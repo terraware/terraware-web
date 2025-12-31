@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/37</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/26</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/34</span>
             </div>
         
             
@@ -94,7 +94,28 @@
 <a name='L29'></a><a href='#L29'>29</a>
 <a name='L30'></a><a href='#L30'>30</a>
 <a name='L31'></a><a href='#L31'>31</a>
-<a name='L32'></a><a href='#L32'>32</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L32'></a><a href='#L32'>32</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -103,47 +124,26 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { datadogRum } from '@datadog/browser-rum';
-import { reactPlugin } from '@datadog/browser-rum-react';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { datado<span class="cstat-no" title="statement not covered" >gRum } from '@</span>datadog/browser-rum';
+import { reactPl<span class="cstat-no" title="statement not covered" >ugin } from '@datadog/</span>browser-rum-react';
+<span class="cstat-no" title="statement not covered" ></span>
+import packageJson from <span class="cstat-no" title="statement not covered" >'../package.json';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+const tier = proces<span class="cstat-no" title="statement not covered" >s.env.REACT_APP_TERRAWARE_TIER |</span>| 'dev';
+const appVersio<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >n </span>= process.env.REACT_APP_TERRAWARE_FE_BUILD_VERSION || packageJson.version;</span>
+co<span class="cstat-no" title="statement not covered" >nst applicationId = process.env.REACT_APP_DATADOG_APP_ID;</span>
+cons<span class="cstat-no" title="statement not covered" >t clientToken = process.env.REACT_APP_DATADOG_CLIENT_TOKEN;</span>
 &nbsp;
-import packageJson from '../package.json';
-&nbsp;
-const tier = <span class="cstat-no" title="statement not covered" >process.env.REACT_APP_TERRAWARE_TIER || 'dev';</span>
-const appVersion = <span class="cstat-no" title="statement not covered" >process.env.REACT_APP_TERRAWARE_FE_BUILD_VERSION || packageJson.version;</span>
-const applicationId = <span class="cstat-no" title="statement not covered" >process.env.REACT_APP_DATADOG_APP_ID;</span>
-const clientToken = <span class="cstat-no" title="statement not covered" >process.env.REACT_APP_DATADOG_CLIENT_TOKEN;</span>
-&nbsp;
-export const canEnableRum = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span>: boolean =&gt; {</span>
+export const canEn<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ab</span>leRum = (): boolean =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >  return !(tier === 'test' || !appVersion || !applicationId || !clientToken);</span>
-};
-&nbsp;
-const setupRum = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >  datadogRum.init({</span>
-    applicationId: applicationId as string,
+};<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+const se<span class="cstat-no" title="statement not covered" >tupRum = () =&gt; {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  datadogRum.init({
+<span class="cstat-no" title="statement not covered" >    applicati</span>onId: applicationId as string,
     clientToken: clientToken as string,
-    site: 'us3.datadoghq.com',
+    site: 'us3<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >.d</span>atadoghq.com',<span class="cstat-no" title="statement not covered" ></span></span>
     service: 'terraware-web',
     env: tier,
 &nbsp;
@@ -151,11 +151,11 @@ const setupRum = <span class="cstat-no" title="statement not covered" ><span cla
     sessionSampleRate: 100,
     sessionReplaySampleRate: 0,
     defaultPrivacyLevel: 'mask-user-input',
-    plugins: [reactPlugin({ router: true })],
-  });
-};
-&nbsp;
-export default setupRum;
+    plugins: [react<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Pl</span>ugin({ <span class="cstat-no" title="statement not covered" >router: true })],</span></span>
+  });<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >};</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+export defa<span class="fstat-no" title="function not covered" >ul</span>t se<span class="cstat-no" title="statement not covered" >tupRum;</span>
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -163,7 +163,7 @@ export default setupRum;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../prettify.js"></script>
         <script>

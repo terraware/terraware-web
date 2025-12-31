@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>0/35</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/21</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>0/31</span>
             </div>
         
             
@@ -90,17 +90,14 @@
 <a name='L25'></a><a href='#L25'>25</a>
 <a name='L26'></a><a href='#L26'>26</a>
 <a name='L27'></a><a href='#L27'>27</a>
-<a name='L28'></a><a href='#L28'>28</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L28'></a><a href='#L28'>28</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -110,48 +107,51 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useCallback, useMemo } from 'react';
-&nbsp;
-import { findLocaleDetails, supportedLocales } from 'src/strings/locales';
-import { NumberFormatter } from 'src/types/Number';
-&nbsp;
-const getLocaleToUse = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(l</span>ocale?: string) =&gt; (<span class="cstat-no" title="statement not covered" >locale === 'gx' ? 'fr' : locale || 'en')</span>;</span>
-&nbsp;
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useCall<span class="cstat-no" title="statement not covered" >back, useMemo } from '</span>react';
+<span class="cstat-no" title="statement not covered" ></span>
+import { findLocaleDetai<span class="cstat-no" title="statement not covered" >ls, supportedLocales } from</span> 'src/strings/locales';
+import { NumberForm<span class="cstat-no" title="statement not covered" >atter } from 'src/types/Number';</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+co<span class="cstat-no" title="statement not covered" >nst getLocaleToUse = (locale?: string) =&gt; (locale === 'gx' ? 'fr' : locale || 'en');</span>
+<span class="cstat-no" title="statement not covered" ></span>
 /**
- * formatter
- */
-export const useNumberFormatter = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(l</span>ocale?: string | null): NumberFormatter =&gt; {</span>
-  const intlFormat = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-    let localeToUse = <span class="cstat-no" title="statement not covered" >getLocaleToUse(locale ?? undefined);</span>
-<span class="cstat-no" title="statement not covered" >    if (locale &amp;&amp; supportedLocales) {</span>
-      const localeDetails = <span class="cstat-no" title="statement not covered" >findLocaleDetails(supportedLocales, locale);</span>
-<span class="cstat-no" title="statement not covered" >      localeToUse = localeDetails.id;</span>
-    }
-<span class="cstat-no" title="statement not covered" >    return new Intl.NumberFormat(localeToUse);</span>
-  }, [locale]);
-  const format = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >(n</span>um: number) =&gt; <span class="cstat-no" title="statement not covered" >intlFormat.format(num),</span> [intlFormat]);</span>
+ * formatter<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+ *<span class="cstat-no" title="statement not covered" >/</span>
+expo<span class="cstat-no" title="statement not covered" >rt const useNumberFormatter = (locale?: string | null): NumberFormatter =&gt; {</span>
+  cons<span class="cstat-no" title="statement not covered" >t intlFormat = useMemo(() =&gt; {</span>
+    let <span class="cstat-no" title="statement not covered" >localeToUse = getLocaleToU<span class="fstat-no" title="function not covered" >se</span>(loc<span class="cstat-no" title="statement not covered" >ale ?? und</span>efined);</span>
+    if (locale &amp;&amp; supportedLocales) {
+<span class="cstat-no" title="statement not covered" >      const l</span>ocaleDetails = findLocaleDetails(supportedLocales, locale);
+      localeToUse = localeDetails.id;
+    }<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+    return new Intl.<span class="cstat-no" title="statement not covered" >Num</span>berFormat(localeToUse);
+<span class="cstat-no" title="statement not covered" >  }, [locale]);</span>
+  const format = useCa<span class="fstat-no" title="function not covered" >ll</span>back<span class="cstat-no" title="statement not covered" >((num: number) =&gt; i</span>ntlFormat.format(num), [intlFormat]);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    return {</span>
-      format,
-    };
-  }, [format]);
-};
-&nbsp;</pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" >  return useMemo(() =&gt; {</span>
+    return {<span class="cstat-no" title="statement not covered" ></span>
+      format,<span class="cstat-no" title="statement not covered" ></span>
+    };<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  }, [format]);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+};<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

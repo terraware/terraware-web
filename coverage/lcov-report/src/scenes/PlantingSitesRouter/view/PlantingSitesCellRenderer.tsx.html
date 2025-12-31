@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>0/46</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/28</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>0/43</span>
             </div>
         
             
@@ -119,29 +119,19 @@
 <a name='L54'></a><a href='#L54'>54</a>
 <a name='L55'></a><a href='#L55'>55</a>
 <a name='L56'></a><a href='#L56'>56</a>
-<a name='L57'></a><a href='#L57'>57</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L57'></a><a href='#L57'>57</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -154,19 +144,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -174,71 +160,85 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
-&nbsp;
-import Link from 'src/components/common/Link';
-import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
-import { RendererProps } from 'src/components/common/table/types';
-import { APP_PATHS } from 'src/constants';
-import { useTimeZones } from 'src/providers';
-import { getTimeZone, useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
-&nbsp;
-export default function <span class="fstat-no" title="function not covered" >PlantingSitesCellRenderer(</span>props: RendererProps&lt;TableRowType&gt;): JSX.Element {
-  const { column, row, value, index } = <span class="cstat-no" title="statement not covered" >props;</span>
-  const isDraft = <span class="cstat-no" title="statement not covered" >row.isDraft;</span>
-&nbsp;
-  const textStyles = <span class="cstat-no" title="statement not covered" >{</span>
-    fontSize: '16px',
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React fr<span class="cstat-no" title="statement not covered" >om 'react';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+import Link from 'src/c<span class="cstat-no" title="statement not covered" >omponents/common/Link';</span>
+import CellRenderer, { T<span class="cstat-no" title="statement not covered" >ableRowType } from 'src/com</span>ponents/common/table/TableCellRenderer';
+import { RendererPr<span class="cstat-no" title="statement not covered" >ops } from 'src/compon</span>ents/common/table/types';
+import { APP_PATHS <span class="cstat-no" title="statement not covered" >} from 'src/constants';</span>
+import { useTim<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >eZ</span>ones } from 'src/providers';</span>
+im<span class="cstat-no" title="statement not covered" >port { getTimeZone, useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+export default function PlantingSitesCellRenderer(props: RendererProps&lt;TableRowType&gt;): JSX.Element {
+  const { column, <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ro</span>w, value, index } = props;</span>
+<span class="cstat-no" title="statement not covered" >  const isDraft = row.isDraft;</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  cons<span class="cstat-no" title="statement not covered" >t textStyles = {</span>
+    font<span class="cstat-no" title="statement not covered" >Size: '16px',<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
     '&amp; &gt; p': {
-      fontSize: '16px',
+<span class="cstat-no" title="statement not covered" >      fontSiz</span>e: '16px',
     },
-  };
+  };<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 &nbsp;
-  const timeZones = <span class="cstat-no" title="statement not covered" >useTimeZones();</span>
-  const defaultTimeZone = <span class="cstat-no" title="statement not covered" >useDefaultTimeZone().get();</span>
+  const timeZones = useTimeZones();
+  const defaultTimeZone = useDefaultTimeZone().get();
 &nbsp;
-  const createLinkToPlantingSiteView = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(i</span>Value: React.ReactNode | unknown[]) =&gt; {</span>
-    const plantingSiteViewUrl = <span class="cstat-no" title="statement not covered" >isDraft ? APP_PATHS.PLANTING_SITES_DRAFT_VIEW : APP_PATHS.PLANTING_SITES_VIEW;</span>
+  const createLinkToPlantingSiteView = (iValue: React.ReactNode | unknown[]) =&gt; {
+    const plantingSiteViewUrl = isDraft ? APP_PATHS.PLANTING_SITES_DRAFT_VIEW : APP_PATHS.PLANTING_SITES_VIEW;
 &nbsp;
-    const to = <span class="cstat-no" title="statement not covered" >plantingSiteViewUrl.replace(':plantingSiteId', row.id.toString());</span>
-&nbsp;
+    const to = plan<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ti</span>ngSiteV<span class="cstat-no" title="statement not covered" >iewUrl.replace(':plantingSiteId', row.id.toString());</span></span>
+<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >    return (</span>
-      &lt;Link fontSize='16px' to={to}&gt;
+      &lt;Link<span class="fstat-no" title="function not covered" > f</span>ontS<span class="cstat-no" title="statement not covered" >ize='16px' to={to}&gt;</span>
         {iValue as React.ReactNode}
-      &lt;/Link&gt;
-    );
-  };
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  if (column.key === 'name') {</span>
-<span class="cstat-no" title="statement not covered" >    return (</span>
-      &lt;CellRenderer
-        index={index}
+<span class="cstat-no" title="statement not covered" >      &lt;/Link&gt;</span>
+    );<span class="cstat-no" title="statement not covered" ></span>
+  };<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+  if (column.key === 'n<span class="cstat-no" title="statement not covered" >ame') {</span>
+    return (<span class="cstat-no" title="statement not covered" ></span>
+      &lt;CellRenderer<span class="cstat-no" title="statement not covered" ></span>
+        i<span class="fstat-no" title="function not covered" >ndex={index}</span>
         column={column}
-        value={createLinkToPlantingSiteView(value)}
-        row={row}
-        sx={textStyles}
+        value={createLinkToPlantingSiteV<span class="cstat-no" title="statement not covered" >iew(va</span>lue)}
+        row={row}<span class="cstat-no" title="statement not covered" ></span>
+        sx={textStyle<span class="cstat-no" title="statement not covered" >s}</span>
         title={value as string}
       /&gt;
     );
   }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  if (column.key === 'timeZoneId') {</span>
-    const timeZoneId = <span class="cstat-no" title="statement not covered" >row.timeZoneId;</span>
-    const timeZone = <span class="cstat-no" title="statement not covered" >(timeZoneId ? getTimeZone(timeZones, timeZoneId) : undefined) ?? defaultTimeZone;</span>
-<span class="cstat-no" title="statement not covered" >    return &lt;CellRenderer index={index} column={column} value={timeZone.longName} row={row} sx={textStyles} /&gt;;</span>
-  }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  return &lt;CellRenderer {...props} sx={textStyles} /&gt;;</span>
-}
-&nbsp;</pre></td></tr></table></pre>
+  if (column.key ===<span class="cstat-no" title="statement not covered" > 'timeZoneId') {</span>
+    const timeZoneId = row<span class="cstat-no" title="statement not covered" >.timeZoneId;</span>
+    const timeZone = (timeZoneId ? getT<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >im</span>eZone(timeZones, timeZoneId) : undefined) ?? defaultTimeZone;</span>
+    return &lt;CellRenderer index={<span class="cstat-no" title="statement not covered" >index} column={column} value={timeZone.longName} row={row} sx={textStyles} /&gt;;</span>
+  }<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+  return &lt;CellRenderer {...props} sx={textStyles} /&gt;;
+}<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

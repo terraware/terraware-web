@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/35</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/32</span>
             </div>
         
             
@@ -90,68 +90,68 @@
 <a name='L25'></a><a href='#L25'>25</a>
 <a name='L26'></a><a href='#L26'>26</a>
 <a name='L27'></a><a href='#L27'>27</a>
-<a name='L28'></a><a href='#L28'>28</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L28'></a><a href='#L28'>28</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { Dispatch, SetStateAction, useCallback } from 'react';
-&nbsp;
-type CurriedChangeHandler = (id: string) =&gt; (value: unknown) =&gt; void;
-type DirectChangeHandler = (id: string, value: unknown) =&gt; void;
-&nbsp;
-const useForm = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >&lt;T</span>&gt;(originalRecord: T): [T, Dispatch&lt;SetStateAction&lt;T&gt;&gt;, DirectChangeHandler, CurriedChangeHandler] =&gt; {</span>
-  const [record, setRecord] = <span class="cstat-no" title="statement not covered" >React.useState(originalRecord);</span>
-&nbsp;
-  const onChange = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >(i</span>d: string, value: unknown) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    setRecord(<span class="fstat-no" title="function not covered" >(p</span>reviousRecord: T): T =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >      return { ...previousRecord, [id]: value };</span>
-    });
-  }, []);
-&nbsp;
-  const onChangeCallback = <span class="cstat-no" title="statement not covered" >useCallback(</span>
-<span class="fstat-no" title="function not covered" >    (i</span>d: string) =&gt; {
-<span class="cstat-no" title="statement not covered" >      return <span class="fstat-no" title="function not covered" >(v</span>alue: unknown) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >        onChange(id, value);</span>
-      };
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > Dispatch, Set</span>StateAction, useCallback } from 'react';
+<span class="cstat-no" title="statement not covered" ></span>
+type CurriedChangeHandl<span class="cstat-no" title="statement not covered" >er = (id: string) =&gt; (value: unk</span>nown) =&gt; void;
+type DirectChangeHandler<span class="cstat-no" title="statement not covered" > = (id: string, value: unkn</span>own) =&gt; void;
+<span class="cstat-no" title="statement not covered" ></span>
+const useForm = &lt;T&gt;<span class="cstat-no" title="statement not covered" >(originalRecord: T): [T, Dispatc</span>h&lt;SetStateAction&lt;T&gt;&gt;, DirectChangeHandler, CurriedChangeHandler] =&gt; {
+  const [record<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >, </span>setRecord] = React.useState(originalRecord);</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  co<span class="cstat-no" title="statement not covered" >nst onChange = useCallback((id: string, value: unknown) =&gt; {</span>
+    setRecord((previousRecord: T): T =&gt; {
+      return { ...<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >pr</span>eviousRecord, [id]: value };</span>
+<span class="cstat-no" title="statement not covered" >    });</span>
+  },<span class="cstat-no" title="statement not covered" > []);</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  const <span class="cstat-no" title="statement not covered" >onChangeCallback = useCall<span class="fstat-no" title="function not covered" >ba</span>ck(<span class="cstat-no" title="statement not covered" ></span></span>
+    (id: string) =&gt; {
+<span class="cstat-no" title="statement not covered" >      return </span>(value: unknown) =&gt; {
+        onChange(id, value);
+      };<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
     },
     [onChange]
   );
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return [record, setRecord, onChange, onChangeCallback];</span>
+  return [record, setRecord, onChange, onChangeCallback];
 };
 &nbsp;
-export default useForm;
-&nbsp;</pre></td></tr></table></pre>
+export default useF<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >or</span>m;<span class="cstat-no" title="statement not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

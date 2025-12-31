@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/34</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/29</span>
             </div>
         
             
@@ -99,9 +99,23 @@
 <a name='L34'></a><a href='#L34'>34</a>
 <a name='L35'></a><a href='#L35'>35</a>
 <a name='L36'></a><a href='#L36'>36</a>
-<a name='L37'></a><a href='#L37'>37</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L37'></a><a href='#L37'>37</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -111,66 +125,52 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { paths } from 'src/api/types/generated-schema';
-&nbsp;
-import HttpService, { Response, Response2 } from './HttpService';
-&nbsp;
-const REPORTS_SETTINGS_ENDPOINT = <span class="cstat-no" title="statement not covered" >'/api/v1/reports/settings';</span>
-&nbsp;
-export type GetReportsSettingsResponsePayload =
-  paths[typeof REPORTS_SETTINGS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
-&nbsp;
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { paths <span class="cstat-no" title="statement not covered" >} from 'src/ap</span>i/types/generated-schema';
+<span class="cstat-no" title="statement not covered" ></span>
+import HttpService, { R<span class="cstat-no" title="statement not covered" >esponse, Response2 } from './Htt</span>pService';
+<span class="cstat-no" title="statement not covered" ></span>
+const REPORTS_SETTI<span class="cstat-no" title="statement not covered" >NGS_ENDPOINT = '/api/v</span>1/reports/settings';
+<span class="cstat-no" title="statement not covered" ></span>
+export type Get<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Re</span>portsSettingsResponsePayload =</span>
+<span class="cstat-no" title="statement not covered" >  paths[typeof REPORTS_SETTINGS_ENDPOINT]['get']['responses'][200]['content']['application/json'];</span>
+<span class="cstat-no" title="statement not covered" ></span>
 export type PutReportsSettingsRequestPayload =
-  paths[typeof REPORTS_SETTINGS_ENDPOINT]['put']['requestBody']['content']['application/json'];
-export type PutReportsSettingsResponsePayload =
-  paths[typeof REPORTS_SETTINGS_ENDPOINT]['put']['responses'][200]['content']['application/json'];
-&nbsp;
-export type GetReportsSettingsResponse = Response &amp; GetReportsSettingsResponsePayload;
+  paths[typeof REP<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >OR</span>TS_SETTINGS_ENDPOINT]['put']['requestBody']['content']['application/json'];</span>
+ex<span class="cstat-no" title="statement not covered" >port type PutReportsSettingsResponsePayload =</span>
+  pa<span class="cstat-no" title="statement not covered" >ths[typeof REPORTS_SETTINGS_ENDPOINT]['put']['responses'][200]['content']['application/json'];</span>
+<span class="cstat-no" title="statement not covered" ></span>
+export t<span class="cstat-no" title="statement not covered" >ype GetReportsSettingsResp<span class="fstat-no" title="function not covered" >on</span>se =<span class="cstat-no" title="statement not covered" > Response </span>&amp; GetReportsSettingsResponsePayload;</span>
 export type ReportsSettings = Omit&lt;GetReportsSettingsResponsePayload, 'status'&gt;;
-&nbsp;
-const httpReportsSettings = <span class="cstat-no" title="statement not covered" >HttpService.root(REPORTS_SETTINGS_ENDPOINT);</span>
-&nbsp;
-const getReportsSettings = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(o</span>rganizationId: number): Promise&lt;GetReportsSettingsResponse&gt; =&gt;</span>
-<span class="cstat-no" title="statement not covered" >  httpReportsSettings.get&lt;GetReportsSettingsResponsePayload, GetReportsSettingsResponsePayload | undefined&gt;(</span>
+<span class="cstat-no" title="statement not covered" ></span>
+const httpReportsSettings = HttpService.root(REPORTS_SETTINGS_ENDPOINT);
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+const getReportsSettings = (organizationId: number): Promise&lt;GetReportsSettingsResponse&gt; =&gt;
+  httpReportsSettings.get&lt;GetReportsSettingsResponsePayload, GetReportsSettingsResponsePayload | undefined&gt;(
     { params: { organizationId: organizationId.toString() } },
-<span class="fstat-no" title="function not covered" >    (d</span>ata) =&gt; <span class="cstat-no" title="statement not covered" >data</span>
+    (data) =&gt; data
   );
 &nbsp;
-const updateSettings = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(</span></span>
-  payload: PutReportsSettingsRequestPayload
-): Promise&lt;Response2&lt;PutReportsSettingsResponsePayload&gt;&gt; =&gt;
+const updateSettings = (
+  payload: PutRepor<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ts</span>Setting<span class="cstat-no" title="statement not covered" >sRequestPayload</span></span>
+): Promise&lt;Response2<span class="cstat-no" title="statement not covered" >&lt;Pu</span>tReportsSettingsResponsePayload&gt;&gt; =&gt;
 <span class="cstat-no" title="statement not covered" >  httpReportsSettings.put2&lt;PutReportsSettingsResponsePayload&gt;({ entity: payload });</span>
-&nbsp;
-const ReportsSettingsService = <span class="cstat-no" title="statement not covered" >{</span>
-  getReportsSettings,
-  updateSettings,
-};
-&nbsp;
-export default ReportsSettingsService;
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+const ReportsSettingsService = {
+<span class="cstat-no" title="statement not covered" >  getReportsSettings,</span>
+  updateSettings,<span class="cstat-no" title="statement not covered" ></span>
+};<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+export default ReportsSetti<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ng</span>sService;<span class="cstat-no" title="statement not covered" ></span></span>
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -178,7 +178,7 @@ export default ReportsSettingsService;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

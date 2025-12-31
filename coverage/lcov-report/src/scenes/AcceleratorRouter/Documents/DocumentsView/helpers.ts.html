@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/27</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/25</span>
             </div>
         
             
@@ -77,42 +77,42 @@
 <a name='L12'></a><a href='#L12'>12</a>
 <a name='L13'></a><a href='#L13'>13</a>
 <a name='L14'></a><a href='#L14'>14</a>
-<a name='L15'></a><a href='#L15'>15</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L15'></a><a href='#L15'>15</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { DocumentTemplate } from 'src/types/documentProducer/DocumentTemplate';
-import { memoize } from 'src/utils/memoize';
-&nbsp;
-export const getDocumentTemplateName = <span class="cstat-no" title="statement not covered" >memoize(</span>
-<span class="fstat-no" title="function not covered" >  (d</span>ocumentTemplateId: number, documentTemplates: DocumentTemplate[] | undefined): string =&gt; {
-    const documentTemplate = <span class="cstat-no" title="statement not covered" >(documentTemplates || []).find(</span>
-<span class="fstat-no" title="function not covered" >      (_</span>documentTemplate) =&gt; <span class="cstat-no" title="statement not covered" >_documentTemplate.id === documentTemplateId</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Documen<span class="cstat-no" title="statement not covered" >tTemplate } from 'src/</span>types/documentProducer/DocumentTemplate';
+import { memoize } from<span class="cstat-no" title="statement not covered" > 'src/utils/memoize';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+export const getDoc<span class="cstat-no" title="statement not covered" >umentTemplateName = memoize(</span>
+  (documentTemp<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >la</span>teId: number, documentTemplates: DocumentTemplate[] | undefined): string =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    const documentTemplate = (documentTemplates || []).find(</span>
+<span class="cstat-no" title="statement not covered" >      (_documentTemplate) =&gt; _documentTemplate.id === documentTempl</span>ateId
     );
-<span class="cstat-no" title="statement not covered" >    if (!documentTemplate) {</span>
+    if (!documentT<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >em</span>plate) {</span>
 <span class="cstat-no" title="statement not covered" >      return '';</span>
-    }
-<span class="cstat-no" title="statement not covered" >    return documentTemplate.name;</span>
-  }
+<span class="cstat-no" title="statement not covered" >    }</span>
+    re<span class="cstat-no" title="statement not covered" >turn documentTemplate.name;</span>
+  }<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 );
-&nbsp;</pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

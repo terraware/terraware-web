@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/29</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/27</span>
             </div>
         
             
@@ -86,60 +86,60 @@
 <a name='L21'></a><a href='#L21'>21</a>
 <a name='L22'></a><a href='#L22'>22</a>
 <a name='L23'></a><a href='#L23'>23</a>
-<a name='L24'></a><a href='#L24'>24</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L24'></a><a href='#L24'>24</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { createSlice } from '@reduxjs/toolkit';
-&nbsp;
-import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
-import { FunderActivity } from 'src/types/FunderActivity';
-&nbsp;
-import { requestListFunderActivities } from './funderActivitiesAsyncThunks';
-&nbsp;
-const initialStateFunderActivities: { [requestId: string]: StatusT&lt;FunderActivity[]&gt; } = <span class="cstat-no" title="statement not covered" >{};</span>
-&nbsp;
-export const funderActivitiesSlice = <span class="cstat-no" title="statement not covered" >createSlice({</span>
-  name: 'funderActivitiesSlice',
-  initialState: initialStateFunderActivities,
-  reducers: {},
-  extraReducers: <span class="fstat-no" title="function not covered" >(b</span>uilder) =&gt; {
-<span class="cstat-no" title="statement not covered" >    buildReducers(requestListFunderActivities, true)(builder);</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { createS<span class="cstat-no" title="statement not covered" >lice } from '@reduxjs/</span>toolkit';
+<span class="cstat-no" title="statement not covered" ></span>
+import { StatusT, buildR<span class="cstat-no" title="statement not covered" >educers } from 'src/redux/f</span>eatures/asyncUtils';
+import { FunderActi<span class="cstat-no" title="statement not covered" >vity } from 'src/types/FunderAct</span>ivity';
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+im<span class="cstat-no" title="statement not covered" >port { requestListFunderActivities } from './funderActivitiesAsyncThunks';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+const initialStateFunderActivities: { [requestId: string]: StatusT&lt;FunderActivity[]&gt; } = {};
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+ex<span class="cstat-no" title="statement not covered" >port const funderActivitiesSlice = createSlice({</span>
+  na<span class="cstat-no" title="statement not covered" >me: 'funderActivitiesSlice',</span>
+  init<span class="cstat-no" title="statement not covered" >ialState: initialStateFunderActivities,</span>
+  reduce<span class="cstat-no" title="statement not covered" >rs: {},<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  extraReducers: (builder) =&gt; {
+<span class="cstat-no" title="statement not covered" >    buildRedu</span>cers(requestListFunderActivities, true)(builder);
   },
-});
+});<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >const funderActivitiesReducers = {</span>
+  funderAct<span class="fstat-no" title="function not covered" >iv</span>itie<span class="cstat-no" title="statement not covered" >s: funderActiv</span>itiesSlice.reducer,
+};<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 &nbsp;
-const funderActivitiesReducers = <span class="cstat-no" title="statement not covered" >{</span>
-  funderActivities: funderActivitiesSlice.reducer,
-};
-&nbsp;
-export default funderActivitiesReducers;
-&nbsp;</pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" >export default funderActivitiesReducers;</span>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>0/43</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/24</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>0/40</span>
             </div>
         
             
@@ -102,8 +102,25 @@
 <a name='L37'></a><a href='#L37'>37</a>
 <a name='L38'></a><a href='#L38'>38</a>
 <a name='L39'></a><a href='#L39'>39</a>
-<a name='L40'></a><a href='#L40'>40</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L40'></a><a href='#L40'>40</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -114,6 +131,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -121,73 +139,55 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useMemo } from 'react';
-import { Route, Routes } from 'react-router';
-&nbsp;
-import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
-import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
-import NurseryPlantingsAndWithdrawalsView from 'src/scenes/NurseryRouter/NurseryPlantingsAndWithdrawalsView';
-import NurseryReassignmentView from 'src/scenes/NurseryRouter/NurseryReassignmentView';
-import NurseryWithdrawalsDetailsView from 'src/scenes/NurseryRouter/NurseryWithdrawalsDetailsView';
-&nbsp;
-const NurseryRouter = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-  const { species } = <span class="cstat-no" title="statement not covered" >useSpeciesData();</span>
-  const { allPlantingSites } = <span class="cstat-no" title="statement not covered" >usePlantingSiteData();</span>
-&nbsp;
-  const plantingSubzoneNames = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-    const subzones: Record&lt;number, string&gt; = <span class="cstat-no" title="statement not covered" >{};</span>
-<span class="cstat-no" title="statement not covered" >    for (const plantingSite of allPlantingSites ?? []) {</span>
-<span class="cstat-no" title="statement not covered" >      for (const plantingZone of plantingSite.plantingZones ?? []) {</span>
-<span class="cstat-no" title="statement not covered" >        for (const subzone of plantingZone.plantingSubzones ?? []) {</span>
-<span class="cstat-no" title="statement not covered" >          subzones[subzone.id] = plantingZone.name + '-' + subzone.name;</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > useMemo } fro</span>m 'react';
+import { Route, <span class="cstat-no" title="statement not covered" >Routes } from 'react-r</span>outer';
+<span class="cstat-no" title="statement not covered" ></span>
+import { useSpeciesData <span class="cstat-no" title="statement not covered" >} from 'src/providers/Speci</span>es/SpeciesContext';
+import { usePlantin<span class="cstat-no" title="statement not covered" >gSiteData } from 'src/</span>providers/Tracking/PlantingSiteContext';
+import NurseryPlant<span class="cstat-no" title="statement not covered" >ingsAndWithdrawalsView from 'src</span>/scenes/NurseryRouter/NurseryPlantingsAndWithdrawalsView';
+import NurseryR<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ea</span>ssignmentView from 'src/scenes/NurseryRouter/NurseryReassignmentView';</span>
+im<span class="cstat-no" title="statement not covered" >port NurseryWithdrawalsDetailsView from 'src/scenes/NurseryRouter/NurseryWithdrawalsDetailsView';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+const NurseryRouter = () =&gt; {
+  const { species <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >} </span>= useSpeciesData();</span>
+<span class="cstat-no" title="statement not covered" >  const { allPlantingSites } = usePlantingSiteData();</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  cons<span class="cstat-no" title="statement not covered" >t plantingSubzoneNames = useMemo(() =&gt; {</span>
+    cons<span class="cstat-no" title="statement not covered" >t subzones: Record&lt;number,<span class="fstat-no" title="function not covered" > s</span>trin<span class="cstat-no" title="statement not covered" >g&gt; = {};</span></span>
+    for (const plantingSite of allPlantingSites ?? []) {
+<span class="cstat-no" title="statement not covered" >      for (co</span>nst plantingZone of plantingSite.plantingZones ?? []) {
+        for (const subzone of plantingZone.plantingSubzones ?? []) {
+          subz<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >on</span>es[subzone.id] = plantingZon<span class="cstat-no" title="statement not covered" >e.name + '-' + subzone.name;</span></span>
         }
       }
     }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return subzones;</span>
+    return subzones;
   }, [allPlantingSites]);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;Routes&gt;
-      &lt;Route path={'/withdrawals'} element={&lt;NurseryPlantingsAndWithdrawalsView /&gt;} /&gt;
-      &lt;Route
+  return (<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+    &lt;Routes&gt;<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >      &lt;Route path={'/withdrawals'} element={&lt;NurseryPlantingsAndWithdrawalsView /&gt;} /&gt;</span>
+      &lt;Rout<span class="fstat-no" title="function not covered" >e<span class="cstat-no" title="statement not covered" ></span></span>
         path={'/withdrawals/:withdrawalId'}
-        element={&lt;NurseryWithdrawalsDetailsView species={species} plantingSubzoneNames={plantingSubzoneNames} /&gt;}
-      /&gt;
-      &lt;Route path={'/reassignment/:deliveryId'} element={&lt;NurseryReassignmentView /&gt;} /&gt;
-    &lt;/Routes&gt;
-  );
-};
-&nbsp;
-export default NurseryRouter;
-&nbsp;</pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" >        element={&lt;NurseryWithdrawalsDetailsVie</span>w species={species} plantingSubzoneNames={plantingSubzoneNames} /&gt;}
+      /&gt;<span class="cstat-no" title="statement not covered" ></span>
+      &lt;Route path={'/reass<span class="cstat-no" title="statement not covered" >ignment/:deliveryId'} el</span>ement={&lt;NurseryReassignmentView /&gt;} /&gt;
+    &lt;/Routes&gt;<span class="cstat-no" title="statement not covered" ></span>
+  );<span class="cstat-no" title="statement not covered" ></span>
+};<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+export default NurseryRouter;<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

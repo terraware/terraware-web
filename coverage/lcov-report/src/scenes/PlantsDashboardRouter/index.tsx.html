@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/37</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/20</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/34</span>
             </div>
         
             
@@ -90,52 +90,52 @@
 <a name='L25'></a><a href='#L25'>25</a>
 <a name='L26'></a><a href='#L26'>26</a>
 <a name='L27'></a><a href='#L27'>27</a>
-<a name='L28'></a><a href='#L28'>28</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L28'></a><a href='#L28'>28</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useEffect } from 'react';
-import { Route, Routes, useParams } from 'react-router';
-&nbsp;
-import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
-import PlantsDashboardView from 'src/scenes/PlantsDashboardRouter/PlantsDashboardView';
-&nbsp;
-const PlantsDashboardRouter = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-  const { plantingSiteId } = <span class="cstat-no" title="statement not covered" >useParams&lt;{ plantingSiteId: string }&gt;();</span>
-&nbsp;
-  const { setSelectedPlantingSite } = <span class="cstat-no" title="statement not covered" >usePlantingSiteData();</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-    const siteId = <span class="cstat-no" title="statement not covered" >Number(plantingSiteId);</span>
-<span class="cstat-no" title="statement not covered" >    if (!isNaN(siteId)) {</span>
-<span class="cstat-no" title="statement not covered" >      setSelectedPlantingSite(siteId);</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > useEffect } f</span>rom 'react';
+import { Route, <span class="cstat-no" title="statement not covered" >Routes, useParams } fr</span>om 'react-router';
+<span class="cstat-no" title="statement not covered" ></span>
+import { usePlantingSite<span class="cstat-no" title="statement not covered" >Data } from 'src/providers/</span>Tracking/PlantingSiteContext';
+import PlantsDashbo<span class="cstat-no" title="statement not covered" >ardView from 'src/scen</span>es/PlantsDashboardRouter/PlantsDashboardView';
+<span class="cstat-no" title="statement not covered" ></span>
+const PlantsDas<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >hb</span>oardRouter = () =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  const { plantingSiteId } = useParams&lt;{ plantingSiteId: string }&gt;();</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  const { setSelectedPlantingSite } = usePlantingSiteData();
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >  useEffect(() =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    const siteId = Number(plantingSiteId);</span>
+    if<span class="cstat-no" title="statement not covered" > (!isNaN(siteId)) {</span>
+      se<span class="cstat-no" title="statement not covered" >tSelectedPlantingSite(site<span class="fstat-no" title="function not covered" >Id</span>);<span class="cstat-no" title="statement not covered" ></span></span>
     }
-  }, [plantingSiteId, setSelectedPlantingSite]);
+<span class="cstat-no" title="statement not covered" >  }, [plantin</span>gSiteId, setSelectedPlantingSite]);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+  return (<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
     &lt;Routes&gt;
       &lt;Route path='/*' element={&lt;PlantsDashboardView /&gt;} /&gt;
       &lt;Route path={'/:plantingSiteId'} element={&lt;PlantsDashboardView /&gt;} /&gt;
@@ -143,15 +143,15 @@ const PlantsDashboardRouter = <span class="cstat-no" title="statement not covere
   );
 };
 &nbsp;
-export default PlantsDashboardRouter;
-&nbsp;</pre></td></tr></table></pre>
+export default Plan<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ts</span>Dashboa<span class="cstat-no" title="statement not covered" >rdRouter;</span></span>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/41</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/24</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/38</span>
             </div>
         
             
@@ -95,8 +95,25 @@
 <a name='L30'></a><a href='#L30'>30</a>
 <a name='L31'></a><a href='#L31'>31</a>
 <a name='L32'></a><a href='#L32'>32</a>
-<a name='L33'></a><a href='#L33'>33</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L33'></a><a href='#L33'>33</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -110,63 +127,46 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback } from 'react';
-import { useParams } from 'react-router';
-&nbsp;
-import QuestionsDeliverableEditForm from 'src/components/DeliverableView/QuestionsDeliverableEditForm';
-import useFetchDeliverable from 'src/components/DeliverableView/useFetchDeliverable';
-import useNavigateTo from 'src/hooks/useNavigateTo';
-&nbsp;
-import DeliverablePage from './DeliverablePage';
-&nbsp;
-const QuestionsDeliverableEditView = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span>: JSX.Element | null =&gt; {</span>
-  const { goToDeliverable } = <span class="cstat-no" title="statement not covered" >useNavigateTo();</span>
-  const { deliverableId, projectId } = <span class="cstat-no" title="statement not covered" >useParams&lt;{ deliverableId: string; projectId: string }&gt;();</span>
-  const { deliverable } = <span class="cstat-no" title="statement not covered" >useFetchDeliverable({ deliverableId: Number(deliverableId), projectId: Number(projectId) });</span>
-&nbsp;
-  const goToThisDeliverable = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (deliverable) {</span>
-<span class="cstat-no" title="statement not covered" >      goToDeliverable(deliverable.id, deliverable?.projectId);</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > useCallback }</span> from 'react';
+import { usePara<span class="cstat-no" title="statement not covered" >ms } from 'react-route</span>r';
+<span class="cstat-no" title="statement not covered" ></span>
+import QuestionsDelivera<span class="cstat-no" title="statement not covered" >bleEditForm from 'src/compo</span>nents/DeliverableView/QuestionsDeliverableEditForm';
+import useFetchDeli<span class="cstat-no" title="statement not covered" >verable from 'src/comp</span>onents/DeliverableView/useFetchDeliverable';
+import useNavigateT<span class="cstat-no" title="statement not covered" >o from 'src/hooks/useNavigateTo'</span>;
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+im<span class="cstat-no" title="statement not covered" >port DeliverablePage from './DeliverablePage';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+const QuestionsDeliverableEditView = (): JSX.Element | null =&gt; {
+  const { goToDeli<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ve</span>rable } = useNavigateTo();</span>
+<span class="cstat-no" title="statement not covered" >  const { deliverableId, projectId } = useParams&lt;{ deliverableId: string; projectId: string }&gt;();</span>
+  co<span class="cstat-no" title="statement not covered" >nst { deliverable } = useFetchDeliverable({ deliverableId: Number(deliverableId), projectId: Number(projectId) });</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  const <span class="cstat-no" title="statement not covered" >goToThisDeliverable = useC<span class="fstat-no" title="function not covered" >al</span>lbac<span class="cstat-no" title="statement not covered" >k(() =&gt; {</span></span>
+    if (deliverable) {
+<span class="cstat-no" title="statement not covered" >      goToDel</span>iverable(deliverable.id, deliverable?.projectId);
     }
-  }, [deliverable, goToDeliverable]);
+  }, [delivera<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >bl</span>e, goToDeliverable]);<span class="cstat-no" title="statement not covered" ></span></span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  if (!deliverable) {</span>
-<span class="cstat-no" title="statement not covered" >    return null;</span>
+  if (!deliverable) {
+    return null;
   }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+  return (
     &lt;DeliverablePage deliverable={deliverable}&gt;
-      &lt;QuestionsDeliverableEditForm deliverable={deliverable} exit={goToThisDeliverable} /&gt;
-    &lt;/DeliverablePage&gt;
-  );
-};
+      &lt;QuestionsDel<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >iv</span>erableE<span class="cstat-no" title="statement not covered" >ditForm deliverable={deliverable} exit={goToThisDeliverable} /&gt;</span></span>
+    &lt;/DeliverablePag<span class="cstat-no" title="statement not covered" >e&gt;</span>
+<span class="cstat-no" title="statement not covered" >  );</span>
+};<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 &nbsp;
-export default QuestionsDeliverableEditView;
-&nbsp;</pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" >export default QuestionsDeliverableEditView;</span>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

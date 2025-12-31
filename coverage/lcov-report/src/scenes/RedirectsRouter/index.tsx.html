@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/30</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/27</span>
             </div>
         
             
@@ -87,49 +87,49 @@
 <a name='L22'></a><a href='#L22'>22</a>
 <a name='L23'></a><a href='#L23'>23</a>
 <a name='L24'></a><a href='#L24'>24</a>
-<a name='L25'></a><a href='#L25'>25</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L25'></a><a href='#L25'>25</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
-import { Navigate, Route, Routes } from 'react-router';
-&nbsp;
-import { APP_PATHS } from 'src/constants';
-&nbsp;
-const RedirectsRouter = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;Routes&gt;
-      {/* Redirects. Invalid paths will redirect to the closest valid path. */}
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React fr<span class="cstat-no" title="statement not covered" >om 'react';</span>
+import { Navigat<span class="cstat-no" title="statement not covered" >e, Route, Routes } fro</span>m 'react-router';
+<span class="cstat-no" title="statement not covered" ></span>
+import { APP_PATHS } fro<span class="cstat-no" title="statement not covered" >m 'src/constants';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+const RedirectsRout<span class="cstat-no" title="statement not covered" >er = () =&gt; {</span>
+  return (<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    &lt;Routes&gt;</span>
+<span class="cstat-no" title="statement not covered" >      {/* Redirects. Invalid paths will redirect to the closest val</span>id path. */}
       {/* In alphabetical order for easy reference with APP_PATHS, except for /home which must go last */}
-      {/* &lt;Route path={APP_PATHS.ACCESSIONS + '/*'} element={&lt;Navigate to={APP_PATHS.ACCESSIONS} /&gt;} /&gt; */}
-      &lt;Route path={APP_PATHS.CHECKIN + '/'} element={&lt;Navigate to={APP_PATHS.CHECKIN} /&gt;} /&gt;
-      &lt;Route path={APP_PATHS.HELP_SUPPORT + '/'} element={&lt;Navigate to={APP_PATHS.HELP_SUPPORT} /&gt;} /&gt;
-      &lt;Route path={APP_PATHS.ORGANIZATION + '/'} element={&lt;Navigate to={APP_PATHS.ORGANIZATION} /&gt;} /&gt;
-      &lt;Route path={APP_PATHS.PEOPLE + '/'} element={&lt;Navigate to={APP_PATHS.PEOPLE} /&gt;} /&gt;
+      {/* &lt;Route p<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >at</span>h={APP_PATHS.ACCESSIONS + '/*'} element={&lt;Navigate to={APP_PATHS.ACCESSIONS} /&gt;} /&gt; */}</span>
+<span class="cstat-no" title="statement not covered" >      &lt;Route path={APP_PATHS.CHECKIN + '/'} element={&lt;Navigate to={APP_PATHS.CHECKIN} /&gt;} /&gt;</span>
+<span class="cstat-no" title="statement not covered" >      &lt;Route path={APP_PATHS.HELP_SUPPORT + '/'} element={&lt;Navigate to={APP_PATHS.HELP_SUPPORT} /&gt;} /&gt;</span>
+<span class="cstat-no" title="statement not covered" >      &lt;Route path={APP_PATHS.ORGANIZATION + '/'} element={&lt;Navigate to={APP_PATHS.ORGANIZATION} /&gt;} /&gt;</span>
+      &lt;R<span class="cstat-no" title="statement not covered" >oute path={APP_PATHS.PEOPL<span class="fstat-no" title="function not covered" >E </span>+ '/<span class="cstat-no" title="statement not covered" >'} element</span>={&lt;Navigate to={APP_PATHS.PEOPLE} /&gt;} /&gt;</span>
       &lt;Route path={APP_PATHS.PROJECTS + '/'} element={&lt;Navigate to={APP_PATHS.PROJECTS} /&gt;} /&gt;
-      &lt;Route path={APP_PATHS.SEEDS_DASHBOARD + '/'} element={&lt;Navigate to={APP_PATHS.SEEDS_DASHBOARD} /&gt;} /&gt;
+<span class="cstat-no" title="statement not covered" >      &lt;Route </span>path={APP_PATHS.SEEDS_DASHBOARD + '/'} element={&lt;Navigate to={APP_PATHS.SEEDS_DASHBOARD} /&gt;} /&gt;
       &lt;Route path={APP_PATHS.SPECIES + '/'} element={&lt;Navigate to={APP_PATHS.SPECIES} /&gt;} /&gt;
-      &lt;Route path='*' element={&lt;Navigate to={APP_PATHS.HOME} /&gt;} /&gt;
+      &lt;Route p<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >at</span>h='*' element={&lt;Navigate to=<span class="cstat-no" title="statement not covered" >{APP_PATHS.HOME} /&gt;} /&gt;</span></span>
     &lt;/Routes&gt;
   );
 };
@@ -142,7 +142,7 @@ export default RedirectsRouter;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

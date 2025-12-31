@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/31</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/29</span>
             </div>
         
             
@@ -99,76 +99,76 @@
 <a name='L34'></a><a href='#L34'>34</a>
 <a name='L35'></a><a href='#L35'>35</a>
 <a name='L36'></a><a href='#L36'>36</a>
-<a name='L37'></a><a href='#L37'>37</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L37'></a><a href='#L37'>37</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Payload<span class="cstat-no" title="statement not covered" >Action, createSlice } </span>from '@reduxjs/toolkit';
+<span class="cstat-no" title="statement not covered" ></span>
+import { GetReportsSetti<span class="cstat-no" title="statement not covered" >ngsResponse, ReportsSetting</span>s } from 'src/services/ReportSettingsService';
+<span class="cstat-no" title="statement not covered" ></span>
+type Payload = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >{</span></span>
+<span class="cstat-no" title="statement not covered" >  settings?: GetReportsSettingsResponse;</span>
+};<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
-import { GetReportsSettingsResponse, ReportsSettings } from 'src/services/ReportSettingsService';
+type State = {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >  settings?: ReportsSettings;</span>
+};<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+const in<span class="cstat-no" title="statement not covered" >itialState: State = {};<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 &nbsp;
-type Payload = {
-  settings?: GetReportsSettingsResponse;
-};
-&nbsp;
-type State = {
-  settings?: ReportsSettings;
-};
-&nbsp;
-const initialState: State = <span class="cstat-no" title="statement not covered" >{};</span>
-&nbsp;
-export const reportsSettingsSlice = <span class="cstat-no" title="statement not covered" >createSlice({</span>
+ex<span class="cstat-no" title="statement not covered" >port const </span>reportsSettingsSlice = createSlice({
   name: 'reportsSettingsSlice',
-  initialState,
-  reducers: {
-    setReportsSettingsAction: <span class="fstat-no" title="function not covered" >(s</span>tate, action: PayloadAction&lt;Payload&gt;) =&gt; {
-<span class="cstat-no" title="statement not covered" >      if (action.payload.settings) {</span>
-        // Leaving these here in case we want to do something with invalid responses
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { status, requestSucceeded, statusCode, ...rest } = <span class="cstat-no" title="statement not covered" >action.payload.settings;</span>
+  initialState,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  reducers: {<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >    setReportsSettingsAction: (state, action: PayloadAction&lt;Payload&gt;) =&gt; {</span>
+      if (a<span class="fstat-no" title="function not covered" >ct</span>ion.<span class="cstat-no" title="statement not covered" >payload.settin</span>gs) {
+        // Leaving these<span class="fstat-no" title="function not covered" > h</span>ere <span class="cstat-no" title="statement not covered" >in case we want to do</span> something with invalid responses
+        // eslint-disable-ne<span class="fstat-no" title="function not covered" >xt</span>-lin<span class="cstat-no" title="statement not covered" >e @typescript-eslint/no-u</span>nused-vars
+        const { status, requestSucceeded, statusCode, ...rest } = action.payload.settings;
 <span class="cstat-no" title="statement not covered" >        state.settings = rest;</span>
-      }
-    },
-  },
+      }<span class="cstat-no" title="statement not covered" ></span>
+    },<span class="cstat-no" title="statement not covered" ></span>
+  },<span class="cstat-no" title="statement not covered" ></span>
 });
 &nbsp;
-export const { setReportsSettingsAction } = <span class="cstat-no" title="statement not covered" >reportsSettingsSlice.actions;</span>
-&nbsp;
-const reportsSettingsReducers = <span class="cstat-no" title="statement not covered" >{</span>
-  reportsSettings: reportsSettingsSlice.reducer,
-};
+export const { setReportsSettingsAction } = reportsSettingsSlice.actions;
+<span class="fstat-no" title="function not covered" ></span>
+const <span class="cstat-no" title="statement not covered" >reportsSettingsReducers = {</span>
+  reportsSettings: reportsSettingsSlice.reducer,<span class="cstat-no" title="statement not covered" ></span>
+};<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
 export default reportsSettingsReducers;
 &nbsp;</pre></td></tr></table></pre>
@@ -178,7 +178,7 @@ export default reportsSettingsReducers;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

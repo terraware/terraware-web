@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/32</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/29</span>
             </div>
         
             
@@ -87,53 +87,53 @@
 <a name='L22'></a><a href='#L22'>22</a>
 <a name='L23'></a><a href='#L23'>23</a>
 <a name='L24'></a><a href='#L24'>24</a>
-<a name='L25'></a><a href='#L25'>25</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L25'></a><a href='#L25'>25</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback } from 'react';
-&nbsp;
-import SubLocations from 'src/components/common/SubLocations';
-import { APP_PATHS } from 'src/constants';
-import { ActiveStatuses } from 'src/types/Accession';
-import { PartialSubLocation } from 'src/types/Facility';
-&nbsp;
-export type SeedBankSubLocationsProps = {
-  seedBankId?: number;
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > useCallback }</span> from 'react';
+<span class="cstat-no" title="statement not covered" ></span>
+import SubLocations fro<span class="cstat-no" title="statement not covered" >m 'src/components/common/SubLoca</span>tions';
+import { APP_PATHS } fro<span class="cstat-no" title="statement not covered" >m 'src/constants';</span>
+import { ActiveStat<span class="cstat-no" title="statement not covered" >uses } from 'src/types</span>/Accession';
+import { PartialSub<span class="cstat-no" title="statement not covered" >Location } from 'src/types/Facil</span>ity';
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+ex<span class="cstat-no" title="statement not covered" >port type SeedBankSubLocationsProps = {</span>
+  se<span class="cstat-no" title="statement not covered" >edBankId?: number;</span>
   onEdit?: (subLocations: PartialSubLocation[]) =&gt; void;
-};
-&nbsp;
-export default function <span class="fstat-no" title="function not covered" >SeedBankSubLocations(</span>{ seedBankId, onEdit }: SeedBankSubLocationsProps): JSX.Element {
-  const renderLink = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >(f</span>acilityId: number, locationName: string) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    return [</span>
+};<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ></span>
+expo<span class="cstat-no" title="statement not covered" >rt default function SeedBankSubLocations({ seedBankId, onEdit }: SeedBankSubLocationsProps): JSX.Element {</span>
+  cons<span class="cstat-no" title="statement not covered" >t renderLink = useCallback((facilityId: number, locationName: string) =&gt; {</span>
+    retu<span class="cstat-no" title="statement not covered" >rn [<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
       `${APP_PATHS.ACCESSIONS}/?`,
-      `subLocationName=${encodeURIComponent(locationName)}`,
+<span class="cstat-no" title="statement not covered" >      `subLoc</span>ationName=${encodeURIComponent(locationName)}`,
       `facilityId=${facilityId}`,
-      ...ActiveStatuses().map(<span class="fstat-no" title="function not covered" >(s</span>tatus) =&gt; <span class="cstat-no" title="statement not covered" >`stage=${status}`)</span>,
+      ...Activ<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >eS</span>tatuses().map((status) =&gt; `s<span class="cstat-no" title="statement not covered" >tage=${status}`),</span></span>
     ].join('&amp;');
   }, []);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return &lt;SubLocations facilityType='seedbank' facilityId={seedBankId} onEdit={onEdit} renderLink={renderLink} /&gt;;</span>
+  return &lt;SubLocations facilityType='seedbank' facilityId={seedBankId} onEdit={onEdit} renderLink={renderLink} /&gt;;
 }
 &nbsp;</pre></td></tr></table></pre>
 
@@ -142,7 +142,7 @@ export default function <span class="fstat-no" title="function not covered" >See
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

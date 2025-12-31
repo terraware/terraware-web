@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/40</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/26</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/37</span>
             </div>
         
             
@@ -113,28 +113,26 @@
 <a name='L48'></a><a href='#L48'>48</a>
 <a name='L49'></a><a href='#L49'>49</a>
 <a name='L50'></a><a href='#L50'>50</a>
-<a name='L51'></a><a href='#L51'>51</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L51'></a><a href='#L51'>51</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -143,76 +141,78 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { createAsyncThunk } from '@reduxjs/toolkit';
-&nbsp;
-import AcceleratorService, { AcceleratorOrgData } from 'src/services/AcceleratorService';
-import { Response } from 'src/services/HttpService';
-import strings from 'src/strings';
-import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
-&nbsp;
-export const requestAcceleratorOrgs = <span class="cstat-no" title="statement not covered" >createAsyncThunk(</span>
-  'acceleratorOrgs/list',
-<span class="fstat-no" title="function not covered" >  as</span>ync (
-    request: {
-      locale: string | null;
-      includeParticipants?: boolean;
-      hasProjectApplication?: boolean;
-      search?: SearchNodePayload;
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { create<span class="cstat-no" title="statement not covered" >AsyncThunk } f</span>rom '@reduxjs/toolkit';
+<span class="cstat-no" title="statement not covered" ></span>
+import AcceleratorServi<span class="cstat-no" title="statement not covered" >ce, { AcceleratorOrgData } from </span>'src/services/AcceleratorService';
+import { Response } from<span class="cstat-no" title="statement not covered" > 'src/services/HttpService'</span>;
+import strings from<span class="cstat-no" title="statement not covered" > 'src/strings';</span>
+import { SearchNode<span class="cstat-no" title="statement not covered" >Payload, SearchSortOrder } from </span>'src/types/Search';
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+ex<span class="cstat-no" title="statement not covered" >port const requestAcceleratorOrgs = createAsyncThunk(</span>
+  'a<span class="cstat-no" title="statement not covered" >cceleratorOrgs/list',</span>
+  async (
+    request: {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >      locale: string | null;</span>
+<span class="cstat-no" title="statement not covered" >      includeParticipants?: boolean;</span>
+<span class="cstat-no" title="statement not covered" >      hasProjectApplication?: boolean;</span>
+      se<span class="cstat-no" title="statement not covered" >arch?: SearchNodePayload;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
       searchSortOrder?: SearchSortOrder;
-    },
+<span class="cstat-no" title="statement not covered" >    },</span>
     { rejectWithValue }
-  ) =&gt; {
-    const { locale, hasProjectApplication, includeParticipants, search, searchSortOrder } = <span class="cstat-no" title="statement not covered" >request;</span>
+  ) =&gt; {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+    const { locale, hasProjectApplication, includeParticipants, search, searchSortOrder } = request;
 &nbsp;
-    const response: Response &amp; AcceleratorOrgData = <span class="cstat-no" title="statement not covered" >await AcceleratorService.listAcceleratorOrgs(</span>
+    const response: Response &amp; AcceleratorOrgData = await AcceleratorService.listAcceleratorOrgs(
       locale,
       { hasProjectApplication, includeParticipants },
       search,
       searchSortOrder
-    );
-&nbsp;
+    );<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >    if (response &amp;&amp; response.requestSucceeded) {</span>
-<span class="cstat-no" title="statement not covered" >      return response.organizations;</span>
-    }
+      return response.orga<span class="fstat-no" title="function not covered" >ni</span>zati<span class="cstat-no" title="statement not covered" >ons;</span>
+    }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return rejectWithValue(strings.GENERIC_ERROR);</span>
-  }
-);
-&nbsp;
-export const requestAssignTerraformationContact = <span class="cstat-no" title="statement not covered" >createAsyncThunk(</span>
+<span class="cstat-no" title="statement not covered" >    return rejectWithValue(strings.GENERIC_ERR</span>OR);
+  }<span class="cstat-no" title="statement not covered" ></span>
+);<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+export const requestAssignTerra<span class="cstat-no" title="statement not covered" >formationContact = createAsyncThunk(</span>
   'terraformationContact/assign',
 <span class="fstat-no" title="function not covered" >  as</span>ync (request: { organizationId: number; terraformationContactId: number }, { rejectWithValue }) =&gt; {
-    const { organizationId, terraformationContactId } = <span class="cstat-no" title="statement not covered" >request;</span>
+    const { organizationId, terraformationContactId } = request;<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+    const response = await AcceleratorService.assignTerraformationContact(organizationId, terraformationContactId);
 &nbsp;
-    const response = <span class="cstat-no" title="statement not covered" >await AcceleratorService.assignTerraformationContact(organizationId, terraformationContactId);</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    if (response &amp;&amp; response.requestSucceeded) {</span>
-<span class="cstat-no" title="statement not covered" >      return response;</span>
+    if (response &amp;&amp; response.requestSucceeded) {
+      return response;
     }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    return rejectWithValue(strings.GENERIC_ERROR);</span>
+<span class="cstat-no" title="statement not covered" ></span>
+    re<span class="cstat-no" title="statement not covered" >turn rejectWithValue(strings.GE</span>NERIC_ERROR);
   }
-);
+);<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -220,7 +220,7 @@ export const requestAssignTerraformationContact = <span class="cstat-no" title="
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

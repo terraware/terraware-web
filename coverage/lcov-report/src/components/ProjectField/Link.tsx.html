@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/38</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/22</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/35</span>
             </div>
         
             
@@ -95,8 +95,25 @@
 <a name='L30'></a><a href='#L30'>30</a>
 <a name='L31'></a><a href='#L31'>31</a>
 <a name='L32'></a><a href='#L32'>32</a>
-<a name='L33'></a><a href='#L33'>33</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L33'></a><a href='#L33'>33</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -107,66 +124,49 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback } from 'react';
-&nbsp;
-import { useTheme } from '@mui/material';
-&nbsp;
-import Link from 'src/components/common/Link';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-&nbsp;
-import { ProjectFieldProps } from '.';
-&nbsp;
-const ProjectFieldLink = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> label, value }: ProjectFieldProps) =&gt; {</span>
-  const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-  const navigate = <span class="cstat-no" title="statement not covered" >useSyncNavigate();</span>
-&nbsp;
-  const onClick = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if ((value as string).startsWith('http')) {</span>
-<span class="cstat-no" title="statement not covered" >      window.open(value as string, '_blank');</span>
-    } else {
-<span class="cstat-no" title="statement not covered" >      void navigate(value as string);</span>
-<span class="cstat-no" title="statement not covered" >      window.scroll(0, 0);</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > useCallback }</span> from 'react';
+<span class="cstat-no" title="statement not covered" ></span>
+import { useTheme } fro<span class="cstat-no" title="statement not covered" >m '@mui/material';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+import Link from 's<span class="cstat-no" title="statement not covered" >rc/components/common/L</span>ink';
+import { useSyncNav<span class="cstat-no" title="statement not covered" >igate } from 'src/hooks/useSyncN</span>avigate';
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+im<span class="cstat-no" title="statement not covered" >port { ProjectFieldProps } from '.';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+const ProjectFieldLink = ({ label, value }: ProjectFieldProps) =&gt; {
+  const theme = us<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >eT</span>heme();</span>
+<span class="cstat-no" title="statement not covered" >  const navigate = useSyncNavigate();</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  cons<span class="cstat-no" title="statement not covered" >t onClick = useCallback(() =&gt; {</span>
+    if (<span class="cstat-no" title="statement not covered" >(value as string).startsWi<span class="fstat-no" title="function not covered" >th</span>('ht<span class="cstat-no" title="statement not covered" >tp')) {</span></span>
+      window.open(value as string, '_blank');
+<span class="cstat-no" title="statement not covered" >    } else {</span>
+      void navigate(value as string);
+      window.s<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >cr</span>oll(0, 0);<span class="cstat-no" title="statement not covered" ></span></span>
     }
   }, [navigate, value]);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+  return (
     value &amp;&amp; (
       &lt;Link fontSize={'16px'} onClick={onClick} style={{ paddingRight: theme.spacing(2) }}&gt;
         {label}
-      &lt;/Link&gt;
-    )
-  );
-};
+      &lt;/Link&gt;<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+    )<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >  );</span>
+};<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 &nbsp;
-export default ProjectFieldLink;
-&nbsp;</pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" >export default ProjectFieldLink;</span>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

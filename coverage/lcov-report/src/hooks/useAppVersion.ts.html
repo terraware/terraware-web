@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/31</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/29</span>
             </div>
         
             
@@ -90,68 +90,68 @@
 <a name='L25'></a><a href='#L25'>25</a>
 <a name='L26'></a><a href='#L26'>26</a>
 <a name='L27'></a><a href='#L27'>27</a>
-<a name='L28'></a><a href='#L28'>28</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L28'></a><a href='#L28'>28</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useEffect } from 'react';
-&nbsp;
-import { ONE_MINUTE_INTERVAL_MS } from 'src/constants';
-import { requestAppVersion } from 'src/redux/features/appVersion/appVersionThunks';
-&nbsp;
-import { useAppDispatch } from './../redux/store';
-&nbsp;
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useEffe<span class="cstat-no" title="statement not covered" >ct } from 'react';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+import { ONE_MINUTE_INTE<span class="cstat-no" title="statement not covered" >RVAL_MS } from 'src/constan</span>ts';
+import { requestApp<span class="cstat-no" title="statement not covered" >Version } from 'src/redux/featur</span>es/appVersion/appVersionThunks';
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+im<span class="cstat-no" title="statement not covered" >port { useAppDispatch } from './../redux/store';</span>
+<span class="cstat-no" title="statement not covered" ></span>
 // variable used to track interval references
-let checkInterval: NodeJS.Timeout;
+let checkInterval:<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > N</span>odeJS.Timeout;</span>
+<span class="cstat-no" title="statement not covered" ></span>
+// s<span class="cstat-no" title="statement not covered" >imple hook used to setup a polling app version check</span>
+export<span class="cstat-no" title="statement not covered" > const useAppVersion = () =&gt; {</span>
+  const <span class="cstat-no" title="statement not covered" >dispatch = useAppDispatch(<span class="fstat-no" title="function not covered" >);<span class="cstat-no" title="statement not covered" ></span></span></span>
 &nbsp;
-// simple hook used to setup a polling app version check
-export const useAppVersion = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-  const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  useEffect((</span>) =&gt; {
     // clear any existing intervals
-<span class="cstat-no" title="statement not covered" >    clearInterval(checkInterval);</span>
+    clearInterval(c<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >he</span>ckInter<span class="cstat-no" title="statement not covered" >val);</span></span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >    // trigger initial request</span>
+    void dispatch<span class="fstat-no" title="function not covered" >(r</span>eque<span class="cstat-no" title="statement not covered" >stAppVersion()</span>);
 &nbsp;
-    // trigger initial request
-<span class="cstat-no" title="statement not covered" >    void dispatch(requestAppVersion());</span>
-&nbsp;
-    // setup a interval check for new versions
-<span class="cstat-no" title="statement not covered" >    checkInterval = setInterval(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >      void dispatch(requestAppVersion());</span>
-    }, ONE_MINUTE_INTERVAL_MS);
-  }, [dispatch]);
+<span class="cstat-no" title="statement not covered" >    // setup a interval check for new versions</span>
+    checkInterval =<span class="cstat-no" title="statement not covered" > setInterval(() =</span>&gt; {
+      void dispatch(req<span class="cstat-no" title="statement not covered" >uestAppVersion());</span>
+    }, ONE_MINUTE_INTERVAL_MS)<span class="cstat-no" title="statement not covered" >;</span>
+  }, [dispatch]);<span class="cstat-no" title="statement not covered" ></span>
 };
-&nbsp;</pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

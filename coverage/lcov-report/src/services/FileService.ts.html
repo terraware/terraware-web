@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/30</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/27</span>
             </div>
         
             
@@ -81,50 +81,50 @@
 <a name='L16'></a><a href='#L16'>16</a>
 <a name='L17'></a><a href='#L17'>17</a>
 <a name='L18'></a><a href='#L18'>18</a>
-<a name='L19'></a><a href='#L19'>19</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L19'></a><a href='#L19'>19</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import HttpService, { Response2 } from './HttpService';
-&nbsp;
-const FILE_TOKEN_ENDPOINT = <span class="cstat-no" title="statement not covered" >'/api/v1/files/tokens/{token}';</span>
-&nbsp;
-/**
- * Get file content using a token
- */
-const getFileForToken = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync (token: string): Promise&lt;Response2&lt;any&gt;&gt; =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >  return HttpService.root(FILE_TOKEN_ENDPOINT).get2&lt;any&gt;({</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import HttpServ<span class="cstat-no" title="statement not covered" >ice, { Respons</span>e2 } from './HttpService';
+<span class="cstat-no" title="statement not covered" ></span>
+const FILE_TOKEN_ENDPOI<span class="cstat-no" title="statement not covered" >NT = '/api/v1/files/tokens/{toke</span>n}';
+<span class="cstat-no" title="statement not covered" ></span>
+/**<span class="cstat-no" title="statement not covered" ></span>
+ * Get file content<span class="cstat-no" title="statement not covered" > using a token</span>
+ */<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+co<span class="cstat-no" title="statement not covered" >nst getFileForToken = async (token: string): Promise&lt;Response2&lt;any&gt;&gt; =&gt; {</span>
+  re<span class="cstat-no" title="statement not covered" >turn HttpService.root(FILE_TOKEN_ENDPOINT).get2&lt;any&gt;({</span>
     urlReplacements: { '{token}': token },
-  });
+  });<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+};<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+const <span class="cstat-no" title="statement not covered" >FileService = {</span>
+  getFil<span class="cstat-no" title="statement not covered" >eForToken,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 };
-&nbsp;
-const FileService = <span class="cstat-no" title="statement not covered" >{</span>
-  getFileForToken,
-};
-&nbsp;
+<span class="cstat-no" title="statement not covered" ></span>
 export default FileService;
-&nbsp;</pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

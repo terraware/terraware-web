@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/30</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/28</span>
             </div>
         
             
@@ -96,72 +96,72 @@
 <a name='L31'></a><a href='#L31'>31</a>
 <a name='L32'></a><a href='#L32'>32</a>
 <a name='L33'></a><a href='#L33'>33</a>
-<a name='L34'></a><a href='#L34'>34</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L34'></a><a href='#L34'>34</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-&nbsp;
-import { SearchResponseAccession } from 'src/services/SeedBankService';
-&nbsp;
-type OrgIdSpeciesId = string;
-&nbsp;
-export type AccessionsResponseData = {
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Payload<span class="cstat-no" title="statement not covered" >Action, createSlice } </span>from '@reduxjs/toolkit';
+<span class="cstat-no" title="statement not covered" ></span>
+import { SearchResponseA<span class="cstat-no" title="statement not covered" >ccession } from 'src/servic</span>es/SeedBankService';
+<span class="cstat-no" title="statement not covered" ></span>
+type OrgIdSpeci<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >es</span>Id = string;</span>
+<span class="cstat-no" title="statement not covered" ></span>
+expo<span class="cstat-no" title="statement not covered" >rt type AccessionsResponseData = {</span>
   error?: string | true;
-  accessions?: SearchResponseAccession[];
-};
-&nbsp;
-const initialState: Record&lt;OrgIdSpeciesId, AccessionsResponseData&gt; = <span class="cstat-no" title="statement not covered" >{};</span>
-&nbsp;
+  accessions?: Sea<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >rc</span>hResponseAccession[];</span>
+};<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+const <span class="cstat-no" title="statement not covered" >initialState: Record&lt;OrgIdSpeciesId, AccessionsResponseData&gt; = {};</span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 type SetAccessionsPayload = { orgIdSpeciesId: OrgIdSpeciesId; data: AccessionsResponseData };
-&nbsp;
-export const accessionsSlice = <span class="cstat-no" title="statement not covered" >createSlice({</span>
-  name: 'accessionsSlice',
-  initialState,
-  reducers: {
-    setAccessionsAction: <span class="fstat-no" title="function not covered" >(s</span>tate, action: PayloadAction&lt;SetAccessionsPayload&gt;) =&gt; {
-      const payload: SetAccessionsPayload = <span class="cstat-no" title="statement not covered" >action.payload;</span>
-<span class="cstat-no" title="statement not covered" >      state[payload.orgIdSpeciesId] = payload.data;</span>
+<span class="cstat-no" title="statement not covered" ></span>
+export const accessionsSlice = createSlice({
+  name: 'accessions<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Sl</span>ice',<span class="cstat-no" title="statement not covered" ></span></span>
+  initialState,<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >  reducers: {</span>
+    setAccessionsAc<span class="fstat-no" title="function not covered" >ti</span>on: <span class="cstat-no" title="statement not covered" >(state, action: </span>PayloadAction&lt;SetAccessionsPayload&gt;) =&gt; {
+      const<span class="fstat-no" title="function not covered" > p</span>aylo<span class="cstat-no" title="statement not covered" >ad: SetAccessi</span>onsPayload = action.payload;
+      state[payload.org<span class="fstat-no" title="function not covered" >Id</span>Spec<span class="cstat-no" title="statement not covered" >iesId] = payload.dat</span>a;
     },
-  },
-});
+<span class="cstat-no" title="statement not covered" >  },</span>
+});<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+export const { setAccess<span class="cstat-no" title="statement not covered" >ionsAction } = accessionsSlice.actions;</span>
 &nbsp;
-export const { setAccessionsAction } = <span class="cstat-no" title="statement not covered" >accessionsSlice.actions;</span>
-&nbsp;
-const accessionsReducers = <span class="cstat-no" title="statement not covered" >{</span>
+const accessionsReducers = {
   accessions: accessionsSlice.reducer,
-};
-&nbsp;
-export default accessionsReducers;
+};<span class="fstat-no" title="function not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+export<span class="cstat-no" title="statement not covered" > default accessionsReducers;</span>
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -169,7 +169,7 @@ export default accessionsReducers;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

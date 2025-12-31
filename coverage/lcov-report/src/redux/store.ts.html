@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/34</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/31</span>
             </div>
         
             
@@ -92,72 +92,72 @@
 <a name='L27'></a><a href='#L27'>27</a>
 <a name='L28'></a><a href='#L28'>28</a>
 <a name='L29'></a><a href='#L29'>29</a>
-<a name='L30'></a><a href='#L30'>30</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L30'></a><a href='#L30'>30</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { TypedUs<span class="cstat-no" title="statement not covered" >eSelectorHook, useDisp</span>atch, useSelector } from 'react-redux';
+<span class="cstat-no" title="statement not covered" ></span>
+import { configureStore <span class="cstat-no" title="statement not covered" >} from '@reduxjs/toolkit';</span>
+import { setupListe<span class="cstat-no" title="statement not covered" >ners } from '@reduxjs/toolkit/qu</span>ery';
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+im<span class="cstat-no" title="statement not covered" >port 'src/queries/extensions';</span>
+impo<span class="cstat-no" title="statement not covered" >rt { rtkMiddleware } from 'src/queries/reducers';</span>
 &nbsp;
-import { configureStore } from '@reduxjs/toolkit';
-import { setupListeners } from '@reduxjs/toolkit/query';
-&nbsp;
-import 'src/queries/extensions';
-import { rtkMiddleware } from 'src/queries/reducers';
-&nbsp;
-import { rootReducer } from './rootReducer';
-&nbsp;
-// configure the root store
-export const store = <span class="cstat-no" title="statement not covered" >configureStore({</span>
-  reducer: rootReducer,
-  middleware: <span class="fstat-no" title="function not covered" >(g</span>etDefaultMiddleware) =&gt; {
-<span class="cstat-no" title="statement not covered" >    return getDefaultMiddleware({</span>
+import { rootReduc<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >er</span> } from './rootReducer';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+// c<span class="cstat-no" title="statement not covered" >onfigure the root store</span>
+export<span class="cstat-no" title="statement not covered" > const store = configureStore({</span>
+  reduce<span class="cstat-no" title="statement not covered" >r: rootReducer,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  middleware: (getDefaultMiddleware) =&gt; {
+<span class="cstat-no" title="statement not covered" >    return ge</span>tDefaultMiddleware({
       immutableCheck: false,
-      serializableCheck: false,
-    }).concat(rtkMiddleware);
-  },
-});
+      serializableC<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >he</span>ck: fal<span class="cstat-no" title="statement not covered" >se,</span></span>
+    }).concat(rtkMid<span class="cstat-no" title="statement not covered" >dle</span>ware);
+<span class="cstat-no" title="statement not covered" >  },</span>
+});<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+setupListeners(sto<span class="fstat-no" title="function not covered" >re</span>.dis<span class="cstat-no" title="statement not covered" >patch);</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >setupListeners(store.dispatch);</span>
-&nbsp;
-export type RootState = ReturnType&lt;typeof store.getState&gt;;
-export type AppDispatch = typeof store.dispatch;
-&nbsp;
-// Use throughout your app instead of plain `useDispatch` and `useSelector`
-export const useAppDispatch = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >useDispatch&lt;AppDispatch&gt;();</span></span>
-export const useAppSelector: TypedUseSelectorHook&lt;RootState&gt; = <span class="cstat-no" title="statement not covered" >useSelector;</span>
-&nbsp;</pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" >export type RootState = ReturnType&lt;typeof stor</span>e.getState&gt;;
+export type AppDispatch =<span class="cstat-no" title="statement not covered" > typeof store.dispatch;</span>
+<span class="cstat-no" title="statement not covered" ></span>
+// Use throughout y<span class="cstat-no" title="statement not covered" >our app instead of plain `useDispa</span>tch` and `useSelector`
+export const useAppDispa<span class="cstat-no" title="statement not covered" >tch = () =&gt; useDispatch&lt;AppDispatc</span>h&gt;();
+export const useAppSel<span class="cstat-no" title="statement not covered" >ector: TypedUseSelectorHook&lt;Root</span>State&gt; = useSelector;
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

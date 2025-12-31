@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
@@ -85,9 +85,8 @@
 <a name='L20'></a><a href='#L20'>20</a>
 <a name='L21'></a><a href='#L21'>21</a>
 <a name='L22'></a><a href='#L22'>22</a>
-<a name='L23'></a><a href='#L23'>23</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L23'></a><a href='#L23'>23</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -107,25 +106,26 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { api } from '../generated/t0';
-import { QueryTagTypes } from '../tags';
-&nbsp;
-<span class="cstat-no" title="statement not covered" >api.enhanceEndpoints({</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { api } f<span class="cstat-no" title="statement not covered" >rom '../generated/t0';</span>
+import { QueryTagT<span class="cstat-no" title="statement not covered" >ypes } from '../tag</span>s';
+<span class="cstat-no" title="statement not covered" ></span>
+api.enhanceEndpoints({
   endpoints: {
-    getAllT0SiteDataSet: {
-      providesTags: <span class="fstat-no" title="function not covered" >(_</span>result, _error, plantingSiteId) =&gt; <span class="cstat-no" title="statement not covered" >[{ type: QueryTagTypes.T0, id: plantingSiteId }],</span>
+    getAllT0SiteData<span class="fstat-no" title="function not covered" >Se</span>t: {<span class="cstat-no" title="statement not covered" ></span>
+      providesTags: (_result, _error, plantingSiteId) =&gt; [{ type: QueryTagTypes.T0, id: plantingSiteId }],
     },
-    getT0SiteData: {
-      providesTags: <span class="fstat-no" title="function not covered" >(_</span>result, _error, plantingSiteId) =&gt; <span class="cstat-no" title="statement not covered" >[{ type: QueryTagTypes.T0, id: plantingSiteId }],</span>
+    getT0SiteData: {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+      providesTags: (_result, _error, plantingSiteId) =&gt; [{ type: QueryTagTypes.T0, id: plantingSiteId }],
     },
-    getT0SpeciesForPlantingSite: {
-      providesTags: <span class="fstat-no" title="function not covered" >(_</span>result, _error, plantingSiteId) =&gt; <span class="cstat-no" title="statement not covered" >[{ type: QueryTagTypes.T0, id: plantingSiteId }],</span>
+    getT0SpeciesForP<span class="fstat-no" title="function not covered" >la</span>ntingSite: {<span class="cstat-no" title="statement not covered" ></span>
+      providesTags: (_result, _error, plantingSiteId) =&gt; [{ type: QueryTagTypes.T0, id: plantingSiteId }],
     },
-    assignT0SiteData: {
-      invalidatesTags: <span class="fstat-no" title="function not covered" >(_</span>result, _error, payload) =&gt; <span class="cstat-no" title="statement not covered" >[{ type: QueryTagTypes.T0, id: payload.plantingSiteId }],</span>
+    assignT0SiteData: {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+      invalidatesTags: (_result, _error, payload) =&gt; [{ type: QueryTagTypes.T0, id: payload.plantingSiteId }],
     },
-    assignT0TempSiteData: {
-      invalidatesTags: <span class="fstat-no" title="function not covered" >(_</span>result, _error, payload) =&gt; <span class="cstat-no" title="statement not covered" >[{ type: QueryTagTypes.T0, id: payload.plantingSiteId }],</span>
+    assignT0TempSiteDat<span class="fstat-no" title="function not covered" >a:</span> {<span class="cstat-no" title="statement not covered" ></span>
+      invalidatesTags: (_result, _error, payload) =&gt; [{ type: QueryTagTypes.T0, id: payload.plantingSiteId }],
     },
   },
 });
@@ -136,7 +136,7 @@ import { QueryTagTypes } from '../tags';
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

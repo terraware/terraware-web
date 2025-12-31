@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/31</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/28</span>
             </div>
         
             
@@ -89,66 +89,66 @@
 <a name='L24'></a><a href='#L24'>24</a>
 <a name='L25'></a><a href='#L25'>25</a>
 <a name='L26'></a><a href='#L26'>26</a>
-<a name='L27'></a><a href='#L27'>27</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L27'></a><a href='#L27'>27</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useMemo } from 'react';
-&nbsp;
-import { useLocalization } from 'src/providers';
-import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
-import { SearchOrderConfig, searchAndSort } from 'src/utils/searchAndSort';
-&nbsp;
-const useClientSideFilter = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >&lt;T</span> extends Record&lt;string, unknown&gt;&gt;(</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useMemo<span class="cstat-no" title="statement not covered" > } from 'react';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+import { useLocalization<span class="cstat-no" title="statement not covered" > } from 'src/providers';</span>
+import { SearchNode<span class="cstat-no" title="statement not covered" >Payload, SearchSortOrder } from </span>'src/types/Search';
+import { Search<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Or</span>derConfig, searchAndSort } from 'src/utils/searchAndSort';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+cons<span class="cstat-no" title="statement not covered" >t useClientSideFilter = &lt;T extends Record&lt;string, unknown&gt;&gt;(</span>
   data: T[],
-  search?: SearchNodePayload,
-  searchSortOrder?: SearchSortOrder
-) =&gt; {
-  const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
-&nbsp;
-  const searchOrderConfig: SearchOrderConfig | undefined = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (searchSortOrder) {</span>
-<span class="cstat-no" title="statement not covered" >      return {</span>
-        locale: activeLocale ?? null,
-        sortOrder: searchSortOrder,
-      };
-    }
+  search?: SearchN<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >od</span>ePayload,</span>
+<span class="cstat-no" title="statement not covered" >  searchSortOrder?: SearchSortOrder</span>
+) =&gt;<span class="cstat-no" title="statement not covered" > {</span>
+  cons<span class="cstat-no" title="statement not covered" >t { activeLocale } = useLocalization();</span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  const searchOrderConfig: SearchOrderConfig | undefined = useMemo(() =&gt; {
+<span class="cstat-no" title="statement not covered" >    if (searc</span>hSortOrder) {
+      return {
+        locale: act<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >iv</span>eLocale<span class="cstat-no" title="statement not covered" > ?? null,</span></span>
+        sortOrder: s<span class="cstat-no" title="statement not covered" >ear</span>chSortOrder,
+<span class="cstat-no" title="statement not covered" >      };</span>
+    }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
   }, [activeLocale, searchSortOrder]);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  return useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >searchAndSort(data, search, searchOrderConfig),</span> [data, search, searchOrderConfig]);</span>
-};
-&nbsp;
-export default useClientSideFilter;
-&nbsp;</pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" ></span>
+  return useMemo(()<span class="cstat-no" title="statement not covered" > =&gt; searchAndSort</span>(data, search, searchOrderConfig), [data, search, searchOrderConfig]);
+};<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+export default useClientSide<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Fi</span>lter;</span>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

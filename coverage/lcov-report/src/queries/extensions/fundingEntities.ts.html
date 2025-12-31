@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
@@ -111,27 +111,15 @@
 <a name='L46'></a><a href='#L46'>46</a>
 <a name='L47'></a><a href='#L47'>47</a>
 <a name='L48'></a><a href='#L48'>48</a>
-<a name='L49'></a><a href='#L49'>49</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L49'></a><a href='#L49'>49</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -155,55 +143,67 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { api } from '../generated/fundingEntities';
-import { QueryTagTypes } from '../tags';
-&nbsp;
-<span class="cstat-no" title="statement not covered" >api.enhanceEndpoints({</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { api } from '../gener<span class="cstat-no" title="statement not covered" >ated/fundingEntities';</span>
+import { QueryTagT<span class="cstat-no" title="statement not covered" >ypes } from '../tag</span>s';
+<span class="cstat-no" title="statement not covered" ></span>
+api.enhanceEndpoints({
   endpoints: {
-    listFundingEntities: {
-      providesTags: <span class="fstat-no" title="function not covered" >(r</span>esults) =&gt; <span class="cstat-no" title="statement not covered" >[</span>
+    listFundingEntit<span class="fstat-no" title="function not covered" >ie</span>s: {<span class="cstat-no" title="statement not covered" ></span>
+      providesTags: (results) =&gt; [<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
         ...(results
-          ? results.fundingEntities.map(<span class="fstat-no" title="function not covered" >(e</span>ntity) =&gt; (<span class="cstat-no" title="statement not covered" >{ type: QueryTagTypes.FundingEntities, id: entity.id })</span>)
+          ? results.fundingEntities.map((entity) =&gt; ({ type: QueryTagTypes.FundingEntities, id: entity.id }))
           : []),
         { type: QueryTagTypes.FundingEntities, id: 'LIST' },
-      ],
+      ],<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
     },
     createFundingEntity: {
-      invalidatesTags: <span class="fstat-no" title="function not covered" >(r</span>esult) =&gt; <span class="cstat-no" title="statement not covered" >[</span>
+      invalidatesTags: (result) =&gt; [
         ...(result ? [{ type: QueryTagTypes.FundingEntities, id: result.fundingEntity.id }] : []),
         { type: QueryTagTypes.FundingEntities, id: 'LIST' },
-      ],
+      ],<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
     },
     getFundingEntity1: {
-      providesTags: <span class="fstat-no" title="function not covered" >(r</span>esult) =&gt; (<span class="cstat-no" title="statement not covered" >result ? [{ type: QueryTagTypes.FundingEntities, id: result.fundingEntity.id }] : [])</span>,
+      providesTags: (re<span class="fstat-no" title="function not covered" >su</span>lt) =&gt; (result ? [{ type: QueryTagTy<span class="cstat-no" title="statement not covered" >pes.FundingEntities, id: result.fundingEntity.id }] : []),</span>
     },
     deleteFundingEntity: {
-      invalidatesTags: <span class="fstat-no" title="function not covered" >(_</span>result, _error, fundingEntityId) =&gt; <span class="cstat-no" title="statement not covered" >[</span>
+      invalidatesTags: (_result, _error, fundingEntityId) =&gt; [
         { type: QueryTagTypes.FundingEntities, id: fundingEntityId },
         { type: QueryTagTypes.FundingEntities, id: 'LIST' },
-      ],
+      ],<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
     },
     getFundingEntity: {
-      providesTags: <span class="fstat-no" title="function not covered" >(r</span>esult) =&gt; (<span class="cstat-no" title="statement not covered" >result ? [{ type: QueryTagTypes.FundingEntities, id: result.fundingEntity.id }] : [])</span>,
+      providesTags: (re<span class="fstat-no" title="function not covered" >su</span>lt) =&gt; (result ? [{ type: Qu<span class="cstat-no" title="statement not covered" >eryTagTypes.FundingEntities, id: result.fundingEntity.id }] : []),</span>
     },
     updateFundingEntity: {
-      invalidatesTags: <span class="fstat-no" title="function not covered" >(_</span>result, _error, payload) =&gt; <span class="cstat-no" title="statement not covered" >[</span>
+      invalidatesTags: (_result, _error, payload) =&gt; [
         { type: QueryTagTypes.FundingEntities, id: payload.fundingEntityId },
         { type: QueryTagTypes.FundingEntities, id: 'LIST' },
-      ],
+      ],<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
     },
     removeFunder: {
-      invalidatesTags: <span class="fstat-no" title="function not covered" >(_</span>result, _error, payload) =&gt; <span class="cstat-no" title="statement not covered" >[{ type: QueryTagTypes.Funders, id: payload.fundingEntityId }],</span>
+      invalidatesTag<span class="fstat-no" title="function not covered" >s:</span> (_result, _error, payload) =&gt; [{ ty<span class="cstat-no" title="statement not covered" >pe: QueryTagTypes.Funders, id: payload.fundingEntityId }],</span>
     },
     getFunders: {
-      providesTags: <span class="fstat-no" title="function not covered" >(_</span>result, _error, fundingEntityId) =&gt; <span class="cstat-no" title="statement not covered" >[{ type: QueryTagTypes.Funders, id: fundingEntityId }],</span>
+      providesTags: (_r<span class="fstat-no" title="function not covered" >es</span>ult, _error, fundingEntityId<span class="cstat-no" title="statement not covered" >) =&gt; [{ type: QueryTagTypes.Funders, id: fundingEntityId }],</span>
     },
     inviteFunder: {
-      invalidatesTags: <span class="fstat-no" title="function not covered" >(_</span>result, _error, payload) =&gt; <span class="cstat-no" title="statement not covered" >[{ type: QueryTagTypes.Funders, id: payload.fundingEntityId }],</span>
+      invalidatesTags: (_result, _error, payload) =&gt; [{ type: QueryTagTypes.Funders, id: payload.fundingEntityId }],
     },
   },
 });
@@ -214,7 +214,7 @@ import { QueryTagTypes } from '../tags';
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

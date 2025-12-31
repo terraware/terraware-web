@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/14</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/14</span>
             </div>
         
             
@@ -112,22 +112,9 @@
 <a name='L47'></a><a href='#L47'>47</a>
 <a name='L48'></a><a href='#L48'>48</a>
 <a name='L49'></a><a href='#L49'>49</a>
-<a name='L50'></a><a href='#L50'>50</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L50'></a><a href='#L50'>50</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -143,6 +130,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -157,56 +147,66 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { api } from '../generated/plantingSites';
-import { QueryTagTypes } from '../tags';
-&nbsp;
-<span class="cstat-no" title="statement not covered" >api.enhanceEndpoints({</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { api } from '../gen<span class="cstat-no" title="statement not covered" >erated/plantingSites';</span>
+import { QueryTagT<span class="cstat-no" title="statement not covered" >ypes } from '../tag</span>s';
+<span class="cstat-no" title="statement not covered" ></span>
+api.enhanceEndpoints({
   endpoints: {
-    listPlantingSites: {
-      providesTags: <span class="fstat-no" title="function not covered" >(r</span>esults) =&gt; <span class="cstat-no" title="statement not covered" >[</span>
-        ...(results ? results.sites.map(<span class="fstat-no" title="function not covered" >(s</span>ite) =&gt; (<span class="cstat-no" title="statement not covered" >{ type: QueryTagTypes.PlantingSites, id: site.id })</span>) : []),
+    listPlantingSite<span class="fstat-no" title="function not covered" >s:</span> {<span class="cstat-no" title="statement not covered" ></span>
+      providesTags: (results) =&gt; [<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+        ...(results ? results.sites.map((site) =&gt; ({ type: QueryTagTypes.PlantingSites, id: site.id })) : []),
         { type: QueryTagTypes.PlantingSites, id: 'LIST' },
       ],
     },
-    createPlantingSite: {
-      invalidatesTags: <span class="fstat-no" title="function not covered" >(r</span>esult) =&gt; <span class="cstat-no" title="statement not covered" >[</span>
+    createPlantingSite:<span class="fstat-no" title="function not covered" > {<span class="cstat-no" title="statement not covered" ></span></span>
+      invalidatesTags: (result) =&gt; [
         ...(result ? [{ type: QueryTagTypes.PlantingSites, id: result.id }] : []),
         { type: QueryTagTypes.PlantingSites, id: 'LIST' },
       ],
     },
-    listPlantingSiteReportedPlants: {
-      providesTags: <span class="fstat-no" title="function not covered" >(r</span>esults) =&gt; <span class="cstat-no" title="statement not covered" >[</span>
-        ...(results ? results.sites.map(<span class="fstat-no" title="function not covered" >(s</span>ite) =&gt; (<span class="cstat-no" title="statement not covered" >{ type: QueryTagTypes.PlantingSites, id: site.id })</span>) : []),
+    listPlantingSite<span class="fstat-no" title="function not covered" >Re</span>portedPlant<span class="cstat-no" title="statement not covered" >s: {</span>
+      providesTags: (results) =&gt; [<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+        ...(results ? results.sites.map((site) =&gt; ({ type: QueryTagTypes.PlantingSites, id: site.id })) : []),
         { type: QueryTagTypes.PlantingSites, id: 'LIST' },
       ],
     },
-    deletePlantingSite: {
-      invalidatesTags: <span class="fstat-no" title="function not covered" >(_</span>result, _error, plantingSiteId) =&gt; <span class="cstat-no" title="statement not covered" >[</span>
+    deletePlantingSite:<span class="fstat-no" title="function not covered" > {<span class="cstat-no" title="statement not covered" ></span></span>
+      invalidatesTags: (_result, _error, plantingSiteId) =&gt; [
         { type: QueryTagTypes.PlantingSites, id: plantingSiteId },
         { type: QueryTagTypes.PlantingSites, id: 'LIST' },
       ],
     },
-    getPlantingSite: {
-      providesTags: <span class="fstat-no" title="function not covered" >(_</span>result, _error, plantingSiteId) =&gt; <span class="cstat-no" title="statement not covered" >[{ type: QueryTagTypes.PlantingSites, id: plantingSiteId }],</span>
+    getPlantingSite:<span class="fstat-no" title="function not covered" > {<span class="cstat-no" title="statement not covered" ></span></span>
+      providesTags: (_result, _error, plantingSiteId) =&gt; [{ type: QueryTagTypes.PlantingSites, id: plantingSiteId }],
     },
-    updatePlantingSite: {
-      invalidatesTags: <span class="fstat-no" title="function not covered" >(_</span>result, _error, plantingSiteId) =&gt; <span class="cstat-no" title="statement not covered" >[</span>
+    updatePlantingSite:<span class="fstat-no" title="function not covered" > {<span class="cstat-no" title="statement not covered" ></span></span>
+      invalidatesTags: (_result, _error, plantingSiteId) =&gt; [
         { type: QueryTagTypes.PlantingSites, id: plantingSiteId.id },
         { type: QueryTagTypes.PlantingSites, id: 'LIST' },
       ],
     },
-    listPlantingSiteHistories: {
-      providesTags: <span class="fstat-no" title="function not covered" >(_</span>result, _error, plantingSiteId) =&gt; <span class="cstat-no" title="statement not covered" >[{ type: QueryTagTypes.PlantingSites, id: plantingSiteId }],</span>
+    listPlantingSite<span class="fstat-no" title="function not covered" >Hi</span>stories: {<span class="cstat-no" title="statement not covered" ></span>
+      providesTags: (_result, _error, plantingSiteId) =&gt; [{ type: QueryTagTypes.PlantingSites, id: plantingSiteId }],
     },
-    getPlantingSiteHistory: {
-      providesTags: <span class="fstat-no" title="function not covered" >(_</span>result, _error, payload) =&gt; <span class="cstat-no" title="statement not covered" >[{ type: QueryTagTypes.PlantingSites, id: payload.id }],</span>
+    getPlantingSiteH<span class="fstat-no" title="function not covered" >is</span>tory: {<span class="cstat-no" title="statement not covered" ></span>
+      providesTags: (_result, _error, payload) =&gt; [{ type: QueryTagTypes.PlantingSites, id: payload.id }],
     },
-    getPlantingSiteReportedPlants: {
-      providesTags: <span class="fstat-no" title="function not covered" >(_</span>result, _error, plantingSiteId) =&gt; <span class="cstat-no" title="statement not covered" >[{ type: QueryTagTypes.PlantingSites, id: plantingSiteId }],</span>
+    getPlantingSiteR<span class="fstat-no" title="function not covered" >ep</span>ortedPlants: {<span class="cstat-no" title="statement not covered" ></span>
+      providesTags: (_result, _error, plantingSiteId) =&gt; [{ type: QueryTagTypes.PlantingSites, id: plantingSiteId }],
     },
   },
 });
@@ -217,7 +217,7 @@ import { QueryTagTypes } from '../tags';
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

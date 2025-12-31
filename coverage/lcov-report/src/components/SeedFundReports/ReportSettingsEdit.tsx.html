@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/42</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/24</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/39</span>
             </div>
         
             
@@ -97,11 +97,25 @@
 <a name='L32'></a><a href='#L32'>32</a>
 <a name='L33'></a><a href='#L33'>33</a>
 <a name='L34'></a><a href='#L34'>34</a>
-<a name='L35'></a><a href='#L35'>35</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L35'></a><a href='#L35'>35</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -112,67 +126,53 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useEffect } from 'react';
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > useEffect } f</span>rom 'react';
+<span class="cstat-no" title="statement not covered" ></span>
+import PageHeader from <span class="cstat-no" title="statement not covered" >'src/components/PageHeader';</span>
+import TfMain from 'src/<span class="cstat-no" title="statement not covered" >components/common/TfMain';</span>
+import { useOrganiz<span class="cstat-no" title="statement not covered" >ation } from 'src/prov</span>iders';
+import { selectRepo<span class="cstat-no" title="statement not covered" >rtsSettings } from 'src/redux/fe</span>atures/reportsSettings/reportsSettingsSelectors';
+import { reques<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >tR</span>eportsSettings } from 'src/redux/features/reportsSettings/reportsSettingsThunks';</span>
+im<span class="cstat-no" title="statement not covered" >port { useAppDispatch, useAppSelector } from 'src/redux/store';</span>
+impo<span class="cstat-no" title="statement not covered" >rt strings from 'src/strings';</span>
 &nbsp;
-import PageHeader from 'src/components/PageHeader';
-import TfMain from 'src/components/common/TfMain';
-import { useOrganization } from 'src/providers';
-import { selectReportsSettings } from 'src/redux/features/reportsSettings/reportsSettingsSelectors';
-import { requestReportsSettings } from 'src/redux/features/reportsSettings/reportsSettingsThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import strings from 'src/strings';
+import ReportSetti<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ng</span>sEditForm from './ReportSettingsEditForm';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+cons<span class="cstat-no" title="statement not covered" >t ReportSettingsEdit = () =&gt; {</span>
+  cons<span class="cstat-no" title="statement not covered" >t dispatch = useAppDispatch();</span>
+  const <span class="cstat-no" title="statement not covered" >{ selectedOrganization } =<span class="fstat-no" title="function not covered" > u</span>seOr<span class="cstat-no" title="statement not covered" >ganization</span>();</span>
 &nbsp;
-import ReportSettingsEditForm from './ReportSettingsEditForm';
+<span class="cstat-no" title="statement not covered" >  const repor</span>tsSettings = useAppSelector(selectReportsSettings);
 &nbsp;
-const ReportSettingsEdit = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-  const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
-  const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
-&nbsp;
-  const reportsSettings = <span class="cstat-no" title="statement not covered" >useAppSelector(selectReportsSettings);</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (!reportsSettings &amp;&amp; selectedOrganization) {</span>
-<span class="cstat-no" title="statement not covered" >      void dispatch(requestReportsSettings(selectedOrganization.id));</span>
+  useEffect(()<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > =</span>&gt; {<span class="cstat-no" title="statement not covered" ></span></span>
+    if (!reportsSettings &amp;&amp; selectedOrganization) {
+      void dispatch(requestReportsSettings(selectedOrganization.id));
     }
   }, [dispatch, reportsSettings, selectedOrganization]);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+  return (
     &lt;TfMain&gt;
-      &lt;PageHeader title={strings.REPORTS} /&gt;
-&nbsp;
-      {reportsSettings &amp;&amp; &lt;ReportSettingsEditForm reportsSettings={reportsSettings} isEditing /&gt;}
-    &lt;/TfMain&gt;
+      &lt;PageHeader t<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >it</span>le={str<span class="cstat-no" title="statement not covered" >ings.REPORTS} /&gt;</span></span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >      {reportsSettings &amp;&amp; &lt;ReportSettingsEditForm reportsSettings={reportsSettings} isEditing /&gt;}</span>
+    &lt;/TfMai<span class="fstat-no" title="function not covered" >n&gt;<span class="cstat-no" title="statement not covered" ></span></span>
   );
-};
-&nbsp;
-export default ReportSettingsEdit;
-&nbsp;</pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" >};</span>
+<span class="cstat-no" title="statement not covered" ></span>
+export default ReportSet<span class="cstat-no" title="statement not covered" >tingsEdit;</span>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

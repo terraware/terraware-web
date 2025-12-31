@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>0/38</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>0/36</span>
             </div>
         
             
@@ -102,92 +102,92 @@
 <a name='L37'></a><a href='#L37'>37</a>
 <a name='L38'></a><a href='#L38'>38</a>
 <a name='L39'></a><a href='#L39'>39</a>
-<a name='L40'></a><a href='#L40'>40</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L40'></a><a href='#L40'>40</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useCallback, useEffect, useMemo, useState } from 'react';
-&nbsp;
-import { requestGetCohortModule } from 'src/redux/features/cohortModules/cohortModulesAsyncThunks';
-import { selectCohortModuleRequest } from 'src/redux/features/cohortModules/cohortModulesSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { CohortModule } from 'src/types/Module';
-&nbsp;
-const useGetCohortModule = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-  const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
-&nbsp;
-  const [moduleRequestId, setModuleRequestId] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
-  const [cohortModule, setCohortModule] = <span class="cstat-no" title="statement not covered" >useState&lt;CohortModule&gt;();</span>
-&nbsp;
-  const getModuleResponse = <span class="cstat-no" title="statement not covered" >useAppSelector(selectCohortModuleRequest(moduleRequestId));</span>
-&nbsp;
-  const getCohortModule = <span class="cstat-no" title="statement not covered" >useCallback(</span>
-<span class="fstat-no" title="function not covered" >    (r</span>equest: { cohortId: number; moduleId: number }) =&gt; {
-      const getModule = <span class="cstat-no" title="statement not covered" >dispatch(requestGetCohortModule(request));</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useCall<span class="cstat-no" title="statement not covered" >back, useEffect, useMe</span>mo, useState } from 'react';
+<span class="cstat-no" title="statement not covered" ></span>
+import { requestGetCohor<span class="cstat-no" title="statement not covered" >tModule } from 'src/redux/f</span>eatures/cohortModules/cohortModulesAsyncThunks';
+import { selectCoho<span class="cstat-no" title="statement not covered" >rtModuleRequest } from 'src/redu</span>x/features/cohortModules/cohortModulesSelectors';
+import { useApp<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Di</span>spatch, useAppSelector } from 'src/redux/store';</span>
+im<span class="cstat-no" title="statement not covered" >port { CohortModule } from 'src/types/Module';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+const useGetCohortModule = () =&gt; {
+  const dispatch =<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > u</span>seAppDispatch();</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  co<span class="cstat-no" title="statement not covered" >nst [moduleRequestId, setModuleRequestId] = useState&lt;string&gt;('');</span>
+  cons<span class="cstat-no" title="statement not covered" >t [cohortModule, setCohortModule] = useState&lt;CohortModule&gt;();</span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  const getModuleResponse = useAppSelector(selectCohortModuleRequest(moduleRequestId));
+<span class="cstat-no" title="statement not covered" ></span>
+  const getCohortModule = useCallback(
+    (request: { coh<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >or</span>tId: nu<span class="cstat-no" title="statement not covered" >mber; moduleId: number }) =&gt; {</span></span>
+      const getModul<span class="cstat-no" title="statement not covered" >e =</span> dispatch(requestGetCohortModule(request));
 <span class="cstat-no" title="statement not covered" >      setModuleRequestId(getModule.requestId);</span>
-    },
+    },<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
     [dispatch, setModuleRequestId]
-  );
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (getModuleResponse &amp;&amp; getModuleResponse.status === 'success') {</span>
-<span class="cstat-no" title="statement not covered" >      setCohortModule(getModuleResponse.data);</span>
-    }
-  }, [getModuleResponse, setCohortModule]);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  return useMemo(</span>
-<span class="fstat-no" title="function not covered" >    ()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
-      cohortModule,
-      getCohortModule,
-    }),
-    [getCohortModule, cohortModule]
+<span class="cstat-no" title="statement not covered" >  );</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
+    if (getModuleResponse &amp;&amp; getModu<span class="cstat-no" title="statement not covered" >leResponse.status === 'success') {</span>
+      setCohortModu<span class="cstat-no" title="statement not covered" >le(getModuleResponse.data);</span>
+    }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  }, [getModuleResp<span class="cstat-no" title="statement not covered" >onse, setCohortModule]);</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  return useMemo(<span class="cstat-no" title="statement not covered" ></span>
+    () =&gt; ({<span class="cstat-no" title="statement not covered" ></span>
+      cohortModule,<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" ></span>      getCohortModule,
+    }),<span class="cstat-no" title="statement not covered" ></span>
+    [g<span class="cstat-no" title="statement not covered" >etCohortModule, cohortModule]</span>
   );
 };
 &nbsp;
-export default useGetCohortModule;
-&nbsp;</pre></td></tr></table></pre>
+ex<span class="cstat-no" title="statement not covered" >port default useGetCohortMod<span class="fstat-no" title="function not covered" >ul</span>e;</span>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

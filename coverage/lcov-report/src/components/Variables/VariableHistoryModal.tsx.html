@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/34</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/31</span>
             </div>
         
             
@@ -98,14 +98,25 @@
 <a name='L33'></a><a href='#L33'>33</a>
 <a name='L34'></a><a href='#L34'>34</a>
 <a name='L35'></a><a href='#L35'>35</a>
-<a name='L36'></a><a href='#L36'>36</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L36'></a><a href='#L36'>36</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -116,66 +127,55 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback } from 'react';
-&nbsp;
-import DialogBox from 'src/components/common/ScrollableDialogBox';
-import Button from 'src/components/common/button/Button';
-import strings from 'src/strings';
-&nbsp;
-import { VariableHistoryTable } from './VariableHistoryTable';
-&nbsp;
-type VariableHistoryModalProps = {
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > useCallback }</span> from 'react';
+<span class="cstat-no" title="statement not covered" ></span>
+import DialogBox from '<span class="cstat-no" title="statement not covered" >src/components/common/Scrollable</span>DialogBox';
+import Button from 'src/<span class="cstat-no" title="statement not covered" >components/common/button/Bu</span>tton';
+import strings from<span class="cstat-no" title="statement not covered" > 'src/strings';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+import { Variab<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >le</span>HistoryTable } from './VariableHistoryTable';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+type<span class="cstat-no" title="statement not covered" > VariableHistoryModalProps = {</span>
   open: boolean;
-  projectId: number;
-  setOpen: (open: boolean) =&gt; void;
-  variableId: number;
-};
+  projectId: numbe<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >r;</span></span>
+<span class="cstat-no" title="statement not covered" >  setOpen: (open: boolean) =&gt; void;</span>
+  va<span class="cstat-no" title="statement not covered" >riableId: number;</span>
+};<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+const VariableHistoryModal = ({ open, projectId, setOpen, variableId }: VariableHistoryModalProps): JSX.Element =&gt; {
+<span class="cstat-no" title="statement not covered" >  const onClo</span>se = useCallback(() =&gt; {
+    setOpen(false);
+  }, [setOpen]<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >);<span class="cstat-no" title="statement not covered" ></span></span></span>
 &nbsp;
-const VariableHistoryModal = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> open, projectId, setOpen, variableId }: VariableHistoryModalProps): JSX.Element =&gt; {</span>
-  const onClose = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    setOpen(false);</span>
-  }, [setOpen]);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+  return (
     &lt;DialogBox
       onClose={onClose}
       open={open}
       title={strings.VARIABLE_HISTORY}
       size='x-large'
-      middleButtons={[&lt;Button label={strings.CLOSE} onClick={onClose} key={'close-button'} /&gt;]}
-      style={{ zIndex: 1301 }}
-    &gt;
-      &lt;VariableHistoryTable projectId={projectId} variableId={variableId} /&gt;
+      middleButtons<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >={</span>[&lt;Butto<span class="cstat-no" title="statement not covered" >n label={strings.CLOSE} onClick={onClose} key={'close-button'} </span></span>/&gt;]}
+      style={{ zInde<span class="cstat-no" title="statement not covered" >x: </span>1301 }}
+<span class="cstat-no" title="statement not covered" >    &gt;</span>
+      &lt;Vari<span class="fstat-no" title="function not covered" >ab</span>leHi<span class="cstat-no" title="statement not covered" >storyTable pro</span>jectId={projectId} variableId={variableId} /&gt;
     &lt;/DialogBox&gt;
-  );
-};
-&nbsp;
-export default VariableHistoryModal;
-&nbsp;</pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" >  );</span>
+};<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+export default Varia<span class="cstat-no" title="statement not covered" >bleHistoryModal;</span>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/36</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/22</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/31</span>
             </div>
         
             
@@ -88,23 +88,23 @@
 <a name='L23'></a><a href='#L23'>23</a>
 <a name='L24'></a><a href='#L24'>24</a>
 <a name='L25'></a><a href='#L25'>25</a>
-<a name='L26'></a><a href='#L26'>26</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L26'></a><a href='#L26'>26</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -113,25 +113,25 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
-&nbsp;
-import { Grid, Typography, useTheme } from '@mui/material';
-&nbsp;
-import SdgIcon from 'src/components/common/SDG/SdgIcon';
-import strings from 'src/strings';
-import { SustainableDevelopmentGoal } from 'src/types/Report';
-&nbsp;
-const ProjectSdgDisplay = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> sdgList }: { sdgList?: SustainableDevelopmentGoal[] }) =&gt; {</span>
-  const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-&nbsp;
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React fr<span class="cstat-no" title="statement not covered" >om 'react';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+import { Grid, Typograp<span class="cstat-no" title="statement not covered" >hy, useTheme } from '@mui/materi</span>al';
+<span class="cstat-no" title="statement not covered" ></span>
+import SdgIcon from<span class="cstat-no" title="statement not covered" > 'src/components/commo</span>n/SDG/SdgIcon';
+import strings from<span class="cstat-no" title="statement not covered" > 'src/strings';</span>
+import { Sustai<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >na</span>bleDevelopmentGoal } from 'src/types/Report';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+cons<span class="cstat-no" title="statement not covered" >t ProjectSdgDisplay = ({ sdgList }: { sdgList?: SustainableDeve</span>lopmentGoal[] }) =&gt; {
+  const theme = useTheme();
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >  if (!sdgList || sdgList.length === 0) {</span>
 <span class="cstat-no" title="statement not covered" >    return &lt;Typography&gt;{strings.NONE_SELECTED}&lt;/Typography&gt;;</span>
-  }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  return sdgList</span>
-    .toSorted(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >Number(a) - Number(b))</span>
-    .map(<span class="fstat-no" title="function not covered" >(s</span>dg, i) =&gt; (
-<span class="cstat-no" title="statement not covered" >      &lt;Grid item md={1} key={`sdg-${i}`} paddingRight={theme.spacing(1)} component={'span'}&gt;</span>
+  }<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  return sdgList
+<span class="cstat-no" title="statement not covered" >    .toSorted</span>((a, b) =&gt; Number(a) - Number(b))
+    .map((sdg, i) =&gt; (
+      &lt;Grid it<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >em</span> md={1} key={`sdg-${i}`} pad<span class="cstat-no" title="statement not covered" >dingRight={theme.spacing(1)} component={'span'}&gt;</span></span>
         &lt;SdgIcon goal={sdg} size={128} /&gt;
       &lt;/Grid&gt;
     ));
@@ -145,7 +145,7 @@ export default ProjectSdgDisplay;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

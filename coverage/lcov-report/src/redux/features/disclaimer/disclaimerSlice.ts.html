@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/33</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/31</span>
             </div>
         
             
@@ -98,75 +98,75 @@
 <a name='L33'></a><a href='#L33'>33</a>
 <a name='L34'></a><a href='#L34'>34</a>
 <a name='L35'></a><a href='#L35'>35</a>
-<a name='L36'></a><a href='#L36'>36</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L36'></a><a href='#L36'>36</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { createSlice } from '@reduxjs/toolkit';
-&nbsp;
-import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
-import { Disclaimer } from 'src/types/Disclaimer';
-&nbsp;
-import { requestAcceptDisclaimer, requestDisclaimer } from './disclaimerAsyncThunks';
-&nbsp;
-const initialStateDisclaimer: { [key: string]: StatusT&lt;Disclaimer&gt; } = <span class="cstat-no" title="statement not covered" >{};</span>
-&nbsp;
-export const disclaimerSlice = <span class="cstat-no" title="statement not covered" >createSlice({</span>
-  name: 'disclaimerSlice',
-  initialState: initialStateDisclaimer,
-  reducers: {},
-  extraReducers: <span class="fstat-no" title="function not covered" >(b</span>uilder) =&gt; {
-<span class="cstat-no" title="statement not covered" >    buildReducers(requestDisclaimer)(builder);</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { createS<span class="cstat-no" title="statement not covered" >lice } from '@reduxjs/</span>toolkit';
+<span class="cstat-no" title="statement not covered" ></span>
+import { StatusT, buildR<span class="cstat-no" title="statement not covered" >educers } from 'src/redux/f</span>eatures/asyncUtils';
+import { Disclaimer<span class="cstat-no" title="statement not covered" > } from 'src/types/Disclaimer';</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+im<span class="cstat-no" title="statement not covered" >port { requestAcceptDisclaimer, requestDisclaimer } from './disclaimerAsyncThunks';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+const initialStateDisclaimer: { [key: string]: StatusT&lt;Disclaimer&gt; } = {};
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+ex<span class="cstat-no" title="statement not covered" >port const disclaimerSlice = createSlice({</span>
+  na<span class="cstat-no" title="statement not covered" >me: 'disclaimerSlice',</span>
+  init<span class="cstat-no" title="statement not covered" >ialState: initialStateDisclaimer,</span>
+  reduce<span class="cstat-no" title="statement not covered" >rs: {},<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  extraReducers: (builder) =&gt; {
+<span class="cstat-no" title="statement not covered" >    buildRedu</span>cers(requestDisclaimer)(builder);
   },
-});
-&nbsp;
-const initialStateAcceptDisclaimer: { [key: string]: StatusT&lt;void&gt; } = <span class="cstat-no" title="statement not covered" >{};</span>
-&nbsp;
-export const acceptDisclaimerSlice = <span class="cstat-no" title="statement not covered" >createSlice({</span>
-  name: 'acceptDisclaimerSlice',
+});<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >const initialStateAcceptDisclaimer: { [key: string]: StatusT&lt;void&gt; } = {};</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+export cons<span class="fstat-no" title="function not covered" >t </span>acce<span class="cstat-no" title="statement not covered" >ptDisclaimerSl</span>ice = createSlice({
+  name: 'acceptDisc<span class="fstat-no" title="function not covered" >la</span>imer<span class="cstat-no" title="statement not covered" >Slice',</span>
   initialState: initialStateAcceptDisclaimer,
-  reducers: {},
-  extraReducers: <span class="fstat-no" title="function not covered" >(b</span>uilder) =&gt; {
-<span class="cstat-no" title="statement not covered" >    buildReducers(requestAcceptDisclaimer)(builder);</span>
-  },
-});
-&nbsp;
-const disclaimersReducers = <span class="cstat-no" title="statement not covered" >{</span>
+<span class="cstat-no" title="statement not covered" >  reducers: {},</span>
+  extraReducers: (bui<span class="cstat-no" title="statement not covered" >lder) =&gt; {</span>
+    buildReducers(reques<span class="cstat-no" title="statement not covered" >tAcceptDisclaimer)(builder);</span>
+  },<span class="cstat-no" title="statement not covered" ></span>
+});<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+const disclaimersReducers = {
   disclaimer: disclaimerSlice.reducer,
   disclaimerAccept: acceptDisclaimerSlice.reducer,
-};
-&nbsp;
+};<span class="fstat-no" title="function not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
 export default disclaimersReducers;
 &nbsp;</pre></td></tr></table></pre>
 
@@ -175,7 +175,7 @@ export default disclaimersReducers;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

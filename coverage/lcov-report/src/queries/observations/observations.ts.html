@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/31</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/28</span>
             </div>
         
             
@@ -111,17 +111,32 @@
 <a name='L46'></a><a href='#L46'>46</a>
 <a name='L47'></a><a href='#L47'>47</a>
 <a name='L48'></a><a href='#L48'>48</a>
-<a name='L49'></a><a href='#L49'>49</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L49'></a><a href='#L49'>49</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -143,60 +158,45 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { baseApi as api } from '../baseApi';
-import { EventLogEntryPayload, ListEventLogEntriesApiResponse } from '../generated/events';
-import { QueryTagTypes } from '../tags';
-&nbsp;
-export type ListObservationEventsArgs = {
-  monitoringPlotId: number;
-  observationId: number;
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { baseApi<span class="cstat-no" title="statement not covered" > as api } from '../bas</span>eApi';
+import { EventLogEntryP<span class="cstat-no" title="statement not covered" >ayload, ListEventLogEntriesApiRe</span>sponse } from '../generated/events';
+import { QueryTagTypes }<span class="cstat-no" title="statement not covered" > from '../tags';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+export type Lis<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >tO</span>bservationEventsArgs = {</span>
+<span class="cstat-no" title="statement not covered" >  monitoringPlotId: number;</span>
+  ob<span class="cstat-no" title="statement not covered" >servationId: number;</span>
   isBiomass: boolean;
-  organizationId: number;
-};
-&nbsp;
-const injectedRtkApi = <span class="cstat-no" title="statement not covered" >api.injectEndpoints({</span>
-  endpoints: <span class="fstat-no" title="function not covered" >(b</span>uild) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
+  organizationId: <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >nu</span>mber;</span>
+};<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+const <span class="cstat-no" title="statement not covered" >injectedRtkApi = api.injectEndpoints({</span>
+  endpoi<span class="cstat-no" title="statement not covered" >nts: (build) =&gt; ({<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
     listObservationEvents: build.query&lt;EventLogEntryPayload[], ListObservationEventsArgs&gt;({
-      query: <span class="fstat-no" title="function not covered" >(q</span>ueryArgs) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
+<span class="cstat-no" title="statement not covered" >      query: </span>(queryArgs) =&gt; ({
         url: '/api/v1/events/list',
-        method: 'POST',
-        body: {
-          monitoringPlotId: queryArgs.monitoringPlotId,
-          observationId: queryArgs.observationId,
-          subjects: queryArgs.isBiomass
-            ? [
+        method: 'PO<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ST</span>',<span class="cstat-no" title="statement not covered" ></span></span>
+        body: {<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >          monitoringPlotId: queryArgs.monitoringPlotId,</span>
+<span class="fstat-no" title="function not covered" ></span>          obs<span class="cstat-no" title="statement not covered" >ervationId: que</span>ryArgs.observationId,
+          subjects: queryArgs.isBioma<span class="fstat-no" title="function not covered" >ss<span class="cstat-no" title="statement not covered" ></span></span>
+            ? [<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
                 'ObservationPlot',
-                'ObservationPlotMedia',
-                'BiomassDetails',
-                'BiomassQuadrat',
-                'BiomassQuadratSpecies',
-                'BiomassSpecies',
+<span class="cstat-no" title="statement not covered" >                'ObservationPlotMedia',</span>
+                'Biom<span class="cstat-no" title="statement not covered" >assDetails',</span>
+                'B<span class="cstat-no" title="statement not covered" >iomassQuadrat',</span>
+                'Biomas<span class="cstat-no" title="statement not covered" >sQuadratSpecies',</span>
+<span class="fstat-no" title="function not covered" ></span>                'BiomassS<span class="cstat-no" title="statement not covered" >pecies',</span>
                 'RecordedTree',
-              ]
+<span class="fstat-no" title="function not covered" >              ]<span class="cstat-no" title="statement not covered" ></span></span>
             : ['ObservationPlot', 'ObservationPlotMedia'],
           organizationId: queryArgs.organizationId,
         },
       }),
-      providesTags: <span class="fstat-no" title="function not covered" >(_</span>results, _error, payload) =&gt; <span class="cstat-no" title="statement not covered" >[{ type: QueryTagTypes.Observation, id: payload.observationId }],</span>
-      transformResponse: <span class="fstat-no" title="function not covered" >(r</span>esults: ListEventLogEntriesApiResponse) =&gt;
-<span class="cstat-no" title="statement not covered" >        results.events</span>
-          .map(<span class="fstat-no" title="function not covered" >(e</span>vent) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
+      providesTags: (_results, _error, payload) =&gt; [{ type: QueryTagTypes.Observation, id: payload.observationId }],
+      transformResponse: (results: ListEventLogEntriesApiResponse) =&gt;
+        results.events
+          .map((event) =&gt; ({
             ...event,
           }))
           .reverse(),
@@ -206,15 +206,15 @@ const injectedRtkApi = <span class="cstat-no" title="statement not covered" >api
 &nbsp;
 export { injectedRtkApi as api };
 &nbsp;
-export const { useListObservationEventsQuery, useLazyListObservationEventsQuery } = <span class="cstat-no" title="statement not covered" >injectedRtkApi;</span>
-&nbsp;</pre></td></tr></table></pre>
+export const { useLi<span class="fstat-no" title="function not covered" >st</span>ObservationEventsQuery, useLa<span class="cstat-no" title="statement not covered" >zyListObservationEventsQuery } = injectedRtkApi;</span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

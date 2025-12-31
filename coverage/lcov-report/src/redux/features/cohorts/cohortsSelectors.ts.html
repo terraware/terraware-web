@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/33</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/26</span>
             </div>
         
             
@@ -75,38 +75,38 @@
 <a name='L10'></a><a href='#L10'>10</a>
 <a name='L11'></a><a href='#L11'>11</a>
 <a name='L12'></a><a href='#L12'>12</a>
-<a name='L13'></a><a href='#L13'>13</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L13'></a><a href='#L13'>13</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { RootState } from 'src/redux/rootReducer';
-import { Cohort } from 'src/types/Cohort';
-&nbsp;
-export const selectCohorts = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState) =&gt; <span class="cstat-no" title="statement not covered" >state.cohorts.cohorts;</span></span>
-export const selectCohortsRequest = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState) =&gt; <span class="cstat-no" title="statement not covered" >state.cohorts;</span></span>
-&nbsp;
-export const selectCohort =
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >  (c</span>ohortId: number) =&gt;</span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >  (s</span>tate: RootState): Cohort | undefined =&gt;</span>
-<span class="cstat-no" title="statement not covered" >    state.cohorts?.cohorts?.find(<span class="fstat-no" title="function not covered" >(c</span>ohort) =&gt; <span class="cstat-no" title="statement not covered" >cohort.id === cohortId)</span>;</span>
-&nbsp;
-export const selectCohortRequest = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState, requestId: string) =&gt; <span class="cstat-no" title="statement not covered" >state.cohortsRequests[requestId];</span></span>
-&nbsp;</pre></td></tr></table></pre>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { RootSta<span class="cstat-no" title="statement not covered" >te } from 'src/redux/r</span>ootReducer';
+import { Cohort } from <span class="cstat-no" title="statement not covered" >'src/types/Cohort';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+export const select<span class="cstat-no" title="statement not covered" >Cohorts = (state: RootState) =&gt; </span>state.cohorts.cohorts;
+export const se<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >le</span>ctCohortsRequest = (state: RootState) =&gt; state.cohorts;</span>
+<span class="cstat-no" title="statement not covered" ></span>
+expo<span class="cstat-no" title="statement not covered" >rt const selectCohort =</span>
+  (cohortId: number) =&gt;
+  (state: RootStat<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >e)</span>: Cohort | undefined =&gt;</span>
+<span class="cstat-no" title="statement not covered" >    state.cohorts?.cohorts?.find((cohort) =&gt; cohort.id === cohortId);</span>
+<span class="cstat-no" title="statement not covered" ></span>
+export<span class="cstat-no" title="statement not covered" > const selectCohortRequest = (state: RootState, requestId: string) =&gt; state.cohortsRequests[requestId];</span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

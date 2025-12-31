@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>0/38</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/31</span>
             </div>
         
             
@@ -87,13 +87,10 @@
 <a name='L22'></a><a href='#L22'>22</a>
 <a name='L23'></a><a href='#L23'>23</a>
 <a name='L24'></a><a href='#L24'>24</a>
-<a name='L25'></a><a href='#L25'>25</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L25'></a><a href='#L25'>25</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -104,45 +101,48 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { createSelector } from '@reduxjs/toolkit';
-&nbsp;
-import { RootState } from 'src/redux/rootReducer';
-import { FunderProjectDetails } from 'src/types/FunderProject';
-&nbsp;
-export const selectPublishedProjects = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(r</span>equestId: string) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState) =&gt; <span class="cstat-no" title="statement not covered" >state.publishedProjects[requestId];</span></span></span>
-&nbsp;
-export const selectFunderProjects = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(p</span>rojectIds: number[]) =&gt;</span>
-<span class="cstat-no" title="statement not covered" >  createSelector(</span>
-<span class="fstat-no" title="function not covered" >    (s</span>tate: RootState) =&gt; <span class="cstat-no" title="statement not covered" >state.funderProjects,</span>
-<span class="fstat-no" title="function not covered" >    (f</span>underProjects) =&gt; {
-      const result: Record&lt;number, FunderProjectDetails&gt; = <span class="cstat-no" title="statement not covered" >{};</span>
-<span class="cstat-no" title="statement not covered" >      projectIds.forEach(<span class="fstat-no" title="function not covered" >(p</span>rojectId) =&gt; {</span>
-        const stateProject = <span class="cstat-no" title="statement not covered" >funderProjects[projectId];</span>
-<span class="cstat-no" title="statement not covered" >        if (stateProject) {</span>
-<span class="cstat-no" title="statement not covered" >          result[projectId] = stateProject;</span>
-        }
-      });
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { createS<span class="cstat-no" title="statement not covered" >elector } from '@redux</span>js/toolkit';
+<span class="cstat-no" title="statement not covered" ></span>
+import { RootState } fro<span class="cstat-no" title="statement not covered" >m 'src/redux/rootReducer';</span>
+import { FunderProj<span class="cstat-no" title="statement not covered" >ectDetails } from 'src/types/Fun</span>derProject';
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+ex<span class="cstat-no" title="statement not covered" >port const selectPublishedProjects = (requestId: string) =&gt; (state: RootState) =&gt; state.publishedProjects[requestId];</span>
+<span class="cstat-no" title="statement not covered" ></span>
+export const selectFunderProjects = (projectIds: number[]) =&gt;
+  createSelector(<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    (state: RootState) =&gt; state.funderProjects,</span>
+<span class="cstat-no" title="statement not covered" >    (funderProjects) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      const result: Record&lt;number, FunderProjectDetails&gt; = {};</span>
+      pr<span class="cstat-no" title="statement not covered" >ojectIds.forEach((projectI<span class="fstat-no" title="function not covered" >d)</span> =&gt; <span class="cstat-no" title="statement not covered" >{</span></span>
+        const stateProject = funderProjects[projectId];
+<span class="cstat-no" title="statement not covered" >        if (s</span>tateProject) {
+          result[projectId] = stateProject;
+        }<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+      });<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >      return result;</span>
-    }
-  );
-&nbsp;
-export const selectPublishFunderProject = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(r</span>equestId: string) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState) =&gt;</span></span>
+    }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+export const selectPublishFunderProject = (requestId: string) =&gt; (state: RootState) =&gt;
 <span class="cstat-no" title="statement not covered" >  state.publishFunderProject[requestId];</span>
-&nbsp;</pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>0/39</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/24</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>0/36</span>
             </div>
         
             
@@ -93,7 +93,26 @@
 <a name='L28'></a><a href='#L28'>28</a>
 <a name='L29'></a><a href='#L29'>29</a>
 <a name='L30'></a><a href='#L30'>30</a>
-<a name='L31'></a><a href='#L31'>31</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L31'></a><a href='#L31'>31</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -102,65 +121,46 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { createAsyncThunk } from '@reduxjs/toolkit';
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { create<span class="cstat-no" title="statement not covered" >AsyncThunk } f</span>rom '@reduxjs/toolkit';
+<span class="cstat-no" title="statement not covered" ></span>
+import { Response, Resp<span class="cstat-no" title="statement not covered" >onse2 } from 'src/services/HttpS</span>ervice';
+import VotesService from<span class="cstat-no" title="statement not covered" > 'src/services/VotesService</span>';
+import strings from<span class="cstat-no" title="statement not covered" > 'src/strings';</span>
+import { GetProject<span class="cstat-no" title="statement not covered" >VotesResponsePayload, UpsertProj</span>ectVotesRequestPayload } from 'src/types/Votes';
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+ex<span class="cstat-no" title="statement not covered" >port const requestProjectVotesGet = createAsyncThunk('votes/get', async (projectId: number, { rejectWithValue }) =&gt; {</span>
+  co<span class="cstat-no" title="statement not covered" >nst response: Response2&lt;GetProjectVotesResponsePayload&gt; = await</span> VotesService.getProjectVotes(projectId);
 &nbsp;
-import { Response, Response2 } from 'src/services/HttpService';
-import VotesService from 'src/services/VotesService';
-import strings from 'src/strings';
-import { GetProjectVotesResponsePayload, UpsertProjectVotesRequestPayload } from 'src/types/Votes';
-&nbsp;
-export const requestProjectVotesGet = <span class="cstat-no" title="statement not covered" >createAsyncThunk('votes/get', <span class="fstat-no" title="function not covered" >as</span>ync (projectId: number, { rejectWithValue }) =&gt; {</span>
-  const response: Response2&lt;GetProjectVotesResponsePayload&gt; = <span class="cstat-no" title="statement not covered" >await VotesService.getProjectVotes(projectId);</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  if (response.requestSucceeded) {</span>
+  if (response.req<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ue</span>stSucceeded) {</span>
 <span class="cstat-no" title="statement not covered" >    return response.data?.votes;</span>
-  }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  return rejectWithValue(strings.GENERIC_ERROR);</span>
+  }<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+  return<span class="cstat-no" title="statement not covered" > rejectWithValue(strings.G<span class="fstat-no" title="function not covered" >EN</span>ERIC<span class="cstat-no" title="statement not covered" >_ERROR);</span></span>
 });
+<span class="cstat-no" title="statement not covered" ></span>
+export const requestProjectVotesUpdate = createAsyncThunk(
+  'votes/updat<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >e'</span>,<span class="cstat-no" title="statement not covered" ></span></span>
+  async (request: { projectId: number; payload: UpsertProjectVotesRequestPayload }, { dispatch, rejectWithValue }) =&gt; {
+    const response: Response = await VotesService.setProjectVotes(request.projectId, request.payload);
 &nbsp;
-export const requestProjectVotesUpdate = <span class="cstat-no" title="statement not covered" >createAsyncThunk(</span>
-  'votes/update',
-<span class="fstat-no" title="function not covered" >  as</span>ync (request: { projectId: number; payload: UpsertProjectVotesRequestPayload }, { dispatch, rejectWithValue }) =&gt; {
-    const response: Response = <span class="cstat-no" title="statement not covered" >await VotesService.setProjectVotes(request.projectId, request.payload);</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    if (response.requestSucceeded) {</span>
-<span class="cstat-no" title="statement not covered" >      void dispatch(requestProjectVotesGet(request.projectId));</span>
-<span class="cstat-no" title="statement not covered" >      return true;</span>
+    if (response.requestSucceeded) {
+      void dispatch(requestProjectVotesGet(request.projectId));
+      return true;
     }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    return rejectWithValue(strings.GENERIC_ERROR);</span>
-  }
-);
-&nbsp;</pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+    return rejectWit<span class="cstat-no" title="statement not covered" >hVa</span>lue(strings.GENERIC_ERROR);
+<span class="cstat-no" title="statement not covered" >  }</span>
+);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

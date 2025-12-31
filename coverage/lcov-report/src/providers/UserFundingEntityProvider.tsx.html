@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/18</span>
+                <span class='fraction'>0/50</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/17</span>
+                <span class='fraction'>0/35</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/18</span>
+                <span class='fraction'>0/47</span>
             </div>
         
             
@@ -118,16 +118,25 @@
 <a name='L53'></a><a href='#L53'>53</a>
 <a name='L54'></a><a href='#L54'>54</a>
 <a name='L55'></a><a href='#L55'>55</a>
-<a name='L56'></a><a href='#L56'>56</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L56'></a><a href='#L56'>56</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -139,25 +148,16 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -166,76 +166,76 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useEffect, useState } from 'react';
-&nbsp;
-import { APP_PATHS } from 'src/constants';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { useLazyGetFundingEntity1Query } from 'src/queries/generated/fundingEntities';
-import strings from 'src/strings';
-import useEnvironment from 'src/utils/useEnvironment';
-&nbsp;
-import { ProvidedUserFundingEntityData } from './DataTypes';
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > useEffect, us</span>eState } from 'react';
+<span class="cstat-no" title="statement not covered" ></span>
+import { APP_PATHS } fr<span class="cstat-no" title="statement not covered" >om 'src/constants';</span>
+import { useSyncNavigate<span class="cstat-no" title="statement not covered" > } from 'src/hooks/useSyncN</span>avigate';
+import { useLazyGet<span class="cstat-no" title="statement not covered" >FundingEntity1Query } </span>from 'src/queries/generated/fundingEntities';
+import strings from<span class="cstat-no" title="statement not covered" > 'src/strings';</span>
+import useEnvir<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >on</span>ment from 'src/utils/useEnvironment';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+impo<span class="cstat-no" title="statement not covered" >rt { ProvidedUserFundingEntityData } from './DataTypes';</span>
 import { UserFundingEntityContext } from './contexts';
-import { useUser } from './hooks';
+import { useUser }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > f</span>rom './hooks';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+expo<span class="cstat-no" title="statement not covered" >rt type UserFundingEntityProviderProps = {</span>
+  chil<span class="cstat-no" title="statement not covered" >dren?: React.ReactNode;</span>
+};<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 &nbsp;
-export type UserFundingEntityProviderProps = {
-  children?: React.ReactNode;
-};
-&nbsp;
-export default function <span class="fstat-no" title="function not covered" >UserFundingEntityProvider(</span>{ children }: UserFundingEntityProviderProps) {
-  const { user, bootstrapped: userBootstrapped } = <span class="cstat-no" title="statement not covered" >useUser();</span>
-  const navigate = <span class="cstat-no" title="statement not covered" >useSyncNavigate();</span>
-  const { isDev, isStaging } = <span class="cstat-no" title="statement not covered" >useEnvironment();</span>
-  const [getUserFundingEntity, result] = <span class="cstat-no" title="statement not covered" >useLazyGetFundingEntity1Query();</span>
-  const [fundingEntityData, setFundingEntityData] = <span class="cstat-no" title="statement not covered" >useState&lt;ProvidedUserFundingEntityData&gt;({</span>
+ex<span class="cstat-no" title="statement not covered" >port defaul</span>t function UserFundingEntityProvider({ children }: UserFundingEntityProviderProps) {
+  const { user, bootstrapped: userBootstrapped } = useUser();
+  const naviga<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >te</span> = useSyncNavigate();<span class="cstat-no" title="statement not covered" ></span></span>
+  const { isDev, isStaging } = useEnvironment();
+  const [getUserFundingEntity, result] = useLazyGetFundingEntity1Query();
+  const [fundingEntityData, setFundingEntityData] = useState&lt;ProvidedUserFundingEntityData&gt;({
     userFundingEntity: undefined,
     bootstrapped: false,
   });
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (userBootstrapped &amp;&amp; user &amp;&amp; user.userType === 'Funder') {</span>
+  useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+    if (userBootstra<span class="cstat-no" title="statement not covered" >ppe</span>d &amp;&amp; user &amp;&amp; user.userType === 'Funder') {
 <span class="cstat-no" title="statement not covered" >      void getUserFundingEntity(user.id);</span>
-    }
+    }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
   }, [userBootstrapped, user, getUserFundingEntity]);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (result.isSuccess &amp;&amp; result.data) {</span>
-<span class="cstat-no" title="statement not covered" >      setFundingEntityData({</span>
-        userFundingEntity: result.data.fundingEntity,
-        bootstrapped: true,
-      });
-    }
-  }, [result]);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (result.isError) {</span>
-<span class="cstat-no" title="statement not covered" >      if (isDev || isStaging) {</span>
-<span class="cstat-no" title="statement not covered" >        if (confirm(strings.DEV_SERVER_ERROR)) {</span>
-<span class="cstat-no" title="statement not covered" >          window.location.reload();</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
+    if (result.isSucces<span class="cstat-no" title="statement not covered" >s &amp;&amp; result.data) {</span>
+      setFundingEntityData({<span class="cstat-no" title="statement not covered" ></span>
+        userFundingEntity: re<span class="cstat-no" title="statement not covered" >sult.data.fundingEntity,</span>
+        bootstrapped:<span class="cstat-no" title="statement not covered" > true,</span>
+      });<span class="cstat-no" title="statement not covered" ></span>
+    }<span class="cstat-no" title="statement not covered" ></span>
+  }, [result]);<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" ></span>
+  useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
+    if (result.isEr<span class="cstat-no" title="statement not covered" >ror) {</span>
+      if (isDev || isStaging) {<span class="cstat-no" title="statement not covered" ></span>
+        if (confirm(strings.DEV_SERVER_ER<span class="cstat-no" title="statement not covered" >ROR)) {</span>
+          window.location.reload();<span class="cstat-no" title="statement not covered" ></span>
         }
       } else {
-<span class="cstat-no" title="statement not covered" >        navigate(APP_PATHS.ERROR_FAILED_TO_FETCH_ORG_DATA);</span>
-      }
-    }
-  }, [result, isDev, isStaging, navigate]);
+        navigate(APP_PATHS.ERROR_FAILED_TO_FETCH_ORG_DATA);
+<span class="cstat-no" title="statement not covered" >      }<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    }</span>
+  }, [<span class="cstat-no" title="statement not covered" >result, isDev, isStaging, navigate])</span>;
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return &lt;UserFundingEntityContext.Provider value={fundingEntityData}&gt;{children}&lt;/UserFundingEntityContext.Provider&gt;;</span>
-}
-&nbsp;</pre></td></tr></table></pre>
+  return &lt;UserFundingEntityContext.Provider value={fundingEntityData}&gt;{children}&lt;/UserFundingEntityContext.Provider&gt;;
+}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/32</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/24</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/28</span>
             </div>
         
             
@@ -114,37 +114,25 @@
 <a name='L49'></a><a href='#L49'>49</a>
 <a name='L50'></a><a href='#L50'>50</a>
 <a name='L51'></a><a href='#L51'>51</a>
-<a name='L52'></a><a href='#L52'>52</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L52'></a><a href='#L52'>52</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -154,10 +142,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -165,25 +159,31 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { isValidElement, useMemo } from 'react';
-&nbsp;
-import { Typography } from '@mui/material';
-import { Props } from '@terraware/web-components/components/Textfield/Textfield';
-&nbsp;
-type DisplayFieldValue = string | number | null | undefined | JSX.Element | false;
-&nbsp;
-export interface ProjectFieldProps {
-  height?: string;
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > isValidElemen</span>t, useMemo } from 'react';
+<span class="cstat-no" title="statement not covered" ></span>
+import { Typography } f<span class="cstat-no" title="statement not covered" >rom '@mui/material';</span>
+import { Props } from '@<span class="cstat-no" title="statement not covered" >terraware/web-components/co</span>mponents/Textfield/Textfield';
+<span class="cstat-no" title="statement not covered" ></span>
+type DisplayFieldVa<span class="cstat-no" title="statement not covered" >lue = string | number | null | u</span>ndefined | JSX.Element | false;
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+ex<span class="cstat-no" title="statement not covered" >port interface ProjectFieldProps {</span>
+  he<span class="cstat-no" title="statement not covered" >ight?: string;</span>
   label?: string;
-  md?: number;
-  value?: DisplayFieldValue;
-  units?: DisplayFieldValue;
-  tooltip?: string;
-  rightBorder?: boolean;
+  md?: number;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >  value?: DisplayFieldValue;</span>
+  un<span class="cstat-no" title="statement not covered" >its?: DisplayFieldValue;</span>
+  tool<span class="cstat-no" title="statement not covered" >tip?: string;</span>
+  rightB<span class="cstat-no" title="statement not covered" >order?: boolean;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
   user?: string;
-  date?: string;
+<span class="cstat-no" title="statement not covered" >  date?: stri</span>ng;
   backgroundColor?: string;
-}
+}<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 &nbsp;
 export type ProjectIdFieldProps = ProjectFieldProps &amp; {
   id: string;
@@ -191,26 +191,26 @@ export type ProjectIdFieldProps = ProjectFieldProps &amp; {
 &nbsp;
 export type EditFieldValue = string | number | undefined;
 &nbsp;
-export interface ProjectFieldEditProps {
-  height?: string;
-  id: string;
-  label: string;
+export interface Pr<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >oj</span>ectFiel<span class="cstat-no" title="statement not covered" >dEditProps {</span></span>
+  height?: string;<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >  id: string;</span>
+  label: string;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
   tooltip?: string;
-  onChange: (id: string, value: string) =&gt; void;
-  md?: number;
-  // Defaults to 'text'
-  type?: Props['type'];
-  value?: EditFieldValue;
-}
+<span class="cstat-no" title="statement not covered" >  onChange: (id: string, value: string) =&gt; voi</span>d;
+  md?: number;<span class="cstat-no" title="statement not covered" ></span>
+  // Defaults to 'text<span class="cstat-no" title="statement not covered" >'</span>
+  type?: Props['type'];<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  value?: EditField<span class="cstat-no" title="statement not covered" >Value;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+}<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+export const ProjectFieldValue = ({ value, units }: { value: DisplayFieldValue; units?: DisplayFieldValue }) =&gt; {
+<span class="cstat-no" title="statement not covered" >  const hasValue = useMemo(() =&gt; !([undefined, null] as DisplayFieldValue[]).includes(value), [value]);</span>
 &nbsp;
-export const ProjectFieldValue = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> value, units }: { value: DisplayFieldValue; units?: DisplayFieldValue }) =&gt; {</span>
-  const hasValue = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >!([undefined, null] as DisplayFieldValue[]).includes(value),</span> [value]);</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  if (isValidElement(value)) {</span>
-<span class="cstat-no" title="statement not covered" >    return value;</span>
+  if (isValidElement(value)) {
+    return value;
   }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+  return (
     &lt;Typography fontSize='24px' fontWeight={600} lineHeight='32px' overflow='hidden' textOverflow='ellipsis'&gt;
       {hasValue ? value : 'N/A'} {hasValue &amp;&amp; units}
     &lt;/Typography&gt;
@@ -223,7 +223,7 @@ export const ProjectFieldValue = <span class="cstat-no" title="statement not cov
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

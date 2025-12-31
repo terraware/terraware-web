@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/30</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/28</span>
             </div>
         
             
@@ -91,70 +91,70 @@
 <a name='L26'></a><a href='#L26'>26</a>
 <a name='L27'></a><a href='#L27'>27</a>
 <a name='L28'></a><a href='#L28'>28</a>
-<a name='L29'></a><a href='#L29'>29</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L29'></a><a href='#L29'>29</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-&nbsp;
-type UserAnalyticsState = {
-  gtmInstrumented: boolean;
-};
-&nbsp;
-const initialState: UserAnalyticsState = <span class="cstat-no" title="statement not covered" >{</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Payload<span class="cstat-no" title="statement not covered" >Action, createSlice } </span>from '@reduxjs/toolkit';
+<span class="cstat-no" title="statement not covered" ></span>
+type UserAnalyticsState <span class="cstat-no" title="statement not covered" >= {</span>
+  gtmInstrumented: <span class="cstat-no" title="statement not covered" >boolean;</span>
+};<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ></span>
+cons<span class="cstat-no" title="statement not covered" >t initialState: UserAnalyticsState = {</span>
   gtmInstrumented: false,
-};
-&nbsp;
-export const userAnalyticsSlice = <span class="cstat-no" title="statement not covered" >createSlice({</span>
-  name: 'userAnalytics',
-  initialState,
+};<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ></span>
+expo<span class="cstat-no" title="statement not covered" >rt const userAnalyticsSlice = createSlice({</span>
+  name<span class="cstat-no" title="statement not covered" >: 'userAnalytics',</span>
+  initia<span class="cstat-no" title="statement not covered" >lState,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
   reducers: {
-    updateGtmInstrumented: <span class="fstat-no" title="function not covered" >(s</span>tate, action: PayloadAction&lt;UserAnalyticsState&gt;) =&gt; {
-      const userAnalyticsState = <span class="cstat-no" title="statement not covered" >action.payload;</span>
-<span class="cstat-no" title="statement not covered" >      state.gtmInstrumented = userAnalyticsState.gtmInstrumented;</span>
-    },
-  },
-});
+<span class="cstat-no" title="statement not covered" >    updateGtm</span>Instrumented: (state, action: PayloadAction&lt;UserAnalyticsState&gt;) =&gt; {
+      const userAnalyticsState = action.payload;
+      state.gtmInst<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ru</span>mented <span class="cstat-no" title="statement not covered" >= userAnalyticsState.gtmInstrumented;</span></span>
+    },<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >  },</span>
+});<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+export const { updateG<span class="fstat-no" title="function not covered" >tm</span>Inst<span class="cstat-no" title="statement not covered" >rumented } = userAn</span>alyticsSlice.actions;
 &nbsp;
-export const { updateGtmInstrumented } = <span class="cstat-no" title="statement not covered" >userAnalyticsSlice.actions;</span>
-&nbsp;
-const userAnalyticsReducers = <span class="cstat-no" title="statement not covered" >{</span>
-  userAnalytics: userAnalyticsSlice.reducer,
-};
+<span class="cstat-no" title="statement not covered" >const userAnalyticsReducers = {</span>
+  userAnalytics: user<span class="cstat-no" title="statement not covered" >AnalyticsSlice.reducer,</span>
+};<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
 export default userAnalyticsReducers;
-&nbsp;</pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

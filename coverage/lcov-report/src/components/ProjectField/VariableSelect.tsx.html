@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/32</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/22</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/28</span>
             </div>
         
             
@@ -89,25 +89,23 @@
 <a name='L24'></a><a href='#L24'>24</a>
 <a name='L25'></a><a href='#L25'>25</a>
 <a name='L26'></a><a href='#L26'>26</a>
-<a name='L27'></a><a href='#L27'>27</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L27'></a><a href='#L27'>27</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -115,40 +113,42 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useMemo } from 'react';
-&nbsp;
-import { DropdownItem } from '@terraware/web-components';
-&nbsp;
-import { SelectOptionPayload } from 'src/types/documentProducer/Variable';
-&nbsp;
-import ProjectFieldSelect from './Select';
-import { ProjectFieldEditProps } from './index';
-&nbsp;
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > useMemo } fro</span>m 'react';
+<span class="cstat-no" title="statement not covered" ></span>
+import { DropdownItem }<span class="cstat-no" title="statement not covered" > from '@terraware/web-components</span>';
+<span class="cstat-no" title="statement not covered" ></span>
+import { SelectOpti<span class="cstat-no" title="statement not covered" >onPayload } from 'src/</span>types/documentProducer/Variable';
+<span class="cstat-no" title="statement not covered" ></span>
+import ProjectF<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ie</span>ldSelect from './Select';</span>
+im<span class="cstat-no" title="statement not covered" >port { ProjectFieldEditProps } from './index';</span>
+<span class="cstat-no" title="statement not covered" ></span>
 type VariableSelectProps = ProjectFieldEditProps &amp; {
-  options: SelectOptionPayload[];
-};
-&nbsp;
-const VariableSelect = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> id, label, onChange, options, value, md }: VariableSelectProps) =&gt; {</span>
-  const dropdownOptions = <span class="cstat-no" title="statement not covered" >useMemo(</span>
-<span class="fstat-no" title="function not covered" >    ()</span>: DropdownItem[] =&gt;
-<span class="cstat-no" title="statement not covered" >      options?.map(<span class="fstat-no" title="function not covered" >(o</span>ption: SelectOptionPayload) =&gt; (<span class="cstat-no" title="statement not covered" >{ label: option.name, value: option.name })</span>) || [],</span>
+  options: SelectO<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >pt</span>ionPayload[];</span>
+};<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+const <span class="cstat-no" title="statement not covered" >VariableSelect = ({ id, label, onChange, options, value, md }: VariableSelectProps) =&gt; {</span>
+  const <span class="cstat-no" title="statement not covered" >dropdownOptions = useMemo(<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+    (): DropdownItem[] =&gt;
+<span class="cstat-no" title="statement not covered" >      options</span>?.map((option: SelectOptionPayload) =&gt; ({ label: option.name, value: option.name })) || [],
     [options]
-  );
+  );<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+  return (
     &lt;ProjectFieldSelect id={id} md={md} label={label} onChange={onChange} value={value} options={dropdownOptions} /&gt;
   );
 };
 &nbsp;
 export default VariableSelect;
-&nbsp;</pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

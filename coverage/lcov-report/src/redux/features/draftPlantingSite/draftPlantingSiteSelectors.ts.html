@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/38</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/28</span>
             </div>
         
             
@@ -77,8 +77,7 @@
 <a name='L12'></a><a href='#L12'>12</a>
 <a name='L13'></a><a href='#L13'>13</a>
 <a name='L14'></a><a href='#L14'>14</a>
-<a name='L15'></a><a href='#L15'>15</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L15'></a><a href='#L15'>15</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -86,33 +85,34 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { RootState } from 'src/redux/rootReducer';
-&nbsp;
-export const selectDraftPlantingSiteCreate = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(r</span>equestId: string) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState) =&gt;</span></span>
-<span class="cstat-no" title="statement not covered" >  state.draftPlantingSiteCreate[requestId];</span>
-export const selectDraftPlantingSiteEdit = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(r</span>equestId: string) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState) =&gt;</span></span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { RootSta<span class="cstat-no" title="statement not covered" >te } from 'src/redux/r</span>ootReducer';
+<span class="cstat-no" title="statement not covered" ></span>
+export const selectDraft<span class="cstat-no" title="statement not covered" >PlantingSiteCreate = (reque</span>stId: string) =&gt; (state: RootState) =&gt;
+  state.draftPlanti<span class="cstat-no" title="statement not covered" >ngSiteCreate[requestId];</span>
+export const se<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >le</span>ctDraftPlantingSiteEdit = (requestId: string) =&gt; (state: RootState) =&gt;</span>
 <span class="cstat-no" title="statement not covered" >  state.draftPlantingSiteEdit[requestId];</span>
-export const selectDraftPlantingSiteGet = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(i</span>d: number) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState) =&gt; <span class="cstat-no" title="statement not covered" >state.draftPlantingSiteGet[id];</span></span></span>
-export const selectDraftPlantingSite = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState, id: number) =&gt; <span class="cstat-no" title="statement not covered" >selectDraftPlantingSiteGet(id)(state)?.data;</span></span>
-&nbsp;
-/**
- * Returns PlantingSiteSearchResult[], not a draft planting site will full geometries
- */
-export const selectDraftPlantingSites = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(o</span>rganizationId: number) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState) =&gt;</span></span>
-<span class="cstat-no" title="statement not covered" >  state.draftPlantingSiteSearch[organizationId];</span>
-&nbsp;</pre></td></tr></table></pre>
+expo<span class="cstat-no" title="statement not covered" >rt const selectDraftPlantingSiteGet = (id: number) =&gt; (state: R</span>ootState) =&gt; state.draftPlantingSiteGet[id];
+export const selectDraftPlantingSite = (state: RootState, id: number) =&gt; selectDraftPlantingSiteGet(id)(state)?.data;
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+/*<span class="cstat-no" title="statement not covered" >*</span>
+ * R<span class="cstat-no" title="statement not covered" >eturns PlantingSiteSearchResult[], not a draft planting site will full geometries</span>
+ */<span class="cstat-no" title="statement not covered" ></span>
+export c<span class="cstat-no" title="statement not covered" >onst selectDraftPlantingSi<span class="fstat-no" title="function not covered" >te</span>s = <span class="cstat-no" title="statement not covered" >(organizat</span>ionId: number) =&gt; (state: RootState) =&gt;</span>
+  state.draftPlantingSiteSearch[organizationId];
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

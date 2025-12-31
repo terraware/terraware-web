@@ -1,3 +1,4 @@
+4b5c21e9e42 Use esbuild in craco build (#4983)
 cdf4f6ad9e5 SW-7902 Switch craco to nginx for more prod-like tests (#4976)
 e19337035f9 SW-7902 Refactor web server URL used by Playwright tests into a constant (#4975)
 2d601c3428c Fix plantings query (#4970)

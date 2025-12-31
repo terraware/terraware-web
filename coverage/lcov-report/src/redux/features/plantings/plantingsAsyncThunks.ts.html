@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/20</span>
+                <span class='fraction'>0/48</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/36</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/16</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/17</span>
+                <span class='fraction'>0/42</span>
             </div>
         
             
@@ -115,10 +115,25 @@
 <a name='L50'></a><a href='#L50'>50</a>
 <a name='L51'></a><a href='#L51'>51</a>
 <a name='L52'></a><a href='#L52'>52</a>
-<a name='L53'></a><a href='#L53'>53</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L53'></a><a href='#L53'>53</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -127,31 +142,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -159,65 +150,74 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { createAsyncThunk } from '@reduxjs/toolkit';
-&nbsp;
-import { PlantingsService, Response } from 'src/services';
-import strings from 'src/strings';
-import { UpdatePlantingSubzonePayload } from 'src/types/PlantingSite';
-&nbsp;
-export type UpdateRequest = {
-  subzoneId: number;
-  planting: UpdatePlantingSubzonePayload;
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { create<span class="cstat-no" title="statement not covered" >AsyncThunk } f</span>rom '@reduxjs/toolkit';
+<span class="cstat-no" title="statement not covered" ></span>
+import { PlantingsServi<span class="cstat-no" title="statement not covered" >ce, Response } from 'src/service</span>s';
+import strings from 'src<span class="cstat-no" title="statement not covered" >/strings';</span>
+import { UpdatePlan<span class="cstat-no" title="statement not covered" >tingSubzonePayload } f</span>rom 'src/types/PlantingSite';
+<span class="cstat-no" title="statement not covered" ></span>
+export type Upd<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >at</span>eRequest = {</span>
+<span class="cstat-no" title="statement not covered" >  subzoneId: number;</span>
+  pl<span class="cstat-no" title="statement not covered" >anting: UpdatePlantingSubzonePayload;</span>
 };
-&nbsp;
-export const requestUpdatePlantingCompleted = <span class="cstat-no" title="statement not covered" >createAsyncThunk(</span>
-  'updatePlantingCompleted',
-<span class="fstat-no" title="function not covered" >  as</span>ync ({ subzoneId, planting }: UpdateRequest, { rejectWithValue }) =&gt; {
-    const response: Response = <span class="cstat-no" title="statement not covered" >await PlantingsService.updatePlantingCompleted(subzoneId, planting);</span>
-<span class="cstat-no" title="statement not covered" >    if (response.requestSucceeded) {</span>
-<span class="cstat-no" title="statement not covered" >      return true;</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+ex<span class="cstat-no" title="statement not covered" >port const requestUpdatePlantingCompleted = createAsyncThunk(</span>
+  'u<span class="cstat-no" title="statement not covered" >pdatePlantingCompleted',</span>
+  asyn<span class="cstat-no" title="statement not covered" >c ({ subzoneId, planting }: UpdateRequest, { rejectWithValue }) =&gt; {</span>
+    cons<span class="cstat-no" title="statement not covered" >t response: Response = awa<span class="fstat-no" title="function not covered" >it</span> Pla<span class="cstat-no" title="statement not covered" >ntingsServ</span>ice.updatePlantingCompleted(subzoneId, planting);</span>
+    if (response.requestSucceeded) {
+<span class="cstat-no" title="statement not covered" >      return </span>true;
     }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    return rejectWithValue(response.error || strings.GENERIC_ERROR);</span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+    return rejectWithValue(response.error || strings.GENERIC_ERROR);
   }
 );
 &nbsp;
 export type BulkUpdateRequest = {
   subzoneIds: number[];
   planting: UpdatePlantingSubzonePayload;
-};
+};<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >export const requestUpdatePlantingsCompleted = createAsyncThunk(</span>
+  'updatePlantingsCompleted',<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  async ({ subzoneIds, planting }: <span class="fstat-no" title="function not covered" >Bu</span>lkUp<span class="cstat-no" title="statement not covered" >dateRequest, { rejectWithValue }</span>) =&gt; {
+    const promises = subzoneIds.map((subzoneId) =&gt; PlantingsService.updatePlantingCompleted(subzoneId, planting));
+<span class="cstat-no" title="statement not covered" >    const results = (await Promise.allSettled(</span>promises)).map((result, index) =&gt; ({
+      ...result,<span class="cstat-no" title="statement not covered" ></span>
+      data: subzoneIds<span class="cstat-no" title="statement not covered" >[index],</span>
+    }));<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+    const succeeded = results
+<span class="fstat-no" title="function not covered" ></span>      .filter((result) =&gt; (result as any).value?.requestSucceeded)
+      .map((result) =<span class="cstat-no" title="statement not covered" >&gt; ({ data: result.data, value: (result as any).value?.data }));</span>
+<span class="cstat-no" title="statement not covered" ></span>
+    co<span class="cstat-no" title="statement not covered" >nst failed = </span>results
+      .filter((result) =&gt; !(result as any).value?.requestSucceeded)
+<span class="cstat-no" title="statement not covered" >      .map((result) =&gt; ({ data: result.data, error: (result as any).value?.error ?? </span>strings.GENERIC_ERROR }));
 &nbsp;
-export const requestUpdatePlantingsCompleted = <span class="cstat-no" title="statement not covered" >createAsyncThunk(</span>
-  'updatePlantingsCompleted',
-<span class="fstat-no" title="function not covered" >  as</span>ync ({ subzoneIds, planting }: BulkUpdateRequest, { rejectWithValue }) =&gt; {
-    const promises = <span class="cstat-no" title="statement not covered" >subzoneIds.map(<span class="fstat-no" title="function not covered" >(s</span>ubzoneId) =&gt; <span class="cstat-no" title="statement not covered" >PlantingsService.updatePlantingCompleted(subzoneId, planting))</span>;</span>
-    const results = <span class="cstat-no" title="statement not covered" >(await Promise.allSettled(promises)).map(<span class="fstat-no" title="function not covered" >(r</span>esult, index) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-      ...result,
-      data: subzoneIds[index],
-    }));
-&nbsp;
-    const succeeded = <span class="cstat-no" title="statement not covered" >results</span>
-      .filter(<span class="fstat-no" title="function not covered" >(r</span>esult) =&gt; <span class="cstat-no" title="statement not covered" >(result as any).value?.requestSucceeded)</span>
-      .map(<span class="fstat-no" title="function not covered" >(r</span>esult) =&gt; (<span class="cstat-no" title="statement not covered" >{ data: result.data, value: (result as any).value?.data })</span>);
-&nbsp;
-    const failed = <span class="cstat-no" title="statement not covered" >results</span>
-      .filter(<span class="fstat-no" title="function not covered" >(r</span>esult) =&gt; <span class="cstat-no" title="statement not covered" >!(result as any).value?.requestSucceeded)</span>
-      .map(<span class="fstat-no" title="function not covered" >(r</span>esult) =&gt; (<span class="cstat-no" title="statement not covered" >{ data: result.data, error: (result as any).value?.error ?? strings.GENERIC_ERROR })</span>);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    if (failed.length &amp;&amp; !succeeded.length) {</span>
-<span class="cstat-no" title="statement not covered" >      return rejectWithValue(failed.map(<span class="fstat-no" title="function not covered" >(f</span>) =&gt; <span class="cstat-no" title="statement not covered" >f.error)</span>.join(', '));</span>
+    if (failed.length &amp;&amp; !succeeded.length) {
+      return rejectWithValue(failed.map(<span class="cstat-no" title="statement not covered" >(f) =&gt; f.error).join(', '));</span>
     }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    return true;</span>
-  }
+<span class="fstat-no" title="function not covered" ></span>
+    return true;<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  }<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 );
 &nbsp;</pre></td></tr></table></pre>
 
@@ -226,7 +226,7 @@ export const requestUpdatePlantingsCompleted = <span class="cstat-no" title="sta
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

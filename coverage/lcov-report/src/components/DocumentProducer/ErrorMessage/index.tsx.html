@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/32</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/22</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/29</span>
             </div>
         
             
@@ -87,21 +87,23 @@
 <a name='L22'></a><a href='#L22'>22</a>
 <a name='L23'></a><a href='#L23'>23</a>
 <a name='L24'></a><a href='#L24'>24</a>
-<a name='L25'></a><a href='#L25'>25</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L25'></a><a href='#L25'>25</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -109,27 +111,25 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
-&nbsp;
-import { Typography, useTheme } from '@mui/material';
-&nbsp;
-export type ErrorMessageProps = {
-  error?: string;
-  fontSize?: number;
-};
-&nbsp;
-const ErrorMessage = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> error, fontSize }: ErrorMessageProps): JSX.Element | null =&gt; {</span>
-  const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  if (!error) {</span>
-<span class="cstat-no" title="statement not covered" >    return null;</span>
-  }
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React fr<span class="cstat-no" title="statement not covered" >om 'react';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+import { Typography, us<span class="cstat-no" title="statement not covered" >eTheme } from '@mui/material';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+export type ErrorMe<span class="cstat-no" title="statement not covered" >ssageProps = {</span>
+  error?: string;<span class="cstat-no" title="statement not covered" ></span>
+  fontSize?: nu<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >mb</span>er;</span>
+};<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+const ErrorMessage = ({ error, fontSize }: ErrorMessageProps): JSX.Element | null =&gt; {
+  const theme = us<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >eT</span>heme();</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  if<span class="cstat-no" title="statement not covered" > (!error) {</span>
+    re<span class="cstat-no" title="statement not covered" >turn null;</span>
+  }<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Typography color={theme.palette.TwClrTxtDanger} fontSize={fontSize ? `${fontSize}px` : '20px'} fontWeight={600}&gt;
-      {error}
+      {error}<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
     &lt;/Typography&gt;
   );
 };
@@ -142,7 +142,7 @@ export default ErrorMessage;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

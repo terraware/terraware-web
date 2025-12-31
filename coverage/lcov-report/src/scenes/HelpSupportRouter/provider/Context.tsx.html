@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>0/25</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/22</span>
             </div>
         
             
@@ -77,42 +77,42 @@
 <a name='L12'></a><a href='#L12'>12</a>
 <a name='L13'></a><a href='#L13'>13</a>
 <a name='L14'></a><a href='#L14'>14</a>
-<a name='L15'></a><a href='#L15'>15</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L15'></a><a href='#L15'>15</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { createContext, useContext } from 'react';
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { createC<span class="cstat-no" title="statement not covered" >ontext, useContext } f</span>rom 'react';
+<span class="cstat-no" title="statement not covered" ></span>
+import { SupportRequestT<span class="cstat-no" title="statement not covered" >ype } from 'src/types/Suppo</span>rt';
+<span class="cstat-no" title="statement not covered" ></span>
+export type Sup<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >po</span>rtData = {</span>
+<span class="cstat-no" title="statement not covered" >  types?: SupportRequestType[];</span>
+};<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
-import { SupportRequestType } from 'src/types/Support';
-&nbsp;
-export type SupportData = {
-  types?: SupportRequestType[];
-};
-&nbsp;
-// default values pointing to nothing
-export const SupportContext = <span class="cstat-no" title="statement not covered" >createContext&lt;SupportData&gt;({</span>
-  types: undefined, // undefined instead of [] for not loaded state
-});
-&nbsp;
-export const useSupportData = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >useContext(SupportContext);</span></span>
-&nbsp;</pre></td></tr></table></pre>
+// default values <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >po</span>inting to nothing</span>
+ex<span class="cstat-no" title="statement not covered" >port const SupportContext = createContext&lt;SupportData&gt;({</span>
+  ty<span class="cstat-no" title="statement not covered" >pes: undefined, // undefined instead of [] for not loaded state</span>
+});<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+export const useSupportData = () =&gt; useContext(SupportContext);
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/39</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/20</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/36</span>
             </div>
         
             
@@ -96,9 +96,25 @@
 <a name='L31'></a><a href='#L31'>31</a>
 <a name='L32'></a><a href='#L32'>32</a>
 <a name='L33'></a><a href='#L33'>33</a>
-<a name='L34'></a><a href='#L34'>34</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L34'></a><a href='#L34'>34</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -113,63 +129,47 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
-import { Navigate, Route, Routes } from 'react-router';
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React fr<span class="cstat-no" title="statement not covered" >om 'react';</span>
+import { Navigat<span class="cstat-no" title="statement not covered" >e, Route, Routes } fro</span>m 'react-router';
+<span class="cstat-no" title="statement not covered" ></span>
+import { APP_PATHS } fro<span class="cstat-no" title="statement not covered" >m 'src/constants';</span>
+import { useOrganiz<span class="cstat-no" title="statement not covered" >ation, useUser } from </span>'src/providers';
+<span class="cstat-no" title="statement not covered" ></span>
+import Accelera<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >to</span>rReportEdit from './AcceleratorReportEdit';</span>
+im<span class="cstat-no" title="statement not covered" >port AcceleratorReportView from './AcceleratorReportView';</span>
+impo<span class="cstat-no" title="statement not covered" >rt AcceleratorReportsView from './AcceleratorReportsView';</span>
 &nbsp;
-import { APP_PATHS } from 'src/constants';
-import { useOrganization, useUser } from 'src/providers';
-&nbsp;
-import AcceleratorReportEdit from './AcceleratorReportEdit';
-import AcceleratorReportView from './AcceleratorReportView';
-import AcceleratorReportsView from './AcceleratorReportsView';
-&nbsp;
-const AcceleratorReportsRouter = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-  const { isAllowed } = <span class="cstat-no" title="statement not covered" >useUser();</span>
-  const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
-  const isAllowedReadReports = <span class="cstat-no" title="statement not covered" >isAllowed('READ_REPORTS', { organization: selectedOrganization });</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  if (!isAllowedReadReports) {</span>
+const AcceleratorR<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ep</span>ortsRouter = () =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  const { isAllowed } = useUser();</span>
+  co<span class="cstat-no" title="statement not covered" >nst { selectedOrganization } = useOrganization();</span>
+  cons<span class="cstat-no" title="statement not covered" >t isAllowedReadReports = isAllowed('READ_REPORTS', { organization: selectedOrganization });</span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  if (!isAllowedReadReports) {
 <span class="cstat-no" title="statement not covered" >    return (</span>
       &lt;Routes&gt;
-        &lt;Route path='*' element={&lt;Navigate to={APP_PATHS.HOME} /&gt;} /&gt;
+        &lt;Route<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > p</span>ath='*' element={&lt;Navigate t<span class="cstat-no" title="statement not covered" >o={APP_PATHS.HOME} /&gt;} /&gt;</span></span>
       &lt;/Routes&gt;
     );
   }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+  return (
     &lt;Routes&gt;
       &lt;Route path='/*' element={&lt;AcceleratorReportsView /&gt;} /&gt;
-      &lt;Route path={'/:projectId/:reportId'} element={&lt;AcceleratorReportView /&gt;} /&gt;
-      &lt;Route path={'/:projectId/:reportId/edit'} element={&lt;AcceleratorReportEdit /&gt;} /&gt;
-    &lt;/Routes&gt;
-  );
+      &lt;Route path={<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >'/</span>:projec<span class="cstat-no" title="statement not covered" >tId/:reportId'} element={&lt;AcceleratorReportView /&gt;} /&gt;</span></span>
+      &lt;Route path={'<span class="cstat-no" title="statement not covered" >/:p</span>rojectId/:reportId/edit'} element={&lt;AcceleratorReportEdit /&gt;} /&gt;
+<span class="cstat-no" title="statement not covered" >    &lt;/Routes&gt;</span>
+  );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 };
-&nbsp;
-export default AcceleratorReportsRouter;
-&nbsp;</pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" ></span>
+export default Acce<span class="cstat-no" title="statement not covered" >leratorReportsRouter;</span>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

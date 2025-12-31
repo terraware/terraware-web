@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">68.75% </span>
+                <span class="strong">76.74% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>11/16</span>
+                <span class='fraction'>33/43</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">28.57% </span>
+                <span class="strong">55.55% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>2/7</span>
+                <span class='fraction'>10/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">37.5% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>3/8</span>
+                <span class='fraction'>10/20</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">81.81% </span>
+                <span class="strong">84.84% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>9/11</span>
+                <span class='fraction'>28/33</span>
             </div>
         
             
@@ -92,72 +92,72 @@
 <a name='L27'></a><a href='#L27'>27</a>
 <a name='L28'></a><a href='#L28'>28</a>
 <a name='L29'></a><a href='#L29'>29</a>
-<a name='L30'></a><a href='#L30'>30</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L30'></a><a href='#L30'>30</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">32x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">32x</span>
+<span class="cline-any cline-yes">117x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">115x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">37x</span>
 <span class="cline-any cline-yes">78x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">export type WithRequired&lt;T, K extends keyof T&gt; = T &amp; { [P in K]-?: T[P] };
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span></td><td class="text"><pre class="prettyprint lang-js">export type WithRequired&lt;T, K extends keyof T&gt; = T &amp; { [P in K]-?: T[P] };
 &nbsp;
-export const isOptionalT = <span class="fstat-no" title="function not covered" >&lt;T</span>&gt;(input: unknown, typeguard: (input: unknown) =&gt; input is T): input is T | undefined =&gt;
-<span class="cstat-no" title="statement not covered" >  input === undefined || typeguard(input);</span>
+export const isOptionalT = &lt;T&gt;(input: unknown, typeguard: (input: unknown) =&gt; input is T): input is T | undefined =&gt;
+  input === undefined || typeguard(input);
 &nbsp;
 export const isNumber = (input: unknown): input is number =&gt; typeof input === 'number';
 &nbsp;
-export const isOptionalNumber = <span class="fstat-no" title="function not covered" >(i</span>nput: unknown): input is number | undefined =&gt; <span class="cstat-no" title="statement not covered" >isOptionalT&lt;number&gt;(input, isNumber);</span>
+export const isOptionalNumber = (input: unknown): input is number | undefined =&gt; isOptionalT&lt;number&gt;(input, isNumber);
 &nbsp;
-export const isString = <span class="fstat-no" title="function not covered" >(i</span>nput: unknown): input is string =&gt; <span class="cstat-no" title="statement not covered" >typeof input === 'string';</span>
+ex<span class="missing-if-branch" title="else path not taken" >E</span>port const isString = (input: unknown): <span class="branch-2 cbranch-no" title="branch not covered" >input is string =&gt; typeof i</span>nput === 'string';
 &nbsp;
-export const isOptionalString = <span class="fstat-no" title="function not covered" >(i</span>nput: unknown): input is string | undefined =&gt; <span class="cstat-no" title="statement not covered" >isOptionalT&lt;string&gt;(input, isString);</span>
+export<span class="missing-if-branch" title="else path not taken" >E</span> const isOptionalString = (input: unknown): input is string | undefined =&gt; isOptionalT&lt;string&gt;(input, isString);
 &nbsp;
 export const isArray = (input: unknown): input is unknown[] =&gt; Array.isArray(input);
 &nbsp;
 export const isArrayOfT = &lt;T&gt;(input: unknown, typeguard: (input: unknown) =&gt; input is T): input is T[] =&gt;
   isArray(input) &amp;&amp; input.every(typeguard);
 &nbsp;
-export const isObject = <span class="fstat-no" title="function not covered" >(i</span>nput: unknown): input is Record&lt;string, unknown&gt; =&gt;
-<span class="cstat-no" title="statement not covered" >  typeof input === 'object' &amp;&amp; input !== null &amp;&amp; !isArray(input);</span>
+export const isObject = (input: unknown): input is Record&lt;string, unknown&gt; =&gt;
+  typeof input === 'object' &amp;&amp; input !== null &amp;&amp; !isArray(input);
 &nbsp;
 // Gives you a type from an array of the given type
-// (1 | 2 | 3)[] =&gt; 1 | 2 | 3
-// MyType[] =&gt; MyType
-export type ArrayDeref&lt;T extends unknown[]&gt; = T[number];
-&nbsp;
-// Removes the union with undefined
+// (1 | 2 | <span class="fstat-no" title="function not covered" >3)</span>[] =<span class="cstat-no" title="statement not covered" >&gt; 1 | 2 |</span> 3
+// MyType[] =&gt; MyTyp<span class="fstat-no" title="function not covered" >e<span class="cstat-no" title="statement not covered" ></span></span>
+export type ArrayDer<span class="fstat-no" title="function not covered" >ef</span>&lt;T e<span class="cstat-no" title="statement not covered" >xtends unknown[]&gt;</span> = T[number];
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+// Removes t<span class="fstat-no" title="function not covered" >he</span> uni<span class="cstat-no" title="statement not covered" >on with u</span>ndefined
 // MyType | undefined =&gt; MyType
 export type NonUndefined&lt;T&gt; = T extends undefined ? never : T;
-&nbsp;</pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

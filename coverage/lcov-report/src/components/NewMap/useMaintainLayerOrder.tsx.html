@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/33</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/29</span>
             </div>
         
             
@@ -90,11 +90,13 @@
 <a name='L25'></a><a href='#L25'>25</a>
 <a name='L26'></a><a href='#L26'>26</a>
 <a name='L27'></a><a href='#L27'>27</a>
-<a name='L28'></a><a href='#L28'>28</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L28'></a><a href='#L28'>28</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -102,56 +104,54 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { MutableRefObject, useEffect } from 'react';
-import { MapRef } from 'react-map-gl/mapbox';
-&nbsp;
-/**
- * Ensures that all given layers maintain strict order in the Mapbox layer stack.
- */
-export const useMaintainLayerOrder = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(m</span>apRef: MutableRefObject&lt;MapRef | null&gt;, orderedLayerIds: string[]) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-    const map = <span class="cstat-no" title="statement not covered" >mapRef.current;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Mutable<span class="cstat-no" title="statement not covered" >RefObject, useEffect }</span> from 'react';
+import { MapRef } from <span class="cstat-no" title="statement not covered" >'react-map-gl/mapbox';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+/**<span class="cstat-no" title="statement not covered" ></span>
+ * Ensures that<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > a</span>ll given layers maintain strict order in the Mapbox layer stack.</span>
+ *<span class="cstat-no" title="statement not covered" >/</span>
+expo<span class="cstat-no" title="statement not covered" >rt const useMaintainLayerOrder = (mapRef: MutableRefObject&lt;MapR</span>ef | null&gt;, orderedLayerIds: string[]) =&gt; {
+  useEffect(() =&gt; {
+    const map = ma<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >pR</span>ef.current;</span>
 <span class="cstat-no" title="statement not covered" >    if (!map) {</span>
 <span class="cstat-no" title="statement not covered" >      return;</span>
-    }
-&nbsp;
+    }<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
     // Only move layers that exist
-    const existingLayerIds = <span class="cstat-no" title="statement not covered" >orderedLayerIds.filter(<span class="fstat-no" title="function not covered" >(i</span>d) =&gt; <span class="cstat-no" title="statement not covered" >map.getLayer(id))</span>;</span>
+<span class="cstat-no" title="statement not covered" >    const exi</span>stingLayerIds = orderedLayerIds.filter((id) =&gt; map.getLayer(id));
 &nbsp;
-    // Reverse iterate so first in array ends up lowest
-<span class="cstat-no" title="statement not covered" >    for (let i = <span class="cstat-no" title="statement not covered" >existingLayerIds.length - 1;</span> i &gt;= 0; i--) {</span>
-      const layerId = <span class="cstat-no" title="statement not covered" >existingLayerIds[i];</span>
-<span class="cstat-no" title="statement not covered" >      try {</span>
-<span class="cstat-no" title="statement not covered" >        map.moveLayer(layerId, i &lt; existingLayerIds.length - 1 ? existingLayerIds[i + 1] : undefined);</span>
-      } catch (e) {
-        // moveLayer will throw if layer doesn't exist in current style
-      }
-    }
-  }, [mapRef, orderedLayerIds]);
-};
-&nbsp;</pre></td></tr></table></pre>
+    // Reverse iter<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >at</span>e so fi<span class="cstat-no" title="statement not covered" >rst in array ends up lowest</span></span>
+    for (let i = exi<span class="cstat-no" title="statement not covered" >sti</span>ngLayerIds.length - 1; i &gt;= 0; i--) {
+<span class="cstat-no" title="statement not covered" >      const layerId = existingLayerIds[i];</span>
+      try {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+        map.moveLayer(layerId, i &lt; existingLayerIds.length - 1 ? existingLayerIds[i + 1] : undefined);
+<span class="cstat-no" title="statement not covered" >      } catch (e) {</span>
+        // moveLaye<span class="cstat-no" title="statement not covered" >r will throw if l</span>ayer doesn't exist in current style
+      }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    }<span class="fstat-no" title="function not covered" ></span></span>
+  }, [mapRef, or<span class="cstat-no" title="statement not covered" >deredLayerIds])</span>;
+};<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/29</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/27</span>
             </div>
         
             
@@ -86,60 +86,60 @@
 <a name='L21'></a><a href='#L21'>21</a>
 <a name='L22'></a><a href='#L22'>22</a>
 <a name='L23'></a><a href='#L23'>23</a>
-<a name='L24'></a><a href='#L24'>24</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L24'></a><a href='#L24'>24</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { createSlice } from '@reduxjs/toolkit';
-&nbsp;
-import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
-import { GisResponse } from 'src/services/gis/GisService';
-&nbsp;
-import { requestGetGis } from './gisAsyncThunks';
-&nbsp;
-const initialGisState: { [key: string]: StatusT&lt;GisResponse&gt; } = <span class="cstat-no" title="statement not covered" >{};</span>
-&nbsp;
-export const gisSlice = <span class="cstat-no" title="statement not covered" >createSlice({</span>
-  name: 'gisSlice',
-  initialState: initialGisState,
-  reducers: {},
-  extraReducers: <span class="fstat-no" title="function not covered" >(b</span>uilder) =&gt; {
-<span class="cstat-no" title="statement not covered" >    buildReducers(requestGetGis, true)(builder);</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { createS<span class="cstat-no" title="statement not covered" >lice } from '@reduxjs/</span>toolkit';
+<span class="cstat-no" title="statement not covered" ></span>
+import { StatusT, buildR<span class="cstat-no" title="statement not covered" >educers } from 'src/redux/f</span>eatures/asyncUtils';
+import { GisRespons<span class="cstat-no" title="statement not covered" >e } from 'src/services/gis/GisSe</span>rvice';
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+im<span class="cstat-no" title="statement not covered" >port { requestGetGis } from './gisAsyncThunks';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+const initialGisState: { [key: string]: StatusT&lt;GisResponse&gt; } = {};
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+ex<span class="cstat-no" title="statement not covered" >port const gisSlice = createSlice({</span>
+  na<span class="cstat-no" title="statement not covered" >me: 'gisSlice',</span>
+  init<span class="cstat-no" title="statement not covered" >ialState: initialGisState,</span>
+  reduce<span class="cstat-no" title="statement not covered" >rs: {},<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  extraReducers: (builder) =&gt; {
+<span class="cstat-no" title="statement not covered" >    buildRedu</span>cers(requestGetGis, true)(builder);
   },
-});
+});<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >const gisReducers = {</span>
+  gisReques<span class="fstat-no" title="function not covered" >t:</span> gis<span class="cstat-no" title="statement not covered" >Slice.reducer,</span>
+};<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 &nbsp;
-const gisReducers = <span class="cstat-no" title="statement not covered" >{</span>
-  gisRequest: gisSlice.reducer,
-};
-&nbsp;
-export default gisReducers;
-&nbsp;</pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" >export default gisReducers;</span>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

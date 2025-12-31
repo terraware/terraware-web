@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/28</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/26</span>
             </div>
         
             
@@ -90,19 +90,17 @@
 <a name='L25'></a><a href='#L25'>25</a>
 <a name='L26'></a><a href='#L26'>26</a>
 <a name='L27'></a><a href='#L27'>27</a>
-<a name='L28'></a><a href='#L28'>28</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L28'></a><a href='#L28'>28</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -110,48 +108,50 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useCallback } from 'react';
-import { useNavigate as useNavigateRouter } from 'react-router';
-import { N as NavigateOptions, T as To } from 'react-router/dist/development/route-data-C12CLHiN';
-&nbsp;
-interface SyncNavigateFunction {
-  (to: To, options?: NavigateOptions): void;
-&nbsp;
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useCall<span class="cstat-no" title="statement not covered" >back } from 'react';</span>
+import { useNavigate as<span class="cstat-no" title="statement not covered" > useNavigateRouter } from 'react</span>-router';
+import { N as NavigateOp<span class="cstat-no" title="statement not covered" >tions, T as To } from 'reac</span>t-router/dist/development/route-data-C12CLHiN';
+<span class="cstat-no" title="statement not covered" ></span>
+interface SyncN<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >av</span>igateFunction {</span>
+<span class="cstat-no" title="statement not covered" >  (to: To, options?: NavigateOptions): void;</span>
+<span class="cstat-no" title="statement not covered" ></span>
   (delta: number): void;
-}
+}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ></span>
+/**<span class="cstat-no" title="statement not covered" ></span>
+ * Rep<span class="cstat-no" title="statement not covered" >laces the useNavigate hook to remove the need for adding `void navigate` to all usages to fix linting issues</span>
+ */<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+export const useSyncNavigate = (): SyncNavigateFunction =&gt; {
+<span class="cstat-no" title="statement not covered" >  const route</span>rNavigate = useNavigateRouter();
 &nbsp;
-/**
- * Replaces the useNavigate hook to remove the need for adding `void navigate` to all usages to fix linting issues
- */
-export const useSyncNavigate = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span>: SyncNavigateFunction =&gt; {</span>
-  const routerNavigate = <span class="cstat-no" title="statement not covered" >useNavigateRouter();</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  return useCallback(</span>
-<span class="fstat-no" title="function not covered" >    (t</span>oOrDelta, options?: NavigateOptions) =&gt; {
+  return useCallbac<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >k(<span class="cstat-no" title="statement not covered" ></span></span></span>
+    (toOrDelta, opti<span class="cstat-no" title="statement not covered" >ons</span>?: NavigateOptions) =&gt; {
 <span class="cstat-no" title="statement not covered" >      if (typeof toOrDelta === 'number') {</span>
-<span class="cstat-no" title="statement not covered" >        void routerNavigate(toOrDelta);</span>
+        void router<span class="fstat-no" title="function not covered" >Na</span>viga<span class="cstat-no" title="statement not covered" >te(toOrDelta);</span>
       } else {
-<span class="cstat-no" title="statement not covered" >        void routerNavigate(toOrDelta, options);</span>
-      }
-    },
-    [routerNavigate]
-  );
-};
-&nbsp;</pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" >        void routerNavigate(toOrDelta, options</span>);
+      }<span class="cstat-no" title="statement not covered" ></span>
+    },<span class="cstat-no" title="statement not covered" ></span>
+    [routerNavigate]<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  );<span class="cstat-no" title="statement not covered" ></span>
+};<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/34</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/32</span>
             </div>
         
             
@@ -99,75 +99,75 @@
 <a name='L34'></a><a href='#L34'>34</a>
 <a name='L35'></a><a href='#L35'>35</a>
 <a name='L36'></a><a href='#L36'>36</a>
-<a name='L37'></a><a href='#L37'>37</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L37'></a><a href='#L37'>37</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useCallback, useMemo, useState } from 'react';
-&nbsp;
-import { requestRescheduleObservation } from 'src/redux/features/observations/observationsAsyncThunks';
-import { selectRescheduleObservation } from 'src/redux/features/observations/observationsSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
-&nbsp;
-const useRescheduleObservation = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-  const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
-&nbsp;
-  const [requestId, setRequestId] = <span class="cstat-no" title="statement not covered" >useState('');</span>
-  const rescheduleResult = <span class="cstat-no" title="statement not covered" >useAppSelector(selectRescheduleObservation(requestId));</span>
-&nbsp;
-  const reschedule = <span class="cstat-no" title="statement not covered" >useCallback(</span>
-<span class="fstat-no" title="function not covered" >    (o</span>bservationId: number, startDate: string, endDate: string) =&gt; {
-      const request = <span class="cstat-no" title="statement not covered" >dispatch(</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useCall<span class="cstat-no" title="statement not covered" >back, useMemo, useStat</span>e } from 'react';
+<span class="cstat-no" title="statement not covered" ></span>
+import { requestReschedu<span class="cstat-no" title="statement not covered" >leObservation } from 'src/r</span>edux/features/observations/observationsAsyncThunks';
+import { selectResc<span class="cstat-no" title="statement not covered" >heduleObservation } from 'src/re</span>dux/features/observations/observationsSelectors';
+import { useApp<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Di</span>spatch, useAppSelector } from 'src/redux/store';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+cons<span class="cstat-no" title="statement not covered" >t useRescheduleObservation = () =&gt; {</span>
+  const dispatch = useAppDispatch();
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >  const [requestId, setRequestId] = useState('');</span>
+  co<span class="cstat-no" title="statement not covered" >nst rescheduleResult = useAppSelector(selectRescheduleObservation(requestId));</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  const <span class="cstat-no" title="statement not covered" >reschedule = useCallback(<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+    (observationId: number, startDate: string, endDate: string) =&gt; {
+<span class="cstat-no" title="statement not covered" >      const r</span>equest = dispatch(
         requestRescheduleObservation({
-          observationId,
-          request: { startDate, endDate },
-        })
-      );
+          observati<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >on</span>Id,<span class="cstat-no" title="statement not covered" ></span></span>
+          request: {<span class="cstat-no" title="statement not covered" > st</span>artDate, endDate },
+<span class="cstat-no" title="statement not covered" >        })</span>
+      );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      setRequestId(request.requestId);</span>
-    },
-    [dispatch]
-  );
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  return useMemo(</span>
-<span class="fstat-no" title="function not covered" >    ()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
-      reschedule,
-      rescheduleResult,
-    }),
-    [reschedule, rescheduleResult]
-  );
+    },<span class="cstat-no" title="statement not covered" ></span>
+    [dispatch]<span class="cstat-no" title="statement not covered" ></span>
+  );<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+  return useMemo(<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+    () =&gt; ({<span class="cstat-no" title="statement not covered" ></span>
+      reschedule,<span class="cstat-no" title="statement not covered" ></span>
+      rescheduleResult,<span class="cstat-no" title="statement not covered" ></span>
+    }),<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" >    [r</span>eschedule, rescheduleResult]
+  );<span class="cstat-no" title="statement not covered" ></span>
 };
 &nbsp;
 export default useRescheduleObservation;
@@ -178,7 +178,7 @@ export default useRescheduleObservation;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

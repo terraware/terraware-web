@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>0/25</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/22</span>
             </div>
         
             
@@ -80,48 +80,48 @@
 <a name='L15'></a><a href='#L15'>15</a>
 <a name='L16'></a><a href='#L16'>16</a>
 <a name='L17'></a><a href='#L17'>17</a>
-<a name='L18'></a><a href='#L18'>18</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L18'></a><a href='#L18'>18</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { createContext, useContext } from 'react';
-&nbsp;
-import { Statuses } from 'src/redux/features/asyncUtils';
-import { Project } from 'src/types/Project';
-import { PhaseVotes } from 'src/types/Votes';
-&nbsp;
-export type VotingData = {
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { createC<span class="cstat-no" title="statement not covered" >ontext, useContext } f</span>rom 'react';
+<span class="cstat-no" title="statement not covered" ></span>
+import { Statuses } from<span class="cstat-no" title="statement not covered" > 'src/redux/features/asyncU</span>tils';
+import { Project } <span class="cstat-no" title="statement not covered" >from 'src/types/Project';</span>
+import { PhaseV<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ot</span>es } from 'src/types/Votes';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+expo<span class="cstat-no" title="statement not covered" >rt type VotingData = {</span>
   // This is defaults to Phase 1 votes
-  phaseVotes?: PhaseVotes;
-  project?: Project;
-  status?: Statuses;
-};
-&nbsp;
+  phaseVotes?: Pha<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >se</span>Votes;</span>
+<span class="cstat-no" title="statement not covered" >  project?: Project;</span>
+  st<span class="cstat-no" title="statement not covered" >atus?: Statuses;</span>
+};<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 // default values pointing to nothing
-export const VotingContext = <span class="cstat-no" title="statement not covered" >createContext&lt;VotingData&gt;({});</span>
+ex<span class="cstat-no" title="statement not covered" >port const </span>VotingContext = createContext&lt;VotingData&gt;({});
 &nbsp;
-export const useVotingData = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >useContext(VotingContext);</span></span>
-&nbsp;</pre></td></tr></table></pre>
+export const useVot<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >in</span>gData =<span class="cstat-no" title="statement not covered" > () =&gt; useContext(VotingContext);</span></span>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

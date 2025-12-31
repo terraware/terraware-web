@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/29</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/27</span>
             </div>
         
             
@@ -92,64 +92,64 @@
 <a name='L27'></a><a href='#L27'>27</a>
 <a name='L28'></a><a href='#L28'>28</a>
 <a name='L29'></a><a href='#L29'>29</a>
-<a name='L30'></a><a href='#L30'>30</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L30'></a><a href='#L30'>30</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-&nbsp;
-import { SpeciesProjectsSearchResponse } from 'src/services/SpeciesService';
-&nbsp;
-type SpeciesId = number;
-&nbsp;
-type Payload = {
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Payload<span class="cstat-no" title="statement not covered" >Action, createSlice } </span>from '@reduxjs/toolkit';
+<span class="cstat-no" title="statement not covered" ></span>
+import { SpeciesProjects<span class="cstat-no" title="statement not covered" >SearchResponse } from 'src/</span>services/SpeciesService';
+<span class="cstat-no" title="statement not covered" ></span>
+type SpeciesId <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >= </span>number;</span>
+<span class="cstat-no" title="statement not covered" ></span>
+type<span class="cstat-no" title="statement not covered" > Payload = {</span>
   projects: SpeciesProjectsSearchResponse['projects'];
-  speciesId: SpeciesId;
-};
+  speciesId: Speci<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >es</span>Id;</span>
+};<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+// Def<span class="cstat-no" title="statement not covered" >ine the initial state</span>
+const in<span class="cstat-no" title="statement not covered" >itialState: Record&lt;Species<span class="fstat-no" title="function not covered" >Id</span>, Sp<span class="cstat-no" title="statement not covered" >eciesProje</span>ctsSearchResponse['projects']&gt; = {};</span>
 &nbsp;
-// Define the initial state
-const initialState: Record&lt;SpeciesId, SpeciesProjectsSearchResponse['projects']&gt; = <span class="cstat-no" title="statement not covered" >{};</span>
-&nbsp;
-export const speciesProjectsSlice = <span class="cstat-no" title="statement not covered" >createSlice({</span>
+ex<span class="cstat-no" title="statement not covered" >port const </span>speciesProjectsSlice = createSlice({
   name: 'speciesProjectsSlice',
-  initialState,
-  reducers: {
-    setSpeciesProjectsAction: <span class="fstat-no" title="function not covered" >(s</span>tate, action: PayloadAction&lt;Payload&gt;) =&gt; {
-<span class="cstat-no" title="statement not covered" >      if (action.payload.projects) {</span>
-<span class="cstat-no" title="statement not covered" >        state[action.payload.speciesId] = action.payload.projects;</span>
-      }
+  initialState,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  reducers: {<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >    setSpeciesProjectsAction: (state, action: PayloadAction&lt;Payload&gt;) =&gt; {</span>
+      if (action.payload.pro<span class="fstat-no" title="function not covered" >je</span>cts)<span class="cstat-no" title="statement not covered" > {</span>
+        state[action.paylo<span class="fstat-no" title="function not covered" >ad</span>.spe<span class="cstat-no" title="statement not covered" >ciesId] = action.payloa</span>d.projects;
+      }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
     },
-  },
-});
+<span class="cstat-no" title="statement not covered" >  },</span>
+});<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+export const { setSpeciesProj<span class="cstat-no" title="statement not covered" >ectsAction } = speciesProjectsSlice.actions;</span>
 &nbsp;
-export const { setSpeciesProjectsAction } = <span class="cstat-no" title="statement not covered" >speciesProjectsSlice.actions;</span>
-&nbsp;
-export const speciesProjectsReducer = <span class="cstat-no" title="statement not covered" >speciesProjectsSlice.reducer;</span>
+export const speciesProjectsReducer = speciesProjectsSlice.reducer;
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -157,7 +157,7 @@ export const speciesProjectsReducer = <span class="cstat-no" title="statement no
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

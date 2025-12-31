@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/31</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/29</span>
             </div>
         
             
@@ -93,64 +93,64 @@
 <a name='L28'></a><a href='#L28'>28</a>
 <a name='L29'></a><a href='#L29'>29</a>
 <a name='L30'></a><a href='#L30'>30</a>
-<a name='L31'></a><a href='#L31'>31</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L31'></a><a href='#L31'>31</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Dispatch } from 'redux';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Dispatc<span class="cstat-no" title="statement not covered" >h } from 'redux';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+import { RootState } fro<span class="cstat-no" title="statement not covered" >m 'src/redux/rootReducer';</span>
+import { SpeciesSer<span class="cstat-no" title="statement not covered" >vice } from 'src/services';</span>
+import { Specie<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >sP</span>rojectsSearchResponse } from 'src/services/SpeciesService';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+impo<span class="cstat-no" title="statement not covered" >rt { setSpeciesProjectsAction } from './speciesProjectsSlice';</span>
 &nbsp;
-import { RootState } from 'src/redux/rootReducer';
-import { SpeciesService } from 'src/services';
-import { SpeciesProjectsSearchResponse } from 'src/services/SpeciesService';
-&nbsp;
-import { setSpeciesProjectsAction } from './speciesProjectsSlice';
-&nbsp;
-export const requestSpeciesProjects = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(o</span>rganizationId: number, speciesId: number) =&gt; {</span>
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-<span class="cstat-no" title="statement not covered" >  return <span class="fstat-no" title="function not covered" >as</span>ync (dispatch: Dispatch, _getState: () =&gt; RootState) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    try {</span>
-      const response: SpeciesProjectsSearchResponse[] | null = <span class="cstat-no" title="statement not covered" >await SpeciesService.getSpeciesProjects(</span>
+export const reque<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >st</span>SpeciesProjects = (organizationId: number, speciesId: number) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  // eslint-disable-next-line @typescript-eslint/no-unused-vars</span>
+  re<span class="cstat-no" title="statement not covered" >turn async (dispatch: Dispatch, _getState: () =&gt; RootState) =&gt; {</span>
+    tr<span class="cstat-no" title="statement not covered" >y {</span>
+      co<span class="cstat-no" title="statement not covered" >nst response: SpeciesProje<span class="fstat-no" title="function not covered" >ct</span>sSea<span class="cstat-no" title="statement not covered" >rchRespons</span>e[] | null = await SpeciesService.getSpeciesProjects(</span>
         organizationId,
-        speciesId
+<span class="cstat-no" title="statement not covered" >        speci</span>esId
       );
-&nbsp;
-<span class="cstat-no" title="statement not covered" >      if (response) {</span>
-        const projectsForSpecies = <span class="cstat-no" title="statement not covered" >response.shift();</span>
-<span class="cstat-no" title="statement not covered" >        if (projectsForSpecies) {</span>
-<span class="cstat-no" title="statement not covered" >          dispatch(setSpeciesProjectsAction({ projects: projectsForSpecies.projects, speciesId }));</span>
-        }
-      }
-    } catch (e) {
-      // should not happen, the response above captures any http request errors
-      // eslint-disable-next-line no-console
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+      if (response) <span class="cstat-no" title="statement not covered" >{</span>
+<span class="cstat-no" title="statement not covered" >        const projectsForSpecies = response.shift();</span>
+        if (projectsForSpe<span class="fstat-no" title="function not covered" >ci</span>es) <span class="cstat-no" title="statement not covered" >{</span>
+          dispatch(setSpeciesProjectsAction({ projects: projectsForSpecies.projects, speciesId }));
+<span class="cstat-no" title="statement not covered" >        }</span>
+      }<span class="cstat-no" title="statement not covered" ></span>
+    } catch (e) {<span class="cstat-no" title="statement not covered" ></span>
+      // should not happen, the<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > r</span>esponse above captures any http request errors</span>
+<span class="cstat-no" title="statement not covered" >      // <span class="fstat-no" title="function not covered" >es</span>lint-disable-next-line no-console</span>
 <span class="cstat-no" title="statement not covered" >      console.error('Error dispatching request to get projects for a species', e);</span>
-    }
+    }<span class="cstat-no" title="statement not covered" ></span>
   };
 };
 &nbsp;</pre></td></tr></table></pre>
@@ -160,7 +160,7 @@ export const requestSpeciesProjects = <span class="cstat-no" title="statement no
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

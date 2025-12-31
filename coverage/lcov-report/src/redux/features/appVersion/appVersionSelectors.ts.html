@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/30</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/26</span>
             </div>
         
             
@@ -78,36 +78,36 @@
 <a name='L13'></a><a href='#L13'>13</a>
 <a name='L14'></a><a href='#L14'>14</a>
 <a name='L15'></a><a href='#L15'>15</a>
-<a name='L16'></a><a href='#L16'>16</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L16'></a><a href='#L16'>16</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { createSelector } from '@reduxjs/toolkit';
-&nbsp;
-import { RootState } from 'src/redux/rootReducer';
-&nbsp;
-export const selectAppVersion = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState) =&gt; <span class="cstat-no" title="statement not covered" >state.appVersion.version;</span></span>
-const currentAppVersion = <span class="cstat-no" title="statement not covered" >process.env.REACT_APP_TERRAWARE_FE_BUILD_VERSION;</span>
-&nbsp;
-export const selectIsAppVersionStale = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState) =&gt;</span>
-<span class="cstat-no" title="statement not covered" >  !!state.appVersion.version &amp;&amp; state.appVersion.version.toString().trim() !== currentAppVersion;</span>
-&nbsp;
-// simple example of composable selectors
-export const selectIsAppVersionStaleExample = <span class="cstat-no" title="statement not covered" >createSelector(</span>
-  selectAppVersion,
-<span class="fstat-no" title="function not covered" >  (a</span>ppVersion) =&gt; <span class="cstat-no" title="statement not covered" >appVersion &amp;&amp; appVersion.toString().trim() !== currentAppVersion</span>
-);
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { createS<span class="cstat-no" title="statement not covered" >elector } from '@redux</span>js/toolkit';
+<span class="cstat-no" title="statement not covered" ></span>
+import { RootState } fro<span class="cstat-no" title="statement not covered" >m 'src/redux/rootReducer';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+export const se<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >le</span>ctAppVersion = (state: RootState) =&gt; state.appVersion.version;</span>
+co<span class="cstat-no" title="statement not covered" >nst currentAppVersion = process.env.REACT_APP_TERRAWARE_FE_BUILD_VERSION;</span>
+<span class="cstat-no" title="statement not covered" ></span>
+export const selectIsAppVersionStale = (state: RootState) =&gt;
+  !!state.appVersi<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >on</span>.version &amp;&amp; state.appVersion.version.toString().trim() !== currentAppVersion;</span>
+<span class="cstat-no" title="statement not covered" ></span>
+// s<span class="cstat-no" title="statement not covered" >imple example of composable selectors</span>
+export<span class="cstat-no" title="statement not covered" > const selectIsAppVersionStaleExample = createSelector(</span>
+  select<span class="cstat-no" title="statement not covered" >AppVersion,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  (appVersion) =&gt; appVersion &amp;&amp; appVersion.toString().trim() !== currentAppVersion
+);<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -115,7 +115,7 @@ export const selectIsAppVersionStaleExample = <span class="cstat-no" title="stat
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/31</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/28</span>
             </div>
         
             
@@ -84,47 +84,47 @@
 <a name='L19'></a><a href='#L19'>19</a>
 <a name='L20'></a><a href='#L20'>20</a>
 <a name='L21'></a><a href='#L21'>21</a>
-<a name='L22'></a><a href='#L22'>22</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L22'></a><a href='#L22'>22</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
-&nbsp;
-import ExportCsvModal from 'src/components/common/ExportCsvModal';
-import ParticipantProjectSpeciesService from 'src/services/ParticipantProjectSpeciesService';
-&nbsp;
-interface DownloadSpeciesSnapshotModalProps {
-  deliverableId: number;
-  open: boolean;
-  onClose: () =&gt; void;
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React fr<span class="cstat-no" title="statement not covered" >om 'react';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+import ExportCsvModal f<span class="cstat-no" title="statement not covered" >rom 'src/components/common/Expor</span>tCsvModal';
+import ParticipantProjec<span class="cstat-no" title="statement not covered" >tSpeciesService from 'src/s</span>ervices/ParticipantProjectSpeciesService';
+<span class="cstat-no" title="statement not covered" ></span>
+interface DownloadS<span class="cstat-no" title="statement not covered" >peciesSnapshotModalProps {</span>
+  deliverableId<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >: </span>number;</span>
+<span class="cstat-no" title="statement not covered" >  open: boolean;</span>
+  on<span class="cstat-no" title="statement not covered" >Close: () =&gt; void;</span>
   projectId: number;
-}
-&nbsp;
-export default function <span class="fstat-no" title="function not covered" >DownloadSpeciesSnapshotModal(</span>props: DownloadSpeciesSnapshotModalProps): JSX.Element {
-  const { deliverableId, open, onClose, projectId } = <span class="cstat-no" title="statement not covered" >props;</span>
-&nbsp;
-  const onExport = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    return await ParticipantProjectSpeciesService.downloadSnapshot(deliverableId, projectId);</span>
+}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ></span>
+expo<span class="cstat-no" title="statement not covered" >rt default function DownloadSpeciesSnapshotModal(props: DownloadSpeciesSnapshotModalProps): JSX.Element {</span>
+  cons<span class="cstat-no" title="statement not covered" >t { deliverableId, open, onClose, projectId } = props;</span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  const onExport = async () =&gt; {
+<span class="cstat-no" title="statement not covered" >    return aw</span>ait ParticipantProjectSpeciesService.downloadSnapshot(deliverableId, projectId);
   };
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  return &lt;ExportCsvModal open={open} onExport={onExport} onClose={onClose} /&gt;;</span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  return &lt;ExportCsvModal open={open} onExport={onExport} onClose={onClose} /&gt;;
 }
 &nbsp;</pre></td></tr></table></pre>
 
@@ -133,7 +133,7 @@ export default function <span class="fstat-no" title="function not covered" >Dow
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

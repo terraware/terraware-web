@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/30</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/28</span>
             </div>
         
             
@@ -90,68 +90,68 @@
 <a name='L25'></a><a href='#L25'>25</a>
 <a name='L26'></a><a href='#L26'>26</a>
 <a name='L27'></a><a href='#L27'>27</a>
-<a name='L28'></a><a href='#L28'>28</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L28'></a><a href='#L28'>28</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useEffect, useState } from 'react';
-&nbsp;
-/**
- * Determine if the element denoted by the ref parameter is visible. This is done by checking its intersection with
- * the viewport. For performance, only runs the callback when the ref's visibility changes.
- * See: https://dev.to/jmalvarez/check-if-an-element-is-visible-with-react-hooks-27h8
- *
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { <span class="cstat-no" title="statement not covered" >useEffect, useState } </span>from 'react';
+<span class="cstat-no" title="statement not covered" ></span>
+/**<span class="cstat-no" title="statement not covered" ></span>
+ * Determine if the<span class="cstat-no" title="statement not covered" > element denoted by the ref para</span>meter is visible. This is done by checking its intersection with
+ * the viewport<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >. </span>For performance, only runs the callback when the ref's visibility changes.</span>
+ *<span class="cstat-no" title="statement not covered" > See: https://dev.to/jmalvarez/check-if-an-element-is-visible-with-react-hooks-27h8</span>
+ *<span class="cstat-no" title="statement not covered" ></span>
  * @param ref The ref to the element to detect visibility of.
- */
-export function <span class="fstat-no" title="function not covered" >useIsVisible(</span>ref: React.MutableRefObject&lt;any&gt;) {
-  const [isIntersecting, setIntersecting] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-    const observer = <span class="cstat-no" title="statement not covered" >new IntersectionObserver(<span class="fstat-no" title="function not covered" >([</span>entry]) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >      setIntersecting(entry.isIntersecting);</span>
+ */<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+ex<span class="cstat-no" title="statement not covered" >port function useIsVisible(ref: React.MutableRefObject&lt;any&gt;) {</span>
+  co<span class="cstat-no" title="statement not covered" >nst [isIntersecting, setIntersecting] = useState(false);</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  useEff<span class="cstat-no" title="statement not covered" >ect(() =&gt; {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+    const observer = new IntersectionObserver(([entry]) =&gt; {
+<span class="cstat-no" title="statement not covered" >      setInte</span>rsecting(entry.isIntersecting);
     });
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    if (ref.current) {</span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+    if (ref.current)<span class="cstat-no" title="statement not covered" > {</span>
 <span class="cstat-no" title="statement not covered" >      observer.observe(ref.current);</span>
-    }
-<span class="cstat-no" title="statement not covered" >    return <span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+    }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+    return () =&gt; {
 <span class="cstat-no" title="statement not covered" >      observer.disconnect();</span>
-    };
-  }, [ref]);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  return isIntersecting;</span>
-}
-&nbsp;</pre></td></tr></table></pre>
+    };<span class="cstat-no" title="statement not covered" ></span>
+  }, [ref<span class="fstat-no" title="function not covered" >]);</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >  return isIntersecting;<span class="fstat-no" title="function not covered" ></span></span>
+}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

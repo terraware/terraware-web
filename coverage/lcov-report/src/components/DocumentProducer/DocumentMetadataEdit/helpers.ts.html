@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/32</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/19</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/26</span>
             </div>
         
             
@@ -83,54 +83,54 @@
 <a name='L18'></a><a href='#L18'>18</a>
 <a name='L19'></a><a href='#L19'>19</a>
 <a name='L20'></a><a href='#L20'>20</a>
-<a name='L21'></a><a href='#L21'>21</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L21'></a><a href='#L21'>21</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { DropdownItem } from '@terraware/web-components/components/types';
-&nbsp;
-import { UserWithGlobalRoles } from 'src/types/GlobalRoles';
-import { DocumentTemplate } from 'src/types/documentProducer/DocumentTemplate';
-import { getUserDisplayName } from 'src/utils/user';
-&nbsp;
-export const getDocumentTemplateOptions = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(d</span>ocumentTemplates: DocumentTemplate[]): DropdownItem[] =&gt;</span>
-<span class="cstat-no" title="statement not covered" >  documentTemplates.map(<span class="fstat-no" title="function not covered" >(d</span>ocumentTemplate) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-    label: documentTemplate.name,
-    value: documentTemplate.id.toString(),
-  }));
-&nbsp;
-export const getDocumentOwnerOptions = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(u</span>sers: UserWithGlobalRoles[]): DropdownItem[] =&gt;</span>
-<span class="cstat-no" title="statement not covered" >  users.map(<span class="fstat-no" title="function not covered" >(u</span>ser) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-    label: getUserDisplayName(user) ?? '',
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Dropdow<span class="cstat-no" title="statement not covered" >nItem } from '@terrawa</span>re/web-components/components/types';
+<span class="cstat-no" title="statement not covered" ></span>
+import { UserWithGlobalR<span class="cstat-no" title="statement not covered" >oles } from 'src/types/Glob</span>alRoles';
+import { DocumentTe<span class="cstat-no" title="statement not covered" >mplate } from 'src/types/documen</span>tProducer/DocumentTemplate';
+import { getUse<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >rD</span>isplayName } from 'src/utils/user';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+expo<span class="cstat-no" title="statement not covered" >rt const getDocumentTemplateOptions = (documentTemplates: Docum</span>entTemplate[]): DropdownItem[] =&gt;
+  documentTemplates.map((documentTemplate) =&gt; ({
+    label: documen<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >tT</span>emplate.name,</span>
+<span class="cstat-no" title="statement not covered" >    value: documentTemplate.id.toString(),</span>
+  })<span class="cstat-no" title="statement not covered" >);</span>
+<span class="cstat-no" title="statement not covered" ></span>
+export c<span class="cstat-no" title="statement not covered" >onst getDocumentOwnerOptio<span class="fstat-no" title="function not covered" >ns</span> = (<span class="cstat-no" title="statement not covered" >users: Use</span>rWithGlobalRoles[]): DropdownItem[] =&gt;</span>
+  users.map((user) =&gt; ({
+<span class="cstat-no" title="statement not covered" >    label: ge</span>tUserDisplayName(user) ?? '',
     value: user.id.toString(),
-  }));
-&nbsp;
-export const getDocumentTemplateName = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(d</span>ocumentTemplates: DocumentTemplate[], id?: string | number): string =&gt;</span>
-<span class="cstat-no" title="statement not covered" >  documentTemplates.find(<span class="fstat-no" title="function not covered" >(d</span>ocumentTemplate) =&gt; <span class="cstat-no" title="statement not covered" >documentTemplate.id.toString() === id?.toString())</span>?.name ?? '';</span>
-&nbsp;</pre></td></tr></table></pre>
+  }));<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >export const getDocumentTemplateName = (documentTemplates: DocumentTemplate[], id?: string | number): string =&gt;</span>
+  documentTemplates.find((d<span class="fstat-no" title="function not covered" >oc</span>umen<span class="cstat-no" title="statement not covered" >tTemplate) =&gt; documentTe</span>mplate.id.toString() === id?.toString())?.name ?? '';
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

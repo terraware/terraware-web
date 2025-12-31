@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/34</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/31</span>
             </div>
         
             
@@ -88,17 +88,23 @@
 <a name='L23'></a><a href='#L23'>23</a>
 <a name='L24'></a><a href='#L24'>24</a>
 <a name='L25'></a><a href='#L25'>25</a>
-<a name='L26'></a><a href='#L26'>26</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L26'></a><a href='#L26'>26</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -107,31 +113,25 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
-import { Navigate, Route, Routes, useParams } from 'react-router';
-&nbsp;
-import { APP_PATHS } from 'src/constants';
-&nbsp;
-import VotingEdit from './VotingEdit';
-import VotingView from './VotingView';
-&nbsp;
-const VotingRouter = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-  const pathParams = <span class="cstat-no" title="statement not covered" >useParams&lt;{ projectId: string }&gt;();</span>
-  const projectId = <span class="cstat-no" title="statement not covered" >Number(pathParams.projectId);</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;Routes&gt;
-      &lt;Route path='' element={&lt;VotingView /&gt;} /&gt;
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React fr<span class="cstat-no" title="statement not covered" >om 'react';</span>
+import { Navigat<span class="cstat-no" title="statement not covered" >e, Route, Routes, useP</span>arams } from 'react-router';
+<span class="cstat-no" title="statement not covered" ></span>
+import { APP_PATHS } fro<span class="cstat-no" title="statement not covered" >m 'src/constants';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+import VotingEdit f<span class="cstat-no" title="statement not covered" >rom './VotingEdit';</span>
+import VotingVi<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ew</span> from './VotingView';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+cons<span class="cstat-no" title="statement not covered" >t VotingRouter = () =&gt; {</span>
+  const pathParams = useParams&lt;{ projectId: string }&gt;();
+  const projectId <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >= </span>Number(pathParams.projectId);</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  re<span class="cstat-no" title="statement not covered" >turn (</span>
+    &lt;R<span class="cstat-no" title="statement not covered" >outes&gt;</span>
+      &lt;R<span class="cstat-no" title="statement not covered" >oute path='' element={&lt;Vot<span class="fstat-no" title="function not covered" >in</span>gVie<span class="cstat-no" title="statement not covered" >w /&gt;} /&gt;</span></span>
       &lt;Route path='edit' element={&lt;VotingEdit /&gt;} /&gt;
-      &lt;Route
+<span class="cstat-no" title="statement not covered" >      &lt;Route</span>
         path='*'
-        element={&lt;Navigate to={APP_PATHS.ACCELERATOR_PROJECT_VOTES.replace(':projectId', `${projectId}`)} /&gt;}
+        elemen<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >t=</span>{&lt;Navigate to={APP_PATHS.ACC<span class="cstat-no" title="statement not covered" >ELERATOR_PROJECT_VOTES.replace(':projectId', `${projectId}`)} /&gt;}</span></span>
       /&gt;
     &lt;/Routes&gt;
   );
@@ -145,7 +145,7 @@ export default VotingRouter;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

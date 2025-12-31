@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/28</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/25</span>
             </div>
         
             
@@ -92,64 +92,64 @@
 <a name='L27'></a><a href='#L27'>27</a>
 <a name='L28'></a><a href='#L28'>28</a>
 <a name='L29'></a><a href='#L29'>29</a>
-<a name='L30'></a><a href='#L30'>30</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L30'></a><a href='#L30'>30</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { createSelector } from '@reduxjs/toolkit';
-&nbsp;
-import { ObservationMonitoringPlotResults, ObservationPlantingSubzoneResults } from 'src/types/Observations';
-&nbsp;
-import { ZoneParams, selectObservationPlantingZone } from './observationPlantingZoneSelectors';
-&nbsp;
-export type MonitoringPlotParams = ZoneParams &amp; {
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { createS<span class="cstat-no" title="statement not covered" >elector } from '@redux</span>js/toolkit';
+<span class="cstat-no" title="statement not covered" ></span>
+import { ObservationMoni<span class="cstat-no" title="statement not covered" >toringPlotResults, Observat</span>ionPlantingSubzoneResults } from 'src/types/Observations';
+<span class="cstat-no" title="statement not covered" ></span>
+import { ZonePa<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ra</span>ms, selectObservationPlantingZone } from './observationPlantingZoneSelectors';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+expo<span class="cstat-no" title="statement not covered" >rt type MonitoringPlotParams = ZoneParams &amp; {</span>
   monitoringPlotId: number;
+};<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ></span>
+expo<span class="cstat-no" title="statement not covered" >rt type PlotObservations = ObservationMonitoringPlotResults &amp; {</span>
+  plan<span class="cstat-no" title="statement not covered" >tingZoneName: string;</span>
+  planti<span class="cstat-no" title="statement not covered" >ngSubzoneName: string;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 };
-&nbsp;
-export type PlotObservations = ObservationMonitoringPlotResults &amp; {
-  plantingZoneName: string;
-  plantingSubzoneName: string;
-};
-&nbsp;
-export const selectObservationMonitoringPlot = <span class="cstat-no" title="statement not covered" >createSelector(</span>
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  [selectObservationPlantingZone, <span class="fstat-no" title="function not covered" >(s</span>tate, params, defaultTimeZone) =&gt; <span class="cstat-no" title="statement not covered" >params]</span>,
-<span class="fstat-no" title="function not covered" >  (o</span>bservationPlantingZone, params) =&gt;
-<span class="cstat-no" title="statement not covered" >    observationPlantingZone?.plantingSubzones</span>
-      .flatMap(<span class="fstat-no" title="function not covered" >(s</span>ubzone: ObservationPlantingSubzoneResults): PlotObservations[] =&gt;
-<span class="cstat-no" title="statement not covered" >        subzone.monitoringPlots.map(<span class="fstat-no" title="function not covered" >(p</span>lot: ObservationMonitoringPlotResults) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-          ...plot,
-          plantingZoneName: observationPlantingZone.plantingZoneName,
-          plantingSubzoneName: subzone.plantingSubzoneName,
+<span class="cstat-no" title="statement not covered" ></span>
+export const selectObservationMonitoringPlot = createSelector(
+  // eslint-disable<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >-n</span>ext-lin<span class="cstat-no" title="statement not covered" >e @typescript-eslint/no-unused-vars</span></span>
+  [selectObservation<span class="cstat-no" title="statement not covered" >Pla</span>ntingZone, (state, params, defaultTimeZone) =&gt; params],
+<span class="cstat-no" title="statement not covered" >  (observationPlantingZone, params) =&gt;</span>
+    observationPlantingZone?.planti<span class="fstat-no" title="function not covered" >ng</span>Subz<span class="cstat-no" title="statement not covered" >ones</span>
+      .flatMap((subzone: ObservationPlantingSubzoneResults): PlotObservations[] =&gt;
+<span class="cstat-no" title="statement not covered" >        subzone.monitoringPlots.map((plot: Obs</span>ervationMonitoringPlotResults) =&gt; ({
+          ...plot,<span class="cstat-no" title="statement not covered" ></span>
+          plantingZoneName: observationPlantin<span class="cstat-no" title="statement not covered" >gZone.plantingZoneName,</span>
+          plantingSubzoneName: subzone.p<span class="cstat-no" title="statement not covered" >lantingSubzoneName,</span>
         }))
-      )
-      .find(<span class="fstat-no" title="function not covered" >(m</span>onitoringPlot: PlotObservations) =&gt; <span class="cstat-no" title="statement not covered" >monitoringPlot.monitoringPlotId === params.monitoringPlotId)</span>
-);
+      )<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="fstat-no" title="function not covered" ></span>      .find((monitoringPlot: PlotObserv<span class="cstat-no" title="statement not covered" >ations) =&gt; monitoringPlot.monitoringPlotId === params.monitoringPlotId)</span>
+);<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span>
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -157,7 +157,7 @@ export const selectObservationMonitoringPlot = <span class="cstat-no" title="sta
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

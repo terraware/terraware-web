@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/35</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/32</span>
             </div>
         
             
@@ -86,48 +86,48 @@
 <a name='L21'></a><a href='#L21'>21</a>
 <a name='L22'></a><a href='#L22'>22</a>
 <a name='L23'></a><a href='#L23'>23</a>
-<a name='L24'></a><a href='#L24'>24</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L24'></a><a href='#L24'>24</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useState } from 'react';
-&nbsp;
-import TfMain from 'src/components/common/TfMain';
-import { useDisclaimerData } from 'src/providers/Disclaimer/Context';
-&nbsp;
-import DisclaimerModal from './DisclaimerModal';
-&nbsp;
-const DisclaimerPage = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-  const { accept } = <span class="cstat-no" title="statement not covered" >useDisclaimerData();</span>
-  const [open, setOpen] = <span class="cstat-no" title="statement not covered" >useState(true);</span>
-&nbsp;
-  const logout = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > useCallback, </span>useState } from 'react';
+<span class="cstat-no" title="statement not covered" ></span>
+import TfMain from 'src<span class="cstat-no" title="statement not covered" >/components/common/TfMain';</span>
+import { useDisclaimerDa<span class="cstat-no" title="statement not covered" >ta } from 'src/providers/Di</span>sclaimer/Context';
+<span class="cstat-no" title="statement not covered" ></span>
+import DisclaimerMo<span class="cstat-no" title="statement not covered" >dal from './DisclaimerModal';</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+co<span class="cstat-no" title="statement not covered" >nst DisclaimerPage = () =&gt; {</span>
+  co<span class="cstat-no" title="statement not covered" >nst { accept } = useDisclaimerData();</span>
+  const [open, setOpen] = useState(true);
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >  const logout = useCallback(() =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    window.location.href = '/sso/logout';</span>
-  }, []);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;TfMain&gt;
+  }, [<span class="cstat-no" title="statement not covered" >]);</span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  return (
+<span class="cstat-no" title="statement not covered" >    &lt;TfMain&gt;</span>
       &lt;DisclaimerModal onCancel={logout} onConfirm={accept} open={open} setOpen={setOpen} /&gt;
-    &lt;/TfMain&gt;
+    &lt;/TfMain&gt;<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
   );
 };
 &nbsp;
@@ -139,7 +139,7 @@ export default DisclaimerPage;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

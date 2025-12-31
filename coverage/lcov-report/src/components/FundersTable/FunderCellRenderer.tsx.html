@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/39</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/30</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/36</span>
             </div>
         
             
@@ -87,19 +87,8 @@
 <a name='L22'></a><a href='#L22'>22</a>
 <a name='L23'></a><a href='#L23'>23</a>
 <a name='L24'></a><a href='#L24'>24</a>
-<a name='L25'></a><a href='#L25'>25</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L25'></a><a href='#L25'>25</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -109,30 +98,41 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
-&nbsp;
-import { getDate } from '@terraware/web-components/utils';
-&nbsp;
-import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
-import { RendererProps } from 'src/components/common/table/types';
-import { useLocalization } from 'src/providers';
-import strings from 'src/strings';
-&nbsp;
-export default function <span class="fstat-no" title="function not covered" >FunderCellRenderer(</span>props: RendererProps&lt;TableRowType&gt;): JSX.Element {
-  const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
-  const { column, row, index } = <span class="cstat-no" title="statement not covered" >props;</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  if (column.key === 'name') {</span>
-    const name = <span class="cstat-no" title="statement not covered" >`${row.firstName ?? ''} ${row.lastName ?? ''}`.trim();</span>
-<span class="cstat-no" title="statement not covered" >    return &lt;CellRenderer index={index} column={column} value={name} row={row} /&gt;;</span>
-  } else <span class="cstat-no" title="statement not covered" >if (column.key === 'dateAdded') {</span>
-    const date = <span class="cstat-no" title="statement not covered" >getDate(row.createdTime).toFormat('yyyy-MM-dd');</span>
-    const value = <span class="cstat-no" title="statement not covered" >row.accountCreated ? `${strings.ADDED} ${date}` : activeLocale ? strings.INVITATION_PENDING : '';</span>
-<span class="cstat-no" title="statement not covered" >    return &lt;CellRenderer index={index} column={column} value={value} row={row} /&gt;;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React fr<span class="cstat-no" title="statement not covered" >om 'react';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+import { getDate } from<span class="cstat-no" title="statement not covered" > '@terraware/web-components/util</span>s';
+<span class="cstat-no" title="statement not covered" ></span>
+import CellRenderer<span class="cstat-no" title="statement not covered" >, { TableRowType } fro</span>m 'src/components/common/table/TableCellRenderer';
+import { RendererPr<span class="cstat-no" title="statement not covered" >ops } from 'src/components/commo</span>n/table/types';
+import { useLoc<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >al</span>ization } from 'src/providers';</span>
+im<span class="cstat-no" title="statement not covered" >port strings from 'src/strings';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+export default function FunderCellRenderer(props: RendererProps&lt;TableRowType&gt;): JSX.Element {
+  const { activeLo<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ca</span>le } = useLocalization();</span>
+<span class="cstat-no" title="statement not covered" >  const { column, row, index } = props;</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  if (<span class="cstat-no" title="statement not covered" >column.key === 'name') {</span>
+    cons<span class="cstat-no" title="statement not covered" >t name = `${row.firstName <span class="fstat-no" title="function not covered" >??</span> ''}<span class="cstat-no" title="statement not covered" > ${row.las</span>tName ?? ''}`.trim();</span>
+    return &lt;CellRenderer index={index} column={column} value={name} row={row} /&gt;;
+<span class="cstat-no" title="statement not covered" >  } else if (</span>column.key === 'dateAdded') {
+    const date = getDate(row.createdTime).toFormat('yyyy-MM-dd');
+    const valu<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >e </span>= row.accountCreated ? `${st<span class="cstat-no" title="statement not covered" >rings.ADDED} ${date}` : activeLocale ? strings.INVITATION_PENDING : '';</span></span>
+    return &lt;CellRenderer index={index} column={column} value={value} row={row} /&gt;;
   } else {
-<span class="cstat-no" title="statement not covered" >    return &lt;CellRenderer {...props} /&gt;;</span>
+    return &lt;CellRenderer {...props} /&gt;;
   }
 }
 &nbsp;</pre></td></tr></table></pre>
@@ -142,7 +142,7 @@ export default function <span class="fstat-no" title="function not covered" >Fun
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

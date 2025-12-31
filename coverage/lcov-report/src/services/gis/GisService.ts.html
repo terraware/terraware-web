@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/32</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/29</span>
             </div>
         
             
@@ -89,66 +89,66 @@
 <a name='L24'></a><a href='#L24'>24</a>
 <a name='L25'></a><a href='#L25'>25</a>
 <a name='L26'></a><a href='#L26'>26</a>
-<a name='L27'></a><a href='#L27'>27</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L27'></a><a href='#L27'>27</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import addQueryParams from 'src/api/helpers/addQueryParams';
-import { paths } from 'src/api/types/generated-schema';
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import addQuery<span class="cstat-no" title="statement not covered" >Params from 's</span>rc/api/helpers/addQueryParams';
+import { paths }<span class="cstat-no" title="statement not covered" > from 'src/api/types/g</span>enerated-schema';
+<span class="cstat-no" title="statement not covered" ></span>
+import HttpService, { Re<span class="cstat-no" title="statement not covered" >sponse2, ServerData } from </span>'../HttpService';
+<span class="cstat-no" title="statement not covered" ></span>
+// types<span class="cstat-no" title="statement not covered" ></span>
+export type Gis<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Re</span>sponseData = ServerData &amp; {</span>
+<span class="cstat-no" title="statement not covered" >  content: GisResponse;</span>
+};<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
-import HttpService, { Response2, ServerData } from '../HttpService';
+// endpoints<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+co<span class="cstat-no" title="statement not covered" >nst GIS_ENDPOINT = '/api/v1/gis/wfs';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+// res<span class="cstat-no" title="statement not covered" >ponses</span>
+export t<span class="cstat-no" title="statement not covered" >ype GisResponse = paths[ty<span class="fstat-no" title="function not covered" >pe</span>of G<span class="cstat-no" title="statement not covered" >IS_ENDPOIN</span>T]['get']['responses'][200]['content']['application/json'];</span>
 &nbsp;
-// types
-export type GisResponseData = ServerData &amp; {
-  content: GisResponse;
+co<span class="cstat-no" title="statement not covered" >nst get = a</span>sync (query: any): Promise&lt;Response2&lt;GisResponseData&gt;&gt; =&gt; {
+  const endpoint = addQueryParams(GIS_ENDPOINT, query);
+  return HttpS<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >er</span>vice.root(endpoint).get2&lt;Gis<span class="cstat-no" title="statement not covered" >ResponseData&gt;({});</span></span>
 };
 &nbsp;
-// endpoints
-const GIS_ENDPOINT = <span class="cstat-no" title="statement not covered" >'/api/v1/gis/wfs';</span>
-&nbsp;
-// responses
-export type GisResponse = paths[typeof GIS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
-&nbsp;
-const get = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync (query: any): Promise&lt;Response2&lt;GisResponseData&gt;&gt; =&gt; {</span>
-  const endpoint = <span class="cstat-no" title="statement not covered" >addQueryParams(GIS_ENDPOINT, query);</span>
-<span class="cstat-no" title="statement not covered" >  return HttpService.root(endpoint).get2&lt;GisResponseData&gt;({});</span>
-};
-&nbsp;
-const GisService = <span class="cstat-no" title="statement not covered" >{</span>
+const GisService = {
   get,
 };
 &nbsp;
 export default GisService;
-&nbsp;</pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

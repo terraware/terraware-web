@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/21</span>
+                <span class='fraction'>0/47</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/25</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/31</span>
             </div>
         
             
@@ -79,46 +79,46 @@
 <a name='L14'></a><a href='#L14'>14</a>
 <a name='L15'></a><a href='#L15'>15</a>
 <a name='L16'></a><a href='#L16'>16</a>
-<a name='L17'></a><a href='#L17'>17</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L17'></a><a href='#L17'>17</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { RootState } from 'src/redux/rootReducer';
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { RootSta<span class="cstat-no" title="statement not covered" >te } from 'src/redux/r</span>ootReducer';
+<span class="cstat-no" title="statement not covered" ></span>
+export const selectEvent<span class="cstat-no" title="statement not covered" >Request = (requestId: strin</span>g) =&gt; (state: RootState) =&gt; state.event[requestId];
+<span class="cstat-no" title="statement not covered" ></span>
+export const se<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >le</span>ctEventList = (requestId: string) =&gt; (state: RootState) =&gt; state.eventList[requestId];</span>
+<span class="cstat-no" title="statement not covered" ></span>
+expo<span class="cstat-no" title="statement not covered" >rt const selectCreateModuleEvent = (requestId: string) =&gt; (stat</span>e: RootState) =&gt; state.eventCreate[requestId];
 &nbsp;
-export const selectEventRequest = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(r</span>equestId: string) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState) =&gt; <span class="cstat-no" title="statement not covered" >state.event[requestId];</span></span></span>
-&nbsp;
-export const selectEventList = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(r</span>equestId: string) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState) =&gt; <span class="cstat-no" title="statement not covered" >state.eventList[requestId];</span></span></span>
-&nbsp;
-export const selectCreateModuleEvent = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(r</span>equestId: string) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState) =&gt; <span class="cstat-no" title="statement not covered" >state.eventCreate[requestId];</span></span></span>
-&nbsp;
-export const selectUpdateEventProjects = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(r</span>equestId: string) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState) =&gt;</span></span>
+export const selec<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >tU</span>pdateEventProjects = (requestId: string) =&gt; (state: RootState) =&gt;</span>
 <span class="cstat-no" title="statement not covered" >  state.eventProjectsUpdate[requestId];</span>
-&nbsp;
-export const selectDeleteEvent = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(r</span>equestId: string) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState) =&gt; <span class="cstat-no" title="statement not covered" >state.eventDelete[requestId];</span></span></span>
-&nbsp;
-export const selectUpdateEvent = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(r</span>equestId: string) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState) =&gt; <span class="cstat-no" title="statement not covered" >state.eventUpdate[requestId];</span></span></span>
-&nbsp;
-export const selectDeleteManyEvents = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(r</span>equestId: string) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState) =&gt; <span class="cstat-no" title="statement not covered" >state.eventDeleteMany[requestId];</span></span></span>
-&nbsp;</pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" ></span>
+export<span class="cstat-no" title="statement not covered" > const selectDeleteEvent = (requestId: string) =&gt; (state: RootState) =&gt; state.eventDelete[requestId];</span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+export const selectUpdateEvent = (requestId: string) =&gt; (state: RootState) =&gt; state.eventUpdate[requestId];
+<span class="cstat-no" title="statement not covered" ></span>
+export const selectDeleteManyEvents = (requestId: string) =&gt; (state: RootState) =&gt; state.eventDeleteMany[requestId];
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/40</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/25</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/37</span>
             </div>
         
             
@@ -106,40 +106,23 @@
 <a name='L41'></a><a href='#L41'>41</a>
 <a name='L42'></a><a href='#L42'>42</a>
 <a name='L43'></a><a href='#L43'>43</a>
-<a name='L44'></a><a href='#L44'>44</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L44'></a><a href='#L44'>44</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -149,57 +132,74 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useCallback } from 'react';
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useCal<span class="cstat-no" title="statement not covered" >lback } from '</span>react';
+<span class="cstat-no" title="statement not covered" ></span>
+import sanitize from 's<span class="cstat-no" title="statement not covered" >anitize-filename';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+import { selectPlan<span class="cstat-no" title="statement not covered" >tingSite } from 'src/r</span>edux/features/tracking/trackingSelectors';
+import { useAppSele<span class="cstat-no" title="statement not covered" >ctor } from 'src/redux/store';</span>
+import Observat<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >io</span>nsService from 'src/services/ObservationsService';</span>
+im<span class="cstat-no" title="statement not covered" >port strings from 'src/strings';</span>
+impo<span class="cstat-no" title="statement not covered" >rt downloadZipFile from 'src/utils/downloadZipFile';</span>
 &nbsp;
-import sanitize from 'sanitize-filename';
-&nbsp;
-import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
-import { useAppSelector } from 'src/redux/store';
-import ObservationsService from 'src/services/ObservationsService';
-import strings from 'src/strings';
-import downloadZipFile from 'src/utils/downloadZipFile';
-&nbsp;
-export default function <span class="fstat-no" title="function not covered" >useExportBiomassDetailsZip(</span>
-  observationId?: number,
-  plantingSiteId?: number,
-  startDate?: string
-) {
-  const plantingSite = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt;</span>
-<span class="cstat-no" title="statement not covered" >    plantingSiteId ? selectPlantingSite(state, plantingSiteId) : undefined</span>
+export default fun<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ct</span>ion useExportBiomassDetailsZip(</span>
+<span class="cstat-no" title="statement not covered" >  observationId?: number,</span>
+  pl<span class="cstat-no" title="statement not covered" >antingSiteId?: number,</span>
+  star<span class="cstat-no" title="statement not covered" >tDate?: string</span>
+) {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  const plantingSite = useAppSelector((state) =&gt;
+<span class="cstat-no" title="statement not covered" >    plantingS</span>iteId ? selectPlantingSite(state, plantingSiteId) : undefined
   );
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  return useCallback(<span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (plantingSite &amp;&amp; observationId &amp;&amp; startDate) {</span>
-      const fileNamePrefix = <span class="cstat-no" title="statement not covered" >`${plantingSite.name}-${startDate}-${strings.BIOMASS_OBSERVATION_FILENAME_PREFIX}`;</span>
-<span class="cstat-no" title="statement not covered" >      await downloadZipFile({</span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  return useCallback(async () =&gt; {
+    if (plantingSite &amp;&amp; observationId &amp;&amp; startDate) {
+      const fileNamePrefix = `${plantingSite.name}-${startDate}-${strings.BIOMASS_OBSERVATION_FILENAME_PREFIX}`;
+      await downloadZipFile({
         dirName: sanitize(fileNamePrefix),
         files: [
           {
-            fileName: `${fileNamePrefix}-${strings.PLOT}`,
-            content: <span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >ObservationsService.exportBiomassPlotCsv(observationId),</span>
-          },
-          {
+            fileNam<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >e:</span> `${fil<span class="cstat-no" title="statement not covered" >eNamePrefix}-${strings.PLOT}`,</span></span>
+            content:<span class="cstat-no" title="statement not covered" > ()</span> =&gt; ObservationsService.exportBiomassPlotCsv(observationId),
+<span class="cstat-no" title="statement not covered" >          },</span>
+          {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
             fileName: `${fileNamePrefix}-${strings.SPECIES_CLASSIFICATION}`,
-            content: <span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >ObservationsService.exportBiomassSpeciesCsv(observationId),</span>
-          },
-          {
-            fileName: `${fileNamePrefix}-${strings.TREES_AND_SHRUBS}`,
-            content: <span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >ObservationsService.exportBiomassTreesShrubsCsv(observationId),</span>
-          },
-        ],
-        suffix: '.csv',
-      });
-    }
-  }, [observationId, plantingSite, startDate]);
+<span class="cstat-no" title="statement not covered" >            content: () =&gt; ObservationsService</span>.exportBiomassSpeciesCsv(observationId),
+          },<span class="cstat-no" title="statement not covered" ></span>
+          {<span class="cstat-no" title="statement not covered" ></span>
+            fileName: `${fileNa<span class="cstat-no" title="statement not covered" >mePrefix}-${strings.TREES_AND_SHRUBS}`,</span>
+            content<span class="cstat-no" title="statement not covered" >: () =&gt; ObservationsService</span>.exportBiomassTreesShrubsCsv(observationId),
+          },<span class="cstat-no" title="statement not covered" ></span>
+        ],<span class="cstat-no" title="statement not covered" ></span>
+        suffix: '.csv',<span class="cstat-no" title="statement not covered" ></span>
+      });<span class="fstat-no" title="function not covered" ></span>
+    }<span class="cstat-no" title="statement not covered" ></span>
+  },<span class="fstat-no" title="function not covered" > [</span>observati<span class="cstat-no" title="statement not covered" >onId, plantingSite, startDate]);</span>
 }
-&nbsp;</pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

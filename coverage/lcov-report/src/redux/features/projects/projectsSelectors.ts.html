@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/36</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/16</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/28</span>
             </div>
         
             
@@ -80,48 +80,48 @@
 <a name='L15'></a><a href='#L15'>15</a>
 <a name='L16'></a><a href='#L16'>16</a>
 <a name='L17'></a><a href='#L17'>17</a>
-<a name='L18'></a><a href='#L18'>18</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L18'></a><a href='#L18'>18</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { RootState } from 'src/redux/rootReducer';
-import { Project } from 'src/types/Project';
-&nbsp;
-export const selectProjects = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState) =&gt; <span class="cstat-no" title="statement not covered" >state.projects.projects;</span></span>
-&nbsp;
-export const selectProject =
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >  (p</span>rojectId: number) =&gt;</span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >  (s</span>tate: RootState): Project | undefined =&gt;</span>
-<span class="cstat-no" title="statement not covered" >    state.projects?.projects?.find(<span class="fstat-no" title="function not covered" >(p</span>roject) =&gt; <span class="cstat-no" title="statement not covered" >project.id === projectId)</span>;</span>
-&nbsp;
-export const selectProjectRequest = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState, requestId: string) =&gt; <span class="cstat-no" title="statement not covered" >state.projectsRequests[requestId];</span></span>
-&nbsp;
-export const selectProjectInternalUsersUpdateRequest = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState, requestId: string) =&gt;</span>
-<span class="cstat-no" title="statement not covered" >  state.projectInternalUsersUpdate[requestId];</span>
-&nbsp;
-export const selectProjectInternalUsersListRequest = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState, requestId: string) =&gt;</span>
-<span class="cstat-no" title="statement not covered" >  state.projectInternalUsersList[requestId];</span>
-&nbsp;</pre></td></tr></table></pre>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { RootSta<span class="cstat-no" title="statement not covered" >te } from 'src/redux/r</span>ootReducer';
+import { Project } from<span class="cstat-no" title="statement not covered" > 'src/types/Project';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+export const select<span class="cstat-no" title="statement not covered" >Projects = (state: RootState) =&gt;</span> state.projects.projects;
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+ex<span class="cstat-no" title="statement not covered" >port const selectProject =</span>
+  (p<span class="cstat-no" title="statement not covered" >rojectId: number) =&gt;</span>
+  (state: RootState): Project | undefined =&gt;
+    state.projects<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >?.</span>projects?.find((project) =&gt; project.id === projectId);</span>
+<span class="cstat-no" title="statement not covered" ></span>
+expo<span class="cstat-no" title="statement not covered" >rt const selectProjectRequest = (state: RootState, requestId: string) =&gt; state.projectsRequests[requestId];</span>
+<span class="cstat-no" title="statement not covered" ></span>
+export c<span class="cstat-no" title="statement not covered" >onst selectProjectInternal<span class="fstat-no" title="function not covered" >Us</span>ersU<span class="cstat-no" title="statement not covered" >pdateReque</span>st = (state: RootState, requestId: string) =&gt;</span>
+  state.projectInternalUsersUpdate[requestId];
+<span class="cstat-no" title="statement not covered" ></span>
+export const selectProjectInternalUsersListRequest = (state: RootState, requestId: string) =&gt;
+  state.projectInte<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >rn</span>alUsers<span class="cstat-no" title="statement not covered" >List[requestId];</span></span>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

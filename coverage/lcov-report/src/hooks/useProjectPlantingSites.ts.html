@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/38</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/16</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/36</span>
             </div>
         
             
@@ -95,78 +95,78 @@
 <a name='L30'></a><a href='#L30'>30</a>
 <a name='L31'></a><a href='#L31'>31</a>
 <a name='L32'></a><a href='#L32'>32</a>
-<a name='L33'></a><a href='#L33'>33</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L33'></a><a href='#L33'>33</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useCallback, useEffect, useState } from 'react';
-&nbsp;
-import { selectProjectPlantingSiteList } from 'src/redux/features/tracking/trackingSelectors';
-import { requestListProjectPlantingSites } from 'src/redux/features/tracking/trackingThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { PlantingSite } from 'src/types/Tracking';
-&nbsp;
-export const useProjectPlantingSites = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(p</span>rojectId: number) =&gt; {</span>
-  const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
-&nbsp;
-  const [plantingSites, setPlantingSites] = <span class="cstat-no" title="statement not covered" >useState&lt;PlantingSite[]&gt;();</span>
-  const [requestId, setRequestId] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
-&nbsp;
-  const result = <span class="cstat-no" title="statement not covered" >useAppSelector(selectProjectPlantingSiteList(requestId));</span>
-&nbsp;
-  const reload = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-    const request = <span class="cstat-no" title="statement not covered" >dispatch(requestListProjectPlantingSites(projectId));</span>
-<span class="cstat-no" title="statement not covered" >    setRequestId(request.requestId);</span>
-  }, [dispatch, projectId]);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useCall<span class="cstat-no" title="statement not covered" >back, useEffect, useSt</span>ate } from 'react';
+<span class="cstat-no" title="statement not covered" ></span>
+import { selectProjectPl<span class="cstat-no" title="statement not covered" >antingSiteList } from 'src/</span>redux/features/tracking/trackingSelectors';
+import { requestLis<span class="cstat-no" title="statement not covered" >tProjectPlantingSites } from 'sr</span>c/redux/features/tracking/trackingThunks';
+import { useApp<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Di</span>spatch, useAppSelector } from 'src/redux/store';</span>
+im<span class="cstat-no" title="statement not covered" >port { PlantingSite } from 'src/types/Tracking';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+export const useProjectPlantingSites = (projectId: number) =&gt; {
+  const dispatch =<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > u</span>seAppDispatch();</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  co<span class="cstat-no" title="statement not covered" >nst [plantingSites, setPlantingSites] = useState&lt;PlantingSite[]&gt;();</span>
+  cons<span class="cstat-no" title="statement not covered" >t [requestId, setRequestId] = useState&lt;string&gt;('');</span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  const result = useAppSelector(selectProjectPlantingSiteList(requestId));
+<span class="cstat-no" title="statement not covered" ></span>
+  const reload = useCallback(() =&gt; {
+    const request =<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > d</span>ispatch<span class="cstat-no" title="statement not covered" >(requestListProjectPlantingSites(projectId));</span></span>
+    setRequestId(req<span class="cstat-no" title="statement not covered" >ues</span>t.requestId);
+<span class="cstat-no" title="statement not covered" >  }, [dispatch, projectId]);</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  useEffect(() =&gt; {
 <span class="cstat-no" title="statement not covered" >    reload();</span>
-  }, [dispatch, reload]);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (result &amp;&amp; result.status === 'success' &amp;&amp; result.data) {</span>
-<span class="cstat-no" title="statement not covered" >      setPlantingSites(result.data);</span>
-    }
-  }, [result]);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  return { plantingSites, reload };</span>
-};
-&nbsp;</pre></td></tr></table></pre>
+  }, [dispatch, rel<span class="cstat-no" title="statement not covered" >oad]);</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
+    if (result &amp;&amp; r<span class="cstat-no" title="statement not covered" >esult.status === 'success' </span>&amp;&amp; result.data) {
+      setPlantingSites(result.da<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ta</span>);</span>
+    }<span class="cstat-no" title="statement not covered" ></span>
+  }, [result]);<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+  return { planti<span class="cstat-no" title="statement not covered" >ngSites, reload };</span>
+};<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

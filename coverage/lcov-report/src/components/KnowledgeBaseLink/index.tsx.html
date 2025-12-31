@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/43</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/20</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/40</span>
             </div>
         
             
@@ -100,10 +100,25 @@
 <a name='L35'></a><a href='#L35'>35</a>
 <a name='L36'></a><a href='#L36'>36</a>
 <a name='L37'></a><a href='#L37'>37</a>
-<a name='L38'></a><a href='#L38'>38</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L38'></a><a href='#L38'>38</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -118,70 +133,55 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
-import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router';
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React fr<span class="cstat-no" title="statement not covered" >om 'react';</span>
+import { useEffe<span class="cstat-no" title="statement not covered" >ct, useState } from 'r</span>eact';
+import { useLocation } <span class="cstat-no" title="statement not covered" >from 'react-router';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+import { IconButton<span class="cstat-no" title="statement not covered" >, useTheme } from '@mu</span>i/material';
+import { Icon, Tool<span class="cstat-no" title="statement not covered" >tip } from '@terraware/web-compo</span>nents';
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+im<span class="cstat-no" title="statement not covered" >port { useKnowledgeBaseLinks } from 'src/knowledgeBaseLinks';</span>
+impo<span class="cstat-no" title="statement not covered" >rt strings from 'src/strings';</span>
 &nbsp;
-import { IconButton, useTheme } from '@mui/material';
-import { Icon, Tooltip } from '@terraware/web-components';
+export default fun<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ct</span>ion KnowledgeBaseLink(): JSX.Element {</span>
+<span class="cstat-no" title="statement not covered" >  const theme = useTheme();</span>
+  co<span class="cstat-no" title="statement not covered" >nst knowledgeBaseLinks = useKnowledgeBaseLinks();</span>
+  cons<span class="cstat-no" title="statement not covered" >t [currentLink, setCurrentLink] = useState(knowledgeBaseLinks['/home']);</span>
+  const <span class="cstat-no" title="statement not covered" >location = useLocation();<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 &nbsp;
-import { useKnowledgeBaseLinks } from 'src/knowledgeBaseLinks';
-import strings from 'src/strings';
+<span class="cstat-no" title="statement not covered" >  const onCli</span>ck = () =&gt; {
+    window.open(currentLink, '_blank');
+  };<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >KnowledgeBaseLink(</span>): JSX.Element {
-  const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-  const knowledgeBaseLinks = <span class="cstat-no" title="statement not covered" >useKnowledgeBaseLinks();</span>
-  const [currentLink, setCurrentLink] = <span class="cstat-no" title="statement not covered" >useState(knowledgeBaseLinks['/home']);</span>
-  const location = <span class="cstat-no" title="statement not covered" >useLocation();</span>
-&nbsp;
-  const onClick = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    window.open(currentLink, '_blank');</span>
-  };
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    setCurrentLink(knowledgeBaseLinks['/home']);</span>
-<span class="cstat-no" title="statement not covered" >    for (const key in knowledgeBaseLinks) {</span>
-<span class="cstat-no" title="statement not covered" >      if ((location.pathname + location.search).match(key)) {</span>
-<span class="cstat-no" title="statement not covered" >        setCurrentLink(knowledgeBaseLinks[key as keyof typeof KnowledgeBaseLink]);</span>
+  useEffect(() =&gt; {
+    setCurrentLink(knowledgeBaseLinks['/home']);
+    for (const key in knowledgeBaseLinks) {
+      if ((location.pathname + location.search).match(key)) {
+        setCurrentLink(knowledgeBaseLinks[key as keyof typeof KnowledgeBaseLink]);
       }
-    }
-  }, [knowledgeBaseLinks, location]);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+    }<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  }, [knowledgeBaseL<span class="cstat-no" title="statement not covered" >ink</span>s, location]);
+<span class="cstat-no" title="statement not covered" ></span>
+  return (<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
     &lt;Tooltip title={strings.KNOWLEDGE_BASE}&gt;
-      &lt;IconButton id='knowledge-base' onClick={onClick}&gt;
-        &lt;Icon name='iconHelp' size='medium' fillColor={theme.palette.TwClrIcn} /&gt;
-      &lt;/IconButton&gt;
-    &lt;/Tooltip&gt;
-  );
-}
-&nbsp;</pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" >      &lt;IconButton id='knowledge-base' onClick=</span>{onClick}&gt;
+        &lt;Icon name=<span class="cstat-no" title="statement not covered" >'iconHelp' size='medium' f</span>illColor={theme.palette.TwClrIcn} /&gt;
+      &lt;/IconButton&gt;<span class="cstat-no" title="statement not covered" ></span>
+    &lt;/Tooltip&gt;<span class="cstat-no" title="statement not covered" ></span>
+  );<span class="cstat-no" title="statement not covered" ></span>
+}<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

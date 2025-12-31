@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>0/40</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/24</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>0/37</span>
             </div>
         
             
@@ -98,10 +98,25 @@
 <a name='L33'></a><a href='#L33'>33</a>
 <a name='L34'></a><a href='#L34'>34</a>
 <a name='L35'></a><a href='#L35'>35</a>
-<a name='L36'></a><a href='#L36'>36</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L36'></a><a href='#L36'>36</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -113,69 +128,54 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useEffect, useState } from 'react';
-&nbsp;
-import BatchWithdrawFlow from 'src/components/BatchWithdrawFlow';
-import { APP_PATHS } from 'src/constants';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import useQuery from 'src/utils/useQuery';
-&nbsp;
-type BatchBulkWithdrawViewProps = {
-  withdrawalCreatedCallback?: () =&gt; void;
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > useEffect, us</span>eState } from 'react';
+<span class="cstat-no" title="statement not covered" ></span>
+import BatchWithdrawFlo<span class="cstat-no" title="statement not covered" >w from 'src/components/BatchWith</span>drawFlow';
+import { APP_PATHS } fro<span class="cstat-no" title="statement not covered" >m 'src/constants';</span>
+import { useSyncNav<span class="cstat-no" title="statement not covered" >igate } from 'src/hook</span>s/useSyncNavigate';
+import useQuery fro<span class="cstat-no" title="statement not covered" >m 'src/utils/useQuery';</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+ty<span class="cstat-no" title="statement not covered" >pe BatchBulkWithdrawViewProps = {</span>
+  wi<span class="cstat-no" title="statement not covered" >thdrawalCreatedCallback?: () =&gt; void;</span>
 };
-export default function <span class="fstat-no" title="function not covered" >BatchBulkWithdrawView(</span>props: BatchBulkWithdrawViewProps): JSX.Element | null {
-  const { withdrawalCreatedCallback } = <span class="cstat-no" title="statement not covered" >props;</span>
-  const [batchIds, setBatchIds] = <span class="cstat-no" title="statement not covered" >useState&lt;string[]&gt;();</span>
-  const [source, setSource] = <span class="cstat-no" title="statement not covered" >useState&lt;string | null&gt;();</span>
-  const query = <span class="cstat-no" title="statement not covered" >useQuery();</span>
-  const navigate = <span class="cstat-no" title="statement not covered" >useSyncNavigate();</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (query.getAll('batchId').length &gt; 0) {</span>
-<span class="cstat-no" title="statement not covered" >      setBatchIds(query.getAll('batchId'));</span>
-<span class="cstat-no" title="statement not covered" >      setSource(query.get('source'));</span>
+export default fun<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ct</span>ion BatchBulkWithdrawView(props: BatchBulkWithdrawViewProps): JSX.Element | null {</span>
+<span class="cstat-no" title="statement not covered" >  const { withdrawalCreatedCallback } = props;</span>
+  co<span class="cstat-no" title="statement not covered" >nst [batchIds, setBatchIds] = useState&lt;string[]&gt;();</span>
+  cons<span class="cstat-no" title="statement not covered" >t [source, setSource] = useState&lt;string | null&gt;();</span>
+  const <span class="cstat-no" title="statement not covered" >query = useQuery();<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  const navigate = useSyncNavigate();
+<span class="cstat-no" title="statement not covered" ></span>
+  useEffect(() =&gt; {
+    if (query.<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ge</span>tAll('batchId').length &gt; 0) <span class="cstat-no" title="statement not covered" >{</span></span>
+      setBatchIds(query.getAll('batchId'));
+      setSource(query.get('source'));
     } else {
       // invalid url params
-<span class="cstat-no" title="statement not covered" >      navigate({ pathname: APP_PATHS.INVENTORY });</span>
+      navigate({ pathname: APP_PATHS.INVENTORY });
     }
   }, [query, navigate]);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  return batchIds ? (</span>
-    &lt;BatchWithdrawFlow
-      batchIds={batchIds}
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  return batchIds ? <span class="cstat-no" title="statement not covered" >(</span>
+<span class="cstat-no" title="statement not covered" >    &lt;BatchWithdrawFlow</span>
+      batch<span class="fstat-no" title="function not covered" >Id</span>s={b<span class="cstat-no" title="statement not covered" >atchIds}</span>
       sourcePage={source || undefined}
-      withdrawalCreatedCallback={withdrawalCreatedCallback}
-    /&gt;
-  ) : null;
-}
-&nbsp;</pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" >      withdrawalCreatedCallback={withdrawalCre</span>atedCallback}
+    /&gt;<span class="cstat-no" title="statement not covered" ></span>
+  ) : null;<span class="cstat-no" title="statement not covered" ></span>
+}<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

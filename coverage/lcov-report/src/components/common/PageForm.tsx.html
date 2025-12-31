@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/29</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/24</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/26</span>
             </div>
         
             
@@ -89,22 +89,25 @@
 <a name='L24'></a><a href='#L24'>24</a>
 <a name='L25'></a><a href='#L25'>25</a>
 <a name='L26'></a><a href='#L26'>26</a>
-<a name='L27'></a><a href='#L27'>27</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L27'></a><a href='#L27'>27</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -112,28 +115,25 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { BusySpinner } from '@terraware/web-components';
-import PageForm, { PageFormProps as FormProps } from '@terraware/web-components/components/PageForm';
-&nbsp;
-import strings from 'src/strings';
-&nbsp;
-export type PageFormProps = Omit&lt;FormProps, 'saveButtonText' | 'cancelButtonText'&gt; &amp; {
-  busy?: boolean;
-  cancelButtonText?: string;
-  saveButtonText?: string;
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > BusySpinner }</span> from '@terraware/web-components';
+import PageForm,<span class="cstat-no" title="statement not covered" > { PageFormProps as Fo</span>rmProps } from '@terraware/web-components/components/PageForm';
+<span class="cstat-no" title="statement not covered" ></span>
+import strings from 'src<span class="cstat-no" title="statement not covered" >/strings';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+export type PageFor<span class="cstat-no" title="statement not covered" >mProps = Omit&lt;FormProps, 'saveBu</span>ttonText' | 'cancelButtonText'&gt; &amp; {
+  busy?: boolea<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >n;</span></span>
+<span class="cstat-no" title="statement not covered" >  cancelButtonText?: string;</span>
+  sa<span class="cstat-no" title="statement not covered" >veButtonText?: string;</span>
 };
-&nbsp;
-export default function <span class="fstat-no" title="function not covered" >WrappedPageForm(</span>props: PageFormProps): JSX.Element {
-  const { busy, cancelButtonText, saveButtonText, ...formProps } = <span class="cstat-no" title="statement not covered" >props;</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+ex<span class="cstat-no" title="statement not covered" >port default function WrappedPageForm(props: PageFormProps): JSX.Element {</span>
+  co<span class="cstat-no" title="statement not covered" >nst { busy, cancelButtonText, saveButtonText, ...formProps } = props;</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  return<span class="cstat-no" title="statement not covered" > (<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
     &lt;&gt;
-      {busy &amp;&amp; &lt;BusySpinner withSkrim={true} /&gt;}
+<span class="cstat-no" title="statement not covered" >      {busy &amp;</span>&amp; &lt;BusySpinner withSkrim={true} /&gt;}
       &lt;PageForm
-        {...formProps}
+        {...fo<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >rm</span>Props}<span class="cstat-no" title="statement not covered" ></span></span>
         saveDisabled={busy}
         saveButtonText={saveButtonText || strings.SAVE}
         cancelButtonText={cancelButtonText || strings.CANCEL}
@@ -141,14 +141,14 @@ export default function <span class="fstat-no" title="function not covered" >Wra
     &lt;/&gt;
   );
 }
-&nbsp;</pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

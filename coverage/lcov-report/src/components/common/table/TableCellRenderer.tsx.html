@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>0/28</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>0/25</span>
             </div>
         
             
@@ -82,44 +82,44 @@
 <a name='L17'></a><a href='#L17'>17</a>
 <a name='L18'></a><a href='#L18'>18</a>
 <a name='L19'></a><a href='#L19'>19</a>
-<a name='L20'></a><a href='#L20'>20</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L20'></a><a href='#L20'>20</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { CellDateRenderer, TableRowType, CellRenderer as WebComponentsCellRenderer } from '@terraware/web-components';
-import { LocalizationProps } from '@terraware/web-components/components/table';
-import { RendererProps } from '@terraware/web-components/components/table/types';
-&nbsp;
-import strings from 'src/strings';
-&nbsp;
-type CellRendererProps&lt;T extends TableRowType&gt; = Omit&lt;RendererProps&lt;T&gt;, keyof LocalizationProps&gt;;
-&nbsp;
-export default function <span class="fstat-no" title="function not covered" >CellRenderer&lt;</span>T extends TableRowType&gt;(props: CellRendererProps&lt;T&gt;): JSX.Element {
-<span class="cstat-no" title="statement not covered" >  return WebComponentsCellRenderer({</span>
-    ...props,
-    booleanFalseText: strings.NO,
-    booleanTrueText: strings.YES,
-    editText: strings.EDIT,
-  });
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { CellDa<span class="cstat-no" title="statement not covered" >teRenderer, Ta</span>bleRowType, CellRenderer as WebComponentsCellRenderer } from '@terraware/web-components';
+import { Localiz<span class="cstat-no" title="statement not covered" >ationProps } from '@te</span>rraware/web-components/components/table';
+import { RendererProps <span class="cstat-no" title="statement not covered" >} from '@terraware/web-component</span>s/components/table/types';
+<span class="cstat-no" title="statement not covered" ></span>
+import strings from<span class="cstat-no" title="statement not covered" > 'src/strings';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+type CellRender<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >er</span>Props&lt;T extends TableRowType&gt; = Omit&lt;RendererProps&lt;T&gt;, keyof LocalizationProps&gt;;</span>
+<span class="cstat-no" title="statement not covered" ></span>
+expo<span class="cstat-no" title="statement not covered" >rt default function CellRenderer&lt;T extends TableRowType&gt;(props:</span> CellRendererProps&lt;T&gt;): JSX.Element {
+  return WebComponentsCellRenderer({
+    ...props,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    booleanFalseText: strings.NO,</span>
+<span class="cstat-no" title="statement not covered" >    booleanTrueText: strings.YES,</span>
+    ed<span class="cstat-no" title="statement not covered" >itText: strings.EDIT,</span>
+  });<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 }
-&nbsp;
+<span class="cstat-no" title="statement not covered" ></span>
 export { CellDateRenderer };
-export type { TableRowType };
+export type { <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Ta</span>bleRowType };<span class="cstat-no" title="statement not covered" ></span></span>
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -127,7 +127,7 @@ export type { TableRowType };
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

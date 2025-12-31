@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>0/38</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/21</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>0/36</span>
             </div>
         
             
@@ -99,16 +99,10 @@
 <a name='L34'></a><a href='#L34'>34</a>
 <a name='L35'></a><a href='#L35'>35</a>
 <a name='L36'></a><a href='#L36'>36</a>
-<a name='L37'></a><a href='#L37'>37</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L37'></a><a href='#L37'>37</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -116,61 +110,67 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useCallback, useEffect, useMemo, useState } from 'react';
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useCall<span class="cstat-no" title="statement not covered" >back, useEffect, useMe</span>mo, useState } from 'react';
+<span class="cstat-no" title="statement not covered" ></span>
+import { requestListModu<span class="cstat-no" title="statement not covered" >les } from 'src/redux/featu</span>res/modules/modulesAsyncThunks';
+import { selectModu<span class="cstat-no" title="statement not covered" >leList } from 'src/redux/feature</span>s/modules/modulesSelectors';
+import { useApp<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Di</span>spatch, useAppSelector } from 'src/redux/store';</span>
+im<span class="cstat-no" title="statement not covered" >port { Module } from 'src/types/Module';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+const useListCohortModules = () =&gt; {
+  const dispatch =<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > u</span>seAppDispatch();</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  co<span class="cstat-no" title="statement not covered" >nst [requestId, setRequestId] = useState&lt;string&gt;('');</span>
+  cons<span class="cstat-no" title="statement not covered" >t [modules, setModules] = useState&lt;Module[]&gt;([]);</span>
+  const <span class="cstat-no" title="statement not covered" >listModulesResponse = useA<span class="fstat-no" title="function not covered" >pp</span>Sele<span class="cstat-no" title="statement not covered" >ctor(selec</span>tModuleList(requestId));</span>
 &nbsp;
-import { requestListModules } from 'src/redux/features/modules/modulesAsyncThunks';
-import { selectModuleList } from 'src/redux/features/modules/modulesSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { Module } from 'src/types/Module';
+<span class="cstat-no" title="statement not covered" >  const listM</span>odules = useCallback(() =&gt; {
+    const dispatched = dispatch(requestListModules());
+    setRequestId(di<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >sp</span>atched.<span class="cstat-no" title="statement not covered" >requestId);</span></span>
+  }, [dispatch, setR<span class="cstat-no" title="statement not covered" >equ</span>estId]);
+<span class="cstat-no" title="statement not covered" ></span>
+  useEffect<span class="fstat-no" title="function not covered" >((</span>) =&gt;<span class="cstat-no" title="statement not covered" > {</span>
+    if (listModulesResponse &amp;&amp; listModulesResponse.status === 'success') {
+<span class="cstat-no" title="statement not covered" >      setModules(listModulesResponse.data ?? [</span>]);
+    }<span class="cstat-no" title="statement not covered" ></span>
+  }, [listModulesResponse, setMo<span class="cstat-no" title="statement not covered" >dules]);</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  return useMemo(<span class="cstat-no" title="statement not covered" ></span>
+    () =&gt; ({<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+      listModules,<span class="cstat-no" title="statement not covered" ></span>
+      status: listModulesResponse?.s<span class="cstat-no" title="statement not covered" >tatus,</span>
+      modules,<span class="cstat-no" title="statement not covered" ></span>
+    }),<span class="cstat-no" title="statement not covered" ></span>
+    [listModules, list<span class="cstat-no" title="statement not covered" >ModulesResponse?.status, modul<span class="fstat-no" title="function not covered" >es</span>]</span>
+  );<span class="cstat-no" title="statement not covered" ></span>
+};<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
-const useListCohortModules = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-  const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
-&nbsp;
-  const [requestId, setRequestId] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
-  const [modules, setModules] = <span class="cstat-no" title="statement not covered" >useState&lt;Module[]&gt;([]);</span>
-  const listModulesResponse = <span class="cstat-no" title="statement not covered" >useAppSelector(selectModuleList(requestId));</span>
-&nbsp;
-  const listModules = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-    const dispatched = <span class="cstat-no" title="statement not covered" >dispatch(requestListModules());</span>
-<span class="cstat-no" title="statement not covered" >    setRequestId(dispatched.requestId);</span>
-  }, [dispatch, setRequestId]);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (listModulesResponse &amp;&amp; listModulesResponse.status === 'success') {</span>
-<span class="cstat-no" title="statement not covered" >      setModules(listModulesResponse.data ?? []);</span>
-    }
-  }, [listModulesResponse, setModules]);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  return useMemo(</span>
-<span class="fstat-no" title="function not covered" >    ()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
-      listModules,
-      status: listModulesResponse?.status,
-      modules,
-    }),
-    [listModules, listModulesResponse?.status, modules]
-  );
-};
-&nbsp;
-export default useListCohortModules;
+ex<span class="cstat-no" title="statement not covered" >port default useListCohortMo<span class="fstat-no" title="function not covered" >du</span>les;</span>
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -178,7 +178,7 @@ export default useListCohortModules;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

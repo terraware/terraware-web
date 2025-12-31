@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/38</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/28</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/34</span>
             </div>
         
             
@@ -87,53 +87,53 @@
 <a name='L22'></a><a href='#L22'>22</a>
 <a name='L23'></a><a href='#L23'>23</a>
 <a name='L24'></a><a href='#L24'>24</a>
-<a name='L25'></a><a href='#L25'>25</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L25'></a><a href='#L25'>25</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useMemo } from 'react';
-import { useParams } from 'react-router';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > useMemo } fro</span>m 'react';
+import { usePara<span class="cstat-no" title="statement not covered" >ms } from 'react-route</span>r';
+<span class="cstat-no" title="statement not covered" ></span>
+import { useGetPlantingS<span class="cstat-no" title="statement not covered" >iteQuery } from 'src/querie</span>s/generated/plantingSites';
+<span class="cstat-no" title="statement not covered" ></span>
+import GenericZoneV<span class="cstat-no" title="statement not covered" >iew from './GenericZoneView';</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+ex<span class="cstat-no" title="statement not covered" >port default function PlantingSiteZoneView(): JSX.Element | undefined {</span>
+  co<span class="cstat-no" title="statement not covered" >nst params = useParams&lt;{ plantingSiteId: string; zoneId: string</span> }&gt;();
+  const zoneId = Number(params.zoneId);
+  const plantingSi<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >te</span>Id = Number(params.plantingSiteId);</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  co<span class="cstat-no" title="statement not covered" >nst { data: plantingSite } = useGetPlantingSiteQuery(plantingSiteId);</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  const <span class="cstat-no" title="statement not covered" >plantingZone = useMemo(() <span class="fstat-no" title="function not covered" >=&gt;</span> {<span class="cstat-no" title="statement not covered" ></span></span>
+    return plantingSite?.site?.plantingZones?.find((zone) =&gt; zone.id === zoneId);
+<span class="cstat-no" title="statement not covered" >  }, [plantin</span>gSite, zoneId]);
 &nbsp;
-import { useGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
-&nbsp;
-import GenericZoneView from './GenericZoneView';
-&nbsp;
-export default function <span class="fstat-no" title="function not covered" >PlantingSiteZoneView(</span>): JSX.Element | undefined {
-  const params = <span class="cstat-no" title="statement not covered" >useParams&lt;{ plantingSiteId: string; zoneId: string }&gt;();</span>
-  const zoneId = <span class="cstat-no" title="statement not covered" >Number(params.zoneId);</span>
-  const plantingSiteId = <span class="cstat-no" title="statement not covered" >Number(params.plantingSiteId);</span>
-&nbsp;
-  const { data: plantingSite } = <span class="cstat-no" title="statement not covered" >useGetPlantingSiteQuery(plantingSiteId);</span>
-&nbsp;
-  const plantingZone = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    return plantingSite?.site?.plantingZones?.find(<span class="fstat-no" title="function not covered" >(z</span>one) =&gt; <span class="cstat-no" title="statement not covered" >zone.id === zoneId)</span>;</span>
-  }, [plantingSite, zoneId]);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  if (!plantingSite || !plantingZone) {</span>
-<span class="cstat-no" title="statement not covered" >    return undefined;</span>
+  if (!plantin<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >gS</span>ite || !plantingZone) {<span class="cstat-no" title="statement not covered" ></span></span>
+    return undefined;
   }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return &lt;GenericZoneView plantingSite={plantingSite.site} plantingZone={plantingZone} /&gt;;</span>
+  return &lt;GenericZoneView plantingSite={plantingSite.site} plantingZone={plantingZone} /&gt;;
 }
 &nbsp;</pre></td></tr></table></pre>
 
@@ -142,7 +142,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

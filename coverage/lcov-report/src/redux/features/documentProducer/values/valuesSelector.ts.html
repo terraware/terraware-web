@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/18</span>
+                <span class='fraction'>0/47</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/24</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>0/20</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>0/39</span>
             </div>
         
             
@@ -99,7 +99,25 @@
 <a name='L34'></a><a href='#L34'>34</a>
 <a name='L35'></a><a href='#L35'>35</a>
 <a name='L36'></a><a href='#L36'>36</a>
-<a name='L37'></a><a href='#L37'>37</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L37'></a><a href='#L37'>37</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -109,76 +127,58 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/* eslint-disable @typescript-eslint/no-unused-vars */
-import createCachedSelector from 're-reselect';
-&nbsp;
-import { RootState } from 'src/redux/rootReducer';
-import { VariableValue } from 'src/types/documentProducer/VariableValue';
-&nbsp;
-import { variableListCompositeKeyFn } from './valuesSlice';
-&nbsp;
-export const selectVariablesValues = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState, docId: number | string, maxValueId?: number) =&gt;</span>
-<span class="cstat-no" title="statement not covered" >  state.documentProducerVariableValuesList[docId];</span>
-&nbsp;
-export const selectGetVariableValues = <span class="cstat-no" title="statement not covered" >createCachedSelector(</span>
-<span class="fstat-no" title="function not covered" >  (s</span>tate: RootState, projectId: number | string, variableId: number, maxValueId?: number) =&gt;
-<span class="cstat-no" title="statement not covered" >    state.documentProducerVariableValuesList[variableListCompositeKeyFn({ projectId, maxValueId })],</span>
-<span class="fstat-no" title="function not covered" >  (s</span>tate: RootState, projectId: number | string, variableId: number, maxValueId?: number) =&gt; <span class="cstat-no" title="statement not covered" >projectId,</span>
-<span class="fstat-no" title="function not covered" >  (s</span>tate: RootState, projectId: number | string, variableId: number, maxValueId?: number) =&gt; <span class="cstat-no" title="statement not covered" >variableId,</span>
-<span class="fstat-no" title="function not covered" >  (r</span>esponse, projectId, variableId) =&gt; {
-<span class="cstat-no" title="statement not covered" >    if (response?.data) {</span>
-      const variableValueToReturn = <span class="cstat-no" title="statement not covered" >response.data.find(</span>
-<span class="fstat-no" title="function not covered" >        (v</span>ariableValue: VariableValue) =&gt; <span class="cstat-no" title="statement not covered" >variableValue.variableId === variableId</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/* eslint-disab<span class="cstat-no" title="statement not covered" >le @typescript</span>-eslint/no-unused-vars */
+import createCac<span class="cstat-no" title="statement not covered" >hedSelector from 're-r</span>eselect';
+<span class="cstat-no" title="statement not covered" ></span>
+import { RootState } fro<span class="cstat-no" title="statement not covered" >m 'src/redux/rootReducer';</span>
+import { VariableVa<span class="cstat-no" title="statement not covered" >lue } from 'src/types/</span>documentProducer/VariableValue';
+<span class="cstat-no" title="statement not covered" ></span>
+import { variab<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >le</span>ListCompositeKeyFn } from './valuesSlice';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+expo<span class="cstat-no" title="statement not covered" >rt const selectVariablesValues = (state: RootState, docId: numb</span>er | string, maxValueId?: number) =&gt;
+  state.documentProducerVariableValuesList[docId];
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+ex<span class="cstat-no" title="statement not covered" >port const selectGetVariableValues = createCachedSelector(</span>
+  (s<span class="cstat-no" title="statement not covered" >tate: RootState, projectId: number | string, variableId: number, maxValueId?: number) =&gt;</span>
+    st<span class="cstat-no" title="statement not covered" >ate.documentProducerVariableValuesList[variableListCompositeKeyFn({ projectId, maxValueId })],</span>
+  (state<span class="cstat-no" title="statement not covered" >: RootState, projectId: nu<span class="fstat-no" title="function not covered" >mb</span>er |<span class="cstat-no" title="statement not covered" > string, v</span>ariableId: number, maxValueId?: number) =&gt; projectId,</span>
+  (state: RootState, projectId: number | string, variableId: number, maxValueId?: number) =&gt; variableId,
+<span class="cstat-no" title="statement not covered" >  (response, </span>projectId, variableId) =&gt; {
+    if (response?.data) {
+      const va<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ri</span>ableValueToReturn = response<span class="cstat-no" title="statement not covered" >.data.find(</span></span>
+        (variableValue: VariableValue) =&gt; variableValue.variableId === variableId
       );
-<span class="cstat-no" title="statement not covered" >      return {</span>
+      return {
         ...response,
         data: variableValueToReturn?.values,
       };
     } else {
-<span class="cstat-no" title="statement not covered" >      return response;</span>
-    }
-  }
-)(<span class="fstat-no" title="function not covered" >(s</span>tate: RootState, projectId: number | string, variableId: number) =&gt; <span class="cstat-no" title="statement not covered" >variableId)</span>;
+      return respon<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >se</span>;<span class="cstat-no" title="statement not covered" ></span></span>
+    }<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >  }</span>
+)((state: RootState, projec<span class="fstat-no" title="function not covered" >tI</span>d: n<span class="cstat-no" title="statement not covered" >umber | string, variable</span>Id: number) =&gt; variableId);
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+export const selectUpdateV<span class="fstat-no" title="function not covered" >ar</span>iabl<span class="cstat-no" title="statement not covered" >eValues = (requestId: s</span>tring) =&gt; (state: RootState) =&gt;
+  state.documentProducerV<span class="fstat-no" title="function not covered" >ar</span>iabl<span class="cstat-no" title="statement not covered" >eValuesUpdate[requestI</span>d];
 &nbsp;
-export const selectUpdateVariableValues = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(r</span>equestId: string) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState) =&gt;</span></span>
-<span class="cstat-no" title="statement not covered" >  state.documentProducerVariableValuesUpdate[requestId];</span>
-&nbsp;
-export const selectUploadImageValue = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(r</span>equestId: string) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState) =&gt;</span></span>
-<span class="cstat-no" title="statement not covered" >  state.documentProducerVariableValuesImageUpload[requestId];</span>
-&nbsp;</pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" >export const selectUploadImageValue = (request</span>Id: string) =&gt; (state: RootState) =&gt;
+  state.documentProducerV<span class="cstat-no" title="statement not covered" >ariableValuesImageUpload[request</span>Id];
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

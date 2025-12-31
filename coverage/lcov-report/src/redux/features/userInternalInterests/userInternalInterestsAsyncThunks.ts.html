@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/40</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/26</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/37</span>
             </div>
         
             
@@ -96,7 +96,26 @@
 <a name='L31'></a><a href='#L31'>31</a>
 <a name='L32'></a><a href='#L32'>32</a>
 <a name='L33'></a><a href='#L33'>33</a>
-<a name='L34'></a><a href='#L34'>34</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L34'></a><a href='#L34'>34</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -104,72 +123,53 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { createAsyncThunk } from '@reduxjs/toolkit';
-&nbsp;
-import UserInternalInterestsService from 'src/services/UserInternalInterestsService';
-import strings from 'src/strings';
-import { User } from 'src/types/User';
-import { InternalInterest } from 'src/types/UserInternalInterests';
-&nbsp;
-export const requestGetUserInternalInterests = <span class="cstat-no" title="statement not covered" >createAsyncThunk(</span>
-  'userInternalInterests/get-for-user',
-<span class="fstat-no" title="function not covered" >  as</span>ync (userId: number, { rejectWithValue }) =&gt; {
-    const response = <span class="cstat-no" title="statement not covered" >await UserInternalInterestsService.get(userId);</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { create<span class="cstat-no" title="statement not covered" >AsyncThunk } f</span>rom '@reduxjs/toolkit';
+<span class="cstat-no" title="statement not covered" ></span>
+import UserInternalInte<span class="cstat-no" title="statement not covered" >restsService from 'src/services/</span>UserInternalInterestsService';
+import strings from 'src<span class="cstat-no" title="statement not covered" >/strings';</span>
+import { User } fro<span class="cstat-no" title="statement not covered" >m 'src/types/User';</span>
+import { InternalIn<span class="cstat-no" title="statement not covered" >terest } from 'src/types/UserInt</span>ernalInterests';
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+ex<span class="cstat-no" title="statement not covered" >port const requestGetUserInternalInterests = createAsyncThunk(</span>
+  'u<span class="cstat-no" title="statement not covered" >serInternalInterests/get-for-user',</span>
+  async (userId: number, { rejectWithValue }) =&gt; {
+    const response<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > =</span> await UserInternalInterestsService.get(userId);</span>
 <span class="cstat-no" title="statement not covered" >    if (response &amp;&amp; response.requestSucceeded) {</span>
 <span class="cstat-no" title="statement not covered" >      return response.data;</span>
-    }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    return rejectWithValue(strings.GENERIC_ERROR);</span>
-  }
+    }<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+    return rejectWithValue(strings.GENERIC_ERROR);
+<span class="cstat-no" title="statement not covered" >  }</span>
 );
-&nbsp;
-export const requestUpdateUserInternalInterests = <span class="cstat-no" title="statement not covered" >createAsyncThunk(</span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+export const requestUpdateUserInternalInterests = createAsyncThunk(
   'userInternalInterests/update-for-user',
-<span class="fstat-no" title="function not covered" >  as</span>ync (request: { user: User; internalInterests: InternalInterest[] }, { dispatch, rejectWithValue }) =&gt; {
-    const { user, internalInterests } = <span class="cstat-no" title="statement not covered" >request;</span>
+  async (request: { user: User; internalInterests: InternalInterest[] }, { dispatch, rejectWithValue }) =&gt; {
+    const { user, internalInterests } = request;
 &nbsp;
-    const response = <span class="cstat-no" title="statement not covered" >await UserInternalInterestsService.update(user, internalInterests);</span>
-<span class="cstat-no" title="statement not covered" >    if (response &amp;&amp; response.requestSucceeded) {</span>
-<span class="cstat-no" title="statement not covered" >      void dispatch(requestGetUserInternalInterests(user.id));</span>
-<span class="cstat-no" title="statement not covered" >      return user.id;</span>
-    }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    return rejectWithValue(strings.GENERIC_ERROR);</span>
+    const response = await UserInternalInterestsService.update(user, internalInterests);
+    if (response &amp;&amp; response.requestSucceeded) {
+      void dispatch<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(r</span>equestG<span class="cstat-no" title="statement not covered" >etUserInternalInterests(user.id));</span></span>
+      return user.id<span class="cstat-no" title="statement not covered" >;</span>
+<span class="cstat-no" title="statement not covered" >    }</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+    return rejectWithValue(strings.GEN<span class="fstat-no" title="function not covered" >ER</span>IC_E<span class="cstat-no" title="statement not covered" >RROR);</span>
   }
-);
-&nbsp;</pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" >);</span>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/33</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/22</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/30</span>
             </div>
         
             
@@ -91,70 +91,70 @@
 <a name='L26'></a><a href='#L26'>26</a>
 <a name='L27'></a><a href='#L27'>27</a>
 <a name='L28'></a><a href='#L28'>28</a>
-<a name='L29'></a><a href='#L29'>29</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L29'></a><a href='#L29'>29</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { createAsyncThunk } from '@reduxjs/toolkit';
-&nbsp;
-import { Response2 } from 'src/services/HttpService';
-import GisService, { GisResponseData } from 'src/services/gis/GisService';
-import strings from 'src/strings';
-&nbsp;
-export const requestGetGis = <span class="cstat-no" title="statement not covered" >createAsyncThunk(</span>
-  'ges/get-one',
-<span class="fstat-no" title="function not covered" >  as</span>ync (request: { cqlFilter: string; typeNames: string; propertyName: string }, { rejectWithValue }) =&gt; {
-    const { cqlFilter, typeNames, propertyName } = <span class="cstat-no" title="statement not covered" >request;</span>
-    const response: Response2&lt;GisResponseData&gt; = <span class="cstat-no" title="statement not covered" >await GisService.get({</span>
-      service: 'wfs',
-      version: '2.0.0',
-      request: 'GetFeature',
-      typeNames,
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { create<span class="cstat-no" title="statement not covered" >AsyncThunk } f</span>rom '@reduxjs/toolkit';
+<span class="cstat-no" title="statement not covered" ></span>
+import { Response2 } fr<span class="cstat-no" title="statement not covered" >om 'src/services/HttpService';</span>
+import GisService, { Gis<span class="cstat-no" title="statement not covered" >ResponseData } from 'src/se</span>rvices/gis/GisService';
+import strings from<span class="cstat-no" title="statement not covered" > 'src/strings';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+export const re<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >qu</span>estGetGis = createAsyncThunk(</span>
+<span class="cstat-no" title="statement not covered" >  'ges/get-one',</span>
+  as<span class="cstat-no" title="statement not covered" >ync (request: { cqlFilter: string; typeNames: string; propertyN</span>ame: string }, { rejectWithValue }) =&gt; {
+    const { cqlFilter, typeNames, propertyName } = request;
+    const response<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >: </span>Response2&lt;GisResponseData&gt; = await GisService.get({</span>
+<span class="cstat-no" title="statement not covered" >      service: 'wfs',</span>
+<span class="cstat-no" title="statement not covered" >      version: '2.0.0',</span>
+<span class="cstat-no" title="statement not covered" >      request: 'GetFeature',</span>
+      ty<span class="cstat-no" title="statement not covered" >peNames,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
       propertyName,
-      outputFormat: 'application/json',
+<span class="cstat-no" title="statement not covered" >      outputF</span>ormat: 'application/json',
       srsName: 'EPSG:4326',
-      cql_filter: cqlFilter,
+      cql_filt<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >er</span>: cqlFilter,<span class="cstat-no" title="statement not covered" ></span></span>
     });
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    if (response &amp;&amp; response.requestSucceeded) {</span>
-<span class="cstat-no" title="statement not covered" >      return response.data;</span>
+    if (response &amp;&amp; response.requestSucceeded) {
+      return response.data;
     }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return rejectWithValue(strings.GENERIC_ERROR);</span>
-  }
-);
-&nbsp;</pre></td></tr></table></pre>
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+);<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

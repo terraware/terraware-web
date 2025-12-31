@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/33</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/29</span>
             </div>
         
             
@@ -95,11 +95,25 @@
 <a name='L30'></a><a href='#L30'>30</a>
 <a name='L31'></a><a href='#L31'>31</a>
 <a name='L32'></a><a href='#L32'>32</a>
-<a name='L33'></a><a href='#L33'>33</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L33'></a><a href='#L33'>33</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -110,42 +124,28 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useMemo } from 'react';
-&nbsp;
-import { LAND_USE_MODEL_TYPES, getLandUseModelType } from 'src/types/ParticipantProject';
-&nbsp;
-import { ProjectFieldEditProps } from '.';
-import ProjectFieldMultiSelect from './MultiSelect';
-&nbsp;
-type LandUseMultiSelectProps = Omit&lt;ProjectFieldEditProps, 'onChange' | 'value'&gt; &amp; {
-  onChange: (id: string, values: string[]) =&gt; void;
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > useMemo } fro</span>m 'react';
+<span class="cstat-no" title="statement not covered" ></span>
+import { LAND_USE_MODEL<span class="cstat-no" title="statement not covered" >_TYPES, getLandUseModelType } fr</span>om 'src/types/ParticipantProject';
+<span class="cstat-no" title="statement not covered" ></span>
+import { ProjectFie<span class="cstat-no" title="statement not covered" >ldEditProps } from '.'</span>;
+import ProjectField<span class="cstat-no" title="statement not covered" >MultiSelect from './MultiSelect'</span>;
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+ty<span class="cstat-no" title="statement not covered" >pe LandUseMultiSelectProps = Omit&lt;ProjectFieldEditProps, 'onChange' | 'value'&gt; &amp; {</span>
+  on<span class="cstat-no" title="statement not covered" >Change: (id: string, values: string[]) =&gt; void;</span>
   value: string[] | undefined;
-};
-&nbsp;
-const LandUseMultiSelect = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> id, label, onChange, value, md, height }: LandUseMultiSelectProps) =&gt; {</span>
-  const options = <span class="cstat-no" title="statement not covered" >useMemo(</span>
-<span class="fstat-no" title="function not covered" >    ()</span>: Map&lt;string, string&gt; =&gt; <span class="cstat-no" title="statement not covered" >new Map(LAND_USE_MODEL_TYPES.map(<span class="fstat-no" title="function not covered" >(_</span>value) =&gt; <span class="cstat-no" title="statement not covered" >[getLandUseModelType(_value), _value])</span>),</span>
+};<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ></span>
+cons<span class="cstat-no" title="statement not covered" >t LandUseMultiSelect = ({ id, label, onChange, value, md, height }: LandUseMultiSelectProps) =&gt; {</span>
+  cons<span class="cstat-no" title="statement not covered" >t options = useMemo(</span>
+    (): <span class="cstat-no" title="statement not covered" >Map&lt;string, string&gt; =&gt; new<span class="fstat-no" title="function not covered" > M</span>ap(L<span class="cstat-no" title="statement not covered" >AND_USE_MO</span>DEL_TYPES.map((_value) =&gt; [getLandUseModelType(_value), _value])),</span>
     []
-  );
+<span class="cstat-no" title="statement not covered" >  );</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+  return (<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
     &lt;ProjectFieldMultiSelect
       id={id}
       md={md}
@@ -153,20 +153,20 @@ const LandUseMultiSelect = <span class="cstat-no" title="statement not covered" 
       label={label}
       onChange={onChange}
       values={value}
-      options={options}
-    /&gt;
-  );
-};
+      options={opti<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >on</span>s}<span class="cstat-no" title="statement not covered" ></span></span>
+    /&gt;<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >  );</span>
+};<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 &nbsp;
-export default LandUseMultiSelect;
-&nbsp;</pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" >export default LandUseMultiSelect;</span>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

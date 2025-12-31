@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>0/42</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/20</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/38</span>
             </div>
         
             
@@ -98,28 +98,9 @@
 <a name='L33'></a><a href='#L33'>33</a>
 <a name='L34'></a><a href='#L34'>34</a>
 <a name='L35'></a><a href='#L35'>35</a>
-<a name='L36'></a><a href='#L36'>36</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L36'></a><a href='#L36'>36</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -127,55 +108,74 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Dispatch } from 'redux';
-&nbsp;
-import { setProjectAction, setProjectsAction } from 'src/redux/features/projects/projectsSlice';
-import { RootState } from 'src/redux/rootReducer';
-import ProjectsService from 'src/services/ProjectsService';
-&nbsp;
-export const requestProjects = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(o</span>rganizationId?: number, locale?: string | null) =&gt; {</span>
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-<span class="cstat-no" title="statement not covered" >  return <span class="fstat-no" title="function not covered" >as</span>ync (dispatch: Dispatch, _getState: () =&gt; RootState) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    try {</span>
-      const response = <span class="cstat-no" title="statement not covered" >await ProjectsService.listProjects(organizationId, locale);</span>
-      const { error, projects } = <span class="cstat-no" title="statement not covered" >response;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Dispat<span class="cstat-no" title="statement not covered" >ch } from 'red</span>ux';
+<span class="cstat-no" title="statement not covered" ></span>
+import { setProjectActi<span class="cstat-no" title="statement not covered" >on, setProjectsAction } from 'sr</span>c/redux/features/projects/projectsSlice';
+import { RootState } fro<span class="cstat-no" title="statement not covered" >m 'src/redux/rootReducer';</span>
+import ProjectsServ<span class="cstat-no" title="statement not covered" >ice from 'src/services</span>/ProjectsService';
+<span class="cstat-no" title="statement not covered" ></span>
+export const re<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >qu</span>estProjects = (organizationId?: number, locale?: string | null) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  // eslint-disable-next-line @typescript-eslint/no-unused-vars</span>
+  re<span class="cstat-no" title="statement not covered" >turn async (dispatch: Dispatch, _getState: () =&gt; RootState) =&gt; </span>{
+    try {
+      const respon<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >se</span> = await ProjectsService.listProjects(organizationId, locale);</span>
+<span class="cstat-no" title="statement not covered" >      const { error, projects } = response;</span>
 <span class="cstat-no" title="statement not covered" >      dispatch(setProjectsAction({ error, projects }));</span>
-    } catch (e) {
-      // should not happen, the response above captures any http request errors
+    } <span class="cstat-no" title="statement not covered" >catch (e) {</span>
+      //<span class="cstat-no" title="statement not covered" > should not happen, the re<span class="fstat-no" title="function not covered" >sp</span>onse<span class="cstat-no" title="statement not covered" > above cap</span>tures any http request errors</span>
       // eslint-disable-next-line no-console
-<span class="cstat-no" title="statement not covered" >      console.error('Error dispatching projects', e);</span>
+<span class="cstat-no" title="statement not covered" >      console</span>.error('Error dispatching projects', e);
     }
-  };
+  };<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 };
 &nbsp;
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const requestProject = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(p</span>rojectId: number) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync (dispatch: Dispatch, _getState: () =&gt; RootState) =&gt; {</span></span>
-<span class="cstat-no" title="statement not covered" >  try {</span>
-    const response = <span class="cstat-no" title="statement not covered" >await ProjectsService.getProject(projectId);</span>
-    const { error, data } = <span class="cstat-no" title="statement not covered" >response;</span>
-<span class="cstat-no" title="statement not covered" >    if (data) {</span>
-<span class="cstat-no" title="statement not covered" >      dispatch(setProjectAction({ error, projects: [data] }));</span>
-    }
-  } catch (e) {
-    // should not happen, the response above captures any http request errors
+export const requestProject = (projectId: number) =&gt; async (dispatch: Dispatch, _getState: () =&gt; RootState) =&gt; {
+  try {
+    const response = await ProjectsService.getProject(projectId);
+    const { error, data } = response;
+    if (data) {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+      dispatch(setPr<span class="cstat-no" title="statement not covered" >oje</span>ctAction({ error, projects: [data] }));
+<span class="cstat-no" title="statement not covered" >    }</span>
+  } catch (e) {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+    // should not h<span class="fstat-no" title="function not covered" >ap</span>pen,<span class="cstat-no" title="statement not covered" > the response ab</span>ove captures any http request errors
     // eslint-disable-next-line no-console
-<span class="cstat-no" title="statement not covered" >    console.error('Error dispatching projects', e);</span>
-  }
-};
-&nbsp;</pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" >    console.error('Error dispatching projects'</span>, e);
+  }<span class="cstat-no" title="statement not covered" ></span>
+};<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

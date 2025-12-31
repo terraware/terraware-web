@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/32</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/20</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/29</span>
             </div>
         
             
@@ -94,10 +94,23 @@
 <a name='L29'></a><a href='#L29'>29</a>
 <a name='L30'></a><a href='#L30'>30</a>
 <a name='L31'></a><a href='#L31'>31</a>
-<a name='L32'></a><a href='#L32'>32</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L32'></a><a href='#L32'>32</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -107,63 +120,50 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useMemo } from 'react';
-&nbsp;
-import PhotosList from 'src/components/common/PhotosList';
-import { ObservationMonitoringPlotPhoto } from 'src/types/Observations';
-&nbsp;
-const PHOTO_URL = <span class="cstat-no" title="statement not covered" >'/api/v1/tracking/observations/{observationId}/plots/{monitoringPlotId}/photos/{fileId}';</span>
-&nbsp;
-export type MonitoringPlotPhotosProps = {
-  observationId: number;
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > useMemo } fro</span>m 'react';
+<span class="cstat-no" title="statement not covered" ></span>
+import PhotosList from <span class="cstat-no" title="statement not covered" >'src/components/common/PhotosLis</span>t';
+import { ObservationMoni<span class="cstat-no" title="statement not covered" >toringPlotPhoto } from 'src</span>/types/Observations';
+<span class="cstat-no" title="statement not covered" ></span>
+const PHOTO_URL = '<span class="cstat-no" title="statement not covered" >/api/v1/tracking/observations/{o</span>bservationId}/plots/{monitoringPlotId}/photos/{fileId}';
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+ex<span class="cstat-no" title="statement not covered" >port type MonitoringPlotPhotosProps = {</span>
+  ob<span class="cstat-no" title="statement not covered" >servationId: number;</span>
   monitoringPlotId: number;
-  photos?: ObservationMonitoringPlotPhoto[];
-};
-&nbsp;
-export default function <span class="fstat-no" title="function not covered" >MonitoringPlotPhotos(</span>{
-  observationId,
+  photos?: Observa<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ti</span>onMonitoringPlotPhoto[];</span>
+};<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+export<span class="cstat-no" title="statement not covered" > default function MonitoringPlotPhotos({</span>
+  observ<span class="cstat-no" title="statement not covered" >ationId,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
   monitoringPlotId,
-  photos,
+<span class="cstat-no" title="statement not covered" >  photos,</span>
 }: MonitoringPlotPhotosProps): JSX.Element {
-  const photoUrls = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-    const rootUrl = <span class="cstat-no" title="statement not covered" >PHOTO_URL.replace('{observationId}', observationId.toString()).replace(</span>
+  const photoU<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >rl</span>s = useMemo(() =&gt; {<span class="cstat-no" title="statement not covered" ></span></span>
+    const rootUrl = PHOTO_URL.replace('{observationId}', observationId.toString()).replace(
       '{monitoringPlotId}',
       monitoringPlotId.toString()
     );
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return (photos ?? []).map(<span class="fstat-no" title="function not covered" >(p</span>hoto: ObservationMonitoringPlotPhoto) =&gt;</span>
-<span class="cstat-no" title="statement not covered" >      rootUrl.replace('{fileId}', photo.fileId.toString())</span>
-    );
-  }, [observationId, monitoringPlotId, photos]);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  return &lt;PhotosList photoUrls={photoUrls} fillSpace /&gt;;</span>
+    return (photos ?? []).map((photo: ObservationMonitoringPlotPhoto) =&gt;
+      rootUrl.replace('{fileId}', photo.fileId.toString())
+    );<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  }, [observationId,<span class="cstat-no" title="statement not covered" > mo</span>nitoringPlotId, photos]);
+<span class="cstat-no" title="statement not covered" ></span>
+  return &lt;P<span class="fstat-no" title="function not covered" >ho</span>tosL<span class="cstat-no" title="statement not covered" >ist photoUrls={photoU</span>rls} fillSpace /&gt;;
 }
-&nbsp;</pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

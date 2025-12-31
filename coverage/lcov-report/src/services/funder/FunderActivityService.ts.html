@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/34</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/20</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/31</span>
             </div>
         
             
@@ -93,74 +93,74 @@
 <a name='L28'></a><a href='#L28'>28</a>
 <a name='L29'></a><a href='#L29'>29</a>
 <a name='L30'></a><a href='#L30'>30</a>
-<a name='L31'></a><a href='#L31'>31</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L31'></a><a href='#L31'>31</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { paths } from 'src/api/types/generated-schema';
-import HttpService, { Response2 } from 'src/services/HttpService';
-&nbsp;
-// endpoints
-const FUNDER_ACTIVITIES_ENDPOINT = <span class="cstat-no" title="statement not covered" >'/api/v1/funder/activities';</span>
-export const FUNDER_ACTIVITY_MEDIA_FILE_ENDPOINT = <span class="cstat-no" title="statement not covered" >'/api/v1/funder/activities/{activityId}/media/{fileId}';</span>
-&nbsp;
-// responses
-type PublishFunderActivitiesResponse =
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { paths <span class="cstat-no" title="statement not covered" >} from 'src/ap</span>i/types/generated-schema';
+import HttpServi<span class="cstat-no" title="statement not covered" >ce, { Response2 } from</span> 'src/services/HttpService';
+<span class="cstat-no" title="statement not covered" ></span>
+// endpoints<span class="cstat-no" title="statement not covered" ></span>
+const FUNDER_ACTIVI<span class="cstat-no" title="statement not covered" >TIES_ENDPOINT = '/api/</span>v1/funder/activities';
+export const FUNDER<span class="cstat-no" title="statement not covered" >_ACTIVITY_MEDIA_FILE_ENDPOINT = </span>'/api/v1/funder/activities/{activityId}/media/{fileId}';
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+//<span class="cstat-no" title="statement not covered" > responses</span>
+type<span class="cstat-no" title="statement not covered" > PublishFunderActivitiesResponse =</span>
   paths[typeof FUNDER_ACTIVITIES_ENDPOINT]['get']['responses'][200]['content']['application/json'];
-&nbsp;
-const httpPublishedActivities = <span class="cstat-no" title="statement not covered" >HttpService.root(FUNDER_ACTIVITIES_ENDPOINT);</span>
-&nbsp;
-const getAll = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync (</span>
-  projectId: number,
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+co<span class="cstat-no" title="statement not covered" >nst httpPublishedActivities = HttpService.root(FUNDER_ACTIVITIES_ENDPOINT);</span>
+<span class="cstat-no" title="statement not covered" ></span>
+const <span class="cstat-no" title="statement not covered" >getAll = async (</span>
+  projec<span class="cstat-no" title="statement not covered" >tId: number,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
   includeMedia?: boolean
-): Promise&lt;Response2&lt;PublishFunderActivitiesResponse&gt;&gt; =&gt; {
-  const queryParams = <span class="cstat-no" title="statement not covered" >{</span>
-    projectId: projectId.toString(),
+):<span class="cstat-no" title="statement not covered" > Promise&lt;Re</span>sponse2&lt;PublishFunderActivitiesResponse&gt;&gt; =&gt; {
+  const queryParams = {
+    projectId:<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > p</span>rojectId.toString(),<span class="cstat-no" title="statement not covered" ></span></span>
     ...(includeMedia !== undefined &amp;&amp; { includeMedia: includeMedia.toString() }),
   };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return await httpPublishedActivities.get2&lt;PublishFunderActivitiesResponse&gt;({ params: queryParams });</span>
+  return await httpPublishedActivities.get2&lt;PublishFunderActivitiesResponse&gt;({ params: queryParams });
 };
 &nbsp;
-const FunderActivityService = <span class="cstat-no" title="statement not covered" >{</span>
-  getAll,
-};
-&nbsp;
-export default FunderActivityService;
-&nbsp;</pre></td></tr></table></pre>
+const FunderActivityService = {
+  getAll,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+};<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+export default FunderActivityService;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

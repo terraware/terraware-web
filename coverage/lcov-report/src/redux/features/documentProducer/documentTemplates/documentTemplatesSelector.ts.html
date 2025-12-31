@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/36</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/22</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/31</span>
             </div>
         
             
@@ -84,48 +84,48 @@
 <a name='L19'></a><a href='#L19'>19</a>
 <a name='L20'></a><a href='#L20'>20</a>
 <a name='L21'></a><a href='#L21'>21</a>
-<a name='L22'></a><a href='#L22'>22</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L22'></a><a href='#L22'>22</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/* eslint-disable @typescript-eslint/no-unused-vars */
-import createCachedSelector from 're-reselect';
-&nbsp;
-import { RootState } from 'src/redux/rootReducer';
-import { DocumentTemplate } from 'src/types/documentProducer/DocumentTemplate';
-&nbsp;
-import { DocumentTemplatesData } from './documentTemplatesSlice';
-&nbsp;
-export const selectDocumentTemplates = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState): DocumentTemplatesData =&gt;</span>
-<span class="cstat-no" title="statement not covered" >  state.documentProducerDocumentTemplates.listDocumentTemplates;</span>
-&nbsp;
-export const selectDocumentTemplate = <span class="cstat-no" title="statement not covered" >createCachedSelector(</span>
-<span class="fstat-no" title="function not covered" >  (s</span>tate: RootState, documentTemplateId: number) =&gt; <span class="cstat-no" title="statement not covered" >state.documentProducerDocumentTemplates.listDocumentTemplates,</span>
-<span class="fstat-no" title="function not covered" >  (s</span>tate: RootState, documentTemplateId: number) =&gt; <span class="cstat-no" title="statement not covered" >documentTemplateId,</span>
-<span class="fstat-no" title="function not covered" >  (r</span>esponse, documentTemplateId): DocumentTemplate | undefined =&gt; {
-<span class="cstat-no" title="statement not covered" >    if (response &amp;&amp; response.documentTemplates) {</span>
-<span class="cstat-no" title="statement not covered" >      return response.documentTemplates.find(<span class="fstat-no" title="function not covered" >(m</span>: DocumentTemplate) =&gt; <span class="cstat-no" title="statement not covered" >m.id === documentTemplateId)</span>;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/* eslint-disab<span class="cstat-no" title="statement not covered" >le @typescript</span>-eslint/no-unused-vars */
+import createCac<span class="cstat-no" title="statement not covered" >hedSelector from 're-r</span>eselect';
+<span class="cstat-no" title="statement not covered" ></span>
+import { RootState } fro<span class="cstat-no" title="statement not covered" >m 'src/redux/rootReducer';</span>
+import { DocumentTe<span class="cstat-no" title="statement not covered" >mplate } from 'src/typ</span>es/documentProducer/DocumentTemplate';
+<span class="cstat-no" title="statement not covered" ></span>
+import { Docume<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >nt</span>TemplatesData } from './documentTemplatesSlice';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+expo<span class="cstat-no" title="statement not covered" >rt const selectDocumentTemplates = (state: RootState): Document</span>TemplatesData =&gt;
+  state.documentProducerDocumentTemplates.listDocumentTemplates;
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+ex<span class="cstat-no" title="statement not covered" >port const selectDocumentTemplate = createCachedSelector(</span>
+  (s<span class="cstat-no" title="statement not covered" >tate: RootState, documentTemplateId: number) =&gt; state.documentProducerDocumentTemplates.listDocumentTemplates,</span>
+  (sta<span class="cstat-no" title="statement not covered" >te: RootState, documentTemplateId: number) =&gt; documentTemplateId,</span>
+  (respo<span class="cstat-no" title="statement not covered" >nse, documentTemplateId): <span class="fstat-no" title="function not covered" >Do</span>cume<span class="cstat-no" title="statement not covered" >ntTemplate</span> | undefined =&gt; {</span>
+    if (response &amp;&amp; response.documentTemplates) {
+<span class="cstat-no" title="statement not covered" >      return </span>response.documentTemplates.find((m: DocumentTemplate) =&gt; m.id === documentTemplateId);
     }
-<span class="cstat-no" title="statement not covered" >    return undefined;</span>
+    return und<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ef</span>ined;<span class="cstat-no" title="statement not covered" ></span></span>
   }
-)(<span class="fstat-no" title="function not covered" >(s</span>tate: RootState, documentTemplateId: number) =&gt; <span class="cstat-no" title="statement not covered" >documentTemplateId)</span>;
+)((state: RootState, documentTemplateId: number) =&gt; documentTemplateId);
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -133,7 +133,7 @@ export const selectDocumentTemplate = <span class="cstat-no" title="statement no
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

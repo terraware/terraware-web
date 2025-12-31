@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/32</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/29</span>
             </div>
         
             
@@ -88,14 +88,19 @@
 <a name='L23'></a><a href='#L23'>23</a>
 <a name='L24'></a><a href='#L24'>24</a>
 <a name='L25'></a><a href='#L25'>25</a>
-<a name='L26'></a><a href='#L26'>26</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L26'></a><a href='#L26'>26</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -105,33 +110,28 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useMemo } from 'react';
-&nbsp;
-import { ClientNotification } from 'src/types/Notifications';
-&nbsp;
-import OrganizationNotification from './OrganizationNotification';
-import UserNotification from './UserNotification';
-&nbsp;
-export default function <span class="fstat-no" title="function not covered" >useClientNotifications(</span>): ClientNotification[] {
-  const userNotification = <span class="cstat-no" title="statement not covered" >UserNotification();</span>
-  const orgNotification = <span class="cstat-no" title="statement not covered" >OrganizationNotification();</span>
-&nbsp;
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useMem<span class="cstat-no" title="statement not covered" >o } from 'reac</span>t';
+<span class="cstat-no" title="statement not covered" ></span>
+import { ClientNotifica<span class="cstat-no" title="statement not covered" >tion } from 'src/types/Notificat</span>ions';
+<span class="cstat-no" title="statement not covered" ></span>
+import Organization<span class="cstat-no" title="statement not covered" >Notification from './O</span>rganizationNotification';
+import UserNotifica<span class="cstat-no" title="statement not covered" >tion from './UserNotification';</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+ex<span class="cstat-no" title="statement not covered" >port default function useClientNotifications(): ClientNotification[] {</span>
+  co<span class="cstat-no" title="statement not covered" >nst userNotification = UserNotification();</span>
+  const orgNotification = OrganizationNotification();
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >  return useMemo(</span>
-<span class="fstat-no" title="function not covered" >    ()</span> =&gt;
+<span class="cstat-no" title="statement not covered" >    () =&gt;</span>
 <span class="cstat-no" title="statement not covered" >      [</span>
-        // add all notifications here
+<span class="cstat-no" title="statement not covered" >        // add all notifications h<span class="fstat-no" title="function not covered" >er</span>e<span class="cstat-no" title="statement not covered" ></span></span>
         userNotification,
-        orgNotification,
-      ].filter(<span class="fstat-no" title="function not covered" >(n</span>otification) =&gt; <span class="cstat-no" title="statement not covered" >notification !== null)</span> as ClientNotification[],
-    [
+<span class="cstat-no" title="statement not covered" >        orgNo</span>tification,
+      ].filter((notification) =&gt; notification !== null) as ClientNotification[],
+    [<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
       // add all notification dependencies here
       userNotification,
       orgNotification,
@@ -145,7 +145,7 @@ export default function <span class="fstat-no" title="function not covered" >use
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

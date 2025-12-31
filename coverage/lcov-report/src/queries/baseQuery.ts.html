@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/18</span>
+                <span class='fraction'>0/40</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/23</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>0/36</span>
             </div>
         
             
@@ -107,31 +107,27 @@
 <a name='L42'></a><a href='#L42'>42</a>
 <a name='L43'></a><a href='#L43'>43</a>
 <a name='L44'></a><a href='#L44'>44</a>
-<a name='L45'></a><a href='#L45'>45</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L45'></a><a href='#L45'>45</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -146,63 +142,67 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { BaseQueryFn, FetchArgs, FetchBaseQueryError, fetchBaseQuery } from '@reduxjs/toolkit/query';
-&nbsp;
-function <span class="fstat-no" title="function not covered" >delay(</span>ms: number): Promise&lt;void&gt; {
-<span class="cstat-no" title="statement not covered" >  return new Promise(<span class="fstat-no" title="function not covered" >(r</span>esolve) =&gt; <span class="cstat-no" title="statement not covered" >setTimeout(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >resolve(),</span> ms))</span>;</span>
-}
-&nbsp;
-const rawBaseQuery = <span class="cstat-no" title="statement not covered" >fetchBaseQuery({</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { BaseQue<span class="cstat-no" title="statement not covered" >ryFn, FetchArgs, Fetch</span>BaseQueryError, fetchBaseQuery } from '@reduxjs/toolkit/query';
+<span class="cstat-no" title="statement not covered" ></span>
+function delay(ms: numbe<span class="cstat-no" title="statement not covered" >r): Promise&lt;void&gt; {</span>
+  return new Promis<span class="cstat-no" title="statement not covered" >e((resolve) =&gt; setTimeout(() =&gt; </span>resolve(), ms));
+}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ></span>
+cons<span class="cstat-no" title="statement not covered" >t rawBaseQuery = fetchBaseQuery({</span>
   baseUrl: '',
-  credentials: 'include',
-});
-&nbsp;
-const baseQueryWithInterceptors: BaseQueryFn&lt;string | FetchArgs, unknown, FetchBaseQueryError&gt; = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync (</span>
-  args,
+  credentials: 'in<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >cl</span>ude',</span>
+})<span class="cstat-no" title="statement not covered" >;</span>
+<span class="cstat-no" title="statement not covered" ></span>
+const <span class="cstat-no" title="statement not covered" >baseQueryWithInterceptors: BaseQueryFn&lt;string | FetchArgs, unknown, FetchBaseQueryError&gt; = async (</span>
+  args,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
   api,
-  extraOptions
+<span class="cstat-no" title="statement not covered" >  extraOption</span>s
 ) =&gt; {
-  const shouldDelay = <span class="cstat-no" title="statement not covered" >process.env.REACT_APP_DELAY_QUERIES === 'true';</span>
+  const shouldDelay<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > =</span> proces<span class="cstat-no" title="statement not covered" >s.env.REACT_APP_DELAY_QUERIES === 'true';</span></span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >  // --- simulate network delay (like your proxy)</span>
+  if (shoul<span class="fstat-no" title="function not covered" >dD</span>elay<span class="cstat-no" title="statement not covered" >) {</span>
+    await delay(1500);
+<span class="cstat-no" title="statement not covered" >  }</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  // --- <span class="fstat-no" title="function not covered" >measur</span>e timing
+<span class="cstat-no" title="statement not covered" >  const start = Date.<span class="fstat-no" title="function not covered" >no</span>w();<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span>
+  const result = await rawBaseQuery(args, api, extraOptions);
+  const responseTime <span class="cstat-no" title="statement not covered" >= Date.now() - start;</span>
 &nbsp;
-  // --- simulate network delay (like your proxy)
-<span class="cstat-no" title="statement not covered" >  if (shouldDelay) {</span>
-<span class="cstat-no" title="statement not covered" >    await delay(1500);</span>
-  }
-&nbsp;
-  // --- measure timing
-  const start = <span class="cstat-no" title="statement not covered" >Date.now();</span>
-  const result = <span class="cstat-no" title="statement not covered" >await rawBaseQuery(args, api, extraOptions);</span>
-  const responseTime = <span class="cstat-no" title="statement not covered" >Date.now() - start;</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  if (process.env.NODE_ENV === 'development') {</span>
+  if (process.env.NODE_ENV === 'development') {
     // TODO determine whether to log this elsewhere
-<span class="cstat-no" title="statement not covered" >    console.log(`[RTKQ] ${typeof args === 'string' ? args : args.url} took ${responseTime}ms`);</span>
-  }
-&nbsp;
-  // --- handle 401 (redirect)
-<span class="cstat-no" title="statement not covered" >  if (result.error &amp;&amp; result.error.status === 401) {</span>
-    const href = <span class="cstat-no" title="statement not covered" >location.href.match('/error') ? location.origin : location.href;</span>
-    const redirect = <span class="cstat-no" title="statement not covered" >encodeURIComponent(href);</span>
-<span class="cstat-no" title="statement not covered" >    location.href = `/api/v1/login?redirect=${redirect}`;</span>
-  }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  return result;</span>
-};
-&nbsp;
-export default baseQueryWithInterceptors;
-&nbsp;</pre></td></tr></table></pre>
+    console.log(`[RTKQ] ${typeof a<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >rg</span>s === 'string' ? args : args.url} took ${responseTime}ms`);</span>
+  }<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+  //<span class="cstat-no" title="statement not covered" > --- handle 401 (re</span>direct)
+  if (result.error &amp;&amp; result.error.status === 401) {
+    const href =<span class="cstat-no" title="statement not covered" > location.h</span>ref.match('/error') ? location.origin : location.href;
+    const redirec<span class="cstat-no" title="statement not covered" >t = encodeURIComponent(href);</span>
+    location.href = `/a<span class="cstat-no" title="statement not covered" >pi/v1/login?redirec</span>t=${redirect}`;
+<span class="cstat-no" title="statement not covered" >  }</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  return result;
+};<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+export default baseQu<span class="cstat-no" title="statement not covered" >eryWithInterceptors;</span>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/39</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/26</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/36</span>
             </div>
         
             
@@ -85,18 +85,15 @@
 <a name='L20'></a><a href='#L20'>20</a>
 <a name='L21'></a><a href='#L21'>21</a>
 <a name='L22'></a><a href='#L22'>22</a>
-<a name='L23'></a><a href='#L23'>23</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L23'></a><a href='#L23'>23</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -106,27 +103,30 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import strings from 'src/strings';
-import { accessionNurserySubstrates, labSubstrates } from 'src/types/Accession';
-&nbsp;
-export const getFullTestType = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(t</span>estType: 'Lab' | 'Nursery' | 'Cut') =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >  if (testType === 'Lab') {</span>
-<span class="cstat-no" title="statement not covered" >    return strings.LAB_GERMINATION;</span>
-  } else <span class="cstat-no" title="statement not covered" >if (testType === 'Nursery') {</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import strings <span class="cstat-no" title="statement not covered" >from 'src/stri</span>ngs';
+import { accessi<span class="cstat-no" title="statement not covered" >onNurserySubstrates, l</span>abSubstrates } from 'src/types/Accession';
+<span class="cstat-no" title="statement not covered" ></span>
+export const getFullTest<span class="cstat-no" title="statement not covered" >Type = (testType: 'Lab' | '</span>Nursery' | 'Cut') =&gt; {
+  if (testType === <span class="cstat-no" title="statement not covered" >'Lab') {</span>
+    return strings.<span class="cstat-no" title="statement not covered" >LAB_GERMINATION;</span>
+  } else if (te<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >st</span>Type === 'Nursery') {</span>
 <span class="cstat-no" title="statement not covered" >    return strings.NURSERY_GERMINATION;</span>
-  } else {
-<span class="cstat-no" title="statement not covered" >    return strings.CUT_TEST;</span>
-  }
-};
-&nbsp;
-export const getSubstratesAccordingToType = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(t</span>ype?: string) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >  if (type === 'Lab') {</span>
-<span class="cstat-no" title="statement not covered" >    return labSubstrates();</span>
-  } else <span class="cstat-no" title="statement not covered" >if (type === 'Nursery') {</span>
-<span class="cstat-no" title="statement not covered" >    return accessionNurserySubstrates();</span>
-  } else {
-<span class="cstat-no" title="statement not covered" >    return [];</span>
+  } <span class="cstat-no" title="statement not covered" >else {</span>
+    return strings.CUT_TEST;
+  }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+};<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+export<span class="cstat-no" title="statement not covered" > const getSubstratesAccordingToType = (type?: string) =&gt; {</span>
+  if (ty<span class="cstat-no" title="statement not covered" >pe === 'Lab') {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+    return labSubstrates();
+<span class="cstat-no" title="statement not covered" >  } else if (</span>type === 'Nursery') {
+    return accessionNurserySubstrates();
+  } else {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+    return [];
   }
 };
 &nbsp;</pre></td></tr></table></pre>
@@ -136,7 +136,7 @@ export const getSubstratesAccordingToType = <span class="cstat-no" title="statem
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

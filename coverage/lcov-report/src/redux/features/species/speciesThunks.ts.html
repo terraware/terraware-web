@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>0/40</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/24</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>0/35</span>
             </div>
         
             
@@ -115,26 +115,20 @@
 <a name='L50'></a><a href='#L50'>50</a>
 <a name='L51'></a><a href='#L51'>51</a>
 <a name='L52'></a><a href='#L52'>52</a>
-<a name='L53'></a><a href='#L53'>53</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L53'></a><a href='#L53'>53</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -149,7 +143,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -159,66 +164,61 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { createAsyncThunk } from '@reduxjs/toolkit';
-&nbsp;
-import { SpeciesService } from 'src/services';
-import { Response2 } from 'src/services/HttpService';
-import strings from 'src/strings';
-import { MergeOtherSpeciesPayload } from 'src/types/Species';
-&nbsp;
-export type MergeOtherSpeciesRequestData = MergeOtherSpeciesPayload &amp; {
-  newName: string;
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { create<span class="cstat-no" title="statement not covered" >AsyncThunk } f</span>rom '@reduxjs/toolkit';
+<span class="cstat-no" title="statement not covered" ></span>
+import { SpeciesService<span class="cstat-no" title="statement not covered" > } from 'src/services';</span>
+import { Response2 } fro<span class="cstat-no" title="statement not covered" >m 'src/services/HttpService</span>';
+import strings from<span class="cstat-no" title="statement not covered" > 'src/strings';</span>
+import { MergeOther<span class="cstat-no" title="statement not covered" >SpeciesPayload } from 'src/types</span>/Species';
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+ex<span class="cstat-no" title="statement not covered" >port type MergeOtherSpeciesRequestData = MergeOtherSpeciesPayload &amp; {</span>
+  ne<span class="cstat-no" title="statement not covered" >wName: string;</span>
 };
-&nbsp;
-export const requestMergeOtherSpecies = <span class="cstat-no" title="statement not covered" >createAsyncThunk(</span>
-  'species/mergeOthers',
-<span class="fstat-no" title="function not covered" >  as</span>ync (
-    request: {
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+ex<span class="cstat-no" title="statement not covered" >port const requestMergeOtherSpecies = createAsyncThunk(</span>
+  's<span class="cstat-no" title="statement not covered" >pecies/mergeOthers',</span>
+  asyn<span class="cstat-no" title="statement not covered" >c (</span>
+    requ<span class="cstat-no" title="statement not covered" >est: {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
       mergeOtherSpeciesRequestData: MergeOtherSpeciesRequestData[];
-      observationId: number;
+<span class="cstat-no" title="statement not covered" >      observa</span>tionId: number;
     },
-    { rejectWithValue }
+    { rejectWi<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >th</span>Value }<span class="cstat-no" title="statement not covered" ></span></span>
   ) =&gt; {
-    const { observationId, mergeOtherSpeciesRequestData } = <span class="cstat-no" title="statement not covered" >request;</span>
+    const { observationId, mergeOtherSpeciesRequestData } = request;
 &nbsp;
-    const promises: Promise&lt;Response2&lt;MergeOtherSpeciesRequestData&gt;&gt;[] = <span class="cstat-no" title="statement not covered" >mergeOtherSpeciesRequestData.map(</span>
-<span class="fstat-no" title="function not covered" >      as</span>ync (mergeOtherSpeciesRequestDatum) =&gt; {
-        const result = <span class="cstat-no" title="statement not covered" >await SpeciesService.mergeOtherSpecies(</span>
+    const promises: Promise&lt;Response2&lt;MergeOtherSpeciesRequestData&gt;&gt;[] = mergeOtherSpeciesRequestData.map(
+      async (mergeOtherSpeciesRequestDatum) =&gt; {
+        const result = await SpeciesService.mergeOtherSpecies(
           {
-            otherSpeciesName: mergeOtherSpeciesRequestDatum.otherSpeciesName,
-            speciesId: mergeOtherSpeciesRequestDatum.speciesId,
-          },
-          observationId
+            otherSp<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ec</span>iesName<span class="cstat-no" title="statement not covered" >: mergeOtherSpeciesRequestDatum.otherSpeciesName,</span></span>
+            speciesI<span class="cstat-no" title="statement not covered" >d: </span>mergeOtherSpeciesRequestDatum.speciesId,
+<span class="cstat-no" title="statement not covered" >          },</span>
+          observationId<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
         );
+<span class="cstat-no" title="statement not covered" ></span>
+        if (!result.r<span class="cstat-no" title="statement not covered" >equestSucceeded) {</span>
+          return resul<span class="cstat-no" title="statement not covered" >t;</span>
+        }<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+        return {
+<span class="fstat-no" title="function not covered" ></span>          ...result,
+          data: mergeOtherSpeciesRequestDatum,<span class="cstat-no" title="statement not covered" ></span>
+        };<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" >      }</span>
+    );<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        if (!result.requestSucceeded) {</span>
-<span class="cstat-no" title="statement not covered" >          return result;</span>
-        }
+    const results: Response2&lt;MergeOtherSpeciesRequestData&gt;[] = await Promise.all(promises);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        return {</span>
-          ...result,
-          data: mergeOtherSpeciesRequestDatum,
-        };
-      }
-    );
-&nbsp;
-    const results: Response2&lt;MergeOtherSpeciesRequestData&gt;[] = <span class="cstat-no" title="statement not covered" >await Promise.all(promises);</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    if (results.every(<span class="fstat-no" title="function not covered" >(r</span>esult) =&gt; <span class="cstat-no" title="statement not covered" >result &amp;&amp; result.requestSucceeded)</span>) {</span>
-<span class="cstat-no" title="statement not covered" >      return results.map(<span class="fstat-no" title="function not covered" >(r</span>esult) =&gt; <span class="cstat-no" title="statement not covered" >result.data)</span>;</span>
+    if (results.every((result) =&gt; result &amp;&amp; result.requestSucceeded)) {
+      return results.map((result) =&gt; result.data);
     }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    return rejectWithValue(strings.GENERIC_ERROR);</span>
+<span class="cstat-no" title="statement not covered" ></span>
+    return<span class="cstat-no" title="statement not covered" > rejectWithValu</span>e(strings.GENERIC_ERROR);
   }
-);
+);<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -226,7 +226,7 @@ export const requestMergeOtherSpecies = <span class="cstat-no" title="statement 
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

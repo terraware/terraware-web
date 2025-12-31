@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">51.42% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>18/35</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">61.53% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>8/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">30% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>3/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">53.12% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>17/32</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -92,72 +92,72 @@
 <a name='L27'></a><a href='#L27'>27</a>
 <a name='L28'></a><a href='#L28'>28</a>
 <a name='L29'></a><a href='#L29'>29</a>
-<a name='L30'></a><a href='#L30'>30</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L30'></a><a href='#L30'>30</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">export async function <span class="fstat-no" title="function not covered" >getPromisesResponse&lt;</span>T&gt;(promises: Promise&lt;T&gt;[]): Promise&lt;(T | null)[]&gt; {
-<span class="cstat-no" title="statement not covered" >  try {</span>
-    const promiseResponses = <span class="cstat-no" title="statement not covered" >await Promise.allSettled(promises);</span>
-<span class="cstat-no" title="statement not covered" >    return promiseResponses.map(<span class="fstat-no" title="function not covered" >(r</span>esponse) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >      if (response.status === 'rejected') {</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">export async function getPromisesResponse&lt;T&gt;(promises: Promise&lt;T&gt;[]): Promise&lt;(T | null)[]&gt; {
+  try {
+    const promiseResponses = await Promise.allSettled(promises);
+    return promiseResponses.map((response) =&gt; {
+      if (response.status === 'rejected') {
         // eslint-disable-next-line no-console
-<span class="cstat-no" title="statement not covered" >        console.error(response.reason);</span>
-<span class="cstat-no" title="statement not covered" >        return null;</span>
+        console.error(response.reason);
+        return null;
       } else {
-<span class="cstat-no" title="statement not covered" >        return response.value as T;</span>
+  <span class="missing-if-branch" title="else path not taken" >E</span>      return response.value as T;<span class="branch-2 cbranch-no" title="branch not covered" ></span>
       }
-    });
-  } catch (e) {
+    })<span class="missing-if-branch" title="else path not taken" >E</span>;
+  } catch (e) {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
     // swallow error
   }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return [];</span>
+  return [];
 }
 &nbsp;
-export async function <span class="fstat-no" title="function not covered" >handlePromises&lt;</span>T&gt;(promises: Promise&lt;T&gt;[]): Promise&lt;boolean&gt; {
-<span class="cstat-no" title="statement not covered" >  try {</span>
-    const promiseResponses = <span class="cstat-no" title="statement not covered" >await Promise.allSettled(promises);</span>
-<span class="cstat-no" title="statement not covered" >    return promiseResponses.every(<span class="fstat-no" title="function not covered" >(r</span>esponse) =&gt; <span class="cstat-no" title="statement not covered" >response.status !== 'rejected')</span>;</span>
-  } catch (e) {
-    // eslint-disable-next-line no-console
-<span class="cstat-no" title="statement not covered" >    console.error(e);</span>
-<span class="cstat-no" title="statement not covered" >    return false;</span>
-  }
-}
-&nbsp;</pre></td></tr></table></pre>
+export async function h<span class="fstat-no" title="function not covered" >an</span>dleP<span class="cstat-no" title="statement not covered" >romises&lt;T&gt;(promises:</span> Promise&lt;T&gt;[]): Promise&lt;boolean&gt; {
+  try {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+    const promiseResponses = await Promise.allSettled(promises);
+    return promiseResponses.every((response) =&gt; response.status !== 'rejected');
+  } catch (e) {<span class="fstat-no" title="function not covered" ></span>
+<span class="cstat-no" title="statement not covered" >    // eslint-disable-next-line no-console</span>
+    console.error(e);<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >    return false;<span class="fstat-no" title="function not covered" ></span></span>
+  }<span class="cstat-no" title="statement not covered" ></span>
+}<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

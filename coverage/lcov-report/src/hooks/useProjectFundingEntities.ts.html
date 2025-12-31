@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/17</span>
+                <span class='fraction'>0/42</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/23</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>0/39</span>
             </div>
         
             
@@ -104,13 +104,15 @@
 <a name='L39'></a><a href='#L39'>39</a>
 <a name='L40'></a><a href='#L40'>40</a>
 <a name='L41'></a><a href='#L41'>41</a>
-<a name='L42'></a><a href='#L42'>42</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L42'></a><a href='#L42'>42</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -121,6 +123,21 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -128,72 +145,55 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useCallback, useEffect, useMemo, useState } from 'react';
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useCall<span class="cstat-no" title="statement not covered" >back, useEffect, useMe</span>mo, useState } from 'react';
+<span class="cstat-no" title="statement not covered" ></span>
+import { requestProjectF<span class="cstat-no" title="statement not covered" >undingEntities } from 'src/</span>redux/features/funder/entities/fundingEntitiesAsyncThunks';
+import { selectProj<span class="cstat-no" title="statement not covered" >ectFundingEntities } from 'src/r</span>edux/features/funder/entities/fundingEntitiesSelectors';
+import { useApp<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Di</span>spatch, useAppSelector } from 'src/redux/store';</span>
+im<span class="cstat-no" title="statement not covered" >port { FundingEntity } from 'src/types/FundingEntity';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+const useProjectFundingEntities = (projectId?: number | string) =&gt; {
+  const dispatch =<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > u</span>seAppDispatch();</span>
+<span class="cstat-no" title="statement not covered" >  const [requestId, setRequestId] = useState('');</span>
+  co<span class="cstat-no" title="statement not covered" >nst [fundingEntities, setFundingEntities] = useState&lt;FundingEntity[]&gt;([]);</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  const <span class="cstat-no" title="statement not covered" >listFundingEntitiesRequest<span class="fstat-no" title="function not covered" > =</span> use<span class="cstat-no" title="statement not covered" >AppSelecto</span>r(selectProjectFundingEntities(requestId));</span>
 &nbsp;
-import { requestProjectFundingEntities } from 'src/redux/features/funder/entities/fundingEntitiesAsyncThunks';
-import { selectProjectFundingEntities } from 'src/redux/features/funder/entities/fundingEntitiesSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { FundingEntity } from 'src/types/FundingEntity';
-&nbsp;
-const useProjectFundingEntities = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(p</span>rojectId?: number | string) =&gt; {</span>
-  const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
-  const [requestId, setRequestId] = <span class="cstat-no" title="statement not covered" >useState('');</span>
-  const [fundingEntities, setFundingEntities] = <span class="cstat-no" title="statement not covered" >useState&lt;FundingEntity[]&gt;([]);</span>
-&nbsp;
-  const listFundingEntitiesRequest = <span class="cstat-no" title="statement not covered" >useAppSelector(selectProjectFundingEntities(requestId));</span>
-&nbsp;
-  const reload = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (projectId) {</span>
-      const request = <span class="cstat-no" title="statement not covered" >dispatch(</span>
-        requestProjectFundingEntities({
-          projectId: Number(projectId),
-        })
+<span class="cstat-no" title="statement not covered" >  const reloa</span>d = useCallback(() =&gt; {
+    if (projectId) {
+      const request<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > =</span> dispat<span class="cstat-no" title="statement not covered" >ch(</span></span>
+        requestProje<span class="cstat-no" title="statement not covered" >ctF</span>undingEntities({
+<span class="cstat-no" title="statement not covered" >          projectId: Number(projectId),</span>
+        })<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
       );
 <span class="cstat-no" title="statement not covered" >      setRequestId(request.requestId);</span>
-    }
-  }, [dispatch, projectId]);
+    }<span class="cstat-no" title="statement not covered" ></span>
+  }, [dispatch, projectId]);<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+  useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
+    reload();<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  }, [reload]);<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+  useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
+    if (listFundingEntitiesRequest?.s<span class="cstat-no" title="statement not covered" >tatus === 'success') {</span>
+      setFundingE<span class="cstat-no" title="statement not covered" >ntities(listFundingEntitiesReq<span class="fstat-no" title="function not covered" >ue</span>st?.data || []);</span>
+<span class="cstat-no" title="statement not covered" >    }</span>
+  }, [listFundingEntit<span class="cstat-no" title="statement not covered" >iesRequest]);</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    reload();</span>
-  }, [reload]);
+  const busy = useMemo(() =&gt; listFundingEntitiesRequest?.status === 'pending', [listFundingEntitiesRequest]);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (listFundingEntitiesRequest?.status === 'success') {</span>
-<span class="cstat-no" title="statement not covered" >      setFundingEntities(listFundingEntitiesRequest?.data || []);</span>
-    }
-  }, [listFundingEntitiesRequest]);
-&nbsp;
-  const busy = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >listFundingEntitiesRequest?.status === 'pending',</span> [listFundingEntitiesRequest]);</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  return { busy, reload, fundingEntities };</span>
-};
+  return { busy, reload, fundingEntities };
+};<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
 export default useProjectFundingEntities;
-&nbsp;</pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

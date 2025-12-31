@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/37</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/23</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>0/34</span>
             </div>
         
             
@@ -93,74 +93,74 @@
 <a name='L28'></a><a href='#L28'>28</a>
 <a name='L29'></a><a href='#L29'>29</a>
 <a name='L30'></a><a href='#L30'>30</a>
-<a name='L31'></a><a href='#L31'>31</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L31'></a><a href='#L31'>31</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useCallback, useEffect, useState } from 'react';
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useCall<span class="cstat-no" title="statement not covered" >back, useEffect, useSt</span>ate } from 'react';
+<span class="cstat-no" title="statement not covered" ></span>
+import { useOrganization<span class="cstat-no" title="statement not covered" > } from 'src/providers';</span>
+import { Facility }<span class="cstat-no" title="statement not covered" > from 'src/types/Facility';</span>
+import { getAll<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Nu</span>rseries } from 'src/utils/organization';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+expo<span class="cstat-no" title="statement not covered" >rt const useNurseries = (record?: { facilityId?: number }) =&gt; {</span>
+  const { selectedOrganization } = useOrganization();
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >  const [availableNurseries, setAvailableNurseries] = useState&lt;Facility[]&gt;();</span>
+  co<span class="cstat-no" title="statement not covered" >nst [selectedNursery, setSelectedNursery] = useState&lt;Facility&gt;();</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  const <span class="cstat-no" title="statement not covered" >initNurseries = useCallbac<span class="fstat-no" title="function not covered" >k(</span>() =<span class="cstat-no" title="statement not covered" >&gt; {</span></span>
+    setAvailableNurseries(selectedOrganization ? getAllNurseries(selectedOrganization) : []);
+<span class="cstat-no" title="statement not covered" >  }, [selecte</span>dOrganization]);
 &nbsp;
-import { useOrganization } from 'src/providers';
-import { Facility } from 'src/types/Facility';
-import { getAllNurseries } from 'src/utils/organization';
-&nbsp;
-export const useNurseries = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(r</span>ecord?: { facilityId?: number }) =&gt; {</span>
-  const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
-&nbsp;
-  const [availableNurseries, setAvailableNurseries] = <span class="cstat-no" title="statement not covered" >useState&lt;Facility[]&gt;();</span>
-  const [selectedNursery, setSelectedNursery] = <span class="cstat-no" title="statement not covered" >useState&lt;Facility&gt;();</span>
-&nbsp;
-  const initNurseries = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    setAvailableNurseries(selectedOrganization ? getAllNurseries(selectedOrganization) : []);</span>
-  }, [selectedOrganization]);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (availableNurseries &amp;&amp; record?.facilityId) {</span>
-<span class="cstat-no" title="statement not covered" >      setSelectedNursery(availableNurseries.find(<span class="fstat-no" title="function not covered" >(n</span>ursery) =&gt; <span class="cstat-no" title="statement not covered" >nursery.id === record.facilityId)</span>);</span>
-    }
+  useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+    if (availableNur<span class="cstat-no" title="statement not covered" >ser</span>ies &amp;&amp; record?.facilityId) {
+<span class="cstat-no" title="statement not covered" >      setSelectedNursery(availableNurseries.find((nursery) =&gt; nursery.id === record.facilityId));</span>
+    }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
   }, [availableNurseries, record?.facilityId]);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (!availableNurseries) {</span>
-<span class="cstat-no" title="statement not covered" >      initNurseries();</span>
-    }
-  }, [availableNurseries, initNurseries]);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  return { availableNurseries, selectedNursery };</span>
-};
-&nbsp;</pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" ></span>
+  useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
+    if (!availableNurse<span class="cstat-no" title="statement not covered" >ries) {</span>
+      initNurseries();<span class="cstat-no" title="statement not covered" ></span>
+    }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  }, [availableNurseries, initNurse<span class="cstat-no" title="statement not covered" >ries]);</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  return { availableNurseries, selectedNursery }<span class="cstat-no" title="statement not covered" >;</span>
+};<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

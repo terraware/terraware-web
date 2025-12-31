@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/34</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/23</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/31</span>
             </div>
         
             
@@ -94,9 +94,25 @@
 <a name='L29'></a><a href='#L29'>29</a>
 <a name='L30'></a><a href='#L30'>30</a>
 <a name='L31'></a><a href='#L31'>31</a>
-<a name='L32'></a><a href='#L32'>32</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L32'></a><a href='#L32'>32</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -105,57 +121,41 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { components } from 'src/api/types/generated-schema';
-import strings from 'src/strings';
-&nbsp;
-export type Cohort = components['schemas']['CohortPayload'];
-export type CohortWithParticipantNum = Cohort &amp; { numOfParticipants: number };
-&nbsp;
-export type CreateCohortRequestPayload = components['schemas']['CreateCohortRequestPayload'];
-export type UpdateCohortRequestPayload = components['schemas']['UpdateCohortRequestPayload'];
-&nbsp;
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { compon<span class="cstat-no" title="statement not covered" >ents } from 's</span>rc/api/types/generated-schema';
+import strings f<span class="cstat-no" title="statement not covered" >rom 'src/strings';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+export type Cohort = com<span class="cstat-no" title="statement not covered" >ponents['schemas']['CohortP</span>ayload'];
+export type CohortW<span class="cstat-no" title="statement not covered" >ithParticipantNum = Co</span>hort &amp; { numOfParticipants: number };
+<span class="cstat-no" title="statement not covered" ></span>
+export type Cre<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >at</span>eCohortRequestPayload = components['schemas']['CreateCohortRequestPayload'];</span>
+ex<span class="cstat-no" title="statement not covered" >port type UpdateCohortRequestPayload = components['schemas']['UpdateCohortRequestPayload'];</span>
+<span class="cstat-no" title="statement not covered" ></span>
 export type CohortPhaseType = components['schemas']['CohortPayload']['phase'];
-export const CohortPhases: CohortPhaseType[] = <span class="cstat-no" title="statement not covered" >[</span>
-  'Phase 0 - Due Diligence',
-  'Phase 1 - Feasibility Study',
-  'Phase 2 - Plan and Scale',
-  'Phase 3 - Implement and Monitor',
+export const Cohor<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >tP</span>hases: CohortPhaseType[] = [</span>
+<span class="cstat-no" title="statement not covered" >  'Phase 0 - Due Diligence',</span>
+  'P<span class="cstat-no" title="statement not covered" >hase 1 - Feasibility Study',</span>
+  'Pha<span class="cstat-no" title="statement not covered" >se 2 - Plan and Scale',</span>
+  'Phase<span class="cstat-no" title="statement not covered" > 3 - Implement and Monitor<span class="fstat-no" title="function not covered" >',<span class="cstat-no" title="statement not covered" ></span></span></span>
 ];
-&nbsp;
-export const getPhaseString = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(p</span>hase: CohortPhaseType): string =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >  switch (phase) {</span>
+<span class="cstat-no" title="statement not covered" ></span>
+export const getPhaseString = (phase: CohortPhaseType): string =&gt; {
+  switch (phas<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >e)</span> {<span class="cstat-no" title="statement not covered" ></span></span>
     case 'Phase 0 - Due Diligence':
-<span class="cstat-no" title="statement not covered" >      return strings.COHORT_PHASE_DUE_DILIGENCE;</span>
+      return strings.COHORT_PHASE_DUE_DILIGENCE;
     case 'Phase 1 - Feasibility Study':
-<span class="cstat-no" title="statement not covered" >      return strings.COHORT_PHASE_FEASIBILITY_STUDY;</span>
+      return strings.COHORT_PHASE_FEASIBILITY_STUDY;
     case 'Phase 2 - Plan and Scale':
-<span class="cstat-no" title="statement not covered" >      return strings.COHORT_PHASE_PLAN_AND_SCALE;</span>
+      return strings.COHORT_PHASE_PLAN_AND_SCALE;
     case 'Phase 3 - Implement and Monitor':
-<span class="cstat-no" title="statement not covered" >      return strings.COHORT_PHASE_IMPLEMENT_AND_MONITOR;</span>
-    default:
+      return string<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >s.</span>COHORT_<span class="cstat-no" title="statement not covered" >PHASE_IMPLEMENT_AND_MONITOR;</span></span>
+    default:<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >      return '';</span>
-  }
-};
+  }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+};<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -163,7 +163,7 @@ export const getPhaseString = <span class="cstat-no" title="statement not covere
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

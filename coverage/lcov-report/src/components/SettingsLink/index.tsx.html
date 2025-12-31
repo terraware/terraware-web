@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/34</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/31</span>
             </div>
         
             
@@ -87,17 +87,23 @@
 <a name='L22'></a><a href='#L22'>22</a>
 <a name='L23'></a><a href='#L23'>23</a>
 <a name='L24'></a><a href='#L24'>24</a>
-<a name='L25'></a><a href='#L25'>25</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L25'></a><a href='#L25'>25</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -105,31 +111,25 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
-&nbsp;
-import { IconButton, useTheme } from '@mui/material';
-import { Icon, Tooltip } from '@terraware/web-components';
-&nbsp;
-import useNavigateTo from 'src/hooks/useNavigateTo';
-import strings from 'src/strings';
-&nbsp;
-const SettingsLink = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-  const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-  const { goToSettings } = <span class="cstat-no" title="statement not covered" >useNavigateTo();</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;div&gt;
-      &lt;Tooltip title={strings.SETTINGS}&gt;
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React fr<span class="cstat-no" title="statement not covered" >om 'react';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+import { IconButton, us<span class="cstat-no" title="statement not covered" >eTheme } from '@mui/material';</span>
+import { Icon, Tooltip }<span class="cstat-no" title="statement not covered" > from '@terraware/web-compo</span>nents';
+<span class="cstat-no" title="statement not covered" ></span>
+import useNavigateT<span class="cstat-no" title="statement not covered" >o from 'src/hooks/useNavigateTo'</span>;
+import strings <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >fr</span>om 'src/strings';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+cons<span class="cstat-no" title="statement not covered" >t SettingsLink = () =&gt; {</span>
+  const theme = useTheme();
+  const { goToSett<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >in</span>gs } = useNavigateTo();</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  re<span class="cstat-no" title="statement not covered" >turn (</span>
+    &lt;d<span class="cstat-no" title="statement not covered" >iv&gt;</span>
+      &lt;T<span class="cstat-no" title="statement not covered" >ooltip title={strings.SETT<span class="fstat-no" title="function not covered" >IN</span>GS}&gt;<span class="cstat-no" title="statement not covered" ></span></span>
         &lt;IconButton id='settings-button' onClick={goToSettings}&gt;
-          &lt;Icon name='iconSettings' size='medium' fillColor={theme.palette.TwClrIcn} /&gt;
+<span class="cstat-no" title="statement not covered" >          &lt;Ic</span>on name='iconSettings' size='medium' fillColor={theme.palette.TwClrIcn} /&gt;
         &lt;/IconButton&gt;
-      &lt;/Tooltip&gt;
+      &lt;/Toolti<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >p&gt;<span class="cstat-no" title="statement not covered" ></span></span></span>
     &lt;/div&gt;
   );
 };
@@ -142,7 +142,7 @@ export default SettingsLink;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/26</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>0/22</span>
             </div>
         
             
@@ -77,42 +77,42 @@
 <a name='L12'></a><a href='#L12'>12</a>
 <a name='L13'></a><a href='#L13'>13</a>
 <a name='L14'></a><a href='#L14'>14</a>
-<a name='L15'></a><a href='#L15'>15</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L15'></a><a href='#L15'>15</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Country, Subdivision } from 'src/types/Country';
-&nbsp;
-export function <span class="fstat-no" title="function not covered" >getCountryByCode(</span>countries: Country[], countryCode: string): Country | undefined {
-<span class="cstat-no" title="statement not covered" >  return countries.find(<span class="fstat-no" title="function not covered" >(c</span>ountry) =&gt; <span class="cstat-no" title="statement not covered" >country.code.toString() === countryCode)</span>;</span>
-}
-&nbsp;
-export function <span class="fstat-no" title="function not covered" >getSubdivisionByCode(</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Country<span class="cstat-no" title="statement not covered" >, Subdivision } from '</span>src/types/Country';
+<span class="cstat-no" title="statement not covered" ></span>
+export function getCount<span class="cstat-no" title="statement not covered" >ryByCode(countries: Country</span>[], countryCode: string): Country | undefined {
+  return countries.<span class="cstat-no" title="statement not covered" >find((country) =&gt; country.code.t</span>oString() === countryCode);
+}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ></span>
+expo<span class="cstat-no" title="statement not covered" >rt function getSubdivisionByCode(</span>
   countries: Country[],
-  countryCode: string,
-  subdivisionCode: string
-): Subdivision | undefined {
-  const country = <span class="cstat-no" title="statement not covered" >getCountryByCode(countries, countryCode);</span>
-<span class="cstat-no" title="statement not covered" >  return country?.subdivisions?.find(<span class="fstat-no" title="function not covered" >(s</span>ubdivision) =&gt; <span class="cstat-no" title="statement not covered" >subdivision.code.toString() === subdivisionCode)</span>;</span>
+  countryCode: str<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >in</span>g,</span>
+<span class="cstat-no" title="statement not covered" >  subdivisionCode: string</span>
+): S<span class="cstat-no" title="statement not covered" >ubdivision | undefined {</span>
+  cons<span class="cstat-no" title="statement not covered" >t country = getCountryByCode(countries, countryCode);</span>
+  return<span class="cstat-no" title="statement not covered" > country?.subdivisions?.fi<span class="fstat-no" title="function not covered" >nd</span>((su<span class="cstat-no" title="statement not covered" >bdivision)</span> =&gt; subdivision.code.toString() === subdivisionCode);</span>
 }
-&nbsp;</pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

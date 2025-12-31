@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/31</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/29</span>
             </div>
         
             
@@ -80,12 +80,15 @@
 <a name='L15'></a><a href='#L15'>15</a>
 <a name='L16'></a><a href='#L16'>16</a>
 <a name='L17'></a><a href='#L17'>17</a>
-<a name='L18'></a><a href='#L18'>18</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L18'></a><a href='#L18'>18</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -94,34 +97,31 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useMatch } from 'react-router';
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useMatc<span class="cstat-no" title="statement not covered" >h } from 'react-router</span>';
+<span class="cstat-no" title="statement not covered" ></span>
+import { APP_PATHS } fro<span class="cstat-no" title="statement not covered" >m 'src/constants';</span>
+import { useUser } <span class="cstat-no" title="statement not covered" >from 'src/providers';</span>
+import { isAllo<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >we</span>d } from 'src/utils/acl';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+cons<span class="cstat-no" title="statement not covered" >t useAcceleratorConsole = () =&gt; {</span>
+  const isAcceleratorRoute = !!useMatch({ path: APP_PATHS.ACCELERATOR, end: false });
+  const isAccelera<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >to</span>rApplicationRoute = !!useMatch({ path: APP_PATHS.ACCELERATOR_APPLICATIONS, end: false });</span>
+<span class="cstat-no" title="statement not covered" >  const { user } = useUser();</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  cons<span class="cstat-no" title="statement not covered" >t isAllowedViewConsole = user &amp;&amp; isAllowed(user, 'VIEW_CONSOLE');</span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  return { isAcceleratorRoute, isAcceleratorApplicationRoute, isAllowedViewConsole };
+};<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
-import { APP_PATHS } from 'src/constants';
-import { useUser } from 'src/providers';
-import { isAllowed } from 'src/utils/acl';
-&nbsp;
-const useAcceleratorConsole = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-  const isAcceleratorRoute = <span class="cstat-no" title="statement not covered" >!!useMatch({ path: APP_PATHS.ACCELERATOR, end: false });</span>
-  const isAcceleratorApplicationRoute = <span class="cstat-no" title="statement not covered" >!!useMatch({ path: APP_PATHS.ACCELERATOR_APPLICATIONS, end: false });</span>
-  const { user } = <span class="cstat-no" title="statement not covered" >useUser();</span>
-&nbsp;
-  const isAllowedViewConsole = <span class="cstat-no" title="statement not covered" >user &amp;&amp; isAllowed(user, 'VIEW_CONSOLE');</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  return { isAcceleratorRoute, isAcceleratorApplicationRoute, isAllowedViewConsole };</span>
-};
-&nbsp;
-export default useAcceleratorConsole;
-&nbsp;</pre></td></tr></table></pre>
+export default useA<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >cc</span>elerato<span class="cstat-no" title="statement not covered" >rConsole;</span></span>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

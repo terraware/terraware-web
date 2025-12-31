@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/32</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/29</span>
             </div>
         
             
@@ -84,46 +84,46 @@
 <a name='L19'></a><a href='#L19'>19</a>
 <a name='L20'></a><a href='#L20'>20</a>
 <a name='L21'></a><a href='#L21'>21</a>
-<a name='L22'></a><a href='#L22'>22</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L22'></a><a href='#L22'>22</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
-&nbsp;
-import Form, { PageFormProps as FormProps } from '@terraware/web-components/components/PageForm';
-&nbsp;
-import PageWorkflow from 'src/components/DocumentProducer/PageWorkflow';
-import { WorkflowSuccessProps } from 'src/redux/hooks/useWorkflowSuccess';
-&nbsp;
-export type PageFormProps = FormProps &amp; WorkflowSuccessProps;
-&nbsp;
-const PageForm = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(p</span>rops: PageFormProps): JSX.Element =&gt; {</span>
-  const { ...formProps }: FormProps = <span class="cstat-no" title="statement not covered" >props;</span>
-  const { ...workflowProps }: WorkflowSuccessProps = <span class="cstat-no" title="statement not covered" >props;</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;PageWorkflow {...workflowProps}&gt;
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React fr<span class="cstat-no" title="statement not covered" >om 'react';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+import Form, { PageForm<span class="cstat-no" title="statement not covered" >Props as FormProps } from '@terr</span>aware/web-components/components/PageForm';
+<span class="cstat-no" title="statement not covered" ></span>
+import PageWorkflow<span class="cstat-no" title="statement not covered" > from 'src/components/</span>DocumentProducer/PageWorkflow';
+import { WorkflowSu<span class="cstat-no" title="statement not covered" >ccessProps } from 'src/redux/hoo</span>ks/useWorkflowSuccess';
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+ex<span class="cstat-no" title="statement not covered" >port type PageFormProps = FormProps &amp; WorkflowSuccessProps;</span>
+<span class="cstat-no" title="statement not covered" ></span>
+const PageForm = (props: PageFormProps): JSX.Element =&gt; {
+  const { ...formP<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ro</span>ps }: FormProps = props;</span>
+<span class="cstat-no" title="statement not covered" >  const { ...workflowProps }: WorkflowSuccessProps = props;</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  retu<span class="cstat-no" title="statement not covered" >rn (</span>
+    &lt;Pag<span class="cstat-no" title="statement not covered" >eWorkflow {...workflowProp<span class="fstat-no" title="function not covered" >s}</span>&gt;<span class="cstat-no" title="statement not covered" ></span></span>
       &lt;Form {...formProps} /&gt;
-    &lt;/PageWorkflow&gt;
+<span class="cstat-no" title="statement not covered" >    &lt;/PageWor</span>kflow&gt;
   );
-};
+};<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 &nbsp;
 export default PageForm;
 &nbsp;</pre></td></tr></table></pre>
@@ -133,7 +133,7 @@ export default PageForm;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

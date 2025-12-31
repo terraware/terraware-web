@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/32</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/21</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/30</span>
             </div>
         
             
@@ -94,68 +94,68 @@
 <a name='L29'></a><a href='#L29'>29</a>
 <a name='L30'></a><a href='#L30'>30</a>
 <a name='L31'></a><a href='#L31'>31</a>
-<a name='L32'></a><a href='#L32'>32</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L32'></a><a href='#L32'>32</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { MutableRefObject, useCallback } from 'react';
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Mutable<span class="cstat-no" title="statement not covered" >RefObject, useCallback</span> } from 'react';
+<span class="cstat-no" title="statement not covered" ></span>
+const useMapDrawer = (dr<span class="cstat-no" title="statement not covered" >awerRef: MutableRefObject&lt;H</span>TMLDivElement | null&gt;) =&gt; {
+  const scrollToEle<span class="cstat-no" title="statement not covered" >mentById = useCallback(</span>
+    (elementId:<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > s</span>tring) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      const container = drawerRef.current;</span>
+<span class="cstat-no" title="statement not covered" >      const target = container?.querySelector&lt;HTMLElement&gt;(`#${elem</span>entId}`);
 &nbsp;
-const useMapDrawer = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(d</span>rawerRef: MutableRefObject&lt;HTMLDivElement | null&gt;) =&gt; {</span>
-  const scrollToElementById = <span class="cstat-no" title="statement not covered" >useCallback(</span>
-<span class="fstat-no" title="function not covered" >    (e</span>lementId: string) =&gt; {
-      const container = <span class="cstat-no" title="statement not covered" >drawerRef.current;</span>
-      const target = <span class="cstat-no" title="statement not covered" >container?.querySelector&lt;HTMLElement&gt;(`#${elementId}`);</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >      if (container &amp;&amp; target) {</span>
-        const top = <span class="cstat-no" title="statement not covered" >target.offsetTop - container.offsetTop;</span>
-&nbsp;
+      if (containe<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >r </span>&amp;&amp; target) {</span>
+<span class="cstat-no" title="statement not covered" >        const top = target.offsetTop - container.offsetTop;</span>
+<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >        container.scrollTo({</span>
-          top,
+<span class="cstat-no" title="statement not covered" >          top,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
           behavior: 'smooth',
-        });
+<span class="cstat-no" title="statement not covered" >        });</span>
       }
-    },
-    [drawerRef]
-  );
-&nbsp;
-  const scrollToTop = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+    },<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+    [drawerRef]<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >  );</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  const scrollToTop = useCallback(() =&gt; {
 <span class="cstat-no" title="statement not covered" >    drawerRef?.current?.scrollTo(0, 0);</span>
-  }, [drawerRef]);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  return {</span>
-    scrollToElementById,
-    scrollToTop,
-  };
-};
-&nbsp;
-export default useMapDrawer;
+  }, [drawerRef]);<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  return {<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" >    sc</span>rollToElementById,
+    scrollToTop,<span class="cstat-no" title="statement not covered" ></span>
+  };<span class="cstat-no" title="statement not covered" ></span>
+};<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+export d<span class="cstat-no" title="statement not covered" >efault useMapDrawer;</span>
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -163,7 +163,7 @@ export default useMapDrawer;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/30</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/21</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/28</span>
             </div>
         
             
@@ -93,16 +93,10 @@
 <a name='L28'></a><a href='#L28'>28</a>
 <a name='L29'></a><a href='#L29'>29</a>
 <a name='L30'></a><a href='#L30'>30</a>
-<a name='L31'></a><a href='#L31'>31</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L31'></a><a href='#L31'>31</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -111,56 +105,62 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Chart, ChartType, DefaultDataPoint, ScaleOptionsByType } from 'chart.js/auto';
-import { ChartConfiguration, ChartConfigurationCustomTypesPerDataset, ChartItem } from 'chart.js/dist/types';
-import 'chartjs-adapter-luxon';
-&nbsp;
-// eslint-disable-next-line @typescript-eslint/require-await
-export async function <span class="fstat-no" title="function not covered" >newChart&lt;</span>TType extends ChartType = ChartType, TData = DefaultDataPoint&lt;TType&gt;, TLabel = unknown&gt;(
-  locale: string,
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Chart, <span class="cstat-no" title="statement not covered" >ChartType, DefaultData</span>Point, ScaleOptionsByType } from 'chart.js/auto';
+import { ChartConfigura<span class="cstat-no" title="statement not covered" >tion, ChartConfigurationCustomTy</span>pesPerDataset, ChartItem } from 'chart.js/dist/types';
+import 'chartjs-adapter-<span class="cstat-no" title="statement not covered" >luxon';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+// eslint-disab<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >le</span>-next-line @typescript-eslint/require-await</span>
+ex<span class="cstat-no" title="statement not covered" >port async function newChart&lt;TType extends ChartType = ChartType, TData = DefaultDataPoint&lt;TType&gt;, TLabel = unknown&gt;(</span>
+  lo<span class="cstat-no" title="statement not covered" >cale: string,</span>
   item: ChartItem,
-  config: ChartConfiguration&lt;TType, TData, TLabel&gt; | ChartConfigurationCustomTypesPerDataset&lt;TType, TData, TLabel&gt;
-): Promise&lt;Chart&lt;TType, TData, TLabel&gt;&gt; {
-<span class="cstat-no" title="statement not covered" >  if (typeof config.options === 'object' &amp;&amp; 'scales' in config.options) {</span>
-<span class="cstat-no" title="statement not covered" >    config.options.locale = locale === 'gx' ? 'fr' : locale;</span>
-    const scales = <span class="cstat-no" title="statement not covered" >config.options.scales as { [name: string]: ScaleOptionsByType };</span>
+  config: ChartCon<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >fi</span>guration&lt;TType, TData, TLabel&gt; | ChartConfigurationCustomTypesPerDataset&lt;TType, TData, TLabel&gt;</span>
+):<span class="cstat-no" title="statement not covered" > Promise&lt;Chart&lt;TType, TData, TLabel&gt;&gt; {</span>
+  if<span class="cstat-no" title="statement not covered" > (typeof config.options === 'object' &amp;&amp; 'scales' in config.options) {</span>
+    co<span class="cstat-no" title="statement not covered" >nfig.options.locale = locale === 'gx' ? 'fr' : locale;</span>
+    cons<span class="cstat-no" title="statement not covered" >t scales = config.options.<span class="fstat-no" title="function not covered" >sc</span>ales<span class="cstat-no" title="statement not covered" > as { [nam</span>e: string]: ScaleOptionsByType };</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    for (const scaleOptions of Object.values(scales)) {</span>
-<span class="cstat-no" title="statement not covered" >      if (scaleOptions.type === 'time') {</span>
-        const existingDateOptions = <span class="cstat-no" title="statement not covered" >scaleOptions.adapters?.date as object | undefined;</span>
-<span class="cstat-no" title="statement not covered" >        scaleOptions.adapters = {</span>
-          ...scaleOptions.adapters,
-          date: {
+<span class="cstat-no" title="statement not covered" >    for (cons</span>t scaleOptions of Object.values(scales)) {
+      if (scaleOptions.type === 'time') {
+        const exist<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >in</span>gDateOp<span class="cstat-no" title="statement not covered" >tions = scaleOptions.adapters?.date as object | undefined;</span></span>
+        scaleOptions<span class="cstat-no" title="statement not covered" >.ad</span>apters = {
+<span class="cstat-no" title="statement not covered" >          ...scaleOptions.adapters,</span>
+          da<span class="fstat-no" title="function not covered" >te</span>: {<span class="cstat-no" title="statement not covered" ></span>
             ...existingDateOptions,
-            locale: config.options.locale,
-          },
-        };
-      }
+<span class="cstat-no" title="statement not covered" >            locale: config.options.locale,</span>
+          },<span class="cstat-no" title="statement not covered" ></span>
+        };<span class="cstat-no" title="statement not covered" ></span>
+      }<span class="fstat-no" title="function not covered" ></span>
     }
-  }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  return new Chart(item, config);</span>
-}
-&nbsp;</pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" >  }</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  return new Chart(<span class="cstat-no" title="statement not covered" >item, config);</span>
+}<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

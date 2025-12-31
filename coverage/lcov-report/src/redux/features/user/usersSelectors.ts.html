@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/35</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/21</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/16</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/27</span>
             </div>
         
             
@@ -75,38 +75,38 @@
 <a name='L10'></a><a href='#L10'>10</a>
 <a name='L11'></a><a href='#L11'>11</a>
 <a name='L12'></a><a href='#L12'>12</a>
-<a name='L13'></a><a href='#L13'>13</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L13'></a><a href='#L13'>13</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { RootState } from 'src/redux/rootReducer';
-&nbsp;
-export const selectUserRequest = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(u</span>serId: number) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState) =&gt; <span class="cstat-no" title="statement not covered" >state.users[userId];</span></span></span>
-&nbsp;
-export const selectUser = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(u</span>serId?: number) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState) =&gt; <span class="cstat-no" title="statement not covered" >state.users[userId || -1]?.data?.user;</span></span></span>
-&nbsp;
-export const selectUsers = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState) =&gt;</span>
-<span class="cstat-no" title="statement not covered" >  Object.values(state.users)</span>
-    .map(<span class="fstat-no" title="function not covered" >(u</span>ser) =&gt; <span class="cstat-no" title="statement not covered" >user?.data?.user)</span>
-    .filter(Boolean);
-&nbsp;
-export const selectUserByEmailRequest = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(e</span>mail: string) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState) =&gt; <span class="cstat-no" title="statement not covered" >state.usersByEmail[email];</span></span></span>
-&nbsp;</pre></td></tr></table></pre>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { RootSta<span class="cstat-no" title="statement not covered" >te } from 'src/redux/r</span>ootReducer';
+<span class="cstat-no" title="statement not covered" ></span>
+export const selectUserR<span class="cstat-no" title="statement not covered" >equest = (userId: number) =</span>&gt; (state: RootState) =&gt; state.users[userId];
+<span class="cstat-no" title="statement not covered" ></span>
+export const se<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >le</span>ctUser = (userId?: number) =&gt; (state: RootState) =&gt; state.users[userId || -1]?.data?.user;</span>
+<span class="cstat-no" title="statement not covered" ></span>
+expo<span class="cstat-no" title="statement not covered" >rt const selectUsers = (state: RootState) =&gt;</span>
+  Object.values(state.users)
+    .map((user) =&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > u</span>ser?.data?.user)</span>
+<span class="cstat-no" title="statement not covered" >    .filter(Boolean);</span>
+<span class="cstat-no" title="statement not covered" ></span>
+export<span class="cstat-no" title="statement not covered" > const selectUserByEmailRequest = (email: string) =&gt; (state: RootState) =&gt; state.usersByEmail[email];</span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

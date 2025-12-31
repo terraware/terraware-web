@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>0/37</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>0/31</span>
             </div>
         
             
@@ -90,16 +90,14 @@
 <a name='L25'></a><a href='#L25'>25</a>
 <a name='L26'></a><a href='#L26'>26</a>
 <a name='L27'></a><a href='#L27'>27</a>
-<a name='L28'></a><a href='#L28'>28</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L28'></a><a href='#L28'>28</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -109,49 +107,51 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Dispatch } from 'redux';
-&nbsp;
-import { setSubLocationsAction } from 'src/redux/features/subLocations/subLocationsSlice';
-import { RootState } from 'src/redux/rootReducer';
-import { SubLocationService } from 'src/services';
-&nbsp;
-export const requestSubLocations = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(f</span>acilityIds: number[]) =&gt; {</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Dispatc<span class="cstat-no" title="statement not covered" >h } from 'redux';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+import { setSubLocations<span class="cstat-no" title="statement not covered" >Action } from 'src/redux/fe</span>atures/subLocations/subLocationsSlice';
+import { RootState <span class="cstat-no" title="statement not covered" >} from 'src/redux/rootReducer';</span>
+import { SubLoc<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >at</span>ionService } from 'src/services';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+expo<span class="cstat-no" title="statement not covered" >rt const requestSubLocations = (facilityIds: number[]) =&gt; {</span>
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-<span class="cstat-no" title="statement not covered" >  return <span class="fstat-no" title="function not covered" >as</span>ync (dispatch: Dispatch, _getState: () =&gt; RootState) =&gt; {</span>
+  return async (di<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >sp</span>atch: Dispatch, _getState: () =&gt; RootState) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    try {</span>
 <span class="cstat-no" title="statement not covered" >      if (facilityIds.length) {</span>
-        const resultPromises = <span class="cstat-no" title="statement not covered" >facilityIds.map(<span class="fstat-no" title="function not covered" >(f</span>) =&gt; <span class="cstat-no" title="statement not covered" >SubLocationService.getSubLocations(f))</span>;</span>
-        const results = <span class="cstat-no" title="statement not covered" >await Promise.all(resultPromises);</span>
-        const subLocations = <span class="cstat-no" title="statement not covered" >results.flatMap(<span class="fstat-no" title="function not covered" >(r</span>) =&gt; <span class="cstat-no" title="statement not covered" >r.subLocations)</span>;</span>
-        const errors = <span class="cstat-no" title="statement not covered" >results.flatMap(<span class="fstat-no" title="function not covered" >(r</span>) =&gt; <span class="cstat-no" title="statement not covered" >r.error)</span>.filter(<span class="fstat-no" title="function not covered" >(e</span>) =&gt; <span class="cstat-no" title="statement not covered" >e !== undefined)</span> as string[];</span>
+<span class="cstat-no" title="statement not covered" >        const resultPromises = facilityIds.map((f) =&gt; SubLocationService.getSubLocations(f));</span>
+<span class="cstat-no" title="statement not covered" >        const results = await Prom<span class="fstat-no" title="function not covered" >is</span>e.al<span class="cstat-no" title="statement not covered" >l(resultPr</span>omises);</span>
+        const subLocations = results.flatMap((r) =&gt; r.subLocations);
+<span class="cstat-no" title="statement not covered" >        const</span> errors = results.flatMap((r) =&gt; r.error).filter((e) =&gt; e !== undefined) as string[];
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        dispatch(setSubLocationsAction({ errors, subLocations }));</span>
-      } else {
+        dispatch(se<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >tS</span>ubLocat<span class="cstat-no" title="statement not covered" >ionsAction({ errors, subLocations }));</span></span>
+      } else {<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >        dispatch(setSubLocationsAction({ errors: undefined, subLocations: [] }));</span>
-      }
+      }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
     } catch (e) {
-      // should not happen, the response above captures any http request errors
-      // eslint-disable-next-line no-console
-<span class="cstat-no" title="statement not covered" >      console.error('Error dispatching subLocations', e);</span>
-    }
-  };
-};
-&nbsp;</pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" >      // should not happen, the response above</span> captures any http request errors
+      // eslint-disable-next-li<span class="cstat-no" title="statement not covered" >ne no-console</span>
+      console.error('E<span class="cstat-no" title="statement not covered" >rror dispatching subLoca</span>tions', e);
+    }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >  };<span class="fstat-no" title="function not covered" ></span></span>
+};<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

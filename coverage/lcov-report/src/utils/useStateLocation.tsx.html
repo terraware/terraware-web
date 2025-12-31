@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/27</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/19</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/25</span>
             </div>
         
             
@@ -99,18 +99,34 @@
 <a name='L34'></a><a href='#L34'>34</a>
 <a name='L35'></a><a href='#L35'>35</a>
 <a name='L36'></a><a href='#L36'>36</a>
-<a name='L37'></a><a href='#L37'>37</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L37'></a><a href='#L37'>37</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -119,54 +135,38 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Location, useLocation } from 'react-router';
-&nbsp;
-type State = {
-  from?: string;
-};
-type StateLocation = Location&lt;State&gt;;
-&nbsp;
-export default function <span class="fstat-no" title="function not covered" >useStateLocation(</span>): StateLocation {
-  const location = <span class="cstat-no" title="statement not covered" >useLocation() as StateLocation;</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  return location;</span>
-}
-&nbsp;
-export function <span class="fstat-no" title="function not covered" >getLocation(</span>pathname: string, location: StateLocation, search?: string): Location&lt;State&gt; {
-<span class="cstat-no" title="statement not covered" >  if (location.state?.from) {</span>
-<span class="cstat-no" title="statement not covered" >    return {</span>
-      pathname,
-      state: {
-        from: location.state.from,
-      },
-      search: search || '',
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Locatio<span class="cstat-no" title="statement not covered" >n, useLocation } from </span>'react-router';
+<span class="cstat-no" title="statement not covered" ></span>
+type State = {<span class="cstat-no" title="statement not covered" ></span>
+  from?: string;<span class="cstat-no" title="statement not covered" ></span>
+};<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+ty<span class="cstat-no" title="statement not covered" >pe StateLocation = Location&lt;State&gt;;</span>
+<span class="cstat-no" title="statement not covered" ></span>
+export default function useStateLocation(): StateLocation {
+  const location =<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > u</span>seLocation() as StateLocation;</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  re<span class="cstat-no" title="statement not covered" >turn location;</span>
+}<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+export function getLocation(pathname: string, location: StateLocation, search?: string): Location&lt;State&gt; {
+<span class="cstat-no" title="statement not covered" >  if (locatio</span>n.state?.from) {
+    return {
+      pathname,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+      state: {<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >        from: location.state.from,</span>
+      },<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+      search: s<span class="fstat-no" title="function not covered" >ea</span>rch <span class="cstat-no" title="statement not covered" >|| '',</span>
       key: '',
-      hash: '#',
-    };
-  } else {
-<span class="cstat-no" title="statement not covered" >    return {</span>
-      pathname,
+<span class="cstat-no" title="statement not covered" >      hash: '#',</span>
+    };<span class="cstat-no" title="statement not covered" ></span>
+  } else <span class="fstat-no" title="function not covered" >{</span>
+    return {<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >      pathname,</span>
       state: {
-        from: location.pathname,
+        f<span class="fstat-no" title="function not covered" >rom: locatio</span>n.pathname,
       },
-      search: search || '',
-      key: '',
+<span class="cstat-no" title="statement not covered" >      search: search || '',</span>
+<span class="cstat-no" title="statement not covered" >      key: '',</span>
       hash: '#',
     };
   }
@@ -178,7 +178,7 @@ export function <span class="fstat-no" title="function not covered" >getLocation
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

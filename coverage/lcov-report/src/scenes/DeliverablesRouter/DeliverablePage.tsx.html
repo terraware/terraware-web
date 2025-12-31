@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/36</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/20</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/33</span>
             </div>
         
             
@@ -96,16 +96,25 @@
 <a name='L31'></a><a href='#L31'>31</a>
 <a name='L32'></a><a href='#L32'>32</a>
 <a name='L33'></a><a href='#L33'>33</a>
-<a name='L34'></a><a href='#L34'>34</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L34'></a><a href='#L34'>34</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -116,60 +125,51 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { ReactNode } from 'react';
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > ReactNode } f</span>rom 'react';
+<span class="cstat-no" title="statement not covered" ></span>
+import { useDeviceInfo <span class="cstat-no" title="statement not covered" >} from '@terraware/web-component</span>s/utils';
+<span class="cstat-no" title="statement not covered" ></span>
+import { Crumb } fr<span class="cstat-no" title="statement not covered" >om 'src/components/Bre</span>adCrumbs';
+import MobileMessag<span class="cstat-no" title="statement not covered" >e from 'src/components/Deliverab</span>leView/MobileMessage';
+import TitleBar<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > f</span>rom 'src/components/DeliverableView/TitleBar';</span>
+im<span class="cstat-no" title="statement not covered" >port { EditProps } from 'src/components/DeliverableView/types';</span>
+impo<span class="cstat-no" title="statement not covered" >rt Page from 'src/components/Page';</span>
 &nbsp;
-import { useDeviceInfo } from '@terraware/web-components/utils';
-&nbsp;
-import { Crumb } from 'src/components/BreadCrumbs';
-import MobileMessage from 'src/components/DeliverableView/MobileMessage';
-import TitleBar from 'src/components/DeliverableView/TitleBar';
-import { EditProps } from 'src/components/DeliverableView/types';
-import Page from 'src/components/Page';
-&nbsp;
-type DeliverablePageProp = EditProps &amp; {
-  children?: ReactNode;
-  crumbs?: Crumb[];
-  isLoading?: boolean;
-  rightComponent?: ReactNode;
+type DeliverablePa<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ge</span>Prop = EditProps &amp; {</span>
+<span class="cstat-no" title="statement not covered" >  children?: ReactNode;</span>
+  cr<span class="cstat-no" title="statement not covered" >umbs?: Crumb[];</span>
+  isLo<span class="cstat-no" title="statement not covered" >ading?: boolean;</span>
+  rightC<span class="cstat-no" title="statement not covered" >omponent?: ReactNode;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 };
+<span class="cstat-no" title="statement not covered" ></span>
+const DeliverablePage = (props: DeliverablePageProp) =&gt; {
+  const { chil<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >dr</span>en, crumbs, isLoading, right<span class="cstat-no" title="statement not covered" >Component } = props;</span></span>
+  const { isMobile } = useDeviceInfo();
 &nbsp;
-const DeliverablePage = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(p</span>rops: DeliverablePageProp) =&gt; {</span>
-  const { children, crumbs, isLoading, rightComponent } = <span class="cstat-no" title="statement not covered" >props;</span>
-  const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  if (isMobile) {</span>
-<span class="cstat-no" title="statement not covered" >    return &lt;MobileMessage {...props} /&gt;;</span>
+  if (isMobile) {
+    return &lt;MobileMessage {...props} /&gt;;
   }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;Page title={&lt;TitleBar {...props} /&gt;} crumbs={crumbs} isLoading={isLoading} rightComponent={rightComponent}&gt;
-      {children}
-    &lt;/Page&gt;
-  );
+  return (
+    &lt;Page title={&lt;T<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >it</span>leBar {<span class="cstat-no" title="statement not covered" >...props} /&gt;} crumbs={crumbs} isLoading={isLoading} rightCompon</span></span>ent={rightComponent}&gt;
+      {children}<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >    &lt;/Page&gt;</span>
+  );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 };
-&nbsp;
-export default DeliverablePage;
-&nbsp;</pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" ></span>
+export default Deli<span class="cstat-no" title="statement not covered" >verablePage;</span>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

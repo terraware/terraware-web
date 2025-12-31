@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/34</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/20</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/31</span>
             </div>
         
             
@@ -93,12 +93,25 @@
 <a name='L28'></a><a href='#L28'>28</a>
 <a name='L29'></a><a href='#L29'>29</a>
 <a name='L30'></a><a href='#L30'>30</a>
-<a name='L31'></a><a href='#L31'>31</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L31'></a><a href='#L31'>31</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -107,52 +120,39 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { createAsyncThunk } from '@reduxjs/toolkit';
-&nbsp;
-import { TrackingService } from 'src/services';
-import strings from 'src/strings';
-import { MonitoringPlotSearchResult } from 'src/types/Tracking';
-&nbsp;
-export type MonitoringPlotsRequest = {
-  plantingSiteId: number;
-  monitoringPlotIds: number[];
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { create<span class="cstat-no" title="statement not covered" >AsyncThunk } f</span>rom '@reduxjs/toolkit';
+<span class="cstat-no" title="statement not covered" ></span>
+import { TrackingServic<span class="cstat-no" title="statement not covered" >e } from 'src/services';</span>
+import strings from 'src<span class="cstat-no" title="statement not covered" >/strings';</span>
+import { Monitoring<span class="cstat-no" title="statement not covered" >PlotSearchResult } fro</span>m 'src/types/Tracking';
+<span class="cstat-no" title="statement not covered" ></span>
+export type Mon<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >it</span>oringPlotsRequest = {</span>
+<span class="cstat-no" title="statement not covered" >  plantingSiteId: number;</span>
+  mo<span class="cstat-no" title="statement not covered" >nitoringPlotIds: number[];</span>
 };
-&nbsp;
-export type MonitoringPlotsResponse = Record&lt;number, MonitoringPlotSearchResult&gt;;
-&nbsp;
-export const requestMonitoringPlots = <span class="cstat-no" title="statement not covered" >createAsyncThunk(</span>
-  'requestMonitoringPlots',
-<span class="fstat-no" title="function not covered" >  as</span>ync ({ plantingSiteId, monitoringPlotIds }: MonitoringPlotsRequest, { rejectWithValue }) =&gt; {
-    const response: MonitoringPlotSearchResult[] | null = <span class="cstat-no" title="statement not covered" >await TrackingService.searchMonitoringPlots(</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+ex<span class="cstat-no" title="statement not covered" >port type MonitoringPlotsResponse = Record&lt;number, MonitoringPlotSearchResult&gt;;</span>
+<span class="cstat-no" title="statement not covered" ></span>
+export<span class="cstat-no" title="statement not covered" > const requestMonitoringPlots = createAsyncThunk(</span>
+  'reque<span class="cstat-no" title="statement not covered" >stMonitoringPlots',<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  async ({ plantingSiteId, monitoringPlotIds }: MonitoringPlotsRequest, { rejectWithValue }) =&gt; {
+<span class="cstat-no" title="statement not covered" >    const res</span>ponse: MonitoringPlotSearchResult[] | null = await TrackingService.searchMonitoringPlots(
       plantingSiteId,
-      monitoringPlotIds
+      monitori<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ng</span>PlotIds<span class="cstat-no" title="statement not covered" ></span></span>
     );
-<span class="cstat-no" title="statement not covered" >    if (response !== null) {</span>
-<span class="cstat-no" title="statement not covered" >      return response.reduce(<span class="fstat-no" title="function not covered" >(a</span>cc: MonitoringPlotsResponse, plotResult: MonitoringPlotSearchResult) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >        acc[Number(plotResult.id)] = plotResult;</span>
-<span class="cstat-no" title="statement not covered" >        return acc;</span>
+    if (response !== null) {
+      return response.reduce((acc: MonitoringPlotsResponse, plotResult: MonitoringPlotSearchResult) =&gt; {
+        acc[Number(plotResult.id)] = plotResult;
+        return acc;
       }, {} as MonitoringPlotsResponse);
     }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    return rejectWithValue(strings.GENERIC_ERROR);</span>
-  }
-);
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+    return rejectWit<span class="cstat-no" title="statement not covered" >hVa</span>lue(strings.GENERIC_ERROR);
+<span class="cstat-no" title="statement not covered" >  }</span>
+);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -160,7 +160,7 @@ export const requestMonitoringPlots = <span class="cstat-no" title="statement no
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">18.18% </span>
+                <span class="strong">63.63% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>2/11</span>
+                <span class='fraction'>21/33</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">34.78% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>8/23</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">42.85% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>3/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">18.18% </span>
+                <span class="strong">64.51% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>2/11</span>
+                <span class='fraction'>20/31</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -91,35 +91,35 @@
 <a name='L26'></a><a href='#L26'>26</a>
 <a name='L27'></a><a href='#L27'>27</a>
 <a name='L28'></a><a href='#L28'>28</a>
-<a name='L29'></a><a href='#L29'>29</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L29'></a><a href='#L29'>29</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { DateTime } from 'luxon';
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { DateTime } from 'luxon';
 &nbsp;
 /**
  * Checks if a date (dateString1) occurs after another date (dateString2).
@@ -127,34 +127,34 @@
  * If any date is undefined, the valid date takes precedence.
  * If both are undefined, returns undefined.
  */
-export const isAfter = <span class="fstat-no" title="function not covered" >(d</span>ateString1: string | undefined, dateString2: string | undefined): boolean | undefined =&gt; {
-<span class="cstat-no" title="statement not covered" >  if (dateString1 !== undefined &amp;&amp; dateString2 !== undefined) {</span>
-    const date1 = <span class="cstat-no" title="statement not covered" >new Date(dateString1).getTime();</span>
-    const date2 = <span class="cstat-no" title="statement not covered" >new Date(dateString2).getTime();</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    return date1 &gt; date2;</span>
+export const isAfter = (dateString1: string | undefined, dateString2: string | undefined): boolean | undefined =&gt; {
+  <span class="missing-if-branch" title="else path not taken" >E</span>if (dateString1 !== undefined &amp;&amp; dateStr<span class="branch-2 cbranch-no" title="branch not covered" >ing2 !== undefined) {</span>
+    const date1 = new Date(dateString1).getTime();
+    co<span class="missing-if-branch" title="else path not taken" >E</span>nst date2 = new Date(dateString2).getTime();
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+    return date1 &gt; date2;
   }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  if (dateString1 === undefined &amp;&amp; dateString2 !== undefined) {</span>
-<span class="cstat-no" title="statement not covered" >    return false;</span>
+  if (dateString1 === undefined &amp;&amp; dateString2 !== undefined) {
+    return false;
+  }
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  if (dat<span class="fstat-no" title="function not covered" >eS</span>trin<span class="cstat-no" title="statement not covered" >g1 !==</span> undefined &amp;&amp; dateString2 === undefined) {
+    return true;
   }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  if (dateString1 !== undefined &amp;&amp; dateString2 === undefined) {</span>
-<span class="cstat-no" title="statement not covered" >    return true;</span>
-  }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  return undefined;</span>
-};
-&nbsp;
-export const today = DateTime.now().toUTC().startOf('day');
-&nbsp;</pre></td></tr></table></pre>
+  return undefin<span class="fstat-no" title="function not covered" >ed</span>;
+};<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+export const today<span class="cstat-no" title="statement not covered" > = DateTime.now().toUTC().startO</span>f('day');
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

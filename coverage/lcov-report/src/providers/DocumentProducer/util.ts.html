@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/30</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/21</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/26</span>
             </div>
         
             
@@ -84,56 +84,56 @@
 <a name='L19'></a><a href='#L19'>19</a>
 <a name='L20'></a><a href='#L20'>20</a>
 <a name='L21'></a><a href='#L21'>21</a>
-<a name='L22'></a><a href='#L22'>22</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L22'></a><a href='#L22'>22</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { SectionVariableWithValues } from 'src/types/documentProducer/Variable';
-&nbsp;
-export const getContainingSections =
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >  (v</span>ariableId: number) =&gt;</span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >  (a</span>cc: string[], currentVal: SectionVariableWithValues): string[] =&gt; {</span>
-    const newAcc = <span class="cstat-no" title="statement not covered" >[...acc];</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    if (</span>
-      currentVal.parentSectionNumber &amp;&amp;
-      currentVal.values?.some(<span class="fstat-no" title="function not covered" >(v</span>al) =&gt; <span class="cstat-no" title="statement not covered" >val.type === 'SectionVariable' &amp;&amp; val.variableId === variableId)</span>
-    ) {
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Section<span class="cstat-no" title="statement not covered" >VariableWithValues } f</span>rom 'src/types/documentProducer/Variable';
+<span class="cstat-no" title="statement not covered" ></span>
+export const getContaini<span class="cstat-no" title="statement not covered" >ngSections =</span>
+  (variableId: numb<span class="cstat-no" title="statement not covered" >er) =&gt;</span>
+  (acc: string[<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >],</span> currentVal: SectionVariableWithValues): string[] =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    const newAcc = [...acc];</span>
+<span class="cstat-no" title="statement not covered" ></span>
+    if (
+      currentVal.p<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ar</span>entSectionNumber &amp;&amp;</span>
+<span class="cstat-no" title="statement not covered" >      currentVal.values?.some((val) =&gt; val.type === 'SectionVariable' &amp;&amp; val.variableId === variableId)</span>
+<span class="cstat-no" title="statement not covered" >    ) {</span>
 <span class="cstat-no" title="statement not covered" >      newAcc.push(currentVal.parentSectionNumber);</span>
-    }
+    }<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    currentVal.children?.forEach(<span class="fstat-no" title="function not covered" >(c</span>hildSection) =&gt; {</span>
-      const childContainingSections = <span class="cstat-no" title="statement not covered" >getContainingSections(variableId)([], childSection as SectionVariableWithValues);</span>
-<span class="cstat-no" title="statement not covered" >      newAcc.push(...childContainingSections);</span>
-    });
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    return newAcc;</span>
+<span class="cstat-no" title="statement not covered" >    currentVa</span>l.children?.forEach((childSection) =&gt; {
+      const childContainingSections = getContainingSections(variableId)([], childSection as SectionVariableWithValues);
+      newAcc.push(.<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >..</span>childCo<span class="cstat-no" title="statement not covered" >ntainingSections);</span></span>
+    });<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+    return newAcc;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
   };
-&nbsp;</pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/31</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/29</span>
             </div>
         
             
@@ -87,62 +87,62 @@
 <a name='L22'></a><a href='#L22'>22</a>
 <a name='L23'></a><a href='#L23'>23</a>
 <a name='L24'></a><a href='#L24'>24</a>
-<a name='L25'></a><a href='#L25'>25</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L25'></a><a href='#L25'>25</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useEffect, useState } from 'react';
-&nbsp;
-export default function <span class="fstat-no" title="function not covered" >useDebounce&lt;</span>T&gt;(value: T, delay: number, callback?: (v: T) =&gt; void) {
-  // State and setters for debounced value
-  const [debouncedValue, setDebouncedValue] = <span class="cstat-no" title="statement not covered" >useState(value);</span>
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-    // Update debounced value after delay, execute callback if defined
-    const handler = <span class="cstat-no" title="statement not covered" >setTimeout(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >      if (value !== debouncedValue) {</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useEffe<span class="cstat-no" title="statement not covered" >ct, useState } from 'r</span>eact';
+<span class="cstat-no" title="statement not covered" ></span>
+export default function <span class="cstat-no" title="statement not covered" >useDebounce&lt;T&gt;(value: T, de</span>lay: number, callback?: (v: T) =&gt; void) {
+  // State and sett<span class="cstat-no" title="statement not covered" >ers for debounced value</span>
+  const [deboun<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ce</span>dValue, setDebouncedValue] = useState(value);</span>
+<span class="cstat-no" title="statement not covered" >  useEffect(() =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    // Update debounced value after delay, execute callback if defi</span>ned
+    const handler = setTimeout(() =&gt; {
+      if (value !=<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >= </span>debouncedValue) {</span>
 <span class="cstat-no" title="statement not covered" >        setDebouncedValue(value);</span>
 <span class="cstat-no" title="statement not covered" >        if (callback) {</span>
 <span class="cstat-no" title="statement not covered" >          callback(value);</span>
-        }
+<span class="cstat-no" title="statement not covered" >        }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
       }
-    }, delay);
+<span class="cstat-no" title="statement not covered" >    }, delay)</span>;
     // Cancel the timeout if value changes (also on delay change or unmount)
-    // This is how we prevent debounced value from updating if value is changed ...
-    // .. within the delay period. Timeout gets cleared and restarted.
-<span class="cstat-no" title="statement not covered" >    return <span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >      clearTimeout(handler);</span>
+    // This is how <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >we</span> preven<span class="cstat-no" title="statement not covered" >t debounced value from updating if value is changed ...</span></span>
+    // .. within the<span class="cstat-no" title="statement not covered" > de</span>lay period. Timeout gets cleared and restarted.
+<span class="cstat-no" title="statement not covered" >    return () =&gt; {</span>
+      clear<span class="fstat-no" title="function not covered" >Ti</span>meou<span class="cstat-no" title="statement not covered" >t(handler);</span>
     };
-  }, [value, delay, callback, debouncedValue]);
-<span class="cstat-no" title="statement not covered" >  return debouncedValue;</span>
-}
-&nbsp;</pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" >  }, [value, delay, callback, debouncedValue])</span>;
+  return debouncedV<span class="cstat-no" title="statement not covered" >alue;</span>
+}<span class="fstat-no" title="function not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

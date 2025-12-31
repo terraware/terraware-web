@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/17</span>
+                <span class='fraction'>0/47</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/32</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/17</span>
+                <span class='fraction'>0/44</span>
             </div>
         
             
@@ -113,14 +113,25 @@
 <a name='L48'></a><a href='#L48'>48</a>
 <a name='L49'></a><a href='#L49'>49</a>
 <a name='L50'></a><a href='#L50'>50</a>
-<a name='L51'></a><a href='#L51'>51</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L51'></a><a href='#L51'>51</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -131,96 +142,85 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useEffect, useMemo, useState } from 'react';
-&nbsp;
-import { requestGetParticipant } from 'src/redux/features/participants/participantsAsyncThunks';
-import { selectParticipantGetRequest } from 'src/redux/features/participants/participantsSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import strings from 'src/strings';
-import { Participant } from 'src/types/Participant';
-import useSnackbar from 'src/utils/useSnackbar';
-&nbsp;
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useEff<span class="cstat-no" title="statement not covered" >ect, useMemo, </span>useState } from 'react';
+<span class="cstat-no" title="statement not covered" ></span>
+import { requestGetPart<span class="cstat-no" title="statement not covered" >icipant } from 'src/redux/featur</span>es/participants/participantsAsyncThunks';
+import { selectParticipa<span class="cstat-no" title="statement not covered" >ntGetRequest } from 'src/re</span>dux/features/participants/participantsSelectors';
+import { useAppDisp<span class="cstat-no" title="statement not covered" >atch, useAppSelector }</span> from 'src/redux/store';
+import strings from<span class="cstat-no" title="statement not covered" > 'src/strings';</span>
+import { Partic<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ip</span>ant } from 'src/types/Participant';</span>
+im<span class="cstat-no" title="statement not covered" >port useSnackbar from 'src/utils/useSnackbar';</span>
+<span class="cstat-no" title="statement not covered" ></span>
 export type Response = {
-  isError: boolean;
-  isBusy: boolean;
-  participant?: Participant;
-};
+  isError: boolean<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >;</span></span>
+<span class="cstat-no" title="statement not covered" >  isBusy: boolean;</span>
+  pa<span class="cstat-no" title="statement not covered" >rticipant?: Participant;</span>
+};<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+export const useParticipant = (participantId: number) =&gt; {
+<span class="cstat-no" title="statement not covered" >  const dispa</span>tch = useAppDispatch();
+  const snackbar = useSnackbar();
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  const [requestId, setRequestId] = useState('');
+  const result = useAppSelector(selectParticipantGetRequest(requestId));
 &nbsp;
-export const useParticipant = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(p</span>articipantId: number) =&gt; {</span>
-  const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
-  const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
-&nbsp;
-  const [requestId, setRequestId] = <span class="cstat-no" title="statement not covered" >useState('');</span>
-  const result = <span class="cstat-no" title="statement not covered" >useAppSelector(selectParticipantGetRequest(requestId));</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (participantId !== -1) {</span>
-      const request = <span class="cstat-no" title="statement not covered" >dispatch(requestGetParticipant(participantId));</span>
-<span class="cstat-no" title="statement not covered" >      setRequestId(request.requestId);</span>
-    }
-  }, [dispatch, participantId]);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (result?.status === 'error') {</span>
-<span class="cstat-no" title="statement not covered" >      snackbar.toastError(strings.GENERIC_ERROR);</span>
-    }
-  }, [result, snackbar]);
-&nbsp;
-  const participant = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (result?.status === 'success') {</span>
-<span class="cstat-no" title="statement not covered" >      return result.data;</span>
-    }
-  }, [result]);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  return useMemo(</span>
-<span class="fstat-no" title="function not covered" >    ()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
-      isError: result?.status === 'error',
-      isBusy: result?.status === 'pending',
-      participant,
-    }),
+  useEffect(() =&gt; {
+    if (participantId !== -1) {
+      const request = dispatch(requestGetParticipant(participantId));
+      setRequestId(request.requestId);
+    }<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  }, [dispatch, part<span class="cstat-no" title="statement not covered" >ici</span>pantId]);
+<span class="cstat-no" title="statement not covered" ></span>
+  useEffect(() =&gt; <span class="fstat-no" title="function not covered" >{<span class="cstat-no" title="statement not covered" ></span></span>
+    if (result?.status === 'error') {
+<span class="cstat-no" title="statement not covered" >      snackbar.toastError(strings.GENERIC_ERRO</span>R);
+    }<span class="cstat-no" title="statement not covered" ></span>
+  }, [result, snackbar]);<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+  const participant<span class="cstat-no" title="statement not covered" > = useMemo(() =&gt; {</span>
+    if (result?.statu<span class="cstat-no" title="statement not covered" >s === 'success') {</span>
+      return result.data;<span class="cstat-no" title="statement not covered" ></span>
+    }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  }, [result]);<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+  return useMemo(<span class="cstat-no" title="statement not covered" ></span>
+    () =&gt; ({<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >      isError: result?.status <span class="fstat-no" title="function not covered" >==</span>= 'error',</span>
+<span class="cstat-no" title="statement not covered" >      isBusy: result?.status === 'pending',</span>
+      participant,<span class="cstat-no" title="statement not covered" ></span>
+    })<span class="cstat-no" title="statement not covered" >,</span>
     [result, participant]
   );
-};
-&nbsp;</pre></td></tr></table></pre>
+};<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

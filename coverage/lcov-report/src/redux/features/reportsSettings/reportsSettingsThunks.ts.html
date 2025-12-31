@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/32</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/29</span>
             </div>
         
             
@@ -83,13 +83,17 @@
 <a name='L18'></a><a href='#L18'>18</a>
 <a name='L19'></a><a href='#L19'>19</a>
 <a name='L20'></a><a href='#L20'>20</a>
-<a name='L21'></a><a href='#L21'>21</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L21'></a><a href='#L21'>21</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -97,31 +101,27 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/* eslint-disable @typescript-eslint/no-unused-vars */
-import { Dispatch } from 'redux';
-&nbsp;
-import { setReportsSettingsAction } from 'src/redux/features/reportsSettings/reportsSettingsSlice';
-import { RootState } from 'src/redux/rootReducer';
-import ReportSettingsService, { GetReportsSettingsResponse } from 'src/services/ReportSettingsService';
-&nbsp;
-export const requestReportsSettings = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(o</span>rganizationId: number) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >  return <span class="fstat-no" title="function not covered" >as</span>ync (dispatch: Dispatch, _getState: () =&gt; RootState) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    try {</span>
-      const response: GetReportsSettingsResponse = <span class="cstat-no" title="statement not covered" >await ReportSettingsService.getReportsSettings(organizationId);</span>
-&nbsp;
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/* eslint-disab<span class="cstat-no" title="statement not covered" >le @typescript</span>-eslint/no-unused-vars */
+import { Dispatc<span class="cstat-no" title="statement not covered" >h } from 'redux';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+import { setReportsSetti<span class="cstat-no" title="statement not covered" >ngsAction } from 'src/redux</span>/features/reportsSettings/reportsSettingsSlice';
+import { RootState <span class="cstat-no" title="statement not covered" >} from 'src/redux/root</span>Reducer';
+import ReportSettin<span class="cstat-no" title="statement not covered" >gsService, { GetReportsSettingsR</span>esponse } from 'src/services/ReportSettingsService';
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+ex<span class="cstat-no" title="statement not covered" >port const requestReportsSettings = (organizationId: number) =&gt; {</span>
+  re<span class="cstat-no" title="statement not covered" >turn async (dispatch: Dispatch, _getState: () =&gt; RootState) =&gt; </span>{
+    try {
+      const respon<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >se</span>: GetReportsSettingsResponse = await ReportSettingsService.getReportsSettings(organizationId);</span>
+<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >      dispatch(setReportsSettingsAction({ settings: response }));</span>
-    } catch (e) {
-      // should not happen, the response above captures any http request errors
+    } <span class="cstat-no" title="statement not covered" >catch (e) {</span>
+      //<span class="cstat-no" title="statement not covered" > should not happen, the re<span class="fstat-no" title="function not covered" >sp</span>onse<span class="cstat-no" title="statement not covered" > above cap</span>tures any http request errors</span>
       // eslint-disable-next-line no-console
-<span class="cstat-no" title="statement not covered" >      console.error('Error dispatching request to get projects for a species', e);</span>
+<span class="cstat-no" title="statement not covered" >      console</span>.error('Error dispatching request to get projects for a species', e);
     }
-  };
+  };<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 };
 &nbsp;</pre></td></tr></table></pre>
 
@@ -130,7 +130,7 @@ export const requestReportsSettings = <span class="cstat-no" title="statement no
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

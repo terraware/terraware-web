@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/32</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/24</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/28</span>
             </div>
         
             
@@ -83,45 +83,45 @@
 <a name='L18'></a><a href='#L18'>18</a>
 <a name='L19'></a><a href='#L19'>19</a>
 <a name='L20'></a><a href='#L20'>20</a>
-<a name='L21'></a><a href='#L21'>21</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L21'></a><a href='#L21'>21</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
-&nbsp;
-import { Box, useTheme } from '@mui/material';
-&nbsp;
-import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
-&nbsp;
-import ModuleEntry from './ModuleEntry';
-&nbsp;
-export default function <span class="fstat-no" title="function not covered" >ListModulesContent(</span>): JSX.Element {
-  const { currentParticipantProject, modules } = <span class="cstat-no" title="statement not covered" >useParticipantData();</span>
-  const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React fr<span class="cstat-no" title="statement not covered" >om 'react';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+import { Box, useTheme <span class="cstat-no" title="statement not covered" >} from '@mui/material';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+import { usePartici<span class="cstat-no" title="statement not covered" >pantData } from 'src/p</span>roviders/Participant/ParticipantContext';
+<span class="cstat-no" title="statement not covered" ></span>
+import ModuleEn<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >tr</span>y from './ModuleEntry';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+expo<span class="cstat-no" title="statement not covered" >rt default function ListModulesContent(): JSX.Element {</span>
+  const { currentParticipantProject, modules } = useParticipantData();
+  const theme = us<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >eT</span>heme();</span>
 <span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;Box paddingX={theme.spacing(2)}&gt;
-      {currentParticipantProject &amp;&amp;
-        modules?.map(<span class="fstat-no" title="function not covered" >(m</span>odule, index) =&gt; (
-<span class="cstat-no" title="statement not covered" >          &lt;ModuleEntry index={index} key={index} module={module} projectId={currentParticipantProject?.id} /&gt;</span>
-        ))}
+<span class="cstat-no" title="statement not covered" >    &lt;Box paddingX={theme.spacing(2)}&gt;</span>
+<span class="cstat-no" title="statement not covered" >      {currentParticipantProject &amp;&amp;</span>
+<span class="cstat-no" title="statement not covered" >        modules?.map((module, inde<span class="fstat-no" title="function not covered" >x)</span> =&gt; <span class="cstat-no" title="statement not covered" >(</span></span>
+          &lt;ModuleEntry index={index} key={index} module={module} projectId={currentParticipantProject?.id} /&gt;
+<span class="cstat-no" title="statement not covered" >        ))}</span>
     &lt;/Box&gt;
-  );
+  );<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 }
 &nbsp;</pre></td></tr></table></pre>
 
@@ -130,7 +130,7 @@ export default function <span class="fstat-no" title="function not covered" >Lis
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

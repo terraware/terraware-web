@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/36</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/28</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/32</span>
             </div>
         
             
@@ -99,9 +99,25 @@
 <a name='L34'></a><a href='#L34'>34</a>
 <a name='L35'></a><a href='#L35'>35</a>
 <a name='L36'></a><a href='#L36'>36</a>
-<a name='L37'></a><a href='#L37'>37</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L37'></a><a href='#L37'>37</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -110,75 +126,59 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
-&nbsp;
-import { RendererProps, TableRowType } from '@terraware/web-components';
-&nbsp;
-import Link from 'src/components/common/Link';
-import CellRenderer from 'src/components/common/table/TableCellRenderer';
-import { APP_PATHS } from 'src/constants';
-import { ParticipantProject } from 'src/types/ParticipantProject';
-&nbsp;
-export default function <span class="fstat-no" title="function not covered" >FundingEntitiesCellRenderer(</span>props: RendererProps&lt;TableRowType&gt;): JSX.Element {
-  const { column, value, row } = <span class="cstat-no" title="statement not covered" >props;</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  if (column.key === 'projects') {</span>
-    const stringList: string[] =
-<span class="cstat-no" title="statement not covered" >      Array.isArray(value) &amp;&amp; value.length</span>
-        ? (value as ParticipantProject[]).map(<span class="fstat-no" title="function not covered" >(p</span>roject: ParticipantProject) =&gt; <span class="cstat-no" title="statement not covered" >project.dealName || '')</span>
-        : [];
-<span class="cstat-no" title="statement not covered" >    return &lt;CellRenderer {...props} value={stringList.join(', ')} style={{ width: '50%' }} /&gt;;</span>
-  } else <span class="cstat-no" title="statement not covered" >if (column.key === 'name') {</span>
-<span class="cstat-no" title="statement not covered" >    return (</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React fr<span class="cstat-no" title="statement not covered" >om 'react';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+import { RendererProps,<span class="cstat-no" title="statement not covered" > TableRowType } from '@terraware</span>/web-components';
+<span class="cstat-no" title="statement not covered" ></span>
+import Link from 's<span class="cstat-no" title="statement not covered" >rc/components/common/L</span>ink';
+import CellRenderer<span class="cstat-no" title="statement not covered" > from 'src/components/common/tab</span>le/TableCellRenderer';
+import { APP_PA<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >TH</span>S } from 'src/constants';</span>
+im<span class="cstat-no" title="statement not covered" >port { ParticipantProject } from 'src/types/ParticipantProject';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+export default function FundingEntitiesCellRenderer(props: RendererProps&lt;TableRowType&gt;): JSX.Element {
+  const { column, <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >va</span>lue, row } = props;</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  if<span class="cstat-no" title="statement not covered" > (column.key === 'projects') {</span>
+    co<span class="cstat-no" title="statement not covered" >nst stringList: string[] =</span>
+      Ar<span class="cstat-no" title="statement not covered" >ray.isArray(value) &amp;&amp; valu<span class="fstat-no" title="function not covered" >e.</span>leng<span class="cstat-no" title="statement not covered" >th</span></span>
+        ? (value as ParticipantProject[]).map((project: ParticipantProject) =&gt; project.dealName || '')
+<span class="cstat-no" title="statement not covered" >        : [];</span>
+    return &lt;CellRenderer {...props} value={stringList.join(', ')} style={{ width: '50%' }} /&gt;;
+  } else if (c<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ol</span>umn.key === 'name') {<span class="cstat-no" title="statement not covered" ></span></span>
+    return (
       &lt;CellRenderer
         {...props}
         value={
           &lt;Link
             fontSize='16px'
             to={APP_PATHS.ACCELERATOR_FUNDING_ENTITIES_VIEW.replace(':fundingEntityId', `${row.id}`)}
-          &gt;
-            {String(value)}
-          &lt;/Link&gt;
-        }
+          &gt;<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+            {String(<span class="cstat-no" title="statement not covered" >val</span>ue)}
+<span class="cstat-no" title="statement not covered" >          &lt;/Link&gt;</span>
+        }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
       /&gt;
-    );
-  }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  return &lt;CellRenderer {...props} /&gt;;</span>
-}
-&nbsp;</pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" >    );</span>
+  }<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+  return &lt;CellRenderer {...prop<span class="cstat-no" title="statement not covered" >s} /&gt;;</span>
+}<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

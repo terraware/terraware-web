@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/28</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/25</span>
             </div>
         
             
@@ -78,36 +78,36 @@
 <a name='L13'></a><a href='#L13'>13</a>
 <a name='L14'></a><a href='#L14'>14</a>
 <a name='L15'></a><a href='#L15'>15</a>
-<a name='L16'></a><a href='#L16'>16</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L16'></a><a href='#L16'>16</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React fr<span class="cstat-no" title="statement not covered" >om 'react';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+import ExportCsvModal f<span class="cstat-no" title="statement not covered" >rom 'src/components/common/Expor</span>tCsvModal';
+import { SearchResponseE<span class="cstat-no" title="statement not covered" >lement } from 'src/types/Se</span>arch';
+<span class="cstat-no" title="statement not covered" ></span>
+interface BatchesEx<span class="cstat-no" title="statement not covered" >portModalProps {</span>
+  batchesExport<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >: </span>() =&gt; Promise&lt;SearchResponseElement[] | null&gt;;</span>
+<span class="cstat-no" title="statement not covered" >  onClose: () =&gt; void;</span>
+}<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
-import ExportCsvModal from 'src/components/common/ExportCsvModal';
-import { SearchResponseElement } from 'src/types/Search';
-&nbsp;
-interface BatchesExportModalProps {
-  batchesExport: () =&gt; Promise&lt;SearchResponseElement[] | null&gt;;
-  onClose: () =&gt; void;
-}
-&nbsp;
-export default function <span class="fstat-no" title="function not covered" >BatchesExportModal(</span>props: BatchesExportModalProps): JSX.Element {
-  const { batchesExport, onClose } = <span class="cstat-no" title="statement not covered" >props;</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  return &lt;ExportCsvModal open={true} onExport={batchesExport} onClose={onClose} /&gt;;</span>
-}
+export default fun<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ct</span>ion BatchesExportModal(props: BatchesExportModalProps): JSX.Element {</span>
+<span class="cstat-no" title="statement not covered" >  const { batchesExport, onClose } = props;</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  retu<span class="cstat-no" title="statement not covered" >rn &lt;ExportCsvModal open={true} onExport={batchesExport} onClose={onClose} /&gt;;</span>
+}<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -115,7 +115,7 @@ export default function <span class="fstat-no" title="function not covered" >Bat
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

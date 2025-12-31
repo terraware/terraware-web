@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/38</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/23</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>0/35</span>
             </div>
         
             
@@ -91,13 +91,8 @@
 <a name='L26'></a><a href='#L26'>26</a>
 <a name='L27'></a><a href='#L27'>27</a>
 <a name='L28'></a><a href='#L28'>28</a>
-<a name='L29'></a><a href='#L29'>29</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L29'></a><a href='#L29'>29</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -108,53 +103,58 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useEffect, useState } from 'react';
-&nbsp;
-import { requestListPublishedProjects } from '../redux/features/funder/projects/funderProjectsAsyncThunks';
-import { selectPublishedProjects } from '../redux/features/funder/projects/funderProjectsSelectors';
-import { useAppDispatch, useAppSelector } from '../redux/store';
-import { PublishedProject } from '../types/FunderProject';
-&nbsp;
-export const usePublishedProjects = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-  const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
-  const [publishedProjects, setPublishedProjects] = <span class="cstat-no" title="statement not covered" >useState&lt;PublishedProject[] | null&gt;(null);</span>
-  const [requestId, setRequestId] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
-  const result = <span class="cstat-no" title="statement not covered" >useAppSelector(selectPublishedProjects(requestId));</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (publishedProjects === null) {</span>
-      const request = <span class="cstat-no" title="statement not covered" >dispatch(requestListPublishedProjects());</span>
-<span class="cstat-no" title="statement not covered" >      setRequestId(request.requestId);</span>
-    }
-  }, [dispatch, publishedProjects]);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (result?.status === 'success' &amp;&amp; result.data) {</span>
-<span class="cstat-no" title="statement not covered" >      setPublishedProjects(result.data.toSorted(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >(a.dealName || '').localeCompare(b.dealName || ''))</span>);</span>
-    }
-  }, [result]);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  return { publishedProjects };</span>
-};
-&nbsp;</pre></td></tr></table></pre>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useEffe<span class="cstat-no" title="statement not covered" >ct, useState } from 'r</span>eact';
+<span class="cstat-no" title="statement not covered" ></span>
+import { requestListPubl<span class="cstat-no" title="statement not covered" >ishedProjects } from '../re</span>dux/features/funder/projects/funderProjectsAsyncThunks';
+import { selectPubl<span class="cstat-no" title="statement not covered" >ishedProjects } from '../redux/f</span>eatures/funder/projects/funderProjectsSelectors';
+import { useApp<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Di</span>spatch, useAppSelector } from '../redux/store';</span>
+im<span class="cstat-no" title="statement not covered" >port { PublishedProject } from '../types/FunderProject';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+export const usePublishedProjects = () =&gt; {
+  const dispatch =<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > u</span>seAppDispatch();</span>
+<span class="cstat-no" title="statement not covered" >  const [publishedProjects, setPublishedProjects] = useState&lt;PublishedProject[] | null&gt;(null);</span>
+  co<span class="cstat-no" title="statement not covered" >nst [requestId, setRequestId] = useState&lt;string&gt;('');</span>
+  cons<span class="cstat-no" title="statement not covered" >t result = useAppSelector(selectPublishedProjects(requestId));</span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  useEffect(() =&gt; {
+<span class="cstat-no" title="statement not covered" >    if (publi</span>shedProjects === null) {
+      const request = dispatch(requestListPublishedProjects());
+      setRequestId(<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >re</span>quest.r<span class="cstat-no" title="statement not covered" >equestId);</span></span>
+    }<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >  }, [dispatch, publishedProjects]);</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  useEffect(() =&gt; {
+<span class="cstat-no" title="statement not covered" >    if (result?.status === 'success' &amp;&amp; result</span>.data) {
+      setPublishedP<span class="cstat-no" title="statement not covered" >rojects(result.da</span>ta.toSorted((a, b) =&gt; (a.dealName || '').localeCompare(b.dealName || '')));
+    }<span class="cstat-no" title="statement not covered" ></span>
+  }, [result]);<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+  return { publishedProjects <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >};</span></span>
+};<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/27</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/25</span>
             </div>
         
             
@@ -81,13 +81,13 @@
 <a name='L16'></a><a href='#L16'>16</a>
 <a name='L17'></a><a href='#L17'>17</a>
 <a name='L18'></a><a href='#L18'>18</a>
-<a name='L19'></a><a href='#L19'>19</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L19'></a><a href='#L19'>19</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -95,36 +95,36 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/* eslint-disable @typescript-eslint/no-unused-vars */
-import { Dispatch } from 'redux';
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/* eslint-disabl<span class="cstat-no" title="statement not covered" >e @typescript-eslint/n</span>o-unused-vars */
+import { Dispatch } fro<span class="cstat-no" title="statement not covered" >m 'redux';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+import { RootState <span class="cstat-no" title="statement not covered" >} from 'src/redux/rootReducer';</span>
+import { System<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Se</span>rvice } from 'src/services';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+impo<span class="cstat-no" title="statement not covered" >rt { setVersionAction } from './appVersionSlice';</span>
 &nbsp;
-import { RootState } from 'src/redux/rootReducer';
-import { SystemService } from 'src/services';
-&nbsp;
-import { setVersionAction } from './appVersionSlice';
-&nbsp;
-export const requestAppVersion = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >  return <span class="fstat-no" title="function not covered" >as</span>ync (dispatch: Dispatch, _getState: () =&gt; RootState) =&gt; {</span>
+export const reque<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >st</span>AppVersion = () =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  return async (dispatch: Dispatch, _getState: () =&gt; RootState) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    try {</span>
-      const response = <span class="cstat-no" title="statement not covered" >await SystemService.getLatestAppVersion();</span>
-<span class="cstat-no" title="statement not covered" >      dispatch(setVersionAction(response.version));</span>
+<span class="cstat-no" title="statement not covered" >      const response = await SystemService.getLatestAppVersion();</span>
+      di<span class="cstat-no" title="statement not covered" >spatch(setVersionAction(re<span class="fstat-no" title="function not covered" >sp</span>onse<span class="cstat-no" title="statement not covered" >.version))</span>;</span>
     } catch (e) {
-      // add error handling
+<span class="cstat-no" title="statement not covered" >      // add </span>error handling
     }
-  };
-};
-&nbsp;</pre></td></tr></table></pre>
+  };<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+};<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

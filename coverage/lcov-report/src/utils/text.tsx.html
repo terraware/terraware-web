@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/31</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>0/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/28</span>
             </div>
         
             
@@ -77,42 +77,42 @@
 <a name='L12'></a><a href='#L12'>12</a>
 <a name='L13'></a><a href='#L13'>13</a>
 <a name='L14'></a><a href='#L14'>14</a>
-<a name='L15'></a><a href='#L15'>15</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L15'></a><a href='#L15'>15</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { isWhitespaces } from '@terraware/web-components/utils';
-&nbsp;
-export const numWords = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(t</span>estString: string): number =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >  return testString.trim().split(/\s+/).length;</span>
-};
-&nbsp;
-export const overWordLimit = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(t</span>estString: string, wordLimit: number): boolean =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >  return numWords(testString) &gt; wordLimit;</span>
-};
-&nbsp;
-export const truncate = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>: string, len: number, terminator: string = <span class="branch-0 cbranch-no" title="branch not covered" >'...')</span>: string =&gt;</span>
-<span class="cstat-no" title="statement not covered" >  s.length &lt;= len ? s : s.slice(0, len - terminator.length) + terminator;</span>
-&nbsp;
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { isWhite<span class="cstat-no" title="statement not covered" >spaces } from '@terraw</span>are/web-components/utils';
+<span class="cstat-no" title="statement not covered" ></span>
+export const numWords = <span class="cstat-no" title="statement not covered" >(testString: string): numbe</span>r =&gt; {
+  return testString<span class="cstat-no" title="statement not covered" >.trim().split(/\s+/).length;</span>
+};<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ></span>
+expo<span class="cstat-no" title="statement not covered" >rt const overWordLimit = (testString: string, wordLimit: number</span>): boolean =&gt; {
+  return numWords(testString) &gt; wordLimit;
+};<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ></span>
+expo<span class="cstat-no" title="statement not covered" >rt const truncate = (s: string, len: number, terminator: string = '...'): string =&gt;</span>
+  s.le<span class="cstat-no" title="statement not covered" >ngth &lt;= len ? s : s.slice(0, len - terminator.length) + terminator;</span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 export default isWhitespaces;
-&nbsp;</pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

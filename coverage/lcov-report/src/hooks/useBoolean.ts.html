@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/29</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/27</span>
             </div>
         
             
@@ -80,48 +80,48 @@
 <a name='L15'></a><a href='#L15'>15</a>
 <a name='L16'></a><a href='#L16'>16</a>
 <a name='L17'></a><a href='#L17'>17</a>
-<a name='L18'></a><a href='#L18'>18</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L18'></a><a href='#L18'>18</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Dispatch, SetStateAction, useCallback, useState } from 'react';
-&nbsp;
-const useBoolean = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(i</span>nitialValue: boolean): [boolean, Dispatch&lt;SetStateAction&lt;boolean&gt;&gt;, () =&gt; void, () =&gt; void] =&gt; {</span>
-  const [value, setValue] = <span class="cstat-no" title="statement not covered" >useState(initialValue);</span>
-&nbsp;
-  const setTrue = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Dispatc<span class="cstat-no" title="statement not covered" >h, SetStateAction, use</span>Callback, useState } from 'react';
+<span class="cstat-no" title="statement not covered" ></span>
+const useBoolean = (init<span class="cstat-no" title="statement not covered" >ialValue: boolean): [boolea</span>n, Dispatch&lt;SetStateAction&lt;boolean&gt;&gt;, () =&gt; void, () =&gt; void] =&gt; {
+  const [value, set<span class="cstat-no" title="statement not covered" >Value] = useState(initialValue);</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >  const setTrue = useCallback(() =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setValue(true);</span>
   }, []);
-&nbsp;
-  const setFalse = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >  const setFalse = useCallback(() =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setValue(false);</span>
-  }, []);
+  }, [<span class="cstat-no" title="statement not covered" >]);</span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  return [value, setValue, setTrue, setFalse];
+};<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return [value, setValue, setTrue, setFalse];</span>
-};
-&nbsp;
-export default useBoolean;
-&nbsp;</pre></td></tr></table></pre>
+export default useB<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >oo</span>lean;<span class="cstat-no" title="statement not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

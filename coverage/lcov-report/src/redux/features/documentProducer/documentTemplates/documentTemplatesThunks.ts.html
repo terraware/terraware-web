@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/39</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/24</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/35</span>
             </div>
         
             
@@ -93,7 +93,25 @@
 <a name='L28'></a><a href='#L28'>28</a>
 <a name='L29'></a><a href='#L29'>29</a>
 <a name='L30'></a><a href='#L30'>30</a>
-<a name='L31'></a><a href='#L31'>31</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L31'></a><a href='#L31'>31</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -103,56 +121,38 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Dispatch } from 'redux';
-&nbsp;
-import { RootState } from 'src/redux/rootReducer';
-import DocumentTemplateService from 'src/services/documentProducer/DocumentTemplateService';
-&nbsp;
-import { selectDocumentTemplates } from './documentTemplatesSelector';
-import { setDocumentTemplates } from './documentTemplatesSlice';
-&nbsp;
-const hasFetchedDocumentTemplates = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState): boolean =&gt;</span>
-<span class="cstat-no" title="statement not covered" >  (selectDocumentTemplates(state).documentTemplates || []).length &gt; 0;</span>
-&nbsp;
-export const requestListDocumentTemplates = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >  return <span class="fstat-no" title="function not covered" >as</span>ync (dispatch: Dispatch, _getState: () =&gt; RootState): Promise&lt;void&gt; =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (hasFetchedDocumentTemplates(_getState())) {</span>
-<span class="cstat-no" title="statement not covered" >      return;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Dispat<span class="cstat-no" title="statement not covered" >ch } from 'red</span>ux';
+<span class="cstat-no" title="statement not covered" ></span>
+import { RootState } fr<span class="cstat-no" title="statement not covered" >om 'src/redux/rootReducer';</span>
+import DocumentTemplateS<span class="cstat-no" title="statement not covered" >ervice from 'src/services/d</span>ocumentProducer/DocumentTemplateService';
+<span class="cstat-no" title="statement not covered" ></span>
+import { selectDocu<span class="cstat-no" title="statement not covered" >mentTemplates } from './document</span>TemplatesSelector';
+import { setDoc<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >um</span>entTemplates } from './documentTemplatesSlice';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+cons<span class="cstat-no" title="statement not covered" >t hasFetchedDocumentTemplates = (state: RootState): boolean =&gt;</span>
+  (selectDocumentTemplates(state).documentTemplates || []).length &gt; 0;
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+ex<span class="cstat-no" title="statement not covered" >port const requestListDocumentTemplates = () =&gt; {</span>
+  re<span class="cstat-no" title="statement not covered" >turn async (dispatch: Dispatch, _getState: () =&gt; RootState): Promise&lt;void&gt; =&gt; {</span>
+    if<span class="cstat-no" title="statement not covered" > (hasFetchedDocumentTemplates(_getState())) {</span>
+      re<span class="cstat-no" title="statement not covered" >turn;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
     }
+<span class="cstat-no" title="statement not covered" ></span>
+    try {
+      const re<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >sp</span>onse = await DocumentTemplat<span class="cstat-no" title="statement not covered" >eService.getDocumentTemplates();</span></span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    try {</span>
-      const response = <span class="cstat-no" title="statement not covered" >await DocumentTemplateService.getDocumentTemplates();</span>
+      const documentTemplates = response.data?.documentTemplates;
+      const error = response.error;
 &nbsp;
-      const documentTemplates = <span class="cstat-no" title="statement not covered" >response.data?.documentTemplates;</span>
-      const error = <span class="cstat-no" title="statement not covered" >response.error;</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >      dispatch(setDocumentTemplates({ documentTemplates, error }));</span>
+      dispatch(setDocumentTemplates({ documentTemplates, error }));
     } catch (e) {
       // eslint-disable-next-line no-console
-<span class="cstat-no" title="statement not covered" >      console.error('Error dispatching list documentTemplates', e);</span>
-    }
-  };
-};
+      console.error<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >('</span>Error d<span class="cstat-no" title="statement not covered" >ispatching list documentTemplates', e);</span></span>
+    }<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >  };</span>
+};<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -160,7 +160,7 @@ export const requestListDocumentTemplates = <span class="cstat-no" title="statem
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

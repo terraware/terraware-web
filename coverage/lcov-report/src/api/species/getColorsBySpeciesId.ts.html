@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>0/35</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/19</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>0/33</span>
             </div>
         
             
@@ -94,73 +94,73 @@
 <a name='L29'></a><a href='#L29'>29</a>
 <a name='L30'></a><a href='#L30'>30</a>
 <a name='L31'></a><a href='#L31'>31</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const LOCAL_STORAGE_KEY = <span class="cstat-no" title="statement not covered" >'speciesColors';</span>
-&nbsp;
-const generateRandomColor = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >  return `#${Math.floor(Math.random() * 16777215).toString(16)}`;</span>
-};
-&nbsp;
-export default function <span class="fstat-no" title="function not covered" >getColorsBySpeciesId(</span>speciesIds: number[]): Record&lt;number, string&gt; {
-  let colorsBySpecies: Record&lt;number, string&gt; = <span class="cstat-no" title="statement not covered" >{};</span>
-  const colorsJSON = <span class="cstat-no" title="statement not covered" >localStorage.getItem(LOCAL_STORAGE_KEY);</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const LOCAL_STOR<span class="cstat-no" title="statement not covered" >AGE_KEY = 'speciesColo</span>rs';
+<span class="cstat-no" title="statement not covered" ></span>
+const generateRandomColo<span class="cstat-no" title="statement not covered" >r = () =&gt; {</span>
+  return `#${Math.f<span class="cstat-no" title="statement not covered" >loor(Math.random() * 16777215).t</span>oString(16)}`;
+};<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ></span>
+expo<span class="cstat-no" title="statement not covered" >rt default function getColorsBySpeciesId(speciesIds: number[]):</span> Record&lt;number, string&gt; {
+  let colorsBySpecies: Record&lt;number, string&gt; = {};
+  const colorsJSON<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > =</span> localStorage.getItem(LOCAL_STORAGE_KEY);</span>
 <span class="cstat-no" title="statement not covered" >  if (colorsJSON) {</span>
 <span class="cstat-no" title="statement not covered" >    colorsBySpecies = JSON.parse(colorsJSON);</span>
-  }
-&nbsp;
+  }<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
   // Assign a color for OTHER species
-<span class="cstat-no" title="statement not covered" >  if (!colorsBySpecies[0]) {</span>
-<span class="cstat-no" title="statement not covered" >    colorsBySpecies[0] = generateRandomColor();</span>
-  }
-&nbsp;
+<span class="cstat-no" title="statement not covered" >  if (!colors</span>BySpecies[0]) {
+    colorsBySpecies[0] = generateRandomColor();
+  }<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >  if (speciesIds.length + 1 !== Object.keys(colorsBySpecies).length) {</span>
-<span class="cstat-no" title="statement not covered" >    speciesIds.forEach(<span class="fstat-no" title="function not covered" >(s</span>peciesId) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >      if (!colorsBySpecies[speciesId]) {</span>
-<span class="cstat-no" title="statement not covered" >        colorsBySpecies[speciesId] = generateRandomColor();</span>
-      }
-    });
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(colorsBySpecies));</span>
-  }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  return colorsBySpecies;</span>
-}
-&nbsp;</pre></td></tr></table></pre>
+    species<span class="fstat-no" title="function not covered" >Id</span>s.fo<span class="cstat-no" title="statement not covered" >rEach((speciesId) =&gt; </span>{
+      if (!colorsBySpecies[speciesId]) {
+<span class="cstat-no" title="statement not covered" >        colorsBySpecies[speciesId] = generateR</span>andomColor();
+      }<span class="cstat-no" title="statement not covered" ></span>
+    });<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ></span>
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(colorsBySpecies));
+  }<span class="fstat-no" title="function not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+  return colorsBySpec<span class="cstat-no" title="statement not covered" >ies;</span>
+}<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

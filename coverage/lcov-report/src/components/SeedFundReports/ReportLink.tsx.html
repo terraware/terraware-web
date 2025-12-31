@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/36</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/24</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/33</span>
             </div>
         
             
@@ -96,30 +96,23 @@
 <a name='L31'></a><a href='#L31'>31</a>
 <a name='L32'></a><a href='#L32'>32</a>
 <a name='L33'></a><a href='#L33'>33</a>
-<a name='L34'></a><a href='#L34'>34</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L34'></a><a href='#L34'>34</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -129,47 +122,54 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
-&nbsp;
-import Link from 'src/components/common/Link';
-import { APP_PATHS } from 'src/constants';
-import { ListReport } from 'src/types/Report';
-&nbsp;
-interface ReportLinkProps {
-  report: ListReport &amp; { organizationName?: string };
-  fontSize?: string | number;
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React fr<span class="cstat-no" title="statement not covered" >om 'react';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+import Link from 'src/c<span class="cstat-no" title="statement not covered" >omponents/common/Link';</span>
+import { APP_PATHS } fro<span class="cstat-no" title="statement not covered" >m 'src/constants';</span>
+import { ListReport<span class="cstat-no" title="statement not covered" > } from 'src/types/Rep</span>ort';
+<span class="cstat-no" title="statement not covered" ></span>
+interface Repor<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >tL</span>inkProps {</span>
+<span class="cstat-no" title="statement not covered" >  report: ListReport &amp; { organizationName?: string };</span>
+  fo<span class="cstat-no" title="statement not covered" >ntSize?: string | number;</span>
 }
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+co<span class="cstat-no" title="statement not covered" >nst ReportLink = ({ report, fontSize }: ReportLinkProps) =&gt; {</span>
+  co<span class="cstat-no" title="statement not covered" >nst reportLocation = {</span>
+    pa<span class="cstat-no" title="statement not covered" >thname: APP_PATHS.SEED_FUND_REPORTS_VIEW.replace(':reportId', report.id.toString()),</span>
+  };<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 &nbsp;
-const ReportLink = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> report, fontSize }: ReportLinkProps) =&gt; {</span>
-  const reportLocation = <span class="cstat-no" title="statement not covered" >{</span>
-    pathname: APP_PATHS.SEED_FUND_REPORTS_VIEW.replace(':reportId', report.id.toString()),
-  };
-&nbsp;
-  let reportName = <span class="cstat-no" title="statement not covered" >`${report.year}-Q${report.quarter}`;</span>
-<span class="cstat-no" title="statement not covered" >  if (report.projectName) {</span>
-<span class="cstat-no" title="statement not covered" >    reportName += ` ${report.projectName}`;</span>
+<span class="cstat-no" title="statement not covered" >  let reportN</span>ame = `${report.year}-Q${report.quarter}`;
+  if (report.projectName) {
+    reportName<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > +</span>= ` ${report.projectName}`;<span class="cstat-no" title="statement not covered" ></span></span>
   }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  if (report.organizationName) {</span>
-<span class="cstat-no" title="statement not covered" >    reportName += ` ${report.organizationName} [Org]`;</span>
+  if (report.organizationName) {
+    reportName += ` ${report.organizationName} [Org]`;
   }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;Link fontSize={fontSize ?? '14px'} to={reportLocation.pathname}&gt;
-      {reportName}
-    &lt;/Link&gt;
-  );
+  return (
+    &lt;Link fontSize=<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >{f</span>ontSize<span class="cstat-no" title="statement not covered" > ?? '14px'} to={reportLocation.pathname}&gt;</span></span>
+      {reportName}<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >    &lt;/Link&gt;</span>
+  );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 };
-&nbsp;
-export default ReportLink;
-&nbsp;</pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" ></span>
+export default Repo<span class="cstat-no" title="statement not covered" >rtLink;</span>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

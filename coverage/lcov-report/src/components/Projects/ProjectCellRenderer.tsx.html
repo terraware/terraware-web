@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/35</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/20</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/32</span>
             </div>
         
             
@@ -90,7 +90,25 @@
 <a name='L25'></a><a href='#L25'>25</a>
 <a name='L26'></a><a href='#L26'>26</a>
 <a name='L27'></a><a href='#L27'>27</a>
-<a name='L28'></a><a href='#L28'>28</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L28'></a><a href='#L28'>28</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -99,59 +117,41 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React fr<span class="cstat-no" title="statement not covered" >om 'react';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+import Link from 'src/c<span class="cstat-no" title="statement not covered" >omponents/common/Link';</span>
+import CellRenderer, { T<span class="cstat-no" title="statement not covered" >ableRowType } from 'src/com</span>ponents/common/table/TableCellRenderer';
+import { RendererPr<span class="cstat-no" title="statement not covered" >ops } from 'src/compon</span>ents/common/table/types';
+import { APP_PATHS <span class="cstat-no" title="statement not covered" >} from 'src/constants';</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+ex<span class="cstat-no" title="statement not covered" >port default function ProjectCellRenderer(props: RendererProps&lt;TableRowType&gt;): JSX.Element {</span>
+  co<span class="cstat-no" title="statement not covered" >nst { column, row, index } = props;</span>
 &nbsp;
-import Link from 'src/components/common/Link';
-import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
-import { RendererProps } from 'src/components/common/table/types';
-import { APP_PATHS } from 'src/constants';
-&nbsp;
-export default function <span class="fstat-no" title="function not covered" >ProjectCellRenderer(</span>props: RendererProps&lt;TableRowType&gt;): JSX.Element {
-  const { column, row, index } = <span class="cstat-no" title="statement not covered" >props;</span>
-&nbsp;
-  const createProjectLink = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-    const projectLocation = <span class="cstat-no" title="statement not covered" >{</span>
-      pathname: APP_PATHS.PROJECT_VIEW.replace(':projectId', row.id.toString()),
-    };
-<span class="cstat-no" title="statement not covered" >    return (</span>
+  const createProj<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ec</span>tLink = () =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    const projectLocation = {</span>
+<span class="cstat-no" title="statement not covered" >      pathname: APP_PATHS.PROJECT_VIEW.replace(':projectId', row.id.toString()),</span>
+    };<span class="cstat-no" title="statement not covered" ></span>
+    retu<span class="cstat-no" title="statement not covered" >rn (<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
       &lt;Link fontSize='16px' to={projectLocation.pathname}&gt;
-        {row.name}
+<span class="cstat-no" title="statement not covered" >        {row.</span>name}
       &lt;/Link&gt;
-    );
+    );<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
   };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  if (column.key === 'name') {</span>
-<span class="cstat-no" title="statement not covered" >    return &lt;CellRenderer index={index} column={column} value={createProjectLink()} row={row} /&gt;;</span>
+  if (column.key === 'name') {
+    return &lt;CellRenderer index={index} column={column} value={createProjectLink()} row={row} /&gt;;
   }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return &lt;CellRenderer {...props} /&gt;;</span>
-}
-&nbsp;</pre></td></tr></table></pre>
+  return &lt;CellRenderer {...props} /&gt;;
+}<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

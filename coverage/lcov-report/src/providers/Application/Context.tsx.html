@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/26</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>0/23</span>
             </div>
         
             
@@ -90,60 +90,60 @@
 <a name='L25'></a><a href='#L25'>25</a>
 <a name='L26'></a><a href='#L26'>26</a>
 <a name='L27'></a><a href='#L27'>27</a>
-<a name='L28'></a><a href='#L28'>28</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L28'></a><a href='#L28'>28</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { createContext, useContext } from 'react';
-&nbsp;
-import { Application, ApplicationDeliverable, ApplicationModule } from 'src/types/Application';
-&nbsp;
-export type ApplicationData = {
-  allApplications?: Application[];
-  applicationDeliverables: ApplicationDeliverable[];
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { createC<span class="cstat-no" title="statement not covered" >ontext, useContext } f</span>rom 'react';
+<span class="cstat-no" title="statement not covered" ></span>
+import { Application, Ap<span class="cstat-no" title="statement not covered" >plicationDeliverable, Appli</span>cationModule } from 'src/types/Application';
+<span class="cstat-no" title="statement not covered" ></span>
+export type App<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >li</span>cationData = {</span>
+<span class="cstat-no" title="statement not covered" >  allApplications?: Application[];</span>
+  ap<span class="cstat-no" title="statement not covered" >plicationDeliverables: ApplicationDeliverable[];</span>
   applicationSections: ApplicationModule[];
-  getApplicationByProjectId: (projectId: number) =&gt; Application | undefined;
-  selectedApplication?: Application;
-  setSelectedApplication: (applicationId: number) =&gt; void;
-  reload: (onReload?: () =&gt; void) =&gt; void;
-};
+  getApplicationBy<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Pr</span>ojectId: (projectId: number) =&gt; Application | undefined;</span>
+<span class="cstat-no" title="statement not covered" >  selectedApplication?: Application;</span>
+  se<span class="cstat-no" title="statement not covered" >tSelectedApplication: (applicationId: number) =&gt; void;</span>
+  relo<span class="cstat-no" title="statement not covered" >ad: (onReload?: () =&gt; void) =&gt; void;</span>
+};<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 &nbsp;
-// default values pointing to nothing
-export const ApplicationContext = <span class="cstat-no" title="statement not covered" >createContext&lt;ApplicationData&gt;({</span>
-  applicationDeliverables: [],
-  applicationSections: [],
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getApplicationByProjectId: <span class="fstat-no" title="function not covered" >(p</span>rojectId: number) =&gt; <span class="cstat-no" title="statement not covered" >undefined,</span>
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
-  setSelectedApplication: <span class="fstat-no" title="function not covered" >(a</span>pplicationId: number) =&gt; {},
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
-  reload: <span class="fstat-no" title="function not covered" >(o</span>nReload?: () =&gt; void) =&gt; {},
-});
+//<span class="cstat-no" title="statement not covered" > default va</span>lues pointing to nothing
+export const ApplicationContext = createContext&lt;ApplicationData&gt;({
+  applicationDelive<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ra</span>bles: [<span class="cstat-no" title="statement not covered" >],</span></span>
+  applicationSection<span class="cstat-no" title="statement not covered" >s: </span>[],
+<span class="cstat-no" title="statement not covered" >  // eslint-disable-next-line @typescript-eslint/no-unused-vars</span>
+  getApplicationByProj<span class="fstat-no" title="function not covered" >ec</span>tId:<span class="cstat-no" title="statement not covered" > (projectId: number</span>) =&gt; undefined,
+  // eslint-disable-ne<span class="fstat-no" title="function not covered" >xt</span>-lin<span class="cstat-no" title="statement not covered" >e @typescript-eslin</span>t/no-unused-vars, @typescript-eslint/no-empty-function
+  setSelectedApplication: (applicationId: number) =&gt; {},
+<span class="cstat-no" title="statement not covered" >  // eslint-disable-next-line @typescript-esli</span>nt/no-unused-vars, @typescript-eslint/no-empty-function
+  reload: (onReload<span class="cstat-no" title="statement not covered" >?: () =&gt; void) =&gt;</span> {},
+});<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
-export const useApplicationData = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >useContext(ApplicationContext);</span></span>
+export const useApplicationData = () =&gt; useContext(ApplicationContext);
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -151,7 +151,7 @@ export const useApplicationData = <span class="cstat-no" title="statement not co
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

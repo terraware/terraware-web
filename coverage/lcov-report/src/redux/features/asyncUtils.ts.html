@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>0/36</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/17</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>0/31</span>
             </div>
         
             
@@ -103,25 +103,16 @@
 <a name='L38'></a><a href='#L38'>38</a>
 <a name='L39'></a><a href='#L39'>39</a>
 <a name='L40'></a><a href='#L40'>40</a>
-<a name='L41'></a><a href='#L41'>41</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L41'></a><a href='#L41'>41</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -130,58 +121,67 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { ActionReducerMapBuilder, AsyncThunk, CaseReducers } from '@reduxjs/toolkit';
-&nbsp;
-export type Statuses = 'error' | 'partial-success' | 'pending' | 'success';
-&nbsp;
-export type StatusT&lt;T&gt; = { status: Statuses; data?: T };
-&nbsp;
-// Type used across all async thunks
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { ActionR<span class="cstat-no" title="statement not covered" >educerMapBuilder, Asyn</span>cThunk, CaseReducers } from '@reduxjs/toolkit';
+<span class="cstat-no" title="statement not covered" ></span>
+export type Statuses = '<span class="cstat-no" title="statement not covered" >error' | 'partial-success' </span>| 'pending' | 'success';
+<span class="cstat-no" title="statement not covered" ></span>
+export type Sta<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >tu</span>sT&lt;T&gt; = { status: Statuses; data?: T };</span>
+<span class="cstat-no" title="statement not covered" ></span>
+// T<span class="cstat-no" title="statement not covered" >ype used across all async thunks</span>
 export type AsyncRequest = StatusT&lt;unknown&gt;; // when data is not relevant in the response
-export type AsyncRequestT&lt;T&gt; = StatusT&lt;T&gt;; // This is identical to StatusT, just renamed
-&nbsp;
-export const buildReducers =
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >  &lt;T</span>&gt;(asyncThunk: AsyncThunk&lt;any, any, any&gt;, useArgAsKey?: boolean, compositeKeyFn?: (args: unknown) =&gt; string) =&gt;</span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >  (b</span>uilder: CaseReducers&lt;any, any&gt; | ActionReducerMapBuilder&lt;any&gt;) =&gt;</span>
-<span class="cstat-no" title="statement not covered" >    (builder as any)</span>
-      .addCase(asyncThunk.pending, setStatus&lt;T&gt;('pending', useArgAsKey, compositeKeyFn))
+export type AsyncR<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >eq</span>uestT&lt;T&gt; = StatusT&lt;T&gt;; // This is identical to StatusT, just renamed</span>
+<span class="cstat-no" title="statement not covered" ></span>
+expo<span class="cstat-no" title="statement not covered" >rt const buildReducers =</span>
+  &lt;T&gt;(<span class="cstat-no" title="statement not covered" >asyncThunk: AsyncThunk&lt;any, any, any&gt;, useArgAsKey?: boolean, compositeKeyFn?: (args: unknown) =&gt; string) =&gt;</span>
+  (build<span class="cstat-no" title="statement not covered" >er: CaseReducers&lt;any, any&gt;<span class="fstat-no" title="function not covered" > |</span> Act<span class="cstat-no" title="statement not covered" >ionReducer</span>MapBuilder&lt;any&gt;) =&gt;</span>
+    (builder as any)
+<span class="cstat-no" title="statement not covered" >      .addCas</span>e(asyncThunk.pending, setStatus&lt;T&gt;('pending', useArgAsKey, compositeKeyFn))
       .addCase(asyncThunk.fulfilled, setStatus&lt;T&gt;('success', useArgAsKey, compositeKeyFn))
-      .addCase(asyncThunk.rejected, setStatus&lt;T&gt;('error', useArgAsKey, compositeKeyFn));
-&nbsp;
-export const setStatus =
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >  &lt;T</span>&gt;(status: Statuses, useArgAsKey?: boolean, compositeKeyFn?: (arg: unknown) =&gt; string) =&gt;</span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >  (s</span>tate: any, action: any) =&gt; {</span>
-    const data: T = <span class="cstat-no" title="statement not covered" >action.payload as T;</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    state[action.meta.requestId] = { status, data };</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    if (!useArgAsKey) {</span>
+      .addCase(asyn<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >cT</span>hunk.re<span class="cstat-no" title="statement not covered" >jected, setStatus&lt;T&gt;('error', useArgAsKey, compositeKeyFn));</span></span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >export const setStatus =</span>
+  &lt;T&gt;(status: Sta<span class="fstat-no" title="function not covered" >tu</span>ses,<span class="cstat-no" title="statement not covered" > useArgAsKey?:</span> boolean, compositeKeyFn?: (arg: unknown) =&gt; string) =&gt;
+  (state: any<span class="fstat-no" title="function not covered" >, </span>acti<span class="cstat-no" title="statement not covered" >on: any) =</span>&gt; {
+    const data: T = action.payload as T;
+<span class="cstat-no" title="statement not covered" ></span>
+    state[action.meta.<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >re</span>questId] = { status, data };<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span>
+    if (!useArg<span class="cstat-no" title="statement not covered" >AsKey) {</span>
 <span class="cstat-no" title="statement not covered" >      return;</span>
-    }
-&nbsp;
-    let key = <span class="cstat-no" title="statement not covered" >action.meta.arg;</span>
-&nbsp;
+<span class="cstat-no" title="statement not covered" >    }</span>
+<span class="cstat-no" title="statement not covered" ></span>
+    let key = action.meta.arg;
+<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >    if (compositeKeyFn) {</span>
-      const compositeKey = <span class="cstat-no" title="statement not covered" >compositeKeyFn(action.meta.arg);</span>
+      const compositeKey <span class="cstat-no" title="statement not covered" >= compositeKeyFn(action.meta.arg</span>);
 <span class="cstat-no" title="statement not covered" >      if (compositeKey !== '') {</span>
-<span class="cstat-no" title="statement not covered" >        key = compositeKey;</span>
+<span class="cstat-no" title="statement not covered" >        key = compositeKey</span>;
       }
     }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    state[key] = { status, data };</span>
+<span class="cstat-no" title="statement not covered" ></span>
+    state[key] = { status, data };
   };
 &nbsp;</pre></td></tr></table></pre>
 
@@ -190,7 +190,7 @@ export const setStatus =
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

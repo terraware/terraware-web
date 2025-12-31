@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/31</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/20</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/28</span>
             </div>
         
             
@@ -88,21 +88,23 @@
 <a name='L23'></a><a href='#L23'>23</a>
 <a name='L24'></a><a href='#L24'>24</a>
 <a name='L25'></a><a href='#L25'>25</a>
-<a name='L26'></a><a href='#L26'>26</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L26'></a><a href='#L26'>26</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -111,27 +113,25 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
-&nbsp;
-import { Box, Typography, useTheme } from '@mui/material';
-import { Icon } from '@terraware/web-components';
-&nbsp;
-type ErrorMessageProps = {
-  message: string;
-};
-&nbsp;
-export default function <span class="fstat-no" title="function not covered" >ErrorMessage(</span>{ message }: ErrorMessageProps): JSX.Element | null {
-  const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  if (!message) {</span>
-<span class="cstat-no" title="statement not covered" >    return null;</span>
-  }
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React fr<span class="cstat-no" title="statement not covered" >om 'react';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+import { Box, Typograph<span class="cstat-no" title="statement not covered" >y, useTheme } from '@mui/materia</span>l';
+import { Icon } from '@t<span class="cstat-no" title="statement not covered" >erraware/web-components';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+type ErrorMessagePr<span class="cstat-no" title="statement not covered" >ops = {</span>
+  message: stri<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ng</span>;</span>
+};<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+export default function ErrorMessage({ message }: ErrorMessageProps): JSX.Element | null {
+  const theme = us<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >eT</span>heme();</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  if<span class="cstat-no" title="statement not covered" > (!message) {</span>
+    re<span class="cstat-no" title="statement not covered" >turn null;</span>
+  }<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Box display='flex' flexDirection='row' alignItems='center'&gt;
-      &lt;Icon name='error' style={{ fill: theme.palette.TwClrTxtDanger }} /&gt;
+      &lt;Icon na<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >me</span>='error' style={{ fill: them<span class="cstat-no" title="statement not covered" >e.palette.TwClrTxtDanger }} /&gt;</span></span>
       &lt;Typography marginLeft={1} fontWeight={500} fontSize='14px' color={theme.palette.TwClrTxtDanger}&gt;
         {message}
       &lt;/Typography&gt;
@@ -145,7 +145,7 @@ export default function <span class="fstat-no" title="function not covered" >Err
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/21</span>
+                <span class='fraction'>0/49</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/40</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/20</span>
+                <span class='fraction'>0/45</span>
             </div>
         
             
@@ -109,8 +109,25 @@
 <a name='L44'></a><a href='#L44'>44</a>
 <a name='L45'></a><a href='#L45'>45</a>
 <a name='L46'></a><a href='#L46'>46</a>
-<a name='L47'></a><a href='#L47'>47</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L47'></a><a href='#L47'>47</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -120,7 +137,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -128,87 +144,71 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useCallback, useEffect, useState } from 'react';
-&nbsp;
-import strings from 'src/strings';
-import useSnackbar from 'src/utils/useSnackbar';
-&nbsp;
-import { SubLocationService } from '../../../services';
-import { SubLocationsResponse } from '../../../services/SubLocationService';
-import { SubLocation } from '../../../types/Facility';
-&nbsp;
-export const useSubLocations = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(n</span>urseryId?: number, record?: { subLocationIds?: number[]; facilityId?: number }) =&gt; {</span>
-  const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
-&nbsp;
-  const [availableSubLocations, setAvailableSubLocations] = <span class="cstat-no" title="statement not covered" >useState&lt;SubLocation[]&gt;();</span>
-  const [selectedSubLocations, setSelectedSubLocations] = <span class="cstat-no" title="statement not covered" >useState&lt;SubLocation[]&gt;();</span>
-&nbsp;
-  const initSubLocations = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
-    const facilityId = <span class="cstat-no" title="statement not covered" >nurseryId || record?.facilityId;</span>
-<span class="cstat-no" title="statement not covered" >    if (!facilityId) {</span>
-<span class="cstat-no" title="statement not covered" >      return;</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useCal<span class="cstat-no" title="statement not covered" >lback, useEffe</span>ct, useState } from 'react';
+<span class="cstat-no" title="statement not covered" ></span>
+import strings from 'sr<span class="cstat-no" title="statement not covered" >c/strings';</span>
+import useSnackbar from <span class="cstat-no" title="statement not covered" >'src/utils/useSnackbar';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+import { SubLocatio<span class="cstat-no" title="statement not covered" >nService } from '../../../servic</span>es';
+import { SubLoc<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >at</span>ionsResponse } from '../../../services/SubLocationService';</span>
+im<span class="cstat-no" title="statement not covered" >port { SubLocation } from '../../../types/Facility';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+export const useSubLocations = (nurseryId?: number, record?: { subLocationIds?: number[]; facilityId?: number }) =&gt; {
+  const snackbar =<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > u</span>seSnackbar();</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  co<span class="cstat-no" title="statement not covered" >nst [availableSubLocations, setAvailableSubLocations] = useState&lt;SubLocation[]&gt;();</span>
+  cons<span class="cstat-no" title="statement not covered" >t [selectedSubLocations, setSelectedSubLocations] = useState&lt;SubLocation[]&gt;();</span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  const initSubLocations = useCallback(async () =&gt; {
+<span class="cstat-no" title="statement not covered" >    const fac</span>ilityId = nurseryId || record?.facilityId;
+    if (!facilityId) {
+      return;<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
     }
 &nbsp;
-    const result: SubLocationsResponse = <span class="cstat-no" title="statement not covered" >await SubLocationService.getSubLocations(facilityId);</span>
-<span class="cstat-no" title="statement not covered" >    if (!result.requestSucceeded || !result.subLocations) {</span>
-<span class="cstat-no" title="statement not covered" >      snackbar.toastError(strings.ERROR_LOAD_SUB_LOCATIONS);</span>
-<span class="cstat-no" title="statement not covered" >      return;</span>
+    const result: SubLocationsResponse = await SubLocationService.getSubLocations(facilityId);
+    if (!result.requestSucceeded || !result.subLocations) {
+      snackbar.toastError(strings.ERROR_LOAD_SUB_LOCATIONS);
+      return;
     }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    setAvailableSubLocations(result.subLocations);</span>
-  }, [nurseryId, record?.facilityId, snackbar]);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (availableSubLocations &amp;&amp; record?.subLocationIds) {</span>
-<span class="cstat-no" title="statement not covered" >      setSelectedSubLocations(</span>
-        availableSubLocations.filter(<span class="fstat-no" title="function not covered" >(s</span>ubLocation) =&gt;
-<span class="cstat-no" title="statement not covered" >          (record.subLocationIds || []).find(<span class="fstat-no" title="function not covered" >(s</span>ubLocationId) =&gt; <span class="cstat-no" title="statement not covered" >subLocation.id === subLocationId)</span></span>
-        )
-      );
-    }
-  }, [availableSubLocations, record?.subLocationIds]);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    void initSubLocations();</span>
-  }, [initSubLocations]);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  return { availableSubLocations, selectedSubLocations };</span>
-};
-&nbsp;</pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+    setAvailableSubL<span class="cstat-no" title="statement not covered" >oca</span>tions(result.subLocations);
+<span class="cstat-no" title="statement not covered" >  }, [nurseryId, record?.facilityId, snackbar]);</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  useEffect(() =&gt; {
+<span class="cstat-no" title="statement not covered" >    if (availableSubLocations &amp;&amp; record?.subLo</span>cationIds) {
+      setSelectedSu<span class="cstat-no" title="statement not covered" >bLocations(</span>
+        availableSubL<span class="cstat-no" title="statement not covered" >ocations.filter((subLocation) =&gt;</span>
+          (record.subLoca<span class="cstat-no" title="statement not covered" >tionIds || []).find((subLocationId) =&gt; sub</span>Location.id === subLocationId)
+        )<span class="cstat-no" title="statement not covered" ></span>
+      );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+    }<span class="cstat-no" title="statement not covered" ></span>
+  }, [availableSubLocations, record?.subLocationIds]);<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+  useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+    void initSubLocatio<span class="cstat-no" title="statement not covered" >ns();</span>
+  },<span class="cstat-no" title="statement not covered" > [initSubLocations]);</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  return { availableSubLocations, selectedSubLocations };
+};<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

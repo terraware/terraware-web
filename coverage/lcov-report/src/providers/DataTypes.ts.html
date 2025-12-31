@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
@@ -126,7 +126,21 @@
 <a name='L61'></a><a href='#L61'>61</a>
 <a name='L62'></a><a href='#L62'>62</a>
 <a name='L63'></a><a href='#L63'>63</a>
-<a name='L64'></a><a href='#L64'>64</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L64'></a><a href='#L64'>64</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -175,35 +189,21 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React fro<span class="cstat-no" title="statement not covered" >m 'react';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+import defaultStrings fr<span class="cstat-no" title="statement not covered" >om 'src/strings';</span>
+import { Country } <span class="cstat-no" title="statement not covered" >from 'src/types/Country';</span>
+import { FundingEn<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ti</span>ty } from 'src/types/FundingEntity';</span>
+im<span class="cstat-no" title="statement not covered" >port { Organization } from 'src/types/Organization';</span>
+impo<span class="cstat-no" title="statement not covered" >rt { TimeZoneDescription } from 'src/types/TimeZones';</span>
+import<span class="cstat-no" title="statement not covered" > { User } from 'src/types/User';</span>
+import {<span class="cstat-no" title="statement not covered" > GlobalRolePermission } fr<span class="fstat-no" title="function not covered" >om</span> 'sr<span class="cstat-no" title="statement not covered" >c/utils/ac</span>l';</span>
 &nbsp;
-import defaultStrings from 'src/strings';
-import { Country } from 'src/types/Country';
-import { FundingEntity } from 'src/types/FundingEntity';
-import { Organization } from 'src/types/Organization';
-import { TimeZoneDescription } from 'src/types/TimeZones';
-import { User } from 'src/types/User';
-import { GlobalRolePermission } from 'src/utils/acl';
+ex<span class="cstat-no" title="statement not covered" >port type P</span>referencesType = { [key: string]: unknown };
 &nbsp;
-export type PreferencesType = { [key: string]: unknown };
-&nbsp;
-export type ProvidedUserData = {
-  bootstrapped: boolean;
-  isAllowed: (permission: GlobalRolePermission, metadata?: unknown) =&gt; boolean;
+export type Provide<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >dU</span>serData<span class="cstat-no" title="statement not covered" > = {</span></span>
+  bootstrapped: bool<span class="cstat-no" title="statement not covered" >ean</span>;
+<span class="cstat-no" title="statement not covered" >  isAllowed: (permission: GlobalRolePermission</span>, metadata?: unknown) =&gt; boolean;
   reloadUser: () =&gt; void;
   reloadUserPreferences: () =&gt; void;
   updateUserCookieConsent: (consent: boolean) =&gt; Promise&lt;void&gt;;
@@ -259,7 +259,7 @@ export type ProvidedFundingEntityData = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

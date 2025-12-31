@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/36</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/20</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/33</span>
             </div>
         
             
@@ -108,8 +108,25 @@
 <a name='L43'></a><a href='#L43'>43</a>
 <a name='L44'></a><a href='#L44'>44</a>
 <a name='L45'></a><a href='#L45'>45</a>
-<a name='L46'></a><a href='#L46'>46</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L46'></a><a href='#L46'>46</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -123,78 +140,61 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
-&nbsp;
-import { Grid, useTheme } from '@mui/material';
-&nbsp;
-import Page, { PageProps } from 'src/components/Page';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
-&nbsp;
-import ModuleTimeline, { ModuleTimelineProps } from './ModuleTimeline';
-&nbsp;
-const PageWithModuleTimeline = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(p</span>rops: PageProps &amp; ModuleTimelineProps) =&gt; {</span>
-  const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-  const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
-  const { contentStyle, titleStyle, titleContainerStyle } = <span class="cstat-no" title="statement not covered" >props;</span>
-&nbsp;
-  const desktopContainerStyles = <span class="cstat-no" title="statement not covered" >{</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React fr<span class="cstat-no" title="statement not covered" >om 'react';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+import { Grid, useTheme<span class="cstat-no" title="statement not covered" > } from '@mui/material';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+import Page, { Page<span class="cstat-no" title="statement not covered" >Props } from 'src/comp</span>onents/Page';
+import useDeviceInf<span class="cstat-no" title="statement not covered" >o from 'src/utils/useDeviceInfo'</span>;
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+im<span class="cstat-no" title="statement not covered" >port ModuleTimeline, { ModuleTimelineProps } from './ModuleTimeline';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+const PageWithModuleTimeline = (props: PageProps &amp; ModuleTimelineProps) =&gt; {
+  const theme = us<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >eT</span>heme();</span>
+<span class="cstat-no" title="statement not covered" >  const { isMobile } = useDeviceInfo();</span>
+  co<span class="cstat-no" title="statement not covered" >nst { contentStyle, titleStyle, titleContainerStyle } = props;</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  const <span class="cstat-no" title="statement not covered" >desktopContainerStyles = {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
     paddingTop: 0,
-    paddingLeft: 0,
+<span class="cstat-no" title="statement not covered" >    paddingLe</span>ft: 0,
     paddingRight: theme.spacing(2),
-  };
+  };<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+  return (
     &lt;Grid container spacing={theme.spacing(0)} paddingRight={'24px'}&gt;
       &lt;Grid
         item
         sx={{
           maxWidth: { xs: '100%', sm: '100%', md: '100%', lg: 'calc(100% - 206px)', xl: 'calc(100% - 206px)' },
-          width: '100%',
-        }}
-      &gt;
-        &lt;Page
+          width: '1<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >00</span>%',<span class="cstat-no" title="statement not covered" ></span></span>
+        }}<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >      &gt;</span>
+        &lt;Pa<span class="fstat-no" title="function not covered" >ge<span class="cstat-no" title="statement not covered" ></span></span>
           {...props}
-          containerStyles={isMobile ? {} : desktopContainerStyles}
-          contentStyle={contentStyle}
-          titleStyle={titleStyle}
-          titleContainerStyle={titleContainerStyle}
-        /&gt;
-      &lt;/Grid&gt;
-      &lt;Grid item sx={{ display: { xs: 'none', sm: 'none', md: 'none', lg: 'block', xl: 'block' } }} minWidth={'206px'}&gt;
-        &lt;ModuleTimeline {...props} /&gt;
-      &lt;/Grid&gt;
-    &lt;/Grid&gt;
-  );
+<span class="cstat-no" title="statement not covered" >          containerStyles={isMobile ? {} : des</span>ktopContainerStyles}
+          contentSt<span class="cstat-no" title="statement not covered" >yle={contentStyle}</span>
+          titleStyle={<span class="cstat-no" title="statement not covered" >titleStyle}</span>
+          titleCon<span class="cstat-no" title="statement not covered" >tainerStyle={titleContainerStyle}</span>
+        /&gt;<span class="cstat-no" title="statement not covered" ></span>
+      &lt;/Grid&gt;<span class="cstat-no" title="statement not covered" ></span>
+      &lt;Grid item sx={{ display:<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > {</span> xs: 'none', sm: 'none', md: 'none', lg: 'block', xl: 'block' } }} minWidth={'206px'}&gt;</span>
+        &lt;ModuleT<span class="cstat-no" title="statement not covered" >imeline {...props} /&gt;</span>
+      &lt;/Grid&gt;<span class="cstat-no" title="statement not covered" ></span>
+    &lt;/Grid&gt;<span class="cstat-no" title="statement not covered" ></span>
+  );<span class="cstat-no" title="statement not covered" ></span>
 };
 &nbsp;
 export default PageWithModuleTimeline;
@@ -205,7 +205,7 @@ export default PageWithModuleTimeline;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/35</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/24</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/31</span>
             </div>
         
             
@@ -91,8 +91,25 @@
 <a name='L26'></a><a href='#L26'>26</a>
 <a name='L27'></a><a href='#L27'>27</a>
 <a name='L28'></a><a href='#L28'>28</a>
-<a name='L29'></a><a href='#L29'>29</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L29'></a><a href='#L29'>29</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -102,42 +119,25 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useMemo } from 'react';
-&nbsp;
-import { useOrganization } from 'src/providers';
-import { DraftPlantingSite, SiteType } from 'src/types/PlantingSite';
-import useQuery from 'src/utils/useQuery';
-&nbsp;
-import PlantingSiteEditor from './editor/Editor';
-&nbsp;
-export default function <span class="fstat-no" title="function not covered" >PlantingSiteDraftCreate(</span>): JSX.Element {
-  const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
-  const query = <span class="cstat-no" title="statement not covered" >useQuery();</span>
-  const siteType = <span class="cstat-no" title="statement not covered" >useMemo&lt;SiteType&gt;(<span class="fstat-no" title="function not covered" >()</span> =&gt; (<span class="cstat-no" title="statement not covered" >query.has('detailed') ? 'detailed' : 'simple')</span>, [query]);</span>
-&nbsp;
-  const site = <span class="cstat-no" title="statement not covered" >useMemo&lt;DraftPlantingSite&gt;(</span>
-<span class="fstat-no" title="function not covered" >    ()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > useMemo } fro</span>m 'react';
+<span class="cstat-no" title="statement not covered" ></span>
+import { useOrganizatio<span class="cstat-no" title="statement not covered" >n } from 'src/providers';</span>
+import { DraftPlantingSi<span class="cstat-no" title="statement not covered" >te, SiteType } from 'src/ty</span>pes/PlantingSite';
+import useQuery fro<span class="cstat-no" title="statement not covered" >m 'src/utils/useQuery'</span>;
+<span class="cstat-no" title="statement not covered" ></span>
+import Planting<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Si</span>teEditor from './editor/Editor';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+expo<span class="cstat-no" title="statement not covered" >rt default function PlantingSiteDraftCreate(): JSX.Element {</span>
+  const { selectedOrganization } = useOrganization();
+  const query = us<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >eQ</span>uery();</span>
+<span class="cstat-no" title="statement not covered" >  const siteType = useMemo&lt;SiteType&gt;(() =&gt; (query.has('detailed') ? 'detailed' : 'simple'), [query]);</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  cons<span class="cstat-no" title="statement not covered" >t site = useMemo&lt;DraftPlantingSite&gt;(</span>
+    () =<span class="cstat-no" title="statement not covered" >&gt; ({<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
       createdBy: -1,
-      id: -1,
+<span class="cstat-no" title="statement not covered" >      id: -1,</span>
       name: '',
-      organizationId: selectedOrganization?.id || -1,
+      organiza<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ti</span>onId: selectedOrganization?.<span class="cstat-no" title="statement not covered" >id || -1,</span></span>
       plantingSeasons: [],
       siteEditStep: 'details',
       siteType,
@@ -145,16 +145,16 @@ export default function <span class="fstat-no" title="function not covered" >Pla
     [selectedOrganization, siteType]
   );
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return &lt;PlantingSiteEditor site={site} /&gt;;</span>
-}
-&nbsp;</pre></td></tr></table></pre>
+  return &lt;PlantingS<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >it</span>eEditor<span class="cstat-no" title="statement not covered" > site={site} /&gt;;</span></span>
+}<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/21</span>
+                <span class='fraction'>0/51</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/38</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/19</span>
+                <span class='fraction'>0/46</span>
             </div>
         
             
@@ -110,9 +110,25 @@
 <a name='L45'></a><a href='#L45'>45</a>
 <a name='L46'></a><a href='#L46'>46</a>
 <a name='L47'></a><a href='#L47'>47</a>
-<a name='L48'></a><a href='#L48'>48</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L48'></a><a href='#L48'>48</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -126,83 +142,67 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useCallback, useEffect, useState } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useCal<span class="cstat-no" title="statement not covered" >lback, useEffe</span>ct, useState } from 'react';
+<span class="cstat-no" title="statement not covered" ></span>
+import { useOrganizatio<span class="cstat-no" title="statement not covered" >n } from 'src/providers';</span>
+import { selectProjects <span class="cstat-no" title="statement not covered" >} from 'src/redux/features/</span>projects/projectsSelectors';
+import { requestPro<span class="cstat-no" title="statement not covered" >jects } from 'src/redu</span>x/features/projects/projectsThunks';
+import { useAppDisp<span class="cstat-no" title="statement not covered" >atch, useAppSelector } from 'src</span>/redux/store';
+import { Projec<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >t </span>} from 'src/types/Project';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+impo<span class="cstat-no" title="statement not covered" >rt useAcceleratorConsole from './useAcceleratorConsole';</span>
 &nbsp;
-import { useOrganization } from 'src/providers';
-import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
-import { requestProjects } from 'src/redux/features/projects/projectsThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { Project } from 'src/types/Project';
-&nbsp;
-import useAcceleratorConsole from './useAcceleratorConsole';
-&nbsp;
-export const useProjects = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(r</span>ecord?: { projectId?: number }) =&gt; {</span>
-  const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
-  const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
-  const { isAcceleratorRoute } = <span class="cstat-no" title="statement not covered" >useAcceleratorConsole();</span>
-&nbsp;
-  const availableProjects = <span class="cstat-no" title="statement not covered" >useAppSelector(selectProjects);</span>
-&nbsp;
-  const [selectedProject, setSelectedProject] = <span class="cstat-no" title="statement not covered" >useState&lt;Project&gt;();</span>
-&nbsp;
-  const getProjectName = <span class="cstat-no" title="statement not covered" >useCallback(</span>
-<span class="fstat-no" title="function not covered" >    (p</span>rojectId: number) =&gt; <span class="cstat-no" title="statement not covered" >(availableProjects?.find(<span class="fstat-no" title="function not covered" >(p</span>roject: Project) =&gt; <span class="cstat-no" title="statement not covered" >project.id === projectId)</span> || {}).name || '',</span>
+export const usePr<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >oj</span>ects = (record?: { projectId?: number }) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  const dispatch = useAppDispatch();</span>
+  co<span class="cstat-no" title="statement not covered" >nst { selectedOrganization } = useOrganization();</span>
+  cons<span class="cstat-no" title="statement not covered" >t { isAcceleratorRoute } = useAcceleratorConsole();</span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  const availableProjects = useAppSelector(selectProjects);
+<span class="cstat-no" title="statement not covered" ></span>
+  const [selectedProject, setSelectedProject] = useState&lt;Project&gt;();
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  const getProjectName = useCallback(
+    (projectId: number) =&gt; (availableProjects?.find((project: Project) =&gt; project.id === projectId) || {}).name || '',
     [availableProjects]
   );
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (availableProjects &amp;&amp; record?.projectId) {</span>
-<span class="cstat-no" title="statement not covered" >      setSelectedProject(availableProjects.find(<span class="fstat-no" title="function not covered" >(p</span>roject) =&gt; <span class="cstat-no" title="statement not covered" >project.id === record.projectId)</span>);</span>
-    } else {
+  useEffect(() =&gt; {
+    if (availableProjects &amp;&amp; record?.projectId) {
+      setSelectedPr<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >oj</span>ect(ava<span class="cstat-no" title="statement not covered" >ilableProjects.find((project) =&gt; project.id === record.projectI</span></span>d));
+    } else {<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >      setSelectedProject(undefined);</span>
-    }
+    }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
   }, [availableProjects, record?.projectId]);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (!availableProjects &amp;&amp; selectedOrganization) {</span>
-<span class="cstat-no" title="statement not covered" >      void dispatch(requestProjects(selectedOrganization.id));</span>
-    }
-  }, [availableProjects, dispatch, selectedOrganization]);
-&nbsp;
-  // fetch all projects in the accelerator route
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (isAcceleratorRoute) {</span>
-<span class="cstat-no" title="statement not covered" >      void dispatch(requestProjects());</span>
-    }
-  }, [isAcceleratorRoute, dispatch]);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  return { availableProjects, getProjectName, selectedProject };</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
+    if (!availableProje<span class="cstat-no" title="statement not covered" >cts &amp;&amp; selectedOrganizati</span>on) {
+      void dispatch(requestProj<span class="cstat-no" title="statement not covered" >ects(selectedOrganization.id));</span>
+    }<span class="cstat-no" title="statement not covered" ></span>
+  }, [availableProj<span class="cstat-no" title="statement not covered" >ects, dispatch, selectedOrg</span>anization]);
+<span class="cstat-no" title="statement not covered" ></span>
+  // fetch all proje<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ct</span>s in the accelerator route</span>
+  useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
+    if (isAcceleratorRoute) {<span class="cstat-no" title="statement not covered" ></span>
+      void dispatch(requestProjec<span class="cstat-no" title="statement not covered" >ts());</span>
+    }<span class="cstat-no" title="statement not covered" ></span>
+  }, [isAcceleratorRoute, dispatch]);<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+  re<span class="fstat-no" title="function not covered" >tu</span>rn { availabl<span class="cstat-no" title="statement not covered" >eProjects, getProjectName, selectedProject };<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 };
 &nbsp;</pre></td></tr></table></pre>
 
@@ -211,7 +211,7 @@ export const useProjects = <span class="cstat-no" title="statement not covered" 
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-30T23:33:34.503Z
+                at 2025-12-31T00:27:19.063Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
