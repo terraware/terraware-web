@@ -35,13 +35,18 @@ const ObservationListView = (): JSX.Element => {
       label: site.name,
       value: site.id,
     }));
-    return [
-      {
-        label: strings.ALL_PLANTING_SITES,
-        value: undefined,
-      },
-      ...sitesOptions,
-    ];
+
+    const allSiteOptions =
+      plantingSites.length > 1
+        ? [
+            {
+              label: strings.ALL_PLANTING_SITES,
+              value: undefined,
+            },
+          ]
+        : [];
+
+    return [...allSiteOptions, ...sitesOptions];
   }, [plantingSites, strings]);
 
   const PageHeaderPlantingSiteDropdown = useMemo(
