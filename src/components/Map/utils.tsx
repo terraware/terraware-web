@@ -224,7 +224,7 @@ export const overlayAndSubtract = (source: GeometryFeature[], newPolygon: Geomet
     return acc;
   });
 
-  // Subtract intersection from each of the existing zone
+  // Subtract intersection from each of the existing stratum
   const newFeatures = intersections.reduce((acc, curr, index) => {
     const originalFeature = source[index];
 

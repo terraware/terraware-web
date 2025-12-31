@@ -6,57 +6,57 @@ import { Autocomplete } from '@terraware/web-components';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
-export type SubzoneInfo = {
+export type SubstratumInfo = {
   id: number | string;
   fullName: string;
 };
 
-export type ZoneInfo = {
+export type StratumInfo = {
   id: number | string;
   name: string;
-  substrata?: SubzoneInfo[];
+  substrata?: SubstratumInfo[];
 };
 
-export type SubzoneSelectorProps = {
-  zones: ZoneInfo[];
-  onSubzoneSelected: (subzone?: SubzoneInfo) => void;
-  onZoneSelected: (zone?: ZoneInfo) => void;
-  zoneError?: string;
-  subzoneError?: string;
+export type SubstratumSelectorProps = {
+  strata: StratumInfo[];
+  onStratumSelected: (stratum?: StratumInfo) => void;
+  onSubstratumSelected: (substratum?: SubstratumInfo) => void;
+  stratumError?: string;
+  substratumError?: string;
   horizontalLayout?: boolean;
-  selectedSubzone?: SubzoneInfo;
-  selectedZone?: ZoneInfo;
+  selectedStratum?: StratumInfo;
+  selectedSubstratum?: SubstratumInfo;
 };
 
-export default function SubzoneSelector(props: SubzoneSelectorProps): JSX.Element {
+export default function SubstratumSelector(props: SubstratumSelectorProps): JSX.Element {
   const {
-    zones,
-    onZoneSelected,
-    onSubzoneSelected,
-    zoneError,
-    subzoneError,
+    strata,
+    onStratumSelected,
+    onSubstratumSelected,
+    stratumError,
+    substratumError,
     horizontalLayout,
-    selectedSubzone,
-    selectedZone,
+    selectedSubstratum,
+    selectedStratum,
   } = props;
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
 
-  const zoneToDropdownItem = (zone?: ZoneInfo) =>
-    zone ? { label: zone.name, value: zone.id } : { label: '', value: '' };
-  const subzoneToDropdownItem = (subzone?: SubzoneInfo) =>
-    subzone ? { label: subzone.fullName, value: subzone.id } : { label: '', value: '' };
+  const stratumToDropdownItem = (stratum?: StratumInfo) =>
+    stratum ? { label: stratum.name, value: stratum.id } : { label: '', value: '' };
+  const substratumToDropdownItem = (substratum?: SubstratumInfo) =>
+    substratum ? { label: substratum.fullName, value: substratum.id } : { label: '', value: '' };
 
-  const onChangeZone = (zone: any) => {
-    const foundZone = zones.find((zoneItem) => zoneItem.id.toString() === zone?.value?.toString());
-    onZoneSelected(foundZone);
+  const onChangeStratum = (stratum: any) => {
+    const foundStratum = strata.find((stratumItem) => stratumItem.id.toString() === stratum?.value?.toString());
+    onStratumSelected(foundStratum);
   };
 
-  const onChangeSubzone = (subzone: any) => {
-    const foundSubzone = selectedZone?.substrata?.find(
-      (subzoneItem) => subzoneItem.id.toString() === subzone?.value?.toString()
+  const onChangeSubstratum = (substratum: any) => {
+    const foundSubstratum = selectedStratum?.substrata?.find(
+      (substratumItem) => substratumItem.id.toString() === substratum?.value?.toString()
     );
-    onSubzoneSelected(foundSubzone);
+    onSubstratumSelected(foundSubstratum);
   };
 
   const isEqual = (optionA: any, optionB: any) => {
@@ -85,21 +85,21 @@ export default function SubzoneSelector(props: SubzoneSelectorProps): JSX.Elemen
     alignItems: 'center',
   };
 
-  const zoneOptions: any[] = useMemo(() => {
-    return zones
-      .filter((zone) => zone.substrata)
+  const stratumOptions: any[] = useMemo(() => {
+    return strata
+      .filter((stratum) => stratum.substrata)
       .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }))
-      .map((zone) => zoneToDropdownItem(zone));
-  }, [zones]);
+      .map((stratum) => stratumToDropdownItem(stratum));
+  }, [strata]);
 
-  const subzoneOptions: any[] = useMemo(() => {
-    if (!selectedZone?.substrata) {
+  const substratumOptions: any[] = useMemo(() => {
+    if (!selectedStratum?.substrata) {
       return [];
     }
-    return [...selectedZone.substrata]
+    return [...selectedStratum.substrata]
       .sort((a, b) => a.fullName.localeCompare(b.fullName, undefined, { numeric: true }))
-      .map((subzone) => subzoneToDropdownItem(subzone));
-  }, [selectedZone]);
+      .map((substratum) => substratumToDropdownItem(substratum));
+  }, [selectedStratum]);
 
   return (
     <Box
@@ -124,11 +124,11 @@ export default function SubzoneSelector(props: SubzoneSelectorProps): JSX.Elemen
           id='zone'
           placeholder={strings.SELECT}
           label={horizontalLayout ? '' : strings.ZONE_REQUIRED}
-          selected={zoneToDropdownItem(selectedZone)}
-          options={zoneOptions}
-          onChange={(value) => onChangeZone(value)}
-          errorText={zoneError}
-          disabled={!zones.length}
+          selected={stratumToDropdownItem(selectedStratum)}
+          options={stratumOptions}
+          onChange={(value) => onChangeStratum(value)}
+          errorText={stratumError}
+          disabled={!strata.length}
           isEqual={isEqual}
           freeSolo={false}
           hideClearIcon={true}
@@ -140,11 +140,11 @@ export default function SubzoneSelector(props: SubzoneSelectorProps): JSX.Elemen
           id='subzone'
           placeholder={strings.SELECT}
           label={horizontalLayout ? '' : strings.SUBZONE_REQUIRED}
-          selected={subzoneToDropdownItem(selectedSubzone)}
-          options={subzoneOptions}
-          onChange={(value) => onChangeSubzone(value)}
-          errorText={subzoneError}
-          disabled={!selectedZone?.substrata?.length}
+          selected={substratumToDropdownItem(selectedSubstratum)}
+          options={substratumOptions}
+          onChange={(value) => onChangeSubstratum(value)}
+          errorText={substratumError}
+          disabled={!selectedStratum?.substrata?.length}
           isEqual={isEqual}
           freeSolo={false}
           hideClearIcon={true}

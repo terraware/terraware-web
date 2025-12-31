@@ -349,8 +349,8 @@ export default function Map(props: MapProps): JSX.Element {
     const { sources } = options;
 
     /**
-     * Initialize sources - we want ONE source per data type, eg. one source containing all geometries for zones.
-     * Creating multiple sources, one per zone or one per subzone, is unnecessarily and will create performance
+     * Initialize sources - we want ONE source per data type, eg. one source containing all geometries for strata.
+     * Creating multiple sources, one per stratum or one per substratum, is unnecessarily and will create performance
      * bottlenecks. Leverage data-drive rendering using properties in the features and mapbox supported properties:
      *  eg. 'text-field': ['get', source.annotation.textField]
      */
