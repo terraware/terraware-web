@@ -32,6 +32,6 @@ test.describe('ProjectDocumentsTests', () => {
     await page.getByRole('button', { name: 'Add Document' }).click();
     await page.waitForURL(`${APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENT_NEW}`);
 
-    expect(page.url()).toBe(`${APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENT_NEW}`);
+    await expect(page).toHaveURL(`${APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENT_NEW}`);
   });
 });
