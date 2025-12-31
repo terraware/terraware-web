@@ -1,3 +1,5 @@
+1e2b289005d SW-7909 Ensure /build-version.txt contains same value as APP_VERSION environment variable (#5000)
+55146f36b70 SW-7903 Update AssignSiteT0TempDataRequestPayload usage to use strata instead of zones (#4980)
 88b06a71013 SW-7903 Update planting site response payloads to new names (#4973)
 01ace70e4f6 SW-7903 Update CreateNurseryWithdrawalRequestPayload usage to use substratumId instead of plantingSubzoneId (#4981)
 a7a6f1ab7f6 SW-7903 Update to new substrata endpoint (#4979)

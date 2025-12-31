@@ -596,7 +596,7 @@ im<span class="cstat-no" title="statement not covered" >port {</span>
 impo<span class="cstat-no" title="statement not covered" >rt { useAssignT0TempSiteDataMutation } from 'src/queries/generated/t0';</span>
 import<span class="cstat-no" title="statement not covered" > { PlotsWithObservationsSearchResult } from 'src/redux/features/tracking/trackingThunks';</span>
 import s<span class="cstat-no" title="statement not covered" >trings from 'src/strings';<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-import { AssignSiteT0TempData, SpeciesPlot, ZoneT0Data } from 'src/types/Tracking';
+import { AssignSiteT0TempData, SpeciesPlot, StratumT0Data } from 'src/types/Tracking';
 im<span class="cstat-no" title="statement not covered" >port useFor</span>m from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
@@ -607,7 +607,7 @@ type EditTemporaryPlotsTabProps = {
   plantingSiteId: number;
   temporaryPlotsWithObservations?: PlotsWithObservationsSearchResult[];
   withdrawnSpeciesPlots?: SpeciesPlot[];
-  zones?: ZoneT0Dat<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >a[</span>];<span class="cstat-no" title="statement not covered" ></span></span>
+  zones?: StratumT0<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Da</span>ta[];<span class="cstat-no" title="statement not covered" ></span></span>
   alreadyIncluding?:<span class="cstat-no" title="statement not covered" > bo</span>olean;
 <span class="cstat-no" title="statement not covered" >};</span>
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
@@ -630,7 +630,7 @@ const EditTemporaryPlotsTab = ({
 &nbsp;
   const [record, setRecord] = useForm&lt;AssignSiteT0TempData&gt;({
     plantingSiteId,
-    zones: zones ?? [],
+    strata: zones ?? [],
   });
 <span class="cstat-no" title="statement not covered" ></span>
   useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
@@ -641,7 +641,7 @@ const EditTemporaryPlotsTab = ({
 <span class="cstat-no" title="statement not covered" ></span>
   useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
     if (zones) {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-      setRecord({ plantingSite<span class="cstat-no" title="statement not covered" >Id, zones });</span>
+      setRecord({ plantingSite<span class="cstat-no" title="statement not covered" >Id, strata: zones });</span>
     }
   }, [plantingSiteId, setRecord, zones]);
 &nbsp;
@@ -707,7 +707,7 @@ const EditTemporaryPlotsTab = ({
       cons<span class="cstat-no" title="statement not covered" >t allWithdrawnSpeciesForZone = Array.from(speciesMap.values());</span>
 <span class="cstat-no" title="statement not covered" ></span>
       allWithdrawnSpeciesForZone.forEach((spec) =&gt; {
-        const correspondingZone = (record.zones || []).find((z) =&gt; z.plantingZoneId.toString() === zoneId.toString());
+        const correspondingZone = (record.strata || []).find((z) =&gt; z.stratumId.toString() === zoneId.toString());
         const correspondingSpecies = correspondingZone?.densityData.find(
           (denData) =&gt; denData.speciesId.<span class="cstat-no" title="statement not covered" >toString() === spec.speciesId.to</span>String()
 <span class="cstat-no" title="statement not covered" >        );<span class="fstat-no" title="function not covered" ></span></span>
@@ -717,10 +717,10 @@ const EditTemporaryPlotsTab = ({
       });
     });<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-    (record.zones || []).forEach((zone) =&gt; {
+    (record.strata || []).forEach((zone) =&gt; {
       zone.densityData.forEach((denData) =&gt; {
         if (denData.density === undefined || denData.density === null) {
-<span class="cstat-no" title="statement not covered" >          shouldShowWarning = tru<span class="fstat-no" title="function not covered" >e;</span></span>
+<span class="cstat-no" title="statement not covered" >          shouldShowWarning = true<span class="fstat-no" title="function not covered" >;</span></span>
 <span class="cstat-no" title="statement not covered" >        }<span class="fstat-no" title="function not covered" ></span></span>
       })<span class="cstat-no" title="statement not covered" >;</span>
     });<span class="cstat-no" title="statement not covered" ></span>
@@ -731,7 +731,7 @@ const EditTemporaryPlotsTab = ({
     }<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
     updatePlantingSiteSetting();
-<span class="cstat-no" title="statement not covered" >    if (record.zones &amp;&amp; record.zo</span>nes.length &gt; 0) {
+<span class="cstat-no" title="statement not covered" >    if (record.strata &amp;&amp; record.s</span>trata.length &gt; 0) {
 <span class="cstat-no" title="statement not covered" >      void updateT0(record);</span>
     } <span class="cstat-no" title="statement not covered" >else {</span>
       goToViewSettings();
@@ -768,7 +768,7 @@ const EditTemporaryPlotsTab = ({
 <span class="cstat-no" title="statement not covered" ></span>
   cons<span class="cstat-no" title="statement not covered" >t saveWithDefaultDensit</span>y = useCallback(() =&gt; {
     updatePlantingSiteSetting();
-    if<span class="cstat-no" title="statement not covered" > (record.zones &amp;&amp; re</span>cord.zones.length &gt; 0) {
+    if<span class="cstat-no" title="statement not covered" > (record.strata &amp;&amp; r</span>ecord.strata.length &gt; 0) {
       void updateT0(record);
     } else {
 <span class="cstat-no" title="statement not covered" >      goToViewSettings();</span>
@@ -828,7 +828,7 @@ const EditTemporaryPlotsTab = ({
                 key={zoneId}
                 plot<span class="cstat-no" title="statement not covered" >sWithObservations={plo</span>ts}
                 withdrawnSpeciesPlot={filteredWithdrawnSpecies}
-                zoneData={zones?.find((z) =&gt; z.plantingZoneId.toString() === zoneId.toString())}
+                zoneData={zones?.find((z) =&gt; z.stratumId.toString() === zoneId.toString())}
                 record={record}
                 setRecord={setRecord}
               /&gt;
@@ -847,7 +847,7 @@ export default EditTemporaryPlotsTab;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-31T19:59:27.800Z
+                at 2025-12-31T20:09:41.774Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

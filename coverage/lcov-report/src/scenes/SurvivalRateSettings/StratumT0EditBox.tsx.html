@@ -954,7 +954,7 @@ im<span class="cstat-no" title="statement not covered" >port { useSpeciesData } 
 impo<span class="cstat-no" title="statement not covered" >rt { PlotsWithObservationsSearchResult } from 'src/redux/featur</span>es/tracking/trackingThunks';
 import strings from 'src/strings';
 import { Species }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > f</span>rom 'src/types/Species';</span>
-im<span class="cstat-no" title="statement not covered" >port { AssignSiteT0TempData, SpeciesPlot, ZoneT0Data } from 'src/types/Tracking';</span>
+im<span class="cstat-no" title="statement not covered" >port { AssignSiteT0TempData, SpeciesPlot, StratumT0Data } from 'src/types/Tracking';</span>
 impo<span class="cstat-no" title="statement not covered" >rt { allowOneDecimal, roundToDecimal } from 'src/utils/numbers';</span>
 <span class="cstat-no" title="statement not covered" ></span>
 import {<span class="cstat-no" title="statement not covered" > AddedSpecies } from './Pl<span class="fstat-no" title="function not covered" >ot</span>T0Ed<span class="cstat-no" title="statement not covered" >itBox';</span></span>
@@ -962,7 +962,7 @@ import {<span class="cstat-no" title="statement not covered" > AddedSpecies } fr
 ty<span class="cstat-no" title="statement not covered" >pe StratumT</span>0EditBoxProps = {
   plotsWithObservations: PlotsWithObservationsSearchResult[];
   withdrawnSpe<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ci</span>esPlot?: SpeciesPlot[];<span class="cstat-no" title="statement not covered" ></span></span>
-  zoneData?: ZoneT0Data;
+  zoneData?: StratumT0Data;
   record: AssignSiteT0TempData;
   setRecord: React.Dispatch&lt;React.SetStateAction&lt;AssignSiteT0TempData&gt;&gt;;
 };
@@ -1024,7 +1024,7 @@ const StratumT0EditBox = ({
   co<span class="cstat-no" title="statement not covered" >nst zoneTotalDensity =</span> useMemo(() =&gt; {
     const editingZoneId = plotsWithObservations?.length ? plotsWithObservations[0].substratum_stratum_id : null;
     if (editingZoneId) {<span class="cstat-no" title="statement not covered" ></span>
-      const selectedZone = <span class="cstat-no" title="statement not covered" >(record.zones || []).find(<span class="fstat-no" title="function not covered" >(z</span>) =&gt; z.plantingZoneId.toString() === editingZoneId.toString());</span>
+      const selectedZone = <span class="cstat-no" title="statement not covered" >(record.strata || []).find<span class="fstat-no" title="function not covered" >((</span>z) =&gt; z.stratumId.toString() === editingZoneId.toString());</span>
       const total =<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
         selectedZone?.densityData.<span class="cstat-no" title="statement not covered" >reduce((sum, densit<span class="fstat-no" title="function not covered" >y)</span> =&gt; {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span>
 <span class="cstat-no" title="statement not covered" >          return isNaN(den<span class="fstat-no" title="function not covered" >si</span>ty.de<span class="cstat-no" title="statement not covered" >nsity) ? sum : sum + density.density;</span></span>
@@ -1036,17 +1036,17 @@ const StratumT0EditBox = ({
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
   const <span class="cstat-no" title="statement not covered" >zoneToSave = useMemo(() =&gt; {</span>
     if (!plotsWithObservations?.length) {
-<span class="cstat-no" title="statement not covered" >      return { plantingZoneId: 0, densityData: [] };</span>
+<span class="cstat-no" title="statement not covered" >      return { stratumId: 0, densityData: [] };</span>
     }
 <span class="cstat-no" title="statement not covered" ></span>
-    const existingZone = (record.zones || []).find(
-      (zone) =&gt; plots<span class="cstat-no" title="statement not covered" >WithObservations?.[0].subs<span class="fstat-no" title="function not covered" >tr</span>atum_stratum_id === zone.plantingZoneId.toString()</span>
+    const existingZone = (record.strata || []).find(
+      (zone) =&gt; plots<span class="cstat-no" title="statement not covered" >WithObservations?.[0].subs<span class="fstat-no" title="function not covered" >tr</span>atum_stratum_id === zone.stratumId.toString()</span>
 <span class="cstat-no" title="statement not covered" >    );</span>
     if<span class="cstat-no" title="statement not covered" > (existingZone) {</span>
       return existingZone;
     }<span class="cstat-no" title="statement not covered" ></span>
     re<span class="fstat-no" title="function not covered" >tu</span>rn {<span class="cstat-no" title="statement not covered" ></span>
-      plantingZoneId: Number(plotsWithObservations?.[0].substratum_stratum_id),
+      stratumId: Number(plotsWithObservations?.[0].substratum_stratum_id),
 <span class="cstat-no" title="statement not covered" >      densityData: [],</span>
     };<span class="cstat-no" title="statement not covered" ></span>
   }, [plotsWithObservations, record]);
@@ -1057,7 +1057,7 @@ const StratumT0EditBox = ({
         const densityDataToUpdate = zoneToSave.densityData.find(
           (densityData) =&gt;<span class="cstat-no" title="statement not covered" > densityData.speciesId.toString() === id</span>
 <span class="fstat-no" title="function not covered" ></span>        );
-<span class="cstat-no" title="statement not covered" >        let zoneCopy: ZoneT0Data;</span>
+<span class="cstat-no" title="statement not covered" >        let zoneCopy: StratumT0Data;</span>
 <span class="cstat-no" title="statement not covered" ></span>
         if<span class="fstat-no" title="function not covered" > (</span>value !== undef<span class="cstat-no" title="statement not covered" >ined) {</span>
           if (densityDataToUpdate?.plotDensity !== undefined || densityDataToUpdate?.density !== undefined) {
@@ -1093,10 +1093,10 @@ const StratumT0EditBox = ({
         }
 <span class="cstat-no" title="statement not covered" ></span>
         //<span class="fstat-no" title="function not covered" > R</span>emove<span class="cstat-no" title="statement not covered" > the existing zone, then add the updated one</span>
-        const otherZones = (record.zones || []).filter(
-<span class="cstat-no" title="statement not covered" >          (z) =&gt; z.plantingZoneId.toString() !== plotsWithObservations?.[0].substratum_stratum</span>_id.toString()
+        const otherZones = (record.strata || []).filter(
+<span class="cstat-no" title="statement not covered" >          (z) =&gt; z.stratumId.toString() !== plotsWithObservations?.[0].substratum_stratum_id.to</span>String()
         );
-        setRecord({ ...record, zones: otherZones ? [...otherZones, zoneCopy] : [zoneCopy] });
+        setRecord({ ...record, strata: otherZones ? [...otherZones, zoneCopy] : [zoneCopy] });
       }
     },
     [plotsWithObservations, r<span class="cstat-no" title="statement not covered" >ecord, setRecord, zoneToSave]</span>
@@ -1390,7 +1390,7 @@ export default StratumT0EditBox;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-31T19:59:27.800Z
+                at 2025-12-31T20:09:41.774Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
