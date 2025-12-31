@@ -389,7 +389,7 @@ expo<span class="cstat-no" title="statement not covered" >rt type SubzoneInfo = 
 export<span class="cstat-no" title="statement not covered" > type ZoneInfo = {</span>
   id: nu<span class="cstat-no" title="statement not covered" >mber | string;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
   name: string;
-<span class="cstat-no" title="statement not covered" >  plantingSub</span>zones?: SubzoneInfo[];
+<span class="cstat-no" title="statement not covered" >  substrata?:</span> SubzoneInfo[];
 };
 <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 export type SubzoneSelectorProps = {
@@ -428,7 +428,7 @@ export default function SubzoneSelector(props: SubzoneSelectorProps): JSX.Elemen
   };<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
   const onChangeSubzon<span class="cstat-no" title="statement not covered" >e = (subzon<span class="fstat-no" title="function not covered" >e:</span> any) =&gt; {</span>
-    const foundSubzone = selectedZone?.plantingSubzones?.find(
+    const foundSubzone = selectedZone?.substrata?.find(
 <span class="cstat-no" title="statement not covered" >      (subzoneItem) =&gt; subzoneItem.id.toString() === subzone?.value?.toString()</span>
     );
 <span class="cstat-no" title="statement not covered" >    onSubzoneSelected(foundSubz</span>one);
@@ -462,18 +462,18 @@ export default function SubzoneSelector(props: SubzoneSelectorProps): JSX.Elemen
 &nbsp;
   const zoneOptions: any[] = useMemo(() =&gt; {
     return zones<span class="cstat-no" title="statement not covered" ></span>
-      .filter((zone) =&gt; zone.plantingSubzones)
+      .filter((zone) =&gt; zone.substrata)
       .sort((a, b) =&gt; a.name.localeCompare(b.name, undefined, { numeric: true }))
       .map((zone) =&gt; zoneToDropdownItem(zone));
   }, [zones]);
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
   co<span class="cstat-no" title="statement not covered" >nst subzoneOptions: <span class="fstat-no" title="function not covered" >an</span>y[] = us<span class="cstat-no" title="statement not covered" >eMemo(() =&gt; {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span></span>
-    if (!selectedZone?.plantingSubzones) {
+    if (!selectedZone?.substrata) {
       return [];<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >    }</span>
-    re<span class="cstat-no" title="statement not covered" >turn [...se</span>lectedZone.plantingSubzones]
+    re<span class="cstat-no" title="statement not covered" >turn [...se</span>lectedZone.substrata]
       .sort((a, b) =&gt; a.fullName.localeCompare(b.fullName, undefined, { numeric: true }))
-<span class="cstat-no" title="statement not covered" >      .map((subzone) =&gt; subzoneToDropdownItem(subzo<span class="fstat-no" title="function not covered" >ne</span>));<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span>
+<span class="cstat-no" title="statement not covered" >      .map((subzone) =&gt; subzoneToDropdownIte<span class="fstat-no" title="function not covered" >m(</span>subzone)<span class="cstat-no" title="statement not covered" >);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span>
   }, [selectedZone]);
 <span class="cstat-no" title="statement not covered" ></span>
   return (
@@ -519,7 +519,7 @@ export default function SubzoneSelector(props: SubzoneSelectorProps): JSX.Elemen
           options={subzoneOptions}
           onChange={(value) =&gt; onChangeSubzone(value)}
           errorTex<span class="fstat-no" title="function not covered" >t=</span>{subzoneE<span class="cstat-no" title="statement not covered" >rror}</span>
-          disabled={!selectedZone?.plantingSubzones?.length}
+          disabled={!selectedZone?.substrata?.length}
           isEqual={isEqual}
           freeSolo={false}
           hideClearIcon={true}
@@ -535,7 +535,7 @@ export default function SubzoneSelector(props: SubzoneSelectorProps): JSX.Elemen
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-31T19:52:18.242Z
+                at 2025-12-31T19:59:27.800Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

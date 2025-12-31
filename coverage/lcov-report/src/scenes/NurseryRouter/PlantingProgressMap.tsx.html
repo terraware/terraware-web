@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/91</span>
+                <span class='fraction'>0/90</span>
             </div>
         
             
@@ -236,9 +236,7 @@
 <a name='L171'></a><a href='#L171'>171</a>
 <a name='L172'></a><a href='#L172'>172</a>
 <a name='L173'></a><a href='#L173'>173</a>
-<a name='L174'></a><a href='#L174'>174</a>
-<a name='L175'></a><a href='#L175'>175</a>
-<a name='L176'></a><a href='#L176'>176</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L174'></a><a href='#L174'>174</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -369,8 +367,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -483,8 +479,8 @@ export default funct<span class="cstat-no" title="statement not covered" >ion</s
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  const subzonesAreaHa: Record<span class="fstat-no" title="function not covered" >&lt;n</span>umber, number&gt; = useMemo(() =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    const result: Record&lt;number, number&gt; = {}</span>;
-    plantingSite?.plantingZones
-<span class="cstat-no" title="statement not covered" >      ?.flatMap((zone) =&gt; zone<span class="fstat-no" title="function not covered" >.p</span>lantingSubzones)</span>
+    plantingSite?.strata
+<span class="cstat-no" title="statement not covered" >      ?.flatMap((zone) =&gt; zone<span class="fstat-no" title="function not covered" >.s</span>ubstrata)</span>
       ?.forEach((sz) =&gt; {
 <span class="cstat-no" title="statement not covered" >        result[sz.id] = sz.areaHa;</span>
 <span class="cstat-no" title="statement not covered" >      });</span>
@@ -493,8 +489,8 @@ export default funct<span class="cstat-no" title="statement not covered" >ion</s
 &nbsp;
   const <span class="cstat-no" title="statement not covered" >subzonesComplete: Re</span>cord&lt;number, boolean&gt; = useMemo(() =&gt; {
     cons<span class="cstat-no" title="statement not covered" >t result: Record&lt;numbe</span>r, boolean&gt; = {};
-    plantingSite?.plantingZones
-      ?.flatMap((zone) =&gt; zone.plantingSubzones)
+    plantingSite?.strata
+      ?.flatMap((zone) =&gt; zone.substrata)
       ?.forEach((sz) =&gt; {
         result[sz.id] = s<span class="cstat-no" title="statement not covered" >z.plantingCompleted;<span class="fstat-no" title="function not covered" ></span></span>
       });
@@ -534,18 +530,16 @@ export default funct<span class="cstat-no" title="statement not covered" >ion</s
 <span class="cstat-no" title="statement not covered" >        completeUpdate(id, val);</span>
 <span class="cstat-no" title="statement not covered" >      } else {</span>
         setStatsWarningDialogProps({ id, val });
-        const selectedZone = plantingSite?.plantingZones?.find((zone) =&gt;
-          zone.plantingSubzones.map((sz) =&gt; sz.id).includes(id)
-        );<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" ></span>        setZoneIdSelected(selectedZone?.id ?? -1);
-      }
-    },<span class="cstat-no" title="statement not covered" ></span>
-    [sel<span class="cstat-no" title="statement not covered" >ectedZoneHasStats, comple</span>teUpdate, plantingSite?.plantingZones]
-  );
+        const selectedZone = plantingSite?.strata?.find((zone) =&gt; zone.substrata.map((sz) =&gt; sz.id).includes(id));
+        setZoneIdSelected(selectedZone?.id ?? -1);
+      }<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" >    },</span>
+    [selectedZoneHasStats, completeUpdate, plantingSite?.strata]
+  );<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  return mapData ? (<span class="cstat-no" title="statement not covered" ></span>
-    &lt;&gt;<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span>
-      &lt;StatsWarningDialog
+  return mapData ? (
+    &lt;&gt;<span class="cstat-no" title="statement not covered" ></span>
+      &lt;StatsWarningDialog<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
 <span class="cstat-no" title="statement not covered" >        open={!!statsWarningDialogProps}</span>
         completeUpdateProps={statsWarningDialogProps}
         onClose={() =&gt; setStatsWarningDialogProps(undefined)}
@@ -595,7 +589,7 @@ export default funct<span class="cstat-no" title="statement not covered" >ion</s
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-31T19:52:18.242Z
+                at 2025-12-31T19:59:27.800Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

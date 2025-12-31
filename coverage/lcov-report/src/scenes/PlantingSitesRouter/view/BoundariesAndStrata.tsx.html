@@ -786,8 +786,8 @@ export default functio<span class="cstat-no" title="statement not covered" >n Bo
   const plantingCompleteArea = useMem<span class="cstat-no" title="statement not covered" >o(() =&gt; {</span>
     let total = 0;<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
     if (plantingSite) <span class="cstat-no" title="statement not covered" >{</span>
-<span class="fstat-no" title="function not covered" ></span>      plant<span class="cstat-no" title="statement not covered" >ingSite.plantingZones?.forEach((zone) =&gt; {</span>
-        zone.plantingSubzones.forEach((subzone) =&gt; {
+<span class="fstat-no" title="function not covered" ></span>      plant<span class="cstat-no" title="statement not covered" >ingSite.strata?.forEach((zone) =&gt; {</span>
+        zone.substrata.forEach((subzone) =&gt; {
           if (su<span class="fstat-no" title="function not covered" >bz</span>one.plant<span class="cstat-no" title="statement not covered" >ingCompleted) {</span>
             total += subzone.areaHa;
           }
@@ -920,9 +920,9 @@ fu<span class="cstat-no" title="statement not covered" >nction PlantingSiteMapVi
     if (!s<span class="cstat-no" title="statement not covered" >earch) {</span>
       setSearchZoneEntities([]);
     } else {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-      const entities = plantingSite?.plantingZones
+      const entities = plantingSite?.strata
         ?.filte<span class="cstat-no" title="statement not covered" >r((zone) =&gt; regexMatch(zone.name, search))</span>
-        .map((zone) =&gt; ({ sour<span class="cstat-no" title="statement not covered" >ceId: 'zones', id: zone.id }));<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+        .map((zone) =&gt; ({ sour<span class="cstat-no" title="statement not covered" >ceId: 'zones', id: zone.id }<span class="fstat-no" title="function not covered" >))</span>;<span class="cstat-no" title="statement not covered" ></span></span>
       setSearchZoneEnti<span class="cstat-no" title="statement not covered" >ties(entities ?? []);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
     }<span class="cstat-no" title="statement not covered" ></span>
   }, [plan<span class="cstat-no" title="statement not covered" >tingSite, search]);</span>
@@ -947,12 +947,12 @@ fu<span class="cstat-no" title="statement not covered" >nction PlantingSiteMapVi
         if (entity.type === 'site') {
           title = plantingSite.name;
           properties = [
-            { key: strings.ZONES, value: selectedHistory.plantingZones.length },
-            { key: strings.SUBZONES, value: selectedHistory.plantingZones.flatMap((z) =&gt; z.plantingSubzones).length },
+            { key: strings.ZONES, value: selectedHistory.strata.length },
+            { key: strings.SUBZONES, value: selectedHistory.strata.flatMap((z) =&gt; z.substrata).length },
           ];
         } <span class="cstat-no" title="statement not covered" >else if (enti</span>ty.type === 'zone') {
-          const zoneHistory = selectedHistory.plantingZones.find((_zoneHistory) =&gt; _zoneHistory.id === entity.id);
-<span class="cstat-no" title="statement not covered" >          const zone = plantingSite.plantingZones?.find((_zone) =&gt; _zone.id === zoneHistory?.plantingZoneId);</span>
+          const zoneHistory = selectedHistory.strata.find((_zoneHistory) =&gt; _zoneHistory.id === entity.id);
+<span class="cstat-no" title="statement not covered" >          const zone = plantingSite.strata?.find((_zone) =&gt; _zone.id === zoneHistory?.stratumId);</span>
           title = zoneHistory?.name ?? zone?.name ?? '';
 <span class="cstat-no" title="statement not covered" ></span>
           properties = [
@@ -960,9 +960,9 @@ fu<span class="cstat-no" title="statement not covered" >nction PlantingSiteMapVi
             { key: strings.TARGET_PLANTING_DENSITY, value: zone?.targetPlantingDensity ?? 0 },
             {
 <span class="cstat-no" title="statement not covered" >              key: strings.PLANTING_COMPLETE,</span>
-<span class="cstat-no" title="statement not covered" >              val</span>ue: zone?.plantingSubzones?.every((subzone) =&gt; subzone.plantingCompleted) ? strings.YES : strings.NO,
+<span class="cstat-no" title="statement not covered" >              val</span>ue: zone?.substrata?.every((subzone) =&gt; subzone.plantingCompleted) ? strings.YES : strings.NO,
             },
-<span class="cstat-no" title="statement not covered" >            { key: strings.SUBZONES, value: zone?.plantingSubzones.length ?? 0 },</span>
+<span class="cstat-no" title="statement not covered" >            { key: strings.SUBZONES, value: zone?.substrata.length ?? 0 },</span>
             {
               key: strings.LAST_OBSERVED,
               value: zone?.latestObservationCompletedTime
@@ -971,12 +971,12 @@ fu<span class="cstat-no" title="statement not covered" >nction PlantingSiteMapVi
             },
           ];
         } else if (entity.type === 'subzone') {
-          const subzoneHistory = selectedHistory.plantingZones
-            .flatMap((_zoneHistory) =&gt; _zoneHistory.plantingSubzones)
+          const subzoneHistory = selectedHistory.strata
+            .flatMap((_zoneHistory) =&gt; _zoneHistory.substrata)
             .find((_subzoneHistory) =&gt; _subzoneHistory.id === entity.id);
-          const subzone = plantingSite.plantingZones
-            ?.flatMap((_zone) =&gt; _zone.plantingSubzones)
-            .find((_subzone) =&gt; _subzone.id === subzoneHistory?.plantingSubzoneId);
+          const subzone = plantingSite.strata
+            ?.flatMap((_zone) =&gt; _zone.substrata)
+            .find((_subzone) =&gt; _subzone.id === subzoneHistory?.substratumId);
           title = subzoneHistory?.name ?? subzone?.name ?? '';
           properties = [
             {
@@ -1051,7 +1051,7 @@ fu<span class="cstat-no" title="statement not covered" >nction PlantingSiteMapVi
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-31T19:52:18.242Z
+                at 2025-12-31T19:59:27.800Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

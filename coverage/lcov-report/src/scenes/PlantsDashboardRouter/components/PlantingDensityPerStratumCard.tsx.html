@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/62</span>
+                <span class='fraction'>0/61</span>
             </div>
         
             
@@ -173,9 +173,7 @@
 <a name='L108'></a><a href='#L108'>108</a>
 <a name='L109'></a><a href='#L109'>109</a>
 <a name='L110'></a><a href='#L110'>110</a>
-<a name='L111'></a><a href='#L111'>111</a>
-<a name='L112'></a><a href='#L112'>112</a>
-<a name='L113'></a><a href='#L113'>113</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L111'></a><a href='#L111'>111</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -230,8 +228,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -310,40 +306,38 @@ expo<span class="cstat-no" title="statement not covered" >rt default function Pl
   useEffect(() =&gt; {
     if (plantingSite) {
       const zoneDensities: Record&lt;string, (number | null)[]&gt; = {};
-      plantingSite.plantingZones?.forEach((zone) =&gt; {
+      plantingSite.strata?.forEach((zone) =&gt; {
         zoneDensities[zone.name] = [zone.targetPlantingDensity];
 &nbsp;
         if (observa<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ti</span>onSumma<span class="cstat-no" title="statement not covered" >ries &amp;&amp; observationSummaries.length &gt; 0) {</span></span>
-          const zone<span class="cstat-no" title="statement not covered" >Fro</span>mObs = observationSummaries[0].plantingZones.find(
-<span class="cstat-no" title="statement not covered" >            (obsZone) =&gt; obsZone.plantingZoneId === zone.id</span>
-          )<span class="fstat-no" title="function not covered" >;<span class="cstat-no" title="statement not covered" ></span></span>
-          zoneDensities[zone.name].push(zoneFromObs?.plantingDensity ?? null);
-<span class="cstat-no" title="statement not covered" >        }</span>
-      });<span class="cstat-no" title="statement not covered" ></span>
-      setLabels(Object<span class="cstat-no" title="statement not covered" >.keys(zoneDensities).map(</span>(name) =&gt; truncate(name, MAX_ZONE_NAME_LENGTH)));
-      setTargets(Objec<span class="cstat-no" title="statement not covered" >t.values(zoneDensities).map((t) =&gt; t[0]));</span>
-      setActuals(Object.values(zo<span class="cstat-no" title="statement not covered" >neDensities).map((t) =&gt; t[1]));</span>
-      setTooltipTitle<span class="cstat-no" title="statement not covered" >s(Object.keys(zoneDensities));</span>
+          const zone<span class="cstat-no" title="statement not covered" >Fro</span>mObs = observationSummaries[0].strata.find((obsZone) =&gt; obsZone.stratumId === zone.id);
+<span class="cstat-no" title="statement not covered" >          zoneDensities[zone.name].push(zoneFromObs?.plantingDensity ?? null);</span>
+        }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+      });
+<span class="cstat-no" title="statement not covered" >      setLabels(Object.keys(zoneDensities).map</span>((name) =&gt; truncate(name, MAX_ZONE_NAME_LENGTH)));
+      setTargets(Ob<span class="cstat-no" title="statement not covered" >ject.values(zoneDensities)</span>.map((t) =&gt; t[0]));
+      setActuals(Objec<span class="cstat-no" title="statement not covered" >t.values(zoneDensities).m</span>ap((t) =&gt; t[1]));
+      setTooltipTitles<span class="cstat-no" title="statement not covered" >(Object.keys(zoneDensities));</span>
     } else {<span class="cstat-no" title="statement not covered" ></span>
       setLabels([]);<span class="cstat-no" title="statement not covered" ></span>
-      set<span class="fstat-no" title="function not covered" >Targets([]);</span>
-      setActuals<span class="cstat-no" title="statement not covered" >([]);</span>
-      setTooltipTitles([]);<span class="cstat-no" title="statement not covered" ></span>
+      setTargets([<span class="cstat-no" title="statement not covered" >]);</span>
+      setActuals([]);<span class="cstat-no" title="statement not covered" ></span>
+      set<span class="fstat-no" title="function not covered" >TooltipTitles([]);</span>
     }<span class="cstat-no" title="statement not covered" ></span>
-  }, [plantingSite, observationS<span class="cstat-no" title="statement not covered" >ummaries]);</span>
+  }, [plantingSite, observationSummaries]);<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const chartData = useMemo(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >    if (!labels?.length || !ta<span class="fstat-no" title="function not covered" >rg</span>ets?.length) {</span>
-      return undefined;
-<span class="cstat-no" title="statement not covered" >    }</span>
-<span class="cstat-no" title="statement not covered" ></span>
-    co<span class="cstat-no" title="statement not covered" >nst datasets: ChartDataset[] = [<span class="fstat-no" title="function not covered" ></span></span>
-      {
-<span class="cstat-no" title="statement not covered" >        label: strings.TARGET_DENSITY,</span>
-<span class="cstat-no" title="statement not covered" >        values: targets.map((v) =&gt; [v, v] as [number, number]),</span>
-        color: theme.palette.T<span class="cstat-no" title="statement not covered" >wClrBaseBlack,</span>
-        minB<span class="fstat-no" title="function not covered" >ar</span>Length: 1,<span class="cstat-no" title="statement not covered" ></span>
-        xAxisID: 'xAxisTarget',
+  const chartData = useMemo(() =<span class="cstat-no" title="statement not covered" >&gt; {</span>
+    if (!labels?.length || !targ<span class="cstat-no" title="statement not covered" >ets?.length) {</span>
+      return undefined;<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >    }<span class="fstat-no" title="function not covered" ></span></span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    const datasets: ChartDataset[] = [</span>
+      {<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >        label: strings.TARGET_DENSITY,<span class="fstat-no" title="function not covered" ></span></span>
+        values: targets.map((v) =&gt; [v, v] as [number, number]),
+<span class="cstat-no" title="statement not covered" >        color: theme.palette.TwClrBaseBlack,</span>
+<span class="cstat-no" title="statement not covered" >        minBarLength: 1,</span>
+        xAxisID: 'xAxisTarget'<span class="cstat-no" title="statement not covered" >,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
       },<span class="cstat-no" title="statement not covered" ></span>
     ];
 &nbsp;
@@ -406,7 +400,7 @@ expo<span class="cstat-no" title="statement not covered" >rt default function Pl
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-31T19:52:18.242Z
+                at 2025-12-31T19:59:27.800Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

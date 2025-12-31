@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">41.75% </span>
+                <span class="strong">41.89% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>124/297</span>
+                <span class='fraction'>124/296</span>
             </div>
         
             
@@ -906,9 +906,7 @@
 <a name='L841'></a><a href='#L841'>841</a>
 <a name='L842'></a><a href='#L842'>842</a>
 <a name='L843'></a><a href='#L843'>843</a>
-<a name='L844'></a><a href='#L844'>844</a>
-<a name='L845'></a><a href='#L845'>845</a>
-<a name='L846'></a><a href='#L846'>846</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
+<a name='L844'></a><a href='#L844'>844</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
@@ -1211,8 +1209,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1987,10 +1983,10 @@ const extractPlantingZonesFromSites = (sites: MinimalPlantingSite[]): MapSourceB
   const zonesEntities: MapEntity[<span class="fstat-no" title="function not covered" >] </span>= [];
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >  sites.forEach(<span class="fstat-no" title="function not covered" >(p</span>s) =&gt; {</span>
-    const zonesData = ps.plantingZones?.map((zone) =&gt; {
+    const zonesData = ps.strata?.map((zone) =&gt; {
       const { id, name, boundary } =<span class="cstat-no" title="statement not covered" > zone;<span class="fstat-no" title="function not covered" ></span></span>
       return {<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >        properties: { id, name, ty<span class="fstat-no" title="function not covered" >pe</span>: 'zone', recency: 0 },</span>
+<span class="cstat-no" title="statement not covered" >        properties: { id, n<span class="fstat-no" title="function not covered" >am</span>e, type: 'zone', recency: 0 },</span>
         boundary: getPolygons(boundary),<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >        id,</span>
       };
@@ -2011,7 +2007,7 @@ const extractPlantingZonesFromSites = (sites: MinimalPlantingSite[]): MapSourceB
  */
 const extractPlantingZones = (site: MinimalPlantingSite): MapSourceBaseData =&gt; {
   const zonesData =<span class="branch-0 cbranch-no" title="branch not covered" ></span>
-    site.plantingZones?.map((zone) =&gt; {
+    site.strata?.map((zone) =&gt; {
       const { id, name, boundary } = zone;
       return {
         properties: { id, name, type: 'zone', recency: 0 },
@@ -2029,12 +2025,12 @@ const extractPlantingZones = (site: MinimalPlantingSite): MapSourceBaseData =&gt
 /**<span class="fstat-no" title="function not covered" ></span>
  * Transform zones geometry data into UI model
  */<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-const extractPlantingZonesFromHis<span class="cstat-no" title="statement not covered" >tory </span>= (site: PlantingSiteHistory): MapSourceBaseData =&gt; {
+const extractPlantingZones<span class="cstat-no" title="statement not covered" >FromH</span>istory = (site: PlantingSiteHistory): MapSourceBaseData =&gt; {
   co<span class="cstat-no" title="statement not covered" >nst zonesData =<span class="fstat-no" title="function not covered" ></span></span>
-    site.plantingZones?.map((zone) =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >      const { id, plantingZoneId, name, boundary } = zone;</span>
+    site.strata?.map((zone) =&gt; {<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >      const { id, stratumId, name, boundary } = zone;</span>
       return {
-        properties: { id, plantingZoneId, name, type: 'zone', recency: 0 },
+        properties: { id, stratumId, name, type: 'zone', recency: 0 },
         boundary: getPolygons(boundary),
         id,
       };
@@ -2049,97 +2045,95 @@ const extractPlantingZonesFromHis<span class="cstat-no" title="statement not cov
 /**<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
  * Transform multiple sites subzones geometry data into UI model
  */<span class="cstat-no" title="statement not covered" ></span>
-const extractSubz<span class="cstat-no" title="statement not covered" >onesFromSites = (sites: MinimalPlantingSite[]): MapSour<span class="fstat-no" title="function not covered" >ce</span>BaseData <span class="cstat-no" title="statement not covered" >=&gt; {</span></span>
+const extractSubz<span class="cstat-no" title="statement not covered" >onesFromSites = (sites: MinimalPlantingSite[]): <span class="fstat-no" title="function not covered" >Ma</span>pSourceBa<span class="cstat-no" title="statement not covered" >seData =&gt; {</span></span>
   const subzoneEntities<span class="cstat-no" title="statement not covered" >: MapEntity[] = [];<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
   sites.forEach((ps) =&gt; {
-    const allPlantingSubzonesData = ps.plantingZones?.flatMap((zon<span class="cstat-no" title="statement not covered" >e) =&gt; {</span>
-      const { planting<span class="cstat-no" title="statement not covered" >Subzones } = zone;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-      return plantingSubzone<span class="cstat-no" title="statement not covered" >s.map((subzone) =&gt; {</span>
-<span class="fstat-no" title="function not covered" >        co</span>nst { id, na<span class="cstat-no" title="statement not covered" >me, fullName, boundary } = subzone;</span>
-        return {
-          properties: <span class="cstat-no" title="statement not covered" >{ id, name, fullName, type: 'subzone', zoneId: zone.id },</span>
-          boundary: getPoly<span class="cstat-no" title="statement not covered" >gons(boundary),</span>
-<span class="cstat-no" title="statement not covered" >          id,</span>
+    const allPlantingSubzonesData = ps.strata?.flatMap((zone)<span class="cstat-no" title="statement not covered" > =&gt; {</span>
+      const { substrat<span class="cstat-no" title="statement not covered" >a } = zone;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+      return substrata.map((<span class="cstat-no" title="statement not covered" >subzone) =&gt; {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+        const { id, na<span class="cstat-no" title="statement not covered" >me, fullName, boundary } = subzone;</span>
+        return {<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >          properties: { id, name, fullName, type: 'subzone', zoneId: zone.id },</span>
+          boundary: getPolygons(boundary),
+          id,
         };
       });
     });
     if (allPlantingSubzonesData) {
-      subzoneEntities.push(...allPlantingSubzonesData);
-    }
-<span class="cstat-no" title="statement not covered" >  });</span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >      subzoneEntities.push(...allPlantingSubzonesData);</span>
+    }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  });
+&nbsp;
   return {
     entities: subzoneEntities,
-    id: 'subzones',
-  };
-};<span class="missing-if-branch" title="if path not taken" >I</span>
-<span class="cstat-no" title="statement not covered" ></span>
-/**
- * Transform subzones geometry data into UI model
- */<span class="missing-if-branch" title="if path not taken" >I</span>
-const <span class="cstat-no" title="statement not covered" >extractSubzon</span>es = (site: MinimalPlantingSite): MapSourceBaseData =&gt; {
+  <span class="missing-if-branch" title="if path not taken" >I</span>  id: 'subzones',
+  };<span class="cstat-no" title="statement not covered" ></span>
+};
+&nbsp;
+/**<span class="missing-if-branch" title="if path not taken" >I</span>
+ * Tra<span class="cstat-no" title="statement not covered" >nsform subzon</span>es geometry data into UI model
+ */
+const extractSubzones = (site: MinimalPlantingSite): MapSourceBaseData =&gt; {
   const allPlantingSubzonesData =
-    site.plantingZones?.flatMap((zone) =&gt; {
-      const { plantingSubzones } = zone;
-      return plantingSubzones.map((subzone) =&gt; {
-        const { id, name, fullName, boundary } = subzone;
-        return {<span class="fstat-no" title="function not covered" ></span>
-          propertie<span class="cstat-no" title="statement not covered" >s: { id, name, fullName, type: 'subzone', zoneId:</span> zone.id },
-          boundary:<span class="cstat-no" title="statement not covered" > getPolygons(boundary),</span>
-          id,<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >        };</span>
+    site.strata?.flatMap((zone) =&gt; {
+      const { substrata } = zone;
+      return substrata.map((subzone) =&gt;<span class="fstat-no" title="function not covered" > {</span>
+        const { id,<span class="cstat-no" title="statement not covered" > name, fullName, boundary } = subzone;</span>
+        return {<span class="cstat-no" title="statement not covered" ></span>
+          properties: <span class="cstat-no" title="statement not covered" >{ id, name, fullName, type: 'subzone', zoneI</span>d: zone.id },
+<span class="cstat-no" title="statement not covered" >          boundary: getPolygons(boundary),</span>
+          id,
+        };
       });
     }) || [];
 &nbsp;
   return {
     entities: allPlantingSubzonesData.flatMap((f) =&gt; f),
     id: 'subzones',
-  };
-};
-<span class="fstat-no" title="function not covered" ><span class="branch-0 cbranch-no" title="branch not covered" ></span></span>
-const extractSubzonesFromHistory = (site: PlantingSiteHistory): MapSourceBaseData =&gt; {
-  const allPlanting<span class="cstat-no" title="statement not covered" >SubzonesData =</span>
-    site.plantingZones?.flatMap((zone) =&gt; {
-      const { plantingSubzones } = zone;
-      return plantingSubzones.map((subzone) =&gt; {
-<span class="cstat-no" title="statement not covered" >        const { id, name, fullName, boundary } = subzone;</span>
-<span class="cstat-no" title="statement not covered" >        return {</span>
-          properties: { id<span class="cstat-no" title="statement not covered" >, name, fullN<span class="fstat-no" title="function not covered" >am</span>e, ty<span class="cstat-no" title="statement not covered" >pe: 'subzone', zoneId: z</span>one.id }</span>,
-<span class="cstat-no" title="statement not covered" >          boundary: getPolygons(boundary)</span>,
-          id,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-<span class="cstat-no" title="statement not covered" >        };</span>
-      });
-<span class="cstat-no" title="statement not covered" >    }) || [];</span>
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ></span></span>
-  return {<span class="cstat-no" title="statement not covered" ></span>
-    en<span class="cstat-no" title="statement not covered" >tities: allPlantingSubzonesData.flatMap((f) =&gt; f),</span>
-    id: <span class="cstat-no" title="statement not covered" >'subzones',</span>
-  };
+  };<span class="fstat-no" title="function not covered" ><span class="branch-0 cbranch-no" title="branch not covered" ></span></span>
 };
 <span class="cstat-no" title="statement not covered" ></span>
-cons<span class="cstat-no" title="statement not covered" >t extractSubzonesFromHistoryAndResult = (</span>
-  si<span class="cstat-no" title="statement not covered" >te: PlantingSite,</span>
-  history: PlantingSiteHistory,
-  result: ObservationSu<span class="cstat-no" title="statement not covered" >mmary</span>
-): MapSourceBaseData =&gt; <span class="cstat-no" title="statement not covered" >{</span>
-  const allPlantingS<span class="cstat-no" title="statement not covered" >ubzonesData =<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-<span class="cstat-no" title="statement not covered" >    history.plantingZones?.flatMap((zoneHistory) =&gt; {</span>
-      const { plantingZoneId, plantingSubzones } = zoneHistory;
-      const zone = site.plantingZones?.find((_zone) =&gt; _zone.id === plantingZoneId);
-      const zoneResult = result.plantingZones.find((_zone) =&gt; _zone.plantingZoneId === plantingZoneId);
-      return plantingSubzones.map((subzoneHistory) =&gt; {
-        const { id, plantingSubzoneId, name, fullName, boundary } = subzoneHistory;
-        const subzone = zone?.plantingSubzones?.find((_subzone) =&gt; _subzone.id === plantingSubzoneId);
-        const subzoneResult = zoneResult?.plantingSubzones?.find(
-          (_subzone) =&gt; _subzone.plantingSubzoneId === plantingSubzoneId
-        );
+const extractSubzonesFromHistory = (site: PlantingSiteHistory): MapSourceBaseData =&gt; {
+  const allPlantingSubzonesData =
+    site.strata?.flatMap((zone) =&gt; {
+<span class="cstat-no" title="statement not covered" >      const { substrata } = zone;</span>
+<span class="cstat-no" title="statement not covered" >      return substrata.map((subzone) =&gt; {</span>
+        const { id, name, <span class="cstat-no" title="statement not covered" >fullName, bou<span class="fstat-no" title="function not covered" >nd</span>ary }<span class="cstat-no" title="statement not covered" > = subzone;</span></span>
+<span class="cstat-no" title="statement not covered" >        return {</span>
+          properties: { i<span class="cstat-no" title="statement not covered" >d, name, fullNam<span class="fstat-no" title="function not covered" >e,</span> type: 'subzone'<span class="cstat-no" title="statement not covered" >, zoneId: zone.id },</span></span>
+<span class="cstat-no" title="statement not covered" >          boundary: getPolygons(boundary)</span>,
+          id,
+<span class="cstat-no" title="statement not covered" >        };</span>
+<span class="cstat-no" title="statement not covered" >      });<span class="cstat-no" title="statement not covered" ></span></span>
+    }) || [];<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+  return<span class="cstat-no" title="statement not covered" > {</span>
+    entities: allPlantingSubzonesData.flatMap((f) =&gt; f),
+    id: 'subzones',
+  };<span class="cstat-no" title="statement not covered" ></span>
+};<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+const extractSubzonesFromHistoryAndResult = (
+  site: PlantingSite,<span class="cstat-no" title="statement not covered" ></span>
+  history: PlantingSiteH<span class="cstat-no" title="statement not covered" >istory,</span>
+  result: Observatio<span class="cstat-no" title="statement not covered" >nSummary<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+):<span class="cstat-no" title="statement not covered" > MapSourceBaseData =&gt; {</span>
+  const allPlantingSubzonesData =
+    history.strata?.flatMap((zoneHistory) =&gt; {
+      const { stratumId, substrata } = zoneHistory;
+      const zone = site.strata?.find((_zone) =&gt; _zone.id === stratumId);
+      const zoneResult = result.strata.find((_zone) =&gt; _zone.stratumId === stratumId);
+      return substrata.map((subzoneHistory) =&gt; {
+        const { id, substratumId, name, fullName, boundary } = subzoneHistory;
+        const subzone = zone?.substrata?.find((_subzone) =&gt; _subzone.id === substratumId);
+        const subzoneResult = zoneResult?.substrata?.find((_subzone) =&gt; _subzone.substratumId === substratumId);
         const recency = subzone?.latestObservationCompletedTime
           ? getRecencyFromTime(su<span class="fstat-no" title="function not covered" >bz</span>one.latestObservationCompletedTime)
           : -1;<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >        const survivalRate = subzoneRe</span>sult?.survivalRate;
         return {
-          properties: { id, name, fu<span class="fstat-no" title="function not covered" >ll</span>Name, type: 'subzone', zoneId: plantingZoneId, recency, survivalRate },
+          properties: { id, name, fu<span class="fstat-no" title="function not covered" >ll</span>Name, type: 'subzone', zoneId: stratumId, recency, survivalRate },
           boundary: getPolygons(boundary),
           id,<span class="cstat-no" title="statement not covered" ></span>
         };<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
@@ -2605,7 +2599,7 @@ export default MapService;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-31T19:52:18.242Z
+                at 2025-12-31T19:59:27.800Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

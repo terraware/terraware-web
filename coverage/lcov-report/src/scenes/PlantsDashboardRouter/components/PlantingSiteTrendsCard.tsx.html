@@ -491,7 +491,7 @@ ex<span class="cstat-no" title="statement not covered" >port default function Pl
   const { isDesktop, isMobile } = useDeviceInfo();
 <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
   useEffect(() =&gt; {
-    const zoneOpts = plantingSite?.plantingZones?.map((pzone) =&gt; ({ label: pzone.name, value: pzone.id }));
+    const zoneOpts = plantingSite?.strata?.map((pzone) =&gt; ({ label: pzone.name, value: pzone.id }));
     if (zoneOpts) {
       setZoneOptions(zoneOpts);
       setSelectedPlantsPerHaZone(zoneOpts[0].value);
@@ -501,24 +501,24 @@ ex<span class="cstat-no" title="statement not covered" >port default function Pl
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >  const plantsChartData: ChartData = useMemo(() =&gt; {</span>
     const f<span class="fstat-no" title="function not covered" >il</span>tere<span class="cstat-no" title="statement not covered" >dSummaries = observatio</span>nSummaries?.filter((sc) =&gt; {
-      const zone = sc.plantingZones.find((pz) =&gt; pz.plantingZoneId === selectedPlantsPerHaZone);
+      const zone = sc.strata.find((pz) =&gt; pz.stratumId === selectedPlantsPerHaZone);
 <span class="cstat-no" title="statement not covered" >      if (zone?.plantingDensity !== undefined)</span> {
         return true<span class="cstat-no" title="statement not covered" >;</span>
       }<span class="cstat-no" title="statement not covered" ></span>
     });<span class="cstat-no" title="statement not covered" ></span>
     const labels = <span class="cstat-no" title="statement not covered" >filteredSummaries?.map((sm) =&gt; sm.latestObs</span>ervationTime);
     const values =<span class="cstat-no" title="statement not covered" > filteredSummaries?.map((sm) =&gt; {</span>
-      const zone = <span class="cstat-no" title="statement not covered" >sm.plantingZones.find((pz) =&gt; pz.plantingZoneId === se</span>lectedPlantsPerHaZone);
+      const zone = <span class="cstat-no" title="statement not covered" >sm.strata.find((pz) =&gt; pz.stratumId === selectedPlants</span>PerHaZone);
       return zone?.plantingDensit<span class="cstat-no" title="statement not covered" >y || 0;</span>
     });<span class="cstat-no" title="statement not covered" ></span>
 <span class="fstat-no" title="function not covered" ></span>
     const minValues = filteredSummaries?.map((sm) =&gt; {
-      const zone<span class="cstat-no" title="statement not covered" > = sm.plantingZones.find((pz) =&gt;</span> pz.plantingZoneId === selectedPlantsPerHaZone);
+      const zone<span class="cstat-no" title="statement not covered" > = sm.strata.find((pz) =&gt; pz.str</span>atumId === selectedPlantsPerHaZone);
       return (zone?.plantingDensity || 0)<span class="cstat-no" title="statement not covered" > - (zone?.plantingDensityStdD</span>ev || 0);
     });<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
     const maxValues = filteredSummaries?.map((sm)<span class="cstat-no" title="statement not covered" > =&gt; {</span>
-      const zone = sm.plantingZone<span class="cstat-no" title="statement not covered" >s.find((pz) =&gt; pz.plantingZoneId =</span>== selectedPlantsPerHaZone);
+      const zone = sm.strata.find(<span class="cstat-no" title="statement not covered" >(pz) =&gt; pz.stratumId === selectedP</span>lantsPerHaZone);
 <span class="cstat-no" title="statement not covered" >      return (zone?.plantingDe<span class="fstat-no" title="function not covered" >ns</span>ity || 0) + (zone?.plantingDensityStdDev || 0);</span>
     });
 <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
@@ -552,14 +552,14 @@ ex<span class="cstat-no" title="statement not covered" >port default function Pl
 &nbsp;
   const survivalChartData: ChartData = useMemo(() =&gt; {
     const filteredSummaries = observationSummaries?.filter((sc) =&gt; {
-      const zone = sc.plantingZones.find((pz) =&gt; pz.plantingZoneId === selectedPlantsPerHaZone);
+      const zone = sc.strata.find((pz) =&gt; pz.stratumId === selectedPlantsPerHaZone);
       if (zone?.survivalRate !== undefined) {
         return true;
       }
     });
     const labels = filteredSummaries?.map((sm) =&gt; sm.latestObservationTime);
     const values = filteredSummaries?.map((sm) =&gt; {
-      const zone = sm.plantingZones.find((pz) =&gt; pz.plantingZoneId === selectedSurvivalZone);
+      const zone = sm.strata.find((pz) =&gt; pz.stratumId === selectedSurvivalZone);
       return zone?.survivalRate || 0;
     });
 &nbsp;
@@ -585,7 +585,7 @@ ex<span class="cstat-no" title="statement not covered" >port default function Pl
         &lt;Box
           display={<span class="cstat-no" title="statement not covered" >'flex'}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
           flexDirec<span class="cstat-no" title="statement not covered" >tion={isMobile ? 'column' : 'row'}<span class="fstat-no" title="function not covered" ></span></span>
-          alignItem<span class="cstat-no" title="statement not covered" >s={isMobile ? 'flex-st<span class="fstat-no" title="function not covered" >ar</span>t' : '<span class="cstat-no" title="statement not covered" >center'}</span></span>
+          alignItem<span class="cstat-no" title="statement not covered" >s={isMobile ? '<span class="fstat-no" title="function not covered" >fl</span>ex-sta<span class="cstat-no" title="statement not covered" >rt' : 'center'}</span></span>
 <span class="cstat-no" title="statement not covered" >        &gt;</span>
           &lt;Box display={'flex'} alignItems={'center'}&gt;
 <span class="cstat-no" title="statement not covered" >            &lt;Typography fontSize={'20px'} fontWeight={600} marginRight={1}&gt;</span>
@@ -682,7 +682,7 @@ ex<span class="cstat-no" title="statement not covered" >port default function Pl
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-31T19:52:18.242Z
+                at 2025-12-31T19:59:27.800Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

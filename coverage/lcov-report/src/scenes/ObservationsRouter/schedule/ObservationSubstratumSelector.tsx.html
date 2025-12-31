@@ -248,10 +248,7 @@
 <a name='L183'></a><a href='#L183'>183</a>
 <a name='L184'></a><a href='#L184'>184</a>
 <a name='L185'></a><a href='#L185'>185</a>
-<a name='L186'></a><a href='#L186'>186</a>
-<a name='L187'></a><a href='#L187'>187</a>
-<a name='L188'></a><a href='#L188'>188</a>
-<a name='L189'></a><a href='#L189'>189</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L186'></a><a href='#L186'>186</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -335,9 +332,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -419,7 +414,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -450,7 +444,7 @@ im<span class="cstat-no" title="statement not covered" >port Link from 'src/comp
 impo<span class="cstat-no" title="statement not covered" >rt { APP_PATHS } from 'src/constants';</span>
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import strings fro<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >m </span>'src/strings';</span>
-im<span class="cstat-no" title="statement not covered" >port { PlantingZone } from 'src/types/Tracking';</span>
+im<span class="cstat-no" title="statement not covered" >port { Stratum } from 'src/types/Tracking';</span>
 impo<span class="cstat-no" title="statement not covered" >rt { isAfter } from 'src/utils/dateUtils';</span>
 <span class="cstat-no" title="statement not covered" ></span>
 interfac<span class="cstat-no" title="statement not covered" >e ObservationSubstratumSel<span class="fstat-no" title="function not covered" >ec</span>torP<span class="cstat-no" title="statement not covered" >rops {</span></span>
@@ -492,9 +486,9 @@ const ObservationSubstratumSelector = ({ errorText, onChangeSelectedSubzones }: 
   );<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
   cons<span class="cstat-no" title="statement not covered" >t onChangeZoneCheckbox = useC<span class="fstat-no" title="function not covered" >al</span>lback(</span>
-    (zon<span class="cstat-no" title="statement not covered" >e: PlantingZone) =&gt; (value: boolean) =&gt; {</span>
+    (zon<span class="cstat-no" title="statement not covered" >e: Stratum) =&gt; (value: boolean) =&gt; {</span>
       cons<span class="cstat-no" title="statement not covered" >t nextSelectedSubzones = new Map(sel</span>ectedSubzones);
-      zone.plantingSubzones.forEach((subzone) =&gt; {
+      zone.substrata.forEach((subzone) =&gt; {
         nextSelectedSubzones.set(subzone.id, value);
 <span class="cstat-no" title="statement not covered" >      });</span>
 &nbsp;
@@ -503,45 +497,42 @@ const ObservationSubstratumSelector = ({ errorText, onChangeSelectedSubzones }: 
     [handleOnChangeSelectedSubzone<span class="cstat-no" title="statement not covered" >s, selectedSubzones]</span>
   );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  cons<span class="cstat-no" title="statement not covered" >t isZoneFullySelected = (zone: PlantingZone) =&gt;</span>
-    zone.plantingSubzones.every((subzone) =&gt; selectedSubzones.get(subzone.id));
+  cons<span class="cstat-no" title="statement not covered" >t isZoneFullySelected = (zone: Stratum) =&gt; zone.substr</span>ata.every((subzone) =&gt; selectedSubzones.get(subzone.id));
 &nbsp;
-  const isZonePartiallySelected = (zone: PlantingZone) =&gt;
-    !isZoneFullySelected(zone) <span class="cstat-no" title="statement not covered" >&amp;&amp; zone.plantingSubzones.some((subzone) =&gt; selectedSubzones.get(subzone.id));</span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-    if<span class="cstat-no" title="statement not covered" > (plantingSite) {<span class="fstat-no" title="function not covered" ></span></span>
-      //<span class="cstat-no" title="statement not covered" > Initialize all subzone selections</span>
-      const initialSelectedSubzones = new Map(
-<span class="cstat-no" title="statement not covered" >        plantingSite.plantingZones?.flatMap((zone) =&gt;</span>
-          zone.plantingSubzones.map((subzone) =&gt; [subzone.id, selectAll ? true : false])
-        )
-      );
-      handleOnChangeSelectedSu<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >bz</span>ones(ini<span class="cstat-no" title="statement not covered" >tialSelectedSubzones);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span>
-    }<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
-<span class="cstat-no" title="statement not covered" >  }, [handleOnChangeSelectedSu<span class="fstat-no" title="function not covered" >bz</span>ones, plantingSite, selectAll]);</span>
-&nbsp;
-  re<span class="cstat-no" title="statement not covered" >turn (</span>
-    plantingSite &amp;&amp;<span class="cstat-no" title="statement not covered" ></span>
-    plantingSite.plantingZones?.length &amp;&amp; (
-      &lt;Gri<span class="fstat-no" title="function not covered" >d </span>containe<span class="cstat-no" title="statement not covered" >r spacing={3}&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  const isZonePartiallySelected = (zone: Stratum) =&gt;
+    !isZoneFullySelected(zone) &amp;&amp; zone.substrata.some((subzone) =&gt; selectedSubzones.get(subzone.id));
+<span class="cstat-no" title="statement not covered" ></span>
+  us<span class="fstat-no" title="function not covered" >eE</span>ffect(()<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > =</span>&gt; {</span>
+    if (plantingSite) {<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >      // Initialize all subzo<span class="fstat-no" title="function not covered" >ne</span> selections</span>
+      co<span class="cstat-no" title="statement not covered" >nst initialSelectedSubzones = new Map(</span>
+        plantingSite.strata?.flatMap((zone) =&gt; zone.substrata.map((subzone) =&gt; [subzone.id, selectAll ? true : false]))
+<span class="cstat-no" title="statement not covered" >      );</span>
+      handleOnChangeSelectedSubzones(initialSelectedSubzones);
+    }
+  }, [handleOnChangeSelectedSubzones, plantingSite, selectAll]);
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
+  return (<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
+<span class="cstat-no" title="statement not covered" >    plantingSite &amp;&amp;<span class="fstat-no" title="function not covered" ></span></span>
+    plantingSite.strata?.length &amp;&amp; (
+<span class="cstat-no" title="statement not covered" >      &lt;Grid container spacing={3}&gt;</span>
+        &lt;Grid item xs={12}&gt;<span class="cstat-no" title="statement not covered" ></span>
+          &lt;Typography&gt; {strings.SCHEDULE_OBSERVATION_MESSAGE}&lt;/Typo<span class="fstat-no" title="function not covered" >gr</span>aphy&gt;<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+          {errorText &amp;&amp; &lt;Typography color={theme.palette.TwClrTxtDanger}&gt;{errorText}&lt;/Typography&gt;}
+<span class="cstat-no" title="statement not covered" >        &lt;/Grid&gt;</span>
         &lt;Grid item xs={12}&gt;
-          &lt;Typography&gt; {strings.SCHEDULE_OBSERVATION_MESSAGE}&lt;/Typography&gt;
-<span class="cstat-no" title="statement not covered" >          {errorText &amp;&amp; &lt;Typography color={theme.palette.TwClrT</span>xtDanger}&gt;{errorText}&lt;/Typography&gt;}
-        &lt;/Grid&gt;
-        &lt;Grid item xs={12}&gt;
-<span class="cstat-no" title="statement not covered" >          &lt;Checkbox</span>
-            id='selectAll'
+          &lt;Checkbox
+<span class="cstat-no" title="statement not covered" >            id='selectAll'</span>
             name='SelectAll'
             label={strings.SELECT_ALL}
             value={selectAll}
             onChange={setSelectAll}
           /&gt;
         &lt;/Grid&gt;
-        {plantingSite.plantingZones?.map((zone, index) =&gt; {
-          return (<span class="fstat-no" title="function not covered" ></span>
-<span class="cstat-no" title="statement not covered" >            &lt;Grid item xs={12} key={index}&gt;</span>
-              &lt;Checkbox
+        {plantingSite.strata?.map((zone, index) =&gt; {
+          return (
+            &lt;Grid item xs={12} key={index}&gt;<span class="fstat-no" title="function not covered" ></span>
+<span class="cstat-no" title="statement not covered" >              &lt;Checkbox</span>
                 id={`observation-zone-${zone.id}`}
                 indeterminate={isZonePartiallySelected(zone)}
                 label={zone.name}
@@ -577,16 +568,16 @@ const ObservationSubstratumSelector = ({ errorText, onChangeSelectedSubzones }: 
                       )}
                     &lt;/Typography&gt;
                     &lt;Link
-                      target='_blank'<span class="fstat-no" title="function not covered" ></span>
-<span class="cstat-no" title="statement not covered" >                      fontSize={'16px'}</span>
-                      to={APP_PATHS.PLANTING_SITES_VIEW.replace(':plantingSiteId', plantingSite.id.toString())}
+                      target='_blank'
+                      fontSize={'16px'}<span class="fstat-no" title="function not covered" ></span>
+<span class="cstat-no" title="statement not covered" >                      to={APP_PATHS.PLANTING_SITES_VIEW.replace(':plantingSiteId', plantingSite.id.toString())}</span>
                     &gt;
                       {strings.VIEW_MAP}
                     &lt;/Link&gt;
                   &lt;/Box&gt;
                 )}
               &lt;Box sx={{ columnGap: theme.spacing(3), paddingLeft: `${theme.spacing(4)}` }}&gt;
-                {zone.plantingSubzones.map((subzone, _index) =&gt; {
+                {zone.substrata.map((subzone, _index) =&gt; {
                   return (
                     &lt;Box sx={{ display: 'inline-block', width: '100%' }} key={_index}&gt;
                       &lt;Checkbox
@@ -606,8 +597,8 @@ const ObservationSubstratumSelector = ({ errorText, onChangeSelectedSubzones }: 
                             paddingLeft: 1,
                           }}
                         &gt;
-<span class="cstat-no" title="statement not covered" >                          {subzone.latestObservati</span>onCompletedTime
-                            ? strings.formatString(
+                          {subzone.latestObservationCompletedTime
+<span class="cstat-no" title="statement not covered" >                            ? strings.formatString</span>(
                                 strings.LAST_OBSERVATION,
                                 getDateDisplayValue(subzone.latestObservationCompletedTime)
                               )
@@ -634,7 +625,7 @@ export default ObservationSubstratumSelector;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-31T19:52:18.242Z
+                at 2025-12-31T19:59:27.800Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
