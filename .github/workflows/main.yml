@@ -104,7 +104,7 @@ jobs:
         run: yarn build
         env:
           REACT_APP_TERRAWARE_API: ''
-          REACT_APP_TERRAWARE_TIER: ${{ env.IS_CD == 'true' && env.LOWER_TIER || 'test' }}
+          REACT_APP_TERRAWARE_TIER: ${{ env.LOWER_TIER }}
           REACT_APP_DATADOG_APP_ID: ${{ secrets.DATADOG_APP_ID }}
           REACT_APP_DATADOG_CLIENT_TOKEN: ${{ secrets.DATADOG_CLIENT_TOKEN }}
           REACT_APP_TERRAWARE_FE_BUILD_VERSION: ${{ env.APP_VERSION }}

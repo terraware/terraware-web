@@ -6,9 +6,6 @@ set -euo pipefail
 commit_sha="${GITHUB_SHA:0:12}"
 APP_VERSION=$commit_sha
 
-# Store app version in build version file
-echo $APP_VERSION > public/build-version.txt
-
 # Define tier based on branch ref
 if [[ "$GITHUB_REF" =~ refs/tags/(v[0-9]+\.[0-9.]+) ]]; then
   export TIER=PROD
@@ -17,8 +14,19 @@ elif [[ "$GITHUB_REF" == refs/heads/main ]]; then
   export TIER=STAGING
   APP_VERSION=x$APP_VERSION
 else
+  export TIER=TEST
+fi
+
+LOWER_TIER=$(echo $TIER | tr '[:upper:]' '[:lower:]')
+
+# Store app version in build version file
+echo $APP_VERSION > public/build-version.txt
+
+if [[ "$TIER" == TEST ]]; then
   echo "
 IS_CD=false
+TIER=${TIER}
+LOWER_TIER=${LOWER_TIER}
 APP_VERSION=${APP_VERSION}" >> $GITHUB_ENV
   exit
 fi
@@ -33,7 +41,7 @@ ECS_CLUSTER_VAR_NAME=${TIER}_ECS_CLUSTER
 ECS_SERVICE_VAR_NAME=${TIER}_ECS_SERVICE
 IS_CD=true
 TIER=$TIER
-LOWER_TIER=$(echo $TIER | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+LOWER_TIER=${LOWER_TIER}" >> $GITHUB_ENV
 
 # Define secret names based on the tier; the values of the secrets will be looked up
 # by the GitHub Actions steps.
