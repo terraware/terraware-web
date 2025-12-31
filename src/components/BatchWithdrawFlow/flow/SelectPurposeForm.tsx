@@ -149,7 +149,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   };
 
   const onChangePlantingSite = (value: string) => {
-    updateField('plantingSubzoneId', undefined); // clear subzone id when there's a new planting site id
+    updateField('substratumId', undefined); // clear subzone id when there's a new planting site id
     updateField('plantingSiteId', value);
     setSelectedZone(undefined);
     setSelectedSubzone(undefined);
@@ -164,12 +164,12 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     setSelectedZone(value);
     setSelectedSubzone(undefined);
     setZoneId(value?.id);
-    updateField('plantingSubzoneId', undefined); // clear subzone id when there's a new planting zone id
+    updateField('substratumId', undefined); // clear subzone id when there's a new planting zone id
   };
 
   const onChangeSubzone = (value: any) => {
     setSelectedSubzone(value);
-    updateField('plantingSubzoneId', value?.id);
+    updateField('substratumId', value?.id);
   };
 
   const setIndividualError = (id: string, error?: string) => {
@@ -354,11 +354,11 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
       setIndividualError('zoneId', strings.REQUIRED_FIELD);
     }
 
-    if (!localRecord.plantingSubzoneId) {
+    if (!localRecord.substratumId) {
       setIndividualError('subzoneId', strings.REQUIRED_FIELD);
     }
 
-    return localRecord.plantingSiteId && localRecord.plantingSubzoneId;
+    return localRecord.plantingSiteId && localRecord.substratumId;
   };
 
   const onNextHandler = () => {
@@ -384,7 +384,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
       ...localRecord,
       destinationFacilityId: isNurseryTransfer ? localRecord.destinationFacilityId : undefined,
       plantingSiteId: isOutplant ? localRecord.plantingSiteId : undefined,
-      plantingSubzoneId: isOutplant ? localRecord.plantingSubzoneId : undefined,
+      substratumId: isOutplant ? localRecord.substratumId : undefined,
       facilityId: Number(selectedNursery?.id || -1),
       batchWithdrawals: batches
         .filter((batch: SearchResponseElement) => {
