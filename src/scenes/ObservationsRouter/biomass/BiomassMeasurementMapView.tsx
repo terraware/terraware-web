@@ -126,13 +126,13 @@ export default function BiomassMeasurementMapView({
     return MapService.getMapDataFromObservation(selectedObservation, plantingSiteHistory);
   }, [selectedObservation, selectedObservationDate, plantingSiteMapData, plantingSiteHistory]);
 
-  const layerOptions: MapLayer[] = ['Planting Site', 'Zones', 'Monitoring Plots'];
+  const layerOptions: MapLayer[] = ['Planting Site', 'Strata', 'Monitoring Plots'];
   const [includedLayers, setIncludedLayers] = useState<MapLayer[]>(layerOptions);
 
   const layerOptionLabels: Record<MapLayer, string> = {
     'Planting Site': strings.PLANTING_SITE,
-    Zones: strings.ZONES,
-    'Sub-Zones': strings.SUBZONES,
+    Strata: strings.ZONES,
+    'Sub-Strata': strings.SUBZONES,
     'Monitoring Plots': strings.MONITORING_PLOTS,
     'Project Zones': strings.PROJECT_ZONES,
   };
@@ -180,7 +180,7 @@ export default function BiomassMeasurementMapView({
 
   return (
     <Box display='flex' flexDirection={isDesktop ? 'row' : 'column-reverse'} flexGrow={1}>
-      <PlantingSiteMapLegend options={['site', 'zone', 'permanentPlot', 'temporaryPlot', 'adHocPlot']} />
+      <PlantingSiteMapLegend options={['site', 'stratum', 'permanentPlot', 'temporaryPlot', 'adHocPlot']} />
       <Box display='flex' sx={{ flexGrow: 1 }}>
         {mapData.site && (
           <PlantingSiteMap

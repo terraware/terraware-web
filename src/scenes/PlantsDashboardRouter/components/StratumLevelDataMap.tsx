@@ -309,7 +309,7 @@ export default function StratumLevelDataMap({ plantingSiteId }: StratumLevelData
           <PlantingSiteMap
             mapData={mapData}
             style={{ borderRadius: '8px' }}
-            layers={['Planting Site', 'Zones', 'Sub-Zones']}
+            layers={['Planting Site', 'Strata', 'Sub-Strata']}
             showSurvivalRateFill={!!latestResult && legends.find((l) => l.title === strings.SURVIVAL_RATE)?.checked}
             showRecencyFill={legends.find((l) => l.title === strings.OBSERVATION_EVENTS)?.checked}
             focusEntities={focusEntities}

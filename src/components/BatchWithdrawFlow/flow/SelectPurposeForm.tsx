@@ -75,11 +75,11 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const [activeGrowthQuantityWithdrawn, setActiveGrowthQuantityWithdrawn] = useState<number>(0);
   const [hardeningOffQuantityWithdrawn, setHardeningOffQuantityWithdrawn] = useState<number>(0);
   const [germinatingQuantityWithdrawn, setGerminatingQuantityWithdrawn] = useState<number>(0);
-  const [zones, setZones] = useState<any[]>([]);
-  const [zoneId, setZoneId] = useState<number>();
+  const [strata, setStrata] = useState<any[]>([]);
+  const [stratumId, setStratumId] = useState<number>();
   const [noReadySeedlings, setNoReadySeedlings] = useState<boolean>(false);
-  const [selectedSubzone, setSelectedSubzone] = useState<SubstratumInfo>();
-  const [selectedZone, setSelectedZone] = useState<StratumInfo>();
+  const [selectedStratum, setSelectedStratum] = useState<StratumInfo>();
+  const [selectedSubstratum, setSelectedSubstratum] = useState<SubstratumInfo>();
   const [projectRecord, setProjectRecord] = useState<{ projectId?: number }>({});
 
   const speciesMap = useMemo((): Record<string, string> => {
@@ -151,24 +151,24 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const onChangePlantingSite = (value: string) => {
     updateField('substratumId', undefined); // clear substratum id when there's a new planting site id
     updateField('plantingSiteId', value);
-    setSelectedZone(undefined);
-    setSelectedSubzone(undefined);
+    setSelectedStratum(undefined);
+    setSelectedSubstratum(undefined);
     const plantingSite = allPlantingSites
       ? allPlantingSites.find((site) => site.id.toString() === value.toString())
       : null;
-    setZones(plantingSite?.strata || []);
-    setZoneId(undefined);
+    setStrata(plantingSite?.strata || []);
+    setStratumId(undefined);
   };
 
-  const onChangePlantingZone = (value: any) => {
-    setSelectedZone(value);
-    setSelectedSubzone(undefined);
-    setZoneId(value?.id);
-    updateField('substratumId', undefined); // clear substratum id when there's a new planting zone id
+  const onChangeStratum = (value: any) => {
+    setSelectedStratum(value);
+    setSelectedSubstratum(undefined);
+    setStratumId(value?.id);
+    updateField('substratumId', undefined); // clear substratum id when there's a new stratum id
   };
 
-  const onChangeSubzone = (value: any) => {
-    setSelectedSubzone(value);
+  const onChangeSubstratum = (value: any) => {
+    setSelectedSubstratum(value);
     updateField('substratumId', value?.id);
   };
 
@@ -332,10 +332,10 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     return allValid;
   };
 
-  const validatePlantingSiteSubzone = () => {
+  const validatePlantingSiteSubstratum = () => {
     setIndividualError('plantingSiteId', '');
-    setIndividualError('zoneId', '');
-    setIndividualError('subzoneId', '');
+    setIndividualError('stratumId', '');
+    setIndividualError('substratumId', '');
 
     if (!isOutplant) {
       return true;
@@ -345,17 +345,17 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
       setIndividualError('plantingSiteId', strings.REQUIRED_FIELD);
     }
 
-    if (!zones.length) {
+    if (!strata.length) {
       // stratum/substratum not required if site has no strata/substrata
       return !!localRecord.plantingSiteId;
     }
 
-    if (!zoneId) {
-      setIndividualError('zoneId', strings.REQUIRED_FIELD);
+    if (!stratumId) {
+      setIndividualError('stratumId', strings.REQUIRED_FIELD);
     }
 
     if (!localRecord.substratumId) {
-      setIndividualError('subzoneId', strings.REQUIRED_FIELD);
+      setIndividualError('substratumId', strings.REQUIRED_FIELD);
     }
 
     return localRecord.plantingSiteId && localRecord.substratumId;
@@ -365,14 +365,14 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     const nurseryTransferInvalid = !validateNurseryTransfer();
     const selectedNurseryInvalid = !validateSelectedNursery();
     const withdrawnQuantityInvalid = !validateWithdrawnQuantity();
-    const plantingSiteSubzoneInvalid = !validatePlantingSiteSubzone();
+    const plantingSiteSubstratumInvalid = !validatePlantingSiteSubstratum();
     const germinatingReadyAndActiveGrowthInvalid = !validateQuantities();
     if (
       fieldsErrors.withdrawnDate ||
       nurseryTransferInvalid ||
       selectedNurseryInvalid ||
       withdrawnQuantityInvalid ||
-      plantingSiteSubzoneInvalid ||
+      plantingSiteSubstratumInvalid ||
       germinatingReadyAndActiveGrowthInvalid
     ) {
       return;
@@ -726,15 +726,15 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                     selectStyles={{ optionsContainer: { maxHeight: '250px' } }}
                   />
                 </Grid>
-                {!!zones.length && (
+                {!!strata.length && (
                   <SubstratumSelector
-                    strata={zones}
-                    onStratumSelected={onChangePlantingZone}
-                    onSubstratumSelected={onChangeSubzone}
-                    stratumError={fieldsErrors.zoneId}
-                    substratumError={fieldsErrors.subzoneId}
-                    selectedSubstratum={selectedSubzone}
-                    selectedStratum={selectedZone}
+                    strata={strata}
+                    onStratumSelected={onChangeStratum}
+                    onSubstratumSelected={onChangeSubstratum}
+                    stratumError={fieldsErrors.stratumId}
+                    substratumError={fieldsErrors.substratumId}
+                    selectedSubstratum={selectedSubstratum}
+                    selectedStratum={selectedStratum}
                   />
                 )}
               </>

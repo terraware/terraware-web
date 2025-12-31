@@ -131,7 +131,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
           });
         }
       }
-      if (mapData.substratum && (layers === undefined || layers?.includes('Sub-Zones'))) {
+      if (mapData.substratum && (layers === undefined || layers?.includes('Sub-Strata'))) {
         sources.push({
           ...mapData.substratum,
           ...getRenderAttributes('substratum'),
@@ -175,7 +175,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
             : undefined,
         });
       }
-      if (mapData.stratum && (layers === undefined || layers?.includes('Zones'))) {
+      if (mapData.stratum && (layers === undefined || layers?.includes('Strata'))) {
         sources.push({
           ...mapData.stratum,
           ...getRenderAttributes('stratum'),
