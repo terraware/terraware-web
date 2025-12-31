@@ -74,9 +74,9 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
   useEffect(() => {
     if (plantingSite) {
       const zoneDensities: Record<string, number | string> = {};
-      plantingSite.plantingZones?.forEach((zone) => {
+      plantingSite.strata?.forEach((zone) => {
         if (latestResult) {
-          const zoneFromObs = latestResult.plantingZones.find((obsZone) => obsZone.plantingZoneId === zone.id);
+          const zoneFromObs = latestResult.strata.find((obsZone) => obsZone.stratumId === zone.id);
           zoneDensities[zone.name] = zoneFromObs?.plantingDensity ?? '';
         }
       });
@@ -135,9 +135,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
   }, [latestResult]);
 
   const numberOfPlots = useMemo(() => {
-    return latestResult?.plantingZones.flatMap((pz) =>
-      pz.plantingSubzones.flatMap((subzone) => subzone.monitoringPlots)
-    ).length;
+    return latestResult?.strata.flatMap((pz) => pz.substrata.flatMap((subzone) => subzone.monitoringPlots)).length;
   }, [latestResult]);
 
   const markedAsComplete = useMemo(() => {

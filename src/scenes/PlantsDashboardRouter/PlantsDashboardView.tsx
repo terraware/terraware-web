@@ -66,10 +66,10 @@ export default function PlantsDashboardView({
   const { observationResults } = useObservation(latestResultId);
 
   const geometryChangedNote = useMemo(() => {
-    if (latestResult?.completedTime && plantingSite?.plantingZones?.length) {
-      const siteBoundaryModifiedTime = plantingSite.plantingZones.reduce(
+    if (latestResult?.completedTime && plantingSite?.strata?.length) {
+      const siteBoundaryModifiedTime = plantingSite.strata.reduce(
         (maxTime, zone) => (isAfter(zone.boundaryModifiedTime, maxTime) ? zone.boundaryModifiedTime : maxTime),
-        plantingSite.plantingZones[0].boundaryModifiedTime
+        plantingSite.strata[0].boundaryModifiedTime
       );
       return isAfter(siteBoundaryModifiedTime, latestResult.completedTime);
     } else {
@@ -315,16 +315,14 @@ export default function PlantsDashboardView({
   );
 
   const hasPlantingZones = useMemo(
-    () => !!plantingSite && !!plantingSite.plantingZones && plantingSite.plantingZones.length > 0,
+    () => !!plantingSite && !!plantingSite.strata && plantingSite.strata.length > 0,
     [plantingSite]
   );
 
   const summariesHectares = useMemo(() => {
     const totalSquareMeters =
-      observationSummaries?.[0]?.plantingZones
-        .flatMap((pz) =>
-          pz.plantingSubzones.flatMap((psz) => psz.monitoringPlots.map((mp) => mp.sizeMeters * mp.sizeMeters))
-        )
+      observationSummaries?.[0]?.strata
+        .flatMap((pz) => pz.substrata.flatMap((psz) => psz.monitoringPlots.map((mp) => mp.sizeMeters * mp.sizeMeters)))
         .reduce((acc, area) => acc + area, 0) ?? 0;
 
     return totalSquareMeters * SQ_M_TO_HECTARES;
@@ -332,10 +330,8 @@ export default function PlantsDashboardView({
 
   const observationHectares = useMemo(() => {
     const totalSquareMeters =
-      latestResult?.plantingZones
-        .flatMap((pz) =>
-          pz.plantingSubzones.flatMap((psz) => psz.monitoringPlots.map((mp) => mp.sizeMeters * mp.sizeMeters))
-        )
+      latestResult?.strata
+        .flatMap((pz) => pz.substrata.flatMap((psz) => psz.monitoringPlots.map((mp) => mp.sizeMeters * mp.sizeMeters)))
         .reduce((acc, area) => acc + area, 0) ?? 0;
 
     return totalSquareMeters * SQ_M_TO_HECTARES;

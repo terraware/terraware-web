@@ -369,8 +369,8 @@ const PlantDashboardMap = ({
       !!photo.gpsCoordinates;
 
     return observationResults.flatMap((results) =>
-      results.plantingZones
-        .flatMap((zone) => zone.plantingSubzones)
+      results.strata
+        .flatMap((zone) => zone.substrata)
         .flatMap((subzone) => subzone.monitoringPlots)
         .flatMap((plot): MapMarker[] =>
           plot.photos.filter(hasGpsCoordinates).map((photo) => {
@@ -398,8 +398,8 @@ const PlantDashboardMap = ({
       }
 
       return observationResults.flatMap((results) =>
-        results.plantingZones
-          .flatMap((zone) => zone.plantingSubzones)
+        results.strata
+          .flatMap((zone) => zone.substrata)
           .flatMap((subzone) => subzone.monitoringPlots)
           .flatMap((plot): MapMarker[] => {
             if (plot.plants) {

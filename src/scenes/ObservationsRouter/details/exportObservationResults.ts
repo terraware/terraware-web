@@ -102,8 +102,8 @@ function makeObservationCsv(observationResults: ObservationResults): Blob {
     },
   ];
 
-  const data = observationResults.plantingZones.flatMap((plantingZone) =>
-    plantingZone.plantingSubzones.flatMap((subzone) =>
+  const data = observationResults.strata.flatMap((plantingZone) =>
+    plantingZone.substrata.flatMap((subzone) =>
       subzone.monitoringPlots.map((monitoringPlot) => {
         const allSpecies = monitoringPlot.unknownSpecies
           ? [...monitoringPlot.species, monitoringPlot.unknownSpecies]
@@ -196,8 +196,8 @@ function makePlotSpeciesCsv(observationResults: ObservationResults): Blob {
       .map((species) => [species.speciesId!, species.speciesScientificName])
   );
 
-  const data = observationResults.plantingZones.flatMap((plantingZone) =>
-    plantingZone.plantingSubzones.flatMap((subzone) =>
+  const data = observationResults.strata.flatMap((plantingZone) =>
+    plantingZone.substrata.flatMap((subzone) =>
       subzone.monitoringPlots.flatMap((monitoringPlot) => {
         const allSpecies = monitoringPlot.unknownSpecies
           ? [...monitoringPlot.species, monitoringPlot.unknownSpecies]

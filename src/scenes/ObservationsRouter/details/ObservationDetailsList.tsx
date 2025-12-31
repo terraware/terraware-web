@@ -37,7 +37,7 @@ const ObservationDetailsList = (props: SearchProps): JSX.Element => {
   const columns = useCallback(
     () =>
       [
-        { key: 'plantingZoneName', name: strings.ZONE, type: 'string' },
+        { key: 'stratumName', name: strings.ZONE, type: 'string' },
         { key: 'completedDate', name: strings.DATE, type: 'string' },
         { key: 'status', name: strings.STATUS, type: 'string' },
         { key: 'totalLive', name: strings.LIVE_PLANTS, tooltipTitle: strings.TOOLTIP_LIVE_PLANTS, type: 'number' },
@@ -74,12 +74,12 @@ const ObservationDetailsList = (props: SearchProps): JSX.Element => {
 
   const rows = useMemo(() => {
     return (
-      details?.plantingZones.map((zone) => {
+      details?.strata.map((zone) => {
         const totalLive = getObservationSpeciesLivePlantsCount(zone.species);
         return { ...zone, totalLive };
       }) ?? []
     );
-  }, [details?.plantingZones]);
+  }, [details?.strata]);
 
   useEffect(() => {
     if (!details) {
@@ -100,7 +100,7 @@ const ObservationDetailsList = (props: SearchProps): JSX.Element => {
   }, [zoneNames, searchProps.filtersProps]);
 
   const has25mPlotsZones = () => {
-    const allSubzones = details?.plantingZones.flatMap((zone) => zone.plantingSubzones.flatMap((subzone) => subzone));
+    const allSubzones = details?.strata.flatMap((zone) => zone.substrata.flatMap((subzone) => subzone));
     if (allSubzones) {
       return has25mPlots(allSubzones);
     }
@@ -111,7 +111,7 @@ const ObservationDetailsList = (props: SearchProps): JSX.Element => {
       id='observation-details-table'
       columns={columns}
       rows={rows}
-      orderBy='plantingZoneName'
+      orderBy='stratumName'
       Renderer={ObservationDetailsRenderer(plantingSiteId, observationId)}
       tableComments={has25mPlotsZones() ? strings.PLOTS_SIZE_NOTE : undefined}
     />

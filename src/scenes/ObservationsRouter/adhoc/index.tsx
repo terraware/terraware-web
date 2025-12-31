@@ -21,9 +21,9 @@ import SpeciesTotalPlantsChart from 'src/scenes/ObservationsRouter/common/Specie
 import strings from 'src/strings';
 import {
   ObservationMonitoringPlotResultsPayload,
-  ObservationPlantingSubzoneResultsPayload,
-  ObservationPlantingZoneResultsPayload,
   ObservationSpeciesResults,
+  ObservationStratumResultsPayload,
+  ObservationSubstratumResultsPayload,
 } from 'src/types/Observations';
 import { getShortTime } from 'src/utils/dateFormatter';
 import { getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
@@ -56,8 +56,8 @@ export default function ObservationMonitoringPlot({ reloadAll }: { reloadAll: ()
 
   const { species } = useSpeciesData();
   const { plantingSite, adHocObservationResults, observationResults } = usePlantingSiteData();
-  const [plantingZoneResult, setPlantingZoneResult] = useState<ObservationPlantingZoneResultsPayload>();
-  const [plantingSubzoneResult, setPlantingSubzoneResult] = useState<ObservationPlantingSubzoneResultsPayload>();
+  const [plantingZoneResult, setPlantingZoneResult] = useState<ObservationStratumResultsPayload>();
+  const [plantingSubzoneResult, setPlantingSubzoneResult] = useState<ObservationSubstratumResultsPayload>();
   const [monitoringPlotResult, setMonitoringPlotResult] = useState<ObservationMonitoringPlotResultsPayload>();
   const isEditObservationsEnabled = isEnabled('Edit Observations');
 
@@ -83,8 +83,8 @@ export default function ObservationMonitoringPlot({ reloadAll }: { reloadAll: ()
   useEffect(() => {
     let plotFound = false;
     if (result) {
-      result.plantingZones.forEach((zone) =>
-        zone.plantingSubzones.forEach((subzone) =>
+      result.strata.forEach((zone) =>
+        zone.substrata.forEach((subzone) =>
           subzone.monitoringPlots.forEach((plot) => {
             if (plot.monitoringPlotId === monitoringPlotId) {
               setPlantingZoneResult(zone);
@@ -104,13 +104,13 @@ export default function ObservationMonitoringPlot({ reloadAll }: { reloadAll: ()
 
   const plantingZone = useMemo(() => {
     if (plantingZoneResult) {
-      return plantingSite?.plantingZones?.find((zone) => zone.id === plantingZoneResult.plantingZoneId);
+      return plantingSite?.strata?.find((zone) => zone.id === plantingZoneResult.stratumId);
     }
   }, [plantingSite, plantingZoneResult]);
 
   const plantingSubzone = useMemo(() => {
     if (plantingSubzoneResult) {
-      return plantingZone?.plantingSubzones?.find((subzone) => subzone.id === plantingSubzoneResult.plantingSubzoneId);
+      return plantingZone?.substrata?.find((subzone) => subzone.id === plantingSubzoneResult.substratumId);
     }
   }, [plantingZone, plantingSubzoneResult]);
 
@@ -278,8 +278,8 @@ export default function ObservationMonitoringPlot({ reloadAll }: { reloadAll: ()
     const names =
       monitoringPlotResult?.overlapsWithPlotIds.map((plotId, index) => {
         const allPlots = observationResults?.flatMap((obv) =>
-          obv.plantingZones.flatMap((pz) =>
-            pz.plantingSubzones.flatMap((subzone) =>
+          obv.strata.flatMap((pz) =>
+            pz.substrata.flatMap((subzone) =>
               subzone.monitoringPlots.map((plot) => {
                 return { ...plot, observationId: obv.observationId };
               })

@@ -179,9 +179,9 @@ export const selectZonesHaveStatistics = createSelector(
         const siteIdSelected = Number(siteId);
         const latestObservations = selectLatestObservation(state, siteIdSelected, orgId, defaultTimeZoneId);
         return Array.from(zoneIdsBySiteId[siteIdSelected]).some((zoneId) => {
-          return latestObservations?.plantingZones.some(
+          return latestObservations?.strata.some(
             (plantingZone) =>
-              plantingZone.plantingZoneId === zoneId &&
+              plantingZone.stratumId === zoneId &&
               plantingZone.estimatedPlants !== null &&
               plantingZone.estimatedPlants !== undefined
           );

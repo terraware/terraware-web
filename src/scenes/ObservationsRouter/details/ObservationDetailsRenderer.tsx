@@ -18,7 +18,7 @@ const ObservationDetailsRenderer =
     const createLinkToPlantingZoneObservation = (name: string) => {
       const url = APP_PATHS.OBSERVATION_PLANTING_ZONE_DETAILS.replace(':plantingSiteId', plantingSiteId.toString())
         .replace(':observationId', observationId.toString())
-        .replace(':plantingZoneName', encodeURIComponent(row.plantingZoneName));
+        .replace(':plantingZoneName', encodeURIComponent(row.stratumName));
       return (
         <Link fontSize='16px' to={url}>
           {name as React.ReactNode}
@@ -32,7 +32,7 @@ const ObservationDetailsRenderer =
       return <CellRenderer {...props} value={''} />;
     }
 
-    if (column.key === 'plantingZoneName') {
+    if (column.key === 'stratumName') {
       return (
         <CellRenderer {...props} value={createLinkToPlantingZoneObservation(value as string)} title={value as string} />
       );

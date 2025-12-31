@@ -7,10 +7,10 @@ import { RootState } from 'src/redux/rootReducer';
 import {
   AdHocObservationResults,
   Observation,
-  ObservationPlantingZoneResults,
   ObservationResults,
   ObservationResultsPayload,
   ObservationState,
+  ObservationStratumResults,
 } from 'src/types/Observations';
 
 import { mergeAdHocObservations, mergeObservations, searchPlots, searchZonesAndDates } from './utils';
@@ -215,7 +215,7 @@ export const selectObservationsZoneNames: (
     Array.from(
       new Set(
         (observations ?? []).flatMap((observation: ObservationResults) =>
-          observation.plantingZones.map((plantingZone: ObservationPlantingZoneResults) => plantingZone.plantingZoneName)
+          observation.strata.map((plantingZone: ObservationStratumResults) => plantingZone.stratumName)
         )
       )
     )

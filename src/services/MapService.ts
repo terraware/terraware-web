@@ -9,9 +9,9 @@ import {
   AdHocObservationResults,
   ObservationMonitoringPlotResults,
   ObservationMonitoringPlotResultsPayload,
-  ObservationPlantingSubzoneResults,
-  ObservationPlantingZoneResults,
   ObservationResultsWithLastObv,
+  ObservationStratumResults,
+  ObservationSubstratumResults,
   ObservationSummary,
 } from 'src/types/Observations';
 import { MinimalPlantingSite, MultiPolygon, PlantingSite, PlantingSiteHistory } from 'src/types/Tracking';
@@ -699,15 +699,15 @@ const getMapDataFromObservation = (
     },
   ];
 
-  const plantingSiteHistoryZones = plantingSiteHistory.plantingZones.filter((z) => z.plantingZoneId !== undefined);
+  const plantingSiteHistoryZones = plantingSiteHistory.strata.filter((z) => z.stratumId !== undefined);
   const zoneEntities = plantingSiteHistoryZones.map((zone) => {
-    const zoneFromObservation = observation.plantingZones.find((pz) => pz.plantingZoneName === zone.name);
+    const zoneFromObservation = observation.strata.find((pz) => pz.stratumName === zone.name);
     return {
       // -1 should never be set because undefined ids are filtered before
-      id: zone.plantingZoneId || -1,
+      id: zone.stratumId || -1,
       properties: {
-        id: zone.plantingZoneId || -1,
-        name: zoneFromObservation?.plantingZoneName || zone.name || '',
+        id: zone.stratumId || -1,
+        name: zoneFromObservation?.stratumName || zone.name || '',
         type: 'zone',
         survivalRate: zoneFromObservation?.survivalRate,
         hasObservedPermanentPlots: zoneFromObservation?.hasObservedPermanentPlots,
@@ -717,19 +717,17 @@ const getMapDataFromObservation = (
   });
 
   const plantingSiteHistorySubZones = plantingSiteHistoryZones
-    .flatMap((z) => z.plantingSubzones.flatMap((subz) => ({ ...subz, zoneName: z.name })))
+    .flatMap((z) => z.substrata.flatMap((subz) => ({ ...subz, zoneName: z.name })))
     .filter((subz) => subz.name !== undefined);
   const subzoneEntities = plantingSiteHistorySubZones?.map((subzone) => {
-    const zoneFromObservation = observation.plantingZones.find((pz) => pz.name === subzone.zoneName);
-    const subzoneFromObservation = zoneFromObservation?.plantingSubzones?.find(
-      (sz) => sz.plantingSubzoneName === subzone.name
-    );
+    const zoneFromObservation = observation.strata.find((pz) => pz.name === subzone.zoneName);
+    const subzoneFromObservation = zoneFromObservation?.substrata?.find((sz) => sz.substratumName === subzone.name);
     return {
       // -1 should never be set because undefined ids are filtered before
-      id: subzone.plantingSubzoneId || -1,
+      id: subzone.substratumId || -1,
       properties: {
-        id: subzone.plantingSubzoneId || -1,
-        name: subzoneFromObservation?.plantingSubzoneName || subzone.name || '',
+        id: subzone.substratumId || -1,
+        name: subzoneFromObservation?.substratumName || subzone.name || '',
         survivalRate: zoneFromObservation?.survivalRate,
         type: 'subzone',
       },
@@ -770,16 +768,12 @@ const getMapDataFromObservation = (
     return entitiesToReturn;
   };
 
-  const permanentPlotEntities = observation.plantingZones.flatMap((zone: ObservationPlantingZoneResults) =>
-    zone.plantingSubzones.flatMap((sz: ObservationPlantingSubzoneResults) =>
-      getMonitoringPlotMapData(sz.monitoringPlots, true)
-    )
+  const permanentPlotEntities = observation.strata.flatMap((zone: ObservationStratumResults) =>
+    zone.substrata.flatMap((sz: ObservationSubstratumResults) => getMonitoringPlotMapData(sz.monitoringPlots, true))
   );
 
-  const temporaryPlotEntities = observation.plantingZones.flatMap((zone: ObservationPlantingZoneResults) =>
-    zone.plantingSubzones.flatMap((sz: ObservationPlantingSubzoneResults) =>
-      getMonitoringPlotMapData(sz.monitoringPlots, false)
-    )
+  const temporaryPlotEntities = observation.strata.flatMap((zone: ObservationStratumResults) =>
+    zone.substrata.flatMap((sz: ObservationSubstratumResults) => getMonitoringPlotMapData(sz.monitoringPlots, false))
   );
 
   const adHocPlot = observation.adHocPlot;
