@@ -148,7 +148,7 @@ export default function DetailsInputForm<T extends MinimalPlantingSite>({
           tooltip={strings.TOOLTIP_TIME_ZONE_PLANTING_SITE}
         />
       </Grid>
-      {record?.plantingZones && effectiveTimeZone && (
+      {record?.strata && effectiveTimeZone && (
         <Grid item xs={gridSize()}>
           <TextField
             label={strings.UPCOMING_PLANTING_SEASONS}

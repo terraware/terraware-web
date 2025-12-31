@@ -15,7 +15,7 @@ import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import strings from 'src/strings';
-import { MinimalPlantingSite, MinimalPlantingZone } from 'src/types/Tracking';
+import { MinimalPlantingSite, MinimalStratum } from 'src/types/Tracking';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 const columns = (): TableColumnType[] => [
@@ -44,7 +44,7 @@ const columns = (): TableColumnType[] => [
 
 export type GenericStratumViewProps = {
   plantingSite: MinimalPlantingSite;
-  plantingZone: MinimalPlantingZone;
+  plantingZone: MinimalStratum;
 };
 
 export default function GenericStratumView({ plantingSite, plantingZone }: GenericStratumViewProps): JSX.Element {
@@ -92,7 +92,7 @@ export default function GenericStratumView({ plantingSite, plantingZone }: Gener
           <Table
             id='planting-site-zone-details-table'
             columns={columns}
-            rows={plantingZone?.plantingSubzones ?? []}
+            rows={plantingZone?.substrata ?? []}
             orderBy='fullName'
             Renderer={DetailsRenderer(timeZone)}
           />

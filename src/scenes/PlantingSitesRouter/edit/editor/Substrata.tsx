@@ -21,7 +21,7 @@ import {
   RenderableReadOnlyBoundary,
 } from 'src/types/Map';
 import { DraftPlantingSite } from 'src/types/PlantingSite';
-import { MinimalPlantingSubzone, MinimalPlantingZone } from 'src/types/Tracking';
+import { MinimalStratum, MinimalSubstratum } from 'src/types/Tracking';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import StepTitleDescription, { Description } from './StepTitleDescription';
@@ -65,7 +65,7 @@ const createDraftSiteWith =
   ) =>
   (cutBoundaries: GeometryFeature[]) => ({
     ...site,
-    plantingZones: site.plantingZones?.map((zone) => ({
+    plantingZones: site.strata?.map((zone) => ({
       ...zone,
       // re-create subzones from the record of zones to subzones
       // unless this is the selected zone, in which case use the newly cut boundaries
@@ -82,11 +82,11 @@ const createDraftSiteWith =
 
 // create subzone feature collections from site, for edit purposes
 const featureSiteSubzones = (site: DraftPlantingSite): Record<number, FeatureCollection> =>
-  (site.plantingZones ?? []).reduce(
+  (site.strata ?? []).reduce(
     (subzonesMap, zone) => {
       subzonesMap[zone.id] = {
         type: 'FeatureCollection',
-        features: zone.plantingSubzones.map(plantingSubzoneToFeature),
+        features: zone.substrata.map(plantingSubzoneToFeature),
       };
       return subzonesMap;
     },
@@ -102,7 +102,7 @@ type Stack = {
 };
 
 export default function Substrata({ onValidate, site }: SubstrataProps): JSX.Element {
-  const [selectedZone, setSelectedZone] = useState<number | undefined>(site.plantingZones?.[0]?.id);
+  const [selectedZone, setSelectedZone] = useState<number | undefined>(site.strata?.[0]?.id);
 
   // map of zone id to subzones
   const [subzonesData, setSubzonesData, undo, redo] = useUndoRedoState<Stack>({
@@ -125,11 +125,11 @@ export default function Substrata({ onValidate, site }: SubstrataProps): JSX.Ele
 
   const zones = useMemo<FeatureCollection | undefined>(
     () =>
-      !site.plantingZones
+      !site.strata
         ? undefined
         : {
             type: 'FeatureCollection',
-            features: site.plantingZones.map((zone) => plantingZoneToFeature(zone)),
+            features: site.strata.map((zone) => plantingZoneToFeature(zone)),
           },
     [site]
   );
@@ -150,8 +150,8 @@ export default function Substrata({ onValidate, site }: SubstrataProps): JSX.Ele
 
     // subzones are children of zones, we need to repopuplate zones with new subzones information
     // and update `plantingZones` in the site
-    const plantingZones: MinimalPlantingZone[] | undefined = site.plantingZones?.map((zone) => {
-      const plantingSubzones: MinimalPlantingSubzone[] = (subzones?.[zone.id]?.features ?? [])
+    const plantingZones: MinimalStratum[] | undefined = site.strata?.map((zone) => {
+      const plantingSubzones: MinimalSubstratum[] = (subzones?.[zone.id]?.features ?? [])
         .map((subzone) => {
           const { geometry, properties } = subzone;
           const multiPolygon = toMultiPolygon(geometry);
@@ -167,12 +167,12 @@ export default function Substrata({ onValidate, site }: SubstrataProps): JSX.Ele
             return undefined;
           }
         })
-        .filter((subzone) => !!subzone) as MinimalPlantingSubzone[];
-      return { ...zone, plantingSubzones };
+        .filter((subzone) => !!subzone) as MinimalSubstratum[];
+      return { ...zone, substrata: plantingSubzones };
     });
-    const numZones = site.plantingZones?.length ?? 0;
-    const numSubzones = plantingZones?.flatMap((zone) => zone.plantingSubzones)?.length ?? 0;
-    const data = plantingZones ? { plantingZones } : undefined;
+    const numZones = site.strata?.length ?? 0;
+    const numSubzones = plantingZones?.flatMap((zone) => zone.substrata)?.length ?? 0;
+    const data = plantingZones ? { strata: plantingZones } : undefined;
     onValidate.apply(plantingZones === undefined, data, numSubzones > numZones);
   }, [subzonesData?.errorAnnotations, onValidate, site, snackbar, subzones, zones]);
 

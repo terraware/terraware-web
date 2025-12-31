@@ -251,8 +251,8 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
         />
       )}
       <ObservationStatusSummaryMessage
-        plantingZones={plantingSite?.plantingZones}
-        requestedSubzoneIds={observation?.requestedSubzoneIds}
+        plantingZones={plantingSite?.strata}
+        requestedSubzoneIds={observation?.requestedSubstratumIds}
         statusSummary={statusSummary}
       />
       <Grid container spacing={3}>

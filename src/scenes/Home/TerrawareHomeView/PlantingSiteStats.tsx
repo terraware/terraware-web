@@ -36,9 +36,9 @@ export const PlantingSiteStats = () => {
 
   const plantingCompleteArea = useMemo(() => {
     let total = 0;
-    if (plantingSite?.plantingZones) {
-      plantingSite.plantingZones.forEach((zone) => {
-        zone.plantingSubzones.forEach((subzone) => {
+    if (plantingSite?.strata) {
+      plantingSite.strata.forEach((zone) => {
+        zone.substrata.forEach((subzone) => {
           if (subzone.plantingCompleted) {
             total += subzone.areaHa;
           }

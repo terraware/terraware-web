@@ -21,13 +21,11 @@ export default function PlantingDensityPerStratumCard(): JSX.Element {
   useEffect(() => {
     if (plantingSite) {
       const zoneDensities: Record<string, (number | null)[]> = {};
-      plantingSite.plantingZones?.forEach((zone) => {
+      plantingSite.strata?.forEach((zone) => {
         zoneDensities[zone.name] = [zone.targetPlantingDensity];
 
         if (observationSummaries && observationSummaries.length > 0) {
-          const zoneFromObs = observationSummaries[0].plantingZones.find(
-            (obsZone) => obsZone.plantingZoneId === zone.id
-          );
+          const zoneFromObs = observationSummaries[0].strata.find((obsZone) => obsZone.stratumId === zone.id);
           zoneDensities[zone.name].push(zoneFromObs?.plantingDensity ?? null);
         }
       });

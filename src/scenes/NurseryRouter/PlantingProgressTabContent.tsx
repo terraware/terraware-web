@@ -150,7 +150,7 @@ export default function PlantingProgress(): JSX.Element {
           : strings.PLANTING_PROGRESS_MAP_DESCRIPTION}
       </Typography>
       <ListMapView
-        data={plantingSite?.plantingZones}
+        data={plantingSite?.strata}
         style={{
           display: 'flex',
           flexDirection: 'column',

@@ -1,16 +1,9 @@
 import { components } from 'src/api/types/generated-schema';
 
-// planting site, zone, subzone
+// planting site, stratum, substratum
 export type PlantingSite = components['schemas']['PlantingSitePayload'];
-export type PlantingZone = components['schemas']['PlantingZonePayload'];
-export type PlantingSubzone = components['schemas']['PlantingSubzonePayload'];
-export type PlantingZoneWithSubzonesWithLastObservationDate = Omit<PlantingZone, 'plantingSubzones'> & {
-  plantingSubzones: PlantingSubzoneWithLastObservationDate[];
-};
-export type PlantingSubzoneWithLastObservationDate = PlantingSubzone & { lastObservationDate?: Date };
-export type PlantingSiteWithSubzonesWithLastObservationDate = Omit<PlantingSite, 'plantingZones'> & {
-  plantingZones?: PlantingZoneWithSubzonesWithLastObservationDate[];
-};
+export type Stratum = components['schemas']['StratumResponsePayload'];
+export type Substratum = components['schemas']['SubstratumResponsePayload'];
 
 // geometry and types of geometries
 export type Polygon = components['schemas']['Polygon'];
@@ -39,20 +32,6 @@ export type Planting = components['schemas']['PlantingPayload'];
 
 // reported plants
 export type PlantingSiteReportedPlants = components['schemas']['PlantingSiteReportedPlantsPayload'];
-export type PlantingSiteReportedZonePlants = components['schemas']['PlantingZoneReportedPlantsPayload'];
-export type PlantingSiteReportedSubzonePlants = components['schemas']['PlantingSubzoneReportedPlantsPayload'];
-
-// Planting site with select data from reports merged in
-export type PlantingSiteWithReportedPlants = Omit<PlantingSite, 'plantingZones'> & {
-  plantingZones: PlantingSiteZoneWithReportedPlants[];
-};
-export type PlantingSiteZoneWithReportedPlants = Omit<PlantingZone, 'plantingSubzones'> & {
-  plantingSubzones: PlantingSiteSubzoneWithReportedPlants[];
-};
-export type PlantingSiteSubzoneWithReportedPlants = PlantingSubzone &
-  Omit<PlantingSiteReportedSubzonePlants, 'totalPlants'> & {
-    totalPlants?: number;
-  };
 
 // monitoring plots
 export type MonitoringPlotSearchResult = {
@@ -68,13 +47,13 @@ export type Location = {
   timeZone?: string;
 };
 
-export type MinimalPlantingSubzone = Omit<PlantingSubzone, 'areaHa' | 'monitoringPlots'>;
+export type MinimalSubstratum = Omit<Substratum, 'areaHa' | 'monitoringPlots'>;
 
-export type MinimalPlantingZone = Omit<
-  PlantingZone,
-  'areaHa' | 'plantingSubzones' | 'boundaryModifiedTime' | 'numPermanentPlots' | 'numTemporaryPlots'
+export type MinimalStratum = Omit<
+  Stratum,
+  'areaHa' | 'substrata' | 'boundaryModifiedTime' | 'numPermanentPlots' | 'numTemporaryPlots'
 > & {
-  plantingSubzones: MinimalPlantingSubzone[];
+  substrata: MinimalSubstratum[];
 };
 
 /**
@@ -87,12 +66,11 @@ export type MinimalPlantingSite = Location & {
   name: string;
   organizationId: number;
   plantingSeasons: PlantingSeason[];
-  plantingZones?: MinimalPlantingZone[];
+  strata?: MinimalStratum[];
   projectId?: number;
 };
 
 export type PlantingSiteHistory = components['schemas']['PlantingSiteHistoryPayload'];
-export type PlantingZoneHistory = components['schemas']['PlantingZoneHistoryPayload'];
 
 export type PlotT0Data = components['schemas']['PlotT0DataPayload'];
 export type SiteT0Data = components['schemas']['SiteT0DataResponsePayload'];

@@ -13,7 +13,7 @@ export default function PlantingSiteStratumView(): JSX.Element | undefined {
   const { data: plantingSite } = useGetPlantingSiteQuery(plantingSiteId);
 
   const plantingZone = useMemo(() => {
-    return plantingSite?.site?.plantingZones?.find((zone) => zone.id === zoneId);
+    return plantingSite?.site?.strata?.find((zone) => zone.id === zoneId);
   }, [plantingSite, zoneId]);
 
   if (!plantingSite || !plantingZone) {

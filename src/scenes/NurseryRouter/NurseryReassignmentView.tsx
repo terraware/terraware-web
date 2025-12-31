@@ -83,14 +83,14 @@ export default function NurseryReassignmentView(): JSX.Element {
       if (response.requestSucceeded && response.site) {
         setSiteName(response.site.name);
 
-        if (!response.site.plantingZones) {
+        if (!response.site.strata) {
           return;
         }
 
-        const zoneInfos = response.site.plantingZones.map((zone) => ({
+        const zoneInfos = response.site.strata.map((zone) => ({
           id: zone.id,
           name: zone.name,
-          subzones: zone.plantingSubzones.map((subzone) => ({ id: subzone.id, name: subzone.fullName })),
+          subzones: zone.substrata.map((subzone) => ({ id: subzone.id, name: subzone.fullName })),
         }));
 
         setZones(zoneInfos);

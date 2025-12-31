@@ -50,7 +50,7 @@ export default function DraftPlantingSiteDetailsTable({
       <Table
         id='draft-planting-site-details-table'
         columns={columns}
-        rows={plantingSite.plantingZones ?? []}
+        rows={plantingSite.strata ?? []}
         orderBy='name'
         Renderer={DetailsRenderer(timeZone, plantingSite.id)}
       />

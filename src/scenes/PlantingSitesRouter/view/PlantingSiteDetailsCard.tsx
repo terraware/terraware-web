@@ -65,7 +65,7 @@ export default function PlantingSiteDetailsCard({ plantingSite }: PlantingSiteDe
           display={true}
         />
       </Grid>
-      {plantingSite.plantingZones && (
+      {plantingSite.strata && (
         <Grid item xs={gridSize()}>
           <TextField
             label={strings.UPCOMING_PLANTING_SEASONS}

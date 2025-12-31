@@ -14,8 +14,8 @@ const NurseryRouter = () => {
   const substratumNames = useMemo(() => {
     const subzones: Record<number, string> = {};
     for (const plantingSite of allPlantingSites ?? []) {
-      for (const plantingZone of plantingSite.plantingZones ?? []) {
-        for (const subzone of plantingZone.plantingSubzones ?? []) {
+      for (const plantingZone of plantingSite.strata ?? []) {
+        for (const subzone of plantingZone.substrata ?? []) {
           subzones[subzone.id] = plantingZone.name + '-' + subzone.name;
         }
       }

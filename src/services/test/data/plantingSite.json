@@ -15,7 +15,7 @@
   },
   "id": 1,
   "name": "testPlantingSite",
-  "plantingZones": [
+  "strata": [
     {
       "boundary": {
         "type": "MultiPolygon",
@@ -34,7 +34,7 @@
       },
       "id": 4,
       "name": "PZ1",
-      "plantingSubzones": [
+      "substrata": [
         {
           "boundary": {
             "type": "MultiPolygon",
@@ -1315,7 +1315,7 @@
       },
       "id": 3,
       "name": "PZ2",
-      "plantingSubzones": [
+      "substrata": [
         {
           "boundary": {
             "type": "MultiPolygon",
@@ -2298,7 +2298,7 @@
       },
       "id": 2,
       "name": "PZ3",
-      "plantingSubzones": [
+      "substrata": [
         {
           "boundary": {
             "type": "MultiPolygon",
@@ -3330,7 +3330,7 @@
       },
       "id": 1,
       "name": "PZ4",
-      "plantingSubzones": [
+      "substrata": [
         {
           "boundary": {
             "type": "MultiPolygon",

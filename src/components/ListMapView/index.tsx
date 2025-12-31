@@ -6,7 +6,7 @@ import Card from 'src/components/common/Card';
 import ListMapSelector, { View } from 'src/components/common/ListMapSelector';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
-import { PlantingZone } from 'src/types/Tracking';
+import { Stratum } from 'src/types/Tracking';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
@@ -16,7 +16,7 @@ import { useNumberFormatter } from 'src/utils/useNumberFormatter';
  * disable corresponding selector.
  */
 export type ListMapViewProps = {
-  data?: PlantingZone[];
+  data?: Stratum[];
   search: React.ReactNode;
   list: React.ReactNode;
   map: React.ReactNode;
@@ -58,7 +58,7 @@ export default function ListMapView({
     let total = 0;
     if (data) {
       data.forEach((zone) => {
-        zone.plantingSubzones.forEach((subzone) => {
+        zone.substrata.forEach((subzone) => {
           if (subzone.plantingCompleted) {
             total += subzone.areaHa;
           }

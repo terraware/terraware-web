@@ -69,13 +69,9 @@ const MapStatsDrawer = ({ layerFeatureId, plantingSiteId }: MapStatsDrawerProps)
         plantingDensity: latestSummary?.plantingDensity,
       };
     } else if (layerFeatureId.layerId === 'zones') {
-      const zone = plantingSite?.plantingZones?.find((_zone) => `${_zone.id}` === layerFeatureId.featureId);
-      const zoneSummary = latestSummary?.plantingZones.find(
-        (_zone) => `${_zone.plantingZoneId}` === layerFeatureId.featureId
-      );
-      const zoneStats = plantingSiteReportedPlants?.plantingZones.find(
-        (_zone) => `${_zone.id}` === layerFeatureId.featureId
-      );
+      const zone = plantingSite?.strata?.find((_zone) => `${_zone.id}` === layerFeatureId.featureId);
+      const zoneSummary = latestSummary?.strata.find((_zone) => `${_zone.stratumId}` === layerFeatureId.featureId);
+      const zoneStats = plantingSiteReportedPlants?.strata.find((_zone) => `${_zone.id}` === layerFeatureId.featureId);
 
       return {
         type: strings.ZONE,
@@ -90,15 +86,15 @@ const MapStatsDrawer = ({ layerFeatureId, plantingSiteId }: MapStatsDrawerProps)
         plantingDensity: zoneSummary?.plantingDensity,
       };
     } else if (layerFeatureId.layerId === 'subzones') {
-      const zone = plantingSite?.plantingZones?.find((_zone) =>
-        _zone.plantingSubzones.some((_subzone) => `${_subzone.id}` === layerFeatureId.featureId)
+      const zone = plantingSite?.strata?.find((_zone) =>
+        _zone.substrata.some((_subzone) => `${_subzone.id}` === layerFeatureId.featureId)
       );
-      const subzone = zone?.plantingSubzones.find((_subzone) => `${_subzone.id}` === layerFeatureId.featureId);
-      const subzoneSummary = latestSummary?.plantingZones
-        .flatMap((_zone) => _zone.plantingSubzones)
-        .find((_subzone) => `${_subzone.plantingSubzoneId}` === layerFeatureId.featureId);
-      const subzoneStats = plantingSiteReportedPlants?.plantingZones
-        .flatMap((_zone) => _zone.plantingSubzones)
+      const subzone = zone?.substrata.find((_subzone) => `${_subzone.id}` === layerFeatureId.featureId);
+      const subzoneSummary = latestSummary?.strata
+        .flatMap((_zone) => _zone.substrata)
+        .find((_subzone) => `${_subzone.substratumId}` === layerFeatureId.featureId);
+      const subzoneStats = plantingSiteReportedPlants?.strata
+        .flatMap((_zone) => _zone.substrata)
         .find((_subzone) => `${_subzone.id}` === layerFeatureId.featureId);
 
       return {

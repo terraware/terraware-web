@@ -119,8 +119,8 @@ const MonitoringPlotEditPhotos = ({ reload }: { reload: () => void }) => {
 
   useEffect(() => {
     if (observationResults) {
-      observationResults.plantingZones.forEach((zone) =>
-        zone.plantingSubzones.forEach((subzone) =>
+      observationResults.strata.forEach((zone) =>
+        zone.substrata.forEach((subzone) =>
           subzone.monitoringPlots.forEach((plot) => {
             if (plot.monitoringPlotId === monitoringPlotId) {
               setMonitoringPlotResult(plot);
