@@ -472,8 +472,8 @@ const ProjectProfileGisMaps = () => {
               <PlantingSiteMap
                 mapData={{
                   site: undefined,
-                  zone: undefined,
-                  subzone: undefined,
+                  stratum: undefined,
+                  substratum: undefined,
                   permanentPlot: undefined,
                   temporaryPlot: undefined,
                   adHocPlot: undefined,

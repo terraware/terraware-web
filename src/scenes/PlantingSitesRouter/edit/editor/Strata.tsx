@@ -170,7 +170,7 @@ export default function Strata({ onValidate, site }: StrataProps): JSX.Element {
         id: 'zone',
         isInteractive: true,
         renderProperties: {
-          ...getRenderAttributes('draft-zone'),
+          ...getRenderAttributes('draft-stratum'),
           annotation: {
             textField: 'name',
             textColor: theme.palette.TwClrBaseWhite as string,
