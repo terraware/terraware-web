@@ -140,8 +140,8 @@ const getRecencyFromTime = (time: string): number => {
  */
 const getPlantingSiteBoundingBox = (mapData: MapData): MapBoundingBox => {
   const site: MapSourceBaseData = mapData.site ?? { id: 'site', entities: [] };
-  const zones: MapSourceBaseData = mapData.zone ?? { id: 'zone', entities: [] };
-  const subzones: MapSourceBaseData = mapData.subzone ?? { id: 'subzone', entities: [] };
+  const zones: MapSourceBaseData = mapData.stratum ?? { id: 'zone', entities: [] };
+  const subzones: MapSourceBaseData = mapData.substratum ?? { id: 'subzone', entities: [] };
   const permanentPlots: MapSourceBaseData = mapData.permanentPlot ?? { id: 'permanentPlot', entities: [] };
   const temporaryPlots: MapSourceBaseData = mapData.temporaryPlot ?? { id: 'temporaryPlot', entities: [] };
   const adHocPlots: MapSourceBaseData = mapData.adHocPlot ?? { id: 'adHocPlot', entities: [] };
@@ -422,8 +422,8 @@ const getMapDataFromGisPlantingSites = (gisPlantingSiteData: FeatureCollection<M
 
   return {
     site: siteData,
-    zone: zoneData,
-    subzone: subzoneData,
+    stratum: zoneData,
+    substratum: subzoneData,
     permanentPlot: undefined,
     temporaryPlot: undefined,
     adHocPlot: undefined,
@@ -624,8 +624,8 @@ const extractSubzonesFromGis = (gisPlantingSiteData: FeatureCollection): MapSour
 const getMapDataFromPlantingSites = (plantingSites: PlantingSite[]): MapData => {
   return {
     site: extractPlantingSites(plantingSites),
-    zone: extractPlantingZonesFromSites(plantingSites),
-    subzone: extractSubzonesFromSites(plantingSites),
+    stratum: extractPlantingZonesFromSites(plantingSites),
+    substratum: extractSubzonesFromSites(plantingSites),
     permanentPlot: undefined,
     temporaryPlot: undefined,
     adHocPlot: undefined,
@@ -638,8 +638,8 @@ const getMapDataFromPlantingSites = (plantingSites: PlantingSite[]): MapData => 
 const getMapDataFromPlantingSite = (plantingSite: MinimalPlantingSite): MapData => {
   return {
     site: extractPlantingSite(plantingSite),
-    zone: extractPlantingZones(plantingSite),
-    subzone: extractSubzones(plantingSite),
+    stratum: extractPlantingZones(plantingSite),
+    substratum: extractSubzones(plantingSite),
     permanentPlot: undefined,
     temporaryPlot: undefined,
     adHocPlot: undefined,
@@ -652,8 +652,8 @@ const getMapDataFromPlantingSite = (plantingSite: MinimalPlantingSite): MapData 
 const getMapDataFromPlantingSiteHistory = (plantingSite: PlantingSite, history: PlantingSiteHistory): MapData => {
   return {
     site: extractPlantingSiteFromHistory(plantingSite, history),
-    zone: extractPlantingZonesFromHistory(history),
-    subzone: extractSubzonesFromHistory(history),
+    stratum: extractPlantingZonesFromHistory(history),
+    substratum: extractSubzonesFromHistory(history),
     permanentPlot: undefined,
     temporaryPlot: undefined,
     adHocPlot: undefined,
@@ -670,8 +670,8 @@ const getMapDataFromPlantingSiteFromHistoryAndResults = (
 ): MapData => {
   return {
     site: extractPlantingSiteFromHistory(plantingSite, history),
-    zone: extractPlantingZonesFromHistory(history),
-    subzone: extractSubzonesFromHistoryAndResult(plantingSite, history, result),
+    stratum: extractPlantingZonesFromHistory(history),
+    substratum: extractSubzonesFromHistoryAndResult(plantingSite, history, result),
     permanentPlot: undefined,
     temporaryPlot: undefined,
     adHocPlot: undefined,
@@ -791,8 +791,8 @@ const getMapDataFromObservation = (
 
   return {
     site: { id: 'sites', entities: plantingSiteEntities },
-    zone: { id: 'zones', entities: zoneEntities || [] },
-    subzone: { id: 'subzones', entities: subzoneEntitiesWithRecency() },
+    stratum: { id: 'zones', entities: zoneEntities || [] },
+    substratum: { id: 'subzones', entities: subzoneEntitiesWithRecency() },
     permanentPlot: { id: 'permanentPlots', entities: permanentPlotEntities },
     temporaryPlot: { id: 'temporaryPlots', entities: temporaryPlotEntities },
     adHocPlot: { id: 'adHocPlots', entities: addHocPlotEntities },

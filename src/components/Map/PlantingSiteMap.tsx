@@ -131,10 +131,10 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
           });
         }
       }
-      if (mapData.subzone && (layers === undefined || layers?.includes('Sub-Zones'))) {
+      if (mapData.substratum && (layers === undefined || layers?.includes('Sub-Zones'))) {
         sources.push({
-          ...mapData.subzone,
-          ...getRenderAttributes('subzone'),
+          ...mapData.substratum,
+          ...getRenderAttributes('substratum'),
           isInteractive: subzoneInteractive !== undefined ? subzoneInteractive : isFirstLayerAdded(),
           annotation: isFirstLayerAdded()
             ? {
@@ -147,9 +147,9 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
             ? [
                 'case',
                 ['==', ['get', 'recency'], -1],
-                getRenderAttributes('subzone').fillColor,
+                getRenderAttributes('substratum').fillColor,
                 ['==', ['get', 'recency'], 0],
-                getRenderAttributes('subzone').fillColor,
+                getRenderAttributes('substratum').fillColor,
                 ['==', ['get', 'recency'], 1],
                 getRgbaFromHex(theme.palette.TwClrBasePink200 as string, 0.9),
                 ['==', ['get', 'recency'], 2],
@@ -160,9 +160,9 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
                 getRgbaFromHex(theme.palette.TwClrBasePink200 as string, 0.3),
                 ['==', ['get', 'recency'], 5],
                 getRgbaFromHex(theme.palette.TwClrBasePink200 as string, 0.1),
-                getRenderAttributes('subzone').fillColor,
+                getRenderAttributes('substratum').fillColor,
               ]
-            : getRenderAttributes('subzone').fillColor,
+            : getRenderAttributes('substratum').fillColor,
           patternFill: showSurvivalRateFill
             ? [
                 'case',
@@ -175,10 +175,10 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
             : undefined,
         });
       }
-      if (mapData.zone && (layers === undefined || layers?.includes('Zones'))) {
+      if (mapData.stratum && (layers === undefined || layers?.includes('Zones'))) {
         sources.push({
-          ...mapData.zone,
-          ...getRenderAttributes('zone'),
+          ...mapData.stratum,
+          ...getRenderAttributes('stratum'),
           isInteractive: zoneInteractive !== undefined ? zoneInteractive : isFirstLayerAdded(),
           annotation: isFirstLayerAdded()
             ? {
@@ -215,7 +215,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
                 textSize: 16,
               }
             : undefined,
-          ...getRenderAttributes('projectZonesBoundary'),
+          ...getRenderAttributes('strataBoundary'),
         });
       }
 
@@ -255,8 +255,8 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
     () =>
       [
         mapData.site ? `${mapData.site.id}-fill` : undefined,
-        mapData.zone ? `${mapData.zone.id}-fill` : undefined,
-        mapData.subzone ? `${mapData.subzone.id}-fill` : undefined,
+        mapData.stratum ? `${mapData.stratum.id}-fill` : undefined,
+        mapData.substratum ? `${mapData.substratum.id}-fill` : undefined,
         mapData.adHocPlot ? `${mapData.adHocPlot.id}-fill` : undefined,
         mapData.permanentPlot ? `${mapData.permanentPlot.id}-fill` : undefined,
         mapData.temporaryPlot ? `${mapData.temporaryPlot.id}-fill` : undefined,

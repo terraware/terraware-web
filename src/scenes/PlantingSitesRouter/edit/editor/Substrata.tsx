@@ -195,7 +195,7 @@ export default function Substrata({ onValidate, site }: SubstrataProps): JSX.Ele
       id: 'zone',
       isInteractive: true,
       renderProperties: {
-        ...getRenderAttributes('draft-zone'),
+        ...getRenderAttributes('draft-stratum'),
         annotation: {
           textField: 'name',
           textColor: theme.palette.TwClrBaseWhite as string,
@@ -218,7 +218,7 @@ export default function Substrata({ onValidate, site }: SubstrataProps): JSX.Ele
       id: 'subzone',
       isInteractive: true,
       renderProperties: {
-        ...getRenderAttributes('draft-subzone'),
+        ...getRenderAttributes('draft-substratum'),
         annotation: {
           textField: 'name',
           textColor: theme.palette.TwClrBaseWhite as string,

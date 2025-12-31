@@ -66,7 +66,7 @@ export type MapPatternFill = Expression | string;
 
 /**
  * A renderable map entity
- * eg. site, zone, subzone
+ * eg. site, stratum, substratum
  */
 export type MapEntity = {
   properties: MapSourceProperties;
@@ -123,7 +123,7 @@ export type MapPopupRenderer = {
  */
 export type MapEntityId = {
   id?: number; // id of entity, undefined for unknown
-  sourceId: string; // source type of entity 'subzone', 'zone', 'site', etc.
+  sourceId: string; // source type of entity 'substratum', 'stratum', 'site', etc.
 };
 
 /**
@@ -138,7 +138,7 @@ export type MapEntityOptions = {
 /**
  * Types of objects that can be added to MapData
  */
-export type MapObject = 'site' | 'zone' | 'subzone' | 'permanentPlot' | 'temporaryPlot' | 'adHocPlot';
+export type MapObject = 'site' | 'stratum' | 'substratum' | 'permanentPlot' | 'temporaryPlot' | 'adHocPlot';
 
 /**
  * Sources for a map
@@ -186,11 +186,11 @@ export type RenderableReadOnlyBoundary = ReadOnlyBoundary & {
 export type RenderableObject =
   | MapObject
   | 'exclusions'
-  | 'draft-zone'
-  | 'draft-subzone'
+  | 'draft-stratum'
+  | 'draft-substratum'
   | 'boundary'
   | 'countryBoundary'
-  | 'projectZonesBoundary';
+  | 'strataBoundary';
 
 export type MapDrawingLayer = {
   id: string;

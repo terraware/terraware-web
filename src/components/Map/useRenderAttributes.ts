@@ -20,7 +20,7 @@ export default function useRenderAttributes(): (type: RenderableObject) => MapSo
             lineWidth: 2,
             selectFillColor: getRgbaFromHex(theme.palette.TwClrBaseGreen300 as string, 0.6),
           };
-        case 'zone':
+        case 'stratum':
           return {
             fillColor: 'transparent',
             highlightFillColor: getRgbaFromHex(theme.palette.TwClrBaseLightGreen300 as string, 0.2),
@@ -29,7 +29,7 @@ export default function useRenderAttributes(): (type: RenderableObject) => MapSo
             lineWidth: 4,
             selectFillColor: getRgbaFromHex(theme.palette.TwClrBaseLightGreen300 as string, 0.6),
           };
-        case 'draft-zone':
+        case 'draft-stratum':
           return {
             fillColor: 'transparent',
             highlightFillColor: getRgbaFromHex(theme.palette.TwClrBaseLightGreen300 as string, 0.2),
@@ -40,7 +40,7 @@ export default function useRenderAttributes(): (type: RenderableObject) => MapSo
             selectLineColor: getRgbaFromHex(theme.palette.TwClrBaseLightGreen300 as string, 0.6),
             selectLineWidth: 8,
           };
-        case 'subzone':
+        case 'substratum':
           return {
             fillColor: getRgbaFromHex(theme.palette.TwClrBaseBlue300 as string, 0.2),
             highlightFillColor: getRgbaFromHex(theme.palette.TwClrBaseBlue300 as string, 0.6),
@@ -49,7 +49,7 @@ export default function useRenderAttributes(): (type: RenderableObject) => MapSo
             lineWidth: 2,
             selectFillColor: getRgbaFromHex(theme.palette.TwClrBaseBlue300 as string, 0.6),
           };
-        case 'draft-subzone':
+        case 'draft-substratum':
           return {
             fillColor: getRgbaFromHex(theme.palette.TwClrBaseBlue300 as string, 0.2),
             highlightFillColor: getRgbaFromHex(theme.palette.TwClrBaseBlue300 as string, 0.6),
@@ -89,7 +89,7 @@ export default function useRenderAttributes(): (type: RenderableObject) => MapSo
             lineColor: theme.palette.TwClrBaseGreen300 as string,
             lineWidth: 2,
           };
-        case 'projectZonesBoundary':
+        case 'strataBoundary':
           return {
             fillColor: getRgbaFromHex(theme.palette.TwClrBaseOrange400 as string, 0.2),
             hoverFillColor: getRgbaFromHex(theme.palette.TwClrBaseOrange400 as string, 0.4),

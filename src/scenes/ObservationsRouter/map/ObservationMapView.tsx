@@ -155,8 +155,8 @@ export default function ObservationMapView({
     if (!selectedObservationDate || !observationToUse || !plantingSiteHistory) {
       return {
         site: plantingSiteMapData,
-        zone: undefined,
-        subzone: undefined,
+        stratum: undefined,
+        substratum: undefined,
         permanentPlot: undefined,
         temporaryPlot: undefined,
         adHocPlot: undefined,
