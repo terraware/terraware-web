@@ -51,8 +51,8 @@ export type PlantingSiteMapProps = {
   layers?: MapLayer[];
   showRecencyFill?: boolean;
   showSurvivalRateFill?: boolean;
-  zoneInteractive?: boolean;
-  subzoneInteractive?: boolean;
+  stratumInteractive?: boolean;
+  substratumInteractive?: boolean;
   showSiteMarker?: boolean;
   minHeight?: string;
 } & MapControl;
@@ -67,8 +67,8 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
     layers,
     showRecencyFill,
     showSurvivalRateFill,
-    zoneInteractive,
-    subzoneInteractive,
+    stratumInteractive,
+    substratumInteractive,
     showSiteMarker,
     minHeight,
   } = props;
@@ -135,7 +135,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
         sources.push({
           ...mapData.substratum,
           ...getRenderAttributes('substratum'),
-          isInteractive: subzoneInteractive !== undefined ? subzoneInteractive : isFirstLayerAdded(),
+          isInteractive: substratumInteractive !== undefined ? substratumInteractive : isFirstLayerAdded(),
           annotation: isFirstLayerAdded()
             ? {
                 textField: 'name',
@@ -179,7 +179,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
         sources.push({
           ...mapData.stratum,
           ...getRenderAttributes('stratum'),
-          isInteractive: zoneInteractive !== undefined ? zoneInteractive : isFirstLayerAdded(),
+          isInteractive: stratumInteractive !== undefined ? stratumInteractive : isFirstLayerAdded(),
           annotation: isFirstLayerAdded()
             ? {
                 textField: 'name',
@@ -238,9 +238,9 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
     getRenderAttributes,
     showRecencyFill,
     showSurvivalRateFill,
-    subzoneInteractive,
+    substratumInteractive,
     theme,
-    zoneInteractive,
+    stratumInteractive,
   ]);
 
   const entityOptions: MapEntityOptions = useMemo(

@@ -210,7 +210,7 @@ export default function BiomassMeasurementMapView({
                 />
               )
             }
-            zoneInteractive={true}
+            stratumInteractive={true}
             contextRenderer={{
               render: contextRenderer,
               sx: {
