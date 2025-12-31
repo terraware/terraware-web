@@ -5,8 +5,8 @@ import { changeToSuperAdmin } from '../utils/userUtils';
 import { waitFor } from '../utils/utils';
 
 test.describe('ProjectVariablesTests', () => {
-  test.beforeEach(async ({ context }, testInfo) => {
-    await changeToSuperAdmin(context);
+  test.beforeEach(async ({ context, baseURL }, testInfo) => {
+    await changeToSuperAdmin(context, baseURL);
   });
 
   test('View Project Variables Table', async ({ page }, testInfo) => {

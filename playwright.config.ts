@@ -35,47 +35,16 @@ export default defineConfig({
   timeout: process.env.CI ? 60000 : parseInt(process.env.TIMEOUT || '15000'),
 
   /* Configure projects for major browsers */
-  projects: process.env.CI
-    ? [
-        {
-          name: 'chromium',
-          use: { ...devices['Desktop Chrome'] },
-        },
-      ]
-    : [
-        {
-          name: 'chromium',
-          use: { ...devices['Desktop Chrome'] },
-        },
-
-        // {
-        //   name: 'firefox',
-        //   use: { ...devices['Desktop Firefox'] },
-        // },
-
-        // {
-        //   name: 'webkit',
-        //   use: { ...devices['Desktop Safari'] },
-        // },
-
-        /* Test against mobile viewports. */
-        // {
-        //   name: 'Mobile Chrome',
-        //   use: { ...devices['Pixel 5'] },
-        // },
-        // {
-        //   name: 'Mobile Safari',
-        //   use: { ...devices['iPhone 12'] },
-        // },
-
-        /* Test against branded browsers. */
-        // {
-        //   name: 'Microsoft Edge',
-        //   use: { ...devices['Desktop Edge'], channel: 'msedge' },
-        // },
-        // {
-        //   name: 'Google Chrome',
-        //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
-        // },
-      ],
+  projects: [
+    {
+      name: 'dev',
+      /* Test with an unoptimized developer build */
+      use: { baseURL: 'http://localhost:3000', ...devices['Desktop Chrome'] },
+    },
+    {
+      name: 'prod',
+      /* Test with an optimized developer build served with nginx. Make sure to run `yarn build && yarn server:reset` first. */
+      use: { baseURL: 'http://localhost:3001', ...devices['Desktop Chrome'] },
+    },
+  ],
 });

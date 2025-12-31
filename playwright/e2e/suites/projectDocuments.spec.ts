@@ -1,13 +1,12 @@
 import { expect, test } from '@playwright/test';
 
 import { APP_PATHS } from '../../../src/constants';
-import { TERRAWARE_WEB_URL } from '../constants';
 import { navigateToProjectProfile } from '../utils/navigation';
 import { changeToSuperAdmin } from '../utils/userUtils';
 
 test.describe('ProjectDocumentsTests', () => {
-  test.beforeEach(async ({ page, context }, testInfo) => {
-    await changeToSuperAdmin(context);
+  test.beforeEach(async ({ page, context, baseURL }, testInfo) => {
+    await changeToSuperAdmin(context, baseURL);
     await navigateToProjectProfile('Phase 2 Project Deal', page);
     await page.getByRole('tab', { name: 'Documents' }).click();
   });
@@ -31,8 +30,8 @@ test.describe('ProjectDocumentsTests', () => {
 
     // click the Add Document button and wait for the new page to load
     await page.getByRole('button', { name: 'Add Document' }).click();
-    await page.waitForURL(`${TERRAWARE_WEB_URL}${APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENT_NEW}`);
+    await page.waitForURL(`${APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENT_NEW}`);
 
-    expect(page.url()).toBe(`${TERRAWARE_WEB_URL}${APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENT_NEW}`);
+    expect(page.url()).toBe(`${APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENT_NEW}`);
   });
 });

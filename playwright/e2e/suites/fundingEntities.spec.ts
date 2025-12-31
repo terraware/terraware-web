@@ -19,8 +19,8 @@ type FundingEntity = {
 };
 
 test.describe('FundingEntitiesTests', () => {
-  test.beforeEach(async ({ page, context }, testInfo) => {
-    await changeToSuperAdmin(context);
+  test.beforeEach(async ({ page, context, baseURL }, testInfo) => {
+    await changeToSuperAdmin(context, baseURL);
     await navigateToFundingEntities(page);
   });
 

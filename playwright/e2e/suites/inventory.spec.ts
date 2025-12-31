@@ -1,14 +1,13 @@
 import { Locator, expect, test } from '@playwright/test';
 import { Page } from 'playwright-core';
 
-import { TERRAWARE_WEB_URL } from '../constants';
 import { changeToSuperAdmin } from '../utils/userUtils';
 import { exactOptions, selectOrg, waitFor } from '../utils/utils';
 
 test.describe('InventoryTests', () => {
-  test.beforeEach(async ({ page, context }, testInfo) => {
-    await changeToSuperAdmin(context);
-    await page.goto(TERRAWARE_WEB_URL);
+  test.beforeEach(async ({ page, context, baseURL }, testInfo) => {
+    await changeToSuperAdmin(context, baseURL);
+    await page.goto('/');
     await waitFor(page, '#home');
     await selectOrg(page, 'Terraformation (staging)');
   });

@@ -1,18 +1,17 @@
 import { test } from '@playwright/test';
 
-import { TERRAWARE_WEB_URL } from '../constants';
 import { ProjectDetails, publishProjectProfile, validateProjectProfilePage } from '../utils/projectProfile';
 import { changeToFunderUser, changeToSuperAdmin } from '../utils/userUtils';
 
 test.describe('FunderProjectProfileTests', () => {
-  test('Publish Project and then View Published Project', async ({ page, context }, testInfo) => {
+  test('Publish Project and then View Published Project', async ({ page, context, baseURL }, testInfo) => {
     // publish project
-    await changeToSuperAdmin(context);
+    await changeToSuperAdmin(context, baseURL);
     await publishProjectProfile('Phase 1 Project Deal', page);
 
     // view published project
-    await changeToFunderUser(context);
-    await page.goto(TERRAWARE_WEB_URL);
+    await changeToFunderUser(context, baseURL);
+    await page.goto('/');
     await page.getByRole('tab', { name: 'Project Profile' }).click();
 
     const projectDetails: ProjectDetails = {
