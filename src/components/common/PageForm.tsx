@@ -10,14 +10,14 @@ export type PageFormProps = Omit<FormProps, 'saveButtonText' | 'cancelButtonText
 };
 
 export default function WrappedPageForm(props: PageFormProps): JSX.Element {
-  const { busy, cancelButtonText, saveButtonText, ...formProps } = props;
+  const { busy, cancelButtonText, saveButtonText, saveDisabled, ...formProps } = props;
 
   return (
     <>
       {busy && <BusySpinner withSkrim={true} />}
       <PageForm
         {...formProps}
-        saveDisabled={busy}
+        saveDisabled={busy || saveDisabled}
         saveButtonText={saveButtonText || strings.SAVE}
         cancelButtonText={cancelButtonText || strings.CANCEL}
       />
