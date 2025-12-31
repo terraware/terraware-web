@@ -8,7 +8,7 @@ import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 type AddPhotosProps = {
-  onNext: (photos: File[]) => void;
+  onNext: (photos: File[]) => Promise<void>;
   onCancel: () => void;
   saveText: string;
 };
@@ -16,6 +16,7 @@ export default function AddPhotos(props: AddPhotosProps): JSX.Element {
   const { onNext, onCancel, saveText } = props;
   const [photos, setPhotos] = useState<File[]>([]);
   const theme = useTheme();
+  const [busy, setBusy] = useState(false);
   const { isMobile } = useDeviceInfo();
 
   const onPhotosChanged = (photosList: File[]) => {
@@ -23,8 +24,9 @@ export default function AddPhotos(props: AddPhotosProps): JSX.Element {
   };
 
   const onNextHandler = async () => {
-    // eslint-disable-next-line @typescript-eslint/await-thenable
+    setBusy(true);
     await onNext(photos);
+    setBusy(false);
   };
 
   return (
@@ -34,6 +36,7 @@ export default function AddPhotos(props: AddPhotosProps): JSX.Element {
       onCancel={onCancel}
       onSave={() => void onNextHandler()}
       saveButtonText={saveText}
+      busy={busy}
     >
       <Container
         maxWidth={false}
