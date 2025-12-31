@@ -3,7 +3,7 @@ import { Route, Routes } from 'react-router';
 
 import ObservationListView from './ListView';
 
-const ObservationsRouter = (): JSX.Element => {
+const ObservationsRouterV2 = (): JSX.Element => {
   return (
     <Routes>
       <Route path={'/*'} element={<ObservationListView />} />
@@ -11,4 +11,4 @@ const ObservationsRouter = (): JSX.Element => {
   );
 };
 
-export default ObservationsRouter;
+export default ObservationsRouterV2;
