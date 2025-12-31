@@ -13,7 +13,7 @@ import {
 import { useAssignT0TempSiteDataMutation } from 'src/queries/generated/t0';
 import { PlotsWithObservationsSearchResult } from 'src/redux/features/tracking/trackingThunks';
 import strings from 'src/strings';
-import { AssignSiteT0TempData, SpeciesPlot, ZoneT0Data } from 'src/types/Tracking';
+import { AssignSiteT0TempData, SpeciesPlot, StratumT0Data } from 'src/types/Tracking';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -24,7 +24,7 @@ type EditTemporaryPlotsTabProps = {
   plantingSiteId: number;
   temporaryPlotsWithObservations?: PlotsWithObservationsSearchResult[];
   withdrawnSpeciesPlots?: SpeciesPlot[];
-  zones?: ZoneT0Data[];
+  zones?: StratumT0Data[];
   alreadyIncluding?: boolean;
 };
 
@@ -47,7 +47,7 @@ const EditTemporaryPlotsTab = ({
 
   const [record, setRecord] = useForm<AssignSiteT0TempData>({
     plantingSiteId,
-    zones: zones ?? [],
+    strata: zones ?? [],
   });
 
   useEffect(() => {
@@ -58,7 +58,7 @@ const EditTemporaryPlotsTab = ({
 
   useEffect(() => {
     if (zones) {
-      setRecord({ plantingSiteId, zones });
+      setRecord({ plantingSiteId, strata: zones });
     }
   }, [plantingSiteId, setRecord, zones]);
 
@@ -124,7 +124,7 @@ const EditTemporaryPlotsTab = ({
       const allWithdrawnSpeciesForZone = Array.from(speciesMap.values());
 
       allWithdrawnSpeciesForZone.forEach((spec) => {
-        const correspondingZone = (record.zones || []).find((z) => z.plantingZoneId.toString() === zoneId.toString());
+        const correspondingZone = (record.strata || []).find((z) => z.stratumId.toString() === zoneId.toString());
         const correspondingSpecies = correspondingZone?.densityData.find(
           (denData) => denData.speciesId.toString() === spec.speciesId.toString()
         );
@@ -134,7 +134,7 @@ const EditTemporaryPlotsTab = ({
       });
     });
 
-    (record.zones || []).forEach((zone) => {
+    (record.strata || []).forEach((zone) => {
       zone.densityData.forEach((denData) => {
         if (denData.density === undefined || denData.density === null) {
           shouldShowWarning = true;
@@ -148,7 +148,7 @@ const EditTemporaryPlotsTab = ({
     }
 
     updatePlantingSiteSetting();
-    if (record.zones && record.zones.length > 0) {
+    if (record.strata && record.strata.length > 0) {
       void updateT0(record);
     } else {
       goToViewSettings();
@@ -185,7 +185,7 @@ const EditTemporaryPlotsTab = ({
 
   const saveWithDefaultDensity = useCallback(() => {
     updatePlantingSiteSetting();
-    if (record.zones && record.zones.length > 0) {
+    if (record.strata && record.strata.length > 0) {
       void updateT0(record);
     } else {
       goToViewSettings();
@@ -245,7 +245,7 @@ const EditTemporaryPlotsTab = ({
                 key={zoneId}
                 plotsWithObservations={plots}
                 withdrawnSpeciesPlot={filteredWithdrawnSpecies}
-                zoneData={zones?.find((z) => z.plantingZoneId.toString() === zoneId.toString())}
+                zoneData={zones?.find((z) => z.stratumId.toString() === zoneId.toString())}
                 record={record}
                 setRecord={setRecord}
               />
