@@ -41,7 +41,7 @@ export const fromDraft = (site: DraftPlantingSite): DraftPlantingSitePayload => 
   };
 
   const numStrata = strata?.length;
-  const numSubstrata = strata?.flatMap((zone) => zone.substrata)?.length;
+  const numSubstrata = strata?.flatMap((stratum) => stratum.substrata)?.length;
 
   return {
     createdBy,
@@ -95,7 +95,7 @@ export const fromDraftToCreate = (site: DraftPlantingSite): CreatePlantingSiteRe
     name,
     organizationId,
     plantingSeasons,
-    plantingZones: strata,
+    strata,
     projectId,
     timeZone,
   };

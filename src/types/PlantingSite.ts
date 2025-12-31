@@ -67,7 +67,6 @@ export type UpdatePlantingSiteRequestPayload = components['schemas']['UpdatePlan
 export type GetPlantingSiteResponsePayload = components['schemas']['GetPlantingSiteResponsePayload'];
 
 export type PlantingSiteProblem = components['schemas']['PlantingSiteValidationProblemPayload'];
-export type PlantingSiteProblemType = components['schemas']['PlantingSiteValidationProblemPayload']['problemType'];
 
 /**
  * Client side draft planting site with first class properties.
