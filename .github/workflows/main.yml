@@ -51,7 +51,7 @@ jobs:
           key: ${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn install --frozen-lockfile --prefer-offline
 
       # This is currently failing because the server hasn't been started yet.
       # Additionally, it's not enough to just output the generated types file.
