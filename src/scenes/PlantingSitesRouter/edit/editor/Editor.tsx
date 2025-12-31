@@ -43,8 +43,8 @@ export type EditorProps = {
 const initializeOptionalStepsStatus = (site: DraftPlantingSite): Record<OptionalSiteEditStep, boolean> => {
   const status: Record<OptionalSiteEditStep, boolean> = {
     exclusion_areas: false,
-    zone_boundaries: false,
-    subzone_boundaries: false,
+    stratum_boundaries: false,
+    substratum_boundaries: false,
   };
 
   if (site.exclusion) {
@@ -57,9 +57,9 @@ const initializeOptionalStepsStatus = (site: DraftPlantingSite): Record<Optional
     const numSubzones = site.strata.flatMap((zone) => zone.substrata).length;
 
     // if we have more than just the default zone, mark this optional step as completed
-    status.zone_boundaries = numZones > 1;
+    status.stratum_boundaries = numZones > 1;
     // if we have more than just the default subzones, mark this optional step as completed
-    status.subzone_boundaries = numSubzones > numZones;
+    status.substratum_boundaries = numSubzones > numZones;
   }
 
   return status;
@@ -160,14 +160,14 @@ export default function Editor(props: EditorProps): JSX.Element {
     return [
       ...simpleSiteSteps,
       {
-        type: 'zone_boundaries',
+        type: 'stratum_boundaries',
         label: strings.ZONE_BOUNDARIES,
-        optional: { completed: isCompleted('zone_boundaries') },
+        optional: { completed: isCompleted('stratum_boundaries') },
       },
       {
-        type: 'subzone_boundaries',
+        type: 'substratum_boundaries',
         label: strings.SUBZONE_BOUNDARIES,
-        optional: { completed: isCompleted('subzone_boundaries') },
+        optional: { completed: isCompleted('substratum_boundaries') },
       },
     ];
   }, [activeLocale, isSimpleSite, completedOptionalSteps]);
@@ -365,8 +365,8 @@ export default function Editor(props: EditorProps): JSX.Element {
             )}
             {currentStep === 'site_boundary' && <SiteBoundary onValidate={onValidate} site={plantingSite} />}
             {currentStep === 'exclusion_areas' && <Exclusions onValidate={onValidate} site={plantingSite} />}
-            {currentStep === 'zone_boundaries' && <Strata onValidate={onValidate} site={plantingSite} />}
-            {currentStep === 'subzone_boundaries' && <Substrata onValidate={onValidate} site={plantingSite} />}
+            {currentStep === 'stratum_boundaries' && <Strata onValidate={onValidate} site={plantingSite} />}
+            {currentStep === 'substratum_boundaries' && <Substrata onValidate={onValidate} site={plantingSite} />}
           </Card>
         </Form>
       )}

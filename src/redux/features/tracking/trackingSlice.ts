@@ -1,7 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
-import { PlantingSiteZone } from 'src/types/PlantingSite';
 import {
   PlantingSite,
   PlantingSiteHistory,
@@ -90,28 +89,6 @@ export const plantingSitesSearchResultsSlice = createSlice({
 });
 
 export const { setPlantingSitesSearchResultsAction } = plantingSitesSearchResultsSlice.actions;
-
-// Planting Site Population Data Slice
-type SitePopulationData = {
-  error?: string;
-  zones?: PlantingSiteZone[];
-};
-
-const initialSitePopulationState: SitePopulationData = {};
-
-export const sitePopulationSlice = createSlice({
-  name: 'sitePopulationSlice',
-  initialState: initialSitePopulationState,
-  reducers: {
-    setSitePopulationAction: (state, action: PayloadAction<SitePopulationData>) => {
-      const data: SitePopulationData = action.payload;
-      state.error = data.error;
-      state.zones = data.zones;
-    },
-  },
-});
-
-export const { setSitePopulationAction } = sitePopulationSlice.actions;
 
 // Planting Site Reported Plants Slice
 type SiteReportedPlantsData = {
@@ -227,7 +204,6 @@ export const organizationReportedPlantsSlice = createSlice({
 const trackingReducers = {
   tracking: trackingSlice.reducer,
   plantingSitesSearchResults: plantingSitesSearchResultsSlice.reducer,
-  sitePopulation: sitePopulationSlice.reducer,
   siteReportedPlantsResults: siteReportedPlantsSlice.reducer,
   monitoringPlots: monitoringPlotsSlice.reducer,
   plantingSite: plantingSiteSlice.reducer,
