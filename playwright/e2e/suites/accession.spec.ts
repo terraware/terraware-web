@@ -56,19 +56,31 @@ test.describe('AccessionTests', () => {
     await expect(page.getByLabel('Accession Details')).toContainText('Collected from plants');
     await page.getByRole('button', { name: 'Check In' }).click();
     await expect(page.getByRole('main')).toContainText('Awaiting Processing');
-    await page.getByRole('main').getByRole('button').nth(1).click();
-    await page.locator('.textfield-value > .tw-icon').click();
+    await page
+      .getByText('Status', { ...exactOptions })
+      .locator('../..')
+      .locator('.tw-icon') // edit icon
+      .click();
+    await page.locator('#accession-status').click();
     await page.getByText('Processing', { exact: true }).click();
     await page.getByRole('button', { name: 'Save' }).click();
     await page.waitForTimeout(1000); //Wait for modal to close
     await expect(page.getByRole('main')).toContainText('Processing');
-    await page.getByRole('main').getByRole('button').nth(1).click();
-    await page.getByPlaceholder('Select...').click();
+    await page
+      .getByText('Status', { ...exactOptions })
+      .locator('../..')
+      .locator('.tw-icon') // edit icon
+      .click();
+    await page.locator('#accession-status').click();
     await page.getByText('Drying').click();
     await page.getByRole('button', { name: 'Save' }).click();
     await expect(page.getByRole('main')).toContainText('Drying');
     await expect(page.getByRole('main')).toContainText('End-drying Reminder Off');
-    await page.getByRole('main').getByRole('button').nth(3).click();
+    await page
+      .getByText('End-Drying Reminder', { ...exactOptions })
+      .locator('../..')
+      .locator('.tw-icon') // edit icon
+      .click();
     await page.getByLabel('End-Drying Reminder').fill('2034-01-31');
     await page.getByRole('button', { name: 'Set Reminder' }).click();
     await page.waitForTimeout(1000); //Wait for modal to close
@@ -91,9 +103,9 @@ test.describe('AccessionTests', () => {
     await expect(page.getByLabel('History')).toContainText('Super Admin updated the quantity to 500 grams');
     await page.getByRole('tab', { name: 'Viability Tests' }).click();
     await page.getByRole('button', { name: 'Add Test' }).click();
-    await page.getByPlaceholder('Select...').nth(1).click();
+    await page.locator('#seed-type').click();
     await page.getByText('Fresh').click();
-    await page.getByPlaceholder('Select...').nth(2).click();
+    await page.locator('#substrate').click();
     await page.getByText('Nursery Media').click();
     await page.locator('#seedsTested').getByRole('textbox').fill('5');
     await page.getByRole('button', { name: 'Save' }).click();
