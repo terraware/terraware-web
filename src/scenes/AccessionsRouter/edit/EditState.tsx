@@ -29,6 +29,7 @@ export default function EditState(props: EditStateProps): JSX.Element {
       <Grid item xs={12} textAlign='left'>
         <Grid item xs={12}>
           <Dropdown
+            id={'accession-status'}
             label={strings.STATUS}
             placeholder={strings.SELECT}
             options={options}

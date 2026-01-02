@@ -516,6 +516,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
         <Grid container item xs={12} spacing={2} textAlign='left'>
           <Grid item xs={12} padding={theme.spacing(1, 3, 1, 5)}>
             <Dropdown
+              id={'test-method'}
               options={testMethods()}
               placeholder={strings.SELECT}
               onChange={(value) => onChangeTestType(value as TEST_TYPES)}
@@ -528,6 +529,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
           </Grid>
           <Grid item padding={theme.spacing(1, 3, 1, 5)} xs={12}>
             <Dropdown
+              id={'seed-type'}
               label={strings.SEED_TYPE}
               placeholder={strings.SELECT}
               options={seedTypes()}
@@ -554,6 +556,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
             <>
               <Grid item padding={theme.spacing(1, 3, 1, 5)} xs={12}>
                 <Dropdown
+                  id={'substrate'}
                   label={strings.SUBSTRATE}
                   placeholder={strings.SELECT}
                   options={getSubstratesAccordingToType(record?.testType)}
@@ -578,6 +581,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
               </Grid>
               <Grid item padding={theme.spacing(1, 3, 1, 5)} xs={12}>
                 <Dropdown
+                  id={'treatment'}
                   label={strings.TREATMENT}
                   placeholder={strings.SELECT}
                   options={treatments()}

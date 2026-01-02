@@ -25,7 +25,7 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Collect trace for the first failure. See https://playwright.dev/docs/trace-viewer */
-    trace: 'retain-on-first-failure',
+    trace: process.env.CI ? 'retain-on-first-failure' : 'on',
 
     screenshot: 'only-on-failure',
     launchOptions: {
