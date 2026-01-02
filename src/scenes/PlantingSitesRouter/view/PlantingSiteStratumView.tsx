@@ -6,19 +6,19 @@ import { useGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import GenericStratumView from './GenericStratumView';
 
 export default function PlantingSiteStratumView(): JSX.Element | undefined {
-  const params = useParams<{ plantingSiteId: string; zoneId: string }>();
-  const zoneId = Number(params.zoneId);
+  const params = useParams<{ plantingSiteId: string; stratumId: string }>();
+  const stratumId = Number(params.stratumId);
   const plantingSiteId = Number(params.plantingSiteId);
 
   const { data: plantingSite } = useGetPlantingSiteQuery(plantingSiteId);
 
-  const plantingZone = useMemo(() => {
-    return plantingSite?.site?.strata?.find((zone) => zone.id === zoneId);
-  }, [plantingSite, zoneId]);
+  const stratum = useMemo(() => {
+    return plantingSite?.site?.strata?.find((_stratum) => _stratum.id === stratumId);
+  }, [plantingSite, stratumId]);
 
-  if (!plantingSite || !plantingZone) {
+  if (!plantingSite || !stratum) {
     return undefined;
   }
 
-  return <GenericStratumView plantingSite={plantingSite.site} plantingZone={plantingZone} />;
+  return <GenericStratumView plantingSite={plantingSite.site} stratum={stratum} />;
 }

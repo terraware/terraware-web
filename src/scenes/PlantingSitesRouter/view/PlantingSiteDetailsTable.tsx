@@ -86,9 +86,9 @@ const DetailsRenderer =
       },
     };
 
-    const createLinkToZone = () => {
-      const url = APP_PATHS.PLANTING_SITES_ZONE_VIEW.replace(':plantingSiteId', plantingSiteId.toString()).replace(
-        ':zoneId',
+    const createLinkToStratum = () => {
+      const url = APP_PATHS.PLANTING_SITES_STRATUM_VIEW.replace(':plantingSiteId', plantingSiteId.toString()).replace(
+        ':stratumId',
         row.id.toString()
       );
       return (
@@ -114,7 +114,7 @@ const DetailsRenderer =
     };
 
     if (column.key === 'name') {
-      return <CellRenderer {...props} value={createLinkToZone()} sx={textStyles} title={value as string} />;
+      return <CellRenderer {...props} value={createLinkToStratum()} sx={textStyles} title={value as string} />;
     }
 
     if (column.key === 'latestObservationCompletedTime') {

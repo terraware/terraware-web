@@ -82,7 +82,7 @@ type PlantingSiteMapViewProps = {
 
 function DraftPlantingSiteMapView({ plantingSite, search }: PlantingSiteMapViewProps): JSX.Element | null {
   const { isDesktop } = useDeviceInfo();
-  const [searchZoneEntities, setSearchZoneEntities] = useState<MapEntityId[]>([]);
+  const [searchStratumEntities, setSearchStratumEntities] = useState<MapEntityId[]>([]);
   const [includedLayers, setIncludedLayers] = useState<MapLayer[]>(['Planting Site', 'Strata', 'Sub-Strata']);
 
   const layerOptionLabels: Record<MapLayer, string> = {
@@ -101,12 +101,12 @@ function DraftPlantingSiteMapView({ plantingSite, search }: PlantingSiteMapViewP
 
   useEffect(() => {
     if (!search) {
-      setSearchZoneEntities([]);
+      setSearchStratumEntities([]);
     } else {
       const entities = plantingSite?.strata
-        ?.filter((zone) => regexMatch(zone.name, search))
-        .map((zone) => ({ sourceId: 'zones', id: zone.id }));
-      setSearchZoneEntities(entities ?? []);
+        ?.filter((stratum) => regexMatch(stratum.name, search))
+        .map((stratum) => ({ sourceId: 'strata', id: stratum.id }));
+      setSearchStratumEntities(entities ?? []);
     }
   }, [plantingSite, search]);
 
@@ -134,8 +134,10 @@ function DraftPlantingSiteMapView({ plantingSite, search }: PlantingSiteMapViewP
           mapData={mapData}
           style={{ borderRadius: '24px' }}
           layers={includedLayers}
-          highlightEntities={searchZoneEntities}
-          focusEntities={searchZoneEntities.length ? searchZoneEntities : [{ sourceId: 'sites', id: plantingSite.id }]}
+          highlightEntities={searchStratumEntities}
+          focusEntities={
+            searchStratumEntities.length ? searchStratumEntities : [{ sourceId: 'sites', id: plantingSite.id }]
+          }
           contextRenderer={{
             render: ContextRenderer(plantingSite),
             sx: {
@@ -169,21 +171,21 @@ const ContextRenderer =
   (site: MinimalPlantingSite) =>
   // eslint-disable-next-line react/display-name
   (entity: MapSourceProperties): JSX.Element | null => {
-    const zones = site.strata ?? [];
+    const strata = site.strata ?? [];
     let properties: TooltipProperty[] = [];
     let title: string;
     if (entity.type === 'site') {
       title = site.name;
       properties = [
-        { key: strings.ZONES, value: zones.length },
-        { key: strings.SUBZONES, value: zones.flatMap((z) => z.substrata).length },
+        { key: strings.ZONES, value: strata.length },
+        { key: strings.SUBZONES, value: strata.flatMap((z) => z.substrata).length },
       ];
-    } else if (entity.type === 'zone') {
-      const zone = zones.find((z) => z.id === entity.id);
-      title = zone?.name ?? '';
+    } else if (entity.type === 'stratum') {
+      const stratum = strata.find((z) => z.id === entity.id);
+      title = stratum?.name ?? '';
       properties = [
-        { key: strings.TARGET_PLANTING_DENSITY, value: zone?.targetPlantingDensity ?? 0 },
-        { key: strings.SUBZONES, value: zone?.substrata.length ?? 0 },
+        { key: strings.TARGET_PLANTING_DENSITY, value: stratum?.targetPlantingDensity ?? 0 },
+        { key: strings.SUBZONES, value: stratum?.substrata.length ?? 0 },
       ];
     } else {
       return null;

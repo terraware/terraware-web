@@ -20,7 +20,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 import StepTitleDescription, { Description } from './StepTitleDescription';
 import { OnValidate } from './types';
-import { boundingAreaHectares, defaultZonePayload, zoneNameGenerator } from './utils';
+import { boundingAreaHectares, defaultStratumPayload, stratumNameGenerator } from './utils';
 import { findErrors } from './utils';
 
 export type SiteBoundaryProps = {
@@ -28,17 +28,17 @@ export type SiteBoundaryProps = {
   site: DraftPlantingSite;
 };
 
-// create default planting zones off the site boundary
-const createPlantingZoneWith = (boundary?: MultiPolygon): MinimalStratum | undefined => {
+// create default strata off the site boundary
+const createStratumWith = (boundary?: MultiPolygon): MinimalStratum | undefined => {
   if (!boundary) {
     return undefined;
   }
-  const zoneBoundary: MultiPolygon = { type: 'MultiPolygon', coordinates: boundary.coordinates };
-  const zoneName = zoneNameGenerator(new Set<string>(), strings.ZONE);
-  return defaultZonePayload({
-    boundary: zoneBoundary,
+  const stratumBoundary: MultiPolygon = { type: 'MultiPolygon', coordinates: boundary.coordinates };
+  const stratumName = stratumNameGenerator(new Set<string>(), strings.ZONE);
+  return defaultStratumPayload({
+    boundary: stratumBoundary,
     id: 0,
-    name: zoneName,
+    name: stratumName,
     targetPlantingDensity: 1500,
   });
 };
@@ -105,10 +105,10 @@ export default function SiteBoundary({ onValidate, site }: SiteBoundaryProps): J
         onValidate.apply(true);
         return;
       } else {
-        // create one zone per disjoint polygon in the site boundary
-        const plantingZone = createPlantingZoneWith(boundary);
-        const plantingZones = plantingZone ? [plantingZone] : [];
-        onValidate.apply(false, { boundary, strata: plantingZones });
+        // create one stratum per disjoint polygon in the site boundary
+        const stratum = createStratumWith(boundary);
+        const strata = stratum ? [stratum] : [];
+        onValidate.apply(false, { boundary, strata });
       }
     }
   }, [boundary, errorAnnotations, onValidate, site.id, snackbar]);
@@ -161,13 +161,13 @@ export default function SiteBoundary({ onValidate, site }: SiteBoundaryProps): J
    */
   const onEditableBoundaryChanged = async (editableBoundary?: FeatureCollection) => {
     const newBoundary = (editableBoundary && unionMultiPolygons(editableBoundary)) || undefined;
-    const plantingZone = createPlantingZoneWith(newBoundary);
-    const plantingZones = plantingZone ? [plantingZone] : [];
+    const stratum = createStratumWith(newBoundary);
+    const strata = stratum ? [stratum] : [];
     const errors = await findErrors(
       {
         ...site,
         boundary: newBoundary,
-        strata: plantingZones,
+        strata,
       },
       'site_boundary',
       []

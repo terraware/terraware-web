@@ -29,7 +29,7 @@ export function PlantingSitesRouter(): JSX.Element {
 
   return (
     <Routes>
-      <Route path={'/zone/:zoneId'} element={<PlantingSiteStratumView />} />
+      <Route path={'/stratum/:stratumId'} element={<PlantingSiteStratumView />} />
       <Route path={'/edit'} element={<PlantingSiteCreate plantingSiteId={Number(plantingSiteId)} />} />
       <Route path={'*'} element={<PlantingSiteView />} />
     </Routes>
@@ -39,7 +39,7 @@ export function PlantingSitesRouter(): JSX.Element {
 export function PlantingSitesDraftRouter(): JSX.Element {
   return (
     <Routes>
-      <Route path={'/:plantingSiteId/zone/:zoneId'} element={<PlantingSiteDraftStratumView />} />
+      <Route path={'/:plantingSiteId/stratum/:stratumId'} element={<PlantingSiteDraftStratumView />} />
       <Route path={'/new'} element={<PlantingSiteDraftCreate />} />
       <Route path={'/:plantingSiteId/edit'} element={<PlantingSiteDraftEdit />} />
       <Route path={'/:plantingSiteId'} element={<PlantingSiteDraftView />} />
