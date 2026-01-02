@@ -694,13 +694,7 @@
 <a name='L629'></a><a href='#L629'>629</a>
 <a name='L630'></a><a href='#L630'>630</a>
 <a name='L631'></a><a href='#L631'>631</a>
-<a name='L632'></a><a href='#L632'>632</a>
-<a name='L633'></a><a href='#L633'>633</a>
-<a name='L634'></a><a href='#L634'>634</a>
-<a name='L635'></a><a href='#L635'>635</a>
-<a name='L636'></a><a href='#L636'>636</a>
-<a name='L637'></a><a href='#L637'>637</a>
-<a name='L638'></a><a href='#L638'>638</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L632'></a><a href='#L632'>632</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -784,6 +778,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1083,15 +1080,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1421,18 +1409,21 @@ const PlantDashboardMap = ({<span class="cstat-no" title="statement not covered"
   const { plotPhotosVisible, plotPhotosLegendGroup } = usePlotPhotosMapLegend(
     disablePhotoMarkers || observationResults.length === 0
   );
-  cons<span class="cstat-no" title="statement not covered" >t { survivalRateVisible, survivalRateLegen</span>dGroup } = useSurvivalRateMapLegend(
-    disableSurvivalRate || latestSumma<span class="cstat-no" title="statement not covered" >ry === undefined</span>
-  );<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
-  cons<span class="cstat-no" title="statement not covered" >t {</span>
-    si<span class="cstat-no" title="statement not covered" >tesLayerStyle,</span>
-    st<span class="cstat-no" title="statement not covered" >rataLayerStyle,</span>
-    substrataLayerStyle,
-    observationEventStyle,
-    survivalRate50To75,
-    survivalRateLessTh<span class="cstat-no" title="statement not covered" >an50,</span>
-<span class="fstat-no" title="function not covered" >    su</span>rvivalRateMoreThan75,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  const { survivalRateVisible, survivalRateLegendGroup } = useSurvivalRateMapLegend(
+    disableSurvivalRate || latestSummary === undefined
+  );
+<span class="cstat-no" title="statement not covered" ></span>
+  const {<span class="cstat-no" title="statement not covered" ></span>
+    sitesLayerStyle,<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" >    st</span>rataLayerStyle,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span>
+    su<span class="cstat-no" title="statement not covered" >bstrataLayerStyle,</span>
+    ob<span class="cstat-no" title="statement not covered" >servationEventStyl</span>e,
+    su<span class="cstat-no" title="statement not covered" >rvivalRate50To75,</span>
+    survivalRateLessThan50,
+    survivalRateMoreThan75,
+    deadPlantStyle,
+    livePlantStyle,<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" >    pl</span>otPhotoStyle,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
   } = <span class="cstat-no" title="statement not covered" >useMapFeatureStyles();</span>
 <span class="cstat-no" title="statement not covered" ></span>
   cons<span class="cstat-no" title="statement not covered" >t [drawerOpen, set</span>DrawerOpen] = useState&lt;boolean&gt;(false);
@@ -1754,8 +1745,8 @@ const PlantDashboardMap = ({<span class="cstat-no" title="statement not covered"
   );
 &nbsp;
   const observationEventsHighlights = useMemo((): MapLayerFeatureId[][] =&gt; {
-    const recencyHighlights: MapLayerFeatureId[][] = [[], [], [], [], []];
-&nbsp;
+    const recencyHigh<span class="cstat-no" title="statement not covered" >lights: MapLayerFeatureId[<span class="fstat-no" title="function not covered" >][</span>] = [[], [], [], [], []];</span>
+<span class="cstat-no" title="statement not covered" ></span>
     if (plantingSites.length === 0) {
       return recencyHighlights;
     }
@@ -1763,8 +1754,8 @@ const PlantDashboardMap = ({<span class="cstat-no" title="statement not covered"
     const sortFeatureByObservationRecency = (featureId: MapLayerFeatureId, time: string | undefined) =&gt; {
       if (time !== undefined) {
         const recency = MapService.getRecencyFromTime(time);
-        recencyHighli<span class="cstat-no" title="statement not covered" >ghts[recency - 1].push(fea<span class="fstat-no" title="function not covered" >tu</span>reId);</span>
-<span class="cstat-no" title="statement not covered" >      }</span>
+        recencyHighlights[recency - 1].push(featureId);
+      }
     };
 &nbsp;
     plantingSites.forEach((plantingSite) =&gt; {
@@ -1790,41 +1781,32 @@ const PlantDashboardMap = ({<span class="cstat-no" title="statement not covered"
         markers: photoMarkers,
         markerGroupId: 'plot-photos',
         onClusterClick: selectPhotosFromMarkers,
-        style: {
-          iconColor: '#CC79A7',
-          iconName: 'iconPhoto',
-          type: 'icon',
-        },
+        style: plotPhotoStyle,
         visible: plotPhotosVisible,
       },
       {
         markers: plantsMarkers('Live'),
         markerGroupId: 'live-plants',
         onClusterClick: selectPlantsFromMarkers,
-        style: {
-          iconColor: '#40B0A6',
-          iconName: 'iconLivePlant',
-          type: 'icon',
-        },
+        style: livePlantStyle,
         visible: livePlantsVisible,
       },
       {
         markers: plantsMarkers('Dead'),
         markerGroupId: 'dead-plants',
         onClusterClick: selectPlantsFromMarkers,
-        style: {
-          iconColor: '#E1BE6A',
-          iconName: 'iconLivePlant',
-          type: 'icon',
-        },
+        style: deadPlantStyle,
         visible: deadPlantsVisible,
       },
     ];
   }, [
+    deadPlantStyle,
     deadPlantsVisible,
+    livePlantStyle,
     livePlantsVisible,
     photoMarkers,
     plantsMarkers,
+    plotPhotoStyle,
     plotPhotosVisible,
     selectPhotosFromMarkers,
     selectPlantsFromMarkers,
@@ -1981,7 +1963,7 @@ export default PlantDashboardMap;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-02T23:42:29.883Z
+                at 2026-01-02T23:54:45.332Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
