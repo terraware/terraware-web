@@ -13,45 +13,45 @@ export default function HighestAndLowestSurvivalRateStrataCard(): JSX.Element {
 
   const [highestSurvivalRate, setHighestSurvivalRate] = useState<number>();
   const [lowestSurvivalRate, setLowestSurvivalRate] = useState<number>();
-  const [highestZoneId, setHighestZoneId] = useState<number>();
-  const [lowestZoneId, setLowestZoneId] = useState<number>();
+  const [highestStratumId, setHighestStratumId] = useState<number>();
+  const [lowestStratumId, setLowestStratumId] = useState<number>();
 
   useEffect(() => {
     let _highestSurvivalRate = 0;
     let _lowestSurvivalRate = Infinity;
-    let _highestZoneId: number | undefined;
-    let _lowestZoneId: number | undefined;
-    observationSummaries?.[0]?.strata.forEach((zone: StratumObservationSummary) => {
-      if (zone.survivalRate !== undefined) {
-        if (zone.survivalRate >= _highestSurvivalRate) {
-          _highestSurvivalRate = zone.survivalRate;
-          _highestZoneId = zone.stratumId;
+    let _highestStratumId: number | undefined;
+    let _lowestStratumId: number | undefined;
+    observationSummaries?.[0]?.strata.forEach((stratum: StratumObservationSummary) => {
+      if (stratum.survivalRate !== undefined) {
+        if (stratum.survivalRate >= _highestSurvivalRate) {
+          _highestSurvivalRate = stratum.survivalRate;
+          _highestStratumId = stratum.stratumId;
         }
-        if (zone.survivalRate < _lowestSurvivalRate) {
-          _lowestSurvivalRate = zone.survivalRate;
-          _lowestZoneId = zone.stratumId;
+        if (stratum.survivalRate < _lowestSurvivalRate) {
+          _lowestSurvivalRate = stratum.survivalRate;
+          _lowestStratumId = stratum.stratumId;
         }
       }
     });
 
-    setLowestSurvivalRate(_lowestZoneId ? _lowestSurvivalRate : undefined);
-    setLowestZoneId(_lowestZoneId);
+    setLowestSurvivalRate(_lowestStratumId ? _lowestSurvivalRate : undefined);
+    setLowestStratumId(_lowestStratumId);
 
-    setHighestSurvivalRate(_highestZoneId ? _highestSurvivalRate : undefined);
-    setHighestZoneId(_highestZoneId);
+    setHighestSurvivalRate(_highestStratumId ? _highestSurvivalRate : undefined);
+    setHighestStratumId(_highestStratumId);
   }, [observationSummaries]);
 
-  const highestPlantingZone = useMemo(() => {
-    return plantingSite?.strata?.find((zone) => zone.id === highestZoneId);
-  }, [plantingSite, highestZoneId]);
+  const highestStratum = useMemo(() => {
+    return plantingSite?.strata?.find((stratum) => stratum.id === highestStratumId);
+  }, [plantingSite, highestStratumId]);
 
-  const lowestPlantingZone = useMemo(() => {
-    return plantingSite?.strata?.find((zone) => zone.id === lowestZoneId);
-  }, [plantingSite, lowestZoneId]);
+  const lowestStratum = useMemo(() => {
+    return plantingSite?.strata?.find((stratum) => stratum.id === lowestStratumId);
+  }, [plantingSite, lowestStratumId]);
 
   return (
     <Box>
-      {highestPlantingZone && highestSurvivalRate !== undefined && (
+      {highestStratum && highestSurvivalRate !== undefined && (
         <>
           <Box
             sx={{
@@ -65,20 +65,20 @@ export default function HighestAndLowestSurvivalRateStrataCard(): JSX.Element {
               {strings.HIGHEST}
             </Typography>
             <Typography fontSize='24px' fontWeight={600} paddingY={theme.spacing(1)}>
-              {highestPlantingZone.name}
+              {highestStratum.name}
             </Typography>
             <Typography fontSize='24px' fontWeight={600}>
               <FormattedNumber value={highestSurvivalRate} />%
             </Typography>
           </Box>
-          {(!lowestPlantingZone || lowestPlantingZone.id === highestPlantingZone.id) && (
+          {(!lowestStratum || lowestStratum.id === highestStratum.id) && (
             <Typography fontWeight={400} fontSize='14px' color={theme.palette.TwClrTxtSecondary} marginTop={1}>
               {strings.SINGLE_ZONE_SURVIVAL_RATE_MESSAGE}
             </Typography>
           )}
         </>
       )}
-      {lowestPlantingZone && lowestPlantingZone.id !== highestPlantingZone?.id && (
+      {lowestStratum && lowestStratum.id !== highestStratum?.id && (
         <Box
           sx={{
             backgroundColor: '#CB4D4533',
@@ -90,7 +90,7 @@ export default function HighestAndLowestSurvivalRateStrataCard(): JSX.Element {
             {strings.LOWEST}
           </Typography>
           <Typography fontSize='24px' fontWeight={600} paddingY={theme.spacing(1)}>
-            {lowestPlantingZone.name}
+            {lowestStratum.name}
           </Typography>
           <Typography fontSize='24px' fontWeight={600}>
             <FormattedNumber value={lowestSurvivalRate || 0} />%

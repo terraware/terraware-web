@@ -154,7 +154,7 @@ test.describe('ParticipantPlantsDashboardTests', () => {
     ).toBeVisible();
     await expect(page.getByText('1,014Plants/ha')).toBeVisible();
     await expect(page.getByText('Observed Density Per Zone')).toBeVisible();
-    await expect(page.locator('#plantingDensityByZone')).toBeVisible();
+    await expect(page.locator('#plantingDensityByStratum')).toBeVisible();
     await expect(page.getByText('Survival Rate').nth(1)).toBeVisible();
     await expect(page.getByText('as of 2025-05-29 Observation').nth(1)).toBeVisible();
     await expect(page.getByText('Survival Rate').nth(2)).toBeVisible();

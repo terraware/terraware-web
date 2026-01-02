@@ -8,7 +8,7 @@ import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext'
 import strings from 'src/strings';
 import { truncate } from 'src/utils/text';
 
-const MAX_ZONE_NAME_LENGTH = 20;
+const MAX_STRATUM_NAME_LENGTH = 20;
 
 export default function PlantingDensityPerStratumCard(): JSX.Element {
   const theme = useTheme();
@@ -20,19 +20,21 @@ export default function PlantingDensityPerStratumCard(): JSX.Element {
 
   useEffect(() => {
     if (plantingSite) {
-      const zoneDensities: Record<string, (number | null)[]> = {};
-      plantingSite.strata?.forEach((zone) => {
-        zoneDensities[zone.name] = [zone.targetPlantingDensity];
+      const stratumDensities: Record<string, (number | null)[]> = {};
+      plantingSite.strata?.forEach((stratum) => {
+        stratumDensities[stratum.name] = [stratum.targetPlantingDensity];
 
         if (observationSummaries && observationSummaries.length > 0) {
-          const zoneFromObs = observationSummaries[0].strata.find((obsZone) => obsZone.stratumId === zone.id);
-          zoneDensities[zone.name].push(zoneFromObs?.plantingDensity ?? null);
+          const stratumFromObs = observationSummaries[0].strata.find(
+            (obsStratum) => obsStratum.stratumId === stratum.id
+          );
+          stratumDensities[stratum.name].push(stratumFromObs?.plantingDensity ?? null);
         }
       });
-      setLabels(Object.keys(zoneDensities).map((name) => truncate(name, MAX_ZONE_NAME_LENGTH)));
-      setTargets(Object.values(zoneDensities).map((t) => t[0]));
-      setActuals(Object.values(zoneDensities).map((t) => t[1]));
-      setTooltipTitles(Object.keys(zoneDensities));
+      setLabels(Object.keys(stratumDensities).map((name) => truncate(name, MAX_STRATUM_NAME_LENGTH)));
+      setTargets(Object.values(stratumDensities).map((t) => t[0]));
+      setActuals(Object.values(stratumDensities).map((t) => t[1]));
+      setTooltipTitles(Object.keys(stratumDensities));
     } else {
       setLabels([]);
       setTargets([]);
@@ -80,7 +82,7 @@ export default function PlantingDensityPerStratumCard(): JSX.Element {
           showLegend={true}
           elementColor={theme.palette.TwClrBgBrand}
           barWidth={actuals && actuals?.length ? 0 : undefined}
-          chartId='plantingDensityByZone'
+          chartId='plantingDensityByStratum'
           chartData={chartData}
           customTooltipTitles={tooltipTitles}
           maxWidth='100%'

@@ -69,10 +69,10 @@ export default function NumberOfSpeciesPlantedCard({
 
   if (!plantingSite) {
     return <RolledUpCard projectId={projectId} />;
-  } else if (!plantingSite.plantingZones?.length) {
-    return <SiteWithoutZonesCard plantingSiteId={plantingSite.id} />;
+  } else if (!plantingSite.strata?.length) {
+    return <SiteWithoutStrataCard plantingSiteId={plantingSite.id} />;
   } else {
-    return <SiteWithZonesCard />;
+    return <SiteWithStrataCard />;
   }
 }
 const RolledUpCard = ({ projectId }: { projectId?: number }): JSX.Element => {
@@ -142,7 +142,7 @@ const RolledUpCard = ({ projectId }: { projectId?: number }): JSX.Element => {
   return <ChartData labels={labels} values={values} rareSpecies={rareSpecies} />;
 };
 
-const SiteWithoutZonesCard = ({
+const SiteWithoutStrataCard = ({
   plantingSiteId,
 }: NumberOfSpeciesPlantedCardProps & { plantingSiteId: number }): JSX.Element | undefined => {
   const [labels, setLabels] = useState<string[]>();
@@ -187,7 +187,7 @@ const SiteWithoutZonesCard = ({
   return <ChartData labels={labels} values={values} rareSpecies={rareSpecies} />;
 };
 
-const SiteWithZonesCard = (): JSX.Element => {
+const SiteWithStrataCard = (): JSX.Element => {
   const { plantingSiteReportedPlants } = usePlantingSiteData();
   const { species: orgSpecies } = useSpeciesData();
 

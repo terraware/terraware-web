@@ -34,9 +34,9 @@ export default function PlantsReportedPerSpeciesCard({
   if (!plantingSite) {
     return <RolledUpCard projectId={projectId} />;
   } else if (!plantingSite.strata?.length) {
-    return <SiteWithoutZonesCard plantingSiteId={plantingSite.id} newVersion={newVersion} />;
+    return <SiteWithoutStrataCard plantingSiteId={plantingSite.id} newVersion={newVersion} />;
   } else {
-    return <SiteWithZonesCard plantingSiteId={plantingSite.id} newVersion={newVersion} />;
+    return <SiteWithStrataCard plantingSiteId={plantingSite.id} newVersion={newVersion} />;
   }
 }
 
@@ -112,7 +112,7 @@ const RolledUpCard = ({ projectId }: { projectId?: number }): JSX.Element => {
   );
 };
 
-const SiteWithoutZonesCard = ({
+const SiteWithoutStrataCard = ({
   plantingSiteId,
   newVersion,
 }: {
@@ -150,7 +150,7 @@ const SiteWithoutZonesCard = ({
   );
 };
 
-const SiteWithZonesCard = ({
+const SiteWithStrataCard = ({
   plantingSiteId,
   newVersion,
 }: {

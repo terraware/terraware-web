@@ -19,7 +19,7 @@ type MapStatsProperties = {
   plantedSpecies: number | undefined;
   plantingDensity: number | undefined;
   type: string;
-  zoneName?: string;
+  stratumName?: string;
 };
 
 type MapStatsDrawerProps = {
@@ -68,47 +68,51 @@ const MapStatsDrawer = ({ layerFeatureId, plantingSiteId }: MapStatsDrawerProps)
         plantedSpecies: plantingSiteReportedPlants?.species.length,
         plantingDensity: latestSummary?.plantingDensity,
       };
-    } else if (layerFeatureId.layerId === 'zones') {
-      const zone = plantingSite?.strata?.find((_zone) => `${_zone.id}` === layerFeatureId.featureId);
-      const zoneSummary = latestSummary?.strata.find((_zone) => `${_zone.stratumId}` === layerFeatureId.featureId);
-      const zoneStats = plantingSiteReportedPlants?.strata.find((_zone) => `${_zone.id}` === layerFeatureId.featureId);
+    } else if (layerFeatureId.layerId === 'strata') {
+      const stratum = plantingSite?.strata?.find((_stratum) => `${_stratum.id}` === layerFeatureId.featureId);
+      const stratumSummary = latestSummary?.strata.find(
+        (_stratum) => `${_stratum.stratumId}` === layerFeatureId.featureId
+      );
+      const stratumStats = plantingSiteReportedPlants?.strata.find(
+        (_stratum) => `${_stratum.id}` === layerFeatureId.featureId
+      );
 
       return {
         type: strings.ZONE,
-        areaHa: zone?.areaHa,
-        survivalRate: zoneSummary?.survivalRate,
-        name: zone?.name,
-        observed: zoneSummary !== undefined,
-        observedPlants: zoneSummary?.totalPlants,
-        observedSpecies: zoneSummary?.totalSpecies,
-        plantedPlants: zoneStats?.totalPlants,
-        plantedSpecies: zoneStats?.species.length,
-        plantingDensity: zoneSummary?.plantingDensity,
+        areaHa: stratum?.areaHa,
+        survivalRate: stratumSummary?.survivalRate,
+        name: stratum?.name,
+        observed: stratumSummary !== undefined,
+        observedPlants: stratumSummary?.totalPlants,
+        observedSpecies: stratumSummary?.totalSpecies,
+        plantedPlants: stratumStats?.totalPlants,
+        plantedSpecies: stratumStats?.species.length,
+        plantingDensity: stratumSummary?.plantingDensity,
       };
-    } else if (layerFeatureId.layerId === 'subzones') {
-      const zone = plantingSite?.strata?.find((_zone) =>
-        _zone.substrata.some((_subzone) => `${_subzone.id}` === layerFeatureId.featureId)
+    } else if (layerFeatureId.layerId === 'substrata') {
+      const stratum = plantingSite?.strata?.find((_stratum) =>
+        _stratum.substrata.some((_substratum) => `${_substratum.id}` === layerFeatureId.featureId)
       );
-      const subzone = zone?.substrata.find((_subzone) => `${_subzone.id}` === layerFeatureId.featureId);
-      const subzoneSummary = latestSummary?.strata
-        .flatMap((_zone) => _zone.substrata)
-        .find((_subzone) => `${_subzone.substratumId}` === layerFeatureId.featureId);
-      const subzoneStats = plantingSiteReportedPlants?.strata
-        .flatMap((_zone) => _zone.substrata)
-        .find((_subzone) => `${_subzone.id}` === layerFeatureId.featureId);
+      const substratum = stratum?.substrata.find((_substratum) => `${_substratum.id}` === layerFeatureId.featureId);
+      const substratumSummary = latestSummary?.strata
+        .flatMap((_stratum) => _stratum.substrata)
+        .find((_substratum) => `${_substratum.substratumId}` === layerFeatureId.featureId);
+      const substratumStats = plantingSiteReportedPlants?.strata
+        .flatMap((_stratum) => _stratum.substrata)
+        .find((_substratum) => `${_substratum.id}` === layerFeatureId.featureId);
 
       return {
         type: strings.SUBZONE,
-        areaHa: subzone?.areaHa,
-        survivalRate: subzoneSummary?.survivalRate,
-        name: subzone?.name,
-        observed: subzoneSummary !== undefined,
-        observedPlants: subzoneSummary?.totalPlants,
-        observedSpecies: subzoneSummary?.totalSpecies,
-        plantedPlants: subzoneStats?.totalPlants,
-        plantedSpecies: subzoneStats?.species.length,
-        plantingDensity: subzoneSummary?.plantingDensity,
-        zoneName: zone?.name,
+        areaHa: substratum?.areaHa,
+        survivalRate: substratumSummary?.survivalRate,
+        name: substratum?.name,
+        observed: substratumSummary !== undefined,
+        observedPlants: substratumSummary?.totalPlants,
+        observedSpecies: substratumSummary?.totalSpecies,
+        plantedPlants: substratumStats?.totalPlants,
+        plantedSpecies: substratumStats?.species.length,
+        plantingDensity: substratumSummary?.plantingDensity,
+        stratumName: stratum?.name,
       };
     } else {
       return undefined;
@@ -124,10 +128,10 @@ const MapStatsDrawer = ({ layerFeatureId, plantingSiteId }: MapStatsDrawerProps)
         value: properties.type,
       });
 
-      if (properties.zoneName) {
+      if (properties.stratumName) {
         results.push({
           key: strings.ZONE,
-          value: properties.zoneName,
+          value: properties.stratumName,
         });
       }
 

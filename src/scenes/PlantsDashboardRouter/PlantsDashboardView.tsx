@@ -68,7 +68,7 @@ export default function PlantsDashboardView({
   const geometryChangedNote = useMemo(() => {
     if (latestResult?.completedTime && plantingSite?.strata?.length) {
       const siteBoundaryModifiedTime = plantingSite.strata.reduce(
-        (maxTime, zone) => (isAfter(zone.boundaryModifiedTime, maxTime) ? zone.boundaryModifiedTime : maxTime),
+        (maxTime, stratum) => (isAfter(stratum.boundaryModifiedTime, maxTime) ? stratum.boundaryModifiedTime : maxTime),
         plantingSite.strata[0].boundaryModifiedTime
       );
       return isAfter(siteBoundaryModifiedTime, latestResult.completedTime);
@@ -237,7 +237,7 @@ export default function PlantsDashboardView({
     [plantingSite, theme]
   );
 
-  const renderZoneLevelData = useCallback(
+  const renderStratumLevelData = useCallback(
     () =>
       plantingSite ? (
         <>
@@ -314,7 +314,7 @@ export default function PlantsDashboardView({
     [plantingSite]
   );
 
-  const hasPlantingZones = useMemo(
+  const hasStrata = useMemo(
     () => !!plantingSite && !!plantingSite.strata && plantingSite.strata.length > 0,
     [plantingSite]
   );
@@ -443,8 +443,8 @@ export default function PlantsDashboardView({
         {hasObservations && plantingSite?.id !== -1 && renderPlantingSiteTrends()}
         {plantingSite?.id !== -1 && hasObservations && renderPlantingProgressAndDensity()}
         {hasObservations && plantingSite?.id !== -1 && renderSurvivalRate()}
-        {plantingSite?.id !== -1 && hasPlantingZones && renderZoneLevelData()}
-        {plantingSite?.id !== -1 && hasPolygons && !hasPlantingZones && renderSimpleSiteMap()}
+        {plantingSite?.id !== -1 && hasStrata && renderStratumLevelData()}
+        {plantingSite?.id !== -1 && hasPolygons && !hasStrata && renderSimpleSiteMap()}
         {(plantingSite?.id === -1 || !plantingSite) && renderMapWithSites()}
       </Grid>
     </PlantsPrimaryPage>
