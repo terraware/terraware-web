@@ -81,6 +81,9 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
     survivalRate50To75,
     survivalRateLessThan50,
     survivalRateMoreThan75,
+    plotPhotoStyle,
+    livePlantStyle,
+    deadPlantStyle,
   } = useMapFeatureStyles();
 
   const [selectedFeature, setSelectedFeature] = useState<LayerFeature>();
@@ -746,33 +749,22 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
         markers: photoMarkers,
         markerGroupId: 'plot-photos',
         onClusterClick: selectPhotosFromMarkers,
-        style: {
-          iconColor: '#CC79A7',
-          iconName: 'iconPhoto',
-          type: 'icon',
-        },
+        style: plotPhotoStyle,
+
         visible: plotPhotosVisible,
       },
       {
         markers: plantsMarkers('Live'),
         markerGroupId: 'live-plants',
         onClusterClick: selectPlantsFromMarkers,
-        style: {
-          iconColor: '#40B0A6',
-          iconName: 'iconLivePlant',
-          type: 'icon',
-        },
+        style: livePlantStyle,
         visible: livePlantsVisible,
       },
       {
         markers: plantsMarkers('Dead'),
         markerGroupId: 'dead-plants',
         onClusterClick: selectPlantsFromMarkers,
-        style: {
-          iconColor: '#E1BE6A',
-          iconName: 'iconLivePlant',
-          type: 'icon',
-        },
+        style: deadPlantStyle,
         visible: deadPlantsVisible,
       },
       {
@@ -797,10 +789,13 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
       },
     ];
   }, [
+    deadPlantStyle,
     deadPlantsVisible,
+    livePlantStyle,
     livePlantsVisible,
     photoMarkers,
     plantsMarkers,
+    plotPhotoStyle,
     plotPhotosVisible,
     selectPhotosFromMarkers,
     selectPlantsFromMarkers,
