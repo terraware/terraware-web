@@ -43,7 +43,7 @@ const columnsWithoutZones = (): TableColumnType[] => [
 
 const columnsWithZones = (): TableColumnType[] => [
   {
-    key: 'subzoneName',
+    key: 'substratumName',
     name: strings.SUBZONE,
     type: 'string',
   },
@@ -64,7 +64,7 @@ const columnsWithZones = (): TableColumnType[] => [
     type: 'string',
   },
   {
-    key: 'zoneName',
+    key: 'stratumName',
     name: strings.ZONE,
     type: 'string',
   },
@@ -113,9 +113,9 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
       const zoneIds = selectedRows.reduce((selectedZoneIdsBySiteIdObj: Record<number, Set<number>>, row) => {
         const siteId = row.siteId;
         if (selectedZoneIdsBySiteIdObj[siteId]) {
-          selectedZoneIdsBySiteIdObj[siteId].add(row.zoneId);
+          selectedZoneIdsBySiteIdObj[siteId].add(row.stratumId);
         } else {
-          selectedZoneIdsBySiteIdObj[siteId] = new Set([row.zoneId]);
+          selectedZoneIdsBySiteIdObj[siteId] = new Set([row.stratumId]);
         }
         return selectedZoneIdsBySiteIdObj;
       }, {});
@@ -144,7 +144,7 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
 
   const setPlantingCompleted = useCallback(
     (complete: boolean) => {
-      const subzoneIds = selectedRows.map((row) => row.subzoneId);
+      const subzoneIds = selectedRows.map((row) => row.substratumId);
       const request = dispatch(
         requestUpdatePlantingsCompleted({ substratumIds: subzoneIds, planting: { plantingCompleted: complete } })
       );
@@ -211,7 +211,7 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
         id={hasZones ? 'plantings-progress-table-with-zones' : 'plantings-progress-table-without-zones'}
         columns={hasZones ? columnsWithZones : columnsWithoutZones}
         rows={rows}
-        orderBy={hasZones ? 'subzoneName' : 'siteName'}
+        orderBy={hasZones ? 'substratumName' : 'siteName'}
         Renderer={DetailsRenderer}
         selectedRows={selectedRows}
         setSelectedRows={setSelectedRows}
@@ -235,8 +235,8 @@ const DetailsRenderer = (props: RendererProps<TableRowType>): JSX.Element => {
   };
 
   const createLinkToWithdrawals = () => {
-    const filterParam = row.subzoneName
-      ? `subzoneName=${encodeURIComponent(row.subzoneName)}&siteName=${encodeURIComponent(row.siteName)}`
+    const filterParam = row.substratumName
+      ? `substratumName=${encodeURIComponent(row.substratumName)}&siteName=${encodeURIComponent(row.siteName)}`
       : `siteName=${encodeURIComponent(row.siteName)}`;
     const url = `${APP_PATHS.NURSERY_WITHDRAWALS}?tab=withdrawal_history&${filterParam}`;
     return (

@@ -60,7 +60,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   const navigate = useSyncNavigate();
   const location = useStateLocation();
   const query = useQuery();
-  const subzoneParam = query.get('subzoneName');
+  const subzoneParam = query.get('substratumName');
   const siteParam = query.get('siteName');
   const dispatch = useAppDispatch();
 
@@ -344,7 +344,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
 
   useEffect(() => {
     if (subzoneParam) {
-      query.delete('subzoneName');
+      query.delete('substratumName');
       navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
       setFilters((curr) => ({
         ...curr,
