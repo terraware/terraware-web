@@ -37,6 +37,7 @@ const injectedRtkApi = api.injectEndpoints({
           },
           count: 0,
         },
+        responseHandler: 'text',
       }),
       providesTags: (_results, _errors, observationId) => [{ type: QueryTagTypes.Observation, id: observationId }],
     }),
@@ -46,6 +47,7 @@ const injectedRtkApi = api.injectEndpoints({
         headers: {
           accept: 'application/gpx+xml',
         },
+        responseHandler: 'text',
       }),
       providesTags: (_results, _errors, observationId) => [{ type: QueryTagTypes.Observation, id: observationId }],
     }),

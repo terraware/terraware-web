@@ -23,6 +23,7 @@ import PlantMonitoringRenderer from './PlantMonitorignRenderer';
 
 type PlotSelectionType = 'assigned' | 'adHoc';
 type PlantMonitoringRow = {
+  observationId: number;
   observationDate?: string;
   state: ObservationState;
   plantingSiteName?: string;
@@ -271,6 +272,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
         }, '');
 
         return {
+          observationId: observationResult.observationId,
           observationDate: observation?.endDate,
           state: observationResult.state,
           plantingSiteName: plantingSite?.name,
