@@ -4,9 +4,9 @@ import { SearchCriteria, SearchRequestPayload, SearchResponseElement, SearchSort
 
 import HttpService, { Response } from './HttpService';
 
-const PLANTING_SUBZONE_ENDPOINT = '/api/v1/tracking/substrata/{id}';
+const SUBSTRATUM_ENDPOINT = '/api/v1/tracking/substrata/{id}';
 
-const httpPlantingSubzone = HttpService.root(PLANTING_SUBZONE_ENDPOINT);
+const httpSubstratum = HttpService.root(SUBSTRATUM_ENDPOINT);
 
 /**
  * List nursery withdrawals
@@ -40,10 +40,10 @@ const listPlantings = async (
   return await SearchService.search(searchParams);
 };
 
-const updatePlantingCompleted = async (subzoneId: number, planting: UpdateSubstratumPayload): Promise<Response> => {
-  return await httpPlantingSubzone.put({
+const updatePlantingCompleted = async (substratumId: number, planting: UpdateSubstratumPayload): Promise<Response> => {
+  return await httpSubstratum.put({
     urlReplacements: {
-      '{id}': subzoneId.toString(),
+      '{id}': substratumId.toString(),
     },
     entity: planting,
   });

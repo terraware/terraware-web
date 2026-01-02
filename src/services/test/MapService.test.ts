@@ -40,7 +40,7 @@ describe('Map service', () => {
       ];
       const data = {
         id: 1,
-        properties: { id: 1, name: 'test', type: 'zone' },
+        properties: { id: 1, name: 'test', type: 'stratum' },
         boundary,
       };
       const expected = [
@@ -65,18 +65,18 @@ describe('Map service', () => {
       expect(observed).toEqual(readData('extractedSite.json'));
     });
 
-    it('should extract zones info from planting site hierarchy', () => {
+    it('should extract strata info from planting site hierarchy', () => {
       const data = readData('plantingSite.json');
-      const observed = MapService.extractPlantingZones(data);
+      const observed = MapService.extractStrata(data);
 
-      expect(observed).toEqual(readData('extractedZones.json'));
+      expect(observed).toEqual(readData('extractedStrata.json'));
     });
 
-    it('should extract subzones info from planting site hierarchy', () => {
+    it('should extract substrata info from planting site hierarchy', () => {
       const data = readData('plantingSite.json');
-      const observed = MapService.extractSubzones(data);
+      const observed = MapService.extractSubstrata(data);
 
-      expect(observed).toEqual(readData('extractedSubzones.json'));
+      expect(observed).toEqual(readData('extractedSubstrata.json'));
     });
   });
 });

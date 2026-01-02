@@ -140,16 +140,16 @@ const getRecencyFromTime = (time: string): number => {
  */
 const getPlantingSiteBoundingBox = (mapData: MapData): MapBoundingBox => {
   const site: MapSourceBaseData = mapData.site ?? { id: 'site', entities: [] };
-  const zones: MapSourceBaseData = mapData.stratum ?? { id: 'zone', entities: [] };
-  const subzones: MapSourceBaseData = mapData.substratum ?? { id: 'subzone', entities: [] };
+  const strata: MapSourceBaseData = mapData.stratum ?? { id: 'stratum', entities: [] };
+  const substrata: MapSourceBaseData = mapData.substratum ?? { id: 'substratum', entities: [] };
   const permanentPlots: MapSourceBaseData = mapData.permanentPlot ?? { id: 'permanentPlot', entities: [] };
   const temporaryPlots: MapSourceBaseData = mapData.temporaryPlot ?? { id: 'temporaryPlot', entities: [] };
   const adHocPlots: MapSourceBaseData = mapData.adHocPlot ?? { id: 'adHocPlot', entities: [] };
 
   const geometries: MapGeometry[] = [
     ...(site?.entities.map((s) => s.boundary) || []),
-    ...(zones?.entities.map((s) => s.boundary) || []),
-    ...(subzones?.entities.map((s) => s.boundary) || []),
+    ...(strata?.entities.map((s) => s.boundary) || []),
+    ...(substrata?.entities.map((s) => s.boundary) || []),
     ...(permanentPlots?.entities.map((s) => s.boundary) || []),
     ...(temporaryPlots?.entities.map((s) => s.boundary) || []),
     ...(adHocPlots?.entities.map((s) => s.boundary) || []),
@@ -226,111 +226,111 @@ const extractPlantingSites = (sites: MinimalPlantingSite[]): MapSourceBaseData =
 };
 
 /**
- * Transform multiple sites zones geometry data into UI model
+ * Transform multiple sites strata geometry data into UI model
  */
-const extractPlantingZonesFromSites = (sites: MinimalPlantingSite[]): MapSourceBaseData => {
-  const zonesEntities: MapEntity[] = [];
+const extractStrataFromSites = (sites: MinimalPlantingSite[]): MapSourceBaseData => {
+  const strataEntities: MapEntity[] = [];
 
   sites.forEach((ps) => {
-    const zonesData = ps.strata?.map((zone) => {
-      const { id, name, boundary } = zone;
+    const strataData = ps.strata?.map((stratum) => {
+      const { id, name, boundary } = stratum;
       return {
-        properties: { id, name, type: 'zone', recency: 0 },
+        properties: { id, name, type: 'stratum', recency: 0 },
         boundary: getPolygons(boundary),
         id,
       };
     });
-    if (zonesData) {
-      zonesEntities.push(...zonesData);
+    if (strataData) {
+      strataEntities.push(...strataData);
     }
   });
 
   return {
-    entities: zonesEntities,
-    id: 'zones',
+    entities: strataEntities,
+    id: 'strata',
   };
 };
 
 /**
- * Transform zones geometry data into UI model
+ * Transform strata geometry data into UI model
  */
-const extractPlantingZones = (site: MinimalPlantingSite): MapSourceBaseData => {
-  const zonesData =
-    site.strata?.map((zone) => {
-      const { id, name, boundary } = zone;
+const extractStrata = (site: MinimalPlantingSite): MapSourceBaseData => {
+  const strataData =
+    site.strata?.map((stratum) => {
+      const { id, name, boundary } = stratum;
       return {
-        properties: { id, name, type: 'zone', recency: 0 },
+        properties: { id, name, type: 'stratum', recency: 0 },
         boundary: getPolygons(boundary),
         id,
       };
     }) || [];
 
   return {
-    entities: zonesData,
-    id: 'zones',
+    entities: strataData,
+    id: 'strata',
   };
 };
 
 /**
- * Transform zones geometry data into UI model
+ * Transform strata geometry data into UI model
  */
-const extractPlantingZonesFromHistory = (site: PlantingSiteHistory): MapSourceBaseData => {
-  const zonesData =
-    site.strata?.map((zone) => {
-      const { id, stratumId, name, boundary } = zone;
+const extractStrataFromHistory = (site: PlantingSiteHistory): MapSourceBaseData => {
+  const strataData =
+    site.strata?.map((stratum) => {
+      const { id, stratumId, name, boundary } = stratum;
       return {
-        properties: { id, stratumId, name, type: 'zone', recency: 0 },
+        properties: { id, stratumId, name, type: 'stratum', recency: 0 },
         boundary: getPolygons(boundary),
         id,
       };
     }) || [];
 
   return {
-    entities: zonesData,
-    id: 'zones',
+    entities: strataData,
+    id: 'strata',
   };
 };
 
 /**
- * Transform multiple sites subzones geometry data into UI model
+ * Transform multiple sites substrata geometry data into UI model
  */
-const extractSubzonesFromSites = (sites: MinimalPlantingSite[]): MapSourceBaseData => {
-  const subzoneEntities: MapEntity[] = [];
+const extractSubstrataFromSites = (sites: MinimalPlantingSite[]): MapSourceBaseData => {
+  const substratumEntities: MapEntity[] = [];
 
   sites.forEach((ps) => {
-    const allPlantingSubzonesData = ps.strata?.flatMap((zone) => {
-      const { substrata } = zone;
-      return substrata.map((subzone) => {
-        const { id, name, fullName, boundary } = subzone;
+    const allSubstrataData = ps.strata?.flatMap((stratum) => {
+      const { substrata } = stratum;
+      return substrata.map((substratum) => {
+        const { id, name, fullName, boundary } = substratum;
         return {
-          properties: { id, name, fullName, type: 'subzone', zoneId: zone.id },
+          properties: { id, name, fullName, type: 'substratum', stratumId: stratum.id },
           boundary: getPolygons(boundary),
           id,
         };
       });
     });
-    if (allPlantingSubzonesData) {
-      subzoneEntities.push(...allPlantingSubzonesData);
+    if (allSubstrataData) {
+      substratumEntities.push(...allSubstrataData);
     }
   });
 
   return {
-    entities: subzoneEntities,
-    id: 'subzones',
+    entities: substratumEntities,
+    id: 'substrata',
   };
 };
 
 /**
- * Transform subzones geometry data into UI model
+ * Transform substrata geometry data into UI model
  */
-const extractSubzones = (site: MinimalPlantingSite): MapSourceBaseData => {
-  const allPlantingSubzonesData =
-    site.strata?.flatMap((zone) => {
-      const { substrata } = zone;
-      return substrata.map((subzone) => {
-        const { id, name, fullName, boundary } = subzone;
+const extractSubstrata = (site: MinimalPlantingSite): MapSourceBaseData => {
+  const allSubstrataData =
+    site.strata?.flatMap((stratum) => {
+      const { substrata } = stratum;
+      return substrata.map((substratum) => {
+        const { id, name, fullName, boundary } = substratum;
         return {
-          properties: { id, name, fullName, type: 'subzone', zoneId: zone.id },
+          properties: { id, name, fullName, type: 'substratum', stratumId: stratum.id },
           boundary: getPolygons(boundary),
           id,
         };
@@ -338,19 +338,19 @@ const extractSubzones = (site: MinimalPlantingSite): MapSourceBaseData => {
     }) || [];
 
   return {
-    entities: allPlantingSubzonesData.flatMap((f) => f),
-    id: 'subzones',
+    entities: allSubstrataData.flatMap((f) => f),
+    id: 'substrata',
   };
 };
 
-const extractSubzonesFromHistory = (site: PlantingSiteHistory): MapSourceBaseData => {
-  const allPlantingSubzonesData =
-    site.strata?.flatMap((zone) => {
-      const { substrata } = zone;
-      return substrata.map((subzone) => {
-        const { id, name, fullName, boundary } = subzone;
+const extractSubstrataFromHistory = (site: PlantingSiteHistory): MapSourceBaseData => {
+  const allSubstrataData =
+    site.strata?.flatMap((stratum) => {
+      const { substrata } = stratum;
+      return substrata.map((substratum) => {
+        const { id, name, fullName, boundary } = substratum;
         return {
-          properties: { id, name, fullName, type: 'subzone', zoneId: zone.id },
+          properties: { id, name, fullName, type: 'substratum', stratumId: stratum.id },
           boundary: getPolygons(boundary),
           id,
         };
@@ -358,31 +358,33 @@ const extractSubzonesFromHistory = (site: PlantingSiteHistory): MapSourceBaseDat
     }) || [];
 
   return {
-    entities: allPlantingSubzonesData.flatMap((f) => f),
-    id: 'subzones',
+    entities: allSubstrataData.flatMap((f) => f),
+    id: 'substrata',
   };
 };
 
-const extractSubzonesFromHistoryAndResult = (
+const extractSubstrataFromHistoryAndResult = (
   site: PlantingSite,
   history: PlantingSiteHistory,
   result: ObservationSummary
 ): MapSourceBaseData => {
-  const allPlantingSubzonesData =
-    history.strata?.flatMap((zoneHistory) => {
-      const { stratumId, substrata } = zoneHistory;
-      const zone = site.strata?.find((_zone) => _zone.id === stratumId);
-      const zoneResult = result.strata.find((_zone) => _zone.stratumId === stratumId);
-      return substrata.map((subzoneHistory) => {
-        const { id, substratumId, name, fullName, boundary } = subzoneHistory;
-        const subzone = zone?.substrata?.find((_subzone) => _subzone.id === substratumId);
-        const subzoneResult = zoneResult?.substrata?.find((_subzone) => _subzone.substratumId === substratumId);
-        const recency = subzone?.latestObservationCompletedTime
-          ? getRecencyFromTime(subzone.latestObservationCompletedTime)
+  const allSubstrataData =
+    history.strata?.flatMap((stratumHistory) => {
+      const { stratumId, substrata } = stratumHistory;
+      const stratum = site.strata?.find((_stratum) => _stratum.id === stratumId);
+      const stratumResult = result.strata.find((_stratum) => _stratum.stratumId === stratumId);
+      return substrata.map((substratumHistory) => {
+        const { id, substratumId, name, fullName, boundary } = substratumHistory;
+        const substratum = stratum?.substrata?.find((_substratum) => _substratum.id === substratumId);
+        const substratumResult = stratumResult?.substrata?.find(
+          (_substratum) => _substratum.substratumId === substratumId
+        );
+        const recency = substratum?.latestObservationCompletedTime
+          ? getRecencyFromTime(substratum.latestObservationCompletedTime)
           : -1;
-        const survivalRate = subzoneResult?.survivalRate;
+        const survivalRate = substratumResult?.survivalRate;
         return {
-          properties: { id, name, fullName, type: 'subzone', zoneId: stratumId, recency, survivalRate },
+          properties: { id, name, fullName, type: 'substratum', stratumId, recency, survivalRate },
           boundary: getPolygons(boundary),
           id,
         };
@@ -390,8 +392,8 @@ const extractSubzonesFromHistoryAndResult = (
     }) || [];
 
   return {
-    entities: allPlantingSubzonesData.flatMap((f) => f),
-    id: 'subzones',
+    entities: allSubstrataData.flatMap((f) => f),
+    id: 'substrata',
   };
 };
 
@@ -417,13 +419,13 @@ const getMapEntityGeometry = (entity: MapEntity): MapGeometry => {
 
 const getMapDataFromGisPlantingSites = (gisPlantingSiteData: FeatureCollection<MultiPolygon>): MapData => {
   const siteData = extractPlantingSitesFromGis(gisPlantingSiteData);
-  const zoneData = extractZonesFromGis(gisPlantingSiteData);
-  const subzoneData = extractSubzonesFromGis(gisPlantingSiteData);
+  const stratumData = extractStrataFromGis(gisPlantingSiteData);
+  const substratumData = extractSubstrataFromGis(gisPlantingSiteData);
 
   return {
     site: siteData,
-    stratum: zoneData,
-    substratum: subzoneData,
+    stratum: stratumData,
+    substratum: substratumData,
     permanentPlot: undefined,
     temporaryPlot: undefined,
     adHocPlot: undefined,
@@ -533,8 +535,8 @@ const extractPlantingSitesFromGis = (gisPlantingSiteData: FeatureCollection<Mult
   };
 };
 
-const extractZonesFromGis = (gisPlantingSiteData: FeatureCollection): MapSourceBaseData => {
-  const zonesData: {
+const extractStrataFromGis = (gisPlantingSiteData: FeatureCollection): MapSourceBaseData => {
+  const strataData: {
     properties: {
       id: number;
       name: any;
@@ -574,11 +576,11 @@ const extractZonesFromGis = (gisPlantingSiteData: FeatureCollection): MapSourceB
         Math.abs(strata.split('').reduce((a: number, b: string, i: number) => a + b.charCodeAt(0) * (i + 1), 0)) ||
         index;
 
-      zonesData.push({
+      strataData.push({
         properties: {
           id: numericId,
           name: firstFeature.properties?.strata,
-          type: 'zone',
+          type: 'stratum',
         },
         boundary: boundaryCoordinates,
         id: numericId,
@@ -588,23 +590,23 @@ const extractZonesFromGis = (gisPlantingSiteData: FeatureCollection): MapSourceB
   }
 
   return {
-    entities: zonesData,
-    id: 'zones',
+    entities: strataData,
+    id: 'strata',
   };
 };
 
-const extractSubzonesFromGis = (gisPlantingSiteData: FeatureCollection): MapSourceBaseData => {
-  const allPlantingSubzonesData =
-    gisPlantingSiteData.features?.map((subzone) => {
-      const { properties, geometry } = subzone;
-      const totalArea = (area(subzone) / 10_000).toFixed(2);
+const extractSubstrataFromGis = (gisPlantingSiteData: FeatureCollection): MapSourceBaseData => {
+  const allSubstrataData =
+    gisPlantingSiteData.features?.map((substratum) => {
+      const { properties, geometry } = substratum;
+      const totalArea = (area(substratum) / 10_000).toFixed(2);
       return {
         properties: {
           id: Number(properties?.fid),
           name: properties?.substrata,
           fullName: properties?.substrata,
-          type: 'subzone',
-          zoneId: properties?.strata,
+          type: 'substratum',
+          stratumId: properties?.strata,
         },
         boundary: getPolygons(geometry as MultiPolygon),
         id: Number(properties?.fid),
@@ -613,19 +615,19 @@ const extractSubzonesFromGis = (gisPlantingSiteData: FeatureCollection): MapSour
     }) || [];
 
   return {
-    entities: allPlantingSubzonesData,
-    id: 'subzones',
+    entities: allSubstrataData,
+    id: 'substrata',
   };
 };
 
 /**
- * Extract Planting Sites, Zones, Subzones from planting sites data
+ * Extract Planting Sites, Strata, Substrata from planting sites data
  */
 const getMapDataFromPlantingSites = (plantingSites: PlantingSite[]): MapData => {
   return {
     site: extractPlantingSites(plantingSites),
-    stratum: extractPlantingZonesFromSites(plantingSites),
-    substratum: extractSubzonesFromSites(plantingSites),
+    stratum: extractStrataFromSites(plantingSites),
+    substratum: extractSubstrataFromSites(plantingSites),
     permanentPlot: undefined,
     temporaryPlot: undefined,
     adHocPlot: undefined,
@@ -633,13 +635,13 @@ const getMapDataFromPlantingSites = (plantingSites: PlantingSite[]): MapData => 
 };
 
 /**
- * Extract Planting Site, Zones, Subzones from planting site data
+ * Extract Planting Site, Strata, Substrata from planting site data
  */
 const getMapDataFromPlantingSite = (plantingSite: MinimalPlantingSite): MapData => {
   return {
     site: extractPlantingSite(plantingSite),
-    stratum: extractPlantingZones(plantingSite),
-    substratum: extractSubzones(plantingSite),
+    stratum: extractStrata(plantingSite),
+    substratum: extractSubstrata(plantingSite),
     permanentPlot: undefined,
     temporaryPlot: undefined,
     adHocPlot: undefined,
@@ -647,13 +649,13 @@ const getMapDataFromPlantingSite = (plantingSite: MinimalPlantingSite): MapData 
 };
 
 /**
- * Extract Planting Site, Zones, Subzones from planting site data
+ * Extract Planting Site, Strata, Substrata from planting site data
  */
 const getMapDataFromPlantingSiteHistory = (plantingSite: PlantingSite, history: PlantingSiteHistory): MapData => {
   return {
     site: extractPlantingSiteFromHistory(plantingSite, history),
-    stratum: extractPlantingZonesFromHistory(history),
-    substratum: extractSubzonesFromHistory(history),
+    stratum: extractStrataFromHistory(history),
+    substratum: extractSubstrataFromHistory(history),
     permanentPlot: undefined,
     temporaryPlot: undefined,
     adHocPlot: undefined,
@@ -661,7 +663,7 @@ const getMapDataFromPlantingSiteHistory = (plantingSite: PlantingSite, history: 
 };
 
 /**
- * Extract Planting Site, Zones, Subzones from planting site data and results
+ * Extract Planting Site, Strata, Substrata from planting site data and results
  */
 const getMapDataFromPlantingSiteFromHistoryAndResults = (
   plantingSite: PlantingSite,
@@ -670,8 +672,8 @@ const getMapDataFromPlantingSiteFromHistoryAndResults = (
 ): MapData => {
   return {
     site: extractPlantingSiteFromHistory(plantingSite, history),
-    stratum: extractPlantingZonesFromHistory(history),
-    substratum: extractSubzonesFromHistoryAndResult(plantingSite, history, result),
+    stratum: extractStrataFromHistory(history),
+    substratum: extractSubstrataFromHistoryAndResult(plantingSite, history, result),
     permanentPlot: undefined,
     temporaryPlot: undefined,
     adHocPlot: undefined,
@@ -679,7 +681,7 @@ const getMapDataFromPlantingSiteFromHistoryAndResults = (
 };
 
 /**
- * Extract Planting Site, Zones, Subzones, and Plots from an ObservationResult
+ * Extract Planting Site, Strata, Substrata, and Plots from an ObservationResult
  */
 const getMapDataFromObservation = (
   observation: ObservationResultsWithLastObv | AdHocObservationResults,
@@ -697,44 +699,46 @@ const getMapDataFromObservation = (
     },
   ];
 
-  const plantingSiteHistoryZones = plantingSiteHistory.strata.filter((z) => z.stratumId !== undefined);
-  const zoneEntities = plantingSiteHistoryZones.map((zone) => {
-    const zoneFromObservation = observation.strata.find((pz) => pz.stratumName === zone.name);
+  const plantingSiteHistoryStrata = plantingSiteHistory.strata.filter((z) => z.stratumId !== undefined);
+  const stratumEntities = plantingSiteHistoryStrata.map((stratum) => {
+    const stratumFromObservation = observation.strata.find((pz) => pz.stratumName === stratum.name);
     return {
       // -1 should never be set because undefined ids are filtered before
-      id: zone.stratumId || -1,
+      id: stratum.stratumId || -1,
       properties: {
-        id: zone.stratumId || -1,
-        name: zoneFromObservation?.stratumName || zone.name || '',
-        type: 'zone',
-        survivalRate: zoneFromObservation?.survivalRate,
-        hasObservedPermanentPlots: zoneFromObservation?.hasObservedPermanentPlots,
+        id: stratum.stratumId || -1,
+        name: stratumFromObservation?.stratumName || stratum.name || '',
+        type: 'stratum',
+        survivalRate: stratumFromObservation?.survivalRate,
+        hasObservedPermanentPlots: stratumFromObservation?.hasObservedPermanentPlots,
       },
-      boundary: getPolygons(zone.boundary),
+      boundary: getPolygons(stratum.boundary),
     };
   });
 
-  const plantingSiteHistorySubZones = plantingSiteHistoryZones
-    .flatMap((z) => z.substrata.flatMap((subz) => ({ ...subz, zoneName: z.name })))
+  const plantingSiteHistorySubstrata = plantingSiteHistoryStrata
+    .flatMap((z) => z.substrata.flatMap((subz) => ({ ...subz, stratumName: z.name })))
     .filter((subz) => subz.name !== undefined);
-  const subzoneEntities = plantingSiteHistorySubZones?.map((subzone) => {
-    const zoneFromObservation = observation.strata.find((pz) => pz.name === subzone.zoneName);
-    const subzoneFromObservation = zoneFromObservation?.substrata?.find((sz) => sz.substratumName === subzone.name);
+  const substratumEntities = plantingSiteHistorySubstrata?.map((substratum) => {
+    const stratumFromObservation = observation.strata.find((pz) => pz.name === substratum.stratumName);
+    const substratumFromObservation = stratumFromObservation?.substrata?.find(
+      (sz) => sz.substratumName === substratum.name
+    );
     return {
       // -1 should never be set because undefined ids are filtered before
-      id: subzone.substratumId || -1,
+      id: substratum.substratumId || -1,
       properties: {
-        id: subzone.substratumId || -1,
-        name: subzoneFromObservation?.substratumName || subzone.name || '',
-        survivalRate: zoneFromObservation?.survivalRate,
-        type: 'subzone',
+        id: substratum.substratumId || -1,
+        name: substratumFromObservation?.substratumName || substratum.name || '',
+        survivalRate: stratumFromObservation?.survivalRate,
+        type: 'substratum',
       },
-      boundary: getPolygons(subzone.boundary),
-      lastObv: subzoneFromObservation?.lastObv,
+      boundary: getPolygons(substratum.boundary),
+      lastObv: substratumFromObservation?.lastObv,
     };
   });
-  const subzoneEntitiesWithRecency = () => {
-    const orderedSubzoneEntities = subzoneEntities?.sort((a, b) => {
+  const substratumEntitiesWithRecency = () => {
+    const orderedSubstratumEntities = substratumEntities?.sort((a, b) => {
       // Check for undefined and compare valid dates
       if (a.lastObv && b.lastObv) {
         return isAfter(b.lastObv, a.lastObv) ? 1 : -1;
@@ -748,10 +752,10 @@ const getMapDataFromObservation = (
       boundary: MapGeometry;
       lastObv: string | undefined;
     }[] = [];
-    let lastProcecedDate = orderedSubzoneEntities?.[0]?.lastObv;
+    let lastProcecedDate = orderedSubstratumEntities?.[0]?.lastObv;
     let recencyToSet = 1;
 
-    orderedSubzoneEntities?.forEach((entity) => {
+    orderedSubstratumEntities?.forEach((entity) => {
       if (entity.lastObv !== lastProcecedDate) {
         recencyToSet = recencyToSet + 1;
         lastProcecedDate = entity.lastObv;
@@ -766,12 +770,12 @@ const getMapDataFromObservation = (
     return entitiesToReturn;
   };
 
-  const permanentPlotEntities = observation.strata.flatMap((zone: ObservationStratumResults) =>
-    zone.substrata.flatMap((sz: ObservationSubstratumResults) => getMonitoringPlotMapData(sz.monitoringPlots, true))
+  const permanentPlotEntities = observation.strata.flatMap((stratum: ObservationStratumResults) =>
+    stratum.substrata.flatMap((sz: ObservationSubstratumResults) => getMonitoringPlotMapData(sz.monitoringPlots, true))
   );
 
-  const temporaryPlotEntities = observation.strata.flatMap((zone: ObservationStratumResults) =>
-    zone.substrata.flatMap((sz: ObservationSubstratumResults) => getMonitoringPlotMapData(sz.monitoringPlots, false))
+  const temporaryPlotEntities = observation.strata.flatMap((stratum: ObservationStratumResults) =>
+    stratum.substrata.flatMap((sz: ObservationSubstratumResults) => getMonitoringPlotMapData(sz.monitoringPlots, false))
   );
 
   const adHocPlot = observation.adHocPlot;
@@ -791,8 +795,8 @@ const getMapDataFromObservation = (
 
   return {
     site: { id: 'sites', entities: plantingSiteEntities },
-    stratum: { id: 'zones', entities: zoneEntities || [] },
-    substratum: { id: 'subzones', entities: subzoneEntitiesWithRecency() },
+    stratum: { id: 'strata', entities: stratumEntities || [] },
+    substratum: { id: 'substrata', entities: substratumEntitiesWithRecency() },
     permanentPlot: { id: 'permanentPlots', entities: permanentPlotEntities },
     temporaryPlot: { id: 'temporaryPlots', entities: temporaryPlotEntities },
     adHocPlot: { id: 'adHocPlots', entities: addHocPlotEntities },
@@ -833,10 +837,10 @@ const MapService = {
   getRecencyFromTime,
   extractPlantingSite,
   extractPlantingSiteFromHistory,
-  extractPlantingZones,
-  extractPlantingZonesFromHistory,
-  extractSubzones,
-  extractSubzonesFromHistory,
+  extractStrata,
+  extractStrataFromHistory,
+  extractSubstrata,
+  extractSubstrataFromHistory,
   calculateAreaFromGisData,
 };
 
