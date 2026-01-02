@@ -51,7 +51,7 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
     reload();
   }, [reload]);
 
-  const plantingSitesWithZonesAndNoUpcomingObservations = useMemo(() => {
+  const plantingSitesWithStrataAndNoUpcomingObservations = useMemo(() => {
     if (!allPlantingSites || !reportedPlants) {
       return [];
     }
@@ -100,8 +100,8 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
   });
 
   const newObservationsSchedulable = useMemo(() => {
-    return plantingSitesWithZonesAndNoUpcomingObservations.length > 0;
-  }, [plantingSitesWithZonesAndNoUpcomingObservations]);
+    return plantingSitesWithStrataAndNoUpcomingObservations.length > 0;
+  }, [plantingSitesWithStrataAndNoUpcomingObservations]);
 
   const scheduleObservationsEnabled = isAdmin(selectedOrganization);
 

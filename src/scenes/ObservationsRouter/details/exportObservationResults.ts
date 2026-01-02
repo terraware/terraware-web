@@ -17,11 +17,11 @@ function makeObservationCsv(observationResults: ObservationResults): Blob {
       displayLabel: strings.MONITORING_PLOT,
     },
     {
-      key: 'zoneName',
+      key: 'stratumName',
       displayLabel: strings.ZONE,
     },
     {
-      key: 'subzoneName',
+      key: 'substratumName',
       displayLabel: strings.SUBZONE,
     },
     {
@@ -102,9 +102,9 @@ function makeObservationCsv(observationResults: ObservationResults): Blob {
     },
   ];
 
-  const data = observationResults.strata.flatMap((plantingZone) =>
-    plantingZone.substrata.flatMap((subzone) =>
-      subzone.monitoringPlots.map((monitoringPlot) => {
+  const data = observationResults.strata.flatMap((stratum) =>
+    stratum.substrata.flatMap((substratum) =>
+      substratum.monitoringPlots.map((monitoringPlot) => {
         const allSpecies = monitoringPlot.unknownSpecies
           ? [...monitoringPlot.species, monitoringPlot.unknownSpecies]
           : monitoringPlot.species;
@@ -118,7 +118,7 @@ function makeObservationCsv(observationResults: ObservationResults): Blob {
           pathPattern
             .replace(':plantingSiteId', observationResults.plantingSiteId.toString())
             .replace(':observationId', observationResults.observationId.toString())
-            .replace(':plantingZoneName', encodeURIComponent(plantingZone.name))
+            .replace(':stratumName', encodeURIComponent(stratum.name))
             .replace(':monitoringPlotId', monitoringPlot.monitoringPlotId.toString()),
           location.href
         ).toString();
@@ -146,14 +146,14 @@ function makeObservationCsv(observationResults: ObservationResults): Blob {
           southwestLatitude: plotCoordinates[0][1],
           southwestLongitude: plotCoordinates[0][0],
           status: getPlotStatus(monitoringPlot.status),
-          subzoneName: subzone.name,
+          substratumName: substratum.name,
           survivalRate: monitoringPlot.survivalRate,
           totalDead,
           totalExisting,
           totalLive,
           totalPlants: totalDead + totalExisting + totalLive,
           totalSpecies: monitoringPlot.totalSpecies,
-          zoneName: plantingZone.name,
+          stratumName: stratum.name,
         };
       })
     )
@@ -196,9 +196,9 @@ function makePlotSpeciesCsv(observationResults: ObservationResults): Blob {
       .map((species) => [species.speciesId!, species.speciesScientificName])
   );
 
-  const data = observationResults.strata.flatMap((plantingZone) =>
-    plantingZone.substrata.flatMap((subzone) =>
-      subzone.monitoringPlots.flatMap((monitoringPlot) => {
+  const data = observationResults.strata.flatMap((stratum) =>
+    stratum.substrata.flatMap((substratum) =>
+      substratum.monitoringPlots.flatMap((monitoringPlot) => {
         const allSpecies = monitoringPlot.unknownSpecies
           ? [...monitoringPlot.species, monitoringPlot.unknownSpecies]
           : monitoringPlot.species;

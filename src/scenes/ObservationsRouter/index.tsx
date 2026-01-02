@@ -98,7 +98,7 @@ const ObservationsInnerRouter = ({ reload }: { reload: () => void }): JSX.Elemen
   const filterColumns = useMemo<FilterField[]>(() => {
     if (activeLocale) {
       return [
-        { name: 'zone', label: strings.ZONE, type: 'multiple_selection' },
+        { name: 'stratum', label: strings.ZONE, type: 'multiple_selection' },
         { name: 'status', label: strings.STATUS, type: 'multiple_selection' },
       ];
     } else {
@@ -147,8 +147,8 @@ const ObservationsInnerRouter = ({ reload }: { reload: () => void }): JSX.Elemen
     if (activeLocale) {
       setFilters((prev: Record<string, any>) => {
         const newFilters: Record<string, any> = {};
-        if (prev.zone) {
-          newFilters.zone = prev.zone;
+        if (prev.stratum) {
+          newFilters.stratum = prev.stratum;
         }
         return newFilters;
       });
@@ -166,7 +166,7 @@ const ObservationsInnerRouter = ({ reload }: { reload: () => void }): JSX.Elemen
         element={<BiomassMeasurementsDetails reload={reload} />}
       />
       <Route
-        path={'/:plantingSiteId/results/:observationId/zone/:plantingZoneName/plot/:monitoringPlotId'}
+        path={'/:plantingSiteId/results/:observationId/stratum/:stratumName/plot/:monitoringPlotId'}
         element={<ObservationMonitoringPlotDetails reloadAll={reload} />}
       />
       <Route
@@ -174,7 +174,7 @@ const ObservationsInnerRouter = ({ reload }: { reload: () => void }): JSX.Elemen
         element={<MonitoringPlotEditPhotos reload={reload} />}
       />
       <Route
-        path={'/:plantingSiteId/results/:observationId/zone/:plantingZoneName'}
+        path={'/:plantingSiteId/results/:observationId/stratum/:stratumName'}
         element={<ObservationStratumDetails />}
       />
       <Route

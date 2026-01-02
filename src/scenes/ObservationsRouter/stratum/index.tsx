@@ -44,12 +44,12 @@ export default function ObservationStratum(): JSX.Element {
   const params = useParams<{
     plantingSiteId: string;
     observationId: string;
-    plantingZoneName: string;
+    stratumName: string;
   }>();
 
   const plantingSiteId = Number(params.plantingSiteId);
   const observationId = Number(params.observationId);
-  const plantingZoneName = params.plantingZoneName!;
+  const stratumName = params.stratumName!;
 
   const { observation } = useObservation(observationId);
   const [search, onSearch] = useState<string>('');
@@ -63,7 +63,7 @@ export default function ObservationStratum(): JSX.Element {
     () =>
       [
         { key: 'monitoringPlotNumber', name: strings.MONITORING_PLOT, type: 'string' },
-        { key: 'subzoneName', name: strings.SUBZONE, type: 'string' },
+        { key: 'substratumName', name: strings.SUBZONE, type: 'string' },
         { key: 'completedDate', name: strings.DATE, type: 'string' },
         { key: 'status', name: strings.STATUS, type: 'string' },
         { key: 'isPermanent', name: strings.MONITORING_PLOT_TYPE, type: 'string' },
@@ -118,14 +118,14 @@ export default function ObservationStratum(): JSX.Element {
     setReplaceObservationPlot(undefined);
   }, [setReplaceObservationPlot]);
 
-  const plantingZone = useAppSelector((state) =>
+  const stratum = useAppSelector((state) =>
     searchObservationStratum(
       state,
       {
         plantingSiteId,
         observationId,
         orgId: selectedOrganization?.id || -1,
-        stratumName: plantingZoneName,
+        stratumName,
         search,
         plotType: filters.plotType === undefined ? undefined : filters.plotType.values[0] === strings.PERMANENT,
       },
@@ -138,7 +138,7 @@ export default function ObservationStratum(): JSX.Element {
   }, [activeLocale]);
 
   useEffect(() => {
-    if (selectedOrganization && !plantingZone) {
+    if (selectedOrganization && !stratum) {
       navigate(
         APP_PATHS.OBSERVATION_DETAILS.replace(':plantingSiteId', `${plantingSiteId}`).replace(
           ':observationId',
@@ -146,23 +146,23 @@ export default function ObservationStratum(): JSX.Element {
         )
       );
     }
-  }, [navigate, selectedOrganization, observationId, plantingSiteId, plantingZone]);
+  }, [navigate, selectedOrganization, observationId, plantingSiteId, stratum]);
 
-  const rows: (ObservationMonitoringPlotResultsPayload & { subzoneName?: string; totalLive?: number })[] = useMemo(
+  const rows: (ObservationMonitoringPlotResultsPayload & { substratumName?: string; totalLive?: number })[] = useMemo(
     () =>
-      plantingZone?.substrata?.flatMap((subzone) =>
-        subzone.monitoringPlots.map((plot) => ({
+      stratum?.substrata?.flatMap((substratum) =>
+        substratum.monitoringPlots.map((plot) => ({
           ...plot,
-          subzoneName: subzone.name,
+          substratumName: substratum.name,
           totalLive: getObservationSpeciesLivePlantsCount(plot.species),
         }))
       ) ?? [],
-    [plantingZone]
+    [stratum]
   );
 
   const showSurvivalRateMessage = useMemo(() => {
-    return plantingZone?.survivalRate === undefined;
-  }, [plantingZone]);
+    return stratum?.survivalRate === undefined;
+  }, [stratum]);
 
   return (
     <>
@@ -175,15 +175,15 @@ export default function ObservationStratum(): JSX.Element {
         />
       )}
       <DetailsPage
-        title={plantingZoneName}
+        title={stratumName}
         plantingSiteId={plantingSiteId}
-        plantingZoneName={plantingZoneName}
+        stratumName={stratumName}
         observationId={observationId}
       >
         {showSurvivalRateMessage && plantingSiteId && <SurvivalRateMessage selectedPlantingSiteId={plantingSiteId} />}
         <Grid container spacing={3}>
           <Grid item xs={12}>
-            <AggregatedPlantsStats {...(plantingZone ?? {})} />
+            <AggregatedPlantsStats {...(stratum ?? {})} />
           </Grid>
         </Grid>
         <Box sx={{ marginTop: 3, maxWidth: '100%' }}>
@@ -191,19 +191,19 @@ export default function ObservationStratum(): JSX.Element {
             <Search search={search} onSearch={onSearch} filtersProps={filtersProps} />
             <Box marginTop={2}>
               <Table
-                id='observation-zone-table'
+                id='observation-stratum-table'
                 columns={columns}
                 rows={rows}
-                orderBy='plantingZoneName'
+                orderBy='stratumName'
                 Renderer={ObservationStratumRenderer(
                   plantingSiteId,
                   observationId,
-                  plantingZoneName,
+                  stratumName,
                   setReplaceObservationPlot,
                   observation?.state
                 )}
                 tableComments={
-                  plantingZone?.substrata && has25mPlots(plantingZone.substrata) ? strings.PLOTS_SIZE_NOTE : undefined
+                  stratum?.substrata && has25mPlots(stratum.substrata) ? strings.PLOTS_SIZE_NOTE : undefined
                 }
               />
             </Box>

@@ -17,48 +17,48 @@ export type ObservationStatusSummary = {
 };
 
 type ObservationStatusSummaryMessageProps = {
-  plantingZones?: PlantingSite['strata'];
-  requestedSubzoneIds?: Observation['requestedSubstratumIds'];
+  strata?: PlantingSite['strata'];
+  requestedSubstratumIds?: Observation['requestedSubstratumIds'];
   statusSummary?: ObservationStatusSummary;
 };
 
 const ObservationStatusSummaryMessage = ({
-  plantingZones,
-  requestedSubzoneIds,
+  strata,
+  requestedSubstratumIds,
   statusSummary,
 }: ObservationStatusSummaryMessageProps): JSX.Element | null => {
   const theme = useTheme();
 
-  const subzoneMessageBody = useMemo(() => {
-    if (!requestedSubzoneIds || requestedSubzoneIds.length === 0 || !plantingZones || plantingZones.length === 0) {
+  const substratumMessageBody = useMemo(() => {
+    if (!requestedSubstratumIds || requestedSubstratumIds.length === 0 || !strata || strata.length === 0) {
       return undefined;
     }
 
-    const zoneListItems: JSX.Element[] = plantingZones
-      .map((zone, index): JSX.Element | null => {
-        const subzoneNames = zone.substrata
-          .filter((subzone) => requestedSubzoneIds.includes(subzone.id))
-          .map((subzone) => subzone.name);
+    const stratumListItems: JSX.Element[] = strata
+      .map((stratum, index): JSX.Element | null => {
+        const substratumNames = stratum.substrata
+          .filter((substratum) => requestedSubstratumIds.includes(substratum.id))
+          .map((substratum) => substratum.name);
 
-        if (subzoneNames.length === 0) {
+        if (substratumNames.length === 0) {
           return null;
         }
 
-        return <li key={index}>{`${zone.name}: ${subzoneNames.join(', ')}`}</li>;
+        return <li key={index}>{`${stratum.name}: ${substratumNames.join(', ')}`}</li>;
       })
       .filter((element: JSX.Element | null): element is JSX.Element => element !== null);
 
-    if (zoneListItems.length === 0) {
+    if (stratumListItems.length === 0) {
       return null;
     }
 
     return (
       <Box marginTop={3}>
         {strings.THIS_OBSERVATION_INCLUDES}
-        <ul style={{ margin: 0, padding: `0 ${theme.spacing(3)}` }}>{zoneListItems}</ul>
+        <ul style={{ margin: 0, padding: `0 ${theme.spacing(3)}` }}>{stratumListItems}</ul>
       </Box>
     );
-  }, [plantingZones, requestedSubzoneIds, theme]);
+  }, [strata, requestedSubstratumIds, theme]);
 
   if (!statusSummary) {
     return null;
@@ -93,7 +93,7 @@ const ObservationStatusSummaryMessage = ({
               }
             </Box>
 
-            {subzoneMessageBody}
+            {substratumMessageBody}
           </>
         }
       />

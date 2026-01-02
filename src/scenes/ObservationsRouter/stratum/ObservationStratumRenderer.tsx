@@ -19,7 +19,7 @@ const ObservationStratumRenderer =
   (
     plantingSiteId: number,
     observationId: number,
-    plantingZoneName: string,
+    stratumName: string,
     setReplaceObservationPlot: React.Dispatch<
       React.SetStateAction<ObservationMonitoringPlotResultsPayload | undefined>
     >,
@@ -32,7 +32,7 @@ const ObservationStratumRenderer =
     const createLinkToMonitoringPlotObservation = (name: string) => {
       const url = APP_PATHS.OBSERVATION_MONITORING_PLOT_DETAILS.replace(':plantingSiteId', plantingSiteId.toString())
         .replace(':observationId', observationId.toString())
-        .replace(':plantingZoneName', encodeURIComponent(plantingZoneName))
+        .replace(':stratumName', encodeURIComponent(stratumName))
         .replace(':monitoringPlotId', row.monitoringPlotId.toString());
       return (
         <Link fontSize='16px' to={url}>

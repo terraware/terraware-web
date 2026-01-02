@@ -62,21 +62,21 @@ const ObservationDetailsList = (props: SearchProps): JSX.Element => {
         observationId,
         orgId: selectedOrganization?.id || -1,
         search: searchProps.search,
-        stratumNames: searchProps.filtersProps?.filters.zone?.values ?? [],
+        stratumNames: searchProps.filtersProps?.filters.stratum?.values ?? [],
       },
       defaultTimeZone.get().id
     )
   );
 
-  const zoneNames = useAppSelector((state) =>
+  const stratumNames = useAppSelector((state) =>
     selectDetailsStratumNames(state, plantingSiteId, observationId, selectedOrganization?.id || -1)
   );
 
   const rows = useMemo(() => {
     return (
-      details?.strata.map((zone) => {
-        const totalLive = getObservationSpeciesLivePlantsCount(zone.species);
-        return { ...zone, totalLive };
+      details?.strata.map((stratum) => {
+        const totalLive = getObservationSpeciesLivePlantsCount(stratum.species);
+        return { ...stratum, totalLive };
       }) ?? []
     );
   }, [details?.strata]);
@@ -88,21 +88,21 @@ const ObservationDetailsList = (props: SearchProps): JSX.Element => {
   }, [details, navigate, plantingSiteId]);
 
   useEffect(() => {
-    const initialZones = searchProps.filtersProps?.filters?.zone?.values ?? [];
-    const availableZones = initialZones.filter((name: string) => zoneNames.includes(name));
+    const initialStrata = searchProps.filtersProps?.filters?.stratum?.values ?? [];
+    const availableStrata = initialStrata.filter((name: string) => stratumNames.includes(name));
 
-    if (availableZones.length < initialZones.length) {
+    if (availableStrata.length < initialStrata.length) {
       searchProps.filtersProps?.setFilters((previous: Record<string, any>) => ({
         ...previous,
-        zone: { ...previous.zone, values: availableZones },
+        stratum: { ...previous.stratum, values: availableStrata },
       }));
     }
-  }, [zoneNames, searchProps.filtersProps]);
+  }, [stratumNames, searchProps.filtersProps]);
 
-  const has25mPlotsZones = () => {
-    const allSubzones = details?.strata.flatMap((zone) => zone.substrata.flatMap((subzone) => subzone));
-    if (allSubzones) {
-      return has25mPlots(allSubzones);
+  const has25mPlotsStrata = () => {
+    const allSubstrata = details?.strata.flatMap((stratum) => stratum.substrata.flatMap((substratum) => substratum));
+    if (allSubstrata) {
+      return has25mPlots(allSubstrata);
     }
   };
 
@@ -113,7 +113,7 @@ const ObservationDetailsList = (props: SearchProps): JSX.Element => {
       rows={rows}
       orderBy='stratumName'
       Renderer={ObservationDetailsRenderer(plantingSiteId, observationId)}
-      tableComments={has25mPlotsZones() ? strings.PLOTS_SIZE_NOTE : undefined}
+      tableComments={has25mPlotsStrata() ? strings.PLOTS_SIZE_NOTE : undefined}
     />
   );
 };

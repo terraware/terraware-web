@@ -15,14 +15,14 @@ const ObservationDetailsRenderer =
   (props: RendererProps<TableRowType>): JSX.Element => {
     const { column, row, value } = props;
 
-    const createLinkToPlantingZoneObservation = (name: string) => {
-      const url = APP_PATHS.OBSERVATION_PLANTING_ZONE_DETAILS.replace(':plantingSiteId', plantingSiteId.toString())
+    const createLinkToStratumObservation = (name: string) => {
+      const url = APP_PATHS.OBSERVATION_STRATUM_DETAILS.replace(':plantingSiteId', plantingSiteId.toString())
         .replace(':observationId', observationId.toString())
-        .replace(':plantingZoneName', encodeURIComponent(row.stratumName));
+        .replace(':stratumName', encodeURIComponent(row.stratumName));
       return (
         <Link fontSize='16px' to={url}>
           {name as React.ReactNode}
-          {has25mPlots(row.plantingSubzones) ? '*' : ''}
+          {has25mPlots(row.substrata) ? '*' : ''}
         </Link>
       );
     };
@@ -34,7 +34,7 @@ const ObservationDetailsRenderer =
 
     if (column.key === 'stratumName') {
       return (
-        <CellRenderer {...props} value={createLinkToPlantingZoneObservation(value as string)} title={value as string} />
+        <CellRenderer {...props} value={createLinkToStratumObservation(value as string)} title={value as string} />
       );
     }
 

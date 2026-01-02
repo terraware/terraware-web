@@ -30,8 +30,8 @@ export type ScheduleObservationFormProps = {
   plantingSiteId?: number;
   disablePlantingSiteSelect?: boolean;
 
-  // Hide subzone selections
-  disablePlantingSubzoneSelect?: boolean;
+  // Hide substratum selections
+  disableSubstratumSelect?: boolean;
 };
 
 export default function ScheduleObservationForm({
@@ -48,12 +48,12 @@ export default function ScheduleObservationForm({
 
   const [startDate, setStartDate] = useState<string>();
   const [endDate, setEndDate] = useState<string>();
-  const [requestedSubzoneIds, setRequestedSubzoneIds] = useState<number[]>();
+  const [requestedSubstratumIds, setRequestedSubstratumIds] = useState<number[]>();
 
   const [validate, setValidate] = useState<boolean>(false);
   const [startDateError, setStartDateError] = useState<string>();
   const [endDateError, setEndDateError] = useState<string>();
-  const [subzoneError, setSubzoneError] = useState<string>();
+  const [substratumError, setSubstratumError] = useState<string>();
   const [showSmallSiteWarning, setShowSmallSiteWarning] = useState<boolean>();
 
   const upcomingObservations = useMemo(() => {
@@ -64,7 +64,7 @@ export default function ScheduleObservationForm({
     });
   }, [observations]);
 
-  const plantingSitesWithZonesAndNoUpcomingObservations = useMemo(() => {
+  const plantingSitesWithStrataAndNoUpcomingObservations = useMemo(() => {
     if (!allPlantingSites || !reportedPlants) {
       return [];
     }
@@ -87,18 +87,18 @@ export default function ScheduleObservationForm({
   }, [allPlantingSites, reportedPlants, upcomingObservations]);
 
   const siteOptions = useMemo((): DropdownItem[] => {
-    return plantingSitesWithZonesAndNoUpcomingObservations
+    return plantingSitesWithStrataAndNoUpcomingObservations
       .toSorted((a, b) => a.name.localeCompare(b.name, activeLocale || undefined))
       .map((site) => ({
         label: site.name,
         value: site.id,
       }));
-  }, [activeLocale, plantingSitesWithZonesAndNoUpcomingObservations]);
+  }, [activeLocale, plantingSitesWithStrataAndNoUpcomingObservations]);
 
   const findErrors = useCallback(() => {
     let _startDateError: string = '';
     let _endDateError: string = '';
-    let _subzoneError: string = '';
+    let _substratumError: string = '';
     if (!startDate) {
       _startDateError = strings.REQUIRED_FIELD;
     }
@@ -120,8 +120,8 @@ export default function ScheduleObservationForm({
       }
     }
 
-    if (!requestedSubzoneIds || requestedSubzoneIds?.length === 0) {
-      _subzoneError = strings.SELECT_AT_LEAST_ONE_SUBZONE;
+    if (!requestedSubstratumIds || requestedSubstratumIds?.length === 0) {
+      _substratumError = strings.SELECT_AT_LEAST_ONE_SUBZONE;
     }
 
     const _showSmallSiteWarning =
@@ -129,11 +129,11 @@ export default function ScheduleObservationForm({
 
     setStartDateError(_startDateError);
     setEndDateError(_endDateError);
-    setSubzoneError(_subzoneError);
+    setSubstratumError(_substratumError);
     setShowSmallSiteWarning(_showSmallSiteWarning);
 
-    return _startDateError || _endDateError || _subzoneError || _showSmallSiteWarning;
-  }, [endDate, plantingSite, requestedSubzoneIds, setShowSmallSiteWarning, startDate]);
+    return _startDateError || _endDateError || _substratumError || _showSmallSiteWarning;
+  }, [endDate, plantingSite, requestedSubstratumIds, setShowSmallSiteWarning, startDate]);
 
   const onSelectPlantingSite = useCallback(
     (value: string) => {
@@ -143,10 +143,10 @@ export default function ScheduleObservationForm({
   );
 
   const doSave = useCallback(() => {
-    if (startDate && endDate && requestedSubzoneIds && plantingSite) {
-      onSave({ startDate, endDate, requestedSubstratumIds: requestedSubzoneIds, plantingSiteId: plantingSite.id });
+    if (startDate && endDate && requestedSubstratumIds && plantingSite) {
+      onSave({ startDate, endDate, requestedSubstratumIds, plantingSiteId: plantingSite.id });
     }
-  }, [endDate, onSave, plantingSite, requestedSubzoneIds, startDate]);
+  }, [endDate, onSave, plantingSite, requestedSubstratumIds, startDate]);
 
   const onSubmit = useCallback(() => {
     setValidate(true);
@@ -195,8 +195,8 @@ export default function ScheduleObservationForm({
 
             <Grid item xs={12}>
               <ObservationSubstratumSelector
-                errorText={validate ? subzoneError : ''}
-                onChangeSelectedSubzones={setRequestedSubzoneIds}
+                errorText={validate ? substratumError : ''}
+                onChangeSelectedSubstrata={setRequestedSubstratumIds}
               />
             </Grid>
 
