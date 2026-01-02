@@ -25,7 +25,6 @@ import usePlantingSiteMapLegend from 'src/components/NewMap/usePlantingSiteMapLe
 import usePlotPhotosMapLegend from 'src/components/NewMap/usePlotPhotosMapLegend';
 import useSurvivalRateMapLegend from 'src/components/NewMap/useSurvivalRateMapLegend';
 import { getBoundingBoxFromPoints } from 'src/components/NewMap/utils';
-import { useLocalization } from 'src/providers';
 import { MapService } from 'src/services';
 import {
   ObservationMonitoringPlotPhoto,
@@ -81,14 +80,13 @@ const PlantDashboardMap = ({
   const { mapId, refreshToken, token } = useMapboxToken();
   const mapRef = useRef<MapRef | null>(null);
   const { fitBounds } = useMapUtils(mapRef);
-  const { strings } = useLocalization();
 
   const [drawerPage, setDrawerPage] = useState<number>(1);
   const [selectedFeature, setSelectedFeature] = useState<LayerFeature>();
   const [selectedPhotos, setSelectedPhotos] = useState<PlotPhoto[]>([]);
   const [selectedPlants, setSelectedPlants] = useState<PlotPlant[]>([]);
 
-  const { selectedLayer, plantingSiteLegendGroup } = usePlantingSiteMapLegend('zones');
+  const { selectedLayer, plantingSiteLegendGroup } = usePlantingSiteMapLegend('strata');
   const { deadPlantsVisible, livePlantsVisible, plantMakersLegendGroup } = usePlantMarkersMapLegend(
     disablePlantMarkers || observationResults.length === 0
   );
@@ -104,8 +102,8 @@ const PlantDashboardMap = ({
 
   const {
     sitesLayerStyle,
-    zonesLayerStyle,
-    subzonesLayerStyle,
+    strataLayerStyle,
+    substrataLayerStyle,
     observationEventStyle,
     survivalRate50To75,
     survivalRateLessThan50,
@@ -266,9 +264,9 @@ const PlantDashboardMap = ({
             type: 'MultiPolygon',
             coordinates: zone.boundary.coordinates,
           },
-          onClick: selectFeature(site.id)('zones', `${zone.id}`),
+          onClick: selectFeature(site.id)('strata', `${zone.id}`),
           selected:
-            selectedFeature?.layerFeatureId.layerId === 'zones' &&
+            selectedFeature?.layerFeatureId.layerId === 'strata' &&
             selectedFeature?.layerFeatureId.featureId === `${zone.id}`,
         })),
         subzoneFeatures:
@@ -279,9 +277,9 @@ const PlantDashboardMap = ({
               type: 'MultiPolygon',
               coordinates: subzone.boundary.coordinates,
             },
-            onClick: selectFeature(site.id)('subzones', `${subzone.id}`),
+            onClick: selectFeature(site.id)('substrata', `${subzone.id}`),
             selected:
-              selectedFeature?.layerFeatureId.layerId === 'subzones' &&
+              selectedFeature?.layerFeatureId.layerId === 'substrata' &&
               selectedFeature?.layerFeatureId.featureId === `${subzone.id}`,
           })) ?? [],
       };
@@ -305,18 +303,18 @@ const PlantDashboardMap = ({
       },
       {
         features: features.flatMap(({ zoneFeatures }) => zoneFeatures),
-        layerId: 'zones',
-        style: zonesLayerStyle,
-        visible: selectedLayer === 'zones',
+        layerId: 'strata',
+        style: strataLayerStyle,
+        visible: selectedLayer === 'strata',
       },
       {
         features: features.flatMap(({ subzoneFeatures }) => subzoneFeatures),
-        layerId: 'subzones',
-        style: subzonesLayerStyle,
-        visible: selectedLayer === 'subzones',
+        layerId: 'substrata',
+        style: substrataLayerStyle,
+        visible: selectedLayer === 'substrata',
       },
     ];
-  }, [extractFeaturesFromSite, plantingSites, selectedLayer, sitesLayerStyle, subzonesLayerStyle, zonesLayerStyle]);
+  }, [extractFeaturesFromSite, plantingSites, selectedLayer, sitesLayerStyle, substrataLayerStyle, strataLayerStyle]);
 
   const photoMarkers = useMemo((): MapMarker[] => {
     if (observationResults.length === 0) {
@@ -414,11 +412,11 @@ const PlantDashboardMap = ({
     sortFeatureBySurvivalRate(siteId, latestSummary?.survivalRate);
 
     latestSummary?.strata.forEach((zone) => {
-      const zoneId = { layerId: 'zones', featureId: `${zone.stratumId}` };
+      const zoneId = { layerId: 'strata', featureId: `${zone.stratumId}` };
       sortFeatureBySurvivalRate(zoneId, zone.survivalRate);
 
       zone.substrata.forEach((subzone) => {
-        const subzoneId = { layerId: 'subzones', featureId: `${subzone.substratumId}` };
+        const subzoneId = { layerId: 'substrata', featureId: `${subzone.substratumId}` };
         sortFeatureBySurvivalRate(subzoneId, subzone.survivalRate);
       });
     });
@@ -460,10 +458,10 @@ const PlantDashboardMap = ({
       sortFeatureByObservationRecency(siteId, plantingSite.latestObservationCompletedTime);
 
       plantingSite.strata?.forEach((zone) => {
-        const zoneId = { layerId: 'zones', featureId: `${zone.id}` };
+        const zoneId = { layerId: 'strata', featureId: `${zone.id}` };
         sortFeatureByObservationRecency(zoneId, zone.latestObservationCompletedTime);
         zone.substrata.forEach((subzone) => {
-          const subzoneId = { layerId: 'subzones', featureId: `${subzone.id}` };
+          const subzoneId = { layerId: 'substrata', featureId: `${subzone.id}` };
           sortFeatureByObservationRecency(subzoneId, subzone.latestObservationCompletedTime);
         });
       });
@@ -475,7 +473,6 @@ const PlantDashboardMap = ({
   const markers = useMemo((): MapMarkerGroup[] => {
     return [
       {
-        label: strings.MONITORING_PLOTS,
         markers: photoMarkers,
         markerGroupId: 'plot-photos',
         onClusterClick: selectPhotosFromMarkers,
@@ -487,7 +484,6 @@ const PlantDashboardMap = ({
         visible: plotPhotosVisible,
       },
       {
-        label: strings.LIVE_PLANTS,
         markers: plantsMarkers('Live'),
         markerGroupId: 'live-plants',
         onClusterClick: selectPlantsFromMarkers,
@@ -499,7 +495,6 @@ const PlantDashboardMap = ({
         visible: livePlantsVisible,
       },
       {
-        label: strings.DEAD_PLANTS,
         markers: plantsMarkers('Dead'),
         markerGroupId: 'dead-plants',
         onClusterClick: selectPlantsFromMarkers,
@@ -519,9 +514,6 @@ const PlantDashboardMap = ({
     plotPhotosVisible,
     selectPhotosFromMarkers,
     selectPlantsFromMarkers,
-    strings.DEAD_PLANTS,
-    strings.LIVE_PLANTS,
-    strings.MONITORING_PLOTS,
   ]);
 
   const highlights = useMemo((): MapHighlightGroup[] => {

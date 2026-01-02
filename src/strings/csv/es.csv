@@ -52,6 +52,7 @@ AD_HOC_PLOT_LIVE_PLANTS_TOOLTIP,Plantas vivas es el número de plantas observada
 AD_HOC_PLOT_PLANT_DENSITY_TOOLTIP,La densidad de plantas (plantas por hectárea) se calcula en función del número de plantas observadas.,142e44c5
 AD_HOC_PLOT_SPECIES_TOOLTIP,Especies es el número de especies representadas por todas las plantas observadas.,ed7c35b1
 AD_HOC_PLOT_TOTAL_PLANTS_TOOLTIP,"Plantas totales es el número de todas las plantas observadas, incluyendo las registradas como vivas y muertas.",b2fd163f
+AD_HOC_PLOTS,Parcelas ad hoc,104e30b2
 ADD,Añadir,2ffae546
 ADD_A_NURSERY,Añadir un vivero,758726df
 ADD_A_PLANTING_SITE,Añadir un sitio de plantación,edbe08ae
@@ -2009,6 +2010,7 @@ SUBSET_WEIGHT_ERROR,El peso del subconjunto debe ser inferior al peso de las sem
 SUBSET_WEIGHT_POSITIVE,El peso del subconjunto tiene que ser un número positivo,8f1b1fed
 SUBSET_WEIGHT_REQUIRED,Usted debe introducir un peso y un recuento del subconjunto para determinar el recuento de semillas aproximado al extraerlas a un vivero. Esto puede hacerse editando la cantidad de esta accesión.,18baf19c
 SUBSHRUB,Subarbusto,f13ec462
+SUBSTRATA,Sustratos,6dda38f7
 SUBSTRATE,Sustrato,74ff28de
 SUBSTRATE_AFTER,Sustrato (después),4f743cf7
 SUBSTRATE_BEFORE,Sustrato (antes),34fc5273

@@ -1,40 +1,81 @@
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { MapRef } from 'react-map-gl/mapbox';
 
 import MapComponent from 'src/components/NewMap';
 import { MapLegendGroup } from 'src/components/NewMap/MapLegend';
-import { MapLayer, MapNameTag, MapPoint } from 'src/components/NewMap/types';
+import {
+  MapHighlightGroup,
+  MapLayer,
+  MapLayerFeatureId,
+  MapMarker,
+  MapMarkerGroup,
+  MapNameTag,
+  MapPoint,
+} from 'src/components/NewMap/types';
 import useMapFeatureStyles from 'src/components/NewMap/useMapFeatureStyles';
 import useMapUtils from 'src/components/NewMap/useMapUtils';
+import useMonitoringPlotsMapLegend from 'src/components/NewMap/useMonitoringPlotsMapLegend';
 import usePlantMarkersMapLegend from 'src/components/NewMap/usePlantMarkersMapLegend';
 import usePlantingSiteMapLegend from 'src/components/NewMap/usePlantingSiteMapLegend';
 import usePlotPhotosMapLegend from 'src/components/NewMap/usePlotPhotosMapLegend';
 import useSurvivalRateMapLegend from 'src/components/NewMap/useSurvivalRateMapLegend';
 import { getBoundingBoxFromPoints } from 'src/components/NewMap/utils';
 import { useOrganization } from 'src/providers';
-import { useLazyGetPlantingSiteQuery, useLazyListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
+import {
+  ObservationMonitoringPlotResultsPayload,
+  useLazyListAdHocObservationResultsQuery,
+  useLazyListObservationResultsQuery,
+} from 'src/queries/generated/observations';
+import {
+  useLazyGetPlantingSiteHistoryQuery,
+  useLazyGetPlantingSiteQuery,
+  useLazyListPlantingSitesQuery,
+} from 'src/queries/generated/plantingSites';
+import {
+  ObservationMonitoringPlotPhoto,
+  ObservationMonitoringPlotPhotoWithGps,
+  RecordedPlantStatus,
+} from 'src/types/Observations';
 import useMapboxToken from 'src/utils/useMapboxToken';
 
 type ObservationMapProps = {
+  isBiomass?: boolean;
   plantingSiteId?: number;
   selectPlantingSiteId: (siteId: number) => void;
 };
 
-const ObservationMap = ({ plantingSiteId, selectPlantingSiteId }: ObservationMapProps) => {
+const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: ObservationMapProps) => {
   const { mapId, token } = useMapboxToken();
   const { selectedOrganization } = useOrganization();
   const mapRef = useRef<MapRef | null>(null);
   const { fitBounds } = useMapUtils(mapRef);
 
   const { selectedLayer, plantingSiteLegendGroup } = usePlantingSiteMapLegend('sites', plantingSiteId === undefined);
-  const { plantMakersLegendGroup } = usePlantMarkersMapLegend(plantingSiteId === undefined);
-  const { plotPhotosLegendGroup } = usePlotPhotosMapLegend(plantingSiteId === undefined);
-  const { survivalRateLegendGroup } = useSurvivalRateMapLegend(plantingSiteId === undefined);
+  const { livePlantsVisible, deadPlantsVisible, plantMakersLegendGroup } = usePlantMarkersMapLegend(
+    plantingSiteId === undefined
+  );
+  const { plotPhotosVisible, plotPhotosLegendGroup } = usePlotPhotosMapLegend(plantingSiteId === undefined);
+  const { survivalRateVisible, survivalRateLegendGroup } = useSurvivalRateMapLegend(plantingSiteId === undefined);
+  const { adHocPlotsVisible, permanentPlotsVisible, temporaryPlotsVisible, monitoringPlotsLegendGroup } =
+    useMonitoringPlotsMapLegend(plantingSiteId === undefined, isBiomass, isBiomass);
 
-  const { sitesLayerStyle, zonesLayerStyle, subzonesLayerStyle } = useMapFeatureStyles();
+  const {
+    sitesLayerStyle,
+    strataLayerStyle,
+    substrataLayerStyle,
+    adHocPlotsLayerStyle,
+    permanentPlotsLayerStyle,
+    temporaryPlotsLayerStyle,
+    survivalRate50To75,
+    survivalRateLessThan50,
+    survivalRateMoreThan75,
+  } = useMapFeatureStyles();
 
   const [listPlantingSites, listPlantingSitesResult] = useLazyListPlantingSitesQuery();
   const [getPlantingSite, getPlantingSiteResult] = useLazyGetPlantingSiteQuery();
+  const [getPlantingSiteHistory, getPlantingSiteHistoryResult] = useLazyGetPlantingSiteHistoryQuery();
+  const [listObservationResults, listObservationsResultsResponse] = useLazyListObservationResultsQuery();
+  const [listAdHocObservationResults, listAdHocObservationResultsResponse] = useLazyListAdHocObservationResultsQuery();
 
   useEffect(() => {
     if (selectedOrganization && plantingSiteId === undefined) {
@@ -45,10 +86,36 @@ const ObservationMap = ({ plantingSiteId, selectPlantingSiteId }: ObservationMap
         },
         true
       );
-    } else if (plantingSiteId !== undefined) {
+    } else if (selectedOrganization && plantingSiteId !== undefined) {
       void getPlantingSite(plantingSiteId, true);
+      void listAdHocObservationResults(
+        {
+          organizationId: selectedOrganization.id,
+          plantingSiteId,
+          includePlants: true,
+        },
+        true
+      );
+      if (!isBiomass) {
+        void listObservationResults(
+          {
+            organizationId: selectedOrganization.id,
+            plantingSiteId,
+            includePlants: true,
+          },
+          true
+        );
+      }
     }
-  }, [getPlantingSite, listPlantingSites, plantingSiteId, selectedOrganization]);
+  }, [
+    getPlantingSite,
+    isBiomass,
+    listAdHocObservationResults,
+    listObservationResults,
+    listPlantingSites,
+    plantingSiteId,
+    selectedOrganization,
+  ]);
 
   const allPlantingSites = useMemo(
     () => listPlantingSitesResult.data?.sites ?? [],
@@ -56,6 +123,71 @@ const ObservationMap = ({ plantingSiteId, selectPlantingSiteId }: ObservationMap
   );
 
   const plantingSite = useMemo(() => getPlantingSiteResult.data?.site, [getPlantingSiteResult.data?.site]);
+
+  const observationResults = useMemo(() => {
+    if (listObservationsResultsResponse.isSuccess) {
+      return listObservationsResultsResponse.data.observations.filter(
+        (observation) => observation.type === (isBiomass ? 'Biomass Measurements' : 'Monitoring')
+      );
+    } else {
+      return [];
+    }
+  }, [isBiomass, listObservationsResultsResponse]);
+
+  const adHocObservationResults = useMemo(() => {
+    if (listAdHocObservationResultsResponse.isSuccess) {
+      return listAdHocObservationResultsResponse.data.observations.filter(
+        (observation) => observation.type === (isBiomass ? 'Biomass Measurements' : 'Monitoring')
+      );
+    } else {
+      return [];
+    }
+  }, [isBiomass, listAdHocObservationResultsResponse]);
+
+  // TODO: Filter by timeline
+  const selectedResults = useMemo(() => {
+    if (observationResults.length) {
+      return observationResults[0];
+    } else if (adHocObservationResults.length) {
+      return adHocObservationResults[0];
+    } else {
+      return undefined;
+    }
+  }, [adHocObservationResults, observationResults]);
+
+  const monitoringPlots = useMemo(() => {
+    if (selectedResults) {
+      return selectedResults.strata
+        .flatMap((stratum) => stratum.substrata)
+        .flatMap((substratum) => substratum.monitoringPlots);
+    } else {
+      return [];
+    }
+  }, [selectedResults]);
+
+  const adHocPlots = useMemo(() => {
+    return adHocObservationResults
+      .filter((observation) => observation.isAdHoc)
+      .map((observation) => observation.adHocPlot)
+      .filter((plot): plot is ObservationMonitoringPlotResultsPayload => plot !== undefined);
+  }, [adHocObservationResults]);
+
+  useEffect(() => {
+    if (selectedResults && selectedResults.plantingSiteHistoryId) {
+      void getPlantingSiteHistory(
+        {
+          id: selectedResults.plantingSiteId,
+          historyId: selectedResults.plantingSiteHistoryId,
+        },
+        true
+      );
+    }
+  }, [getPlantingSiteHistory, selectedResults]);
+
+  const selectedHistory = useMemo(
+    () => getPlantingSiteHistoryResult.data?.site,
+    [getPlantingSiteHistoryResult.data?.site]
+  );
 
   const layers = useMemo((): MapLayer[] => {
     if (plantingSiteId === undefined) {
@@ -72,6 +204,96 @@ const ObservationMap = ({ plantingSiteId, selectPlantingSiteId }: ObservationMap
           layerId: 'sites',
           style: sitesLayerStyle,
           visible: true,
+        },
+      ];
+    } else if (selectedHistory) {
+      return [
+        {
+          features: [
+            {
+              featureId: `${selectedHistory.plantingSiteId}`,
+              geometry: {
+                type: 'MultiPolygon',
+                coordinates: selectedHistory.boundary?.coordinates ?? [],
+              },
+            },
+          ],
+          layerId: 'sites',
+          style: sitesLayerStyle,
+          visible: selectedLayer === 'sites',
+        },
+        {
+          features:
+            selectedHistory.strata?.map((stratum) => ({
+              featureId: `${stratum.stratumId}`,
+              geometry: {
+                type: 'MultiPolygon',
+                coordinates: stratum.boundary?.coordinates ?? [],
+              },
+              label: stratum.name,
+            })) ?? [],
+          layerId: 'strata',
+          style: strataLayerStyle,
+          visible: selectedLayer === 'strata',
+        },
+        {
+          features:
+            selectedHistory.strata?.flatMap((stratum) =>
+              stratum.substrata.map((substratum) => ({
+                featureId: `${substratum.substratumId}`,
+                geometry: {
+                  type: 'MultiPolygon',
+                  coordinates: substratum.boundary?.coordinates ?? [],
+                },
+                label: substratum.name,
+              }))
+            ) ?? [],
+          layerId: 'substrata',
+          style: substrataLayerStyle,
+          visible: selectedLayer === 'substrata',
+        },
+        {
+          features: monitoringPlots
+            .filter((plot) => plot.isPermanent)
+            .map((plot) => ({
+              featureId: `${plot.monitoringPlotId}`,
+              geometry: {
+                type: 'MultiPolygon',
+                coordinates: [plot.boundary?.coordinates ?? []],
+              },
+              label: `${plot.monitoringPlotNumber}`,
+            })),
+          layerId: 'permanentPlots',
+          style: permanentPlotsLayerStyle,
+          visible: permanentPlotsVisible,
+        },
+        {
+          features: monitoringPlots
+            .filter((plot) => !plot.isPermanent)
+            .map((plot) => ({
+              featureId: `${plot.monitoringPlotId}`,
+              geometry: {
+                type: 'MultiPolygon',
+                coordinates: [plot.boundary?.coordinates ?? []],
+              },
+              label: `${plot.monitoringPlotNumber}`,
+            })),
+          layerId: 'temporaryPlot',
+          style: temporaryPlotsLayerStyle,
+          visible: temporaryPlotsVisible,
+        },
+        {
+          features: adHocPlots.map((plot) => ({
+            featureId: `${plot.monitoringPlotId}`,
+            geometry: {
+              type: 'MultiPolygon',
+              coordinates: [plot.boundary?.coordinates ?? []],
+            },
+            label: `${plot.monitoringPlotNumber}`,
+          })),
+          layerId: 'adHocPlots',
+          style: adHocPlotsLayerStyle,
+          visible: adHocPlotsVisible,
         },
       ];
     } else if (plantingSiteId !== undefined && plantingSite !== undefined) {
@@ -92,45 +314,54 @@ const ObservationMap = ({ plantingSiteId, selectPlantingSiteId }: ObservationMap
         },
         {
           features:
-            plantingSite.plantingZones?.map((zone) => ({
-              featureId: `${zone.id}`,
+            plantingSite.strata?.map((stratum) => ({
+              featureId: `${stratum.id}`,
               geometry: {
                 type: 'MultiPolygon',
-                coordinates: zone.boundary?.coordinates ?? [],
+                coordinates: stratum.boundary?.coordinates ?? [],
               },
-              label: zone.name,
+              label: stratum.name,
             })) ?? [],
-          layerId: 'zones',
-          style: zonesLayerStyle,
-          visible: selectedLayer === 'zones',
+          layerId: 'strata',
+          style: strataLayerStyle,
+          visible: selectedLayer === 'strata',
         },
         {
           features:
-            plantingSite.plantingZones?.flatMap((zone) =>
-              zone.plantingSubzones.map((subzone) => ({
-                featureId: `${subzone.id}`,
+            plantingSite.strata?.flatMap((stratum) =>
+              stratum.substrata.map((substratum) => ({
+                featureId: `${substratum.id}`,
                 geometry: {
                   type: 'MultiPolygon',
-                  coordinates: subzone.boundary?.coordinates ?? [],
+                  coordinates: substratum.boundary?.coordinates ?? [],
                 },
-                label: subzone.name,
+                label: substratum.name,
               }))
             ) ?? [],
-          layerId: 'subzones',
-          style: subzonesLayerStyle,
-          visible: selectedLayer === 'subzones',
+          layerId: 'substrata',
+          style: substrataLayerStyle,
+          visible: selectedLayer === 'substrata',
         },
       ];
     }
     return [];
   }, [
+    adHocPlots,
+    adHocPlotsLayerStyle,
+    adHocPlotsVisible,
     allPlantingSites,
+    monitoringPlots,
+    permanentPlotsLayerStyle,
+    permanentPlotsVisible,
     plantingSite,
     plantingSiteId,
+    selectedHistory,
     selectedLayer,
     sitesLayerStyle,
-    subzonesLayerStyle,
-    zonesLayerStyle,
+    substrataLayerStyle,
+    temporaryPlotsLayerStyle,
+    temporaryPlotsVisible,
+    strataLayerStyle,
   ]);
 
   const nameTags = useMemo((): MapNameTag[] | undefined => {
@@ -192,6 +423,220 @@ const ObservationMap = ({ plantingSiteId, selectPlantingSiteId }: ObservationMap
     }
   }, [allPlantingSites, fitBounds, plantingSite, plantingSiteId, selectPlantingSiteId]);
 
+  const survivalRateHighlights = useMemo(() => {
+    const lessThanFifty: MapLayerFeatureId[] = [];
+    const lessThanSeventyFive: MapLayerFeatureId[] = [];
+    const greaterThanSeventyFive: MapLayerFeatureId[] = [];
+
+    if (selectedResults === undefined || selectedHistory === undefined) {
+      return {
+        lessThanFifty,
+        lessThanSeventyFive,
+        greaterThanSeventyFive,
+      };
+    }
+
+    const sortFeatureBySurvivalRate = (entityId: MapLayerFeatureId, survivalRate: number | undefined) => {
+      if (survivalRate !== undefined) {
+        if (survivalRate < 50) {
+          lessThanFifty.push(entityId);
+        } else if (survivalRate < 75) {
+          lessThanSeventyFive.push(entityId);
+        } else {
+          greaterThanSeventyFive.push(entityId);
+        }
+      }
+    };
+
+    const siteId = { layerId: 'sites', featureId: `${selectedHistory.plantingSiteId}` };
+    sortFeatureBySurvivalRate(siteId, selectedResults.survivalRate);
+
+    selectedResults.strata.forEach((stratum) => {
+      const selectedStratumHistory = selectedHistory.strata.find(
+        (stratumHistory) => stratumHistory.stratumId === stratum.stratumId
+      );
+      const stratumId = { layerId: 'strata', featureId: `${selectedStratumHistory?.stratumId}` };
+      sortFeatureBySurvivalRate(stratumId, stratum.survivalRate);
+
+      stratum.substrata.forEach((substratum) => {
+        const selectedSubstratumistory = selectedStratumHistory?.substrata.find(
+          (substratumistory) => substratumistory.substratumId === substratum.substratumId
+        );
+        const substratumId = { layerId: 'substrata', featureId: `${selectedSubstratumistory?.substratumId}` };
+        sortFeatureBySurvivalRate(substratumId, substratum.survivalRate);
+      });
+    });
+
+    return {
+      lessThanFifty,
+      lessThanSeventyFive,
+      greaterThanSeventyFive,
+    };
+  }, [selectedHistory, selectedResults]);
+
+  const highlights = useMemo((): MapHighlightGroup[] => {
+    return [
+      {
+        highlightId: 'survivalRate',
+        highlights: [
+          {
+            featureIds: survivalRateHighlights.lessThanFifty,
+            style: survivalRateLessThan50,
+          },
+          {
+            featureIds: survivalRateHighlights.lessThanSeventyFive,
+            style: survivalRate50To75,
+          },
+          {
+            featureIds: survivalRateHighlights.greaterThanSeventyFive,
+            style: survivalRateMoreThan75,
+          },
+        ],
+        visible: survivalRateVisible,
+      },
+    ];
+  }, [survivalRate50To75, survivalRateHighlights, survivalRateLessThan50, survivalRateMoreThan75, survivalRateVisible]);
+
+  const photoMarkers = useMemo((): MapMarker[] => {
+    if (!selectedResults) {
+      return [];
+    }
+
+    const hasGpsCoordinates = (photo: ObservationMonitoringPlotPhoto): photo is ObservationMonitoringPlotPhotoWithGps =>
+      !!photo.gpsCoordinates;
+
+    const adHocPlotPhotos = adHocPlots.flatMap((plot): MapMarker[] =>
+      plot.photos.filter(hasGpsCoordinates).map((photo) => {
+        return {
+          id: `photos/${photo.fileId}`,
+          longitude: photo.gpsCoordinates?.coordinates[1],
+          latitude: photo.gpsCoordinates?.coordinates[0],
+          properties: {
+            adHocPlotId: plot.monitoringPlotId,
+            photo,
+          },
+        };
+      })
+    );
+    const monitoringPlotPhotos = selectedResults.strata
+      .flatMap((stratum) => stratum.substrata)
+      .flatMap((substratum) => substratum.monitoringPlots)
+      .flatMap((plot): MapMarker[] =>
+        plot.photos.filter(hasGpsCoordinates).map((photo) => {
+          return {
+            id: `photos/${photo.fileId}`,
+            longitude: photo.gpsCoordinates?.coordinates[1],
+            latitude: photo.gpsCoordinates?.coordinates[0],
+            properties: {
+              monitoringPlotId: plot.monitoringPlotId,
+              observationId: selectedResults.observationId,
+              photo,
+            },
+          };
+        })
+      );
+
+    return [...adHocPlotPhotos, ...monitoringPlotPhotos];
+  }, [adHocPlots, selectedResults]);
+
+  const plantsMarkers = useCallback(
+    (isDead: boolean): MapMarker[] => {
+      if (selectedResults === undefined) {
+        return [];
+      }
+      if (isBiomass) {
+        return adHocObservationResults.flatMap((observation) => {
+          const trees = observation.biomassMeasurements?.trees ?? [];
+          return trees
+            .filter((tree) => tree.isDead === isDead)
+            .map((tree): MapMarker | undefined => {
+              if (tree.gpsCoordinates) {
+                return {
+                  id: `trees/${tree.id}`,
+                  longitude: tree.gpsCoordinates.coordinates[1],
+                  latitude: tree.gpsCoordinates.coordinates[0],
+                };
+              } else {
+                return undefined;
+              }
+            })
+            .filter((marker): marker is MapMarker => marker !== undefined);
+        });
+      } else {
+        const recordedPlantStatus: RecordedPlantStatus = isDead ? 'Dead' : 'Live';
+        const monitoringPlotPlants = selectedResults.strata
+          .flatMap((stratum) => stratum.substrata)
+          .flatMap((substratum) => substratum.monitoringPlots)
+          .flatMap((plot): MapMarker[] => {
+            if (plot.plants) {
+              const filteredPlants = plot.plants.filter((plant) => plant.status === recordedPlantStatus);
+              return filteredPlants.map(
+                (plant): MapMarker => ({
+                  id: `plants/${plant.id}`,
+                  longitude: plant.gpsCoordinates.coordinates[1],
+                  latitude: plant.gpsCoordinates.coordinates[0],
+                })
+              );
+            } else {
+              return [];
+            }
+          });
+        const adHocPlotPlants = adHocPlots.flatMap((plot): MapMarker[] => {
+          if (plot.plants) {
+            const filteredPlants = plot.plants.filter((plant) => plant.status === recordedPlantStatus);
+            return filteredPlants.map(
+              (plant): MapMarker => ({
+                id: `plants/${plant.id}`,
+                longitude: plant.gpsCoordinates.coordinates[1],
+                latitude: plant.gpsCoordinates.coordinates[0],
+              })
+            );
+          } else {
+            return [];
+          }
+        });
+
+        return [...adHocPlotPlants, ...monitoringPlotPlants];
+      }
+    },
+    [adHocObservationResults, adHocPlots, isBiomass, selectedResults]
+  );
+
+  const markers = useMemo((): MapMarkerGroup[] => {
+    return [
+      {
+        markers: photoMarkers,
+        markerGroupId: 'plot-photos',
+        style: {
+          iconColor: '#CC79A7',
+          iconName: 'iconPhoto',
+          type: 'icon',
+        },
+        visible: plotPhotosVisible,
+      },
+      {
+        markers: plantsMarkers(false),
+        markerGroupId: 'live-plants',
+        style: {
+          iconColor: '#40B0A6',
+          iconName: 'iconLivePlant',
+          type: 'icon',
+        },
+        visible: livePlantsVisible,
+      },
+      {
+        markers: plantsMarkers(true),
+        markerGroupId: 'dead-plants',
+        style: {
+          iconColor: '#E1BE6A',
+          iconName: 'iconLivePlant',
+          type: 'icon',
+        },
+        visible: deadPlantsVisible,
+      },
+    ];
+  }, [deadPlantsVisible, livePlantsVisible, photoMarkers, plantsMarkers, plotPhotosVisible]);
+
   const legends = useMemo((): MapLegendGroup[] => {
     const siteLegendGroup =
       plantingSiteId === undefined
@@ -201,14 +646,30 @@ const ObservationMap = ({ plantingSiteId, selectPlantingSiteId }: ObservationMap
           }
         : plantingSiteLegendGroup;
 
-    return [siteLegendGroup, plotPhotosLegendGroup, plantMakersLegendGroup, survivalRateLegendGroup];
-  }, [plantingSiteId, plantingSiteLegendGroup, plotPhotosLegendGroup, plantMakersLegendGroup, survivalRateLegendGroup]);
+    return [
+      siteLegendGroup,
+      monitoringPlotsLegendGroup,
+      plotPhotosLegendGroup,
+      plantMakersLegendGroup,
+      !isBiomass ? survivalRateLegendGroup : undefined,
+    ].filter((group): group is MapLegendGroup => group !== undefined);
+  }, [
+    plantingSiteId,
+    plantingSiteLegendGroup,
+    monitoringPlotsLegendGroup,
+    plotPhotosLegendGroup,
+    plantMakersLegendGroup,
+    isBiomass,
+    survivalRateLegendGroup,
+  ]);
 
   return (
     <MapComponent
       legends={legends}
-      mapLayers={layers}
+      mapHighlights={highlights}
+      mapMarkers={markers}
       mapId={mapId}
+      mapLayers={layers}
       mapRef={mapRef}
       nameTags={nameTags}
       token={token ?? ''}

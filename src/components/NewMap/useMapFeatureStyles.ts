@@ -25,7 +25,7 @@ const useMapFeatureStyles = () => {
     [theme]
   );
 
-  const zonesLayerStyle = useMemo(
+  const strataLayerStyle = useMemo(
     (): MapFillComponentStyle => ({
       borderColor: theme.palette.TwClrBasePurple300,
       fillColor: theme.palette.TwClrBasePurple300,
@@ -35,10 +35,40 @@ const useMapFeatureStyles = () => {
     [theme]
   );
 
-  const subzonesLayerStyle = useMemo(
+  const substrataLayerStyle = useMemo(
     (): MapFillComponentStyle => ({
       borderColor: theme.palette.TwClrBaseBlue300,
       fillColor: theme.palette.TwClrBaseBlue300,
+      opacity: 0.2,
+      type: 'fill',
+    }),
+    [theme]
+  );
+
+  const permanentPlotsLayerStyle = useMemo(
+    (): MapFillComponentStyle => ({
+      borderColor: theme.palette.TwClrBasePink300,
+      fillColor: theme.palette.TwClrBasePink300,
+      opacity: 0.2,
+      type: 'fill',
+    }),
+    [theme]
+  );
+
+  const temporaryPlotsLayerStyle = useMemo(
+    (): MapFillComponentStyle => ({
+      borderColor: theme.palette.TwClrBaseYellow300,
+      fillColor: theme.palette.TwClrBaseYellow300,
+      opacity: 0.2,
+      type: 'fill',
+    }),
+    [theme]
+  );
+
+  const adHocPlotsLayerStyle = useMemo(
+    (): MapFillComponentStyle => ({
+      borderColor: theme.palette.TwClrBaseOrange300,
+      fillColor: theme.palette.TwClrBaseOrange300,
       opacity: 0.2,
       type: 'fill',
     }),
@@ -100,16 +130,19 @@ const useMapFeatureStyles = () => {
   );
 
   return {
+    adHocPlotsLayerStyle,
     deadPlantStyle,
     livePlantStyle,
     observationEventStyle,
+    permanentPlotsLayerStyle,
     plotPhotoStyle,
     sitesLayerStyle,
-    subzonesLayerStyle,
+    substrataLayerStyle,
     survivalRateLessThan50,
     survivalRate50To75,
     survivalRateMoreThan75,
-    zonesLayerStyle,
+    temporaryPlotsLayerStyle,
+    strataLayerStyle,
   };
 };
 

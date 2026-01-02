@@ -159,15 +159,15 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
 
   useEffect(() => {
     if (selectedOrganization) {
-      void listAdHocObservations(
-        {
-          organizationId: selectedOrganization.id,
-          plantingSiteId,
-        },
-        true
-      );
       void listPlantingSites({ organizationId: selectedOrganization.id, full: true }, true);
       if (selectedPlotSelection === 'adHoc') {
+        void listAdHocObservations(
+          {
+            organizationId: selectedOrganization.id,
+            plantingSiteId,
+          },
+          true
+        );
         void listAdHocObservationResults(
           {
             organizationId: selectedOrganization.id,
