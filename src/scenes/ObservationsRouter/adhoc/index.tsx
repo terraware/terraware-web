@@ -162,8 +162,8 @@ export default function ObservationMonitoringPlot({ reloadAll }: { reloadAll: ()
           : undefined,
       },
       { label: strings.OBSERVER, value: monitoringPlotResult?.claimedByName },
-      { label: strings.ZONE, value: stratum?.name },
-      { label: strings.SUBZONE, value: substratum?.name },
+      { label: strings.STRATUM, value: stratum?.name },
+      { label: strings.SUBSTRATUM, value: substratum?.name },
       {
         label: strings.MONITORING_PLOT_TYPE,
         value: monitoringPlotResult
@@ -223,10 +223,10 @@ export default function ObservationMonitoringPlot({ reloadAll }: { reloadAll: ()
           title={
             <Box>
               <Typography>
-                {strings.ZONE}: {stratum?.name}
+                {strings.STRATUM}: {stratum?.name}
               </Typography>
               <Typography>
-                {strings.SUBZONE}: {substratum?.name}
+                {strings.SUBSTRATUM}: {substratum?.name}
               </Typography>
               <Typography>
                 {strings.PLOT_TYPE}:{' '}

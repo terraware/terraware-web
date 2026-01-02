@@ -119,11 +119,11 @@ export default function SubstratumSelector(props: SubstratumSelectorProps): JSX.
         margin={theme.spacing(2, isMobile || horizontalLayout ? 0 : 2, 0, 0)}
         sx={horizontalLayout ? horizontalStyle : {}}
       >
-        {horizontalLayout && horizontalLabel(strings.ZONE)}
+        {horizontalLayout && horizontalLabel(strings.STRATUM)}
         <Autocomplete
           id='stratum'
           placeholder={strings.SELECT}
-          label={horizontalLayout ? '' : strings.ZONE_REQUIRED}
+          label={horizontalLayout ? '' : strings.STRATUM_REQUIRED}
           selected={stratumToDropdownItem(selectedStratum)}
           options={stratumOptions}
           onChange={(value) => onChangeStratum(value)}
@@ -135,11 +135,11 @@ export default function SubstratumSelector(props: SubstratumSelectorProps): JSX.
         />
       </Box>
       <Box flex={1} margin={theme.spacing(2, 0, 0)} sx={horizontalLayout ? horizontalStyle : {}}>
-        {horizontalLayout && horizontalLabel(strings.SUBZONE)}
+        {horizontalLayout && horizontalLabel(strings.SUBSTRATUM)}
         <Autocomplete
           id='substratum'
           placeholder={strings.SELECT}
-          label={horizontalLayout ? '' : strings.SUBZONE_REQUIRED}
+          label={horizontalLayout ? '' : strings.SUBSTRATUM_REQUIRED}
           selected={substratumToDropdownItem(selectedSubstratum)}
           options={substratumOptions}
           onChange={(value) => onChangeSubstratum(value)}

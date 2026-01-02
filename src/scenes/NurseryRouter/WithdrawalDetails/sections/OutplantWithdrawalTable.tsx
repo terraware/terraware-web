@@ -24,7 +24,7 @@ type OutplantWithdrawalTableProps = {
 const columns = (): TableColumnType[] => [
   { key: 'batchNumber', name: strings.BATCH, type: 'string' },
   { key: 'name', name: strings.SPECIES, type: 'string' },
-  { key: 'toSubstratum', name: strings.TO_SUBZONE, type: 'string' },
+  { key: 'toSubstratum', name: strings.TO_SUBSTRATUM, type: 'string' },
   { key: 'total', name: strings.QUANTITY, type: 'number' },
 ];
 

@@ -133,7 +133,7 @@ const ObservationSubstratumSelector = ({
                     <Icon name='warning' fillColor={theme.palette.TwClrTxtSecondary} size='medium' />
                     <Typography color={theme.palette.TwClrTxtSecondary} paddingLeft={1} paddingRight={1}>
                       {strings.formatString(
-                        strings.ZONE_GEOMETRY_CHANGED,
+                        strings.STRATUM_GEOMETRY_CHANGED,
                         stratum.name,
                         DateTime.fromISO(stratum.boundaryModifiedTime).toFormat('yyyy-MM-dd')
                       )}

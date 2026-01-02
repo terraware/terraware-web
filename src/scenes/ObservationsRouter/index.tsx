@@ -98,7 +98,7 @@ const ObservationsInnerRouter = ({ reload }: { reload: () => void }): JSX.Elemen
   const filterColumns = useMemo<FilterField[]>(() => {
     if (activeLocale) {
       return [
-        { name: 'stratum', label: strings.ZONE, type: 'multiple_selection' },
+        { name: 'stratum', label: strings.STRATUM, type: 'multiple_selection' },
         { name: 'status', label: strings.STATUS, type: 'multiple_selection' },
       ];
     } else {

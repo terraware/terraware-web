@@ -18,11 +18,11 @@ function makeObservationCsv(observationResults: ObservationResults): Blob {
     },
     {
       key: 'stratumName',
-      displayLabel: strings.ZONE,
+      displayLabel: strings.STRATUM,
     },
     {
       key: 'substratumName',
-      displayLabel: strings.SUBZONE,
+      displayLabel: strings.SUBSTRATUM,
     },
     {
       key: 'dateObserved',

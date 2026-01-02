@@ -63,7 +63,7 @@ export default function ObservationStratum(): JSX.Element {
     () =>
       [
         { key: 'monitoringPlotNumber', name: strings.MONITORING_PLOT, type: 'string' },
-        { key: 'substratumName', name: strings.SUBZONE, type: 'string' },
+        { key: 'substratumName', name: strings.SUBSTRATUM, type: 'string' },
         { key: 'completedDate', name: strings.DATE, type: 'string' },
         { key: 'status', name: strings.STATUS, type: 'string' },
         { key: 'isPermanent', name: strings.MONITORING_PLOT_TYPE, type: 'string' },

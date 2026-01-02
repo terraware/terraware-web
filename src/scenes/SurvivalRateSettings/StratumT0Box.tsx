@@ -66,7 +66,7 @@ const StratumT0Box = ({ plotsWithObservations, withdrawnSpeciesPlot, t0Stratum }
           flexDirection={'column'}
           padding={2}
         >
-          <Typography fontWeight={600}>{strings.ZONE}</Typography>
+          <Typography fontWeight={600}>{strings.STRATUM}</Typography>
           <Typography>{plotsWithObservations?.[0].substratum_stratum_name}</Typography>
         </Box>
         <Box flexGrow={1} display={'flex'} alignItems={'center'}>

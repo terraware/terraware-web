@@ -29,10 +29,10 @@ import ReassignmentRenderer, { Reassignment, ReassignmentRowType, StratumInfo } 
 const columns = (): TableColumnType[] => [
   { key: 'species', name: strings.SPECIES, type: 'string' },
   { key: 'siteName', name: strings.PLANTING_SITE, type: 'string' },
-  { key: 'originalStratum', name: strings.ORIGINAL_ZONE, type: 'string' },
-  { key: 'originalSubstratum', name: strings.ORIGINAL_SUBZONE, type: 'string' },
-  { key: 'newStratum', name: strings.NEW_ZONE, type: 'string' },
-  { key: 'newSubstratum', name: strings.NEW_SUBZONE, type: 'string' },
+  { key: 'originalStratum', name: strings.ORIGINAL_STRATUM, type: 'string' },
+  { key: 'originalSubstratum', name: strings.ORIGINAL_SUBSTRATUM, type: 'string' },
+  { key: 'newStratum', name: strings.NEW_STRATUM, type: 'string' },
+  { key: 'newSubstratum', name: strings.NEW_SUBSTRATUM, type: 'string' },
   { key: 'reassign', name: strings.REASSIGN, type: 'number' },
   { key: 'notes', name: strings.NOTES, type: 'string' },
 ];

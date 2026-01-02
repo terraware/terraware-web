@@ -55,7 +55,7 @@ export default function DraftPlantingSiteListMapView({
     <Box sx={view === 'map' ? { display: 'flex', flexGrow: 1, flexDirection: 'column' } : undefined}>
       <Box display='flex' flexGrow={0} alignItems='center'>
         <Typography fontSize='16px' fontWeight={600} margin={theme.spacing(3, 0)}>
-          {strings.BOUNDARIES_AND_ZONES}
+          {strings.BOUNDARIES_AND_STRATA}
         </Typography>
       </Box>
       {plantingSite.boundary && (
@@ -87,8 +87,8 @@ function DraftPlantingSiteMapView({ plantingSite, search }: PlantingSiteMapViewP
 
   const layerOptionLabels: Record<MapLayer, string> = {
     'Planting Site': strings.PLANTING_SITE,
-    Strata: strings.ZONES,
-    'Sub-Strata': strings.SUBZONES,
+    Strata: strings.STRATA,
+    'Sub-Strata': strings.SUBSTRATA,
     'Monitoring Plots': strings.MONITORING_PLOTS,
     'Project Zones': strings.PROJECT_ZONES,
   };
@@ -177,15 +177,15 @@ const ContextRenderer =
     if (entity.type === 'site') {
       title = site.name;
       properties = [
-        { key: strings.ZONES, value: strata.length },
-        { key: strings.SUBZONES, value: strata.flatMap((z) => z.substrata).length },
+        { key: strings.STRATA, value: strata.length },
+        { key: strings.SUBSTRATA, value: strata.flatMap((z) => z.substrata).length },
       ];
     } else if (entity.type === 'stratum') {
       const stratum = strata.find((z) => z.id === entity.id);
       title = stratum?.name ?? '';
       properties = [
         { key: strings.TARGET_PLANTING_DENSITY, value: stratum?.targetPlantingDensity ?? 0 },
-        { key: strings.SUBZONES, value: stratum?.substrata.length ?? 0 },
+        { key: strings.SUBSTRATA, value: stratum?.substrata.length ?? 0 },
       ];
     } else {
       return null;

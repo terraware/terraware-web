@@ -385,7 +385,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
             <Grid item xs={smallItemGridWidth()}>
               <OverviewItemCard
                 isEditable={false}
-                title={strings.PLANT_DENSITY_OF_PLANTED_ZONES}
+                title={strings.PLANT_DENSITY_OF_PLANTED_STRATA}
                 contents={plantingDensityForStrata}
                 sx={infoCardStyles}
               />

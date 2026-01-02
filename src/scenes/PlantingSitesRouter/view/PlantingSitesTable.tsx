@@ -48,8 +48,9 @@ const columns = (): TableColumnType[] => [
     name: strings.PROJECT,
     type: 'string',
   },
-  { key: 'numStrata', name: strings.PLANTING_ZONES, type: 'number' },
-  { key: 'numSubstrata', name: strings.SUBZONES, type: 'number' },
+  // Change this to just STRATA after the rename
+  { key: 'numStrata', name: strings.STRATA_LONG, type: 'number' },
+  { key: 'numSubstrata', name: strings.SUBSTRATA, type: 'number' },
   { key: 'timeZoneId', name: strings.TIME_ZONE, type: 'string' },
 ];
 

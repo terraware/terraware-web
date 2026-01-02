@@ -18,8 +18,8 @@ type OutplantReassignmentTableProps = {
 
 const columns = (): TableColumnType[] => [
   { key: 'species', name: strings.SPECIES, type: 'string' },
-  { key: 'from_substratum', name: strings.FROM_SUBZONE, type: 'string' },
-  { key: 'to_substratum', name: strings.TO_SUBZONE, type: 'string' },
+  { key: 'from_substratum', name: strings.FROM_SUBSTRATUM, type: 'string' },
+  { key: 'to_substratum', name: strings.TO_SUBSTRATUM, type: 'string' },
   { key: 'original_qty', name: strings.ORIGINAL_QTY, type: 'string' },
   { key: 'final_qty', name: strings.FINAL_QTY, type: 'string' },
   { key: 'notes', name: strings.NOTES, type: 'string' },

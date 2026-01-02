@@ -18,7 +18,7 @@ import strings from 'src/strings';
 const columns = (): TableColumnType[] => [
   {
     key: 'fullName',
-    name: strings.SUBZONE,
+    name: strings.SUBSTRATUM,
     type: 'string',
   },
 ];

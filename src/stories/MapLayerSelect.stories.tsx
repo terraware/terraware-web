@@ -25,11 +25,11 @@ export const Default: Story = {
           value: 'Planting Site',
         },
         {
-          label: strings.ZONES,
+          label: strings.STRATA,
           value: 'Strata',
         },
         {
-          label: strings.SUBZONES,
+          label: strings.SUBSTRATA,
           value: 'Sub-Strata',
         },
         {

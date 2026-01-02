@@ -57,7 +57,7 @@ const createDraftSiteWith = (site: DraftPlantingSite) => (cutStrata: GeometryFea
     defaultStratumPayload({
       boundary: toMultiPolygon(stratum.geometry) as MultiPolygon,
       id: index,
-      name: stratumNameGenerator(new Set<string>(), strings.ZONE),
+      name: stratumNameGenerator(new Set<string>(), strings.STRATUM),
       targetPlantingDensity: stratum.properties?.targetPlantingDensity ?? 1500,
     })
   ),
@@ -109,7 +109,9 @@ export default function Strata({ onValidate, site }: StrataProps): JSX.Element {
       const missingData = (missingStrata || missingStratumNames) && !onValidate.isSaveAndClose;
 
       if (strataTooSmall || missingData) {
-        snackbar.toastError(strataTooSmall ? strings.SITE_ZONE_BOUNDARIES_TOO_SMALL : strings.SITE_ZONE_NAMES_MISSING);
+        snackbar.toastError(
+          strataTooSmall ? strings.SITE_STRATUM_BOUNDARIES_TOO_SMALL : strings.SITE_STRATUM_NAMES_MISSING
+        );
         onValidate.apply(true);
         return;
       }
@@ -189,15 +191,15 @@ export default function Strata({ onValidate, site }: StrataProps): JSX.Element {
     () =>
       activeLocale
         ? [
-            { text: strings.SITE_ZONE_BOUNDARIES_DESCRIPTION_0 },
+            { text: strings.SITE_STRATUM_BOUNDARIES_DESCRIPTION_0 },
             {
-              text: strings.SITE_ZONE_BOUNDARIES_DESCRIPTION_1,
+              text: strings.SITE_STRATUM_BOUNDARIES_DESCRIPTION_1,
               hasTutorial: true,
               handlePrefix: (prefix: string) =>
                 strings.formatString(prefix, <MapIcon centerAligned={true} icon='slice' />) as JSX.Element[],
             },
             {
-              text: strings.SITE_ZONE_BOUNDARIES_SIZE,
+              text: strings.SITE_STRATUM_BOUNDARIES_SIZE,
               isBold: true,
             },
           ]
@@ -210,7 +212,7 @@ export default function Strata({ onValidate, site }: StrataProps): JSX.Element {
       return '';
     }
     return strings.formatString(
-      strings.ADDING_ZONE_BOUNDARIES_INSTRUCTIONS_DESCRIPTION,
+      strings.ADDING_STRATUM_BOUNDARIES_INSTRUCTIONS_DESCRIPTION,
       <MapIcon centerAligned icon='slice' />
     ) as JSX.Element[];
   }, [activeLocale]);
@@ -228,7 +230,7 @@ export default function Strata({ onValidate, site }: StrataProps): JSX.Element {
       );
       const strataWithIds = cutStrata.map((stratum) => {
         if (!stratum.properties?.name) {
-          const stratumName = stratumNameGenerator(usedNames, strings.ZONE);
+          const stratumName = stratumNameGenerator(usedNames, strings.STRATUM);
           stratum.properties = { ...stratum.properties, name: stratumName };
           usedNames.add(stratumName);
         }
@@ -350,10 +352,10 @@ export default function Strata({ onValidate, site }: StrataProps): JSX.Element {
       <StepTitleDescription
         description={description}
         dontShowAgainPreferenceName='dont-show-site-stratum-boundaries-instructions'
-        title={strings.ADDING_ZONE_BOUNDARIES}
+        title={strings.ADDING_STRATUM_BOUNDARIES}
         tutorialDescription={tutorialDescription}
         tutorialDocLinkKey='planting_site_create_stratum_boundary_instructions_video'
-        tutorialTitle={strings.ADDING_ZONE_BOUNDARIES}
+        tutorialTitle={strings.ADDING_STRATUM_BOUNDARIES}
       />
       <EditableMap
         editableBoundary={strataData?.editableBoundary}
@@ -400,9 +402,9 @@ const TooltipContents = ({
     if (!stratumName) {
       setNameError(strings.REQUIRED_FIELD);
     } else if (stratumNamesInUse.has(stratumName)) {
-      setNameError(strings.ZONE_NAME_IN_USE);
+      setNameError(strings.STRATUM_NAME_IN_USE);
     } else if (stratumName.length > 15) {
-      setNameError(strings.ZONE_NAME_MAXIMUM_LENGTH);
+      setNameError(strings.STRATUM_NAME_MAXIMUM_LENGTH);
     } else {
       setNameError('');
       hasNameErrors = false;
@@ -441,10 +443,10 @@ const TooltipContents = ({
       cancelButton={{ title: strings.CANCEL, onClick: onClose }}
       onClose={onClose}
       saveButton={{ title: strings.SAVE, onClick: save }}
-      title={strings.ZONE}
+      title={strings.STRATUM}
     >
       <Box display='flex' flexDirection='column' padding={theme.spacing(2)}>
-        <Typography>{strings.PLANTING_SITE_ZONE_NAME_HELP}</Typography>
+        <Typography>{strings.PLANTING_SITE_STRATUM_NAME_HELP}</Typography>
         <Textfield
           autoFocus
           label={strings.NAME}

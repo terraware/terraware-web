@@ -68,7 +68,7 @@ export default function StratumLevelDataMap({ plantingSiteId }: StratumLevelData
         fillColor: getRgbaFromHex(theme.palette.TwClrBaseGreen300 as string, 0.2),
       },
       {
-        label: strings.ZONES,
+        label: strings.STRATA,
         borderColor: theme.palette.TwClrBaseLightGreen300 as string,
         fillColor: 'transparent',
       },
@@ -79,7 +79,7 @@ export default function StratumLevelDataMap({ plantingSiteId }: StratumLevelData
         items: [
           ...boundariesLegendItems,
           {
-            label: strings.SUBZONES,
+            label: strings.SUBSTRATA,
             borderColor: theme.palette.TwClrBaseBlue300 as string,
             fillColor: getRgbaFromHex(theme.palette.TwClrBaseBlue300 as string, 0.2),
           },

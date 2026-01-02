@@ -341,13 +341,13 @@ const PlotT0EditBox = ({
           >
             <Box display='flex' paddingRight={3}>
               <Typography fontWeight={600} paddingRight={0.5}>
-                {strings.ZONE}
+                {strings.STRATUM}
               </Typography>
               <Typography>{plot.substratum_stratum_name}</Typography>
             </Box>
             <Box display='flex'>
               <Typography fontWeight={600} paddingRight={0.5}>
-                {strings.SUBZONE}
+                {strings.SUBSTRATUM}
               </Typography>
               <Typography>{plot.substratum_name}</Typography>
             </Box>
@@ -408,13 +408,13 @@ const PlotT0EditBox = ({
               <Box sx={{ background: theme.palette.TwClrBgSecondary }} display='flex' padding={1} height='fit-content'>
                 <Box display='flex' paddingRight={3}>
                   <Typography fontWeight={600} paddingRight={0.5}>
-                    {strings.ZONE}
+                    {strings.STRATUM}
                   </Typography>
                   <Typography>{plot.substratum_stratum_name}</Typography>
                 </Box>
                 <Box display='flex'>
                   <Typography fontWeight={600} paddingRight={0.5}>
-                    {strings.SUBZONE}
+                    {strings.SUBSTRATUM}
                   </Typography>
                   <Typography>{plot.substratum_name}</Typography>
                 </Box>
