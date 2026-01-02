@@ -4,7 +4,7 @@ import { getDateDisplayValue } from '@terraware/web-components/utils';
 import sanitize from 'sanitize-filename';
 
 import { APP_PATHS } from 'src/constants';
-import { useLocalization } from 'src/providers';
+import { useLocalization, useOrganization } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { useLazyExportObservationCsvQuery, useLazyExportObservationGpxQuery } from 'src/queries/exports/observations';
 import { ObservationResultsPayload, useLazyGetObservationResultsQuery } from 'src/queries/generated/observations';
@@ -13,8 +13,9 @@ import { getPlotStatus } from 'src/types/Observations';
 import { makeCsv } from 'src/utils/csv';
 import downloadZipFile from 'src/utils/downloadZipFile';
 
-const useObservationExports = (timezoneId?: string) => {
+const useObservationExports = () => {
   const { strings } = useLocalization();
+  const { selectedOrganization } = useOrganization();
   const [getObservationResults] = useLazyGetObservationResultsQuery();
   const [exportObservationCsv] = useLazyExportObservationCsvQuery();
   const [exportObservationGpx] = useLazyExportObservationGpxQuery();
@@ -35,7 +36,7 @@ const useObservationExports = (timezoneId?: string) => {
   );
 
   const makeObservationCsv = useCallback(
-    (observationResults: ObservationResultsPayload) => {
+    (observationResults: ObservationResultsPayload, timezone?: string) => {
       const columnHeaders = [
         {
           key: 'monitoringPlotNumber',
@@ -153,7 +154,7 @@ const useObservationExports = (timezoneId?: string) => {
             ).toString();
 
             const dateObserved = monitoringPlot.completedTime
-              ? getDateDisplayValue(monitoringPlot.completedTime, timezoneId)
+              ? getDateDisplayValue(monitoringPlot.completedTime, timezone)
               : '';
 
             // Plot polygon has a single ring of coordinates. They're in order SW-SE-NE-NW-SW, with
@@ -215,7 +216,6 @@ const useObservationExports = (timezoneId?: string) => {
       strings.TOTAL_PLANTS_OBSERVED,
       strings.TOTAL_SPECIES_OBSERVED,
       strings.ZONE,
-      timezoneId,
     ]
   );
 
@@ -291,7 +291,7 @@ const useObservationExports = (timezoneId?: string) => {
       const site = siteResults.site;
 
       const completedDate = observationResults.completedTime
-        ? getDateDisplayValue(observationResults.completedTime, timezoneId)
+        ? getDateDisplayValue(observationResults.completedTime, site.timeZone ?? selectedOrganization?.timeZone)
         : strings.INCOMPLETE;
 
       const prefix = `${site.name}-${completedDate}`;
@@ -302,7 +302,7 @@ const useObservationExports = (timezoneId?: string) => {
         files: [
           {
             fileName: dirName,
-            content: makeObservationCsv(observationResults),
+            content: makeObservationCsv(observationResults, site.timeZone ?? selectedOrganization?.timeZone),
           },
           {
             fileName: `${prefix}-${strings.SPECIES}`,
@@ -317,10 +317,10 @@ const useObservationExports = (timezoneId?: string) => {
       getPlantingSite,
       makeObservationCsv,
       makePlotSpeciesCsv,
+      selectedOrganization?.timeZone,
       strings.INCOMPLETE,
       strings.OBSERVATION,
       strings.SPECIES,
-      timezoneId,
     ]
   );
 
@@ -334,7 +334,7 @@ const useObservationExports = (timezoneId?: string) => {
       const site = siteResults.site;
 
       const completedDate = observationResults.completedTime
-        ? getDateDisplayValue(observationResults.completedTime, timezoneId)
+        ? getDateDisplayValue(observationResults.completedTime, site.timeZone ?? selectedOrganization?.timeZone)
         : strings.INCOMPLETE;
 
       const sanitizedSiteName = sanitize(site.name);
@@ -346,7 +346,7 @@ const useObservationExports = (timezoneId?: string) => {
       link.setAttribute('download', fileName);
       link.click();
     },
-    [exportObservationCsv, getObservationResults, getPlantingSite, strings.INCOMPLETE, timezoneId]
+    [exportObservationCsv, getObservationResults, getPlantingSite, selectedOrganization?.timeZone, strings.INCOMPLETE]
   );
 
   const downloadObservationGpx = useCallback(
@@ -359,7 +359,7 @@ const useObservationExports = (timezoneId?: string) => {
       const site = siteResults.site;
 
       const completedDate = observationResults.completedTime
-        ? getDateDisplayValue(observationResults.completedTime, timezoneId)
+        ? getDateDisplayValue(observationResults.completedTime, site.timeZone ?? selectedOrganization?.timeZone)
         : strings.INCOMPLETE;
 
       const sanitizedSiteName = sanitize(site.name);
@@ -371,7 +371,7 @@ const useObservationExports = (timezoneId?: string) => {
       link.setAttribute('download', fileName);
       link.click();
     },
-    [exportObservationGpx, getObservationResults, getPlantingSite, strings.INCOMPLETE, timezoneId]
+    [exportObservationGpx, getObservationResults, getPlantingSite, selectedOrganization?.timeZone, strings.INCOMPLETE]
   );
 
   return {
