@@ -113,7 +113,11 @@
 <a name='L48'></a><a href='#L48'>48</a>
 <a name='L49'></a><a href='#L49'>49</a>
 <a name='L50'></a><a href='#L50'>50</a>
-<a name='L51'></a><a href='#L51'>51</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L51'></a><a href='#L51'>51</a>
+<a name='L52'></a><a href='#L52'>52</a>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -150,6 +154,10 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -170,37 +178,41 @@ import { useLocalizatio<span class="cstat-no" title="statement not covered" >n }
 import { MapSingleS<span class="cstat-no" title="statement not covered" >electLegendGroup } fro</span>m './MapLegend';
 import useMapFeatur<span class="cstat-no" title="statement not covered" >eStyles from './useMapFeatureSty</span>les';
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-ex<span class="cstat-no" title="statement not covered" >port type PlantingSiteMapLayer = 'sites' | 'zones' | 'subzones';</span>
+ex<span class="cstat-no" title="statement not covered" >port type PlantingSiteMapLayer = 'sites' | 'strata' | 'substrata';</span>
 <span class="cstat-no" title="statement not covered" ></span>
 const usePlantingSiteMapLegend = (defaultLayer?: PlantingSiteMapLayer, disabled?: boolean) =&gt; {
   const { strings <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >} </span>= useLocalization();</span>
-<span class="cstat-no" title="statement not covered" >  const { sitesLayerStyle, zonesLayerStyle, subzonesLayerStyle } = useMapFeatureStyles();</span>
-  co<span class="cstat-no" title="statement not covered" >nst [selectedLayer, setSelectedLayer] = useState&lt;PlantingSiteMapLayer | undefined&gt;(defaultLayer);</span>
-<span class="cstat-no" title="statement not covered" ></span>
-  const <span class="cstat-no" title="statement not covered" >plantingSiteLegendGroup = <span class="fstat-no" title="function not covered" >us</span>eMem<span class="cstat-no" title="statement not covered" >o(</span></span>
+<span class="cstat-no" title="statement not covered" >  const {</span>
+<span class="cstat-no" title="statement not covered" >    sitesLayerStyle,</span>
+    st<span class="cstat-no" title="statement not covered" >rataLayerStyle: zonesLayerStyle,</span>
+    subs<span class="cstat-no" title="statement not covered" >trataLayerStyle: subzonesL<span class="fstat-no" title="function not covered" >ay</span>erSt<span class="cstat-no" title="statement not covered" >yle,</span></span>
+  } = useMapFeatureStyles();
+<span class="cstat-no" title="statement not covered" >  const [sele</span>ctedLayer, setSelectedLayer] = useState&lt;PlantingSiteMapLayer | undefined&gt;(defaultLayer);
+&nbsp;
+  const planti<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ng</span>SiteLegendGroup = useMemo(<span class="cstat-no" title="statement not covered" ></span></span>
     (): MapSingleSelectLegendGroup =&gt; ({
-<span class="cstat-no" title="statement not covered" >      items: </span>[
+      items: [
         {
-          id: <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >'s</span>ites',<span class="cstat-no" title="statement not covered" ></span></span>
+          id: 'sites',
           label: strings.SITE,
           style: sitesLayerStyle,
         },
-        {
-          id: 'zones',
-          label: strings.ZONES,
-          style: zonesLayerStyle,
-        },<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-        {<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >          id: 'subzones',</span>
-          l<span class="fstat-no" title="function not covered" >ab</span>el: <span class="cstat-no" title="statement not covered" >strings.SUBZON</span>ES,
-          style: subzonesLayerStyle,
-<span class="cstat-no" title="statement not covered" >        },</span>
+        {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+          id: 'strat<span class="cstat-no" title="statement not covered" >a',</span>
+<span class="cstat-no" title="statement not covered" >          label: strings.STRATA,</span>
+          s<span class="fstat-no" title="function not covered" >ty</span>le: <span class="cstat-no" title="statement not covered" >zonesLayerStyl</span>e,
+        },
+<span class="cstat-no" title="statement not covered" >        {</span>
+          id: 'subs<span class="cstat-no" title="statement not covered" >trata',</span>
+          label: string<span class="cstat-no" title="statement not covered" >s.SUBSTRATA,</span>
+          style: subzonesLayerSty<span class="cstat-no" title="statement not covered" >le,</span>
+        },<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
       ],<span class="cstat-no" title="statement not covered" ></span>
-      title: strings.BO<span class="cstat-no" title="statement not covered" >UNDARIES,</span>
-      type: 'single-select',<span class="cstat-no" title="statement not covered" ></span>
-      selectedLayer,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-      setSelectedLayer<span class="cstat-no" title="statement not covered" >: (id: string | undefined) =&gt; setSelecte</span>dLayer(id as PlantingSiteMapLayer | undefined),
-      disabled,<span class="cstat-no" title="statement not covered" ></span>
+      title: strings.BOUNDARIES,
+      type: 'single-select',
+      selectedLayer,
+      setSelectedLayer: (id: string | undefined) =&gt; setSelectedLayer(id as PlantingSiteMapLayer | undefined),
+<span class="cstat-no" title="statement not covered" >      disabled,</span>
     }),<span class="cstat-no" title="statement not covered" ></span>
     [disabled, selectedLayer, site<span class="cstat-no" title="statement not covered" >sLayerStyle, strings, subzonesLayerStyle, zonesLayerStyle]</span>
   );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
@@ -220,7 +232,7 @@ export default usePlantingSiteMapLegend;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-02T23:18:32.467Z
+                at 2026-01-02T23:30:33.929Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

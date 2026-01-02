@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/232</span>
+                <span class='fraction'>0/230</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/220</span>
+                <span class='fraction'>0/218</span>
             </div>
         
             
@@ -725,15 +725,7 @@
 <a name='L660'></a><a href='#L660'>660</a>
 <a name='L661'></a><a href='#L661'>661</a>
 <a name='L662'></a><a href='#L662'>662</a>
-<a name='L663'></a><a href='#L663'>663</a>
-<a name='L664'></a><a href='#L664'>664</a>
-<a name='L665'></a><a href='#L665'>665</a>
-<a name='L666'></a><a href='#L666'>666</a>
-<a name='L667'></a><a href='#L667'>667</a>
-<a name='L668'></a><a href='#L668'>668</a>
-<a name='L669'></a><a href='#L669'>669</a>
-<a name='L670'></a><a href='#L670'>670</a>
-<a name='L671'></a><a href='#L671'>671</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L663'></a><a href='#L663'>663</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -783,7 +775,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -792,7 +783,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1134,12 +1124,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1430,22 +1414,21 @@ import usePlantingSiteMapLegend from 'src/components/NewMap/usePlantingSiteMapLe
 import usePlotPhotosMapLegend from 'src/components/NewMap/usePlotPhotosMapLegend';
 import useSurvivalRateMapLegend from 'src/components/NewMap/useSurvivalRateMapLegend';
 import { getBoundin<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >gB</span>oxFromP<span class="cstat-no" title="statement not covered" >oints } from 'src/components/NewMap/utils';</span></span>
-import { useLocaliza<span class="cstat-no" title="statement not covered" >tio</span>n } from 'src/providers';
-<span class="cstat-no" title="statement not covered" >import { MapService } from 'src/services';</span>
-import {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  ObservationMonitoringPlotPhoto,
-<span class="cstat-no" title="statement not covered" >  ObservationMonitoringPlotPhotoWithGps,</span>
-  ObservationResult<span class="cstat-no" title="statement not covered" >sPayload,</span>
-  ObservationSummary,<span class="cstat-no" title="statement not covered" ></span>
+import { MapService <span class="cstat-no" title="statement not covered" >} f</span>rom 'src/services';
+<span class="cstat-no" title="statement not covered" >import {</span>
+  Observati<span class="fstat-no" title="function not covered" >on</span>Moni<span class="cstat-no" title="statement not covered" >toringPlotPhot</span>o,
+  ObservationMonitoringPlotPhotoWithGps,
+<span class="cstat-no" title="statement not covered" >  ObservationResultsPayload,</span>
+  ObservationSummar<span class="cstat-no" title="statement not covered" >y,</span>
   RecordedPlant,<span class="cstat-no" title="statement not covered" ></span>
-  RecordedPlantStatus,<span class="cstat-no" title="statement not covered" ></span>
+  RecordedPlantStatu<span class="cstat-no" title="statement not covered" >s,</span>
 } from 'src/types/Observations';<span class="cstat-no" title="statement not covered" ></span>
-import { PlantingSite } f<span class="cstat-no" title="statement not covered" >rom 'src/types/Tracking';</span>
-import useMapboxToken from 'src/utils/useMa<span class="cstat-no" title="statement not covered" >pboxToken';</span>
+import { PlantingSite } from 'src<span class="cstat-no" title="statement not covered" >/types/Tracking';</span>
+import useMapboxToken fro<span class="cstat-no" title="statement not covered" >m 'src/utils/useMapboxToken';</span>
 <span class="cstat-no" title="statement not covered" ></span>
 import MapPhotoDrawer from './MapPhoto<span class="cstat-no" title="statement not covered" >Drawer';</span>
-import MapPlantDrawer from './MapPla<span class="cstat-no" title="statement not covered" >ntDrawer';</span>
-import MapStatsDrawer from './MapStats<span class="cstat-no" title="statement not covered" >Drawer';</span>
+import MapPlantDrawer from './MapPlant<span class="cstat-no" title="statement not covered" >Drawer';</span>
+import MapStatsDrawer from './MapSta<span class="cstat-no" title="statement not covered" >tsDrawer';</span>
 <span class="cstat-no" title="statement not covered" ></span>
 type PlotPhoto = {<span class="cstat-no" title="statement not covered" ></span>
   observationId: numbe<span class="cstat-no" title="statement not covered" >r;</span>
@@ -1465,35 +1448,34 @@ type LayerFeature = {
 };<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
 type PlantDashboardMapPr<span class="cstat-no" title="statement not covered" >ops = {</span>
-  disableObserationEve<span class="cstat-no" title="statement not covered" >nts?: boolean;</span>
+  disableObserationEvents?: boolean;<span class="cstat-no" title="statement not covered" ></span>
   disablePhotoMarkers?: boolean;<span class="cstat-no" title="statement not covered" ></span>
   disablePlantMarkers?: boolean;<span class="cstat-no" title="statement not covered" ></span>
   disableSurvivalRate?: boolean;<span class="cstat-no" title="statement not covered" ></span>
   plantingSites: PlantingSite[];<span class="cstat-no" title="statement not covered" ></span>
   observationResults: ObservationResultsPayload[];<span class="cstat-no" title="statement not covered" ></span>
-  latestSummary?: ObservationSummary;<span class="cstat-no" title="statement not covered" ></span>
+  latestSummary?: ObservationSummary;
 };
-&nbsp;
-const PlantDashboardMap = ({<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+const PlantDashboardMap = ({
   disableObserationEvents,
-  disablePhotoMarkers,
-  disablePlantMarkers,<span class="cstat-no" title="statement not covered" ></span>
+  disablePhotoMarkers,<span class="cstat-no" title="statement not covered" ></span>
+  disablePlantMarkers,
   disableSurvivalRate,
-  plantingSites,
-  observationResults,<span class="cstat-no" title="statement not covered" ></span>
+  plantingSites,<span class="cstat-no" title="statement not covered" ></span>
+  observationResults,
   latestSummary,
 }: PlantDashboardMapProps): JSX.Element =&gt; {
   const { mapId, refreshToken, token } = useMapboxToken();
   const mapRef = useRef&lt;MapRef | null&gt;(null);
   const { fitBounds } = useMapUtils(mapRef);
-  const { strings } = useLocalization();
 &nbsp;
   const [drawerPage, setDrawerPage] = useState&lt;number&gt;(1);
   const [selectedFeature, setSelectedFeature] = useState&lt;LayerFeature&gt;();
   const [selectedPhotos, setSelectedPhotos] = useState&lt;PlotPhoto[]&gt;([]);
   cons<span class="cstat-no" title="statement not covered" >t [selectedPlants, setSelectedPlants] = us</span>eState&lt;PlotPlant[]&gt;([]);
 <span class="cstat-no" title="statement not covered" ></span>
-  const { selectedLayer, plantingSiteL<span class="cstat-no" title="statement not covered" >egendGroup } = usePlantingSiteMapLeg</span>end('zones');
+  const { selectedLayer, plantingSiteL<span class="cstat-no" title="statement not covered" >egendGroup } = usePlantingSiteMapLeg</span>end('strata');
   const { deadPlantsVisi<span class="cstat-no" title="statement not covered" >ble, livePlantsVisible, plantMakersLegendGroup } = usePlantMarkersMapLegend(</span>
 <span class="fstat-no" title="function not covered" >    di</span>sablePlantMarkers <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >||</span> observationResults.le<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ng</span>th === 0</span></span>
   );<span class="cstat-no" title="statement not covered" ></span>
@@ -1509,8 +1491,8 @@ const PlantDashboardMap = ({<span class="cstat-no" title="statement not covered"
 <span class="cstat-no" title="statement not covered" ></span>
   cons<span class="cstat-no" title="statement not covered" >t {</span>
     si<span class="cstat-no" title="statement not covered" >tesLayerStyle,</span>
-    zo<span class="cstat-no" title="statement not covered" >nesLayerStyle,</span>
-    su<span class="cstat-no" title="statement not covered" >bzonesLayerStyle,</span>
+    st<span class="cstat-no" title="statement not covered" >rataLayerStyle,</span>
+    su<span class="cstat-no" title="statement not covered" >bstrataLayerStyle,</span>
     ob<span class="cstat-no" title="statement not covered" >servationEventStyl</span>e,
     survivalRate50To75,
     survivalRateLessThan50,
@@ -1671,9 +1653,9 @@ const PlantDashboardMap = ({<span class="cstat-no" title="statement not covered"
             type: 'MultiPolygon',
             coordinates: zone.boundary.coordinates,
           },
-          onClick: selectFeature(site.id)('zones', `${zone.id}`),
+          onClick: selectFeature(site.id)('strata', `${zone.id}`),
           selected:<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >            selectedFeature?.layerFeatureId.layerId === 'zones' &amp;&amp;</span>
+<span class="cstat-no" title="statement not covered" >            selectedFeature?.layerFeatureId.layerId === 'strata' &amp;&amp;</span>
 <span class="cstat-no" title="statement not covered" >            selec</span>tedFeature?.layerFeatureId.featureId === `${zone.id}`,
         })),
         subzoneFeatures:<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
@@ -1684,9 +1666,9 @@ const PlantDashboardMap = ({<span class="cstat-no" title="statement not covered"
 <span class="cstat-no" title="statement not covered" >              type: 'MultiPolygon',</span>
               coordinates: subzone.boundary.coordinates,
             },
-            onClick: selectFeature(site.id)('subzones', `${subzone.id}`),
+            onClick: selectFeature(site.id)('substrata', `${subzone.id}`),
             selected:
-              selectedFeature?.layerFeatur<span class="fstat-no" title="function not covered" >eI</span>d.layerId ==<span class="cstat-no" title="statement not covered" >= 'subzones' &amp;&amp;</span>
+              selectedFeature?.layerFeatur<span class="fstat-no" title="function not covered" >eI</span>d.layerId ==<span class="cstat-no" title="statement not covered" >= 'substrata' &amp;&amp;</span>
               selectedFeature?.layerFeatureId.featureId === `${subzone.id}`,
           })) ?? [],
       };
@@ -1710,18 +1692,18 @@ const PlantDashboardMap = ({<span class="cstat-no" title="statement not covered"
       },<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
       {
         features: features.flatMap(({ zoneFeatures }) =&gt; zoneFeatures),
-        layerId: 'zones',
-        style: zonesLayerStyle,
-        visible: selectedLayer === 'zones',<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+        layerId: 'strata',
+        style: strataLayerStyle,
+        visible: selectedLayer === 'strata',<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
       },
       {
         features: features.flatMap(({ subzoneFeatures }) =&gt; subzoneFeatures),
-        layerId: 'subzones',
-        style: subzonesLayerStyle,
-        visible: selectedLayer === 'subzones',
+        layerId: 'substrata',
+        style: substrataLayerStyle,
+        visible: selectedLayer === 'substrata',
       },
     ];
-  }, [extrac<span class="cstat-no" title="statement not covered" >tFeaturesFr</span>omSite, plantingSites, selectedLayer, sitesLayerStyle, subzonesLayerStyle, zonesLayerStyle]);
+  }, [extrac<span class="cstat-no" title="statement not covered" >tFeaturesFr</span>omSite, plantingSites, selectedLayer, sitesLayerStyle, substrataLayerStyle, strataLayerStyle]);
 &nbsp;
   const photoMarkers = useMemo((): MapMarker[] =&gt; {
     if (observationResults.length === 0) {
@@ -1819,11 +1801,11 @@ const PlantDashboardMap = ({<span class="cstat-no" title="statement not covered"
     sortFeatureBySurvivalRate(siteId, latestSummary?.survivalRate);
 &nbsp;
     latestSummary?.strata.forEach((zone) =&gt; {
-      const zoneId = { layerId: 'zones', featureId: `${zone.stratumId}` };
+      const zoneId = { layerId: 'strata', featureId: `${zone.stratumId}` };
       sortFeatureBySurvivalRate(zoneId, zone.survivalRate);
 &nbsp;
       zone.substrata.forEach((subzone) =&gt; {
-        const subzoneId = { layerId: 'subzones', featureId: `${subzone.substratumId}` };
+        const subzoneId = { layerId: 'substrata', featureId: `${subzone.substratumId}` };
         sortFeatureBySurvivalRate(subzoneId, subzone.survivalRate);
       });
     });
@@ -1847,14 +1829,14 @@ const PlantDashboardMap = ({<span class="cstat-no" title="statement not covered"
   }, []);
 &nbsp;
   const observationEventsHighlights = useMemo((): MapLayerFeatureId[][] =&gt; {
-    const recencyHighlights: MapLayerFeatureId[][] = [[], [], [], [], []];
-&nbsp;
+    const recencyHigh<span class="cstat-no" title="statement not covered" >lights: MapLayerFeatureId[<span class="fstat-no" title="function not covered" >][</span>] = [[], [], [], [], []];</span>
+<span class="cstat-no" title="statement not covered" ></span>
     if (plantingSites.length === 0) {
       return recencyHighlights;
     }
 &nbsp;
-    const sortFeature<span class="cstat-no" title="statement not covered" >ByObservationRecency = (fe<span class="fstat-no" title="function not covered" >at</span>ureId: MapLayerFeatureId, time: string | undefined) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >      if (time !== undefined) {</span>
+    const sortFeatureByObservationRecency = (featureId: MapLayerFeatureId, time: string | undefined) =&gt; {
+      if (time !== undefined) {
         const recency = MapService.getRecencyFromTime(time);
         recencyHighlights[recency - 1].push(featureId);
       }
@@ -1865,10 +1847,10 @@ const PlantDashboardMap = ({<span class="cstat-no" title="statement not covered"
       sortFeatureByObservationRecency(siteId, plantingSite.latestObservationCompletedTime);
 &nbsp;
       plantingSite.strata?.forEach((zone) =&gt; {
-        const zoneId = { layerId: 'zones', featureId: `${zone.id}` };
+        const zoneId = { layerId: 'strata', featureId: `${zone.id}` };
         sortFeatureByObservationRecency(zoneId, zone.latestObservationCompletedTime);
         zone.substrata.forEach((subzone) =&gt; {
-          const subzoneId = { layerId: 'subzones', featureId: `${subzone.id}` };
+          const subzoneId = { layerId: 'substrata', featureId: `${subzone.id}` };
           sortFeatureByObservationRecency(subzoneId, subzone.latestObservationCompletedTime);
         });
       });
@@ -1880,7 +1862,6 @@ const PlantDashboardMap = ({<span class="cstat-no" title="statement not covered"
   const markers = useMemo((): MapMarkerGroup[] =&gt; {
     return [
       {
-        label: strings.MONITORING_PLOTS,
         markers: photoMarkers,
         markerGroupId: 'plot-photos',
         onClusterClick: selectPhotosFromMarkers,
@@ -1892,7 +1873,6 @@ const PlantDashboardMap = ({<span class="cstat-no" title="statement not covered"
         visible: plotPhotosVisible,
       },
       {
-        label: strings.LIVE_PLANTS,
         markers: plantsMarkers('Live'),
         markerGroupId: 'live-plants',
         onClusterClick: selectPlantsFromMarkers,
@@ -1904,7 +1884,6 @@ const PlantDashboardMap = ({<span class="cstat-no" title="statement not covered"
         visible: livePlantsVisible,
       },
       {
-        label: strings.DEAD_PLANTS,
         markers: plantsMarkers('Dead'),
         markerGroupId: 'dead-plants',
         onClusterClick: selectPlantsFromMarkers,
@@ -1924,9 +1903,6 @@ const PlantDashboardMap = ({<span class="cstat-no" title="statement not covered"
     plotPhotosVisible,
     selectPhotosFromMarkers,
     selectPlantsFromMarkers,
-    strings.DEAD_PLANTS,
-    strings.LIVE_PLANTS,
-    strings.MONITORING_PLOTS,
   ]);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" ></span>
   const highlights = useMemo((): MapHighlightGroup[] =&gt; {
@@ -2080,7 +2056,7 @@ export default PlantDashboardMap;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-02T23:18:32.467Z
+                at 2026-01-02T23:30:33.929Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

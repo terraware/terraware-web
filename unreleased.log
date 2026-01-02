@@ -1,3 +1,4 @@
+730289611ad Added highlights, markers and plots for observation map (#4993)
 09ea08d65be Refactor common legend items for Observation Maps (#4992)
 e2096898554 SW-7864 Implemented Plant Monitoring Observations List using RTK Query (#4991)
 36db231d684 SW-7865 Implemented Biomass Observations List (#4990)
