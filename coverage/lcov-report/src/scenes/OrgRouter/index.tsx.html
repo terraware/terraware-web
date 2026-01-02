@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/118</span>
+                <span class='fraction'>0/121</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/65</span>
+                <span class='fraction'>0/67</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/113</span>
+                <span class='fraction'>0/116</span>
             </div>
         
             
@@ -325,7 +325,14 @@
 <a name='L260'></a><a href='#L260'>260</a>
 <a name='L261'></a><a href='#L261'>261</a>
 <a name='L262'></a><a href='#L262'>262</a>
-<a name='L263'></a><a href='#L263'>263</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L263'></a><a href='#L263'>263</a>
+<a name='L264'></a><a href='#L264'>264</a>
+<a name='L265'></a><a href='#L265'>265</a>
+<a name='L266'></a><a href='#L266'>266</a>
+<a name='L267'></a><a href='#L267'>267</a>
+<a name='L268'></a><a href='#L268'>268</a>
+<a name='L269'></a><a href='#L269'>269</a>
+<a name='L270'></a><a href='#L270'>270</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -417,6 +424,9 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -530,16 +540,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -596,104 +610,108 @@ import ErrorBoundar<span class="cstat-no" title="statement not covered" >y from 
 import Projects<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Ro</span>uter from 'src/components/Projects/Router';</span>
 im<span class="cstat-no" title="statement not covered" >port SeedFundReportsRouter from 'src/components/SeedFundReports/Router';</span>
 impo<span class="cstat-no" title="statement not covered" >rt { APP_PATHS } from 'src/constants';</span>
-import { useOrgTracking } from 'src/hooks/useOrgTracking';
-import { useLocali<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >za</span>tion, useOrganization, useUser } from 'src/providers';</span>
-im<span class="cstat-no" title="statement not covered" >port ApplicationProvider from 'src/providers/Application';</span>
-impo<span class="cstat-no" title="statement not covered" >rt ParticipantProvider from 'src/providers/Participant/ParticipantProvider';</span>
-import<span class="cstat-no" title="statement not covered" > { useSpeciesData } from 'src/providers/Species/SpeciesContext';</span>
-import S<span class="cstat-no" title="statement not covered" >peciesProvider from 'src/p<span class="fstat-no" title="function not covered" >ro</span>vide<span class="cstat-no" title="statement not covered" >rs/Species</span>/SpeciesProvider';</span>
-import PlantingSiteProvider from 'src/providers/Tracking/PlantingSiteProvider';
-im<span class="cstat-no" title="statement not covered" >port { sele</span>ctProjects } from 'src/redux/features/projects/projectsSelectors';
-import { requestProjects } from 'src/redux/features/projects/projectsThunks';
-import { useAp<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >pD</span>ispatch, useAppSelector } fr<span class="cstat-no" title="statement not covered" >om 'src/redux/store';</span></span>
+import isEnabled from 'src/features';
+import { useOrgTra<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ck</span>ing } from 'src/hooks/useOrgTracking';</span>
+im<span class="cstat-no" title="statement not covered" >port { useLocalization, useOrganization, useUser } from 'src/providers';</span>
+impo<span class="cstat-no" title="statement not covered" >rt ApplicationProvider from 'src/providers/Application';</span>
+import<span class="cstat-no" title="statement not covered" > ParticipantProvider from 'src/providers/Participant/ParticipantProvider';</span>
+import {<span class="cstat-no" title="statement not covered" > useSpeciesData } from 'sr<span class="fstat-no" title="function not covered" >c/</span>prov<span class="cstat-no" title="statement not covered" >iders/Spec</span>ies/SpeciesContext';</span>
+import SpeciesProvider from 'src/providers/Species/SpeciesProvider';
+im<span class="cstat-no" title="statement not covered" >port Planti</span>ngSiteProvider from 'src/providers/Tracking/PlantingSiteProvider';
+import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
+import { reque<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >st</span>Projects } from 'src/redux/f<span class="cstat-no" title="statement not covered" >eatures/projects/projectsThunks';</span></span>
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import AccessionsRouter from 'src/scenes/AccessionsRouter';
 import ApplicationRouter from 'src/scenes/ApplicationRouter';
 import BatchBulkWithdrawView from 'src/scenes/BatchBulkWithdrawView';
 import CheckIn from 'src/scenes/CheckIn';
 import DeliverablesRouter from 'src/scenes/DeliverablesRouter';
 import HelpSupportRouter from 'src/scenes/HelpSupportRouter';
-import Home from 'src/scenes/Home';
-import InventoryRou<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >te</span>r from <span class="cstat-no" title="statement not covered" >'src/scenes/InventoryRouter';</span></span>
-import ModulesRouter<span class="cstat-no" title="statement not covered" > fr</span>om 'src/scenes/ModulesRouter';
-<span class="cstat-no" title="statement not covered" >import MyAccountRouter from 'src/scenes/MyAccountRouter';</span>
-import Nurs<span class="fstat-no" title="function not covered" >er</span>iesR<span class="cstat-no" title="statement not covered" >outer from 'sr</span>c/scenes/NurseriesRouter';
-import NurseryRouter from 'src/scenes/NurseryRouter';
-<span class="cstat-no" title="statement not covered" >import ObservationsRouter from 'src/scenes/Obs</span>ervationsRouter';
-import OptInFeature<span class="cstat-no" title="statement not covered" >sView from 'src/scenes/Opt</span>InFeatures';
-import NavBar from 'src/sc<span class="cstat-no" title="statement not covered" >enes/OrgRouter/NavBar';</span>
-import OrganizationRou<span class="cstat-no" title="statement not covered" >ter from 'src/scenes/Orga</span>nizationRouter';
-import PeopleRouter from 's<span class="cstat-no" title="statement not covered" >rc/scenes/PeopleRouter';</span>
-import PlantingSites<span class="cstat-no" title="statement not covered" > from 'src/scenes/PlantingSitesRouter';</span>
-import PlantsDashboar<span class="cstat-no" title="statement not covered" >dRouter from 'src/scenes/PlantsDashboardRouter';</span>
-import AcceleratorRepor<span class="cstat-no" title="statement not covered" >tsRouter from 'src/scenes</span>/Reports';
-import SeedBanksRouter from <span class="cstat-no" title="statement not covered" >'src/scenes/SeedBanksRouter';</span>
-import SeedsDashboard f<span class="cstat-no" title="statement not covered" >rom 'src/scenes/SeedsDash</span>board';
-import SpeciesRouter from<span class="cstat-no" title="statement not covered" > 'src/scenes/Species';</span>
-import { Project } from 'src/type<span class="cstat-no" title="statement not covered" >s/Project';</span>
-import { getRgbaFromHex } fr<span class="cstat-no" title="statement not covered" >om 'src/utils/color';</span>
-import { isPlaceholderOrg, se<span class="cstat-no" title="statement not covered" >lectedOrgHasFacilityType } from 'src/utils/organization';</span>
-import useDeviceInfo from 'src/uti<span class="cstat-no" title="statement not covered" >ls/useDeviceInfo';</span>
-import useEnvironment from 'src<span class="cstat-no" title="statement not covered" >/utils/useEnvironment';</span>
-import useStateLocation from<span class="cstat-no" title="statement not covered" > 'src/utils/useStateLocation';</span>
+import Home from 's<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >rc</span>/scenes<span class="cstat-no" title="statement not covered" >/Home';</span></span>
+import InventoryRout<span class="cstat-no" title="statement not covered" >er </span>from 'src/scenes/InventoryRouter';
+<span class="cstat-no" title="statement not covered" >import ModulesRouter from 'src/scenes/ModulesRouter';</span>
+import MyAc<span class="fstat-no" title="function not covered" >co</span>untR<span class="cstat-no" title="statement not covered" >outer from 'sr</span>c/scenes/MyAccountRouter';
+import NurseriesRouter from 'src/scenes/NurseriesRouter';
+<span class="cstat-no" title="statement not covered" >import NurseryRouter from 'src/scenes/NurseryR</span>outer';
+import Observations<span class="cstat-no" title="statement not covered" >Router from 'src/scenes/Ob</span>servationsRouter';
+import ObservationRouterV2<span class="cstat-no" title="statement not covered" > from 'src/scenes/Observ</span>ationsRouterV2';
+import OptInFeaturesVi<span class="cstat-no" title="statement not covered" >ew from 'src/scenes/OptIn</span>Features';
+import NavBar from 'src/sce<span class="cstat-no" title="statement not covered" >nes/OrgRouter/NavBar';</span>
+import OrganizationR<span class="cstat-no" title="statement not covered" >outer from 'src/scenes/OrganizationRouter';</span>
+import PeopleRouter f<span class="cstat-no" title="statement not covered" >rom 'src/scenes/PeopleRouter';</span>
+import PlantingSites fr<span class="cstat-no" title="statement not covered" >om 'src/scenes/PlantingSi</span>tesRouter';
+import PlantsDashboard<span class="cstat-no" title="statement not covered" >Router from 'src/scenes/PlantsDas</span>hboardRouter';
+import AcceleratorReportsRou<span class="cstat-no" title="statement not covered" >ter from 'src/scenes/Reports';</span>
+import SeedBanksRouter <span class="cstat-no" title="statement not covered" >from 'src/scenes/SeedBank</span>sRouter';
+import SeedsDashboard fro<span class="cstat-no" title="statement not covered" >m 'src/scenes/SeedsDashboard';</span>
+import SpeciesRouter from 'src/sc<span class="cstat-no" title="statement not covered" >enes/Species';</span>
+import { Project } from 'src<span class="cstat-no" title="statement not covered" >/types/Project';</span>
+import { getRgbaFromHex } fro<span class="cstat-no" title="statement not covered" >m 'src/utils/color';</span>
+import { isPlaceholderOrg, selecte<span class="cstat-no" title="statement not covered" >dOrgHasFacilityType } from 'src/utils/organization';</span>
+import useDeviceInfo from 'src/<span class="cstat-no" title="statement not covered" >utils/useDeviceInfo';</span>
+import useEnvironment from '<span class="cstat-no" title="statement not covered" >src/utils/useEnvironment';</span>
+import useStateLoca<span class="cstat-no" title="statement not covered" >tion from 'src/utils/useSta</span>teLocation';
 <span class="cstat-no" title="statement not covered" ></span>
-import ActivityLogRouter from <span class="cstat-no" title="statement not covered" >'../ActivityLogRouter';</span>
+import ActivityLogRouter from '<span class="cstat-no" title="statement not covered" >../ActivityLogRouter';</span>
 <span class="cstat-no" title="statement not covered" ></span>
-interface OrgRouterProps {<span class="cstat-no" title="statement not covered" ></span>
-  showNavBar: boolean<span class="cstat-no" title="statement not covered" >;</span>
-  setShowNavBar: (value: boolean<span class="cstat-no" title="statement not covered" >) =&gt; void;</span>
+interface OrgRouterPr<span class="cstat-no" title="statement not covered" >ops {</span>
+  showNavBar: boolean;<span class="cstat-no" title="statement not covered" ></span>
+  setShowNavBar: (value: boolea<span class="cstat-no" title="statement not covered" >n) =&gt; void;</span>
 }<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-const OrgRouter = ({ showNavB<span class="cstat-no" title="statement not covered" >ar, setShowNavBar }: OrgRouterProps) =&gt; {</span>
-  const dispatch = useAppDi<span class="cstat-no" title="statement not covered" >spatch();</span>
+const OrgRouter = ({ showNa<span class="cstat-no" title="statement not covered" >vBar, setShowNavBar }: OrgRouterProps) =&gt; {</span>
+  const dispatch = useAppDisp<span class="cstat-no" title="statement not covered" >atch();</span>
   const { activeLocale } = us<span class="cstat-no" title="statement not covered" >eLocalization();</span>
-  const { type } = useDeviceI<span class="cstat-no" title="statement not covered" >nfo();</span>
-  const { isProduction } = <span class="cstat-no" title="statement not covered" >useEnvironment();</span>
-  const { reloadUserPreferences:<span class="cstat-no" title="statement not covered" > reloadPreferences } = useUser();</span>
+  const { type } = useDevic<span class="cstat-no" title="statement not covered" >eInfo();</span>
+  const { isProduction } = useEn<span class="cstat-no" title="statement not covered" >vironment();</span>
+  const { reloadUserPreferences: r<span class="cstat-no" title="statement not covered" >eloadPreferences } = useUser();</span>
   const location = useState<span class="cstat-no" title="statement not covered" >Location();</span>
   const { selectedOr<span class="cstat-no" title="statement not covered" >ganization } = useOrganization();</span>
   const theme = useTheme();<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const { species } = useSpeciesD<span class="cstat-no" title="statement not covered" >ata();</span>
-  const { plantingSites, observatio<span class="cstat-no" title="statement not covered" >nResults } = useOrgTracking();</span>
-  const projects: Pro<span class="cstat-no" title="statement not covered" >ject[] | undefined = useAppSelector(sel</span>ectProjects);
+  const newObservationViewEnabled<span class="cstat-no" title="statement not covered" > = isEnabled('New Observation View');</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const hasObservationsResul<span class="cstat-no" title="statement not covered" >ts = useMemo(() =&gt; {</span>
-    return observatio<span class="cstat-no" title="statement not covered" >nResults.length &gt; 0;</span>
-  }, [observationRe<span class="cstat-no" title="statement not covered" >sults.length]);</span>
+  const { species } =<span class="cstat-no" title="statement not covered" > useSpeciesData();</span>
+  const { plantingSites, obse<span class="cstat-no" title="statement not covered" >rvationResults } = useOrgTracking();</span>
+  const projects: Project[] <span class="cstat-no" title="statement not covered" >| undefined = useAppSelector(selectProjects);</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  const hasObservat<span class="cstat-no" title="statement not covered" >ionsResults = useMemo(() =&gt;</span> {
+    return observationResu<span class="cstat-no" title="statement not covered" >lts.length &gt; 0;</span>
+  }, [observationResults.le<span class="cstat-no" title="statement not covered" >ngth]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
   const contentStyles = {<span class="cstat-no" title="statement not covered" ></span>
     height: '100%',<span class="cstat-no" title="statement not covered" ></span>
-    overflow: 'auto',<span class="cstat-no" title="statement not covered" ></span>
-    '&amp; &gt; div, &amp; &gt; main': {<span class="cstat-no" title="statement not covered" ></span>
-      paddingTop: <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >'9</span>6px !important',</span>
+    overflow: 'aut<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >o'</span>,</span>
+    '&amp; &gt; div, &amp; &gt; m<span class="cstat-no" title="statement not covered" >ain': {</span>
+      paddingTop: '96px !im<span class="cstat-no" title="statement not covered" >portant',</span>
     },<span class="cstat-no" title="statement not covered" ></span>
   };<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const contentWithNavBar =<span class="cstat-no" title="statement not covered" > {</span>
+  const contentWith<span class="cstat-no" title="statement not covered" >NavBar = {</span>
     '&amp; &gt; div, &amp; &gt; main': {<span class="cstat-no" title="statement not covered" ></span>
-      paddingTop: '<span class="cstat-no" title="statement not covered" >96px !important',</span>
-      paddingLeft: '220px !importan<span class="cstat-no" title="statement not covered" >t',</span>
+      paddingTop<span class="cstat-no" title="statement not covered" >: '96px !important',</span>
+      paddingLeft: '220px !important<span class="cstat-no" title="statement not covered" >',</span>
     },<span class="cstat-no" title="statement not covered" ></span>
   };<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const navBarOpene<span class="cstat-no" title="statement not covered" >d = {</span>
-    backdropFilter: 'blur(8px)',<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >    background: getRgbaFromHex(theme.palet</span>te.TwClrBgSecondary as string, 0.8),
-    height: '100%',
-    alignItems: 'center'<span class="cstat-no" title="statement not covered" >,</span>
+  const navBarOpened = {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    backdropFilter: 'blur(8px)',</span>
+    background: getRgbaFromHex(theme.palette.TwClrBgSecondary as string, 0.8),
+    height: '100%',<span class="cstat-no" title="statement not covered" ></span>
+    alignItems: 'center',
     position: 'fixed',
     zIndex: 1300,
     inset: '0px',
   };
 &nbsp;
-  const [withdrawalCreated, setWithdrawalCreated] = useState&lt;boolean&gt;(false);
-<span class="cstat-no" title="statement not covered" ></span>
+  const [withdrawalCreated, <span class="cstat-no" title="statement not covered" >setWithdrawalCreated] = useState&lt;boolean&gt;(false);</span>
+&nbsp;
   const reloadProjects = useCallback(() =&gt; {
     const populateProjects = () =&gt; {
       if (selectedOrganization &amp;&amp; !isPlaceholderOrg(selectedOrganization.id)) {
         void dispatch(requestProjects(selectedOrganization.id, activeLocale || undefined));
-      }
-    };<span class="cstat-no" title="statement not covered" ></span>
+      }<span class="cstat-no" title="statement not covered" ></span>
+    };
     populateProjects();
   }, [selectedOrganization, dispatch, activeLocale]);
 &nbsp;
@@ -701,43 +719,43 @@ const OrgRouter = ({ showNavB<span class="cstat-no" title="statement not covered
     if (selectedOrganization &amp;&amp; !isPlaceholderOrg(selectedOrganization.id)) {
       setWithdrawalCreated(false);
     }
-  }, [selectedOrganization]);
-<span class="cstat-no" title="statement not covered" ></span>
-  useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-    reloadProjects();<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  }, [<span class="cstat-no" title="statement not covered" >reloadProjects]);</span>
-<span class="cstat-no" title="statement not covered" ></span>
-  useEffect(() =&gt; {
-    setDefaults();
-  },<span class="cstat-no" title="statement not covered" > [setDefaults]);</span>
-&nbsp;
-  const selectedOrgHas<span class="cstat-no" title="statement not covered" >Species = useCallback((): bool<span class="fstat-no" title="function not covered" >ea</span>n =&gt; species.length &gt; 0, [species]);</span>
-<span class="cstat-no" title="statement not covered" ></span>
-  cons<span class="cstat-no" title="statement not covered" >t selectedOrgHasSeedBanks = u</span>seCallback(
-    (): boolean =&gt; (selectedOrganization ? selectedOrgHasFacilityType(selectedOrganization, 'Seed Bank') : false),
-    [selectedOrganization]
-<span class="cstat-no" title="statement not covered" >  );<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" ></span>
-  const selectedOrgHasNurseries = useCallback(
-<span class="cstat-no" title="statement not covered" >    (): boolean =&gt; (selectedOr<span class="fstat-no" title="function not covered" >ga</span>nization ? selectedOrgHasFacilityType(selectedOrganization, 'Nursery') : false),</span>
-<span class="cstat-no" title="statement not covered" >    [selectedOrgani</span>zation]
-  );
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  const selectedOrgHasProjects = u<span class="cstat-no" title="statement not covered" >seCallback((): boolean =&gt; projects !== undefined &amp;&amp; projects.length &gt; 0, [projects]);</span>
+  }, [selectedOrganization]);<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  const selectedOrgHasPlantingSites = useCallback(
-    (): boolean =&gt; plantingSites !== undefined &amp;&amp; plantingSites.length &gt; 0,
-    [plantingSites]<span class="cstat-no" title="statement not covered" ></span>
-  );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+    re<span class="cstat-no" title="statement not covered" >loadProjects();</span>
+  }, [re<span class="cstat-no" title="statement not covered" >loadProjects]);</span>
 &nbsp;
-  const viewHasBackgroundImage = useCallback((): boolean =&gt; {
-    return (<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-      location.pathname.startsWith(APP<span class="cstat-no" title="statement not covered" >_PATHS.HOME) ||</span>
-<span class="fstat-no" title="function not covered" ></span>      (loc<span class="cstat-no" title="statement not covered" >ation.pathname.startsWith(APP_PATHS.SPECIES) &amp;&amp; !sele</span>ctedOrgHasSpecies()) ||
+  useEffect(() =&gt; {
+<span class="cstat-no" title="statement not covered" >    setDefaults();</span>
+  }, [setDefaults]);
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  co<span class="cstat-no" title="statement not covered" >nst selectedOrgHasSpecies = useCallback((): boolean =&gt; species.length &gt; 0, [species]);</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  const selectedOrgHasSeedBanks = useCallback(
+    (): boolean =&gt; (selectedOrganization ? selectedOrgHasFacilityType(selectedOrganization, 'Seed Bank') : false),
+<span class="cstat-no" title="statement not covered" >    [selectedOrganization]<span class="fstat-no" title="function not covered" ></span></span>
+  );<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  const selectedOrgHasNurserie<span class="fstat-no" title="function not covered" >s </span>= useCallback(</span>
+<span class="cstat-no" title="statement not covered" >    (): boolean =&gt; </span>(selectedOrganization ? selectedOrgHasFacilityType(selectedOrganization, 'Nursery') : false),
+    [selectedOrganization]
+  );<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+<span class="cstat-no" title="statement not covered" ></span>
+  co<span class="fstat-no" title="function not covered" >ns</span>t se<span class="cstat-no" title="statement not covered" >lectedOrgHasProjects = useCallback((): boolean =&gt; projects !== undefined &amp;&amp; projects.length &gt; 0, [projects]);</span>
+&nbsp;
+  const selectedOrgHasPlantingSites = useCallback(
+    (): boolean =&gt; plantingSites !<span class="cstat-no" title="statement not covered" >== undefined &amp;&amp; plantingSites.length &gt; 0,</span>
+<span class="fstat-no" title="function not covered" >    [p</span>lant<span class="cstat-no" title="statement not covered" >ingSites]</span>
+  );
+&nbsp;
+  const viewHasBackgroundImage = <span class="cstat-no" title="statement not covered" >useCallback((): boolean =&gt; {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+    return (<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" ></span>      loca<span class="cstat-no" title="statement not covered" >tion.pathname.startsWith(APP_PATHS.HOME) ||</span>
+      (location.pathname.startsWith(APP_PATHS.SPECIES) &amp;&amp; !selectedOrgHasSpecies()) ||
       (location.pathname.startsWith(APP_PATHS.ACCESSIONS) &amp;&amp;
-        (!selectedOrgHasSeedBanks() || !selectedOrgHasSpecies())) ||
-      (location.pathname.startsWi<span class="cstat-no" title="statement not covered" >th(APP_PATHS.INVENTORY) &amp;&amp; (!s<span class="fstat-no" title="function not covered" >el</span>ectedOrgHasNurseries() || !selectedOrgHasSpecies())) ||</span>
-<span class="cstat-no" title="statement not covered" >      (location.pathname.startsWith(APP_PATHS.SEED_BANKS) &amp;&amp; !selectedOrgHasSeedBanks()) ||</span>
+        (!selectedOrgHasSeedBanks<span class="cstat-no" title="statement not covered" >() || !selectedOrgHasSpecies()<span class="fstat-no" title="function not covered" >))</span> ||</span>
+<span class="cstat-no" title="statement not covered" >      (location.pathname.startsWith(APP_PATHS.INVENTORY) &amp;&amp; (!selectedOrgHasNurseries() || !selectedOrgHasSpecies())) ||</span>
+      (location.pathname.startsWith(APP_PATHS.SEED_BANKS) &amp;&amp; !selectedOrgHasSeedBanks()) ||
       (location.pathname.startsWith(APP_PATHS.NURSERIES) &amp;&amp; !selectedOrgHasNurseries()) ||
       (location.pathname.startsWith(APP_PATHS.OBSERVATIONS) &amp;&amp; !hasObservationsResults) ||
       (location.pathname.startsWith(APP_PATHS.PLANTING_SITES) &amp;&amp; !selectedOrgHasPlantingSites()) ||
@@ -746,8 +764,8 @@ const OrgRouter = ({ showNavB<span class="cstat-no" title="statement not covered
   }, [
     hasObservationsResults,
     location.pathname,
-    selectedOrgHasNurseries,
-<span class="cstat-no" title="statement not covered" >    selectedOrgHasPlantingSites,</span>
+<span class="cstat-no" title="statement not covered" >    selectedOrgHasNurseries,</span>
+    selectedOrgHasPlantingSites,
     selectedOrgHasProjects,
     selectedOrgHasSeedBanks,
     selectedOrgHasSpecies,
@@ -775,8 +793,8 @@ const OrgRouter = ({ showNavB<span class="cstat-no" title="statement not covered
       )}
       &lt;Box
         sx={type === 'desktop' || showNavBar ? { ...contentStyles, ...contentWithNavBar } : contentStyles}
-        className='scrollable-content'
-      &gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+        className='scrollable-<span class="fstat-no" title="function not covered" >co</span>nten<span class="cstat-no" title="statement not covered" >t'</span>
+      &gt;
         &lt;ErrorBoundary setShowNavBar={setShowNavBar}&gt;
           &lt;Routes&gt;
             {/* Routes, in order of their appearance down the side NavBar */}
@@ -790,21 +808,21 @@ const OrgRouter = ({ showNavB<span class="cstat-no" title="statement not covered
             {/* modules router *must* come before the projects router,
             or else the path will be picked up by the projects router */}
             &lt;Route path={APP_PATHS.PROJECT_MODULES + '/*'} element={&lt;ModulesRouter /&gt;} /&gt;
-            &lt;Route
-              path={APP_PATHS.PROJECTS + '/*'}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+            &lt;Route<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+              path={APP_PATHS.PROJECTS + '/*'}
               element={
                 &lt;ProjectsRouter
                   reloadProjects={reloadProjects}
                   isPlaceholderOrg={() =&gt; (selectedOrganization ? isPlaceholderOrg(selectedOrganization.id) : true)}
-                  selectedOrgHa<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >sP</span>rojects={selectedOrgHasProjects}</span>
-<span class="cstat-no" title="statement not covered" >                /&gt;</span>
+                  selectedOrgHasProjects={selectedOrgHasProjects}
+                /&gt;
               }
-            /&gt;<span class="cstat-no" title="statement not covered" ></span>
+            /&gt;
             &lt;Route path={APP_PATHS.SEED_BANKS + '/*'} element={&lt;SeedBanksRouter /&gt;} /&gt;
-            &lt;Route path={APP_PATHS.NURSERIES + '/*'} element={&lt;NurseriesRouter /&gt;} /&gt;
-            &lt;Route path={APP_PATHS.PLANTS_DASHBOARD + '/*'} element={&lt;PlantsDashboardRouter /&gt;} /&gt;
+            &lt;Route path={APP_PA<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >TH</span>S.NURSERIES + '/*'} element={&lt;NurseriesRouter /&gt;} /&gt;</span>
+<span class="cstat-no" title="statement not covered" >            &lt;Route path={APP_PATHS.PLANTS_DASHBOARD + '/*'} element={&lt;PlantsDashboardRouter /&gt;} /&gt;</span>
             &lt;Route
-              path={APP_PATHS.INVENTORY + '/*'}
+              path={<span class="cstat-no" title="statement not covered" >APP_PATHS.INVENTORY + '</span>/*'}
               element={&lt;InventoryRouter setWithdrawalCreated={setWithdrawalCreated} /&gt;}
             /&gt;
             &lt;Route
@@ -817,7 +835,10 @@ const OrgRouter = ({ showNavB<span class="cstat-no" title="statement not covered
             &lt;Route path={APP_PATHS.MY_ACCOUNT + '/*'} element={&lt;MyAccountRouter /&gt;} /&gt;
             &lt;Route path={APP_PATHS.REPORTS + '/*'} element={&lt;AcceleratorReportsRouter /&gt;} /&gt;
             &lt;Route path={APP_PATHS.SEED_FUND_REPORTS + '/*'} element={&lt;SeedFundReportsRouter /&gt;} /&gt;
-            &lt;Route path={APP_PATHS.OBSERVATIONS + '/*'} element={&lt;ObservationsRouter /&gt;} /&gt;
+            &lt;Route
+              path={APP_PATHS.OBSERVATIONS + '/*'}
+              element={newObservationViewEnabled ? &lt;ObservationRouterV2 /&gt; : &lt;ObservationsRouter /&gt;}
+            /&gt;
             &lt;Route path={APP_PATHS.DELIVERABLES + '/*'} element={&lt;DeliverablesRouter /&gt;} /&gt;
             &lt;Route path={APP_PATHS.APPLICATIONS + '/*'} element={&lt;ApplicationRouter /&gt;} /&gt;
             &lt;Route path={APP_PATHS.ACTIVITY_LOG + '/*'} element={&lt;ActivityLogRouter /&gt;} /&gt;
@@ -856,7 +877,7 @@ export default OrgRouterWithProviders;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-02T19:16:43.445Z
+                at 2026-01-02T22:39:37.896Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
