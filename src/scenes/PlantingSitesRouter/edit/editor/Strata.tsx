@@ -320,7 +320,7 @@ export default function Strata({ onValidate, site }: StrataProps): JSX.Element {
           stratum.properties.targetPlantingDensity = targetPlantingDensityVal;
           setStrataData((prev) => ({
             ...prev,
-            fixeBoundaries: updatedStrata,
+            fixedBoundaries: updatedStrata,
           }));
           close();
         };
