@@ -10,14 +10,14 @@ import { SiteT0Data, SpeciesPlot } from 'src/types/Tracking';
 import StratumT0Box from './StratumT0Box';
 
 type TemporaryPlotsTabProps = {
-  zonesWithObservations: Record<string, PlotsWithObservationsSearchResult[]>;
+  strataWithObservations: Record<string, PlotsWithObservationsSearchResult[]>;
   withdrawnSpeciesPlots?: SpeciesPlot[];
   t0SiteData?: SiteT0Data;
   including?: boolean;
 };
 
 const TemporaryPlotsTab = ({
-  zonesWithObservations,
+  strataWithObservations,
   withdrawnSpeciesPlots,
   t0SiteData,
   including,
@@ -29,22 +29,22 @@ const TemporaryPlotsTab = ({
     return true;
   }, []);
 
-  if (Object.entries(zonesWithObservations).length === 0) {
+  if (Object.entries(strataWithObservations).length === 0) {
     return <Box padding={theme.spacing(2)}>{strings.NO_TEMPORARY_PLOTS_WITHIN_ZONES}</Box>;
   }
 
   return including ? (
-    Object.entries(zonesWithObservations).map(([zoneId, plots]) => {
+    Object.entries(strataWithObservations).map(([stratumId, plots]) => {
       const plotIds = plots.map((plot) => plot.id.toString());
       const filteredWithdrawnSpecies = withdrawnSpeciesPlots?.filter((wsp) =>
         plotIds.includes(wsp.monitoringPlotId.toString())
       );
       return (
         <StratumT0Box
-          key={zoneId}
+          key={stratumId}
           plotsWithObservations={plots}
           withdrawnSpeciesPlot={filteredWithdrawnSpecies}
-          t0Zone={t0SiteData?.strata.find((z) => z.stratumId.toString() === zoneId.toString())}
+          t0Stratum={t0SiteData?.strata.find((z) => z.stratumId.toString() === stratumId.toString())}
         />
       );
     })
