@@ -3,15 +3,15 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/scenes/PlantsDashboardRouter/components/MapPlantDrawer.tsx</title>
+    <title>Code coverage report for src/components/NewMap/MapPlantDrawer.tsx</title>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="../../../../prettify.css" />
-    <link rel="stylesheet" href="../../../../base.css" />
-    <link rel="shortcut icon" type="image/x-icon" href="../../../../favicon.png" />
+    <link rel="stylesheet" href="../../../prettify.css" />
+    <link rel="stylesheet" href="../../../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../../favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style type='text/css'>
         .coverage-summary .sorter {
-            background-image: url(../../../../sort-arrow-sprite.png);
+            background-image: url(../../../sort-arrow-sprite.png);
         }
     </style>
 </head>
@@ -19,20 +19,20 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../../index.html">All files</a> / <a href="index.html">src/scenes/PlantsDashboardRouter/components</a> MapPlantDrawer.tsx</h1>
+        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/components/NewMap</a> MapPlantDrawer.tsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/74</span>
+                <span class='fraction'>0/76</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/47</span>
+                <span class='fraction'>0/61</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/66</span>
+                <span class='fraction'>0/69</span>
             </div>
         
             
@@ -199,7 +199,10 @@
 <a name='L134'></a><a href='#L134'>134</a>
 <a name='L135'></a><a href='#L135'>135</a>
 <a name='L136'></a><a href='#L136'>136</a>
-<a name='L137'></a><a href='#L137'>137</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L137'></a><a href='#L137'>137</a>
+<a name='L138'></a><a href='#L138'>138</a>
+<a name='L139'></a><a href='#L139'>139</a>
+<a name='L140'></a><a href='#L140'>140</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -260,7 +263,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -343,7 +349,7 @@ import MapDrawerTab<span class="cstat-no" title="statement not covered" >le, { M
 import { APP_PATHS <span class="cstat-no" title="statement not covered" >} from 'src/constants';</span>
 import { useLoc<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >al</span>ization } from 'src/providers';</span>
 im<span class="cstat-no" title="statement not covered" >port { useSpeciesData } from 'src/providers/Species/SpeciesContext';</span>
-impo<span class="cstat-no" title="statement not covered" >rt { usePlantingSiteData } from 'src/providers/Tracking/Plantin</span>gSiteContext';
+impo<span class="cstat-no" title="statement not covered" >rt { useGetObservationResultsQuery } from 'src/queries/generate</span>d/observations';
 import { RecordedPlant } from 'src/types/Observations';
 import { getShortD<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >at</span>e } from 'src/utils/dateFormatter';</span>
 im<span class="cstat-no" title="statement not covered" >port { useNumberFormatter } from 'src/utils/useNumberFormatter';</span>
@@ -355,16 +361,16 @@ type M<span class="cstat-no" title="statement not covered" >apPlantDrawerProps =
 };
 <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 const MapPlantDrawer = ({ monitoringPlotId, observationId, plant }: MapPlantDrawerProps): JSX.Element | undefined =&gt; {
-  const { observationResults } = usePlantingSiteData();
   const { activeLocale, strings } = useLocalization();
 &nbsp;
   const { format } = useNumberFormatter(activeLocale);
+  const { data } = useGetObservationResultsQuery({ observationId, includePlants: true });
 &nbsp;
   const { species } = useSpeciesData();
 <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
   const result = use<span class="cstat-no" title="statement not covered" >Mem</span>o(() =&gt; {
-<span class="cstat-no" title="statement not covered" >    return observationResults?.find((_result) =&gt; _result.observationId === observationId);</span>
-  }, [obser<span class="fstat-no" title="function not covered" >va</span>tion<span class="cstat-no" title="statement not covered" >Id, observatio</span>nResults]);
+<span class="cstat-no" title="statement not covered" >    return data?.observation;</span>
+  }, [data?<span class="fstat-no" title="function not covered" >.o</span>bser<span class="cstat-no" title="statement not covered" >vation]);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  const observationUrl = useMemo(() =&gt; {</span>
     if (result) {<span class="cstat-no" title="statement not covered" ></span>
@@ -375,28 +381,31 @@ const MapPlantDrawer = ({ monitoringPlotId, observationId, plant }: MapPlantDraw
     }<span class="cstat-no" title="statement not covered" ></span>
   }, [result]);<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const observer = useMemo(() =&gt;<span class="cstat-no" title="statement not covered" > {</span>
-    if (result) {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-      return result.strata<span class="cstat-no" title="statement not covered" ></span>
-        .flatMap((zone) =&gt; zone.subs<span class="cstat-no" title="statement not covered" >trata)</span>
-        .flatMap((sub<span class="cstat-no" title="statement not covered" >zone) =&gt; subzone.monitoringPlots)</span>
-        .find((plot) =<span class="cstat-no" title="statement not covered" >&gt; plot.monitoringPlotId === monitoringPlotId</span>)?.claimedByName;
-    }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  },<span class="cstat-no" title="statement not covered" > [monitoringPlotId, result]);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-&nbsp;
-  const formatGPS = useCa<span class="cstat-no" title="statement not covered" >llback(<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >    (lon: number, lat: number): string =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >      const latHemisphere = lat &gt;= 0 ? 'N' : 'S';</span>
+  const monitoringPlot = useMemo<span class="cstat-no" title="statement not covered" >(() =&gt; {</span>
+    const monitoringPlo<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ts</span> =</span>
+      result?.strata.flatMap((stratu<span class="cstat-no" title="statement not covered" >m) =&gt; stratum.substrata).flatMap((substr</span>atum) =&gt; substratum.monitoringPlots) ?? [];
+    const adHocPlots <span class="cstat-no" title="statement not covered" >= result?.adHocPlot ? [result.adHocPlot] : [];</span>
+<span class="cstat-no" title="statement not covered" ></span>
+    return [...monitor<span class="cstat-no" title="statement not covered" >ingPlots, ...adHocPlots].find((plot) =&gt; plot</span>.monitoringPlotId === monitoringPlotId);
+  }, [monitoringP<span class="cstat-no" title="statement not covered" >lotId, result?.adHocPlot, <span class="fstat-no" title="function not covered" >re</span>sult?.strata]);</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  const observer = useMemo(() =&gt; {
+    return monitoringPlot<span class="cstat-no" title="statement not covered" >?.claimedByName;<span class="fstat-no" title="function not covered" ></span></span>
+  },<span class="cstat-no" title="statement not covered" > [monitoringPlot?.claimedByName]);</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  const formatGPS = useCallback(
+    (lon: number, lat: number): string =&gt; {
+      const latHemisphere = lat &gt;= 0 ? 'N' : 'S';
       const lonHemisphere = lon &gt;= 0 ? 'E' : 'W';
 &nbsp;
-      const latAbs = Math.abs(lat).toFixed(4);
+      const latAbs = Math<span class="cstat-no" title="statement not covered" >.abs(lat).toFixed(4);<span class="fstat-no" title="function not covered" ></span></span>
       const lonAbs = Math.abs(lon).toFixed(4);
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
+      const latFormatte<span class="cstat-no" title="statement not covered" >d = format(Number(latAbs));</span>
+<span class="cstat-no" title="statement not covered" >      const lonFormatted = format(Number(lonAbs));<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 &nbsp;
-      const latForm<span class="cstat-no" title="statement not covered" >atted = format(Number(latA<span class="fstat-no" title="function not covered" >bs</span>));</span>
-      const lonFormatted = format(Number(lonAbs));
-<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >      return `${latFormatted}° ${latHemis<span class="fstat-no" title="function not covered" >ph</span>ere}, ${<span class="cstat-no" title="statement not covered" >lonFormatted}° </span>${lonHemi<span class="fstat-no" title="function not covered" >sp</span>here}`;<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span>
-    },
+      return `${lat<span class="cstat-no" title="statement not covered" >Formatted}° ${latHemispher<span class="fstat-no" title="function not covered" >e}</span>, ${lonFormatted}° ${lonHemisphere}`;</span>
+<span class="cstat-no" title="statement not covered" >    },</span>
     [format]
   );<span class="cstat-no" title="statement not covered" ></span>
 <span class="fstat-no" title="function not covered" ></span>
@@ -478,16 +487,16 @@ export default MapPlantDrawer;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-02T23:30:33.929Z
+                at 2026-01-02T23:42:29.883Z
             </div>
-        <script src="../../../../prettify.js"></script>
+        <script src="../../../prettify.js"></script>
         <script>
             window.onload = function () {
                 prettyPrint();
             };
         </script>
-        <script src="../../../../sorter.js"></script>
-        <script src="../../../../block-navigation.js"></script>
+        <script src="../../../sorter.js"></script>
+        <script src="../../../block-navigation.js"></script>
     </body>
 </html>
     
