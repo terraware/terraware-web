@@ -5,7 +5,7 @@ import { Box } from '@mui/material';
 import MapDrawerTable, { MapDrawerTableRow } from 'src/components/MapDrawerTable';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
-import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
+import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
 import { ObservationMonitoringPlotPhotoWithGps } from 'src/types/Observations';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
@@ -19,10 +19,10 @@ type MapPhotoDrawerProps = {
 };
 
 const MapPhotoDrawer = ({ monitoringPlotId, observationId, photo }: MapPhotoDrawerProps): JSX.Element | undefined => {
-  const { observationResults } = usePlantingSiteData();
   const { activeLocale, strings } = useLocalization();
 
   const { format } = useNumberFormatter(activeLocale);
+  const { data } = useGetObservationResultsQuery({ observationId });
 
   const photoUrl = useMemo(() => {
     return PHOTO_URL.replace(':observationId', `${observationId}`)
@@ -31,8 +31,8 @@ const MapPhotoDrawer = ({ monitoringPlotId, observationId, photo }: MapPhotoDraw
   }, [observationId, monitoringPlotId, photo]);
 
   const result = useMemo(() => {
-    return observationResults?.find((_result) => _result.observationId === observationId);
-  }, [observationId, observationResults]);
+    return data?.observation;
+  }, [data?.observation]);
 
   const observationUrl = useMemo(() => {
     if (result) {
@@ -43,14 +43,17 @@ const MapPhotoDrawer = ({ monitoringPlotId, observationId, photo }: MapPhotoDraw
     }
   }, [result]);
 
+  const monitoringPlot = useMemo(() => {
+    const monitoringPlots =
+      result?.strata.flatMap((stratum) => stratum.substrata).flatMap((substratum) => substratum.monitoringPlots) ?? [];
+    const adHocPlots = result?.adHocPlot ? [result.adHocPlot] : [];
+
+    return [...monitoringPlots, ...adHocPlots].find((plot) => plot.monitoringPlotId === monitoringPlotId);
+  }, [monitoringPlotId, result?.adHocPlot, result?.strata]);
+
   const observer = useMemo(() => {
-    if (result) {
-      return result.strata
-        .flatMap((zone) => zone.substrata)
-        .flatMap((subzone) => subzone.monitoringPlots)
-        .find((plot) => plot.monitoringPlotId === monitoringPlotId)?.claimedByName;
-    }
-  }, [monitoringPlotId, result]);
+    return monitoringPlot?.claimedByName;
+  }, [monitoringPlot?.claimedByName]);
 
   const formatGPS = useCallback(
     (lon: number, lat: number): string => {

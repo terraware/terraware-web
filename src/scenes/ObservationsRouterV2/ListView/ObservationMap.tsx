@@ -1,7 +1,8 @@
-import React, { useCallback, useEffect, useMemo, useRef } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { MapRef } from 'react-map-gl/mapbox';
 
 import MapComponent from 'src/components/NewMap';
+import { MapDrawerSize } from 'src/components/NewMap/MapDrawer';
 import { MapLegendGroup } from 'src/components/NewMap/MapLegend';
 import {
   MapHighlightGroup,
@@ -13,6 +14,8 @@ import {
   MapPoint,
 } from 'src/components/NewMap/types';
 import useMapFeatureStyles from 'src/components/NewMap/useMapFeatureStyles';
+import useMapPhotoDrawer, { PlotPhoto } from 'src/components/NewMap/useMapPhotoDrawer';
+import useMapPlantDrawer, { PlotPlant } from 'src/components/NewMap/useMapPlantDrawer';
 import useMapUtils from 'src/components/NewMap/useMapUtils';
 import useMonitoringPlotsMapLegend from 'src/components/NewMap/useMonitoringPlotsMapLegend';
 import usePlantMarkersMapLegend from 'src/components/NewMap/usePlantMarkersMapLegend';
@@ -34,9 +37,17 @@ import {
 import {
   ObservationMonitoringPlotPhoto,
   ObservationMonitoringPlotPhotoWithGps,
+  RecordedPlant,
   RecordedPlantStatus,
 } from 'src/types/Observations';
 import useMapboxToken from 'src/utils/useMapboxToken';
+
+import ObservationStatsDrawer from './ObservationStatsDrawer';
+
+type LayerFeature = {
+  plantingSiteId: number;
+  layerFeatureId: MapLayerFeatureId;
+};
 
 type ObservationMapProps = {
   isBiomass?: boolean;
@@ -49,6 +60,7 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
   const { selectedOrganization } = useOrganization();
   const mapRef = useRef<MapRef | null>(null);
   const { fitBounds } = useMapUtils(mapRef);
+  const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
 
   const { selectedLayer, plantingSiteLegendGroup } = usePlantingSiteMapLegend('sites', plantingSiteId === undefined);
   const { livePlantsVisible, deadPlantsVisible, plantMakersLegendGroup } = usePlantMarkersMapLegend(
@@ -70,6 +82,10 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
     survivalRateLessThan50,
     survivalRateMoreThan75,
   } = useMapFeatureStyles();
+
+  const [selectedFeature, setSelectedFeature] = useState<LayerFeature>();
+  const { plantDrawerContent, plantDrawerHeader, plantDrawerSize, selectedPlants, selectPlants } = useMapPlantDrawer();
+  const { photoDrawerContent, photoDrawerHeader, photoDrawerSize, selectedPhotos, selectPhotos } = useMapPhotoDrawer();
 
   const [listPlantingSites, listPlantingSitesResult] = useLazyListPlantingSitesQuery();
   const [getPlantingSite, getPlantingSiteResult] = useLazyGetPlantingSiteQuery();
@@ -189,6 +205,15 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
     [getPlantingSiteHistoryResult.data?.site]
   );
 
+  const selectFeature = useCallback(
+    (_plantingSiteId: number) => (layerId: string, featureId: string) => () => {
+      setSelectedFeature({ layerFeatureId: { layerId, featureId }, plantingSiteId: _plantingSiteId });
+      selectPhotos([]);
+      setDrawerOpen(true);
+    },
+    [selectPhotos]
+  );
+
   const layers = useMemo((): MapLayer[] => {
     if (plantingSiteId === undefined) {
       // Show only sites if no layers selected.
@@ -209,63 +234,21 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
     } else if (selectedHistory) {
       return [
         {
-          features: [
-            {
-              featureId: `${selectedHistory.plantingSiteId}`,
-              geometry: {
-                type: 'MultiPolygon',
-                coordinates: selectedHistory.boundary?.coordinates ?? [],
-              },
+          features: adHocPlots.map((plot) => ({
+            featureId: `${plot.monitoringPlotId}`,
+            geometry: {
+              type: 'MultiPolygon',
+              coordinates: [plot.boundary?.coordinates ?? []],
             },
-          ],
-          layerId: 'sites',
-          style: sitesLayerStyle,
-          visible: selectedLayer === 'sites',
-        },
-        {
-          features:
-            selectedHistory.strata?.map((stratum) => ({
-              featureId: `${stratum.stratumId}`,
-              geometry: {
-                type: 'MultiPolygon',
-                coordinates: stratum.boundary?.coordinates ?? [],
-              },
-              label: stratum.name,
-            })) ?? [],
-          layerId: 'strata',
-          style: strataLayerStyle,
-          visible: selectedLayer === 'strata',
-        },
-        {
-          features:
-            selectedHistory.strata?.flatMap((stratum) =>
-              stratum.substrata.map((substratum) => ({
-                featureId: `${substratum.substratumId}`,
-                geometry: {
-                  type: 'MultiPolygon',
-                  coordinates: substratum.boundary?.coordinates ?? [],
-                },
-                label: substratum.name,
-              }))
-            ) ?? [],
-          layerId: 'substrata',
-          style: substrataLayerStyle,
-          visible: selectedLayer === 'substrata',
-        },
-        {
-          features: monitoringPlots
-            .filter((plot) => plot.isPermanent)
-            .map((plot) => ({
-              featureId: `${plot.monitoringPlotId}`,
-              geometry: {
-                type: 'MultiPolygon',
-                coordinates: [plot.boundary?.coordinates ?? []],
-              },
-              label: `${plot.monitoringPlotNumber}`,
-            })),
-          layerId: 'permanentPlots',
-          style: permanentPlotsLayerStyle,
-          visible: permanentPlotsVisible,
+            label: `${plot.monitoringPlotNumber}`,
+            onClick: selectFeature(selectedHistory.plantingSiteId)('adHocPlots', `${plot.monitoringPlotId}`),
+            selected:
+              selectedFeature?.layerFeatureId.layerId === 'adHocPlots' &&
+              selectedFeature?.layerFeatureId.featureId === `${plot.monitoringPlotId}`,
+          })),
+          layerId: 'adHocPlots',
+          style: adHocPlotsLayerStyle,
+          visible: adHocPlotsVisible,
         },
         {
           features: monitoringPlots
@@ -277,23 +260,89 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
                 coordinates: [plot.boundary?.coordinates ?? []],
               },
               label: `${plot.monitoringPlotNumber}`,
+              onClick: selectFeature(selectedHistory.plantingSiteId)('temporaryPlots', `${plot.monitoringPlotId}`),
+              selected:
+                selectedFeature?.layerFeatureId.layerId === 'temporaryPlots' &&
+                selectedFeature?.layerFeatureId.featureId === `${plot.monitoringPlotId}`,
             })),
-          layerId: 'temporaryPlot',
+          layerId: 'temporaryPlots',
           style: temporaryPlotsLayerStyle,
           visible: temporaryPlotsVisible,
         },
         {
-          features: adHocPlots.map((plot) => ({
-            featureId: `${plot.monitoringPlotId}`,
-            geometry: {
-              type: 'MultiPolygon',
-              coordinates: [plot.boundary?.coordinates ?? []],
+          features: monitoringPlots
+            .filter((plot) => plot.isPermanent)
+            .map((plot) => ({
+              featureId: `${plot.monitoringPlotId}`,
+              geometry: {
+                type: 'MultiPolygon',
+                coordinates: [plot.boundary?.coordinates ?? []],
+              },
+              label: `${plot.monitoringPlotNumber}`,
+              onClick: selectFeature(selectedHistory.plantingSiteId)('permanentPlots', `${plot.monitoringPlotId}`),
+              selected:
+                selectedFeature?.layerFeatureId.layerId === 'permanentPlots' &&
+                selectedFeature?.layerFeatureId.featureId === `${plot.monitoringPlotId}`,
+            })),
+          layerId: 'permanentPlots',
+          style: permanentPlotsLayerStyle,
+          visible: permanentPlotsVisible,
+        },
+        {
+          features:
+            selectedHistory.strata?.flatMap((stratum) =>
+              stratum.substrata.map((substratum) => ({
+                featureId: `${substratum.substratumId}`,
+                geometry: {
+                  type: 'MultiPolygon',
+                  coordinates: substratum.boundary?.coordinates ?? [],
+                },
+                label: substratum.name,
+                onClick: selectFeature(selectedHistory.plantingSiteId)('substrata', `${substratum.substratumId}`),
+                selected:
+                  selectedFeature?.layerFeatureId.layerId === 'substrata' &&
+                  selectedFeature?.layerFeatureId.featureId === `${substratum.substratumId}`,
+              }))
+            ) ?? [],
+          layerId: 'substrata',
+          style: substrataLayerStyle,
+          visible: selectedLayer === 'substrata',
+        },
+        {
+          features:
+            selectedHistory.strata?.map((stratum) => ({
+              featureId: `${stratum.stratumId}`,
+              geometry: {
+                type: 'MultiPolygon',
+                coordinates: stratum.boundary?.coordinates ?? [],
+              },
+              label: stratum.name,
+              onClick: selectFeature(selectedHistory.plantingSiteId)('strata', `${stratum.stratumId}`),
+              selected:
+                selectedFeature?.layerFeatureId.layerId === 'strata' &&
+                selectedFeature?.layerFeatureId.featureId === `${stratum.stratumId}`,
+            })) ?? [],
+          layerId: 'strata',
+          style: strataLayerStyle,
+          visible: selectedLayer === 'strata',
+        },
+        {
+          features: [
+            {
+              featureId: `${selectedHistory.plantingSiteId}`,
+              geometry: {
+                type: 'MultiPolygon',
+                coordinates: selectedHistory.boundary?.coordinates ?? [],
+              },
+              onClick: selectFeature(selectedHistory.plantingSiteId)('sites', `${selectedHistory.plantingSiteId}`),
+              selected:
+                selectedFeature?.layerFeatureId.layerId === 'sites' &&
+                selectedFeature?.layerFeatureId.featureId === `${selectedHistory.plantingSiteId}`,
             },
-            label: `${plot.monitoringPlotNumber}`,
-          })),
-          layerId: 'adHocPlots',
-          style: adHocPlotsLayerStyle,
-          visible: adHocPlotsVisible,
+          ],
+          layerId: 'sites',
+          style: sitesLayerStyle,
+          visible: selectedLayer === 'sites',
         },
       ];
     } else if (plantingSiteId !== undefined && plantingSite !== undefined) {
@@ -355,6 +404,9 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
     permanentPlotsVisible,
     plantingSite,
     plantingSiteId,
+    selectFeature,
+    selectedFeature?.layerFeatureId.featureId,
+    selectedFeature?.layerFeatureId.layerId,
     selectedHistory,
     selectedLayer,
     sitesLayerStyle,
@@ -497,6 +549,66 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
     ];
   }, [survivalRate50To75, survivalRateHighlights, survivalRateLessThan50, survivalRateMoreThan75, survivalRateVisible]);
 
+  const selectPhoto = useCallback(
+    (monitoringPlotId: number, observationId: number, photo: ObservationMonitoringPlotPhotoWithGps) => () => {
+      selectPhotos([{ monitoringPlotId, observationId, photo }]);
+      selectPlants([]);
+      setSelectedFeature(undefined);
+      setDrawerOpen(true);
+    },
+    [selectPhotos, selectPlants]
+  );
+
+  const selectPhotosFromMarkers = useCallback(
+    (selectedMarkers: MapMarker[]) => {
+      const photos = selectedMarkers
+        .map((marker): PlotPhoto | undefined => {
+          if (marker.properties) {
+            const observationId = marker.properties.observationId as number;
+            const monitoringPlotId = marker.properties.monitoringPlotId as number;
+            const photo = marker.properties.photo as ObservationMonitoringPlotPhotoWithGps;
+            return { monitoringPlotId, observationId, photo };
+          }
+        })
+        .filter((photo): photo is PlotPhoto => photo !== undefined);
+      selectPhotos(photos);
+      selectPlants([]);
+      setSelectedFeature(undefined);
+      setDrawerOpen(true);
+    },
+    [selectPhotos, selectPlants]
+  );
+
+  const selectPlant = useCallback(
+    (monitoringPlotId: number, observationId: number, plant: RecordedPlant) => () => {
+      selectPhotos([]);
+      selectPlants([{ monitoringPlotId, observationId, plant }]);
+      setSelectedFeature(undefined);
+      setDrawerOpen(true);
+    },
+    [selectPhotos, selectPlants]
+  );
+
+  const selectPlantsFromMarkers = useCallback(
+    (selectedMarkers: MapMarker[]) => {
+      const plants = selectedMarkers
+        .map((marker): PlotPlant | undefined => {
+          if (marker.properties) {
+            const observationId = marker.properties.observationId as number;
+            const monitoringPlotId = marker.properties.monitoringPlotId as number;
+            const plant = marker.properties.plant as RecordedPlant;
+            return { monitoringPlotId, observationId, plant };
+          }
+        })
+        .filter((plant): plant is PlotPlant => plant !== undefined);
+      selectPhotos([]);
+      selectPlants(plants);
+      setSelectedFeature(undefined);
+      setDrawerOpen(true);
+    },
+    [selectPhotos, selectPlants]
+  );
+
   const photoMarkers = useMemo((): MapMarker[] => {
     if (!selectedResults) {
       return [];
@@ -511,6 +623,8 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
           id: `photos/${photo.fileId}`,
           longitude: photo.gpsCoordinates?.coordinates[1],
           latitude: photo.gpsCoordinates?.coordinates[0],
+          onClick: selectPhoto(plot.monitoringPlotId, selectedResults.observationId, photo),
+          selected: selectedPhotos.find((selected) => selected.photo.fileId === photo.fileId) !== undefined,
           properties: {
             adHocPlotId: plot.monitoringPlotId,
             photo,
@@ -527,6 +641,8 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
             id: `photos/${photo.fileId}`,
             longitude: photo.gpsCoordinates?.coordinates[1],
             latitude: photo.gpsCoordinates?.coordinates[0],
+            onClick: selectPhoto(plot.monitoringPlotId, selectedResults.observationId, photo),
+            selected: selectedPhotos.find((selected) => selected.photo.fileId === photo.fileId) !== undefined,
             properties: {
               monitoringPlotId: plot.monitoringPlotId,
               observationId: selectedResults.observationId,
@@ -537,13 +653,10 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
       );
 
     return [...adHocPlotPhotos, ...monitoringPlotPhotos];
-  }, [adHocPlots, selectedResults]);
+  }, [adHocPlots, selectPhoto, selectedPhotos, selectedResults]);
 
-  const plantsMarkers = useCallback(
+  const treesMarkers = useCallback(
     (isDead: boolean): MapMarker[] => {
-      if (selectedResults === undefined) {
-        return [];
-      }
       if (isBiomass) {
         return adHocObservationResults.flatMap((observation) => {
           const trees = observation.biomassMeasurements?.trees ?? [];
@@ -563,18 +676,36 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
             .filter((marker): marker is MapMarker => marker !== undefined);
         });
       } else {
-        const recordedPlantStatus: RecordedPlantStatus = isDead ? 'Dead' : 'Live';
+        return [];
+      }
+    },
+    [adHocObservationResults, isBiomass]
+  );
+
+  const plantsMarkers = useCallback(
+    (status: RecordedPlantStatus): MapMarker[] => {
+      if (selectedResults === undefined) {
+        return [];
+      }
+      if (!isBiomass) {
         const monitoringPlotPlants = selectedResults.strata
           .flatMap((stratum) => stratum.substrata)
           .flatMap((substratum) => substratum.monitoringPlots)
           .flatMap((plot): MapMarker[] => {
             if (plot.plants) {
-              const filteredPlants = plot.plants.filter((plant) => plant.status === recordedPlantStatus);
+              const filteredPlants = plot.plants.filter((plant) => plant.status === status);
               return filteredPlants.map(
                 (plant): MapMarker => ({
                   id: `plants/${plant.id}`,
                   longitude: plant.gpsCoordinates.coordinates[1],
                   latitude: plant.gpsCoordinates.coordinates[0],
+                  onClick: selectPlant(plot.monitoringPlotId, selectedResults.observationId, plant),
+                  selected: selectedPlants.find((selected) => selected.plant.id === plant.id) !== undefined,
+                  properties: {
+                    monitoringPlotId: plot.monitoringPlotId,
+                    observationId: selectedResults.observationId,
+                    plant,
+                  },
                 })
               );
             } else {
@@ -583,12 +714,17 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
           });
         const adHocPlotPlants = adHocPlots.flatMap((plot): MapMarker[] => {
           if (plot.plants) {
-            const filteredPlants = plot.plants.filter((plant) => plant.status === recordedPlantStatus);
+            const filteredPlants = plot.plants.filter((plant) => plant.status === status);
             return filteredPlants.map(
               (plant): MapMarker => ({
                 id: `plants/${plant.id}`,
                 longitude: plant.gpsCoordinates.coordinates[1],
                 latitude: plant.gpsCoordinates.coordinates[0],
+                properties: {
+                  monitoringPlotId: plot.monitoringPlotId,
+                  observationId: selectedResults.observationId,
+                  plant,
+                },
               })
             );
           } else {
@@ -597,9 +733,11 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
         });
 
         return [...adHocPlotPlants, ...monitoringPlotPlants];
+      } else {
+        return [];
       }
     },
-    [adHocObservationResults, adHocPlots, isBiomass, selectedResults]
+    [adHocPlots, isBiomass, selectPlant, selectedPlants, selectedResults]
   );
 
   const markers = useMemo((): MapMarkerGroup[] => {
@@ -607,6 +745,7 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
       {
         markers: photoMarkers,
         markerGroupId: 'plot-photos',
+        onClusterClick: selectPhotosFromMarkers,
         style: {
           iconColor: '#CC79A7',
           iconName: 'iconPhoto',
@@ -615,8 +754,9 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
         visible: plotPhotosVisible,
       },
       {
-        markers: plantsMarkers(false),
+        markers: plantsMarkers('Live'),
         markerGroupId: 'live-plants',
+        onClusterClick: selectPlantsFromMarkers,
         style: {
           iconColor: '#40B0A6',
           iconName: 'iconLivePlant',
@@ -625,8 +765,29 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
         visible: livePlantsVisible,
       },
       {
-        markers: plantsMarkers(true),
+        markers: plantsMarkers('Dead'),
         markerGroupId: 'dead-plants',
+        onClusterClick: selectPlantsFromMarkers,
+        style: {
+          iconColor: '#E1BE6A',
+          iconName: 'iconLivePlant',
+          type: 'icon',
+        },
+        visible: deadPlantsVisible,
+      },
+      {
+        markers: treesMarkers(true),
+        markerGroupId: 'live-trees',
+        style: {
+          iconColor: '#40B0A6',
+          iconName: 'iconLivePlant',
+          type: 'icon',
+        },
+        visible: livePlantsVisible,
+      },
+      {
+        markers: treesMarkers(false),
+        markerGroupId: 'dead-trees',
         style: {
           iconColor: '#E1BE6A',
           iconName: 'iconLivePlant',
@@ -635,7 +796,16 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
         visible: deadPlantsVisible,
       },
     ];
-  }, [deadPlantsVisible, livePlantsVisible, photoMarkers, plantsMarkers, plotPhotosVisible]);
+  }, [
+    deadPlantsVisible,
+    livePlantsVisible,
+    photoMarkers,
+    plantsMarkers,
+    plotPhotosVisible,
+    selectPhotosFromMarkers,
+    selectPlantsFromMarkers,
+    treesMarkers,
+  ]);
 
   const legends = useMemo((): MapLegendGroup[] => {
     const siteLegendGroup =
@@ -663,8 +833,71 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
     survivalRateLegendGroup,
   ]);
 
+  const drawerContent = useMemo(() => {
+    if (selectedFeature && selectedResults) {
+      return (
+        <ObservationStatsDrawer
+          layerFeatureId={selectedFeature.layerFeatureId}
+          observationId={selectedResults.observationId}
+          plantingSiteId={selectedFeature.plantingSiteId}
+        />
+      );
+    }
+    if (selectedPhotos.length > 0) {
+      return photoDrawerContent;
+    }
+    if (selectedPlants.length > 0) {
+      return plantDrawerContent;
+    }
+  }, [
+    photoDrawerContent,
+    plantDrawerContent,
+    selectedFeature,
+    selectedPhotos.length,
+    selectedPlants.length,
+    selectedResults,
+  ]);
+
+  const drawerHeader = useMemo(() => {
+    if (selectedPhotos.length > 0) {
+      return photoDrawerHeader;
+    } else if (selectedPlants.length > 0) {
+      return plantDrawerHeader;
+    } else {
+      return undefined;
+    }
+  }, [photoDrawerHeader, plantDrawerHeader, selectedPhotos.length, selectedPlants.length]);
+
+  const drawerSize: MapDrawerSize = useMemo(() => {
+    if (selectedPhotos.length > 0) {
+      return photoDrawerSize;
+    } else if (selectedPlants.length > 0) {
+      return plantDrawerSize;
+    } else {
+      return 'small';
+    }
+  }, [photoDrawerSize, plantDrawerSize, selectedPhotos.length, selectedPlants.length]);
+
+  const setDrawerOpenCallback = useCallback(
+    (open: boolean) => {
+      if (open) {
+        setDrawerOpen(true);
+      } else {
+        setDrawerOpen(false);
+        selectPhotos([]);
+        selectPlants([]);
+      }
+    },
+    [selectPhotos, selectPlants]
+  );
+
   return (
     <MapComponent
+      clusterMaxZoom={20}
+      drawerChildren={drawerContent}
+      drawerHeader={drawerHeader}
+      drawerOpen={drawerOpen}
+      drawerSize={drawerSize}
       legends={legends}
       mapHighlights={highlights}
       mapMarkers={markers}
@@ -673,6 +906,7 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
       mapRef={mapRef}
       nameTags={nameTags}
       token={token ?? ''}
+      setDrawerOpen={setDrawerOpenCallback}
     />
   );
 };
