@@ -855,7 +855,11 @@
 <a name='L790'></a><a href='#L790'>790</a>
 <a name='L791'></a><a href='#L791'>791</a>
 <a name='L792'></a><a href='#L792'>792</a>
-<a name='L793'></a><a href='#L793'>793</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L793'></a><a href='#L793'>793</a>
+<a name='L794'></a><a href='#L794'>794</a>
+<a name='L795'></a><a href='#L795'>795</a>
+<a name='L796'></a><a href='#L796'>796</a>
+<a name='L797'></a><a href='#L797'>797</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1332,7 +1336,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1372,7 +1378,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2124,8 +2132,8 @@ export default functi<span class="cstat-no" title="statement not covered" >on Ne
     const date = value ? getDateDisplayValue(value.getTime(), tz.id) : null;
     onChange(id, date);
   };
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  return (
+&nbsp;
+  return (<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
     &lt;&gt;
       {openViabilityResultModal &amp;&amp; savedRecord &amp;&amp; (
         &lt;ViabilityResultModal
@@ -2144,9 +2152,9 @@ export default functi<span class="cstat-no" title="statement not covered" >on Ne
         title={record?.id !== -1 ? strings.EDIT_VIABILITY_TEST : strings.ADD_VIABILITY_TEST}
         size='large'
         middleButtons={[
-          &lt;Button<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+          &lt;Button
             id='cancelNewViabilityTest'
-            label={strings.CANCEL}
+            label={st<span class="fstat-no" title="function not covered" >ri</span>ngs.<span class="cstat-no" title="statement not covered" >CANCEL}</span>
             type='passive'
             onClick={onCloseHandler}
             priority='secondary'
@@ -2164,9 +2172,10 @@ export default functi<span class="cstat-no" title="statement not covered" >on Ne
         /&gt;
         &lt;Grid container item xs={12} spacing={2} textAlign='left'&gt;
           &lt;Grid item xs={12} padding={theme.spacing(1, 3, 1, 5)}&gt;
-            &lt;Dropdown<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+            &lt;Dropdown
+              id={'test-method'}
               options={testMethods()}
-              placeholder={strings.SELECT}
+              placeho<span class="fstat-no" title="function not covered" >ld</span>er={<span class="cstat-no" title="statement not covered" >strings.SELECT}</span>
               onChange={(value) =&gt; onChangeTestType(value as TEST_TYPES)}
               selectedValue={record?.testType}
               fullWidth={true}
@@ -2177,6 +2186,7 @@ export default functi<span class="cstat-no" title="statement not covered" >on Ne
           &lt;/Grid&gt;
           &lt;Grid item padding={theme.spacing(1, 3, 1, 5)} xs={12}&gt;
             &lt;Dropdown
+              id={'seed-type'}
               label={strings.SEED_TYPE}
               placeholder={strings.SELECT}
               options={seedTypes()}
@@ -2184,9 +2194,9 @@ export default functi<span class="cstat-no" title="statement not covered" >on Ne
               selectedValue={record?.seedType}
               fullWidth={true}
               disabled={readOnly}
-              tooltip<span class="fstat-no" title="function not covered" >Ti</span>tle=<span class="cstat-no" title="statement not covered" >{</span>
+              tooltipTitle={
                 &lt;&gt;
-                  {strings.TOOLTIP_VIABILITY_TEST_SEED_TYPE}
+                  {st<span class="fstat-no" title="function not covered" >ri</span>ngs.<span class="cstat-no" title="statement not covered" >TOOLTIP_VIABILITY_TEST_SEED_TYPE}</span>
                   &lt;LearnMoreLink
                     onClick={() =&gt;
                       openTooltipLearnMoreModal({
@@ -2198,12 +2208,13 @@ export default functi<span class="cstat-no" title="statement not covered" >on Ne
                 &lt;/&gt;
               }
             /&gt;
-          &lt;/Grid&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-          {record?.tes<span class="fstat-no" title="function not covered" >tT</span>ype !== 'C<span class="cstat-no" title="statement not covered" >ut' &amp;&amp; (</span>
+          &lt;/Grid&gt;
+          {record?.testType !== 'Cut' &amp;&amp; (
             &lt;&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-              &lt;Grid item padding={theme.spacing(1, 3, 1, 5)<span class="fstat-no" title="function not covered" >} </span>xs={12}&gt;<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" ></span>                &lt;Dropdown<span class="cstat-no" title="statement not covered" ></span>
-                  label={strings.SUBSTRATE}
+              &lt;Grid it<span class="fstat-no" title="function not covered" >em</span> padding={<span class="cstat-no" title="statement not covered" >theme.spacing(1, 3, 1, 5)} xs={12}&gt;</span>
+                &lt;Dropd<span class="fstat-no" title="function not covered" >ow</span>n<span class="cstat-no" title="statement not covered" ></span>
+                  id={'substrate'}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="fstat-no" title="function not covered" ></span>                  label={stri<span class="cstat-no" title="statement not covered" >ngs.SUBSTRATE}</span>
                   placeholder={strings.SELECT}
                   options={getSubstratesAccordingToType(record?.testType)}
                   onChange={onChangeCallback('substrate')}
@@ -2213,8 +2224,8 @@ export default functi<span class="cstat-no" title="statement not covered" >on Ne
                   tooltipTitle={
                     &lt;&gt;
                       {strings.TOOLTIP_VIABILITY_TEST_SUBSTRATE}
-<span class="fstat-no" title="function not covered" ></span>                      &lt;LearnM<span class="cstat-no" title="statement not covered" >oreLink</span>
-                        onClick={() =&gt;
+                      &lt;LearnMoreLink
+<span class="fstat-no" title="function not covered" ></span>                        onCli<span class="cstat-no" title="statement not covered" >ck={() =&gt;</span>
                           openTooltipLearnMoreModal({
                             title: strings.SUBSTRATE,
                             content: &lt;LearnMoreModalContentSubstrate /&gt;,
@@ -2223,10 +2234,11 @@ export default functi<span class="cstat-no" title="statement not covered" >on Ne
                       /&gt;
                     &lt;/&gt;
                   }
-                /&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-              &lt;/Grid&gt;
+                /&gt;
+              &lt;/Gr<span class="fstat-no" title="function not covered" >id</span>&gt;<span class="cstat-no" title="statement not covered" ></span>
               &lt;Grid item padding={theme.spacing(1, 3, 1, 5)} xs={12}&gt;
                 &lt;Dropdown
+                  id={'treatment'}
                   label={strings.TREATMENT}
                   placeholder={strings.SELECT}
                   options={treatments()}
@@ -2446,7 +2458,7 @@ export default functi<span class="cstat-no" title="statement not covered" >on Ne
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-31T22:49:22.792Z
+                at 2026-01-02T19:16:43.445Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
