@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/100</span>
+                <span class='fraction'>0/98</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/95</span>
+                <span class='fraction'>0/93</span>
             </div>
         
             
@@ -300,10 +300,7 @@
 <a name='L235'></a><a href='#L235'>235</a>
 <a name='L236'></a><a href='#L236'>236</a>
 <a name='L237'></a><a href='#L237'>237</a>
-<a name='L238'></a><a href='#L238'>238</a>
-<a name='L239'></a><a href='#L239'>239</a>
-<a name='L240'></a><a href='#L240'>240</a>
-<a name='L241'></a><a href='#L241'>241</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L238'></a><a href='#L238'>238</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -346,7 +343,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -367,7 +363,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -436,7 +431,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -564,27 +558,26 @@ import {
 import useMapU<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ti</span>ls from 'src/components/NewM<span class="cstat-no" title="statement not covered" >ap/useMapUtils';</span></span>
 import { getBoundingBoxFromMultiPolygons, getBoundingBoxFromPoints } from 'src/components/NewMap/utils';
 import { useProjectPlantingSites } from 'src/hooks/useProjectPlantingSites';
-import { useLocalization } from 'src/providers';
 import { activityTypeColor } from 'src/types/Activity';
 import useMapboxToken from 'src/utils/useMapboxToken';
 &nbsp;
 import { TypedActivity } from './types';
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-type MapSplitViewPro<span class="cstat-no" title="statement not covered" >ps </span>= {
-<span class="cstat-no" title="statement not covered" >  activities?: TypedActivity[];</span>
-  activityM<span class="fstat-no" title="function not covered" >ar</span>kerH<span class="cstat-no" title="statement not covered" >ighlighted?: </span>(activityId: number, fileId: number) =&gt; boolean;
-  children: React.ReactNode;
-<span class="cstat-no" title="statement not covered" >  drawerRef?: MutableRefObject&lt;HTMLDivElement </span>| null&gt;;
-  heightOffsetPx: n<span class="cstat-no" title="statement not covered" >umber;</span>
-  mapRef: MutableRefObject<span class="cstat-no" title="statement not covered" >&lt;MapRef | null&gt;;</span>
-  onActivityMarkerClic<span class="cstat-no" title="statement not covered" >k?: (activityId: number, </span>fileId: number) =&gt; void;
-  projectId: number<span class="cstat-no" title="statement not covered" >;</span>
-  topComponent?: Rea<span class="cstat-no" title="statement not covered" >ct.ReactNode;</span>
+&nbsp;
+type MapSplitViewPr<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >op</span>s = {<span class="cstat-no" title="statement not covered" ></span></span>
+  activities?: Typed<span class="cstat-no" title="statement not covered" >Act</span>ivity[];
+<span class="cstat-no" title="statement not covered" >  activityMarkerHighlighted?: (activityId: number, fileId: number) =&gt; boolean;</span>
+  children:<span class="fstat-no" title="function not covered" > R</span>eact<span class="cstat-no" title="statement not covered" >.ReactNode;</span>
+  drawerRef?: MutableRefObject&lt;HTMLDivElement | null&gt;;
+<span class="cstat-no" title="statement not covered" >  heightOffsetPx: number;</span>
+  mapRef: MutableRe<span class="cstat-no" title="statement not covered" >fObject&lt;MapRef | null&gt;;</span>
+  onActivityMarkerClick?: <span class="cstat-no" title="statement not covered" >(activityId: number, fil</span>eId: number) =&gt; void;
+  projectId: number;<span class="cstat-no" title="statement not covered" ></span>
+  topComponent?: Re<span class="cstat-no" title="statement not covered" >act.ReactNode;</span>
 };<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-export default funct<span class="cstat-no" title="statement not covered" >ion MapSplitView({</span>
+export default function M<span class="cstat-no" title="statement not covered" >apSplitView({</span>
   activities,<span class="cstat-no" title="statement not covered" ></span>
-  activityMarkerHighlig<span class="cstat-no" title="statement not covered" >hted,</span>
+  activityMarkerHighlighted,<span class="cstat-no" title="statement not covered" ></span>
   children,<span class="cstat-no" title="statement not covered" ></span>
   drawerRef,<span class="cstat-no" title="statement not covered" ></span>
   heightO<span class="fstat-no" title="function not covered" >ffsetPx,</span>
@@ -596,11 +589,10 @@ export default funct<span class="cstat-no" title="statement not covered" >ion Ma
   const theme = useTheme();
   const { isDesktop } = useDeviceInfo();
   const { mapId, refreshToken, token } = useMapboxToken();
-  const { strings } = useLocalization();
   const { fitBounds } = useMapUtils(mapRef);
-  const { planti<span class="cstat-no" title="statement not covered" >ngSites } = useProjectPlantingSi</span>tes(projectId);
-  const [searchParams, s<span class="cstat-no" title="statement not covered" >etSearchParams] = useSearchParams(</span>);
-  const [currentProjectId, setCurrentProj<span class="cstat-no" title="statement not covered" >ectId] = useState(projectId);</span>
+  const { plantingSites } = useProjectPlantingSites(projectId);
+  const [searchP<span class="cstat-no" title="statement not covered" >arams, setSearchParams] = useSea</span>rchParams();
+  const [currentProjectI<span class="cstat-no" title="statement not covered" >d, setCurrentProjectId] = useState</span>(projectId);
 <span class="cstat-no" title="statement not covered" ></span>
   const onActivityMarker<span class="cstat-no" title="statement not covered" >ClickCallback = useCallback(</span>
     (activityId: number, fil<span class="cstat-no" title="statement not covered" >eId: number) =&gt; () =&gt; onActivityMarkerClick?.(activityId, fileId),</span>
@@ -681,7 +673,6 @@ export default funct<span class="cstat-no" title="statement not covered" >ion Ma
     return [
       {
         features: siteFeatures,
-        label: strings.PLANTING_SITES,
         layerId: 'sites',
         style: {
           borderColor: theme.palette.TwClrBaseGreen300,
@@ -692,7 +683,7 @@ export default funct<span class="cstat-no" title="statement not covered" >ion Ma
         visible: true,
       },<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >    ];<span class="fstat-no" title="function not covered" ></span></span>
-  }, [<span class="cstat-no" title="statement not covered" >siteFeatures, strings, theme]);</span>
+  }, [<span class="cstat-no" title="statement not covered" >siteFeatures, theme]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
   const na<span class="fstat-no" title="function not covered" >me</span>Tags = useMemo(<span class="cstat-no" title="statement not covered" >(): MapNameTag[] | undefined =&gt; {</span>
     return plantingSites
@@ -790,7 +781,7 @@ export default funct<span class="cstat-no" title="statement not covered" >ion Ma
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-02T23:06:33.683Z
+                at 2026-01-02T23:18:32.467Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
