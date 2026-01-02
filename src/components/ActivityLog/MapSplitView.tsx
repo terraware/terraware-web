@@ -19,7 +19,6 @@ import {
 import useMapUtils from 'src/components/NewMap/useMapUtils';
 import { getBoundingBoxFromMultiPolygons, getBoundingBoxFromPoints } from 'src/components/NewMap/utils';
 import { useProjectPlantingSites } from 'src/hooks/useProjectPlantingSites';
-import { useLocalization } from 'src/providers';
 import { activityTypeColor } from 'src/types/Activity';
 import useMapboxToken from 'src/utils/useMapboxToken';
 
@@ -51,7 +50,6 @@ export default function MapSplitView({
   const theme = useTheme();
   const { isDesktop } = useDeviceInfo();
   const { mapId, refreshToken, token } = useMapboxToken();
-  const { strings } = useLocalization();
   const { fitBounds } = useMapUtils(mapRef);
   const { plantingSites } = useProjectPlantingSites(projectId);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -136,7 +134,6 @@ export default function MapSplitView({
     return [
       {
         features: siteFeatures,
-        label: strings.PLANTING_SITES,
         layerId: 'sites',
         style: {
           borderColor: theme.palette.TwClrBaseGreen300,
@@ -147,7 +144,7 @@ export default function MapSplitView({
         visible: true,
       },
     ];
-  }, [siteFeatures, strings, theme]);
+  }, [siteFeatures, theme]);
 
   const nameTags = useMemo((): MapNameTag[] | undefined => {
     return plantingSites

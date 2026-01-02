@@ -55,10 +55,10 @@ export default function MultiplePlantingSiteMap({
           )}
         </Typography>
         <PlantDashboardMap
+          disableObserationEvents
           disablePhotoMarkers
           disablePlantMarkers
           disableSurvivalRate
-          disableObserationEvents
           plantingSites={plantingSites}
           observationResults={[]}
         />

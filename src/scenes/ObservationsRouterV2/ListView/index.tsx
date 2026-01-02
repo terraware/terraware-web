@@ -7,7 +7,7 @@ import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import useStickyPlantingSiteId from 'src/hooks/useStickyPlantingSiteId';
 import { useLocalization, useOrganization } from 'src/providers';
-import { useLazySearchPlantingSitesQuery } from 'src/queries/search/plantingSites';
+import { useLazyListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
 import MobileAppCard from 'src/scenes/Home/MobileAppCard';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
@@ -20,28 +20,30 @@ const ObservationListView = (): JSX.Element => {
   const { strings } = useLocalization();
   const theme = useTheme();
 
-  const [listPlantingSites, listPlantingSitesResult] = useLazySearchPlantingSitesQuery();
-  const { selectPlantingSite, selectedPlantingSiteId } = useStickyPlantingSiteId('observations-list');
+  const [listPlantingSites, listPlantingSitesResult] = useLazyListPlantingSitesQuery();
+  const { selectPlantingSite, selectedPlantingSiteId } = useStickyPlantingSiteId('observations-list', -1);
 
   useEffect(() => {
     if (selectedOrganization) {
-      void listPlantingSites({ organizationId: selectedOrganization.id, searchOrder: [{ field: 'name' }] }, true);
+      void listPlantingSites({ organizationId: selectedOrganization.id, full: false }, true);
     }
   }, [listPlantingSites, selectedOrganization]);
 
-  const plantingSites = useMemo(() => listPlantingSitesResult.data ?? [], [listPlantingSitesResult.data]);
+  const plantingSites = useMemo(() => listPlantingSitesResult.data?.sites ?? [], [listPlantingSitesResult.data]);
   const plantingSiteOptions = useMemo((): DropdownItem[] => {
-    const sitesOptions = plantingSites.map((site) => ({
-      label: site.name,
-      value: site.id,
-    }));
+    const sitesOptions = plantingSites
+      .map((site) => ({
+        label: site.name,
+        value: site.id,
+      }))
+      .sort((a, b) => a.label.localeCompare(b.label));
 
     const allSiteOptions =
       plantingSites.length > 1
         ? [
             {
               label: strings.ALL_PLANTING_SITES,
-              value: undefined,
+              value: -1,
             },
           ]
         : [];
@@ -61,24 +63,25 @@ const ObservationListView = (): JSX.Element => {
           required
           selectedValue={selectedPlantingSiteId}
           options={plantingSiteOptions}
-          onChange={(newValue: string) => selectPlantingSite(Number(newValue))}
+          onChange={(value: any) => selectPlantingSite(Number(value))}
         />
       </Box>
     ),
-    [plantingSiteOptions, selectPlantingSite, selectedPlantingSiteId, strings, theme]
+    [selectPlantingSite, plantingSiteOptions, selectedPlantingSiteId, strings, theme]
   );
 
   const tabs = useMemo(() => {
+    const siteId = selectedPlantingSiteId === -1 ? undefined : selectedPlantingSiteId;
     return [
       {
         id: 'plantMonitoring',
         label: strings.PLANT_MONITORING,
-        children: <PlantMonitoringList siteId={selectedPlantingSiteId} />,
+        children: <PlantMonitoringList plantingSiteId={siteId} />,
       },
       {
         id: 'biomassMeasurements',
         label: strings.BIOMASS_MONITORING,
-        children: <BiomassList siteId={selectedPlantingSiteId} />,
+        children: <BiomassList plantingSiteId={siteId} />,
       },
     ];
   }, [selectedPlantingSiteId, strings.BIOMASS_MONITORING, strings.PLANT_MONITORING]);
@@ -93,7 +96,10 @@ const ObservationListView = (): JSX.Element => {
     <Page title={strings.OBSERVATIONS} leftComponent={PageHeaderPlantingSiteDropdown}>
       <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs}>
         <Card radius={'8px'} style={{ marginBottom: theme.spacing(3), width: '100%' }}>
-          <ObservationMap />
+          <ObservationMap
+            plantingSiteId={selectedPlantingSiteId === -1 ? undefined : selectedPlantingSiteId}
+            selectPlantingSiteId={selectPlantingSite}
+          />
         </Card>
       </Tabs>
       <Box marginTop={'24px'} width={'100%'}>

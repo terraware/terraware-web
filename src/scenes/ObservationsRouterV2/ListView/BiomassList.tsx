@@ -12,10 +12,10 @@ import { SearchSortOrder } from 'src/types/Search';
 import BiomassRenderer from './BiomassRenderer';
 
 export type BiomassListProps = {
-  siteId?: number;
+  plantingSiteId?: number;
 };
 
-export default function BiomassList({ siteId }: BiomassListProps): JSX.Element {
+export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.Element {
   const { strings } = useLocalization();
 
   const columns: TableColumnType[] = useMemo(
@@ -87,11 +87,11 @@ export default function BiomassList({ siteId }: BiomassListProps): JSX.Element {
     if (selectedOrganization) {
       void listPlantingSites({ organizationId: selectedOrganization.id }, true);
       void listAdHocObservationResults(
-        { plantingSiteId: siteId, organizationId: selectedOrganization.id, includePlants: true },
+        { plantingSiteId, organizationId: selectedOrganization.id, includePlants: true },
         true
       );
     }
-  }, [listAdHocObservationResults, listPlantingSites, selectedOrganization, siteId]);
+  }, [listAdHocObservationResults, listPlantingSites, selectedOrganization, plantingSiteId]);
 
   const adHocObservationsResults = useMemo(() => {
     if (adHocObservationsResultsResponse.isSuccess) {
