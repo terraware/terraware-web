@@ -3,7 +3,7 @@
     {
       "properties": {
         "id": 4,
-        "name": "PZ1",
+        "name": "STR1",
         "type": "stratum",
         "recency": 0
       },
@@ -24,7 +24,7 @@
     {
       "properties": {
         "id": 3,
-        "name": "PZ2",
+        "name": "STR2",
         "type": "stratum",
         "recency": 0
       },
@@ -48,7 +48,7 @@
     {
       "properties": {
         "id": 2,
-        "name": "PZ3",
+        "name": "STR3",
         "type": "stratum",
         "recency": 0
       },
@@ -71,7 +71,7 @@
     {
       "properties": {
         "id": 1,
-        "name": "PZ4",
+        "name": "STR4",
         "type": "stratum",
         "recency": 0
       },

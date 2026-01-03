@@ -124,7 +124,9 @@ const EditTemporaryPlotsTab = ({
       const allWithdrawnSpeciesForStratum = Array.from(speciesMap.values());
 
       allWithdrawnSpeciesForStratum.forEach((spec) => {
-        const correspondingStratum = (record.strata || []).find((z) => z.stratumId.toString() === stratumId.toString());
+        const correspondingStratum = (record.strata || []).find(
+          (_stratum) => _stratum.stratumId.toString() === stratumId.toString()
+        );
         const correspondingSpecies = correspondingStratum?.densityData.find(
           (denData) => denData.speciesId.toString() === spec.speciesId.toString()
         );
@@ -245,7 +247,7 @@ const EditTemporaryPlotsTab = ({
                 key={stratumId}
                 plotsWithObservations={plots}
                 withdrawnSpeciesPlot={filteredWithdrawnSpecies}
-                stratumData={strata?.find((z) => z.stratumId.toString() === stratumId.toString())}
+                stratumData={strata?.find((_stratum) => _stratum.stratumId.toString() === stratumId.toString())}
                 record={record}
                 setRecord={setRecord}
               />

@@ -58,16 +58,16 @@ export const selectPlantingProgress = createSelector(
             siteName: ps.name,
             reported: ps.strata?.flatMap((stratum) =>
               stratum.substrata
-                .filter((sz) => plantingsBySubstratum[sz.id])
-                .map((sz) => ({
-                  substratumId: sz.id,
-                  substratumName: sz.fullName,
-                  plantingCompleted: sz.plantingCompleted,
+                .filter((_substratum) => plantingsBySubstratum[_substratum.id])
+                .map((_substratum) => ({
+                  substratumId: _substratum.id,
+                  substratumName: _substratum.fullName,
+                  plantingCompleted: _substratum.plantingCompleted,
                   plantingSite: ps.name,
                   stratumName: stratum.name,
                   stratumId: stratum.id,
                   targetPlantingDensity: stratum.targetPlantingDensity,
-                  totalSeedlingsSent: plantingsBySubstratum[sz.id],
+                  totalSeedlingsSent: plantingsBySubstratum[_substratum.id],
                 }))
             ),
             totalPlants: totalPlantsBySite[ps.id],

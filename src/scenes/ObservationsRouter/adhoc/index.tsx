@@ -278,8 +278,8 @@ export default function ObservationMonitoringPlot({ reloadAll }: { reloadAll: ()
     const names =
       monitoringPlotResult?.overlapsWithPlotIds.map((plotId, index) => {
         const allPlots = observationResults?.flatMap((obv) =>
-          obv.strata.flatMap((pz) =>
-            pz.substrata.flatMap((_substratum) =>
+          obv.strata.flatMap((_stratum) =>
+            _stratum.substrata.flatMap((_substratum) =>
               _substratum.monitoringPlots.map((plot) => {
                 return { ...plot, observationId: obv.observationId };
               })

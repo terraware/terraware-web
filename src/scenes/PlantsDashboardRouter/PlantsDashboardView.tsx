@@ -322,7 +322,11 @@ export default function PlantsDashboardView({
   const summariesHectares = useMemo(() => {
     const totalSquareMeters =
       observationSummaries?.[0]?.strata
-        .flatMap((pz) => pz.substrata.flatMap((psz) => psz.monitoringPlots.map((mp) => mp.sizeMeters * mp.sizeMeters)))
+        .flatMap((_stratum) =>
+          _stratum.substrata.flatMap((_substratum) =>
+            _substratum.monitoringPlots.map((mp) => mp.sizeMeters * mp.sizeMeters)
+          )
+        )
         .reduce((acc, area) => acc + area, 0) ?? 0;
 
     return totalSquareMeters * SQ_M_TO_HECTARES;
@@ -331,7 +335,11 @@ export default function PlantsDashboardView({
   const observationHectares = useMemo(() => {
     const totalSquareMeters =
       latestResult?.strata
-        .flatMap((pz) => pz.substrata.flatMap((psz) => psz.monitoringPlots.map((mp) => mp.sizeMeters * mp.sizeMeters)))
+        .flatMap((_stratum) =>
+          _stratum.substrata.flatMap((_substratum) =>
+            _substratum.monitoringPlots.map((mp) => mp.sizeMeters * mp.sizeMeters)
+          )
+        )
         .reduce((acc, area) => acc + area, 0) ?? 0;
 
     return totalSquareMeters * SQ_M_TO_HECTARES;

@@ -145,7 +145,9 @@ const DetailsRenderer =
     }
 
     if (column.key === 'plantingCompleted') {
-      const isPlantingCompleted = row.substrata.every((psz: MinimalSubstratum) => psz.plantingCompleted);
+      const isPlantingCompleted = row.substrata.every(
+        (_substratum: MinimalSubstratum) => _substratum.plantingCompleted
+      );
       return (
         <CellRenderer
           {...props}

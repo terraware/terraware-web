@@ -28,24 +28,24 @@ export default function PlantingSiteTrendsCard(): JSX.Element {
 
   const plantsChartData: ChartData = useMemo(() => {
     const filteredSummaries = observationSummaries?.filter((sc) => {
-      const stratum = sc.strata.find((pz) => pz.stratumId === selectedPlantsPerHaStratum);
+      const stratum = sc.strata.find((_stratum) => _stratum.stratumId === selectedPlantsPerHaStratum);
       if (stratum?.plantingDensity !== undefined) {
         return true;
       }
     });
     const labels = filteredSummaries?.map((sm) => sm.latestObservationTime);
     const values = filteredSummaries?.map((sm) => {
-      const stratum = sm.strata.find((pz) => pz.stratumId === selectedPlantsPerHaStratum);
+      const stratum = sm.strata.find((_stratum) => _stratum.stratumId === selectedPlantsPerHaStratum);
       return stratum?.plantingDensity || 0;
     });
 
     const minValues = filteredSummaries?.map((sm) => {
-      const stratum = sm.strata.find((pz) => pz.stratumId === selectedPlantsPerHaStratum);
+      const stratum = sm.strata.find((_stratum) => _stratum.stratumId === selectedPlantsPerHaStratum);
       return (stratum?.plantingDensity || 0) - (stratum?.plantingDensityStdDev || 0);
     });
 
     const maxValues = filteredSummaries?.map((sm) => {
-      const stratum = sm.strata.find((pz) => pz.stratumId === selectedPlantsPerHaStratum);
+      const stratum = sm.strata.find((_stratum) => _stratum.stratumId === selectedPlantsPerHaStratum);
       return (stratum?.plantingDensity || 0) + (stratum?.plantingDensityStdDev || 0);
     });
 
@@ -79,14 +79,14 @@ export default function PlantingSiteTrendsCard(): JSX.Element {
 
   const survivalChartData: ChartData = useMemo(() => {
     const filteredSummaries = observationSummaries?.filter((sc) => {
-      const stratum = sc.strata.find((pz) => pz.stratumId === selectedPlantsPerHaStratum);
+      const stratum = sc.strata.find((_stratum) => _stratum.stratumId === selectedPlantsPerHaStratum);
       if (stratum?.survivalRate !== undefined) {
         return true;
       }
     });
     const labels = filteredSummaries?.map((sm) => sm.latestObservationTime);
     const values = filteredSummaries?.map((sm) => {
-      const stratum = sm.strata.find((pz) => pz.stratumId === selectedSurvivalStratum);
+      const stratum = sm.strata.find((_stratum) => _stratum.stratumId === selectedSurvivalStratum);
       return stratum?.survivalRate || 0;
     });
 

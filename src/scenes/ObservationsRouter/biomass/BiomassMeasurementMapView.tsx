@@ -144,8 +144,8 @@ export default function BiomassMeasurementMapView({
         entity = selectedObservation;
       } else if (properties.type === 'stratum') {
         entity =
-          selectedObservation?.strata?.find((z) => z.stratumId === properties.id) ||
-          plantingSiteHistory?.strata.find((z) => z.stratumId === properties.id);
+          selectedObservation?.strata?.find((_stratum) => _stratum.stratumId === properties.id) ||
+          plantingSiteHistory?.strata.find((_stratum) => _stratum.stratumId === properties.id);
       } else {
         // monitoring plot
         const adHocPlotCopy = {

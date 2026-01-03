@@ -4,7 +4,7 @@
       "properties": {
         "id": 56,
         "name": "A3",
-        "fullName": "PZ1-A3",
+        "fullName": "STR1-A3",
         "type": "substratum",
         "stratumId": 4
       },
@@ -26,7 +26,7 @@
       "properties": {
         "id": 55,
         "name": "A4",
-        "fullName": "PZ1-A4",
+        "fullName": "STR1-A4",
         "type": "substratum",
         "stratumId": 4
       },
@@ -48,7 +48,7 @@
       "properties": {
         "id": 54,
         "name": "A5",
-        "fullName": "PZ1-A5",
+        "fullName": "STR1-A5",
         "type": "substratum",
         "stratumId": 4
       },
@@ -69,7 +69,7 @@
       "properties": {
         "id": 53,
         "name": "A6",
-        "fullName": "PZ1-A6",
+        "fullName": "STR1-A6",
         "type": "substratum",
         "stratumId": 4
       },
@@ -90,7 +90,7 @@
       "properties": {
         "id": 52,
         "name": "A7",
-        "fullName": "PZ1-A7",
+        "fullName": "STR1-A7",
         "type": "substratum",
         "stratumId": 4
       },
@@ -111,7 +111,7 @@
       "properties": {
         "id": 51,
         "name": "A8",
-        "fullName": "PZ1-A8",
+        "fullName": "STR1-A8",
         "type": "substratum",
         "stratumId": 4
       },
@@ -132,7 +132,7 @@
       "properties": {
         "id": 62,
         "name": "B2",
-        "fullName": "PZ1-B2",
+        "fullName": "STR1-B2",
         "type": "substratum",
         "stratumId": 4
       },
@@ -152,7 +152,7 @@
       "properties": {
         "id": 61,
         "name": "B3",
-        "fullName": "PZ1-B3",
+        "fullName": "STR1-B3",
         "type": "substratum",
         "stratumId": 4
       },
@@ -174,7 +174,7 @@
       "properties": {
         "id": 116,
         "name": "B4",
-        "fullName": "PZ1-B4",
+        "fullName": "STR1-B4",
         "type": "substratum",
         "stratumId": 4
       },
@@ -196,7 +196,7 @@
       "properties": {
         "id": 60,
         "name": "B5",
-        "fullName": "PZ1-B5",
+        "fullName": "STR1-B5",
         "type": "substratum",
         "stratumId": 4
       },
@@ -217,7 +217,7 @@
       "properties": {
         "id": 59,
         "name": "B6",
-        "fullName": "PZ1-B6",
+        "fullName": "STR1-B6",
         "type": "substratum",
         "stratumId": 4
       },
@@ -238,7 +238,7 @@
       "properties": {
         "id": 58,
         "name": "B7",
-        "fullName": "PZ1-B7",
+        "fullName": "STR1-B7",
         "type": "substratum",
         "stratumId": 4
       },
@@ -259,7 +259,7 @@
       "properties": {
         "id": 57,
         "name": "B8",
-        "fullName": "PZ1-B8",
+        "fullName": "STR1-B8",
         "type": "substratum",
         "stratumId": 4
       },
@@ -280,7 +280,7 @@
       "properties": {
         "id": 69,
         "name": "C2",
-        "fullName": "PZ1-C2",
+        "fullName": "STR1-C2",
         "type": "substratum",
         "stratumId": 4
       },
@@ -301,7 +301,7 @@
       "properties": {
         "id": 68,
         "name": "C3",
-        "fullName": "PZ1-C3",
+        "fullName": "STR1-C3",
         "type": "substratum",
         "stratumId": 4
       },
@@ -322,7 +322,7 @@
       "properties": {
         "id": 67,
         "name": "C4",
-        "fullName": "PZ1-C4",
+        "fullName": "STR1-C4",
         "type": "substratum",
         "stratumId": 4
       },
@@ -343,7 +343,7 @@
       "properties": {
         "id": 66,
         "name": "C5",
-        "fullName": "PZ1-C5",
+        "fullName": "STR1-C5",
         "type": "substratum",
         "stratumId": 4
       },
@@ -364,7 +364,7 @@
       "properties": {
         "id": 65,
         "name": "C6",
-        "fullName": "PZ1-C6",
+        "fullName": "STR1-C6",
         "type": "substratum",
         "stratumId": 4
       },
@@ -385,7 +385,7 @@
       "properties": {
         "id": 64,
         "name": "C7",
-        "fullName": "PZ1-C7",
+        "fullName": "STR1-C7",
         "type": "substratum",
         "stratumId": 4
       },
@@ -406,7 +406,7 @@
       "properties": {
         "id": 63,
         "name": "C8",
-        "fullName": "PZ1-C8",
+        "fullName": "STR1-C8",
         "type": "substratum",
         "stratumId": 4
       },
@@ -427,7 +427,7 @@
       "properties": {
         "id": 76,
         "name": "D2",
-        "fullName": "PZ1-D2",
+        "fullName": "STR1-D2",
         "type": "substratum",
         "stratumId": 4
       },
@@ -448,7 +448,7 @@
       "properties": {
         "id": 75,
         "name": "D3",
-        "fullName": "PZ1-D3",
+        "fullName": "STR1-D3",
         "type": "substratum",
         "stratumId": 4
       },
@@ -469,7 +469,7 @@
       "properties": {
         "id": 74,
         "name": "D4",
-        "fullName": "PZ1-D4",
+        "fullName": "STR1-D4",
         "type": "substratum",
         "stratumId": 4
       },
@@ -490,7 +490,7 @@
       "properties": {
         "id": 73,
         "name": "D5",
-        "fullName": "PZ1-D5",
+        "fullName": "STR1-D5",
         "type": "substratum",
         "stratumId": 4
       },
@@ -511,7 +511,7 @@
       "properties": {
         "id": 72,
         "name": "D6",
-        "fullName": "PZ1-D6",
+        "fullName": "STR1-D6",
         "type": "substratum",
         "stratumId": 4
       },
@@ -532,7 +532,7 @@
       "properties": {
         "id": 71,
         "name": "D7",
-        "fullName": "PZ1-D7",
+        "fullName": "STR1-D7",
         "type": "substratum",
         "stratumId": 4
       },
@@ -553,7 +553,7 @@
       "properties": {
         "id": 70,
         "name": "D8",
-        "fullName": "PZ1-D8",
+        "fullName": "STR1-D8",
         "type": "substratum",
         "stratumId": 4
       },
@@ -574,7 +574,7 @@
       "properties": {
         "id": 83,
         "name": "E2",
-        "fullName": "PZ1-E2",
+        "fullName": "STR1-E2",
         "type": "substratum",
         "stratumId": 4
       },
@@ -595,7 +595,7 @@
       "properties": {
         "id": 82,
         "name": "E3",
-        "fullName": "PZ1-E3",
+        "fullName": "STR1-E3",
         "type": "substratum",
         "stratumId": 4
       },
@@ -616,7 +616,7 @@
       "properties": {
         "id": 81,
         "name": "E4",
-        "fullName": "PZ1-E4",
+        "fullName": "STR1-E4",
         "type": "substratum",
         "stratumId": 4
       },
@@ -637,7 +637,7 @@
       "properties": {
         "id": 80,
         "name": "E5",
-        "fullName": "PZ1-E5",
+        "fullName": "STR1-E5",
         "type": "substratum",
         "stratumId": 4
       },
@@ -658,7 +658,7 @@
       "properties": {
         "id": 79,
         "name": "E6",
-        "fullName": "PZ1-E6",
+        "fullName": "STR1-E6",
         "type": "substratum",
         "stratumId": 4
       },
@@ -679,7 +679,7 @@
       "properties": {
         "id": 78,
         "name": "E7",
-        "fullName": "PZ1-E7",
+        "fullName": "STR1-E7",
         "type": "substratum",
         "stratumId": 4
       },
@@ -700,7 +700,7 @@
       "properties": {
         "id": 77,
         "name": "E8",
-        "fullName": "PZ1-E8",
+        "fullName": "STR1-E8",
         "type": "substratum",
         "stratumId": 4
       },
@@ -721,7 +721,7 @@
       "properties": {
         "id": 91,
         "name": "F1",
-        "fullName": "PZ1-F1",
+        "fullName": "STR1-F1",
         "type": "substratum",
         "stratumId": 4
       },
@@ -741,7 +741,7 @@
       "properties": {
         "id": 90,
         "name": "F2",
-        "fullName": "PZ1-F2",
+        "fullName": "STR1-F2",
         "type": "substratum",
         "stratumId": 4
       },
@@ -763,7 +763,7 @@
       "properties": {
         "id": 89,
         "name": "F3",
-        "fullName": "PZ1-F3",
+        "fullName": "STR1-F3",
         "type": "substratum",
         "stratumId": 4
       },
@@ -784,7 +784,7 @@
       "properties": {
         "id": 88,
         "name": "F4",
-        "fullName": "PZ1-F4",
+        "fullName": "STR1-F4",
         "type": "substratum",
         "stratumId": 4
       },
@@ -805,7 +805,7 @@
       "properties": {
         "id": 87,
         "name": "F5",
-        "fullName": "PZ1-F5",
+        "fullName": "STR1-F5",
         "type": "substratum",
         "stratumId": 4
       },
@@ -826,7 +826,7 @@
       "properties": {
         "id": 86,
         "name": "F6",
-        "fullName": "PZ1-F6",
+        "fullName": "STR1-F6",
         "type": "substratum",
         "stratumId": 4
       },
@@ -847,7 +847,7 @@
       "properties": {
         "id": 85,
         "name": "F7",
-        "fullName": "PZ1-F7",
+        "fullName": "STR1-F7",
         "type": "substratum",
         "stratumId": 4
       },
@@ -868,7 +868,7 @@
       "properties": {
         "id": 84,
         "name": "F8",
-        "fullName": "PZ1-F8",
+        "fullName": "STR1-F8",
         "type": "substratum",
         "stratumId": 4
       },
@@ -889,7 +889,7 @@
       "properties": {
         "id": 99,
         "name": "G1",
-        "fullName": "PZ1-G1",
+        "fullName": "STR1-G1",
         "type": "substratum",
         "stratumId": 4
       },
@@ -910,7 +910,7 @@
       "properties": {
         "id": 98,
         "name": "G2",
-        "fullName": "PZ1-G2",
+        "fullName": "STR1-G2",
         "type": "substratum",
         "stratumId": 4
       },
@@ -931,7 +931,7 @@
       "properties": {
         "id": 97,
         "name": "G3",
-        "fullName": "PZ1-G3",
+        "fullName": "STR1-G3",
         "type": "substratum",
         "stratumId": 4
       },
@@ -952,7 +952,7 @@
       "properties": {
         "id": 96,
         "name": "G4",
-        "fullName": "PZ1-G4",
+        "fullName": "STR1-G4",
         "type": "substratum",
         "stratumId": 4
       },
@@ -973,7 +973,7 @@
       "properties": {
         "id": 95,
         "name": "G5",
-        "fullName": "PZ1-G5",
+        "fullName": "STR1-G5",
         "type": "substratum",
         "stratumId": 4
       },
@@ -994,7 +994,7 @@
       "properties": {
         "id": 94,
         "name": "G6",
-        "fullName": "PZ1-G6",
+        "fullName": "STR1-G6",
         "type": "substratum",
         "stratumId": 4
       },
@@ -1015,7 +1015,7 @@
       "properties": {
         "id": 93,
         "name": "G7",
-        "fullName": "PZ1-G7",
+        "fullName": "STR1-G7",
         "type": "substratum",
         "stratumId": 4
       },
@@ -1036,7 +1036,7 @@
       "properties": {
         "id": 92,
         "name": "G8",
-        "fullName": "PZ1-G8",
+        "fullName": "STR1-G8",
         "type": "substratum",
         "stratumId": 4
       },
@@ -1057,7 +1057,7 @@
       "properties": {
         "id": 107,
         "name": "H1",
-        "fullName": "PZ1-H1",
+        "fullName": "STR1-H1",
         "type": "substratum",
         "stratumId": 4
       },
@@ -1078,7 +1078,7 @@
       "properties": {
         "id": 106,
         "name": "H2",
-        "fullName": "PZ1-H2",
+        "fullName": "STR1-H2",
         "type": "substratum",
         "stratumId": 4
       },
@@ -1099,7 +1099,7 @@
       "properties": {
         "id": 105,
         "name": "H3",
-        "fullName": "PZ1-H3",
+        "fullName": "STR1-H3",
         "type": "substratum",
         "stratumId": 4
       },
@@ -1120,7 +1120,7 @@
       "properties": {
         "id": 104,
         "name": "H4",
-        "fullName": "PZ1-H4",
+        "fullName": "STR1-H4",
         "type": "substratum",
         "stratumId": 4
       },
@@ -1141,7 +1141,7 @@
       "properties": {
         "id": 103,
         "name": "H5",
-        "fullName": "PZ1-H5",
+        "fullName": "STR1-H5",
         "type": "substratum",
         "stratumId": 4
       },
@@ -1162,7 +1162,7 @@
       "properties": {
         "id": 102,
         "name": "H6",
-        "fullName": "PZ1-H6",
+        "fullName": "STR1-H6",
         "type": "substratum",
         "stratumId": 4
       },
@@ -1183,7 +1183,7 @@
       "properties": {
         "id": 101,
         "name": "H7",
-        "fullName": "PZ1-H7",
+        "fullName": "STR1-H7",
         "type": "substratum",
         "stratumId": 4
       },
@@ -1204,7 +1204,7 @@
       "properties": {
         "id": 100,
         "name": "H8",
-        "fullName": "PZ1-H8",
+        "fullName": "STR1-H8",
         "type": "substratum",
         "stratumId": 4
       },
@@ -1225,7 +1225,7 @@
       "properties": {
         "id": 115,
         "name": "I1",
-        "fullName": "PZ1-I1",
+        "fullName": "STR1-I1",
         "type": "substratum",
         "stratumId": 4
       },
@@ -1246,7 +1246,7 @@
       "properties": {
         "id": 114,
         "name": "I2",
-        "fullName": "PZ1-I2",
+        "fullName": "STR1-I2",
         "type": "substratum",
         "stratumId": 4
       },
@@ -1267,7 +1267,7 @@
       "properties": {
         "id": 113,
         "name": "I3",
-        "fullName": "PZ1-I3",
+        "fullName": "STR1-I3",
         "type": "substratum",
         "stratumId": 4
       },
@@ -1288,7 +1288,7 @@
       "properties": {
         "id": 112,
         "name": "I4",
-        "fullName": "PZ1-I4",
+        "fullName": "STR1-I4",
         "type": "substratum",
         "stratumId": 4
       },
@@ -1309,7 +1309,7 @@
       "properties": {
         "id": 111,
         "name": "I5",
-        "fullName": "PZ1-I5",
+        "fullName": "STR1-I5",
         "type": "substratum",
         "stratumId": 4
       },
@@ -1330,7 +1330,7 @@
       "properties": {
         "id": 110,
         "name": "I6",
-        "fullName": "PZ1-I6",
+        "fullName": "STR1-I6",
         "type": "substratum",
         "stratumId": 4
       },
@@ -1351,7 +1351,7 @@
       "properties": {
         "id": 109,
         "name": "I7",
-        "fullName": "PZ1-I7",
+        "fullName": "STR1-I7",
         "type": "substratum",
         "stratumId": 4
       },
@@ -1372,7 +1372,7 @@
       "properties": {
         "id": 108,
         "name": "I8",
-        "fullName": "PZ1-I8",
+        "fullName": "STR1-I8",
         "type": "substratum",
         "stratumId": 4
       },
@@ -1393,7 +1393,7 @@
       "properties": {
         "id": 1,
         "name": "A10",
-        "fullName": "PZ2-A10",
+        "fullName": "STR2-A10",
         "type": "substratum",
         "stratumId": 3
       },
@@ -1414,7 +1414,7 @@
       "properties": {
         "id": 2,
         "name": "A9",
-        "fullName": "PZ2-A9",
+        "fullName": "STR2-A9",
         "type": "substratum",
         "stratumId": 3
       },
@@ -1435,7 +1435,7 @@
       "properties": {
         "id": 7,
         "name": "B10",
-        "fullName": "PZ2-B10",
+        "fullName": "STR2-B10",
         "type": "substratum",
         "stratumId": 3
       },
@@ -1456,7 +1456,7 @@
       "properties": {
         "id": 6,
         "name": "B11",
-        "fullName": "PZ2-B11",
+        "fullName": "STR2-B11",
         "type": "substratum",
         "stratumId": 3
       },
@@ -1478,7 +1478,7 @@
       "properties": {
         "id": 5,
         "name": "B12",
-        "fullName": "PZ2-B12",
+        "fullName": "STR2-B12",
         "type": "substratum",
         "stratumId": 3
       },
@@ -1499,7 +1499,7 @@
       "properties": {
         "id": 4,
         "name": "B13",
-        "fullName": "PZ2-B13",
+        "fullName": "STR2-B13",
         "type": "substratum",
         "stratumId": 3
       },
@@ -1520,7 +1520,7 @@
       "properties": {
         "id": 3,
         "name": "B14",
-        "fullName": "PZ2-B14",
+        "fullName": "STR2-B14",
         "type": "substratum",
         "stratumId": 3
       },
@@ -1541,7 +1541,7 @@
       "properties": {
         "id": 8,
         "name": "B9",
-        "fullName": "PZ2-B9",
+        "fullName": "STR2-B9",
         "type": "substratum",
         "stratumId": 3
       },
@@ -1562,7 +1562,7 @@
       "properties": {
         "id": 13,
         "name": "C10",
-        "fullName": "PZ2-C10",
+        "fullName": "STR2-C10",
         "type": "substratum",
         "stratumId": 3
       },
@@ -1583,7 +1583,7 @@
       "properties": {
         "id": 12,
         "name": "C11",
-        "fullName": "PZ2-C11",
+        "fullName": "STR2-C11",
         "type": "substratum",
         "stratumId": 3
       },
@@ -1604,7 +1604,7 @@
       "properties": {
         "id": 11,
         "name": "C12",
-        "fullName": "PZ2-C12",
+        "fullName": "STR2-C12",
         "type": "substratum",
         "stratumId": 3
       },
@@ -1625,7 +1625,7 @@
       "properties": {
         "id": 10,
         "name": "C13",
-        "fullName": "PZ2-C13",
+        "fullName": "STR2-C13",
         "type": "substratum",
         "stratumId": 3
       },
@@ -1646,7 +1646,7 @@
       "properties": {
         "id": 9,
         "name": "C14",
-        "fullName": "PZ2-C14",
+        "fullName": "STR2-C14",
         "type": "substratum",
         "stratumId": 3
       },
@@ -1667,7 +1667,7 @@
       "properties": {
         "id": 14,
         "name": "C9",
-        "fullName": "PZ2-C9",
+        "fullName": "STR2-C9",
         "type": "substratum",
         "stratumId": 3
       },
@@ -1688,7 +1688,7 @@
       "properties": {
         "id": 19,
         "name": "D10",
-        "fullName": "PZ2-D10",
+        "fullName": "STR2-D10",
         "type": "substratum",
         "stratumId": 3
       },
@@ -1709,7 +1709,7 @@
       "properties": {
         "id": 18,
         "name": "D11",
-        "fullName": "PZ2-D11",
+        "fullName": "STR2-D11",
         "type": "substratum",
         "stratumId": 3
       },
@@ -1730,7 +1730,7 @@
       "properties": {
         "id": 17,
         "name": "D12",
-        "fullName": "PZ2-D12",
+        "fullName": "STR2-D12",
         "type": "substratum",
         "stratumId": 3
       },
@@ -1751,7 +1751,7 @@
       "properties": {
         "id": 16,
         "name": "D13",
-        "fullName": "PZ2-D13",
+        "fullName": "STR2-D13",
         "type": "substratum",
         "stratumId": 3
       },
@@ -1772,7 +1772,7 @@
       "properties": {
         "id": 15,
         "name": "D14",
-        "fullName": "PZ2-D14",
+        "fullName": "STR2-D14",
         "type": "substratum",
         "stratumId": 3
       },
@@ -1793,7 +1793,7 @@
       "properties": {
         "id": 20,
         "name": "D9",
-        "fullName": "PZ2-D9",
+        "fullName": "STR2-D9",
         "type": "substratum",
         "stratumId": 3
       },
@@ -1814,7 +1814,7 @@
       "properties": {
         "id": 25,
         "name": "E10",
-        "fullName": "PZ2-E10",
+        "fullName": "STR2-E10",
         "type": "substratum",
         "stratumId": 3
       },
@@ -1835,7 +1835,7 @@
       "properties": {
         "id": 24,
         "name": "E11",
-        "fullName": "PZ2-E11",
+        "fullName": "STR2-E11",
         "type": "substratum",
         "stratumId": 3
       },
@@ -1856,7 +1856,7 @@
       "properties": {
         "id": 23,
         "name": "E12",
-        "fullName": "PZ2-E12",
+        "fullName": "STR2-E12",
         "type": "substratum",
         "stratumId": 3
       },
@@ -1877,7 +1877,7 @@
       "properties": {
         "id": 22,
         "name": "E13",
-        "fullName": "PZ2-E13",
+        "fullName": "STR2-E13",
         "type": "substratum",
         "stratumId": 3
       },
@@ -1898,7 +1898,7 @@
       "properties": {
         "id": 21,
         "name": "E14",
-        "fullName": "PZ2-E14",
+        "fullName": "STR2-E14",
         "type": "substratum",
         "stratumId": 3
       },
@@ -1919,7 +1919,7 @@
       "properties": {
         "id": 26,
         "name": "E9",
-        "fullName": "PZ2-E9",
+        "fullName": "STR2-E9",
         "type": "substratum",
         "stratumId": 3
       },
@@ -1940,7 +1940,7 @@
       "properties": {
         "id": 31,
         "name": "F10",
-        "fullName": "PZ2-F10",
+        "fullName": "STR2-F10",
         "type": "substratum",
         "stratumId": 3
       },
@@ -1963,7 +1963,7 @@
       "properties": {
         "id": 30,
         "name": "F11",
-        "fullName": "PZ2-F11",
+        "fullName": "STR2-F11",
         "type": "substratum",
         "stratumId": 3
       },
@@ -1984,7 +1984,7 @@
       "properties": {
         "id": 29,
         "name": "F12",
-        "fullName": "PZ2-F12",
+        "fullName": "STR2-F12",
         "type": "substratum",
         "stratumId": 3
       },
@@ -2005,7 +2005,7 @@
       "properties": {
         "id": 28,
         "name": "F13",
-        "fullName": "PZ2-F13",
+        "fullName": "STR2-F13",
         "type": "substratum",
         "stratumId": 3
       },
@@ -2026,7 +2026,7 @@
       "properties": {
         "id": 27,
         "name": "F14",
-        "fullName": "PZ2-F14",
+        "fullName": "STR2-F14",
         "type": "substratum",
         "stratumId": 3
       },
@@ -2047,7 +2047,7 @@
       "properties": {
         "id": 32,
         "name": "F9",
-        "fullName": "PZ2-F9",
+        "fullName": "STR2-F9",
         "type": "substratum",
         "stratumId": 3
       },
@@ -2070,7 +2070,7 @@
       "properties": {
         "id": 37,
         "name": "G10",
-        "fullName": "PZ2-G10",
+        "fullName": "STR2-G10",
         "type": "substratum",
         "stratumId": 3
       },
@@ -2092,7 +2092,7 @@
       "properties": {
         "id": 36,
         "name": "G11",
-        "fullName": "PZ2-G11",
+        "fullName": "STR2-G11",
         "type": "substratum",
         "stratumId": 3
       },
@@ -2113,7 +2113,7 @@
       "properties": {
         "id": 35,
         "name": "G12",
-        "fullName": "PZ2-G12",
+        "fullName": "STR2-G12",
         "type": "substratum",
         "stratumId": 3
       },
@@ -2134,7 +2134,7 @@
       "properties": {
         "id": 34,
         "name": "G13",
-        "fullName": "PZ2-G13",
+        "fullName": "STR2-G13",
         "type": "substratum",
         "stratumId": 3
       },
@@ -2155,7 +2155,7 @@
       "properties": {
         "id": 33,
         "name": "G14",
-        "fullName": "PZ2-G14",
+        "fullName": "STR2-G14",
         "type": "substratum",
         "stratumId": 3
       },
@@ -2176,7 +2176,7 @@
       "properties": {
         "id": 43,
         "name": "H10",
-        "fullName": "PZ2-H10",
+        "fullName": "STR2-H10",
         "type": "substratum",
         "stratumId": 3
       },
@@ -2197,7 +2197,7 @@
       "properties": {
         "id": 42,
         "name": "H11",
-        "fullName": "PZ2-H11",
+        "fullName": "STR2-H11",
         "type": "substratum",
         "stratumId": 3
       },
@@ -2218,7 +2218,7 @@
       "properties": {
         "id": 41,
         "name": "H12",
-        "fullName": "PZ2-H12",
+        "fullName": "STR2-H12",
         "type": "substratum",
         "stratumId": 3
       },
@@ -2239,7 +2239,7 @@
       "properties": {
         "id": 40,
         "name": "H13",
-        "fullName": "PZ2-H13",
+        "fullName": "STR2-H13",
         "type": "substratum",
         "stratumId": 3
       },
@@ -2260,7 +2260,7 @@
       "properties": {
         "id": 39,
         "name": "H14",
-        "fullName": "PZ2-H14",
+        "fullName": "STR2-H14",
         "type": "substratum",
         "stratumId": 3
       },
@@ -2281,7 +2281,7 @@
       "properties": {
         "id": 44,
         "name": "H9",
-        "fullName": "PZ2-H9",
+        "fullName": "STR2-H9",
         "type": "substratum",
         "stratumId": 3
       },
@@ -2302,7 +2302,7 @@
       "properties": {
         "id": 49,
         "name": "I10",
-        "fullName": "PZ2-I10",
+        "fullName": "STR2-I10",
         "type": "substratum",
         "stratumId": 3
       },
@@ -2323,7 +2323,7 @@
       "properties": {
         "id": 48,
         "name": "I11",
-        "fullName": "PZ2-I11",
+        "fullName": "STR2-I11",
         "type": "substratum",
         "stratumId": 3
       },
@@ -2344,7 +2344,7 @@
       "properties": {
         "id": 47,
         "name": "I12",
-        "fullName": "PZ2-I12",
+        "fullName": "STR2-I12",
         "type": "substratum",
         "stratumId": 3
       },
@@ -2365,7 +2365,7 @@
       "properties": {
         "id": 46,
         "name": "I13",
-        "fullName": "PZ2-I13",
+        "fullName": "STR2-I13",
         "type": "substratum",
         "stratumId": 3
       },
@@ -2387,7 +2387,7 @@
       "properties": {
         "id": 45,
         "name": "I14",
-        "fullName": "PZ2-I14",
+        "fullName": "STR2-I14",
         "type": "substratum",
         "stratumId": 3
       },
@@ -2408,7 +2408,7 @@
       "properties": {
         "id": 50,
         "name": "I9",
-        "fullName": "PZ2-I9",
+        "fullName": "STR2-I9",
         "type": "substratum",
         "stratumId": 3
       },
@@ -2429,7 +2429,7 @@
       "properties": {
         "id": 38,
         "name": "g9",
-        "fullName": "PZ2-g9",
+        "fullName": "STR2-g9",
         "type": "substratum",
         "stratumId": 3
       },
@@ -2453,7 +2453,7 @@
       "properties": {
         "id": 120,
         "name": "B15",
-        "fullName": "PZ3-B15",
+        "fullName": "STR3-B15",
         "type": "substratum",
         "stratumId": 2
       },
@@ -2474,7 +2474,7 @@
       "properties": {
         "id": 119,
         "name": "B16",
-        "fullName": "PZ3-B16",
+        "fullName": "STR3-B16",
         "type": "substratum",
         "stratumId": 2
       },
@@ -2495,7 +2495,7 @@
       "properties": {
         "id": 118,
         "name": "B17",
-        "fullName": "PZ3-B17",
+        "fullName": "STR3-B17",
         "type": "substratum",
         "stratumId": 2
       },
@@ -2516,7 +2516,7 @@
       "properties": {
         "id": 117,
         "name": "B18",
-        "fullName": "PZ3-B18",
+        "fullName": "STR3-B18",
         "type": "substratum",
         "stratumId": 2
       },
@@ -2537,7 +2537,7 @@
       "properties": {
         "id": 127,
         "name": "C15",
-        "fullName": "PZ3-C15",
+        "fullName": "STR3-C15",
         "type": "substratum",
         "stratumId": 2
       },
@@ -2558,7 +2558,7 @@
       "properties": {
         "id": 126,
         "name": "C16",
-        "fullName": "PZ3-C16",
+        "fullName": "STR3-C16",
         "type": "substratum",
         "stratumId": 2
       },
@@ -2579,7 +2579,7 @@
       "properties": {
         "id": 125,
         "name": "C17",
-        "fullName": "PZ3-C17",
+        "fullName": "STR3-C17",
         "type": "substratum",
         "stratumId": 2
       },
@@ -2600,7 +2600,7 @@
       "properties": {
         "id": 124,
         "name": "C18",
-        "fullName": "PZ3-C18",
+        "fullName": "STR3-C18",
         "type": "substratum",
         "stratumId": 2
       },
@@ -2621,7 +2621,7 @@
       "properties": {
         "id": 123,
         "name": "C19",
-        "fullName": "PZ3-C19",
+        "fullName": "STR3-C19",
         "type": "substratum",
         "stratumId": 2
       },
@@ -2643,7 +2643,7 @@
       "properties": {
         "id": 122,
         "name": "C20",
-        "fullName": "PZ3-C20",
+        "fullName": "STR3-C20",
         "type": "substratum",
         "stratumId": 2
       },
@@ -2664,7 +2664,7 @@
       "properties": {
         "id": 121,
         "name": "C21",
-        "fullName": "PZ3-C21",
+        "fullName": "STR3-C21",
         "type": "substratum",
         "stratumId": 2
       },
@@ -2685,7 +2685,7 @@
       "properties": {
         "id": 134,
         "name": "D15",
-        "fullName": "PZ3-D15",
+        "fullName": "STR3-D15",
         "type": "substratum",
         "stratumId": 2
       },
@@ -2706,7 +2706,7 @@
       "properties": {
         "id": 133,
         "name": "D16",
-        "fullName": "PZ3-D16",
+        "fullName": "STR3-D16",
         "type": "substratum",
         "stratumId": 2
       },
@@ -2727,7 +2727,7 @@
       "properties": {
         "id": 132,
         "name": "D17",
-        "fullName": "PZ3-D17",
+        "fullName": "STR3-D17",
         "type": "substratum",
         "stratumId": 2
       },
@@ -2748,7 +2748,7 @@
       "properties": {
         "id": 131,
         "name": "D18",
-        "fullName": "PZ3-D18",
+        "fullName": "STR3-D18",
         "type": "substratum",
         "stratumId": 2
       },
@@ -2769,7 +2769,7 @@
       "properties": {
         "id": 130,
         "name": "D19",
-        "fullName": "PZ3-D19",
+        "fullName": "STR3-D19",
         "type": "substratum",
         "stratumId": 2
       },
@@ -2790,7 +2790,7 @@
       "properties": {
         "id": 129,
         "name": "D20",
-        "fullName": "PZ3-D20",
+        "fullName": "STR3-D20",
         "type": "substratum",
         "stratumId": 2
       },
@@ -2811,7 +2811,7 @@
       "properties": {
         "id": 128,
         "name": "D21",
-        "fullName": "PZ3-D21",
+        "fullName": "STR3-D21",
         "type": "substratum",
         "stratumId": 2
       },
@@ -2832,7 +2832,7 @@
       "properties": {
         "id": 141,
         "name": "E15",
-        "fullName": "PZ3-E15",
+        "fullName": "STR3-E15",
         "type": "substratum",
         "stratumId": 2
       },
@@ -2853,7 +2853,7 @@
       "properties": {
         "id": 140,
         "name": "E16",
-        "fullName": "PZ3-E16",
+        "fullName": "STR3-E16",
         "type": "substratum",
         "stratumId": 2
       },
@@ -2874,7 +2874,7 @@
       "properties": {
         "id": 139,
         "name": "E17",
-        "fullName": "PZ3-E17",
+        "fullName": "STR3-E17",
         "type": "substratum",
         "stratumId": 2
       },
@@ -2895,7 +2895,7 @@
       "properties": {
         "id": 138,
         "name": "E18",
-        "fullName": "PZ3-E18",
+        "fullName": "STR3-E18",
         "type": "substratum",
         "stratumId": 2
       },
@@ -2916,7 +2916,7 @@
       "properties": {
         "id": 137,
         "name": "E19",
-        "fullName": "PZ3-E19",
+        "fullName": "STR3-E19",
         "type": "substratum",
         "stratumId": 2
       },
@@ -2937,7 +2937,7 @@
       "properties": {
         "id": 136,
         "name": "E20",
-        "fullName": "PZ3-E20",
+        "fullName": "STR3-E20",
         "type": "substratum",
         "stratumId": 2
       },
@@ -2958,7 +2958,7 @@
       "properties": {
         "id": 135,
         "name": "E21",
-        "fullName": "PZ3-E21",
+        "fullName": "STR3-E21",
         "type": "substratum",
         "stratumId": 2
       },
@@ -2979,7 +2979,7 @@
       "properties": {
         "id": 148,
         "name": "F15",
-        "fullName": "PZ3-F15",
+        "fullName": "STR3-F15",
         "type": "substratum",
         "stratumId": 2
       },
@@ -3000,7 +3000,7 @@
       "properties": {
         "id": 147,
         "name": "F16",
-        "fullName": "PZ3-F16",
+        "fullName": "STR3-F16",
         "type": "substratum",
         "stratumId": 2
       },
@@ -3021,7 +3021,7 @@
       "properties": {
         "id": 146,
         "name": "F17",
-        "fullName": "PZ3-F17",
+        "fullName": "STR3-F17",
         "type": "substratum",
         "stratumId": 2
       },
@@ -3042,7 +3042,7 @@
       "properties": {
         "id": 145,
         "name": "F18",
-        "fullName": "PZ3-F18",
+        "fullName": "STR3-F18",
         "type": "substratum",
         "stratumId": 2
       },
@@ -3063,7 +3063,7 @@
       "properties": {
         "id": 144,
         "name": "F19",
-        "fullName": "PZ3-F19",
+        "fullName": "STR3-F19",
         "type": "substratum",
         "stratumId": 2
       },
@@ -3084,7 +3084,7 @@
       "properties": {
         "id": 143,
         "name": "F20",
-        "fullName": "PZ3-F20",
+        "fullName": "STR3-F20",
         "type": "substratum",
         "stratumId": 2
       },
@@ -3105,7 +3105,7 @@
       "properties": {
         "id": 142,
         "name": "F21",
-        "fullName": "PZ3-F21",
+        "fullName": "STR3-F21",
         "type": "substratum",
         "stratumId": 2
       },
@@ -3126,7 +3126,7 @@
       "properties": {
         "id": 155,
         "name": "G15",
-        "fullName": "PZ3-G15",
+        "fullName": "STR3-G15",
         "type": "substratum",
         "stratumId": 2
       },
@@ -3147,7 +3147,7 @@
       "properties": {
         "id": 154,
         "name": "G16",
-        "fullName": "PZ3-G16",
+        "fullName": "STR3-G16",
         "type": "substratum",
         "stratumId": 2
       },
@@ -3168,7 +3168,7 @@
       "properties": {
         "id": 153,
         "name": "G17",
-        "fullName": "PZ3-G17",
+        "fullName": "STR3-G17",
         "type": "substratum",
         "stratumId": 2
       },
@@ -3189,7 +3189,7 @@
       "properties": {
         "id": 152,
         "name": "G18",
-        "fullName": "PZ3-G18",
+        "fullName": "STR3-G18",
         "type": "substratum",
         "stratumId": 2
       },
@@ -3210,7 +3210,7 @@
       "properties": {
         "id": 151,
         "name": "G19",
-        "fullName": "PZ3-G19",
+        "fullName": "STR3-G19",
         "type": "substratum",
         "stratumId": 2
       },
@@ -3231,7 +3231,7 @@
       "properties": {
         "id": 150,
         "name": "G20",
-        "fullName": "PZ3-G20",
+        "fullName": "STR3-G20",
         "type": "substratum",
         "stratumId": 2
       },
@@ -3252,7 +3252,7 @@
       "properties": {
         "id": 149,
         "name": "G21",
-        "fullName": "PZ3-G21",
+        "fullName": "STR3-G21",
         "type": "substratum",
         "stratumId": 2
       },
@@ -3273,7 +3273,7 @@
       "properties": {
         "id": 162,
         "name": "H15",
-        "fullName": "PZ3-H15",
+        "fullName": "STR3-H15",
         "type": "substratum",
         "stratumId": 2
       },
@@ -3294,7 +3294,7 @@
       "properties": {
         "id": 161,
         "name": "H16",
-        "fullName": "PZ3-H16",
+        "fullName": "STR3-H16",
         "type": "substratum",
         "stratumId": 2
       },
@@ -3315,7 +3315,7 @@
       "properties": {
         "id": 160,
         "name": "H17",
-        "fullName": "PZ3-H17",
+        "fullName": "STR3-H17",
         "type": "substratum",
         "stratumId": 2
       },
@@ -3336,7 +3336,7 @@
       "properties": {
         "id": 159,
         "name": "H18",
-        "fullName": "PZ3-H18",
+        "fullName": "STR3-H18",
         "type": "substratum",
         "stratumId": 2
       },
@@ -3357,7 +3357,7 @@
       "properties": {
         "id": 158,
         "name": "H19",
-        "fullName": "PZ3-H19",
+        "fullName": "STR3-H19",
         "type": "substratum",
         "stratumId": 2
       },
@@ -3378,7 +3378,7 @@
       "properties": {
         "id": 157,
         "name": "H20",
-        "fullName": "PZ3-H20",
+        "fullName": "STR3-H20",
         "type": "substratum",
         "stratumId": 2
       },
@@ -3399,7 +3399,7 @@
       "properties": {
         "id": 156,
         "name": "H21",
-        "fullName": "PZ3-H21",
+        "fullName": "STR3-H21",
         "type": "substratum",
         "stratumId": 2
       },
@@ -3420,7 +3420,7 @@
       "properties": {
         "id": 169,
         "name": "I15",
-        "fullName": "PZ3-I15",
+        "fullName": "STR3-I15",
         "type": "substratum",
         "stratumId": 2
       },
@@ -3441,7 +3441,7 @@
       "properties": {
         "id": 168,
         "name": "I16",
-        "fullName": "PZ3-I16",
+        "fullName": "STR3-I16",
         "type": "substratum",
         "stratumId": 2
       },
@@ -3462,7 +3462,7 @@
       "properties": {
         "id": 167,
         "name": "I17",
-        "fullName": "PZ3-I17",
+        "fullName": "STR3-I17",
         "type": "substratum",
         "stratumId": 2
       },
@@ -3483,7 +3483,7 @@
       "properties": {
         "id": 166,
         "name": "I18",
-        "fullName": "PZ3-I18",
+        "fullName": "STR3-I18",
         "type": "substratum",
         "stratumId": 2
       },
@@ -3504,7 +3504,7 @@
       "properties": {
         "id": 165,
         "name": "I19",
-        "fullName": "PZ3-I19",
+        "fullName": "STR3-I19",
         "type": "substratum",
         "stratumId": 2
       },
@@ -3525,7 +3525,7 @@
       "properties": {
         "id": 164,
         "name": "I20",
-        "fullName": "PZ3-I20",
+        "fullName": "STR3-I20",
         "type": "substratum",
         "stratumId": 2
       },
@@ -3546,7 +3546,7 @@
       "properties": {
         "id": 163,
         "name": "I21",
-        "fullName": "PZ3-I21",
+        "fullName": "STR3-I21",
         "type": "substratum",
         "stratumId": 2
       },
@@ -3567,7 +3567,7 @@
       "properties": {
         "id": 174,
         "name": "C22",
-        "fullName": "PZ4-C22",
+        "fullName": "STR4-C22",
         "type": "substratum",
         "stratumId": 1
       },
@@ -3588,7 +3588,7 @@
       "properties": {
         "id": 173,
         "name": "C23",
-        "fullName": "PZ4-C23",
+        "fullName": "STR4-C23",
         "type": "substratum",
         "stratumId": 1
       },
@@ -3609,7 +3609,7 @@
       "properties": {
         "id": 172,
         "name": "C24",
-        "fullName": "PZ4-C24",
+        "fullName": "STR4-C24",
         "type": "substratum",
         "stratumId": 1
       },
@@ -3630,7 +3630,7 @@
       "properties": {
         "id": 171,
         "name": "C25",
-        "fullName": "PZ4-C25",
+        "fullName": "STR4-C25",
         "type": "substratum",
         "stratumId": 1
       },
@@ -3651,7 +3651,7 @@
       "properties": {
         "id": 170,
         "name": "C26",
-        "fullName": "PZ4-C26",
+        "fullName": "STR4-C26",
         "type": "substratum",
         "stratumId": 1
       },
@@ -3672,7 +3672,7 @@
       "properties": {
         "id": 181,
         "name": "D22",
-        "fullName": "PZ4-D22",
+        "fullName": "STR4-D22",
         "type": "substratum",
         "stratumId": 1
       },
@@ -3693,7 +3693,7 @@
       "properties": {
         "id": 180,
         "name": "D23",
-        "fullName": "PZ4-D23",
+        "fullName": "STR4-D23",
         "type": "substratum",
         "stratumId": 1
       },
@@ -3714,7 +3714,7 @@
       "properties": {
         "id": 179,
         "name": "D24",
-        "fullName": "PZ4-D24",
+        "fullName": "STR4-D24",
         "type": "substratum",
         "stratumId": 1
       },
@@ -3735,7 +3735,7 @@
       "properties": {
         "id": 178,
         "name": "D25",
-        "fullName": "PZ4-D25",
+        "fullName": "STR4-D25",
         "type": "substratum",
         "stratumId": 1
       },
@@ -3756,7 +3756,7 @@
       "properties": {
         "id": 177,
         "name": "D26",
-        "fullName": "PZ4-D26",
+        "fullName": "STR4-D26",
         "type": "substratum",
         "stratumId": 1
       },
@@ -3777,7 +3777,7 @@
       "properties": {
         "id": 176,
         "name": "D27",
-        "fullName": "PZ4-D27",
+        "fullName": "STR4-D27",
         "type": "substratum",
         "stratumId": 1
       },
@@ -3799,7 +3799,7 @@
       "properties": {
         "id": 175,
         "name": "D28",
-        "fullName": "PZ4-D28",
+        "fullName": "STR4-D28",
         "type": "substratum",
         "stratumId": 1
       },
@@ -3820,7 +3820,7 @@
       "properties": {
         "id": 188,
         "name": "E22",
-        "fullName": "PZ4-E22",
+        "fullName": "STR4-E22",
         "type": "substratum",
         "stratumId": 1
       },
@@ -3841,7 +3841,7 @@
       "properties": {
         "id": 187,
         "name": "E23",
-        "fullName": "PZ4-E23",
+        "fullName": "STR4-E23",
         "type": "substratum",
         "stratumId": 1
       },
@@ -3862,7 +3862,7 @@
       "properties": {
         "id": 186,
         "name": "E24",
-        "fullName": "PZ4-E24",
+        "fullName": "STR4-E24",
         "type": "substratum",
         "stratumId": 1
       },
@@ -3883,7 +3883,7 @@
       "properties": {
         "id": 185,
         "name": "E25",
-        "fullName": "PZ4-E25",
+        "fullName": "STR4-E25",
         "type": "substratum",
         "stratumId": 1
       },
@@ -3904,7 +3904,7 @@
       "properties": {
         "id": 184,
         "name": "E26",
-        "fullName": "PZ4-E26",
+        "fullName": "STR4-E26",
         "type": "substratum",
         "stratumId": 1
       },
@@ -3925,7 +3925,7 @@
       "properties": {
         "id": 183,
         "name": "E27",
-        "fullName": "PZ4-E27",
+        "fullName": "STR4-E27",
         "type": "substratum",
         "stratumId": 1
       },
@@ -3946,7 +3946,7 @@
       "properties": {
         "id": 182,
         "name": "E28",
-        "fullName": "PZ4-E28",
+        "fullName": "STR4-E28",
         "type": "substratum",
         "stratumId": 1
       },
@@ -3967,7 +3967,7 @@
       "properties": {
         "id": 195,
         "name": "F22",
-        "fullName": "PZ4-F22",
+        "fullName": "STR4-F22",
         "type": "substratum",
         "stratumId": 1
       },
@@ -3988,7 +3988,7 @@
       "properties": {
         "id": 194,
         "name": "F23",
-        "fullName": "PZ4-F23",
+        "fullName": "STR4-F23",
         "type": "substratum",
         "stratumId": 1
       },
@@ -4009,7 +4009,7 @@
       "properties": {
         "id": 193,
         "name": "F24",
-        "fullName": "PZ4-F24",
+        "fullName": "STR4-F24",
         "type": "substratum",
         "stratumId": 1
       },
@@ -4030,7 +4030,7 @@
       "properties": {
         "id": 192,
         "name": "F25",
-        "fullName": "PZ4-F25",
+        "fullName": "STR4-F25",
         "type": "substratum",
         "stratumId": 1
       },
@@ -4051,7 +4051,7 @@
       "properties": {
         "id": 191,
         "name": "F26",
-        "fullName": "PZ4-F26",
+        "fullName": "STR4-F26",
         "type": "substratum",
         "stratumId": 1
       },
@@ -4072,7 +4072,7 @@
       "properties": {
         "id": 190,
         "name": "F27",
-        "fullName": "PZ4-F27",
+        "fullName": "STR4-F27",
         "type": "substratum",
         "stratumId": 1
       },
@@ -4093,7 +4093,7 @@
       "properties": {
         "id": 189,
         "name": "F28",
-        "fullName": "PZ4-F28",
+        "fullName": "STR4-F28",
         "type": "substratum",
         "stratumId": 1
       },
@@ -4114,7 +4114,7 @@
       "properties": {
         "id": 202,
         "name": "G22",
-        "fullName": "PZ4-G22",
+        "fullName": "STR4-G22",
         "type": "substratum",
         "stratumId": 1
       },
@@ -4135,7 +4135,7 @@
       "properties": {
         "id": 201,
         "name": "G23",
-        "fullName": "PZ4-G23",
+        "fullName": "STR4-G23",
         "type": "substratum",
         "stratumId": 1
       },
@@ -4156,7 +4156,7 @@
       "properties": {
         "id": 200,
         "name": "G24",
-        "fullName": "PZ4-G24",
+        "fullName": "STR4-G24",
         "type": "substratum",
         "stratumId": 1
       },
@@ -4177,7 +4177,7 @@
       "properties": {
         "id": 199,
         "name": "G25",
-        "fullName": "PZ4-G25",
+        "fullName": "STR4-G25",
         "type": "substratum",
         "stratumId": 1
       },
@@ -4198,7 +4198,7 @@
       "properties": {
         "id": 198,
         "name": "G26",
-        "fullName": "PZ4-G26",
+        "fullName": "STR4-G26",
         "type": "substratum",
         "stratumId": 1
       },
@@ -4219,7 +4219,7 @@
       "properties": {
         "id": 197,
         "name": "G27",
-        "fullName": "PZ4-G27",
+        "fullName": "STR4-G27",
         "type": "substratum",
         "stratumId": 1
       },
@@ -4240,7 +4240,7 @@
       "properties": {
         "id": 196,
         "name": "G28",
-        "fullName": "PZ4-G28",
+        "fullName": "STR4-G28",
         "type": "substratum",
         "stratumId": 1
       },
@@ -4261,7 +4261,7 @@
       "properties": {
         "id": 209,
         "name": "H22",
-        "fullName": "PZ4-H22",
+        "fullName": "STR4-H22",
         "type": "substratum",
         "stratumId": 1
       },
@@ -4282,7 +4282,7 @@
       "properties": {
         "id": 208,
         "name": "H23",
-        "fullName": "PZ4-H23",
+        "fullName": "STR4-H23",
         "type": "substratum",
         "stratumId": 1
       },
@@ -4303,7 +4303,7 @@
       "properties": {
         "id": 207,
         "name": "H24",
-        "fullName": "PZ4-H24",
+        "fullName": "STR4-H24",
         "type": "substratum",
         "stratumId": 1
       },
@@ -4324,7 +4324,7 @@
       "properties": {
         "id": 206,
         "name": "H25",
-        "fullName": "PZ4-H25",
+        "fullName": "STR4-H25",
         "type": "substratum",
         "stratumId": 1
       },
@@ -4345,7 +4345,7 @@
       "properties": {
         "id": 205,
         "name": "H26",
-        "fullName": "PZ4-H26",
+        "fullName": "STR4-H26",
         "type": "substratum",
         "stratumId": 1
       },
@@ -4366,7 +4366,7 @@
       "properties": {
         "id": 204,
         "name": "H27",
-        "fullName": "PZ4-H27",
+        "fullName": "STR4-H27",
         "type": "substratum",
         "stratumId": 1
       },
@@ -4387,7 +4387,7 @@
       "properties": {
         "id": 203,
         "name": "H28",
-        "fullName": "PZ4-H28",
+        "fullName": "STR4-H28",
         "type": "substratum",
         "stratumId": 1
       },
@@ -4408,7 +4408,7 @@
       "properties": {
         "id": 216,
         "name": "I22",
-        "fullName": "PZ4-I22",
+        "fullName": "STR4-I22",
         "type": "substratum",
         "stratumId": 1
       },
@@ -4429,7 +4429,7 @@
       "properties": {
         "id": 215,
         "name": "I23",
-        "fullName": "PZ4-I23",
+        "fullName": "STR4-I23",
         "type": "substratum",
         "stratumId": 1
       },
@@ -4450,7 +4450,7 @@
       "properties": {
         "id": 214,
         "name": "I24",
-        "fullName": "PZ4-I24",
+        "fullName": "STR4-I24",
         "type": "substratum",
         "stratumId": 1
       },
@@ -4471,7 +4471,7 @@
       "properties": {
         "id": 213,
         "name": "I25",
-        "fullName": "PZ4-I25",
+        "fullName": "STR4-I25",
         "type": "substratum",
         "stratumId": 1
       },
@@ -4492,7 +4492,7 @@
       "properties": {
         "id": 212,
         "name": "I26",
-        "fullName": "PZ4-I26",
+        "fullName": "STR4-I26",
         "type": "substratum",
         "stratumId": 1
       },
@@ -4513,7 +4513,7 @@
       "properties": {
         "id": 211,
         "name": "I27",
-        "fullName": "PZ4-I27",
+        "fullName": "STR4-I27",
         "type": "substratum",
         "stratumId": 1
       },
@@ -4534,7 +4534,7 @@
       "properties": {
         "id": 210,
         "name": "I28",
-        "fullName": "PZ4-I28",
+        "fullName": "STR4-I28",
         "type": "substratum",
         "stratumId": 1
       },

@@ -178,10 +178,10 @@ const ContextRenderer =
       title = site.name;
       properties = [
         { key: strings.STRATA, value: strata.length },
-        { key: strings.SUBSTRATA, value: strata.flatMap((z) => z.substrata).length },
+        { key: strings.SUBSTRATA, value: strata.flatMap((_stratum) => _stratum.substrata).length },
       ];
     } else if (entity.type === 'stratum') {
-      const stratum = strata.find((z) => z.id === entity.id);
+      const stratum = strata.find((_stratum) => _stratum.id === entity.id);
       title = stratum?.name ?? '';
       properties = [
         { key: strings.TARGET_PLANTING_DENSITY, value: stratum?.targetPlantingDensity ?? 0 },

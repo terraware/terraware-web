@@ -211,15 +211,15 @@ export default function ObservationMapView({
         entity = selectedObservation;
       } else if (properties.type === 'stratum') {
         entity =
-          selectedObservation?.strata?.find((z) => z.stratumId === properties.id) ||
-          plantingSiteHistory?.strata.find((z) => z.stratumId === properties.id);
+          selectedObservation?.strata?.find((_stratum) => _stratum.stratumId === properties.id) ||
+          plantingSiteHistory?.strata.find((_stratum) => _stratum.stratumId === properties.id);
       } else {
         // monitoring plot
         entity =
           selectedAdHocObservation?.adHocPlot ||
           selectedObservation?.strata
-            ?.flatMap((z) => z.substrata)
-            ?.flatMap((sz) => sz.monitoringPlots)
+            ?.flatMap((_stratum) => _stratum.substrata)
+            ?.flatMap((_substratum) => _substratum.monitoringPlots)
             ?.find((p) => p.monitoringPlotId === properties.id);
       }
 

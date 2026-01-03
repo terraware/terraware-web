@@ -44,7 +44,7 @@ const TemporaryPlotsTab = ({
           key={stratumId}
           plotsWithObservations={plots}
           withdrawnSpeciesPlot={filteredWithdrawnSpecies}
-          t0Stratum={t0SiteData?.strata.find((z) => z.stratumId.toString() === stratumId.toString())}
+          t0Stratum={t0SiteData?.strata.find((_stratum) => _stratum.stratumId.toString() === stratumId.toString())}
         />
       );
     })
