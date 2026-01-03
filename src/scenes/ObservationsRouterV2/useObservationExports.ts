@@ -6,7 +6,13 @@ import sanitize from 'sanitize-filename';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization, useOrganization } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
-import { useLazyExportObservationCsvQuery, useLazyExportObservationGpxQuery } from 'src/queries/exports/observations';
+import {
+  useLazyExportBiomassPlotsCsvQuery,
+  useLazyExportBiomassSpeciesCsvQuery,
+  useLazyExportBiomassTreesShrubsCsvQuery,
+  useLazyExportObservationCsvQuery,
+  useLazyExportObservationGpxQuery,
+} from 'src/queries/exports/observations';
 import { ObservationResultsPayload, useLazyGetObservationResultsQuery } from 'src/queries/generated/observations';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import { getPlotStatus } from 'src/types/Observations';
@@ -17,6 +23,9 @@ const useObservationExports = () => {
   const { strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const [getObservationResults] = useLazyGetObservationResultsQuery();
+  const [exportBiomassPlots] = useLazyExportBiomassPlotsCsvQuery();
+  const [exportBiomassSpecies] = useLazyExportBiomassSpeciesCsvQuery();
+  const [exportBiomassTreesShrubs] = useLazyExportBiomassTreesShrubsCsvQuery();
   const [exportObservationCsv] = useLazyExportObservationCsvQuery();
   const [exportObservationGpx] = useLazyExportObservationGpxQuery();
   const [getPlantingSite] = useLazyGetPlantingSiteQuery();
@@ -374,10 +383,57 @@ const useObservationExports = () => {
     [exportObservationGpx, getObservationResults, getPlantingSite, selectedOrganization?.timeZone, strings.INCOMPLETE]
   );
 
+  const downloadBiomassObservationDetails = useCallback(
+    async (observationId: number) => {
+      const results = await getObservationResults({ observationId, includePlants: true }, true).unwrap();
+      const observationResults = results.observation;
+
+      const siteResults = await getPlantingSite(observationResults.plantingSiteId, true).unwrap();
+      const site = siteResults.site;
+
+      const fileNamePrefix = `${site.name}-${observationResults.startDate}-${strings.BIOMASS_OBSERVATION_FILENAME_PREFIX}`;
+
+      const biomassPlots = await exportBiomassPlots(observationId, true).unwrap();
+      const biomassSpecies = await exportBiomassSpecies(observationId, true).unwrap();
+      const biomassTreesShrubs = await exportBiomassTreesShrubs(observationId, true).unwrap();
+
+      await downloadZipFile({
+        dirName: sanitize(fileNamePrefix),
+        files: [
+          {
+            fileName: `${fileNamePrefix}-${strings.PLOT}`,
+            content: biomassPlots,
+          },
+          {
+            fileName: `${fileNamePrefix}-${strings.SPECIES_CLASSIFICATION}`,
+            content: biomassSpecies,
+          },
+          {
+            fileName: `${fileNamePrefix}-${strings.TREES_AND_SHRUBS}`,
+            content: biomassTreesShrubs,
+          },
+        ],
+        suffix: '.csv',
+      });
+    },
+    [
+      exportBiomassPlots,
+      exportBiomassSpecies,
+      exportBiomassTreesShrubs,
+      getObservationResults,
+      getPlantingSite,
+      strings.BIOMASS_OBSERVATION_FILENAME_PREFIX,
+      strings.PLOT,
+      strings.SPECIES_CLASSIFICATION,
+      strings.TREES_AND_SHRUBS,
+    ]
+  );
+
   return {
     downloadObservationResults,
     downloadObservationCsv,
     downloadObservationGpx,
+    downloadBiomassObservationDetails,
   };
 };
 
