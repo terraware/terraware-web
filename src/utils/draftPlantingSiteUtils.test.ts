@@ -32,7 +32,7 @@ const exclusion: MultiPolygon = {
   ],
 };
 
-const zone1: MultiPolygon = {
+const stratum1: MultiPolygon = {
   type: 'MultiPolygon',
   coordinates: [
     [
@@ -47,7 +47,7 @@ const zone1: MultiPolygon = {
   ],
 };
 
-const zone2: MultiPolygon = {
+const stratum2: MultiPolygon = {
   type: 'MultiPolygon',
   coordinates: [
     [
@@ -62,7 +62,7 @@ const zone2: MultiPolygon = {
   ],
 };
 
-const subzone11: MultiPolygon = {
+const substratum11: MultiPolygon = {
   type: 'MultiPolygon',
   coordinates: [
     [
@@ -77,7 +77,7 @@ const subzone11: MultiPolygon = {
   ],
 };
 
-const subzone12: MultiPolygon = {
+const substratum12: MultiPolygon = {
   type: 'MultiPolygon',
   coordinates: [
     [
@@ -92,7 +92,7 @@ const subzone12: MultiPolygon = {
   ],
 };
 
-const subzone21: MultiPolygon = {
+const substratum21: MultiPolygon = {
   type: 'MultiPolygon',
   coordinates: [
     [
@@ -107,7 +107,7 @@ const subzone21: MultiPolygon = {
   ],
 };
 
-const subzone22: MultiPolygon = {
+const substratum22: MultiPolygon = {
   type: 'MultiPolygon',
   coordinates: [
     [
@@ -126,44 +126,44 @@ const plantingSeasons: PlantingSeason[] = [{ id: 1, startDate: '2024-01-01', end
 
 const strata: MinimalStratum[] = [
   {
-    boundary: zone1,
+    boundary: stratum1,
     id: 1,
-    name: 'zone1',
+    name: 'stratum1',
     substrata: [
       {
-        boundary: subzone11,
-        fullName: 'subzone11',
+        boundary: substratum11,
+        fullName: 'substratum11',
         id: 1,
-        name: 'subzone11',
+        name: 'substratum11',
         plantingCompleted: false,
       },
       {
-        boundary: subzone12,
-        fullName: 'subzone12',
+        boundary: substratum12,
+        fullName: 'substratum12',
         id: 2,
-        name: 'subzone12',
+        name: 'substratum12',
         plantingCompleted: false,
       },
     ],
     targetPlantingDensity: 1500,
   },
   {
-    boundary: zone2,
+    boundary: stratum2,
     id: 2,
-    name: 'zone2',
+    name: 'stratum2',
     substrata: [
       {
-        boundary: subzone21,
-        fullName: 'subzone21',
+        boundary: substratum21,
+        fullName: 'substratum21',
         id: 1,
-        name: 'subzone21',
+        name: 'substratum21',
         plantingCompleted: false,
       },
       {
-        boundary: subzone22,
-        fullName: 'subzone22',
+        boundary: substratum22,
+        fullName: 'substratum22',
         id: 2,
-        name: 'subzone22',
+        name: 'substratum22',
         plantingCompleted: false,
       },
     ],
