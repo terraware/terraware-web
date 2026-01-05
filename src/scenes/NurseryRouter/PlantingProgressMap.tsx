@@ -38,14 +38,14 @@ export default function PlantingProgressMap({ plantingSiteId, reloadTracking }: 
   const [focusEntities, setFocusEntities] = useState<{ sourceId: string; id: number }[]>([]);
 
   const { plantingSite, setSelectedPlantingSite } = usePlantingSiteData();
-  const [zoneIdSelected, setZoneIdSelected] = useState<number>(-1);
+  const [stratumIdSelected, setStratumIdSelected] = useState<number>(-1);
   const [statsWarningDialogProps, setStatsWarningDialogProps] = useState<{ id: number; val: boolean } | undefined>();
 
-  const selectedZoneHasStats = useAppSelector((state) =>
+  const selectedStratumHasStats = useAppSelector((state) =>
     selectStrataHaveStatistics(
       state,
       selectedOrganization?.id || -1,
-      { [plantingSiteId]: new Set([zoneIdSelected]) },
+      { [plantingSiteId]: new Set([stratumIdSelected]) },
       defaultTimeZone.get().id
     )
   );
@@ -66,20 +66,20 @@ export default function PlantingProgressMap({ plantingSiteId, reloadTracking }: 
     }
   }, [plantingSite, mapData?.site?.entities]);
 
-  const subzonesAreaHa: Record<number, number> = useMemo(() => {
+  const substrataAreaHa: Record<number, number> = useMemo(() => {
     const result: Record<number, number> = {};
     plantingSite?.strata
-      ?.flatMap((zone) => zone.substrata)
+      ?.flatMap((stratum) => stratum.substrata)
       ?.forEach((sz) => {
         result[sz.id] = sz.areaHa;
       });
     return result;
   }, [plantingSite]);
 
-  const subzonesComplete: Record<number, boolean> = useMemo(() => {
+  const substrataComplete: Record<number, boolean> = useMemo(() => {
     const result: Record<number, boolean> = {};
     plantingSite?.strata
-      ?.flatMap((zone) => zone.substrata)
+      ?.flatMap((stratum) => stratum.substrata)
       ?.forEach((sz) => {
         result[sz.id] = sz.plantingCompleted;
       });
@@ -115,15 +115,17 @@ export default function PlantingProgressMap({ plantingSiteId, reloadTracking }: 
 
   const updatePlantingComplete = useCallback(
     (id: number, val: boolean) => {
-      if (!selectedZoneHasStats) {
+      if (!selectedStratumHasStats) {
         completeUpdate(id, val);
       } else {
         setStatsWarningDialogProps({ id, val });
-        const selectedZone = plantingSite?.strata?.find((zone) => zone.substrata.map((sz) => sz.id).includes(id));
-        setZoneIdSelected(selectedZone?.id ?? -1);
+        const selectedStratum = plantingSite?.strata?.find((stratum) =>
+          stratum.substrata.map((sz) => sz.id).includes(id)
+        );
+        setStratumIdSelected(selectedStratum?.id ?? -1);
       }
     },
-    [selectedZoneHasStats, completeUpdate, plantingSite?.strata]
+    [selectedStratumHasStats, completeUpdate, plantingSite?.strata]
   );
 
   return mapData ? (
@@ -145,11 +147,11 @@ export default function PlantingProgressMap({ plantingSiteId, reloadTracking }: 
         contextRenderer={{
           render: (properties: MapSourceProperties) => (
             <PlantingProgressMapDialog
-              subzoneId={properties.id}
-              subzoneName={properties.fullName}
-              subzoneAreaHa={subzonesAreaHa[properties.id]}
+              substratumId={properties.id}
+              substratumName={properties.fullName}
+              substratumAreaHa={substrataAreaHa[properties.id]}
               siteName={plantingSite?.name || ''}
-              plantingComplete={subzonesComplete[properties.id]}
+              plantingComplete={substrataComplete[properties.id]}
               onUpdatePlantingComplete={updatePlantingComplete}
               busy={updateStatus?.status === 'pending'}
             />

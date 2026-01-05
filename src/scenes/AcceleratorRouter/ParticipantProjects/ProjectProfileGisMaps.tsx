@@ -24,7 +24,7 @@ import { MultiPolygon } from 'src/types/Tracking';
 
 import { useParticipantProjectData } from './ParticipantProjectContext';
 
-type ZoneOrSiteOption = { name: string; type: 'zone' | 'site'; showSeparator?: boolean };
+type StratumOrSiteOption = { name: string; type: 'stratum' | 'site'; showSeparator?: boolean };
 const ProjectProfileGisMaps = () => {
   const projectData = useParticipantProjectData();
   const theme = useTheme();
@@ -36,7 +36,7 @@ const ProjectProfileGisMaps = () => {
   const [plantingSitesData, setPlantingSitesData] = useState<FeatureCollection<MultiPolygon>>();
   const [boundariesData, setBoundariesData] = useState<FeatureCollection<MultiPolygon>>();
   const { activeLocale } = useLocalization();
-  const [zoneOrSite, setZoneOrSite] = useState<ZoneOrSiteOption>();
+  const [stratumOrSite, setStratumOrSite] = useState<StratumOrSiteOption>();
   const [selectedArea, setSelectedArea] = useState<string>();
   const [showSiteMap, setShowSiteMap] = useState(false);
   const [showBoundaryMap, setShowBoundaryMap] = useState(false);
@@ -107,7 +107,7 @@ const ProjectProfileGisMaps = () => {
 
   // Process site data asynchronously
   useEffect(() => {
-    if (!plantingSitesData || !showSiteMap || !zoneOrSite || zoneOrSite.type !== 'site') {
+    if (!plantingSitesData || !showSiteMap || !stratumOrSite || stratumOrSite.type !== 'site') {
       setIsProcessingSite(false);
       setProcessedSiteData(null);
       return;
@@ -117,7 +117,7 @@ const ProjectProfileGisMaps = () => {
 
     // Process in next frame to avoid blocking UI
     requestAnimationFrame(() => {
-      const filteredFeatures = plantingSitesData.features.filter((f) => f.properties?.site === zoneOrSite.name);
+      const filteredFeatures = plantingSitesData.features.filter((f) => f.properties?.site === stratumOrSite.name);
 
       if (filteredFeatures.length === 0) {
         setProcessedSiteData(basePlantingMapData);
@@ -137,25 +137,25 @@ const ProjectProfileGisMaps = () => {
       setProcessedSiteData(mapData);
       setIsProcessingSite(false);
     });
-  }, [plantingSitesData, showSiteMap, zoneOrSite, basePlantingMapData]);
+  }, [plantingSitesData, showSiteMap, stratumOrSite, basePlantingMapData]);
 
   const filteredSiteData = useMemo(() => {
-    if (!showSiteMap || !zoneOrSite || zoneOrSite.type !== 'site') {
+    if (!showSiteMap || !stratumOrSite || stratumOrSite.type !== 'site') {
       return basePlantingMapData;
     }
     return processedSiteData || basePlantingMapData;
-  }, [showSiteMap, zoneOrSite, processedSiteData, basePlantingMapData]);
+  }, [showSiteMap, stratumOrSite, processedSiteData, basePlantingMapData]);
 
-  const filteredZoneData = useMemo(() => {
+  const filteredStratumData = useMemo(() => {
     if (!boundariesData) {
       return undefined;
     }
 
-    if (!showBoundaryMap || !zoneOrSite || zoneOrSite.type !== 'zone') {
+    if (!showBoundaryMap || !stratumOrSite || stratumOrSite.type !== 'stratum') {
       return boundariesMapData;
     }
 
-    if (zoneOrSite.name === strings.ALL_PROJECT_ZONES) {
+    if (stratumOrSite.name === strings.ALL_PROJECT_ZONES) {
       const boundariesMapDataToReturn = { ...boundariesMapData } as MapData;
       boundariesMapDataToReturn.site?.entities.forEach((ent: MapEntity) => (ent.properties.name = ''));
       return boundariesMapDataToReturn;
@@ -163,7 +163,7 @@ const ProjectProfileGisMaps = () => {
 
     const filteredBoundaryData = {
       ...boundariesData,
-      features: boundariesData.features.filter((f) => f.properties?.boundary_name === zoneOrSite.name),
+      features: boundariesData.features.filter((f) => f.properties?.boundary_name === stratumOrSite.name),
     };
 
     if (filteredBoundaryData.features && filteredBoundaryData.features.length > 0) {
@@ -173,13 +173,13 @@ const ProjectProfileGisMaps = () => {
     }
 
     return boundariesMapData;
-  }, [boundariesData, showBoundaryMap, zoneOrSite, boundariesMapData]);
+  }, [boundariesData, showBoundaryMap, stratumOrSite, boundariesMapData]);
 
   const calculateArea = useCallback(() => {
     let totalArea = '';
 
-    if (showSiteMap && zoneOrSite && zoneOrSite.type === 'site' && plantingSitesData) {
-      const filteredFeatures = plantingSitesData.features.filter((f) => f.properties?.site === zoneOrSite.name);
+    if (showSiteMap && stratumOrSite && stratumOrSite.type === 'site' && plantingSitesData) {
+      const filteredFeatures = plantingSitesData.features.filter((f) => f.properties?.site === stratumOrSite.name);
       if (filteredFeatures.length > 0) {
         const filteredPlantingSitesData = {
           ...plantingSitesData,
@@ -189,11 +189,13 @@ const ProjectProfileGisMaps = () => {
           filteredPlantingSitesData as unknown as FeatureCollection<MultiPolygon>
         );
       }
-    } else if (showBoundaryMap && zoneOrSite && zoneOrSite.type === 'zone' && boundariesData) {
-      if (zoneOrSite.name === strings.ALL_PROJECT_ZONES) {
+    } else if (showBoundaryMap && stratumOrSite && stratumOrSite.type === 'stratum' && boundariesData) {
+      if (stratumOrSite.name === strings.ALL_PROJECT_ZONES) {
         totalArea = MapService.calculateAreaFromGisData(boundariesData as unknown as FeatureCollection<MultiPolygon>);
       } else {
-        const filteredFeatures = boundariesData.features.filter((f) => f.properties?.boundary_name === zoneOrSite.name);
+        const filteredFeatures = boundariesData.features.filter(
+          (f) => f.properties?.boundary_name === stratumOrSite.name
+        );
         if (filteredFeatures.length > 0) {
           const filteredBoundaryData = {
             ...boundariesData,
@@ -207,7 +209,7 @@ const ProjectProfileGisMaps = () => {
     }
 
     setSelectedArea(totalArea);
-  }, [boundariesData, plantingSitesData, showBoundaryMap, showSiteMap, zoneOrSite]);
+  }, [boundariesData, plantingSitesData, showBoundaryMap, showSiteMap, stratumOrSite]);
 
   useEffect(() => {
     let timeoutId: ReturnType<typeof setTimeout>;
@@ -221,7 +223,7 @@ const ProjectProfileGisMaps = () => {
         clearTimeout(timeoutId);
       }
     };
-  }, [showSiteMap, showBoundaryMap, zoneOrSite, plantingSitesData, boundariesData, calculateArea]);
+  }, [showSiteMap, showBoundaryMap, stratumOrSite, plantingSitesData, boundariesData, calculateArea]);
 
   // construct the bread crumbs back to originating context
   const crumbs: Crumb[] = useMemo(
@@ -253,56 +255,56 @@ const ProjectProfileGisMaps = () => {
     return Array.from(new Set(plantingSitesData?.features?.map((f) => f.properties?.site)));
   }, [plantingSitesData]);
 
-  const zonesAndSites = useMemo(() => {
-    const zones = uniqueZones?.map((z) => ({ name: z, type: 'zone' }) as ZoneOrSiteOption);
-    const sites = uniqueSites?.map((s) => ({ name: s, type: 'site' }) as ZoneOrSiteOption);
-    if (zones.length > 0 && sites[0]) {
+  const strataAndSites = useMemo(() => {
+    const strata = uniqueZones?.map((z) => ({ name: z, type: 'stratum' }) as StratumOrSiteOption);
+    const sites = uniqueSites?.map((s) => ({ name: s, type: 'site' }) as StratumOrSiteOption);
+    if (strata.length > 0 && sites[0]) {
       sites[0].showSeparator = true;
     }
-    return [...zones, ...sites];
+    return [...strata, ...sites];
   }, [uniqueZones, uniqueSites]);
 
   useEffect(() => {
-    if (!zoneOrSite && zonesAndSites) {
-      setZoneOrSite(zonesAndSites[0]);
+    if (!stratumOrSite && strataAndSites) {
+      setStratumOrSite(strataAndSites[0]);
     }
-  }, [zoneOrSite, zonesAndSites]);
+  }, [stratumOrSite, strataAndSites]);
 
   useEffect(() => {
-    if (zoneOrSite) {
-      if (zoneOrSite.name === strings.ALL_PROJECT_ZONES) {
+    if (stratumOrSite) {
+      if (stratumOrSite.name === strings.ALL_PROJECT_ZONES) {
         setShowBoundaryMap(true);
         setShowSiteMap(false);
         setSelectedLayer(undefined);
-      } else if (zoneOrSite.type === 'site' && uniqueSites.includes(zoneOrSite.name)) {
+      } else if (stratumOrSite.type === 'site' && uniqueSites.includes(stratumOrSite.name)) {
         setShowSiteMap(true);
         setShowBoundaryMap(false);
         setSelectedLayer('Planting Site');
-      } else if (zoneOrSite.type === 'zone' && uniqueZones.includes(zoneOrSite.name)) {
+      } else if (stratumOrSite.type === 'stratum' && uniqueZones.includes(stratumOrSite.name)) {
         setShowBoundaryMap(true);
         setShowSiteMap(false);
         setSelectedLayer(undefined);
       }
     }
-  }, [uniqueSites, uniqueZones, zoneOrSite, zonesAndSites]);
+  }, [uniqueSites, uniqueZones, stratumOrSite, strataAndSites]);
 
-  const labelHandler = useCallback((iZoneOrSite: ZoneOrSiteOption) => iZoneOrSite?.name, []);
+  const labelHandler = useCallback((iStratumOrSite: StratumOrSiteOption) => iStratumOrSite?.name, []);
   const isEqualHandler = useCallback(
-    (zoneOrSiteA: ZoneOrSiteOption, zoneOrSiteB: ZoneOrSiteOption) =>
-      zoneOrSiteA.name === zoneOrSiteB.name && zoneOrSiteA.type === zoneOrSiteB.type,
+    (stratumOrSiteA: StratumOrSiteOption, stratumOrSiteB: StratumOrSiteOption) =>
+      stratumOrSiteA.name === stratumOrSiteB.name && stratumOrSiteA.type === stratumOrSiteB.type,
     []
   );
 
-  const renderOptionHandler = useCallback((iZoneOrSite: ZoneOrSiteOption) => {
+  const renderOptionHandler = useCallback((iStratumOrSite: StratumOrSiteOption) => {
     return (
       <Typography
         component='div'
         sx={{
-          borderTop: iZoneOrSite.showSeparator ? '1px solid' : 'none',
+          borderTop: iStratumOrSite.showSeparator ? '1px solid' : 'none',
           padding: '8px 16px',
         }}
       >
-        {iZoneOrSite.name}
+        {iStratumOrSite.name}
       </Typography>
     );
   }, []);
@@ -311,19 +313,19 @@ const ProjectProfileGisMaps = () => {
     (input: string) =>
       ({
         name: input,
-      }) as ZoneOrSiteOption,
+      }) as StratumOrSiteOption,
     []
   );
 
-  const zonesAndSitesDropdown = (
+  const strataAndSitesDropdown = (
     <Box display='flex' alignItems='center' gap={1}>
       <SelectT
-        id='zoneOrSite'
+        id='stratumOrSite'
         label=''
-        onChange={setZoneOrSite}
-        options={zonesAndSites}
+        onChange={setStratumOrSite}
+        options={strataAndSites}
         placeholder={''}
-        selectedValue={zoneOrSite}
+        selectedValue={stratumOrSite}
         selectStyles={{ optionsContainer: { textAlign: 'left' }, optionContainer: { padding: 0 } }}
         displayLabel={labelHandler}
         isEqual={isEqualHandler}
@@ -357,23 +359,25 @@ const ProjectProfileGisMaps = () => {
     (properties: MapSourceProperties): JSX.Element | null => {
       const tooltipProperties: TooltipProperty[] = [{ key: strings.TYPE, value: properties.type }];
 
-      if (properties.type === 'subzone') {
-        const selectedSubZone = filteredSiteData?.subzone?.entities?.find((ent: MapEntity) => ent.id === properties.id);
+      if (properties.type === 'substratum') {
+        const selectedSubstratum = filteredSiteData?.substratum?.entities?.find(
+          (ent: MapEntity) => ent.id === properties.id
+        );
         tooltipProperties.push({
           key: strings.ZONE,
-          value: filteredSiteData?.subzone?.entities?.[0].properties.zoneId,
+          value: filteredSiteData?.substratum?.entities?.[0].properties.zoneId,
         });
         tooltipProperties.push({
           key: strings.AREA_HA,
-          value: selectedSubZone && 'totalArea' in selectedSubZone ? String(selectedSubZone.totalArea) : '',
+          value: selectedSubstratum && 'totalArea' in selectedSubstratum ? String(selectedSubstratum.totalArea) : '',
         });
       }
 
-      if (properties.type === 'zone') {
-        const selectedZone = filteredSiteData?.zone?.entities?.find((ent: MapEntity) => ent.id === properties.id);
+      if (properties.type === 'stratum') {
+        const selectedStratum = filteredSiteData?.stratum?.entities?.find((ent: MapEntity) => ent.id === properties.id);
         tooltipProperties.push({
           key: strings.AREA_HA,
-          value: selectedZone && 'totalArea' in selectedZone ? String(selectedZone.totalArea) : '',
+          value: selectedStratum && 'totalArea' in selectedStratum ? String(selectedStratum.totalArea) : '',
         });
       }
 
@@ -398,7 +402,7 @@ const ProjectProfileGisMaps = () => {
       crumbs={crumbs}
       hierarchicalCrumbs={false}
       description={strings.MAPS_GIS_DESCRIPTION}
-      rightComponent={mapsNotUploaded ? undefined : zonesAndSitesDropdown}
+      rightComponent={mapsNotUploaded ? undefined : strataAndSitesDropdown}
       descriptionStyle={{ paddingLeft: 1 }}
     >
       <Card
@@ -412,10 +416,10 @@ const ProjectProfileGisMaps = () => {
           borderRadius: theme.spacing(1),
         }}
       >
-        {zoneOrSite?.name && (
+        {stratumOrSite?.name && (
           <Box display='flex' alignItems='center' paddingBottom={2}>
             <Typography fontSize={'20px'} fontWeight={600} paddingRight={1}>
-              {zoneOrSite.name}
+              {stratumOrSite.name}
             </Typography>
             <Typography fontSize={'16px'} fontWeight={400} paddingRight={1}>
               {strings.FROM_GIS_DATABASE}
@@ -459,9 +463,9 @@ const ProjectProfileGisMaps = () => {
               minHeight='700px'
             />
           )}
-          {boundariesData && boundariesMapData && showBoundaryMap && filteredZoneData && (
+          {boundariesData && boundariesMapData && showBoundaryMap && filteredStratumData && (
             <PlantingSiteMap
-              mapData={filteredZoneData}
+              mapData={filteredStratumData}
               style={{ width: '100%', borderRadius: theme.spacing(1) }}
               layers={['Project Zones']}
               minHeight='700px'

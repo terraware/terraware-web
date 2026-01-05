@@ -35,7 +35,7 @@ export interface WithdrawalSummary {
   purpose: string;
   facilityName: string;
   destinationName: string;
-  subzoneNames: string;
+  substratumNames: string;
   scientificNames: string[];
   totalWithdrawn: string;
   hasReassignments: boolean;
@@ -103,7 +103,7 @@ export default function NurseryWithdrawalsDetailsView({
             purpose: withdrawalSummaryRecord.purpose as string,
             facilityName: withdrawalSummaryRecord.facilityName as string,
             destinationName: withdrawalSummaryRecord.destinationName as string,
-            subzoneNames: withdrawalSummaryRecord.substratumNames as string,
+            substratumNames: withdrawalSummaryRecord.substratumNames as string,
             scientificNames: withdrawalSummaryRecord.speciesScientificNames as string[],
             totalWithdrawn: withdrawalSummaryRecord.totalWithdrawn as string,
             hasReassignments: isTrue(withdrawalSummaryRecord.hasReassignments),
@@ -123,7 +123,7 @@ export default function NurseryWithdrawalsDetailsView({
     minWidth: 'fit-content',
   };
 
-  const hasSubzones = delivery?.plantings?.some((planting) => planting.plantingSubzoneId) ?? false;
+  const hasSubstrata = delivery?.plantings?.some((planting) => planting.substratumId) ?? false;
 
   const handleReassign = () => {
     if (delivery) {
@@ -226,7 +226,7 @@ export default function NurseryWithdrawalsDetailsView({
 
             {!withdrawal?.undoneByWithdrawalId && (
               <Box>
-                {withdrawal?.purpose === OUTPLANT && hasSubzones && (
+                {withdrawal?.purpose === OUTPLANT && hasSubstrata && (
                   <Box sx={{ display: 'inline', paddingLeft: 1 }}>
                     <Button
                       size='medium'

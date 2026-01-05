@@ -11,15 +11,15 @@ import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 type OutplantReassignmentTableProps = {
   species: Species[];
-  subzoneNames: Record<number, string>;
+  substratumNames: Record<number, string>;
   delivery?: Delivery;
   withdrawalNotes?: string;
 };
 
 const columns = (): TableColumnType[] => [
   { key: 'species', name: strings.SPECIES, type: 'string' },
-  { key: 'from_subzone', name: strings.FROM_SUBZONE, type: 'string' },
-  { key: 'to_subzone', name: strings.TO_SUBZONE, type: 'string' },
+  { key: 'from_substratum', name: strings.FROM_SUBZONE, type: 'string' },
+  { key: 'to_substratum', name: strings.TO_SUBZONE, type: 'string' },
   { key: 'original_qty', name: strings.ORIGINAL_QTY, type: 'string' },
   { key: 'final_qty', name: strings.FINAL_QTY, type: 'string' },
   { key: 'notes', name: strings.NOTES, type: 'string' },
@@ -28,7 +28,7 @@ const columns = (): TableColumnType[] => [
 export default function OutplantReassignmentTable({
   delivery,
   species,
-  subzoneNames,
+  substratumNames,
   withdrawalNotes,
 }: OutplantReassignmentTableProps): JSX.Element {
   const { user } = useUser();
@@ -53,17 +53,17 @@ export default function OutplantReassignmentTable({
       if (deliveryPlanting && reassignmentFromPlanting && reassignmentToPlanting) {
         rows.push({
           species: speciesName,
-          from_subzone: '',
-          to_subzone: deliveryPlanting.plantingSubzoneId ? subzoneNames[deliveryPlanting.plantingSubzoneId] : '',
+          from_substratum: '',
+          to_substratum: deliveryPlanting.substratumId ? substratumNames[deliveryPlanting.substratumId] : '',
           original_qty: numberFormatter.format(deliveryPlanting.numPlants),
           final_qty: numberFormatter.format(deliveryPlanting.numPlants + reassignmentFromPlanting.numPlants),
           notes: withdrawalNotes ?? '',
         });
         rows.push({
           species: speciesName,
-          from_subzone: deliveryPlanting.plantingSubzoneId ? subzoneNames[deliveryPlanting.plantingSubzoneId] : '',
-          to_subzone: reassignmentToPlanting.plantingSubzoneId
-            ? subzoneNames[reassignmentToPlanting.plantingSubzoneId]
+          from_substratum: deliveryPlanting.substratumId ? substratumNames[deliveryPlanting.substratumId] : '',
+          to_substratum: reassignmentToPlanting.substratumId
+            ? substratumNames[reassignmentToPlanting.substratumId]
             : '',
           original_qty: '0',
           final_qty: numberFormatter.format(reassignmentToPlanting.numPlants),
@@ -73,7 +73,7 @@ export default function OutplantReassignmentTable({
     }
 
     return rows;
-  }, [delivery, species, subzoneNames, withdrawalNotes, numberFormatter]);
+  }, [delivery, species, substratumNames, withdrawalNotes, numberFormatter]);
 
   return <Table id='outplant-reassignment-table' columns={columns} rows={rowData} orderBy={'name'} />;
 }

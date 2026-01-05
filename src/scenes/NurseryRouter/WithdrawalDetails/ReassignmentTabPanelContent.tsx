@@ -66,7 +66,7 @@ export default function ReassignmentTabPanelContent({
       <Box marginTop={theme.spacing(3)}>
         <OutplantReassignmentTable
           species={species}
-          subzoneNames={substratumNames}
+          substratumNames={substratumNames}
           delivery={delivery}
           withdrawalNotes={withdrawal?.notes}
         />

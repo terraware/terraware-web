@@ -40,7 +40,7 @@ export default function WithdrawalTabPanelContent({
       <Box marginTop={theme.spacing(3)}>
         <OutplantWithdrawalTable
           species={species}
-          subzoneNames={substratumNames}
+          substratumNames={substratumNames}
           delivery={delivery}
           batches={batches}
           withdrawal={withdrawal}

@@ -12,16 +12,16 @@ const NurseryRouter = () => {
   const { allPlantingSites } = usePlantingSiteData();
 
   const substratumNames = useMemo(() => {
-    const subzones: Record<number, string> = {};
+    const substrata: Record<number, string> = {};
     for (const plantingSite of allPlantingSites ?? []) {
-      for (const plantingZone of plantingSite.strata ?? []) {
-        for (const subzone of plantingZone.substrata ?? []) {
-          subzones[subzone.id] = plantingZone.name + '-' + subzone.name;
+      for (const stratum of plantingSite.strata ?? []) {
+        for (const substratum of stratum.substrata ?? []) {
+          substrata[substratum.id] = stratum.name + '-' + substratum.name;
         }
       }
     }
 
-    return subzones;
+    return substrata;
   }, [allPlantingSites]);
 
   return (

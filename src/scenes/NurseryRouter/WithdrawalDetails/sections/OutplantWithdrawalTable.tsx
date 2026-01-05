@@ -15,7 +15,7 @@ import WithdrawalRenderer from './WithdrawalRenderer';
 
 type OutplantWithdrawalTableProps = {
   species: Species[];
-  subzoneNames: Record<number, string>;
+  substratumNames: Record<number, string>;
   delivery?: Delivery;
   batches?: Batch[];
   withdrawal?: NurseryWithdrawal;
@@ -24,13 +24,13 @@ type OutplantWithdrawalTableProps = {
 const columns = (): TableColumnType[] => [
   { key: 'batchNumber', name: strings.BATCH, type: 'string' },
   { key: 'name', name: strings.SPECIES, type: 'string' },
-  { key: 'toSubzone', name: strings.TO_SUBZONE, type: 'string' },
+  { key: 'toSubstratum', name: strings.TO_SUBZONE, type: 'string' },
   { key: 'total', name: strings.QUANTITY, type: 'number' },
 ];
 
 export default function OutplantWithdrawalTable({
   species,
-  subzoneNames,
+  substratumNames,
   delivery,
   batches,
   withdrawal,
@@ -44,7 +44,7 @@ export default function OutplantWithdrawalTable({
     batchNumber: string;
     batchId: number;
     speciesId: number;
-    toSubzone: string;
+    toSubstratum: string;
   };
 
   const rowData = useMemo(() => {
@@ -57,28 +57,28 @@ export default function OutplantWithdrawalTable({
           (acc, pl) => (acc.includes(pl.speciesId) ? acc : [...acc, pl.speciesId]),
           []
         ) ?? [];
-      const speciesSubzoneMap: Record<number, Record<number, number>> = {};
+      const speciesSubstratumMap: Record<number, Record<number, number>> = {};
       const rows: { [p: string]: unknown }[] = [];
       for (const sp of speciesList) {
-        // for each species add the number of plants in each subzone for delivery type plantings
-        speciesSubzoneMap[sp] = {};
+        // for each species add the number of plants in each substratum for delivery type plantings
+        speciesSubstratumMap[sp] = {};
         delivery?.plantings
           ?.filter((pl) => pl.speciesId === sp && pl.type === 'Delivery')
           .forEach((pl) => {
-            const subzone = pl.plantingSubzoneId ?? -1;
-            if (!speciesSubzoneMap[sp][subzone]) {
-              speciesSubzoneMap[sp][subzone] = pl.numPlants;
+            const substratum = pl.substratumId ?? -1;
+            if (!speciesSubstratumMap[sp][substratum]) {
+              speciesSubstratumMap[sp][substratum] = pl.numPlants;
               return;
             }
-            speciesSubzoneMap[sp][subzone] += pl.numPlants;
+            speciesSubstratumMap[sp][substratum] += pl.numPlants;
           });
 
-        for (const subzoneKey of Object.keys(speciesSubzoneMap[sp])) {
-          const subzone = Number(subzoneKey);
+        for (const substratumKey of Object.keys(speciesSubstratumMap[sp])) {
+          const substratum = Number(substratumKey);
           rows.push({
             species: species?.find((x) => x?.id === sp)?.scientificName ?? '',
-            to_subzone: subzone > -1 ? subzoneNames[subzone] ?? subzone?.toString() : '',
-            quantity: numberFormatter.format(speciesSubzoneMap[sp][subzone]),
+            to_substratum: substratum > -1 ? substratumNames[substratum] ?? substratum?.toString() : '',
+            quantity: numberFormatter.format(speciesSubstratumMap[sp][substratum]),
           });
         }
       }
@@ -94,15 +94,15 @@ export default function OutplantWithdrawalTable({
           const hardeningOff = hardeningOffQuantityWithdrawn || 0;
           const ready = readyQuantityWithdrawn || 0;
           const name = species.find((sp) => sp.id === speciesId)?.scientificName;
-          const subzonemap = speciesSubzoneMap[speciesId];
-          const subzoneIds = Object.keys(subzonemap);
+          const substratumMap = speciesSubstratumMap[speciesId];
+          const substratumIds = Object.keys(substratumMap);
           batchesMap.push({
             name,
             total: activeGrowth + hardeningOff + ready,
             batchNumber,
             batchId,
             speciesId,
-            toSubzone: subzoneIds.map((szId) => subzoneNames[Number(szId)]).join(','),
+            toSubstratum: substratumIds.map((szId) => substratumNames[Number(szId)]).join(','),
           });
         });
       }
@@ -111,7 +111,7 @@ export default function OutplantWithdrawalTable({
     } else {
       return [];
     }
-  }, [delivery, species, subzoneNames, numberFormatter, batches, withdrawal?.batchWithdrawals]);
+  }, [delivery, species, substratumNames, numberFormatter, batches, withdrawal?.batchWithdrawals]);
 
   return (
     <Table

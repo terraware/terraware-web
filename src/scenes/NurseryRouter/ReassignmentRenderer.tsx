@@ -9,21 +9,21 @@ import { RendererProps } from 'src/components/common/table/types';
 import strings from 'src/strings';
 import { NumberFormatter } from 'src/types/Number';
 
-export type SubzoneInfo = {
+export type SubstratumInfo = {
   id: number;
   name: string;
 };
 
-export type ZoneInfo = {
+export type StratumInfo = {
   id: number;
   name: string;
-  subzones: SubzoneInfo[];
+  substrata: SubstratumInfo[];
 };
 
 export type Reassignment = {
   plantingId: number;
-  newSubzoneId?: number;
-  newZoneId?: number;
+  newSubstratumId?: number;
+  newStratumId?: number;
   quantity?: number;
   notes?: string;
   error?: string;
@@ -33,25 +33,25 @@ export type ReassignmentRowType = {
   numPlants: number;
   species: string;
   siteName: string;
-  originalZone: ZoneInfo;
-  originalSubzone: SubzoneInfo;
+  originalStratum: StratumInfo;
+  originalSubstratum: SubstratumInfo;
   reassignment: Reassignment;
 };
 
 export type ReassignmentRendererProps = {
-  zones: ZoneInfo[];
+  strata: StratumInfo[];
   setReassignment: (reassignment: Reassignment) => void;
   numberFormatter: NumberFormatter;
 };
 
-export default function ReassignmentRenderer({ zones, setReassignment, numberFormatter }: ReassignmentRendererProps) {
+export default function ReassignmentRenderer({ strata, setReassignment, numberFormatter }: ReassignmentRendererProps) {
   // eslint-disable-next-line react/display-name
   return (props: RendererProps<ReassignmentRowType>): JSX.Element => {
     const { column, row } = props;
-    const { numPlants, originalZone, originalSubzone, reassignment } = row;
-    const { plantingId, newSubzoneId, newZoneId, error, quantity, notes } = reassignment;
+    const { numPlants, originalStratum, originalSubstratum, reassignment } = row;
+    const { plantingId, newSubstratumId, newStratumId, error, quantity, notes } = reassignment;
 
-    const subzoneStyles = {
+    const substratumStyles = {
       minWidth: '175px',
     };
 
@@ -61,23 +61,23 @@ export default function ReassignmentRenderer({ zones, setReassignment, numberFor
       },
     };
 
-    const zoneOptions: DropdownItem[] = zones
-      .filter((zone) => zone.subzones.some((subzone) => subzone.id !== originalSubzone.id))
-      .map((zone) => ({ label: zone.name, value: zone.id }));
+    const stratumOptions: DropdownItem[] = strata
+      .filter((stratum) => stratum.substrata.some((substratum) => substratum.id !== originalSubstratum.id))
+      .map((stratum) => ({ label: stratum.name, value: stratum.id }));
 
-    const subzoneOptions: DropdownItem[] = newZoneId
+    const substratumOptions: DropdownItem[] = newStratumId
       ? // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-        zones
-          .find((zone) => zone.id === newZoneId)!!
-          .subzones.filter((subzone) => subzone.id !== originalSubzone.id)
-          .map((subzone) => ({
-            value: subzone.id,
-            label: subzone.name,
+        strata
+          .find((stratum) => stratum.id === newStratumId)!!
+          .substrata.filter((substratum) => substratum.id !== originalSubstratum.id)
+          .map((substratum) => ({
+            value: substratum.id,
+            label: substratum.name,
           }))
       : [];
 
-    const selectedZone = zoneOptions.find((option) => option.value === newZoneId);
-    const selectedSubzone = subzoneOptions.find((option) => option.value === newSubzoneId);
+    const selectedStratum = stratumOptions.find((option) => option.value === newStratumId);
+    const selectedSubstratum = substratumOptions.find((option) => option.value === newSubstratumId);
 
     const onUpdateQuantity = (value: any) => {
       if (value === '') {
@@ -93,46 +93,46 @@ export default function ReassignmentRenderer({ zones, setReassignment, numberFor
       setReassignment({ ...reassignment, quantity: quantityValue });
     };
 
-    if (column.key === 'newZone') {
+    if (column.key === 'newStratum') {
       const value = (
         <Autocomplete
-          id={`newZone_${plantingId}`}
-          selected={selectedZone}
-          onChange={(newZoneValue: any) => {
-            if (newZoneValue.value) {
-              setReassignment({ ...reassignment, newZoneId: newZoneValue.value, newSubzoneId: undefined });
+          id={`newStratum_${plantingId}`}
+          selected={selectedStratum}
+          onChange={(newStratumValue: any) => {
+            if (newStratumValue.value) {
+              setReassignment({ ...reassignment, newStratumId: newStratumValue.value, newSubstratumId: undefined });
             }
           }}
           isEqual={(option: any, selected: any) => option?.value === selected?.value}
           label={''}
           placeholder={strings.SELECT}
-          disabled={selectedSubzone !== undefined}
-          options={zoneOptions}
+          disabled={selectedSubstratum !== undefined}
+          options={stratumOptions}
           freeSolo={false}
           hideClearIcon={true}
-          sx={subzoneStyles}
+          sx={substratumStyles}
         />
       );
 
       return <CellRenderer {...props} value={value} sx={cellStyles} />;
     }
 
-    if (column.key === 'newSubzone') {
+    if (column.key === 'newSubstratum') {
       const value = (
         <Autocomplete
-          id={`newSubzone_${plantingId}`}
-          selected={selectedSubzone}
-          onChange={(newSubzoneValue: any) => {
-            setReassignment({ ...reassignment, newSubzoneId: newSubzoneValue.value });
+          id={`newSubstratum_${plantingId}`}
+          selected={selectedSubstratum}
+          onChange={(newSubstratumValue: any) => {
+            setReassignment({ ...reassignment, newSubstratumId: newSubstratumValue.value });
           }}
           isEqual={(option: any, selected: any) => option?.value === selected?.value}
           label={''}
           placeholder={strings.SELECT}
-          disabled={subzoneOptions.length === 0}
-          options={subzoneOptions}
+          disabled={substratumOptions.length === 0}
+          options={substratumOptions}
           freeSolo={false}
           hideClearIcon={false}
-          sx={subzoneStyles}
+          sx={substratumStyles}
         />
       );
 
@@ -176,12 +176,12 @@ export default function ReassignmentRenderer({ zones, setReassignment, numberFor
       return <CellRenderer {...props} value={value} sx={cellStyles} />;
     }
 
-    if (column.key === 'originalSubzone') {
-      return <CellRenderer {...props} value={originalSubzone.name} />;
+    if (column.key === 'originalSubstratum') {
+      return <CellRenderer {...props} value={originalSubstratum.name} />;
     }
 
-    if (column.key === 'originalZone') {
-      return <CellRenderer {...props} value={originalZone.name} />;
+    if (column.key === 'originalStratum') {
+      return <CellRenderer {...props} value={originalStratum.name} />;
     }
 
     return <CellRenderer {...props} />;

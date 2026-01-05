@@ -60,7 +60,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   const navigate = useSyncNavigate();
   const location = useStateLocation();
   const query = useQuery();
-  const subzoneParam = query.get('substratumName');
+  const substratumParam = query.get('substratumName');
   const siteParam = query.get('siteName');
   const dispatch = useAppDispatch();
 
@@ -343,7 +343,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   }, [siteParam, query, navigate, location]);
 
   useEffect(() => {
-    if (subzoneParam) {
+    if (substratumParam) {
       query.delete('substratumName');
       navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
       setFilters((curr) => ({
@@ -352,11 +352,11 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
           field: 'substratumNames',
           operation: 'field',
           type: 'Exact',
-          values: [subzoneParam],
+          values: [substratumParam],
         },
       }));
     }
-  }, [subzoneParam, query, navigate, location]);
+  }, [substratumParam, query, navigate, location]);
 
   const onSortChange = useCallback((order: SortOrder, orderBy: string) => {
     const orderByStr =

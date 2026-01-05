@@ -24,15 +24,15 @@ import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
 
-import ReassignmentRenderer, { Reassignment, ReassignmentRowType, ZoneInfo } from './ReassignmentRenderer';
+import ReassignmentRenderer, { Reassignment, ReassignmentRowType, StratumInfo } from './ReassignmentRenderer';
 
 const columns = (): TableColumnType[] => [
   { key: 'species', name: strings.SPECIES, type: 'string' },
   { key: 'siteName', name: strings.PLANTING_SITE, type: 'string' },
-  { key: 'originalZone', name: strings.ORIGINAL_ZONE, type: 'string' },
-  { key: 'originalSubzone', name: strings.ORIGINAL_SUBZONE, type: 'string' },
-  { key: 'newZone', name: strings.NEW_ZONE, type: 'string' },
-  { key: 'newSubzone', name: strings.NEW_SUBZONE, type: 'string' },
+  { key: 'originalStratum', name: strings.ORIGINAL_ZONE, type: 'string' },
+  { key: 'originalSubstratum', name: strings.ORIGINAL_SUBZONE, type: 'string' },
+  { key: 'newStratum', name: strings.NEW_ZONE, type: 'string' },
+  { key: 'newSubstratum', name: strings.NEW_SUBZONE, type: 'string' },
   { key: 'reassign', name: strings.REASSIGN, type: 'number' },
   { key: 'notes', name: strings.NOTES, type: 'string' },
 ];
@@ -47,9 +47,9 @@ export default function NurseryReassignmentView(): JSX.Element {
   const { deliveryId } = useParams<{ deliveryId: string }>();
   const snackbar = useSnackbar();
   const [delivery, setDelivery] = useState<Delivery>();
-  const [zones, setZones] = useState<ZoneInfo[]>();
+  const [strata, setStrata] = useState<StratumInfo[]>();
   const [siteName, setSiteName] = useState<string>();
-  const [reassignments, setReassignments] = useState<{ [subzoneId: string]: Reassignment }>({});
+  const [reassignments, setReassignments] = useState<{ [substratumId: string]: Reassignment }>({});
   const [noReassignments, setNoReassignments] = useState<boolean>(false);
   const contentRef = useRef(null);
 
@@ -72,7 +72,7 @@ export default function NurseryReassignmentView(): JSX.Element {
     void populateDelivery();
   }, [deliveryId, snackbar]);
 
-  // populate zones
+  // populate strata
   useEffect(() => {
     if (!delivery) {
       return;
@@ -87,13 +87,13 @@ export default function NurseryReassignmentView(): JSX.Element {
           return;
         }
 
-        const zoneInfos = response.site.strata.map((zone) => ({
-          id: zone.id,
-          name: zone.name,
-          subzones: zone.substrata.map((subzone) => ({ id: subzone.id, name: subzone.fullName })),
+        const stratumInfos = response.site.strata.map((stratum) => ({
+          id: stratum.id,
+          name: stratum.name,
+          substrata: stratum.substrata.map((substratum) => ({ id: substratum.id, name: substratum.fullName })),
         }));
 
-        setZones(zoneInfos);
+        setStrata(stratumInfos);
       } else {
         snackbar.toastError();
       }
@@ -118,7 +118,7 @@ export default function NurseryReassignmentView(): JSX.Element {
           hasErrors = true;
           return false;
         }
-        return Number(reassignment.quantity) > 0 && reassignment.newSubzoneId;
+        return Number(reassignment.quantity) > 0 && reassignment.newSubstratumId;
       });
 
     if (hasErrors) {
@@ -134,7 +134,7 @@ export default function NurseryReassignmentView(): JSX.Element {
       reassignments: validReassignments.map((reassignment) => ({
         fromPlantingId: reassignment.plantingId,
         numPlants: reassignment.quantity!,
-        toSubstratumId: reassignment.newSubzoneId!,
+        toSubstratumId: reassignment.newSubstratumId!,
         notes: reassignment.notes,
       })),
     };
@@ -148,24 +148,26 @@ export default function NurseryReassignmentView(): JSX.Element {
   };
 
   const plantings: ReassignmentRowType[] = useMemo(() => {
-    if (!delivery || !siteName || !zones) {
+    if (!delivery || !siteName || !strata) {
       return [];
     }
 
     return delivery.plantings
       .map((planting) => {
-        if (planting.type !== 'Delivery' || !planting.plantingSubzoneId) {
+        if (planting.type !== 'Delivery' || !planting.substratumId) {
           return null;
         }
 
-        const originalZone = zones.find((zone) =>
-          zone.subzones.some((subzone) => subzone.id === planting.plantingSubzoneId)
+        const originalStratum = strata.find((stratum) =>
+          stratum.substrata.some((substratum) => substratum.id === planting.substratumId)
         );
-        if (!originalZone) {
+        if (!originalStratum) {
           return null;
         }
-        const originalSubzone = originalZone.subzones.find((subzone) => subzone.id === planting.plantingSubzoneId);
-        if (!originalSubzone) {
+        const originalSubstratum = originalStratum.substrata.find(
+          (substratum) => substratum.id === planting.substratumId
+        );
+        if (!originalSubstratum) {
           return null;
         }
 
@@ -173,19 +175,19 @@ export default function NurseryReassignmentView(): JSX.Element {
           numPlants: planting.numPlants,
           species: species.find((_species) => _species.id === planting.speciesId)?.scientificName ?? '',
           siteName,
-          originalZone,
-          originalSubzone,
+          originalStratum,
+          originalSubstratum,
           reassignment: reassignments[planting.id] || { plantingId: planting.id, notes: '' },
         };
       })
       .filter((planting): planting is ReassignmentRowType => !!planting);
-  }, [delivery, siteName, species, zones, reassignments]);
+  }, [delivery, siteName, species, strata, reassignments]);
 
   const reassignmentRenderer = useMemo(
     () =>
       ReassignmentRenderer({
         numberFormatter,
-        zones: zones || [],
+        strata: strata || [],
         setReassignment: (reassignment: Reassignment) =>
           setReassignments((current) => {
             const newReassignments = { ...current };
@@ -193,7 +195,7 @@ export default function NurseryReassignmentView(): JSX.Element {
             return newReassignments;
           }),
       }),
-    [zones, numberFormatter]
+    [strata, numberFormatter]
   );
 
   return (
@@ -222,7 +224,7 @@ export default function NurseryReassignmentView(): JSX.Element {
           <ErrorBox title={strings.NO_REASSIGNMENTS} text={strings.NO_REASSIGNMENTS_TEXT} />
         </Box>
       )}
-      {zones ? (
+      {strata ? (
         <PageForm
           cancelID='cancelNurseryReassignment'
           saveID='saveNurseryReassignment'
