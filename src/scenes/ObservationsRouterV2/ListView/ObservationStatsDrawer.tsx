@@ -61,51 +61,51 @@ const ObservationStatsDrawer = ({
         observedDensity: results?.plantingDensity,
         survivalRate: results?.survivalRate,
       };
-    } else if (layerFeatureId.layerId === 'zones') {
-      const zoneHistory = siteHistory?.plantingZones?.find(
-        (_zone) => _zone.plantingZoneId === Number(layerFeatureId.featureId)
+    } else if (layerFeatureId.layerId === 'strata') {
+      const stratumHistory = siteHistory?.strata?.find(
+        (_stratum) => _stratum.stratumId === Number(layerFeatureId.featureId)
       );
-      const zone = plantingSite?.plantingZones?.find((_zone) => _zone.id === Number(layerFeatureId.featureId));
-      const zoneResults = results?.plantingZones?.find(
-        (_zone) => _zone.plantingZoneId === Number(layerFeatureId.featureId)
+      const stratum = plantingSite?.strata?.find((_stratum) => _stratum.id === Number(layerFeatureId.featureId));
+      const stratumResults = results?.strata?.find(
+        (_stratum) => _stratum.stratumId === Number(layerFeatureId.featureId)
       );
       return {
-        name: zoneHistory?.name ?? zone?.name,
-        observedPlants: zoneResults?.totalPlants,
-        observedSpecies: zoneResults?.totalSpecies,
-        observedDensity: zoneResults?.plantingDensity,
-        survivalRate: zoneResults?.survivalRate,
+        name: stratumHistory?.name ?? stratum?.name,
+        observedPlants: stratumResults?.totalPlants,
+        observedSpecies: stratumResults?.totalSpecies,
+        observedDensity: stratumResults?.plantingDensity,
+        survivalRate: stratumResults?.survivalRate,
       };
-    } else if (layerFeatureId.layerId === 'subzones') {
-      const subzoneHistory = siteHistory?.plantingZones
-        ?.flatMap((_zone) => _zone.plantingSubzones)
-        .find((_subzone) => _subzone.plantingSubzoneId === Number(layerFeatureId.featureId));
-      const subzone = plantingSite?.plantingZones
-        ?.flatMap((_zone) => _zone.plantingSubzones)
-        .find((_subzone) => _subzone.id === Number(layerFeatureId.featureId));
-      const subzoneResults = results?.plantingZones
-        ?.flatMap((_zone) => _zone.plantingSubzones)
-        ?.find((_subzone) => _subzone.plantingSubzoneId === Number(layerFeatureId.featureId));
+    } else if (layerFeatureId.layerId === 'substrata') {
+      const substratumHistory = siteHistory?.strata
+        ?.flatMap((_stratum) => _stratum.substrata)
+        .find((_substratum) => _substratum.substratumId === Number(layerFeatureId.featureId));
+      const substratum = plantingSite?.strata
+        ?.flatMap((_stratum) => _stratum.substrata)
+        .find((_substratum) => _substratum.id === Number(layerFeatureId.featureId));
+      const substratumResults = results?.strata
+        ?.flatMap((_stratum) => _stratum.substrata)
+        ?.find((_substratum) => _substratum.substratumId === Number(layerFeatureId.featureId));
       return {
-        name: subzoneHistory?.name ?? subzone?.name,
-        observedPlants: subzoneResults?.totalPlants,
-        observedSpecies: subzoneResults?.totalSpecies,
-        observedDensity: subzoneResults?.plantingDensity,
-        survivalRate: subzoneResults?.survivalRate,
+        name: substratumHistory?.name ?? substratum?.name,
+        observedPlants: substratumResults?.totalPlants,
+        observedSpecies: substratumResults?.totalSpecies,
+        observedDensity: substratumResults?.plantingDensity,
+        survivalRate: substratumResults?.survivalRate,
       };
     } else if (
       layerFeatureId.layerId === 'permanentPlots' ||
       layerFeatureId.layerId === 'temporaryPlots' ||
       layerFeatureId.layerId === 'adHocPlots'
     ) {
-      const plot = plantingSite?.plantingZones
-        ?.flatMap((_zone) => _zone.plantingSubzones)
-        ?.flatMap((_subzone) => _subzone.monitoringPlots)
+      const plot = plantingSite?.strata
+        ?.flatMap((_stratum) => _stratum.substrata)
+        ?.flatMap((_substratum) => _substratum.monitoringPlots)
         .find((_plot) => _plot.id === Number(layerFeatureId.featureId));
       const allplotResults =
-        results?.plantingZones
-          ?.flatMap((_zone) => _zone.plantingSubzones)
-          ?.flatMap((_subzone) => _subzone.monitoringPlots) ?? [];
+        results?.strata
+          ?.flatMap((_stratum) => _stratum.substrata)
+          ?.flatMap((_substratum) => _substratum.monitoringPlots) ?? [];
       const adHocPlots = results?.adHocPlot ? [results.adHocPlot] : [];
       const plotResults = [...allplotResults, ...adHocPlots].find(
         (_plot) => _plot.monitoringPlotId === Number(layerFeatureId.featureId)
@@ -122,7 +122,7 @@ const ObservationStatsDrawer = ({
     } else {
       return undefined;
     }
-  }, [layerFeatureId, plantingSite, results, siteHistory?.plantingZones]);
+  }, [layerFeatureId, plantingSite, results, siteHistory?.strata]);
 
   const rows = useMemo((): MapDrawerTableRow[] => {
     const drawerRows: MapDrawerTableRow[] = [];
