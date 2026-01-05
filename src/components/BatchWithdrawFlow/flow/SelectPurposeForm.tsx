@@ -15,7 +15,7 @@ import { Dropdown, DropdownItem, IconTooltip, Textfield } from '@terraware/web-c
 import getDateDisplayValue, { getTodaysDateFormatted, isInTheFuture } from '@terraware/web-components/utils/date';
 
 import ProjectsDropdown from 'src/components/ProjectsDropdown';
-import SubzoneSelector, { SubzoneInfo, ZoneInfo } from 'src/components/SubzoneSelector';
+import SubstratumSelector, { StratumInfo, SubstratumInfo } from 'src/components/SubstratumSelector';
 import DatePicker from 'src/components/common/DatePicker';
 import Divisor from 'src/components/common/Divisor';
 import PageForm from 'src/components/common/PageForm';
@@ -78,8 +78,8 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const [zones, setZones] = useState<any[]>([]);
   const [zoneId, setZoneId] = useState<number>();
   const [noReadySeedlings, setNoReadySeedlings] = useState<boolean>(false);
-  const [selectedSubzone, setSelectedSubzone] = useState<SubzoneInfo>();
-  const [selectedZone, setSelectedZone] = useState<ZoneInfo>();
+  const [selectedSubzone, setSelectedSubzone] = useState<SubstratumInfo>();
+  const [selectedZone, setSelectedZone] = useState<StratumInfo>();
   const [projectRecord, setProjectRecord] = useState<{ projectId?: number }>({});
 
   const speciesMap = useMemo((): Record<string, string> => {
@@ -149,7 +149,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   };
 
   const onChangePlantingSite = (value: string) => {
-    updateField('substratumId', undefined); // clear subzone id when there's a new planting site id
+    updateField('substratumId', undefined); // clear substratum id when there's a new planting site id
     updateField('plantingSiteId', value);
     setSelectedZone(undefined);
     setSelectedSubzone(undefined);
@@ -164,7 +164,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     setSelectedZone(value);
     setSelectedSubzone(undefined);
     setZoneId(value?.id);
-    updateField('substratumId', undefined); // clear subzone id when there's a new planting zone id
+    updateField('substratumId', undefined); // clear substratum id when there's a new planting zone id
   };
 
   const onChangeSubzone = (value: any) => {
@@ -346,7 +346,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     }
 
     if (!zones.length) {
-      // zone/subzone not required if site has no zones/subzones
+      // stratum/substratum not required if site has no strata/substrata
       return !!localRecord.plantingSiteId;
     }
 
@@ -727,14 +727,14 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                   />
                 </Grid>
                 {!!zones.length && (
-                  <SubzoneSelector
-                    zones={zones}
-                    onZoneSelected={onChangePlantingZone}
-                    onSubzoneSelected={onChangeSubzone}
-                    zoneError={fieldsErrors.zoneId}
-                    subzoneError={fieldsErrors.subzoneId}
-                    selectedSubzone={selectedSubzone}
-                    selectedZone={selectedZone}
+                  <SubstratumSelector
+                    strata={zones}
+                    onStratumSelected={onChangePlantingZone}
+                    onSubstratumSelected={onChangeSubzone}
+                    stratumError={fieldsErrors.zoneId}
+                    substratumError={fieldsErrors.subzoneId}
+                    selectedSubstratum={selectedSubzone}
+                    selectedStratum={selectedZone}
                   />
                 )}
               </>
