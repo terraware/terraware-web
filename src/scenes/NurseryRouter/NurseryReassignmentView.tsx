@@ -78,7 +78,7 @@ export default function NurseryReassignmentView(): JSX.Element {
       return;
     }
 
-    const populateZones = async () => {
+    const populateStrata = async () => {
       const response = await TrackingService.getPlantingSite(delivery.plantingSiteId);
       if (response.requestSucceeded && response.site) {
         setSiteName(response.site.name);
@@ -99,7 +99,7 @@ export default function NurseryReassignmentView(): JSX.Element {
       }
     };
 
-    void populateZones();
+    void populateStrata();
   }, [delivery, snackbar]);
 
   const goToWithdrawals = () => {

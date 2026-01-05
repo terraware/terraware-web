@@ -243,12 +243,12 @@ const ProjectProfileGisMaps = () => {
     [activeLocale, projectData]
   );
 
-  const uniqueZones = useMemo(() => {
-    const iUniqueZones = Array.from(new Set(boundariesData?.features?.map((f) => f.properties?.boundary_name)));
-    if (iUniqueZones.length > 1) {
-      iUniqueZones.unshift(strings.ALL_PROJECT_ZONES);
+  const uniqueStrata = useMemo(() => {
+    const iUniqueStrata = Array.from(new Set(boundariesData?.features?.map((f) => f.properties?.boundary_name)));
+    if (iUniqueStrata.length > 1) {
+      iUniqueStrata.unshift(strings.ALL_PROJECT_ZONES);
     }
-    return iUniqueZones;
+    return iUniqueStrata;
   }, [boundariesData]);
 
   const uniqueSites = useMemo(() => {
@@ -256,13 +256,13 @@ const ProjectProfileGisMaps = () => {
   }, [plantingSitesData]);
 
   const strataAndSites = useMemo(() => {
-    const strata = uniqueZones?.map((z) => ({ name: z, type: 'stratum' }) as StratumOrSiteOption);
+    const strata = uniqueStrata?.map((z) => ({ name: z, type: 'stratum' }) as StratumOrSiteOption);
     const sites = uniqueSites?.map((s) => ({ name: s, type: 'site' }) as StratumOrSiteOption);
     if (strata.length > 0 && sites[0]) {
       sites[0].showSeparator = true;
     }
     return [...strata, ...sites];
-  }, [uniqueZones, uniqueSites]);
+  }, [uniqueStrata, uniqueSites]);
 
   useEffect(() => {
     if (!stratumOrSite && strataAndSites) {
@@ -280,13 +280,13 @@ const ProjectProfileGisMaps = () => {
         setShowSiteMap(true);
         setShowBoundaryMap(false);
         setSelectedLayer('Planting Site');
-      } else if (stratumOrSite.type === 'stratum' && uniqueZones.includes(stratumOrSite.name)) {
+      } else if (stratumOrSite.type === 'stratum' && uniqueStrata.includes(stratumOrSite.name)) {
         setShowBoundaryMap(true);
         setShowSiteMap(false);
         setSelectedLayer(undefined);
       }
     }
-  }, [uniqueSites, uniqueZones, stratumOrSite, strataAndSites]);
+  }, [uniqueSites, uniqueStrata, stratumOrSite, strataAndSites]);
 
   const labelHandler = useCallback((iStratumOrSite: StratumOrSiteOption) => iStratumOrSite?.name, []);
   const isEqualHandler = useCallback(
@@ -365,7 +365,7 @@ const ProjectProfileGisMaps = () => {
         );
         tooltipProperties.push({
           key: strings.ZONE,
-          value: filteredSiteData?.substratum?.entities?.[0].properties.zoneId,
+          value: filteredSiteData?.substratum?.entities?.[0].properties.stratumId,
         });
         tooltipProperties.push({
           key: strings.AREA_HA,

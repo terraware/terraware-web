@@ -199,12 +199,12 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
 
   useEffect(() => {
     const initialStrata = searchProps.filtersProps?.filters?.stratum?.values ?? [];
-    const availableZones = initialStrata.filter((name: string) => stratumNames.includes(name));
+    const availableStrata = initialStrata.filter((name: string) => stratumNames.includes(name));
 
-    if (availableZones.length < initialStrata.length) {
+    if (availableStrata.length < initialStrata.length) {
       searchProps.filtersProps?.setFilters((previous: Record<string, any>) => ({
         ...previous,
-        stratum: { ...previous.stratum, values: availableZones },
+        stratum: { ...previous.stratum, values: availableStrata },
       }));
     }
   }, [stratumNames, searchProps.filtersProps]);

@@ -53,7 +53,7 @@ const ObservationSubstratumSelector = ({
     [handleOnChangeSelectedSubstrata, selectedSubstrata]
   );
 
-  const onChangeZoneCheckbox = useCallback(
+  const onChangeStratumCheckbox = useCallback(
     (stratum: Stratum) => (value: boolean) => {
       const nextSelectedSubstrata = new Map(selectedSubstrata);
       stratum.substrata.forEach((substratum) => {
@@ -108,7 +108,7 @@ const ObservationSubstratumSelector = ({
                 indeterminate={isStratumPartiallySelected(stratum)}
                 label={stratum.name}
                 name='Limit Observation to Stratum'
-                onChange={onChangeZoneCheckbox(stratum)}
+                onChange={onChangeStratumCheckbox(stratum)}
                 value={isStratumFullySelected(stratum)}
               />
               <Typography
