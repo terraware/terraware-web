@@ -37,7 +37,7 @@ const ObservationDetailsList = (props: SearchProps): JSX.Element => {
   const columns = useCallback(
     () =>
       [
-        { key: 'stratumName', name: strings.ZONE, type: 'string' },
+        { key: 'stratumName', name: strings.STRATUM, type: 'string' },
         { key: 'completedDate', name: strings.DATE, type: 'string' },
         { key: 'status', name: strings.STATUS, type: 'string' },
         { key: 'totalLive', name: strings.LIVE_PLANTS, tooltipTitle: strings.TOOLTIP_LIVE_PLANTS, type: 'number' },

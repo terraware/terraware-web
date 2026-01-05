@@ -30,7 +30,7 @@ const TemporaryPlotsTab = ({
   }, []);
 
   if (Object.entries(strataWithObservations).length === 0) {
-    return <Box padding={theme.spacing(2)}>{strings.NO_TEMPORARY_PLOTS_WITHIN_ZONES}</Box>;
+    return <Box padding={theme.spacing(2)}>{strings.NO_TEMPORARY_PLOTS_WITHIN_STRATA}</Box>;
   }
 
   return including ? (

@@ -88,9 +88,9 @@ export default function SurvivalRateCard(): JSX.Element {
       <Box flexBasis='100%' marginTop={isDesktop ? 0 : 4}>
         <Box display={'flex'} alignItems={'center'}>
           <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
-            {strings.ZONE_SURVIVAL}
+            {strings.STRATUM_SURVIVAL}
           </Typography>
-          <Tooltip title={strings.ZONE_SURVIVAL_TOOLTIP}>
+          <Tooltip title={strings.STRATUM_SURVIVAL_TOOLTIP}>
             <Box display='flex'>
               <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
             </Box>

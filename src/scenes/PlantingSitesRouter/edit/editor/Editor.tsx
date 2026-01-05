@@ -161,12 +161,12 @@ export default function Editor(props: EditorProps): JSX.Element {
       ...simpleSiteSteps,
       {
         type: 'stratum_boundaries',
-        label: strings.ZONE_BOUNDARIES,
+        label: strings.STRATUM_BOUNDARIES,
         optional: { completed: isCompleted('stratum_boundaries') },
       },
       {
         type: 'substratum_boundaries',
-        label: strings.SUBZONE_BOUNDARIES,
+        label: strings.SUBSTRATUM_BOUNDARIES,
         optional: { completed: isCompleted('substratum_boundaries') },
       },
     ];

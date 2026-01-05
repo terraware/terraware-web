@@ -131,8 +131,8 @@ export default function BiomassMeasurementMapView({
 
   const layerOptionLabels: Record<MapLayer, string> = {
     'Planting Site': strings.PLANTING_SITE,
-    Strata: strings.ZONES,
-    'Sub-Strata': strings.SUBZONES,
+    Strata: strings.STRATA,
+    'Sub-Strata': strings.SUBSTRATA,
     'Monitoring Plots': strings.MONITORING_PLOTS,
     'Project Zones': strings.PROJECT_ZONES,
   };

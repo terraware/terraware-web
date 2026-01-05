@@ -364,7 +364,7 @@ const ProjectProfileGisMaps = () => {
           (ent: MapEntity) => ent.id === properties.id
         );
         tooltipProperties.push({
-          key: strings.ZONE,
+          key: strings.STRATUM,
           value: filteredSiteData?.substratum?.entities?.[0].properties.stratumId,
         });
         tooltipProperties.push({

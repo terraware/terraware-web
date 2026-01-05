@@ -121,7 +121,7 @@ export default function ScheduleObservationForm({
     }
 
     if (!requestedSubstratumIds || requestedSubstratumIds?.length === 0) {
-      _substratumError = strings.SELECT_AT_LEAST_ONE_SUBZONE;
+      _substratumError = strings.SELECT_AT_LEAST_ONE_SUBSTRATUM;
     }
 
     const _showSmallSiteWarning =

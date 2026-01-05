@@ -82,7 +82,7 @@ export default function BoundariesAndStrata({
     <Box sx={view === 'map' ? { display: 'flex', flexGrow: 1, flexDirection: 'column' } : undefined}>
       <Box display='flex' flexGrow={0} alignItems='center'>
         <Typography fontSize='16px' fontWeight={600} margin={theme.spacing(3, 0)}>
-          {strings.BOUNDARIES_AND_ZONES}
+          {strings.BOUNDARIES_AND_STRATA}
         </Typography>
       </Box>
       {plantingSite?.boundary && (
@@ -181,8 +181,8 @@ function PlantingSiteMapView({ search }: PlantingSiteMapViewProps): JSX.Element 
 
   const layerOptionLabels: Record<MapLayer, string> = {
     'Planting Site': strings.PLANTING_SITE,
-    Strata: strings.ZONES,
-    'Sub-Strata': strings.SUBZONES,
+    Strata: strings.STRATA,
+    'Sub-Strata': strings.SUBSTRATA,
     'Monitoring Plots': strings.MONITORING_PLOTS,
     'Project Zones': strings.PROJECT_ZONES,
   };
@@ -228,8 +228,8 @@ function PlantingSiteMapView({ search }: PlantingSiteMapViewProps): JSX.Element 
         if (entity.type === 'site') {
           title = plantingSite.name;
           properties = [
-            { key: strings.ZONES, value: selectedHistory.strata.length },
-            { key: strings.SUBZONES, value: selectedHistory.strata.flatMap((z) => z.substrata).length },
+            { key: strings.STRATA, value: selectedHistory.strata.length },
+            { key: strings.SUBSTRATA, value: selectedHistory.strata.flatMap((z) => z.substrata).length },
           ];
         } else if (entity.type === 'stratum') {
           const stratumHistory = selectedHistory.strata.find((_stratumHistory) => _stratumHistory.id === entity.id);
@@ -246,7 +246,7 @@ function PlantingSiteMapView({ search }: PlantingSiteMapViewProps): JSX.Element 
               key: strings.PLANTING_COMPLETE,
               value: stratum?.substrata?.every((substratum) => substratum.plantingCompleted) ? strings.YES : strings.NO,
             },
-            { key: strings.SUBZONES, value: stratum?.substrata.length ?? 0 },
+            { key: strings.SUBSTRATA, value: stratum?.substrata.length ?? 0 },
             {
               key: strings.LAST_OBSERVED,
               value: stratum?.latestObservationCompletedTime

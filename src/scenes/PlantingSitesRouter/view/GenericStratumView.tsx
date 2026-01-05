@@ -21,7 +21,7 @@ import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 const columns = (): TableColumnType[] => [
   {
     key: 'fullName',
-    name: strings.SUBZONE,
+    name: strings.SUBSTRATUM,
     type: 'string',
   },
   {

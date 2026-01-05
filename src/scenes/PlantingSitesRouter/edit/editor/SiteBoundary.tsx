@@ -34,7 +34,7 @@ const createStratumWith = (boundary?: MultiPolygon): MinimalStratum | undefined 
     return undefined;
   }
   const stratumBoundary: MultiPolygon = { type: 'MultiPolygon', coordinates: boundary.coordinates };
-  const stratumName = stratumNameGenerator(new Set<string>(), strings.ZONE);
+  const stratumName = stratumNameGenerator(new Set<string>(), strings.STRATUM);
   return defaultStratumPayload({
     boundary: stratumBoundary,
     id: 0,

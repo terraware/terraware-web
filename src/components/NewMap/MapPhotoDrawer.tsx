@@ -89,7 +89,7 @@ const MapPhotoDrawer = ({ monitoringPlotId, observationId, photo }: MapPhotoDraw
           value: observer ?? strings.UNKNOWN,
         },
         {
-          key: strings.ZONE,
+          key: strings.STRATUM,
           value: stratum?.name ?? '',
         },
         {

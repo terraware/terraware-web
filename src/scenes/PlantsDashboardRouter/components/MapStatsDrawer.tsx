@@ -78,7 +78,7 @@ const MapStatsDrawer = ({ layerFeatureId, plantingSiteId }: MapStatsDrawerProps)
       );
 
       return {
-        type: strings.ZONE,
+        type: strings.STRATUM,
         areaHa: stratum?.areaHa,
         survivalRate: stratumSummary?.survivalRate,
         name: stratum?.name,
@@ -102,7 +102,7 @@ const MapStatsDrawer = ({ layerFeatureId, plantingSiteId }: MapStatsDrawerProps)
         .find((_substratum) => `${_substratum.id}` === layerFeatureId.featureId);
 
       return {
-        type: strings.SUBZONE,
+        type: strings.SUBSTRATUM,
         areaHa: substratum?.areaHa,
         survivalRate: substratumSummary?.survivalRate,
         name: substratum?.name,
@@ -130,7 +130,7 @@ const MapStatsDrawer = ({ layerFeatureId, plantingSiteId }: MapStatsDrawerProps)
 
       if (properties.stratumName) {
         results.push({
-          key: strings.ZONE,
+          key: strings.STRATUM,
           value: properties.stratumName,
         });
       }

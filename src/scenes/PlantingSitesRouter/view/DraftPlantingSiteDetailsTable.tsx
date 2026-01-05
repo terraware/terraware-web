@@ -23,7 +23,7 @@ type DraftPlantingSiteDetailsTableProps = {
 const columns = (): TableColumnType[] => [
   {
     key: 'name',
-    name: strings.ZONE,
+    name: strings.STRATUM,
     type: 'string',
   },
   {
@@ -34,7 +34,7 @@ const columns = (): TableColumnType[] => [
   },
   {
     key: 'substrata',
-    name: strings.SUBZONES,
+    name: strings.SUBSTRATA,
     type: 'number',
   },
 ];

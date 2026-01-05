@@ -720,7 +720,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                     errorText={fieldsErrors.plantingSiteId}
                     tooltipTitle={
                       <a href={APP_PATHS.PLANTING_SITES} target='_blank' rel='noreferrer'>
-                        {strings.VIEW_SITES_ZONES_SUBZONES}
+                        {strings.VIEW_SITES_STRATA_SUBSTRATA}
                       </a>
                     }
                     selectStyles={{ optionsContainer: { maxHeight: '250px' } }}

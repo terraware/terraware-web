@@ -14,7 +14,7 @@ export type DefaultStratumPayload = Omit<MinimalStratum, 'substrata'>;
 
 export const defaultStratumPayload = (payload: DefaultStratumPayload): MinimalStratum => {
   const { boundary, id, name, targetPlantingDensity } = payload;
-  const substratumName = substratumNameGenerator(new Set(), strings.SUBZONE);
+  const substratumName = substratumNameGenerator(new Set(), strings.SUBSTRATUM);
 
   return {
     boundary,
@@ -277,7 +277,9 @@ export const findErrors = async (
     return polygonsTooSmall;
   } else {
     const errorText =
-      errorCheckLevel === 'substratum' ? strings.SITE_SUBZONE_BOUNDARY_TOO_SMALL : strings.SITE_ZONE_BOUNDARY_TOO_SMALL;
+      errorCheckLevel === 'substratum'
+        ? strings.SITE_SUBSTRATUM_BOUNDARY_TOO_SMALL
+        : strings.SITE_STRATUM_BOUNDARY_TOO_SMALL;
     const minimumSideDimension = errorCheckLevel === 'substratum' ? 25 : 100;
     const minArea = minimumSideDimension * minimumSideDimension * SQ_M_TO_HECTARES;
 

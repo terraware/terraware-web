@@ -145,7 +145,7 @@ export default function Substrata({ onValidate, site }: SubstrataProps): JSX.Ele
     // error out on save if there are substrata with less than minimum boundaries
     const hasSubstratumSizeErrors = !!substrataData?.errorAnnotations?.length;
     if (hasSubstratumSizeErrors) {
-      snackbar.toastError(strings.SITE_SUBZONE_BOUNDARIES_TOO_SMALL);
+      snackbar.toastError(strings.SITE_SUBSTRATUM_BOUNDARIES_TOO_SMALL);
       onValidate.apply(true);
       return;
     }
@@ -236,16 +236,16 @@ export default function Substrata({ onValidate, site }: SubstrataProps): JSX.Ele
     () =>
       activeLocale
         ? [
-            { text: strings.SITE_SUBZONE_BOUNDARIES_DESCRIPTION_0 },
+            { text: strings.SITE_SUBSTRATUM_BOUNDARIES_DESCRIPTION_0 },
             {
-              text: strings.SITE_SUBZONE_BOUNDARIES_DESCRIPTION_1,
+              text: strings.SITE_SUBSTRATUM_BOUNDARIES_DESCRIPTION_1,
               hasTutorial: true,
               handlePrefix: (prefix: string) =>
                 strings.formatString(prefix, <MapIcon centerAligned={true} icon='slice' />) as JSX.Element[],
             },
             {
               text: strings.formatString(
-                strings.SITE_SUBZONE_BOUNDARIES_SELECTED_ZONE,
+                strings.SITE_SUBSTRATUM_BOUNDARIES_SELECTED_STRATUM,
                 strata?.features?.find((f) => f.id === selectedStratum)?.properties?.name ?? ''
               ),
               isBold: true,
@@ -260,7 +260,7 @@ export default function Substrata({ onValidate, site }: SubstrataProps): JSX.Ele
       return '';
     }
     return strings.formatString(
-      strings.ADDING_SUBZONE_BOUNDARIES_INSTRUCTIONS_DESCRIPTION,
+      strings.ADDING_SUBSTRATUM_BOUNDARIES_INSTRUCTIONS_DESCRIPTION,
       <MapIcon centerAligned icon='slice' />
     ) as JSX.Element[];
   }, [activeLocale]);
@@ -279,7 +279,7 @@ export default function Substrata({ onValidate, site }: SubstrataProps): JSX.Ele
         const idGenerator = IdGenerator(Object.values(substrata).flatMap((sz) => sz.features));
         const substrataWithIds = leftOrderedFeatures(cutSubstrata).map(({ feature: substratum }) => {
           if (substratum && substratum.properties && !substratum.properties.name) {
-            const substratumName = substratumNameGenerator(usedNames, strings.SUBZONE);
+            const substratumName = substratumNameGenerator(usedNames, strings.SUBSTRATUM);
             substratum.properties.name = substratumName;
             usedNames.add(substratumName);
           }
@@ -427,10 +427,10 @@ export default function Substrata({ onValidate, site }: SubstrataProps): JSX.Ele
     <Box display='flex' flexDirection='column' flexGrow={1}>
       <StepTitleDescription
         description={description}
-        title={strings.SITE_SUBZONE_BOUNDARIES}
+        title={strings.SITE_SUBSTRATUM_BOUNDARIES}
         tutorialDescription={tutorialDescription}
         tutorialDocLinkKey='planting_site_create_substratum_boundary_instructions_video'
-        tutorialTitle={strings.ADDING_SUBZONE_BOUNDARIES}
+        tutorialTitle={strings.ADDING_SUBSTRATUM_BOUNDARIES}
       />
       <EditableMap
         activeContext={activeContext}
@@ -468,7 +468,7 @@ const TooltipContents = ({ name, onClose, onUpdate, substratumNamesInUse }: Tool
     if (!substratumName) {
       setNameError(strings.REQUIRED_FIELD);
     } else if (substratumNamesInUse.has(substratumName)) {
-      setNameError(strings.SUBZONE_NAME_IN_USE);
+      setNameError(strings.SUBSTRATUM_NAME_IN_USE);
     } else {
       setNameError('');
       hasNameErrors = false;
@@ -498,10 +498,10 @@ const TooltipContents = ({ name, onClose, onUpdate, substratumNamesInUse }: Tool
       cancelButton={{ title: strings.CANCEL, onClick: onClose }}
       onClose={onClose}
       saveButton={{ title: strings.SAVE, onClick: save }}
-      title={strings.SUBZONE}
+      title={strings.SUBSTRATUM}
     >
       <Box display='flex' flexDirection='column' padding={theme.spacing(2)}>
-        <Typography>{strings.PLANTING_SITE_ZONE_NAME_HELP}</Typography>
+        <Typography>{strings.PLANTING_SITE_STRATUM_NAME_HELP}</Typography>
         <Textfield
           autoFocus={true}
           label={strings.NAME}

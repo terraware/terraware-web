@@ -121,10 +121,10 @@ ADD_YOUR_FIRST_ACTIVITY,Ajoutez votre première activité,9df0e1e5
 ADDED,Ajouté·e,d441aa1d
 ADDED_SPECIES,Espèces ajoutées,f2342d09
 ADDED_SPECIES_TOOLTIP,Espèces à inclure dans les calculs du taux de survie qui ne proviennent pas des retraits.,cad59bdf
-ADDING_SUBZONE_BOUNDARIES,Ajout de limites de sous-zones,58f0fb08
-ADDING_SUBZONE_BOUNDARIES_INSTRUCTIONS_DESCRIPTION,Cette vidéo montre comment utiliser l'outil tranche {0} pour créer des formes de sous-zones (polygones) à l'intérieur des zones.,042bd160
-ADDING_ZONE_BOUNDARIES,Ajouter les limites des zones,901f668b
-ADDING_ZONE_BOUNDARIES_INSTRUCTIONS_DESCRIPTION,Cette vidéo montre comment utiliser l'outil de découpage {0} pour créer des polygones à l'intérieur des limites du site pour les zones.,06f570cb
+ADDING_STRATUM_BOUNDARIES,Ajouter les limites des zones,901f668b
+ADDING_STRATUM_BOUNDARIES_INSTRUCTIONS_DESCRIPTION,Cette vidéo montre comment utiliser l'outil de découpage {0} pour créer des polygones à l'intérieur des limites du site pour les zones.,06f570cb
+ADDING_SUBSTRATUM_BOUNDARIES,Ajout de limites de sous-zones,58f0fb08
+ADDING_SUBSTRATUM_BOUNDARIES_INSTRUCTIONS_DESCRIPTION,Cette vidéo montre comment utiliser l'outil tranche {0} pour créer des formes de sous-zones (polygones) à l'intérieur des zones.,042bd160
 ADDITIONAL_COMMENTS,Commentaires supplémentaires,bf1dfb11
 ADDITIONAL_INVASIVE_THREATENED_SPECIES,Autres espèces envahissantes/menacées,7d019848
 ADDITIONAL_NURSERY_NOTES,Notes supplémentaires sur les pépinières,db29c13a
@@ -248,7 +248,7 @@ BIOMASS_PLOT_TOTAL_PLANTS_TOOLTIP,"Plantes totales correspond au nombre total d�
 BOOLEAN_FALSE,faux,7a03081c
 BOOLEAN_TRUE,vrai,54415086
 BOUNDARIES,Limites,e40b0600
-BOUNDARIES_AND_ZONES,Limites et zones,7ec48419
+BOUNDARIES_AND_STRATA,Limites et zones,7ec48419
 BUDGET_DOCUMENT_XLS,Document budgétaire (.XLS),6eface4e
 BUDGET_NARRATIVE_SUMMARY,Résumé narratif du budget,075fcdb3
 BUDGET_NARRATIVE_SUMMARY_INSTRUCTIONS,"Fournissez une description de grande qualité de votre budget par rapport aux données réelles, en notant tout écart important et en énumérant tous les contributeurs. (Une demi-page au plus).",3a2e7928
@@ -732,7 +732,7 @@ FROM,De,3b922b12
 FROM_GIS_DATABASE,(à partir de la base de données SIG),7b29f44f
 FROM_NURSERY,De : Pépinière,21226e82
 FROM_NURSERY_REQUIRED,De : Pépinière *,4bcef7f8
-FROM_SUBZONE,De : Sous-zone,e071d8f7
+FROM_SUBSTRATUM,De : Sous-zone,e071d8f7
 FUNDER,Bailleurs de fonds,a66356e6
 FUNDER_ADDED,Bailleur de fonds ajouté,cdcddbaf
 FUNDER_DISCLAIMER_CHECKBOX,"En cochant cette case, je reconnais avoir lu et compris la clause de non-responsabilité de la plateforme Terraware pour les bailleurs de fonds.",24f1c9ed
@@ -1106,10 +1106,10 @@ NEW,Nouveau,b8096e3b
 NEW_ACCESSION,Ajouter une adhésion,6d0d1602
 NEW_APP_VERSION,Veuillez actualiser pour utiliser la dernière version de Terraware.,cd76916f
 NEW_APP_VERSION_MOBILE,Actualisez pour obtenir la dernière version de Terraware.,6235c190
-NEW_SUBZONE,Nouvelle sous-zone,e819356e
+NEW_STRATUM,Nouvelle zone,c51234d3
+NEW_SUBSTRATUM,Nouvelle sous-zone,e819356e
 NEW_TEMPLATE_MODAL_DESCRIPTION,Une nouvelle version a été publiée pour le documentTemplate de ce document. Souhaitez-vous la mettre à jour ?,c11ed4d2
 NEW_TEMPLATE_MODAL_TITLE,Mise à jour de la version du modèle de document,e7c35c92
-NEW_ZONE,Nouvelle zone,c51234d3
 NEXT,Suivant,9bd8de94
 NEXT_PHASE,Prochaine phase,d6968246
 NEXT_STEPS,Étapes suivantes,d6271c51
@@ -1151,7 +1151,7 @@ NO_SPECIES_CONTRIBUTOR_MSG,"Aucune espèce ne figure dans votre liste d'espèces
 NO_SPECIES_DESCRIPTION,"Il semble que vous n'ayez ajouté aucune espèce pour le moment. Le fait de disposer d'une liste principale des espèces permet de rationaliser la saisie des données relatives aux semences et aux plantes au sein de votre organisation. Vous pouvez ajouter des espèces manuellement et individuellement, ou importer des données à partir d'un fichier CSV.",048a81f6
 NO_SUB_LOCATIONS,Modifiez cette banque de semences pour ajouter des sous-emplacements.,963dba11
 NO_SUB_LOCATIONS_NURSERY,Modifier cette pépinière pour ajouter des sous-emplacements.,8a939067
-NO_TEMPORARY_PLOTS_WITHIN_ZONES,Il n’y a aucune parcelle temporaire dans les zones du site de plantation. Seules les parcelles temporaires situées dans les zones peuvent être utilisées pour le calcul du taux de survie.,b9c67f0a
+NO_TEMPORARY_PLOTS_WITHIN_STRATA,Il n’y a aucune parcelle temporaire dans les zones du site de plantation. Seules les parcelles temporaires situées dans les zones peuvent être utilisées pour le calcul du taux de survie.,b9c67f0a
 NO_VOTERS,Pas de votants,7db4c3bf
 NO_VOTERS_FOR_PROJECT,Il n'y a pas de votants pour ce projet. Contactez un administrateur de l'accélérateur pour ajouter des votants.,6753a8bc
 NO_WITHDRAWABLE_QUANTITIES_FOUND,Aucune quantité retirable n'a été trouvée,ab95517f
@@ -1249,7 +1249,7 @@ Scannez les codes QR avec votre appareil pour télécharger sur l’App Store ou
 OBSERVATIONS_WITH_THE_TERRAWARE_APP,Observations avec l'application Terraware,7536ab13
 OBSERVED_BY_ON,Observé par {0} le {1} à {2},c8b41186
 OBSERVED_DENSITY,Densité observée,c5003c27
-OBSERVED_DENSITY_PER_ZONE,Densité observée par zone,c51faa34
+OBSERVED_DENSITY_PER_STRATUM,Densité observée par zone,c51faa34
 OBSERVED_DENSITY_TOOLTIP,La densité observée est basée sur le nombre de plantes observées dans les zones qui ont été observées au moins une fois au cours de cette observation.,655e8e55
 OBSERVED_PLANTS,Plantes observées,375e69c3
 OBSERVED_SPECIES,Espèces observées,922020f2
@@ -1291,8 +1291,8 @@ ORGANIZATION_TYPE_OTHER,Autre,626335b2
 ORGANIZATION_WEBSITE,Site Web de l'organisation,331767ac
 ORGANIZATIONS,Organisations,8c86eca3
 ORIGINAL_QTY,Qté d'origine,636a1ae9
-ORIGINAL_SUBZONE,Sous-zone d'origine,988c013f
-ORIGINAL_ZONE,Zone d'origine,0e12db66
+ORIGINAL_STRATUM,Zone d'origine,0e12db66
+ORIGINAL_SUBSTRATUM,Sous-zone d'origine,988c013f
 ORTHODOX,Orthodoxe,b0a5a550
 OTHER,Autre,626335b2
 OTHER_CONTACT,Autre contact,4268b0fb
@@ -1355,7 +1355,7 @@ PLACEHOLDER,Espace réservé,e7c25185
 PLANT,plante,9089fdf9
 PLANT_DENSITY,Densité de plantation,feae2a2d
 PLANT_DENSITY_MISSING_TOOLTIP,"Lorsqu’une observation est terminée, la densité de plantation calculée apparaîtra ici.",6e3830dd
-PLANT_DENSITY_OF_PLANTED_ZONES,Densité de plantation (des zones plantées),2e0bd471
+PLANT_DENSITY_OF_PLANTED_STRATA,Densité de plantation (des zones plantées),2e0bd471
 PLANT_DENSITY_TITLE_TOOLTIP,Saisissez manuellement la densité de plantation pour chacune des espèces plantées. Cette densité sera utilisée pour les calculs du taux de survie.,50547e3a
 PLANT_DENSITY_TOOLTIP,Densités de plantation par espèce qui seront utilisées pour calculer les taux de survie des parcelles et des espèces.,82b7af4f
 PLANT_DESCRIPTION,Notes sur la plante,0915d26a
@@ -1414,10 +1414,8 @@ PLANTING_SITE_TOTALS,Totaux du site de plantation,f37bb9d8
 PLANTING_SITE_TYPE,Type de site de plantation,4f94b3c8
 PLANTING_SITE_TYPE_DETAILED,Détaillé,6a25500b
 PLANTING_SITE_TYPE_SIMPLE,Simple,33e02624
-PLANTING_SITE_ZONE_NAME_HELP,Des noms lisibles aideront les personnes sur le terrain à identifier les zones lorsqu’elles sont sur le terrain.,63445c3d
+PLANTING_SITE_STRATUM_NAME_HELP,Des noms lisibles aideront les personnes sur le terrain à identifier les zones lorsqu’elles sont sur le terrain.,63445c3d
 PLANTING_SITES,Sites de plantation,3799d2eb
-PLANTING_ZONE,Zone de plantation,b966621d
-PLANTING_ZONES,Zones de plantation,a678dfee
 PLANTINGS_REQUIRE_PLANTING_SITES,Les plantations nécessitent un site de plantation pour être attribuées.,e83e8ad2
 PLANTINGS_REQUIRE_READY_SEEDLINGS,Les plantations nécessitent des lots de plants « prêts ».,373cfc92
 PLANTINGS_REQUIRE_READY_TO_PLANT_SEEDLINGS,Les plantations nécessitent des lots avec des plants « prêts à planter ».,ed590a8b
@@ -1815,7 +1813,7 @@ SELECT_A_CONTACT_TYPE_FOR_ALL_INTERNAL_LEADS,Sélectionnez un type de contact po
 SELECT_ACCESSIONS_FOR_PROJECT,Sélectionner les accessions pour {0},dec51806
 SELECT_ACCESSIONS_FOR_PROJECT_DESCRIPTION,Utilisez la colonne des cases à cocher pour sélectionner les accessions que vous souhaitez ajouter à {0}.,91237af8
 SELECT_ALL,Sélectionner tout,dfe13fdd
-SELECT_AT_LEAST_ONE_SUBZONE,Sélectionnez au moins une sous-zone,ebdde2f7
+SELECT_AT_LEAST_ONE_SUBSTRATUM,Sélectionnez au moins une sous-zone,ebdde2f7
 SELECT_BATCHES,Sélectionnez les lots,d15588c6
 SELECT_BUTTON,Sélectionnez,4e21939d
 SELECT_EXISTING_PROJECT,Sélectionner un projet existant,e3ffeef2
@@ -1856,7 +1854,7 @@ SHRUBS,Arbustes,377018f6
 SILVOPASTURE,Sylviculture,9d942e38
 SIMPLE_SITE,Site simple,760ab731
 SINGLE_SPECIES_SURVIVAL_RATE_MESSAGE,"Il n’y a actuellement qu’une seule espèce avec un taux de survie. Lorsque plusieurs espèces auront un taux de survie, celle avec le taux de survie le plus bas sera affichée.",c4ff6454
-SINGLE_ZONE_SURVIVAL_RATE_MESSAGE,"Le site ne comporte actuellement qu’une seule zone avec un taux de survie. Lorsqu’un site aura plusieurs zones avec un taux de survie, celle avec le taux de survie le plus bas sera affichée.",d9ac1a26
+SINGLE_STRATUM_SURVIVAL_RATE_MESSAGE,"Le site ne comporte actuellement qu’une seule zone avec un taux de survie. Lorsqu’un site aura plusieurs zones avec un taux de survie, celle avec le taux de survie le plus bas sera affichée.",d9ac1a26
 SITE,Site,925ca15b
 SITE_BOUNDARY,Limite du site,ee9dc83f
 SITE_BOUNDARY_ABSENT_WARNING,Veuillez dessiner les limites du site.,495ebdb5
@@ -1879,21 +1877,21 @@ SITE_EXCLUSION_AREAS_OPTIONAL,Zones d'exclusion (facultatif),434ba2b3
 SITE_EXCLUSION_ERRORS,Il y a des erreurs dans la limite d’exclusion.,dc334f43
 SITE_LOCATION,Emplacement du site,e0a85b19
 SITE_MAP,Carte du site,df2fc60a
-SITE_SUBZONE_BOUNDARIES,Limites des sous-zones,7ac3bfe9
-SITE_SUBZONE_BOUNDARIES_DESCRIPTION_0,Chaque zone de votre site de plantation est divisée en une ou plusieurs sous-zones. Une sous-zone est la plus petite zone à laquelle des semis peuvent être attribués pendant la plantation. Les sous-zones doivent être dimensionnées de manière à ce que la totalité de la sous-zone puisse être plantée au cours d'une seule saison de plantation. Les sous-zones ont généralement une superficie de 50 à 200 hectares.,06578b84
-SITE_SUBZONE_BOUNDARIES_DESCRIPTION_1,Dessinez ci-dessous les sous-zones de votre site de plantation. Commencez par sélectionner une zone dans laquelle vous allez créer des sous-zones. Utilisez l'outil de découpe {0} pour créer des formes de sous-zones (polygones) à l'intérieur des zones. [Regardez un tutoriel] sur l'ajout de limites de sous-zones.,ce217578
-SITE_SUBZONE_BOUNDARIES_SELECTED_ZONE,La zone {0} est actuellement sélectionnée pour la création de sous-zones.,5e6cd6a3
-SITE_SUBZONE_BOUNDARIES_TOO_SMALL,Les limites d’une ou plusieurs sous-zones sont inférieures à 25 m x 25 m.,c1d1a11f
-SITE_SUBZONE_BOUNDARY_TOO_SMALL,Les limites de la sous-zone sont inférieures à 25 m x 25 m,69d2798b
+SITE_STRATUM_BOUNDARIES,Limites de la zone,15e88feb
+SITE_STRATUM_BOUNDARIES_DESCRIPTION_0,"Une zone est une strate (couche de végétation) du site de plantation où les conditions de plantation et de croissance sont similaires. Chaque site de plantation doit comporter au moins une zone et généralement pas plus de cinq. Un exemple de zone est la pente d'une colline orientée vers l'est, où les conditions d'ensoleillement et de sol sont similaires.",3781c2ed
+SITE_STRATUM_BOUNDARIES_DESCRIPTION_1,Dessinez ci-dessous les zones de votre site de plantation. Utilisez l'outil de découpage {0} pour créer des polygones à l'intérieur des limites du site pour les zones. [Regardez un tutoriel] sur l'ajouter les limites des zones.,4446f1c1
+SITE_STRATUM_BOUNDARIES_SIZE,Les zones doivent avoir une taille minimale de 100 m x 100 m.,a6121c9f
+SITE_STRATUM_BOUNDARIES_TOO_SMALL,Une ou plusieurs zones ont des limites inférieures à 100 m x 100 m.,bd03c181
+SITE_STRATUM_BOUNDARY_TOO_SMALL,Limite de la zone inférieure à 100 m x 100 m,bee2858c
+SITE_STRATUM_NAMES_MISSING,Une ou plusieurs zones n’ont pas de nom. Cliquez sur une zone pour modifier son nom.,210e36e1
+SITE_SUBSTRATUM_BOUNDARIES,Limites des sous-zones,7ac3bfe9
+SITE_SUBSTRATUM_BOUNDARIES_DESCRIPTION_0,Chaque zone de votre site de plantation est divisée en une ou plusieurs sous-zones. Une sous-zone est la plus petite zone à laquelle des semis peuvent être attribués pendant la plantation. Les sous-zones doivent être dimensionnées de manière à ce que la totalité de la sous-zone puisse être plantée au cours d'une seule saison de plantation. Les sous-zones ont généralement une superficie de 50 à 200 hectares.,06578b84
+SITE_SUBSTRATUM_BOUNDARIES_DESCRIPTION_1,Dessinez ci-dessous les sous-zones de votre site de plantation. Commencez par sélectionner une zone dans laquelle vous allez créer des sous-zones. Utilisez l'outil de découpe {0} pour créer des formes de sous-zones (polygones) à l'intérieur des zones. [Regardez un tutoriel] sur l'ajout de limites de sous-zones.,ce217578
+SITE_SUBSTRATUM_BOUNDARIES_SELECTED_STRATUM,La zone {0} est actuellement sélectionnée pour la création de sous-zones.,5e6cd6a3
+SITE_SUBSTRATUM_BOUNDARIES_TOO_SMALL,Les limites d’une ou plusieurs sous-zones sont inférieures à 25 m x 25 m.,c1d1a11f
+SITE_SUBSTRATUM_BOUNDARY_TOO_SMALL,Les limites de la sous-zone sont inférieures à 25 m x 25 m,69d2798b
 SITE_VISIT,Visite du site,01a6a6fc
 SITE_WITH_NAME_EXISTS,Un site portant ce nom existe déjà.,8a2a38fc
-SITE_ZONE_BOUNDARIES,Limites de la zone,15e88feb
-SITE_ZONE_BOUNDARIES_DESCRIPTION_0,"Une zone est une strate (couche de végétation) du site de plantation où les conditions de plantation et de croissance sont similaires. Chaque site de plantation doit comporter au moins une zone et généralement pas plus de cinq. Un exemple de zone est la pente d'une colline orientée vers l'est, où les conditions d'ensoleillement et de sol sont similaires.",3781c2ed
-SITE_ZONE_BOUNDARIES_DESCRIPTION_1,Dessinez ci-dessous les zones de votre site de plantation. Utilisez l'outil de découpage {0} pour créer des polygones à l'intérieur des limites du site pour les zones. [Regardez un tutoriel] sur l'ajouter les limites des zones.,4446f1c1
-SITE_ZONE_BOUNDARIES_SIZE,Les zones doivent avoir une taille minimale de 100 m x 100 m.,a6121c9f
-SITE_ZONE_BOUNDARIES_TOO_SMALL,Une ou plusieurs zones ont des limites inférieures à 100 m x 100 m.,bd03c181
-SITE_ZONE_BOUNDARY_TOO_SMALL,Limite de la zone inférieure à 100 m x 100 m,bee2858c
-SITE_ZONE_NAMES_MISSING,Une ou plusieurs zones n’ont pas de nom. Cliquez sur une zone pour modifier son nom.,210e36e1
 SKIP,Passer,2198bbf5
 SLACK,Slack,c15b5d48
 SLACK_LINK,Lien Slack,45b022ae
@@ -1985,8 +1983,18 @@ STEEP_SLOPE,Pente raide,5bde8271
 STORAGE,Stocké,bba4a98a
 STORED,Stocké,f74eae19
 STORING,Mise en stockage,2e386dbc
-STRATA,Strates,3149f6f8
+STRATA,Zones,5fc4b33f
+STRATA_LONG,Zones de plantation,a678dfee
 STRATIFICATION,Stratification,f19a442c
+STRATUM,Zone,17bc60dc
+STRATUM_BOUNDARIES,Limites de la zone,15e88feb
+STRATUM_GEOMETRY_CHANGED,La géométrie de {0} a changé sur {1},9eec74cc
+STRATUM_NAME_IN_USE,Le nom de la zone est déjà utilisé.,d75e052d
+STRATUM_NAME_MAXIMUM_LENGTH,Le nom de la zone ne doit pas comporter plus de 15 caractères.,73baca0a
+STRATUM_REQUIRED,Zone *,548cc1ed
+STRATUM_SURVIVAL,Survie par zone,673673ec
+STRATUM_SURVIVAL_TOOLTIP,La survie par zone affiche les zones ayant les taux de survie les plus élevés et les plus faibles parmi les zones observées.,41e612cd
+STRATUM_TRENDS,Tendances par zone,8f734112
 SUB_LOCATION,Sous-emplacement,76bcf83f
 SUB_LOCATION_DETAILS,Détails du sous-emplacements,dfa61b63
 SUB_LOCATION_EXISTS,Cette sous-emplacement existe déjà,b2a86dbc
@@ -2016,13 +2024,13 @@ SUBSTRATE_BEFORE,Substrat (avant),34fc5273
 SUBSTRATE_NOTES,Notes sur le substrat,c0562901
 SUBTITLE_APPLICATION_GET_STARTED,"Pour commencer, veuillez créer votre organisation maintenant. Une fois que vous aurez créé votre organisation, il vous sera demandé de remplir un formulaire de présélection afin de déterminer l'éligibilité de votre projet.",dae63e59
 SUBTITLE_GET_STARTED,"Pour commencer, veuillez créer votre organisation maintenant. Vous pourrez alors paramétrer et gérer votre ressource humaine, votre liste d'espèces, vos emplacements et vos projets.",1be1a60d
-SUBZONE,Sous-zone,efc58319
-SUBZONE_BOUNDARIES,Limites des sous-zones,7ac3bfe9
-SUBZONE_NAME_IN_USE,Le nom de la sous-zone est déjà utilisé.,64a22be0
-SUBZONE_PLANTING_COMPLETED_SUCCESS,Sous-zone(s) marquée(s) comme plantation terminée.,a70f726f
-SUBZONE_PLANTING_UNCOMPLETED_SUCCESS,Sous-zone(s) marquée(s) comme plantation incomplète.,9928a3a5
-SUBZONE_REQUIRED,Sous-zone *,4e9bbf61
-SUBZONES,Sous-zones,d28785f2
+SUBSTRATA,Sous-zones,d28785f2
+SUBSTRATUM,Sous-zone,efc58319
+SUBSTRATUM_BOUNDARIES,Limites des sous-zones,7ac3bfe9
+SUBSTRATUM_NAME_IN_USE,Le nom de la sous-zone est déjà utilisé.,64a22be0
+SUBSTRATUM_PLANTING_COMPLETED_SUCCESS,Sous-zone(s) marquée(s) comme plantation terminée.,a70f726f
+SUBSTRATUM_PLANTING_UNCOMPLETED_SUCCESS,Sous-zone(s) marquée(s) comme plantation incomplète.,9928a3a5
+SUBSTRATUM_REQUIRED,Sous-zone *,4e9bbf61
 SUCCESS,Succès,cbb4902d
 SUCCESS_STORIES,Histoires de réussite,a5cb3671
 SUCCESS_STORIES_INSTRUCTIONS,Décrivez de manière concise une ou deux histoires de réussite personnalisées (une demi-page maximum).,81363354
@@ -2117,7 +2125,7 @@ TO,À,0ec3d25a
 TO_NURSERY,Vers : pépinière,ef613421
 TO_NURSERY_REQUIRED,Vers : Pépinière *,e9bd2c95
 TO_PLANTING_SITE_REQUIRED,Vers : Site de plantation *,b92a92f0
-TO_SUBZONE,Vers : Sous-zone,9bd85926
+TO_SUBSTRATUM,Vers : Sous-zone,9bd85926
 TODO,À faire,4d251a21
 TOOLTIP_ACCESSIONS_ADD_COLLECTING_SITE,L'endroit où les semences ont été récoltées. Il est recommandé de les nommer en se référant à des points de repère stables ou à des caractéristiques qui ne changent pas.,c4d2ea0e
 TOOLTIP_ACCESSIONS_ADD_PLANT_ID,"L'identifiant unique donné à une plante à des fins de suivi ou de conservation. Idéalement, les semences d'une plante dotée d'un identifiant sont conservées séparément des autres plantes (et non regroupées) dans des collections et des accessions.",94eeddbd
@@ -2341,7 +2349,7 @@ VIEW_PRESCREEN_SUBMISSION,Voir la soumission de la présélection,7dadf2e6
 VIEW_PUBLISHED_FUNDER_REPORT,Afficher le rapport publié destiné aux donateurs,8dbc3bb4
 VIEW_REPORTS,Voir les rapports,7fc5e229
 VIEW_SESSION,Voir la session,7f126865
-VIEW_SITES_ZONES_SUBZONES,"Visualiser les sites, les zones et les sous-zones sur une carte.",3a2cd664
+VIEW_SITES_STRATA_SUBSTRATA,"Visualiser les sites, les zones et les sous-zones sur une carte.",3a2cd664
 VIEW_SPECIES_LIST,Afficher la liste des espèces,ff94b19b
 VIEWING,Visualisation,fb67a07d
 VINE,Vigne,c39d21fb
@@ -2415,13 +2423,3 @@ YOU_HAVE_UNPUBLISHED_CHANGES,Vous avez des modifications non publiées,1825c403
 YOUR_APPLICATIONS,Vos candidatures,7da0f423
 YOUR_VIDEO_IS_PROCESSING,Votre vidéo est en cours de traitement et apparaîtra sous peu.,fb65d59c
 ZERO,zéro,16bd92ef
-ZONE,Zone,17bc60dc
-ZONE_BOUNDARIES,Limites de la zone,15e88feb
-ZONE_GEOMETRY_CHANGED,La géométrie de {0} a changé sur {1},9eec74cc
-ZONE_NAME_IN_USE,Le nom de la zone est déjà utilisé.,d75e052d
-ZONE_NAME_MAXIMUM_LENGTH,Le nom de la zone ne doit pas comporter plus de 15 caractères.,73baca0a
-ZONE_REQUIRED,Zone *,548cc1ed
-ZONE_SURVIVAL,Survie par zone,673673ec
-ZONE_SURVIVAL_TOOLTIP,La survie par zone affiche les zones ayant les taux de survie les plus élevés et les plus faibles parmi les zones observées.,41e612cd
-ZONE_TRENDS,Tendances par zone,8f734112
-ZONES,Zones,5fc4b33f

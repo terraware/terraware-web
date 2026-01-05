@@ -73,7 +73,7 @@ export default function HighestAndLowestSurvivalRateStrataCard(): JSX.Element {
           </Box>
           {(!lowestStratum || lowestStratum.id === highestStratum.id) && (
             <Typography fontWeight={400} fontSize='14px' color={theme.palette.TwClrTxtSecondary} marginTop={1}>
-              {strings.SINGLE_ZONE_SURVIVAL_RATE_MESSAGE}
+              {strings.SINGLE_STRATUM_SURVIVAL_RATE_MESSAGE}
             </Typography>
           )}
         </>

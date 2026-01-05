@@ -58,7 +58,7 @@ export default function PlantingDensityCard({ hasObservations }: PlantingDensity
           <Box flexBasis='100%' marginTop={isDesktop ? 0 : 4}>
             <Box display={'flex'} alignItems={'center'}>
               <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
-                {strings.OBSERVED_DENSITY_PER_ZONE}
+                {strings.OBSERVED_DENSITY_PER_STRATUM}
               </Typography>
               <Tooltip title={strings.OBSERVED_DENSITY_TOOLTIP}>
                 <Box display='flex'>

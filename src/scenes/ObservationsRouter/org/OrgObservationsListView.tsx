@@ -89,7 +89,7 @@ export default function OrgObservationsListView({
         },
         {
           key: 'strata',
-          name: strings.ZONES,
+          name: strings.STRATA,
           type: 'string',
         },
         {

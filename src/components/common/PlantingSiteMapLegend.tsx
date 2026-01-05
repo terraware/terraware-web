@@ -48,7 +48,7 @@ export default function PlantingSiteMapLegend({
 
     if (hasStratum) {
       items.push({
-        label: strings.ZONES,
+        label: strings.STRATA,
         borderColor: theme.palette.TwClrBaseLightGreen300 as string,
         fillColor: 'transparent',
       });
@@ -56,7 +56,7 @@ export default function PlantingSiteMapLegend({
 
     if (hasSubstratum) {
       items.push({
-        label: strings.SUBZONES,
+        label: strings.SUBSTRATA,
         borderColor: theme.palette.TwClrBaseBlue300 as string,
         fillColor: getRgbaFromHex(theme.palette.TwClrBaseBlue300 as string, 0.2),
       });

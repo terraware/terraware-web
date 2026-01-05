@@ -223,7 +223,7 @@ export default function PlantsDashboardView({
           <Grid item xs={12}>
             <Box sx={{ display: 'flex', alignItems: 'center', paddingLeft: theme.spacing(3) }}>
               <Typography fontWeight={600} fontSize={'20px'} paddingRight={1}>
-                {strings.ZONE_TRENDS}
+                {strings.STRATUM_TRENDS}
               </Typography>
 
               <Typography>{strings.ALL_OBSERVATIONS}</Typography>

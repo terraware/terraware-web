@@ -44,7 +44,7 @@ const columnsWithoutStrata = (): TableColumnType[] => [
 const columnsWithStrata = (): TableColumnType[] => [
   {
     key: 'substratumName',
-    name: strings.SUBZONE,
+    name: strings.SUBSTRATUM,
     type: 'string',
   },
   {
@@ -65,7 +65,7 @@ const columnsWithStrata = (): TableColumnType[] => [
   },
   {
     key: 'stratumName',
-    name: strings.ZONE,
+    name: strings.STRATUM,
     type: 'string',
   },
   {
@@ -137,9 +137,9 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
       reloadTracking();
       setRequestId('');
       if (markingAsComplete) {
-        snackbar.toastSuccess(strings.SUBZONE_PLANTING_COMPLETED_SUCCESS, strings.SAVED);
+        snackbar.toastSuccess(strings.SUBSTRATUM_PLANTING_COMPLETED_SUCCESS, strings.SAVED);
       } else {
-        snackbar.toastSuccess(strings.SUBZONE_PLANTING_UNCOMPLETED_SUCCESS, strings.SAVED);
+        snackbar.toastSuccess(strings.SUBSTRATUM_PLANTING_UNCOMPLETED_SUCCESS, strings.SAVED);
       }
     } else if (updatePlantingResult?.status === 'error') {
       snackbar.toastError(strings.GENERIC_ERROR);
