@@ -36,7 +36,7 @@ const DOC_LINKS: Record<SupportedLocaleId, DocLink> = {
     knowledge_base_add_species:
       'https://knowledge.terraformation.com/hc/en-us/articles/19699832923796-Adding-Species-To-Your-List',
     knowledge_base_stratification:
-      'https://knowledge.terraformation.com/hc/en-us/articles/27884386873364-Strata-vs-Zones-Subzones',
+      'https://knowledge.terraformation.com/hc/en-us/articles/27918882767892-Managing-Planting-Sites',
   },
   es: {
     ad_hoc_plots: 'https://knowledge.terraformation.com/hc/en-us/articles/36389038050708-Ad-Hoc-Plot-Observations',
@@ -56,7 +56,7 @@ const DOC_LINKS: Record<SupportedLocaleId, DocLink> = {
     knowledge_base_add_species:
       'https://knowledge.terraformation.com/hc/en-us/articles/19699832923796-Adding-Species-To-Your-List',
     knowledge_base_stratification:
-      'https://knowledge.terraformation.com/hc/en-us/articles/27884386873364-Strata-vs-Zones-Subzones',
+      'https://knowledge.terraformation.com/hc/en-us/articles/27918882767892-Managing-Planting-Sites',
   },
   fr: {
     ad_hoc_plots: 'https://knowledge.terraformation.com/hc/en-us/articles/36389038050708-Ad-Hoc-Plot-Observations',
@@ -76,7 +76,7 @@ const DOC_LINKS: Record<SupportedLocaleId, DocLink> = {
     knowledge_base_add_species:
       'https://knowledge.terraformation.com/hc/en-us/articles/19699832923796-Adding-Species-To-Your-List',
     knowledge_base_stratification:
-      'https://knowledge.terraformation.com/hc/en-us/articles/27884386873364-Strata-vs-Zones-Subzones',
+      'https://knowledge.terraformation.com/hc/en-us/articles/27918882767892-Managing-Planting-Sites',
   },
 };
 
