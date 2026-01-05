@@ -24,7 +24,7 @@ type EditTemporaryPlotsTabProps = {
   plantingSiteId: number;
   temporaryPlotsWithObservations?: PlotsWithObservationsSearchResult[];
   withdrawnSpeciesPlots?: SpeciesPlot[];
-  zones?: StratumT0Data[];
+  strata?: StratumT0Data[];
   alreadyIncluding?: boolean;
 };
 
@@ -32,7 +32,7 @@ const EditTemporaryPlotsTab = ({
   plantingSiteId,
   temporaryPlotsWithObservations,
   withdrawnSpeciesPlots,
-  zones,
+  strata,
   alreadyIncluding,
 }: EditTemporaryPlotsTabProps) => {
   const [isTemporaryPlotsChecked, setIsTemporaryPlotsChecked] = useState(false);
@@ -47,7 +47,7 @@ const EditTemporaryPlotsTab = ({
 
   const [record, setRecord] = useForm<AssignSiteT0TempData>({
     plantingSiteId,
-    strata: zones ?? [],
+    strata: strata ?? [],
   });
 
   useEffect(() => {
@@ -57,10 +57,10 @@ const EditTemporaryPlotsTab = ({
   }, [alreadyIncluding]);
 
   useEffect(() => {
-    if (zones) {
-      setRecord({ plantingSiteId, strata: zones });
+    if (strata) {
+      setRecord({ plantingSiteId, strata });
     }
-  }, [plantingSiteId, setRecord, zones]);
+  }, [plantingSiteId, setRecord, strata]);
 
   const goToViewSettings = useCallback(() => {
     navigate(APP_PATHS.SURVIVAL_RATE_SETTINGS.replace(':plantingSiteId', plantingSiteId.toString()));
@@ -80,20 +80,20 @@ const EditTemporaryPlotsTab = ({
     }
   }, [alreadyIncluding, isTemporaryPlotsChecked, plantingSite, plantingSiteId, updatePlantingSite]);
 
-  const zonesWithObservations = useMemo(() => {
+  const strataWithObservations = useMemo(() => {
     if (!temporaryPlotsWithObservations) {
       return {};
     }
     return temporaryPlotsWithObservations.reduce(
       (acc, plot) => {
-        const zoneId = plot.substratum_stratum_id;
-        if (!zoneId) {
+        const stratumId = plot.substratum_stratum_id;
+        if (!stratumId) {
           return acc;
         }
-        if (!acc[zoneId]) {
-          acc[zoneId] = [];
+        if (!acc[stratumId]) {
+          acc[stratumId] = [];
         }
-        acc[zoneId].push(plot);
+        acc[stratumId].push(plot);
         return acc;
       },
       {} as Record<string, PlotsWithObservationsSearchResult[]>
@@ -101,31 +101,31 @@ const EditTemporaryPlotsTab = ({
   }, [temporaryPlotsWithObservations]);
 
   const saveSettings = useCallback(() => {
-    if (Object.entries(zonesWithObservations).length === 0) {
+    if (Object.entries(strataWithObservations).length === 0) {
       goToViewSettings();
       return;
     }
     let shouldShowWarning = false;
 
-    Object.entries(zonesWithObservations).forEach(([zoneId, plots]) => {
+    Object.entries(strataWithObservations).forEach(([stratumId, plots]) => {
       const plotIds = plots.map((plot) => plot.id.toString());
-      const withdrawnSpeciesOfZone = withdrawnSpeciesPlots?.filter((wsp) =>
+      const withdrawnSpeciesOfStratum = withdrawnSpeciesPlots?.filter((wsp) =>
         plotIds.includes(wsp.monitoringPlotId.toString())
       );
 
       const speciesMap = new Map<number, { density?: number; speciesId: number }>();
-      withdrawnSpeciesOfZone?.forEach((plot) => {
+      withdrawnSpeciesOfStratum?.forEach((plot) => {
         plot.species.forEach((wdSpecies) => {
           if (!speciesMap.has(wdSpecies.speciesId)) {
             speciesMap.set(wdSpecies.speciesId, wdSpecies);
           }
         });
       });
-      const allWithdrawnSpeciesForZone = Array.from(speciesMap.values());
+      const allWithdrawnSpeciesForStratum = Array.from(speciesMap.values());
 
-      allWithdrawnSpeciesForZone.forEach((spec) => {
-        const correspondingZone = (record.strata || []).find((z) => z.stratumId.toString() === zoneId.toString());
-        const correspondingSpecies = correspondingZone?.densityData.find(
+      allWithdrawnSpeciesForStratum.forEach((spec) => {
+        const correspondingStratum = (record.strata || []).find((z) => z.stratumId.toString() === stratumId.toString());
+        const correspondingSpecies = correspondingStratum?.densityData.find(
           (denData) => denData.speciesId.toString() === spec.speciesId.toString()
         );
         if (!correspondingSpecies) {
@@ -134,8 +134,8 @@ const EditTemporaryPlotsTab = ({
       });
     });
 
-    (record.strata || []).forEach((zone) => {
-      zone.densityData.forEach((denData) => {
+    (record.strata || []).forEach((stratum) => {
+      stratum.densityData.forEach((denData) => {
         if (denData.density === undefined || denData.density === null) {
           shouldShowWarning = true;
         }
@@ -160,7 +160,7 @@ const EditTemporaryPlotsTab = ({
     record,
     updatePlantingSiteSetting,
     withdrawnSpeciesPlots,
-    zonesWithObservations,
+    strataWithObservations,
   ]);
 
   const onChangeTemporaryPlotsCheck = useCallback(
@@ -192,7 +192,7 @@ const EditTemporaryPlotsTab = ({
     }
   }, [updateT0, goToViewSettings, record, updatePlantingSiteSetting]);
 
-  if (Object.entries(zonesWithObservations).length === 0) {
+  if (Object.entries(strataWithObservations).length === 0) {
     return <Box padding={theme.spacing(2)}>{strings.NO_TEMPORARY_PLOTS_WITHIN_ZONES}</Box>;
   }
 
@@ -235,17 +235,17 @@ const EditTemporaryPlotsTab = ({
         </Box>
 
         {isTemporaryPlotsChecked &&
-          Object.entries(zonesWithObservations).map(([zoneId, plots]) => {
+          Object.entries(strataWithObservations).map(([stratumId, plots]) => {
             const plotIds = plots.map((plot) => plot.id.toString());
             const filteredWithdrawnSpecies = withdrawnSpeciesPlots?.filter((wsp) =>
               plotIds.includes(wsp.monitoringPlotId.toString())
             );
             return (
               <StratumT0EditBox
-                key={zoneId}
+                key={stratumId}
                 plotsWithObservations={plots}
                 withdrawnSpeciesPlot={filteredWithdrawnSpecies}
-                zoneData={zones?.find((z) => z.stratumId.toString() === zoneId.toString())}
+                stratumData={strata?.find((z) => z.stratumId.toString() === stratumId.toString())}
                 record={record}
                 setRecord={setRecord}
               />

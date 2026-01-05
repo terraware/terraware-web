@@ -13,18 +13,18 @@ import { roundToDecimal } from 'src/utils/numbers';
 type StratumT0BoxProps = {
   plotsWithObservations: PlotsWithObservationsSearchResult[];
   withdrawnSpeciesPlot?: SpeciesPlot[];
-  t0Zone?: StratumT0Data;
+  t0Stratum?: StratumT0Data;
 };
 
-const StratumT0Box = ({ plotsWithObservations, withdrawnSpeciesPlot, t0Zone }: StratumT0BoxProps) => {
+const StratumT0Box = ({ plotsWithObservations, withdrawnSpeciesPlot, t0Stratum }: StratumT0BoxProps) => {
   const theme = useTheme();
   const { species } = useSpeciesData();
   const { isMobile } = useDeviceInfo();
 
-  const getZoneTotalDensity = useMemo(() => {
-    const total = t0Zone?.densityData.reduce((sum, density) => sum + density.plotDensity, 0);
+  const stratumTotalDensity = useMemo(() => {
+    const total = t0Stratum?.densityData.reduce((sum, density) => sum + density.plotDensity, 0);
     return total ? roundToDecimal(total, 1) : undefined;
-  }, [t0Zone]);
+  }, [t0Stratum]);
 
   const allWithdrawnSpecies = React.useMemo(() => {
     if (!withdrawnSpeciesPlot) {
@@ -43,11 +43,11 @@ const StratumT0Box = ({ plotsWithObservations, withdrawnSpeciesPlot, t0Zone }: S
 
   const someWithdrawnSpeciesMissing = useMemo(() => {
     return allWithdrawnSpecies?.some((withdrawnSp) => {
-      if (!t0Zone?.densityData.find((dd) => dd.speciesId.toString() === withdrawnSp.speciesId.toString())) {
+      if (!t0Stratum?.densityData.find((dd) => dd.speciesId.toString() === withdrawnSp.speciesId.toString())) {
         return true;
       }
     });
-  }, [allWithdrawnSpecies, t0Zone?.densityData]);
+  }, [allWithdrawnSpecies, t0Stratum?.densityData]);
 
   return (
     <>
@@ -70,14 +70,14 @@ const StratumT0Box = ({ plotsWithObservations, withdrawnSpeciesPlot, t0Zone }: S
           <Typography>{plotsWithObservations?.[0].substratum_stratum_name}</Typography>
         </Box>
         <Box flexGrow={1} display={'flex'} alignItems={'center'}>
-          {t0Zone && !someWithdrawnSpeciesMissing ? (
+          {t0Stratum && !someWithdrawnSpeciesMissing ? (
             <Box>
               <Box display='flex' paddingBottom={3}>
                 <Typography color={theme.palette.TwClrTxtSuccess} fontWeight={500} paddingRight={2}>
                   {strings.T0_DATA_IS_SET}
                 </Typography>
               </Box>
-              {t0Zone.densityData && (
+              {t0Stratum.densityData && (
                 <Box>
                   <table>
                     <thead style={{ textAlign: 'left' }}>
@@ -99,7 +99,7 @@ const StratumT0Box = ({ plotsWithObservations, withdrawnSpeciesPlot, t0Zone }: S
                       </tr>
                     </thead>
                     <tbody>
-                      {t0Zone.densityData.map((densityData, index) => (
+                      {t0Stratum.densityData.map((densityData, index) => (
                         <tr key={index}>
                           <td style={{ paddingRight: '64px' }}>
                             {species.find((sp) => sp.id === densityData.speciesId)?.scientificName}
@@ -115,7 +115,7 @@ const StratumT0Box = ({ plotsWithObservations, withdrawnSpeciesPlot, t0Zone }: S
                           </Box>
                         </td>
                         <td>
-                          <Typography fontWeight={600}>{getZoneTotalDensity}</Typography>
+                          <Typography fontWeight={600}>{stratumTotalDensity}</Typography>
                         </td>
                       </tr>
                     </tbody>

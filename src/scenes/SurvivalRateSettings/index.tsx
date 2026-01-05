@@ -83,48 +83,48 @@ const SurvivalRateSettings = () => {
     return totalSet;
   }, [permanentPlots, t0SiteData, withdrawnSpeciesPlots]);
 
-  const zonesWithObservations = useMemo(() => {
+  const strataWithObservations = useMemo(() => {
     if (!temporaryPlots) {
       return {};
     }
     return temporaryPlots.reduce(
       (acc, plot) => {
-        const zoneId = plot.substratum_stratum_id;
-        if (!zoneId) {
+        const stratumId = plot.substratum_stratum_id;
+        if (!stratumId) {
           return acc;
         }
-        if (!acc[zoneId]) {
-          acc[zoneId] = [];
+        if (!acc[stratumId]) {
+          acc[stratumId] = [];
         }
-        acc[zoneId].push(plot);
+        acc[stratumId].push(plot);
         return acc;
       },
       {} as Record<string, PlotsWithObservationsSearchResult[]>
     );
   }, [temporaryPlots]);
 
-  const numberOfSetZones = useMemo(() => {
+  const numberOfSetStrata = useMemo(() => {
     let totalSet = 0;
-    Object.entries(zonesWithObservations).forEach(([zoneId, plots]) => {
-      const correspondingZone = t0SiteData?.zones?.find((z) => z.plantingZoneId.toString() === zoneId.toString());
+    Object.entries(strataWithObservations).forEach(([stratumId, plots]) => {
+      const correspondingStratum = t0SiteData?.strata?.find((z) => z.stratumId.toString() === stratumId.toString());
 
       const plotIds = plots.map((plot) => plot.id.toString());
-      const withdrawnSpeciesOfZone = withdrawnSpeciesPlots?.filter((wsp) =>
+      const withdrawnSpeciesOfStratum = withdrawnSpeciesPlots?.filter((wsp) =>
         plotIds.includes(wsp.monitoringPlotId.toString())
       );
 
       const speciesMap = new Map<number, { density?: number; speciesId: number }>();
-      withdrawnSpeciesOfZone?.forEach((plot) => {
+      withdrawnSpeciesOfStratum?.forEach((plot) => {
         plot.species.forEach((wdSpecies) => {
           if (!speciesMap.has(wdSpecies.speciesId)) {
             speciesMap.set(wdSpecies.speciesId, wdSpecies);
           }
         });
       });
-      const allWithdrawnSpeciesForZone = Array.from(speciesMap.values());
+      const allWithdrawnSpeciesForStratum = Array.from(speciesMap.values());
 
-      const everySpeciesSet = allWithdrawnSpeciesForZone.every((sp) => {
-        const correspondingSpecies = correspondingZone?.densityData.find((dd) => dd.speciesId === sp.speciesId);
+      const everySpeciesSet = allWithdrawnSpeciesForStratum.every((sp) => {
+        const correspondingSpecies = correspondingStratum?.densityData.find((dd) => dd.speciesId === sp.speciesId);
         if (correspondingSpecies) {
           return true;
         } else {
@@ -137,7 +137,7 @@ const SurvivalRateSettings = () => {
       }
     });
     return totalSet;
-  }, [t0SiteData, withdrawnSpeciesPlots, zonesWithObservations]);
+  }, [t0SiteData, withdrawnSpeciesPlots, strataWithObservations]);
 
   const tabs = useMemo(() => {
     if (!activeLocale) {
@@ -166,7 +166,7 @@ const SurvivalRateSettings = () => {
         children: (
           <TemporaryPlotsTab
             t0SiteData={t0SiteData}
-            zonesWithObservations={zonesWithObservations}
+            strataWithObservations={strataWithObservations}
             withdrawnSpeciesPlots={withdrawnSpeciesPlots}
             including={t0SiteData?.survivalRateIncludesTempPlots}
           />
@@ -182,7 +182,7 @@ const SurvivalRateSettings = () => {
     t0SiteData,
     temporaryPlots,
     withdrawnSpeciesPlots,
-    zonesWithObservations,
+    strataWithObservations,
   ]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
@@ -250,11 +250,11 @@ const SurvivalRateSettings = () => {
                     marginX={1}
                   />
                 )}
-                {(Object.entries(zonesWithObservations).length || 0) === numberOfSetZones ? (
+                {(Object.entries(strataWithObservations).length || 0) === numberOfSetStrata ? (
                   <Typography fontWeight={500} color={theme.palette.TwClrTxtSuccess}>
                     {strings.T0_SET_FOR_TEMPORARY_PLOTS}
                   </Typography>
-                ) : numberOfSetZones === 0 ? (
+                ) : numberOfSetStrata === 0 ? (
                   <Typography fontWeight={500} color={theme.palette.TwClrTxtWarning}>
                     {strings.T0_NOT_SET_FOR_TEMPORARY_PLOTS}
                   </Typography>
@@ -262,8 +262,8 @@ const SurvivalRateSettings = () => {
                   <Typography fontWeight={500} color={theme.palette.TwClrTxtWarning}>
                     {strings.formatString(
                       strings.NUMBER_OF_PLOTS_SET_FOR_TEMPORARY_PLOTS,
-                      numberOfSetZones,
-                      Object.entries(zonesWithObservations).length || 0
+                      numberOfSetStrata,
+                      Object.entries(strataWithObservations).length || 0
                     )}
                   </Typography>
                 )}
