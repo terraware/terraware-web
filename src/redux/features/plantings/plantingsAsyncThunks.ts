@@ -5,14 +5,14 @@ import strings from 'src/strings';
 import { UpdateSubstratumPayload } from 'src/types/PlantingSite';
 
 export type UpdateRequest = {
-  subzoneId: number;
+  substratumId: number;
   planting: UpdateSubstratumPayload;
 };
 
 export const requestUpdatePlantingCompleted = createAsyncThunk(
   'updatePlantingCompleted',
-  async ({ subzoneId, planting }: UpdateRequest, { rejectWithValue }) => {
-    const response: Response = await PlantingsService.updatePlantingCompleted(subzoneId, planting);
+  async ({ substratumId, planting }: UpdateRequest, { rejectWithValue }) => {
+    const response: Response = await PlantingsService.updatePlantingCompleted(substratumId, planting);
     if (response.requestSucceeded) {
       return true;
     }
@@ -22,17 +22,19 @@ export const requestUpdatePlantingCompleted = createAsyncThunk(
 );
 
 export type BulkUpdateRequest = {
-  subzoneIds: number[];
+  substratumIds: number[];
   planting: UpdateSubstratumPayload;
 };
 
 export const requestUpdatePlantingsCompleted = createAsyncThunk(
   'updatePlantingsCompleted',
-  async ({ subzoneIds, planting }: BulkUpdateRequest, { rejectWithValue }) => {
-    const promises = subzoneIds.map((subzoneId) => PlantingsService.updatePlantingCompleted(subzoneId, planting));
+  async ({ substratumIds, planting }: BulkUpdateRequest, { rejectWithValue }) => {
+    const promises = substratumIds.map((substratumId) =>
+      PlantingsService.updatePlantingCompleted(substratumId, planting)
+    );
     const results = (await Promise.allSettled(promises)).map((result, index) => ({
       ...result,
-      data: subzoneIds[index],
+      data: substratumIds[index],
     }));
 
     const succeeded = results

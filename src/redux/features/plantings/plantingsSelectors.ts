@@ -17,14 +17,14 @@ export const selectPlantingsForSite = createSelector(
   (plantings, id) => (plantings ?? []).filter((planting) => planting.plantingSite.id.toString() === id.toString())
 );
 
-export const getTotalPlantsBySubzone = (plantings: PlantingSearchData[]) => {
-  return plantings?.reduce((plantingsBySubzone: { [key: string]: number }, planting) => {
+export const getTotalPlantsBySubstratum = (plantings: PlantingSearchData[]) => {
+  return plantings?.reduce((plantingsBySubstratum: { [key: string]: number }, planting) => {
     if (!planting.substratum) {
-      return plantingsBySubzone;
+      return plantingsBySubstratum;
     }
-    const subzoneId = planting.substratum.id;
-    plantingsBySubzone[subzoneId] = planting.substratum['totalPlants(raw)'];
-    return plantingsBySubzone;
+    const substratumId = planting.substratum.id;
+    plantingsBySubstratum[substratumId] = planting.substratum['totalPlants(raw)'];
+    return plantingsBySubstratum;
   }, {});
 };
 
@@ -44,7 +44,7 @@ export const selectPlantingProgress = createSelector(
   ],
   (plantingSitesSearchResults, plantingSites, plantings) => {
     if (plantingSitesSearchResults && plantings) {
-      const plantingsBySubzone = getTotalPlantsBySubzone(plantings);
+      const plantingsBySubstratum = getTotalPlantsBySubstratum(plantings);
       const totalPlantsBySite = getTotalPlantsBySite(plantingSitesSearchResults);
       return plantingSites
         ?.filter((ps) => totalPlantsBySite[ps.id])
@@ -56,18 +56,18 @@ export const selectPlantingProgress = createSelector(
           return {
             siteId: ps.id,
             siteName: ps.name,
-            reported: ps.strata?.flatMap((zone) =>
-              zone.substrata
-                .filter((sz) => plantingsBySubzone[sz.id])
+            reported: ps.strata?.flatMap((stratum) =>
+              stratum.substrata
+                .filter((sz) => plantingsBySubstratum[sz.id])
                 .map((sz) => ({
-                  subzoneId: sz.id,
-                  subzoneName: sz.fullName,
+                  substratumId: sz.id,
+                  substratumName: sz.fullName,
                   plantingCompleted: sz.plantingCompleted,
                   plantingSite: ps.name,
-                  zoneName: zone.name,
-                  zoneId: zone.id,
-                  targetPlantingDensity: zone.targetPlantingDensity,
-                  totalSeedlingsSent: plantingsBySubzone[sz.id],
+                  stratumName: stratum.name,
+                  stratumId: stratum.id,
+                  targetPlantingDensity: stratum.targetPlantingDensity,
+                  totalSeedlingsSent: plantingsBySubstratum[sz.id],
                 }))
             ),
             totalPlants: totalPlantsBySite[ps.id],
@@ -90,13 +90,13 @@ export type PlantingProgress = {
   projectName: string;
   siteId: number;
   siteName: string;
-  subzoneId: number;
-  subzoneName: string;
+  stratumId: number;
+  stratumName: string;
+  substratumId: number;
+  substratumName: string;
   targetPlantingDensity: number;
   totalPlants: number;
   totalSeedlingsSent: number;
-  zoneId: number;
-  zoneName: string;
 };
 
 export const searchPlantingProgress = createSelector(
@@ -120,7 +120,7 @@ export const searchPlantingProgress = createSelector(
 
       if (reported && reported.length > 0) {
         reported?.forEach((progress) => {
-          const matchesQuery = !query || regexMatch(progress.subzoneName, query);
+          const matchesQuery = !query || regexMatch(progress.substratumName, query);
           const matchesPlantingCompleted =
             plantingCompleted === undefined || progress.plantingCompleted === plantingCompleted;
           const matchesSiteName = siteNameSelected === undefined || siteName === siteNameSelected;
@@ -162,33 +162,33 @@ export const selectUpdatePlantingCompleted = (state: RootState, requestId: strin
 export const selectUpdatePlantingsCompleted = (state: RootState, requestId: string) =>
   state.updatePlantingsCompleted[requestId];
 
-export const selectZonesHaveStatistics = createSelector(
+export const selectStrataHaveStatistics = createSelector(
   [
-    (state: RootState, orgId: number, zoneIdsBySiteId?: Record<number, Set<number>>, defaultTimeZoneId?: string) =>
+    (state: RootState, orgId: number, stratumIdsBySiteId?: Record<number, Set<number>>, defaultTimeZoneId?: string) =>
       state,
-    (state: RootState, orgId: number, zoneIdsBySiteId?: Record<number, Set<number>>, defaultTimeZoneId?: string) =>
+    (state: RootState, orgId: number, stratumIdsBySiteId?: Record<number, Set<number>>, defaultTimeZoneId?: string) =>
       orgId,
-    (state: RootState, orgId: number, zoneIdsBySiteId?: Record<number, Set<number>>, defaultTimeZoneId?: string) =>
-      zoneIdsBySiteId,
-    (state: RootState, orgId: number, zoneIdsBySiteId?: Record<number, Set<number>>, defaultTimeZoneId?: string) =>
+    (state: RootState, orgId: number, stratumIdsBySiteId?: Record<number, Set<number>>, defaultTimeZoneId?: string) =>
+      stratumIdsBySiteId,
+    (state: RootState, orgId: number, stratumIdsBySiteId?: Record<number, Set<number>>, defaultTimeZoneId?: string) =>
       defaultTimeZoneId,
   ],
-  (state, orgId, zoneIdsBySiteId, defaultTimeZoneId) => {
-    if (zoneIdsBySiteId && defaultTimeZoneId) {
-      const zonesHaveStatistics = Object.keys(zoneIdsBySiteId).some((siteId) => {
+  (state, orgId, stratumIdsBySiteId, defaultTimeZoneId) => {
+    if (stratumIdsBySiteId && defaultTimeZoneId) {
+      const strataHaveStatistics = Object.keys(stratumIdsBySiteId).some((siteId) => {
         const siteIdSelected = Number(siteId);
         const latestObservations = selectLatestObservation(state, siteIdSelected, orgId, defaultTimeZoneId);
-        return Array.from(zoneIdsBySiteId[siteIdSelected]).some((zoneId) => {
+        return Array.from(stratumIdsBySiteId[siteIdSelected]).some((stratumId) => {
           return latestObservations?.strata.some(
-            (plantingZone) =>
-              plantingZone.stratumId === zoneId &&
-              plantingZone.estimatedPlants !== null &&
-              plantingZone.estimatedPlants !== undefined
+            (stratum) =>
+              stratum.stratumId === stratumId &&
+              stratum.estimatedPlants !== null &&
+              stratum.estimatedPlants !== undefined
           );
         });
       });
 
-      return zonesHaveStatistics;
+      return strataHaveStatistics;
     }
   }
 );

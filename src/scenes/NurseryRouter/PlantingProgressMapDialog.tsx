@@ -57,7 +57,7 @@ export default function PlantingProgressMapDialog({
   );
 
   const getWithdrawalHistoryLink = () => {
-    const filterParam = `subzoneName=${encodeURIComponent(subzoneName)}&siteName=${encodeURIComponent(siteName)}`;
+    const filterParam = `substratumName=${encodeURIComponent(subzoneName)}&siteName=${encodeURIComponent(siteName)}`;
     const url = `${APP_PATHS.NURSERY_WITHDRAWALS}?tab=withdrawal_history&${filterParam}`;
     return (
       <Link
