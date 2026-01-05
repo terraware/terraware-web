@@ -9,7 +9,7 @@ import { useLocalization, useOrganization } from 'src/providers';
 import {
   searchAdHocObservations,
   searchObservations,
-  selectObservationsZoneNames,
+  selectObservationsStratumNames,
 } from 'src/redux/features/observations/observationsSelectors';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
@@ -83,7 +83,7 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
 
   const zoneNames = useAppSelector((state) =>
     selectedOrganization
-      ? selectObservationsZoneNames(
+      ? selectObservationsStratumNames(
           state,
           selectedPlantingSiteId,
           selectedOrganization.id,

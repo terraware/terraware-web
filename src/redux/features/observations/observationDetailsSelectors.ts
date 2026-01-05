@@ -6,9 +6,9 @@ import { RootState } from 'src/redux/rootReducer';
 import { ObservationResults, ObservationStratumResults } from 'src/types/Observations';
 
 import { ALL_STATES, selectMergedPlantingSiteObservations } from './observationsSelectors';
-import { searchResultZones } from './utils';
+import { searchResultStrata } from './utils';
 
-// search observation details (search planting zone name only)
+// search observation details (search stratum name only)
 
 export type DetailsParams = {
   orgId: number;
@@ -22,7 +22,7 @@ export type SearchParams = {
 
 export type DetailsSearchParams = SearchParams &
   DetailsParams & {
-    zoneNames: string[];
+    stratumNames: string[];
   };
 
 export const selectObservationDetails = createSelector(
@@ -42,25 +42,23 @@ export const searchObservationDetails: (
 ) => ObservationResults | undefined = createCachedSelector(
   selectObservationDetails,
   (state: RootState, params: DetailsSearchParams, defaultTimeZone: string) => params,
-  (observation, params) => searchResultZones(params.search, params.zoneNames, observation)
+  (observation, params) => searchResultStrata(params.search, params.stratumNames, observation)
 )(
   (state: RootState, params: DetailsSearchParams, defaultTimeZone: string) =>
     `${params.plantingSiteId}_${params.observationId}_${defaultTimeZone}_${params.search}_${Array.from(
-      new Set(params.zoneNames)
+      new Set(params.stratumNames)
     ).toString()}`
 );
 
-// get zone names in observation result
-export const selectDetailsZoneNames: (
+// get stratum names in observation result
+export const selectDetailsStratumNames: (
   state: RootState,
   plantingSiteId: number,
   observationId: number,
   organizationId: number
 ) => string[] = createCachedSelector(
   (state: RootState, plantingSiteId: number, observationId: number, orgId: number) =>
-    selectObservationDetails(state, { plantingSiteId, observationId, orgId, search: '', zoneNames: [] }, ''),
+    selectObservationDetails(state, { plantingSiteId, observationId, orgId, search: '', stratumNames: [] }, ''),
   (details) =>
-    Array.from(
-      new Set(details?.strata.map((plantingZone: ObservationStratumResults) => plantingZone.stratumName) ?? [])
-    )
+    Array.from(new Set(details?.strata.map((stratum: ObservationStratumResults) => stratum.stratumName) ?? []))
 )((state: RootState, plantingSiteId: number, observationId: number) => `${plantingSiteId}_${observationId}`);

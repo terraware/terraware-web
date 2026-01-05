@@ -13,7 +13,7 @@ import {
   ObservationStratumResults,
 } from 'src/types/Observations';
 
-import { mergeAdHocObservations, mergeObservations, searchPlots, searchZonesAndDates } from './utils';
+import { mergeAdHocObservations, mergeObservations, searchPlots, searchStrataAndDates } from './utils';
 
 export const ALL_STATES: ObservationState[] = ['Abandoned', 'Completed', 'Overdue', 'InProgress'];
 
@@ -134,7 +134,7 @@ export const selectMergedPlantingSiteAdHocObservations: (
 )((state: RootState, plantingSiteId: number, defaultTimeZone: string) => `${plantingSiteId}_${defaultTimeZone}`);
 
 /**
- * Search observations (search planting zone name and date only at this time).
+ * Search observations (search stratum name and date only at this time).
  * Preserves order of results.
  */
 export const searchObservations: (
@@ -143,7 +143,7 @@ export const searchObservations: (
   orgId: number,
   defaultTimeZone: string,
   search: string,
-  zoneNames: string[],
+  stratumNames: string[],
   status?: ObservationState[],
   locale?: string
 ) => ObservationResults[] | undefined = createCachedSelector(
@@ -153,7 +153,7 @@ export const searchObservations: (
     orgId: number,
     defaultTimeZone: string,
     search: string,
-    zoneNames: string[],
+    stratumNames: string[],
     status?: ObservationState[],
     locale?: string
   ) => search,
@@ -163,17 +163,17 @@ export const searchObservations: (
     orgId: number,
     defaultTimeZone: string,
     search: string,
-    zoneNames: string[],
+    stratumNames: string[],
     status?: ObservationState[],
     locale?: string
-  ) => zoneNames,
+  ) => stratumNames,
   (
     state: RootState,
     plantingSiteId: number,
     orgId: number,
     defaultTimeZone: string,
     search: string,
-    zoneNames: string[],
+    stratumNames: string[],
     status?: ObservationState[],
     locale?: string
   ) => locale,
@@ -183,27 +183,27 @@ export const searchObservations: (
     orgId: number,
     defaultTimeZone: string,
     search: string,
-    zoneNames: string[],
+    stratumNames: string[],
     status?: ObservationState[],
     locale?: string
   ) => selectMergedPlantingSiteObservations(state, plantingSiteId, orgId, defaultTimeZone, status),
-  searchZonesAndDates
+  searchStrataAndDates
 )(
   (
     state: RootState,
     plantingSiteId: number,
     defaultTimeZone: string,
     search: string,
-    zoneNames: string[],
+    stratumNames: string[],
     status?: ObservationState[],
     orgId?: number,
     locale?: string
   ) =>
-    `${plantingSiteId}_${defaultTimeZone}_${search}_${Array.from(new Set(zoneNames)).toString()}_${status?.join(',')}`
+    `${plantingSiteId}_${defaultTimeZone}_${search}_${Array.from(new Set(stratumNames)).toString()}_${status?.join(',')}`
 );
 
-// get zone names in observations
-export const selectObservationsZoneNames: (
+// get stratum names in observations
+export const selectObservationsStratumNames: (
   state: RootState,
   plantingSiteId: number,
   orgId: number,
@@ -215,7 +215,7 @@ export const selectObservationsZoneNames: (
     Array.from(
       new Set(
         (observations ?? []).flatMap((observation: ObservationResults) =>
-          observation.strata.map((plantingZone: ObservationStratumResults) => plantingZone.stratumName)
+          observation.strata.map((stratum: ObservationStratumResults) => stratum.stratumName)
         )
       )
     )

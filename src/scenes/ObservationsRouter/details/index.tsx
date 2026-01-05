@@ -14,7 +14,7 @@ import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
 import {
   searchObservationDetails,
-  selectDetailsZoneNames,
+  selectDetailsStratumNames,
 } from 'src/redux/features/observations/observationDetailsSelectors';
 import { searchObservations, selectObservation } from 'src/redux/features/observations/observationsSelectors';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
@@ -104,7 +104,7 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
             observationId,
             orgId: selectedOrganization.id,
             search: searchProps.search,
-            zoneNames: searchProps.filtersProps?.filters.zone?.values ?? [],
+            stratumNames: searchProps.filtersProps?.filters.zone?.values ?? [],
           },
           defaultTimeZone.get().id
         )
@@ -137,7 +137,9 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
   const observation = useAppSelector((state) => selectObservation(state, plantingSiteId, observationId));
   const zoneNames = useAppSelector((state) =>
-    !selectedOrganization ? [] : selectDetailsZoneNames(state, plantingSiteId, observationId, selectedOrganization.id)
+    !selectedOrganization
+      ? []
+      : selectDetailsStratumNames(state, plantingSiteId, observationId, selectedOrganization.id)
   );
 
   const title = useMemo(() => {
