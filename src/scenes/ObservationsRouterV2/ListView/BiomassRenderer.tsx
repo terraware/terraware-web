@@ -3,12 +3,15 @@ import React from 'react';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import TableRowPopupMenu from 'src/components/common/table/TableRowPopupMenu';
 import { RendererProps } from 'src/components/common/table/types';
-import useExportBiomassDetailsZip from 'src/scenes/ObservationsRouter/biomass/useExportBiomassDetailsZip';
-import strings from 'src/strings';
+import { useLocalization } from 'src/providers';
+
+import useObservationExports from '../useObservationExports';
 
 export default function BiomassRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const { column, row } = props;
-  const exportDetails = useExportBiomassDetailsZip(row.observationId, row.plantingSiteId, row.completedDate);
+  const { strings } = useLocalization();
+  const observationId = row.observationId as number;
+  const { downloadBiomassObservationDetails } = useObservationExports();
 
   const textStyles = {
     fontSize: '16px',
@@ -24,7 +27,7 @@ export default function BiomassRenderer(props: RendererProps<TableRowType>): JSX
           {
             disabled: false,
             label: strings.EXPORT_BIOMASS_MONITORING_DETAILS_CSV,
-            onClick: () => void exportDetails(),
+            onClick: () => void downloadBiomassObservationDetails(observationId),
           },
         ]}
       />
