@@ -134,8 +134,8 @@ type LabeledSwatchProps = MapLegendItem & {
 };
 
 const getLayerFromLabel = (label: string): MapLayer => {
-  if (label === 'Subzones') {
-    return 'Sub-Zones';
+  if (label === strings.SUBZONES) {
+    return 'Sub-Strata';
   }
   return label as MapLayer;
 };
@@ -157,7 +157,7 @@ function LabeledSwatch({
   const onLegendClickHandler = useCallback(() => {
     if (onChangeLayer) {
       if (label === strings.SUBZONES) {
-        onChangeLayer('Sub-Zones');
+        onChangeLayer('Sub-Strata');
       } else {
         onChangeLayer(label);
       }

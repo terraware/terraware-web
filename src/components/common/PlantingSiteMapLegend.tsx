@@ -6,7 +6,13 @@ import MapLegend from 'src/components/common/MapLegend';
 import strings from 'src/strings';
 import { getRgbaFromHex } from 'src/utils/color';
 
-export type PlantingSiteMapLegendOption = 'site' | 'zone' | 'subzone' | 'permanentPlot' | 'temporaryPlot' | 'adHocPlot';
+export type PlantingSiteMapLegendOption =
+  | 'site'
+  | 'stratum'
+  | 'substratum'
+  | 'permanentPlot'
+  | 'temporaryPlot'
+  | 'adHocPlot';
 
 export type PlantingSiteMapLegendProps = {
   options: PlantingSiteMapLegendOption[];
@@ -23,8 +29,8 @@ export default function PlantingSiteMapLegend({
 }: PlantingSiteMapLegendProps): JSX.Element {
   const theme = useTheme();
   const hasSite = !!options.find((opt) => opt === 'site');
-  const hasZone = !!options.find((opt) => opt === 'zone');
-  const hasSubzone = !!options.find((opt) => opt === 'subzone');
+  const hasStratum = !!options.find((opt) => opt === 'stratum');
+  const hasSubstratum = !!options.find((opt) => opt === 'substratum');
   const hasPermanentPlot = !!options.find((opt) => opt === 'permanentPlot');
   const hasTemporaryPlot = !!options.find((opt) => opt === 'temporaryPlot');
   const hasAdHocPlot = !!options.find((opt) => opt === 'adHocPlot');
@@ -40,7 +46,7 @@ export default function PlantingSiteMapLegend({
       });
     }
 
-    if (hasZone) {
+    if (hasStratum) {
       items.push({
         label: strings.ZONES,
         borderColor: theme.palette.TwClrBaseLightGreen300 as string,
@@ -48,7 +54,7 @@ export default function PlantingSiteMapLegend({
       });
     }
 
-    if (hasSubzone) {
+    if (hasSubstratum) {
       items.push({
         label: strings.SUBZONES,
         borderColor: theme.palette.TwClrBaseBlue300 as string,
@@ -86,7 +92,7 @@ export default function PlantingSiteMapLegend({
         items,
       },
     ];
-  }, [hasSite, hasZone, hasSubzone, hasPermanentPlot, hasTemporaryPlot, theme, hasAdHocPlot]);
+  }, [hasSite, hasStratum, hasSubstratum, hasPermanentPlot, hasTemporaryPlot, theme, hasAdHocPlot]);
 
   return (
     <Box display='flex'>

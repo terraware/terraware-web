@@ -434,7 +434,7 @@ const ProjectProfileGisMaps = () => {
         )}
         <Box display='flex' flexDirection={isDesktop ? 'row' : 'column-reverse'} flexGrow={1}>
           <PlantingSiteMapLegend
-            options={['site', 'zone', 'subzone']}
+            options={['site', 'stratum', 'substratum']}
             onChangeLayer={showSiteMap ? onChangeLayerHandler : undefined}
             selectedLayer={selectedLayer || 'Project Zones'}
             disableLegends={!showSiteMap}
@@ -479,7 +479,7 @@ const ProjectProfileGisMaps = () => {
                   adHocPlot: undefined,
                 }}
                 style={{ width: '100%', borderRadius: theme.spacing(1) }}
-                layers={['Planting Site', 'Zones', 'Sub-Zones']}
+                layers={['Planting Site', 'Strata', 'Sub-Strata']}
                 minHeight='700px'
               />
               <Box

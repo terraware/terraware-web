@@ -26,11 +26,11 @@ export const Default: Story = {
         },
         {
           label: strings.ZONES,
-          value: 'Zones',
+          value: 'Strata',
         },
         {
           label: strings.SUBZONES,
-          value: 'Sub-Zones',
+          value: 'Sub-Strata',
         },
         {
           label: strings.MONITORING_PLOTS,

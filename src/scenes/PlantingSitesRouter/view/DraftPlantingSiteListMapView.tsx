@@ -83,12 +83,12 @@ type PlantingSiteMapViewProps = {
 function DraftPlantingSiteMapView({ plantingSite, search }: PlantingSiteMapViewProps): JSX.Element | null {
   const { isDesktop } = useDeviceInfo();
   const [searchZoneEntities, setSearchZoneEntities] = useState<MapEntityId[]>([]);
-  const [includedLayers, setIncludedLayers] = useState<MapLayer[]>(['Planting Site', 'Zones', 'Sub-Zones']);
+  const [includedLayers, setIncludedLayers] = useState<MapLayer[]>(['Planting Site', 'Strata', 'Sub-Strata']);
 
   const layerOptionLabels: Record<MapLayer, string> = {
     'Planting Site': strings.PLANTING_SITE,
-    Zones: strings.ZONES,
-    'Sub-Zones': strings.SUBZONES,
+    Strata: strings.ZONES,
+    'Sub-Strata': strings.SUBZONES,
     'Monitoring Plots': strings.MONITORING_PLOTS,
     'Project Zones': strings.PROJECT_ZONES,
   };
@@ -111,7 +111,7 @@ function DraftPlantingSiteMapView({ plantingSite, search }: PlantingSiteMapViewP
   }, [plantingSite, search]);
 
   const layerOptions: MapLayer[] = useMemo(() => {
-    const result: MapLayer[] = ['Planting Site', 'Zones', 'Sub-Zones'];
+    const result: MapLayer[] = ['Planting Site', 'Strata', 'Sub-Strata'];
     if (
       mapData &&
       ((mapData.permanentPlot?.entities && mapData.permanentPlot.entities.length > 0) ||
@@ -128,7 +128,7 @@ function DraftPlantingSiteMapView({ plantingSite, search }: PlantingSiteMapViewP
 
   return (
     <Box display='flex' flexDirection={isDesktop ? 'row' : 'column-reverse'} flexGrow={1}>
-      <PlantingSiteMapLegend options={['site', 'zone', 'subzone']} />
+      <PlantingSiteMapLegend options={['site', 'stratum', 'substratum']} />
       {mapData && plantingSite && (
         <PlantingSiteMap
           mapData={mapData}

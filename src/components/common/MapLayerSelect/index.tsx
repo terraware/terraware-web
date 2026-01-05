@@ -5,7 +5,7 @@ import { Icon, PopoverMultiSelect } from '@terraware/web-components';
 
 import { useMapPortalContainer } from 'src/components/Map/MapRenderUtils';
 
-export type MapLayer = 'Planting Site' | 'Zones' | 'Sub-Zones' | 'Monitoring Plots' | 'Project Zones';
+export type MapLayer = 'Planting Site' | 'Strata' | 'Sub-Strata' | 'Monitoring Plots' | 'Project Zones';
 
 type MapLayerSelectProps = {
   initialSelection: MapLayer[];
