@@ -34,7 +34,7 @@ test.describe('ObservationDetailsTests', () => {
     await expect(page.locator('#observationsSurvivalRateBySpecies')).toBeVisible();
 
     // table column headers
-    await expect(page.getByRole('columnheader', { name: 'Zone' })).toBeVisible();
+    await expect(page.getByRole('columnheader', { name: 'Stratum' })).toBeVisible();
     await expect(page.getByRole('columnheader', { name: 'Date' })).toBeVisible();
     await expect(page.getByRole('columnheader', { name: 'Status' })).toBeVisible();
     await expect(page.getByRole('columnheader', { name: 'Live Plants' })).toBeVisible();
@@ -44,7 +44,7 @@ test.describe('ObservationDetailsTests', () => {
     await expect(page.getByRole('columnheader', { name: 'Survival Rate' })).toBeVisible();
 
     // table row values
-    await expect(page.locator('#row1-stratumName a:has-text("Zone 01")')).toBeVisible();
+    await expect(page.locator('#row1-stratumName a:has-text("Stratum 01")')).toBeVisible();
     await expect(page.locator('#row1-completedDate p:has-text("2025-05-29")')).toBeVisible();
     await expect(page.locator('#row1-status p:has-text("Completed")')).toBeVisible();
     await expect(page.locator('#row1-totalPlants p:has-text("944")')).toBeVisible();
@@ -53,7 +53,7 @@ test.describe('ObservationDetailsTests', () => {
     // await expect(page.locator('#row1-mortalityRate p:has-text("10%")')).toBeVisible();
   });
 
-  test('Zone level observation detail view, including statistics and charts', async ({ page }, testInfo) => {
+  test('Stratum level observation detail view, including statistics and charts', async ({ page }, testInfo) => {
     // navigate to observation details
     await page.locator('a:has-text("May 2025")').click();
     await waitFor(page, '#home');
@@ -61,8 +61,8 @@ test.describe('ObservationDetailsTests', () => {
     // wait for table rows to load
     await waitFor(page, '#row1');
 
-    // navigate to zone details
-    await page.locator('a:has-text("Zone 01")').click();
+    // navigate to stratum details
+    await page.locator('a:has-text("Stratum 01")').click();
     await waitFor(page, '#home');
 
     // metrics
@@ -79,7 +79,7 @@ test.describe('ObservationDetailsTests', () => {
 
     // table column headers
     await expect(page.getByRole('columnheader', { name: 'Monitoring Plot', exact: true })).toBeVisible();
-    await expect(page.getByRole('columnheader', { name: 'Subzone' })).toBeVisible();
+    await expect(page.getByRole('columnheader', { name: 'Substratum' })).toBeVisible();
     await expect(page.getByRole('columnheader', { name: 'Date' })).toBeVisible();
     await expect(page.getByRole('columnheader', { name: 'Status' })).toBeVisible();
     await expect(page.getByRole('columnheader', { name: 'Monitoring Plot Type' })).toBeVisible();
@@ -91,7 +91,7 @@ test.describe('ObservationDetailsTests', () => {
 
     // table row values
     await expect(page.locator('#row1-monitoringPlotNumber a:has-text("1")')).toBeVisible();
-    await expect(page.locator('#row1-substratumName p:has-text("Subzone A")')).toBeVisible();
+    await expect(page.locator('#row1-substratumName p:has-text("Substratum A")')).toBeVisible();
     await expect(page.locator('#row1-completedDate p:has-text("2025-05-29")')).toBeVisible();
     await expect(page.locator('#row1-status p:has-text("Completed")')).toBeVisible();
     await expect(page.locator('#row1-isPermanent p:has-text("Permanent")')).toBeVisible();
@@ -109,8 +109,8 @@ test.describe('ObservationDetailsTests', () => {
     // wait for table rows to load
     await waitFor(page, '#row1');
 
-    // navigate to zone details
-    await page.locator('a:has-text("Zone 01")').click();
+    // navigate to stratum details
+    await page.locator('a:has-text("Stratum 01")').click();
     await waitFor(page, '#home');
 
     // wait for table rows to load
@@ -134,13 +134,13 @@ test.describe('ObservationDetailsTests', () => {
     await expect(
       page.locator('label.textfield-label:has-text("Observer") + p.textfield-value--display:has-text("Super Admin")')
     ).toBeVisible();
-    await expect(page.getByText('Zone', { exact: true })).toBeVisible();
+    await expect(page.getByText('Stratum', { exact: true })).toBeVisible();
     await expect(
-      page.locator('label.textfield-label:has-text("Zone") + p.textfield-value--display:has-text("Zone 01")')
+      page.locator('label.textfield-label:has-text("Stratum") + p.textfield-value--display:has-text("Stratum 01")')
     ).toBeVisible();
-    await expect(page.locator('label.textfield-label:has-text("Subzone")')).toBeVisible();
+    await expect(page.locator('label.textfield-label:has-text("Substratum")')).toBeVisible();
     await expect(
-      page.locator('label.textfield-label:has-text("Subzone") + p.textfield-value--display:has-text("Subzone A")')
+      page.locator('label.textfield-label:has-text("Substratum") + p.textfield-value--display:has-text("Substratum A")')
     ).toBeVisible();
     await expect(page.locator('label.textfield-label:has-text("Monitoring Plot Type")')).toBeVisible();
     await expect(

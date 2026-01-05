@@ -20,7 +20,7 @@ test.describe('ObservationsTests', () => {
     await expect(page.getByRole('button', { name: 'Cancel' })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Save' })).toBeVisible();
 
-    // select planting site & zones
+    // select planting site & strata
     await page.locator('#site').click();
     await page.locator('li.select-value').first().click();
     await page.getByLabel('Select All').click();

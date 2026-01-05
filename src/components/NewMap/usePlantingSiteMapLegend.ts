@@ -11,8 +11,8 @@ const usePlantingSiteMapLegend = (defaultLayer?: PlantingSiteMapLayer, disabled?
   const { strings } = useLocalization();
   const {
     sitesLayerStyle,
-    strataLayerStyle: zonesLayerStyle,
-    substrataLayerStyle: subzonesLayerStyle,
+    strataLayerStyle: strataLayerStyle,
+    substrataLayerStyle: substrataLayerStyle,
   } = useMapFeatureStyles();
   const [selectedLayer, setSelectedLayer] = useState<PlantingSiteMapLayer | undefined>(defaultLayer);
 
@@ -27,12 +27,12 @@ const usePlantingSiteMapLegend = (defaultLayer?: PlantingSiteMapLayer, disabled?
         {
           id: 'strata',
           label: strings.STRATA,
-          style: zonesLayerStyle,
+          style: strataLayerStyle,
         },
         {
           id: 'substrata',
           label: strings.SUBSTRATA,
-          style: subzonesLayerStyle,
+          style: substrataLayerStyle,
         },
       ],
       title: strings.BOUNDARIES,
@@ -41,7 +41,7 @@ const usePlantingSiteMapLegend = (defaultLayer?: PlantingSiteMapLayer, disabled?
       setSelectedLayer: (id: string | undefined) => setSelectedLayer(id as PlantingSiteMapLayer | undefined),
       disabled,
     }),
-    [disabled, selectedLayer, sitesLayerStyle, strings, subzonesLayerStyle, zonesLayerStyle]
+    [disabled, selectedLayer, sitesLayerStyle, strings, substrataLayerStyle, strataLayerStyle]
   );
 
   return {

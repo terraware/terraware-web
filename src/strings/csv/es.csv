@@ -90,11 +90,11 @@ ADD_PERSON,Añadir persona,9f8535b1
 ADD_PERSON_DESC,Rellene esta página para añadir una persona a la organización.,5c7054bc
 ADD_PHOTO,Agregar foto...,5352e66a
 ADD_PHOTOS,Añadir fotos,612b31b1
-ADD_PHOTOS_DESCRIPTION,Tome una foto (o fotos) de los lotes que se plantarán en la subzona seleccionada. Asegúrese de incluir el retiro entero en la(s) foto(s).,7e265e87
+ADD_PHOTOS_DESCRIPTION,Tome una foto (o fotos) de los lotes que serán plantados en el sustrato seleccionado. Asegúrese de incluir todo el retiro en la(s) foto(s).,8fea0b64
 ADD_PHOTOS_DESCRIPTION_OPTIONAL,Tome una foto opcional (o fotos) de los lotes.,5b1fa829
 ADD_PLANT_SITE_DESCRIPTION,Añadir Planta y Descripción del Sitio,af2cccc4
 ADD_PLANTING_SITE,Añadir Sitio de Plantación,9525532c
-ADD_PLANTING_SITE_DETAILED_SITE,"Selecciónalo si el sitio es relativamente grande, con múltiples estratos (capas de vegetación) y condiciones de crecimiento. Los sitios de plantación detallados con múltiples estratos tendrán una o más zonas.",0ef2429d
+ADD_PLANTING_SITE_DETAILED_SITE,"Seleccione si el sitio es relativamente grande, con múltiples estratos (capas de vegetación) y condiciones de crecimiento. Los sitios de plantación detallados con múltiples estratos tendrán uno o más estratos.",d2c9cfcb
 ADD_PLANTING_SITE_SIMPLE_SITE,"Seleccionar si el sitio de plantación es relativamente chico, con un solo estrato.",d6732c11
 ADD_PLANTING_SITE_TITLE,Selecciona el tipo de sitio de plantación,e0ce7f80
 ADD_PROJECT,Agregar proyecto,89a74ee0
@@ -121,10 +121,10 @@ ADD_YOUR_FIRST_ACTIVITY,Agregue su primera Actividad,9df0e1e5
 ADDED,Agregado,d441aa1d
 ADDED_SPECIES,Especies añadidas,f2342d09
 ADDED_SPECIES_TOOLTIP,Especies que se incluirán en los cálculos de la tasa de supervivencia y que no provienen de Retiros.,cad59bdf
-ADDING_STRATUM_BOUNDARIES,Añadir límites de zona,901f668b
-ADDING_STRATUM_BOUNDARIES_INSTRUCTIONS_DESCRIPTION,Este video muestra cómo utilizar la herramienta de corte {0} para crear polígonos dentro de los límites del sitio para las zonas.,06f570cb
-ADDING_SUBSTRATUM_BOUNDARIES,Añadir límites de subzona,58f0fb08
-ADDING_SUBSTRATUM_BOUNDARIES_INSTRUCTIONS_DESCRIPTION,Este video muestra cómo utilizar la herramienta de corte {0} para crear formas de subzonas (polígonos) dentro de las zonas.,042bd160
+ADDING_STRATUM_BOUNDARIES,Agregando Límites de Estrato,c58fad17
+ADDING_STRATUM_BOUNDARIES_INSTRUCTIONS_DESCRIPTION,Este video muestra cómo usar la herramienta de corte {0} para crear polígonos dentro de los límites del sitio para los estratos.,c53f3647
+ADDING_SUBSTRATUM_BOUNDARIES,Agregando Límites de Sustrato,45f4c828
+ADDING_SUBSTRATUM_BOUNDARIES_INSTRUCTIONS_DESCRIPTION,Este video muestra cómo usar la herramienta de corte {0} para crear formas de sustrato (polígonos) dentro de los estratos.,da07f815
 ADDITIONAL_COMMENTS,Comentarios adicionales,bf1dfb11
 ADDITIONAL_INVASIVE_THREATENED_SPECIES,Especie invasora/en peligro adicional,7d019848
 ADDITIONAL_NURSERY_NOTES,Notas adicionales sobre el vivero,db29c13a
@@ -249,7 +249,7 @@ BIOMASS_PLOT_TOTAL_PLANTS_TOOLTIP,"Plantas totales es el número de todos los á
 BOOLEAN_FALSE,falso,7a03081c
 BOOLEAN_TRUE,verdadero,54415086
 BOUNDARIES,Límites,e40b0600
-BOUNDARIES_AND_STRATA,Límites y zonas,7ec48419
+BOUNDARIES_AND_STRATA,Límites y Estratos,87db24b5
 BUDGET_DOCUMENT_XLS,Documento presupuestario (.XLS),6eface4e
 BUDGET_NARRATIVE_SUMMARY,Resumen narrativo del presupuesto,075fcdb3
 BUDGET_NARRATIVE_SUMMARY_INSTRUCTIONS,"Proporcione una descripción de alto nivel de su presupuesto en relación con los datos reales, señalando cualquier discrepancia importante y enumerando a los contribuyentes. (Media página como máximo).",3a2e7928
@@ -733,7 +733,7 @@ FROM,De,3b922b12
 FROM_GIS_DATABASE,(de la base de datos GIS),7b29f44f
 FROM_NURSERY,De: Vivero,21226e82
 FROM_NURSERY_REQUIRED,De: Vivero *,4bcef7f8
-FROM_SUBSTRATUM,De: Subzona,e071d8f7
+FROM_SUBSTRATUM,De: Sustrato,d8e74cd4
 FUNDER,Financiador,a66356e6
 FUNDER_ADDED,Financiador agregado,cdcddbaf
 FUNDER_DISCLAIMER_CHECKBOX,"Al marcar esta casilla, reconozco que he leído y comprendido el aviso legal de la plataforma Terraware para financiadores.",24f1c9ed
@@ -756,7 +756,7 @@ GDRIVE_LINK,Enlace de GDrive,0ad2a483
 GENERAL,General,989aa26d
 GENERIC_ERROR,Se ha producido un error,e1abd8bd
 GENUS,Género,893239a9
-GEOMETRY_CHANGED_WARNING_MESSAGE,La geometría de este sitio {0}. Los datos aquí mostrados pueden no ser representativos de lo que hay a día de hoy en las zonas de plantación.,b5d7eb2b
+GEOMETRY_CHANGED_WARNING_MESSAGE,La geometría de este sitio {0}. Los datos mostrados aquí pueden no ser representativos de lo que hay en los estratos del sitio de plantación a la fecha de hoy.,5b1b7d6e
 GERMINATED,Germinado,452ce9c6
 GERMINATION_ESTABLISHMENT,Germinación/Establecimiento,0da62fe0
 GERMINATION_ESTABLISHMENT_QUANTITY,Cantidad de germinación/establecimiento,630be8de
@@ -1079,7 +1079,7 @@ MORE_OPTIONS,Más opciones,40289137
 MORTALITY_RATE,Tasa de mortalidad,f1ef57f9
 MORTALITY_RATE_IN_FIELD,Tasa de mortalidad en campo (%),48a2d543
 MORTALITY_RATE_IN_FIELD_REQUIRED,Tasa de mortalidad en el campo (%) *,cdddfe98
-MORTALITY_RATE_INFO,El índice de mortalidad se basa en el número de plantas que se observaron muertas en las zonas totalmente plantadas.,1d21a7e1
+MORTALITY_RATE_INFO,La tasa de mortalidad se basa en el número de plantas que se observaron muertas dentro de los estratos que están completamente plantados.,71128a0a
 MORTALITY_RATE_PERCENT,Tasa de mortalidad (%),2640a01f
 MORTALITY_RATE_PERCENT_REQUIRED,Tasa de mortalidad (%) *,c7d13833
 MOSS,Musgo,5b67a19f
@@ -1107,8 +1107,8 @@ NEW,Nuevo,b8096e3b
 NEW_ACCESSION,Añadir accesión,6d0d1602
 NEW_APP_VERSION,Actualice para usar la versión más reciente de Terraware.,cd76916f
 NEW_APP_VERSION_MOBILE,Actualice para obtener la versión más reciente de Terraware.,6235c190
-NEW_STRATUM,Nueva área,c51234d3
-NEW_SUBSTRATUM,Nueva subzona,e819356e
+NEW_STRATUM,Nuevo Estrato,84292d1f
+NEW_SUBSTRATUM,Nuevo Sustrato,90a1ddc3
 NEW_TEMPLATE_MODAL_DESCRIPTION,Se publicó una nueva versión para documentTemplate de este documento. ¿Quiere actualizar?,c11ed4d2
 NEW_TEMPLATE_MODAL_TITLE,Actualizar versión de DocumentTemplate,e7c35c92
 NEXT,Siguiente,9bd8de94
@@ -1145,14 +1145,14 @@ NO_PROJECT_SELECTED,No se seleccionó ningún proyecto,b1bb5cd3
 NO_PROJECT_SPECIFIC_METRICS_TO_SHOW,No hay métricas específicas del proyecto para mostrar.,99964e82
 NO_QUANTITY_SET,No se ha establecido una cantidad.,5922c859
 NO_REASSIGNMENTS,No hay reasignaciones.,8152a9dd
-NO_REASSIGNMENTS_TEXT,Seleccione una nueva subzona con cantidad en al menos una fila de lotes de plántulas.,bc6192ed
+NO_REASSIGNMENTS_TEXT,Seleccione un nuevo sustrato con cantidad en al menos una fila de lote de plántulas.,f7546414
 NO_SEEDBANKS_NON_ADMIN_MSG,"Antes de poder agregar y administrar sus accesiones, necesitará contar con un banco de semillas y especies dentro de Terraware. Solo los administradores pueden agregar bancos de semillas; contáctese con el suyo para obtener ayuda.",814348fe
 NO_SPECIES,Ninguna especie,1616e61b
 NO_SPECIES_CONTRIBUTOR_MSG,"Aún no hay especies en su lista de especies. Solo los administradores pueden añadir especies, así que por favor contacte con el suyo para que le ayude.",32a4f50e
 NO_SPECIES_DESCRIPTION,Parece que aún no ha añadido ninguna especie. Disponer de una lista maestra de especies ayuda a agilizar la introducción de datos sobre semillas y plantas en su organización. Puede añadir especies manual e individualmente o importar datos desde un CSV.,048a81f6
 NO_SUB_LOCATIONS,Edite este banco de semillas para añadir sublocalizaciones.,963dba11
 NO_SUB_LOCATIONS_NURSERY,Edite este vivero para añadir sublocalizaciones.,8a939067
-NO_TEMPORARY_PLOTS_WITHIN_STRATA,No hay parcelas temporales dentro de las Zonas del Sitio de Plantación. Solo las Parcelas Temporales dentro de las Zonas pueden usarse para los cálculos de la Tasa de Supervivencia.,b9c67f0a
+NO_TEMPORARY_PLOTS_WITHIN_STRATA,No hay parcelas temporales dentro de los estratos del sitio de plantación. Solo las parcelas temporales dentro de los estratos pueden usarse para los cálculos de la tasa de supervivencia.,407bd30a
 NO_VOTERS,No hay votantes,7db4c3bf
 NO_VOTERS_FOR_PROJECT,Este proyecto no tiene votantes. Póngase en contacto con un administrador acelerador para agregar votantes.,6753a8bc
 NO_WITHDRAWABLE_QUANTITIES_FOUND,No se encontraron cantidades retirables,ab95517f
@@ -1189,7 +1189,7 @@ NUMBER_OF_PHOTOS,Número de fotos,643d471f
 NUMBER_OF_PLANTS,Número de plantas,41fe8f14
 NUMBER_OF_PLOTS_IN_MOST_RECENT_OBSERVATION,Número de parcelas en la observación más reciente,ce786371
 NUMBER_OF_PLOTS_SET_FOR_PERMANENT_PLOTS,t0 establecido para {0} de {1} Parcelas Permanentes,8a4987bd
-NUMBER_OF_PLOTS_SET_FOR_TEMPORARY_PLOTS,t0 establecido para {0} de {1} Zonas de Parcelas Temporales,e54f563a
+NUMBER_OF_PLOTS_SET_FOR_TEMPORARY_PLOTS,t0 establecido para {0} de {1} estratos de parcelas temporales,9307eea1
 NUMBER_OF_SEEDS_COMPROMISED,# semillas afectadas,aee08b67
 NUMBER_OF_SEEDS_COMPROMISED_REQUIRED,# Semillas Afectadas *,44a0ef6a
 NUMBER_OF_SEEDS_COMPROMISED_V2,# Semillas Afectadas,aee08b67
@@ -1250,8 +1250,8 @@ Escanee los códigos QR con su dispositivo para descargarla en App Store o Googl
 OBSERVATIONS_WITH_THE_TERRAWARE_APP,Observaciones con la aplicación Terraware,7536ab13
 OBSERVED_BY_ON,Observado por {0} el {1} a las {2},c8b41186
 OBSERVED_DENSITY,Densidad constatada,c5003c27
-OBSERVED_DENSITY_PER_STRATUM,Densidad observada por zona,c51faa34
-OBSERVED_DENSITY_TOOLTIP,La densidad observada se determina con base en el número de plantas detectadas en las zonas que fueron evaluadas al menos una vez en esta observación.,655e8e55
+OBSERVED_DENSITY_PER_STRATUM,Densidad Observada por Estrato,db5f3cf7
+OBSERVED_DENSITY_TOOLTIP,La densidad observada se basa en el número de plantas observadas dentro de los estratos que fueron observados al menos una vez en esta Observación.,328dc9f7
 OBSERVED_PLANTS,Plantas observadas,375e69c3
 OBSERVED_SPECIES,Especies observadas,922020f2
 OBSERVER,Observador,89ceb806
@@ -1292,8 +1292,8 @@ ORGANIZATION_TYPE_OTHER,Otro,626335b2
 ORGANIZATION_WEBSITE,Sitio web de la organización,331767ac
 ORGANIZATIONS,Organizaciones,8c86eca3
 ORIGINAL_QTY,Cantidad original,636a1ae9
-ORIGINAL_STRATUM,Área original,0e12db66
-ORIGINAL_SUBSTRATUM,Subzona original,988c013f
+ORIGINAL_STRATUM,Estrato Original,01b09c38
+ORIGINAL_SUBSTRATUM,Subestrato Original,3d5071db
 ORTHODOX,Ortodoxo,b0a5a550
 OTHER,Otro,626335b2
 OTHER_CONTACT,Otro contacto,4268b0fb
@@ -1356,7 +1356,7 @@ PLACEHOLDER,Marcador de posición,e7c25185
 PLANT,plantar,9089fdf9
 PLANT_DENSITY,Densidad de plantación,feae2a2d
 PLANT_DENSITY_MISSING_TOOLTIP,"Cuando se completa una observación, la densidad de plantación calculada aparecerá aquí.",6e3830dd
-PLANT_DENSITY_OF_PLANTED_STRATA,Densidad de plantación (de Zonas plantadas),2e0bd471
+PLANT_DENSITY_OF_PLANTED_STRATA,Densidad de Plantas (de Estratos Plantados),db91b874
 PLANT_DENSITY_TITLE_TOOLTIP,Ingrese manualmente la densidad de plantas para cada una de las especies plantadas. Esta densidad se utilizará para los cálculos de la Tasa de Supervivencia.,50547e3a
 PLANT_DENSITY_TOOLTIP,Densidades de plantas por especie que se utilizarán para calcular las tasas de supervivencia por parcela y por especie.,82b7af4f
 PLANT_DESCRIPTION,Notas sobre las plantas,0915d26a
@@ -1388,12 +1388,12 @@ PLANTING_COMPLETE_CHART,Plantación completada,3bea077e
 PLANTING_COMPLETE_DASHBOARD,Plantación completada,3bea077e
 PLANTING_COMPLETE_DASHBOARD_TOOLTIP,"La plantación completada incluye el área y el porcentaje totales del sitio que se marcó como ""Plantación completada"".",b9bda0fe
 PLANTING_COMPLETE_ROLLED_UP_DASHBOARD_TOOLTIP,"Porcentaje de ""Plantación completada"" de todos los lugares de plantación relacionados con el proyecto",969947fc
-PLANTING_COMPLETE_TOOLTIP,¿Completó toda la siembra en todas las subzonas de esta zona?,fb7a354d
+PLANTING_COMPLETE_TOOLTIP,¿Ha completado toda la plantación en todos los subestratos de este estrato?,fde094b1
 PLANTING_DENSITY,Densidad de siembra,2d5d3bcb
 PLANTING_PROGRESS,Avance de plantación,58616da9
-PLANTING_PROGRESS_MAP_DESCRIPTION,Haga clic en cada subzona para marcar las áreas donde la plantación se ha completado. La densidad de plantación se calculará una vez que la plantación se haya completado en cada zona.,86a8f71f
+PLANTING_PROGRESS_MAP_DESCRIPTION,Haga clic en cada subestrato para marcar las áreas donde la plantación ha sido completada. La densidad de plantas se calculará una vez que la plantación haya sido completada para cada estrato.,6c72c94f
 PLANTING_PROGRESS_PERCENT,Progreso de la plantación (%),0d372a57
-PLANTING_PROGRESS_TABLE_DESCRIPTION,Use las casillas de selección que están al lado de cada subzona para marcar las áreas donde la plantación se ha completado. La densidad de plantación se calculará una vez que la plantación se haya completado en cada zona.,547b986a
+PLANTING_PROGRESS_TABLE_DESCRIPTION,Utilice las casillas de verificación junto a cada subestrato para marcar las áreas donde la plantación ha sido completada. La densidad de plantas se calculará una vez que la plantación haya sido completada para cada estrato.,7ccc3984
 PLANTING_SEASON_END,Término de temporada de plantación,414309c0
 PLANTING_SEASON_END_IN_PAST,La fecha de término no puede estar en el pasado.,b2729d4d
 PLANTING_SEASON_END_OUT_OF_RANGE,Debe ser entre 4 semanas y 1 año de la fecha de inicio.,fcca5463
@@ -1411,11 +1411,11 @@ PLANTING_SITE_CREATE_INSTRUCTIONS_TITLE,Trazar los límites del sitio,1200219a
 PLANTING_SITE_CREATED,¡Se creó el sitio de plantación!,c8fad00a
 PLANTING_SITE_DELETED,¡Sitio de plantación borrado!,61c0d69a
 PLANTING_SITE_SAVED,Sitio de plantación guardado,70f9ae14
+PLANTING_SITE_STRATUM_NAME_HELP,Los nombres legibles ayudarán al personal de campo a identificar las áreas cuando se encuentren sobre el terreno.,63445c3d
 PLANTING_SITE_TOTALS,Total de lugares de plantación,f37bb9d8
 PLANTING_SITE_TYPE,Tipo de sitio de plantación,4f94b3c8
 PLANTING_SITE_TYPE_DETAILED,Detallado,6a25500b
 PLANTING_SITE_TYPE_SIMPLE,Sencillo,33e02624
-PLANTING_SITE_STRATUM_NAME_HELP,Los nombres legibles ayudarán al personal de campo a identificar las áreas cuando se encuentren sobre el terreno.,63445c3d
 PLANTING_SITES,Sitios de plantación,3799d2eb
 PLANTINGS_REQUIRE_PLANTING_SITES,Es necesario asignar un sitio de plantación a las plantaciones.,e83e8ad2
 PLANTINGS_REQUIRE_READY_SEEDLINGS,"Es necesario realizar plantaciones por lotes con plántulas que estén ""listas"".",373cfc92
@@ -1575,7 +1575,7 @@ READY_TO_PLANT_QUANTITY_REQUIRED,Cantidad lista para plantar *,14a4be0b
 REASON,Motivo,aa1f8a01
 REASSIGN,Reasignar,48e98f3f
 REASSIGN_SEEDLINGS,Reasignar plántulas,99d4391c
-REASSIGN_SEEDLINGS_DESCRIPTION,"Introduzca la nueva subzona, la nueva cantidad y las notas de las especies para las que desea reasignar las plántulas. Las plántulas de las filas que deje vacías no serán reasignadas.",11199a1f
+REASSIGN_SEEDLINGS_DESCRIPTION,"Ingrese el nuevo subestrato, la nueva cantidad y las notas para la especie a la que desea reasignar plántulas. Las plántulas de las filas que deje vacías no serán reasignadas.",1a8cfcc9
 REASSIGNMENT,Reasignación,79a8c3fe
 REASSIGNMENT_DURATION,Duración de la reasignación,3dec5f19
 REASSIGNMENT_REQUEST_NO_PLOTS_ADDED,No se añadirán parcelas.,ebf0fa62
@@ -1745,7 +1745,7 @@ SAVE_VERSION_MESSAGE,"Guardar una versión equivale a crear una captura de panta
 SAVED,Guardado,3324fd4d
 SCARIFY,Escarificar,b34359c6
 SCHEDULE_OBSERVATION,Programar observación,9d1a4cfc
-SCHEDULE_OBSERVATION_MESSAGE,Seleccione las zonas y subzonas para incluir en la observación:,7908c49c
+SCHEDULE_OBSERVATION_MESSAGE,Seleccione los estratos y subestratos que desea incluir en la observación:,3dc66640
 SCHEDULED,(Programado),6079e4e0
 SCIENTIFIC_NAME,Nombre Científico,0273e7b9
 SCIENTIFIC_NAME_NOT_FOUND,"""{0}"" no fue encontrado en nuestra base de datos, pero puede seguir adicionado.",c9754752
@@ -1814,7 +1814,7 @@ SELECT_A_CONTACT_TYPE_FOR_ALL_INTERNAL_LEADS,Seleccione un tipo de contacto para
 SELECT_ACCESSIONS_FOR_PROJECT,Seleccione las accesiones para {0},dec51806
 SELECT_ACCESSIONS_FOR_PROJECT_DESCRIPTION,Use la columna de la casilla de verificación para seleccionar las accesiones que quiera añadir a {0}.,91237af8
 SELECT_ALL,Seleccionar todo,dfe13fdd
-SELECT_AT_LEAST_ONE_SUBSTRATUM,Seleccione al menos una subzona,ebdde2f7
+SELECT_AT_LEAST_ONE_SUBSTRATUM,Seleccione al menos un subestrato,85a3b3d7
 SELECT_BATCHES,Seleccionar lotes,d15588c6
 SELECT_BUTTON,Seleccionar,4e21939d
 SELECT_EXISTING_PROJECT,Seleccionar proyecto existente,e3ffeef2
@@ -1855,7 +1855,7 @@ SHRUBS,Arbustos,377018f6
 SILVOPASTURE,Sistema selvopastoril,9d942e38
 SIMPLE_SITE,Terreno sencillo,760ab731
 SINGLE_SPECIES_SURVIVAL_RATE_MESSAGE,"Actualmente solo hay una especie con una tasa de supervivencia. Cuando haya más especies con una tasa de supervivencia, se mostrará la especie con la tasa de supervivencia más baja.",c4ff6454
-SINGLE_STRATUM_SURVIVAL_RATE_MESSAGE,"El sitio tiene solo una zona con una tasa de supervivencia. Cuando un sitio tenga más de una zona con una tasa de supervivencia, se mostrará la zona con la tasa de supervivencia más baja.",d9ac1a26
+SINGLE_STRATUM_SURVIVAL_RATE_MESSAGE,"El sitio tiene solo un estrato con una tasa de supervivencia. Cuando un sitio tiene más de un estrato con una tasa de supervivencia, se mostrará el estrato con la tasa de supervivencia más baja.",10007138
 SITE,Sitio,925ca15b
 SITE_BOUNDARY,Límite del sitio,ee9dc83f
 SITE_BOUNDARY_ABSENT_WARNING,Dibuje un límite para el sitio.,495ebdb5
@@ -1866,7 +1866,7 @@ SITE_BOUNDARY_DESCRIPTION_3,"Acerca el zoom a la ubicación del sitio de plantac
 SITE_BOUNDARY_DESCRIPTION_4,"Para cambiar la forma del límite del lugar, haz clic en la forma para cambiar los puntos. Para eliminar la forma, haz clic en el botón {0}.",3fd2c49c
 SITE_BOUNDARY_ERRORS,Hay errores en los límites del terreno.,916536c6
 SITE_BOUNDARY_POLYGON_TOO_SMALL,Los límites con una superficie de {0} hectáreas son menores que 100 m x 100 m.,e140c0c1
-SITE_BOUNDARY_SIMPLE_SITE_NOTE,"Nota: Por defecto, los Sitios Simples incluirán solo una Zona y una Subzona que conformarán todo el sitio de plantación.",30664f85
+SITE_BOUNDARY_SIMPLE_SITE_NOTE,"Nota: Por defecto, los Sitios Simples incluirán solo un Estrato y un Subestrato que comprenden todo el sitio de plantación.",d866268c
 SITE_BOUNDING_AREA_TOO_LARGE,El área de delimitación de {0} hectáreas es demasiado grande.,d32baa28
 SITE_DETAIL,Detalle del sitio,c7f1672e
 SITE_EDIT_DISABLED_TOOLTIP,El sitio de plantación actualmente es un borrador; solo el creador del sitio puede editarlo.,07fbd64b
@@ -1878,19 +1878,19 @@ SITE_EXCLUSION_AREAS_OPTIONAL,Zonas de exclusión (opcional),434ba2b3
 SITE_EXCLUSION_ERRORS,Hay errores en el límite de exclusión.,dc334f43
 SITE_LOCATION,Ubicación del sitio,e0a85b19
 SITE_MAP,Mapa del sitio,df2fc60a
-SITE_STRATUM_BOUNDARIES,Límites de la zona,15e88feb
-SITE_STRATUM_BOUNDARIES_DESCRIPTION_0,"Una Zona es un estrato (capa de vegetación) del sitio de plantación en el que las condiciones de plantación y de crecimiento son similares. Cada sitio de plantación debe tener al menos una zona y generalmente no más de cinco. Un ejemplo de Zona es la pendiente de una colina que da al este, donde la luz solar y las condiciones del suelo son similares.",3781c2ed
-SITE_STRATUM_BOUNDARIES_DESCRIPTION_1,Dibuja a continuación las zonas de tu sitio de plantación. Utiliza la herramienta de corte {0} para crear polígonos dentro de los límites del sitio para las zonas. [Ve un tutorial] sobre cómo añadir límites de zona.,4446f1c1
-SITE_STRATUM_BOUNDARIES_SIZE,Las zonas deben tener un tamaño mínimo de 100 m x 100 m.,a6121c9f
-SITE_STRATUM_BOUNDARIES_TOO_SMALL,Los límites de una o varias zonas son menores que 100 m x 100 m.,bd03c181
-SITE_STRATUM_BOUNDARY_TOO_SMALL,Los límites de la zona son menores que 100 m x 100 m.,bee2858c
-SITE_STRATUM_NAMES_MISSING,Faltan nombres en una o más zonas. Haga clic en una zona para editar el nombre.,210e36e1
-SITE_SUBSTRATUM_BOUNDARIES,Límites de las subzonas,7ac3bfe9
-SITE_SUBSTRATUM_BOUNDARIES_DESCRIPTION_0,Cada zona de tu sitio de plantación se divide en una o más subzonas. Una subzona es la zona más pequeña a la que se pueden asignar plántulas durante la plantación. Las subzonas deben tener un tamaño tal que la totalidad de la subzona pueda plantarse durante una sola temporada de plantación. Las subzonas suelen tener entre 50 y 200 hectáreas.,06578b84
-SITE_SUBSTRATUM_BOUNDARIES_DESCRIPTION_1,"Dibuja a continuación las subzonas de tu sitio de plantación. Primero, selecciona una zona en la que crear subzonas. Utiliza la herramienta de corte {0} para crear formas de subzonas (polígonos) dentro de las zonas. [Ve un tutorial] sobre cómo añadir límites de subzonas.",ce217578
-SITE_SUBSTRATUM_BOUNDARIES_SELECTED_STRATUM,Actualmente está seleccionada la zona {0} para crear subzonas.,5e6cd6a3
-SITE_SUBSTRATUM_BOUNDARIES_TOO_SMALL,Una o más subzonas tienen un límite inferior a 25 m x 25 m,c1d1a11f
-SITE_SUBSTRATUM_BOUNDARY_TOO_SMALL,El límite de la subzona es menor que 25 m x 25 m,69d2798b
+SITE_STRATUM_BOUNDARIES,Límites de Estrato,418d687a
+SITE_STRATUM_BOUNDARIES_DESCRIPTION_0,"Un Estrato es una capa de vegetación del sitio de plantación donde las condiciones de plantación y crecimiento son similares. Cada sitio de plantación debe tener al menos un estrato y usualmente no más de cinco. Un ejemplo de Estrato es la pendiente de una colina orientada al este, donde las condiciones de luz solar y suelo son similares.",408485f9
+SITE_STRATUM_BOUNDARIES_DESCRIPTION_1,Dibuje las Estratas de su sitio de plantación a continuación. Use la herramienta de corte {0} para crear polígonos dentro de los límites del sitio para las Estratas. [Vea un tutorial] sobre cómo agregar límites de Estrata.,c6d2ac88
+SITE_STRATUM_BOUNDARIES_SIZE,Las Estratas deben tener un tamaño mínimo de 100 m x 100 m.,d7c8579b
+SITE_STRATUM_BOUNDARIES_TOO_SMALL,Una o más estratas tienen un límite menor a 100 m x 100 m.,e53c42df
+SITE_STRATUM_BOUNDARY_TOO_SMALL,Límite de estrata menor a 100 m x 100 m.,d39bb72b
+SITE_STRATUM_NAMES_MISSING,Falta el nombre de una o más estratas. Haga clic en una estrata para editar su nombre.,dc003708
+SITE_SUBSTRATUM_BOUNDARIES,Límites de Subestrato,71b65a41
+SITE_SUBSTRATUM_BOUNDARIES_DESCRIPTION_0,"Cada Estrata de su sitio de plantación se divide en uno o más Subestratos. Un Subestrato es el área más pequeña a la que se pueden asignar plántulas durante la plantación. Los Subestratos deben tener un tamaño tal que se pueda plantar la totalidad del Subestrato durante una sola temporada de plantación. Generalmente, los Subestratos tienen entre 50 y 200 hectáreas.",f7fdd3e2
+SITE_SUBSTRATUM_BOUNDARIES_DESCRIPTION_1,"Dibuje los Subestratos de su sitio de plantación a continuación. Primero, seleccione una Estrata en la que crear Subestratos. Use la herramienta de corte {0} para crear formas de Subestrato (polígonos) dentro de las Estratas. [Vea un tutorial] sobre cómo agregar límites de Subestrato.",fffa597e
+SITE_SUBSTRATUM_BOUNDARIES_SELECTED_STRATUM,La Estrata {0} está seleccionada actualmente para crear Subestratos.,140be362
+SITE_SUBSTRATUM_BOUNDARIES_TOO_SMALL,Uno o más Subestratos tienen un límite menor a 25 m x 25 m.,87f34c5b
+SITE_SUBSTRATUM_BOUNDARY_TOO_SMALL,Límite de Subestrato menor a 25 m x 25 m.,c014deff
 SITE_VISIT,Visita al sitio,01a6a6fc
 SITE_WITH_NAME_EXISTS,Ya existe un sitio con este nombre.,8a2a38fc
 SKIP,Omitir,2198bbf5
@@ -1924,7 +1924,7 @@ SPECIES_CATEGORIES,Categorías de especies,b63aa30d
 SPECIES_CATEGORIES_TOOLTIP,"Categorías de especies muestra el porcentaje del total de plantas plantadas que son Raras y en Peligro, según la especie.",e6a1dcfe
 SPECIES_CLASSIFICATION,Clasificación de especies,2e8b4fb1
 SPECIES_DENSITY_WARNING_MESSAGE,"No ha ingresado valores de densidad de plantas para todas las especies. Si no ingresa valores de densidad de plantas para todas las especies, las densidades de plantas para esta parcela no se establecerán y no se calculará la tasa de supervivencia para esa especie. Ingrese 0 para cualquier especie que no haya sido plantada en una parcela.",5bcc0f2b
-SPECIES_DENSITY_WARNING_MESSAGE_TEMPORARY_PLOTS,"No ha ingresado valores de densidad de plantas para todas las especies en todas las zonas. Si no ingresa valores de densidad de plantas para todas las especies en una zona, las densidades de plantas para esa zona no se establecerán y no se calculará la tasa de supervivencia para esa especie. Ingrese 0 para cualquier especie que no haya sido plantada en una zona.",f452b032
+SPECIES_DENSITY_WARNING_MESSAGE_TEMPORARY_PLOTS,"No ha ingresado valores de densidad de plantas para todas las especies en todas las estratas. Si no ingresa valores de densidad de plantas para todas las especies en una estrata, no se establecerán las densidades de plantas para esa estrata y no se calculará la tasa de supervivencia para esa especie. Ingrese 0 para cualquier especie que no haya sido plantada en una estrata.",685a0c64
 SPECIES_DESCRIPTION,"Gestione la lista de especies de su organización para fines de planificación, operación y elaboración de informes.",b1943eab
 SPECIES_EMPTY_MSG_BODY,Ingrese ahora la especie que recolecta o planta para simplificar su experiencia cuando esté en campo.,20250069
 SPECIES_FROM_WITHDRAWALS,Especies a partir de retiros,66d674b5
@@ -1950,7 +1950,7 @@ SPECIES_SELECTED,Especie seleccionada,820edb46
 SPECIES_SURVIVAL,Supervivencia de Especies,20e77844
 SPECIES_SURVIVAL_BREAKDOWN,Desglose de Supervivencia de Especies,837eaa3b
 SPECIES_SURVIVAL_BREAKDOWN_TOOLTIP,El desglose de supervivencia muestra el porcentaje de plantas por especie que siguen vivas desde la plantación inicial.,adb3d43d
-SPECIES_SURVIVAL_TOOLTIP,"La Supervivencia de Especies muestra las especies con las tasas de supervivencia más altas y más bajas, entre las zonas que fueron observadas.",dfaff418
+SPECIES_SURVIVAL_TOOLTIP,"Supervivencia de especies muestra las especies con las tasas de supervivencia más altas y más bajas, entre las estratas que fueron observadas.",5dde50a6
 SPECIES_TABLE_INSTRUCTIONS,Haga clic en un número de la tabla para editarlo.,7f5a3f3e
 SPECIES_TABLE_INSTRUCTIONS_NOTE,"NOTA: Cuando se cambian los números, los números originales y las ubicaciones de las plantas observadas no se actualizarán en los mapas. Por favor, cambie los números con discreción.",3d4cd792
 SPECIES_TOOLTIP,Especies cuyas densidades de plantas se utilizarán para calcular las tasas de supervivencia por parcela y por especie.,6e5f03ec
@@ -1970,13 +1970,13 @@ START_DATE_REQUIRED,Fecha de inicio *,f4309372
 START_NEW_APPLICATION,Iniciar nueva solicitud,94edbd44
 START_OVER,Volver a empezar,9a3b31d8
 START_OVER_CONFIRMATION,¿Estás seguro?,d4536b91
-START_OVER_WARNING,"Se borrarán los límites del sitio, la zona de exclusión y los límites de zona y subzona, y tendrás que volver a proporcionar la información.",346eb1dc
+START_OVER_WARNING,"Los límites del sitio, el área de exclusión, los límites de estrata y subestrato se borrarán, y deberá proporcionar la información nuevamente.",b03521e1
 START_TIME,Hora de inicio,f053adca
 STARTED,Iniciada: {0},4eb912f4
 STATE,Estado,655a3fbb
 STATE_PROVINCE_REGION,Estado/Provincia/Región,bec083fc
 STATE_REQUIRED,Estado *,917ddf08
-STATS_WARNING_DESCRIPTION_1,Las estadísticas de observación se calcularon después de que esta subzona fuera marcada como Plantación completa.,2a46c0f5
+STATS_WARNING_DESCRIPTION_1,Las estadísticas de observación se calcularon después de que este subestrato fue marcado como Plantación Completa.,e10ed124
 STATS_WARNING_DESCRIPTION_2,Deshacer el estado de Plantación completa eliminará dichas estadísticas. ¿Está seguro de que desea deshacerlo?,d75cb848
 STATUS,Estado,213765a6
 STATUS_WITH_STATUS,Estatus:{0},67587035
@@ -1984,18 +1984,17 @@ STEEP_SLOPE,Pendiente pronunciada,5bde8271
 STORAGE,Almacenamiento,bba4a98a
 STORED,Almacenada,f74eae19
 STORING,Almacenamiento,2e386dbc
-STRATA,Zonas,5fc4b33f
-STRATA_LONG,Zonas de plantación,a678dfee
+STRATA,Estratos,3149f6f8
 STRATIFICATION,Estratificación,f19a442c
-STRATUM,Zona,17bc60dc
-STRATUM_BOUNDARIES,Límites de la zona,15e88feb
+STRATUM,Estrato,79b6bcfe
+STRATUM_BOUNDARIES,Límites del estrato,418d687a
 STRATUM_GEOMETRY_CHANGED,La geometría para {0} cambió el {1},9eec74cc
-STRATUM_NAME_IN_USE,El nombre de la zona ya está en uso.,d75e052d
-STRATUM_NAME_MAXIMUM_LENGTH,El nombre de la zona debe tener 15 caracteres o menos.,73baca0a
-STRATUM_REQUIRED,Zona *,548cc1ed
-STRATUM_SURVIVAL,Supervivencia por Zona,673673ec
-STRATUM_SURVIVAL_TOOLTIP,"La Supervivencia por Zona muestra las zonas con las tasas de supervivencia más altas y más bajas, entre las zonas que fueron observadas.",41e612cd
-STRATUM_TRENDS,Tendencias por zona,8f734112
+STRATUM_NAME_IN_USE,El nombre del estrato ya está en uso.,a4170ff3
+STRATUM_NAME_MAXIMUM_LENGTH,El nombre del estrato debe tener 15 caracteres o menos.,905761e0
+STRATUM_REQUIRED,Estrato *,d5093ac0
+STRATUM_SURVIVAL,Supervivencia del estrato,8973cb73
+STRATUM_SURVIVAL_TOOLTIP,"La Supervivencia del estrato muestra los estratos con las tasas de supervivencia más altas y más bajas, entre los estratos que fueron observados.",2713bf3c
+STRATUM_TRENDS,Tendencias del estrato,1e6e2f56
 SUB_LOCATION,Sublocalización,76bcf83f
 SUB_LOCATION_DETAILS,Detalles de la sublocalización,dfa61b63
 SUB_LOCATION_EXISTS,Esta sublocalización ya existe,b2a86dbc
@@ -2018,17 +2017,17 @@ SUBSET_WEIGHT_ERROR,El peso del subconjunto debe ser inferior al peso de las sem
 SUBSET_WEIGHT_POSITIVE,El peso del subconjunto tiene que ser un número positivo,8f1b1fed
 SUBSET_WEIGHT_REQUIRED,Usted debe introducir un peso y un recuento del subconjunto para determinar el recuento de semillas aproximado al extraerlas a un vivero. Esto puede hacerse editando la cantidad de esta accesión.,18baf19c
 SUBSHRUB,Subarbusto,f13ec462
-SUBSTRATA,Subzonas,d28785f2
+SUBSTRATA,Subestratos,6dda38f7
 SUBSTRATE,Sustrato,74ff28de
 SUBSTRATE_AFTER,Sustrato (después),4f743cf7
 SUBSTRATE_BEFORE,Sustrato (antes),34fc5273
 SUBSTRATE_NOTES,Notas de sustrato,c0562901
-SUBSTRATUM,Subzona,efc58319
-SUBSTRATUM_BOUNDARIES,Límites de las subzonas,7ac3bfe9
-SUBSTRATUM_NAME_IN_USE,El nombre de la subzona ya está en uso.,64a22be0
-SUBSTRATUM_PLANTING_COMPLETED_SUCCESS,Subzona(s) marcada(s) como Plantación completa.,a70f726f
-SUBSTRATUM_PLANTING_UNCOMPLETED_SUCCESS,Subzona(s) marcada(s) como Plantación incompleta.,9928a3a5
-SUBSTRATUM_REQUIRED,Subzona *,4e9bbf61
+SUBSTRATUM,Subestrato,2b98a6d5
+SUBSTRATUM_BOUNDARIES,Límites del subestrato,71b65a41
+SUBSTRATUM_NAME_IN_USE,El nombre del subestrato ya está en uso.,831365cd
+SUBSTRATUM_PLANTING_COMPLETED_SUCCESS,Subestratos marcados como Plantación Completa.,e10cc879
+SUBSTRATUM_PLANTING_UNCOMPLETED_SUCCESS,Subestratos marcados como Plantación Incompleta.,7478695b
+SUBSTRATUM_REQUIRED,Subestrato *,133a99e5
 SUBTITLE_APPLICATION_GET_STARTED,"Para comenzar, por favor crea tu organización ahora. Una vez que crees tu organización, se te pedirá que completes un formulario de preselección para determinar la elegibilidad de tu proyecto.",dae63e59
 SUBTITLE_GET_STARTED,"Para empezar, cree su organización ahora. Podrá configurar y gestionar las personas, la lista de especies, las ubicaciones y los proyectos de su organización.",1be1a60d
 SUCCESS,Éxito,cbb4902d
@@ -2053,8 +2052,8 @@ SURVIVAL_RATE_PER_SPECIES_AS_OF_THIS_OBSERVATION,Tasa de supervivencia por espec
 SURVIVAL_RATE_PER_SPECIES_AS_OF_THIS_OBSERVATION_TOOLTIP,"La Tasa de Supervivencia por Especie en esta Observación muestra las tasas de supervivencia para las especies observadas en todas las parcelas hasta esta Observación, lo que incluye la observación actual y todas las anteriores. No se incluyen las plantas registradas como preexistentes ni aquellas cuyo nombre científico se desconoce.",5e0d4528
 SURVIVAL_RATE_SETTINGS,Configuración de la tasa de supervivencia,1177b667
 SURVIVAL_RATE_SETTINGS_FOR,Configuración de la tasa de supervivencia para {0},5a727d0d
-SURVIVAL_RATE_SETTINGS_INFO,"{0} Para cada parcela permanente, seleccione o ingrese los datos que se utilizarán para proporcionar la densidad inicial de plantas por parcela para los cálculos de la tasa de supervivencia. Estos “datos de plantación t0” deben establecerse para todas las parcelas. Las observaciones que incluyan la parcela permanente pueden utilizarse como datos de plantación t0 de la parcela. Para las observaciones posteriores, Terraware usará estos datos t0 para calcular las tasas de supervivencia a nivel de Parcela, Subzona, Zona y Sitio de Plantación. Si se utilizan parcelas temporales para los cálculos de la tasa de supervivencia, los datos t0 deben establecerse para todas las zonas. Si se cambia la selección o los datos t0 ingresados para una parcela o zona, las tasas de supervivencia se recalcularán en función de la nueva selección.",ee0c9a0d
-SURVIVAL_RATE_TOOLTIP,La tasa de supervivencia se basa en la cantidad de plantas que fueron observadas como vivas dentro de todas las zonas que fueron observadas.,faa56121
+SURVIVAL_RATE_SETTINGS_INFO,"{0} Para cada parcela permanente, seleccione o ingrese los datos que se utilizarán para proporcionar la densidad inicial de plantas por parcela para los cálculos de la tasa de supervivencia. Estos “datos de plantación t0” deben establecerse para todas las parcelas. Las observaciones que incluyan la parcela permanente pueden utilizarse para los datos de plantación t0 de la parcela. Para las observaciones posteriores, Terraware utilizará estos datos t0 para calcular las tasas de supervivencia a nivel de Parcela, Subestrato, Estrato y Sitio de Plantación. Si se utilizan parcelas temporales para los cálculos de la tasa de supervivencia, los datos t0 deben establecerse para todos los estratos. Si se cambia la selección o los datos t0 ingresados para una parcela o estrato, las tasas de supervivencia se recalcularán en función de la nueva selección.",213de693
+SURVIVAL_RATE_TOOLTIP,La tasa de supervivencia se basa en el número de plantas observadas vivas dentro de todos los estratos que fueron observados.,491e249a
 SURVIVAL_RATE_TREND_TOOLTIP,"La tendencia de la tasa de supervivencia representa los porcentajes de plantas que fueron registradas como vivas en parcelas permanentes dentro de todas las observaciones. Si los datos t0 no están establecidos para todas las parcelas dentro de una Observación, la tasa de supervivencia para la Observación no se representará en la tendencia.",63f175eb
 SURVIVAL_RATES_UNAVAILABLE_BODY,Ingrese los datos en el {0} y obtenga más información sobre el cálculo de tasas de supervivencia en nuestro {1}.,5b1b6dc1
 SURVIVAL_RATES_UNAVAILABLE_TITLE,No es posible calcular las tasas de supervivencia porque no se han ingresado todos los datos requeridos.,3a990e77
@@ -2082,7 +2081,7 @@ TARGET,Objetivo,7f0a4d77
 TARGET_DENSITY,Densidad objetivo,239e7748
 TARGET_HECTARES_PLANTED,Objetivo: {0} ha,8c7d580d
 TARGET_PLANTING_DENSITY,Densidad de plantación objetivo,4f350d39
-TARGET_PLANTING_DENSITY_TOOLTIP,Densidad de plantación objetivo para la zona (plantas por hectárea).,79af64bc
+TARGET_PLANTING_DENSITY_TOOLTIP,Densidad de plantación objetivo para el estrato (plantas por hectárea).,042cc8ff
 TARGETS,Objetivos,afd4bbf9
 TEMPLATE,Plantilla,28afe27c
 TEMPLATES,Plantillas,a66a976a
@@ -2108,7 +2107,7 @@ THIS_DELIVERABLE_HAS_BEEN_APPROVED_DOCUMENT,"Este entregable ha sido aprobado. S
 THIS_DELIVERABLE_HAS_BEEN_APPROVED_QUESTIONNAIRE,"Este entregable ha sido aprobado. Si el proyecto vuelve a enviar el cuestionario, el estado volverá a ""En revisión"".",89b908e0
 THIS_DELIVERABLE_HAS_BEEN_APPROVED_SPECIES,Este entregable ha sido aprobado. La lista de especies y su estado pueden cambiar a medida que se presenten nuevos entregables de listas de especies.,28fcdf43
 THIS_MODULE_CONTAINS,Este módulo contiene:,7982e848
-THIS_OBSERVATION_INCLUDES,Esta observación incluye las siguientes subáreas:,2b52b417
+THIS_OBSERVATION_INCLUDES,Esta observación incluye los siguientes subestratos:,c48c888e
 THIS_PROJECT_HAS_NO_ACTIVITIES,Este proyecto no tiene actividades,cb693792
 THIS_REPORT_HAS_BEEN_APPROVED,Se aprobó este informe.,030064cb
 THREATENED,Amenazada,57ca76f3
@@ -2125,7 +2124,7 @@ TO,A,0ec3d25a
 TO_NURSERY,Para: vivero,ef613421
 TO_NURSERY_REQUIRED,Para: Guardería *,e9bd2c95
 TO_PLANTING_SITE_REQUIRED,Para: Sitio de plantación *,b92a92f0
-TO_SUBSTRATUM,Para: Subzona,9bd85926
+TO_SUBSTRATUM,A: Subestrato,f8e40ecb
 TODO,Tareas pendientes,4d251a21
 TOOLTIP_ACCESSIONS_ADD_COLLECTING_SITE,El lugar donde las semillas fueron recolectadas. Se recomienda nombrarlos mediante puntos de referencia estables o características que no varíen.,c4d2ea0e
 TOOLTIP_ACCESSIONS_ADD_PLANT_ID,El identificador único que se le asigna a una planta con fines de seguimiento o conservación. Lo ideal es que las semillas de una planta con un identificador se mantengan separadas de otras plantas (no agrupadas) en colecciones y accesiones.,94eeddbd
@@ -2300,7 +2299,7 @@ USE_OBSERVATION_DATA,Usar datos de observación,37c30404
 USE_OBSERVATION_DATA_TOOLTIP,Seleccione de la lista de todas las Observaciones completadas que incluyan datos t0 para la parcela.,1919d6a5
 USE_ORGANIZATION_TIME_ZONE,Utilizar zona horaria de la organización,2cf2ac16
 USE_TEMPORARY_PLOTS_IN_SURVIVAL_RATE,Usar densidades de plantas de parcelas temporales en los cálculos de la tasa de supervivencia,7d41da80
-USE_TEMPORARY_PLOTS_IN_SURVIVAL_RATE_TOOLTIP,"Marque la casilla para incluir las Parcelas Temporales en los cálculos de la Tasa de Supervivencia. Si se selecciona, los datos t0 deben estar establecidos para todas las Zonas para que se puedan calcular las Tasas de Supervivencia.",4d450244
+USE_TEMPORARY_PLOTS_IN_SURVIVAL_RATE_TOOLTIP,"Marque la casilla para incluir Parcelas Temporales en los cálculos de la Tasa de Supervivencia. Si se selecciona, los datos t0 deben establecerse para todos los estratos para que se puedan calcular las tasas de supervivencia.",2446319b
 USED_UP,Agotado,323bdb79
 USER_ACCESS,Acceso del usuario,a9aa511b
 USER_NOTIFICATION_ACTION,"Para cambiar las preferencias, ve a [Mi cuenta]",8fcbad99
@@ -2349,7 +2348,7 @@ VIEW_PRESCREEN_SUBMISSION,Ver envío previo a la pantalla,7dadf2e6
 VIEW_PUBLISHED_FUNDER_REPORT,Ver el informe de financiación publicado,8dbc3bb4
 VIEW_REPORTS,Ver informes,7fc5e229
 VIEW_SESSION,Ver sesión,7f126865
-VIEW_SITES_STRATA_SUBSTRATA,"Ver Sitios, Zonas y Subzonas en el mapa.",3a2cd664
+VIEW_SITES_STRATA_SUBSTRATA,"Ver Sitios, Estratos y Subestratos en un mapa.",f4d62997
 VIEW_SPECIES_LIST,Ver lista de especies,ff94b19b
 VIEWING,Visualización,fb67a07d
 VINE,Enredadera,c39d21fb

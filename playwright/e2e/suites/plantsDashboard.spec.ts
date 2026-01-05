@@ -175,7 +175,7 @@ test.describe('PlantsDashboardTests', () => {
     await expect(page.locator('#plantsBySpecies')).toBeVisible();
     await expect(page.getByText('Species Categories', { exact: true })).toBeVisible();
     await expect(page.locator('#speciesByCategory')).toBeVisible();
-    await expect(page.getByText('Zone Trends', { exact: true })).toBeVisible();
+    await expect(page.getByText('Stratum Trends', { exact: true })).toBeVisible();
     await expect(page.getByText('All Observations', { exact: true })).toBeVisible();
     await expect(page.getByText('Plants per Ha', { exact: true })).toBeVisible();
     await expect(page.locator('#plantsPerHaChart')).toBeVisible();
@@ -190,18 +190,18 @@ test.describe('PlantsDashboardTests', () => {
         .getByRole('paragraph')
     ).toBeVisible();
     await expect(page.getByText('1,014Plants/ha')).toBeVisible();
-    await expect(page.getByText('Observed Density Per Zone')).toBeVisible();
+    await expect(page.getByText('Observed Density Per Stratum')).toBeVisible();
     await expect(page.locator('#plantingDensityByStratum')).toBeVisible();
     await expect(page.getByText('Survival Rate').nth(1)).toBeVisible();
     await expect(page.getByText('as of 2025-05-29 Observation').nth(1)).toBeVisible();
     await expect(page.getByText('Survival Rate').nth(2)).toBeVisible();
     // await expect(page.getByText('10%').first()).toBeVisible();
-    await expect(page.getByText('Zone Survival', { exact: true })).toBeVisible();
+    await expect(page.getByText('Stratum Survival', { exact: true })).toBeVisible();
     await expect(page.getByText('Highest').first()).toBeVisible();
-    // await expect(page.getByText('Zone 01', { exact: true })).toBeVisible();
+    // await expect(page.getByText('Stratum 01', { exact: true })).toBeVisible();
     // await expect(page.locator('p').filter({ hasText: '10%' })).toBeVisible();
     await expect(page.getByText('Lowest').first()).toBeVisible();
-    // await expect(page.getByText('Zone 02', { exact: true })).toBeVisible();
+    // await expect(page.getByText('Stratum 02', { exact: true })).toBeVisible();
     // await expect(page.locator('p').filter({ hasText: '9%' })).toBeVisible();
     await expect(page.getByText('Species Survival', { exact: true })).toBeVisible();
     await expect(page.getByText('Highest').nth(1)).toBeVisible();
