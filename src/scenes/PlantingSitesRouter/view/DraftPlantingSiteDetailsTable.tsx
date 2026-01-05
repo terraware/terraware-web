@@ -33,7 +33,7 @@ const columns = (): TableColumnType[] => [
     type: 'number',
   },
   {
-    key: 'plantingSubzones',
+    key: 'substrata',
     name: strings.SUBZONES,
     type: 'number',
   },
@@ -71,11 +71,11 @@ const DetailsRenderer =
       },
     };
 
-    const createLinkToZone = () => {
-      const url = APP_PATHS.PLANTING_SITES_DRAFT_ZONE_VIEW.replace(
+    const createLinkToStratum = () => {
+      const url = APP_PATHS.PLANTING_SITES_DRAFT_STRATUM_VIEW.replace(
         ':plantingSiteId',
         plantingSiteId.toString()
-      ).replace(':zoneId', row.id.toString());
+      ).replace(':stratumId', row.id.toString());
       return (
         <Link fontSize='16px' to={url}>
           {(row.name || '--') as React.ReactNode}
@@ -84,11 +84,11 @@ const DetailsRenderer =
     };
 
     if (column.key === 'name') {
-      return <CellRenderer {...props} value={createLinkToZone()} sx={textStyles} title={value as string} />;
+      return <CellRenderer {...props} value={createLinkToStratum()} sx={textStyles} title={value as string} />;
     }
 
-    if (column.key === 'plantingSubzones') {
-      return <CellRenderer {...props} value={row.plantingSubzones.length} sx={textStyles} />;
+    if (column.key === 'substrata') {
+      return <CellRenderer {...props} value={row.substrata.length} sx={textStyles} />;
     }
 
     return <CellRenderer {...props} />;

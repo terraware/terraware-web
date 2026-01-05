@@ -44,10 +44,10 @@ const columns = (): TableColumnType[] => [
 
 export type GenericStratumViewProps = {
   plantingSite: MinimalPlantingSite;
-  plantingZone: MinimalStratum;
+  stratum: MinimalStratum;
 };
 
-export default function GenericStratumView({ plantingSite, plantingZone }: GenericStratumViewProps): JSX.Element {
+export default function GenericStratumView({ plantingSite, stratum }: GenericStratumViewProps): JSX.Element {
   const [search, setSearch] = useState<string>('');
   const navigate = useSyncNavigate();
   const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
@@ -66,7 +66,7 @@ export default function GenericStratumView({ plantingSite, plantingZone }: Gener
     navigate(APP_PATHS.PLANTING_SITES);
   }
 
-  if (!plantingZone && plantingSiteId) {
+  if (!stratum && plantingSiteId) {
     navigate(APP_PATHS.PLANTING_SITES_VIEW.replace(':plantingSiteId', plantingSiteId));
   }
 
@@ -85,14 +85,14 @@ export default function GenericStratumView({ plantingSite, plantingZone }: Gener
   );
 
   return (
-    <Page crumbs={crumbs} title={plantingZone?.name ?? ''}>
+    <Page crumbs={crumbs} title={stratum?.name ?? ''}>
       <Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
         <Search {...searchProps} />
         <Box>
           <Table
-            id='planting-site-zone-details-table'
+            id='planting-site-stratum-details-table'
             columns={columns}
-            rows={plantingZone?.substrata ?? []}
+            rows={stratum?.substrata ?? []}
             orderBy='fullName'
             Renderer={DetailsRenderer(timeZone)}
           />

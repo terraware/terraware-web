@@ -10,11 +10,11 @@ import { GeometryFeature } from 'src/types/Map';
 import { DraftPlantingSite } from 'src/types/PlantingSite';
 import { MinimalStratum, MinimalSubstratum } from 'src/types/Tracking';
 
-export type DefaultZonePayload = Omit<MinimalStratum, 'substrata'>;
+export type DefaultStratumPayload = Omit<MinimalStratum, 'substrata'>;
 
-export const defaultZonePayload = (payload: DefaultZonePayload): MinimalStratum => {
+export const defaultStratumPayload = (payload: DefaultStratumPayload): MinimalStratum => {
   const { boundary, id, name, targetPlantingDensity } = payload;
-  const subzoneName = subzoneNameGenerator(new Set(), strings.SUBZONE);
+  const substratumName = substratumNameGenerator(new Set(), strings.SUBZONE);
 
   return {
     boundary,
@@ -23,9 +23,9 @@ export const defaultZonePayload = (payload: DefaultZonePayload): MinimalStratum 
     substrata: [
       {
         boundary,
-        fullName: subzoneName,
+        fullName: substratumName,
         id,
-        name: subzoneName,
+        name: substratumName,
         plantingCompleted: false,
       },
     ],
@@ -66,29 +66,29 @@ export const toIdentifiableFeature = (
 };
 
 /**
- * Utility to generate an identifiable zone feature payload from input
- * This is from newly generated polygon data to a zone feature.
+ * Utility to generate an identifiable stratum feature payload from input
+ * This is from newly generated polygon data to a stratum feature.
  */
-export const toZoneFeature = (feature: Feature, idGenerator: () => number) =>
+export const toStratumFeature = (feature: Feature, idGenerator: () => number) =>
   toIdentifiableFeature(feature, idGenerator, {
     targetPlantingDensity: feature.properties?.targetPlantingDensity ?? 1500,
   });
 
 /**
- * Utility to generate a feature from planting zone data.
- * This is from BE planting zone data to a zone feature.
+ * Utility to generate a feature from stratum data.
+ * This is from BE stratum data to a stratum feature.
  */
-export const plantingZoneToFeature = (zone: MinimalStratum): Feature => {
-  const { boundary, id, name, targetPlantingDensity } = zone;
+export const stratumToFeature = (stratum: MinimalStratum): Feature => {
+  const { boundary, id, name, targetPlantingDensity } = stratum;
   return toFeature(boundary, { id, name, targetPlantingDensity }, id);
 };
 
 /**
- * Utility to generate a feature from planting subzone data.
- * This is from BE planting subzone data to a subzone feature.
+ * Utility to generate a feature from substratum data.
+ * This is from BE substratum data to a substratum feature.
  */
-export const plantingSubzoneToFeature = (subzone: MinimalSubstratum): Feature => {
-  const { boundary, id, name } = subzone;
+export const substratumToFeature = (substratum: MinimalSubstratum): Feature => {
+  const { boundary, id, name } = substratum;
   return toFeature(boundary, { id, name }, id);
 };
 
@@ -111,36 +111,36 @@ export const alphabetName = (position: number): string => {
 };
 
 /**
- * Subzone name generator.
+ * Substratum name generator.
  * Generates names in alphabetical order, whose values are in
  * A - Z
  * AA - AZ
  * BA - BZ
  * and so on.
  */
-export const subzoneNameGenerator = (usedNames: Set<string>, prefix?: string): string => {
+export const substratumNameGenerator = (usedNames: Set<string>, prefix?: string): string => {
   let nextNameIndex = 0;
   let nextName = '';
 
   do {
-    const subzoneNameVal = alphabetName(++nextNameIndex);
-    nextName = prefix ? `${prefix} ${subzoneNameVal}` : subzoneNameVal;
+    const substratumNameVal = alphabetName(++nextNameIndex);
+    nextName = prefix ? `${prefix} ${substratumNameVal}` : substratumNameVal;
   } while (usedNames.has(nextName));
 
   return nextName;
 };
 
 /**
- * Zone name generator.
+ * Stratum name generator.
  * Generates names in numerical order, with 2 digits with leading 0
  */
-export const zoneNameGenerator = (usedNames?: Set<string>, prefix?: string): string => {
+export const stratumNameGenerator = (usedNames?: Set<string>, prefix?: string): string => {
   let nextNameIndex = 0;
   let nextName = '';
 
   do {
-    const zoneNum = `${++nextNameIndex}`.padStart(2, '0');
-    nextName = prefix ? `${prefix} ${zoneNum}` : zoneNum;
+    const stratumNum = `${++nextNameIndex}`.padStart(2, '0');
+    nextName = prefix ? `${prefix} ${stratumNum}` : stratumNum;
   } while (usedNames && usedNames.has(nextName));
 
   return nextName;
@@ -194,7 +194,7 @@ export const getLatestFeature = (
  *  callback when the cut geometries are too small, or there were no new cut geometries due to no overlap,
  *  callback accepts list of error annotation features
  */
-export type ErrorCheckLevel = 'site_boundary' | 'exclusion' | 'zone' | 'subzone';
+export type ErrorCheckLevel = 'site_boundary' | 'exclusion' | 'stratum' | 'substratum';
 export type CutData = {
   cutWithFeature?: GeometryFeature;
   errorCheckLevel: ErrorCheckLevel;
@@ -244,7 +244,7 @@ export const findErrors = async (
   // 1. do a dry-run of planting site create with the input 'draft'
   // 2. check problems returned
   // 3. map problems to error annotation with boundary of
-  //    site or exclusion or zone or subzone mentioned in the problem
+  //    site or exclusion or stratum or substratum mentioned in the problem
   // 4. map problem type to a string.<mapped_string_for_problem> as errorText
 
   if (!draft) {
@@ -277,8 +277,8 @@ export const findErrors = async (
     return polygonsTooSmall;
   } else {
     const errorText =
-      errorCheckLevel === 'subzone' ? strings.SITE_SUBZONE_BOUNDARY_TOO_SMALL : strings.SITE_ZONE_BOUNDARY_TOO_SMALL;
-    const minimumSideDimension = errorCheckLevel === 'subzone' ? 25 : 100;
+      errorCheckLevel === 'substratum' ? strings.SITE_SUBZONE_BOUNDARY_TOO_SMALL : strings.SITE_ZONE_BOUNDARY_TOO_SMALL;
+    const minimumSideDimension = errorCheckLevel === 'substratum' ? 25 : 100;
     const minArea = minimumSideDimension * minimumSideDimension * SQ_M_TO_HECTARES;
 
     // check if the new polygons are too small to be boundaries (in which case, we won't create new fixed boundaries using the new polygons)

@@ -27,12 +27,12 @@ export default function PlantingSiteDraftStratumView(): JSX.Element | undefined 
   const { activeLocale } = useLocalization();
   const [search, setSearch] = useState<string>('');
 
-  const { plantingSiteId, zoneId } = useParams<{ plantingSiteId: string; zoneId: string }>();
+  const { plantingSiteId, stratumId } = useParams<{ plantingSiteId: string; stratumId: string }>();
   const { site, status } = useDraftPlantingSiteGet({ draftId: Number(plantingSiteId) });
 
-  const plantingZone = useMemo(() => {
-    return site?.strata?.find((zone) => zone.id === Number(zoneId));
-  }, [site, zoneId]);
+  const stratum = useMemo(() => {
+    return site?.strata?.find((_stratum) => _stratum.id === Number(stratumId));
+  }, [site, stratumId]);
 
   const navigate = useSyncNavigate();
 
@@ -65,24 +65,24 @@ export default function PlantingSiteDraftStratumView(): JSX.Element | undefined 
 
     if (!site || !plantingSiteId) {
       navigate(APP_PATHS.PLANTING_SITES);
-    } else if (!plantingZone) {
+    } else if (!stratum) {
       navigate(APP_PATHS.PLANTING_SITES_DRAFT_VIEW.replace(':plantingSiteId', plantingSiteId));
     }
-  }, [status, site, plantingSiteId, plantingZone, navigate]);
+  }, [status, site, plantingSiteId, stratum, navigate]);
 
-  if (status === 'pending' || !site || !plantingZone) {
+  if (status === 'pending' || !site || !stratum) {
     return <BusySpinner />;
   }
 
   return (
-    <Page crumbs={crumbs} title={plantingZone?.name ?? ''}>
+    <Page crumbs={crumbs} title={stratum?.name ?? ''}>
       <Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
         <Search {...searchProps} />
         <Box>
           <Table
-            id='planting-site-zone-details-table'
+            id='planting-site-stratum-details-table'
             columns={columns}
-            rows={plantingZone?.substrata ?? []}
+            rows={stratum?.substrata ?? []}
             orderBy='fullName'
           />
         </Box>

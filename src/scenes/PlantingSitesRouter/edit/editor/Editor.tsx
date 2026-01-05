@@ -53,13 +53,13 @@ const initializeOptionalStepsStatus = (site: DraftPlantingSite): Record<Optional
   }
 
   if (site.strata) {
-    const numZones = site.strata.length;
-    const numSubzones = site.strata.flatMap((zone) => zone.substrata).length;
+    const numStrata = site.strata.length;
+    const numSubstrata = site.strata.flatMap((stratum) => stratum.substrata).length;
 
-    // if we have more than just the default zone, mark this optional step as completed
-    status.stratum_boundaries = numZones > 1;
-    // if we have more than just the default subzones, mark this optional step as completed
-    status.substratum_boundaries = numSubzones > numZones;
+    // if we have more than just the default stratum, mark this optional step as completed
+    status.stratum_boundaries = numStrata > 1;
+    // if we have more than just the default substrata, mark this optional step as completed
+    status.substratum_boundaries = numSubstrata > numStrata;
   }
 
   return status;

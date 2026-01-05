@@ -8,8 +8,8 @@ import {
   alphabetName,
   cutOverlappingBoundaries,
   getLatestFeature,
-  subzoneNameGenerator,
-  zoneNameGenerator,
+  substratumNameGenerator,
+  stratumNameGenerator,
 } from './utils';
 import {
   cutOnNoOverlapFeature,
@@ -33,17 +33,17 @@ const createDraftSiteWith = (): DraftPlantingSite => {
   };
 };
 
-describe('subzoneNameGenerator', () => {
-  const prefix = 'subzone';
+describe('substratumNameGenerator', () => {
+  const prefix = 'substratum';
 
   test('should return \'A\' when there are no used names', () => {
     const usedNames = new Set<string>();
-    expect(subzoneNameGenerator(usedNames, prefix)).toBe(`${prefix} A`);
+    expect(substratumNameGenerator(usedNames, prefix)).toBe(`${prefix} A`);
   });
 
   test('should return the next unused name', () => {
     const usedNames = new Set<string>([`${prefix} A`, `${prefix} B`, `${prefix} C`, `${prefix} D`]);
-    expect(subzoneNameGenerator(usedNames, prefix)).toBe(`${prefix} E`);
+    expect(substratumNameGenerator(usedNames, prefix)).toBe(`${prefix} E`);
   });
 
   test('should return the next incremented characters sequence in the name', () => {
@@ -55,7 +55,7 @@ describe('subzoneNameGenerator', () => {
         .map((ascii) => String.fromCharCode(ascii))
         .map((name) => `${prefix} ${name}`),
     );
-    expect(subzoneNameGenerator(usedNames, prefix)).toBe(`${prefix} AA`);
+    expect(substratumNameGenerator(usedNames, prefix)).toBe(`${prefix} AA`);
   });
 
   test('should be able to handle names with many character positions', () => {
@@ -64,29 +64,29 @@ describe('subzoneNameGenerator', () => {
     for (let i = 1; i <= 5000; i++) {
       usedNames.add(`${prefix} ${alphabetName(i)}`);
     }
-    expect(subzoneNameGenerator(usedNames, prefix)).toBe(`${prefix} GJI`);
+    expect(substratumNameGenerator(usedNames, prefix)).toBe(`${prefix} GJI`);
   });
 });
 
 
-describe('zoneNameGenerator', () => {
-  const prefix = 'zone';
+describe('stratumNameGenerator', () => {
+  const prefix = 'stratum';
 
   test('should return \'01\' when there are no used names', () => {
     const usedNames = new Set<string>();
-    expect(zoneNameGenerator(usedNames, prefix)).toBe(`${prefix} 01`);
+    expect(stratumNameGenerator(usedNames, prefix)).toBe(`${prefix} 01`);
   });
 
   test('should return the next unused name', () => {
     const usedNames = new Set<string>([`${prefix} 01`, `${prefix} 02`, `${prefix} 03`, `${prefix} 04`]);
-    expect(zoneNameGenerator(usedNames, prefix)).toBe(`${prefix} 05`);
+    expect(stratumNameGenerator(usedNames, prefix)).toBe(`${prefix} 05`);
   });
 
   test('should return with no padding in double digits', () => {
     const usedNames = new Set<string>(
       Array.from({ length: 9 }, (_, index) => `${prefix} 0${index + 1}`),
     );
-    expect(zoneNameGenerator(usedNames, prefix)).toBe(`${prefix} 10`);
+    expect(stratumNameGenerator(usedNames, prefix)).toBe(`${prefix} 10`);
   });
 
   test('should be able to handle names with many positions', () => {
@@ -96,7 +96,7 @@ describe('zoneNameGenerator', () => {
       const num = `${i}`.padStart(2, '0');
       usedNames.add(`${prefix} ${num}`);
     }
-    expect(zoneNameGenerator(usedNames, prefix)).toBe(`${prefix} 5001`);
+    expect(stratumNameGenerator(usedNames, prefix)).toBe(`${prefix} 5001`);
   });
 });
 
@@ -146,7 +146,7 @@ describe('cutBoundaries', () => {
   });
 
   test('should call onError when data is invalid', async () => {
-    await cutOverlappingBoundaries({ errorCheckLevel: 'subzone', createDraftSiteWith }, onSuccess, onError);
+    await cutOverlappingBoundaries({ errorCheckLevel: 'substratum', createDraftSiteWith }, onSuccess, onError);
     expect(success).toBe(0);
     expect(cutBoundaries).toBe(0);
     expect(error).toBe(1);
@@ -157,7 +157,7 @@ describe('cutBoundaries', () => {
     await cutOverlappingBoundaries(
       {
         cutWithFeature: cutOnNoOverlapFeature,
-        errorCheckLevel: 'subzone',
+        errorCheckLevel: 'substratum',
         createDraftSiteWith,
         source: featureCollection2,
       },
@@ -174,7 +174,7 @@ describe('cutBoundaries', () => {
     await cutOverlappingBoundaries(
       {
         cutWithFeature: cutOnOverlapFeature,
-        errorCheckLevel: 'subzone',
+        errorCheckLevel: 'substratum',
         createDraftSiteWith,
         source: featureCollection2,
       },
@@ -249,7 +249,7 @@ describe('cutBoundaries', () => {
     await cutOverlappingBoundaries(
       {
         cutWithFeature: cutOnOverlapFeature,
-        errorCheckLevel: 'zone',
+        errorCheckLevel: 'stratum',
         createDraftSiteWith,
         source: featureCollection3,
       },

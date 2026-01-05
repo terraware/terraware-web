@@ -29,12 +29,12 @@ import useMapStyle from './useMapStyle';
 import {
   IdGenerator,
   cutOverlappingBoundaries,
-  defaultZonePayload,
+  defaultStratumPayload,
   emptyBoundary,
   getLatestFeature,
-  plantingZoneToFeature,
-  toZoneFeature,
-  zoneNameGenerator,
+  stratumNameGenerator,
+  stratumToFeature,
+  toStratumFeature,
 } from './utils';
 
 export type StrataProps = {
@@ -47,26 +47,26 @@ export type StrataProps = {
  * @param site
  *   Site is the original draft site this worflow started with.
  * @return a callback function (using above params in the closure)
- *   A callback function which accepts new cut zone geometries,
+ *   A callback function which accepts new cut stratum geometries,
  *   and should return a version of the draft planting site accounting
- *   for the potentially new zone boundaries.
+ *   for the potentially new stratum boundaries.
  */
-const createDraftSiteWith = (site: DraftPlantingSite) => (cutZones: GeometryFeature[]) => ({
+const createDraftSiteWith = (site: DraftPlantingSite) => (cutStrata: GeometryFeature[]) => ({
   ...site,
-  plantingZones: cutZones.map((zone, index) =>
-    defaultZonePayload({
-      boundary: toMultiPolygon(zone.geometry) as MultiPolygon,
+  strata: cutStrata.map((stratum, index) =>
+    defaultStratumPayload({
+      boundary: toMultiPolygon(stratum.geometry) as MultiPolygon,
       id: index,
-      name: zoneNameGenerator(new Set<string>(), strings.ZONE),
-      targetPlantingDensity: zone.properties?.targetPlantingDensity ?? 1500,
+      name: stratumNameGenerator(new Set<string>(), strings.ZONE),
+      targetPlantingDensity: stratum.properties?.targetPlantingDensity ?? 1500,
     })
   ),
 });
 
-// create zone feature collections from the site
-const featureSiteZones = (site: DraftPlantingSite): FeatureCollection | undefined => {
+// create stratum feature collections from the site
+const featureSiteStrata = (site: DraftPlantingSite): FeatureCollection | undefined => {
   if (site.strata) {
-    const features = site.strata.map(plantingZoneToFeature);
+    const features = site.strata.map(stratumToFeature);
     return { type: 'FeatureCollection', features };
   } else {
     return undefined;
@@ -74,7 +74,7 @@ const featureSiteZones = (site: DraftPlantingSite): FeatureCollection | undefine
 };
 
 // data type for undo/redo state
-// needs to capture zone edit boundary, error annotations and zones created
+// needs to capture stratum edit boundary, error annotations and strata created
 type Stack = {
   editableBoundary?: FeatureCollection;
   errorAnnotations?: Feature[];
@@ -82,10 +82,10 @@ type Stack = {
 };
 
 export default function Strata({ onValidate, site }: StrataProps): JSX.Element {
-  const [zonesData, setZonesData, undo, redo] = useUndoRedoState<Stack>({
+  const [strataData, setStrataData, undo, redo] = useUndoRedoState<Stack>({
     editableBoundary: emptyBoundary(),
     errorAnnotations: [],
-    fixedBoundaries: featureSiteZones(site),
+    fixedBoundaries: featureSiteStrata(site),
   });
   const [overridePopupInfo, setOverridePopupInfo] = useState<PopupInfo | undefined>();
   const theme = useTheme();
@@ -94,30 +94,34 @@ export default function Strata({ onValidate, site }: StrataProps): JSX.Element {
   const getRenderAttributes = useRenderAttributes();
   const activeLocale = useLocalization();
 
-  const zones = useMemo<FeatureCollection | undefined>(() => zonesData?.fixedBoundaries, [zonesData?.fixedBoundaries]);
+  const strata = useMemo<FeatureCollection | undefined>(
+    () => strataData?.fixedBoundaries,
+    [strataData?.fixedBoundaries]
+  );
 
   useEffect(() => {
     if (onValidate) {
-      const missingZones = zones === undefined;
-      const zonesTooSmall = !!zonesData?.errorAnnotations?.length;
-      // check for missing zone names
-      const missingZoneNames = !missingZones && zones.features.some((zone) => !zone?.properties?.name?.trim());
-      const missingData = (missingZones || missingZoneNames) && !onValidate.isSaveAndClose;
+      const missingStrata = strata === undefined;
+      const strataTooSmall = !!strataData?.errorAnnotations?.length;
+      // check for missing stratum names
+      const missingStratumNames =
+        !missingStrata && strata.features.some((stratum) => !stratum?.properties?.name?.trim());
+      const missingData = (missingStrata || missingStratumNames) && !onValidate.isSaveAndClose;
 
-      if (zonesTooSmall || missingData) {
-        snackbar.toastError(zonesTooSmall ? strings.SITE_ZONE_BOUNDARIES_TOO_SMALL : strings.SITE_ZONE_NAMES_MISSING);
+      if (strataTooSmall || missingData) {
+        snackbar.toastError(strataTooSmall ? strings.SITE_ZONE_BOUNDARIES_TOO_SMALL : strings.SITE_ZONE_NAMES_MISSING);
         onValidate.apply(true);
         return;
       }
 
-      // populates zones
-      const plantingZones = zones?.features
-        .map((zone, index) => {
-          const { geometry, properties } = zone;
+      // populates strata
+      const _strata = strata?.features
+        .map((stratum, index) => {
+          const { geometry, properties } = stratum;
           const multiPolygon = toMultiPolygon(geometry);
 
           if (multiPolygon) {
-            return defaultZonePayload({
+            return defaultStratumPayload({
               boundary: multiPolygon,
               id: properties?.id ?? index,
               name: properties?.name ?? '',
@@ -127,23 +131,23 @@ export default function Strata({ onValidate, site }: StrataProps): JSX.Element {
             return undefined;
           }
         })
-        .filter((zone) => !!zone) as MinimalStratum[] | undefined;
+        .filter((stratum) => !!stratum) as MinimalStratum[] | undefined;
 
-      const numZones = plantingZones?.length ?? 0;
+      const numStrata = _strata?.length ?? 0;
 
       // callback with status of error and completion of this step
-      const completed = numZones > 1;
-      const data = plantingZones ? { strata: plantingZones } : undefined;
+      const completed = numStrata > 1;
+      const data = _strata ? { strata: _strata } : undefined;
       onValidate.apply(data === undefined, data, completed);
     }
-  }, [onValidate, snackbar, zones, zonesData?.errorAnnotations]);
+  }, [onValidate, snackbar, strata, strataData?.errorAnnotations]);
 
   const readOnlyBoundary = useMemo<RenderableReadOnlyBoundary[] | undefined>(() => {
-    if (!zones?.features) {
+    if (!strata?.features) {
       return undefined;
     }
 
-    const idGenerator = IdGenerator(zones.features);
+    const idGenerator = IdGenerator(strata.features);
 
     const exclusionsBoundary: RenderableReadOnlyBoundary[] = site.exclusion
       ? [
@@ -165,9 +169,9 @@ export default function Strata({ onValidate, site }: StrataProps): JSX.Element {
       {
         data: {
           type: 'FeatureCollection',
-          features: zones.features.map((feature: Feature) => toZoneFeature(feature, idGenerator)),
+          features: strata.features.map((feature: Feature) => toStratumFeature(feature, idGenerator)),
         },
-        id: 'zone',
+        id: 'stratum',
         isInteractive: true,
         renderProperties: {
           ...getRenderAttributes('draft-stratum'),
@@ -179,7 +183,7 @@ export default function Strata({ onValidate, site }: StrataProps): JSX.Element {
         },
       },
     ];
-  }, [getRenderAttributes, site.boundary, site.exclusion, site.id, theme.palette.TwClrBaseWhite, zones]);
+  }, [getRenderAttributes, site.boundary, site.exclusion, site.id, theme.palette.TwClrBaseWhite, strata]);
 
   const description = useMemo<Description[]>(
     () =>
@@ -213,43 +217,45 @@ export default function Strata({ onValidate, site }: StrataProps): JSX.Element {
 
   const onEditableBoundaryChanged = async (editableBoundary?: FeatureCollection) => {
     // pick the latest geometry that was drawn
-    const cutWithFeature = getLatestFeature(zonesData?.editableBoundary, editableBoundary);
+    const cutWithFeature = getLatestFeature(strataData?.editableBoundary, editableBoundary);
 
-    // update state with cut zones on success
-    const onSuccess = (cutZones: GeometryFeature[]) => {
-      // if it is feasible to cut zones without making them too small, create new fixed zone boundaries and clear the cut geometry
-      const idGenerator = IdGenerator(cutZones);
+    // update state with cut strata on success
+    const onSuccess = (cutStrata: GeometryFeature[]) => {
+      // if it is feasible to cut strata without making them too small, create new fixed stratum boundaries and clear the cut geometry
+      const idGenerator = IdGenerator(cutStrata);
       const usedNames: Set<string> = new Set(
-        (zones?.features ?? []).map((f) => f.properties?.name).filter((name) => !!name)
+        (strata?.features ?? []).map((f) => f.properties?.name).filter((name) => !!name)
       );
-      const zonesWithIds = cutZones.map((zone) => {
-        if (!zone.properties?.name) {
-          const zoneName = zoneNameGenerator(usedNames, strings.ZONE);
-          zone.properties = { ...zone.properties, name: zoneName };
-          usedNames.add(zoneName);
+      const strataWithIds = cutStrata.map((stratum) => {
+        if (!stratum.properties?.name) {
+          const stratumName = stratumNameGenerator(usedNames, strings.ZONE);
+          stratum.properties = { ...stratum.properties, name: stratumName };
+          usedNames.add(stratumName);
         }
-        return toZoneFeature(zone, idGenerator);
+        return toStratumFeature(stratum, idGenerator);
       }) as GeometryFeature[];
 
-      setZonesData({
+      setStrataData({
         editableBoundary: emptyBoundary(),
         errorAnnotations: [],
         fixedBoundaries: {
           type: 'FeatureCollection',
-          features: zonesWithIds,
+          features: strataWithIds,
         },
       });
 
-      const leftMostNewZone = leftMostFeature(zonesWithIds.filter((unused, index) => cutZones[index].id === undefined));
+      const leftMostNewStratum = leftMostFeature(
+        strataWithIds.filter((unused, index) => cutStrata[index].id === undefined)
+      );
 
-      if (leftMostNewZone) {
-        const { feature: zone, center: mid } = leftMostNewZone;
+      if (leftMostNewStratum) {
+        const { feature: stratum, center: mid } = leftMostNewStratum;
         setOverridePopupInfo({
-          id: zone.id,
+          id: stratum.id,
           lng: mid[0],
           lat: mid[1],
-          properties: zone.properties,
-          sourceId: 'zone',
+          properties: stratum.properties,
+          sourceId: 'stratum',
         });
       } else {
         setOverridePopupInfo(undefined);
@@ -258,9 +264,9 @@ export default function Strata({ onValidate, site }: StrataProps): JSX.Element {
 
     // update state with error annotations and keep existing editable boundary so user can edit/correct it
     const onError = (errors: Feature[]) => {
-      // no zones were cut either because there were no overlaps or they could have been too small
+      // no strata were cut either because there were no overlaps or they could have been too small
       // set error annotations that were created and keep the cut geometry in case user wants to re-edit the geometry
-      setZonesData((prev) => ({
+      setStrataData((prev) => ({
         ...prev,
         editableBoundary: cutWithFeature ? { type: 'FeatureCollection', features: [cutWithFeature] } : emptyBoundary(),
         errorAnnotations: errors,
@@ -270,9 +276,9 @@ export default function Strata({ onValidate, site }: StrataProps): JSX.Element {
     await cutOverlappingBoundaries(
       {
         cutWithFeature,
-        errorCheckLevel: 'zone',
+        errorCheckLevel: 'stratum',
         createDraftSiteWith: createDraftSiteWith(site),
-        source: zones,
+        source: strata,
       },
       onSuccess,
       onError
@@ -281,9 +287,9 @@ export default function Strata({ onValidate, site }: StrataProps): JSX.Element {
     return;
   };
 
-  // Pick the first zone, we won't have overlapping zones.
+  // Pick the first stratum, we won't have overlapping strata.
   const featureSelectorOnClick = useCallback(
-    (features: LayerFeature[]) => features.find((feature) => feature.layer?.source === 'zone'),
+    (features: LayerFeature[]) => features.find((feature) => feature.layer?.source === 'stratum'),
     []
   );
 
@@ -299,28 +305,28 @@ export default function Strata({ onValidate, site }: StrataProps): JSX.Element {
         };
 
         const onUpdate = (nameVal: string, targetPlantingDensityVal: number) => {
-          if (!zones) {
+          if (!strata) {
             return;
           }
-          const updatedZones = { ...zones };
-          const zone = updatedZones.features.find((f) => f.id === properties.id);
-          if (!zone) {
+          const updatedStrata = { ...strata };
+          const stratum = updatedStrata.features.find((f) => f.id === properties.id);
+          if (!stratum) {
             return;
           }
-          if (!zone.properties) {
-            zone.properties = {};
+          if (!stratum.properties) {
+            stratum.properties = {};
           }
-          zone.properties.name = nameVal;
-          zone.properties.targetPlantingDensity = targetPlantingDensityVal;
-          setZonesData((prev) => ({
+          stratum.properties.name = nameVal;
+          stratum.properties.targetPlantingDensity = targetPlantingDensityVal;
+          setStrataData((prev) => ({
             ...prev,
-            fixeBoundaries: updatedZones,
+            fixedBoundaries: updatedStrata,
           }));
           close();
         };
 
-        const zoneNamesInUse = new Set(
-          zones?.features
+        const stratumNamesInUse = new Set(
+          strata?.features
             .filter((feature) => feature.properties && feature.properties.id !== id)
             .map((feature) => (feature.properties && feature.properties.name) || '') ?? []
         );
@@ -331,27 +337,27 @@ export default function Strata({ onValidate, site }: StrataProps): JSX.Element {
             onClose={close}
             onUpdate={onUpdate}
             targetPlantingDensity={targetPlantingDensity}
-            zoneNamesInUse={zoneNamesInUse}
+            stratumNamesInUse={stratumNamesInUse}
           />
         );
       },
     }),
-    [mapStyles.box, mapStyles.tooltip, setZonesData, zones]
+    [mapStyles.box, mapStyles.tooltip, setStrataData, strata]
   );
 
   return (
     <Box display='flex' flexDirection='column' flexGrow={1}>
       <StepTitleDescription
         description={description}
-        dontShowAgainPreferenceName='dont-show-site-zone-boundaries-instructions'
+        dontShowAgainPreferenceName='dont-show-site-stratum-boundaries-instructions'
         title={strings.ADDING_ZONE_BOUNDARIES}
         tutorialDescription={tutorialDescription}
-        tutorialDocLinkKey='planting_site_create_zone_boundary_instructions_video'
+        tutorialDocLinkKey='planting_site_create_stratum_boundary_instructions_video'
         tutorialTitle={strings.ADDING_ZONE_BOUNDARIES}
       />
       <EditableMap
-        editableBoundary={zonesData?.editableBoundary}
-        errorAnnotations={zonesData?.errorAnnotations}
+        editableBoundary={strataData?.editableBoundary}
+        errorAnnotations={strataData?.errorAnnotations}
         featureSelectorOnClick={featureSelectorOnClick}
         isSliceTool
         onEditableBoundaryChanged={(editableBoundary) => void onEditableBoundaryChanged(editableBoundary)}
@@ -370,7 +376,7 @@ type TooltipContentsProps = {
   onClose: () => void;
   onUpdate: (name: string, targetPlantingDensity: number) => void;
   targetPlantingDensity: number;
-  zoneNamesInUse: Set<string>;
+  stratumNamesInUse: Set<string>;
 };
 
 const TooltipContents = ({
@@ -378,9 +384,9 @@ const TooltipContents = ({
   onClose,
   onUpdate,
   targetPlantingDensity,
-  zoneNamesInUse,
+  stratumNamesInUse,
 }: TooltipContentsProps): JSX.Element => {
-  const [zoneName, setZoneName] = useState<string>(name ?? '');
+  const [stratumName, setStratumName] = useState<string>(name ?? '');
   const [density, setDensity] = useState<number>(targetPlantingDensity);
   const [nameError, setNameError] = useState<string>('');
   const [densityError, setDensityError] = useState<string>('');
@@ -391,11 +397,11 @@ const TooltipContents = ({
     let hasNameErrors = true;
     let hasDensityErrors = true;
 
-    if (!zoneName) {
+    if (!stratumName) {
       setNameError(strings.REQUIRED_FIELD);
-    } else if (zoneNamesInUse.has(zoneName)) {
+    } else if (stratumNamesInUse.has(stratumName)) {
       setNameError(strings.ZONE_NAME_IN_USE);
-    } else if (zoneName.length > 15) {
+    } else if (stratumName.length > 15) {
       setNameError(strings.ZONE_NAME_MAXIMUM_LENGTH);
     } else {
       setNameError('');
@@ -412,7 +418,7 @@ const TooltipContents = ({
     }
 
     return !(hasNameErrors || hasDensityErrors);
-  }, [density, zoneName, zoneNamesInUse]);
+  }, [density, stratumName, stratumNamesInUse]);
 
   const save = () => {
     if (!validate) {
@@ -420,7 +426,7 @@ const TooltipContents = ({
     }
 
     if (validateInput()) {
-      onUpdate(zoneName, density);
+      onUpdate(stratumName, density);
     }
   };
 
@@ -442,10 +448,10 @@ const TooltipContents = ({
         <Textfield
           autoFocus
           label={strings.NAME}
-          id='zone-name'
+          id='stratum-name'
           type='text'
-          onChange={(value) => setZoneName(value as string)}
-          value={zoneName}
+          onChange={(value) => setStratumName(value as string)}
+          value={stratumName}
           errorText={nameError}
           sx={{ marginTop: theme.spacing(1.5) }}
         />

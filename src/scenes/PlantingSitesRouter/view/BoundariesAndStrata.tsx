@@ -67,10 +67,10 @@ export default function BoundariesAndStrata({
   const plantingCompleteArea = useMemo(() => {
     let total = 0;
     if (plantingSite) {
-      plantingSite.strata?.forEach((zone) => {
-        zone.substrata.forEach((subzone) => {
-          if (subzone.plantingCompleted) {
-            total += subzone.areaHa;
+      plantingSite.strata?.forEach((stratum) => {
+        stratum.substrata.forEach((substratum) => {
+          if (substratum.plantingCompleted) {
+            total += substratum.areaHa;
           }
         });
       });
@@ -124,7 +124,7 @@ type PlantingSiteMapViewProps = {
 
 function PlantingSiteMapView({ search }: PlantingSiteMapViewProps): JSX.Element | null {
   const { isDesktop } = useDeviceInfo();
-  const [searchZoneEntities, setSearchZoneEntities] = useState<MapEntityId[]>([]);
+  const [searchStratumEntities, setSearchStratumEntities] = useState<MapEntityId[]>([]);
   const [includedLayers, setIncludedLayers] = useState<MapLayer[]>(['Planting Site', 'Strata', 'Monitoring Plots']);
   const defaultTimeZone = useDefaultTimeZone();
 
@@ -199,12 +199,12 @@ function PlantingSiteMapView({ search }: PlantingSiteMapViewProps): JSX.Element 
 
   useEffect(() => {
     if (!search) {
-      setSearchZoneEntities([]);
+      setSearchStratumEntities([]);
     } else {
       const entities = plantingSite?.strata
-        ?.filter((zone) => regexMatch(zone.name, search))
-        .map((zone) => ({ sourceId: 'zones', id: zone.id }));
-      setSearchZoneEntities(entities ?? []);
+        ?.filter((stratum) => regexMatch(stratum.name, search))
+        .map((stratum) => ({ sourceId: 'strata', id: stratum.id }));
+      setSearchStratumEntities(entities ?? []);
     }
   }, [plantingSite, search]);
 
@@ -231,40 +231,43 @@ function PlantingSiteMapView({ search }: PlantingSiteMapViewProps): JSX.Element 
             { key: strings.ZONES, value: selectedHistory.strata.length },
             { key: strings.SUBZONES, value: selectedHistory.strata.flatMap((z) => z.substrata).length },
           ];
-        } else if (entity.type === 'zone') {
-          const zoneHistory = selectedHistory.strata.find((_zoneHistory) => _zoneHistory.id === entity.id);
-          const zone = plantingSite.strata?.find((_zone) => _zone.id === zoneHistory?.stratumId);
-          title = zoneHistory?.name ?? zone?.name ?? '';
+        } else if (entity.type === 'stratum') {
+          const stratumHistory = selectedHistory.strata.find((_stratumHistory) => _stratumHistory.id === entity.id);
+          const stratum = plantingSite.strata?.find((_stratum) => _stratum.id === stratumHistory?.stratumId);
+          title = stratumHistory?.name ?? stratum?.name ?? '';
 
-          properties = [
-            { key: strings.AREA_HA, value: zoneHistory?.areaHa && zoneHistory?.areaHa > 0 ? zoneHistory?.areaHa : '' },
-            { key: strings.TARGET_PLANTING_DENSITY, value: zone?.targetPlantingDensity ?? 0 },
-            {
-              key: strings.PLANTING_COMPLETE,
-              value: zone?.substrata?.every((subzone) => subzone.plantingCompleted) ? strings.YES : strings.NO,
-            },
-            { key: strings.SUBZONES, value: zone?.substrata.length ?? 0 },
-            {
-              key: strings.LAST_OBSERVED,
-              value: zone?.latestObservationCompletedTime
-                ? getDateDisplayValue(zone.latestObservationCompletedTime, timeZone)
-                : '',
-            },
-          ];
-        } else if (entity.type === 'subzone') {
-          const subzoneHistory = selectedHistory.strata
-            .flatMap((_zoneHistory) => _zoneHistory.substrata)
-            .find((_subzoneHistory) => _subzoneHistory.id === entity.id);
-          const subzone = plantingSite.strata
-            ?.flatMap((_zone) => _zone.substrata)
-            .find((_subzone) => _subzone.id === subzoneHistory?.substratumId);
-          title = subzoneHistory?.name ?? subzone?.name ?? '';
           properties = [
             {
               key: strings.AREA_HA,
-              value: subzoneHistory?.areaHa && subzoneHistory?.areaHa > 0 ? subzoneHistory?.areaHa : '',
+              value: stratumHistory?.areaHa && stratumHistory?.areaHa > 0 ? stratumHistory?.areaHa : '',
             },
-            { key: strings.PLANTING_COMPLETE, value: subzone?.plantingCompleted ? strings.YES : strings.NO },
+            { key: strings.TARGET_PLANTING_DENSITY, value: stratum?.targetPlantingDensity ?? 0 },
+            {
+              key: strings.PLANTING_COMPLETE,
+              value: stratum?.substrata?.every((substratum) => substratum.plantingCompleted) ? strings.YES : strings.NO,
+            },
+            { key: strings.SUBZONES, value: stratum?.substrata.length ?? 0 },
+            {
+              key: strings.LAST_OBSERVED,
+              value: stratum?.latestObservationCompletedTime
+                ? getDateDisplayValue(stratum.latestObservationCompletedTime, timeZone)
+                : '',
+            },
+          ];
+        } else if (entity.type === 'substratum') {
+          const substratumHistory = selectedHistory.strata
+            .flatMap((_stratumHistory) => _stratumHistory.substrata)
+            .find((_substratumHistory) => _substratumHistory.id === entity.id);
+          const substratum = plantingSite.strata
+            ?.flatMap((_stratum) => _stratum.substrata)
+            .find((_substratum) => _substratum.id === substratumHistory?.substratumId);
+          title = substratumHistory?.name ?? substratum?.name ?? '';
+          properties = [
+            {
+              key: strings.AREA_HA,
+              value: substratumHistory?.areaHa && substratumHistory?.areaHa > 0 ? substratumHistory?.areaHa : '',
+            },
+            { key: strings.PLANTING_COMPLETE, value: substratum?.plantingCompleted ? strings.YES : strings.NO },
           ];
         } else {
           return null;
@@ -290,8 +293,10 @@ function PlantingSiteMapView({ search }: PlantingSiteMapViewProps): JSX.Element 
           mapData={mapData}
           style={{ borderRadius: '24px' }}
           layers={includedLayers}
-          highlightEntities={searchZoneEntities}
-          focusEntities={searchZoneEntities.length ? searchZoneEntities : [{ sourceId: 'sites', id: plantingSite.id }]}
+          highlightEntities={searchStratumEntities}
+          focusEntities={
+            searchStratumEntities.length ? searchStratumEntities : [{ sourceId: 'sites', id: plantingSite.id }]
+          }
           contextRenderer={{
             render: contextRenderer,
             sx: {

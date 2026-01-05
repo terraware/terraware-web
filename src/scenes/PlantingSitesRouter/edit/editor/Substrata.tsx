@@ -32,11 +32,11 @@ import {
   cutOverlappingBoundaries,
   emptyBoundary,
   getLatestFeature,
-  plantingSubzoneToFeature,
-  plantingZoneToFeature,
-  subzoneNameGenerator,
+  stratumToFeature,
+  substratumNameGenerator,
+  substratumToFeature,
   toIdentifiableFeature,
-  toZoneFeature,
+  toStratumFeature,
 } from './utils';
 
 export type SubstrataProps = {
@@ -48,53 +48,55 @@ export type SubstrataProps = {
  * Create a draft site with edited polygons, for error checking.
  * @param site
  *   Site is the original draft site this worflow started with.
- * @param subzones
- *   Record of zone id to subzones
- * @param selectedZone
- *   The zone for which new subzones will be cut.
+ * @param substrata
+ *   Record of stratum id to substrata
+ * @param selectedStratum
+ *   The stratum for which new substrata will be cut.
  * @return a callback function (using above params in the closure)
- *   A callback function which accepts new cut subzone geometries,
+ *   A callback function which accepts new cut substratum geometries,
  *   and should return a version of the draft planting site accounting
- *   for the potentially new subzone boundaries.
+ *   for the potentially new substratum boundaries.
  */
 const createDraftSiteWith =
   (
     site: DraftPlantingSite,
-    subzones: Record<number, FeatureCollection> | undefined,
-    selectedZone: number | undefined
+    substrata: Record<number, FeatureCollection> | undefined,
+    selectedStratum: number | undefined
   ) =>
   (cutBoundaries: GeometryFeature[]) => ({
     ...site,
-    plantingZones: site.strata?.map((zone) => ({
-      ...zone,
-      // re-create subzones from the record of zones to subzones
-      // unless this is the selected zone, in which case use the newly cut boundaries
-      plantingSubzones:
-        (selectedZone === zone.id ? cutBoundaries : subzones?.[zone.id]?.features)?.map((subzone, index) => ({
-          boundary: toMultiPolygon(subzone.geometry) as MultiPolygon,
-          fullName: `${index}`,
-          id: index,
-          name: `${index}`, // temporary name just for error checking
-          plantingCompleted: false,
-        })) ?? [],
+    strata: site.strata?.map((stratum) => ({
+      ...stratum,
+      // re-create substrata from the record of strata to substrata
+      // unless this is the selected stratum, in which case use the newly cut boundaries
+      substrata:
+        (selectedStratum === stratum.id ? cutBoundaries : substrata?.[stratum.id]?.features)?.map(
+          (substratum, index) => ({
+            boundary: toMultiPolygon(substratum.geometry) as MultiPolygon,
+            fullName: `${index}`,
+            id: index,
+            name: `${index}`, // temporary name just for error checking
+            plantingCompleted: false,
+          })
+        ) ?? [],
     })),
   });
 
-// create subzone feature collections from site, for edit purposes
-const featureSiteSubzones = (site: DraftPlantingSite): Record<number, FeatureCollection> =>
+// create substratum feature collections from site, for edit purposes
+const featureSiteSubstrata = (site: DraftPlantingSite): Record<number, FeatureCollection> =>
   (site.strata ?? []).reduce(
-    (subzonesMap, zone) => {
-      subzonesMap[zone.id] = {
+    (substrataMap, stratum) => {
+      substrataMap[stratum.id] = {
         type: 'FeatureCollection',
-        features: zone.substrata.map(plantingSubzoneToFeature),
+        features: stratum.substrata.map(substratumToFeature),
       };
-      return subzonesMap;
+      return substrataMap;
     },
     {} as Record<number, FeatureCollection>
   );
 
 // data type for undo/redo state
-// needs to capture subzone edit boundary, error annotations and subzones created by zone
+// needs to capture substratum edit boundary, error annotations and substrata created by stratum
 type Stack = {
   editableBoundary?: FeatureCollection;
   errorAnnotations?: Feature[];
@@ -102,13 +104,13 @@ type Stack = {
 };
 
 export default function Substrata({ onValidate, site }: SubstrataProps): JSX.Element {
-  const [selectedZone, setSelectedZone] = useState<number | undefined>(site.strata?.[0]?.id);
+  const [selectedStratum, setSelectedStratum] = useState<number | undefined>(site.strata?.[0]?.id);
 
-  // map of zone id to subzones
-  const [subzonesData, setSubzonesData, undo, redo] = useUndoRedoState<Stack>({
+  // map of stratum id to substrata
+  const [substrataData, setSubstrataData, undo, redo] = useUndoRedoState<Stack>({
     editableBoundary: emptyBoundary(),
     errorAnnotations: [],
-    fixedBoundaries: featureSiteSubzones(site),
+    fixedBoundaries: featureSiteSubstrata(site),
   });
   const [overridePopupInfo, setOverridePopupInfo] = useState<PopupInfo | undefined>();
   const theme = useTheme();
@@ -117,19 +119,19 @@ export default function Substrata({ onValidate, site }: SubstrataProps): JSX.Ele
   const snackbar = useSnackbar();
   const { activeLocale } = useLocalization();
 
-  // expose subzones as a constant for easier use
-  const subzones = useMemo<Record<number, FeatureCollection> | undefined>(
-    () => subzonesData?.fixedBoundaries,
-    [subzonesData?.fixedBoundaries]
+  // expose substrata as a constant for easier use
+  const substrata = useMemo<Record<number, FeatureCollection> | undefined>(
+    () => substrataData?.fixedBoundaries,
+    [substrataData?.fixedBoundaries]
   );
 
-  const zones = useMemo<FeatureCollection | undefined>(
+  const strata = useMemo<FeatureCollection | undefined>(
     () =>
       !site.strata
         ? undefined
         : {
             type: 'FeatureCollection',
-            features: site.strata.map((zone) => plantingZoneToFeature(zone)),
+            features: site.strata.map((stratum) => stratumToFeature(stratum)),
           },
     [site]
   );
@@ -140,20 +142,20 @@ export default function Substrata({ onValidate, site }: SubstrataProps): JSX.Ele
       return;
     }
 
-    // error out on save if there are subzones with less than minimum boundaries
-    const hasSubzoneSizeErrors = !!subzonesData?.errorAnnotations?.length;
-    if (hasSubzoneSizeErrors) {
+    // error out on save if there are substrata with less than minimum boundaries
+    const hasSubstratumSizeErrors = !!substrataData?.errorAnnotations?.length;
+    if (hasSubstratumSizeErrors) {
       snackbar.toastError(strings.SITE_SUBZONE_BOUNDARIES_TOO_SMALL);
       onValidate.apply(true);
       return;
     }
 
-    // subzones are children of zones, we need to repopuplate zones with new subzones information
-    // and update `plantingZones` in the site
-    const plantingZones: MinimalStratum[] | undefined = site.strata?.map((zone) => {
-      const plantingSubzones: MinimalSubstratum[] = (subzones?.[zone.id]?.features ?? [])
-        .map((subzone) => {
-          const { geometry, properties } = subzone;
+    // substrata are children of strata, we need to repopuplate strata with new substrata information
+    // and update `strata` in the site
+    const newStrata: MinimalStratum[] | undefined = site.strata?.map((stratum) => {
+      const newSubstrata: MinimalSubstratum[] = (substrata?.[stratum.id]?.features ?? [])
+        .map((substratum) => {
+          const { geometry, properties } = substratum;
           const multiPolygon = toMultiPolygon(geometry);
           if (multiPolygon && properties) {
             return {
@@ -167,32 +169,32 @@ export default function Substrata({ onValidate, site }: SubstrataProps): JSX.Ele
             return undefined;
           }
         })
-        .filter((subzone) => !!subzone) as MinimalSubstratum[];
-      return { ...zone, substrata: plantingSubzones };
+        .filter((substratum) => !!substratum) as MinimalSubstratum[];
+      return { ...stratum, substrata: newSubstrata };
     });
-    const numZones = site.strata?.length ?? 0;
-    const numSubzones = plantingZones?.flatMap((zone) => zone.substrata)?.length ?? 0;
-    const data = plantingZones ? { strata: plantingZones } : undefined;
-    onValidate.apply(plantingZones === undefined, data, numSubzones > numZones);
-  }, [subzonesData?.errorAnnotations, onValidate, site, snackbar, subzones, zones]);
+    const numStrata = site.strata?.length ?? 0;
+    const numSubstrata = newStrata?.flatMap((stratum) => stratum.substrata)?.length ?? 0;
+    const data = newStrata ? { strata: newStrata } : undefined;
+    onValidate.apply(newStrata === undefined, data, numSubstrata > numStrata);
+  }, [substrataData?.errorAnnotations, onValidate, site, snackbar, substrata, strata]);
 
   const readOnlyBoundary = useMemo<RenderableReadOnlyBoundary[] | undefined>(() => {
-    if (!zones) {
+    if (!strata) {
       return undefined;
     }
 
-    const zoneIdGenerator = IdGenerator(zones.features);
-    const subzoneIdGenerator = IdGenerator(
-      site.id === -1 ? [] : Object.values(subzones ?? {}).flatMap((subzone) => subzone.features)
+    const stratumIdGenerator = IdGenerator(strata.features);
+    const substratumIdGenerator = IdGenerator(
+      site.id === -1 ? [] : Object.values(substrata ?? {}).flatMap((substratum) => substratum.features)
     );
 
-    const zonesData: RenderableReadOnlyBoundary = {
+    const strataData: RenderableReadOnlyBoundary = {
       data: {
         type: 'FeatureCollection',
-        features: zones.features.map((feature: Feature) => toZoneFeature(feature, zoneIdGenerator)),
+        features: strata.features.map((feature: Feature) => toStratumFeature(feature, stratumIdGenerator)),
       },
-      selectedId: selectedZone,
-      id: 'zone',
+      selectedId: selectedStratum,
+      id: 'stratum',
       isInteractive: true,
       renderProperties: {
         ...getRenderAttributes('draft-stratum'),
@@ -204,18 +206,18 @@ export default function Substrata({ onValidate, site }: SubstrataProps): JSX.Ele
       },
     };
 
-    const subzonesBoundaries: RenderableReadOnlyBoundary = {
+    const substrataBoundaries: RenderableReadOnlyBoundary = {
       data: {
         type: 'FeatureCollection',
-        features: Object.keys(subzones ?? {}).flatMap((key: string) => {
-          const zoneId = Number(key);
-          const data = subzones![zoneId];
+        features: Object.keys(substrata ?? {}).flatMap((key: string) => {
+          const stratumId = Number(key);
+          const data = substrata![stratumId];
           return data.features.map((feature: Feature) =>
-            toIdentifiableFeature(feature, subzoneIdGenerator, { parentId: zoneId })
+            toIdentifiableFeature(feature, substratumIdGenerator, { parentId: stratumId })
           );
         }),
       },
-      id: 'subzone',
+      id: 'substratum',
       isInteractive: true,
       renderProperties: {
         ...getRenderAttributes('draft-substratum'),
@@ -227,8 +229,8 @@ export default function Substrata({ onValidate, site }: SubstrataProps): JSX.Ele
       },
     };
 
-    return [zonesData, subzonesBoundaries];
-  }, [getRenderAttributes, selectedZone, site.id, subzones, theme.palette.TwClrBaseWhite, zones]);
+    return [strataData, substrataBoundaries];
+  }, [getRenderAttributes, selectedStratum, site.id, substrata, theme.palette.TwClrBaseWhite, strata]);
 
   const description = useMemo<Description[]>(
     () =>
@@ -244,13 +246,13 @@ export default function Substrata({ onValidate, site }: SubstrataProps): JSX.Ele
             {
               text: strings.formatString(
                 strings.SITE_SUBZONE_BOUNDARIES_SELECTED_ZONE,
-                zones?.features?.find((f) => f.id === selectedZone)?.properties?.name ?? ''
+                strata?.features?.find((f) => f.id === selectedStratum)?.properties?.name ?? ''
               ),
               isBold: true,
             },
           ]
         : [],
-    [activeLocale, selectedZone, zones]
+    [activeLocale, selectedStratum, strata]
   );
 
   const tutorialDescription = useMemo(() => {
@@ -263,51 +265,51 @@ export default function Substrata({ onValidate, site }: SubstrataProps): JSX.Ele
     ) as JSX.Element[];
   }, [activeLocale]);
 
-  // when we have a new polygon, add it to the subzones list after carving out the overlapping region in the zone.
+  // when we have a new polygon, add it to the substrata list after carving out the overlapping region in the stratum.
   const onEditableBoundaryChanged = async (editableBoundary?: FeatureCollection) => {
     // pick the latest geometry that was drawn
-    const cutWithFeature = getLatestFeature(subzonesData?.editableBoundary, editableBoundary);
+    const cutWithFeature = getLatestFeature(substrataData?.editableBoundary, editableBoundary);
 
-    // update state with cut subzones on success
-    const onSuccess = (cutSubzones: GeometryFeature[]) => {
-      if (subzones && selectedZone !== undefined) {
+    // update state with cut substrata on success
+    const onSuccess = (cutSubstrata: GeometryFeature[]) => {
+      if (substrata && selectedStratum !== undefined) {
         const usedNames: Set<string> = new Set(
-          (subzones[selectedZone].features ?? []).map((f) => f.properties?.name).filter((name) => !!name)
+          (substrata[selectedStratum].features ?? []).map((f) => f.properties?.name).filter((name) => !!name)
         );
-        const idGenerator = IdGenerator(Object.values(subzones).flatMap((sz) => sz.features));
-        const subzonesWithIds = leftOrderedFeatures(cutSubzones).map(({ feature: subzone }) => {
-          if (subzone && subzone.properties && !subzone.properties.name) {
-            const subzoneName = subzoneNameGenerator(usedNames, strings.SUBZONE);
-            subzone.properties.name = subzoneName;
-            usedNames.add(subzoneName);
+        const idGenerator = IdGenerator(Object.values(substrata).flatMap((sz) => sz.features));
+        const substrataWithIds = leftOrderedFeatures(cutSubstrata).map(({ feature: substratum }) => {
+          if (substratum && substratum.properties && !substratum.properties.name) {
+            const substratumName = substratumNameGenerator(usedNames, strings.SUBZONE);
+            substratum.properties.name = substratumName;
+            usedNames.add(substratumName);
           }
-          return toIdentifiableFeature(subzone, idGenerator, { parentId: selectedZone });
+          return toIdentifiableFeature(substratum, idGenerator, { parentId: selectedStratum });
         }) as GeometryFeature[];
 
-        setSubzonesData(() => ({
+        setSubstrataData(() => ({
           editableBoundary: emptyBoundary(),
           errorAnnotations: [],
           fixedBoundaries: {
-            ...subzones,
-            [selectedZone]: {
+            ...substrata,
+            [selectedStratum]: {
               type: 'FeatureCollection',
-              features: subzonesWithIds,
+              features: substrataWithIds,
             },
           },
         }));
 
-        const leftMostNewSubzone = leftMostFeature(
-          subzonesWithIds.filter((unused, index) => cutSubzones[index].id === undefined)
+        const leftMostNewSubstratum = leftMostFeature(
+          substrataWithIds.filter((unused, index) => cutSubstrata[index].id === undefined)
         );
 
-        if (leftMostNewSubzone) {
-          const { feature: subzone, center: mid } = leftMostNewSubzone;
+        if (leftMostNewSubstratum) {
+          const { feature: substratum, center: mid } = leftMostNewSubstratum;
           setOverridePopupInfo({
-            id: subzone.id,
+            id: substratum.id,
             lng: mid[0],
             lat: mid[1],
-            properties: subzone.properties,
-            sourceId: 'subzone',
+            properties: substratum.properties,
+            sourceId: 'substratum',
           });
         } else {
           setOverridePopupInfo(undefined);
@@ -317,9 +319,9 @@ export default function Substrata({ onValidate, site }: SubstrataProps): JSX.Ele
 
     // update state with error annotations and keep existing editable boundary so user can edit/correct it
     const onError = (errors: Feature[]) => {
-      // no subzones were cut either because there were no overlaps or they could have been too small
+      // no substrata were cut either because there were no overlaps or they could have been too small
       // set error annotations that were created and keep the cut geometry in case user wants to re-edit the geometry
-      setSubzonesData((prev) => ({
+      setSubstrataData((prev) => ({
         ...prev,
         editableBoundary: cutWithFeature ? { type: 'FeatureCollection', features: [cutWithFeature] } : emptyBoundary(),
         errorAnnotations: errors,
@@ -329,9 +331,9 @@ export default function Substrata({ onValidate, site }: SubstrataProps): JSX.Ele
     await cutOverlappingBoundaries(
       {
         cutWithFeature,
-        errorCheckLevel: 'subzone',
-        createDraftSiteWith: createDraftSiteWith(site, subzones, selectedZone),
-        source: selectedZone !== undefined ? subzones?.[selectedZone] : undefined,
+        errorCheckLevel: 'substratum',
+        createDraftSiteWith: createDraftSiteWith(site, substrata, selectedStratum),
+        source: selectedStratum !== undefined ? substrata?.[selectedStratum] : undefined,
       },
       onSuccess,
       onError
@@ -340,24 +342,24 @@ export default function Substrata({ onValidate, site }: SubstrataProps): JSX.Ele
     return;
   };
 
-  // If we don't have a selected zone or clicked zone is not the last selected zone, select the zone.
-  // Otherwise select the subzone.
+  // If we don't have a selected stratum or clicked stratum is not the last selected stratum, select the stratum.
+  // Otherwise select the substratum.
   const featureSelectorOnClick = useCallback(
     (features: LayerFeature[]) => {
-      const zone = features.find((feature) => feature.layer?.source === 'zone');
-      const subzone = features.find((feature) => feature.layer?.source === 'subzone');
-      if (!zone || !zone.properties) {
+      const stratum = features.find((feature) => feature.layer?.source === 'stratum');
+      const substratum = features.find((feature) => feature.layer?.source === 'substratum');
+      if (!stratum || !stratum.properties) {
         return undefined;
       }
-      if (selectedZone === undefined || selectedZone !== zone.properties.id) {
-        setSelectedZone(zone.properties.id);
+      if (selectedStratum === undefined || selectedStratum !== stratum.properties.id) {
+        setSelectedStratum(stratum.properties.id);
         return undefined;
       } else {
-        // select the subzone under the click
-        return subzone;
+        // select the substratum under the click
+        return substratum;
       }
     },
-    [selectedZone]
+    [selectedStratum]
   );
 
   const popupRenderer = useMemo(
@@ -372,49 +374,54 @@ export default function Substrata({ onValidate, site }: SubstrataProps): JSX.Ele
         };
 
         const onUpdate = (nameVal: string) => {
-          if (!subzones) {
+          if (!substrata) {
             return;
           }
-          const updatedSubzones = { ...subzones };
-          const subzone =
-            selectedZone !== undefined
-              ? updatedSubzones[selectedZone].features.find((f) => f.id === properties.id)
+          const updatedSubstrata = { ...substrata };
+          const substratum =
+            selectedStratum !== undefined
+              ? updatedSubstrata[selectedStratum].features.find((f) => f.id === properties.id)
               : undefined; // should not happen
-          if (!subzone) {
+          if (!substratum) {
             return;
           }
-          if (!subzone.properties) {
-            subzone.properties = {};
+          if (!substratum.properties) {
+            substratum.properties = {};
           }
-          subzone.properties.name = nameVal;
-          setSubzonesData((prev) => ({ ...prev, fixedBoundaries: updatedSubzones }));
+          substratum.properties.name = nameVal;
+          setSubstrataData((prev) => ({ ...prev, fixedBoundaries: updatedSubstrata }));
           close();
         };
 
-        const selectedSubzones = subzones && selectedZone ? subzones[selectedZone] : undefined;
-        const subzoneNamesInUse = selectedSubzones
+        const selectedSubstrata = substrata && selectedStratum ? substrata[selectedStratum] : undefined;
+        const substratumNamesInUse = selectedSubstrata
           ? new Set<string>(
-              selectedSubzones.features
+              selectedSubstrata.features
                 .filter((feature) => feature.properties?.id !== id)
                 .map((feature) => feature.properties?.name)
             )
           : new Set<string>();
 
         return (
-          <TooltipContents name={name} onClose={close} onUpdate={onUpdate} subzoneNamesInUse={subzoneNamesInUse} />
+          <TooltipContents
+            name={name}
+            onClose={close}
+            onUpdate={onUpdate}
+            substratumNamesInUse={substratumNamesInUse}
+          />
         );
       },
     }),
-    [mapStyles.box, mapStyles.tooltip, selectedZone, setSubzonesData, subzones]
+    [mapStyles.box, mapStyles.tooltip, selectedStratum, setSubstrataData, substrata]
   );
 
   const activeContext = useMemo<MapEntityOptions | undefined>(() => {
-    if (selectedZone !== undefined) {
-      return { select: [{ sourceId: 'zone', id: selectedZone }] };
+    if (selectedStratum !== undefined) {
+      return { select: [{ sourceId: 'stratum', id: selectedStratum }] };
     } else {
       return undefined;
     }
-  }, [selectedZone]);
+  }, [selectedStratum]);
 
   return (
     <Box display='flex' flexDirection='column' flexGrow={1}>
@@ -422,13 +429,13 @@ export default function Substrata({ onValidate, site }: SubstrataProps): JSX.Ele
         description={description}
         title={strings.SITE_SUBZONE_BOUNDARIES}
         tutorialDescription={tutorialDescription}
-        tutorialDocLinkKey='planting_site_create_subzone_boundary_instructions_video'
+        tutorialDocLinkKey='planting_site_create_substratum_boundary_instructions_video'
         tutorialTitle={strings.ADDING_SUBZONE_BOUNDARIES}
       />
       <EditableMap
         activeContext={activeContext}
-        editableBoundary={subzonesData?.editableBoundary}
-        errorAnnotations={subzonesData?.errorAnnotations}
+        editableBoundary={substrataData?.editableBoundary}
+        errorAnnotations={substrataData?.errorAnnotations}
         featureSelectorOnClick={featureSelectorOnClick}
         isSliceTool
         onEditableBoundaryChanged={(editableBoundary) => void onEditableBoundaryChanged(editableBoundary)}
@@ -446,11 +453,11 @@ type TooltipContentsProps = {
   name?: string;
   onClose: () => void;
   onUpdate: (name: string) => void;
-  subzoneNamesInUse: Set<string>;
+  substratumNamesInUse: Set<string>;
 };
 
-const TooltipContents = ({ name, onClose, onUpdate, subzoneNamesInUse }: TooltipContentsProps): JSX.Element => {
-  const [subzoneName, setSubzoneName] = useState<string>(name ?? '');
+const TooltipContents = ({ name, onClose, onUpdate, substratumNamesInUse }: TooltipContentsProps): JSX.Element => {
+  const [substratumName, setSubstratumName] = useState<string>(name ?? '');
   const [nameError, setNameError] = useState<string>('');
   const [validate, setValidate] = useState<boolean>(false);
   const theme = useTheme();
@@ -458,9 +465,9 @@ const TooltipContents = ({ name, onClose, onUpdate, subzoneNamesInUse }: Tooltip
   const validateInput = useCallback((): boolean => {
     let hasNameErrors = true;
 
-    if (!subzoneName) {
+    if (!substratumName) {
       setNameError(strings.REQUIRED_FIELD);
-    } else if (subzoneNamesInUse.has(subzoneName)) {
+    } else if (substratumNamesInUse.has(substratumName)) {
       setNameError(strings.SUBZONE_NAME_IN_USE);
     } else {
       setNameError('');
@@ -468,7 +475,7 @@ const TooltipContents = ({ name, onClose, onUpdate, subzoneNamesInUse }: Tooltip
     }
 
     return !hasNameErrors;
-  }, [subzoneName, subzoneNamesInUse]);
+  }, [substratumName, substratumNamesInUse]);
 
   const save = () => {
     if (!validate) {
@@ -476,7 +483,7 @@ const TooltipContents = ({ name, onClose, onUpdate, subzoneNamesInUse }: Tooltip
     }
 
     if (validateInput()) {
-      onUpdate(subzoneName);
+      onUpdate(substratumName);
     }
   };
 
@@ -498,10 +505,10 @@ const TooltipContents = ({ name, onClose, onUpdate, subzoneNamesInUse }: Tooltip
         <Textfield
           autoFocus={true}
           label={strings.NAME}
-          id='subzone-name'
+          id='substratum-name'
           type='text'
-          onChange={(value) => setSubzoneName(value as string)}
-          value={subzoneName}
+          onChange={(value) => setSubstratumName(value as string)}
+          value={substratumName}
           errorText={nameError}
           sx={{ marginTop: theme.spacing(1.5) }}
         />
