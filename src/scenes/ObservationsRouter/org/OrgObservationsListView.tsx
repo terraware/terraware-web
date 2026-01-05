@@ -88,7 +88,7 @@ export default function OrgObservationsListView({
           type: 'string',
         },
         {
-          key: 'plantingZones',
+          key: 'strata',
           name: strings.ZONES,
           type: 'string',
         },
@@ -261,7 +261,7 @@ export default function OrgObservationsListView({
       (observationsResults ?? []).map((observation: ObservationResults) => {
         return {
           ...observation,
-          plantingZones: observation.strata.map((zone: ObservationStratumResults) => zone.stratumName).join('\r'),
+          strata: observation.strata.map((stratum: ObservationStratumResults) => stratum.stratumName).join('\r'),
           endDate: endDates[observation.observationId] ?? '',
           observationDate: observation.completedDate || observation.startDate,
         };

@@ -51,7 +51,7 @@ const OrgObservationsRenderer =
       return <CellRenderer {...props} value={''} />;
     }
 
-    if (column.key === 'plantingZones' || column.key === 'plantingSubzones') {
+    if (column.key === 'strata' || column.key === 'substrata') {
       return (
         <CellRenderer
           {...props}

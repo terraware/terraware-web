@@ -39,13 +39,13 @@ export default function ObservationMonitoringPlot({ reloadAll }: { reloadAll: ()
   const params = useParams<{
     plantingSiteId: string;
     observationId: string;
-    plantingZoneName: string;
+    stratumName: string;
     monitoringPlotId: string;
   }>();
 
   const plantingSiteId = Number(params.plantingSiteId);
   const observationId = Number(params.observationId);
-  const plantingZoneName = params.plantingZoneName;
+  const stratumName = params.stratumName;
   const monitoringPlotId = Number(params.monitoringPlotId);
 
   const defaultTimeZone = useDefaultTimeZone();
@@ -56,8 +56,8 @@ export default function ObservationMonitoringPlot({ reloadAll }: { reloadAll: ()
 
   const { species } = useSpeciesData();
   const { plantingSite, adHocObservationResults, observationResults } = usePlantingSiteData();
-  const [plantingZoneResult, setPlantingZoneResult] = useState<ObservationStratumResultsPayload>();
-  const [plantingSubzoneResult, setPlantingSubzoneResult] = useState<ObservationSubstratumResultsPayload>();
+  const [stratumResult, setStratumResult] = useState<ObservationStratumResultsPayload>();
+  const [substratumResult, setSubstratumResult] = useState<ObservationSubstratumResultsPayload>();
   const [monitoringPlotResult, setMonitoringPlotResult] = useState<ObservationMonitoringPlotResultsPayload>();
   const isEditObservationsEnabled = isEnabled('Edit Observations');
 
@@ -70,25 +70,25 @@ export default function ObservationMonitoringPlot({ reloadAll }: { reloadAll: ()
     }
   }, [observationResults, adHocObservationResults, observationId]);
 
-  const navigateToZoneDetails = useCallback(() => {
-    if (plantingZoneName) {
+  const navigateToStratumDetails = useCallback(() => {
+    if (stratumName) {
       navigate(
-        APP_PATHS.OBSERVATION_PLANTING_ZONE_DETAILS.replace(':plantingSiteId', plantingSiteId.toString())
+        APP_PATHS.OBSERVATION_STRATUM_DETAILS.replace(':plantingSiteId', plantingSiteId.toString())
           .replace(':observationId', Number(observationId).toString())
-          .replace(':plantingZoneName', encodeURIComponent(plantingZoneName))
+          .replace(':stratumName', encodeURIComponent(stratumName))
       );
     }
-  }, [navigate, observationId, plantingZoneName, plantingSiteId]);
+  }, [navigate, observationId, stratumName, plantingSiteId]);
 
   useEffect(() => {
     let plotFound = false;
     if (result) {
-      result.strata.forEach((zone) =>
-        zone.substrata.forEach((subzone) =>
-          subzone.monitoringPlots.forEach((plot) => {
+      result.strata.forEach((_stratum) =>
+        _stratum.substrata.forEach((_substratum) =>
+          _substratum.monitoringPlots.forEach((plot) => {
             if (plot.monitoringPlotId === monitoringPlotId) {
-              setPlantingZoneResult(zone);
-              setPlantingSubzoneResult(subzone);
+              setStratumResult(_stratum);
+              setSubstratumResult(_substratum);
               setMonitoringPlotResult(plot);
               plotFound = true;
               return;
@@ -97,22 +97,22 @@ export default function ObservationMonitoringPlot({ reloadAll }: { reloadAll: ()
         )
       );
       if (!plotFound) {
-        navigateToZoneDetails();
+        navigateToStratumDetails();
       }
     }
-  }, [result, monitoringPlotId, navigateToZoneDetails]);
+  }, [result, monitoringPlotId, navigateToStratumDetails]);
 
-  const plantingZone = useMemo(() => {
-    if (plantingZoneResult) {
-      return plantingSite?.strata?.find((zone) => zone.id === plantingZoneResult.stratumId);
+  const stratum = useMemo(() => {
+    if (stratumResult) {
+      return plantingSite?.strata?.find((_stratum) => _stratum.id === stratumResult.stratumId);
     }
-  }, [plantingSite, plantingZoneResult]);
+  }, [plantingSite, stratumResult]);
 
-  const plantingSubzone = useMemo(() => {
-    if (plantingSubzoneResult) {
-      return plantingZone?.substrata?.find((subzone) => subzone.id === plantingSubzoneResult.substratumId);
+  const substratum = useMemo(() => {
+    if (substratumResult) {
+      return stratum?.substrata?.find((_substratum) => _substratum.id === substratumResult.substratumId);
     }
-  }, [plantingZone, plantingSubzoneResult]);
+  }, [stratum, substratumResult]);
 
   const monitoringPlotSpecies = useMemo((): ObservationSpeciesResults[] => {
     if (monitoringPlotResult) {
@@ -162,8 +162,8 @@ export default function ObservationMonitoringPlot({ reloadAll }: { reloadAll: ()
           : undefined,
       },
       { label: strings.OBSERVER, value: monitoringPlotResult?.claimedByName },
-      { label: strings.ZONE, value: plantingZone?.name },
-      { label: strings.SUBZONE, value: plantingSubzone?.name },
+      { label: strings.ZONE, value: stratum?.name },
+      { label: strings.SUBZONE, value: substratum?.name },
       {
         label: strings.MONITORING_PLOT_TYPE,
         value: monitoringPlotResult
@@ -205,8 +205,8 @@ export default function ObservationMonitoringPlot({ reloadAll }: { reloadAll: ()
     plantingSite?.timeZone,
     activeLocale,
     defaultTimeZone,
-    plantingZone?.name,
-    plantingSubzone?.name,
+    stratum?.name,
+    substratum?.name,
   ]);
 
   const mainTitle = useMemo(() => {
@@ -223,10 +223,10 @@ export default function ObservationMonitoringPlot({ reloadAll }: { reloadAll: ()
           title={
             <Box>
               <Typography>
-                {strings.ZONE}: {plantingZone?.name}
+                {strings.ZONE}: {stratum?.name}
               </Typography>
               <Typography>
-                {strings.SUBZONE}: {plantingSubzone?.name}
+                {strings.SUBZONE}: {substratum?.name}
               </Typography>
               <Typography>
                 {strings.PLOT_TYPE}:{' '}
@@ -249,7 +249,7 @@ export default function ObservationMonitoringPlot({ reloadAll }: { reloadAll: ()
         </Tooltip>
       </Box>
     );
-  }, [monitoringPlotResult, plantingSubzone?.name, plantingZone?.name, theme]);
+  }, [monitoringPlotResult, substratum?.name, stratum?.name, theme]);
 
   const title = useCallback(
     (text: string | ReactNode, marginTop?: number, marginBottom?: number) => (
@@ -279,8 +279,8 @@ export default function ObservationMonitoringPlot({ reloadAll }: { reloadAll: ()
       monitoringPlotResult?.overlapsWithPlotIds.map((plotId, index) => {
         const allPlots = observationResults?.flatMap((obv) =>
           obv.strata.flatMap((pz) =>
-            pz.substrata.flatMap((subzone) =>
-              subzone.monitoringPlots.map((plot) => {
+            pz.substrata.flatMap((_substratum) =>
+              _substratum.monitoringPlots.map((plot) => {
                 return { ...plot, observationId: obv.observationId };
               })
             )
@@ -296,7 +296,7 @@ export default function ObservationMonitoringPlot({ reloadAll }: { reloadAll: ()
                 Number(plantingSiteId).toString()
               )
                 .replace(':observationId', Number(found.observationId).toString())
-                .replace(':plantingZoneName', encodeURIComponent(plantingZoneName || ''))
+                .replace(':stratumName', encodeURIComponent(stratumName || ''))
                 .replace(':monitoringPlotId', found.monitoringPlotId.toString())}
             >
               {found.monitoringPlotNumber}
@@ -308,7 +308,7 @@ export default function ObservationMonitoringPlot({ reloadAll }: { reloadAll: ()
 
     const elements = (names ?? []).filter((element): element is JSX.Element => element !== undefined);
     return elements;
-  }, [monitoringPlotResult?.overlapsWithPlotIds, observationResults, plantingSiteId, plantingZoneName]);
+  }, [monitoringPlotResult?.overlapsWithPlotIds, observationResults, plantingSiteId, stratumName]);
 
   const tabs = useMemo(() => {
     if (!activeLocale) {
@@ -357,7 +357,7 @@ export default function ObservationMonitoringPlot({ reloadAll }: { reloadAll: ()
       title={mainTitle}
       plantingSiteId={Number(plantingSiteId)}
       observationId={Number(observationId)}
-      plantingZoneName={plantingZoneName}
+      stratumName={stratumName}
     >
       <Box width='100%'>
         <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />
@@ -368,7 +368,7 @@ export default function ObservationMonitoringPlot({ reloadAll }: { reloadAll: ()
       title={monitoringPlotResult?.monitoringPlotNumber.toString()}
       plantingSiteId={Number(plantingSiteId)}
       observationId={Number(observationId)}
-      plantingZoneName={plantingZoneName}
+      stratumName={stratumName}
       rightComponent={
         <OptionsMenu
           onOptionItemClick={goToSurvivalRateSettings}

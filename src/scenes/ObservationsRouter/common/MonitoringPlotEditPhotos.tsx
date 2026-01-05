@@ -39,7 +39,7 @@ const MonitoringPlotEditPhotos = ({ reload }: { reload: () => void }) => {
   const [mediaItems, setMediaItems] = useState<MonitoringPlotMediaItem[]>([]);
   const theme = useTheme();
   const navigate = useSyncNavigate();
-  const [plantingZoneName, setPlantingZoneName] = useState<string>();
+  const [stratumName, setStratumName] = useState<string>();
   const [showWarning, setShowWarning] = useState(false);
 
   const [monitoringPlotResult, setMonitoringPlotResult] = useState<ObservationMonitoringPlotResultsPayload>();
@@ -119,12 +119,12 @@ const MonitoringPlotEditPhotos = ({ reload }: { reload: () => void }) => {
 
   useEffect(() => {
     if (observationResults) {
-      observationResults.strata.forEach((zone) =>
-        zone.substrata.forEach((subzone) =>
-          subzone.monitoringPlots.forEach((plot) => {
+      observationResults.strata.forEach((stratum) =>
+        stratum.substrata.forEach((substratum) =>
+          substratum.monitoringPlots.forEach((plot) => {
             if (plot.monitoringPlotId === monitoringPlotId) {
               setMonitoringPlotResult(plot);
-              setPlantingZoneName(zone.name);
+              setStratumName(stratum.name);
               setMediaItems(plot.media.map((mediaElement) => ({ type: 'existing', data: mediaElement })));
               return;
             }
@@ -154,11 +154,11 @@ const MonitoringPlotEditPhotos = ({ reload }: { reload: () => void }) => {
             .replace(':observationId', `${observationId}`)
             .replace(':monitoringPlotId', `${monitoringPlotId}`)
         );
-      } else if (plantingZoneName) {
+      } else if (stratumName) {
         navigate(
           APP_PATHS.OBSERVATION_MONITORING_PLOT_DETAILS.replace(':plantingSiteId', `${plantingSiteId}`)
             .replace(':observationId', `${observationId}`)
-            .replace(':plantingZoneName', plantingZoneName)
+            .replace(':stratumName', stratumName)
             .replace(':monitoringPlotId', `${monitoringPlotId}`)
         );
       }
@@ -170,7 +170,7 @@ const MonitoringPlotEditPhotos = ({ reload }: { reload: () => void }) => {
     observationId,
     observationResults,
     plantingSiteId,
-    plantingZoneName,
+    stratumName,
   ]);
 
   const savePhotos = useCallback(() => {

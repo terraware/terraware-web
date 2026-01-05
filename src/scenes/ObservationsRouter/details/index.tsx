@@ -81,7 +81,7 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
           selectedOrganization.id,
           defaultTimeZone.get().id,
           searchProps.search,
-          searchProps.filtersProps?.filters?.zone?.values ?? [],
+          searchProps.filtersProps?.filters?.stratum?.values ?? [],
           status
         )
   );
@@ -104,7 +104,7 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
             observationId,
             orgId: selectedOrganization.id,
             search: searchProps.search,
-            stratumNames: searchProps.filtersProps?.filters.zone?.values ?? [],
+            stratumNames: searchProps.filtersProps?.filters.stratum?.values ?? [],
           },
           defaultTimeZone.get().id
         )
@@ -136,7 +136,7 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
 
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
   const observation = useAppSelector((state) => selectObservation(state, plantingSiteId, observationId));
-  const zoneNames = useAppSelector((state) =>
+  const stratumNames = useAppSelector((state) =>
     !selectedOrganization
       ? []
       : selectDetailsStratumNames(state, plantingSiteId, observationId, selectedOrganization.id)
@@ -150,7 +150,9 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
 
   const statusSummary = useMemo<ObservationStatusSummary | undefined>(() => {
     if (observation && details && Date.now() <= new Date(observation.endDate).getTime()) {
-      const plots = details.strata.flatMap((zone) => zone.substrata.flatMap((subzone) => subzone.monitoringPlots));
+      const plots = details.strata.flatMap((stratum) =>
+        stratum.substrata.flatMap((substratum) => substratum.monitoringPlots)
+      );
       const pendingPlots = plots.filter((plot) => !plot.completedTime).length;
       const totalPlots = plots.length;
       const observedPlots = totalPlots - pendingPlots;
@@ -182,12 +184,12 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
 
   useEffect(() => {
     setFilterOptions({
-      zone: {
+      stratum: {
         partial: false,
-        values: zoneNames,
+        values: stratumNames,
       },
     });
-  }, [setFilterOptions, zoneNames]);
+  }, [setFilterOptions, stratumNames]);
 
   useEffect(() => {
     if (selectedOrganization && !details) {
@@ -196,16 +198,16 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
   }, [details, navigate, plantingSiteId, selectedOrganization]);
 
   useEffect(() => {
-    const initialZones = searchProps.filtersProps?.filters?.zone?.values ?? [];
-    const availableZones = initialZones.filter((name: string) => zoneNames.includes(name));
+    const initialStrata = searchProps.filtersProps?.filters?.stratum?.values ?? [];
+    const availableZones = initialStrata.filter((name: string) => stratumNames.includes(name));
 
-    if (availableZones.length < initialZones.length) {
+    if (availableZones.length < initialStrata.length) {
       searchProps.filtersProps?.setFilters((previous: Record<string, any>) => ({
         ...previous,
-        zone: { ...previous.zone, values: availableZones },
+        stratum: { ...previous.stratum, values: availableZones },
       }));
     }
-  }, [zoneNames, searchProps.filtersProps]);
+  }, [stratumNames, searchProps.filtersProps]);
 
   const onSaveMergedSpecies = useOnSaveMergedSpecies({ observationId, reload, setShowMatchSpeciesModal });
 
@@ -253,8 +255,8 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
         />
       )}
       <ObservationStatusSummaryMessage
-        plantingZones={plantingSite?.strata}
-        requestedSubzoneIds={observation?.requestedSubstratumIds}
+        strata={plantingSite?.strata}
+        requestedSubstratumIds={observation?.requestedSubstratumIds}
         statusSummary={statusSummary}
       />
       <Grid container spacing={3}>

@@ -54,7 +54,7 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
       selectedOrganization?.id || -1,
       defaultTimeZone.get().id,
       searchProps.search,
-      searchProps.filtersProps?.filters.zone?.values ?? [],
+      searchProps.filtersProps?.filters.stratum?.values ?? [],
       searchProps.filtersProps?.filters.status?.values ?? [],
       activeLocale ?? undefined
     )
@@ -81,7 +81,7 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
     }
   }, [adHocObservationResults, selectedPlantingSite]);
 
-  const zoneNames = useAppSelector((state) =>
+  const stratumNames = useAppSelector((state) =>
     selectedOrganization
       ? selectObservationsStratumNames(
           state,
@@ -93,11 +93,11 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
   );
 
   useEffect(() => {
-    if (zoneNames !== undefined) {
+    if (stratumNames !== undefined) {
       setFilterOptions({
-        zone: {
+        stratum: {
           partial: false,
-          values: zoneNames,
+          values: stratumNames,
         },
         status: {
           partial: false,
@@ -105,7 +105,7 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
         },
       });
     }
-  }, [setFilterOptions, zoneNames]);
+  }, [setFilterOptions, stratumNames]);
 
   return (
     <ListMapView

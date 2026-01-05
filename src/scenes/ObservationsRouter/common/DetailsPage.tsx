@@ -12,7 +12,7 @@ import strings from 'src/strings';
 type DetailsPageProps = {
   plantingSiteId: number;
   observationId: number;
-  plantingZoneName?: string;
+  stratumName?: string;
   title: string | React.ReactNode;
   children: React.ReactNode;
   rightComponent?: React.ReactNode;
@@ -21,7 +21,7 @@ type DetailsPageProps = {
 export default function DetailsPage({
   plantingSiteId,
   observationId,
-  plantingZoneName,
+  stratumName,
   title,
   children,
   rightComponent,
@@ -86,17 +86,17 @@ export default function DetailsPage({
           });
         }
 
-        if (plantingZoneName) {
+        if (stratumName) {
           data.push({
-            name: plantingZoneName,
-            to: '/zone/' + encodeURIComponent(plantingZoneName),
+            name: stratumName,
+            to: '/stratum/' + encodeURIComponent(stratumName),
           });
         }
       }
     }
 
     return data;
-  }, [activeLocale, plantingSiteId, observation, observationId, plantingZoneName, observationDate]);
+  }, [activeLocale, plantingSiteId, observation, observationId, stratumName, observationDate]);
 
   return (
     <Page crumbs={crumbs} title={title} rightComponent={rightComponent}>

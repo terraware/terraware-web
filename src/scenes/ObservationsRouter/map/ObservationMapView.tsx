@@ -172,20 +172,23 @@ export default function ObservationMapView({
     selectedAdHocObservation,
   ]);
 
-  const filterZoneNames = useMemo(() => filtersProps?.filters.zone?.values ?? [], [filtersProps?.filters.zone?.values]);
+  const filterStratumNames = useMemo(
+    () => filtersProps?.filters.stratum?.values ?? [],
+    [filtersProps?.filters.stratum?.values]
+  );
 
-  const [searchZoneEntities, setSearchZoneEntities] = useState<MapEntityId[]>([]);
+  const [searchStratumEntities, setSearchStratumEntities] = useState<MapEntityId[]>([]);
   useEffect(() => {
     const entities = (observationsResults ?? [])
       .flatMap((obs) => obs.strata)
       .filter(
-        (zone) =>
-          (!filterZoneNames.length || filterZoneNames.includes(zone.stratumName)) &&
-          regexMatch(zone.stratumName, search)
+        (stratum) =>
+          (!filterStratumNames.length || filterStratumNames.includes(stratum.stratumName)) &&
+          regexMatch(stratum.stratumName, search)
       )
-      .map((zone) => ({ sourceId: 'zones', id: zone.stratumId }));
-    setSearchZoneEntities(entities);
-  }, [observationsResults, search, selectedObservation, filterZoneNames]);
+      .map((stratum) => ({ sourceId: 'strata', id: stratum.stratumId }));
+    setSearchStratumEntities(entities);
+  }, [observationsResults, search, selectedObservation, filterStratumNames]);
 
   const layerOptions: MapLayer[] = ['Planting Site', 'Strata', 'Monitoring Plots'];
   const [includedLayers, setIncludedLayers] = useState<MapLayer[]>(layerOptions);
@@ -198,7 +201,7 @@ export default function ObservationMapView({
     'Project Zones': strings.PROJECT_ZONES,
   };
 
-  const hasSearchCriteria = search.trim() || filterZoneNames.length;
+  const hasSearchCriteria = search.trim() || filterStratumNames.length;
 
   const contextRenderer = useCallback(
     (properties: MapSourceProperties): JSX.Element | null => {
@@ -206,7 +209,7 @@ export default function ObservationMapView({
       let entity: any;
       if (properties.type === 'site') {
         entity = selectedObservation;
-      } else if (properties.type === 'zone') {
+      } else if (properties.type === 'stratum') {
         entity =
           selectedObservation?.strata?.find((z) => z.stratumId === properties.id) ||
           plantingSiteHistory?.strata.find((z) => z.stratumId === properties.id);
@@ -281,16 +284,16 @@ export default function ObservationMapView({
                 },
               },
             }}
-            highlightEntities={hasSearchCriteria ? searchZoneEntities : []}
+            highlightEntities={hasSearchCriteria ? searchStratumEntities : []}
             focusEntities={
-              !hasSearchCriteria || searchZoneEntities.length === 0
+              !hasSearchCriteria || searchStratumEntities.length === 0
                 ? [
                     {
                       sourceId: 'sites',
                       id: selectedObservation?.plantingSiteId || selectedAdHocObservation?.plantingSiteId,
                     },
                   ]
-                : searchZoneEntities
+                : searchStratumEntities
             }
           />
         )}

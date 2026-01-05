@@ -91,7 +91,7 @@ test.describe('ObservationDetailsTests', () => {
 
     // table row values
     await expect(page.locator('#row1-monitoringPlotNumber a:has-text("1")')).toBeVisible();
-    await expect(page.locator('#row1-subzoneName p:has-text("Subzone A")')).toBeVisible();
+    await expect(page.locator('#row1-substratumName p:has-text("Subzone A")')).toBeVisible();
     await expect(page.locator('#row1-completedDate p:has-text("2025-05-29")')).toBeVisible();
     await expect(page.locator('#row1-status p:has-text("Completed")')).toBeVisible();
     await expect(page.locator('#row1-isPermanent p:has-text("Permanent")')).toBeVisible();

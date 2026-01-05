@@ -14,68 +14,74 @@ import { isAfter } from 'src/utils/dateUtils';
 
 interface ObservationSubstratumSelectorProps {
   errorText?: string;
-  onChangeSelectedSubzones: (requestedSubstratumIds: number[]) => void;
+  onChangeSelectedSubstrata: (requestedSubstratumIds: number[]) => void;
 }
 
-const ObservationSubstratumSelector = ({ errorText, onChangeSelectedSubzones }: ObservationSubstratumSelectorProps) => {
+const ObservationSubstratumSelector = ({
+  errorText,
+  onChangeSelectedSubstrata,
+}: ObservationSubstratumSelectorProps) => {
   const theme = useTheme();
   const [selectAll, setSelectAll] = useState<boolean>(false);
 
-  const [selectedSubzones, setSelectedSubzones] = useState(new Map<number, boolean>());
+  const [selectedSubstrata, setSelectedSubstrata] = useState(new Map<number, boolean>());
   const { plantingSite } = usePlantingSiteData();
 
-  const handleOnChangeSelectedSubzones = useCallback(
-    (nextSelectedSubzones: Map<number, boolean>) => {
-      setSelectedSubzones(nextSelectedSubzones);
+  const handleOnChangeSelectedSubstrata = useCallback(
+    (nextSelectedSubstrata: Map<number, boolean>) => {
+      setSelectedSubstrata(nextSelectedSubstrata);
 
       // If we were using es2015 or above, this entire function can go away
-      // We could call onChangeSelectedSubzones with a one liner array creation from the map
-      const selectedSubzoneIds: number[] = [];
-      nextSelectedSubzones.forEach((value: boolean, subzoneId: number) => {
+      // We could call onChangeSelectedSubstrata with a one liner array creation from the map
+      const selectedSubstratumIds: number[] = [];
+      nextSelectedSubstrata.forEach((value: boolean, substratumId: number) => {
         if (value) {
-          selectedSubzoneIds.push(subzoneId);
+          selectedSubstratumIds.push(substratumId);
         }
       });
-      onChangeSelectedSubzones(selectedSubzoneIds);
+      onChangeSelectedSubstrata(selectedSubstratumIds);
     },
-    [onChangeSelectedSubzones]
+    [onChangeSelectedSubstrata]
   );
 
-  const onChangeSubzoneCheckbox = useCallback(
-    (subzoneId: number) => (value: boolean) => {
+  const onChangeSubstratumCheckbox = useCallback(
+    (substratumId: number) => (value: boolean) => {
       // Consider using es2015 or above so we can spread iterators and interact with Map a bit better
-      const nextSelectedSubzones = new Map(selectedSubzones).set(subzoneId, value);
-      handleOnChangeSelectedSubzones(nextSelectedSubzones);
+      const nextSelectedSubstrata = new Map(selectedSubstrata).set(substratumId, value);
+      handleOnChangeSelectedSubstrata(nextSelectedSubstrata);
     },
-    [handleOnChangeSelectedSubzones, selectedSubzones]
+    [handleOnChangeSelectedSubstrata, selectedSubstrata]
   );
 
   const onChangeZoneCheckbox = useCallback(
-    (zone: Stratum) => (value: boolean) => {
-      const nextSelectedSubzones = new Map(selectedSubzones);
-      zone.substrata.forEach((subzone) => {
-        nextSelectedSubzones.set(subzone.id, value);
+    (stratum: Stratum) => (value: boolean) => {
+      const nextSelectedSubstrata = new Map(selectedSubstrata);
+      stratum.substrata.forEach((substratum) => {
+        nextSelectedSubstrata.set(substratum.id, value);
       });
 
-      handleOnChangeSelectedSubzones(nextSelectedSubzones);
+      handleOnChangeSelectedSubstrata(nextSelectedSubstrata);
     },
-    [handleOnChangeSelectedSubzones, selectedSubzones]
+    [handleOnChangeSelectedSubstrata, selectedSubstrata]
   );
 
-  const isZoneFullySelected = (zone: Stratum) => zone.substrata.every((subzone) => selectedSubzones.get(subzone.id));
+  const isStratumFullySelected = (stratum: Stratum) =>
+    stratum.substrata.every((substratum) => selectedSubstrata.get(substratum.id));
 
-  const isZonePartiallySelected = (zone: Stratum) =>
-    !isZoneFullySelected(zone) && zone.substrata.some((subzone) => selectedSubzones.get(subzone.id));
+  const isStratumPartiallySelected = (stratum: Stratum) =>
+    !isStratumFullySelected(stratum) && stratum.substrata.some((substratum) => selectedSubstrata.get(substratum.id));
 
   useEffect(() => {
     if (plantingSite) {
-      // Initialize all subzone selections
-      const initialSelectedSubzones = new Map(
-        plantingSite.strata?.flatMap((zone) => zone.substrata.map((subzone) => [subzone.id, selectAll ? true : false]))
+      // Initialize all substratum selections
+      const initialSelectedSubstrata = new Map(
+        plantingSite.strata?.flatMap((stratum) =>
+          stratum.substrata.map((substratum) => [substratum.id, selectAll ? true : false])
+        )
       );
-      handleOnChangeSelectedSubzones(initialSelectedSubzones);
+      handleOnChangeSelectedSubstrata(initialSelectedSubstrata);
     }
-  }, [handleOnChangeSelectedSubzones, plantingSite, selectAll]);
+  }, [handleOnChangeSelectedSubstrata, plantingSite, selectAll]);
 
   return (
     plantingSite &&
@@ -94,16 +100,16 @@ const ObservationSubstratumSelector = ({ errorText, onChangeSelectedSubzones }: 
             onChange={setSelectAll}
           />
         </Grid>
-        {plantingSite.strata?.map((zone, index) => {
+        {plantingSite.strata?.map((stratum, index) => {
           return (
             <Grid item xs={12} key={index}>
               <Checkbox
-                id={`observation-zone-${zone.id}`}
-                indeterminate={isZonePartiallySelected(zone)}
-                label={zone.name}
-                name='Limit Observation to Zone'
-                onChange={onChangeZoneCheckbox(zone)}
-                value={isZoneFullySelected(zone)}
+                id={`observation-stratum-${stratum.id}`}
+                indeterminate={isStratumPartiallySelected(stratum)}
+                label={stratum.name}
+                name='Limit Observation to Stratum'
+                onChange={onChangeZoneCheckbox(stratum)}
+                value={isStratumFullySelected(stratum)}
               />
               <Typography
                 sx={{
@@ -114,22 +120,22 @@ const ObservationSubstratumSelector = ({ errorText, onChangeSelectedSubzones }: 
                   paddingLeft: 1,
                 }}
               >
-                {zone.latestObservationCompletedTime
+                {stratum.latestObservationCompletedTime
                   ? strings.formatString(
                       strings.LAST_OBSERVATION,
-                      getDateDisplayValue(zone.latestObservationCompletedTime)
+                      getDateDisplayValue(stratum.latestObservationCompletedTime)
                     )
                   : strings.NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED}
               </Typography>
-              {zone.latestObservationCompletedTime &&
-                isAfter(zone.boundaryModifiedTime, zone.latestObservationCompletedTime) && (
+              {stratum.latestObservationCompletedTime &&
+                isAfter(stratum.boundaryModifiedTime, stratum.latestObservationCompletedTime) && (
                   <Box display='flex' alignItems='center' marginTop={2} marginBottom={1}>
                     <Icon name='warning' fillColor={theme.palette.TwClrTxtSecondary} size='medium' />
                     <Typography color={theme.palette.TwClrTxtSecondary} paddingLeft={1} paddingRight={1}>
                       {strings.formatString(
                         strings.ZONE_GEOMETRY_CHANGED,
-                        zone.name,
-                        DateTime.fromISO(zone.boundaryModifiedTime).toFormat('yyyy-MM-dd')
+                        stratum.name,
+                        DateTime.fromISO(stratum.boundaryModifiedTime).toFormat('yyyy-MM-dd')
                       )}
                     </Typography>
                     <Link
@@ -142,17 +148,17 @@ const ObservationSubstratumSelector = ({ errorText, onChangeSelectedSubzones }: 
                   </Box>
                 )}
               <Box sx={{ columnGap: theme.spacing(3), paddingLeft: `${theme.spacing(4)}` }}>
-                {zone.substrata.map((subzone, _index) => {
+                {stratum.substrata.map((substratum, _index) => {
                   return (
                     <Box sx={{ display: 'inline-block', width: '100%' }} key={_index}>
                       <Checkbox
-                        id={`observation-subzone-${zone.id}`}
-                        label={subzone.name}
-                        name='Limit Observation to Subzone'
-                        onChange={onChangeSubzoneCheckbox(subzone.id)}
-                        value={selectedSubzones.get(subzone.id)}
+                        id={`observation-substratum-${stratum.id}`}
+                        label={substratum.name}
+                        name='Limit Observation to Substratum'
+                        onChange={onChangeSubstratumCheckbox(substratum.id)}
+                        value={selectedSubstrata.get(substratum.id)}
                       />
-                      {subzone.latestObservationCompletedTime && (
+                      {substratum.latestObservationCompletedTime && (
                         <Typography
                           sx={{
                             display: 'inline',
@@ -162,10 +168,10 @@ const ObservationSubstratumSelector = ({ errorText, onChangeSelectedSubzones }: 
                             paddingLeft: 1,
                           }}
                         >
-                          {subzone.latestObservationCompletedTime
+                          {substratum.latestObservationCompletedTime
                             ? strings.formatString(
                                 strings.LAST_OBSERVATION,
-                                getDateDisplayValue(subzone.latestObservationCompletedTime)
+                                getDateDisplayValue(substratum.latestObservationCompletedTime)
                               )
                             : strings.NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED}
                         </Typography>
