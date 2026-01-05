@@ -102,7 +102,7 @@ const injectedRtkApi = api.injectEndpoints({
                 operation: 'field',
                 type: 'Exact',
                 field: 'observation_id',
-                values: [observationId],
+                values: [`${observationId}`],
               },
             ],
           },
