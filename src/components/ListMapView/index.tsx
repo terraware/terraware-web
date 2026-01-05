@@ -57,10 +57,10 @@ export default function ListMapView({
   const plantingCompleteArea = useMemo(() => {
     let total = 0;
     if (data) {
-      data.forEach((zone) => {
-        zone.substrata.forEach((subzone) => {
-          if (subzone.plantingCompleted) {
-            total += subzone.areaHa;
+      data.forEach((stratum) => {
+        stratum.substrata.forEach((substratum) => {
+          if (substratum.plantingCompleted) {
+            total += substratum.areaHa;
           }
         });
       });

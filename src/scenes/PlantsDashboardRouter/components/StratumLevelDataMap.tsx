@@ -330,8 +330,8 @@ export default function StratumLevelDataMap({ plantingSiteId }: StratumLevelData
                 },
               },
             }}
-            zoneInteractive={true}
-            subzoneInteractive={false}
+            stratumInteractive={true}
+            substratumInteractive={false}
           />
         ) : (
           <Box sx={{ position: 'fixed', top: '50%', left: '50%' }}>

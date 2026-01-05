@@ -73,14 +73,14 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
 
   useEffect(() => {
     if (plantingSite) {
-      const zoneDensities: Record<string, number | string> = {};
-      plantingSite.strata?.forEach((zone) => {
+      const stratumDensities: Record<string, number | string> = {};
+      plantingSite.strata?.forEach((stratum) => {
         if (latestResult) {
-          const zoneFromObs = latestResult.strata.find((obsZone) => obsZone.stratumId === zone.id);
-          zoneDensities[zone.name] = zoneFromObs?.plantingDensity ?? '';
+          const stratumFromObs = latestResult.strata.find((obsStratum) => obsStratum.stratumId === stratum.id);
+          stratumDensities[stratum.name] = stratumFromObs?.plantingDensity ?? '';
         }
       });
-      setPlantingDensity(zoneDensities);
+      setPlantingDensity(stratumDensities);
     }
   }, [plantingSite, latestResult]);
 
@@ -135,7 +135,8 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
   }, [latestResult]);
 
   const numberOfPlots = useMemo(() => {
-    return latestResult?.strata.flatMap((pz) => pz.substrata.flatMap((subzone) => subzone.monitoringPlots)).length;
+    return latestResult?.strata.flatMap((pz) => pz.substrata.flatMap((substratum) => substratum.monitoringPlots))
+      .length;
   }, [latestResult]);
 
   const markedAsComplete = useMemo(() => {
@@ -143,7 +144,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
       const totalArea = plantingSite.areaHa ?? 0;
       const totalPlantedArea =
         plantingSite?.strata
-          ?.flatMap((zone) => zone.substrata)
+          ?.flatMap((stratum) => stratum.substrata)
           ?.reduce((prev, curr) => (curr.plantingCompleted ? +curr.areaHa + prev : prev), 0) ?? 0;
       const percentagePlanted = totalArea > 0 ? Math.round((totalPlantedArea / totalArea) * 100) : 0;
       return `${percentagePlanted}%`;
@@ -151,20 +152,20 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
     return '0%';
   }, [plantingSite]);
 
-  const plantingDensityForZones = useMemo(() => {
-    const zoneNameWithDensities: string[] = [];
+  const plantingDensityForStrata = useMemo(() => {
+    const stratumNameWithDensities: string[] = [];
     if (plantingSite && plantingDensity) {
-      plantingSite.strata?.reduce((acc, zone) => {
-        if (plantingDensity[zone.name] !== '') {
-          zoneNameWithDensities.push(`${zone.name}: ${plantingDensity[zone.name]}`);
+      plantingSite.strata?.reduce((acc, stratum) => {
+        if (plantingDensity[stratum.name] !== '') {
+          stratumNameWithDensities.push(`${stratum.name}: ${plantingDensity[stratum.name]}`);
         }
         return acc;
-      }, zoneNameWithDensities);
+      }, stratumNameWithDensities);
 
-      return zoneNameWithDensities.length ? (
+      return stratumNameWithDensities.length ? (
         <Box>
-          {zoneNameWithDensities.map((zd, index) => (
-            <Box key={`zone-${index}`}>{zd}</Box>
+          {stratumNameWithDensities.map((zd, index) => (
+            <Box key={`stratum-${index}`}>{zd}</Box>
           ))}
         </Box>
       ) : (
@@ -380,12 +381,12 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
               />
             </Grid>
           )}
-          {plantingDensityForZones && (
+          {plantingDensityForStrata && (
             <Grid item xs={smallItemGridWidth()}>
               <OverviewItemCard
                 isEditable={false}
                 title={strings.PLANT_DENSITY_OF_PLANTED_ZONES}
-                contents={plantingDensityForZones}
+                contents={plantingDensityForStrata}
                 sx={infoCardStyles}
               />
             </Grid>

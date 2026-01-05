@@ -121,7 +121,7 @@ export default function SubstratumSelector(props: SubstratumSelectorProps): JSX.
       >
         {horizontalLayout && horizontalLabel(strings.ZONE)}
         <Autocomplete
-          id='zone'
+          id='stratum'
           placeholder={strings.SELECT}
           label={horizontalLayout ? '' : strings.ZONE_REQUIRED}
           selected={stratumToDropdownItem(selectedStratum)}
@@ -137,7 +137,7 @@ export default function SubstratumSelector(props: SubstratumSelectorProps): JSX.
       <Box flex={1} margin={theme.spacing(2, 0, 0)} sx={horizontalLayout ? horizontalStyle : {}}>
         {horizontalLayout && horizontalLabel(strings.SUBZONE)}
         <Autocomplete
-          id='subzone'
+          id='substratum'
           placeholder={strings.SELECT}
           label={horizontalLayout ? '' : strings.SUBZONE_REQUIRED}
           selected={substratumToDropdownItem(selectedSubstratum)}
