@@ -19,7 +19,7 @@
     "purpose": "Out Plant",
     "facility_name": "testOutplant",
     "destinationName": "testSite",
-    "substratumNames": "PZ2-A9 (PZ2-B9)",
+    "substratumNames": "STR2-A9 (STR2-B9)",
     "totalWithdrawn": "1,005",
     "hasReassignments": "true",
     "batchWithdrawals": [

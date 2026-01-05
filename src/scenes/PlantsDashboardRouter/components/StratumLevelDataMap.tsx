@@ -30,7 +30,7 @@ export default function StratumLevelDataMap({ plantingSiteId }: StratumLevelData
 
     plantingSite?.strata?.forEach((stratum) => {
       const percentProgress =
-        plantingSiteReportedPlants?.strata?.find((z) => z.id === stratum.id)?.progressPercent ?? 0;
+        plantingSiteReportedPlants?.strata?.find((_stratum) => _stratum.id === stratum.id)?.progressPercent ?? 0;
       stratumProgress[stratum.id] = {
         name: stratum.name,
         progress: percentProgress,
@@ -44,7 +44,7 @@ export default function StratumLevelDataMap({ plantingSiteId }: StratumLevelData
   const strataStats = useMemo(() => {
     const stratumStats: Record<number, { name: string; reportedPlants: number; reportedSpecies: number }> = {};
     plantingSite?.strata?.forEach((stratum) => {
-      const stratumReportedPlants = plantingSiteReportedPlants?.strata?.find((z) => z.id === stratum.id);
+      const stratumReportedPlants = plantingSiteReportedPlants?.strata?.find((_stratum) => _stratum.id === stratum.id);
       const reportedPlants = stratumReportedPlants?.totalPlants ?? 0;
       const reportedSpecies = 0; // stratumReportedPlants?.totalSpecies ?? 0;
       stratumStats[stratum.id] = { name: stratum.name, reportedPlants, reportedSpecies };
@@ -189,7 +189,7 @@ export default function StratumLevelDataMap({ plantingSiteId }: StratumLevelData
         const stratumStat = stratumId !== undefined ? strataStats[stratumId] : undefined;
         const progress = stratumId !== undefined ? strataProgress[stratumId] : undefined;
         const stratumArea = stratumId !== undefined ? findStratumArea(stratumId) : undefined;
-        const lastStratumSummary = latestSummary?.strata.find((pz) => pz.stratumId === stratumId);
+        const lastStratumSummary = latestSummary?.strata.find((_stratum) => _stratum.stratumId === stratumId);
 
         if (!stratumStat) {
           properties = [
@@ -254,7 +254,7 @@ export default function StratumLevelDataMap({ plantingSiteId }: StratumLevelData
         }
 
         const latestStratumObservationTime = plantingSite?.strata?.find(
-          (z) => z.id === stratumId
+          (_stratum) => _stratum.id === stratumId
         )?.latestObservationCompletedTime;
 
         return (

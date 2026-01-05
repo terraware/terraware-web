@@ -229,7 +229,7 @@ function PlantingSiteMapView({ search }: PlantingSiteMapViewProps): JSX.Element 
           title = plantingSite.name;
           properties = [
             { key: strings.STRATA, value: selectedHistory.strata.length },
-            { key: strings.SUBSTRATA, value: selectedHistory.strata.flatMap((z) => z.substrata).length },
+            { key: strings.SUBSTRATA, value: selectedHistory.strata.flatMap((_stratum) => _stratum.substrata).length },
           ];
         } else if (entity.type === 'stratum') {
           const stratumHistory = selectedHistory.strata.find((_stratumHistory) => _stratumHistory.id === entity.id);

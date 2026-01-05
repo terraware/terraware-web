@@ -106,7 +106,9 @@ const SurvivalRateSettings = () => {
   const numberOfSetStrata = useMemo(() => {
     let totalSet = 0;
     Object.entries(strataWithObservations).forEach(([stratumId, plots]) => {
-      const correspondingStratum = t0SiteData?.strata?.find((z) => z.stratumId.toString() === stratumId.toString());
+      const correspondingStratum = t0SiteData?.strata?.find(
+        (_stratum) => _stratum.stratumId.toString() === stratumId.toString()
+      );
 
       const plotIds = plots.map((plot) => plot.id.toString());
       const withdrawnSpeciesOfStratum = withdrawnSpeciesPlots?.filter((wsp) =>

@@ -135,8 +135,9 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
   }, [latestResult]);
 
   const numberOfPlots = useMemo(() => {
-    return latestResult?.strata.flatMap((pz) => pz.substrata.flatMap((substratum) => substratum.monitoringPlots))
-      .length;
+    return latestResult?.strata.flatMap((_stratum) =>
+      _stratum.substrata.flatMap((substratum) => substratum.monitoringPlots)
+    ).length;
   }, [latestResult]);
 
   const markedAsComplete = useMemo(() => {
@@ -164,8 +165,8 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
 
       return stratumNameWithDensities.length ? (
         <Box>
-          {stratumNameWithDensities.map((zd, index) => (
-            <Box key={`stratum-${index}`}>{zd}</Box>
+          {stratumNameWithDensities.map((_stratumDensity, index) => (
+            <Box key={`stratum-${index}`}>{_stratumDensity}</Box>
           ))}
         </Box>
       ) : (

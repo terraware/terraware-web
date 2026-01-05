@@ -102,7 +102,7 @@ export default function OutplantWithdrawalTable({
             batchNumber,
             batchId,
             speciesId,
-            toSubstratum: substratumIds.map((szId) => substratumNames[Number(szId)]).join(','),
+            toSubstratum: substratumIds.map((_subId) => substratumNames[Number(_subId)]).join(','),
           });
         });
       }

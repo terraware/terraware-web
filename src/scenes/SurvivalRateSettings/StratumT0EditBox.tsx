@@ -79,7 +79,9 @@ const StratumT0EditBox = ({
   const stratumTotalDensity = useMemo(() => {
     const editingStratumId = plotsWithObservations?.length ? plotsWithObservations[0].substratum_stratum_id : null;
     if (editingStratumId) {
-      const selectedStratum = (record.strata || []).find((z) => z.stratumId.toString() === editingStratumId.toString());
+      const selectedStratum = (record.strata || []).find(
+        (_stratum) => _stratum.stratumId.toString() === editingStratumId.toString()
+      );
       const total =
         selectedStratum?.densityData.reduce((sum, density) => {
           return isNaN(density.density) ? sum : sum + density.density;
@@ -149,7 +151,7 @@ const StratumT0EditBox = ({
 
         // Remove the existing stratum, then add the updated one
         const otherStrata = (record.strata || []).filter(
-          (z) => z.stratumId.toString() !== plotsWithObservations?.[0].substratum_stratum_id.toString()
+          (_stratum) => _stratum.stratumId.toString() !== plotsWithObservations?.[0].substratum_stratum_id.toString()
         );
         setRecord({ ...record, strata: otherStrata ? [...otherStrata, stratumCopy] : [stratumCopy] });
       }

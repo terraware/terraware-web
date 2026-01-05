@@ -276,7 +276,7 @@ export default function Substrata({ onValidate, site }: SubstrataProps): JSX.Ele
         const usedNames: Set<string> = new Set(
           (substrata[selectedStratum].features ?? []).map((f) => f.properties?.name).filter((name) => !!name)
         );
-        const idGenerator = IdGenerator(Object.values(substrata).flatMap((sz) => sz.features));
+        const idGenerator = IdGenerator(Object.values(substrata).flatMap((_substratum) => _substratum.features));
         const substrataWithIds = leftOrderedFeatures(cutSubstrata).map(({ feature: substratum }) => {
           if (substratum && substratum.properties && !substratum.properties.name) {
             const substratumName = substratumNameGenerator(usedNames, strings.SUBSTRATUM);

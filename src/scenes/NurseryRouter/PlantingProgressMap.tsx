@@ -70,8 +70,8 @@ export default function PlantingProgressMap({ plantingSiteId, reloadTracking }: 
     const result: Record<number, number> = {};
     plantingSite?.strata
       ?.flatMap((stratum) => stratum.substrata)
-      ?.forEach((sz) => {
-        result[sz.id] = sz.areaHa;
+      ?.forEach((_substratum) => {
+        result[_substratum.id] = _substratum.areaHa;
       });
     return result;
   }, [plantingSite]);
@@ -80,8 +80,8 @@ export default function PlantingProgressMap({ plantingSiteId, reloadTracking }: 
     const result: Record<number, boolean> = {};
     plantingSite?.strata
       ?.flatMap((stratum) => stratum.substrata)
-      ?.forEach((sz) => {
-        result[sz.id] = sz.plantingCompleted;
+      ?.forEach((_substratum) => {
+        result[_substratum.id] = _substratum.plantingCompleted;
       });
     return result;
   }, [plantingSite]);
@@ -120,7 +120,7 @@ export default function PlantingProgressMap({ plantingSiteId, reloadTracking }: 
       } else {
         setStatsWarningDialogProps({ id, val });
         const selectedStratum = plantingSite?.strata?.find((stratum) =>
-          stratum.substrata.map((sz) => sz.id).includes(id)
+          stratum.substrata.map((_substratum) => _substratum.id).includes(id)
         );
         setStratumIdSelected(selectedStratum?.id ?? -1);
       }

@@ -147,12 +147,12 @@ const getPlantingSiteBoundingBox = (mapData: MapData): MapBoundingBox => {
   const adHocPlots: MapSourceBaseData = mapData.adHocPlot ?? { id: 'adHocPlot', entities: [] };
 
   const geometries: MapGeometry[] = [
-    ...(site?.entities.map((s) => s.boundary) || []),
-    ...(strata?.entities.map((s) => s.boundary) || []),
-    ...(substrata?.entities.map((s) => s.boundary) || []),
-    ...(permanentPlots?.entities.map((s) => s.boundary) || []),
-    ...(temporaryPlots?.entities.map((s) => s.boundary) || []),
-    ...(adHocPlots?.entities.map((s) => s.boundary) || []),
+    ...(site?.entities.map((_site) => _site.boundary) || []),
+    ...(strata?.entities.map((_stratum) => _stratum.boundary) || []),
+    ...(substrata?.entities.map((_substratum) => _substratum.boundary) || []),
+    ...(permanentPlots?.entities.map((_plot) => _plot.boundary) || []),
+    ...(temporaryPlots?.entities.map((_plot) => _plot.boundary) || []),
+    ...(adHocPlots?.entities.map((_plot) => _plot.boundary) || []),
   ].filter((g) => g);
 
   return getBoundingBox(geometries);
@@ -699,9 +699,9 @@ const getMapDataFromObservation = (
     },
   ];
 
-  const plantingSiteHistoryStrata = plantingSiteHistory.strata.filter((z) => z.stratumId !== undefined);
+  const plantingSiteHistoryStrata = plantingSiteHistory.strata.filter((_stratum) => _stratum.stratumId !== undefined);
   const stratumEntities = plantingSiteHistoryStrata.map((stratum) => {
-    const stratumFromObservation = observation.strata.find((pz) => pz.stratumName === stratum.name);
+    const stratumFromObservation = observation.strata.find((_stratum) => _stratum.stratumName === stratum.name);
     return {
       // -1 should never be set because undefined ids are filtered before
       id: stratum.stratumId || -1,
@@ -717,12 +717,14 @@ const getMapDataFromObservation = (
   });
 
   const plantingSiteHistorySubstrata = plantingSiteHistoryStrata
-    .flatMap((z) => z.substrata.flatMap((subz) => ({ ...subz, stratumName: z.name })))
-    .filter((subz) => subz.name !== undefined);
+    .flatMap((_stratum) =>
+      _stratum.substrata.flatMap((_substratum) => ({ ..._substratum, stratumName: _stratum.name }))
+    )
+    .filter((_substratum) => _substratum.name !== undefined);
   const substratumEntities = plantingSiteHistorySubstrata?.map((substratum) => {
-    const stratumFromObservation = observation.strata.find((pz) => pz.name === substratum.stratumName);
+    const stratumFromObservation = observation.strata.find((_stratum) => _stratum.name === substratum.stratumName);
     const substratumFromObservation = stratumFromObservation?.substrata?.find(
-      (sz) => sz.substratumName === substratum.name
+      (_substratum) => _substratum.substratumName === substratum.name
     );
     return {
       // -1 should never be set because undefined ids are filtered before
@@ -771,11 +773,15 @@ const getMapDataFromObservation = (
   };
 
   const permanentPlotEntities = observation.strata.flatMap((stratum: ObservationStratumResults) =>
-    stratum.substrata.flatMap((sz: ObservationSubstratumResults) => getMonitoringPlotMapData(sz.monitoringPlots, true))
+    stratum.substrata.flatMap((_substratum: ObservationSubstratumResults) =>
+      getMonitoringPlotMapData(_substratum.monitoringPlots, true)
+    )
   );
 
   const temporaryPlotEntities = observation.strata.flatMap((stratum: ObservationStratumResults) =>
-    stratum.substrata.flatMap((sz: ObservationSubstratumResults) => getMonitoringPlotMapData(sz.monitoringPlots, false))
+    stratum.substrata.flatMap((_substratum: ObservationSubstratumResults) =>
+      getMonitoringPlotMapData(_substratum.monitoringPlots, false)
+    )
   );
 
   const adHocPlot = observation.adHocPlot;
