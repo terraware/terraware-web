@@ -212,11 +212,11 @@ const PlantDashboardMap = ({
       site: PlantingSite
     ): {
       siteFeatures: MapLayerFeature[];
-      zoneFeatures: MapLayerFeature[];
-      subzoneFeatures: MapLayerFeature[];
+      stratumFeatures: MapLayerFeature[];
+      substratumFeatures: MapLayerFeature[];
     } => {
-      const zones = site.strata ?? [];
-      const subzones = site.strata?.flatMap((zone) => zone.substrata);
+      const strata = site.strata ?? [];
+      const substrata = site.strata?.flatMap((stratum) => stratum.substrata);
 
       return {
         siteFeatures: [
@@ -232,30 +232,30 @@ const PlantDashboardMap = ({
               selectedFeature?.layerFeatureId.featureId === `${site.id}`,
           },
         ],
-        zoneFeatures: zones.map((zone) => ({
-          featureId: `${zone.id}`,
-          label: zone.name,
+        stratumFeatures: strata.map((stratum) => ({
+          featureId: `${stratum.id}`,
+          label: stratum.name,
           geometry: {
             type: 'MultiPolygon',
-            coordinates: zone.boundary.coordinates,
+            coordinates: stratum.boundary.coordinates,
           },
-          onClick: selectFeature(site.id)('strata', `${zone.id}`),
+          onClick: selectFeature(site.id)('strata', `${stratum.id}`),
           selected:
             selectedFeature?.layerFeatureId.layerId === 'strata' &&
-            selectedFeature?.layerFeatureId.featureId === `${zone.id}`,
+            selectedFeature?.layerFeatureId.featureId === `${stratum.id}`,
         })),
-        subzoneFeatures:
-          subzones?.map((subzone) => ({
-            featureId: `${subzone.id}`,
-            label: subzone.name,
+        substratumFeatures:
+          substrata?.map((substratum) => ({
+            featureId: `${substratum.id}`,
+            label: substratum.name,
             geometry: {
               type: 'MultiPolygon',
-              coordinates: subzone.boundary.coordinates,
+              coordinates: substratum.boundary.coordinates,
             },
-            onClick: selectFeature(site.id)('substrata', `${subzone.id}`),
+            onClick: selectFeature(site.id)('substrata', `${substratum.id}`),
             selected:
               selectedFeature?.layerFeatureId.layerId === 'substrata' &&
-              selectedFeature?.layerFeatureId.featureId === `${subzone.id}`,
+              selectedFeature?.layerFeatureId.featureId === `${substratum.id}`,
           })) ?? [],
       };
     },
@@ -277,13 +277,13 @@ const PlantDashboardMap = ({
         visible: selectedLayer === 'sites',
       },
       {
-        features: features.flatMap(({ zoneFeatures }) => zoneFeatures),
+        features: features.flatMap(({ stratumFeatures }) => stratumFeatures),
         layerId: 'strata',
         style: strataLayerStyle,
         visible: selectedLayer === 'strata',
       },
       {
-        features: features.flatMap(({ subzoneFeatures }) => subzoneFeatures),
+        features: features.flatMap(({ substratumFeatures }) => substratumFeatures),
         layerId: 'substrata',
         style: substrataLayerStyle,
         visible: selectedLayer === 'substrata',
@@ -301,8 +301,8 @@ const PlantDashboardMap = ({
 
     return observationResults.flatMap((results) =>
       results.strata
-        .flatMap((zone) => zone.substrata)
-        .flatMap((subzone) => subzone.monitoringPlots)
+        .flatMap((stratum) => stratum.substrata)
+        .flatMap((substratum) => substratum.monitoringPlots)
         .flatMap((plot): MapMarker[] =>
           plot.photos.filter(hasGpsCoordinates).map((photo) => {
             return {
@@ -330,8 +330,8 @@ const PlantDashboardMap = ({
 
       return observationResults.flatMap((results) =>
         results.strata
-          .flatMap((zone) => zone.substrata)
-          .flatMap((subzone) => subzone.monitoringPlots)
+          .flatMap((stratum) => stratum.substrata)
+          .flatMap((substratum) => substratum.monitoringPlots)
           .flatMap((plot): MapMarker[] => {
             if (plot.plants) {
               const filteredPlants = plot.plants.filter((plant) => plant.status === status);
@@ -386,13 +386,13 @@ const PlantDashboardMap = ({
     const siteId = { layerId: 'sites', featureId: `${latestSummary?.plantingSiteId}` };
     sortFeatureBySurvivalRate(siteId, latestSummary?.survivalRate);
 
-    latestSummary?.strata.forEach((zone) => {
-      const zoneId = { layerId: 'strata', featureId: `${zone.stratumId}` };
-      sortFeatureBySurvivalRate(zoneId, zone.survivalRate);
+    latestSummary?.strata.forEach((stratum) => {
+      const stratumId = { layerId: 'strata', featureId: `${stratum.stratumId}` };
+      sortFeatureBySurvivalRate(stratumId, stratum.survivalRate);
 
-      zone.substrata.forEach((subzone) => {
-        const subzoneId = { layerId: 'substrata', featureId: `${subzone.substratumId}` };
-        sortFeatureBySurvivalRate(subzoneId, subzone.survivalRate);
+      stratum.substrata.forEach((substratum) => {
+        const substratumId = { layerId: 'substrata', featureId: `${substratum.substratumId}` };
+        sortFeatureBySurvivalRate(substratumId, substratum.survivalRate);
       });
     });
 
@@ -435,12 +435,12 @@ const PlantDashboardMap = ({
       const siteId = { layerId: 'sites', featureId: `${plantingSite.id}` };
       sortFeatureByObservationRecency(siteId, plantingSite.latestObservationCompletedTime);
 
-      plantingSite.strata?.forEach((zone) => {
-        const zoneId = { layerId: 'strata', featureId: `${zone.id}` };
-        sortFeatureByObservationRecency(zoneId, zone.latestObservationCompletedTime);
-        zone.substrata.forEach((subzone) => {
-          const subzoneId = { layerId: 'substrata', featureId: `${subzone.id}` };
-          sortFeatureByObservationRecency(subzoneId, subzone.latestObservationCompletedTime);
+      plantingSite.strata?.forEach((stratum) => {
+        const stratumId = { layerId: 'strata', featureId: `${stratum.id}` };
+        sortFeatureByObservationRecency(stratumId, stratum.latestObservationCompletedTime);
+        stratum.substrata.forEach((substratum) => {
+          const substratumId = { layerId: 'substrata', featureId: `${substratum.id}` };
+          sortFeatureByObservationRecency(substratumId, substratum.latestObservationCompletedTime);
         });
       });
     });

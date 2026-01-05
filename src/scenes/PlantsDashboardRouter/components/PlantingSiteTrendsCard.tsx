@@ -11,42 +11,42 @@ import strings from 'src/strings';
 
 export default function PlantingSiteTrendsCard(): JSX.Element {
   const theme = useTheme();
-  const [zonesOptions, setZoneOptions] = useState<DropdownItem[]>();
-  const [selectedPlantsPerHaZone, setSelectedPlantsPerHaZone] = useState<number>();
-  const [selectedSurvivalZone, setSelectedSurvivalZone] = useState<number>();
+  const [strataOptions, setStrataOptions] = useState<DropdownItem[]>();
+  const [selectedPlantsPerHaStratum, setSelectedPlantsPerHaStratum] = useState<number>();
+  const [selectedSurvivalStratum, setSelectedSurvivalStratum] = useState<number>();
   const { plantingSite, observationSummaries } = usePlantingSiteData();
   const { isDesktop, isMobile } = useDeviceInfo();
 
   useEffect(() => {
-    const zoneOpts = plantingSite?.strata?.map((pzone) => ({ label: pzone.name, value: pzone.id }));
-    if (zoneOpts) {
-      setZoneOptions(zoneOpts);
-      setSelectedPlantsPerHaZone(zoneOpts[0].value);
-      setSelectedSurvivalZone(zoneOpts[0].value);
+    const stratumOpts = plantingSite?.strata?.map((_stratum) => ({ label: _stratum.name, value: _stratum.id }));
+    if (stratumOpts) {
+      setStrataOptions(stratumOpts);
+      setSelectedPlantsPerHaStratum(stratumOpts[0].value);
+      setSelectedSurvivalStratum(stratumOpts[0].value);
     }
   }, [plantingSite]);
 
   const plantsChartData: ChartData = useMemo(() => {
     const filteredSummaries = observationSummaries?.filter((sc) => {
-      const zone = sc.strata.find((pz) => pz.stratumId === selectedPlantsPerHaZone);
-      if (zone?.plantingDensity !== undefined) {
+      const stratum = sc.strata.find((pz) => pz.stratumId === selectedPlantsPerHaStratum);
+      if (stratum?.plantingDensity !== undefined) {
         return true;
       }
     });
     const labels = filteredSummaries?.map((sm) => sm.latestObservationTime);
     const values = filteredSummaries?.map((sm) => {
-      const zone = sm.strata.find((pz) => pz.stratumId === selectedPlantsPerHaZone);
-      return zone?.plantingDensity || 0;
+      const stratum = sm.strata.find((pz) => pz.stratumId === selectedPlantsPerHaStratum);
+      return stratum?.plantingDensity || 0;
     });
 
     const minValues = filteredSummaries?.map((sm) => {
-      const zone = sm.strata.find((pz) => pz.stratumId === selectedPlantsPerHaZone);
-      return (zone?.plantingDensity || 0) - (zone?.plantingDensityStdDev || 0);
+      const stratum = sm.strata.find((pz) => pz.stratumId === selectedPlantsPerHaStratum);
+      return (stratum?.plantingDensity || 0) - (stratum?.plantingDensityStdDev || 0);
     });
 
     const maxValues = filteredSummaries?.map((sm) => {
-      const zone = sm.strata.find((pz) => pz.stratumId === selectedPlantsPerHaZone);
-      return (zone?.plantingDensity || 0) + (zone?.plantingDensityStdDev || 0);
+      const stratum = sm.strata.find((pz) => pz.stratumId === selectedPlantsPerHaStratum);
+      return (stratum?.plantingDensity || 0) + (stratum?.plantingDensityStdDev || 0);
     });
 
     return {
@@ -75,19 +75,19 @@ export default function PlantingSiteTrendsCard(): JSX.Element {
         },
       ],
     };
-  }, [observationSummaries, selectedPlantsPerHaZone]);
+  }, [observationSummaries, selectedPlantsPerHaStratum]);
 
   const survivalChartData: ChartData = useMemo(() => {
     const filteredSummaries = observationSummaries?.filter((sc) => {
-      const zone = sc.strata.find((pz) => pz.stratumId === selectedPlantsPerHaZone);
-      if (zone?.survivalRate !== undefined) {
+      const stratum = sc.strata.find((pz) => pz.stratumId === selectedPlantsPerHaStratum);
+      if (stratum?.survivalRate !== undefined) {
         return true;
       }
     });
     const labels = filteredSummaries?.map((sm) => sm.latestObservationTime);
     const values = filteredSummaries?.map((sm) => {
-      const zone = sm.strata.find((pz) => pz.stratumId === selectedSurvivalZone);
-      return zone?.survivalRate || 0;
+      const stratum = sm.strata.find((pz) => pz.stratumId === selectedSurvivalStratum);
+      return stratum?.survivalRate || 0;
     });
 
     return {
@@ -101,7 +101,7 @@ export default function PlantingSiteTrendsCard(): JSX.Element {
         },
       ],
     };
-  }, [observationSummaries, selectedPlantsPerHaZone, selectedSurvivalZone]);
+  }, [observationSummaries, selectedPlantsPerHaStratum, selectedSurvivalStratum]);
 
   return (
     <Card
@@ -126,9 +126,9 @@ export default function PlantingSiteTrendsCard(): JSX.Element {
           </Box>
           <Dropdown
             placeholder={strings.SELECT}
-            options={zonesOptions}
-            onChange={(newValue) => setSelectedPlantsPerHaZone(Number(newValue))}
-            selectedValue={selectedPlantsPerHaZone}
+            options={strataOptions}
+            onChange={(newValue) => setSelectedPlantsPerHaStratum(Number(newValue))}
+            selectedValue={selectedPlantsPerHaStratum}
           />
         </Box>
         <Box id='legend-container-th' sx={{ marginTop: 3 }} />
@@ -175,9 +175,9 @@ export default function PlantingSiteTrendsCard(): JSX.Element {
 
           <Dropdown
             placeholder={strings.SELECT}
-            options={zonesOptions}
-            onChange={(newValue) => setSelectedSurvivalZone(Number(newValue))}
-            selectedValue={selectedSurvivalZone}
+            options={strataOptions}
+            onChange={(newValue) => setSelectedSurvivalStratum(Number(newValue))}
+            selectedValue={selectedSurvivalStratum}
           />
         </Box>
         <Box id='legend-container-mr' sx={{ marginTop: 3 }} />

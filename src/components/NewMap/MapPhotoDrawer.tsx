@@ -73,9 +73,9 @@ const MapPhotoDrawer = ({ monitoringPlotId, observationId, photo }: MapPhotoDraw
 
   const rows = useMemo((): MapDrawerTableRow[] => {
     if (result) {
-      const zone = result.strata.find((_zone) =>
-        _zone.substrata.some((subzone) =>
-          subzone.monitoringPlots.some((plot) => plot.monitoringPlotId === monitoringPlotId)
+      const stratum = result.strata.find((_stratum) =>
+        _stratum.substrata.some((substratum) =>
+          substratum.monitoringPlots.some((plot) => plot.monitoringPlotId === monitoringPlotId)
         )
       );
       return [
@@ -90,7 +90,7 @@ const MapPhotoDrawer = ({ monitoringPlotId, observationId, photo }: MapPhotoDraw
         },
         {
           key: strings.ZONE,
-          value: zone?.name ?? '',
+          value: stratum?.name ?? '',
         },
         {
           key: strings.LOCATION,

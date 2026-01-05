@@ -56,7 +56,7 @@ export default function PlantsAndSpeciesCard({ projectId }: { projectId?: number
   const calculatePlantingSitePlantedArea = (iPlantingSite: PlantingSite) => {
     return (
       iPlantingSite?.strata
-        ?.flatMap((zone) => zone.substrata)
+        ?.flatMap((stratum) => stratum.substrata)
         ?.reduce((prev, curr) => (curr.plantingCompleted ? +curr.areaHa + prev : prev), 0) ?? 0
     );
   };

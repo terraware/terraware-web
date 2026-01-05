@@ -25,26 +25,31 @@ export default function StratumLevelDataMap({ plantingSiteId }: StratumLevelData
     usePlantingSiteData();
   const defaultTimeZone = useDefaultTimeZone();
   const timeZone = plantingSite?.timeZone ?? defaultTimeZone.get().id;
-  const zonesProgress = useMemo(() => {
-    const zoneProgress: Record<number, { name: string; progress: number; targetDensity: number }> = {};
+  const strataProgress = useMemo(() => {
+    const stratumProgress: Record<number, { name: string; progress: number; targetDensity: number }> = {};
 
-    plantingSite?.strata?.forEach((zone) => {
-      const percentProgress = plantingSiteReportedPlants?.strata?.find((z) => z.id === zone.id)?.progressPercent ?? 0;
-      zoneProgress[zone.id] = { name: zone.name, progress: percentProgress, targetDensity: zone.targetPlantingDensity };
+    plantingSite?.strata?.forEach((stratum) => {
+      const percentProgress =
+        plantingSiteReportedPlants?.strata?.find((z) => z.id === stratum.id)?.progressPercent ?? 0;
+      stratumProgress[stratum.id] = {
+        name: stratum.name,
+        progress: percentProgress,
+        targetDensity: stratum.targetPlantingDensity,
+      };
     });
 
-    return zoneProgress;
+    return stratumProgress;
   }, [plantingSite, plantingSiteReportedPlants]);
 
-  const zonesStats = useMemo(() => {
-    const zoneStats: Record<number, { name: string; reportedPlants: number; reportedSpecies: number }> = {};
-    plantingSite?.strata?.forEach((zone) => {
-      const zoneReportedPlants = plantingSiteReportedPlants?.strata?.find((z) => z.id === zone.id);
-      const reportedPlants = zoneReportedPlants?.totalPlants ?? 0;
-      const reportedSpecies = 0; // zoneReportedPlants?.totalSpecies ?? 0;
-      zoneStats[zone.id] = { name: zone.name, reportedPlants, reportedSpecies };
+  const strataStats = useMemo(() => {
+    const stratumStats: Record<number, { name: string; reportedPlants: number; reportedSpecies: number }> = {};
+    plantingSite?.strata?.forEach((stratum) => {
+      const stratumReportedPlants = plantingSiteReportedPlants?.strata?.find((z) => z.id === stratum.id);
+      const reportedPlants = stratumReportedPlants?.totalPlants ?? 0;
+      const reportedSpecies = 0; // stratumReportedPlants?.totalSpecies ?? 0;
+      stratumStats[stratum.id] = { name: stratum.name, reportedPlants, reportedSpecies };
     });
-    return zoneStats;
+    return stratumStats;
   }, [plantingSite, plantingSiteReportedPlants]);
 
   const latestSummary = useMemo(() => {
@@ -158,10 +163,10 @@ export default function StratumLevelDataMap({ plantingSiteId }: StratumLevelData
     return [{ sourceId: 'sites', id: plantingSiteId }];
   }, [plantingSiteId]);
 
-  const findZoneArea = useCallback(
-    (zoneId: number) => {
-      const selectedZone = plantingSite?.strata?.find((pZone) => pZone.id === zoneId);
-      return selectedZone?.areaHa;
+  const findStratumArea = useCallback(
+    (stratumId: number) => {
+      const selectedStratum = plantingSite?.strata?.find((_stratum) => _stratum.id === stratumId);
+      return selectedStratum?.areaHa;
     },
     [plantingSite]
   );
@@ -172,96 +177,98 @@ export default function StratumLevelDataMap({ plantingSiteId }: StratumLevelData
       (entity: MapSourceProperties): JSX.Element => {
         let properties: TooltipProperty[] = [];
 
-        const zoneHistory = latestResultSiteHistory?.strata.find((_zoneHistory) => _zoneHistory.id === entity.id);
-
-        // If zone history is not found, the id in the base map uses current zone ID instead.
-        const zoneId = zoneHistory?.stratumId ?? entity.id;
-        const zoneObservation = latestResult?.strata.find(
-          (zoneResult) => zoneResult.stratumId === zoneHistory?.stratumId
+        const stratumHistory = latestResultSiteHistory?.strata.find(
+          (_stratumHistory) => _stratumHistory.id === entity.id
         );
-        const zoneStat = zoneId !== undefined ? zonesStats[zoneId] : undefined;
-        const progress = zoneId !== undefined ? zonesProgress[zoneId] : undefined;
-        const zoneArea = zoneId !== undefined ? findZoneArea(zoneId) : undefined;
-        const lastZoneSummary = latestSummary?.strata.find((pz) => pz.stratumId === zoneId);
 
-        if (!zoneStat) {
+        // If stratum history is not found, the id in the base map uses current stratum ID instead.
+        const stratumId = stratumHistory?.stratumId ?? entity.id;
+        const stratumObservation = latestResult?.strata.find(
+          (stratumResult) => stratumResult.stratumId === stratumHistory?.stratumId
+        );
+        const stratumStat = stratumId !== undefined ? strataStats[stratumId] : undefined;
+        const progress = stratumId !== undefined ? strataProgress[stratumId] : undefined;
+        const stratumArea = stratumId !== undefined ? findStratumArea(stratumId) : undefined;
+        const lastStratumSummary = latestSummary?.strata.find((pz) => pz.stratumId === stratumId);
+
+        if (!stratumStat) {
           properties = [
             {
               key: strings.AREA_HA,
-              value: zoneArea ?? strings.UNKNOWN,
+              value: stratumArea ?? strings.UNKNOWN,
             },
             { key: strings.NO_PLANTS, value: '' },
           ];
-        } else if (progress && zoneStat) {
-          if (lastZoneSummary) {
+        } else if (progress && stratumStat) {
+          if (lastStratumSummary) {
             properties = [
               {
                 key: strings.AREA_HA,
-                value: lastZoneSummary.areaHa,
+                value: lastStratumSummary.areaHa,
               },
               {
                 key: strings.SURVIVAL_RATE,
                 value:
-                  lastZoneSummary.survivalRate !== undefined
-                    ? `${lastZoneSummary.survivalRate}%`
+                  lastStratumSummary.survivalRate !== undefined
+                    ? `${lastStratumSummary.survivalRate}%`
                     : strings.INSUFFICIENT_DATA,
               },
               {
                 key: strings.PLANT_DENSITY,
-                value: `${lastZoneSummary.plantingDensity} ${strings.PLANTS_PER_HECTARE}`,
+                value: `${lastStratumSummary.plantingDensity} ${strings.PLANTS_PER_HECTARE}`,
               },
               {
                 key: strings.PLANTED_PLANTS,
-                value: `${zoneStat.reportedPlants}`,
+                value: `${stratumStat.reportedPlants}`,
               },
               {
                 key: strings.OBSERVED_PLANTS,
-                value: `${lastZoneSummary?.totalPlants}`,
+                value: `${lastStratumSummary?.totalPlants}`,
               },
               {
                 key: strings.PLANTED_SPECIES,
-                value: `${zoneStat.reportedSpecies}`,
+                value: `${stratumStat.reportedSpecies}`,
               },
               {
                 key: strings.OBSERVED_SPECIES,
-                value: `${lastZoneSummary?.totalSpecies}`,
+                value: `${lastStratumSummary?.totalSpecies}`,
               },
             ];
           } else {
             properties = [
               {
                 key: strings.AREA_HA,
-                value: zoneArea || strings.UNKNOWN,
+                value: stratumArea || strings.UNKNOWN,
               },
               {
                 key: strings.PLANTED_PLANTS,
-                value: `${zoneStat.reportedPlants}`,
+                value: `${stratumStat.reportedPlants}`,
               },
               {
                 key: strings.PLANTED_SPECIES,
-                value: `${zoneStat.reportedSpecies}`,
+                value: `${stratumStat.reportedSpecies}`,
               },
               { key: strings.NOT_OBSERVED, value: '' },
             ];
           }
         }
 
-        const latestZoneObservationTime = plantingSite?.strata?.find(
-          (z) => z.id === zoneId
+        const latestStratumObservationTime = plantingSite?.strata?.find(
+          (z) => z.id === stratumId
         )?.latestObservationCompletedTime;
 
         return (
           <MapTooltip
-            title={zoneObservation?.name ?? entity.name}
+            title={stratumObservation?.name ?? entity.name}
             subtitle={
-              latestZoneObservationTime
+              latestStratumObservationTime
                 ? strings
                     .formatString(
                       strings.AS_OF_X,
                       strings
                         .formatString(
                           strings.DATE_OBSERVATION,
-                          getDateDisplayValue(latestZoneObservationTime || '', timeZone)
+                          getDateDisplayValue(latestStratumObservationTime || '', timeZone)
                         )
                         .toString()
                     )
@@ -276,9 +283,9 @@ export default function StratumLevelDataMap({ plantingSiteId }: StratumLevelData
     [
       latestResultSiteHistory?.strata,
       latestResult?.strata,
-      zonesStats,
-      zonesProgress,
-      findZoneArea,
+      strataStats,
+      strataProgress,
+      findStratumArea,
       latestSummary?.strata,
       plantingSite?.strata,
       timeZone,

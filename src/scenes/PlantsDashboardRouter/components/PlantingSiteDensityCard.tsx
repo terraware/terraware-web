@@ -11,16 +11,16 @@ export default function PlantingSiteDensityCard(): JSX.Element {
   const theme = useTheme();
   const { plantingSite, observationSummaries } = usePlantingSiteData();
 
-  const everySubzoneHasObservation = useMemo(() => {
+  const everySubstratumHasObservation = useMemo(() => {
     if (!observationSummaries || observationSummaries.length === 0 || !plantingSite) {
       return true;
     }
 
-    const allSubzones = plantingSite.strata?.flatMap((zone) => zone.substrata);
-    const allSubzonesObserved = observationSummaries[0].strata.flatMap((zone) => zone.substrata);
-    return allSubzones?.every((subzone) =>
-      allSubzonesObserved.find(
-        (subzoneObv) => subzoneObv.substratumId === subzone.id && subzoneObv.monitoringPlots.length > 0
+    const allSubstrata = plantingSite.strata?.flatMap((stratum) => stratum.substrata);
+    const allSubstrataObserved = observationSummaries[0].strata.flatMap((stratum) => stratum.substrata);
+    return allSubstrata?.every((substratum) =>
+      allSubstrataObserved.find(
+        (substratumObv) => substratumObv.substratumId === substratum.id && substratumObv.monitoringPlots.length > 0
       )
     );
   }, [observationSummaries, plantingSite]);
@@ -33,7 +33,7 @@ export default function PlantingSiteDensityCard(): JSX.Element {
       <Typography fontSize='16px' fontWeight={600} lineHeight={1} marginBottom={theme.spacing(2)}>
         {`${strings.PLANTS_PER_HECTARE.charAt(0).toUpperCase()}${strings.PLANTS_PER_HECTARE.slice(1)}`}
       </Typography>
-      {!everySubzoneHasObservation && (
+      {!everySubstratumHasObservation && (
         <Box display={'flex'}>
           <Box paddingRight={0.5}>
             <Icon name='warning' fillColor={theme.palette.TwClrIcnWarning} size='medium' />
