@@ -52,12 +52,12 @@ const useObservationExports = () => {
           displayLabel: strings.MONITORING_PLOT,
         },
         {
-          key: 'zoneName',
-          displayLabel: strings.ZONE,
+          key: 'stratumName',
+          displayLabel: strings.STRATUM,
         },
         {
-          key: 'subzoneName',
-          displayLabel: strings.SUBZONE,
+          key: 'substratumName',
+          displayLabel: strings.SUBSTRATUM,
         },
         {
           key: 'dateObserved',
@@ -137,9 +137,9 @@ const useObservationExports = () => {
         },
       ];
 
-      const data = observationResults.strata.flatMap((plantingZone) =>
-        plantingZone.substrata.flatMap((subzone) =>
-          subzone.monitoringPlots.map((monitoringPlot) => {
+      const data = observationResults.strata.flatMap((stratum) =>
+        stratum.substrata.flatMap((substratum) =>
+          substratum.monitoringPlots.map((monitoringPlot) => {
             const allSpecies = monitoringPlot.unknownSpecies
               ? [...monitoringPlot.species, monitoringPlot.unknownSpecies]
               : monitoringPlot.species;
@@ -157,7 +157,7 @@ const useObservationExports = () => {
               pathPattern
                 .replace(':plantingSiteId', observationResults.plantingSiteId.toString())
                 .replace(':observationId', observationResults.observationId.toString())
-                .replace(':plantingZoneName', encodeURIComponent(plantingZone.name))
+                .replace(':stratumName', encodeURIComponent(stratum.name))
                 .replace(':monitoringPlotId', monitoringPlot.monitoringPlotId.toString()),
               location.href
             ).toString();
@@ -185,14 +185,14 @@ const useObservationExports = () => {
               southwestLatitude: plotCoordinates[0][1],
               southwestLongitude: plotCoordinates[0][0],
               status: getPlotStatus(monitoringPlot.status),
-              subzoneName: subzone.name,
+              substratumName: substratum.name,
               survivalRate: monitoringPlot.survivalRate,
               totalDead,
               totalExisting,
               totalLive,
               totalPlants: totalDead + totalExisting + totalLive,
               totalSpecies: monitoringPlot.totalSpecies,
-              zoneName: plantingZone.name,
+              stratumName: stratum.name,
             };
           })
         )
@@ -219,12 +219,12 @@ const useObservationExports = () => {
       strings.SOUTHWEST_CORNER_LATITUDE,
       strings.SOUTHWEST_CORNER_LONGITUDE,
       strings.STATUS,
-      strings.SUBZONE,
+      strings.SUBSTRATUM,
       strings.SURVIVAL_RATE,
       strings.TEMPORARY,
       strings.TOTAL_PLANTS_OBSERVED,
       strings.TOTAL_SPECIES_OBSERVED,
-      strings.ZONE,
+      strings.STRATUM,
     ]
   );
 
@@ -257,9 +257,9 @@ const useObservationExports = () => {
         },
       ];
 
-      const data = observationResults.strata.flatMap((plantingZone) =>
-        plantingZone.substrata.flatMap((subzone) =>
-          subzone.monitoringPlots.flatMap((monitoringPlot) => {
+      const data = observationResults.strata.flatMap((stratum) =>
+        stratum.substrata.flatMap((substratum) =>
+          substratum.monitoringPlots.flatMap((monitoringPlot) => {
             const allSpecies = monitoringPlot.unknownSpecies
               ? [...monitoringPlot.species, monitoringPlot.unknownSpecies]
               : monitoringPlot.species;
