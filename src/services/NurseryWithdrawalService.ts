@@ -261,7 +261,7 @@ const getFilterOptions = async (organizationId: number): Promise<FieldOptionsMap
   return (data ?? []).reduce((acc, d) => {
     return Object.keys(d).reduce((innerAcc, k) => {
       const isBatchWithdrawals = k === 'batchWithdrawals';
-      const isSubzones = k === 'substratumNames';
+      const isSubstrata = k === 'substratumNames';
       const newKey = isBatchWithdrawals ? 'batchWithdrawals.batch_species_scientificName' : k;
       if (!innerAcc[newKey]) {
         innerAcc[newKey] = { partial: false, values: [] };
@@ -269,8 +269,8 @@ const getFilterOptions = async (organizationId: number): Promise<FieldOptionsMap
       let value;
       if (isBatchWithdrawals) {
         value = (d[k] as any[]).map((batchWithdrawal) => batchWithdrawal.batch_species_scientificName);
-      } else if (isSubzones) {
-        value = parsePlantingSubzones(d[k] as string);
+      } else if (isSubstrata) {
+        value = parseSubstrata(d[k] as string);
       } else {
         value = d[k];
       }
@@ -290,12 +290,12 @@ const getFilterOptions = async (organizationId: number): Promise<FieldOptionsMap
 };
 
 /**
- * Parse subzones from following patterns:
- * 'subzone'
- * 'subzone (subzone)'
- * 'subzone (subzone1, subzone2)' [basically (subzone1, subzone2..., subzoneN)]
+ * Parse substrata from following patterns:
+ * 'substratum'
+ * 'substratum (substratum)'
+ * 'substratum (substratum1, substratum2)' [basically (substratum1, substratum2..., substratumN)]
  */
-const parsePlantingSubzones = (value: string): string[] =>
+const parseSubstrata = (value: string): string[] =>
   (value || '')
     .replaceAll('(', '') // remove ( and ) and ,
     .replaceAll(')', '')

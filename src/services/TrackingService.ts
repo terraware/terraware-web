@@ -112,7 +112,7 @@ const validatePlantingSite = async (
 };
 
 /**
- * Get a planting site by id, also returns associated planting zones -> planting subzones
+ * Get a planting site by id, also returns associated strata -> substrata
  */
 const getPlantingSite = async (siteId: number): Promise<PlantingSiteData & Response> => {
   const response: PlantingSiteData & Response = await httpPlantingSite.get<
