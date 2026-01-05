@@ -1028,13 +1028,13 @@ export default fun<span class="cstat-no" title="statement not covered" >ction Ob
   const params = u<span class="cstat-no" title="statement not covered" >seParams&lt;{</span>
     plantingSiteId: strin<span class="cstat-no" title="statement not covered" >g;</span>
     observationId: stri<span class="cstat-no" title="statement not covered" >ng;</span>
-    plantingZoneName: <span class="cstat-no" title="statement not covered" >string;</span>
+    stratumName: strin<span class="cstat-no" title="statement not covered" >g;</span>
     monitoringPlotId: string;<span class="cstat-no" title="statement not covered" ></span>
   }&gt;();<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
   const plantingSiteId = Number(p<span class="cstat-no" title="statement not covered" >arams.plantingSiteId);</span>
   const observation<span class="cstat-no" title="statement not covered" >Id = Number(params.observationId);</span>
-  const plantingZoneName <span class="cstat-no" title="statement not covered" >= params.plantingZoneName;</span>
+  const stratumName = par<span class="cstat-no" title="statement not covered" >ams.stratumName;</span>
   const monitoringPlotId = Number(<span class="cstat-no" title="statement not covered" >params.monitoringPlotId);</span>
 <span class="cstat-no" title="statement not covered" ></span>
   const defaultTimeZo<span class="cstat-no" title="statement not covered" >ne = useDefaultTimeZone();</span>
@@ -1045,12 +1045,12 @@ export default fun<span class="cstat-no" title="statement not covered" >ction Ob
 <span class="cstat-no" title="statement not covered" ></span>
   const { species } = useSpeciesData()<span class="cstat-no" title="statement not covered" >;</span>
   const { plantingSite, adHocObs<span class="cstat-no" title="statement not covered" >ervationResults, observationResults } = u</span>sePlantingSiteData();
-  const [plantingZoneResult, set<span class="cstat-no" title="statement not covered" >PlantingZoneResult] = useState&lt;Observatio</span>nStratumResultsPayload&gt;();
-  const [<span class="fstat-no" title="function not covered" >plantingSubzoneResult, set</span>PlantingSubzoneResult] = useState&lt;ObservationSubstratumResultsPayload&gt;();
+  const [stratumResult, setStrat<span class="cstat-no" title="statement not covered" >umResult] = useState&lt;ObservationStratumRe</span>sultsPayload&gt;();
+  const [<span class="fstat-no" title="function not covered" >substratumResult, setSubst</span>ratumResult] = useState&lt;ObservationSubstratumResultsPayload&gt;();
   const [monitori<span class="cstat-no" title="statement not covered" >ngPlotResult, setMonitoringPlotResult</span>] = useState&lt;ObservationMonitoringPlotResultsPayload&gt;();
   const isEditObservation<span class="cstat-no" title="statement not covered" >sEnabled = isEnabled('Edit Obs</span>ervations');
 <span class="cstat-no" title="statement not covered" ></span>
-  const result = useMemo(()<span class="cstat-no" title="statement not covered" > =&gt; {</span>
+  const result = useMe<span class="cstat-no" title="statement not covered" >mo(() =&gt; {</span>
     if (!Number.isNaN(obser<span class="cstat-no" title="statement not covered" >vationId)) {</span>
       return (<span class="cstat-no" title="statement not covered" ></span>
         observation<span class="cstat-no" title="statement not covered" >Results?.find((_result) =&gt; _result.observation</span>Id === observationId) ??
@@ -1059,51 +1059,51 @@ export default fun<span class="cstat-no" title="statement not covered" >ction Ob
     }<span class="cstat-no" title="statement not covered" ></span>
   }, [observationResul<span class="cstat-no" title="statement not covered" >ts, adHocObservationResults, observationId])</span>;
 <span class="cstat-no" title="statement not covered" ></span>
-  const navigateToZoneDetails = useCallback(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-    if (plantingZoneName) {<span class="cstat-no" title="statement not covered" ></span>
+  const navigateToStratumDetails = useCallba<span class="cstat-no" title="statement not covered" >ck(() =&gt; {</span>
+    if (stratumName) {<span class="cstat-no" title="statement not covered" ></span>
       navigate(<span class="cstat-no" title="statement not covered" ></span>
-        APP_PATHS.OBSERVATION_PLANTI<span class="cstat-no" title="statement not covered" >NG_ZONE_DETAILS.replace(':plantingSiteId', plantin</span>gSiteId.toString())
+        APP_PATHS.OBSERVATION_STRATU<span class="cstat-no" title="statement not covered" >M_DETAILS.replace(':plantingSiteId', plantingSiteI</span>d.toString())
           .replac<span class="cstat-no" title="statement not covered" >e(':observationId', Number<span class="fstat-no" title="function not covered" >(o</span>bservationId).toString())</span>
-          .replace(':plantingZoneName', encodeURIComponent(plantingZoneName))
+          .replace(':stratumName', encodeURIComponent(stratumName))
 <span class="cstat-no" title="statement not covered" >      );</span>
     }<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
-  }, [navigate, observationId, plantingZoneName, plantingSiteId]);
+  }, [navigate, observationId, stratumName, plantingSiteId]);
 &nbsp;
   useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >    let plotFound = false;</span>
     if<span class="cstat-no" title="statement not covered" > (result) {</span>
-      result.strata.forEach((zone) =&gt;
-        zone.substrata.forEach((subzone) =&gt;
-          subzone.monitoringPlots.forEach((plot) =&gt; {
+      result.strata.forEach((_stratum) =&gt;
+        _stratum.substrata.forEach((_substratum) =&gt;
+          _substratum.monitoringPlots.forEach((plot) =&gt; {
             if (plot.monitoringPlotId === monitoringPlotId) {
-<span class="cstat-no" title="statement not covered" >              setPlantingZoneR<span class="fstat-no" title="function not covered" >es</span>ult(zone);</span>
-              setPla<span class="cstat-no" title="statement not covered" >ntingS</span>ubzoneResult(subzone);
+<span class="cstat-no" title="statement not covered" >              setStratumResult<span class="fstat-no" title="function not covered" >(_</span>stratum);</span>
+              setSub<span class="cstat-no" title="statement not covered" >stratu</span>mResult(_substratum);
 <span class="cstat-no" title="statement not covered" >              setMonitoringPlotResult(plot);</span>
 <span class="cstat-no" title="statement not covered" >              plotFound = true;</span>
-<span class="fstat-no" title="function not covered" ></span>              retu<span class="cstat-no" title="statement not covered" >rn;</span>
+<span class="fstat-no" title="function not covered" ></span>              return;<span class="cstat-no" title="statement not covered" ></span>
 <span class="fstat-no" title="function not covered" ></span>            }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
           })<span class="cstat-no" title="statement not covered" ></span>
         )<span class="cstat-no" title="statement not covered" ></span>
       );<span class="cstat-no" title="statement not covered" ></span>
       if (!plo<span class="cstat-no" title="statement not covered" >tFound) {</span>
-        naviga<span class="cstat-no" title="statement not covered" >teToZoneDetails();</span>
+        naviga<span class="cstat-no" title="statement not covered" >teToStratumDetails</span>();
       }<span class="cstat-no" title="statement not covered" ></span>
     }
-  }, [result, monitoringPlotId, navigateToZoneDetails]);
+  }, [result, monitoringPlotId, navigateToStratumDetails]);
 &nbsp;
-  const plantingZone = useMemo(() =&gt; {
-    if<span class="cstat-no" title="statement not covered" > (plantingZoneResult) {</span>
-      re<span class="cstat-no" title="statement not covered" >turn plantingSite?.strata</span>?.find((zone) =&gt; zone.id === plantingZoneResult.stratumId);
+  const stratum = useMemo(() =&gt; {
+    if<span class="cstat-no" title="statement not covered" > (stratumResult) {</span>
+      re<span class="cstat-no" title="statement not covered" >turn plantingSite?.strata?.f</span>ind((_stratum) =&gt; _stratum.id === stratumResult.stratumId);
     }
-  }, [plantingSite, plantingZoneResult]);
+  }, [plantingSite, stratumResult]);
 &nbsp;
-  const plantingSubzone<span class="cstat-no" title="statement not covered" > = useMemo(() =&gt; {<span class="fstat-no" title="function not covered" ></span></span>
-    if (plantingSubzoneResult) {
-<span class="cstat-no" title="statement not covered" >      return plantingZone?.substrata?.find((subzone) =&gt; subzone.id === plantingSubzoneResult.substratumId);</span>
+  const substratum<span class="cstat-no" title="statement not covered" > = useMemo(() =&gt; {<span class="fstat-no" title="function not covered" ></span></span>
+    if (substratumResult) {
+<span class="cstat-no" title="statement not covered" >      return stratum?.substrata?.find((_substratum) =&gt; _substratum.id === substratumResult.substratumId);</span>
     }<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  }, [plantingZone, plantingSubzoneResult]);
+  }, [stratum, substratumResult]);
 &nbsp;
-  const monitoringPlotSpec<span class="cstat-no" title="statement not covered" >ies = useMemo((): Observat<span class="fstat-no" title="function not covered" >io</span>nSpeciesResults[] =&gt; {</span>
+  const monitoringPlo<span class="cstat-no" title="statement not covered" >tSpecies = useMemo((): Obs<span class="fstat-no" title="function not covered" >er</span>vationSpeciesResults[] =&gt; {</span>
     if (monitoringPlotResult) {
 <span class="cstat-no" title="statement not covered" >      return monitoringPlotResult.species.map((_species) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >        if (_species.speciesId !== undefined) {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
@@ -1151,8 +1151,8 @@ export default fun<span class="cstat-no" title="statement not covered" >ction Ob
           : undefined,
       },
       { label: strings.OBSERVER, value: monitoringPlotResult?.claimedByName },
-      { label: strings.ZONE, value: plantingZone?.name },
-      { label: strings.SUBZONE, value: plantingSubzone?.name },
+      { label: strings.STRATUM, value: stratum?.name },
+      { label: strings.SUBSTRATUM, value: substratum?.name },
       {
         label: strings.MONITORING_PLOT_TYPE,
         value: monitoringPlotResult
@@ -1194,8 +1194,8 @@ export default fun<span class="cstat-no" title="statement not covered" >ction Ob
     plantingSite?.timeZone,
     activeLocale,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
     defaultTimeZone,
-    plantingZone?.name,<span class="cstat-no" title="statement not covered" ></span>
-    plantingSubzone?.name,<span class="cstat-no" title="statement not covered" ></span>
+    stratum?.name,<span class="cstat-no" title="statement not covered" ></span>
+    substratum?.name,<span class="cstat-no" title="statement not covered" ></span>
   ])<span class="cstat-no" title="statement not covered" >;</span>
 &nbsp;
   const mainTitle = useMemo(() =&gt; {
@@ -1212,10 +1212,10 @@ export default fun<span class="cstat-no" title="statement not covered" >ction Ob
           title={
             &lt;Box&gt;
               &lt;Typography&gt;
-                {strings.ZONE}: {plantingZone?.name}
+                {strings.STRATUM}: {stratum?.name}
               &lt;/Typography&gt;
               &lt;T<span class="cstat-no" title="statement not covered" >ypography&gt;</span>
-<span class="fstat-no" title="function not covered" ></span>                {strings.SUBZONE}: {plantingSubzone?.na<span class="cstat-no" title="statement not covered" >me}</span>
+<span class="fstat-no" title="function not covered" ></span>                {strings.SUBSTRATUM}: {substratum?.name<span class="cstat-no" title="statement not covered" >}</span>
               &lt;/Typography&gt;
               &lt;Typography&gt;
                 {strings.PLOT_TYPE}:{' '}
@@ -1238,7 +1238,7 @@ export default fun<span class="cstat-no" title="statement not covered" >ction Ob
         &lt;/Tooltip&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
       &lt;/Box&gt;<span class="cstat-no" title="statement not covered" ></span>
     );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  }, [moni<span class="fstat-no" title="function not covered" >to</span>ringPl<span class="cstat-no" title="statement not covered" >otResult, plantingSubzone?.name, plantingZone?.name, theme]);</span>
+  }, [moni<span class="fstat-no" title="function not covered" >to</span>ringPlotResu<span class="cstat-no" title="statement not covered" >lt, substratum?.name, stratum?.name, theme]);</span>
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
   const title <span class="cstat-no" title="statement not covered" >= useCallback(</span>
     (text: string | ReactNode, marginTop?: number, marginBottom?: number) =&gt; (
@@ -1267,9 +1267,9 @@ export default fun<span class="cstat-no" title="statement not covered" >ction Ob
     const names<span class="cstat-no" title="statement not covered" > =<span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >      monitoringPlotResult?.overlapsWithPlotIds.map((plotId, index) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >        const all</span>Plots = observationResults?.flatMap((obv) =&gt;
-          obv.strata.flatMap((pz) =&gt;
-<span class="cstat-no" title="statement not covered" >            pz.substrata.flatMap((subzone) =&gt;</span>
-              subzone.monitoringPlots.map((plot) =&gt; {
+          obv.strata.flatMap((_stratum) =&gt;
+<span class="cstat-no" title="statement not covered" >            _stratum.substrata.flatMap((_substratum) =&gt;</span>
+              _substratum.monitoringPlots.map((plot) =&gt; {
                 return { ...plot, observationId: obv.observationId };
               })
             )
@@ -1285,7 +1285,7 @@ export default fun<span class="cstat-no" title="statement not covered" >ction Ob
                 Number(plantingSiteId).toString()
               )
                 .replace(':observationId', Number(found.observationId).toString())
-                .replace(':plantingZoneName', encodeURIComponent(plantingZoneName || ''))
+                .replace(':stratumName', encodeURIComponent(stratumName || ''))
                 .replace(':monitoringPlotId', found.monitoringPlotId.toString())}
             &gt;
               {found.monitoringPlotNumber}
@@ -1297,7 +1297,7 @@ export default fun<span class="cstat-no" title="statement not covered" >ction Ob
 &nbsp;
     const elements = (names ?? []).filter((element): element is JSX.Element =&gt; element !== undefined);
     return elements;<span class="cstat-no" title="statement not covered" ></span>
-  }, [monitoringPlotResult?.overlapsWithPlotIds, observationResults, plantingSiteId, plantingZoneName]);
+  }, [monitoringPlotResult?.overlapsWithPlotIds, observationResults, plantingSiteId, stratumName]);
 &nbsp;
   const tabs = useMemo(() =&gt; {
     if (!activeLocale) {
@@ -1346,7 +1346,7 @@ export default fun<span class="cstat-no" title="statement not covered" >ction Ob
       title={mainTitle}
       plantingSiteId={Number(plantingSiteId)}
       observationId={Number(observationId)}
-      plantingZoneName={plantingZoneName}
+      stratumName={stratumName}
     &gt;
       &lt;Box width='100%'&gt;
         &lt;Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} /&gt;
@@ -1357,7 +1357,7 @@ export default fun<span class="cstat-no" title="statement not covered" >ction Ob
       title={monitoringPlotResult?.monitoringPlotNumber.toString()}
       plantingSiteId={Number(plantingSiteId)}
       observationId={Number(observationId)}
-      plantingZoneName={plantingZoneName}
+      stratumName={stratumName}
       rightComponent={
         &lt;OptionsMenu
           onOptionItemClick={goToSurvivalRateSettings}
@@ -1456,7 +1456,7 @@ export default fun<span class="cstat-no" title="statement not covered" >ction Ob
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-05T19:06:18.388Z
+                at 2026-01-05T21:57:59.407Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

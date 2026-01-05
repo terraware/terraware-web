@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/109</span>
+                <span class='fraction'>0/115</span>
             </div>
         
             
@@ -515,7 +515,15 @@
 <a name='L450'></a><a href='#L450'>450</a>
 <a name='L451'></a><a href='#L451'>451</a>
 <a name='L452'></a><a href='#L452'>452</a>
-<a name='L453'></a><a href='#L453'>453</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L453'></a><a href='#L453'>453</a>
+<a name='L454'></a><a href='#L454'>454</a>
+<a name='L455'></a><a href='#L455'>455</a>
+<a name='L456'></a><a href='#L456'>456</a>
+<a name='L457'></a><a href='#L457'>457</a>
+<a name='L458'></a><a href='#L458'>458</a>
+<a name='L459'></a><a href='#L459'>459</a>
+<a name='L460'></a><a href='#L460'>460</a>
+<a name='L461'></a><a href='#L461'>461</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -769,7 +777,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1037,7 +1053,7 @@ type PlantsDashboar<span class="cstat-no" title="statement not covered" ><span c
   const geometryChangedNote = useMemo(() =&gt; {
     if (latestResult?.completedTime &amp;&amp; plantingSite?.strata?.length) {
       const siteBoundaryModifiedTime = plantingSite.strata.reduce(
-        (maxTime, zone) =&gt; (isAfter(zone.boundaryModifiedTime, maxTime) ? zone.boundaryModifiedTime : maxTime),
+        (maxTime, stratum) =&gt; (isAfter(stratum.boundaryModifiedTime, maxTime) ? stratum.boundaryModifiedTime : maxTime),
         plantingSite.strata[0].boundaryModifiedTime
       );
       return isAfter(siteBoundaryModifiedTime, latestResult.completedTime);
@@ -1192,7 +1208,7 @@ type PlantsDashboar<span class="cstat-no" title="statement not covered" ><span c
           &lt;Grid item xs={12}&gt;
             &lt;Box sx={{ display: 'flex', alignItems: 'center', paddingLeft: theme.spacing(3) }}&gt;
               &lt;Typography font<span class="cstat-no" title="statement not covered" >Weight={600} fontSize={'20px'} paddingRight={1}&gt;</span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span>                {strings.ZONE_TRENDS}</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span>                {strings.STRATUM_TRENDS}</span>
               &lt;/Typography&gt;
 &nbsp;
               &lt;Typography&gt;{strings.ALL_OBSERVATIONS}&lt;/Typography&gt;
@@ -1206,65 +1222,65 @@ type PlantsDashboar<span class="cstat-no" title="statement not covered" ><span c
     [plantingSite, theme]
   );
 &nbsp;
-  const renderZoneLeve<span class="cstat-no" title="statement not covered" >lData = useCallback(</span>
+  const renderStratumL<span class="cstat-no" title="statement not covered" >evelData = useCallback(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt;
       plantingSite ? (
 <span class="cstat-no" title="statement not covered" >        &lt;&gt;</span>
           &lt;Grid item xs={12}&gt;
             &lt;Box
               sx={{
-                display: 'f<span class="cstat-no" title="statement not covered" >lex',</span>
+                disp<span class="cstat-no" title="statement not covered" >lay: 'flex',</span>
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span>                alignItems: isMobile ? 'flex-start' : 'center',</span>
                 flexDirection: isMobile ? 'column' : 'row',
               }}
             &gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
               &lt;Typography fontWeight={600} fontSize={'20px'} paddingRight={1} paddingLeft={3}&gt;
-                {strings.SITE_<span class="cstat-no" title="statement not covered" >MAP}<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span></span></span></span></span>
-<span class="cstat-no" title="statement not covered" >              &lt;/Typography&gt;</span>
-              {hasObservations &amp;&amp; (
-                &lt;Typography&gt;{s<span class="cstat-no" title="statement not covered" >trings.formatString(string<span class="fstat-no" title="function not covered" >s.</span>AS_OF_X, renderLatestObservationLink())}&lt;/Typography&gt;</span>
-              )}
-            &lt;/Box&gt;<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span></span></span></span></span>
-<span class="cstat-no" title="statement not covered" >          &lt;/Grid&gt;</span>
-          &lt;Grid item xs={12}&gt;
-            &lt;Box<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-              sx={{
-<span class="cstat-no" title="statement not covered" >                display: 'flex',</span>
-<span class="cstat-no" title="statement not covered" >                flexDirection: 'column',</span>
+                {strings.SITE_<span class="cstat-no" title="statement not covered" >MAP}</span>
+<span class="fstat-no" title="function not covered" ></span>              &lt;/Typo<span class="cstat-no" title="statement not covered" >graphy&gt;</span>
+<span class="fstat-no" title="function not covered" ></span>              {hasObserva<span class="cstat-no" title="statement not covered" >tions &amp;&amp; (<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+                &lt;Typography&gt;{strings.formatString(strings.AS_OF_X, renderLatestObservationLink())}&lt;/Typography&gt;
+<span class="fstat-no" title="function not covered" >              )</span>}<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >            &lt;/Box&gt;</span>
+          &lt;/Grid&gt;
+          &lt;Grid item xs={12}&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+            &lt;Box
+              sx={{<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" ></span>                disp<span class="cstat-no" title="statement not covered" >lay: 'flex',</span>
+<span class="fstat-no" title="function not covered" ></span>                flexDirec<span class="cstat-no" title="statement not covered" >tion: 'column',<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
                 background: theme.palette.TwClrBg,
-                borderRad<span class="cstat-no" title="statement not covered" >ius: '8px',</span>
-                padding<span class="cstat-no" title="statement not covered" >: theme.spacing(1),</span>
-<span class="cstat-no" title="statement not covered" >                gap: theme.spacing(3),</span>
-              }}
+<span class="fstat-no" title="function not covered" ></span>                borderRadius<span class="cstat-no" title="statement not covered" >: '8px',</span>
+<span class="cstat-no" title="statement not covered" >                padding: theme.spacing(1),</span>
+                gap: theme.spacing(3),
+              }}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
             &gt;
-              &lt;Typography fontSize='20px' fontWeight={600}&gt;
-                {plantingSite?.areaHa !== undefined &amp;&amp;
+<span class="cstat-no" title="statement not covered" >              &lt;Typography fontSize='20px' fontWeight={600}&gt;</span>
+<span class="cstat-no" title="statement not covered" >                {plantingSite?.areaHa !== undefined &amp;&amp;</span>
                   strings.formatString(
-                    strings.X_HA_IN_TOTAL_PLANTING_AREA,
-                    &lt;FormattedNumber value={Math.round(plantingSite.areaHa * 100) / 100} /&gt;
-                  )}
+                    strin<span class="cstat-no" title="statement not covered" >gs.X_HA_IN_TOTAL_PLANTING_AREA,</span>
+                    &lt;Fo<span class="cstat-no" title="statement not covered" >rmattedNumber value={Math.round(plantingSite.areaHa * 100) / 100} /&gt;</span>
+<span class="cstat-no" title="statement not covered" >                  )}</span>
               &lt;/Typography&gt;
               &lt;PlantDashboardMap
-                obs<span class="cstat-no" title="statement not covered" >ervationResults={observationResults ? [observationResults] : []}</span>
-<span class="fstat-no" title="function not covered" ></span>                latestSummary={latestSummary}
-<span class="cstat-no" title="statement not covered" >                plantingSites={plantingSite ? [</span>plantingSite] : []}
+                observationResults={observationResults ? [observationResults] : []}
+                latestSummary={latestSummary}
+                plantingSites={plantingSite ? [plantingSite] : []}
               /&gt;
             &lt;/Box&gt;
           &lt;/Grid&gt;
-        &lt;/&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >      ) : undefined,</span>
-    [hasObservations, isMobile, observationResults, latestSummary, plantingSite, renderLatestObservationLink, theme]
-  );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-&nbsp;
-  co<span class="cstat-no" title="statement not covered" >nst renderSimpleSiteMap = useCallback(</span>
+        &lt;/&gt;
+      ) : undefined,
+    [hasObservation<span class="cstat-no" title="statement not covered" >s, isMobile, observationResults, latestSummary, plantingSite, renderLatestObservationLink, theme]</span>
+  );<span class="fstat-no" title="function not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+  const renderSimpleSiteMap = useCallback(
     () =&gt;
       plantingSite ? (
-        &lt;&gt;
-          {sectionHeader(strings.SITE_MAP)}
+        &lt;&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >          {sectionHeader(strings.SITE_MAP)}</span>
           &lt;Grid item xs={12}&gt;
-            &lt;Box
+            &lt;Box<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
               sx={{
-                background: theme.palette.TwClrBg,
+<span class="cstat-no" title="statement not covered" >                background: theme.palette.TwClrBg,</span>
                 borderRadius: '24px',
                 padding: theme.spacing(3),
                 gap: theme.spacing(3),
@@ -1275,7 +1291,7 @@ type PlantsDashboar<span class="cstat-no" title="statement not covered" ><span c
           &lt;/Grid&gt;
         &lt;/&gt;
       ) : undefined,
-<span class="cstat-no" title="statement not covered" >    [plantingSite, theme]</span>
+    [plantingSite, theme]
   );
 &nbsp;
   const hasPolygons = useMemo(
@@ -1283,7 +1299,7 @@ type PlantsDashboar<span class="cstat-no" title="statement not covered" ><span c
     [plantingSite]
   );
 &nbsp;
-  const hasPlantingZones = useMemo(
+<span class="cstat-no" title="statement not covered" >  const hasStrata = useMemo(</span>
     () =&gt; !!plantingSite &amp;&amp; !!plantingSite.strata &amp;&amp; plantingSite.strata.length &gt; 0,
     [plantingSite]
   );
@@ -1291,7 +1307,11 @@ type PlantsDashboar<span class="cstat-no" title="statement not covered" ><span c
   const summariesHectares = useMemo(() =&gt; {
     const totalSquareMeters =
       observationSummaries?.[0]?.strata
-        .flatMap((pz) =&gt; pz.substrata.flatMap((psz) =&gt; psz.monitoringPlots.map((mp) =&gt; mp.sizeMeters * mp.sizeMeters)))
+        .flatMap((_stratum) =&gt;
+          _stratum.substrata.flatMap((_substratum) =&gt;
+            _substratum.monitoringPlots.map((mp) =&gt; mp.sizeMeters * mp.sizeMeters)
+          )
+        )
         .reduce((acc, area) =&gt; acc + area, 0) ?? 0;
 &nbsp;
     return totalSquareMeters * SQ_M_TO_HECTARES;
@@ -1300,7 +1320,11 @@ type PlantsDashboar<span class="cstat-no" title="statement not covered" ><span c
   const observationHectares = useMemo(() =&gt; {
     const totalSquareMeters =
       latestResult?.strata
-        .flatMap((pz) =&gt; pz.substrata.flatMap((psz) =&gt; psz.monitoringPlots.map((mp) =&gt; mp.sizeMeters * mp.sizeMeters)))
+        .flatMap((_stratum) =&gt;
+          _stratum.substrata.flatMap((_substratum) =&gt;
+            _substratum.monitoringPlots.map((mp) =&gt; mp.sizeMeters * mp.sizeMeters)
+          )
+        )
         .reduce((acc, area) =&gt; acc + area, 0) ?? 0;
 &nbsp;
     return totalSquareMeters * SQ_M_TO_HECTARES;
@@ -1412,8 +1436,8 @@ type PlantsDashboar<span class="cstat-no" title="statement not covered" ><span c
         {hasObservations &amp;&amp; plantingSite?.id !== -1 &amp;&amp; renderPlantingSiteTrends()}
         {plantingSite?.id !== -1 &amp;&amp; hasObservations &amp;&amp; renderPlantingProgressAndDensity()}
         {hasObservations &amp;&amp; plantingSite?.id !== -1 &amp;&amp; renderSurvivalRate()}
-        {plantingSite?.id !== -1 &amp;&amp; hasPlantingZones &amp;&amp; renderZoneLevelData()}
-        {plantingSite?.id !== -1 &amp;&amp; hasPolygons &amp;&amp; !hasPlantingZones &amp;&amp; renderSimpleSiteMap()}
+        {plantingSite?.id !== -1 &amp;&amp; hasStrata &amp;&amp; renderStratumLevelData()}
+        {plantingSite?.id !== -1 &amp;&amp; hasPolygons &amp;&amp; !hasStrata &amp;&amp; renderSimpleSiteMap()}
         {(plantingSite?.id === -1 || !plantingSite) &amp;&amp; renderMapWithSites()}
       &lt;/Grid&gt;
     &lt;/PlantsPrimaryPage&gt;
@@ -1426,7 +1450,7 @@ type PlantsDashboar<span class="cstat-no" title="statement not covered" ><span c
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-05T19:06:18.388Z
+                at 2026-01-05T21:57:59.407Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

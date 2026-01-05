@@ -330,7 +330,7 @@ import<span class="cstat-no" title="statement not covered" > WithdrawalRenderer 
 <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 type OutplantWithdrawalTableProps = {
 <span class="cstat-no" title="statement not covered" >  species: Sp</span>ecies[];
-  subzoneNames: Record&lt;number, string&gt;;
+  substratumNames: Record&lt;number, string&gt;;
   delivery?: D<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >el</span>ivery;<span class="cstat-no" title="statement not covered" ></span></span>
   batches?: Batch[];
   withdrawal?: NurseryWithdrawal;
@@ -339,13 +339,13 @@ type OutplantWithdrawalTableProps = {
 const columns = (): TableColumnType[] =&gt; [
   { key: 'batchNumber', name: strings.BATCH, type: 'string' },
   { key: 'name', name: strings.SPECIES, type: 'string' },
-  { key: 'toSubzone<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >',</span> name: <span class="cstat-no" title="statement not covered" >strings.TO_SUBZONE, type: 'string' },</span></span>
+  { key: 'toSubstra<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >tu</span>m', nam<span class="cstat-no" title="statement not covered" >e: strings.TO_SUBSTRATUM, type: 'string' },</span></span>
   { key: 'total', na<span class="cstat-no" title="statement not covered" >me:</span> strings.QUANTITY, type: 'number' },
 <span class="cstat-no" title="statement not covered" >];</span>
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 export default function OutplantWithdrawalTable({
 <span class="cstat-no" title="statement not covered" >  species,</span>
-  subzoneNames,<span class="cstat-no" title="statement not covered" ></span>
+  substratumNames,<span class="cstat-no" title="statement not covered" ></span>
   delivery,<span class="cstat-no" title="statement not covered" ></span>
   batches,<span class="cstat-no" title="statement not covered" ></span>
   withdrawal,<span class="cstat-no" title="statement not covered" ></span>
@@ -359,7 +359,7 @@ export default function OutplantWithdrawalTable({
     batchNumber: string;
     batchId: number;
     speci<span class="fstat-no" title="function not covered" >esId: number;</span>
-    toSubzone: string;
+    toSubstratum: string;
   };
 &nbsp;
   const rowData = useMemo(() =&gt; {
@@ -372,28 +372,28 @@ export default function OutplantWithdrawalTable({
 <span class="cstat-no" title="statement not covered" >          (acc, pl) =&gt; (acc.includes(pl.speciesId) ? acc : [...acc, pl.speciesId]),</span>
           []<span class="cstat-no" title="statement not covered" ></span>
         ) ?? [];<span class="cstat-no" title="statement not covered" ></span>
-      co<span class="fstat-no" title="function not covered" >ns</span>t speciesSu<span class="cstat-no" title="statement not covered" >bzoneMap: Record&lt;number, Record&lt;number, number&gt;&gt; = {};</span>
+      co<span class="fstat-no" title="function not covered" >ns</span>t speciesSu<span class="cstat-no" title="statement not covered" >bstratumMap: Record&lt;number, Record&lt;number, number&gt;&gt; = {};</span>
       const rows: { [p: string]: unknown }[] = [];
       for (const sp of speciesList) {
-        // for each species add <span class="cstat-no" title="statement not covered" >the</span> number of plants in each subzone for delivery type plantings
-        speciesSubz<span class="cstat-no" title="statement not covered" >one</span>Map[sp] = {};
+        // for each species add the<span class="cstat-no" title="statement not covered" > nu</span>mber of plants in each substratum for delivery type plantings
+        speciesSubs<span class="cstat-no" title="statement not covered" >tra</span>tumMap[sp] = {};
 <span class="cstat-no" title="statement not covered" >        delivery?.plantings</span>
-<span class="cstat-no" title="statement not covered" >          ?.filter((pl) =&gt; pl.specie</span>sId === sp &amp;&amp; pl.type === 'Delivery')
+<span class="cstat-no" title="statement not covered" >          ?.filter((pl) =&gt; pl.speciesId</span> === sp &amp;&amp; pl.type === 'Delivery')
 <span class="cstat-no" title="statement not covered" >          .forEach((pl) =&gt; {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span>
-            const subzone = pl.plantingSubzoneId ?? -1;
-            if (!speciesSu<span class="cstat-no" title="statement not covered" >bzoneMap[sp][subzone]) {</span>
-<span class="cstat-no" title="statement not covered" >              speciesSubzoneMap[sp][subzone] = pl.numPlants;</span>
+            const substratum = pl.substratumId ?? -1;
+            if (!speciesSubst<span class="cstat-no" title="statement not covered" >ratumMap[sp][substratum]) {</span>
+<span class="cstat-no" title="statement not covered" >              speciesSubstratumMap[sp][substratum] = pl.numPlants;</span>
 <span class="cstat-no" title="statement not covered" >              return;</span>
 <span class="cstat-no" title="statement not covered" >            }</span>
-            speciesSubzoneMap[sp][subzone] += pl.numPlants;
+            speciesSubstratumMap[sp][substratum] += pl.numPlants;
 <span class="cstat-no" title="statement not covered" >          });</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        for (const subzoneKey of Object.keys(speciesSubzoneMap[sp])) {</span>
-          const subzone = <span class="cstat-no" title="statement not covered" >Number(subzoneKey);</span>
+<span class="cstat-no" title="statement not covered" >        for (const substratumKey of Object.keys(speciesSubstratumMap[sp])) {</span>
+          const substratum = <span class="cstat-no" title="statement not covered" >Number(substratumKey);</span>
 <span class="cstat-no" title="statement not covered" >          rows.push({</span>
             species: species?.find((x) =&gt; x?.id === sp)?.scientificName ?<span class="fstat-no" title="function not covered" >? </span>'',<span class="cstat-no" title="statement not covered" ></span>
-            to_subzone: subzone &gt; -1 ? subzoneNames[subzone] ?? subzone?.toString() : '',
-            quantity: numberFormatter.format(speciesSubzoneMap[sp][subzone]),
+            to_substratum: substratum &gt; -1 ? substratumNames[substratum] ?? substratum?.toString() : '',
+            quantity: numberFormatter.format(speciesSubstratumMap[sp][substratum]),
           });
         }
       }
@@ -407,17 +407,17 @@ export default function OutplantWithdrawalTable({
           const { speciesId, ba<span class="cstat-no" title="statement not covered" >tchNumber } = batchToSpeciesMap[bat</span>chId];
           const activeGr<span class="cstat-no" title="statement not covered" >owth = activeGrowthQuantityW</span>ithdrawn || 0;
           const hardeni<span class="cstat-no" title="statement not covered" >ngOff = hardeningOff<span class="fstat-no" title="function not covered" >Qu</span>antity<span class="cstat-no" title="statement not covered" >Withdrawn || 0;</span></span>
-          const ready = ready<span class="cstat-no" title="statement not covered" >QuantityWithdrawn || 0;</span>
-          const name = specie<span class="cstat-no" title="statement not covered" >s.find((sp) =&gt; sp.id ===</span> speciesId)?.scientificName;
-<span class="cstat-no" title="statement not covered" >          const subzonemap = speciesSubzoneMap[speciesId];</span>
-          const subzoneIds = Object.keys(subzonemap);
+          const ready = readyQua<span class="cstat-no" title="statement not covered" >ntityWithdrawn || 0;</span>
+          const name = species.f<span class="cstat-no" title="statement not covered" >ind((sp) =&gt; sp.id === speci</span>esId)?.scientificName;
+<span class="cstat-no" title="statement not covered" >          const substratumMap = speciesSubstratumMap[speciesId];</span>
+          const substratumIds = Object.keys(substratumMap);
           batchesMap.push({
             name,
             total: activeGrowth + hardeningOff + ready,
             batchNumber,
             batchId,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
             speciesId,
-            toSubzone: subzoneIds.map((szId) =&gt; subzoneNames[Number(szId)]).join(','),
+            toSubstratum: substratumIds.map((_subId) =&gt; substratumNames[Number(_subId)]).join(','),
           });
 <span class="cstat-no" title="statement not covered" >        });</span>
       }
@@ -426,7 +426,7 @@ export default function OutplantWithdrawalTable({
     } else {
 <span class="cstat-no" title="statement not covered" >      return [];</span>
     }
-  }, [delivery, species, subzoneNames, numberFormatter, batches, withdrawal?.batchWithdrawals]);
+  }, [delivery, species, substratumNames, numberFormatter, batches, withdrawal?.batchWithdrawals]);
 &nbsp;
   return (
     &lt;Table
@@ -445,7 +445,7 @@ export default function OutplantWithdrawalTable({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-05T19:06:18.388Z
+                at 2026-01-05T21:57:59.407Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

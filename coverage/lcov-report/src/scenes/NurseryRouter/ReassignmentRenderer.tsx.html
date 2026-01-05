@@ -452,21 +452,21 @@ im<span class="cstat-no" title="statement not covered" >port { RendererProps } f
 impo<span class="cstat-no" title="statement not covered" >rt strings from 'src/strings';</span>
 import { NumberFormatter } from 'src/types/Number';
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-ex<span class="cstat-no" title="statement not covered" >port type SubzoneInfo = {</span>
+ex<span class="cstat-no" title="statement not covered" >port type SubstratumInfo = {</span>
   id<span class="cstat-no" title="statement not covered" >: number;</span>
   name<span class="cstat-no" title="statement not covered" >: string;</span>
 };<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 &nbsp;
-ex<span class="cstat-no" title="statement not covered" >port type Z</span>oneInfo = {
+ex<span class="cstat-no" title="statement not covered" >port type S</span>tratumInfo = {
   id: number;
   name: string<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >;<span class="cstat-no" title="statement not covered" ></span></span></span>
-  subzones: SubzoneInfo[];
+  substrata: SubstratumInfo[];
 };
 &nbsp;
 export type Reassignment = {
   plantingId: number;
-  newSubzoneId?: number;
-  newZoneId?: number;
+  newSubstratumId?: number;
+  newStratumId?: number;
   quantity?: number<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >;<span class="cstat-no" title="statement not covered" ></span></span></span>
   notes?: string;<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >  error?: string;</span>
@@ -476,51 +476,51 @@ export type Reassignment = {
   numPlants: number<span class="cstat-no" title="statement not covered" >;</span>
   species: string;<span class="cstat-no" title="statement not covered" ></span>
   siteName: string;<span class="cstat-no" title="statement not covered" ></span>
-  originalZone: ZoneInfo;<span class="cstat-no" title="statement not covered" ></span>
-  originalSubzone: Su<span class="cstat-no" title="statement not covered" >bzoneInfo;</span>
+  originalStratum: StratumInfo;<span class="cstat-no" title="statement not covered" ></span>
+  originalSubstratum:<span class="cstat-no" title="statement not covered" > SubstratumInfo;</span>
   reassig<span class="fstat-no" title="function not covered" >nment: Reassignment;</span>
 };<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" ></span>
 export type ReassignmentRendererProps = {<span class="cstat-no" title="statement not covered" ></span>
-  zones: ZoneInfo[];<span class="cstat-no" title="statement not covered" ></span>
-  setReassignment: (reassi<span class="cstat-no" title="statement not covered" >gnment: Reassignment) =&gt; void;</span>
+  strata: StratumInfo[];<span class="cstat-no" title="statement not covered" ></span>
+  setReassignment: (reassignm<span class="cstat-no" title="statement not covered" >ent: Reassignment) =&gt; void;</span>
   numberFormatter: NumberFormatter;
 };
 <span class="cstat-no" title="statement not covered" ></span>
-export default function ReassignmentRenderer({ zones, setReassignment, numberFormatter }: ReassignmentRendererProps) {
+export default function ReassignmentRenderer({ strata, setReassignment, numberFormatter }: ReassignmentRendererProps) {
   // eslint-disable-next-line react/display-name
   return (props: RendererProps&lt;ReassignmentRowType&gt;): JSX.Element =&gt; {
     const { column, row } = props;
-    const { numPlants, o<span class="cstat-no" title="statement not covered" >riginalZone, <span class="fstat-no" title="function not covered" >or</span>iginalSu<span class="cstat-no" title="statement not covered" >bzone, reassignment<span class="fstat-no" title="function not covered" > }</span> = row;<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
-    const { plantingId, new<span class="cstat-no" title="statement not covered" >SubzoneId, newZoneId, error, quantity, notes } = reassignment;</span>
+    const { numPlants, orig<span class="cstat-no" title="statement not covered" >inalStratum, o<span class="fstat-no" title="function not covered" >ri</span>ginalSubstr<span class="cstat-no" title="statement not covered" >atum, reassignment } = <span class="fstat-no" title="function not covered" >ro</span>w;<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
+    const { plantingId, newSub<span class="cstat-no" title="statement not covered" >stratumId, newStratumId, error, quantity, notes } = reassignment;</span>
 &nbsp;
-    const subzone<span class="fstat-no" title="function not covered" >St</span>yles = {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
+    const substrat<span class="fstat-no" title="function not covered" >um</span>Styles = {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
       minWidth: '175px',
     };
 &nbsp;
     const cellStyles = {
-      '&amp;.MuiTableCell-roo<span class="cstat-no" title="statement not covered" >t': {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+      '&amp;.MuiTableCell-root':<span class="cstat-no" title="statement not covered" > {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
         height: '76px',<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
       },<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
     };<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-    cons<span class="cstat-no" title="statement not covered" >t zoneOp</span>tions: DropdownItem[] = zones
-      .filter((zone) =&gt; zone.subzones.some((subzone) =&gt; subzone.id !== originalSubzone.id))
-      .map((zone) =&gt; ({ labe<span class="cstat-no" title="statement not covered" >l: zone.name, </span>value: zone.id }));
+    cons<span class="cstat-no" title="statement not covered" >t stratu</span>mOptions: DropdownItem[] = strata
+      .filter((stratum) =&gt; stratum.substrata.some((substratum) =&gt; substratum.id !== originalSubstratum.id))
+      .map((stratum) =&gt; ({ l<span class="cstat-no" title="statement not covered" >abel: stratum.</span>name, value: stratum.id }));
 <span class="cstat-no" title="statement not covered" ></span>
-    cons<span class="cstat-no" title="statement not covered" >t subzoneOptions: DropdownItem[] = newZoneId</span>
+    cons<span class="cstat-no" title="statement not covered" >t substratumOptions: DropdownItem[] = newStratumId</span>
       ? // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-<span class="cstat-no" title="statement not covered" >        zones</span>
-          .find((zone) =&gt; zone.id === newZoneId)!!
-<span class="cstat-no" title="statement not covered" >          .subzones.filter((subzone) =&gt; subzone.id !== originalSubzon</span>e.id)
-          .map((subzone) =&gt; ({
-<span class="cstat-no" title="statement not covered" >            value: subzone.id,</span>
-            label: subzone.name,<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >        strata</span>
+          .find((stratum) =&gt; stratum.id === newStratumId)!!
+<span class="cstat-no" title="statement not covered" >          .substrata.filter((substratum) =&gt; substratum.id !== origina</span>lSubstratum.id)
+          .map((substratum) =&gt; ({
+<span class="cstat-no" title="statement not covered" >            value: substratum.id,</span>
+            label: substratum.name,<span class="cstat-no" title="statement not covered" ></span>
           }))
       : [];
 &nbsp;
-    const selectedZone = zoneOptions.find((option) =&gt; option.value === newZoneId);
-    const selectedSu<span class="fstat-no" title="function not covered" >bz</span>one = subzoneOptions.find((option) =&gt; option.value === newSubzoneId);
+    const selectedStratum = stratumOptions.find((option) =&gt; option.value === newStratumId);
+    const selectedSu<span class="fstat-no" title="function not covered" >bs</span>tratum = substratumOptions.find((option) =&gt; option.value === newSubstratumId);
 <span class="cstat-no" title="statement not covered" ></span>
     const onUp<span class="cstat-no" title="statement not covered" >dateQuantity = (value: any) =&gt; {</span>
       if (value === '') {
@@ -536,46 +536,46 @@ export default function ReassignmentRenderer({ zones, setReassignment, numberFor
       setReassignment({ ...reassignment, quantity: quantityValue });
     };
 <span class="cstat-no" title="statement not covered" ></span>
-    if (column.key === 'newZone') {
+    if (column.key === 'newStratum') {
 <span class="cstat-no" title="statement not covered" >      const value = (</span>
         &lt;Autocomplete<span class="cstat-no" title="statement not covered" ></span>
-          id={`newZone_${plantingId}`}
-          selected={selectedZone}
-          onChange={(newZoneValue: any) =&gt; {
-            if (newZoneValue.value) {
-              setRea<span class="fstat-no" title="function not covered" >ss</span>ignment({ ...reassignment, newZoneId: newZoneValue.value, newSubzoneId: undefined });
+          id={`newStratum_${plantingId}`}
+          selected={selectedStratum}
+          onChange={(newStratumValue: any) =&gt; {
+            if (newStratumValue.value) {
+              setRea<span class="fstat-no" title="function not covered" >ss</span>ignment({ ...reassignment, newStratumId: newStratumValue.value, newSubstratumId: undefined });
 <span class="cstat-no" title="statement not covered" >            }</span>
           }}
           isEqual={<span class="fstat-no" title="function not covered" >(o</span>ption: any, selected<span class="cstat-no" title="statement not covered" >: any) =&gt; option?.value === selected?.value}</span>
           label={''}
           placeholder={strings.SELECT}
-          disabled={selectedSubzone !== undefined}
-          options={zoneOptions}
+          disabled={selectedSubstratum !== undefined}
+          options={stratumOptions}
           freeSolo={false}
           hideClearIcon={true}
-          sx={subzoneStyles}
+          sx={substratumStyles}
         /&gt;
       );
 <span class="cstat-no" title="statement not covered" ></span>
       return &lt;CellRenderer {...props} value={value} sx={cellStyles} /&gt;;
 <span class="cstat-no" title="statement not covered" >    }</span>
 <span class="cstat-no" title="statement not covered" ></span>
-    if (column.key === 'newSubzone') {
+    if (column.key === 'newSubstratum') {
       const value = (
         &lt;Autocomplete
-          id={`newSubzone_${plantingId}`}
-          selected={selectedSubzone}
-          onChange={(newSubzoneValue: any) =&gt; {
-            setReassignment({ ...reassignment, newSubzoneId: newSubzoneValue.value });
+          id={`newSubstratum_${plantingId}`}
+          selected={selectedSubstratum}
+          onChange={(newSubstratumValue: any) =&gt; {
+            setReassignment({ ...reassignment, newSubstratumId: newSubstratumValue.value });
           }}
           isEqual={(option: any, selected: any) =&gt; option?.value === selected?.value}
           label={''}
           placeholder={strings.SELECT}
-          disabled={subzoneOptions.length === 0}
-<span class="cstat-no" title="statement not covered" >          options={subzoneOptions}</span>
+          disabled={substratumOptions.length === 0}
+<span class="cstat-no" title="statement not covered" >          options={substratumOptions}</span>
           freeSolo={false}
 <span class="cstat-no" title="statement not covered" >          hideClearIcon={false}</span>
-          sx={subzoneStyles}<span class="cstat-no" title="statement not covered" ></span>
+          sx={substratumStyles}<span class="cstat-no" title="statement not covered" ></span>
         /&gt;
       );
 &nbsp;
@@ -619,12 +619,12 @@ export default function ReassignmentRenderer({ zones, setReassignment, numberFor
       return &lt;CellRenderer {...props} value={value} sx={cellStyles} /&gt;;
     }
 &nbsp;
-    if (column.key === 'originalSubzone') {
-      return &lt;CellRenderer {...props} value={originalSubzone.name} /&gt;;
+    if (column.key === 'originalSubstratum') {
+      return &lt;CellRenderer {...props} value={originalSubstratum.name} /&gt;;
     }
 &nbsp;
-    if (column.key === 'originalZone') {
-      return &lt;CellRenderer {...props} value={originalZone.name} /&gt;;
+    if (column.key === 'originalStratum') {
+      return &lt;CellRenderer {...props} value={originalStratum.name} /&gt;;
     }
 &nbsp;
     return &lt;CellRenderer {...props} /&gt;;
@@ -637,7 +637,7 @@ export default function ReassignmentRenderer({ zones, setReassignment, numberFor
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-05T19:06:18.388Z
+                at 2026-01-05T21:57:59.407Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

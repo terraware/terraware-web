@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/129</span>
+                <span class='fraction'>0/130</span>
             </div>
         
             
@@ -322,7 +322,9 @@
 <a name='L257'></a><a href='#L257'>257</a>
 <a name='L258'></a><a href='#L258'>258</a>
 <a name='L259'></a><a href='#L259'>259</a>
-<a name='L260'></a><a href='#L260'>260</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L260'></a><a href='#L260'>260</a>
+<a name='L261'></a><a href='#L261'>261</a>
+<a name='L262'></a><a href='#L262'>262</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -492,6 +494,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -607,15 +611,15 @@ import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
 &nbsp;
-import Reassignment<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Re</span>nderer,<span class="cstat-no" title="statement not covered" > { Reassignment, ReassignmentRowType, ZoneInfo } from './Reassi</span></span>gnmentRenderer';
+import Reassignment<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Re</span>nderer,<span class="cstat-no" title="statement not covered" > { Reassignment, ReassignmentRowType, StratumInfo } from './Rea</span></span>ssignmentRenderer';
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >const columns = (): TableColumnType[] =&gt; [</span>
   { key: 's<span class="fstat-no" title="function not covered" >pe</span>cies<span class="cstat-no" title="statement not covered" >', name: strings.SPECIES</span>, type: 'string' },
   { key: 'siteName', name: strings.PLANTING_SITE, type: 'string' },
-<span class="cstat-no" title="statement not covered" >  { key: 'originalZone', name: strings.ORIGINA</span>L_ZONE, type: 'string' },
-  { key: 'originalS<span class="cstat-no" title="statement not covered" >ubzone', name: strings.ORI</span>GINAL_SUBZONE, type: 'string' },
-  { key: 'newZone', name: <span class="cstat-no" title="statement not covered" >strings.NEW_ZONE, type: </span>'string' },
-  { key: 'newSubzone',<span class="cstat-no" title="statement not covered" > name: strings.NEW_SUBZON</span>E, type: 'string' },
+<span class="cstat-no" title="statement not covered" >  { key: 'originalStratum', name: strings.ORIG</span>INAL_STRATUM, type: 'string' },
+  { key: 'originalS<span class="cstat-no" title="statement not covered" >ubstratum', name: strings.</span>ORIGINAL_SUBSTRATUM, type: 'string' },
+  { key: 'newStratum', nam<span class="cstat-no" title="statement not covered" >e: strings.NEW_STRATUM, </span>type: 'string' },
+  { key: 'newSubstratu<span class="cstat-no" title="statement not covered" >m', name: strings.NEW_SUB</span>STRATUM, type: 'string' },
   { key: 'reassign', name: s<span class="cstat-no" title="statement not covered" >trings.REASSIGN, type: 'number' },</span>
   { key: 'notes', name: st<span class="cstat-no" title="statement not covered" >rings.NOTES, type: 'string' },</span>
 ];<span class="cstat-no" title="statement not covered" ></span>
@@ -630,9 +634,9 @@ export default functio<span class="cstat-no" title="statement not covered" >n Nu
   const { deliveryId } <span class="cstat-no" title="statement not covered" >= useParams&lt;{ deliveryId:</span> string }&gt;();
   const snackbar = useSnackb<span class="cstat-no" title="statement not covered" >ar();</span>
   const [delivery, set<span class="cstat-no" title="statement not covered" >Delivery] = useState&lt;Del</span>ivery&gt;();
-  const [zones, setZo<span class="cstat-no" title="statement not covered" >nes] = useState&lt;ZoneInfo[]&gt;();</span>
+  const [strata, setS<span class="cstat-no" title="statement not covered" >trata] = useState&lt;StratumInfo[]&gt;</span>();
   const [siteName, setSiteN<span class="cstat-no" title="statement not covered" >ame] = useState&lt;string&gt;();</span>
-  const [reassignments, setReass<span class="cstat-no" title="statement not covered" >ignments] = useState&lt;{ [subzoneId: strin</span>g]: Reassignment }&gt;({});
+  const [reassignments, setReass<span class="cstat-no" title="statement not covered" >ignments] = useState&lt;{ [substratumId: st</span>ring]: Reassignment }&gt;({});
   const [noReassignmen<span class="cstat-no" title="statement not covered" >ts, setNoReassignments] = useState&lt;bool</span>ean&gt;(false);
   const contentRef = useR<span class="cstat-no" title="statement not covered" >ef(null);</span>
 <span class="cstat-no" title="statement not covered" ></span>
@@ -655,13 +659,13 @@ export default functio<span class="cstat-no" title="statement not covered" >n Nu
     void populateDelive<span class="cstat-no" title="statement not covered" >ry();</span>
   }, [deliveryId, snackba<span class="cstat-no" title="statement not covered" >r]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  // populate zones<span class="cstat-no" title="statement not covered" ></span>
+  // populate strata<span class="cstat-no" title="statement not covered" ></span>
   useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
     if (!delivery) {<span class="cstat-no" title="statement not covered" ></span>
       return;<span class="cstat-no" title="statement not covered" ></span>
     }<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-    const populateZone<span class="cstat-no" title="statement not covered" >s = async () =&gt; {</span>
+    const populateStra<span class="cstat-no" title="statement not covered" >ta = async () =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      const response = await T<span class="fstat-no" title="function not covered" >ra</span>ckingService.getPlantingSite(delivery.plantingSiteId);</span>
 <span class="cstat-no" title="statement not covered" >      if (response.requestSucceeded &amp;&amp; response.site) {</span>
 <span class="cstat-no" title="statement not covered" >        setSit</span>eName(response.site.name);
@@ -670,38 +674,38 @@ export default functio<span class="cstat-no" title="statement not covered" >n Nu
           return;<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >        }</span>
 <span class="cstat-no" title="statement not covered" ></span>
-        const zoneInfos = response.site.strata.map((zone) =&gt; ({
-<span class="cstat-no" title="statement not covered" >          id: zone.id,</span>
-          name: zone.name,
-          subzones: zone.substrata.map((subzone) =&gt; ({ id: subzone.id, name: subzone.fullName })),
+        const stratumInfos = response.site.strata.map((stratum) =&gt; ({
+<span class="cstat-no" title="statement not covered" >          id: stratum.id,</span>
+          name: stratum.name,
+          substrata: stratum.substrata.map((substratum) =&gt; ({ id: substratum.id, name: substratum.fullName })),
 <span class="cstat-no" title="statement not covered" >        }));</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        setZones(zoneInfos);<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >        setStrata(stratumInfos<span class="fstat-no" title="function not covered" >);</span></span>
 <span class="cstat-no" title="statement not covered" >      } else {</span>
 <span class="cstat-no" title="statement not covered" >        snackb</span>ar.toastError();
       }
     };<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" ></span>
-    vo<span class="cstat-no" title="statement not covered" >id populateZones();</span>
+    vo<span class="cstat-no" title="statement not covered" >id populateStrata();</span>
   }, [de<span class="cstat-no" title="statement not covered" >livery, snackbar]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
   const go<span class="cstat-no" title="statement not covered" >ToWithdr</span>awals = () =&gt; {
     const withdrawalId = query.has('fromWithdrawal') ? delivery?.withdrawalId : undefined;
-    navigate({ pathname: A<span class="cstat-no" title="statement not covered" >PP_PATHS.NURSERY_WITHDRAW<span class="fstat-no" title="function not covered" >AL</span>S + (with<span class="cstat-no" title="statement not covered" >drawalId ? `/${withdrawalId}` : '') });</span></span>
+    navigate({ pathname: APP_<span class="cstat-no" title="statement not covered" >PATHS.NURSERY_WITHDRAWALS<span class="fstat-no" title="function not covered" > +</span> (withdrawal<span class="cstat-no" title="statement not covered" >Id ? `/${withdrawalId}` : '') });</span></span>
   };
 &nbsp;
   const reassign = async () =&gt; {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
     // get all reassignments that have a valid quantity
-    setN<span class="cstat-no" title="statement not covered" >oReassignments(false)</span>;
+    setN<span class="cstat-no" title="statement not covered" >oReassignments(false);</span>
     let hasErrors = false;
     cons<span class="cstat-no" title="statement not covered" >t validReassignments = </span>plantings
       .map((planting) =&gt; planting?.reassignment)
       .filter((reassignment) =&gt; {
-<span class="cstat-no" title="statement not covered" >        if (reassignment.e</span>rror) {
+<span class="cstat-no" title="statement not covered" >        if (reassignment.er</span>ror) {
           hasErrors = true;
           return false;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
         }<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >        return Number(reassignment.quantity) &gt; 0 &amp;&amp; reassignment.newSubzoneId;</span>
+<span class="cstat-no" title="statement not covered" >        return Number(reassignment.quantity) &gt; 0 &amp;&amp; reassignment.newSubstratumId;</span>
       });
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >    if (hasErrors) {</span>
@@ -717,7 +721,7 @@ export default functio<span class="cstat-no" title="statement not covered" >n Nu
 <span class="cstat-no" title="statement not covered" >      reassign</span>ments: validReassignments.map((reassignment) =&gt; ({
         fromPlantingId: reassignment.plantingId,
 <span class="cstat-no" title="statement not covered" >        numPlants: reassignment.quantity!,</span>
-<span class="cstat-no" title="statement not covered" >        toSubstratumId: reassign</span>ment.newSubzoneId!,
+<span class="cstat-no" title="statement not covered" >        toSubstratumId: reassign</span>ment.newSubstratumId!,
 <span class="cstat-no" title="statement not covered" >        notes:</span> reassignment.notes,
       })),
     };<span class="cstat-no" title="statement not covered" ></span>
@@ -731,44 +735,46 @@ export default functio<span class="cstat-no" title="statement not covered" >n Nu
   };<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
   cons<span class="cstat-no" title="statement not covered" >t plantings: Reassi</span>gnmentRowType[] = useMemo(() =&gt; {
-    if (!delivery || !siteName || !zones) {
+    if (!delivery || !siteName || !strata) {
 <span class="cstat-no" title="statement not covered" >      return [];</span>
     }
 &nbsp;
     return delivery.<span class="cstat-no" title="statement not covered" >plantings<span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >      .map((planting) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >        if (plant</span>ing.type !== 'Delivery' || !planting.plantingSubzoneId) {
+<span class="cstat-no" title="statement not covered" >        if (plant</span>ing.type !== 'Delivery' || !planting.substratumId) {
           return null;
 <span class="cstat-no" title="statement not covered" >        }<span class="fstat-no" title="function not covered" ></span></span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        const originalZone = zones.find((zone) =&gt;</span>
-<span class="cstat-no" title="statement not covered" >          zone.subzon</span>es.some((subzone) =&gt; subzone.id === planting.plantingSubzoneId)
+<span class="cstat-no" title="statement not covered" >        const originalStratum = strata.find((stratum) =&gt;</span>
+<span class="cstat-no" title="statement not covered" >          stratum.sub</span>strata.some((substratum) =&gt; substratum.id === planting.substratumId)
         );
-        if (!originalZone) <span class="cstat-no" title="statement not covered" >{</span>
-<span class="fstat-no" title="function not covered" ></span>          return n<span class="cstat-no" title="statement not covered" >ull;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+        if (!originalStratum) <span class="cstat-no" title="statement not covered" >{</span>
+<span class="fstat-no" title="function not covered" ></span>          return null<span class="cstat-no" title="statement not covered" >;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
         }
-<span class="cstat-no" title="statement not covered" >        const originalSubzone = originalZone.subzones.find((subzone) =&gt; subzone.id === planting.plantingSubzoneId);</span>
-<span class="cstat-no" title="statement not covered" >        if (!original</span>Subzone) {
-          return null;
-        }<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+<span class="cstat-no" title="statement not covered" >        const originalSubstratum = originalStratum.substrata.find(</span>
+<span class="cstat-no" title="statement not covered" >          (substratum</span>) =&gt; substratum.id === planting.substratumId
+        );
+        if (!originalSubstratum) <span class="cstat-no" title="statement not covered" >{</span>
+<span class="fstat-no" title="function not covered" ></span>          return null;<span class="cstat-no" title="statement not covered" ></span>
+        }
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >        return {</span>
           numPlants: planting.numPlants,
 <span class="cstat-no" title="statement not covered" >          species: species.find((_species) =&gt; _species.id === planting.speciesId)?.scientificName ?? '',</span>
           siteName,
-          originalZone,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-          originalSubzone,
+          originalStratum,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+          originalSubstratum,
           reassignment: reassignments[planting.id] || { plantingId: planting.id, notes: '' },
         };
       })
       .filter((planting): planting is ReassignmentRowType =&gt; !!planting);
-  }, [delivery<span class="fstat-no" title="function not covered" >, </span>siteName, sp<span class="cstat-no" title="statement not covered" >ecies, zone</span>s, reassignments]);
+  }, [delivery<span class="fstat-no" title="function not covered" >, </span>siteName, sp<span class="cstat-no" title="statement not covered" >ecies, stra</span>ta, reassignments]);
 &nbsp;
   const reassignmentRenderer = <span class="cstat-no" title="statement not covered" >useMemo(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt;<span class="cstat-no" title="statement not covered" ></span>
       ReassignmentRenderer({
         numberFormatter,
-        zones: zones ||<span class="fstat-no" title="function not covered" > [</span>],<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+        strata: strata <span class="fstat-no" title="function not covered" >||</span> [],<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
         setReassignment: (reassig<span class="cstat-no" title="statement not covered" >nment: Reassign</span>ment) =&gt;
 <span class="cstat-no" title="statement not covered" >          setReassignments((current) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >            const newReassignment</span>s = { ...current };
@@ -776,7 +782,7 @@ export default functio<span class="cstat-no" title="statement not covered" >n Nu
             return newReassignments;
           }),
       }),
-<span class="cstat-no" title="statement not covered" >    [zones, numberFormatter]</span>
+<span class="cstat-no" title="statement not covered" >    [strata, numberFormatter]</span>
   );
 &nbsp;
   return (
@@ -805,7 +811,7 @@ export default functio<span class="cstat-no" title="statement not covered" >n Nu
           &lt;ErrorBox title={strings.NO_REASSIGNMENTS} text={strings.NO_REASSIGNMENTS_TEXT} /&gt;
         &lt;/Box&gt;
       )}
-      {zones ? (
+      {strata ? (
         &lt;PageForm
           cancelID='cancelNurseryReassignment'
           saveID='saveNurseryReassignment'
@@ -847,7 +853,7 @@ export default functio<span class="cstat-no" title="statement not covered" >n Nu
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-05T19:06:18.388Z
+                at 2026-01-05T21:57:59.407Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

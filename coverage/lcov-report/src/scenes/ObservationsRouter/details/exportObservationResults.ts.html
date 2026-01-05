@@ -582,12 +582,12 @@ func<span class="cstat-no" title="statement not covered" >tion makeObservationCs
 <span class="cstat-no" title="statement not covered" >      display</span>Label: strings.MONITORING_PLOT,
     },
     {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-      key: 'zoneName',
-      displayLabel: strings.ZONE,
+      key: 'stratumName',
+      displayLabel: strings.STRATUM,
     },
     {
-      key: 'subzoneName',
-      displayLabel: strings.SUBZONE,
+      key: 'substratumName',
+      displayLabel: strings.SUBSTRATUM,
     },
     {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
       key: 'dateObse<span class="cstat-no" title="statement not covered" >rve</span>d',
@@ -667,9 +667,9 @@ func<span class="cstat-no" title="statement not covered" >tion makeObservationCs
     },
   ];
 &nbsp;
-  const data = observationResults.strata.flatMap((plantingZone) =&gt;
-    plantingZone.substrata.flatMap((subzone) =&gt;
-      subzone.monitoringPlots.map((monitoringPlot) =&gt; {
+  const data = observationResults.strata.flatMap((stratum) =&gt;
+    stratum.substrata.flatMap((substratum) =&gt;
+      substratum.monitoringPlots.map((monitoringPlot) =&gt; {
         const allSpecies = monitoringPlot.unknownSpecies
           ? [...monitoringPlot.species, monitoringPlot.unknownSpecies]
           : monitoringPlot.species;
@@ -683,7 +683,7 @@ func<span class="cstat-no" title="statement not covered" >tion makeObservationCs
           pathPattern
             .replace(':plantingSiteId', observationResults.plantingSiteId.toString())
             .replace(':observationId', observationResults.observationId.toString())
-            .replace(':plantingZoneName', encodeURIComponent(plantingZone.name))
+            .replace(':stratumName', encodeURIComponent(stratum.name))
             .replace(':monitoringPlotId', monitoringPlot.monitoringPlotId.toString()),
           location.href
         ).toString();
@@ -693,8 +693,8 @@ func<span class="cstat-no" title="statement not covered" >tion makeObservationCs
           : '';
 &nbsp;
         // Plot<span class="cstat-no" title="statement not covered" > polygon has a single ring of coordinates. They're in order SW-SE-NE-NW-SW, with</span>
-<span class="fstat-no" title="function not covered" ></span>        // longitude f<span class="cstat-no" title="statement not covered" >irst in each coordinate pair.</span>
-<span class="fstat-no" title="function not covered" ></span>        const plotC<span class="cstat-no" title="statement not covered" >oordinates: number[][] = mon<span class="fstat-no" title="function not covered" >it</span>oringPlot.boundary.coordinates[0];</span>
+<span class="fstat-no" title="function not covered" ></span>        // longit<span class="cstat-no" title="statement not covered" >ude first in each coordinate pair.</span>
+<span class="fstat-no" title="function not covered" ></span>        const plotCoor<span class="cstat-no" title="statement not covered" >dinates: number[][] = monitorin<span class="fstat-no" title="function not covered" >gP</span>lot.boundary.coordinates[0];</span>
 <span class="cstat-no" title="statement not covered" ></span>
         return {<span class="cstat-no" title="statement not covered" ></span>
 <span class="fstat-no" title="function not covered" >          da</span>teObserved,<span class="cstat-no" title="statement not covered" ></span>
@@ -711,14 +711,14 @@ func<span class="cstat-no" title="statement not covered" >tion makeObservationCs
           southwestLatitude: plotCoordinates[0][1],
           southwestLongitude: plotCoordinates[0][0],
           status: getPlotStatus(monitoringPlot.status),
-          subzoneName: subzone.name,
+          substratumName: substratum.name,
           survivalRate: monitoringPlot.survivalRate,
           totalDead,
           totalExisting,
           totalLive,
           totalPlants: totalDead + totalExisting + totalLive,
           totalSpecies: monitoringPlot.totalSpecies,
-          zoneName: plantingZone.name,
+          stratumName: stratum.name,
         };
       })
     )
@@ -761,14 +761,14 @@ function makePlotSpeciesCsv(observationResults: ObservationResults): Blob {
       .map((species) =&gt; [species.speciesId!, species.speciesScientificName])
   );
 &nbsp;
-  const data = observationResults.strata.flatMap((plantingZone) =&gt;
-    plantingZone.substrata.flatMap((subzone) =&gt;
-      subzone.monitoringPlots.<span class="cstat-no" title="statement not covered" >flatMap((monitoringPlot) =&gt; {</span>
+  const data = observationResults.strata.flatMap((stratum) =&gt;
+    stratum.substrata.flatMap((substratum) =&gt;
+      substratum.monitoringPlo<span class="cstat-no" title="statement not covered" >ts.flatMap((monitoringPlot) =&gt; {</span>
         const allSpecies = monitoringP<span class="fstat-no" title="function not covered" >lo</span>t.unknownSp<span class="cstat-no" title="statement not covered" >ecies<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
           ? [...monitoringPlot.species, monitoringPlot.unknownSpecies]
           : mon<span class="cstat-no" title="statement not covered" >itoringPlot.species;</span>
-<span class="fstat-no" title="function not covered" ></span>        return allSpec<span class="cstat-no" title="statement not covered" >ies.map((species) =&gt; {</span>
-<span class="fstat-no" title="function not covered" ></span>          let speci<span class="cstat-no" title="statement not covered" >esName: string;<span class="fstat-no" title="function not covered" ></span></span>
+<span class="fstat-no" title="function not covered" ></span>        return al<span class="cstat-no" title="statement not covered" >lSpecies.map((species) =&gt; {</span>
+<span class="fstat-no" title="function not covered" ></span>          let speciesN<span class="cstat-no" title="statement not covered" >ame: string;<span class="fstat-no" title="function not covered" ></span></span>
           if (species.speci<span class="cstat-no" title="statement not covered" >esId) {</span>
 <span class="cstat-no" title="statement not covered" >            speciesName = scie<span class="fstat-no" title="function not covered" >nt</span>ificNamesById[species.speciesId];</span>
           } else if (species.speciesName) {
@@ -820,7 +820,7 @@ export de<span class="fstat-no" title="function not covered" >fault function exp
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-05T19:06:18.388Z
+                at 2026-01-05T21:57:59.407Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

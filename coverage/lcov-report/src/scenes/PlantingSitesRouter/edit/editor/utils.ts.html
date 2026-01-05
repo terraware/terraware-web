@@ -355,7 +355,9 @@
 <a name='L290'></a><a href='#L290'>290</a>
 <a name='L291'></a><a href='#L291'>291</a>
 <a name='L292'></a><a href='#L292'>292</a>
-<a name='L293'></a><a href='#L293'>293</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L293'></a><a href='#L293'>293</a>
+<a name='L294'></a><a href='#L294'>294</a>
+<a name='L295'></a><a href='#L295'>295</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -392,12 +394,12 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -542,6 +544,8 @@
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -659,11 +663,11 @@ import { GeometryFeature } from 'src/types/Map';
 import { DraftPlantingSite } from 'src/types/PlantingSite';
 import { MinimalStratum, MinimalSubstratum } from 'src/types/Tracking';
 <span class="branch-2 cbranch-no" title="branch not covered" ><span class="missing-if-branch" title="else path not taken" >E</span></span>
-export type DefaultZonePayload = Omit&lt;MinimalStratum, 'substrata'&gt;;
+export type DefaultStratumPayload = Omit&lt;MinimalStratum, 'substrata'&gt;;
 <span class="missing-if-branch" title="else path not taken" >E</span>
-export const defaultZonePayload = (payload: DefaultZonePayload): MinimalStratum =&gt; {
+export const defaultStratumPayload = (payload: DefaultStratumPayload): MinimalStratum =&gt; {
   const { boundary, id, name, targetPlantingDensity } = payload;
-  const subzoneName = subzoneNameGenerator(new Set(), strings.SUBZONE);
+  const substratumName = substratumNameGenerator(new Set(), strings.SUBSTRATUM);
 &nbsp;
   return {<span class="branch-1 cbranch-no" title="branch not covered" ></span>
     boundary,
@@ -672,9 +676,9 @@ export const defaultZonePayload = (payload: DefaultZonePayload): MinimalStratum 
     substrata: [
       {<span class="branch-0 cbranch-no" title="branch not covered" ></span>
         boundary,
-        fullName: subzoneName,
+        fullName: substratumName,
         id,
-        name: subzoneName,
+        name: substratumName,
         plantingCompleted: false,
       },<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
     ],
@@ -684,12 +688,12 @@ export const defaultZonePayload = (payload: DefaultZonePayload): MinimalStratum 
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 /**<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
  * Generates incremental ids, uses list of input features to determine next id
- */<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-export const IdGenerator <span class="fstat-no" title="function not covered" >= </span>(fea<span class="cstat-no" title="statement not covered" >tures: Feature[]): (()</span> =&gt; number) =&gt; {
+ */
+export const IdGener<span class="fstat-no" title="function not covered" >at</span>or =<span class="cstat-no" title="statement not covered" > (features: Featu</span>re[]): (() =&gt; number) =&gt; {
   let nextId = features
-    .map((f) =&gt; Number(f.<span class="fstat-no" title="function not covered" >id</span>))<span class="cstat-no" title="statement not covered" ></span>
-    .filter((id) <span class="fstat-no" title="function not covered" >=&gt;</span> !is<span class="cstat-no" title="statement not covered" >NaN(id))</span>
-    .reduce((a, b) =&gt; Math.max(a, b), -1);
+    .map((f) =&gt; Number(<span class="fstat-no" title="function not covered" >f.</span>id))<span class="cstat-no" title="statement not covered" ></span>
+    .filter((id) =&gt; !isNa<span class="fstat-no" title="function not covered" >N(</span>id))<span class="cstat-no" title="statement not covered" ></span>
+    .reduce((a, b) =<span class="fstat-no" title="function not covered" >&gt; </span>Math<span class="cstat-no" title="statement not covered" >.max(a, b), -1);</span>
 &nbsp;
   return () =&gt; {
     return ++nextId;
@@ -698,9 +702,9 @@ export const IdGenerator <span class="fstat-no" title="function not covered" >= 
 &nbsp;
 /**
  * Utility to generate an identifiable feature payload from input.
- * Properties are 'id' and <span class="fstat-no" title="function not covered" >'n</span>ame' for identity
+ * Properties are 'id' and 'na<span class="fstat-no" title="function not covered" >me</span>' for identity
  */<span class="cstat-no" title="statement not covered" ></span>
-export const toIdentif<span class="cstat-no" title="statement not covered" >iableFeature = (</span>
+export const toIdentifiab<span class="cstat-no" title="statement not covered" >leFeature = (</span>
 <span class="cstat-no" title="statement not covered" >  feature: Feature,</span>
   idGenerator: () =&gt; number,
   additionalProperties?: Record&lt;string, string | number | boolean&gt;
@@ -715,36 +719,36 @@ export const toIdentif<span class="cstat-no" title="statement not covered" >iabl
 };
 &nbsp;
 /**
- * Utility to generate an identifiable zone feature payload from input
- * This is from newly generated polygon data to a zone feature.
+ * Utility to generate an identifiable stratum feature payload from input
+ * This is from newly generated polygon data to a stratum feature.
  */<span class="fstat-no" title="function not covered" ></span>
-export const to<span class="cstat-no" title="statement not covered" >ZoneFeature =<span class="fstat-no" title="function not covered" > (</span>featu<span class="cstat-no" title="statement not covered" >re: Feature, </span>idGenera<span class="fstat-no" title="function not covered" >to</span>r: () <span class="cstat-no" title="statement not covered" >=&gt; number) </span>=&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+export const to<span class="cstat-no" title="statement not covered" >StratumFeatur<span class="fstat-no" title="function not covered" >e </span>= (fe<span class="cstat-no" title="statement not covered" >ature: Featur</span>e, idGen<span class="fstat-no" title="function not covered" >er</span>ator: <span class="cstat-no" title="statement not covered" >() =&gt; numbe</span>r) =&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 <span class="cstat-no" title="statement not covered" >  toIdent<span class="fstat-no" title="function not covered" >if</span>iableFeature(feature, idGenerator, {</span>
 <span class="cstat-no" title="statement not covered" >    targetPlantingDen</span>sity: feature.properties?.targetPlantingDensity ?? 1500,
   });
 &nbsp;
 /**<span class="fstat-no" title="function not covered" ></span>
- * Utility to generate a feature from planting zone data.
- * This is fr<span class="cstat-no" title="statement not covered" >om BE planting zone data to a zone feature.</span>
+ * Utility to generate a feature from stratum data.
+ * This is fr<span class="cstat-no" title="statement not covered" >om BE stratum data to a stratum feature.</span>
  */<span class="cstat-no" title="statement not covered" ></span>
-export const plantingZoneToFeature = (zone: MinimalStratum): Feature =&gt; {
-  const { boundary, id, name, targetPlantingDensity } = zone;
+export const stratumToFeature = (stratum: MinimalStratum): Feature =&gt; {
+  const { boundary, id, name, targetPlantingDensity } = stratum;
   return toFeature(boundary, { id, name, targetPlantingDensity }, id);
 };
 <span class="cstat-no" title="statement not covered" ></span>
 /**
- * Utility to generate<span class="fstat-no" title="function not covered" > a</span> feature from planting subzone data.
- * This is from BE planting subzone data to a subzone feature.
+ * Utility to generate a <span class="fstat-no" title="function not covered" >fe</span>ature from substratum data.
+ * This is from BE substratum data to a substratum feature.
  *<span class="cstat-no" title="statement not covered" >/</span>
-export const plantingSubzoneToFeature = (subzone: MinimalSubstratum): Feature =&gt; {
-  const { boundary, id, name } = subzone;
+export const substratumToFeature = (substratum: MinimalSubstratum): Feature =&gt; {
+  const { boundary, id, name } = substratum;
   return toFeature(boundary, { id, name }, id);
 };<span class="fstat-no" title="function not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
 /*<span class="cstat-no" title="statement not covered" >*</span>
  * generate string for number in alphabetical order looping through all alphabets
- * 1 -&gt; A, 2 -&gt; B, 26 -&gt; Z, 27 -&gt;<span class="fstat-no" title="function not covered" > A</span>A, etc.
- * Source: https://codereview.sta<span class="cstat-no" title="statement not covered" >ckexchan</span>ge.com/questions/16124/implement-numbering-scheme-like-a-b-c-aa-ab-aaa-similar-to-converting
+ * 1 -&gt; A, 2 -&gt; B, 26 -&gt; Z, <span class="fstat-no" title="function not covered" >27</span> -&gt; AA, etc.
+ * Source: https://codereview.sta<span class="cstat-no" title="statement not covered" >ckexchange.</span>com/questions/16124/implement-numbering-scheme-like-a-b-c-aa-ab-aaa-similar-to-converting
  *<span class="cstat-no" title="statement not covered" >/</span>
 export const alphabetName = (position: number): string =&gt; {
   const baseChar = 'A'.charCodeAt(0);
@@ -760,36 +764,36 @@ export const alphabetName = (position: number): string =&gt; {
 };
 &nbsp;
 /**
- * Subzone name generator.
+ * Substratum name generator.
  * Generates names in alphabetical order, whose values are in
  * A - Z<span class="branch-1 cbranch-no" title="branch not covered" ></span>
  * AA - AZ
  * BA - BZ
  * and so on.
  */
-export const subzoneNameGenerator = (usedNames: Set&lt;string&gt;, prefix?: string): string =&gt; {
+export const substratumNameGenerator = (usedNames: Set&lt;string&gt;, prefix?: string): string =&gt; {
   let nextNameIndex = 0;
   let nextName = '';
 &nbsp;
   do {<span class="branch-1 cbranch-no" title="branch not covered" ></span>
-    const subzoneNameVal = alphabetName(++nextNameIndex);
-    nextName = prefix ? `${prefix} ${subzoneNameVal}` : subzoneNameVal;
+    const substratumNameVal = alphabetName(++nextNameIndex);
+    nextName = prefix ? `${prefix} ${substratumNameVal}` : substratumNameVal;
   } while (usedNames.has(nextName));
 &nbsp;
   return nextName;
 };
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 /**
- * Zone name generator.
+ * Stratum name generator.
  * Generates names in numerical order, with 2 digits with leading 0<span class="branch-0 cbranch-no" title="branch not covered" ><span class="branch-0 cbranch-no" title="branch not covered" ></span></span>
  */
-export const zoneNameGenerator = (usedN<span class="branch-0 cbranch-no" title="branch not covered" >ames?: </span>Set&lt;string&gt;, prefix?: string): <span class="branch-0 cbranch-no" title="branch not covered" >string </span>=&gt; {
+export const stratumNameGenerator = (us<span class="branch-0 cbranch-no" title="branch not covered" >edNames</span>?: Set&lt;string&gt;, prefix?: string<span class="branch-0 cbranch-no" title="branch not covered" >): stri</span>ng =&gt; {
   let nextNameIn<span class="branch-0 cbranch-no" title="branch not covered" >dex = 0</span>;
   let nextName = '';
 &nbsp;
   do {
-    const zoneNum = `${++nextNameIndex}`.padStart(2, '0');
-    nextName = prefix ? `${prefix} ${zoneNum}` : zoneNum;
+    const stratumNum = `${++nextNameIndex}`.padStart(2, '0');
+    nextName = prefix ? `${prefix} ${stratumNum}` : stratumNum;
   } while (usedNames &amp;&amp; usedNames.has(nextName));
 &nbsp;
   return nextName;
@@ -843,7 +847,7 @@ export const getLatestFeature = (
  *  callback when the cut geometries are too small, or there were no new cut geometries due to no overlap,
  *  callback accepts list of error annotation features
  */
-export type ErrorCheckLevel = 'site_boundary' | 'exclusion' | 'zone' | 'subzone';
+export type ErrorCheckLevel = 'site_boundary' | 'exclusion' | 'stratum' | 'substratum';
 export type CutData = {
   cutWithFeature?: GeometryFeature;
   errorCheckLevel: ErrorCheckLevel;
@@ -893,7 +897,7 @@ export const findErrors = async (
   // 1. do a dry-run of planting site create with the input 'draft'
   // 2. check problems returned
   // 3. map problems to error annotation with boundary of
-  //    site or exclusion or zone or subzone mentioned in the problem
+  //    site or exclusion or stratum or substratum mentioned in the problem
   // 4. map problem type to a string.&lt;mapped_string_for_problem&gt; as errorText
 &nbsp;
   if (!draft) {
@@ -926,8 +930,10 @@ export const findErrors = async (
     return polygonsTooSmall;
   } else {
     const errorText =
-      errorCheckLevel === 'subzone' ? strings.SITE_SUBZONE_BOUNDARY_TOO_SMALL : strings.SITE_ZONE_BOUNDARY_TOO_SMALL;
-    const minimumSideDimension = errorCheckLevel === 'subzone' ? 25 : 100;
+      errorCheckLevel === 'substratum'
+        ? strings.SITE_SUBSTRATUM_BOUNDARY_TOO_SMALL
+        : strings.SITE_STRATUM_BOUNDARY_TOO_SMALL;
+    const minimumSideDimension = errorCheckLevel === 'substratum' ? 25 : 100;
     const minArea = minimumSideDimension * minimumSideDimension * SQ_M_TO_HECTARES;
 &nbsp;
     // check if the new polygons are too small to be boundaries (in which case, we won't create new fixed boundaries using the new polygons)
@@ -946,7 +952,7 @@ export const findErrors = async (
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-05T19:06:18.388Z
+                at 2026-01-05T21:57:59.407Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

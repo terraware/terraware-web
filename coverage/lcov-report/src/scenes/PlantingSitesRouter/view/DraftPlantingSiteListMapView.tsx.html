@@ -256,7 +256,9 @@
 <a name='L191'></a><a href='#L191'>191</a>
 <a name='L192'></a><a href='#L192'>192</a>
 <a name='L193'></a><a href='#L193'>193</a>
-<a name='L194'></a><a href='#L194'>194</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L194'></a><a href='#L194'>194</a>
+<a name='L195'></a><a href='#L195'>195</a>
+<a name='L196'></a><a href='#L196'>196</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -433,6 +435,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -506,7 +510,7 @@ export defa<span class="fstat-no" title="function not covered" >ul</span>t fu<sp
     &lt;Box sx={view === <span class="cstat-no" title="statement not covered" >'map' ? { display: 'flex', flexGrow: 1, flexDirection: 'column' } : undefined}&gt;</span>
 <span class="fstat-no" title="function not covered" ></span>      &lt;Box <span class="cstat-no" title="statement not covered" >display='flex' flexGrow={0} alignItems='center'&gt;</span>
         &lt;Typography fontSize='16px' fontWeight={600} margin={theme.spacing(3, 0)}&gt;
-          {strin<span class="fstat-no" title="function not covered" >gs</span>.BOUNDARI<span class="cstat-no" title="statement not covered" >ES_AND_ZONES}</span>
+          {strin<span class="fstat-no" title="function not covered" >gs</span>.BOUNDARI<span class="cstat-no" title="statement not covered" >ES_AND_STRATA}</span>
         &lt;/Typography&gt;
       &lt;/Box&gt;
       {plantingSite.boundary &amp;&amp; (
@@ -533,13 +537,13 @@ type PlantingSiteMapViewProps = {
 &nbsp;
 function <span class="fstat-no" title="function not covered" >DraftPlantingSiteMapView(</span>{ plantingSite, search }: PlantingSiteMapViewProps): JSX.Element | null {
   const { isDesktop } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
-  const [searchZoneEntities, setSearchZoneEntities] = <span class="cstat-no" title="statement not covered" >useState&lt;MapEntityId[]&gt;([]);</span>
-  const [includedLayers, setIncludedLayers] = <span class="cstat-no" title="statement not covered" >useState&lt;MapLayer[]&gt;(['Planting Site', 'Zones', 'Sub-Zones']);</span>
+  const [searchStratumEntities, setSearchStratumEntities] = <span class="cstat-no" title="statement not covered" >useState&lt;MapEntityId[]&gt;([]);</span>
+  const [includedLayers, setIncludedLayers] = <span class="cstat-no" title="statement not covered" >useState&lt;MapLayer[]&gt;(['Planting Site', 'Strata', 'Sub-Strata']);</span>
 <span class="cstat-no" title="statement not covered" ></span>
   const layerOptionLabels: Record&lt;MapLayer, string&gt; = {
     'Planting Site': strings.PLANTING_SITE,
-    Zones: strings.ZONES,
-    'Sub-Zones': strings.SUBZONES,
+    Strata: strings.STRATA,
+    'Sub-Strata': strings.SUBSTRATA,
     'Monitoring Plots': strings.MONITORING_PLOTS,
     'Project Zones': strings.PROJECT_ZONES,
   };<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
@@ -552,17 +556,17 @@ function <span class="fstat-no" title="function not covered" >DraftPlantingSiteM
 <span class="cstat-no" title="statement not covered" ></span>
   useE<span class="cstat-no" title="statement not covered" >ffect(() =&gt; {</span>
     if (!search) {
-      setSearchZoneEnti<span class="cstat-no" title="statement not covered" >ties([]);<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
+      setSearchStratumE<span class="cstat-no" title="statement not covered" >ntities([]);<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
     } <span class="cstat-no" title="statement not covered" >else {</span>
       const entities = plantingSite?.strata
-        ?.filter((zone) =&gt; regexMatch(zone.name, search))
-        .map((zone) =&gt; <span class="cstat-no" title="statement not covered" >({ sourceId: 'zones', id: <span class="fstat-no" title="function not covered" >zo</span>ne.id }));</span>
-      setSearchZoneEntities(entities ?? []);
+        ?.filter((stratum) =&gt; regexMatch(stratum.name, search))
+        .map((stratum) <span class="cstat-no" title="statement not covered" >=&gt; ({ sourceId: 'strata', <span class="fstat-no" title="function not covered" >id</span>: stratum.id }));</span>
+      setSearchStratumEntities(entities ?? []);
     }<span class="cstat-no" title="statement not covered" ></span>
   },<span class="cstat-no" title="statement not covered" > [plantingSite, search]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
   const layerOptions: MapLayer[] = useMemo(() =&gt; {
-<span class="cstat-no" title="statement not covered" >    const result: M</span>apLayer[] = ['Planting Site', 'Zones', 'Sub-Zones'];
+<span class="cstat-no" title="statement not covered" >    const result: M</span>apLayer[] = ['Planting Site', 'Strata', 'Sub-Strata'];
     if (
 <span class="cstat-no" title="statement not covered" >      mapData &amp;&amp;</span>
 <span class="cstat-no" title="statement not covered" >      ((mapData.p</span>ermanentPlot?.entities &amp;&amp; mapData.permanentPlot.entities.length &gt; 0) ||
@@ -579,20 +583,22 @@ function <span class="fstat-no" title="function not covered" >DraftPlantingSiteM
 &nbsp;
   return (
     &lt;Box display='flex' flexDirection={isDesktop ? 'row' : 'column-reverse'} flexGrow={1}&gt;
-      &lt;PlantingSiteMapLegend options={['site', 'zone', 'subzone']} /&gt;
+      &lt;PlantingSiteMapLegend options={['site', 'stratum', 'substratum']} /&gt;
       {mapData &amp;&amp; plantingSite &amp;&amp; (
         &lt;PlantingSiteMap
           mapData={mapData}
           style={{ borderRadius: '24px' }}
           layers={includedLayers}
-          highlightEntities={searchZoneEntities}
-          focusEntities={searchZoneEntities.length ? searchZoneEntities : [{ sourceId: 'sites', id: plantingSite.id }]}
+          highlightEntities={searchStratumEntities}
+          focusEntities={
+            searchStratumEntities.length ? searchStratumEntities : [{ sourceId: 'sites', id: plantingSite.id }]
+          }
           contextRenderer={{
             render: ContextRenderer(plantingSite),
             sx: {
-              '.mapboxgl-popup .mapboxgl-popup-content': {
+              '.mapboxgl-popu<span class="fstat-no" title="function not covered" >p </span>.mapboxg<span class="cstat-no" title="statement not covered" >l-popup-content': {</span>
                 borderRadius: '8px',
-                padding: '10p<span class="fstat-no" title="function not covered" >x'</span>,<span class="cstat-no" title="statement not covered" ></span>
+                padding: '10px',
                 width: 'fit-content',
                 maxWidth: '350px',
               },
@@ -600,41 +606,41 @@ function <span class="fstat-no" title="function not covered" >DraftPlantingSiteM
           }}
           topRightMapControl={
             &lt;MapLayerSelect
-              initialSelection={includedLayers}
+              initialSel<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ec</span>tion={includedLayers}</span>
               onUpdateSelection={setIncludedLayers}
-              menuSectio<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ns</span>={[</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span>              menuSections={[</span>
                 layerOptions.map((opt) =&gt; ({
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span>                  label: layerOptionLabels[opt],</span>
-                  value: opt,
-                })<span class="cstat-no" title="statement not covered" >),</span>
-              ]}<span class="cstat-no" title="statement not covered" ></span>
-            /&gt;
+                  l<span class="cstat-no" title="statement not covered" >abel: layerOptionLabels[opt],</span>
+                  val<span class="cstat-no" title="statement not covered" >ue:</span> opt,
+                })),
+<span class="cstat-no" title="statement not covered" >              ]}</span>
+<span class="cstat-no" title="statement not covered" >            /&gt;</span>
 <span class="cstat-no" title="statement not covered" >          }</span>
-<span class="cstat-no" title="statement not covered" >        /&gt;</span>
-<span class="cstat-no" title="statement not covered" >      )}</span>
+        /&gt;
+      )}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
     &lt;/Box&gt;
-  );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-}
+  );<span class="cstat-no" title="statement not covered" ></span>
+}<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 <span class="cstat-no" title="statement not covered" ></span>
-const ContextRender<span class="cstat-no" title="statement not covered" >er =<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  (sit<span class="cstat-no" title="statement not covered" >e: MinimalPlantingSite) =&gt;</span>
-  // e<span class="cstat-no" title="statement not covered" >slint-disable-next-line react/display-name</span>
+const <span class="cstat-no" title="statement not covered" >ContextRenderer =</span>
+  (site: MinimalPlantingSite) =&gt;
+  // eslint-disable-next-line react/display-name
   (entity: MapSourceProperties): JSX.Element | null =&gt; {
-    const zones = site.strata ?? [];
-    let properties: TooltipProperty[] = [];
+    const strata = site.strata ?? [];
+    le<span class="cstat-no" title="statement not covered" >t properties:</span> TooltipProperty[] = [];
     let title: string;
-    if<span class="cstat-no" title="statement not covered" > (entity.type</span> === 'site') {
+<span class="cstat-no" title="statement not covered" >    if (entity.type === 'site') {</span>
       title = site.name;
-<span class="cstat-no" title="statement not covered" >      properties = [</span>
-        { key: strings.ZONES, value: zones.length },
-        { key: strings.SUBZONES, value: zones.flatMap((z) =&gt; z.substrata).length },
-      ];
-    } else if (entity.type === 'zone') {
-      const zone = zones.find((z) =&gt; z.id === entity.id);
-      title = zone?.name ?? '';
       properties = [
-        { key: strings.TARGET_PLANTING_DENSITY, value: zone?.targetPlantingDensity ?? 0 },
-        { key: strings.SUBZONES, value: zone?.substrata.length ?? 0 },
+        { key: strings.STRATA, value: strata.length },
+        { key: strings.SUBSTRATA, value: strata.flatMap((_stratum) =&gt; _stratum.substrata).length },
+      ];
+    } else if (entity.type === 'stratum') {
+      const stratum = strata.find((_stratum) =&gt; _stratum.id === entity.id);
+      title = stratum?.name ?? '';
+      properties = [
+        { key: strings.TARGET_PLANTING_DENSITY, value: stratum?.targetPlantingDensity ?? 0 },
+        { key: strings.SUBSTRATA, value: stratum?.substrata.length ?? 0 },
       ];
     } else {
       return null;
@@ -649,7 +655,7 @@ const ContextRender<span class="cstat-no" title="statement not covered" >er =<sp
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-05T19:06:18.388Z
+                at 2026-01-05T21:57:59.407Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

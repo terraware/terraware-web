@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/208</span>
+                <span class='fraction'>0/209</span>
             </div>
         
             
@@ -583,7 +583,11 @@
 <a name='L518'></a><a href='#L518'>518</a>
 <a name='L519'></a><a href='#L519'>519</a>
 <a name='L520'></a><a href='#L520'>520</a>
-<a name='L521'></a><a href='#L521'>521</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L521'></a><a href='#L521'>521</a>
+<a name='L522'></a><a href='#L522'>522</a>
+<a name='L523'></a><a href='#L523'>523</a>
+<a name='L524'></a><a href='#L524'>524</a>
+<a name='L525'></a><a href='#L525'>525</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -788,7 +792,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -939,6 +945,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1129,7 +1137,7 @@ import { MultiPolygon } from 'src/types/Tracking';
 &nbsp;
 import { useParticipantProjectData } from './ParticipantProjectContext';
 &nbsp;
-type ZoneOrSiteOpti<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >on</span> = { na<span class="cstat-no" title="statement not covered" >me: string; type: 'zone' | 'site'; showSeparator?: boolean };</span></span>
+type StratumOrSiteO<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >pt</span>ion = {<span class="cstat-no" title="statement not covered" > name: string; type: 'stratum' | 'site'; showSeparator?: boolea</span></span>n };
 const ProjectProfile<span class="cstat-no" title="statement not covered" >Gis</span>Maps = () =&gt; {
 <span class="cstat-no" title="statement not covered" >  const projectData = useParticipantProjectData();</span>
   const the<span class="fstat-no" title="function not covered" >me</span> = u<span class="cstat-no" title="statement not covered" >seTheme();</span>
@@ -1141,7 +1149,7 @@ const ProjectProfile<span class="cstat-no" title="statement not covered" >Gis</s
   const [plantingSi<span class="cstat-no" title="statement not covered" >tesData, setPlantingSitesData] = useState&lt;F</span>eatureCollection&lt;MultiPolygon&gt;&gt;();
   const [boundari<span class="cstat-no" title="statement not covered" >esData, setBoundariesData] = u</span>seState&lt;FeatureCollection&lt;MultiPolygon&gt;&gt;();
   const { activeLocale } = u<span class="cstat-no" title="statement not covered" >seLocalization();</span>
-  const [zoneOrSit<span class="cstat-no" title="statement not covered" >e, setZoneOrSite] = useState&lt;ZoneOrSiteO</span>ption&gt;();
+  const [stratumOr<span class="cstat-no" title="statement not covered" >Site, setStratumOrSite] = useState&lt;Strat</span>umOrSiteOption&gt;();
   const [selectedA<span class="cstat-no" title="statement not covered" >rea, setSelectedArea] = useState&lt;string&gt;();</span>
   const [showSiteMap, setShowSiteMa<span class="cstat-no" title="statement not covered" >p] = useState(false);</span>
   const [showBoundaryMa<span class="cstat-no" title="statement not covered" >p, setShowBoundaryMap] = </span>useState(false);
@@ -1164,7 +1172,7 @@ const ProjectProfile<span class="cstat-no" title="statement not covered" >Gis</s
     }<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
     if (projectDetails &amp;&amp; p<span class="cstat-no" title="statement not covered" >rojectDetails.plantingSitesCql) {</span>
-      const requestPlantingSites = dis<span class="cstat-no" title="statement not covered" >patch(</span>
+      const requestPlantingSites = dispatch(<span class="cstat-no" title="statement not covered" ></span>
         requestGetGis({<span class="cstat-no" title="statement not covered" ></span>
           cqlFilter: projectDetails.plan<span class="cstat-no" title="statement not covered" >tingSitesCql,</span>
           typeNames: 'tf_accelerator:planting_si<span class="cstat-no" title="statement not covered" >tes',</span>
@@ -1212,7 +1220,7 @@ const ProjectProfile<span class="cstat-no" title="statement not covered" >Gis</s
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
   //<span class="cstat-no" title="statement not covered" > Process site data asynchronously</span>
   useE<span class="cstat-no" title="statement not covered" >ffect(() =&gt; {</span>
-    if (!plantingSitesData || !showSiteMap || !zoneOrSite || zoneOrSite.type !== 'site') {
+    if (!plantingSitesData || !showSiteMap || !stratumOrSite || stratumOrSite.type !== 'site') {
       setIsProcessingSite(false);
       setProcessedSiteData(n<span class="cstat-no" title="statement not covered" >ull);<span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >      return;</span>
@@ -1222,7 +1230,7 @@ const ProjectProfile<span class="cstat-no" title="statement not covered" >Gis</s
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >    // Process in next frame to avoid blocking UI</span>
     re<span class="cstat-no" title="statement not covered" >questAnimationFrame(() =&gt; {</span>
-      const filteredFeatures = plantingSitesData.features.filter((f) =&gt; f.properties?.site === zoneOrSite.name);
+      const filteredFeatures = plantingSitesData.features.filter((f) =&gt; f.properties?.site === stratumOrSite.name);
 <span class="cstat-no" title="statement not covered" ></span>
       if (filteredFeatures.length === 0) {
 <span class="cstat-no" title="statement not covered" >        setProcessedSiteData(b<span class="fstat-no" title="function not covered" >as</span>ePlantingMapData);</span>
@@ -1242,25 +1250,25 @@ const ProjectProfile<span class="cstat-no" title="statement not covered" >Gis</s
       se<span class="cstat-no" title="statement not covered" >tProcessedSiteData(mapData);</span>
       se<span class="cstat-no" title="statement not covered" >tIsProce</span>ssingSite(false);
     });
-  }, [plantingSitesData, showSiteMap, zo<span class="cstat-no" title="statement not covered" >neOrSite, basePlantingMapData]);</span>
+  }, [plantingSitesData, showSiteMap, st<span class="cstat-no" title="statement not covered" >ratumOrSite, basePlantingMapData]);</span>
 &nbsp;
   const filteredSiteData = useMemo(() =&gt; {
-    if (!showSiteMap || !zoneOrSite || zoneOrSite.type !== 'site') {
+    if (!showSiteMap || !stratumOrSite || stratumOrSite.type !== 'site') {
       return basePlant<span class="cstat-no" title="statement not covered" >ingMapData;</span>
     }
     return processedSiteData || basePlantingMapData;
-  }, [<span class="cstat-no" title="statement not covered" >showSiteMap, zoneOrSite, proces</span>sedSiteData, basePlantingMapData]);
+  }, [<span class="cstat-no" title="statement not covered" >showSiteMap, stratumOrSite, pro</span>cessedSiteData, basePlantingMapData]);
 <span class="cstat-no" title="statement not covered" ></span>
-  const filteredZoneData = useMemo(() =&gt; {
+  const filteredStratumData = useMemo(() =&gt; {
     if (!boundariesData) {
       return undefined;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >    }</span>
 <span class="cstat-no" title="statement not covered" ></span>
-    if (!showBoundaryMap || !zoneOrSite || zoneOrSite.type !== 'zone') {
+    if (!showBoundaryMap || !stratumOrSite || stratumOrSite.type !== 'stratum') {
 <span class="cstat-no" title="statement not covered" >      return boundariesMapData;</span>
     }
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-    if (zoneOrSite.name === strings.ALL_PROJECT_ZONES) {
+    if (stratumOrSite.name === strings.ALL_PROJECT_ZONES) {
 <span class="cstat-no" title="statement not covered" >      const boundariesMapDataToReturn = { ...boundariesMapData } as MapData;</span>
 <span class="cstat-no" title="statement not covered" >      boundariesMapDa</span>taToReturn.site?.entities.forEach((ent: MapEntity) =&gt; (ent.properties.name = ''));
       return boundariesMapDataToReturn;
@@ -1268,7 +1276,7 @@ const ProjectProfile<span class="cstat-no" title="statement not covered" >Gis</s
 <span class="cstat-no" title="statement not covered" ></span>
     const filteredBoundaryData = {
 <span class="cstat-no" title="statement not covered" >      ...boundariesData,</span>
-      features: boundariesData.features.<span class="cstat-no" title="statement not covered" >filter((f) =&gt; f.propertie</span>s?.boundary_name === zoneOrSite.name),
+      features: boundariesData.features.<span class="cstat-no" title="statement not covered" >filter((f) =&gt; f.propertie</span>s?.boundary_name === stratumOrSite.name),
     };<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 <span class="cstat-no" title="statement not covered" ></span>
     if (filteredBoundaryData.features &amp;&amp; filteredBoundaryData.features.length &gt; 0) {
@@ -1278,13 +1286,13 @@ const ProjectProfile<span class="cstat-no" title="statement not covered" >Gis</s
     }
 <span class="cstat-no" title="statement not covered" ></span>
     return boundariesMapData;
-  }, [boundariesData, showBoundaryMap, zoneOrSite, boundariesMapData]);
+  }, [boundariesData, showBoundaryMap, stratumOrSite, boundariesMapData]);
 <span class="cstat-no" title="statement not covered" ></span>
   cons<span class="cstat-no" title="statement not covered" >t calculateArea = useCallback(() =&gt; {</span>
     let totalArea = '';
 &nbsp;
-    if (showSiteMap &amp;&amp; zoneOrSite &amp;&amp; zoneOrSite.type === 'site' &amp;&amp; plantingSitesData) {
-<span class="cstat-no" title="statement not covered" >      const filteredFeatures =</span> plantingSitesData.features.filter((f) =&gt; f.properties?.site === zoneOrSite.name);
+    if (showSiteMap &amp;&amp; stratumOrSite &amp;&amp; stratumOrSite.type === 'site' &amp;&amp; plantingSitesData) {
+<span class="cstat-no" title="statement not covered" >      const filteredFeatures =</span> plantingSitesData.features.filter((f) =&gt; f.properties?.site === stratumOrSite.name);
       if (filteredFeatures.length &gt; 0) {
         const filteredPl<span class="cstat-no" title="statement not covered" >antingSitesData = {<span class="fstat-no" title="function not covered" ></span></span>
           ...plantin<span class="cstat-no" title="statement not covered" >gSi</span>tesData,
@@ -1294,25 +1302,27 @@ const ProjectProfile<span class="cstat-no" title="statement not covered" >Gis</s
 <span class="cstat-no" title="statement not covered" >          filteredPlantingSitesData as unknown as FeatureCollection&lt;MultiPolygon&gt;</span>
         );
 <span class="cstat-no" title="statement not covered" >      }</span>
-    } else if (showBoundaryMap &amp;&amp; zoneOrSi<span class="cstat-no" title="statement not covered" >te &amp;&amp; zoneOrSite.type === 'zone' &amp;&amp; boundariesData) {</span>
-      if (zoneOrSite.name === strings.ALL_PROJECT_ZONES) {
+    } else if (showBoundaryMap &amp;&amp; stratumO<span class="cstat-no" title="statement not covered" >rSite &amp;&amp; stratumOrSite.type === 'stratum' &amp;&amp; boundariesData) {</span>
+      if (stratumOrSite.name === strings.ALL_PROJECT_ZONES) {
         totalArea = MapService.calculateAreaFromGisData(boundariesData as unknown as FeatureCollection&lt;MultiPolygon&gt;);
       } else {
-<span class="cstat-no" title="statement not covered" >        const filteredFeatures = boundariesData.features.filter((f) =&gt; f.properties?.boundary_name === zoneOrSite.name);</span>
+<span class="cstat-no" title="statement not covered" >        const filteredFeatures = boundariesData.features.filter(</span>
+          (f) =&gt; f.properties?.boundary_name === stratumOrSite.name
+        );
         if (filteredFeatures.length &gt; 0) {
-          const filteredBoundaryData = {
-            ...boundariesData,
+          c<span class="cstat-no" title="statement not covered" >onst filteredBoundaryData = {</span>
+<span class="cstat-no" title="statement not covered" >            ...boundariesData,</span>
 <span class="cstat-no" title="statement not covered" >            features: filteredFeatures,</span>
-<span class="cstat-no" title="statement not covered" >          };</span>
-<span class="cstat-no" title="statement not covered" >          totalArea = MapService.calculateAreaFromGisData(</span>
-            filteredBoundaryData as unknown as FeatureCollection&lt;MultiPolygon&gt;
-          );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-        }
-      }<span class="cstat-no" title="statement not covered" ></span>
+          };
+          totalArea = MapService.<span class="cstat-no" title="statement not covered" >calculateAreaFromGisData(</span>
+<span class="fstat-no" title="function not covered" ></span>            filteredBoundaryData as unknown as FeatureCollection&lt;MultiPolygon&gt;
+          );
+        }<span class="cstat-no" title="statement not covered" ></span>
+      }
     }
 <span class="cstat-no" title="statement not covered" ></span>
     setSelectedArea(totalArea);<span class="cstat-no" title="statement not covered" ></span>
-  }, [boundariesData, plantingSitesData, showBoundaryMap, showSiteMap, zoneOrSite]);
+  }, [boundariesData, plantingSitesData, showBoundaryMap, showSiteMap, stratumOrSite]);
 &nbsp;
   useEffect(() =&gt; {
     let ti<span class="cstat-no" title="statement not covered" >meoutId: ReturnType&lt;typeof setTimeout&gt;;</span>
@@ -1326,7 +1336,7 @@ const ProjectProfile<span class="cstat-no" title="statement not covered" >Gis</s
 <span class="cstat-no" title="statement not covered" >        clearTimeout(timeoutId<span class="fstat-no" title="function not covered" >);</span></span>
       }
     };<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  }, [<span class="cstat-no" title="statement not covered" >showSiteMap, showBoundaryMap, zoneOrSite, p</span>lantingSitesData, boundariesData, calculateArea]);
+  }, [<span class="cstat-no" title="statement not covered" >showSiteMap, showBoundaryMap, stratumOrSite</span>, plantingSitesData, boundariesData, calculateArea]);
 &nbsp;
   //<span class="cstat-no" title="statement not covered" > constr<span class="fstat-no" title="function not covered" >uc</span>t the bread crumbs back to originating context</span>
   cons<span class="cstat-no" title="statement not covered" >t crumbs: Crumb[] = useMemo(</span>
@@ -1346,68 +1356,68 @@ const ProjectProfile<span class="cstat-no" title="statement not covered" >Gis</s
     [activeLocale, projectData]
   );
 &nbsp;
-  const uniqueZones = useMemo(() =&gt; {
-    const iUniqueZones = Array.from(new Set(boundariesData?.features?.map((f) =&gt; f.properties?.boundary_name)));
-    if (iUniqueZones.length &gt; 1) {
-      iUniqueZones.unshift(strings.ALL_PROJECT_ZONES);
+  const uniqueStrata = useMemo(() =&gt; {
+    const iUniqueStrata = Array.from(new Set(boundariesData?.features?.map((f) =&gt; f.properties?.boundary_name)));
+    if (iUniqueStrata.length &gt; 1) {
+      iUniqueStrata.unshift(strings.ALL_PROJECT_ZONES);
     }
-    return iUniqueZone<span class="cstat-no" title="statement not covered" >s;<span class="fstat-no" title="function not covered" ></span></span>
+    return iUniqueStrat<span class="cstat-no" title="statement not covered" >a;<span class="fstat-no" title="function not covered" ></span></span>
   }, [boundariesData]);
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
   const uniqueSites = useMemo(() =&gt; {
     re<span class="cstat-no" title="statement not covered" >turn Array.from(new Set(plantingSitesData?.features?.map((f) =&gt; f.</span>properties?.site)));
   }, [plantingSitesData]);
 <span class="cstat-no" title="statement not covered" ></span>
-  cons<span class="cstat-no" title="statement not covered" >t zonesAndSites = useMemo(() =&gt; {</span>
-    const zones = uniqueZones?.map((z) =&gt; ({ name: z, type: 'zone' }) as ZoneOrSiteOption);
-<span class="cstat-no" title="statement not covered" >    const sites = uniqueS</span>ites?.map((s) =&gt; ({ name: s, type: 'site' }) as ZoneOrSiteOption);
-    if (zones.length &gt; 0 &amp;&amp; sites[0]) {
+  cons<span class="cstat-no" title="statement not covered" >t strataAndSites = useMemo(() =&gt; {</span>
+    const strata = uniqueStrata?.map((_stratum) =&gt; ({ name: _stratum, type: 'stratum' }) as StratumOrSiteOption);
+<span class="cstat-no" title="statement not covered" >    const sites = uniqueSi</span>tes?.map((s) =&gt; ({ name: s, type: 'site' }) as StratumOrSiteOption);
+    if (strata.length &gt; 0 &amp;&amp; sites[0]) {
       sites[0].showSep<span class="cstat-no" title="statement not covered" >arator = true;<span class="fstat-no" title="function not covered" ></span></span>
     }
-<span class="cstat-no" title="statement not covered" >    return [...zones, ...sites];<span class="fstat-no" title="function not covered" ></span></span>
-  }, [uniqueZones, uniqueSites]);
+<span class="cstat-no" title="statement not covered" >    return [...strata, ...sites];<span class="fstat-no" title="function not covered" ></span></span>
+  }, [uniqueStrata, uniqueSites]);
 <span class="cstat-no" title="statement not covered" ></span>
   useEffect(() =&gt; {
-    if (!zoneOrSite &amp;&amp; zonesAndSites) {
-      setZoneOrSite(zone<span class="cstat-no" title="statement not covered" >sAndSites[0]);<span class="fstat-no" title="function not covered" ></span></span>
+    if (!stratumOrSite &amp;&amp; strataAndSites) {
+      setStratumOrSite(st<span class="cstat-no" title="statement not covered" >rataAndSites[0]);<span class="fstat-no" title="function not covered" ></span></span>
     }<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  }, [zoneOrSite, <span class="cstat-no" title="statement not covered" >zonesAndSites]);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  }, [stratumOrSit<span class="cstat-no" title="statement not covered" >e, strataAndSites]);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 <span class="cstat-no" title="statement not covered" ></span>
   useE<span class="cstat-no" title="statement not covered" >ffect(() =&gt; {</span>
-    if (zoneOrSite) {
-<span class="cstat-no" title="statement not covered" >      if (zoneOrSite.name === str</span>ings.ALL_PROJECT_ZONES) {
+    if (stratumOrSite) {
+<span class="cstat-no" title="statement not covered" >      if (stratumOrSite.name === s</span>trings.ALL_PROJECT_ZONES) {
         setShowBoundaryMap(true);
 <span class="cstat-no" title="statement not covered" >        setShowSiteMap(false);<span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >        setSelectedLayer(undefined);</span>
-<span class="cstat-no" title="statement not covered" >      } else if (zoneOrSite.type === 's</span>ite' &amp;&amp; uniqueSites.includes(zoneOrSite.name)) {
+<span class="cstat-no" title="statement not covered" >      } else if (stratumOrSite.type === 'si</span>te' &amp;&amp; uniqueSites.includes(stratumOrSite.name)) {
         setShowSiteMap(true);
         setShowBoundaryMap(false);
 <span class="cstat-no" title="statement not covered" >        setSelectedLayer('Plan<span class="fstat-no" title="function not covered" >ti</span>ng Site');</span>
-<span class="cstat-no" title="statement not covered" >      } else if (zoneOrSite.type === 'zone' &amp;&amp; uniqueZones.includes(zoneOrSite.name)) {</span>
+<span class="cstat-no" title="statement not covered" >      } else if (stratumOrSite.type === 'stratum' &amp;&amp; uniqueStrata.includes(stratumOrSite.name)) {</span>
 <span class="cstat-no" title="statement not covered" >        setShowBoundaryMap(true);</span>
 <span class="cstat-no" title="statement not covered" >        setShowSiteMap(false);</span>
 <span class="cstat-no" title="statement not covered" >        setSelectedLayer(undefi</span>ned);
       }<span class="cstat-no" title="statement not covered" ></span>
     }<span class="cstat-no" title="statement not covered" ></span>
-  }, [un<span class="cstat-no" title="statement not covered" >iqueSites, uniqueZones</span>, zoneOrSite, zonesAndSites]);
+  }, [un<span class="cstat-no" title="statement not covered" >iqueSites, uniqueStrat</span>a, stratumOrSite, strataAndSites]);
 <span class="cstat-no" title="statement not covered" ></span>
-  const <span class="cstat-no" title="statement not covered" >labelHandler = useCallback((iZoneOr</span>Site: ZoneOrSiteOption) =&gt; iZoneOrSite?.name, []);
+  const <span class="cstat-no" title="statement not covered" >labelHandler = useCallback((iStratu</span>mOrSite: StratumOrSiteOption) =&gt; iStratumOrSite?.name, []);
   const isEqu<span class="cstat-no" title="statement not covered" >alHandler = useCallback(</span>
-    (zon<span class="cstat-no" title="statement not covered" >eOrSiteA: ZoneOrSiteOption</span>, zoneOrSiteB: ZoneOrSiteOption) =&gt;
-      zo<span class="cstat-no" title="statement not covered" >neOrSiteA.name === zone</span>OrSiteB.name &amp;&amp; zoneOrSiteA.type === zoneOrSiteB.type,
+    (str<span class="cstat-no" title="statement not covered" >atumOrSiteA: StratumOrSite</span>Option, stratumOrSiteB: StratumOrSiteOption) =&gt;
+      st<span class="cstat-no" title="statement not covered" >ratumOrSiteA.name === s</span>tratumOrSiteB.name &amp;&amp; stratumOrSiteA.type === stratumOrSiteB.type,
     []<span class="cstat-no" title="statement not covered" ></span>
   );
 &nbsp;
-  const renderOptionHandler = useCallback((iZoneOrSite: ZoneOrSiteOption) =&gt; {
+  const renderOptionHandler = useCallback((iStratumOrSite: StratumOrSiteOption) =&gt; {
     return (<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
       &lt;Typography<span class="cstat-no" title="statement not covered" ></span>
 <span class="fstat-no" title="function not covered" ></span>        component='div'<span class="cstat-no" title="statement not covered" ></span>
         sx={{
-          borderTop: iZoneOrSite.showSeparator ? '1px solid' : 'none',
+          borderTop: iStratumOrSite.showSeparator ? '1px solid' : 'none',
           padding: '8px 16px',<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >        }}</span>
       &gt;
-        {iZoneOrSite.name}
+        {iStratumOrSite.name}
       &lt;/Typography&gt;
     );
   }, []);
@@ -1416,19 +1426,19 @@ const ProjectProfile<span class="cstat-no" title="statement not covered" >Gis</s
     (input: string) =&gt;
       ({
         name: input,
-      }) as ZoneOrSiteOption,
+      }) as StratumOrSiteOption,
     []<span class="cstat-no" title="statement not covered" ></span>
   );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 &nbsp;
-  const zonesAndSitesDropdown = (
+  const strataAndSitesDropdown = (
     &lt;Box display='flex' alignItems='center' gap={1}&gt;
       &lt;SelectT
-        id='zoneOrSite'<span class="cstat-no" title="statement not covered" ></span>
+        id='stratumOrSite'<span class="cstat-no" title="statement not covered" ></span>
         label=''
-        onChange={setZoneOrSite}
-        options={zonesAndSites}
+        onChange={setStratumOrSite}
+        options={strataAndSites}
         placeholder={''}
-        selectedValue={zoneOrSite}
+        selectedValue={stratumOrSite}
         selectStyles={{ optionsContainer: { textAlign: 'left' }, optionContainer: { padding: 0 } }}
         displayLabel={labelHandler}
         isEqual={isEqualHandler}
@@ -1458,27 +1468,29 @@ const ProjectProfile<span class="cstat-no" title="statement not covered" >Gis</s
     return lastUpdated;
   }, [plantingSitesData]);<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const contextRenderer = useCal<span class="cstat-no" title="statement not covered" >lback(<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-    (pro<span class="cstat-no" title="statement not covered" >perties: MapSourceProperties): JSX.Element | null =&gt; {</span>
+  const contextRenderer = useCallba<span class="cstat-no" title="statement not covered" >ck(</span>
+    (prope<span class="fstat-no" title="function not covered" >rt</span>ies: Ma<span class="cstat-no" title="statement not covered" >pSourceProperties): JSX.E</span>lement | null =&gt; {
       const tooltipProperties: TooltipProperty[] = [{ key: strings.TYPE, value: properties.type }];
-&nbsp;
-      if (properties.type === 'subzone') {
-<span class="cstat-no" title="statement not covered" >        const selectedSubZone = filteredSiteData?.subzone?.entities?.find((ent: MapEntity) =&gt; ent.id === properties.id);</span>
+<span class="cstat-no" title="statement not covered" ></span>
+      if (properties.type === 'substratum') {
+        const selectedSubstratum = filteredSiteData?.substratum?.entities?.find(
+          (ent: MapEntity) =&gt; ent.id === properties.id
+<span class="cstat-no" title="statement not covered" >        );</span>
         tooltipProperties.push({
-          key: strings.ZONE,
-          value: filteredSiteData?.subzone?.entities?.[0].properties.zoneId,
+          key: strings.STRATUM,
+          value: filteredSiteData?.substratum?.entities?.[0].properties.stratumId,
         });
 <span class="cstat-no" title="statement not covered" >        tooltipProperties.push({</span>
-          key: strings.AREA_H<span class="cstat-no" title="statement not covered" >A,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-<span class="cstat-no" title="statement not covered" >          value: selectedSubZone &amp;&amp; 'totalArea' in selectedSubZone ? String(selectedSubZone.totalArea) : '',</span>
+          key: strings.AREA_HA,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+<span class="cstat-no" title="statement not covered" >          value: selectedSubstratum &amp;&amp; 'totalArea' in selectedSubstratum ? String(selectedSubstratum.totalArea) : '',</span>
         });
       }
 &nbsp;
-      if (properties.type === 'zone') {
-<span class="cstat-no" title="statement not covered" >        const selectedZone = filteredSiteData?.zone?.entities?.find((ent: MapEntity) =&gt; ent.id === properties.id);</span>
+      if (properties.type === 'stratum') {
+<span class="cstat-no" title="statement not covered" >        const selectedStratum = filteredSiteData?.stratum?.entities?.find((ent: MapEntity) =&gt; ent.id === properties.id);</span>
         tooltipProperties.p<span class="cstat-no" title="statement not covered" >ush({</span>
 <span class="cstat-no" title="statement not covered" >          key: strings.AREA_HA,</span>
-          value: selectedZone &amp;&amp; 'totalArea' in selectedZone ? String(selectedZone.totalArea) : '',
+          value: selectedStratum &amp;&amp; 'totalArea' in selectedStratum ? String(selectedStratum.totalArea) : '',
         });
       }
 &nbsp;
@@ -1503,7 +1515,7 @@ const ProjectProfile<span class="cstat-no" title="statement not covered" >Gis</s
       crumbs={crumbs}
       hierarchicalCrumbs={false}
       description={strings.MAPS_GIS_DESCRIPTION}
-      rightComponent={mapsNotUploaded ? undefined : zonesAndSitesDropdown}
+      rightComponent={mapsNotUploaded ? undefined : strataAndSitesDropdown}
       descriptionStyle={{ paddingLeft: 1 }}
     &gt;
       &lt;Card
@@ -1517,10 +1529,10 @@ const ProjectProfile<span class="cstat-no" title="statement not covered" >Gis</s
           borderRadius: theme.spacing(1),
         }}
       &gt;
-        {zoneOrSite?.name &amp;&amp; (
+        {stratumOrSite?.name &amp;&amp; (
           &lt;Box display='flex' alignItems='center' paddingBottom={2}&gt;
             &lt;Typography fontSize={'20px'} fontWeight={600} paddingRight={1}&gt;
-              {zoneOrSite.name}
+              {stratumOrSite.name}
             &lt;/Typography&gt;
             &lt;Typography fontSize={'16px'} fontWeight={400} paddingRight={1}&gt;
               {strings.FROM_GIS_DATABASE}
@@ -1539,7 +1551,7 @@ const ProjectProfile<span class="cstat-no" title="statement not covered" >Gis</s
         )}
         &lt;Box display='flex' flexDirection={isDesktop ? 'row' : 'column-reverse'} flexGrow={1}&gt;
           &lt;PlantingSiteMapLegend
-            options={['site', 'zone', 'subzone']}
+            options={['site', 'stratum', 'substratum']}
             onChangeLayer={showSiteMap ? onChangeLayerHandler : undefined}
             selectedLayer={selectedLayer || 'Project Zones'}
             disableLegends={!showSiteMap}
@@ -1564,9 +1576,9 @@ const ProjectProfile<span class="cstat-no" title="statement not covered" >Gis</s
               minHeight='700px'
             /&gt;
           )}
-          {boundariesData &amp;&amp; boundariesMapData &amp;&amp; showBoundaryMap &amp;&amp; filteredZoneData &amp;&amp; (
+          {boundariesData &amp;&amp; boundariesMapData &amp;&amp; showBoundaryMap &amp;&amp; filteredStratumData &amp;&amp; (
             &lt;PlantingSiteMap
-              mapData={filteredZoneData}
+              mapData={filteredStratumData}
               style={{ width: '100%', borderRadius: theme.spacing(1) }}
               layers={['Project Zones']}
               minHeight='700px'
@@ -1584,7 +1596,7 @@ const ProjectProfile<span class="cstat-no" title="statement not covered" >Gis</s
                   adHocPlot: undefined,
                 }}
                 style={{ width: '100%', borderRadius: theme.spacing(1) }}
-                layers={['Planting Site', 'Zones', 'Sub-Zones']}
+                layers={['Planting Site', 'Strata', 'Sub-Strata']}
                 minHeight='700px'
               /&gt;
               &lt;Box
@@ -1630,7 +1642,7 @@ export default ProjectProfileGisMaps;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-05T19:06:18.388Z
+                at 2026-01-05T21:57:59.407Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/42</span>
+                <span class='fraction'>0/43</span>
             </div>
         
             
@@ -115,7 +115,9 @@
 <a name='L50'></a><a href='#L50'>50</a>
 <a name='L51'></a><a href='#L51'>51</a>
 <a name='L52'></a><a href='#L52'>52</a>
-<a name='L53'></a><a href='#L53'>53</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -165,6 +167,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { create<span class="cstat-no" title="statement not covered" >AsyncThunk } f</span>rom '@reduxjs/toolkit';
@@ -174,14 +178,14 @@ import strings from 'src<span class="cstat-no" title="statement not covered" >/s
 import { UpdateSubs<span class="cstat-no" title="statement not covered" >tratumPayload } from '</span>src/types/PlantingSite';
 <span class="cstat-no" title="statement not covered" ></span>
 export type Upd<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >at</span>eRequest = {</span>
-<span class="cstat-no" title="statement not covered" >  subzoneId: number;</span>
+<span class="cstat-no" title="statement not covered" >  substratumId: number;</span>
   pl<span class="cstat-no" title="statement not covered" >anting: UpdateSubstratumPayload;</span>
 };
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 ex<span class="cstat-no" title="statement not covered" >port const requestUpdatePlantingCompleted = createAsyncThunk(</span>
   'u<span class="cstat-no" title="statement not covered" >pdatePlantingCompleted',</span>
-  asyn<span class="cstat-no" title="statement not covered" >c ({ subzoneId, planting }: UpdateRequest, { rejectWithValue }) =&gt; {</span>
-    cons<span class="cstat-no" title="statement not covered" >t response: Response = awa<span class="fstat-no" title="function not covered" >it</span> Pla<span class="cstat-no" title="statement not covered" >ntingsServ</span>ice.updatePlantingCompleted(subzoneId, planting);</span>
+  asyn<span class="cstat-no" title="statement not covered" >c ({ substratumId, planting }: UpdateRequest, { rejectWithValue }) =&gt; {</span>
+    cons<span class="cstat-no" title="statement not covered" >t response: Response = awa<span class="fstat-no" title="function not covered" >it</span> Pla<span class="cstat-no" title="statement not covered" >ntingsServ</span>ice.updatePlantingCompleted(substratumId, planting);</span>
     if (response.requestSucceeded) {
 <span class="cstat-no" title="statement not covered" >      return </span>true;
     }
@@ -191,32 +195,34 @@ ex<span class="cstat-no" title="statement not covered" >port const requestUpdate
 );
 &nbsp;
 export type BulkUpdateRequest = {
-  subzoneIds: number[];
+  substratumIds: number[];
   planting: UpdateSubstratumPayload;
 };<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >export const requestUpdatePlantingsCompleted = createAsyncThunk(</span>
   'updatePlantingsCompleted',<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  async ({ subzoneIds, planting }: <span class="fstat-no" title="function not covered" >Bu</span>lkUp<span class="cstat-no" title="statement not covered" >dateRequest, { rejectWithValue }</span>) =&gt; {
-    const promises = subzoneIds.map((subzoneId) =&gt; PlantingsService.updatePlantingCompleted(subzoneId, planting));
-<span class="cstat-no" title="statement not covered" >    const results = (await Promise.allSettled(</span>promises)).map((result, index) =&gt; ({
+  async ({ substratumIds, planting <span class="fstat-no" title="function not covered" >}:</span> Bul<span class="cstat-no" title="statement not covered" >kUpdateRequest, { rejectWithValu</span>e }) =&gt; {
+    const promises = substratumIds.map((substratumId) =&gt;
+<span class="cstat-no" title="statement not covered" >      PlantingsService.updatePlantingCompleted</span>(substratumId, planting)
+    );<span class="cstat-no" title="statement not covered" ></span>
+    const results = (a<span class="cstat-no" title="statement not covered" >wait Promise.allSettled(</span>promises)).map((result, index) =&gt; ({
       ...result,<span class="cstat-no" title="statement not covered" ></span>
-      data: subzoneIds<span class="cstat-no" title="statement not covered" >[index],</span>
-    }));<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span>
-    const succeeded = results
-<span class="fstat-no" title="function not covered" ></span>      .filter((result) =&gt; (result as any).value?.requestSucceeded)
-      .map((result) =<span class="cstat-no" title="statement not covered" >&gt; ({ data: result.data, value: (result as any).value?.data }));</span>
-<span class="cstat-no" title="statement not covered" ></span>
-    co<span class="cstat-no" title="statement not covered" >nst failed = </span>results
-      .filter((result) =&gt; !(result as any).value?.requestSucceeded)
-<span class="cstat-no" title="statement not covered" >      .map((result) =&gt; ({ data: result.data, error: (result as any).value?.error ?? </span>strings.GENERIC_ERROR }));
-&nbsp;
-    if (failed.length &amp;&amp; !succeeded.length) {
-      return rejectWithValue(failed.map(<span class="cstat-no" title="statement not covered" >(f) =&gt; f.error).join(', '));</span>
-    }
+      data: substratumIds[index],<span class="cstat-no" title="statement not covered" ></span>
+    }));
 <span class="fstat-no" title="function not covered" ></span>
-    return true;<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+    const succeeded =<span class="cstat-no" title="statement not covered" > results</span>
+<span class="cstat-no" title="statement not covered" >      .filter((result) =&gt; (result as any).value?.requestSucceeded)</span>
+<span class="cstat-no" title="statement not covered" >      .map((result)</span> =&gt; ({ data: result.data, value: (result as any).value?.data }));
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    const failed = results</span>
+      .filter((result) =&gt; !(result as any).value?.requestSucceeded)
+      .map((result) =&gt; ({ data: result.data, error: (result as any).value?.error ?? strings.GENERIC_ERROR }));
+<span class="cstat-no" title="statement not covered" ></span>
+    if (failed.length &amp;&amp; !succeeded.length) {
+<span class="fstat-no" title="function not covered" ></span>      return rejectWithValue(failed.map((f) =&gt; f.error).join(', '));
+    }<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+    return true;
   }<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 );
 &nbsp;</pre></td></tr></table></pre>
@@ -226,7 +232,7 @@ export type BulkUpdateRequest = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-05T19:06:18.388Z
+                at 2026-01-05T21:57:59.407Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

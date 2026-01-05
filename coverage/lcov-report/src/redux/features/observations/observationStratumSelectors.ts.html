@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/redux/features/observations/observationMonitoringPlotSelectors.ts</title>
+    <title>Code coverage report for src/redux/features/observations/observationStratumSelectors.ts</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../../../prettify.css" />
     <link rel="stylesheet" href="../../../../base.css" />
@@ -19,13 +19,13 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../../index.html">All files</a> / <a href="index.html">src/redux/features/observations</a> observationMonitoringPlotSelectors.ts</h1>
+        <h1><a href="../../../../index.html">All files</a> / <a href="index.html">src/redux/features/observations</a> observationStratumSelectors.ts</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/28</span>
+                <span class='fraction'>0/33</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/25</span>
+                <span class='fraction'>0/30</span>
             </div>
         
             
@@ -92,7 +92,13 @@
 <a name='L27'></a><a href='#L27'>27</a>
 <a name='L28'></a><a href='#L28'>28</a>
 <a name='L29'></a><a href='#L29'>29</a>
-<a name='L30'></a><a href='#L30'>30</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L30'></a><a href='#L30'>30</a>
+<a name='L31'></a><a href='#L31'>31</a>
+<a name='L32'></a><a href='#L32'>32</a>
+<a name='L33'></a><a href='#L33'>33</a>
+<a name='L34'></a><a href='#L34'>34</a>
+<a name='L35'></a><a href='#L35'>35</a>
+<a name='L36'></a><a href='#L36'>36</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -112,52 +118,64 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { createS<span class="cstat-no" title="statement not covered" >elector } from '@redux</span>js/toolkit';
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/* eslint-disabl<span class="cstat-no" title="statement not covered" >e @typescript-eslint/n</span>o-unused-vars */
+import { createSelector<span class="cstat-no" title="statement not covered" > } from '@reduxjs/toolkit';</span>
+import { createCachedSel<span class="cstat-no" title="statement not covered" >ector } from 're-reselect';</span>
 <span class="cstat-no" title="statement not covered" ></span>
-import { ObservationMoni<span class="cstat-no" title="statement not covered" >toringPlotResults, Observat</span>ionSubstratumResults } from 'src/types/Observations';
+import { RootSt<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >at</span>e } from 'src/redux/rootReducer';</span>
+im<span class="cstat-no" title="statement not covered" >port { ObservationStratumResults } from 'src/types/Observations';</span>
 <span class="cstat-no" title="statement not covered" ></span>
-import { ZonePa<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ra</span>ms, selectObservationPlantingZone } from './observationPlantingZoneSelectors';</span>
+import { DetailsParams, SearchParams, selectObservationDetails } from './observationDetailsSelectors';
+import { searchRes<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ul</span>tPlots } from './utils';</span>
 <span class="cstat-no" title="statement not covered" ></span>
-expo<span class="cstat-no" title="statement not covered" >rt type MonitoringPlotParams = ZoneParams &amp; {</span>
-  monitoringPlotId: number;
-};<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+expo<span class="cstat-no" title="statement not covered" >rt type StratumParams = DetailsParams &amp; {</span>
+  stra<span class="cstat-no" title="statement not covered" >tumName: string;</span>
+};<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+&nbsp;
+ex<span class="cstat-no" title="statement not covered" >port type S</span>tratumSearchParams = SearchParams &amp; StratumParams &amp; { plotType?: boolean };
+&nbsp;
+export const select<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Ob</span>servati<span class="cstat-no" title="statement not covered" >onStratum = createSelector(</span></span>
+  [selectObservation<span class="cstat-no" title="statement not covered" >Det</span>ails, (state, params: StratumParams, defaultTimeZone) =&gt; params],
+<span class="cstat-no" title="statement not covered" >  (observationDetails, params) =&gt; {</span>
+    return observationDetail<span class="fstat-no" title="function not covered" >s?</span>.str<span class="cstat-no" title="statement not covered" >ata.find((stratum: Observ</span>ationStratumResults) =&gt; stratum.name === params.stratumName);
+  }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+);
 <span class="cstat-no" title="statement not covered" ></span>
-expo<span class="cstat-no" title="statement not covered" >rt type PlotObservations = ObservationMonitoringPlotResults &amp; {</span>
-  plan<span class="cstat-no" title="statement not covered" >tingZoneName: string;</span>
-  planti<span class="cstat-no" title="statement not covered" >ngSubzoneName: string;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-};
-<span class="cstat-no" title="statement not covered" ></span>
-export const selectObservationMonitoringPlot = createSelector(
-  // eslint-disable<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >-n</span>ext-lin<span class="cstat-no" title="statement not covered" >e @typescript-eslint/no-unused-vars</span></span>
-  [selectObservation<span class="cstat-no" title="statement not covered" >Pla</span>ntingZone, (state, params, defaultTimeZone) =&gt; params],
-<span class="cstat-no" title="statement not covered" >  (observationPlantingZone, params) =&gt;</span>
-    observationPlantingZone?.substr<span class="fstat-no" title="function not covered" >at</span>a<span class="cstat-no" title="statement not covered" ></span>
-      .flatMap((subzone: ObservationSubstratumResults): PlotObservations[] =&gt;
-<span class="cstat-no" title="statement not covered" >        subzone.monitoringPlots.map((plot: Obs</span>ervationMonitoringPlotResults) =&gt; ({
-          ...plot,<span class="cstat-no" title="statement not covered" ></span>
-          plantingZoneName: observationPlantin<span class="cstat-no" title="statement not covered" >gZone.stratumName,</span>
-          plantingSubzoneName: subzone.s<span class="cstat-no" title="statement not covered" >ubstratumName,</span>
-        }))
-      )<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="fstat-no" title="function not covered" ></span>      .find((monitoringPlot: PlotObserv<span class="cstat-no" title="statement not covered" >ations) =&gt; monitoringPlot.monitoringPlotId === params.monitoringPlotId)</span>
-);<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span>
-&nbsp;</pre></td></tr></table></pre>
+export const searchOb<span class="cstat-no" title="statement not covered" >servationStratum: (</span>
+  state: RootState,<span class="cstat-no" title="statement not covered" ></span>
+  params: StratumSearchParams,<span class="cstat-no" title="statement not covered" ></span>
+  defaultTimeZone: <span class="cstat-no" title="statement not covered" >string</span>
+) =&gt; ObservationStratumResults | <span class="cstat-no" title="statement not covered" >undefined = createCachedSelector(</span>
+  selectObservationStratum,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="fstat-no" title="function not covered" >  (s</span>tate: RootState, params: StratumSearchParams, defaultTimeZone: string) =&gt; params,
+  (s<span class="cstat-no" title="statement not covered" >tratum, params) =&gt; searchResultPlots(params.search, params.plotType, stratum<span class="fstat-no" title="function not covered" >)<span class="cstat-no" title="statement not covered" ></span></span></span>
+)(
+  (state: RootState, params: StratumSearchParams, defaultTimeZone: string) =&gt;
+    `${params.plantingSiteId}_${p<span class="cstat-no" title="statement not covered" >arams.observationId}_${params.stratumName}_${defaultTimeZone}_${params.search}_${params.plotType}`</span>
+);
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-05T19:06:18.388Z
+                at 2026-01-05T21:57:59.407Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

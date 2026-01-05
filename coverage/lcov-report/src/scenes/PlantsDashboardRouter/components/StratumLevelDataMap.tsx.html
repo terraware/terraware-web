@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/101</span>
+                <span class='fraction'>0/102</span>
             </div>
         
             
@@ -407,7 +407,14 @@
 <a name='L342'></a><a href='#L342'>342</a>
 <a name='L343'></a><a href='#L343'>343</a>
 <a name='L344'></a><a href='#L344'>344</a>
-<a name='L345'></a><a href='#L345'>345</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L345'></a><a href='#L345'>345</a>
+<a name='L346'></a><a href='#L346'>346</a>
+<a name='L347'></a><a href='#L347'>347</a>
+<a name='L348'></a><a href='#L348'>348</a>
+<a name='L349'></a><a href='#L349'>349</a>
+<a name='L350'></a><a href='#L350'>350</a>
+<a name='L351'></a><a href='#L351'>351</a>
+<a name='L352'></a><a href='#L352'>352</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -466,6 +473,10 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -592,8 +603,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -716,6 +729,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -778,60 +792,65 @@ export default function StratumLevelDataMap({ plantingSiteId }: StratumLevelData
     usePlantingSiteData();
   const defaultTimeZone = useDefaultTimeZone();
   const timeZone = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >pl</span>antingS<span class="cstat-no" title="statement not covered" >ite?.timeZone ?? defaultTimeZone.get().id;</span></span>
-  const zonesProgres<span class="cstat-no" title="statement not covered" >s =</span> useMemo(() =&gt; {
-<span class="cstat-no" title="statement not covered" >    const zoneProgress: Record&lt;number, { name: string; progress: number; targetDensity: number }&gt; = {};</span>
+  const strataProgre<span class="cstat-no" title="statement not covered" >ss </span>= useMemo(() =&gt; {
+<span class="cstat-no" title="statement not covered" >    const stratumProgress: Record&lt;number, { name: string; progress: number; targetDensity: number }&gt; = {};</span>
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-    plantingSite?.strata?.forEach((zone) =&gt; {
-<span class="cstat-no" title="statement not covered" >      const percentProgress = plantingSiteRepo</span>rtedPlants?.strata?.find((z) =&gt; z.id === zone.id)?.progressPercent ?? 0;
-      zoneProgress[<span class="cstat-no" title="statement not covered" >zone.id] = { name: zone.na</span>me, progress: percentProgress, targetDensity: zone.targetPlantingDensity };
+    plantingSite?.strata?.forEach((stratum) =&gt; {
+<span class="cstat-no" title="statement not covered" >      const percentProgress =</span>
+        plantingSit<span class="cstat-no" title="statement not covered" >eReportedPlants?.strata?.f</span>ind((_stratum) =&gt; _stratum.id === stratum.id)?.progressPercent ?? 0;
+      stratumProgress[<span class="cstat-no" title="statement not covered" >stratum.id] = {</span>
+        name: strat<span class="cstat-no" title="statement not covered" >um.name,</span>
+        progress:<span class="cstat-no" title="statement not covered" > percentProgress,</span>
+        targetDensity: strat<span class="cstat-no" title="statement not covered" >um.targetPlantingDensity,</span>
+      };<span class="cstat-no" title="statement not covered" ></span>
     });<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-    return zonePr<span class="cstat-no" title="statement not covered" >ogress;</span>
-  }, [plantingSite, planting<span class="cstat-no" title="statement not covered" >SiteReportedPlants]);</span>
+    return stratumProg<span class="cstat-no" title="statement not covered" >ress;</span>
+  }, [plantingSite, p<span class="cstat-no" title="statement not covered" >lantingSiteReportedPlants]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const zonesStats = us<span class="cstat-no" title="statement not covered" >eMemo(() =&gt; {</span>
-    const zoneStats: Record&lt;numbe<span class="cstat-no" title="statement not covered" >r, { name: string; reportedPlants: number; reportedSpe</span>cies: number }&gt; = {};
-    plantingSite?.stra<span class="cstat-no" title="statement not covered" >ta?.forEach((zone) =&gt; {</span>
-      const zoneRepor<span class="cstat-no" title="statement not covered" >tedPlants = plantingSiteReported</span>Plants?.strata?.find((z) =&gt; z.id === zone.id);
-      const reporte<span class="cstat-no" title="statement not covered" >dPlants = zoneReportedPlant</span>s?.totalPlants ?? 0;
-      const reportedSpecies = <span class="cstat-no" title="statement not covered" >0; // zoneReportedPlants?.totalSpecies</span> ?? 0;
-      zon<span class="fstat-no" title="function not covered" >eStats[zone.id] = { </span>name: zone.name, reportedPlants, reportedSpecies };
-    });
-    return zoneS<span class="cstat-no" title="statement not covered" >tats;</span>
-  }, [plantingSite, plan<span class="cstat-no" title="statement not covered" >tingSiteReportedPlants]);</span>
+  const strataStats = useMemo(<span class="cstat-no" title="statement not covered" >() =&gt; {</span>
+    const<span class="fstat-no" title="function not covered" > stratumStats: Recor</span>d&lt;number, { name: string; reportedPlants: number; reportedSpecies: number }&gt; = {};
+    plantingSite?.strata?.forEach((stratum) =&gt; {
+      const stra<span class="cstat-no" title="statement not covered" >tumReportedPlants = plantingSite</span>ReportedPlants?.strata?.find((_stratum) =&gt; _stratum.id === stratum.id);
+      const reportedPlan<span class="cstat-no" title="statement not covered" >ts = stratumReportedPlants?.totalP</span>lants ?? 0;
+      const reportedSpecies = 0; // stratumReportedPlants?.totalSpecies ?? 0;<span class="cstat-no" title="statement not covered" ></span>
+      stratumStats[stratum<span class="cstat-no" title="statement not covered" >.id] = { name: stratum.name, reportedPlants, repor</span>tedSpecies };
+    });<span class="cstat-no" title="statement not covered" ></span>
+    return stratumStats;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  }, [plantingSite, plantingSiteReportedPlants]);
 <span class="cstat-no" title="statement not covered" ></span>
-  const latestSummary = us<span class="cstat-no" title="statement not covered" >eMemo(() =&gt; {</span>
-    if (observation<span class="cstat-no" title="statement not covered" >Summaries?.length) {</span>
-      return observation<span class="cstat-no" title="statement not covered" >Summaries[0];<span class="fstat-no" title="function not covered" ></span></span>
-    }
-  }, [observationSummarie<span class="cstat-no" title="statement not covered" >s])</span>;
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  co<span class="cstat-no" title="statement not covered" >nst latestSummary = useMemo(() =&gt; {<span class="fstat-no" title="function not covered" ></span></span>
+    if (observationSummaries?.length) {
+      return observationSummar<span class="cstat-no" title="statement not covered" >ies[0];<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+    }<span class="cstat-no" title="statement not covered" ></span>
+  }, [observationSummaries]);
+&nbsp;
   const [legends, setLegends] = useState&lt;MapLegendGroup[]&gt;([]);
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  useE<span class="cstat-no" title="statement not covered" >ffect(() =&gt; {</span>
-    const boundariesLegendItems = [
-<span class="cstat-no" title="statement not covered" >      {</span>
-        label: strings.PLANTING_SITE,
-        borderColor: <span class="cstat-no" title="statement not covered" >theme.palette.TwClrBaseGre<span class="fstat-no" title="function not covered" >en</span>300 as string,</span>
-        fillColor: getRgbaFromHex(theme.palette.TwClrBaseGreen300 as string, 0.2),
-      },<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >      {<span class="fstat-no" title="function not covered" ></span></span>
-        label: strings.ZONES,
-        borderColor: theme.palett<span class="cstat-no" title="statement not covered" >e.TwClrBaseLightGreen300 as string,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-        fillColor: 'transpare<span class="cstat-no" title="statement not covered" >nt',</span>
-      },<span class="cstat-no" title="statement not covered" ></span>
-    ];<span class="cstat-no" title="statement not covered" ></span>
-    const result: MapLegendGroup[] = [
-<span class="cstat-no" title="statement not covered" >      {</span>
-        title: strings.BOUNDARIES,
-        items: [<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+&nbsp;
+  useEffect(() =&gt; {
+<span class="cstat-no" title="statement not covered" >    const boundariesLegendIt</span>ems = [
+      {
+        label: strings<span class="cstat-no" title="statement not covered" >.PLANTING_SITE,<span class="fstat-no" title="function not covered" ></span></span>
+        borderColor: theme.palette.TwClrBaseGreen300 as string,
+        fillColor: getRgb<span class="cstat-no" title="statement not covered" >aFr</span>omHex(theme.palette.TwClrBaseGreen300 as string, 0.2),
+<span class="cstat-no" title="statement not covered" >      },<span class="fstat-no" title="function not covered" ></span></span>
+      {
+        label: strings.STRATA,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+        borderColor: theme.pa<span class="cstat-no" title="statement not covered" >lette.TwClrBaseLightGreen300 as string,</span>
+        fillColor: 'transparen<span class="cstat-no" title="statement not covered" >t'</span>,
+<span class="cstat-no" title="statement not covered" >      },</span>
+    ];
+<span class="cstat-no" title="statement not covered" >    const result: MapLege</span>ndGroup[] = [
+      {
+        title: strings.B<span class="cstat-no" title="statement not covered" >OUNDARIES,<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >        items: [</span>
 <span class="cstat-no" title="statement not covered" >          ...boundariesLegendItems,</span>
-<span class="cstat-no" title="statement not covered" >          {</span>
-            label: strings.SUBZONES,
-            borderColor: theme.palette.TwClrBaseBlue300 as string,
-            fillColor: getRgbaFr<span class="cstat-no" title="statement not covered" >omHex(theme.palette.TwClrBaseBl</span>ue300 as string, 0.2),
-<span class="cstat-no" title="statement not covered" >          },<span class="fstat-no" title="function not covered" ></span></span>
-        ],<span class="cstat-no" title="statement not covered" ></span>
+          {
+            label: strings.SUBSTRATA,
+            borderColor: theme.p<span class="cstat-no" title="statement not covered" >alette.TwClrBaseBlue300 as stri</span>ng,
+<span class="cstat-no" title="statement not covered" >            fillColor: getRgba<span class="fstat-no" title="function not covered" >Fr</span>omHex(theme.palette.TwClrBaseBlue300 as string, 0.2),</span>
+          },<span class="cstat-no" title="statement not covered" ></span>
+        ],
       },
     ];
 &nbsp;
@@ -842,8 +861,8 @@ export default function StratumLevelDataMap({ plantingSiteId }: StratumLevelData
         {
           label: strings.LATEST_OBSERVATION,
           borderColor: theme.palette.TwClrBaseLightGreen300 as string,
-          fillColor: theme.palette.TwClrBasePink200 as string,
-          opacity: <span class="cstat-no" title="statement not covered" >0.9,</span>
+          fillColor<span class="cstat-no" title="statement not covered" >: theme.palette.TwClrBasePink200 as string,</span>
+          opacity: 0.9,
         },
       ],
       switch: true,
@@ -855,8 +874,8 @@ export default function StratumLevelDataMap({ plantingSiteId }: StratumLevelData
       title: strings.SURVIVAL_RATE,
       items: [
         {
-          label: strings.LESS_THAN_FIFTY_PERCENT,
-<span class="cstat-no" title="statement not covered" >          borderColor: theme.palette.TwClrBaseLightGreen300 as string,</span>
+<span class="cstat-no" title="statement not covered" >          label: strings.LESS_THAN_FIFTY_PERCENT,</span>
+          borderColor: theme.palette.TwClrBaseLightGreen300 as string,
           fillColor: 'transparent',
           fillPatternUrl: '/assets/survival-rate-less-50.png',
         },
@@ -870,8 +889,8 @@ export default function StratumLevelDataMap({ plantingSiteId }: StratumLevelData
           label: strings.GREATER_THAN_SEVENTY_FIVE_PERCENT,
           borderColor: theme.palette.TwClrBaseLightGreen300 as string,
           fillColor: 'transparent',
-          fillPatternUrl: '/assets/survival-rate-more-75.png',
-<span class="cstat-no" title="statement not covered" >        },</span>
+<span class="cstat-no" title="statement not covered" >          fillPatternUrl: '/assets/survival-rate-more-75.png',</span>
+        },
       ],
       switch: true,
       disabled: !latestResult,
@@ -896,125 +915,127 @@ export default function StratumLevelDataMap({ plantingSiteId }: StratumLevelData
       return baseMap;
     }
 &nbsp;
-    if (!latestSummary) {
-<span class="cstat-no" title="statement not covered" >      return MapService.</span>getMapDataFromPlantingSiteHistory(plantingSite, latestResultSiteHistory);
-    } else {
-      return MapService.getMapData<span class="cstat-no" title="statement not covered" >FromPlantingSiteFromHistor<span class="fstat-no" title="function not covered" >yA</span>ndResults(</span>
-<span class="cstat-no" title="statement not covered" >        plantingSite,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-        latestResultSiteHistory,
-        latestSumm<span class="cstat-no" title="statement not covered" >ary<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    if (!latestSummary) </span>{
+      return MapService.getMapDataFromPlantingSiteHistory(plantingSite, latestResultSiteHistory);
+    } else {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >      return MapService.getMapDataFromPlantingSiteFromHistoryAndResults(<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+        plantingSite,
+        latestResu<span class="cstat-no" title="statement not covered" >ltSiteHistory,<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >        latestSummary</span>
 <span class="cstat-no" title="statement not covered" >      );</span>
-    }<span class="cstat-no" title="statement not covered" ></span>
-  }, [latestResultSiteHistory, latestSummary, plantingSite]);
+    }
+  }, [latestResultSi<span class="cstat-no" title="statement not covered" >teHistory, latestSummary, plantingSite]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  co<span class="cstat-no" title="statement not covered" >nst focusEntities = useMemo(() =&gt; {</span>
-    re<span class="cstat-no" title="statement not covered" >turn [{ sourceId</span>: 'sites', id: plantingSiteId }];
-  }, [plantingSiteId]);
+  cons<span class="cstat-no" title="statement not covered" >t focusEntities </span>= useMemo(() =&gt; {
+    return [{ sourceId: 'sites', id: plantingSiteId }];
+  },<span class="cstat-no" title="statement not covered" > [plantingSiteId]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  cons<span class="cstat-no" title="statement not covered" >t findZoneArea = useCallback(</span>
-    (zoneId: number) =&gt; {
-<span class="cstat-no" title="statement not covered" >      const selectedZone = plantingSite?.strata?.find((pZone) =&gt; pZone.id === zoneId);</span>
-      return selectedZone?.areaHa;
+  const findStratumArea = useCallback(
+    (s<span class="cstat-no" title="statement not covered" >tratumId: number) =&gt; {</span>
+      const selectedStratum = plantingSite?.strata?.find((_stratum) =&gt; _stratum.id === stratumId);
+      return selectedStratum?.areaHa;
     },
     [plantingSite]
   );
 &nbsp;
-  const contextRenderer = useMemo(
-    () =&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >      // eslint-disable-next-line react/display-name</span>
-      (entity: MapSourceProperties): JSX.Element =&gt; {
-        let properties:<span class="cstat-no" title="statement not covered" > TooltipProperty[] = [];</span>
-<span class="fstat-no" title="function not covered" ></span>
-        const zoneHistory = latestResultSiteHistory?.strata.find((_zoneHistory) =&gt; _zoneHistory.id === entity.id);
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-<span class="cstat-no" title="statement not covered" >        // If zone history is not found, the id in the base map us</span>es current zone ID instead.
-        const zoneId = zoneHistory?.stratumId ?? entity.id;
-        const zoneObservation = latestResult?.strata.find(
-          (zoneResult) =&gt; zoneResult.stratumId === zoneHistory?.stratumId
-        );<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" ></span>        const zoneStat = zoneId !== undefined ? zonesStats[zoneId] : undefined;
-        const progress = zoneId !== undefined ? zonesProgress[zoneId] : undefined;
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span>        const zoneArea = zoneId !== undefined ? findZoneArea(zoneId) : undefined;</span>
-        const lastZoneSummary = latestSummary?.strata.find((pz) =&gt; pz.stratumId === zoneId);
-<span class="cstat-no" title="statement not covered" ></span>
-        if (!zoneStat) {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-          properties = <span class="cstat-no" title="statement not covered" >[</span>
-            {<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" ></span>              key: strings<span class="cstat-no" title="statement not covered" >.AREA_HA,</span>
-              value: zoneArea ?? strings.UNKNOWN,
+  const contextRenderer <span class="cstat-no" title="statement not covered" >= useMemo(<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    () =&gt;</span>
+      // eslint-disable-next-line react/display-name
+      (entity: MapSourcePr<span class="cstat-no" title="statement not covered" >operties): JSX.Element =&gt; {</span>
+<span class="fstat-no" title="function not covered" ></span>        let properties: TooltipProperty[] = [];
+&nbsp;
+        const stratumHistory =<span class="cstat-no" title="statement not covered" > latestResultSiteHistory?.strata.find(<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+<span class="cstat-no" title="statement not covered" >          (_stratumHistory) =&gt; _stratumHistory.id === entity.id</span>
+        );
+&nbsp;
+        // If stratum history is not found, the id in the base map uses current stratum ID instead.
+        const stratumId = <span class="cstat-no" title="statement not covered" >stratumHistory?.stratumId ?? entity.id;</span>
+<span class="fstat-no" title="function not covered" ></span>        const stratumObservation = latestResult?.strata.find(
+          (stratumResult) =&gt; stratumResult.stratumId === stratumHistory?.stratumId
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span>        );</span>
+        const stratumStat = stratumId !== undefined ? strataStats[stratumId] : undefined;
+        const progress = <span class="cstat-no" title="statement not covered" >str</span>atumId !== undefined ? strataProgress[stratumId] : undefined;
+        const stratumArea = str<span class="cstat-no" title="statement not covered" >atumId !== undefined ? findStratumArea(stratumId) : undefined;</span>
+        co<span class="fstat-no" title="function not covered" >ns</span>t lastStratumSummar<span class="cstat-no" title="statement not covered" >y = latestSummary?.strata.find((_</span>stratum) =&gt; _stratum.stratumId === stratumId);
+&nbsp;
+        if (!stratumStat) <span class="cstat-no" title="statement not covered" >{</span>
+          properties = [<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" ></span>            {<span class="cstat-no" title="statement not covered" ></span>
+              key: strings.AREA_HA,
+              value: stratum<span class="cstat-no" title="statement not covered" >Area ?? strings.UNKNOWN,</span>
             },<span class="cstat-no" title="statement not covered" ></span>
-            { key: string<span class="cstat-no" title="statement not covered" >s.NO_PLANTS, value: '' },</span>
-          ];<span class="cstat-no" title="statement not covered" ></span>
-        } else if (progress &amp;&amp; z<span class="cstat-no" title="statement not covered" >oneStat) {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-<span class="cstat-no" title="statement not covered" >          if (lastZoneSummary) {</span>
-<span class="cstat-no" title="statement not covered" >            properties = [</span>
+            { key: strings.N<span class="cstat-no" title="statement not covered" >O_PLANTS, value: '' },</span>
+          ];<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+<span class="cstat-no" title="statement not covered" >        } else if (progress &amp;&amp; stratumStat) {</span>
+<span class="cstat-no" title="statement not covered" >          if (lastStratumSummary) {</span>
+            properties = [
               {
                 key: strings.AREA_HA,
-                value: lastZoneSummary.areaHa,
+                value: lastStratumSummary.areaHa,
               },
               {
-                key: strings.SURVIVAL_RATE,
+<span class="cstat-no" title="statement not covered" >                key: strings.SURVIVAL_RATE,</span>
 <span class="cstat-no" title="statement not covered" >                value:</span>
-<span class="cstat-no" title="statement not covered" >                  lastZoneSummary.survivalRate !== undefined</span>
-<span class="cstat-no" title="statement not covered" >                    ? `${lastZoneSummary.survivalRate}%`</span>
+<span class="cstat-no" title="statement not covered" >                  lastStratumSummary.survivalRate !== undefined</span>
+                    ? `${lastStratumSummary.survivalRate}%`
                     : strings.INSUFFICIENT_DATA,
               },
               {
                 key: strings.PLANT_DENSITY,
-                value: `${lastZoneSummary.plantingDensity} ${strings.PLANTS_PER_HECTARE}`,
+                value: `${lastStratumSummary.plantingDensity} ${strings.PLANTS_PER_HECTARE}`,
               },
               {
                 key: strings.PLANTED_PLANTS,
-                value: `${zoneStat.reportedPlants}`,
+                value: `${stratumStat.reportedPlants}`,
               },
               {
                 key: strings.OBSERVED_PLANTS,
-                value: `${lastZoneSummary?.totalPlants}`,
+                value: `${lastStratumSummary?.totalPlants}`,
               },
               {
                 key: strings.PLANTED_SPECIES,
-                value: `${zoneStat.reportedSpecies}`,
+                value: `${stratumStat.reportedSpecies}`,
               },
               {
                 key: strings.OBSERVED_SPECIES,
-                value: `${lastZoneSummary?.totalSpecies}`,
+                value: `${lastStratumSummary?.totalSpecies}`,
               },
             ];
           } else {
             properties = [
               {
                 key: strings.AREA_HA,
-                value: zoneArea || strings.UNKNOWN,
+                value: stratumArea || strings.UNKNOWN,
               },
-              {
-<span class="cstat-no" title="statement not covered" >                key: strings.PLANTED_PLANTS,</span>
-                value: `${zoneStat.reportedPlants}`,
+<span class="cstat-no" title="statement not covered" >              {</span>
+                key: strings.PLANTED_PLANTS,
+                value: `${stratumStat.reportedPlants}`,
               },
               {
                 key: strings.PLANTED_SPECIES,
-                value: `${zoneStat.reportedSpecies}`,
+                value: `${stratumStat.reportedSpecies}`,
               },
               { key: strings.NOT_OBSERVED, value: '' },
             ];
           }
         }
 &nbsp;
-        const latestZoneObservationTime = plantingSite?.strata?.find(
-          (z) =&gt; z.id === zoneId
+        const latestStratumObservationTime = plantingSite?.strata?.find(
+          (_stratum) =&gt; _stratum.id === stratumId
         )?.latestObservationCompletedTime;
 &nbsp;
-        return (
-          &lt;MapTooltip<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" ></span>            title<span class="cstat-no" title="statement not covered" >={zoneObservatio</span>n?.name ?? entity.name}
-            subtitle={
-<span class="cstat-no" title="statement not covered" >              latestZoneObservationTime</span>
+        return (<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" >          &lt;M</span>apTooltip<span class="cstat-no" title="statement not covered" ></span>
+            title={stratumObservation?.name ?? entity.name}
+<span class="cstat-no" title="statement not covered" >            subtitle={</span>
+              latestStratumObservationTime
                 ? strings
                     .formatString(
                       strings.AS_OF_X,
                       strings
                         .formatString(
                           strings.DATE_OBSERVATION,
-                          getDateDisplayValue(latestZoneObservationTime || '', timeZone)
+                          getDateDisplayValue(latestStratumObservationTime || '', timeZone)
                         )
                         .toString()
                     )
@@ -1029,14 +1050,14 @@ export default function StratumLevelDataMap({ plantingSiteId }: StratumLevelData
     [
       latestResultSiteHistory?.strata,
       latestResult?.strata,
-      zonesStats,
-      zonesProgress,
-      findZoneArea,
+      strataStats,
+      strataProgress,
+      findStratumArea,
       latestSummary?.strata,
       plantingSite?.strata,
       timeZone,
-      theme,
-<span class="cstat-no" title="statement not covered" >    ]</span>
+<span class="cstat-no" title="statement not covered" >      theme,</span>
+    ]
   );
 &nbsp;
   return (
@@ -1057,12 +1078,12 @@ export default function StratumLevelDataMap({ plantingSiteId }: StratumLevelData
         )}{' '}
       &lt;/Typography&gt;
       &lt;Box display={'flex'} flexDirection={isDesktop ? 'row' : 'column-reverse'}&gt;
-        &lt;MapLegend legends={legends} setLegends={setLegends} /&gt;
-        {plantingSite?.boundary &amp;&amp; mapData ? (<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-          &lt;PlantingSiteMap<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+        &lt;MapLegend legends={legends} setLegends={setLegends} /&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+        {plantingSite?.boundary &amp;&amp; mapData ?<span class="fstat-no" title="function not covered" > (<span class="cstat-no" title="statement not covered" ></span></span>
+          &lt;PlantingSiteMap
             mapData={mapData}
             style={{ borderRadius: '8px' }}
-            layers={['Planting Site', 'Zones', 'Sub-Zones']}
+            layers={['Planting Site', 'Strata', 'Sub-Strata']}
             showSurvivalRateFill={!!latestResult &amp;&amp; legends.find((l) =&gt; l.title === strings.SURVIVAL_RATE)?.checked}
             showRecencyFill={legends.find((l) =&gt; l.title === strings.OBSERVATION_EVENTS)?.checked}
             focusEntities={focusEntities}
@@ -1083,8 +1104,8 @@ export default function StratumLevelDataMap({ plantingSiteId }: StratumLevelData
                 },
               },
             }}
-            zoneInteractive={true}
-            subzoneInteractive={false}
+            stratumInteractive={true}
+            substratumInteractive={false}
           /&gt;
         ) : (
           &lt;Box sx={{ position: 'fixed', top: '50%', left: '50%' }}&gt;
@@ -1102,7 +1123,7 @@ export default function StratumLevelDataMap({ plantingSiteId }: StratumLevelData
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-05T19:06:18.388Z
+                at 2026-01-05T21:57:59.407Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

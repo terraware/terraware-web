@@ -164,7 +164,13 @@
 <a name='L99'></a><a href='#L99'>99</a>
 <a name='L100'></a><a href='#L100'>100</a>
 <a name='L101'></a><a href='#L101'>101</a>
-<a name='L102'></a><a href='#L102'>102</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L102'></a><a href='#L102'>102</a>
+<a name='L103'></a><a href='#L103'>103</a>
+<a name='L104'></a><a href='#L104'>104</a>
+<a name='L105'></a><a href='#L105'>105</a>
+<a name='L106'></a><a href='#L106'>106</a>
+<a name='L107'></a><a href='#L107'>107</a>
+<a name='L108'></a><a href='#L108'>108</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -265,7 +271,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > useMemo } fro</span>m 'react';
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > useMemo } fro</span>m 'react';
 <span class="cstat-no" title="statement not covered" ></span>
 import { Box, useTheme <span class="cstat-no" title="statement not covered" >} from '@mui/material';</span>
 <span class="cstat-no" title="statement not covered" ></span>
@@ -273,107 +285,113 @@ import MapLegend fr<span class="cstat-no" title="statement not covered" >om 'src
 import strings from<span class="cstat-no" title="statement not covered" > 'src/strings';</span>
 import { getRgb<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >aF</span>romHex } from 'src/utils/color';</span>
 <span class="cstat-no" title="statement not covered" ></span>
-expo<span class="cstat-no" title="statement not covered" >rt type PlantingSiteMapLegendOption = 'site' | 'zone' | 'subzon</span>e' | 'permanentPlot' | 'temporaryPlot' | 'adHocPlot';
+expo<span class="cstat-no" title="statement not covered" >rt type PlantingSiteMapLegendOption =</span>
+  | 'site'
+  | 'stratum'<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >  | 'substratum'</span>
+  | <span class="cstat-no" title="statement not covered" >'permanentPlot'</span>
+  | 't<span class="cstat-no" title="statement not covered" >emporaryPlot'</span>
+  | 'adH<span class="cstat-no" title="statement not covered" >ocPlot';<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 &nbsp;
-export type Planti<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ng</span>SiteMapLegendProps = {</span>
-<span class="cstat-no" title="statement not covered" >  options: PlantingSiteMapLegendOption[];</span>
-  on<span class="cstat-no" title="statement not covered" >ChangeLayer?: (layer: string) =&gt; void;</span>
-  sele<span class="cstat-no" title="statement not covered" >ctedLayer?: string;</span>
-  disabl<span class="cstat-no" title="statement not covered" >eLegends?: boolean;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+ex<span class="cstat-no" title="statement not covered" >port type P</span>lantingSiteMapLegendProps = {
+  options: PlantingSiteMapLegendOption[];
+  onChangeLaye<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >r?</span>: (layer: string) =&gt; void;<span class="cstat-no" title="statement not covered" ></span></span>
+  selectedLayer?: string;
+  disableLegends?: boolean;
 };
-<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
 export default function PlantingSiteMapLegend({
-  options,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  options,
   onChangeLayer,
-  selectedLayer,
-  disableLegends,
-}: PlantingSiteMapLegendProps): JSX.Element {
-  const theme = useTheme();
+  selectedLayer,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  disableLegends,<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >}: PlantingSiteMapLegendProps): JSX.Element {</span>
+  const the<span class="fstat-no" title="function not covered" >me</span> = u<span class="cstat-no" title="statement not covered" >seTheme();</span>
   const hasSite = !!options.find((opt) =&gt; opt === 'site');
-  const hasZone = !!options.find((opt) =&gt; opt === 'zone');
-  const hasSubzone <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >= </span>!!optio<span class="cstat-no" title="statement not covered" >ns.find((opt) =&gt; opt === 'subzone');</span></span>
-  const hasPermanent<span class="cstat-no" title="statement not covered" >Plo</span>t = !!options.find((opt) =&gt; opt === 'permanentPlot');
-<span class="cstat-no" title="statement not covered" >  const hasTemporaryPlot = !!options.find((opt) =&gt; opt === 'temporaryPlot');</span>
-  const has<span class="fstat-no" title="function not covered" >Ad</span>HocP<span class="cstat-no" title="statement not covered" >lot = !!options.find((</span>opt) =&gt; opt === 'adHocPlot');
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  const legends = useMemo(() =&gt; {</span>
-    const items = [<span class="cstat-no" title="statement not covered" >];</span>
+<span class="cstat-no" title="statement not covered" >  const hasStratum = !!options.find((opt) =&gt; o</span>pt === 'stratum');
+  const hasSubstrat<span class="cstat-no" title="statement not covered" >um = !!options.find((opt) </span>=&gt; opt === 'substratum');
+  const hasPermanentPl<span class="cstat-no" title="statement not covered" >ot = !!options.find((opt)</span> =&gt; opt === 'permanentPlot');
+  const hasTemporaryPlo<span class="cstat-no" title="statement not covered" >t = !!options.find((opt) =&gt; opt === 'temporaryPlot')</span>;
+  const hasAdHocPlot <span class="cstat-no" title="statement not covered" >= !!options.find((opt) =&gt; opt ==</span>= 'adHocPlot');
 <span class="cstat-no" title="statement not covered" ></span>
-    if (hasSite) {<span class="cstat-no" title="statement not covered" ></span>
-      items.push({<span class="cstat-no" title="statement not covered" ></span>
-        label: stri<span class="cstat-no" title="statement not covered" >ngs.PLANTING_SITE,</span>
-        b<span class="fstat-no" title="function not covered" >orderColor: theme.pale</span>tte.TwClrBaseGreen300 as string,
-        fillColor: getRgbaFromHex(theme.palette.TwClrBaseGreen300 as string, 0.2),
-      });
-    }
+  const l<span class="fstat-no" title="function not covered" >egends = useMemo(() =&gt;</span> {
+    const items = [];
 &nbsp;
-    if (hasZone) {
-      items.push<span class="cstat-no" title="statement not covered" >({</span>
-        label: str<span class="cstat-no" title="statement not covered" >ings.ZONES,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-        borderColo<span class="cstat-no" title="statement not covered" >r: theme.palett<span class="fstat-no" title="function not covered" >e.</span>TwClrBa<span class="cstat-no" title="statement not covered" >seLightGreen300</span> </span>as string,
-        fillColor: 't<span class="cstat-no" title="statement not covered" >ransparent',<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+    if (hasSite) {
+      items.push({
+        label: strings.PLANTING_SITE,
+        borderCo<span class="cstat-no" title="statement not covered" >lor: theme.palette.TwClrBaseGree</span>n300 as string,
+        fillColor:<span class="cstat-no" title="statement not covered" > getRgbaFromHex<span class="fstat-no" title="function not covered" >(t</span>heme.pa<span class="cstat-no" title="statement not covered" >lette.TwClrBase</span>G</span>reen300 as string, 0.2),
       });<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
     }<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-    if (hasSubzone<span class="cstat-no" title="statement not covered" >) {<span class="fstat-no" title="function not covered" ></span></span>
-      items.push({<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >        label: strings.SUBZONES,</span>
+    if (hasStratum) {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+      items.push({<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+        label: str<span class="cstat-no" title="statement not covered" >ings.STRATA,<span class="fstat-no" title="function not covered" ></span></span>
+        borderColo<span class="cstat-no" title="statement not covered" >r: </span>theme.palette.TwClrBaseLightGreen300 as string,
+<span class="cstat-no" title="statement not covered" >        fillColor: 'transparent',</span>
+<span class="cstat-no" title="statement not covered" >      });</span>
+    }
+&nbsp;
+    if (hasSubstratum) {
+      items.push({
+        label: strings.SUBSTRATA,
 <span class="cstat-no" title="statement not covered" >        borderColor: theme.palette.TwClrBaseBlue300 as string,</span>
-        fillColor: getRgbaFromHex(theme.palette.TwClrBaseBlue300 as string, 0.2),
+<span class="cstat-no" title="statement not covered" >        fillColor: getRgbaFromHex(theme.palette.TwClrBaseBlue300 as string, 0.2),</span>
       });
     }
 &nbsp;
     if (hasPermanentPlot) {
-<span class="cstat-no" title="statement not covered" >      items.push({</span>
+      items.push({
 <span class="cstat-no" title="statement not covered" >        label: strings.PLOTS_PERMANENT,</span>
-        borderColor: theme.palette.TwClrBasePink300 as string,
+<span class="cstat-no" title="statement not covered" >        borderColor: theme.palette.TwClrBasePink300 as string,</span>
         fillColor: getRgbaFromHex(theme.palette.TwClrBasePink300 as string, 0.2),
       });
     }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    if (hasTemporaryPlot) {</span>
+    if (hasTemporaryPlot) {
 <span class="cstat-no" title="statement not covered" >      items.push({</span>
-        label: strings.PLOTS_TEMPORARY,
+<span class="cstat-no" title="statement not covered" >        label: strings.PLOTS_TEMPORARY,</span>
         borderColor: theme.palette.TwClrBaseYellow300 as string,
         fillColor: getRgbaFromHex(theme.palette.TwClrBaseYellow300 as string, 0.2),
       });
     }
-<span class="cstat-no" title="statement not covered" ></span>
-    if<span class="cstat-no" title="statement not covered" > (hasAdHocPlot) {</span>
-      items.push({
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (hasAdHocPlot) {</span>
+<span class="cstat-no" title="statement not covered" >      items.push({</span>
         label: strings.PLOTS_AD_HOC,
         borderColor: theme.palette.TwClrBaseOrange300 as string,
         fillColor: getRgbaFromHex(theme.palette.TwClrBaseOrange300 as string, 0.2),
       });
-<span class="cstat-no" title="statement not covered" >    }</span>
+    }
 <span class="cstat-no" title="statement not covered" ></span>
-    return [
+    re<span class="cstat-no" title="statement not covered" >turn [</span>
       {
         title: strings.BOUNDARIES,
         items,
       },
-<span class="cstat-no" title="statement not covered" >    ];</span>
-  }, [<span class="cstat-no" title="statement not covered" >hasSite, hasZone, hasSubzone, hasPermanentPlot, hasTemporaryPlot, theme, hasAdHocPlot]);</span>
+    ];
+  },<span class="cstat-no" title="statement not covered" > [hasSite, hasStratum, hasSubstratum, hasPermanentPlot, hasTemporaryPlot, theme, hasAdHocPlot]);</span>
 &nbsp;
   return (
     &lt;Box display='flex'&gt;
       &lt;MapLegend
         legends={legends}
-<span class="cstat-no" title="statement not covered" >        onChangeLayer={onChangeLayer}</span>
-        selectedLayer={selectedLayer}
+        onChangeLayer={onChangeLayer}
+<span class="cstat-no" title="statement not covered" >        selectedLayer={selectedLayer}</span>
         disableLegends={disableLegends}
       /&gt;
     &lt;/Box&gt;
   );
 }
-<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
+&nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-05T19:06:18.388Z
+                at 2026-01-05T21:57:59.407Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

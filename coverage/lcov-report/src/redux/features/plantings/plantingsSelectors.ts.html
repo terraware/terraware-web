@@ -470,18 +470,18 @@ export c<span class="cstat-no" title="statement not covered" >onst selectPlantin
 <span class="cstat-no" title="statement not covered" >  (plantings,</span> id) =&gt; (plantings ?? []).filter((planting) =&gt; planting.plantingSite.id.toString() === id.toString())
 );
 <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-export const getTotalPlantsBySubzone = (plantings: PlantingSearchData[]) =&gt; {
-  return plantings?.reduce((plantingsBySubzone: { [key: string]: number }, planting) =&gt; {
+export const getTotalPlantsBySubstratum = (plantings: PlantingSearchData[]) =&gt; {
+  return plantings?.reduce((plantingsBySubstratum: { [key: string]: number }, planting) =&gt; {
     if (!planting.substratum) {
-      return plantingsBySubzone;
+      return plantingsBySubstratum;
     }
-    const subzoneId = planting.substratum.id;
-    plantingsBySubzone[subzoneId] = planting.substratum['totalPlants(raw)'];
-    return planting<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >sB</span>ySubzon<span class="cstat-no" title="statement not covered" >e;</span></span>
+    const substratumId = planting.substratum.id;
+    plantingsBySubstratum[substratumId] = planting.substratum['totalPlants(raw)'];
+    return planting<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >sB</span>ySubstr<span class="cstat-no" title="statement not covered" >atum;</span></span>
   }, {});<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >};</span>
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-export const getTotalPlants<span class="fstat-no" title="function not covered" >By</span>Site<span class="cstat-no" title="statement not covered" > = (plantingsSites: Plan</span>tingSiteSearchResult[]) =&gt; {
+export const getTotalPlantsByS<span class="fstat-no" title="function not covered" >it</span>e = <span class="cstat-no" title="statement not covered" >(plantingsSites: PlantingSi</span>teSearchResult[]) =&gt; {
   return plantingsSites?.r<span class="fstat-no" title="function not covered" >ed</span>uce(<span class="cstat-no" title="statement not covered" >(totalPlantsBySite: { [</span>key: string]: number }, plantingSite) =&gt; {
     const plantingSiteId =<span class="fstat-no" title="function not covered" > p</span>lant<span class="cstat-no" title="statement not covered" >ingSite.id;</span>
     totalPlantsBySi<span class="fstat-no" title="function not covered" >te</span>[pla<span class="cstat-no" title="statement not covered" >ntingSiteId] = N</span>umber(plantingSite['totalPlants(raw)']);
@@ -497,7 +497,7 @@ export const selectPlantingProgress = createSelector(
   ],<span class="cstat-no" title="statement not covered" ></span>
   (plantingSitesSear<span class="cstat-no" title="statement not covered" >chResults, plantingSites, pl</span>antings) =&gt; {
     if (plantingSitesSea<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >rc</span>hResults &amp;&amp; plantings) {</span>
-      const plantingsBySubzone = getTotalPlantsBySubzone(plantings);
+      const plantingsBySubstratum = getTotalPlantsBySubstratum(plantings);
 <span class="cstat-no" title="statement not covered" >      const totalPlantsBySite = getTotalPlantsBySite(plantingSite</span>sSearchResults);
       return plantingSites
         ?.filter((ps) =&gt; totalP<span class="cstat-no" title="statement not covered" >lantsBySite[ps.id])</span>
@@ -509,18 +509,18 @@ export const selectPlantingProgress = createSelector(
           return {
             siteId: ps.id,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >            siteName: ps.name,<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >            reported: ps.strata?.flatMap((zone) =&gt;</span>
-<span class="cstat-no" title="statement not covered" >              zone.substrata</span>
-                .filter((sz) =&gt; plantingsBySubzone[sz.id])
-                .map((<span class="cstat-no" title="statement not covered" >sz) =&gt; ({</span>
-<span class="cstat-no" title="statement not covered" >                  subzoneId: sz.id,</span>
-<span class="cstat-no" title="statement not covered" >                  subzoneName: </span>sz.fullName,
-                  plantingCompleted: sz.plantingCompleted,
+<span class="cstat-no" title="statement not covered" >            reported: ps.strata?.flatMap((stratum) =&gt;</span>
+<span class="cstat-no" title="statement not covered" >              stratum.substrata</span>
+                .filter((_substratum) =&gt; plantingsBySubstratum[_substratum.id])
+                .map((_su<span class="cstat-no" title="statement not covered" >bstratum) =&gt; ({</span>
+<span class="cstat-no" title="statement not covered" >                  substratumId: _substratum.id,</span>
+<span class="cstat-no" title="statement not covered" >                  substratumName: </span>_substratum.fullName,
+                  plantingCompleted: _substratum.plantingCompleted,
                   plantingSite: ps.name,
-                  zoneName: z<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >on</span>e.name,</span>
-<span class="cstat-no" title="statement not covered" >                  zoneId: zone.id,<span class="fstat-no" title="function not covered" ></span></span>
-                  targetPla<span class="cstat-no" title="statement not covered" >ntingDensity: zo</span>ne.targetPlantingDensity,
-<span class="cstat-no" title="statement not covered" >                  totalSeedlingsSent: plantingsBySubzone[sz.id],</span>
+                  stratumName<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >: </span>stratum.name,</span>
+<span class="cstat-no" title="statement not covered" >                  stratumId: stratum.id,<span class="fstat-no" title="function not covered" ></span></span>
+                  targetPla<span class="cstat-no" title="statement not covered" >ntingDensity: st</span>ratum.targetPlantingDensity,
+<span class="cstat-no" title="statement not covered" >                  totalSeedlingsSent: plantingsBySubstratum[_substratum.id],</span>
 <span class="cstat-no" title="statement not covered" >                }))</span>
             ),
             totalPlants: totalPlantsBySite[ps.id],
@@ -543,13 +543,13 @@ export typ<span class="fstat-no" title="function not covered" >e </span>Planting
   projectName: string;
   siteId: number;
   siteName: string;
-  subzoneId:<span class="fstat-no" title="function not covered" > n</span>umber;<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
-  subzoneName: string;
+  stratumId:<span class="fstat-no" title="function not covered" > n</span>umber;<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
+  stratumName: string;
+  substratumId: number;
+  substratumName: string;
   targetPlantingDensity: number;
   totalPlants: number;
   totalSeedlingsSent: number;
-  zoneId: number;
-  zoneName: string;
 };
 &nbsp;
 export const searchPlantingProgress = createSelector(
@@ -573,7 +573,7 @@ export const searchPlantingProgress = createSelector(
 <span class="fstat-no" title="function not covered" ></span>
 <span class="cstat-no" title="statement not covered" >      if (reported &amp;&amp; reported.length &gt; 0) {<span class="fstat-no" title="function not covered" ></span></span>
         reported?.forEach((progress) =&gt; {
-          const matchesQuery = !query || regexMatch(progress.subzoneName, query);<span class="cstat-no" title="statement not covered" ></span>
+          const matchesQuery = !query || regexMatch(progress.substratumName, query<span class="cstat-no" title="statement not covered" >);</span>
           const matchesPlantingC<span class="cstat-no" title="statement not covered" >ompleted =</span>
             plantingCompleted =<span class="cstat-no" title="statement not covered" >== undefined || progress.plantingCompleted === plantingC</span>ompleted;
           const matchesSiteName =<span class="cstat-no" title="statement not covered" > siteNameSelected === undefined || siteName === siteNameSel<span class="fstat-no" title="function not covered" >ec</span>ted;<span class="cstat-no" title="statement not covered" ></span></span>
@@ -615,33 +615,33 @@ ex<span class="fstat-no" title="function not covered" >po</span>rt const selectU
 export const selectUpdatePlanti<span class="cstat-no" title="statement not covered" >ngsCompleted = </span>(state: RootState, requestId: string) =&gt;
   state.updatePlantingsCompleted[re<span class="cstat-no" title="statement not covered" >questId];</span>
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-export con<span class="cstat-no" title="statement not covered" >st selectZonesHaveStatistics = createSelector(</span>
+export con<span class="cstat-no" title="statement not covered" >st selectStrataHaveStatistics = createSelector(</span>
   [<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-    (state: RootState, orgId: number, zoneIdsBySiteId?: Record&lt;number, Set&lt;number&gt;&gt;, defaultTimeZoneId?: string) =&gt;
+    (state: RootState, orgId: number, stratumIdsBySiteId?: Record&lt;number, Set&lt;number&gt;&gt;, defaultTimeZoneId?: string) =&gt;
       state,
-    (state: RootState, orgId: number, zoneIdsBySiteId?: Record&lt;number, Set&lt;number&gt;&gt;, defaultTimeZoneId?: string) =&gt;
+    (state: RootState, orgId: number, stratumIdsBySiteId?: Record&lt;number, Set&lt;number&gt;&gt;, defaultTimeZoneId?: string) =&gt;
 <span class="cstat-no" title="statement not covered" >      orgId,</span>
-    (state: RootState, orgId: number, zoneIdsBySiteId?: Record&lt;number, Set&lt;number&gt;&gt;, defaultTimeZoneId?: string) =&gt;
-      zoneIdsBySiteId,
-    (state: RootState, orgId: number, zoneIdsBySiteId?: Record&lt;number, Set&lt;number&gt;&gt;, defaultTimeZoneId?: string) =&gt;
+    (state: RootState, orgId: number, stratumIdsBySiteId?: Record&lt;number, Set&lt;number&gt;&gt;, defaultTimeZoneId?: string) =&gt;
+      stratumIdsBySiteId,
+    (state: RootState, orgId: number, stratumIdsBySiteId?: Record&lt;number, Set&lt;number&gt;&gt;, defaultTimeZoneId?: string) =&gt;
       defaultTimeZoneId,
   ],
-  (state, orgId, zoneIdsBySiteId, defaultTimeZoneId) =&gt; {
-    if (zoneIdsBySiteId &amp;&amp; defaultTimeZoneId) {
-      const zonesHaveStatistics = Object.keys(zoneIdsBySiteId).some((siteId) =&gt; {
+  (state, orgId, stratumIdsBySiteId, defaultTimeZoneId) =&gt; {
+    if (stratumIdsBySiteId &amp;&amp; defaultTimeZoneId) {
+      const strataHaveStatistics = Object.keys(stratumIdsBySiteId).some((siteId) =&gt; {
         const siteIdSelected = Number(siteId);
         const latestObservations = selectLatestObservation(state, siteIdSelected, orgId, defaultTimeZoneId);
-        return Array.from(zoneIdsBySiteId[siteIdSelected]).some((zoneId) =&gt; {
+        return Array.from(stratumIdsBySiteId[siteIdSelected]).some((stratumId) =&gt; {
           return latestObservations?.strata.some(
-            (plantingZone) =&gt;
-              plantingZone.stratumId === zoneId &amp;&amp;
-              plantingZone.estimatedPlants !== null &amp;&amp;
-              plantingZone.estimatedPlants !== undefined
+            (stratum) =&gt;
+              stratum.stratumId === stratumId &amp;&amp;
+              stratum.estimatedPlants !== null &amp;&amp;
+              stratum.estimatedPlants !== undefined
           );
         });
       });
 &nbsp;
-      return zonesHaveStatistics;
+      return strataHaveStatistics;
     }
   }
 );
@@ -652,7 +652,7 @@ export con<span class="cstat-no" title="statement not covered" >st selectZonesHa
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-05T19:06:18.388Z
+                at 2026-01-05T21:57:59.407Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

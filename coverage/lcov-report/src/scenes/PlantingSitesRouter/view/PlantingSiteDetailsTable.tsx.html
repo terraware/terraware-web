@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/65</span>
+                <span class='fraction'>0/66</span>
             </div>
         
             
@@ -264,7 +264,9 @@
 <a name='L199'></a><a href='#L199'>199</a>
 <a name='L200'></a><a href='#L200'>200</a>
 <a name='L201'></a><a href='#L201'>201</a>
-<a name='L202'></a><a href='#L202'>202</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L202'></a><a href='#L202'>202</a>
+<a name='L203'></a><a href='#L203'>203</a>
+<a name='L204'></a><a href='#L204'>204</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -405,6 +407,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -491,7 +495,7 @@ type PlantingSiteDetailsTableProps = {
 const columns = (): TableColumnType[] =&gt; [
   {
     key: 'name',
-    name: strings.Z<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ON</span>ES,<span class="cstat-no" title="statement not covered" ></span></span>
+    name: strings.S<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >TR</span>ATA,<span class="cstat-no" title="statement not covered" ></span></span>
     type: 'string',<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >  },</span>
   {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
@@ -513,7 +517,7 @@ const columns = (): TableColumnType[] =&gt; [
   },
   {
     key: 'substrata',
-    name: strings.SUBZONES,
+    name: strings.SUBSTRATA,
     type: 'number',
   },
   {
@@ -553,9 +557,9 @@ const Det<span class="fstat-no" title="function not covered" >ailsRenderer =</sp
       },
     };
 &nbsp;
-    const createLinkToZone = () =&gt; {
-      const url = APP_PATHS.PLANTING_SITES_ZONE_VIEW.replace(':plantingSiteId', plantingSiteId.toString()).replace(
-        ':zoneId',<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+    const createLinkToStratum = () =&gt; {
+      const url = APP_PATHS.PLANTING_SITES_STRATUM_VIEW.replace(':plantingSiteId', plantingSiteId.toString()).replace(
+        ':stratumId',<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
         row.id.toString()
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span>      );</span>
       return (
@@ -566,7 +570,7 @@ const Det<span class="fstat-no" title="function not covered" >ailsRenderer =</sp
     };
 &nbsp;
     const createLinkToPlot = (iValue: React.ReactNode | unknown[]) =&gt; {
-      const adHocObservationU<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >rl</span> = APP_PATHS.OBSERVATION_AD_HOC_PLOT_DETAILS;</span>
+      const adHocObservationUrl <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >= </span>APP_PATHS.OBSERVATION_AD_HOC_PLOT_DETAILS;</span>
 <span class="cstat-no" title="statement not covered" ></span>
       const to = adHocObservationUrl
         .replace(':monitoringPlotId', row.adHocPlot?.monitoringPlotId?.toString())
@@ -581,7 +585,7 @@ const Det<span class="fstat-no" title="function not covered" >ailsRenderer =</sp
     };
 <span class="cstat-no" title="statement not covered" ></span>
     if<span class="cstat-no" title="statement not covered" > (column.key === 'name') {</span>
-      return &lt;CellRenderer {...props} value={createLinkToZone()} sx={textStyles} title={value as string} /&gt;;
+      return &lt;CellRenderer {...props} value={createLinkToStratum()} sx={textStyles} title={value as string} /&gt;;
 <span class="cstat-no" title="statement not covered" >    }</span>
 <span class="cstat-no" title="statement not covered" ></span>
     if (column.key === 'latestObservationCompletedTime') {
@@ -605,14 +609,16 @@ const Det<span class="fstat-no" title="function not covered" >ailsRenderer =</sp
           column={column}
           value={createLinkToPlot(row.plotNumber)}
 <span class="cstat-no" title="statement not covered" >          row={row}</span>
-          sx={textStyles}<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-<span class="cstat-no" title="statement not covered" >          title={value as string}</span>
+          sx={textStyles}<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" ></span>          title={value as<span class="cstat-no" title="statement not covered" > string}</span>
         /&gt;
-      );
+<span class="cstat-no" title="statement not covered" >      );</span>
     }
 &nbsp;
     if (column.key === 'plantingCompleted') {
-      const isPlantingCompleted = row.substrata.every((psz: MinimalSubstratum) =&gt; psz.plantingCompleted);
+      const isPlantingCompleted = row.substrata.every(
+        (_substratum: MinimalSubstratum) =&gt; _substratum.plantingCompleted
+      );
       return (
         &lt;CellRenderer
           {...props}
@@ -673,7 +679,7 @@ const Det<span class="fstat-no" title="function not covered" >ailsRenderer =</sp
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-05T19:06:18.388Z
+                at 2026-01-05T21:57:59.407Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

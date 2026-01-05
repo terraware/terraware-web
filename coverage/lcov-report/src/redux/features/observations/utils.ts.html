@@ -940,58 +940,58 @@ import { regexMatch } from 'src/utils/search';
 &nbsp;
 // utils
 <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-export const searchR<span class="cstat-no" title="statement not covered" >esu</span>ltPlots = (search: string, plotType?: boolean, zone?: ObservationStratumResults) =&gt; {
-<span class="cstat-no" title="statement not covered" >  if ((!search.trim() &amp;&amp; plotType === undefined) || !zone) {</span>
-    return zone;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+export const searchR<span class="cstat-no" title="statement not covered" >esu</span>ltPlots = (search: string, plotType?: boolean, stratum?: ObservationStratumResults) =&gt; {
+<span class="cstat-no" title="statement not covered" >  if ((!search.trim() &amp;&amp; plotType === undefined) || !stratum) {</span>
+    return stratum;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
   }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
   return {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-    ...zone,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-    substrata: zone.s<span class="fstat-no" title="function not covered" >ub</span>stra<span class="cstat-no" title="statement not covered" >ta</span>
-      .map((sub<span class="fstat-no" title="function not covered" >zo</span>ne: <span class="cstat-no" title="statement not covered" >ObservationS</span>ubstratumResults) =&gt; ({
-        ...subzone,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-        monitoringPlo<span class="fstat-no" title="function not covered" >ts</span>: su<span class="cstat-no" title="statement not covered" >bzone.monitoringPl</span>ots.filter(
-          (plot: Observ<span class="fstat-no" title="function not covered" >at</span>ionM<span class="cstat-no" title="statement not covered" >onitoringPlotResults</span>) =&gt;
+    ...stratum,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+    substrata: stratu<span class="fstat-no" title="function not covered" >m.</span>subs<span class="cstat-no" title="statement not covered" >trata</span>
+      .map((sub<span class="fstat-no" title="function not covered" >st</span>ratu<span class="cstat-no" title="statement not covered" >m: Observati</span>onSubstratumResults) =&gt; ({
+        ...substratum<span class="fstat-no" title="function not covered" >,<span class="cstat-no" title="statement not covered" ></span></span>
+        monitoringPlot<span class="fstat-no" title="function not covered" >s:</span> sub<span class="cstat-no" title="statement not covered" >stratum.monitoringP</span>lots.filter(
+          (plot: Observa<span class="fstat-no" title="function not covered" >ti</span>onMo<span class="cstat-no" title="statement not covered" >nitoringPlotResults) </span>=&gt;
             regexMatch(`${plot.monitoringPlotNumber}`, search) &amp;&amp;
 <span class="cstat-no" title="statement not covered" >            (plotType === undefined || plot.is</span>Permanent === plotType)
         ),<span class="cstat-no" title="statement not covered" ></span>
       }))<span class="cstat-no" title="statement not covered" ></span>
-      .filter((subzone: Obs<span class="cstat-no" title="statement not covered" >ervationSubstratumResults) =&gt; subzo</span>ne.monitoringPlots.length &gt; 0),
+      .filter((substratum: <span class="cstat-no" title="statement not covered" >ObservationSubstratumResults) =&gt; su</span>bstratum.monitoringPlots.length &gt; 0),
   };<span class="cstat-no" title="statement not covered" ></span>
 };<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-ex<span class="cstat-no" title="statement not covered" >port const searchResultZones = (search: string, zoneNames: string[], observation?: ObservationResults) =&gt; {</span>
-  if<span class="cstat-no" title="statement not covered" > ((!search.tr</span>im() &amp;&amp; !zoneNames.length) || !observation) {
+ex<span class="cstat-no" title="statement not covered" >port const searchResultStrata = (search: string, stratumNames: string[], observation?: ObservationResults) =&gt; {</span>
+  if<span class="cstat-no" title="statement not covered" > ((!search.trim(</span>) &amp;&amp; !stratumNames.length) || !observation) {
     return observation;
 <span class="cstat-no" title="statement not covered" >  }</span>
   return {
     ...observation,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
     strata: observation.strata.filter(
-      (zone: ObservationStratumResults) =&gt;
-<span class="fstat-no" title="function not covered" >        (!</span>zoneName<span class="cstat-no" title="statement not covered" >s.length || zoneNames.includes(zone.stratumName)) &amp;&amp; matchZone(zone, search)</span>
+      (stratum: ObservationStratumResults) =&gt;
+<span class="fstat-no" title="function not covered" >        (!</span>stratumN<span class="cstat-no" title="statement not covered" >ames.length || stratumNames.includes(stratum.stratumName)) &amp;&amp; matchStratum(stratum, search)</span>
     ),
   };<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 };
 &nbsp;
-export const searchZonesAn<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >dD</span>ates = (</span>
+export const searchStrataAn<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >dD</span>ates = (</span>
 <span class="cstat-no" title="statement not covered" >  search: string,</span>
-  zo<span class="cstat-no" title="statement not covered" >neNames: string[],</span>
+  st<span class="cstat-no" title="statement not covered" >ratumNames: string[]</span>,
   locale?: string,
 <span class="cstat-no" title="statement not covered" >  observations?: ObservationResults[]</span>
 ) =&gt; {
   if (!search?.trim()) {
-    re<span class="fstat-no" title="function not covered" >tu</span>rn obser<span class="cstat-no" title="statement not covered" >vations;</span>
+    re<span class="fstat-no" title="function not covered" >tu</span>rn observat<span class="cstat-no" title="statement not covered" >ions;</span>
   }
   return observations?.filter((observation: ObservationResults) =&gt; {
     return (
-      ((!zoneNames.length ||<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >        observation.strata.some((zone: ObservationStratumResults) =&gt; zoneNames.includes(zone.stratumName))) &amp;&amp;</span>
-<span class="cstat-no" title="statement not covered" >        observation.strat</span>a.some((zone: ObservationStratumResults) =&gt; matchZone(zone, search))) ||
+      ((!stratumNames.length <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >||</span></span>
+<span class="cstat-no" title="statement not covered" >        observation.strata.some((stratum: ObservationStratumResults) =&gt; stratumNames.includes(stratum.stratumName))) &amp;&amp;</span>
+<span class="cstat-no" title="statement not covered" >        observation.strat</span>a.some((stratum: ObservationStratumResults) =&gt; matchStratum(stratum, search))) ||
       matchDate(observation.completedDate ? observation.completedDate : observation.startDate, search, locale)
 <span class="cstat-no" title="statement not covered" >    );<span class="fstat-no" title="function not covered" ></span></span>
   })<span class="cstat-no" title="statement not covered" >;<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
 };
 &nbsp;
-const matchZone = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(z</span>one: Observation<span class="cstat-no" title="statement not covered" >StratumResults, search: string) =&gt; regexMatch(zone.strat</span></span>umName, search);
+const matchStratum = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tratum: Observation<span class="cstat-no" title="statement not covered" >StratumResults, search: string) =&gt; regexMatch(stratum.strat</span></span>umName, search);
 const matchDate = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(d</span>ate: string, search: string, locale?: string) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >  if (date) {</span>
 <span class="cstat-no" title="statement not covered" >    return regexMatch(getShortDate(date, locale), search);</span>
@@ -1055,11 +1055,11 @@ export const mergeObservations = (<span class="cstat-no" title="statement not co
   return observations
     .filter((observation) =&gt; sites[observation.plantingSiteId])
     .map((observation: ObservationResultsPayload): ObservationResults =&gt; {
-      const { plant<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >in</span>gSiteId } = observation;</span>
-<span class="cstat-no" title="statement not covered" >      const site = sites[plant<span class="fstat-no" title="function not covered" >in</span>gSiteId];</span>
+      const { planti<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ng</span>SiteId } = observation;</span>
+<span class="cstat-no" title="statement not covered" >      const site = sites[planting<span class="fstat-no" title="function not covered" >Si</span>teId];</span>
       const timeZone = site.<span class="cstat-no" title="statement not covered" >timeZone ?? defaultTimeZone;</span>
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-      const mergedZones = mergeZones(observation.strata, species, timeZone);
+      const mergedStrata = mergeStrata(observation.strata, species, timeZone);
       const mergedS<span class="cstat-no" title="statement not covered" >pecies = mergeSpecies(observation.species, species);</span>
 <span class="fstat-no" title="function not covered" ></span>
       re<span class="cstat-no" title="statement not covered" >turn {</span>
@@ -1068,13 +1068,13 @@ export const mergeObservations = (<span class="cstat-no" title="statement not co
         bo<span class="cstat-no" title="statement not covered" >undary: site</span>.boundary,
         completedDate: observation.completedTime ? getDateDisplayValue(observation.completedTime, site.timeZone) : '',
         startDate: getDateDisplayValue(observation.startDate, site.timeZone),
-        strata: mergedZones,
+        strata: mergedStrata,
         species: mergedSpecies,
 <span class="cstat-no" title="statement not covered" >        timeZone,</span>
         totalLive: getObservationSpeciesLivePlantsCount(observation.species),
         totalPlants: observation.strata.reduce((acc, curr) =&gt; acc + curr.totalPlants, 0),
-        hasObservedPermanentPlots: mergedZones.some((zone) =&gt; zone.hasObservedPermanentPlots),
-        hasObservedTemporaryPlots: mergedZones.some((zone) =&gt; zone.hasObservedTemporaryPlots),
+        hasObservedPermanentPlots: mergedStrata.some((stratum) =&gt; stratum.hasObservedPermanentPlots),
+        hasObservedTemporaryPlots: mergedStrata.some((stratum) =&gt; stratum.hasObservedTemporaryPlots),
       };
     });
 };
@@ -1086,15 +1086,15 @@ const StatusWeights: Record&lt;MonitoringPlotStatus, number&gt; = {
   'Not Observed': 4,
 };
 &nbsp;
-/** Merges additional <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >da</span>ta into the results of a planting zone observation. */</span>
-co<span class="cstat-no" title="statement not covered" >nst mergeZones = (</span>
-  zo<span class="fstat-no" title="function not covered" >ne</span>Observations: ObservationStratumResultsPayload[],
+/** Merges additional d<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >at</span>a into the results of a stratum observation. */</span>
+co<span class="cstat-no" title="statement not covered" >nst mergeStrata = (</span>
+  st<span class="fstat-no" title="function not covered" >ra</span>tumObservations: ObservationStratumResultsPayload[],
   spec<span class="cstat-no" title="statement not covered" >ies: Record&lt;number, SpeciesValue&gt;,</span>
   timeZone?: string
 ): ObservationStratumResults[] =&gt; {
-  return zoneObservations.map((zoneObservation: ObservationStratumResultsPayload): ObservationStratumResults =&gt; {
-    const <span class="fstat-no" title="function not covered" >mo</span>nitoringPlots: ObservationMonitoringPlotResultsPayload[] = zoneObservation.substrata.flatMap(
-      (subZo<span class="cstat-no" title="statement not covered" >ne: ObservationSubstratumResultsPayload) =&gt; subZone.monitoringPlots</span>
+  return stratumObservations.map((stratumObservation: ObservationStratumResultsPayload): ObservationStratumResults =&gt; {
+    const <span class="fstat-no" title="function not covered" >mo</span>nitoringPlots: ObservationMonitoringPlotResultsPayload[] = stratumObservation.substrata.flatMap(
+      (subst<span class="cstat-no" title="statement not covered" >ratum: ObservationSubstratumResultsPayload) =&gt; substratum.monitoringPlots</span>
     );
     const status: MonitoringPlotStatus | undefined = monitoringPlots.reduce(
       (acc: MonitoringPlotStatus | undefined, mp: ObservationMonitoringPlotResultsPayload) =&gt; {
@@ -1108,36 +1108,36 @@ co<span class="cstat-no" title="statement not covered" >nst mergeZones = (</span
     );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="fstat-no" title="function not covered" >    re</span>turn {
-      ...zoneObservation,
-<span class="cstat-no" title="statement not covered" >      stratumName: zoneObservation.name,</span>
-      completedDate: zoneObservation.completedTime
-        ? getDateDisplayValue(zoneObservation.completedTime, timeZone)
+      ...stratumObservation,
+<span class="cstat-no" title="statement not covered" >      stratumName: stratumObservation.name,</span>
+      completedDate: stratumObservation.completedTime
+        ? getDateDisplayValue(stratumObservation.completedTime, timeZone)
 <span class="fstat-no" title="function not covered" ></span>        : undefined,
-      species: mergeSpecies(zoneObservation.species, species),
-<span class="cstat-no" title="statement not covered" >      substrata: mergeSubzones(zoneObservation.substrata, species, timeZone),</span>
+      species: mergeSpecies(stratumObservation.species, species),
+<span class="cstat-no" title="statement not covered" >      substrata: mergeSubstrata(stratumObservation.substrata, species, timeZone),</span>
       status,
-      hasObservedPermanentPlots: zoneObservation.substrata.some((plantingSubzone) =&gt;
-        plantingSubzone.monitoringPlots.some((plot) =&gt; plot.isPermanent &amp;&amp; plot.completedTime)
+      hasObservedPermanentPlots: stratumObservation.substrata.some((substrata) =&gt;
+        substrata.monitoringPlots.some((plot) =&gt; plot.isPermanent &amp;&amp; plot.completedTime)
       ),
-      hasObservedTemporaryPlots: zoneObservation.substrata.some((plantingSubzone) =&gt;
-        plantingSubzone.monitoringPlots.some((plot) =&gt; !plot.isPermanent &amp;&amp; plot.completedTime)
+      hasObservedTemporaryPlots: stratumObservation.substrata.some((substrata) =&gt;
+        substrata.monitoringPlots.some((plot) =&gt; !plot.isPermanent &amp;&amp; plot.completedTime)
       ),
     };<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >  });<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span></span></span>
 };
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-// merge subzone<span class="cstat-no" title="statement not covered" ></span>
-co<span class="cstat-no" title="statement not covered" >nst mergeSubzones = (<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span></span>
-  subzoneObservations: ObservationSubstratumResultsPayload[],
+// merge substra<span class="cstat-no" title="statement not covered" >tum</span>
+co<span class="cstat-no" title="statement not covered" >nst mergeSubstrata = (<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span></span>
+  substratumObservations: ObservationSubstratumResultsPayload[],
   species: Record&lt;number, Speci<span class="cstat-no" title="statement not covered" >esValue&gt;,</span>
   timeZone?: stri<span class="cstat-no" title="statement not covered" >ng</span>
 ): ObservationSubstr<span class="cstat-no" title="statement not covered" >atumResults[] =&gt; {</span>
-  return subzoneObserv<span class="cstat-no" title="statement not covered" >ations.map(</span>
-    (subzoneObservati<span class="cstat-no" title="statement not covered" >on: ObservationSubstratumResultsPayload): Observatio</span>nSubstratumResults =&gt; {
+  return substratumObs<span class="cstat-no" title="statement not covered" >ervations.map(</span>
+    (substratumObserv<span class="cstat-no" title="statement not covered" >ation: ObservationSubstratumResultsPayload): Observa</span>tionSubstratumResults =&gt; {
       return {<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >        ...subzoneObservation,</span>
-        substratumName: subzoneObservation.name,
-        monitoringPlots: subzoneObservation.monitoringPlots.map(
+<span class="cstat-no" title="statement not covered" >        ...substratumObservation,</span>
+        substratumName: substratumObservation.name,
+        monitoringPlots: substratumObservation.monitoringPlots.map(
           (monitoringPlot: ObservationMonitoringPlotResultsPayload) =&gt; {
             return {
               ...monitoringPlot,
@@ -1172,9 +1172,9 @@ const mergeSpecies = (
     );
 };<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
-export const has25mPlots = (subzones: ObservationSubstratumResults[] | ObservationSubstratumResultsPayload[]) =&gt; {
-  retu<span class="cstat-no" title="statement not covered" >rn subzones</span>
-    ?.flatMap((subzone: { monitoringPlots: any[] }) =&gt; subzone.monitoringPlots.flatMap((plot) =&gt; plot.sizeMeters))
+export const has25mPlots = (substrata: ObservationSubstratumResults[] | ObservationSubstratumResultsPayload[]) =&gt; {
+  retu<span class="cstat-no" title="statement not covered" >rn substrata</span>
+    ?.flatMap((substratum: { monitoringPlots: any[] }) =&gt; substratum.monitoringPlots.flatMap((plot) =&gt; plot.sizeMeters))
     .some((size: number) =&gt; size.toString() === '25');
 };<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
@@ -1195,14 +1195,14 @@ export const mergeAdHocObservations = (
       const adHocPlot = observation.adHocPlot!;
       const timeZone = site.timeZone ?? defaultTimeZone;
 <span class="cstat-no" title="statement not covered" ></span>
-      const mergedZones = mergeZones(observation.strata, species, site.timeZone ?? defaultTimeZone);
+      const mergedStrata = mergeStrata(observation.strata, species, site.timeZone ?? defaultTimeZone);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      return {</span>
         ...observation,
         adHocPlot,
 <span class="cstat-no" title="statement not covered" >        boundary: site.boundary,</span>
         plantingSiteName: site.name,
-        strata: mergedZones,
+        strata: mergedStrata,
 <span class="cstat-no" title="statement not covered" >        plotName: adHocPlot.monitoringPlotName,</span>
         plotNumber: adHocPlot.monitoringPlotNumber,
         timeZone,
@@ -1345,7 +1345,7 @@ export const getPlotConditionsOptions = (
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-05T19:06:18.388Z
+                at 2026-01-05T21:57:59.407Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

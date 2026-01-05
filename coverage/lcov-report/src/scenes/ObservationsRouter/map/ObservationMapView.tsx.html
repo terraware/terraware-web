@@ -363,7 +363,10 @@
 <a name='L298'></a><a href='#L298'>298</a>
 <a name='L299'></a><a href='#L299'>299</a>
 <a name='L300'></a><a href='#L300'>300</a>
-<a name='L301'></a><a href='#L301'>301</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L301'></a><a href='#L301'>301</a>
+<a name='L302'></a><a href='#L302'>302</a>
+<a name='L303'></a><a href='#L303'>303</a>
+<a name='L304'></a><a href='#L304'>304</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -532,7 +535,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -830,40 +836,43 @@ export default functio<span class="cstat-no" title="statement not covered" >n Ob
 &nbsp;
     return MapService.getMapDataFromObservation(observationToUse, plantingSiteHistory);
   }, [
-    selectedObservation,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-    selectedObservationDate,
-<span class="cstat-no" title="statement not covered" >    plantingSiteMapData,</span>
-    plantingSiteHistory,
-    selectedAdHocObservation,<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  ]);<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  cons<span class="fstat-no" title="function not covered" >t </span>filterZo<span class="cstat-no" title="statement not covered" >neNames = useMemo(() =&gt; filtersProps?.filters.zone?.values ?? [], [filtersProps?.filters.zone?.values]);</span>
+    selectedObservation,<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" >    se</span>lectedObservationDate,
+    plantingSiteMapData,
+    pl<span class="cstat-no" title="statement not covered" >antingSiteHistory,</span>
+    selectedAdHocObservation,
+  ]);
+&nbsp;
+  const filterStratumNames = useMemo(<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >    () =&gt; filtersProps?.filter<span class="fstat-no" title="function not covered" >s.</span>stratum?.values ?? [],</span>
+    [filtersProps?.fi<span class="cstat-no" title="statement not covered" >lters.stratum?.values]<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  co<span class="cstat-no" title="statement not covered" >nst [searchZoneEntities, setSearc</span>hZoneEntities] = useState&lt;MapEntityId[]&gt;([]);
+  co<span class="cstat-no" title="statement not covered" >nst [searchStratumEntities, setSearc</span>hStratumEntities] = useState&lt;MapEntityId[]&gt;([]);
   useEffect(() =&gt; {
     const entities = (o<span class="cstat-no" title="statement not covered" >bservationsResults ?? [])</span>
       .flatMap((obs) =&gt; obs.strata)<span class="cstat-no" title="statement not covered" ></span>
       .filter(<span class="cstat-no" title="statement not covered" ></span>
-        (zone) =&gt;
-          (!filterZoneNames.length || filterZoneNames.includes(zone.stratumName)) &amp;&amp;
-          regexMatch(zone.stratumName, search)
+        (stratum) =&gt;
+          (!filterStratumNames.length || filterStratumNames.includes(stratum.stratumName)) &amp;&amp;
+          regexMatch(stratum.stratumName, search)
       )
-      .map((zone) =&gt; ({ sourceId: 'zones', id: zone.stratumId }));
-    setSearchZoneEntities(entities);
-  }, [observationsResults, s<span class="cstat-no" title="statement not covered" >earch, selectedObservation, filterZoneNa</span>mes]);
+      .map((stratum) =&gt; ({ sourceId: 'strata', id: stratum.stratumId }));
+    setSearchStratumEntities(entities);
+  }, [observationsResults, s<span class="cstat-no" title="statement not covered" >earch, selectedObservation, filterStratumNa</span>mes]);
 <span class="cstat-no" title="statement not covered" ></span>
-  co<span class="fstat-no" title="function not covered" >ns</span>t layerOptions: MapLayer[] = ['Planting Site', 'Zones', 'Monitoring Plots'];
+  co<span class="fstat-no" title="function not covered" >ns</span>t layerOptions: MapLayer[] = ['Planting Site', 'Strata', 'Monitoring Plots'];
   const [includedLayers, setIncludedLayers] = useState&lt;MapLayer[]&gt;(layerOptions);
 <span class="cstat-no" title="statement not covered" ></span>
   const layerOptionLabels: Record&lt;MapLayer, string&gt; = {
     'P<span class="cstat-no" title="statement not covered" >lanting Site': strings.PLANTING_SITE,</span>
-    Zone<span class="cstat-no" title="statement not covered" >s: strings.ZONES,</span>
-    'Sub-Zone<span class="cstat-no" title="statement not covered" >s': strings.SUBZONES,</span>
+    Stra<span class="cstat-no" title="statement not covered" >ta: strings.STRATA,</span>
+    'Sub-Stra<span class="cstat-no" title="statement not covered" >ta': strings.SUBSTRATA,</span>
     'Mon<span class="cstat-no" title="statement not covered" >itoring Plots': strings.MONITORING_PLOTS,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
     'Project Zones': strings.PROJECT_ZONES,
   };<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span></span></span>
 &nbsp;
-  cons<span class="cstat-no" title="statement not covered" >t hasSearchCriteria = search.trim() || filterZoneNames.length;</span>
+  cons<span class="cstat-no" title="statement not covered" >t hasSearchCriteria = search.trim() || filterStratumNames.length;</span>
 <span class="cstat-no" title="statement not covered" ></span>
   const contextRenderer = useCallback(
     (p<span class="cstat-no" title="statement not covered" >roperties: MapSourceProperties): JSX.Element | null =&gt; {</span>
@@ -871,17 +880,17 @@ export default functio<span class="cstat-no" title="statement not covered" >n Ob
       let entity: any;
       if (properties.type === 'site') {
         entity = selectedObservation;
-      } else if (properties.type === 'zone') {
+      } else if (properties.type === 'stratum') {
         entity =
-          selectedObservation?.strata?.find((z) =&gt; z.stratumId === properties.id) ||
-          plantingSiteHistory?.strata.find((z) =&gt; z.stratumId === properties.id);
+          selectedObservation?.strata?.find((_stratum) =&gt; _stratum.stratumId === properties.id) ||
+          plantingSiteHistory?.strata.find((_stratum) =&gt; _stratum.stratumId === properties.id);
       } else {
         // monitoring plot
         entity =
           selectedAdHocObservation?.adHocPlot ||
           selectedObservation?.strata
-<span class="cstat-no" title="statement not covered" >            ?.flatMap((z) =&gt; z.substrata)</span>
-            ?.flatMap((sz) =&gt; sz.monitoringPlots)
+<span class="cstat-no" title="statement not covered" >            ?.flatMap((_stratum) =&gt; _stratum.substrata)</span>
+            ?.flatMap((_substratum) =&gt; _substratum.monitoringPlots)
             ?.find((p) =&gt; p.monitoringPlotId === properties.id);
       }
 &nbsp;
@@ -905,7 +914,7 @@ export default functio<span class="cstat-no" title="statement not covered" >n Ob
 &nbsp;
   return (
     &lt;Box display='flex' flexDirection={isDesktop ? 'row' : 'column-reverse'} flexGrow={1}&gt;
-      &lt;PlantingSiteMapLegend options={['site', 'zone', 'permanentPlot', 'temporaryPlot', 'adHocPlot']} /&gt;
+      &lt;PlantingSiteMapLegend options={['site', 'stratum', 'permanentPlot', 'temporaryPlot', 'adHocPlot']} /&gt;
       &lt;Box display='flex' sx={{ flexGrow: 1 }}&gt;
         {mapData.site &amp;&amp; (
           &lt;PlantingSiteMap
@@ -946,16 +955,16 @@ export default functio<span class="cstat-no" title="statement not covered" >n Ob
                 },
               },
             }}
-            highlightEntities={hasSearchCriteria ? searchZoneEntities : []}
+            highlightEntities={hasSearchCriteria ? searchStratumEntities : []}
             focusEntities={
-              !hasSearchCriteria || searchZoneEntities.length === 0
+              !hasSearchCriteria || searchStratumEntities.length === 0
                 ? [
                     {
                       sourceId: 'sites',
                       id: selectedObservation?.plantingSiteId || selectedAdHocObservation?.plantingSiteId,
                     },
                   ]
-                : searchZoneEntities
+                : searchStratumEntities
             }
           /&gt;
         )}
@@ -970,7 +979,7 @@ export default functio<span class="cstat-no" title="statement not covered" >n Ob
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-05T19:06:18.388Z
+                at 2026-01-05T21:57:59.407Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

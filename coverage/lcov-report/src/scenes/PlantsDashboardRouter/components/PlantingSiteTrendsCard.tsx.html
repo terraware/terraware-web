@@ -484,42 +484,42 @@ import strings from 'src/strings';
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 ex<span class="cstat-no" title="statement not covered" >port default function PlantingSiteTrendsCard(): JSX.Element {</span>
   co<span class="cstat-no" title="statement not covered" >nst theme = useTheme();</span>
-  cons<span class="cstat-no" title="statement not covered" >t [zonesOptions, setZoneOptions] = useState&lt;DropdownItem[]&gt;();</span>
-  const <span class="cstat-no" title="statement not covered" >[selectedPlantsPerHaZone, <span class="fstat-no" title="function not covered" >se</span>tSel<span class="cstat-no" title="statement not covered" >ectedPlant</span>sPerHaZone] = useState&lt;number&gt;();</span>
-  const [selectedSurvivalZone, setSelectedSurvivalZone] = useState&lt;number&gt;();
+  cons<span class="cstat-no" title="statement not covered" >t [strataOptions, setStrataOptions] = useState&lt;DropdownItem[]&gt;();</span>
+  const <span class="cstat-no" title="statement not covered" >[selectedPlantsPerHaStratu<span class="fstat-no" title="function not covered" >m,</span> set<span class="cstat-no" title="statement not covered" >SelectedPl</span>antsPerHaStratum] = useState&lt;number&gt;();</span>
+  const [selectedSurvivalStratum, setSelectedSurvivalStratum] = useState&lt;number&gt;();
 <span class="cstat-no" title="statement not covered" >  const { pla</span>ntingSite, observationSummaries } = usePlantingSiteData();
   const { isDesktop, isMobile } = useDeviceInfo();
 <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
   useEffect(() =&gt; {
-    const zoneOpts = plantingSite?.strata?.map((pzone) =&gt; ({ label: pzone.name, value: pzone.id }));
-    if (zoneOpts) {
-      setZoneOptions(zoneOpts);
-      setSelectedPlantsPerHaZone(zoneOpts[0].value);
-      setSelectedSurvivalZone(zoneOpts[0].value);
+    const stratumOpts = plantingSite?.strata?.map((_stratum) =&gt; ({ label: _stratum.name, value: _stratum.id }));
+    if (stratumOpts) {
+      setStrataOptions(stratumOpts);
+      setSelectedPlantsPerHaStratum(stratumOpts[0].value);
+      setSelectedSurvivalStratum(stratumOpts[0].value);
     }
   }, [plantingSite]<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >);<span class="cstat-no" title="statement not covered" ></span></span></span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >  const plantsChartData: ChartData = useMemo(() =&gt; {</span>
     const f<span class="fstat-no" title="function not covered" >il</span>tere<span class="cstat-no" title="statement not covered" >dSummaries = observatio</span>nSummaries?.filter((sc) =&gt; {
-      const zone = sc.strata.find((pz) =&gt; pz.stratumId === selectedPlantsPerHaZone);
-<span class="cstat-no" title="statement not covered" >      if (zone?.plantingDensity !== undefined)</span> {
+      const stratum = sc.strata.find((_stratum) =&gt; _stratum.stratumId === selectedPlantsPerHaStratum);
+<span class="cstat-no" title="statement not covered" >      if (stratum?.plantingDensity !== undefin</span>ed) {
         return true<span class="cstat-no" title="statement not covered" >;</span>
       }<span class="cstat-no" title="statement not covered" ></span>
     });<span class="cstat-no" title="statement not covered" ></span>
     const labels = <span class="cstat-no" title="statement not covered" >filteredSummaries?.map((sm) =&gt; sm.latestObs</span>ervationTime);
     const values =<span class="cstat-no" title="statement not covered" > filteredSummaries?.map((sm) =&gt; {</span>
-      const zone = <span class="cstat-no" title="statement not covered" >sm.strata.find((pz) =&gt; pz.stratumId === selectedPlants</span>PerHaZone);
-      return zone?.plantingDensit<span class="cstat-no" title="statement not covered" >y || 0;</span>
+      const stratum<span class="cstat-no" title="statement not covered" > = sm.strata.find((_stratum) =&gt; _stratum.stratumId ===</span> selectedPlantsPerHaStratum);
+      return stratum?.plantingDen<span class="cstat-no" title="statement not covered" >sity || 0;</span>
     });<span class="cstat-no" title="statement not covered" ></span>
 <span class="fstat-no" title="function not covered" ></span>
     const minValues = filteredSummaries?.map((sm) =&gt; {
-      const zone<span class="cstat-no" title="statement not covered" > = sm.strata.find((pz) =&gt; pz.str</span>atumId === selectedPlantsPerHaZone);
-      return (zone?.plantingDensity || 0)<span class="cstat-no" title="statement not covered" > - (zone?.plantingDensityStdD</span>ev || 0);
+      const stra<span class="cstat-no" title="statement not covered" >tum = sm.strata.find((_stratum) </span>=&gt; _stratum.stratumId === selectedPlantsPerHaStratum);
+      return (stratum?.plantingDensity || 0)<span class="cstat-no" title="statement not covered" > - (stratum?.plantingDensityS</span>tdDev || 0);
     });<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
     const maxValues = filteredSummaries?.map((sm)<span class="cstat-no" title="statement not covered" > =&gt; {</span>
-      const zone = sm.strata.find(<span class="cstat-no" title="statement not covered" >(pz) =&gt; pz.stratumId === selectedP</span>lantsPerHaZone);
-<span class="cstat-no" title="statement not covered" >      return (zone?.plantingDe<span class="fstat-no" title="function not covered" >ns</span>ity || 0) + (zone?.plantingDensityStdDev || 0);</span>
+      const stratum = sm.strata.fi<span class="cstat-no" title="statement not covered" >nd((_stratum) =&gt; _stratum.stratumI</span>d === selectedPlantsPerHaStratum);
+<span class="cstat-no" title="statement not covered" >      return (stratum?.plantin<span class="fstat-no" title="function not covered" >gD</span>ensity || 0) + (stratum?.plantingDensityStdDev || 0);</span>
     });
 <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 <span class="cstat-no" title="statement not covered" >    return {</span>
@@ -537,30 +537,30 @@ ex<span class="cstat-no" title="statement not covered" >port default function Pl
           borderWidth: 0,
           fill: {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
             target:<span class="cstat-no" title="statement not covered" > 0, // fill to dataset 0<span class="fstat-no" title="function not covered" ></span></span>
-            above: <span class="cstat-no" title="statement not covered" >'#B8A0D64D',<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+            above: '#B<span class="cstat-no" title="statement not covered" >8A0D64D',<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 <span class="cstat-no" title="statement not covered" >          },</span>
         },
         {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-          values: v<span class="cstat-no" title="statement not covered" >alues ?? [],<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+          values: valu<span class="cstat-no" title="statement not covered" >es ?? [],<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 <span class="cstat-no" title="statement not covered" >          label: strings.ACTUAL,</span>
           pointRadius: values?.length === 1 ? 4 : 0,
           color: '#B8A<span class="cstat-no" title="statement not covered" >0D6',<span class="fstat-no" title="function not covered" ></span></span>
         },<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 <span class="cstat-no" title="statement not covered" >      ],</span>
     };
-  },<span class="cstat-no" title="statement not covered" > [observationSummaries, selectedPlantsPerHaZone]);</span>
+  },<span class="cstat-no" title="statement not covered" > [observationSummaries, selectedPlantsPerHaStratum]);</span>
 &nbsp;
   const survivalChartData: ChartData = useMemo(() =&gt; {
     const filteredSummaries = observationSummaries?.filter((sc) =&gt; {
-      const zone = sc.strata.find((pz) =&gt; pz.stratumId === selectedPlantsPerHaZone);
-      if (zone?.survivalRate !== undefined) {
+      const stratum = sc.strata.find((_stratum) =&gt; _stratum.stratumId === selectedPlantsPerHaStratum);
+      if (stratum?.survivalRate !== undefined) {
         return true;
       }
     });
     const labels = filteredSummaries?.map((sm) =&gt; sm.latestObservationTime);
     const values = filteredSummaries?.map((sm) =&gt; {
-      const zone = sm.strata.find((pz) =&gt; pz.stratumId === selectedSurvivalZone);
-      return zone?.survivalRate || 0;
+      const stratum = sm.strata.find((_stratum) =&gt; _stratum.stratumId === selectedSurvivalStratum);
+      return stratum?.survivalRate || 0;
     });
 &nbsp;
     return {
@@ -574,7 +574,7 @@ ex<span class="cstat-no" title="statement not covered" >port default function Pl
         },
       ],
     };
-  }, [observationSummaries, selectedPlantsPerHaZone, selectedSurvivalZone]);
+  }, [observationSummaries, selectedPlantsPerHaStratum, selectedSurvivalStratum]);
 &nbsp;
   return (<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
     &lt;Card<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
@@ -585,7 +585,7 @@ ex<span class="cstat-no" title="statement not covered" >port default function Pl
         &lt;Box
           display={<span class="cstat-no" title="statement not covered" >'flex'}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
           flexDirec<span class="cstat-no" title="statement not covered" >tion={isMobile ? 'column' : 'row'}<span class="fstat-no" title="function not covered" ></span></span>
-          alignItem<span class="cstat-no" title="statement not covered" >s={isMobile ? '<span class="fstat-no" title="function not covered" >fl</span>ex-sta<span class="cstat-no" title="statement not covered" >rt' : 'center'}</span></span>
+          alignItems={<span class="cstat-no" title="statement not covered" >isMobile ? 'fle<span class="fstat-no" title="function not covered" >x-</span>start' : 'ce<span class="cstat-no" title="statement not covered" >nter'}</span></span>
 <span class="cstat-no" title="statement not covered" >        &gt;</span>
           &lt;Box display={'flex'} alignItems={'center'}&gt;
 <span class="cstat-no" title="statement not covered" >            &lt;Typography fontSize={'20px'} fontWeight={600} marginRight={1}&gt;</span>
@@ -599,9 +599,9 @@ ex<span class="cstat-no" title="statement not covered" >port default function Pl
           &lt;/Box&gt;
           &lt;Dropdown
             placeholder={strings.SELECT}
-            options={zonesOptions}
-<span class="cstat-no" title="statement not covered" >            onChange={(newValue) =&gt; setSelectedPlantsPerHaZone(Number(newValue))}</span>
-            selectedValue={selectedPlantsPerHaZone}
+            options={strataOptions}
+<span class="cstat-no" title="statement not covered" >            onChange={(newValue) =&gt; setSelectedPlantsPerHaStratum(Number(newValue))}</span>
+            selectedValue={selectedPlantsPerHaStratum}
           /&gt;
         &lt;/Box&gt;
         &lt;Box id='legend-container-th' sx={{ marginTop: 3 }} /&gt;
@@ -648,9 +648,9 @@ ex<span class="cstat-no" title="statement not covered" >port default function Pl
 &nbsp;
           &lt;Dropdown
             placeholder={strings.SELECT}
-            options={zonesOptions}
-            onChange={(newValue) =&gt; setSelectedSurvivalZone(Number(newValue))}
-            selectedValue={selectedSurvivalZone}
+            options={strataOptions}
+            onChange={(newValue) =&gt; setSelectedSurvivalStratum(Number(newValue))}
+            selectedValue={selectedSurvivalStratum}
           /&gt;
         &lt;/Box&gt;
         &lt;Box id='legend-container-mr' sx={{ marginTop: 3 }} /&gt;
@@ -682,7 +682,7 @@ ex<span class="cstat-no" title="statement not covered" >port default function Pl
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-05T19:06:18.388Z
+                at 2026-01-05T21:57:59.407Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

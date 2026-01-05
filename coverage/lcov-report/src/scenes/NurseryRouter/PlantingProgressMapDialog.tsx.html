@@ -342,9 +342,9 @@ import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext'
 import strings fro<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >m </span>'src/strings';</span>
 <span class="cstat-no" title="statement not covered" ></span>
 type<span class="cstat-no" title="statement not covered" > PlantingProgressMapDialogProps = {</span>
-  subz<span class="cstat-no" title="statement not covered" >oneId: number;</span>
-  subzon<span class="cstat-no" title="statement not covered" >eName: string;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  subzoneAreaHa: number;
+  subs<span class="cstat-no" title="statement not covered" >tratumId: number;</span>
+  substr<span class="cstat-no" title="statement not covered" >atumName: string;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  substratumAreaHa: number;
 <span class="cstat-no" title="statement not covered" >  siteName: s</span>tring;
   plantingComplete: boolean;
   onUpdatePlan<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ti</span>ngComplete: (id: number, val<span class="cstat-no" title="statement not covered" >: boolean) =&gt; void;</span></span>
@@ -352,9 +352,9 @@ type<span class="cstat-no" title="statement not covered" > PlantingProgressMapDi
 };
 &nbsp;
 export default function PlantingProgressMapDialog({
-  subzoneId,
-  subzoneName,
-  subzoneAreaHa,
+  substratumId,
+  substratumName,
+  substratumAreaHa,
   siteName,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
   plantingComplete,<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >  onUpdatePlantingComplete,</span>
@@ -364,21 +364,21 @@ export default function PlantingProgressMapDialog({
   const { plantingS<span class="cstat-no" title="statement not covered" >iteReportedPlants } = useP</span>lantingSiteData();
   const { species } = <span class="cstat-no" title="statement not covered" >useSpeciesData();</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const subzoneReportedPlants<span class="cstat-no" title="statement not covered" > = useMemo(() =&gt; {</span>
+  const substratumReportedPla<span class="cstat-no" title="statement not covered" >nts = useMemo(() =&gt; {</span>
     if (!plantingS<span class="cstat-no" title="statement not covered" >iteReportedPlants) {</span>
       return undefined;<span class="cstat-no" title="statement not covered" ></span>
     }<span class="cstat-no" title="statement not covered" ></span>
-    const subzones = plantingSite<span class="cstat-no" title="statement not covered" >ReportedPlants.strata.flatMap((zone) =&gt; zone.substrata</span>);
-    return subzones.f<span class="cstat-no" title="statement not covered" >ind((subzone) =&gt; subzone.id === </span>subzoneId);
-  }, [pla<span class="fstat-no" title="function not covered" >ntingSiteReportedPlants, s</span>ubzoneId]);
+    const substrata = plantingSit<span class="cstat-no" title="statement not covered" >eReportedPlants.strata.flatMap((stratum) =&gt; stratum.su</span>bstrata);
+    return substrata.<span class="cstat-no" title="statement not covered" >find((substratum) =&gt; substratum.</span>id === substratumId);
+  }, [pla<span class="fstat-no" title="function not covered" >ntingSiteReportedPlants, s</span>ubstratumId]);
 &nbsp;
   const totalPlants = useMemo(() =&gt; {
-    if (subzoneReportedPlants) {
-      return subzoneReportedPlants.species.reduce((acc, reportedSpecies) =&gt; acc + reportedSpecies.totalPlants, 0);
+    if (substratumReportedPlants) {
+      return substratumReportedPlants.species.reduce((acc, reportedSpecies) =&gt; acc + reportedSpecies.totalPlants, 0);
     } else {
       return 0;
     }
-  }, [subzoneReportedPlants]);
+  }, [substratumReportedPlants]);
 &nbsp;
   const getSpeci<span class="cstat-no" title="statement not covered" >esName = useCallback(</span>
     (speciesId: number) =&gt; {<span class="cstat-no" title="statement not covered" ></span>
@@ -387,8 +387,8 @@ export default function PlantingProgressMapDialog({
 <span class="cstat-no" title="statement not covered" >    [species]</span>
   );<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
-  const getWithdrawal<span class="cstat-no" title="statement not covered" >HistoryLink = () =&gt; {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-<span class="cstat-no" title="statement not covered" >    const filterParam = `<span class="fstat-no" title="function not covered" >su</span>bzoneName=$<span class="cstat-no" title="statement not covered" >{encodeURIComponent(subzo</span>ne</span>Name)}&amp;siteName=${encodeURIComponent(siteName)}`;
+  const getWithdrawalH<span class="cstat-no" title="statement not covered" >istoryLink = () =&gt; {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+<span class="cstat-no" title="statement not covered" >    const filterParam = `s<span class="fstat-no" title="function not covered" >ub</span>stratumName=${<span class="cstat-no" title="statement not covered" >encodeURIComponent(substratumNa</span>me</span>)}&amp;siteName=${encodeURIComponent(siteName)}`;
     const url = `${APP_PATHS.NURSERY_WITHDRAWALS}?tab=withdrawal_history&amp;${filterParam}`;
     return (<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >      &lt;Link</span>
@@ -417,12 +417,12 @@ export default function PlantingProgressMapDialog({
         }}
       &gt;
         &lt;Typography fontSize='16px' fontWeight={600}&gt;
-          {subzoneName}
+          {substratumName}
         &lt;/Typography&gt;
         &lt;Typography fontSize='16px' fontWeight={400}&gt;
           {strings.AREA_HA}
 <span class="cstat-no" title="statement not covered" >          {': '}</span>
-          {subzoneAreaHa}
+          {substratumAreaHa}
         &lt;/Typography&gt;
         &lt;Typography fontSize='16px' fontWeight={400}&gt;
           &lt;FormattedNumber value={totalPlants} /&gt;
@@ -430,8 +430,8 @@ export default function PlantingProgressMapDialog({
         &lt;/Typography&gt;
 &nbsp;
         &lt;ul style={{ margin: 0, paddingLeft: theme.spacing(3) }}&gt;
-          {subzoneReportedPlants &amp;&amp;
-            subzoneReportedPlants.species?.map((reportedSpecies) =&gt; (
+          {substratumReportedPlants &amp;&amp;
+            substratumReportedPlants.species?.map((reportedSpecies) =&gt; (
               &lt;li key={reportedSpecies.id}&gt;
                 &lt;Typography fontSize='16px' fontWeight={400}&gt;
                   &lt;FormattedNumber value={reportedSpecies.totalPlants} /&gt;
@@ -453,7 +453,7 @@ export default function PlantingProgressMapDialog({
         }}
       &gt;
         &lt;Button<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-          onClick={() =&gt; onUpdatePlantingComplete(subzoneId, !plantingComplete)}
+          onClick={() =&gt; onUpdatePlantingComplete(substratumId, !plantingComplete)}
           label={plantingComplete ? strings.UNDO_PLANTING_COMPLETE : strings.SET_PLANTING_COMPLETE}
           type={plantingComplete ? 'passive' : 'productive'}
           disabled={busy}
@@ -469,7 +469,7 @@ export default function PlantingProgressMapDialog({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-05T19:06:18.388Z
+                at 2026-01-05T21:57:59.407Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

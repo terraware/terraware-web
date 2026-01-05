@@ -352,45 +352,45 @@ export default function HighestAndLowestSurvivalRateStrataCard(): JSX.Element {
 <span class="cstat-no" title="statement not covered" ></span>
   cons<span class="cstat-no" title="statement not covered" >t [highestSurvivalRate, setHighestSurvivalRate] = useState&lt;number&gt;();</span>
   const <span class="cstat-no" title="statement not covered" >[lowestSurvivalRate, setLo<span class="fstat-no" title="function not covered" >we</span>stSu<span class="cstat-no" title="statement not covered" >rvivalRate</span>] = useState&lt;number&gt;();</span>
-  const [highestZoneId, setHighestZoneId] = useState&lt;number&gt;();
-<span class="cstat-no" title="statement not covered" >  const [lowe</span>stZoneId, setLowestZoneId] = useState&lt;number&gt;();
+  const [highestStratumId, setHighestStratumId] = useState&lt;number&gt;();
+<span class="cstat-no" title="statement not covered" >  const [lowe</span>stStratumId, setLowestStratumId] = useState&lt;number&gt;();
 &nbsp;
   useEffect(()<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > =</span>&gt; {<span class="cstat-no" title="statement not covered" ></span></span>
     let _highestSurvivalRate = 0;
     let _lowestSurvivalRate = Infinity;
-    let _highestZoneId: number | undefined;
-    let _lowestZoneId: number | undefined;
-    observationSummaries?.[0]?.strata.forEach((zone: StratumObservationSummary) =&gt; {
-      if (zone.survivalRate !== undefined) {
-        if (zone.survivalRate &gt;= _highestSurvivalRate) {
-          _highestS<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ur</span>vivalRa<span class="cstat-no" title="statement not covered" >te = zone.survivalRate;</span></span>
-          _highestZo<span class="cstat-no" title="statement not covered" >neI</span>d = zone.stratumId;
+    let _highestStratumId: number | undefined;
+    let _lowestStratumId: number | undefined;
+    observationSummaries?.[0]?.strata.forEach((stratum: StratumObservationSummary) =&gt; {
+      if (stratum.survivalRate !== undefined) {
+        if (stratum.survivalRate &gt;= _highestSurvivalRate) {
+          _highestS<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ur</span>vivalRa<span class="cstat-no" title="statement not covered" >te = stratum.survivalRate;</span></span>
+          _highestSt<span class="cstat-no" title="statement not covered" >rat</span>umId = stratum.stratumId;
 <span class="cstat-no" title="statement not covered" >        }</span>
-        if <span class="fstat-no" title="function not covered" >(z</span>one.<span class="cstat-no" title="statement not covered" >survivalRate &lt; _lowestSurvivalRate) {</span>
-          _lowestSurvivalRate = zone.survivalRate;
-<span class="cstat-no" title="statement not covered" >          _lowestZoneId = zone.stratumId;</span>
+        if <span class="fstat-no" title="function not covered" >(s</span>trat<span class="cstat-no" title="statement not covered" >um.survivalRate &lt; _lowestSurvivalRate) </span>{
+          _lowestSurvivalRate = stratum.survivalRate;
+<span class="cstat-no" title="statement not covered" >          _lowestStratumId = stratum.stratumId</span>;
         }<span class="cstat-no" title="statement not covered" ></span>
       }<span class="cstat-no" title="statement not covered" ></span>
     });<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-    setLowestSurvival<span class="cstat-no" title="statement not covered" >Rate(_lowestZoneId ? _lowestSurv</span>ivalRate : undefined);
-    setLo<span class="fstat-no" title="function not covered" >westZoneId(_lowestZoneId);</span>
+    setLowestSurvival<span class="cstat-no" title="statement not covered" >Rate(_lowestStratumId ? _lowestS</span>urvivalRate : undefined);
+    setLo<span class="fstat-no" title="function not covered" >westStratumId(_lowestStratumId);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-    setHighestSurvivalRate(_highestZoneId ? _high<span class="cstat-no" title="statement not covered" >estSurvivalRate : undefined);</span>
-    setHighestZoneId(_highestZoneId);<span class="cstat-no" title="statement not covered" ></span>
+    setHighestSurvivalRate(_highestStratumId ? _h<span class="cstat-no" title="statement not covered" >ighestSurvivalRate : undefined);</span>
+    setHighestStratumId(_highestStratumId);<span class="cstat-no" title="statement not covered" ></span>
   }, [observationSummaries]);<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const highestPlantingZone = useMemo(() =<span class="cstat-no" title="statement not covered" >&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    return plantingSite?.strat<span class="fstat-no" title="function not covered" >a?</span>.find((zone) =&gt; zone.id === highestZoneId);</span>
-  }, [plantingSite, highestZoneId]);
+  const highestStratum = useMemo(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >    return plantingSite?.strat<span class="fstat-no" title="function not covered" >a?</span>.find((stratum) =&gt; stratum.id === highestStratumId);</span>
+  }, [plantingSite, highestStratumId]);
 <span class="cstat-no" title="statement not covered" ></span>
-  const lowestPlantingZone = u<span class="cstat-no" title="statement not covered" >seMemo(()</span> =&gt; {
-    return plantingSite?.strata?.find((zone) =&gt; zone.id === lowestZoneId);
-  }, [plantingSite, lowestZoneId]);
+  const lowestStratum = useMem<span class="cstat-no" title="statement not covered" >o(() =&gt; {</span>
+    return plantingSite?.strata?.find((stratum) =&gt; stratum.id === lowestStratumId);
+  }, [plantingSite, lowestStratumId]);
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
   retu<span class="cstat-no" title="statement not covered" >rn (</span>
     &lt;Box<span class="cstat-no" title="statement not covered" >&gt;</span>
-      {hig<span class="cstat-no" title="statement not covered" >hestPlantingZone &amp;&amp; highestSurvivalRate !=</span>= undefined &amp;&amp; (
+      {hig<span class="cstat-no" title="statement not covered" >hestStratum &amp;&amp; highestSurvivalRate !== undefi</span>ned &amp;&amp; (
         &lt;&gt;<span class="cstat-no" title="statement not covered" ></span>
           &lt;Box
 <span class="cstat-no" title="statement not covered" >            sx={{</span>
@@ -400,24 +400,24 @@ export default function HighestAndLowestSurvivalRateStrataCard(): JSX.Element {
               marginBottom: 1,
             }}
 <span class="cstat-no" title="statement not covered" >          &gt;</span>
-<span class="cstat-no" title="statement not covered" >            &lt;Typography fontSize='16</span>px' fontWeight={400}&gt;
+<span class="cstat-no" title="statement not covered" >            &lt;Typography fontSize='16px' fo</span>ntWeight={400}&gt;
 <span class="cstat-no" title="statement not covered" >              {strings.HIGHEST}</span>
 <span class="cstat-no" title="statement not covered" >            &lt;/Typography&gt;</span>
             &lt;Typography fontSize='24px' fontWeight={600} paddingY={theme.spacing(1)}&gt;
-              {highestPlanting<span class="cstat-no" title="statement not covered" >Zone.name}<span class="fstat-no" title="function not covered" ></span></span>
+              {highestStr<span class="cstat-no" title="statement not covered" >atum.name}<span class="fstat-no" title="function not covered" ></span></span>
             &lt;/Typography&gt;
 <span class="cstat-no" title="statement not covered" >            &lt;Typography fontSize='24px' fontWeight={600}&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
               &lt;FormattedNumber value={highestSurvivalRate} /&gt;%
-            &lt;/Typography&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+            &lt;/Typography<span class="cstat-no" title="statement not covered" >&gt;<span class="fstat-no" title="function not covered" ></span></span>
           &lt;/Box&gt;
-<span class="cstat-no" title="statement not covered" >          {(!lowestPlantingZone || lowestPlantingZone.id === highestPlantingZone.id) &amp;&amp; (<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+<span class="cstat-no" title="statement not covered" >          {(!lowestStratum || lowestStratum.id === highestStratum.id) &amp;&amp; (<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
             &lt;Typography fontWeight={400} fontSize='14px' color={theme.palette.TwClrTxtSecondary} marginTop={1}&gt;
-<span class="cstat-no" title="statement not covered" >              {strings.SINGLE_ZONE_SURVIVAL_RATE_MESSAGE}</span>
+<span class="cstat-no" title="statement not covered" >              {strings.SINGLE_STRATUM_SURVIVAL_RATE_MESSAGE}</span>
             &lt;/Typography&gt;
           )}
         &lt;/&gt;
       )}
-      {lowestPlantingZone &amp;&amp; lowestPlantingZone.id !== highestPlantingZone?.id &amp;&amp; (
+      {lowestStratum &amp;&amp; lowestStratum.id !== highestStratum?.id &amp;&amp; (
         &lt;Box
           sx={{
             backgroundColor: '#CB4D4533',
@@ -429,7 +429,7 @@ export default function HighestAndLowestSurvivalRateStrataCard(): JSX.Element {
             {strings.LOWEST}
           &lt;/Typography&gt;
           &lt;Typography fontSize='24px' fontWeight={600} paddingY={theme.spacing(1)}&gt;
-            {lowestPlantingZone.name}
+            {lowestStratum.name}
           &lt;/Typography&gt;
           &lt;Typography fontSize='24px' fontWeight={600}&gt;
             &lt;FormattedNumber value={lowestSurvivalRate || 0} /&gt;%
@@ -481,7 +481,7 @@ export default function HighestAndLowestSurvivalRateStrataCard(): JSX.Element {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-05T19:06:18.388Z
+                at 2026-01-05T21:57:59.407Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

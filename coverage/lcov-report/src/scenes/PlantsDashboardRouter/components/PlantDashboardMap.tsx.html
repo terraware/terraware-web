@@ -1512,7 +1512,7 @@ const PlantDashboardMap = ({<span class="cstat-no" title="statement not covered"
     if (selectedPlants.length &gt; 0)<span class="cstat-no" title="statement not covered" > {</span>
 <span class="fstat-no" title="function not covered" ></span>      return plantDrawerContent;
     }
-  }, [photoDrawerCon<span class="cstat-no" title="statement not covered" >tent, plantDrawerContent, selectedFea</span>ture, selectedPhotos.length, selectedPlants.length]);
+  }, [photoDrawerCont<span class="cstat-no" title="statement not covered" >ent, plantDrawerContent, selectedFeat</span>ure, selectedPhotos.length, selectedPlants.length]);
 <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
   cons<span class="cstat-no" title="statement not covered" >t drawerHeader = useMemo(() =&gt; {</span>
     if (selectedPhotos.length &gt; 0) {
@@ -1539,11 +1539,11 @@ const PlantDashboardMap = ({<span class="cstat-no" title="statement not covered"
       site: PlantingSite<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
     ): {
       siteFeatures: MapLayerFeature[];
-      zoneFeatures: MapLayerFeature[];
-      subzoneFeatures: MapLayerFeature[];
+      stratumFeatures: MapLayerFeature[];
+      substratumFeatures: MapLayerFeature[];
     } =&gt; {
-      const zones = site.strata ?? [];
-      const subzones = site.strata?.flatMap((zone) =&gt; zone.substrata);
+      const strata = site.strata ?? [];
+      const substrata = site.strata?.flatMap((stratum) =&gt; stratum.substrata);
 &nbsp;
       return {
         siteFeatures: [
@@ -1559,30 +1559,30 @@ const PlantDashboardMap = ({<span class="cstat-no" title="statement not covered"
               selectedFeature?.layerFeatureId.featureId === `${site.id}`,
           },<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
         ],
-        zoneFeatures: zones.map((zone) =&gt; ({
-          featureId: `${zone.id}`,
-          label: zone.name,
+        stratumFeatures: strata.map((stratum) =&gt; ({
+          featureId: `${stratum.id}`,
+          label: stratum.name,
           geometry: {
             type: 'MultiPolygon',<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-            coordinates: zone.boundary.coordinates,
+            coordinates: stratum.boundary.coordinates,
           },
-          onClick: selectFeature(site.id)('strata', `${zone.id}`),
+          onClick: selectFeature(site.id)('strata', `${stratum.id}`),
           selected:
             selectedFeature?.layerFeatureId.layerId === 'strata' &amp;&amp;
-            selectedFeature?.layerF<span class="fstat-no" title="function not covered" >ea</span>tureId.featureId === `$<span class="cstat-no" title="statement not covered" >{zone.id}`,</span>
+            selectedFeature?.layerF<span class="fstat-no" title="function not covered" >ea</span>tureId.featureId === `${st<span class="cstat-no" title="statement not covered" >ratum.id}`,</span>
         })),
-        subzoneFeatures:
-          subzones?.map((subzone) =&gt; ({
-            featureId: `${subzone.id}`,
-            label: subzone.name,
+        substratumFeatures:
+          substrata?.map((substratum) =&gt; ({
+            featureId: `${substratum.id}`,
+            label: substratum.name,
             geometry: {
               type: 'Mu<span class="cstat-no" title="statement not covered" >ltiPolygon',<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >              coordinates: subzone.boundary.coordinates,</span>
+<span class="cstat-no" title="statement not covered" >              coordinates: substratum.boundary.coordinates,</span>
 <span class="cstat-no" title="statement not covered" >            },</span>
-            onClick: selectFeature(site.id)('substrata', `${subzone.id}`),
+            onClick: selectFeature(site.id)('substrata', `${substratum.id}`),
             selected:<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 <span class="cstat-no" title="statement not covered" >              selectedFeature?.layerFeatureId.layerId === 'substrata' &amp;&amp;</span>
-<span class="fstat-no" title="function not covered" ></span>              selec<span class="cstat-no" title="statement not covered" >tedFeature?.layerFeatur<span class="fstat-no" title="function not covered" >eI</span>d.featur<span class="cstat-no" title="statement not covered" >eId === `${subz</span>one.id}`,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+<span class="fstat-no" title="function not covered" ></span>              selec<span class="cstat-no" title="statement not covered" >tedFeature?.layerFeatur<span class="fstat-no" title="function not covered" >eI</span>d.featureId<span class="cstat-no" title="statement not covered" > === `${substratum</span>.id}`,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 <span class="fstat-no" title="function not covered" ></span>          })) ?? [<span class="cstat-no" title="statement not covered" >],<span class="fstat-no" title="function not covered" ></span></span>
       };
     },<span class="cstat-no" title="statement not covered" ></span>
@@ -1604,13 +1604,13 @@ const PlantDashboardMap = ({<span class="cstat-no" title="statement not covered"
         visible: selecte<span class="cstat-no" title="statement not covered" >dLayer === 'sites',</span>
 <span class="fstat-no" title="function not covered" ></span>      },
 <span class="cstat-no" title="statement not covered" >      {</span>
-<span class="cstat-no" title="statement not covered" >        features: f</span>eatures.flatMap(({ zoneFeatures }) =&gt; zoneFeatures),
+<span class="cstat-no" title="statement not covered" >        features: f</span>eatures.flatMap(({ stratumFeatures }) =&gt; stratumFeatures),
         layerId: 'strata',
 <span class="cstat-no" title="statement not covered" >        style: strataLayerStyle,</span>
 <span class="fstat-no" title="function not covered" >        vi</span>sible: sele<span class="cstat-no" title="statement not covered" >ctedLayer === 'strata',<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span></span>
       },<span class="cstat-no" title="statement not covered" ></span>
       {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-        feat<span class="cstat-no" title="statement not covered" >ures: features.flatMap(({ subzoneFeatures }) =&gt; subzoneFeatures),</span>
+        feat<span class="cstat-no" title="statement not covered" >ures: features.flatMap(({ substratumFeatures }) =&gt; substratumFeatures),</span>
         layerI<span class="fstat-no" title="function not covered" >d:</span> 'substrat<span class="cstat-no" title="statement not covered" >a',</span>
         style: substrataLayerStyle,
         visible: selectedLayer === 'substrata',
@@ -1628,8 +1628,8 @@ const PlantDashboardMap = ({<span class="cstat-no" title="statement not covered"
 <span class="cstat-no" title="statement not covered" ></span>
     return observationResults.flatMap((results) =&gt;
       results.strata
-        .flatMap((zone) =&gt; zone.substrata)
-        .flatMap((subzone) =&gt; subzone.monitoringPlots)
+        .flatMap((stratum) =&gt; stratum.substrata)
+        .flatMap((substratum) =&gt; substratum.monitoringPlots)
         .flatMap((plot): MapMarker[] =&gt;
           plot.photos.filter(hasGpsCoordinates).map((photo) =&gt; {
             return {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
@@ -1657,11 +1657,11 @@ const PlantDashboardMap = ({<span class="cstat-no" title="statement not covered"
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >      return observationResults.flatMap((results) =&gt;</span>
 <span class="cstat-no" title="statement not covered" >        results.strata<span class="fstat-no" title="function not covered" ></span></span>
-          .flatMap((z<span class="cstat-no" title="statement not covered" >one) =&gt; zone.substrata)</span>
-<span class="cstat-no" title="statement not covered" >          .flatMap((subzone) =&gt; subzone.monitoringPlots)</span>
-<span class="cstat-no" title="statement not covered" >          .flatMap((plot): Ma<span class="fstat-no" title="function not covered" >pM</span>arker[] =&gt; {</span>
-            if (plot.plant<span class="cstat-no" title="statement not covered" >s) {</span>
-<span class="cstat-no" title="statement not covered" >              const filteredPlants = plot.plants.filter((plant) =&gt; p</span>lant.status === status);
+          .flatMap((stra<span class="cstat-no" title="statement not covered" >tum) =&gt; stratum.substrata)</span>
+<span class="cstat-no" title="statement not covered" >          .flatMap((substratum) =&gt; substratum.monitoringPlots)</span>
+<span class="cstat-no" title="statement not covered" >          .flatMap((plot): MapMa<span class="fstat-no" title="function not covered" >rk</span>er[] =&gt; {</span>
+            if (plot.plants) <span class="cstat-no" title="statement not covered" >{</span>
+<span class="cstat-no" title="statement not covered" >              const filteredPlants = plot.plants.filter((plant) =&gt; plant.s</span>tatus === status);
               return filteredPlants.map(
                 (plant): MapMarker =&gt; ({
 <span class="cstat-no" title="statement not covered" >                  id: `plants/${plant.id}`,</span>
@@ -1699,10 +1699,10 @@ const PlantDashboardMap = ({<span class="cstat-no" title="statement not covered"
     }<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
     co<span class="cstat-no" title="statement not covered" >nst sortFeatureBySurvivalRate = (entityId: MapLayerFeatur<span class="fstat-no" title="function not covered" >eI</span>d, survivalRate: number | undefined) =&gt; {</span>
-      if (survivalRate <span class="cstat-no" title="statement not covered" >!== undefined) {</span>
+      if (survivalRate !==<span class="cstat-no" title="statement not covered" > undefined) {</span>
 <span class="cstat-no" title="statement not covered" >        if (survivalRate &lt; 50) {</span>
-<span class="cstat-no" title="statement not covered" >          lessThanFifty.push(en<span class="fstat-no" title="function not covered" >ti</span>tyId);</span>
-        } else if (survivalR<span class="cstat-no" title="statement not covered" >ate &lt; 75) {</span>
+<span class="cstat-no" title="statement not covered" >          lessThanFifty.push(entit<span class="fstat-no" title="function not covered" >yI</span>d);</span>
+        } else if (survivalRate<span class="cstat-no" title="statement not covered" > &lt; 75) {</span>
 <span class="cstat-no" title="statement not covered" >          lessThanSeventyFive.push(entityId);</span>
         } else {
           greaterThanSeventyFive.push(entityId);
@@ -1713,13 +1713,13 @@ const PlantDashboardMap = ({<span class="cstat-no" title="statement not covered"
 <span class="cstat-no" title="statement not covered" >    const siteId = { layerId: 'sites', featureId: `${latestSummary?.plantingSiteId}` };</span>
     sortFeatureBySurvivalRate(siteId, latestSummary?.survivalRate);
 &nbsp;
-    latestSummary?.strata.forEach((zone) =&gt; {
-      const zoneId = { layerId: 'strata', featureId: `${zone.stratumId}` };
-      sortFeatureBySurvivalRate(zoneId, zone.survivalRate);
+    latestSummary?.strata.forEach((stratum) =&gt; {
+      const stratumId = { layerId: 'strata', featureId: `${stratum.stratumId}` };
+      sortFeatureBySurvivalRate(stratumId, stratum.survivalRate);
 &nbsp;
-      zone.substrata.forEach((subzone) =&gt; {
-        const subzoneId = { layerId: 'substrata', featureId: `${subzone.substratumId}` };
-        sortFeatureBySurvivalRate(subzoneId, subzone.survivalRate);
+      stratum.substrata.forEach((substratum) =&gt; {
+        const substratumId = { layerId: 'substrata', featureId: `${substratum.substratumId}` };
+        sortFeatureBySurvivalRate(substratumId, substratum.survivalRate);
       });
     });
 &nbsp;
@@ -1762,12 +1762,12 @@ const PlantDashboardMap = ({<span class="cstat-no" title="statement not covered"
       const siteId = { layerId: 'sites', featureId: `${plantingSite.id}` };
       sortFeatureByObservationRecency(siteId, plantingSite.latestObservationCompletedTime);
 &nbsp;
-      plantingSite.strata?.forEach((zone) =&gt; {
-        const zoneId = { layerId: 'strata', featureId: `${zone.id}` };
-        sortFeatureByObservationRecency(zoneId, zone.latestObservationCompletedTime);
-        zone.substrata.forEach((subzone) =&gt; {
-          const subzoneId = { layerId: 'substrata', featureId: `${subzone.id}` };
-          sortFeatureByObservationRecency(subzoneId, subzone.latestObservationCompletedTime);
+      plantingSite.strata?.forEach((stratum) =&gt; {
+        const stratumId = { layerId: 'strata', featureId: `${stratum.id}` };
+        sortFeatureByObservationRecency(stratumId, stratum.latestObservationCompletedTime);
+        stratum.substrata.forEach((substratum) =&gt; {
+          const substratumId = { layerId: 'substrata', featureId: `${substratum.id}` };
+          sortFeatureByObservationRecency(substratumId, substratum.latestObservationCompletedTime);
         });
       });
     });
@@ -1963,7 +1963,7 @@ export default PlantDashboardMap;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-05T19:06:18.388Z
+                at 2026-01-05T21:57:59.407Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/124</span>
+                <span class='fraction'>0/125</span>
             </div>
         
             
@@ -372,7 +372,9 @@
 <a name='L307'></a><a href='#L307'>307</a>
 <a name='L308'></a><a href='#L308'>308</a>
 <a name='L309'></a><a href='#L309'>309</a>
-<a name='L310'></a><a href='#L310'>310</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L310'></a><a href='#L310'>310</a>
+<a name='L311'></a><a href='#L311'>311</a>
+<a name='L312'></a><a href='#L312'>312</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -504,6 +506,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -766,53 +770,55 @@ const SurvivalRateSettings = () =&gt; {
     return totalSet;
   }, [permanentPlots, t0SiteData, wi<span class="cstat-no" title="statement not covered" >thdrawnSpeciesPlots]);<span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  co<span class="cstat-no" title="statement not covered" >nst zonesWithObservations = useMemo(() =&gt; {<span class="fstat-no" title="function not covered" ></span></span>
+  co<span class="cstat-no" title="statement not covered" >nst strataWithObservations = useMemo(() =&gt; {<span class="fstat-no" title="function not covered" ></span></span>
     if (!temporaryPlots) {
       return {};<span class="cstat-no" title="statement not covered" ></span>
     }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
     return temporaryPlots.reduce(
 <span class="cstat-no" title="statement not covered" >      (acc, plot) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >        const zoneId = plot.subst</span>ratum_stratum_id;
-        if (!zoneId) {
+<span class="cstat-no" title="statement not covered" >        const stratumId = plot.su</span>bstratum_stratum_id;
+        if (!stratumId) {
           return acc;<span class="cstat-no" title="statement not covered" ></span>
         }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-        if (!acc[zoneId]) {
-          acc[zoneId] = [];<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+        if (!acc[stratumId]) {
+          acc[stratumId] = [];<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
         }<span class="cstat-no" title="statement not covered" ></span>
-        acc[<span class="fstat-no" title="function not covered" >zo</span>neId].<span class="cstat-no" title="statement not covered" >push(plot);</span>
+        acc[<span class="fstat-no" title="function not covered" >st</span>ratumI<span class="cstat-no" title="statement not covered" >d].push(plot);</span>
         return acc;
       },
       {}<span class="cstat-no" title="statement not covered" > as Record&lt;string, PlotsWithObservationsSearchResult[]&gt;</span>
     );<span class="cstat-no" title="statement not covered" ></span>
   }, [temporaryPlots]);
 &nbsp;
-  const numberOfSetZones = useMemo(() =&gt; {
+  const numberOfSetStrata = useMemo(() =&gt; {
 <span class="cstat-no" title="statement not covered" >    let totalSet = 0;</span>
-    Object.entries(zonesWithObservations).forEach(([zoneId, plots]) =&gt; {
-      const correspondingZone = <span class="cstat-no" title="statement not covered" >t0SiteData?.zones?.find((z<span class="fstat-no" title="function not covered" >) </span>=&gt; z.plantingZoneId.toString() === zoneId.toString());</span>
-<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >      const plotI</span>ds = plots.map((plot) =&gt; plot.id.toString());
-      const withdrawnSpeciesOfZone = withdrawnSpeciesPlots?.filter((wsp) =&gt;
-<span class="cstat-no" title="statement not covered" >        plotIds.includes(wsp.monitoringPlotId.toString())</span>
-<span class="fstat-no" title="function not covered" >      );</span>
-<span class="cstat-no" title="statement not covered" ></span>
-      co<span class="cstat-no" title="statement not covered" >nst speciesMap = new Map&lt;number, { density?: number; speciesId: number }&gt;();</span>
-      with<span class="cstat-no" title="statement not covered" >drawnSpecies</span>OfZone?.forEach((plot) =&gt; {
-        plot.species.forEach((wdSpecies) =&gt; {
-<span class="cstat-no" title="statement not covered" >          if (!speciesMap.has(wdSpecies.speciesId)) {</span>
-<span class="cstat-no" title="statement not covered" >            speciesMap.set(w</span>dSpecies.speciesId, wdSpecies);
-          }
-<span class="cstat-no" title="statement not covered" >        });</span>
-      })<span class="cstat-no" title="statement not covered" >;</span>
-      const allWithdrawnSpeciesForZone = Array.from(speciesMap.values());
+    Object.entries(strataWithObservations).forEach(([stratumId, plots]) =&gt; {
+      const correspondingStratum <span class="cstat-no" title="statement not covered" >= t0SiteData?.strata?.find<span class="fstat-no" title="function not covered" >(</span></span>
+<span class="cstat-no" title="statement not covered" >        (_stratum) =&gt; _stratum.stratumId.toString() === stratumId.toString()</span>
+<span class="cstat-no" title="statement not covered" >      );</span>
 &nbsp;
-      const everySpeciesSet = allWithdrawnSpeciesForZone.every((sp) =&gt; {
-        const correspondingSpecies = correspondingZone?.densityData.find((dd) =&gt; dd.speciesId === sp.speciesId);
-        if (correspondingSp<span class="cstat-no" title="statement not covered" >ecies) {<span class="fstat-no" title="function not covered" ></span></span>
-          return tr<span class="cstat-no" title="statement not covered" >ue</span>;
-<span class="cstat-no" title="statement not covered" >        } else {<span class="fstat-no" title="function not covered" ></span></span>
-          return false;
-        }<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+<span class="cstat-no" title="statement not covered" >      const plotIds = plots.map((plot) =&gt; plot.id.toString());</span>
+<span class="fstat-no" title="function not covered" >      co</span>nst withdrawnSpeciesOfStratum = withdrawnSpeciesPlots?.filter((wsp) =&gt;
+        plotIds.includes(w<span class="cstat-no" title="statement not covered" >sp.monitoringPlotId.toStrin</span>g())
+      );<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+      const speciesMap = new Map&lt;number, { density?: number; speciesId: number }&gt;();
+      wi<span class="cstat-no" title="statement not covered" >thdrawnSpeciesOfStratum?.forEach((plot) =&gt; {</span>
+        pl<span class="cstat-no" title="statement not covered" >ot.species.forEach((w</span>dSpecies) =&gt; {
+          if (!speciesMap.has(wdSpecies.speciesId)) {
+<span class="cstat-no" title="statement not covered" >            speciesMap.set(wdSpecie</span>s.speciesId, wdSpecies);
+<span class="cstat-no" title="statement not covered" >          }</span>
+        });
+      });
+      const allWithdrawnSpeciesForStratum = Array.from(speciesMap.values());
+&nbsp;
+      const everySpeciesSet <span class="cstat-no" title="statement not covered" >= allWithdrawnSpeciesForSt<span class="fstat-no" title="function not covered" >ra</span>tum.every((sp) =&gt; {</span>
+        const corre<span class="cstat-no" title="statement not covered" >sp</span>ondingSpecies = correspondingStratum?.densityData.find((dd) =&gt; dd.speciesId === sp.speciesId);
+<span class="cstat-no" title="statement not covered" >        if (correspondingSpecies) {<span class="fstat-no" title="function not covered" ></span></span>
+          return true;
+        } else {<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" ></span>          return false<span class="cstat-no" title="statement not covered" >;</span>
+        }
       });<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 <span class="cstat-no" title="statement not covered" ></span>
       if<span class="fstat-no" title="function not covered" > (</span>everySp<span class="cstat-no" title="statement not covered" >eciesSet) {</span>
@@ -820,7 +826,7 @@ const SurvivalRateSettings = () =&gt; {
       }<span class="cstat-no" title="statement not covered" ></span>
     })<span class="cstat-no" title="statement not covered" >;<span class="fstat-no" title="function not covered" ></span></span>
     retu<span class="cstat-no" title="statement not covered" >rn totalSet;<span class="fstat-no" title="function not covered" ></span></span>
-  }, [t0Si<span class="cstat-no" title="statement not covered" >teData, withdrawnSpeciesPlots, zonesWithObservations]);</span>
+  }, [t0Si<span class="cstat-no" title="statement not covered" >teData, withdrawnSpeciesPlots, strataWithObservations]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
   const tabs = useMemo(() =&gt; {
     if (!activeLocale) {
@@ -849,7 +855,7 @@ const SurvivalRateSettings = () =&gt; {
         children: (
           &lt;TemporaryPlotsTab
             t0SiteData={t0SiteData}
-            zonesWithObservations={zonesWithObservations}
+            strataWithObservations={strataWithObservations}
             withdrawnSpeciesPlots={withdrawnSpeciesPlots}
             including={t0SiteData?.survivalRateIncludesTempPlots}
           /&gt;
@@ -865,7 +871,7 @@ const SurvivalRateSettings = () =&gt; {
     t0SiteData,
     temporaryPlots,
     withdrawnSpeciesPlots,
-    zonesWithObservations,
+    strataWithObservations,
   ]);
 &nbsp;
   const { activeTab, onChangeTab } = useStickyTabs({
@@ -933,11 +939,11 @@ const SurvivalRateSettings = () =&gt; {
                     marginX={1}
                   /&gt;
                 )}
-                {(Object.entries(zonesWithObservations).length || 0) === numberOfSetZones ? (
+                {(Object.entries(strataWithObservations).length || 0) === numberOfSetStrata ? (
                   &lt;Typography fontWeight={500} color={theme.palette.TwClrTxtSuccess}&gt;
                     {strings.T0_SET_FOR_TEMPORARY_PLOTS}
                   &lt;/Typography&gt;
-                ) : numberOfSetZones === 0 ? (
+                ) : numberOfSetStrata === 0 ? (
                   &lt;Typography fontWeight={500} color={theme.palette.TwClrTxtWarning}&gt;
                     {strings.T0_NOT_SET_FOR_TEMPORARY_PLOTS}
                   &lt;/Typography&gt;
@@ -945,8 +951,8 @@ const SurvivalRateSettings = () =&gt; {
                   &lt;Typography fontWeight={500} color={theme.palette.TwClrTxtWarning}&gt;
                     {strings.formatString(
                       strings.NUMBER_OF_PLOTS_SET_FOR_TEMPORARY_PLOTS,
-                      numberOfSetZones,
-                      Object.entries(zonesWithObservations).length || 0
+                      numberOfSetStrata,
+                      Object.entries(strataWithObservations).length || 0
                     )}
                   &lt;/Typography&gt;
                 )}
@@ -997,7 +1003,7 @@ export default SurvivalRateSettings;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-05T19:06:18.388Z
+                at 2026-01-05T21:57:59.407Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

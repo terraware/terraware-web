@@ -1079,9 +1079,9 @@ export default functio<span class="cstat-no" title="statement not covered" >n Nu
   const { selectedO<span class="cstat-no" title="statement not covered" >rganization } = useOrganization();</span>
   const { strings }<span class="cstat-no" title="statement not covered" > = useLocalization();</span>
   const navigate<span class="cstat-no" title="statement not covered" > = useSyncNavigate();</span>
-  const location = useS<span class="cstat-no" title="statement not covered" >tateLocation();</span>
+  const location = useStat<span class="cstat-no" title="statement not covered" >eLocation();</span>
   const query = useQ<span class="cstat-no" title="statement not covered" >uery();</span>
-  const subzonePara<span class="cstat-no" title="statement not covered" >m = query.get('subzoneName');</span>
+  const substratumP<span class="cstat-no" title="statement not covered" >aram = query.get('substratumName');</span>
   const siteParam =<span class="cstat-no" title="statement not covered" > query.get('siteName');</span>
   const dispatch = useAppDispatch();<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
@@ -1117,7 +1117,7 @@ export default functio<span class="cstat-no" title="statement not covered" >n Nu
       { key: 'facility_name', name: strings.FROM_NURSERY, type: 'string' },
       { key: 'destinationName', name: strings.DESTINATION, type: 'string' },
       { key: 'project_na<span class="cstat-no" title="statement not covered" >mes', name: strings.PROJECTS, type: 'string' },</span>
-<span class="fstat-no" title="function not covered" ></span>      { ke<span class="cstat-no" title="statement not covered" >y: 'substratumNames', name: strings.TO_SUBZONE, type: 'string' },</span>
+<span class="fstat-no" title="function not covered" ></span>      { ke<span class="cstat-no" title="statement not covered" >y: 'substratumNames', name: strings.TO_SUBSTRATUM, type: 'string' },</span>
       { key: 'speciesScientificNames', name: strings.SPECIES, type: 'string' },
       { key: 'totalWithdrawn', name: strings.TOTAL_QUANTITY, type: 'number' },
       { key: 'menu', name: '', type: 'string' },
@@ -1130,7 +1130,7 @@ export default functio<span class="cstat-no" title="statement not covered" >n Nu
       { name: 'purpose', label: strings.PURPOSE, type: 'multiple_selection' },
       { name: 'facility_name', label: strings.FROM_NURSERY, type: 'multiple_selection' },
       { name: 'destinationName', label: strings.DESTINATION, type: 'multiple_selection' },
-      { name: 'substratumNames', label: strings.SUBZONE, type: 'multiple_selection' },
+      { name: 'substratumNames', label: strings.SUBSTRATUM, type: 'multiple_selection' },
       {<span class="cstat-no" title="statement not covered" ></span>
 <span class="fstat-no" title="function not covered" ></span>        na<span class="cstat-no" title="statement not covered" >me: 'batchWithdrawals.batch_species_scientificName',</span>
         label: strings.SPECIES,
@@ -1165,7 +1165,7 @@ export default functio<span class="cstat-no" title="statement not covered" >n Nu
       },
       {
         key: 'substratumNames',
-        displayLabel: strings.TO_SUBZONE,
+        displayLabel: strings.TO_SUBSTRATUM,
       },
       {
         key: 'speciesSc<span class="cstat-no" title="statement not covered" >ientificNames',</span>
@@ -1364,8 +1364,8 @@ export default functio<span class="cstat-no" title="statement not covered" >n Nu
   }, [siteParam, query, navigate, location]);
 &nbsp;
   useEffect(() =&gt; {
-    if (subzoneParam) {
-      query.delete('subzoneName');
+    if (substratumParam) {
+      query.delete('substratumName');
       navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
       setFilters((curr) =&gt; ({
         ...curr,
@@ -1373,11 +1373,11 @@ export default functio<span class="cstat-no" title="statement not covered" >n Nu
           field: 'substratumNames',
           operation: 'field',
           type: 'Exact<span class="cstat-no" title="statement not covered" >',<span class="fstat-no" title="function not covered" ></span></span>
-          values: [subzoneParam],
+          values: [substratumParam],
 <span class="cstat-no" title="statement not covered" >        },</span>
 <span class="cstat-no" title="statement not covered" >      }));</span>
     }
-  }, [subzoneParam, quer<span class="cstat-no" title="statement not covered" >y, navigate, location]);</span>
+  }, [substratumParam, q<span class="cstat-no" title="statement not covered" >uery, navigate, location]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
   const onSortChange = useCallback((order: SortOrder, orderBy: string) =&gt; {
     const orderByStr =
@@ -1504,7 +1504,7 @@ export default functio<span class="cstat-no" title="statement not covered" >n Nu
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-05T19:06:18.388Z
+                at 2026-01-05T21:57:59.407Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

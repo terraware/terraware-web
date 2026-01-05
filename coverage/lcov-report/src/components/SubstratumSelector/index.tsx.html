@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/components/SubzoneSelector/index.tsx</title>
+    <title>Code coverage report for src/components/SubstratumSelector/index.tsx</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../../prettify.css" />
     <link rel="stylesheet" href="../../../base.css" />
@@ -19,7 +19,7 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/components/SubzoneSelector</a> index.tsx</h1>
+        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/components/SubstratumSelector</a> index.tsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
@@ -381,67 +381,67 @@ import { Autocomplete } <span class="cstat-no" title="statement not covered" >fr
 import strings from<span class="cstat-no" title="statement not covered" > 'src/strings';</span>
 import useDevic<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >eI</span>nfo from 'src/utils/useDeviceInfo';</span>
 <span class="cstat-no" title="statement not covered" ></span>
-expo<span class="cstat-no" title="statement not covered" >rt type SubzoneInfo = {</span>
+expo<span class="cstat-no" title="statement not covered" >rt type SubstratumInfo = {</span>
   id: number | string;
   fullName: string<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >;</span></span>
 };<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-export<span class="cstat-no" title="statement not covered" > type ZoneInfo = {</span>
+export<span class="cstat-no" title="statement not covered" > type StratumInfo = {</span>
   id: nu<span class="cstat-no" title="statement not covered" >mber | string;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
   name: string;
-<span class="cstat-no" title="statement not covered" >  substrata?:</span> SubzoneInfo[];
+<span class="cstat-no" title="statement not covered" >  substrata?:</span> SubstratumInfo[];
 };
 <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-export type SubzoneSelectorProps = {
-  zones: ZoneInfo[];
-  onSubzoneSelected: (subzone?: SubzoneInfo) =&gt; void;
-  onZoneSelected: (zone?: ZoneInfo) =&gt; void;
-  zoneError?: string;
-  subzoneError?: string;
+export type SubstratumSelectorProps = {
+  strata: StratumInfo[];
+  onStratumSelected: (stratum?: StratumInfo) =&gt; void;
+  onSubstratumSelected: (substratum?: SubstratumInfo) =&gt; void;
+  stratumError?: string;
+  substratumError?: string;
   horizontalLayout?: boolean;
-  selectedSubzone?:<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > S</span>ubzoneI<span class="cstat-no" title="statement not covered" >nfo;</span></span>
-  selectedZone?: Zon<span class="cstat-no" title="statement not covered" >eIn</span>fo;
+  selectedStratum?:<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > S</span>tratumI<span class="cstat-no" title="statement not covered" >nfo;</span></span>
+  selectedSubstratum<span class="cstat-no" title="statement not covered" >?: </span>SubstratumInfo;
 <span class="cstat-no" title="statement not covered" >};</span>
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-export default function SubzoneSelector(props: SubzoneSelectorProps): JSX.Element {
+export default function SubstratumSelector(props: SubstratumSelectorProps): JSX.Element {
 <span class="cstat-no" title="statement not covered" >  const {</span>
-    zones,<span class="cstat-no" title="statement not covered" ></span>
-    onZoneSelected,<span class="cstat-no" title="statement not covered" ></span>
-    onSubzoneSelected,<span class="cstat-no" title="statement not covered" ></span>
-    zoneError,<span class="cstat-no" title="statement not covered" ></span>
-    subzoneError,<span class="cstat-no" title="statement not covered" ></span>
+    strata,<span class="cstat-no" title="statement not covered" ></span>
+    onStratumSelected,<span class="cstat-no" title="statement not covered" ></span>
+    onSubstratumSelected,<span class="cstat-no" title="statement not covered" ></span>
+    stratumError,<span class="cstat-no" title="statement not covered" ></span>
+    substratumError,<span class="cstat-no" title="statement not covered" ></span>
     horiz<span class="fstat-no" title="function not covered" >ontalLayout,</span>
-    selectedSubzone,
-    selectedZone,
+    selectedSubstratum,
+    selectedStratum,
   } = props;
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
 &nbsp;
-  const zoneToDropdownItem = (zone?: ZoneInfo) =&gt;
-    zone ? { label: zone.name, value: zone.id } : { label: '', value: '' };
-  const subzoneToDropdownItem = (subzone?: SubzoneInfo) =&gt;
-    subzone ? { label: subzone.fullName, value: subzone.id } : { label: '', value: '' };
+  const stratumToDropdownItem = (stratum?: StratumInfo) =&gt;
+    stratum ? { label: stratum.name, value: stratum.id } : { label: '', value: '' };
+  const substratumToDropdownItem = (substratum?: SubstratumInfo) =&gt;
+    substratum ? { label: substratum.fullName, value: substratum.id } : { label: '', value: '' };
 <span class="cstat-no" title="statement not covered" ></span>
-  const onChangeZone = <span class="cstat-no" title="statement not covered" >(zone: any) =&gt; {</span>
-    const foundZ<span class="cstat-no" title="statement not covered" >one = zones.find((zoneItem) =&gt; z</span>oneItem.id.toString() === zone?.value?.toString());
-    onZoneSelected(foundZone)<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >;<span class="cstat-no" title="statement not covered" ></span></span></span>
+  const onChangeStratum<span class="cstat-no" title="statement not covered" > = (stratum: any) =&gt; {</span>
+    const foundS<span class="cstat-no" title="statement not covered" >tratum = strata.find((stratumIte</span>m) =&gt; stratumItem.id.toString() === stratum?.value?.toString());
+    onStratumSelected(foundStrat<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >um</span>);<span class="cstat-no" title="statement not covered" ></span></span>
   };<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  const onChangeSubzon<span class="cstat-no" title="statement not covered" >e = (subzon<span class="fstat-no" title="function not covered" >e:</span> any) =&gt; {</span>
-    const foundSubzone = selectedZone?.substrata?.find(
-<span class="cstat-no" title="statement not covered" >      (subzoneItem) =&gt; subzoneItem.id.toString() === subzone?.value?.toString()</span>
+  const onChangeSubstratu<span class="cstat-no" title="statement not covered" >m = (substra<span class="fstat-no" title="function not covered" >tu</span>m: any) =&gt; {</span>
+    const foundSubstratum = selectedStratum?.substrata?.find(
+<span class="cstat-no" title="statement not covered" >      (substratumItem) =&gt; substratumItem.id.toString() === substratum?.value?.toString()</span>
     );
-<span class="cstat-no" title="statement not covered" >    onSubzoneSelected(foundSubz</span>one);
+<span class="cstat-no" title="statement not covered" >    onSubstratumSelected(foundSubstra</span>tum);
   };
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
   const isEqual = (optionA: any, optionB: any) =&gt; {
-    if (optionA?.value &amp;&amp;<span class="cstat-no" title="statement not covered" > optionB?.value) {</span>
+    if (optionA?.value &amp;&amp; op<span class="cstat-no" title="statement not covered" >tionB?.value) {</span>
 <span class="fstat-no" title="function not covered" >      re</span>turn optionA.value === optionB.value;
     }
     retu<span class="cstat-no" title="statement not covered" >rn false;</span>
   };
 &nbsp;
-  co<span class="cstat-no" title="statement not covered" >nst horizontalLabel = (text: stri</span>ng) =&gt; (
+  co<span class="cstat-no" title="statement not covered" >nst horizontalLabel = (text: string) =&gt;</span> (
     &lt;Typography
       fontSize='16<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >px</span>'</span>
 <span class="cstat-no" title="statement not covered" >      fontWeight={500}</span>
@@ -460,21 +460,21 @@ export default function SubzoneSelector(props: SubzoneSelectorProps): JSX.Elemen
     alignItems: 'center',
   };
 &nbsp;
-  const zoneOptions: any[] = useMemo(() =&gt; {
-    return zones<span class="cstat-no" title="statement not covered" ></span>
-      .filter((zone) =&gt; zone.substrata)
+  const stratumOptions: any[] = useMemo(() =&gt; {
+    return strata<span class="cstat-no" title="statement not covered" ></span>
+      .filter((stratum) =&gt; stratum.substrata)
       .sort((a, b) =&gt; a.name.localeCompare(b.name, undefined, { numeric: true }))
-      .map((zone) =&gt; zoneToDropdownItem(zone));
-  }, [zones]);
+      .map((stratum) =&gt; stratumToDropdownItem(stratum));
+  }, [strata]);
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  co<span class="cstat-no" title="statement not covered" >nst subzoneOptions: <span class="fstat-no" title="function not covered" >an</span>y[] = us<span class="cstat-no" title="statement not covered" >eMemo(() =&gt; {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span></span>
-    if (!selectedZone?.substrata) {
+  co<span class="cstat-no" title="statement not covered" >nst substratumOptions<span class="fstat-no" title="function not covered" >: </span>any[] = use<span class="cstat-no" title="statement not covered" >Memo(() =&gt; {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span></span>
+    if (!selectedStratum?.substrata) {
       return [];<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >    }</span>
-    re<span class="cstat-no" title="statement not covered" >turn [...se</span>lectedZone.substrata]
+    re<span class="cstat-no" title="statement not covered" >turn [...se</span>lectedStratum.substrata]
       .sort((a, b) =&gt; a.fullName.localeCompare(b.fullName, undefined, { numeric: true }))
-<span class="cstat-no" title="statement not covered" >      .map((subzone) =&gt; subzoneToDropdownIte<span class="fstat-no" title="function not covered" >m(</span>subzone)<span class="cstat-no" title="statement not covered" >);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span>
-  }, [selectedZone]);
+<span class="cstat-no" title="statement not covered" >      .map((substratum) =&gt; substratumToDropdown<span class="fstat-no" title="function not covered" >It</span>em(subst<span class="cstat-no" title="statement not covered" >ratum));<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span>
+  }, [selectedStratum]);
 <span class="cstat-no" title="statement not covered" ></span>
   return (
     &lt;Box
@@ -494,32 +494,32 @@ export default function SubzoneSelector(props: SubzoneSelectorProps): JSX.Elemen
         margin={theme.spacing(2, isMobile || horizontalLayout ? 0 : 2, 0, 0)}
         sx={horizontalLayout ? horizontalStyle : {}}
       &gt;
-        {horizontalLayout &amp;&amp; horizontalLabel(strings.ZONE)}
+        {horizontalLayout &amp;&amp; horizontalLabel(strings.STRATUM)}
         &lt;Autocomplete
-          id='zone'
+          id='stratum'
           placeholder={strings.SELECT}
-          label={horizontalLayout ? '' : strings.ZONE_REQUIRED}
-          selected={zoneToDropdownItem(selectedZone)}
-          options={zoneOptions}
-          onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >onChangeZone(value)}</span>
-          errorText={zoneError}
-          disabled={!zones.length}
+          label={horizontalLayout ? '' : strings.STRATUM_REQUIRED}
+          selected={stratumToDropdownItem(selectedStratum)}
+          options={stratumOptions}
+          onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >onChangeStratum(value)}</span>
+          errorText={stratumError}
+          disabled={!strata.length}
           isEqual={isEqual}
           freeSolo={false}
           hideClearIcon={true}
         /&gt;
       &lt;/Box&gt;
       &lt;Box flex={1} margin={theme.spacing(2, 0, 0)} sx={horizontalLayout ? horizontalStyle : {}}&gt;
-        {horizontalLayout &amp;&amp; horizontalLabel(strings.SUBZONE)}
+        {horizontalLayout &amp;&amp; horizontalLabel(strings.SUBSTRATUM)}
         &lt;Autocomplete
-          id='subzone'
+          id='substratum'
           placeholder={strings.SELECT}
-          label={horizontalLayout ? '' : strings.SUBZONE_REQUIRED}
-          selected={subzoneToDropdownItem(selectedSubzone)}
-          options={subzoneOptions}
-          onChange={(value) =&gt; onChangeSubzone(value)}
-          errorTex<span class="fstat-no" title="function not covered" >t=</span>{subzoneE<span class="cstat-no" title="statement not covered" >rror}</span>
-          disabled={!selectedZone?.substrata?.length}
+          label={horizontalLayout ? '' : strings.SUBSTRATUM_REQUIRED}
+          selected={substratumToDropdownItem(selectedSubstratum)}
+          options={substratumOptions}
+          onChange={(value) =&gt; onChangeSubstratum(value)}
+          errorTex<span class="fstat-no" title="function not covered" >t=</span>{substrat<span class="cstat-no" title="statement not covered" >umError}</span>
+          disabled={!selectedStratum?.substrata?.length}
           isEqual={isEqual}
           freeSolo={false}
           hideClearIcon={true}
@@ -535,7 +535,7 @@ export default function SubzoneSelector(props: SubzoneSelectorProps): JSX.Elemen
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-05T19:06:18.388Z
+                at 2026-01-05T21:57:59.407Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

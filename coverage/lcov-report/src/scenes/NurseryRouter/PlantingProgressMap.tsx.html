@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/90</span>
+                <span class='fraction'>0/91</span>
             </div>
         
             
@@ -236,7 +236,9 @@
 <a name='L171'></a><a href='#L171'>171</a>
 <a name='L172'></a><a href='#L172'>172</a>
 <a name='L173'></a><a href='#L173'>173</a>
-<a name='L174'></a><a href='#L174'>174</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L174'></a><a href='#L174'>174</a>
+<a name='L175'></a><a href='#L175'>175</a>
+<a name='L176'></a><a href='#L176'>176</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -367,6 +369,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -418,8 +422,8 @@ import { useOrganiz<span class="cstat-no" title="statement not covered" >ation }
 import { usePla<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >nt</span>ingSiteData } from 'src/providers/Tracking/PlantingSiteContext';</span>
 im<span class="cstat-no" title="statement not covered" >port { requestUpdatePlantingCompleted } from 'src/redux/features/plantings/plantingsAsyncThunks';</span>
 impo<span class="cstat-no" title="statement not covered" >rt {</span>
-  selectUpdatePlantingCompleted,
-  selectZonesHaveS<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ta</span>tistics,</span>
+  selectStrataHaveStatistics,
+  selectUpdatePlan<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ti</span>ngCompleted,</span>
 } <span class="cstat-no" title="statement not covered" >from 'src/redux/features/plantings/plantingsSelectors';</span>
 impo<span class="cstat-no" title="statement not covered" >rt { useAppDispatch, useAppSelector } from 'src/redux/store';</span>
 import<span class="cstat-no" title="statement not covered" > StatsWarningDialog from 'src/scenes/NurseryRouter/StatsWarningModal';</span>
@@ -449,14 +453,14 @@ export default funct<span class="cstat-no" title="statement not covered" >ion</s
   const [focusEntities, setFocusEn<span class="cstat-no" title="statement not covered" >tities] = useState&lt;{ sourceId: string; id: number }[]&gt;([]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
   const { plantingS<span class="cstat-no" title="statement not covered" >ite, setSelectedPlantingSit</span>e } = usePlantingSiteData();
-  const [zoneIdSelected, setZon<span class="cstat-no" title="statement not covered" >eIdSelected] = useState&lt;number&gt;(-1);</span>
+  const [stratumIdSelected, set<span class="cstat-no" title="statement not covered" >StratumIdSelected] = useState&lt;number&gt;(-1);</span>
   const [statsWarningD<span class="cstat-no" title="statement not covered" >ialogProps, setStatsWarn</span>ingDialogProps] = useState&lt;{ id: number; val: boolean } | undefined&gt;();
 <span class="cstat-no" title="statement not covered" ></span>
-  const selectedZoneHasSt<span class="cstat-no" title="statement not covered" >ats = useAppSelector((state) =&gt;</span>
-    selectZonesHaveStatistics(<span class="cstat-no" title="statement not covered" ></span>
+  const selectedStratumHa<span class="cstat-no" title="statement not covered" >sStats = useAppSelector((state) =&gt;</span>
+    selectStrataHaveStatistics<span class="cstat-no" title="statement not covered" >(</span>
       state,<span class="cstat-no" title="statement not covered" ></span>
       sel<span class="fstat-no" title="function not covered" >ectedOrganization?.i</span>d || -1,
-      { [plantingSiteId]: new Set([zoneIdSelected]) },
+      { [plantingSiteId]: new Set([stratumIdSelected]) },
       defaultTim<span class="cstat-no" title="statement not covered" >eZone.get().id</span>
     )<span class="cstat-no" title="statement not covered" ></span>
   );<span class="cstat-no" title="statement not covered" ></span>
@@ -469,7 +473,7 @@ export default funct<span class="cstat-no" title="statement not covered" >ion</s
     if (!mapData?.site?.entities || plantingSite?.id<span class="cstat-no" title="statement not covered" > !== mapData.site.entities[0]?.id) {</span>
       if (plantingSite?.boundary) {<span class="cstat-no" title="statement not covered" ></span>
         setMapData(MapService.getMapDataFromPlantingSite(plantin<span class="cstat-no" title="statement not covered" >gSite));</span>
-        setFocusEntities([{ sou<span class="cstat-no" title="statement not covered" >rceId: 'sites', id: plantingSite?.id }]);</span>
+        setFocusEntities([{ source<span class="cstat-no" title="statement not covered" >Id: 'sites', id: plantingSite?.id }]);</span>
 <span class="fstat-no" title="function not covered" ></span>      } else {<span class="cstat-no" title="statement not covered" ></span>
         setMapData(undefined);
         setFocusEntities([]);
@@ -477,22 +481,22 @@ export default funct<span class="cstat-no" title="statement not covered" >ion</s
     }
   }, [plantingSite, mapData?.site?.entities]);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  const subzonesAreaHa: Record<span class="fstat-no" title="function not covered" >&lt;n</span>umber, number&gt; = useMemo(() =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  const substrataAreaHa: Recor<span class="fstat-no" title="function not covered" >d&lt;</span>number, number&gt; = useMemo(() =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    const result: Record&lt;number, number&gt; = {}</span>;
     plantingSite?.strata
-<span class="cstat-no" title="statement not covered" >      ?.flatMap((zone) =&gt; zone<span class="fstat-no" title="function not covered" >.s</span>ubstrata)</span>
-      ?.forEach((sz) =&gt; {
-<span class="cstat-no" title="statement not covered" >        result[sz.id] = sz.areaHa;</span>
+<span class="cstat-no" title="statement not covered" >      ?.flatMap((stratum) =&gt; s<span class="fstat-no" title="function not covered" >tr</span>atum.substrata)</span>
+      ?.forEach((_substratum) =&gt; {
+<span class="cstat-no" title="statement not covered" >        result[_substratum.id] = _substratum.areaHa;</span>
 <span class="cstat-no" title="statement not covered" >      });</span>
     retu<span class="cstat-no" title="statement not covered" >rn result;</span>
   }, [pl<span class="cstat-no" title="statement not covered" >antingSite]);</span>
 &nbsp;
-  const <span class="cstat-no" title="statement not covered" >subzonesComplete: Re</span>cord&lt;number, boolean&gt; = useMemo(() =&gt; {
+  const <span class="cstat-no" title="statement not covered" >substrataComplete: R</span>ecord&lt;number, boolean&gt; = useMemo(() =&gt; {
     cons<span class="cstat-no" title="statement not covered" >t result: Record&lt;numbe</span>r, boolean&gt; = {};
     plantingSite?.strata
-      ?.flatMap((zone) =&gt; zone.substrata)
-      ?.forEach((sz) =&gt; {
-        result[sz.id] = s<span class="cstat-no" title="statement not covered" >z.plantingCompleted;<span class="fstat-no" title="function not covered" ></span></span>
+      ?.flatMap((stratum) =&gt; stratum.substrata)
+      ?.forEach((_substratum) =&gt; {
+        result[_substratum<span class="cstat-no" title="statement not covered" >.id] = _substratum.plantin<span class="fstat-no" title="function not covered" >gC</span>ompleted;</span>
       });
     return result;<span class="cstat-no" title="statement not covered" ></span>
   },<span class="cstat-no" title="statement not covered" > [plantingSite]);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span>
@@ -500,7 +504,7 @@ export default funct<span class="cstat-no" title="statement not covered" >ion</s
   useEffect(() =&gt; {
 <span class="cstat-no" title="statement not covered" >    if (updateStatu</span>s) {
       if (updateStatus.status === 'error') {
-        snackbar.toastError<span class="cstat-no" title="statement not covered" >(strings.GENERIC_ERROR);<span class="fstat-no" title="function not covered" ></span></span>
+        snackbar.toastError(<span class="cstat-no" title="statement not covered" >strings.GENERIC_ERROR);<span class="fstat-no" title="function not covered" ></span></span>
       } else if (updateStatus.status === 'success') {
         // refresh <span class="cstat-no" title="statement not covered" >pla</span>nting site and observations data
 <span class="cstat-no" title="statement not covered" >        reloadTracking();<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span>
@@ -512,7 +516,7 @@ export default funct<span class="cstat-no" title="statement not covered" >ion</s
 <span class="cstat-no" title="statement not covered" >    (id: number, val: boolean) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      const request = dispatch(</span>
 <span class="cstat-no" title="statement not covered" >        requestUpdatePlantingCompleted({</span>
-          sub<span class="cstat-no" title="statement not covered" >zoneId: id,</span>
+          sub<span class="cstat-no" title="statement not covered" >stratumId: id,</span>
 <span class="cstat-no" title="statement not covered" >          planting: {</span>
             plantingCompleted: val,
           },
@@ -526,20 +530,22 @@ export default funct<span class="cstat-no" title="statement not covered" >ion</s
 &nbsp;
   const updatePlantingComplete = useCallback(
     (id: number, val: boolean) =&gt; {
-      if (!selectedZoneHasStats) {
+      if (!selectedStratumHasStats) {
 <span class="cstat-no" title="statement not covered" >        completeUpdate(id, val);</span>
 <span class="cstat-no" title="statement not covered" >      } else {</span>
         setStatsWarningDialogProps({ id, val });
-        const selectedZone = plantingSite?.strata?.find((zone) =&gt; zone.substrata.map((sz) =&gt; sz.id).includes(id));
-        setZoneIdSelected(selectedZone?.id ?? -1);
-      }<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" >    },</span>
-    [selectedZoneHasStats, completeUpdate, plantingSite?.strata]
-  );<span class="cstat-no" title="statement not covered" ></span>
+        const selectedStratum = plantingSite?.strata?.find((stratum) =&gt;
+          stratum.substrata.map((_substratum) =&gt; _substratum.id).includes(id)
+        );<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" ></span>        setStratumIdSelected(selectedStratum?.id ?? -1);
+      }
+    },<span class="cstat-no" title="statement not covered" ></span>
+    [sel<span class="cstat-no" title="statement not covered" >ectedStratumHasStats, com</span>pleteUpdate, plantingSite?.strata]
+  );
 <span class="cstat-no" title="statement not covered" ></span>
-  return mapData ? (
-    &lt;&gt;<span class="cstat-no" title="statement not covered" ></span>
-      &lt;StatsWarningDialog<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
+  return mapData ? (<span class="cstat-no" title="statement not covered" ></span>
+    &lt;&gt;<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span>
+      &lt;StatsWarningDialog
 <span class="cstat-no" title="statement not covered" >        open={!!statsWarningDialogProps}</span>
         completeUpdateProps={statsWarningDialogProps}
         onClose={() =&gt; setStatsWarningDialogProps(undefined)}
@@ -556,11 +562,11 @@ export default funct<span class="cstat-no" title="statement not covered" >ion</s
 <span class="cstat-no" title="statement not covered" >        contextRenderer={{</span>
 <span class="cstat-no" title="statement not covered" >          render: (properties: MapSourceProperties) =&gt; (</span>
             &lt;PlantingProgressMapDialog
-              subzoneId={properties.id}
-              subzoneName={properties.fullName}
-              subzoneAreaHa={subzonesAreaHa[properties.id]}
+              substratumId={properties.id}
+              substratumName={properties.fullName}
+              substratumAreaHa={substrataAreaHa[properties.id]}
               siteName={plantingSite?.name || ''}
-              plantingComplete={subzonesComplete[properties.id]}
+              plantingComplete={substrataComplete[properties.id]}
               onUpdatePlantingComplete={updatePlantingComplete}
               busy={updateStatus?.status === 'pending'}
             /&gt;
@@ -589,7 +595,7 @@ export default funct<span class="cstat-no" title="statement not covered" >ion</s
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-05T19:06:18.388Z
+                at 2026-01-05T21:57:59.407Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

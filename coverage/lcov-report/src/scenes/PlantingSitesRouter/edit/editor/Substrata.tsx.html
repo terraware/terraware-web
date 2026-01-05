@@ -574,7 +574,14 @@
 <a name='L509'></a><a href='#L509'>509</a>
 <a name='L510'></a><a href='#L510'>510</a>
 <a name='L511'></a><a href='#L511'>511</a>
-<a name='L512'></a><a href='#L512'>512</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L512'></a><a href='#L512'>512</a>
+<a name='L513'></a><a href='#L513'>513</a>
+<a name='L514'></a><a href='#L514'>514</a>
+<a name='L515'></a><a href='#L515'>515</a>
+<a name='L516'></a><a href='#L516'>516</a>
+<a name='L517'></a><a href='#L517'>517</a>
+<a name='L518'></a><a href='#L518'>518</a>
+<a name='L519'></a><a href='#L519'>519</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -631,6 +638,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -643,6 +651,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -920,10 +929,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1003,9 +1020,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1119,11 +1133,11 @@ import {<span class="cstat-no" title="statement not covered" ><span class="fstat
 <span class="cstat-no" title="statement not covered" >  cutOverlappingBoundaries,</span>
   emptyBoundary,<span class="cstat-no" title="statement not covered" ></span>
   getLatestFeature,<span class="cstat-no" title="statement not covered" ></span>
-  plantingSubzoneToFeature,<span class="cstat-no" title="statement not covered" ></span>
-  plantingZoneToFeature,<span class="cstat-no" title="statement not covered" ></span>
-  subzoneNameGenerato<span class="cstat-no" title="statement not covered" >r,</span>
+  stratumToFeature,<span class="cstat-no" title="statement not covered" ></span>
+  substratumNameGenerator,<span class="cstat-no" title="statement not covered" ></span>
+  substratumToFeature<span class="cstat-no" title="statement not covered" >,</span>
   toIdentifiableFeature,<span class="cstat-no" title="statement not covered" ></span>
-  toZoneFeature,<span class="cstat-no" title="statement not covered" ></span>
+  toStratumFeature,<span class="cstat-no" title="statement not covered" ></span>
 } from './utils';<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
 export type SubstrataPr<span class="cstat-no" title="statement not covered" >ops = {</span>
@@ -1132,115 +1146,117 @@ export type SubstrataPr<span class="cstat-no" title="statement not covered" >ops
 };<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
 /**<span class="cstat-no" title="statement not covered" ></span>
- * Create a draft site with <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ed</span>ited polygons, for error checkin<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >g.</span></span></span>
+ * Create a draft site with <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ed</span>ited polygons, for error checking.<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
  * @param site
  *<span class="cstat-no" title="statement not covered" >   Site is the original draft site this worflow started with.</span>
- * @param subzones
- *   Record of zone id to subzones<span class="fstat-no" title="function not covered" ></span>
- * @param selectedZone
- *   T<span class="cstat-no" title="statement not covered" >he zone for which new subzones will be cut.</span>
+ * @param substrata
+ *   Record of stratum id to substrata<span class="fstat-no" title="function not covered" ></span>
+ * @param selectedStratum
+ *   T<span class="cstat-no" title="statement not covered" >he stratum for which new substrata will be cut.</span>
  * @return a callback function (using above params in the closure)
- *   A callback function which accepts new cut subzone geometries,
+ *   A callback function which accepts new cut substratum geometries,
  *   and should return a version of the draft planting site accounting
- *   for the potentially new subzone boundaries.<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
- */
+ *   for the potentially new substratum boundaries.
+ */<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 const createDraftSiteWith =
   (
     site: DraftPlantingSite,
-    subzones: Record&lt;number, FeatureCollection&gt; | undefined,
-    selectedZone: number | undefined
+    substrata: Record&lt;number, FeatureCollection&gt; | undefined,
+    selectedStratum: number | undefined
   ) =&gt;
   (cutBoundaries: GeometryFeature[]) =&gt; ({
     ...site,
-    plantingZones: site.strata?.map((zone) =&gt; ({
-      ...zone,
-      // re-create subzones <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >fr</span>om the record of zones to subzones</span>
-      // unless this is the selected zone, in which case use the newly cut boundaries
-<span class="cstat-no" title="statement not covered" >      plantingSubzones:</span>
-<span class="fstat-no" title="function not covered" ></span>        (selectedZone === zone.id ? cutBoundaries : subzones?.[zone.id]?.features)?.map((subzone, index) =&gt; ({
-<span class="cstat-no" title="statement not covered" >          boundary: toMultiPolygon(subzone.geometry) as MultiPolygon,</span>
-          fullName: `${index}`,
-          id: index,
-          name: `${index}`, // temporary name just for error checking
-<span class="cstat-no" title="statement not covered" >          plantingComplete</span>d: false,
-        })) ?? [],
+    strata: site.strata?.map((stratum) =&gt; ({
+      ...stratum,
+      // re-create substrata from the record of strata to substrata
+      // unless this is the selected stratum, in which case use the newly cut boundaries
+      substrata:<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+        (selectedStratum === stratum.id ? cutBoundaries : substrata?.[stratum.id]?.features)?.map(
+<span class="cstat-no" title="statement not covered" >          (substratum, index) =&gt; ({</span>
+<span class="fstat-no" title="function not covered" ></span>            boundary: toMultiPolygon(substratum.geometry) as MultiPolygon,
+<span class="cstat-no" title="statement not covered" >            fullName: `${index}`,</span>
+            id: index,
+            name: `${index}`, // temporary name just for error checking
+            plantingCompleted: false,
+<span class="cstat-no" title="statement not covered" >          })</span>
+        ) ?? [],
     })),
   });
 &nbsp;
-// create<span class="fstat-no" title="function not covered" > subzone f</span>eature collections from site, for edit purposes
-const featureSiteSubzones = (site: DraftPlantingSite): Record&lt;number, FeatureCollection&gt; =&gt;
+// create<span class="fstat-no" title="function not covered" > substratu</span>m feature collections from site, for edit purposes
+const featureSiteSubstrata = (site: DraftPlantingSite): Record&lt;number, FeatureCollection&gt; =&gt;
   (site.strata ?? []).reduce(<span class="cstat-no" title="statement not covered" ></span>
-    (subzonesMap, zone) =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-      subzonesMap[zone.id] = {
+    (substrataMap, stratum) =&gt; {<span class="cstat-no" title="statement not covered" ></span>
+      substrataMap[stratum.id] = {
         type: 'FeatureCollection',
-        features: zone.substrata.map(plantingSubzoneToFeature),
+        features: stratum.substrata.map(substratumToFeature),
       };
-      return subzonesMap;<span class="cstat-no" title="statement not covered" ></span>
+      return substrataMap;<span class="cstat-no" title="statement not covered" ></span>
     },<span class="cstat-no" title="statement not covered" ></span>
     {} as Record&lt;num<span class="cstat-no" title="statement not covered" >ber, FeatureCollection&gt;</span>
   );<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
 // data type for undo/redo <span class="cstat-no" title="statement not covered" >state</span>
-// needs to capture<span class="cstat-no" title="statement not covered" > subzone edit boundary, error annotations and subzones created by zone</span>
+// needs to capture <span class="cstat-no" title="statement not covered" >substratum edit boundary, error annotations and substrata created by stratum</span>
 type<span class="fstat-no" title="function not covered" > S</span>tack<span class="cstat-no" title="statement not covered" > = {</span>
   editableBoundary?: FeatureCollection;
   errorAnnotations?: Feature[];
-  fixedBoundarie<span class="cstat-no" title="statement not covered" >s?: Record&lt;number, FeatureCollection&gt;;</span>
+  fixedBoundaries<span class="cstat-no" title="statement not covered" >?: Record&lt;number, FeatureCollection&gt;;</span>
 };<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 &nbsp;
-export default function Substrat<span class="fstat-no" title="function not covered" >a(</span>{ onVali<span class="cstat-no" title="statement not covered" >date, site }: SubstrataProps): JSX.Element {</span>
-  const [selectedZone, setSelectedZone] = useState&lt;number | undefined&gt;(site.strata?.[0]?.id);
+export default function Substrat<span class="fstat-no" title="function not covered" >a(</span>{ onValidat<span class="cstat-no" title="statement not covered" >e, site }: SubstrataProps): JSX.Element {</span>
+  const [selectedStratum, setSelectedStratum] = useState&lt;number | undefined&gt;(site.strata?.[0]?.id);
 &nbsp;
-  // map of zone id to subzones
-<span class="cstat-no" title="statement not covered" >  const [subzonesData, setSubz<span class="fstat-no" title="function not covered" >on</span>esData, undo, redo] = useUndoRedoState&lt;Stack&gt;({</span>
+  // map of stratum id to substrata
+<span class="cstat-no" title="statement not covered" >  const [substrataData, setSub<span class="fstat-no" title="function not covered" >st</span>rataData, undo, redo] = useUndoRedoState&lt;Stack&gt;({</span>
     editableBoundary: emptyBoundary(),
 <span class="cstat-no" title="statement not covered" >    errorAnnotations: [],</span>
-    fi<span class="cstat-no" title="statement not covered" >xedBound</span>aries: featureSiteSubzones(site),
+    fi<span class="cstat-no" title="statement not covered" >xedBound</span>aries: featureSiteSubstrata(site),
   });
-  const [overridePopupInfo, setOv<span class="cstat-no" title="statement not covered" >erridePopupInfo] = useState&lt;PopupInfo | undefined&gt;();</span>
+  const [overridePopupInfo, setOverr<span class="cstat-no" title="statement not covered" >idePopupInfo] = useState&lt;PopupInfo | undefined&gt;();</span>
   co<span class="cstat-no" title="statement not covered" >nst theme = useTheme();</span>
   cons<span class="cstat-no" title="statement not covered" >t mapStyles = useMapStyle(theme);</span>
   cons<span class="cstat-no" title="statement not covered" >t getRenderAttributes = </span>useRenderAttributes();
   cons<span class="cstat-no" title="statement not covered" >t snackb</span>ar = useSnackbar();
   const { activeLocale } = useLocalization();
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  // expose subzones as a constant for easier use
-  const subzones = useMemo&lt;Reco<span class="cstat-no" title="statement not covered" >rd&lt;number, FeatureCollection&gt; | undefined&gt;(<span class="fstat-no" title="function not covered" ></span></span>
-    () =&gt; subzonesData?.fixedBoundaries,<span class="cstat-no" title="statement not covered" ></span>
-    [subzonesData?.fixedBound<span class="cstat-no" title="statement not covered" >aries]</span>
+  // expose substrata as a constant for easier use
+  const substrata = useMemo<span class="cstat-no" title="statement not covered" >&lt;Record&lt;number, FeatureCollection&gt; | undefined&gt;(<span class="fstat-no" title="function not covered" ></span></span>
+    () =&gt; substrataData?.fixedBoundaries,<span class="cstat-no" title="statement not covered" ></span>
+    [substrataData?.fixedBoun<span class="cstat-no" title="statement not covered" >daries]</span>
   );<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const zones = useMemo&lt;FeatureCollection | undefined&gt;(
+  const strata = useMemo&lt;FeatureCollection | undefined&gt;(
     () =&gt;
       !site.strata
         ? undefined
         : {
             type: 'FeatureCollection',
-            features: site.strata.map((zone) =&gt; plantingZoneToFeature(zone)),
+            features: site.strata.map((stratum) =&gt; stratumToFeature(stratum)),
 <span class="cstat-no" title="statement not covered" >          },</span>
     [site]
   );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" ></span>
   useEffect(() =&gt; {
-    // return if we a<span class="cstat-no" title="statement not covered" >re not in save flow</span>
+    // return if we ar<span class="cstat-no" title="statement not covered" >e not in save flow</span>
     if (!onValidate) {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
       return;<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >    }</span>
 &nbsp;
-    // error out on save if<span class="cstat-no" title="statement not covered" > there are subzones with l<span class="fstat-no" title="function not covered" >es</span>s than minimum boundaries</span>
-<span class="cstat-no" title="statement not covered" >    const hasSubzoneSizeErrors = !!subzonesData?.errorAnnotations?.length;</span>
-    if<span class="cstat-no" title="statement not covered" > (hasSubzoneSiz</span>eErrors) {
-      snackbar.toastError(strings.SITE_SUBZONE_BOUNDARIES_TOO_SMALL);
-      onValidate.apply(true)<span class="cstat-no" title="statement not covered" >;</span>
+    // error out on save if<span class="cstat-no" title="statement not covered" > there are substrata with <span class="fstat-no" title="function not covered" >le</span>ss than minimum boundaries</span>
+<span class="cstat-no" title="statement not covered" >    const hasSubstratumSizeErrors = !!substrataData?.errorAnnotations?.length;</span>
+    if<span class="cstat-no" title="statement not covered" > (hasSubstratum</span>SizeErrors) {
+      snackbar.toastError(strings.SITE_SUBSTRATUM_BOUNDARIES_TOO_SMALL);
+      onValidate.apply(true);<span class="cstat-no" title="statement not covered" ></span>
       return;<span class="cstat-no" title="statement not covered" ></span>
     }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 &nbsp;
-    // subzones are ch<span class="cstat-no" title="statement not covered" >ildren of zones, we need to repopuplate zones with new subzones information</span>
-    // and update `plantingZones` in the site
-    const plantingZones: MinimalStratum[] | undefined = site.strata?.map((zone) =&gt; {
-      const plantingSubzones: Minimal<span class="fstat-no" title="function not covered" >Su</span>bstratum[] <span class="cstat-no" title="statement not covered" >= (subzones?.[zone.id]?.features ?? [])</span>
-        .map((subzone) =&gt; {
-          const { geometry, properties } = subzone;
+    // substrata are ch<span class="cstat-no" title="statement not covered" >ildren of strata, we need to repopuplate strata with new substrata information</span>
+    // and update `strata` in the site
+    const newStrata: MinimalStratum[] | undefined = site.strata?.map((stratum) =&gt; {
+      const newSubstrata: MinimalSubst<span class="fstat-no" title="function not covered" >ra</span>tum[] = (su<span class="cstat-no" title="statement not covered" >bstrata?.[stratum.id]?.features ?? [])</span>
+        .map((substratum) =&gt; {
+          const { geometry, properties } = substratum;
           const multiPolygon = toMultiPolygon(geometry);
           if (multiPolygon &amp;&amp; properties) {
             return {
@@ -1254,32 +1270,32 @@ export default function Substrat<span class="fstat-no" title="function not cover
             return undefined;
           }<span class="cstat-no" title="statement not covered" ></span>
         })
-        .filter((subzone) =&gt; !!subzone) as MinimalSubstratum[];
-      return { ...zone, substrata: plantingSubzones };<span class="fstat-no" title="function not covered" ></span>
+        .filter((substratum) =&gt; !!substratum) as MinimalSubstratum[];
+      return { ...stratum, substrata: newSubstrata };<span class="fstat-no" title="function not covered" ></span>
     });<span class="cstat-no" title="statement not covered" ></span>
-    const numZones = si<span class="cstat-no" title="statement not covered" >te.strata?.length</span> ?? 0;
-    const <span class="cstat-no" title="statement not covered" >numSubzones = plantingZones?.flatMap((zone) =&gt; zone.substrata)?.length ?? 0;</span>
-    const da<span class="fstat-no" title="function not covered" >ta</span> = planting<span class="cstat-no" title="statement not covered" >Zones ? { strata: plantingZones } : undefined;</span>
-    onValidate.apply(plantingZones === undefined, data, numSubzones &gt; numZones);
-  }, [subzonesData?.errorAnnotations, onValidate, site, snackbar, subzones, zones]);
+    const numStrata = s<span class="cstat-no" title="statement not covered" >ite.strata?.length ??</span> 0;
+    const <span class="cstat-no" title="statement not covered" >numSubstrata = newStrata?.flatMap((stratum) =&gt; stratum.substrata)?.length ?? 0;</span>
+    const da<span class="fstat-no" title="function not covered" >ta</span> = newStrat<span class="cstat-no" title="statement not covered" >a ? { strata: newStrata } : undefined;</span>
+    onValidate.apply(newStrata === undefined, data, numSubstrata &gt; numStrata);
+  }, [substrataData?.errorAnnotations, onValidate, site, snackbar, substrata, strata]);
 &nbsp;
   const readOnlyBoundary = useMemo&lt;RenderableReadOnlyBoundary[] | undefined&gt;(() =&gt; {
-    if (!zones) {
+    if (!strata) {
       return undefined;
     }
 &nbsp;
-    const zoneIdGenerator = IdGenerator(zones.features);
-    const subzoneIdGenerator = IdGenerator(
-      site.id === -1 ? [] : Object.values(subzones ?? {}).flatMap((subzone) =&gt; subzone.features)
+    const stratumIdGenerator = IdGenerator(strata.features);
+    const substratumIdGenerator = IdGenerator(
+      site.id === -1 ? [] : Object.values(substrata ?? {}).flatMap((substratum) =&gt; substratum.features)
     );
 &nbsp;
-    const zonesData: RenderableReadOnlyBoundary = {
+    const strataData: RenderableReadOnlyBoundary = {
 <span class="cstat-no" title="statement not covered" >      data: {</span>
         type: 'FeatureCollection',
-        features: zone<span class="cstat-no" title="statement not covered" >s.features.map((feature: Feature) =&gt; toZoneFeature(feature, zoneIdGenerator)),</span>
+        features: stra<span class="cstat-no" title="statement not covered" >ta.features.map((feature: Feature) =&gt; toStratumFeature(feature, stratumIdGenerator)),</span>
 <span class="fstat-no" title="function not covered" ></span>      },
-      selectedId: selectedZone,
-<span class="cstat-no" title="statement not covered" >      id: 'zone',</span>
+      selectedId: selectedStratum,
+<span class="cstat-no" title="statement not covered" >      id: 'stratum',</span>
       isInteractive: true,
       renderProperties: {
         ...getRenderAttributes('draft-stratum'),
@@ -1291,18 +1307,18 @@ export default function Substrat<span class="fstat-no" title="function not cover
       },
     };<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 &nbsp;
-    const subzonesBoundaries: RenderableReadOnlyBoundary = {
+    const substrataBoundaries: RenderableReadOnlyBoundary = {
       data: {
         type: 'FeatureCollection',
-        features: Object.keys(subzones ?? {}).flatMap((key: string) =&gt; {
-          const zoneId = Number(key);
-          const data = subzones![zoneId];
+        features: Object.keys(substrata ?? {}).flatMap((key: string) =&gt; {
+          const stratumId = Number(key);
+          const data = substrata![stratumId];
           return data.features<span class="cstat-no" title="statement not covered" >.map((feature: Feature) =&gt;<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >            toIdentifiableFeature(feature, subzoneIdGenerator, { parentId: zoneId })</span>
+<span class="cstat-no" title="statement not covered" >            toIdentifiableFeature(feature, substratumIdGenerator, { parentId: stratumId })</span>
 <span class="cstat-no" title="statement not covered" >          );</span>
         }),
 <span class="cstat-no" title="statement not covered" >      },</span>
-      id: 'subzone',
+      id: 'substratum',
       isInteractive: true,
       renderProperties: {
         ...getRenderAttributes('draft-substratum'),
@@ -1314,30 +1330,30 @@ export default function Substrat<span class="fstat-no" title="function not cover
       },<span class="cstat-no" title="statement not covered" ></span>
     };<span class="fstat-no" title="function not covered" ></span>
 &nbsp;
-    return [<span class="cstat-no" title="statement not covered" >zonesData, subzonesBoundaries];</span>
-  }, [getRenderAttri<span class="fstat-no" title="function not covered" >bu</span>tes, sel<span class="cstat-no" title="statement not covered" >ectedZo</span>ne, site.id, subzones, theme.palette.TwClrBaseWhite, zones]);
+    return [<span class="cstat-no" title="statement not covered" >strataData, substrataBoundaries];</span>
+  }, [getRenderAttri<span class="fstat-no" title="function not covered" >bu</span>tes, sel<span class="cstat-no" title="statement not covered" >ectedSt</span>ratum, site.id, substrata, theme.palette.TwClrBaseWhite, strata]);
 &nbsp;
   const description = useMem<span class="cstat-no" title="statement not covered" >o&lt;Description[]&gt;(<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
     () =&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
       acti<span class="cstat-no" title="statement not covered" >veLocale</span>
         ? [<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >            { text: strings.SITE_SUBZONE_BOUNDARIES</span>_DESCRIPTION_0 },
+<span class="cstat-no" title="statement not covered" >            { text: strings.SITE_SUBSTRATUM_BOUNDARIES_DE</span>SCRIPTION_0 },
 <span class="cstat-no" title="statement not covered" >            {</span>
-              text: strings.SITE_SUBZONE_BOUNDARIES_DESCRIPTION_1,
+              text: strings.SITE_SUBSTRATUM_BOUNDARIES_DESCRIPTION_1,
 <span class="cstat-no" title="statement not covered" >              hasTutorial: true,</span>
               handlePrefix: (prefix: string) =&gt;
-<span class="cstat-no" title="statement not covered" >                strings.<span class="fstat-no" title="function not covered" >fo</span>rmatS<span class="cstat-no" title="statement not covered" >tring(prefix, &lt;MapIcon centerAligned={true} icon='slice' /&gt;) as JSX.Element[],</span></span>
+<span class="cstat-no" title="statement not covered" >                strings.f<span class="fstat-no" title="function not covered" >or</span>matSt<span class="cstat-no" title="statement not covered" >ring(prefix, &lt;MapIcon centerAligned={true} icon='slice' /&gt;) as JSX.Element[],</span></span>
             },
             {
               text: strings.formatString(
-                strings.SITE_SUBZONE_BOUNDARIES_SELECTED_ZONE,
-                zones?.features?.find((f) =&gt; f.id === selectedZone)?.properties?.name ?? ''
+                strings.SITE_SUBSTRATUM_BOUNDARIES_SELECTED_STRATUM,
+                strata?.features?.find((f) =&gt; f.id === selectedStratum)?.properties?.name ?? ''
               ),
               isBold: true,
             },
           ]
         : [],
-    [activeLocale, selectedZone, zo<span class="cstat-no" title="statement not covered" >nes]</span>
+    [activeLocale, selectedStratum, st<span class="cstat-no" title="statement not covered" >rata]</span>
   );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 &nbsp;
   const <span class="cstat-no" title="statement not covered" >tutorialDescription = useMemo(() =&gt; {</span>
@@ -1345,56 +1361,56 @@ export default function Substrat<span class="fstat-no" title="function not cover
       retu<span class="cstat-no" title="statement not covered" >rn '';</span>
     }
     return strings.formatString(
-      strings.ADDING_SUBZONE_BOUNDARIES_INSTRUCTIONS_DESCRIPTION,
+      strings.ADDING_SUBSTRATUM_BOUNDARIES_INSTRUCTIONS_DESCRIPTION,
       &lt;MapIcon centerAligned icon='slice' /&gt;
     ) as JSX.Element[];
   }, [activeLocale]);
 &nbsp;
-  // when <span class="cstat-no" title="statement not covered" >we have a new polygon, add it </span>to the subzones list after carving out the overlapping region in the zone.
+  // when <span class="cstat-no" title="statement not covered" >we have a new polygon, add it </span>to the substrata list after carving out the overlapping region in the stratum.
   const onEditableBoundaryChanged = async (editableBoundary?: FeatureCollection) =&gt; {
     // pick the latest geometry that was drawn
-    const cutWithFeature = getLatestFeature(subzonesData?.editableBoundary, editableBoundary);
+    const cutWithFeature = getLatestFeature(substrataData?.editableBoundary, editableBoundary);
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-    //<span class="cstat-no" title="statement not covered" > update state wi<span class="fstat-no" title="function not covered" >th</span> cut subz<span class="cstat-no" title="statement not covered" >ones on success</span></span>
-    const onSuccess = (cutSubzones: GeometryFeature[]) =&gt; {
-      if (subzones &amp;&amp; selectedZone !== undefined) {
+    //<span class="cstat-no" title="statement not covered" > update state wit<span class="fstat-no" title="function not covered" >h </span>cut subst<span class="cstat-no" title="statement not covered" >rata on success</span></span>
+    const onSuccess = (cutSubstrata: GeometryFeature[]) =&gt; {
+      if (substrata &amp;&amp; selectedStratum !== undefined) {
         const usedNames: Set&lt;string&gt; = new Set(
-          (subzones[selectedZone].features ?? []).map((f) =&gt; f.properties?.name).filter((name) =&gt; !!name)
+          (substrata[selectedStratum].features ?? []).map((f) =&gt; f.properties?.name).filter((name) =&gt; !!name)
         );
-<span class="cstat-no" title="statement not covered" >        const idGenerator = IdGenerator(Object.values(subzones).flatMap((sz) =&gt; sz.features));</span>
-        const subzonesWithIds = leftOrderedFeatures(cutSubzones).map(({ feature: subzone }) =&gt; {
-          if (subzone &amp;&amp; subzone.properties &amp;&amp; !subzone.properties.name) {
-            const subzoneName = subzoneNameGenerator(usedNames, strings.SUBZONE);
-            subzone.properties.name = subzoneName;
-            usedNames.add(subzoneName);
+<span class="cstat-no" title="statement not covered" >        const idGenerator = IdGenerator(Object.values(substrata).flatMap((_substratum) =&gt; _substratum.features));</span>
+        const substrataWithIds = leftOrderedFeatures(cutSubstrata).map(({ feature: substratum }) =&gt; {
+          if (substratum &amp;&amp; substratum.properties &amp;&amp; !substratum.properties.name) {
+            const substratumName = substratumNameGenerator(usedNames, strings.SUBSTRATUM);
+            substratum.properties.name = substratumName;
+            usedNames.add(substratumName);
           }
-          return toIdentifiableFeature(subzone, idGenerator, { parentId: selectedZone });
+          return toIdentifiableFeature(substratum, idGenerator, { parentId: selectedStratum });
         }) as GeometryFeature[];
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        setS</span>ubzonesData(() =&gt; ({
+<span class="cstat-no" title="statement not covered" >        setS</span>ubstrataData(() =&gt; ({
           editableBoundary: emptyBoundary(),
           errorAnnotations: [],<span class="cstat-no" title="statement not covered" ></span>
 <span class="fstat-no" title="function not covered" ></span>          fixedBoundaries: {
-            ...subz<span class="cstat-no" title="statement not covered" >ones,<span class="fstat-no" title="function not covered" ></span></span>
-            [selectedZone]: {
+            ...substra<span class="cstat-no" title="statement not covered" >ta,<span class="fstat-no" title="function not covered" ></span></span>
+            [selectedStratum]: {
 <span class="cstat-no" title="statement not covered" >              type: 'FeatureCollection',</span>
-              features: subzonesWithIds,
+              features: substrataWithIds,
             },<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
           },
 <span class="cstat-no" title="statement not covered" >        }));</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        const leftMostNewSubzone = leftMostFeature(</span>
-<span class="cstat-no" title="statement not covered" >          subzonesWithI</span>ds.filter((unused, index) =&gt; cutSubzones[index].id === undefined)
+<span class="cstat-no" title="statement not covered" >        const leftMostNewSubstratum = leftMostFeature(</span>
+<span class="cstat-no" title="statement not covered" >          substrataWith</span>Ids.filter((unused, index) =&gt; cutSubstrata[index].id === undefined)
         );
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >        if (leftMostNewSubzone) {</span>
-<span class="cstat-no" title="statement not covered" >          const { featu</span>re: subzone, center: mid } = leftMostNewSubzone;
+<span class="cstat-no" title="statement not covered" >        if (leftMostNewSubstratum) {</span>
+<span class="cstat-no" title="statement not covered" >          const { featu</span>re: substratum, center: mid } = leftMostNewSubstratum;
           setOverridePopupInfo({
-<span class="cstat-no" title="statement not covered" >            id: subzone.</span>id,
+<span class="cstat-no" title="statement not covered" >            id: substratum.</span>id,
             lng: mid[0],
             lat: mid[1],
-            properties: subzone.properties,
-            sourceId: 'subzone',
+            properties: substratum.properties,
+            sourceId: 'substratum',
           });<span class="cstat-no" title="statement not covered" ></span>
 <span class="fstat-no" title="function not covered" ></span>        } e<span class="cstat-no" title="statement not covered" >lse {</span>
           setOverridePopupInfo(undefined);
@@ -1404,21 +1420,21 @@ export default function Substrat<span class="fstat-no" title="function not cover
 <span class="cstat-no" title="statement not covered" ></span>
     // upd<span class="cstat-no" title="statement not covered" >ate state with error annotations and k</span>eep existing editable boundary so user can edit/correct it
     const onError = (errors: Feature[]) =&gt; {
-      // no subzones were<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > c</span>ut either because there were no overlaps or they could have been too small</span>
+      // no substrata wer<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >e </span>cut either because there were no overlaps or they could have been too small</span>
       // s<span class="cstat-no" title="statement not covered" >et error annotations that were created and keep the cut geometry in case user wants to re-edit the geometry</span>
-      setSub<span class="cstat-no" title="statement not covered" >zonesDat</span>a((prev) =&gt; ({
+      setSub<span class="cstat-no" title="statement not covered" >strataDa</span>ta((prev) =&gt; ({
         ...prev,
-        editableBoundary: cutWithF<span class="cstat-no" title="statement not covered" >eature ? { type:</span> 'FeatureCollection', features: [cutWithFeature] } : emptyBoundary(),
-        errorAnnotations: <span class="cstat-no" title="statement not covered" >errors,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+        editableBoundary: cutWithFe<span class="cstat-no" title="statement not covered" >ature ? { type: '</span>FeatureCollection', features: [cutWithFeature] } : emptyBoundary(),
+        errorAnnotations: err<span class="cstat-no" title="statement not covered" >ors,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
       }));<span class="cstat-no" title="statement not covered" ></span>
     };<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
     await <span class="cstat-no" title="statement not covered" >cutOverlappingBoundaries(</span>
       {<span class="cstat-no" title="statement not covered" ></span>
         cutWithFeature,
-        er<span class="cstat-no" title="statement not covered" >rorCheckLevel: 'subzone',</span>
-        cr<span class="cstat-no" title="statement not covered" >eateDraftSiteWit<span class="fstat-no" title="function not covered" >h:</span> createDr<span class="cstat-no" title="statement not covered" >aftSiteWith(site, subzones, selectedZone),</span></span>
-        so<span class="cstat-no" title="statement not covered" >urce: sel</span>ectedZone !== undefined ? subzones?.[selectedZone] : undefined,
+        er<span class="cstat-no" title="statement not covered" >rorCheckLevel: 'substratum',</span>
+        cr<span class="cstat-no" title="statement not covered" >eateDraftSiteWith<span class="fstat-no" title="function not covered" >: </span>createDra<span class="cstat-no" title="statement not covered" >ftSiteWith(site, substrata, selectedStratum),</span></span>
+        so<span class="cstat-no" title="statement not covered" >urce: sel</span>ectedStratum !== undefined ? substrata?.[selectedStratum] : undefined,
       },
       onSuccess,<span class="cstat-no" title="statement not covered" ></span>
       onError<span class="cstat-no" title="statement not covered" ></span>
@@ -1427,30 +1443,30 @@ export default function Substrat<span class="fstat-no" title="function not cover
     return;<span class="cstat-no" title="statement not covered" ></span>
   };<span class="fstat-no" title="function not covered" ></span>
 &nbsp;
-  // If we d<span class="cstat-no" title="statement not covered" >on't have a selected zone or clicked zone is not the last selec</span>ted zone, select the zone.
-  // Otherwise select the subzone.
+  // If we d<span class="cstat-no" title="statement not covered" >on't have a selected stratum or clicked stratum is not the last</span> selected stratum, select the stratum.
+  // Otherwise select the substratum.
   const featureSelectorOnClick = useCallback(
     (fea<span class="cstat-no" title="statement not covered" >tures: LayerFeature[]) =&gt; {</span>
-      const zone = features.find((feature) =&gt; feature.layer?.source === 'zone');
-      const subzone = features.find((feature) =&gt; feature.layer?.source === 'subzone');
-      if (!zone || !zone.properties) {
+      const stratum = features.find((feature) =&gt; feature.layer?.source === 'stratum');
+      const substratum = features.find((feature) =&gt; feature.layer?.source === 'substratum');
+      if (!stratum || !stratum.properties) {
         return undefined;
-      }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >      if (selectedZone === undefined || selectedZone !== zone.properties.id) {</span>
-<span class="cstat-no" title="statement not covered" >        setSelectedZone(zone.properties.id);</span>
+      }
+      if (selectedStratum === undefined || selectedStratum !== stratum.properties.id) {
+        setSelectedStratum(stratum.properties.id);
         return undefined;
-<span class="cstat-no" title="statement not covered" >      } else {</span>
-        // select the subzone under the click
-        return subzone;
-<span class="cstat-no" title="statement not covered" >      }</span>
-    },
-    [selectedZone]
-  );
+      } else {
+        // select the substratum under the click
+        return substratum;
+      }
+    },<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    [selectedStratum]</span>
+  );<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
-  const popupRenderer = useMemo(
+  cons<span class="cstat-no" title="statement not covered" >t popupRenderer</span> = useMemo(
     (): MapPopupRenderer =&gt; ({
       sx: [mapStyles.tooltip, mapStyles.box],
-      render: (properties: MapSourceProperties, onClose?: () =&gt; void): JSX.Element | null =&gt; {
+<span class="cstat-no" title="statement not covered" >      render: (properties: MapSourceProperties, onClose?: () =&gt; void): JSX.Element | null =&gt; {</span>
         const { id, name } = properties;
 &nbsp;
         const close = () =&gt; {
@@ -1459,64 +1475,69 @@ export default function Substrat<span class="fstat-no" title="function not cover
         };
 &nbsp;
         const onUpdate = (nameVal: string) =&gt; {
-          if (!subzones) {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+          if (!substrata) {
             return;
           }
-          const updatedSubzones = { ...subzones };
-          const subzone =
-            selectedZone !== undefined
-              ? updatedSubzones[selectedZone].features.find((f) =&gt; f.id === properties.id)
+          const updatedSubstrata = { ...substrata };
+          const substratum =
+            selectedStratum !== undefined
+              ? updatedSubstrata[selectedStratum].features.find((f) =&gt; f.id === properties.id)
               : undefined; // should not happen
-          if (!subzone) {
-            return;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-          }<span class="cstat-no" title="statement not covered" ></span>
-          if (!subzone.properties) {<span class="cstat-no" title="statement not covered" ></span>
-            subzone.properties = {<span class="cstat-no" title="statement not covered" >};</span>
-          }<span class="cstat-no" title="statement not covered" ></span>
-          subzone.proper<span class="cstat-no" title="statement not covered" >ties.name = nameVal;<span class="fstat-no" title="function not covered" ></span></span>
-          setSubzonesDat<span class="cstat-no" title="statement not covered" >a((pr</span>ev) =&gt; ({ ...prev, fixedBoundaries: updatedSubzones }));
-<span class="cstat-no" title="statement not covered" >          close();</span>
-<span class="cstat-no" title="statement not covered" >        };</span>
+          if (!substratum) {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+            return;
+          }
+          if (!substratum.properties) {
+            substratum.properties = {};
+          }
+          substratum.properties.name = nameVal;
+          setSubstrataData((prev) =&gt; ({ ...prev, fixedBoundaries: updatedSubstrata }));
+          close();
+        };<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >        const selectedSubzones = subzones &amp;&amp; selectedZone ? subz</span>ones[selectedZone] : undefined;
-        const subzoneNamesInUse = selectedSubzones
-<span class="cstat-no" title="statement not covered" >          ? new Set&lt;stri</span>ng&gt;(
-<span class="cstat-no" title="statement not covered" >              selectedSubzone</span>s.features
-                .filter((feature) =&gt; feature.properties?.id !== id)
-<span class="cstat-no" title="statement not covered" >                .map((featu</span>re) =&gt; feature.properties?.name)
-            )
-          : new<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > S</span>et&lt;string&gt;();</span>
+        const selectedSubstrata = su<span class="cstat-no" title="statement not covered" >bstrata &amp;&amp; selectedStratum ? su</span>bstrata[selectedStratum] : undefined;
+        const substratumNamesInUse<span class="cstat-no" title="statement not covered" > = selectedSubstrata</span>
+          ? new <span class="cstat-no" title="statement not covered" >Set&lt;string&gt;(</span>
+              selectedSu<span class="cstat-no" title="statement not covered" >bstrata.features<span class="fstat-no" title="function not covered" ></span></span>
+                .filter(<span class="cstat-no" title="statement not covered" >(feat</span>ure) =&gt; feature.properties?.id !== id)
+<span class="cstat-no" title="statement not covered" >                .map((feature) =&gt; feature.properties?.name)</span>
+<span class="cstat-no" title="statement not covered" >            )</span>
+          :<span class="cstat-no" title="statement not covered" > new Set&lt;string&gt;();</span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >        return (</span>
-          &lt;TooltipContents name={name} onClose={close} onUpdate={onUpdate} subzoneNamesInUse={subzoneNamesInUse} /&gt;
+        return (
+<span class="cstat-no" title="statement not covered" >          &lt;TooltipConten</span>ts
+<span class="cstat-no" title="statement not covered" >            name={name}</span>
+            onClose={close}
+<span class="cstat-no" title="statement not covered" >            onUpdate={onUpd</span>ate}
+            substratumNamesInUse={substratumNamesInUse}
+          /&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >        );</span>
 <span class="cstat-no" title="statement not covered" >      },</span>
     }),
-    [mapStyles.box, mapStyles.tooltip, selectedZone, setSubzonesData, subzones]
-<span class="cstat-no" title="statement not covered" >  );<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" ></span>
-  cons<span class="cstat-no" title="statement not covered" >t activeContext =</span> useMemo&lt;MapEntityOptions | undefined&gt;(() =&gt; {
-    if (selectedZone !== undefined) {
-      return { select: [{ sourceId: 'zone', id: selectedZone }] };
-<span class="cstat-no" title="statement not covered" >    } else {</span>
+<span class="cstat-no" title="statement not covered" >    [mapStyles.box, mapStyles.tooltip, selectedStratum, setSubstrataData, substrata]</span>
+  );<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
+  const activeContext = useMemo&lt;MapEntityOptions | undefined&gt;(() =&gt; {
+<span class="cstat-no" title="statement not covered" >    if (selectedStratum !== un<span class="fstat-no" title="function not covered" >de</span>fined) {</span>
+<span class="cstat-no" title="statement not covered" >      return { select: [{ sourceId: 'stratum', id: selectedStratum }] };</span>
+    } <span class="cstat-no" title="statement not covered" >else {</span>
       return undefined;
     }
-  }, [selectedZone]);
+<span class="cstat-no" title="statement not covered" >  }, [selectedStratum]);</span>
 &nbsp;
   return (
     &lt;Box display='flex' flexDirection='column' flexGrow={1}&gt;
       &lt;StepTitleDescription
         description={description}
-        title={strings.SITE_SUBZONE_BOUNDARIES}
+        title={strings.SITE_SUBSTRATUM_BOUNDARIES}
         tutorialDescription={tutorialDescription}
-        tutorialDocLinkKey='planting_site_create_subzone_boundary_instructions_video'
-        tutorialTitle={strings.ADDING_SUBZONE_BOUNDARIES}
+        tutorialDocLinkKey='planting_site_create_substratum_boundary_instructions_video'
+        tutorialTitle={strings.ADDING_SUBSTRATUM_BOUNDARIES}
       /&gt;
       &lt;EditableMap
-        activeCont<span class="fstat-no" title="function not covered" >ex</span>t={active<span class="cstat-no" title="statement not covered" >Context}</span>
-        editableBoundary={subzonesData?.editableBoundary}
-        errorAnnotations={subzonesData?.errorAnnotations}
-        featureSelectorOnClick={featureSelectorOnClick}
+        activeContext={activeContext}
+        editableBoundary={substrataData?.editableBoundary}
+        errorAnnotations={substrataData?.errorAnnotations}
+        featureSel<span class="fstat-no" title="function not covered" >ec</span>torOnClic<span class="cstat-no" title="statement not covered" >k={featureSelectorOnClick</span>}
         isSliceTool
         onEditableBoundaryChanged={(editableBoundary) =&gt; void onEditableBoundaryChanged(editableBoundary)}
         onRedo={redo}
@@ -1533,11 +1554,11 @@ type TooltipContentsProps = {
   name?: string;
   onClose: () =&gt; void;
   onUpdate: (name: string) =&gt; void;
-  subzoneNamesInUse: Set&lt;string&gt;;
+  substratumNamesInUse: Set&lt;string&gt;;
 };
 &nbsp;
-const TooltipContents = ({ name, onClose, onUpdate, subzoneNamesInUse }: TooltipContentsProps): JSX.Element =&gt; {
-  const [subzoneName, setSubzoneName] = useState&lt;string&gt;(name ?? '');
+const TooltipContents = ({ name, onClose, onUpdate, substratumNamesInUse }: TooltipContentsProps): JSX.Element =&gt; {
+  const [substratumName, setSubstratumName] = useState&lt;string&gt;(name ?? '');
   const [nameError, setNameError] = useState&lt;string&gt;('');
   const [validate, setValidate] = useState&lt;boolean&gt;(false);
   const theme = useTheme();
@@ -1545,17 +1566,17 @@ const TooltipContents = ({ name, onClose, onUpdate, subzoneNamesInUse }: Tooltip
   const validateInput = useCallback((): boolean =&gt; {
     let hasNameErrors = true;
 &nbsp;
-    if (!subzoneName) {
+    if (!substratumName) {
       setNameError(strings.REQUIRED_FIELD);
-    } else if (subzoneNamesInUse.has(subzoneName)) {
-      setNameError(strings.SUBZONE_NAME_IN_USE);
+    } else if (substratumNamesInUse.has(substratumName)) {
+      setNameError(strings.SUBSTRATUM_NAME_IN_USE);
     } else {
       setNameError('');
       hasNameErrors = false;
     }
 &nbsp;
     return !hasNameErrors;
-  }, [subzoneName, subzoneNamesInUse]);
+  }, [substratumName, substratumNamesInUse]);
 &nbsp;
   const save = () =&gt; {
     if (!validate) {
@@ -1563,7 +1584,7 @@ const TooltipContents = ({ name, onClose, onUpdate, subzoneNamesInUse }: Tooltip
     }
 &nbsp;
     if (validateInput()) {
-      onUpdate(subzoneName);
+      onUpdate(substratumName);
     }
   };
 &nbsp;
@@ -1578,17 +1599,17 @@ const TooltipContents = ({ name, onClose, onUpdate, subzoneNamesInUse }: Tooltip
       cancelButton={{ title: strings.CANCEL, onClick: onClose }}
       onClose={onClose}
       saveButton={{ title: strings.SAVE, onClick: save }}
-      title={strings.SUBZONE}
+      title={strings.SUBSTRATUM}
     &gt;
       &lt;Box display='flex' flexDirection='column' padding={theme.spacing(2)}&gt;
-        &lt;Typography&gt;{strings.PLANTING_SITE_ZONE_NAME_HELP}&lt;/Typography&gt;
+        &lt;Typography&gt;{strings.PLANTING_SITE_STRATUM_NAME_HELP}&lt;/Typography&gt;
         &lt;Textfield
           autoFocus={true}
           label={strings.NAME}
-          id='subzone-name'
+          id='substratum-name'
           type='text'
-          onChange={(value) =&gt; setSubzoneName(value as string)}
-          value={subzoneName}
+          onChange={(value) =&gt; setSubstratumName(value as string)}
+          value={substratumName}
           errorText={nameError}
           sx={{ marginTop: theme.spacing(1.5) }}
         /&gt;
@@ -1603,7 +1624,7 @@ const TooltipContents = ({ name, onClose, onUpdate, subzoneNamesInUse }: Tooltip
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-05T19:06:18.388Z
+                at 2026-01-05T21:57:59.407Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

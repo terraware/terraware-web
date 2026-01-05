@@ -494,51 +494,51 @@ const ObservationStatsDrawer = ({
         observedDensity: results?.plantingDensity,
         survivalRate:<span class="cstat-no" title="statement not covered" > results?.survivalRate,<span class="fstat-no" title="function not covered" ></span></span>
       };
-<span class="cstat-no" title="statement not covered" >    } else if (layerFeatureId.layerId === 'zones') {</span>
-<span class="cstat-no" title="statement not covered" >      const zoneHistory = siteHistory?.plantingZones?.find(</span>
-        (_zone) =&gt; _zone.plantingZoneId === Number(layerFeatureId.featureId)
+<span class="cstat-no" title="statement not covered" >    } else if (layerFeatureId.layerId === 'strata') {</span>
+<span class="cstat-no" title="statement not covered" >      const stratumHistory = siteHistory?.strata?.find(</span>
+        (_stratum) =&gt; _stratum.stratumId === Number(layerFeatureId.featureId)
       );
-      const zone = plantingSite?.plantingZones?.find((_zone) =&gt; _zone.id === Number(layerFeatureId.featureId));
-      const zoneResults = results?.plantingZones?.find(
-        (_zone) =&gt; _zone.plantingZoneId === Number(layerFeatureId.featureId)
+      const stratum = plantingSite?.strata?.find((_stratum) =&gt; _stratum.id === Number(layerFeatureId.featureId));
+      const stratumResults = results?.strata?.find(
+        (_stratum) =&gt; _stratum.stratumId === Number(layerFeatureId.featureId)
       );
       retur<span class="cstat-no" title="statement not covered" >n {</span>
-        name: zoneHistory?<span class="cstat-no" title="statement not covered" >.name ?? zone?.name,</span>
-<span class="fstat-no" title="function not covered" >        ob</span>servedPla<span class="cstat-no" title="statement not covered" >nts: zoneResults?.totalPlants,</span>
-        observedSpecies: zoneResults?.totalSpecies,
-        observedDen<span class="cstat-no" title="statement not covered" >sity: zoneResults?.plantingDensity,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-        survivalRate: zone<span class="cstat-no" title="statement not covered" >Results?.survivalRate,</span>
+        name: stratumHistory?<span class="cstat-no" title="statement not covered" >.name ?? stratum?.name,</span>
+<span class="fstat-no" title="function not covered" >        ob</span>servedPlants<span class="cstat-no" title="statement not covered" >: stratumResults?.totalPlants,</span>
+        observedSpecies: stratumResults?.totalSpecies,
+        observedDensit<span class="cstat-no" title="statement not covered" >y: stratumResults?.plantingDensity,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+        survivalRate: stratum<span class="cstat-no" title="statement not covered" >Results?.survivalRate,</span>
       };<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-    } else if (layerFeatureId.layerId === 'subzones') {
-<span class="cstat-no" title="statement not covered" >      const subzoneHistory = siteHistory?.plantingZones</span>
-        ?.flatMap((_zone) =&gt; _zone.plantingSubzones)
-        .find((_subzone) =&gt; _subzone.plantingSubzoneId === Number(layerFeatureId.featureId));
-      const subzone = plantingSite?.plantingZones
-        ?.flatMap((_zone) =&gt; _zone.plantingSubzones)
-        .find((_subzone) =&gt; _subzone.id === Number(layerFeatureId.featureId));
-      const subzoneResults = results?.plantingZones
-        ?.f<span class="cstat-no" title="statement not covered" >latMap((_zone) =&gt; _zone.plantingSubzones)</span>
-        ?.find((_subzone) =&gt; <span class="cstat-no" title="statement not covered" >_subzone.plantingSubzoneId === Number(layerFeatureId.featureId));<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
+    } else if (layerFeatureId.layerId === 'substrata') {
+<span class="cstat-no" title="statement not covered" >      const substratumHistory = siteHistory?.strata</span>
+        ?.flatMap((_stratum) =&gt; _stratum.substrata)
+        .find((_substratum) =&gt; _substratum.substratumId === Number(layerFeatureId.featureId));
+      const substratum = plantingSite?.strata
+        ?.flatMap((_stratum) =&gt; _stratum.substrata)
+        .find((_substratum) =&gt; _substratum.id === Number(layerFeatureId.featureId));
+      const substratumResults = results?.strata
+        ?.f<span class="cstat-no" title="statement not covered" >latMap((_stratum) =&gt; _stratum.substrata)</span>
+        ?.find((_substratum) =&gt; <span class="cstat-no" title="statement not covered" >_substratum.substratumId === Number(layerFeatureId.featureId));<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
       return {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
-        name: subzoneHistory?<span class="cstat-no" title="statement not covered" >.name ?? subzone?.name,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
-<span class="cstat-no" title="statement not covered" >        observedPlants: subzoneResults?.totalPlants,</span>
-        observedSpecies: subzoneResults?.totalSpecies,
-        observedDensity: subzoneResults?.plantingDensity,
-        survivalRate: subzoneResults?.survivalRate,
+        name: substratumHistory?<span class="cstat-no" title="statement not covered" >.name ?? substratum?.name,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
+<span class="cstat-no" title="statement not covered" >        observedPlants: substratumResults?.totalPlants,</span>
+        observedSpecies: substratumResults?.totalSpecies,
+        observedDensity: substratumResults?.plantingDensity,
+        survivalRate: substratumResults?.survivalRate,
       };
     } else if (
       layerFeatureId.layerId === 'permanentPlots' ||
       layer<span class="cstat-no" title="statement not covered" >FeatureId.layerId === 'temporaryPlots' ||</span>
       layerFeatureI<span class="cstat-no" title="statement not covered" >d.layerId === 'adHocPlots'<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span></span></span>
     ) {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
-      const plot = planti<span class="cstat-no" title="statement not covered" >ngSite?.plantingZones</span>
-        ?.flatMap((_zone) <span class="cstat-no" title="statement not covered" >=&gt; _zone.plantingSubzones)</span>
-<span class="fstat-no" title="function not covered" >        ?.</span>flatMap((<span class="cstat-no" title="statement not covered" >_subzone) =&gt; _subzone.monitoringPlots)</span>
+      const plot = planti<span class="cstat-no" title="statement not covered" >ngSite?.strata</span>
+        ?.flatMap((_stratu<span class="cstat-no" title="statement not covered" >m) =&gt; _stratum.substrata)</span>
+<span class="fstat-no" title="function not covered" >        ?.</span>flatMap((<span class="cstat-no" title="statement not covered" >_substratum) =&gt; _substratum.monitoringPlots)</span>
         .find((_plot) =&gt; _plot.id === Number(layerFeatureId.featureId));
       const allplotResu<span class="cstat-no" title="statement not covered" >lts =</span>
-<span class="cstat-no" title="statement not covered" >        results?.plantingZones</span>
-          ?.flatMap((_zone) =&gt; _zone.plantingSubzones)
-          ?.flatMap((_subzone) =&gt; _subzone.monitoringPlots) ?? [];
+<span class="cstat-no" title="statement not covered" >        results?.strata</span>
+          ?.flatMap((_stratum) =&gt; _stratum.substrata)
+          ?.flatMap((_substratum) =&gt; _substratum.monitoringPlots) ?? [];
       const adHocPlots = results?.adHocPlot ? [results.adHocPlot] : [];
       const plotResults = [...allplotResults, ...adHocPlots].find(
         (_plot) =&gt; _plot.monitoringPlotId === Number(layerFeatureId.featureId)
@@ -555,7 +555,7 @@ const ObservationStatsDrawer = ({
     } else {<span class="cstat-no" title="statement not covered" ></span>
       re<span class="cstat-no" title="statement not covered" >turn undefined;</span>
     }
-  }, [layerFeatureId, plantingSite, results, siteHistory?.plantingZones]);
+  }, [layerFeatureId, plantingSite, results, siteHistory?.strata]);
 &nbsp;
   const rows = useMemo((): MapDrawerTableRow[] =&gt; {
     co<span class="cstat-no" title="statement not covered" >nst drawerRows: MapDrawerTableRow[] = [];</span>
@@ -622,7 +622,7 @@ export default ObservationStatsDrawer;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-05T19:06:18.388Z
+                at 2026-01-05T21:57:59.407Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

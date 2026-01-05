@@ -748,7 +748,7 @@ const MonitoringPlotEditPhotos = ({ reload }: { reload: () =&gt; void }) =&gt; {
   const [mediaItem<span class="cstat-no" title="statement not covered" >s, setMediaItems] = useState&lt;MonitoringPlotMedi</span>aItem[]&gt;([]);
   const theme = useThem<span class="cstat-no" title="statement not covered" >e();</span>
   const navigate = useSyncNav<span class="cstat-no" title="statement not covered" >igate();</span>
-  const [plantingZoneName,<span class="cstat-no" title="statement not covered" > setPlantingZoneName] = useState&lt;string&gt;();</span>
+  const [stratumName, setS<span class="cstat-no" title="statement not covered" >tratumName] = useState&lt;string&gt;();</span>
   const [showWarning, setShowWarning] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
 <span class="cstat-no" title="statement not covered" ></span>
   const [monitoringPlotRe<span class="cstat-no" title="statement not covered" >sult, setMonitoringPlotResult] = useState&lt;</span>ObservationMonitoringPlotResultsPayload&gt;();
@@ -763,7 +763,7 @@ const MonitoringPlotEditPhotos = ({ reload }: { reload: () =&gt; void }) =&gt; {
   );<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
   const visibleMedi<span class="cstat-no" title="statement not covered" >aItems = useMemo(</span>
-    () =&gt; mediaItems.filter((item) =&gt; item.type ==<span class="cstat-no" title="statement not covered" >= 'new' || !item.isDeleted),</span>
+    () =&gt; mediaItems.filter((item) =&gt; it<span class="cstat-no" title="statement not covered" >em.type === 'new' || !item.is</span>Deleted),
     [mediaItems]<span class="cstat-no" title="statement not covered" ></span>
   );<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
@@ -828,12 +828,12 @@ const MonitoringPlotEditPhotos = ({ reload }: { reload: () =&gt; void }) =&gt; {
 &nbsp;
   useEffect(() =&gt; {
     if (observationResults) {
-      observationResults.strata.forEach((zone) =&gt;
-<span class="cstat-no" title="statement not covered" >        zone.substrata.forEach<span class="fstat-no" title="function not covered" >((</span>subzone) =&gt;</span>
-<span class="cstat-no" title="statement not covered" >          subzone.monitoringPlots.forEach((plot) =&gt; {</span>
+      observationResults.strata.forEach((stratum) =&gt;
+<span class="cstat-no" title="statement not covered" >        stratum.substrata.forE<span class="fstat-no" title="function not covered" >ac</span>h((substratum) =&gt;</span>
+<span class="cstat-no" title="statement not covered" >          substratum.monitoringPlots.forEach((plot) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >            if (plot.monitoringPlotId === monitoringPlotId) {</span>
-<span class="fstat-no" title="function not covered" ></span>              setM<span class="cstat-no" title="statement not covered" >onitoringPlotResult(plot);</span>
-<span class="fstat-no" title="function not covered" ></span>              setPlanti<span class="cstat-no" title="statement not covered" >ngZoneName(zone.name);<span class="fstat-no" title="function not covered" ></span></span>
+<span class="fstat-no" title="function not covered" ></span>              setMoni<span class="cstat-no" title="statement not covered" >toringPlotResult(plot);</span>
+<span class="fstat-no" title="function not covered" ></span>              setStratumNa<span class="cstat-no" title="statement not covered" >me(stratum.name);<span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >              setMediaItems(plot.media.map((mediaElement) =&gt; ({ type: 'existing', data: mediaElement })));</span>
 <span class="cstat-no" title="statement not covered" >              return;</span>
             }<span class="cstat-no" title="statement not covered" ></span>
@@ -863,11 +863,11 @@ const MonitoringPlotEditPhotos = ({ reload }: { reload: () =&gt; void }) =&gt; {
             .replace(':observationId', `${observationId}`)
             .<span class="cstat-no" title="statement not covered" >replace(':monitoringPlotId', `${monitoringPlotId}`)</span>
 <span class="cstat-no" title="statement not covered" >        );</span>
-      } else if (plantingZoneName) {
+      } else if (stratumName) {
         navigate(
           APP_PATHS.OBSERVATION_MONITORING_PLOT_DETAILS.replace(':plantingSiteId', `${plantingSiteId}`)
             .replace(':observationId', `${observationId}`)
-            .replace(':plantingZoneName', plantingZoneName)
+            .replace(':stratumName', stratumName)
             .replace(':monitoringPlotId', `${monitoringPlotId}`)
         );
       }
@@ -879,7 +879,7 @@ const MonitoringPlotEditPhotos = ({ reload }: { reload: () =&gt; void }) =&gt; {
     observationId,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >    observ<span class="fstat-no" title="function not covered" >at</span>ionResults,</span>
     pl<span class="cstat-no" title="statement not covered" >antingSiteId,</span>
-    plantingZoneName,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+    stratumName,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
   ]);<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
   const save<span class="cstat-no" title="statement not covered" >Photos = useCallback(() =&gt; {</span>
@@ -1036,7 +1036,7 @@ export default MonitoringPlotEditPhotos;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-05T19:06:18.388Z
+                at 2026-01-05T21:57:59.407Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

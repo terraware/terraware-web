@@ -290,48 +290,48 @@ export type Observ<span class="cstat-no" title="statement not covered" ><span cl
 };<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
 type Observati<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >on</span>StatusSummaryMessageProps = <span class="cstat-no" title="statement not covered" >{</span></span>
-  plantingZones?: PlantingSite['strata'];
-  requestedSubzoneIds?: Observation['requestedSubstratumIds'];
+  strata?: PlantingSite['strata'];
+  requestedSubstratumIds?: Observation['requestedSubstratumIds'];
   statusSummary?: ObservationStatusSummary;
 };
 &nbsp;
 const ObservationStatusSummaryMessage = ({
-  plantingZones,
-  requestedSubzoneI<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ds</span>,<span class="cstat-no" title="statement not covered" ></span></span>
+  strata,
+  requestedSubstrat<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >um</span>Ids,<span class="cstat-no" title="statement not covered" ></span></span>
   statusSummary,<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >}: ObservationStatusSummaryMessageProps): JSX.Element | null =&gt; {</span>
   const the<span class="fstat-no" title="function not covered" >me</span> = u<span class="cstat-no" title="statement not covered" >seTheme();</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  const subzoneMessageBody = useMemo(() =&gt; {</span>
-    if (!requestedS<span class="cstat-no" title="statement not covered" >ubzoneIds || requestedSubz</span>oneIds.length === 0 || !plantingZones || plantingZones.length === 0) {
+<span class="cstat-no" title="statement not covered" >  const substratumMessageBody = useMemo(() =&gt; </span>{
+    if (!requestedS<span class="cstat-no" title="statement not covered" >ubstratumIds || requestedS</span>ubstratumIds.length === 0 || !strata || strata.length === 0) {
       return undefin<span class="cstat-no" title="statement not covered" >ed;</span>
     }<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-    const zoneListIte<span class="cstat-no" title="statement not covered" >ms: JSX.Element[] = plantingZone</span>s
-      .map((zone, index): JSX.Element | <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >nu</span>ll =&gt; {</span>
-        const subzoneNames = zone.substrata
-          .filter((subzone) =&gt; requestedSubzoneIds.includes(subzone.id))
-          .map((subzone) =&gt; subzone.name);
+    const stratumList<span class="cstat-no" title="statement not covered" >Items: JSX.Element[] = strata</span>
+      .map((stratum, index): JSX.Element<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > |</span> null =&gt; {</span>
+        const substratumNames = stratum.substrata
+          .filter((substratum) =&gt; requestedSubstratumIds.includes(substratum.id))
+          .map((substratum) =&gt; substratum.name);
 &nbsp;
-        if (subz<span class="cstat-no" title="statement not covered" >oneNames.length === 0) {</span>
+        if (subs<span class="cstat-no" title="statement not covered" >tratumNames.length === 0) {</span>
           return null;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >        }</span>
 <span class="cstat-no" title="statement not covered" ></span>
-        return &lt;li key={index}&gt;{`${zone.name}: ${subzoneNames.join(', ')}`}&lt;/li&gt;;
+        return &lt;li key={index}&gt;{`${stratum.name}: ${substratumNames.join(', ')}`}&lt;/li&gt;;
       })<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-      .filter((element: JSX<span class="cstat-no" title="statement not covered" >.Element | null): elem<span class="fstat-no" title="function not covered" >en</span>t is JSX.El<span class="cstat-no" title="statement not covered" >ement =&gt; element !== null);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span>
+      .filter((element: JSX.El<span class="cstat-no" title="statement not covered" >ement | null): element is<span class="fstat-no" title="function not covered" > J</span>SX.Element =&gt; <span class="cstat-no" title="statement not covered" >element !== null);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span>
 <span class="cstat-no" title="statement not covered" ></span>
-    if (<span class="cstat-no" title="statement not covered" >zoneListItems</span>.length === 0) {
+    if (<span class="cstat-no" title="statement not covered" >stratumListIt</span>ems.length === 0) {
       return null;
     }<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >    return (</span>
 <span class="cstat-no" title="statement not covered" >      &lt;Box marginTo</span>p={3}&gt;
         {strings.THIS_OBSERVATION_INCLUDES}
-<span class="cstat-no" title="statement not covered" >        &lt;ul style={{ margin: 0, padding: `0 ${theme.spacing(3)}` }}&gt;{zoneListItems}&lt;/ul&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;ul style={{ margin: 0, padding: `0 ${theme.spacing(3)}` }}&gt;{stratumListItems}&lt;/ul&gt;</span>
       &lt;/Box&gt;
 <span class="cstat-no" title="statement not covered" >    );</span>
-  },<span class="cstat-no" title="statement not covered" > [plantingZon</span>es, requestedSubzoneIds, theme]);
+  },<span class="cstat-no" title="statement not covered" > [strata, req</span>uestedSubstratumIds, theme]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (!statusSummary) {</span>
     return null;
@@ -366,7 +366,7 @@ const ObservationStatusSummaryMessage = ({
               }
             &lt;/Box&gt;
 &nbsp;
-            {subzoneMessageBody}
+            {substratumMessageBody}
           &lt;/&gt;
         }
       /&gt;
@@ -382,7 +382,7 @@ export default ObservationStatusSummaryMessage;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-05T19:06:18.388Z
+                at 2026-01-05T21:57:59.407Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

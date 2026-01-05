@@ -247,8 +247,8 @@ export type DocType<span class="cstat-no" title="statement not covered" > =</spa
 <span class="cstat-no" title="statement not covered" >  | 'cookie_policy'</span>
   | <span class="cstat-no" title="statement not covered" >'planting_site_create_boundary_instructions_video'</span>
   | 'planting_site_create_exclusions_boundary_instructions_video'
-  | 'planting_site<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >_c</span>reate_subzone_boundary_instructions_video'</span>
-<span class="cstat-no" title="statement not covered" >  | 'planting_site_create_zone_boundary_instructions_video'</span>
+  | 'planting_site<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >_c</span>reate_substratum_boundary_instructions_video'</span>
+<span class="cstat-no" title="statement not covered" >  | 'planting_site_create_stratum_boundary_instructions_video'</span>
   | <span class="cstat-no" title="statement not covered" >'privacy_policy'</span>
   | 't<span class="cstat-no" title="statement not covered" >erraformation'</span>
   | 'ter<span class="cstat-no" title="statement not covered" >raformation_software_solut<span class="fstat-no" title="function not covered" >io</span>ns'<span class="cstat-no" title="statement not covered" ></span></span>
@@ -266,9 +266,9 @@ const DOC_LINKS<span class="fstat-no" title="function not covered" >: </span>Rec
       'https://player.vimeo.com/video/911493236?h=b8b5555693&amp;amp;badge=0&amp;amp;autopause=0&amp;amp;player_id=0&amp;amp;app_id=58479',
     planting_site_create_exclusions_boundary_instructions_video:
       'https://player.vimeo.com/video/911493377?h=f4362af8d2&amp;amp;badge=0&amp;amp;autopause=0&amp;amp;player_id=0&amp;amp;app_id=58479',
-    planting_site_create_subzone_boundary_instructions_video:
+    planting_site_create_substratum_boundary_instructions_video:
       'https://player.vimeo.com/video/911493615?h=f252d5f359&amp;amp;badge=0&amp;amp;autopause=0&amp;amp;player_id=0&amp;amp;app_id=58479',
-    planting_site_create_zone_boundary_instructions_video:
+    planting_site_create_stratum_boundary_instructions_video:
       'https://player.vimeo.com/video/911493480?h=788ba11fe4&amp;amp;badge=0&amp;amp;autopause=0&amp;amp;player_id=0&amp;amp;app_id=58479',
     privacy_policy: 'https://www.terraformation.com/privacy-policy',
     terraformation: 'https://www.terraformation.com',
@@ -286,9 +286,9 @@ const DOC_LINKS<span class="fstat-no" title="function not covered" >: </span>Rec
       'https://player.vimeo.com/video/911493236?h=b8b5555693&amp;amp;badge=0&amp;amp;autopause=0&amp;amp;player_id=0&amp;amp;app_id=58479',
     planting_site_create_exclusions_boundary_instructions_video:
       'https://player.vimeo.com/video/911493377?h=f4362af8d2&amp;amp;badge=0&amp;amp;autopause=0&amp;amp;player_id=0&amp;amp;app_id=58479',
-    planting_site_create_subzone_boundary_instructions_video:
+    planting_site_create_substratum_boundary_instructions_video:
       'https://player.vimeo.com/video/911493615?h=f252d5f359&amp;amp;badge=0&amp;amp;autopause=0&amp;amp;player_id=0&amp;amp;app_id=58479',
-    planting_site_create_zone_boundary_instructions_video:
+    planting_site_create_stratum_boundary_instructions_video:
       'https://player.vimeo.com/video/911493480?h=788ba11fe4&amp;amp;badge=0&amp;amp;autopause=0&amp;amp;player_id=0&amp;amp;app_id=58479',
     privacy_policy: 'https://www.terraformation.com/politica-de-privacidad',
     terraformation: 'https://www.terraformation.com',
@@ -306,9 +306,9 @@ const DOC_LINKS<span class="fstat-no" title="function not covered" >: </span>Rec
       'https://player.vimeo.com/video/911493236?h=b8b5555693&amp;amp;badge=0&amp;amp;autopause=0&amp;amp;player_id=0&amp;amp;app_id=58479',
     planting_site_create_exclusions_boundary_instructions_video:
       'https://player.vimeo.com/video/911493377?h=f4362af8d2&amp;amp;badge=0&amp;amp;autopause=0&amp;amp;player_id=0&amp;amp;app_id=58479',
-    planting_site_cr<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ea</span>te_subzone_boundary_instructions_video:</span>
+    planting_site_cr<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ea</span>te_substratum_boundary_instructions_video:</span>
       'https://player.vimeo.c<span class="cstat-no" title="statement not covered" >om/video/911493615?h=f252d5f359&amp;amp;badg</span>e=0&amp;amp;autopause=0&amp;amp;player_id=0&amp;amp;app_id=58479',
-    planting_si<span class="cstat-no" title="statement not covered" >te_create_zone_boundary_instructions_video</span>:
+    planting_si<span class="cstat-no" title="statement not covered" >te_create_stratum_boundary_instructions_vi</span>deo:
 <span class="cstat-no" title="statement not covered" >      'https://</span>player.vimeo.com/video/911493480?h=788ba11fe4&amp;amp;badge=0&amp;amp;autopause=0&amp;amp;player_id=0&amp;amp;app_id=58479',
     privacy_policy: 'https://www.terraformation.com/politique-de-confidentialite',
     terraformation: 'https://www.terraformation.com',
@@ -334,7 +334,7 @@ export const useDocLinks = () =&gt; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-05T19:06:18.388Z
+                at 2026-01-05T21:57:59.407Z
             </div>
         <script src="../prettify.js"></script>
         <script>

@@ -354,18 +354,18 @@ import { roundToDe<span class="cstat-no" title="statement not covered" ><span cl
 type<span class="cstat-no" title="statement not covered" > StratumT0BoxProps = {</span>
   plot<span class="cstat-no" title="statement not covered" >sWithObservations: PlotsWithObservationsSearchResult[];</span>
   withdr<span class="cstat-no" title="statement not covered" >awnSpeciesPlot?: SpeciesPl<span class="fstat-no" title="function not covered" >ot</span>[];<span class="cstat-no" title="statement not covered" ></span></span>
-  t0Zone?: StratumT0Data;
+  t0Stratum?: StratumT0Data;
 };<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
-const StratumT<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >0B</span>ox = ({ plotsWithObservation<span class="cstat-no" title="statement not covered" >s, withdrawnSpeciesPlot, t0Zone }: StratumT0BoxProps) =&gt; {</span></span>
+const StratumT<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >0B</span>ox = ({ plotsWithObservation<span class="cstat-no" title="statement not covered" >s, withdrawnSpeciesPlot, t0Stratum }: StratumT0BoxProps) =&gt; {</span></span>
   const theme = useTheme();
   const { species } = useSpeciesData();
   const { isMobile } = useDeviceInfo();
 &nbsp;
-  const getZoneTotalDensity = useMemo(() =&gt; {
-    const total = t0Zone?.densityData.reduce((sum, density) =&gt; sum + density.plotDensity, 0);
+  const stratumTotalDensity = useMemo(() =&gt; {
+    const total = t0Stratum?.densityData.reduce((sum, density) =&gt; sum + density.plotDensity, 0);
     return total ? roundToDecimal(total, 1) : undefined;
-  }, [t0Zone]);<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  }, [t0Stratum]);<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >  const allWithdrawnSpecies = React.useMemo(() =&gt; {</span>
     if (!wi<span class="fstat-no" title="function not covered" >th</span>draw<span class="cstat-no" title="statement not covered" >nSpeciesPlot) </span>{
@@ -384,11 +384,11 @@ const StratumT<span class="cstat-no" title="statement not covered" ><span class=
 <span class="cstat-no" title="statement not covered" ></span>
   const someWithdrawnSpeciesMi<span class="cstat-no" title="statement not covered" >ssing = useMemo(() =&gt; {<span class="fstat-no" title="function not covered" ></span></span>
     return allWith<span class="cstat-no" title="statement not covered" >drawnSpecies?.some((withdrawnSp) =&gt; {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-<span class="cstat-no" title="statement not covered" >      if (!t0Zone?.densityData.find((dd) =&gt; dd.speciesId.toString() === wi</span>thdrawnSp.speciesId.toString())) {
+<span class="cstat-no" title="statement not covered" >      if (!t0Stratum?.densityData.find((dd) =&gt; dd.speciesId.toString() ===</span> withdrawnSp.speciesId.toString())) {
         return true;
       }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >    });</span>
-  }, [<span class="cstat-no" title="statement not covered" >allWithdraw</span>nSpecies, t0Zone?.densityData]);
+  }, [<span class="cstat-no" title="statement not covered" >allWithdraw</span>nSpecies, t0Stratum?.densityData]);
 &nbsp;
   return (<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >    &lt;&gt;<span class="fstat-no" title="function not covered" ></span></span>
@@ -407,18 +407,18 @@ const StratumT<span class="cstat-no" title="statement not covered" ><span class=
           flexDirection={'column'}
           padding={2}
         &gt;
-<span class="cstat-no" title="statement not covered" >          &lt;Typography fontWeight={600}&gt;{strings.ZONE}&lt;/Typography&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;Typography fontWeight={600}&gt;{strings.STRATUM}&lt;/Typography&gt;</span>
           &lt;Typography&gt;{plotsWithObservations?.[0].substratum_stratum_name}&lt;/Typography&gt;
         &lt;/Box&gt;
         &lt;Box flexGrow={1} display={'flex'} alignItems={'center'}&gt;
-          {t0Zone &amp;&amp; !someWithdrawnSpeciesMissing ? (
+          {t0Stratum &amp;&amp; !someWithdrawnSpeciesMissing ? (
             &lt;Box&gt;
               &lt;Box display='flex' paddingBottom={3}&gt;
                 &lt;Typography color={theme.palette.TwClrTxtSuccess} fontWeight={500} paddingRight={2}&gt;
                   {strings.T0_DATA_IS_SET}
                 &lt;/Typography&gt;
               &lt;/Box&gt;
-              {t0Zone.densityData &amp;&amp; (
+              {t0Stratum.densityData &amp;&amp; (
                 &lt;Box&gt;
                   &lt;table&gt;
                     &lt;thead style={{ textAlign: 'left' }}&gt;
@@ -440,7 +440,7 @@ const StratumT<span class="cstat-no" title="statement not covered" ><span class=
                       &lt;/tr&gt;
                     &lt;/thead&gt;
                     &lt;tbody&gt;
-                      {t0Zone.densityData.map((densityData, index) =&gt; (
+                      {t0Stratum.densityData.map((densityData, index) =&gt; (
                         &lt;tr key={index}&gt;
                           &lt;td style={{ paddingRight: '64px' }}&gt;
                             {species.find((sp) =&gt; sp.id === densityData.speciesId)?.scientificName}
@@ -456,7 +456,7 @@ const StratumT<span class="cstat-no" title="statement not covered" ><span class=
                           &lt;/Box&gt;
                         &lt;/td&gt;
                         &lt;td&gt;
-                          &lt;Typography fontWeight={600}&gt;{getZoneTotalDensity}&lt;/Typography&gt;
+                          &lt;Typography fontWeight={600}&gt;{stratumTotalDensity}&lt;/Typography&gt;
                         &lt;/td&gt;
                       &lt;/tr&gt;
                     &lt;/tbody&gt;
@@ -484,7 +484,7 @@ export default StratumT0Box;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-05T19:06:18.388Z
+                at 2026-01-05T21:57:59.407Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

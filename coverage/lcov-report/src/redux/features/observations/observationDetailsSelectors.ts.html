@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/37</span>
+                <span class='fraction'>0/36</span>
             </div>
         
             
@@ -127,9 +127,7 @@
 <a name='L62'></a><a href='#L62'>62</a>
 <a name='L63'></a><a href='#L63'>63</a>
 <a name='L64'></a><a href='#L64'>64</a>
-<a name='L65'></a><a href='#L65'>65</a>
-<a name='L66'></a><a href='#L66'>66</a>
-<a name='L67'></a><a href='#L67'>67</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L65'></a><a href='#L65'>65</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -178,8 +176,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -203,9 +199,9 @@ import { RootSt<span class="cstat-no" title="statement not covered" ><span class
 im<span class="cstat-no" title="statement not covered" >port { ObservationResults, ObservationStratumResults } from 'src/types/Observations';</span>
 <span class="cstat-no" title="statement not covered" ></span>
 import { ALL_STATES, selectMergedPlantingSiteObservations } from './observationsSelectors';
-import { searchRes<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ul</span>tZones } from './utils';</span>
+import { searchRes<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ul</span>tStrata } from './utils';</span>
 <span class="cstat-no" title="statement not covered" ></span>
-// s<span class="cstat-no" title="statement not covered" >earch observation details (search planting zone name only)</span>
+// s<span class="cstat-no" title="statement not covered" >earch observation details (search stratum name only)</span>
 <span class="cstat-no" title="statement not covered" ></span>
 export t<span class="cstat-no" title="statement not covered" >ype DetailsParams = {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
   orgId: number;
@@ -219,7 +215,7 @@ export t<span class="cstat-no" title="statement not covered" >ype DetailsParams 
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 export type DetailsSearchParams = SearchParams &amp;
 <span class="cstat-no" title="statement not covered" >  DetailsParams &amp; {</span>
-    zoneNames: string<span class="cstat-no" title="statement not covered" >[];</span>
+    stratumNames: str<span class="cstat-no" title="statement not covered" >ing[];</span>
   };<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
 export const select<span class="cstat-no" title="statement not covered" >ObservationDetails </span>= createSelector(
@@ -239,27 +235,25 @@ ex<span class="fstat-no" title="function not covered" >po</span>rt const searchO
 ) =&gt; ObservationResults | undefined = createCachedSelector(
   selectObservationDetails,
   (state: RootState, params: DetailsSearchParams, defaultTimeZone: string) =&gt; params,
-  (observation, params) =&gt; sear<span class="cstat-no" title="statement not covered" >chResultZones(params.search, params.zoneNames, observation)</span>
+  (observation, params) =&gt; searchR<span class="cstat-no" title="statement not covered" >esultStrata(params.search, params.stratumNames, observation)</span>
 )(<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="fstat-no" title="function not covered" >  (s</span>tate: RootState, params: DetailsSearchParams, defaultTimeZone: string) =&gt;
     `${params.plantingSiteId}_${params.observationId}_${defaultTimeZone}_${params.search}_${Array.from(
-<span class="cstat-no" title="statement not covered" >      new Set(params.zoneNames)</span>
-    ).toString()}`<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-);
+<span class="cstat-no" title="statement not covered" >      new Set(params.stratumNames)<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+    ).toString()}`
+);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 &nbsp;
-//<span class="fstat-no" title="function not covered" > g</span>et zone names in observation result<span class="cstat-no" title="statement not covered" ></span>
-export const selectDetailsZoneNames: (
+// get stratum names in observation result
+export const selectDetailsStratumNames: (
   state: RootState,
   plantingSiteId: number,
   observationId: number,
   organizationId: number
 ) =&gt; string[] = createCachedSelector(
   (state: RootState, plantingSiteId: number, observationId: number, orgId: number) =&gt;
-    selectObservationDetails(state, { plantingSiteId, observationId, orgId, search: '', zoneNames: [] }, ''),
+    selectObservationDetails(state, { plantingSiteId, observationId, orgId, search: '', stratumNames: [] }, ''),
   (details) =&gt;
-    Array.from(
-      new Set(details?.strata.map((plantingZone: ObservationStratumResults) =&gt; plantingZone.stratumName) ?? [])
-    )
+    Array.from(new Set(details?.strata.map((stratum: ObservationStratumResults) =&gt; stratum.stratumName) ?? []))
 )((state: RootState, plantingSiteId: number, observationId: number) =&gt; `${plantingSiteId}_${observationId}`);
 &nbsp;</pre></td></tr></table></pre>
 
@@ -268,7 +262,7 @@ export const selectDetailsZoneNames: (
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-05T19:06:18.388Z
+                at 2026-01-05T21:57:59.407Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

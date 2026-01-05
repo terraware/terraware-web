@@ -317,7 +317,12 @@
 <a name='L252'></a><a href='#L252'>252</a>
 <a name='L253'></a><a href='#L253'>253</a>
 <a name='L254'></a><a href='#L254'>254</a>
-<a name='L255'></a><a href='#L255'>255</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L255'></a><a href='#L255'>255</a>
+<a name='L256'></a><a href='#L256'>256</a>
+<a name='L257'></a><a href='#L257'>257</a>
+<a name='L258'></a><a href='#L258'>258</a>
+<a name='L259'></a><a href='#L259'>259</a>
+<a name='L260'></a><a href='#L260'>260</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -432,6 +437,11 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -587,8 +597,8 @@ impo<span class="cstat-no" title="statement not covered" >rt { useOrganization }
 import<span class="cstat-no" title="statement not covered" > { requestUpdatePlantingsCompleted } from 'src/redux/features/plantings/plantingsAsyncThunks';</span>
 import {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
   PlantingProgress,
-<span class="cstat-no" title="statement not covered" >  selectUpdat</span>ePlantingsCompleted,
-  selectZonesHaveStatistics,
+<span class="cstat-no" title="statement not covered" >  selectStrat</span>aHaveStatistics,
+  selectUpdatePlantingsCompleted,
 } from 'src/re<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >du</span>x/features/plantings/plantin<span class="cstat-no" title="statement not covered" >gsSelectors';</span></span>
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import StatsWarningDialog from 'src/scenes/NurseryRouter/StatsWarningModal';
@@ -596,7 +606,7 @@ import strings from 'src/strings';
 import useSnackbar from 'src/utils/useSnackbar';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 &nbsp;
-const columnsWithoutZones = (): TableColumnType[] =&gt; [
+const columnsWithoutStrata = (): TableColumnType[] =&gt; [
   {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
     key: 'siteName',<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >    name: strings.PLANTING_SITE,</span>
@@ -614,10 +624,10 @@ const columnsWithoutZones = (): TableColumnType[] =&gt; [
   },<span class="cstat-no" title="statement not covered" ></span>
 ];<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-const columnsWithZo<span class="cstat-no" title="statement not covered" >nes = (): TableColumnType[]</span> =&gt; [
+const columnsWithSt<span class="cstat-no" title="statement not covered" >rata = (): TableColumnType[</span>] =&gt; [
   {<span class="cstat-no" title="statement not covered" ></span>
-    key: 'subzoneName<span class="cstat-no" title="statement not covered" >',</span>
-    name: strings.SUBZONE<span class="cstat-no" title="statement not covered" >,</span>
+    key: 'substratumN<span class="cstat-no" title="statement not covered" >ame',</span>
+    name: strings.SUBSTRA<span class="cstat-no" title="statement not covered" >TUM,</span>
     type: 'string',<span class="cstat-no" title="statement not covered" ></span>
   },<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
   {
@@ -637,8 +647,8 @@ const columnsWithZo<span class="cstat-no" title="statement not covered" >nes = (
     type: 'string',
   },
   {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-    key: 'zoneName',
-    name: strings.ZONE,
+    key: 'stratumName',
+    name: strings.STRATUM,
     type: 'string',
   },
   {
@@ -660,39 +670,44 @@ export type PlantingProgressListProps = {
 };
 &nbsp;
 export default function PlantingProgressList({ rows, reloadTracking }: PlantingProgressListProps): JSX.Element {
-  const [hasZones, setHasZones] = useState&lt;boolean | undefined&gt;();
+  const [hasStrata, setHasStrata] = useState&lt;boolean | undefined&gt;();
   const [selectedRows, setSelectedRows] = useState&lt;any[]&gt;([]);
   const dispatch = useAppDispatch();
   const defaultTimeZone = useDefaultTimeZone();
   const { selectedOrganization } = useOrganization();
   const [requestId, setRequestId] = useState&lt;string&gt;('');
-  const [selectedZoneIdsBySiteId, setSelectedZoneIdsBySiteId] = useState&lt;Record&lt;number, Set&lt;number&gt;&gt;&gt;();
+  const [selectedStratumIdsBySiteId, setSelectedStratumIdsBySiteId] = useState&lt;Record&lt;number, Set&lt;number&gt;&gt;&gt;();
   const updatePlantingResult = useAppSelector((state) =&gt; selectUpdatePlantingsCompleted(state, requestId));
-  const subzonesStatisticsResult = useAppSelector((state) =&gt;
-    selectZonesHaveStatistics(state, selectedOrganization?.id || -1, selectedZoneIdsBySiteId, defaultTimeZone.get().id)
-  );
-  const snackbar = useSnackbar();
-  const [showWarningModal, setShowWarningModal] = useState(false);
-  const [markingAsComplete, setMarkingAsComplete] = useState(false);
-&nbsp;
-  useEffe<span class="fstat-no" title="function not covered" >ct(() =&gt; {</span>
-    if (rows &amp;&amp; hasZones === undef<span class="cstat-no" title="statement not covered" >ined) {</span>
-      setHasZones(rows.some((d) =&gt; d.subzo<span class="cstat-no" title="statement not covered" >neName));</span>
-    }<span class="cstat-no" title="statement not covered" ></span>
-  }, [rows, hasZones]);<span class="cstat-no" title="statement not covered" ></span>
+  const substrataStatisticsResult = useAppSelector((state) =&gt;
+    selectStrataHaveStatistics(
+      state,
+      selectedOrganization?.id || -1,
+      selectedStratumIdsBySiteId,
+      defaultTimeZone.get().id
+    )
+  );<span class="fstat-no" title="function not covered" ></span>
+  const snackbar = useSnackbar();<span class="cstat-no" title="statement not covered" ></span>
+  const [showWarningModal, setShowWarningM<span class="cstat-no" title="statement not covered" >odal] = useState(false);</span>
+  const [markingAsC<span class="cstat-no" title="statement not covered" >omplete, setMarkingAsComplete] = us</span>eState(false);
 <span class="cstat-no" title="statement not covered" ></span>
   useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-    if (selectedRows) {<span class="cstat-no" title="statement not covered" ></span>
-      const zoneIds = selectedR<span class="cstat-no" title="statement not covered" >ows.reduce((selectedZoneIdsBySite<span class="fstat-no" title="function not covered" >Id</span>Obj: Reco<span class="cstat-no" title="statement not covered" >rd&lt;number, Set&lt;number&gt;&gt;, row) =&gt; {</span></span>
-        const siteId = row.siteId;<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" ></span>        if (sel<span class="cstat-no" title="statement not covered" >ectedZoneIdsBySiteIdObj[siteId]) {</span>
-          selectedZoneIdsBySiteIdObj[siteId].add(row.zoneId);
+    if (rows &amp;&amp; hasStrata === undefi<span class="cstat-no" title="statement not covered" >ned) {</span>
+      setHasStrata(rows.some((d) =&gt; d.substratumName));<span class="cstat-no" title="statement not covered" ></span>
+    }<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  }, [rows, hasStrata]);<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  useEffect(() =&gt; {
+    if (selectedRows) {
+      const stratumIds = selectedRows.reduce((selectedStratumIdsBySiteIdObj: Record&lt;number, Set&lt;number&gt;&gt;, row) =&gt; {
+        const siteId = row.siteId;
+        if (selectedStratumIdsBySiteIdObj[siteId]) {
+          selectedStratumIdsBySiteIdObj[siteId].add(row.stratumId);
         } else {<span class="cstat-no" title="statement not covered" ></span>
-          selectedZoneIdsBySiteIdObj[siteId] = new<span class="cstat-no" title="statement not covered" > Set([row.zoneId]);</span>
+          selectedStratumIdsBySiteIdObj[siteId] = <span class="cstat-no" title="statement not covered" >new Set([row.stratumId]);</span>
         }<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >        return selectedZoneIds<span class="fstat-no" title="function not covered" >By</span>SiteIdObj;</span>
+<span class="cstat-no" title="statement not covered" >        return selectedStratum<span class="fstat-no" title="function not covered" >Id</span>sBySiteIdObj;</span>
 <span class="cstat-no" title="statement not covered" >      }, {});</span>
-<span class="cstat-no" title="statement not covered" >      setSelectedZoneIdsBySi<span class="fstat-no" title="function not covered" >te</span>Id(zo<span class="cstat-no" title="statement not covered" >neIds);</span></span>
+<span class="cstat-no" title="statement not covered" >      setSelectedStratumIdsBy<span class="fstat-no" title="function not covered" >Si</span>teId(<span class="cstat-no" title="statement not covered" >stratumIds);</span></span>
     }
   }, [selectedRows]);
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
@@ -705,9 +720,9 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
       relo<span class="cstat-no" title="statement not covered" >adTracking();</span>
       setRequestId('');
       if<span class="cstat-no" title="statement not covered" > (markingAsComplete) {</span>
-        snackbar.toastSuccess(strings.SUBZONE_PLANTING_COMPLETED_SUCCESS, strings.SAVED);
+        snackbar.toastSuccess(strings.SUBSTRATUM_PLANTING_COMPLETED_SUCCESS, strings.SAVED);
 <span class="cstat-no" title="statement not covered" >      } else {</span>
-        snackbar.toastSuccess(strings.SUBZONE_PLANTING_UNCOMPLETED_SUCCESS, strings.SAVED);
+        snackbar.toastSuccess(strings.SUBSTRATUM_PLANTING_UNCOMPLETED_SUCCESS, strings.SAVED);
       }
 <span class="cstat-no" title="statement not covered" >    } else if (updatePlantingR<span class="fstat-no" title="function not covered" >es</span>ult?.status === 'error') {</span>
 <span class="cstat-no" title="statement not covered" >      snackbar.toastEr</span>ror(strings.GENERIC_ERROR);
@@ -717,9 +732,9 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
 <span class="cstat-no" title="statement not covered" ></span>
   cons<span class="cstat-no" title="statement not covered" >t setPlantingCompl</span>eted = useCallback(
     (c<span class="cstat-no" title="statement not covered" >omplete: boolean) =&gt; {</span>
-      co<span class="cstat-no" title="statement not covered" >nst subzoneIds = selectedRows.map((row) =&gt; row.subzoneId);</span>
+      co<span class="cstat-no" title="statement not covered" >nst substratumIds = selectedRows.map((row) =&gt; row.substratumId);</span>
       const request = dispatch(
-<span class="cstat-no" title="statement not covered" >        requestUpdatePlantingsCompleted({ subzoneIds, planting: { plantingCompleted: complete } })</span>
+<span class="cstat-no" title="statement not covered" >        requestUpdatePlantingsCompleted({ substratumIds, planting: { plantingCompleted: complete } })</span>
       );
       setMa<span class="cstat-no" title="statement not covered" >rkingAsComplete(complete);</span>
 <span class="cstat-no" title="statement not covered" >      setRequestId(request.requestId);</span>
@@ -728,7 +743,7 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
   );
 <span class="cstat-no" title="statement not covered" ></span>
   co<span class="fstat-no" title="function not covered" >ns</span>t onModalSubmit = useCallback(() =&gt; {
-    setShowWarningModal(f<span class="cstat-no" title="statement not covered" >alse);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+    setShowWarningModal(fals<span class="cstat-no" title="statement not covered" >e);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
     setPlantingComplet<span class="cstat-no" title="statement not covered" >ed(false);</span>
   }, [setPlantingCompleted]);
 &nbsp;
@@ -738,12 +753,12 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
 &nbsp;
   const isClickable = useCallback(() =&gt; false, []);
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  if<span class="cstat-no" title="statement not covered" > (!rows || hasZones === unde</span>fined) {
+  if<span class="cstat-no" title="statement not covered" > (!rows || hasStrata === und</span>efined) {
 <span class="cstat-no" title="statement not covered" >    return &lt;CircularProgress sx={</span>{ margin: 'auto' }} /&gt;;
   }
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
   co<span class="cstat-no" title="statement not covered" >nst validateUndoPlantingComp</span>lete = () =&gt; {
-    if (subzonesStatisticsResult) {
+    if (substrataStatisticsResult) {
       setShowWarningMo<span class="cstat-no" title="statement not covered" >dal(true);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 <span class="cstat-no" title="statement not covered" >      return;</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
@@ -781,10 +796,10 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
       )}
       &lt;Box&gt;{updatePlantingResult?.status === 'pending' &amp;&amp; &lt;BusySpinner withSkrim={true} /&gt;}&lt;/Box&gt;
       &lt;Table
-        id={hasZones ? 'plantings-progress-table-with-zones' : 'plantings-progress-table-without-zones'}
-        columns={hasZones ? columnsWithZones : columnsWithoutZones}
+        id={hasStrata ? 'plantings-progress-table-with-strata' : 'plantings-progress-table-without-strata'}
+        columns={hasStrata ? columnsWithStrata : columnsWithoutStrata}
         rows={rows}
-        orderBy={hasZones ? 'subzoneName' : 'siteName'}
+        orderBy={hasStrata ? 'substratumName' : 'siteName'}
         Renderer={DetailsRenderer}
         selectedRows={selectedRows}
         setSelectedRows={setSelectedRows}
@@ -808,8 +823,8 @@ const DetailsRenderer = (props: RendererProps&lt;TableRowType&gt;): JSX.Element 
 <span class="cstat-no" title="statement not covered" >  };</span>
 <span class="cstat-no" title="statement not covered" ></span>
   const createLinkToWithdrawals = () =&gt; {
-<span class="cstat-no" title="statement not covered" >    const filterParam = row.subzoneName</span>
-      ? `subzoneName=${encodeURIComponent(row.subzoneName)}&amp;siteName=${encodeURIComponent(row.siteName)}`
+<span class="cstat-no" title="statement not covered" >    const filterParam = row.substratumName</span>
+      ? `substratumName=${encodeURIComponent(row.substratumName)}&amp;siteName=${encodeURIComponent(row.siteName)}`
       : `siteName=${encodeURIComponent(row.siteName)}`;
     const url = `${APP_PATHS.NURSERY_WITHDRAWALS}?tab=withdrawal_history&amp;${filterParam}`;
     return (
@@ -832,7 +847,7 @@ const DetailsRenderer = (props: RendererProps&lt;TableRowType&gt;): JSX.Element 
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-05T19:06:18.388Z
+                at 2026-01-05T21:57:59.407Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

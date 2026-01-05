@@ -1924,7 +1924,7 @@ import<span class="cstat-no" title="statement not covered" > { Dropdown, Dropdow
 import g<span class="cstat-no" title="statement not covered" >etDateDisplayValue, { getT<span class="fstat-no" title="function not covered" >od</span>aysD<span class="cstat-no" title="statement not covered" >ateFormatt</span>ed, isInTheFuture } from '@terraware/web-components/utils/date';</span>
 &nbsp;
 im<span class="cstat-no" title="statement not covered" >port Projec</span>tsDropdown from 'src/components/ProjectsDropdown';
-import SubzoneSelector, { SubzoneInfo, ZoneInfo } from 'src/components/SubzoneSelector';
+import SubstratumSelector, { StratumInfo, SubstratumInfo } from 'src/components/SubstratumSelector';
 import DatePic<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ke</span>r from 'src/components/commo<span class="cstat-no" title="statement not covered" >n/DatePicker';</span></span>
 import Divisor from 'src/components/common/Divisor';
 import PageForm from 'src/components/common/PageForm';
@@ -1944,7 +1944,7 @@ import { getAllNurseri<span class="cstat-no" title="statement not covered" >es, 
 import useDeviceInfo from 's<span class="cstat-no" title="statement not covered" >rc/utils/useDeviceInfo';</span>
 import { useNumber<span class="cstat-no" title="statement not covered" >Formatter } from 'src/utils/useNumberFormatter';</span>
 import useSnackbar from 'src/u<span class="cstat-no" title="statement not covered" >tils/useSnackbar';</span>
-import { useLocationTimeZone <span class="cstat-no" title="statement not covered" >} from 'src/utils/useTimeZoneUtils';</span>
+import { useLocationTimeZone } f<span class="cstat-no" title="statement not covered" >rom 'src/utils/useTimeZoneUtils';</span>
 <span class="cstat-no" title="statement not covered" ></span>
 type SelectPurposeFor<span class="cstat-no" title="statement not covered" >mProps = {</span>
   onNext: (withdrawal:<span class="cstat-no" title="statement not covered" > NurseryWithdrawalRequest) =&gt; void;</span>
@@ -1984,12 +1984,12 @@ export default function Se<span class="cstat-no" title="statement not covered" >
   const [activeGrowthQuantityWithdrawn, setActiveGrowthQuantityWithdrawn<span class="cstat-no" title="statement not covered" >] = useState&lt;number&gt;(0);</span>
   const [hardeningOffQuant<span class="cstat-no" title="statement not covered" >ityWithdrawn, setHardeningOffQuantityWithdrawn] =</span> useState&lt;number&gt;(0);
   const [germinatingQuantityWithdrawn, setGerminatin<span class="cstat-no" title="statement not covered" >gQuantityWithdrawn] = useState</span>&lt;number&gt;(0);
-  const [zones, setZones] = useState&lt;any[]&gt;([]);<span class="cstat-no" title="statement not covered" ></span>
-  const [zoneId, setZoneId] = useState&lt;number&gt;();<span class="cstat-no" title="statement not covered" ></span>
+  const [strata, setStrata] = useState&lt;any[]&gt;([]);<span class="cstat-no" title="statement not covered" ></span>
+  const [stratumId, setStratumId] = useState&lt;number&gt;();<span class="cstat-no" title="statement not covered" ></span>
   const [noReadySeedlings, setNoReadySeedlings] = useState&lt;boolean&gt;(false);<span class="cstat-no" title="statement not covered" ></span>
-  const [selectedSubzone, setSelectedSubzone] = useState&lt;SubzoneInfo&gt;();<span class="cstat-no" title="statement not covered" ></span>
-  const [selectedZone, setSe<span class="cstat-no" title="statement not covered" >lectedZone] = useState&lt;ZoneInfo</span>&gt;();
-  const [projectRecord, setPro<span class="cstat-no" title="statement not covered" >jectRecord] = useState&lt;{ proj</span>ectId?: number }&gt;({});
+  const [selectedStratum, setSelectedStratum] = useState&lt;StratumInfo&gt;();<span class="cstat-no" title="statement not covered" ></span>
+  const [selectedSubstratum, s<span class="cstat-no" title="statement not covered" >etSelectedSubstratum] = useStat</span>e&lt;SubstratumInfo&gt;();
+  const [projectRecord, setProjectRe<span class="cstat-no" title="statement not covered" >cord] = useState&lt;{ projectId?</span>: number }&gt;({});
 <span class="cstat-no" title="statement not covered" ></span>
   const speciesMap = useMemo((): Record&lt;string, <span class="cstat-no" title="statement not covered" >string&gt; =&gt; {</span>
     return species.reduce((acc, sp) =&gt; {<span class="cstat-no" title="statement not covered" ></span>
@@ -2053,31 +2053,31 @@ export default function Se<span class="cstat-no" title="statement not covered" >
   }, []);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" ></span>
   co<span class="cstat-no" title="statement not covered" >nst onChangePurpose = (event: React.Ch</span>angeEvent&lt;HTMLInputElement&gt;) =&gt; {
-<span class="cstat-no" title="statement not covered" >    const value = (event.targ</span>et as HTMLInputElement).value;
+<span class="cstat-no" title="statement not covered" >    const value = (event.target </span>as HTMLInputElement).value;
 <span class="cstat-no" title="statement not covered" >    updatePurpose(value);</span>
   };<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  co<span class="cstat-no" title="statement not covered" >nst onChangePlantin</span>gSite = (value: string) =&gt; {
-    updateField('substratumId', undefined); // clear subzone id when there's a new planting site id
-    updateField('plantingSiteId<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >',</span> value);</span>
-<span class="cstat-no" title="statement not covered" >    setSelectedZone(undefine</span>d);
-<span class="cstat-no" title="statement not covered" >    setSelectedSubzone(undefined</span>);
+  co<span class="cstat-no" title="statement not covered" >nst onChangePlantingSi</span>te = (value: string) =&gt; {
+    updateField('substratumId', undefined); // clear substratum id when there's a new planting site id
+    updateField('plantingS<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >it</span>eId', value);</span>
+<span class="cstat-no" title="statement not covered" >    setSelectedStratum(undefine</span>d);
+<span class="cstat-no" title="statement not covered" >    setSelectedSubstratum(undefined</span>);
 <span class="cstat-no" title="statement not covered" >    const plantingSite = allPlantingSites</span>
 <span class="cstat-no" title="statement not covered" >      ? allPlantingSites.find((site) =&gt; s</span>ite.id.toString() === value.toString())
       : null;
-    setZones(plantingSite?<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >.s</span>trata || []);</span>
-<span class="cstat-no" title="statement not covered" >    setZoneId(undefined);</span>
+    setStrata(plantingSite?.s<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >tr</span>ata || []);</span>
+<span class="cstat-no" title="statement not covered" >    setStratumId(undefined);</span>
   };<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
-  const onChangePlantingZone <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >= </span>(value: any) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    setSelectedZone(<span class="fstat-no" title="function not covered" >va</span>lue);<span class="cstat-no" title="statement not covered" ></span></span>
-    setSelectedSubzone(undefined);
-    setZoneId(value?.id);
-    updateField('substratumId', undefined); // clear subzone id when there's a new planting zone id
+  const onChangeStratum = (va<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >lu</span>e: any) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    setSelectedStrat<span class="fstat-no" title="function not covered" >um</span>(value);<span class="cstat-no" title="statement not covered" ></span></span>
+    setSelectedSubstratum(undefined);
+    setStratumId(value?.id);
+    updateField('substratumId', undefined); // clear substratum id when there's a new stratum id
   };
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  co<span class="cstat-no" title="statement not covered" >nst onChangeSubzone = (value: any) =&gt; {</span>
-    se<span class="cstat-no" title="statement not covered" >tSelectedSubzone(value);</span>
+  co<span class="cstat-no" title="statement not covered" >nst onChangeSubstratum = (value: any) =&gt; {</span>
+    se<span class="cstat-no" title="statement not covered" >tSelectedSubstratum(value);</span>
     up<span class="cstat-no" title="statement not covered" >dateField('sub</span>stratumId', value?.id);
   };<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
@@ -2213,10 +2213,10 @@ export default function Se<span class="cstat-no" title="statement not covered" >
           allValid = false;
 <span class="cstat-no" title="statement not covered" >        } else {</span>
           if (Number(readyQuantityWithdrawn) &gt; Number(batches[0]['readyQuantity(raw)'])) {
-            setIndividualError('readyQ<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ua</span>ntityWithdrawn', strings.WITHDRAWN_QUANTITY_ERROR);</span>
+            setIndividualError('readyQuan<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ti</span>tyWithdrawn', strings.WITHDRAWN_QUANTITY_ERROR);</span>
 <span class="cstat-no" title="statement not covered" >            allValid = false;</span>
 <span class="cstat-no" title="statement not covered" >          } else {</span>
-<span class="cstat-no" title="statement not covered" >            setIndividualError('readyQuan</span>tityWithdrawn', '');
+<span class="cstat-no" title="statement not covered" >            setIndividualError('readyQuantit</span>yWithdrawn', '');
 <span class="cstat-no" title="statement not covered" >          }</span>
 <span class="cstat-no" title="statement not covered" >        }</span>
       }
@@ -2230,7 +2230,7 @@ export default function Se<span class="cstat-no" title="statement not covered" >
 <span class="cstat-no" title="statement not covered" >          allValid = false;</span>
         } else {
 <span class="cstat-no" title="statement not covered" >          if (Number(germinatingQuantityWithdrawn) &gt; Number(batches[0]['germinatingQuantity(raw)'])) {</span>
-<span class="cstat-no" title="statement not covered" >            setIndividualError('germinatingQuantityWithdrawn', strings.WITHDRA</span>WN_QUANTITY_ERROR);
+<span class="cstat-no" title="statement not covered" >            setIndividualError('germinatingQuantityWithdrawn', strings.WITHDRAWN_</span>QUANTITY_ERROR);
             allValid = false;
 <span class="cstat-no" title="statement not covered" >          } else {</span>
             setIndividualError('germinatingQuantityWithdrawn', '');
@@ -2241,10 +2241,10 @@ export default function Se<span class="cstat-no" title="statement not covered" >
     return allValid;<span class="cstat-no" title="statement not covered" ></span>
   };<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  cons<span class="cstat-no" title="statement not covered" >t valida</span>tePlantingSiteSubzone = () =&gt; {
+  cons<span class="cstat-no" title="statement not covered" >t valida</span>tePlantingSiteSubstratum = () =&gt; {
     setIndividualError('plantingSiteId', '');
-    setIndividualError('zoneI<span class="cstat-no" title="statement not covered" >d', '');</span>
-<span class="cstat-no" title="statement not covered" >    setIndividualError('subzoneId', '');</span>
+    setIndividualError('strat<span class="cstat-no" title="statement not covered" >umId', '');</span>
+<span class="cstat-no" title="statement not covered" >    setIndividualError('substratumId', '');</span>
 &nbsp;
     if (!isOutplant) {
       return true;
@@ -2254,17 +2254,17 @@ export default function Se<span class="cstat-no" title="statement not covered" >
       se<span class="cstat-no" title="statement not covered" >tIndividualError('plantingSiteId', strings.REQUIRED_FIELD);</span>
     }
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-    if (!zones.length) {
-      // zone/subzone not required if site has no zones/subzones
+    if (!strata.length) {
+      // stratum/substratum not required if site has no strata/substrata
       return !!localRecord.plantingSiteId;
     }
 &nbsp;
-    if (!zoneId) {
-      setIndividualError('zoneId', strings.REQUIRED_FIELD);
+    if (!stratumId) {
+      setIndividualError('stratumId', strings.REQUIRED_FIELD);
     }
 &nbsp;
     if (!localRecord.substratu<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >mI</span>d) {</span>
-<span class="cstat-no" title="statement not covered" >      setIndividualError('subzoneId', strings.REQUIRED_FIELD);</span>
+<span class="cstat-no" title="statement not covered" >      setIndividualError('substratumId', strings.REQUIRED_FIELD);</span>
     }<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
     return localRecord.plantingSiteId &amp;&amp; localRecord.substratumId;
@@ -2274,14 +2274,14 @@ export default function Se<span class="cstat-no" title="statement not covered" >
     co<span class="cstat-no" title="statement not covered" >nst nursery</span>TransferInvalid = !validateNurseryTransfer();
     const selectedNurseryInvalid = !validateSelectedNursery();
     const withdrawnQua<span class="cstat-no" title="statement not covered" >ntityInvalid = <span class="fstat-no" title="function not covered" >!v</span>alidateWithdrawnQuantity();</span>
-    co<span class="cstat-no" title="statement not covered" >nst plantingSiteSubzoneInvalid = !validatePlantingSiteSubzone();</span>
+    co<span class="cstat-no" title="statement not covered" >nst plantingSiteSubstratumInvalid = !validatePlantingSiteSubstratum();</span>
     cons<span class="cstat-no" title="statement not covered" >t germinatingReadyAndActiveGrowthInvalid = !validate</span>Quantities();
     if (
 <span class="cstat-no" title="statement not covered" >      fieldsErrors.withdrawnDate ||</span>
       nurseryT<span class="fstat-no" title="function not covered" >ra</span>nsferInvalid ||
 <span class="cstat-no" title="statement not covered" >      selectedNurseryInvalid ||</span>
       wi<span class="cstat-no" title="statement not covered" >thdrawnQuantityInvalid ||</span>
-      plantingSiteSubzoneInvalid ||
+      plantingSiteSubstratumInvalid ||
       germinatingReadyAndActiveGrowthInvalid
     ) {
       return;
@@ -2629,21 +2629,21 @@ export default function Se<span class="cstat-no" title="statement not covered" >
                     errorText={fieldsErrors.plantingSiteId}
                     tooltipTitle={
                       &lt;a href={APP_PATHS.PLANTING_SITES} target='_blank' rel='noreferrer'&gt;
-                        {strings.VIEW_SITES_ZONES_SUBZONES}
+                        {strings.VIEW_SITES_STRATA_SUBSTRATA}
                       &lt;/a&gt;
                     }
                     selectStyles={{ optionsContainer: { maxHeight: '250px' } }}
                   /&gt;
                 &lt;/Grid&gt;
-                {!!zones.length &amp;&amp; (
-                  &lt;Sub<span class="fstat-no" title="function not covered" >zo</span>neSelecto<span class="cstat-no" title="statement not covered" >r</span>
-                    zones={zones}
-                    onZoneSelected={onChangePlantingZone}
-                    onSubzoneSelected={onChangeSubzone}
-                    zoneError={fieldsErrors.zoneId}
-                    subzoneError={fieldsErrors.subzoneId}
-                    selectedSubzone={selectedSubzone}
-                    selectedZone={selectedZone}
+                {!!strata.length &amp;&amp; (
+                  &lt;Sub<span class="fstat-no" title="function not covered" >st</span>ratumSele<span class="cstat-no" title="statement not covered" >ctor</span>
+                    strata={strata}
+                    onStratumSelected={onChangeStratum}
+                    onSubstratumSelected={onChangeSubstratum}
+                    stratumError={fieldsErrors.stratumId}
+                    substratumError={fieldsErrors.substratumId}
+                    selectedSubstratum={selectedSubstratum}
+                    selectedStratum={selectedStratum}
                   /&gt;
                 )}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
               &lt;/&gt;
@@ -2836,7 +2836,7 @@ export default function Se<span class="cstat-no" title="statement not covered" >
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-05T19:06:18.388Z
+                at 2026-01-05T21:57:59.407Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

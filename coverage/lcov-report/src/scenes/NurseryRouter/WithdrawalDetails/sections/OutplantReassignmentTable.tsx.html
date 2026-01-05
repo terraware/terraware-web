@@ -234,15 +234,15 @@ import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 ty<span class="cstat-no" title="statement not covered" >pe OutplantReassignmentTableProps = {</span>
   sp<span class="cstat-no" title="statement not covered" >ecies: Species[];</span>
-  subz<span class="cstat-no" title="statement not covered" >oneNames: Record&lt;number, string&gt;;</span>
+  subs<span class="cstat-no" title="statement not covered" >tratumNames: Record&lt;number, string&gt;;</span>
   delive<span class="cstat-no" title="statement not covered" >ry?: Delivery;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
   withdrawalNotes?: string;
 };<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
 const columns <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >= </span>(): TableColumnType[] =&gt; [<span class="cstat-no" title="statement not covered" ></span></span>
   { key: 'species', name: strings.SPECIES, type: 'string' },
-  { key: 'from_subzone', name: strings.FROM_SUBZONE, type: 'string' },
-  { key: 'to_subzone', name: strings.TO_SUBZONE, type: 'string' },
+  { key: 'from_substratum', name: strings.FROM_SUBSTRATUM, type: 'string' },
+  { key: 'to_substratum', name: strings.TO_SUBSTRATUM, type: 'string' },
   { key: 'original_qty', name: strings.ORIGINAL_QTY, type: 'string' },
   { key: 'final_qty', name: strings.FINAL_QTY, type: 'string' },
   { key: 'notes', name: strings.NOTES, type: 'string' },
@@ -251,7 +251,7 @@ const columns <span class="cstat-no" title="statement not covered" ><span class=
 export default funct<span class="cstat-no" title="statement not covered" >ion</span> OutplantReassignmentTable({
 <span class="cstat-no" title="statement not covered" >  delivery,</span>
   species,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  subzoneNames,
+  substratumNames,
 <span class="cstat-no" title="statement not covered" >  withdrawalNotes,</span>
 }: OutplantReassign<span class="cstat-no" title="statement not covered" >mentTableProps): JSX.Eleme</span>nt {
   const { user } = <span class="cstat-no" title="statement not covered" >useUser();</span>
@@ -276,17 +276,17 @@ export default funct<span class="cstat-no" title="statement not covered" >ion</s
       if (deliveryPlanting<span class="cstat-no" title="statement not covered" > &amp;&amp; reassignmentFromPlanting &amp;&amp; reassignmentToPlanting) {</span>
         rows.push(<span class="cstat-no" title="statement not covered" >{<span class="fstat-no" title="function not covered" ></span></span>
           species: speciesName,
-          from_subzone: <span class="cstat-no" title="statement not covered" >'',</span>
-<span class="fstat-no" title="function not covered" ></span>          to_subzon<span class="cstat-no" title="statement not covered" >e: deliveryPlanting.plantingSubzoneId ? subzoneNames[deliv</span>eryPlanting.plantingSubzoneId] : '',
+          from_substratu<span class="cstat-no" title="statement not covered" >m: '',</span>
+<span class="fstat-no" title="function not covered" ></span>          to_substr<span class="cstat-no" title="statement not covered" >atum: deliveryPlanting.substratumId ? substratumNames[deli</span>veryPlanting.substratumId] : '',
           original_qty: numberFormatter.format(deliveryPlanting.numPlants),
           final_qty: numberFormatter.format(deliveryPlanting.numPlants + reassignmentFromPlanting.numPlants),
           notes: <span class="cstat-no" title="statement not covered" >wit</span>hdrawalNotes ?? '',
 <span class="cstat-no" title="statement not covered" >        });</span>
         rows.push({<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
           species: speci<span class="cstat-no" title="statement not covered" >esName,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-          from_subzone: deliver<span class="cstat-no" title="statement not covered" >yPlanting.plantingSubzoneId ? subzoneNames[d<span class="fstat-no" title="function not covered" >el</span>iveryP<span class="cstat-no" title="statement not covered" >lanting.plantingSubzone</span>I</span>d] : '',
-          to_subzone: reassignmentToPla<span class="cstat-no" title="statement not covered" >nting.plantingSubzoneId<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-            ? subzoneNames[reassignme<span class="cstat-no" title="statement not covered" >ntToPlanting.plantingSubzoneId]<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+          from_substratum: deli<span class="cstat-no" title="statement not covered" >veryPlanting.substratumId ? substratumNames[<span class="fstat-no" title="function not covered" >de</span>livery<span class="cstat-no" title="statement not covered" >Planting.substratumId] </span>:</span> '',
+          to_substratum: reassignmentTo<span class="cstat-no" title="statement not covered" >Planting.substratumId<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+            ? substratumNames[reassig<span class="cstat-no" title="statement not covered" >nmentToPlanting.substratumId]<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 <span class="cstat-no" title="statement not covered" >            : '',</span>
 <span class="cstat-no" title="statement not covered" >          original_qty: '0',</span>
           final_qty: numberFormatter.format(reassignmentToPlanting.numPlants),
@@ -296,7 +296,7 @@ export default funct<span class="cstat-no" title="statement not covered" >ion</s
     }
 &nbsp;
     return rows;
-  }, [de<span class="cstat-no" title="statement not covered" >livery, species, subzoneNames, withdrawalNotes, numberFormatter]);</span>
+  }, [de<span class="cstat-no" title="statement not covered" >livery, species, substratumNames, withdrawalNotes, numberFormatter]);</span>
 &nbsp;
   return &lt;Table id='outplant-reassignment-table' columns={columns} rows={rowData} orderBy={'name'} /&gt;;
 }
@@ -307,7 +307,7 @@ export default funct<span class="cstat-no" title="statement not covered" >ion</s
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-05T19:06:18.388Z
+                at 2026-01-05T21:57:59.407Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

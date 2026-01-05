@@ -997,12 +997,12 @@ const useObservationExports = () =&gt; {
           displayLabel: strings.M<span class="cstat-no" title="statement not covered" >ONITORING_PLOT,</span>
         },<span class="cstat-no" title="statement not covered" ></span>
         {<span class="cstat-no" title="statement not covered" ></span>
-          key: 'zoneNa<span class="cstat-no" title="statement not covered" >me',</span>
-          displayLabel: string<span class="cstat-no" title="statement not covered" >s.ZONE,</span>
+          key: 'stratu<span class="cstat-no" title="statement not covered" >mName',</span>
+          displayLabel: string<span class="cstat-no" title="statement not covered" >s.STRATUM,</span>
 <span class="fstat-no" title="function not covered" ></span>        },<span class="cstat-no" title="statement not covered" ></span>
 <span class="fstat-no" title="function not covered" ></span>        {
-<span class="cstat-no" title="statement not covered" >          key: 'subzoneName',</span>
-<span class="cstat-no" title="statement not covered" >          displayLabel: stri</span>ngs.SUBZONE,
+<span class="cstat-no" title="statement not covered" >          key: 'substratumName',</span>
+<span class="cstat-no" title="statement not covered" >          displayLabel: stri</span>ngs.SUBSTRATUM,
         },
         {
           key: 'dateObserved',
@@ -1082,9 +1082,9 @@ const useObservationExports = () =&gt; {
         },
       ];
 &nbsp;
-      const data = observationResults.strata.flatMap((plantingZone) =&gt;
-        plantingZone.substrata.flatMap((subzone) =&gt;
-          subzone.monitoringPlots.map((monitoringPlot) =&gt; {
+      const data = observationResults.strata.flatMap((stratum) =&gt;
+        stratum.substrata.flatMap((substratum) =&gt;
+          substratum.monitoringPlots.map((monitoringPlot) =&gt; {
             const allSpecies = monitoringPlot.unknownSpecies
               ? [...monitoringPlot.species, monitoringPlot.unknownSpecies]
               : monitoringPlot.species;
@@ -1101,8 +1101,8 @@ const useObservationExports = () =&gt; {
             const detailsLink = new URL(
               pathPattern
                 .re<span class="cstat-no" title="statement not covered" >place(':plantingSiteId', observationResults.plantingSiteId.toString())</span>
-<span class="fstat-no" title="function not covered" ></span>                .replace('<span class="cstat-no" title="statement not covered" >:observationId', observationResults.observationId.toString())</span>
-<span class="fstat-no" title="function not covered" ></span>                .replac<span class="cstat-no" title="statement not covered" >e(':plantingZoneName', encod<span class="fstat-no" title="function not covered" >eU</span>RIComponent(plantingZone.name))</span>
+<span class="fstat-no" title="function not covered" ></span>                .repl<span class="cstat-no" title="statement not covered" >ace(':observationId', observationResults.observationId.toString())</span>
+<span class="fstat-no" title="function not covered" ></span>                .replace('<span class="cstat-no" title="statement not covered" >:stratumName', encodeURICompone<span class="fstat-no" title="function not covered" >nt</span>(stratum.name))</span>
                 .replace(':moni<span class="cstat-no" title="statement not covered" >toringPlotId', monitoringPlot.monitoringPlotId.toString()),</span>
               location.href<span class="cstat-no" title="statement not covered" ></span>
             ).<span class="fstat-no" title="function not covered" >to</span>String();<span class="cstat-no" title="statement not covered" ></span>
@@ -1130,14 +1130,14 @@ const useObservationExports = () =&gt; {
               southwestLatitude: plotCoordinates[0][1],
               southwestLongitude: plotCoordinates[0][0],
               status: getPlotStatus(monitoringPlot.status),
-              subzoneName: subzone.name,
+              substratumName: substratum.name,
               survivalRate: monitoringPlot.survivalRate,
               totalDead,
               totalExisting,
               totalLive,
               totalPlants: totalDead + totalExisting + totalLive,
               totalSpecies: monitoringPlot.totalSpecies,
-              zoneName: plantingZone.name,
+              stratumName: stratum.name,
             };
           })
         )
@@ -1164,12 +1164,12 @@ const useObservationExports = () =&gt; {
       strings.SOUTHWEST_CORNER_LATITUDE,
       strings.SOUTHWEST_CORNER_LONGITUDE,
       strings.STATUS,
-      strings.SUBZONE,
+      strings.SUBSTRATUM,
       strings.SURVIVAL_RATE,
       strings.TEMPORARY,
       strings.TOTAL_PLANTS_OBSERVED,
       strings.TOTAL_SPECIES_OBSERVED,
-      strings.ZONE,
+      strings.STRATUM,
     ]
   );
 &nbsp;
@@ -1202,10 +1202,10 @@ const useObservationExports = () =&gt; {
         },
       ];
 &nbsp;
-      const data = observationResults.strata.flatMap((plantingZone) =&gt;
-        plantingZon<span class="cstat-no" title="statement not covered" >e.substrata.flatMap((subzone) =&gt;</span>
-<span class="fstat-no" title="function not covered" ></span>          subzone.monitori<span class="cstat-no" title="statement not covered" >ngPlots.flatMap((monitoringPlot) =&gt; {</span>
-<span class="fstat-no" title="function not covered" ></span>            const allSp<span class="cstat-no" title="statement not covered" >ecies = monitoringPlot.unknownSp<span class="fstat-no" title="function not covered" >ec</span>ies</span>
+      const data = observationResults.strata.flatMap((stratum) =&gt;
+        stratum.sub<span class="cstat-no" title="statement not covered" >strata.flatMap((substratum) =&gt;</span>
+<span class="fstat-no" title="function not covered" ></span>          substratum.<span class="cstat-no" title="statement not covered" >monitoringPlots.flatMap((monitoringPlot) =&gt; {</span>
+<span class="fstat-no" title="function not covered" ></span>            const allSpeci<span class="cstat-no" title="statement not covered" >es = monitoringPlot.unknownSpecies<span class="fstat-no" title="function not covered" ></span></span>
               ? [...monitoringP<span class="cstat-no" title="statement not covered" >lot.species, monitoringPlot.unknownSpecies]</span>
 <span class="cstat-no" title="statement not covered" >              : monitoringPlot.spe<span class="fstat-no" title="function not covered" >ci</span>es;</span>
             return allSpecies.map((observedSpecies) =&gt; {
@@ -1390,7 +1390,7 @@ export default useObservationExports;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-05T19:06:18.388Z
+                at 2026-01-05T21:57:59.407Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

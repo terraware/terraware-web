@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/122</span>
+                <span class='fraction'>0/123</span>
             </div>
         
             
@@ -322,7 +322,9 @@
 <a name='L257'></a><a href='#L257'>257</a>
 <a name='L258'></a><a href='#L258'>258</a>
 <a name='L259'></a><a href='#L259'>259</a>
-<a name='L260'></a><a href='#L260'>260</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L260'></a><a href='#L260'>260</a>
+<a name='L261'></a><a href='#L261'>261</a>
+<a name='L262'></a><a href='#L262'>262</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -453,6 +455,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -607,7 +611,7 @@ type EditTemporaryPlotsTabProps = {
   plantingSiteId: number;
   temporaryPlotsWithObservations?: PlotsWithObservationsSearchResult[];
   withdrawnSpeciesPlots?: SpeciesPlot[];
-  zones?: StratumT0<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Da</span>ta[];<span class="cstat-no" title="statement not covered" ></span></span>
+  strata?: StratumT<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >0D</span>ata[];<span class="cstat-no" title="statement not covered" ></span></span>
   alreadyIncluding?:<span class="cstat-no" title="statement not covered" > bo</span>olean;
 <span class="cstat-no" title="statement not covered" >};</span>
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
@@ -615,7 +619,7 @@ const EditTemporaryPlotsTab = ({
 <span class="cstat-no" title="statement not covered" >  plantingSiteId,</span>
   temporaryPlotsWit<span class="cstat-no" title="statement not covered" >hObservations,</span>
   withdrawnSpeciesPlot<span class="cstat-no" title="statement not covered" >s,</span>
-  zones,<span class="cstat-no" title="statement not covered" ></span>
+  strata,<span class="cstat-no" title="statement not covered" ></span>
   alreadyIncluding,<span class="cstat-no" title="statement not covered" ></span>
 }: EditTemporaryPlotsTabProps<span class="cstat-no" title="statement not covered" >) =&gt; {</span>
   const [isTemporaryPlotsCh<span class="cstat-no" title="statement not covered" >ecked, setIsTemporaryPlotsChecked] = useState(f</span>alse);
@@ -630,7 +634,7 @@ const EditTemporaryPlotsTab = ({
 &nbsp;
   const [record, setRecord] = useForm&lt;AssignSiteT0TempData&gt;({
     plantingSiteId,
-    strata: zones ?? [],
+    strata: strata ?? [],
   });
 <span class="cstat-no" title="statement not covered" ></span>
   useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
@@ -640,10 +644,10 @@ const EditTemporaryPlotsTab = ({
   }, [alreadyIncluding]);<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
   useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-    if (zones) {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-      setRecord({ plantingSite<span class="cstat-no" title="statement not covered" >Id, strata: zones });</span>
+    if (strata) {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+      setRecord({ plantingSite<span class="cstat-no" title="statement not covered" >Id, strata });</span>
     }
-  }, [plantingSiteId, setRecord, zones]);
+  }, [plantingSiteId, setRecord, strata]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  const goToViewSettings = use<span class="fstat-no" title="function not covered" >Ca</span>llback(() =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    navigate(APP_PATHS.SURVIVAL_RATE_SETTINGS.replace(':plantingSiteId', plantingSiteId.toString()));</span>
@@ -663,20 +667,20 @@ const EditTemporaryPlotsTab = ({
     }<span class="cstat-no" title="statement not covered" ></span>
   }, [alreadyIncluding, isTemporaryPlotsChecked, plantingSite, plantingSiteId, updatePlantingSite]);
 &nbsp;
-  const zonesWithObservations = useMemo(() =&gt; {
+  const strataWithObservations = useMemo(() =&gt; {
     if (!temporaryPlotsWithObservations) {
       return {};
     }
     return temporaryPlotsWithObservations.reduce(
 <span class="cstat-no" title="statement not covered" >      (acc, plot) =&gt; {</span>
-        const zoneId = plot.substratum_stratum_id;
-        if (!zoneId) {
+        const stratumId = plot.substratum_stratum_id;
+        if (!stratumId) {
           return acc;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >        }</span>
-<span class="cstat-no" title="statement not covered" >        if (!acc[</span>zoneId]) {
-          acc[zoneId] = [];
+<span class="cstat-no" title="statement not covered" >        if (!acc[</span>stratumId]) {
+          acc[stratumId] = [];
 <span class="cstat-no" title="statement not covered" >        }</span>
-<span class="fstat-no" title="function not covered" ></span>        acc[zoneId].push(plot);
+<span class="fstat-no" title="function not covered" ></span>        acc[stratumId].push(plot);
         return acc;<span class="cstat-no" title="statement not covered" ></span>
       },<span class="cstat-no" title="statement not covered" ></span>
       {} a<span class="cstat-no" title="statement not covered" >s Record&lt;str</span>ing, PlotsWithObservationsSearchResult[]&gt;
@@ -684,41 +688,43 @@ const EditTemporaryPlotsTab = ({
   }, [te<span class="cstat-no" title="statement not covered" >mporaryPlotsWithObservations]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
   const saveSettings = useCallback(() =&gt; {
-    if (<span class="cstat-no" title="statement not covered" >Object.entries(zonesWith</span>Observations).length === 0) {
+    if (<span class="cstat-no" title="statement not covered" >Object.entries(strataWithOb</span>servations).length === 0) {
       go<span class="cstat-no" title="statement not covered" >ToViewSettin</span>gs();
       return;
     }
     let shouldShowWarning = false;
 &nbsp;
-    Object.entries(zone<span class="cstat-no" title="statement not covered" >sWithObservations).forEach(([z<span class="fstat-no" title="function not covered" >on</span>eId, plots]) =&gt; {</span>
+    Object.entries(stra<span class="cstat-no" title="statement not covered" >taWithObservations).forEach(([<span class="fstat-no" title="function not covered" >st</span>ratumId, plots]) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      const plotIds = plots.map((plot) =&gt; plot.id.toString());</span>
-<span class="cstat-no" title="statement not covered" >      const withdrawnSpeci</span>esOfZone = withdrawnSpeciesPlots?.filter((wsp) =&gt;
+<span class="cstat-no" title="statement not covered" >      const withdrawnSpeci</span>esOfStratum = withdrawnSpeciesPlots?.filter((wsp) =&gt;
 <span class="cstat-no" title="statement not covered" >        plotId</span>s.includes(wsp.monitoringPlotId.toString())
       );
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >      const speciesMap = new Map&lt;number, { density<span class="fstat-no" title="function not covered" >?:</span> number; speciesId: number }&gt;();</span>
-      withdrawnSpecies<span class="cstat-no" title="statement not covered" >OfZone?.fo<span class="fstat-no" title="function not covered" >rE</span>ach((plo<span class="cstat-no" title="statement not covered" >t) =&gt; {</span></span>
-        plot.species.forEach((wdSpeci<span class="cstat-no" title="statement not covered" >es) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      const speciesMap = new Map&lt;number, { density?<span class="fstat-no" title="function not covered" >: </span>number; speciesId: number }&gt;();</span>
+      withdrawnSpecies<span class="cstat-no" title="statement not covered" >OfStratum?<span class="fstat-no" title="function not covered" >.f</span>orEach((<span class="cstat-no" title="statement not covered" >plot) =&gt; {</span></span>
+        plot.species.forEach((wdSpecies)<span class="cstat-no" title="statement not covered" > =&gt; {</span>
 <span class="fstat-no" title="function not covered" ></span>          if (!sp<span class="cstat-no" title="statement not covered" >eciesMap.has(wdSpecies.speciesId)) {</span>
             speciesMap.set(wdSpecies.speciesId, wdSpecies);
           }<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >        });<span class="fstat-no" title="function not covered" ></span></span>
       })<span class="cstat-no" title="statement not covered" >;<span class="fstat-no" title="function not covered" ></span></span>
-      cons<span class="cstat-no" title="statement not covered" >t allWithdrawnSpeciesForZone = Array.from(speciesMap.values());</span>
+      cons<span class="cstat-no" title="statement not covered" >t allWithdrawnSpeciesForStratum = Array.from(speciesMap.values());</span>
 <span class="cstat-no" title="statement not covered" ></span>
-      allWithdrawnSpeciesForZone.forEach((spec) =&gt; {
-        const correspondingZone = (record.strata || []).find((z) =&gt; z.stratumId.toString() === zoneId.toString());
-        const correspondingSpecies = correspondingZone?.densityData.find(
-          (denData) =&gt; denData.speciesId.<span class="cstat-no" title="statement not covered" >toString() === spec.speciesId.to</span>String()
-<span class="cstat-no" title="statement not covered" >        );<span class="fstat-no" title="function not covered" ></span></span>
-        if (!correspondingSpecies)<span class="cstat-no" title="statement not covered" > {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+      allWithdrawnSpeciesForStratum.forEach((spec) =&gt; {
+        const correspondingStratum = (record.strata || []).find(
+          (_stratum) =&gt; _stratum.stratumId.toString() === stratumId.toString()
+        );<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >        const correspondingSpecies = corresp<span class="fstat-no" title="function not covered" >on</span>dingStratum?.densityData.find(</span>
+          (denData) =&gt; denData.specie<span class="cstat-no" title="statement not covered" >sId.toString() === spec.speciesId.toString()</span>
+        );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+        if (!correspondingSpecies) {
           shouldShowWarning = true;<span class="cstat-no" title="statement not covered" ></span>
         }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
       });
     });<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-    (record.strata || []).forEach((zone) =&gt; {
-      zone.densityData.forEach((denData) =&gt; {
+    (record.strata || []).forEach((stratum) =&gt; {
+      stratum.densityData.forEach((denData) =&gt; {
         if (denData.density === undefined || denData.density === null) {
 <span class="cstat-no" title="statement not covered" >          shouldShowWarning = true<span class="fstat-no" title="function not covered" >;</span></span>
 <span class="cstat-no" title="statement not covered" >        }<span class="fstat-no" title="function not covered" ></span></span>
@@ -743,7 +749,7 @@ const EditTemporaryPlotsTab = ({
     record,
     updatePlantingSiteSetting,
     withdrawnSpeciesPlots,
-    zonesWithObservations,
+    strataWithObservations,
   ]);
 &nbsp;
   const onChangeTemporaryPlotsCheck = <span class="cstat-no" title="statement not covered" >useCallback(</span>
@@ -775,8 +781,8 @@ const EditTemporaryPlotsTab = ({
 <span class="cstat-no" title="statement not covered" >    }</span>
   }, [updateT0, goToViewSettings, record, updatePlantingSiteSetting]);
 <span class="cstat-no" title="statement not covered" ></span>
-  if (Object.entries(zonesWithObservations).length === 0) {
-    return &lt;Box padding={theme.spacing(2)}&gt;{strings.NO_TEMPORARY_PLOTS_WITHIN_ZONES}&lt;/Box&gt;;
+  if (Object.entries(strataWithObservations).length === 0) {
+    return &lt;Box padding={theme.spacing(2)}&gt;{strings.NO_TEMPORARY_PLOTS_WITHIN_STRATA}&lt;/Box&gt;;
   }
 &nbsp;
   return (
@@ -818,17 +824,17 @@ const EditTemporaryPlotsTab = ({
         &lt;/Box&gt;
 &nbsp;
         {isTemporaryPlotsChecked &amp;&amp;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-          Object.entries(zonesWithObservations).map(([zoneId, plots]) =&gt; {
+          Object.entries(strataWithObservations).map(([stratumId, plots]) =&gt; {
             const plotIds = plots.map((plot) =&gt; plot.id.toString());
             const filteredWithdrawnSpecies = withdrawnSpeciesPlots?.filter((wsp) =&gt;
               plotIds.includes(wsp.monitoringPlotId.toString())
             );
             return (
               &lt;StratumT0EditBox
-                key={zoneId}
+                key={stratumId}
                 plot<span class="cstat-no" title="statement not covered" >sWithObservations={plo</span>ts}
                 withdrawnSpeciesPlot={filteredWithdrawnSpecies}
-                zoneData={zones?.find((z) =&gt; z.stratumId.toString() === zoneId.toString())}
+                stratumData={strata?.find((_stratum) =&gt; _stratum.stratumId.toString() === stratumId.toString())}
                 record={record}
                 setRecord={setRecord}
               /&gt;
@@ -847,7 +853,7 @@ export default EditTemporaryPlotsTab;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-05T19:06:18.388Z
+                at 2026-01-05T21:57:59.407Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

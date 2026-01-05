@@ -493,7 +493,7 @@ import useSnac<span class="cstat-no" title="statement not covered" ><span class=
 &nbsp;
 import StepTitleDescription, { Description } from './StepTitleDescription';
 import { OnValidate } from './types';
-import { boundingAreaHectares, defaultZonePayload, zoneNameGenerator } from './utils';
+import { boundingAreaHectares, defaultStratumPayload, stratumNameGenerator } from './utils';
 import { findErrors } from './utils';
 &nbsp;
 export type SiteBoundaryProps = {
@@ -501,17 +501,17 @@ export type SiteBoundaryProps = {
   site: DraftPlantin<span class="cstat-no" title="statement not covered" >gSi</span>te;
 <span class="cstat-no" title="statement not covered" >};</span>
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-// create default planting zones off the site boundary
-<span class="cstat-no" title="statement not covered" >const createPlantingZoneWith = (boundary?: Mul</span>tiPolygon): MinimalStratum | undefined =&gt; {
+// create default strata off the site boundary
+<span class="cstat-no" title="statement not covered" >const createStratumWith = (boundary?: MultiPol</span>ygon): MinimalStratum | undefined =&gt; {
   if (!boundary) {<span class="cstat-no" title="statement not covered" ></span>
     return undefined;<span class="cstat-no" title="statement not covered" ></span>
   }<span class="cstat-no" title="statement not covered" ></span>
-  const zoneBoundary: Mult<span class="cstat-no" title="statement not covered" >iPolygon = { type: 'MultiPolygon', coor</span>dinates: boundary.coordinates };
-  const zoneName = zon<span class="cstat-no" title="statement not covered" >eNameGenerator(new Set&lt;string&gt;(), s</span>trings.ZONE);
-  return defaultZone<span class="cstat-no" title="statement not covered" >Payload({</span>
-    boundary: zoneBoundary,<span class="cstat-no" title="statement not covered" ></span>
+  const stratumBoundary: M<span class="cstat-no" title="statement not covered" >ultiPolygon = { type: 'MultiPolygon', c</span>oordinates: boundary.coordinates };
+  const stratumName = <span class="cstat-no" title="statement not covered" >stratumNameGenerator(new Set&lt;string</span>&gt;(), strings.STRATUM);
+  return defaultStra<span class="cstat-no" title="statement not covered" >tumPayload({</span>
+    boundary: stratumBounda<span class="cstat-no" title="statement not covered" >ry,</span>
     id: 0,<span class="cstat-no" title="statement not covered" ></span>
-    name: zoneName,<span class="cstat-no" title="statement not covered" ></span>
+    name: stratumNa<span class="cstat-no" title="statement not covered" >me,</span>
     targetPlantingDensity: 150<span class="cstat-no" title="statement not covered" >0,</span>
   });<span class="cstat-no" title="statement not covered" ></span>
 };<span class="cstat-no" title="statement not covered" ></span>
@@ -524,7 +524,7 @@ const featureSiteBoundary = (id: n<span class="cstat-no" title="statement not co
 <span class="cstat-no" title="statement not covered" >        features: [</span>toFeature(boundary, {}, id)],
       };
 <span class="cstat-no" title="statement not covered" ></span>
-// undo redo stack <span class="cstat-no" title="statement not covered" >to capture site boundary and errors</span>
+// undo redo stack to <span class="cstat-no" title="statement not covered" >capture site boundary and errors</span>
 ty<span class="cstat-no" title="statement not covered" >pe Stack = {</span>
   errorAnnotations?: Feature[];
   siteBoundary?: FeatureCollection;
@@ -575,13 +575,13 @@ export default function SiteBoundary({ onValidate, site }: SiteBoundaryProps): J
 <span class="cstat-no" title="statement not covered" >        snackbar</span>.toastError(
           errorAnnotations?.length ? strings.SITE_BOUNDARY_ERRORS : strings.SITE_BOUNDARY_ABSENT_WARNING
         );<span class="cstat-no" title="statement not covered" ></span>
-        onValidate.apply(true)<span class="cstat-no" title="statement not covered" >;</span>
+        onValidate.appl<span class="cstat-no" title="statement not covered" >y(true);</span>
 <span class="cstat-no" title="statement not covered" >        return;</span>
       } else {
-        // create one zone per disjoint polygon in the site boundary
-        const plantingZone = createPlantingZoneWith(boundary);
-<span class="cstat-no" title="statement not covered" >        const plantingZones = <span class="fstat-no" title="function not covered" >pl</span>antingZone ? [plantingZone] : [];</span>
-<span class="cstat-no" title="statement not covered" >        onValidate.apply(false, { boundary, strata: plantingZones });</span>
+        // create one stratum per disjoint polygon in the site boundary
+        const stratum = createStratumWith(boundary);
+<span class="cstat-no" title="statement not covered" >        const strata = stratum<span class="fstat-no" title="function not covered" > ?</span> [stratum] : [];</span>
+<span class="cstat-no" title="statement not covered" >        onValidate.apply(false, { boundary, strata });</span>
 <span class="cstat-no" title="statement not covered" >      }</span>
     }
   }, [boundary, e<span class="cstat-no" title="statement not covered" >rrorAnnotations, onValidate, site.id, snackbar]);</span>
@@ -617,7 +617,7 @@ export default function SiteBoundary({ onValidate, site }: SiteBoundaryProps): J
     }
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
     setDescription(data)<span class="cstat-no" title="statement not covered" >;</span>
-  }, [activeLocale, mode,<span class="cstat-no" title="statement not covered" > site.siteType]);</span>
+  }, [activeLocale, <span class="cstat-no" title="statement not covered" >mode, site.siteType]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
   const tutorialDes<span class="cstat-no" title="statement not covered" >cription = useMemo(() =&gt; {</span>
     if (!activeLocale) {
@@ -634,13 +634,13 @@ export default function SiteBoundary({ onValidate, site }: SiteBoundaryProps): J
    */
   const onEditableBoundaryChanged = async (editableBoundary?: FeatureCollection) =&gt; {
 <span class="cstat-no" title="statement not covered" >    const newBoundary = (editableBoundary &amp;&amp; unionMultiPolygons(editableBoundary)) || undefined;</span>
-    const plantingZone = createPlantingZoneWith(newBoundary);
-    const plantingZones = plantingZone ? [plantingZone] : [];
+    const stratum = createStratumWith(newBoundary);
+    const strata = stratum ? [stratum] : [];
     const errors = await findErrors(
       {
         ...site,
         boundary: newBoundary,
-        strata: plantingZones,
+        strata,
       },
       'site_boundary',
       []
@@ -682,7 +682,7 @@ export default function SiteBoundary({ onValidate, site }: SiteBoundaryProps): J
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-05T19:06:18.388Z
+                at 2026-01-05T21:57:59.407Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/173</span>
+                <span class='fraction'>0/175</span>
             </div>
         
             
@@ -527,7 +527,15 @@
 <a name='L462'></a><a href='#L462'>462</a>
 <a name='L463'></a><a href='#L463'>463</a>
 <a name='L464'></a><a href='#L464'>464</a>
-<a name='L465'></a><a href='#L465'>465</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L465'></a><a href='#L465'>465</a>
+<a name='L466'></a><a href='#L466'>466</a>
+<a name='L467'></a><a href='#L467'>467</a>
+<a name='L468'></a><a href='#L468'>468</a>
+<a name='L469'></a><a href='#L469'>469</a>
+<a name='L470'></a><a href='#L470'>470</a>
+<a name='L471'></a><a href='#L471'>471</a>
+<a name='L472'></a><a href='#L472'>472</a>
+<a name='L473'></a><a href='#L473'>473</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -611,6 +619,9 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -621,6 +632,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -734,7 +747,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -923,6 +938,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1022,12 +1038,12 @@ import useMapStyle f<span class="cstat-no" title="statement not covered" >rom</s
 <span class="cstat-no" title="statement not covered" >import {</span>
   IdGenerat<span class="fstat-no" title="function not covered" >or</span>,<span class="cstat-no" title="statement not covered" ></span>
   cutOverlappingBoundaries,
-<span class="cstat-no" title="statement not covered" >  defaultZonePayload,</span>
+<span class="cstat-no" title="statement not covered" >  defaultStratumPayload,</span>
   emptyBoundary,<span class="cstat-no" title="statement not covered" ></span>
   getLatestFeature,<span class="cstat-no" title="statement not covered" ></span>
-  plantingZoneToFeature,<span class="cstat-no" title="statement not covered" ></span>
-  toZoneFeature,<span class="cstat-no" title="statement not covered" ></span>
-  zoneNameGenerator,<span class="cstat-no" title="statement not covered" ></span>
+  stratumNameGenerator,<span class="cstat-no" title="statement not covered" ></span>
+  stratumToFeature,<span class="cstat-no" title="statement not covered" ></span>
+  toStratumFeature,<span class="cstat-no" title="statement not covered" ></span>
 } from './utils';<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
 export type StrataP<span class="cstat-no" title="statement not covered" >rops = {</span>
@@ -1038,28 +1054,28 @@ export type StrataP<span class="cstat-no" title="statement not covered" >rops = 
 /**<span class="cstat-no" title="statement not covered" ></span>
  * Create a draft site wi<span class="cstat-no" title="statement not covered" >th edited polygons, for error chec</span>king.
  * @param site<span class="cstat-no" title="statement not covered" ></span>
- *   Site is the original dr<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >af</span>t site t<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >hi</span>s worflow sta<span class="cstat-no" title="statement not covered" >rted with.</span></span></span>
+ *   Site is the original dr<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >af</span>t site t<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >hi</span>s worflow star<span class="cstat-no" title="statement not covered" >ted with.</span></span></span>
  * @return a callback function (using above params in the closure)
- *   A callback function which accepts new cut zone geometries,
+ *   A callback function which accepts new cut stratum geometries,
  *  <span class="fstat-no" title="function not covered" > a</span>nd should return a version of the draft planting site accounting
- *   for the potentially new zone boundaries.
+ *   for the potentially new stratum boundaries.
  */<span class="cstat-no" title="statement not covered" ></span>
-const createDraftSiteWith = (site: DraftPlantingSite) =&gt; (cutZones: GeometryFeature[]) =&gt; ({
+const createDraftSiteWith = (site: DraftPlantingSite) =&gt; (cutStrata: GeometryFeature[]) =&gt; ({
   ...site,
-  plantingZones: cutZones.map((zone, index) =&gt;
-    defaultZonePayload({
-      boundary: toMultiPolygon(zone.geometry) as MultiPolygon,
+  strata: cutStrata.map((stratum, index) =&gt;
+    defaultStratumPayload({
+      boundary: toMultiPolygon(stratum.geometry) as MultiPolygon,
       id: index,
-      name: zoneNameGenerator(new Set&lt;string&gt;(), strings.ZONE),
-      targetPlantingDensity: zone.properties?.targetPlantingDensity ?? 1500,
+      name: stratumNameGenerator(new Set&lt;string&gt;(), strings.STRATUM),
+      targetPlantingDensity: stratum.properties?.targetPlantingDensity ?? 1500,
     })<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >  ),</span>
 });<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-// create zone feature collections from the site
-cons<span class="cstat-no" title="statement not covered" >t featureSiteZo</span>nes = (site: DraftPlantingSite): FeatureCollection | undefined =&gt; {
+// create stratum feature collections from the site
+cons<span class="cstat-no" title="statement not covered" >t featureSiteSt</span>rata = (site: DraftPlantingSite): FeatureCollection | undefined =&gt; {
   if (site.strata) {
-    const features = site.strata.map(plantingZoneToFeature);
+    const features = site.strata.map(stratumToFeature);
     retur<span class="fstat-no" title="function not covered" >n { typ</span>e: 'FeatureCollection', features };
   } else {<span class="cstat-no" title="statement not covered" ></span>
     return undefined;
@@ -1067,76 +1083,82 @@ cons<span class="cstat-no" title="statement not covered" >t featureSiteZo</span>
 };
 &nbsp;
 // data type for undo/redo state<span class="cstat-no" title="statement not covered" ></span>
-// needs to capt<span class="cstat-no" title="statement not covered" >ure zone edit boundary, error an</span>notations and zones created
+// needs to capt<span class="cstat-no" title="statement not covered" >ure stratum edit boundary, error</span> annotations and strata created
 type Stack = {<span class="cstat-no" title="statement not covered" ></span>
   editableBoundary?<span class="cstat-no" title="statement not covered" >: FeatureCollection;</span>
   errorAnnotations?: Feature[]<span class="cstat-no" title="statement not covered" >;</span>
   fixedBoundaries?: Fea<span class="cstat-no" title="statement not covered" >tureCollection;</span>
-};<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+};<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 export default function Strata({ onValidate, site }: StrataProps): JSX.Element {
-  co<span class="cstat-no" title="statement not covered" >nst [zonesData, setZonesData, undo, redo] = useUndoRedoState&lt;Stack&gt;({</span>
-    editableBoundary: empty<span class="cstat-no" title="statement not covered" >Boundary(),</span>
-    errorAnnotations: [],<span class="cstat-no" title="statement not covered" ></span>
-    fixedBoundaries: featureSit<span class="cstat-no" title="statement not covered" >eZones(site),<span class="fstat-no" title="function not covered" ></span></span>
-  });
-  const <span class="cstat-no" title="statement not covered" >[overridePopupInfo, setOverridePopupInfo] = useState&lt;PopupInfo | undefined&gt;();</span>
-  const theme = useTheme();
-  const mapStyles = useMap<span class="cstat-no" title="statement not covered" >Style(theme);</span>
-  cons<span class="cstat-no" title="statement not covered" >t snackbar = useSnackbar();</span>
-  const <span class="cstat-no" title="statement not covered" >getRenderAttributes = useRenderAttributes();</span>
-  const <span class="cstat-no" title="statement not covered" >activeLocale = useLocali</span>zation();
+  const [strataData, setStrataData, undo, redo] = useUndoRedoState&lt;Stack&gt;({
+<span class="cstat-no" title="statement not covered" >    editableBoundary: emptyBou<span class="fstat-no" title="function not covered" >nd</span>ary(),</span>
+    errorAnnotations: [],
+<span class="cstat-no" title="statement not covered" >    fixedBoundaries: featureSiteStrata(site),</span>
+  });<span class="cstat-no" title="statement not covered" ></span>
+  const [overridePopupInfo, s<span class="cstat-no" title="statement not covered" >etOverridePopupInfo] = useState&lt;PopupInfo | undefined&gt;();</span>
+  const theme = useTheme();<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  const mapStyles = useMapStyle(theme);
+  const <span class="cstat-no" title="statement not covered" >snackbar = useSnackbar();</span>
+  const getRenderAttributes = useRenderAttributes();
+  const activeLocale = use<span class="cstat-no" title="statement not covered" >Localization();</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const zones = useMemo&lt;FeatureCollection | undefined&gt;(() =&gt; zonesData?.fixedBoundaries, [zonesData?.fixedBoundaries]);
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  const <span class="cstat-no" title="statement not covered" >strata = useMemo&lt;FeatureCollection | undefined&gt;(</span>
+    () =&gt; strataData?.fixedBoundaries,
+    [strataData?.fixedBoundaries]
+  );<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
   useEffect(() =&gt; {
-    if (onValidate) {<span class="cstat-no" title="statement not covered" ></span>
-      const missingZones = zo<span class="cstat-no" title="statement not covered" >nes === undefined;</span>
-      co<span class="cstat-no" title="statement not covered" >nst zonesTooSmall = !!zonesData?.errorAnnotations?.length;</span>
-      // c<span class="cstat-no" title="statement not covered" >heck for missing zone names</span>
-      const missingZoneNames = !missingZones &amp;&amp; zones.features.some((zone) =&gt; !zone?.properties?.name?.trim());
-      const missingData = (missingZones || missingZoneNames) &amp;&amp; !onValidate.isSaveAndClose;
+    if (onValidate) {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+      const missingStrata = strata === undefined;
+      const strataTooSmall = !!strataData<span class="cstat-no" title="statement not covered" >?.errorA</span>nnotations?.length;
+      // check for missing st<span class="cstat-no" title="statement not covered" >ratum names</span>
+      co<span class="cstat-no" title="statement not covered" >nst missingStratumNames =</span>
+        !m<span class="cstat-no" title="statement not covered" >issingStrata &amp;&amp; strata.features.some((stratum) =&gt; !stratum?.properties?.name?.trim());</span>
+      const missingData = (missingStrata || missingStratumNames) &amp;&amp; !onValidate.isSaveAndClose;
 &nbsp;
-      if (zonesTooSmall || missingData) {
-        snackbar.toastError(zonesTooSmall ? strings.SITE_ZONE_BOUNDARIES_TOO_SMALL : strings.SITE_ZONE_NAMES_MISSING);
-        onValidate.apply(true);
-        re<span class="cstat-no" title="statement not covered" >turn;</span>
-      }
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-      // populates zone<span class="cstat-no" title="statement not covered" >s</span>
-      const plantingZone<span class="cstat-no" title="statement not covered" >s = zones?.fe</span>atures
-        .map((zone,<span class="cstat-no" title="statement not covered" > index) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >          const { geometry, properties } = zone;</span>
+      if (strataTooSmall || missingData) {
+        snackbar.toastError(
+          strataTooSmall ? strings.SITE_STRATUM_BOUNDARIES_TOO_SMALL : strings.SITE_STRATUM_NAMES_MISSING
+        );
+        on<span class="cstat-no" title="statement not covered" >Validate.apply(</span>true);
+        return;
+      }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ></span>
+      // populates strat<span class="cstat-no" title="statement not covered" >a</span>
+      const _strata<span class="cstat-no" title="statement not covered" > = strata?.features</span>
+<span class="cstat-no" title="statement not covered" >        .map((stratum, index) =&gt; {</span>
+          const { geometry, properties } = stratum;
           const multiPolygon = toMultiPolygon(geometry);
-&nbsp;
-          if (multiPolygon)<span class="cstat-no" title="statement not covered" > {<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >            return defaultZonePayload({</span>
-<span class="cstat-no" title="statement not covered" >              boundar</span>y: multiPolygon,
-              id: properties?.id ?? index,
-              name: prop<span class="cstat-no" title="statement not covered" >erties?.name ?? '',</span>
-              targetPlantingDen<span class="cstat-no" title="statement not covered" >sity: properties?.targetPlantingDensity ?? 1500,</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >          if (multiPolygon) {</span>
+<span class="cstat-no" title="statement not covered" >            return de</span>faultStratumPayload({
+              boundary: multiPolygon,
+              id: proper<span class="cstat-no" title="statement not covered" >ties?.id ?? index,</span>
+              name: properties?<span class="cstat-no" title="statement not covered" >.name ?? '',</span>
+              targetPlantingDensity: properties?.targetPlantingDensity ?? 1500,
             });
           } else {
             return undefined;
           }
         })
-        .filter((zone) =&gt; !!zone) as MinimalStratum[] | undefined;
-<span class="cstat-no" title="statement not covered" ></span>
-      const numZones = plantingZones?.length ?? 0;
+<span class="cstat-no" title="statement not covered" >        .filter((stratum) =&gt; !!stratum) as MinimalStratum[] | undefined;</span>
+&nbsp;
+      const numStrata = _strata?.length ?? 0;
 &nbsp;
       // callback with status of error and completion of this step
-      const completed = numZones &gt; 1;
-      const data = plantingZones ? { strata: plantingZones } : undefined;
+      const completed = numStrata &gt; 1;
+      const data = _strata ? { strata: _strata } : undefined;
       onValidate.apply(data === undefined, data, completed);
     }
-  }, [onValidate, snackbar, zones, zonesData?.errorAnnotations]);
-&nbsp;
-  const readOnlyBoundary = useMemo&lt;Rend<span class="fstat-no" title="function not covered" >er</span>ableReadOnl<span class="cstat-no" title="statement not covered" >yBoundary[] | undefined&gt;(() =&gt; {</span>
-    if (!zones?.features) {
+  }, [onValidate, snackbar, strata, strataData?.errorAnnotations]);
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  const readOnlyBoundary = useMemo&lt;RenderableReadOnlyBoundary[] | undefined&gt;(() =&gt; {
+    if (!strata?.features) {
       return undefined;
     }
 &nbsp;
-    const idGenerator = IdGenerator(zones.features);
+    const idGenerator = IdGenerator(strata.features);
 &nbsp;
     const exclusionsBoundary: RenderableReadOnlyBoundary[] = site.exclusion
       ? [
@@ -1145,138 +1167,140 @@ export default function Strata({ onValidate, site }: StrataProps): JSX.Element {
             id: 'exclusions',
             renderProperties: getRenderAttributes('exclusions'),
           },
-        ]
-      : [];<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+        ]<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" ></span>      : []<span class="cstat-no" title="statement not covered" >;</span>
+&nbsp;
     return [
       ...exclusionsBoundary,
       {
-        data: { type: 'FeatureCollection', features: [toFeature(site.boundary!, {}, site.id)] },
-        id: 'site',<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+        data: { type: <span class="fstat-no" title="function not covered" >'F</span>eatureColl<span class="cstat-no" title="statement not covered" >ection', features: [toFeature(site.boundary!, {}, site.id)] },</span>
+        id: 'site',
         renderProperties: getRenderAttributes('site'),
       },
       {
         data: {
           type: 'FeatureCollection',
-          features: zones.features.map((feature: Feature) =&gt; toZoneFeature(feature, idGenerator)),
+          features: strata.features.map((feature: Feature) =&gt; toStratumFeature(feature, idGenerator)),
         },
-        id: 'zone',
-        isInteractive: true,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >        renderProperties: {</span>
-<span class="cstat-no" title="statement not covered" >          ...getR</span>enderAttributes('draft-stratum'),
-          annotation: {
-<span class="cstat-no" title="statement not covered" >            textField: 'name',</span>
+        id: 'stratum',<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >        isInteractive: true,</span>
+<span class="cstat-no" title="statement not covered" >        renderPro</span>perties: {
+          ...getRenderAttributes('draft-stratum'),
+<span class="cstat-no" title="statement not covered" >          annotation: {</span>
+            textField: 'name',
             textColor: theme.palette.TwClrBaseWhite as string,
             textSize: 16,
           },
-        },
-      },<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-    ];<span class="cstat-no" title="statement not covered" ></span>
-  }, [getRenderAttribu<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >te</span>s, site.boundary, site.exclusion, site.id, theme.palette.TwClrBaseWhite, zones]);</span>
-&nbsp;
-  const description = useM<span class="cstat-no" title="statement not covered" >emo&lt;Description[]&gt;(</span>
-    () =&gt;<span class="cstat-no" title="statement not covered" ></span>
-      activeLocale<span class="fstat-no" title="function not covered" ></span>
-        ? [
-<span class="cstat-no" title="statement not covered" >            { text: strings.SITE_ZONE_BOUNDARIES_DESCRIPTION_0 },</span>
-            {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-              text: strings.SITE_ZONE_BOUNDARIES_DESCRIPTION_1,
-              hasTutorial: <span class="cstat-no" title="statement not covered" >true,<span class="fstat-no" title="function not covered" ></span></span>
-              handlePrefix: (prefix: string) =&gt;
-<span class="cstat-no" title="statement not covered" >                strings.formatString(prefix, &lt;MapIcon centerAligned={true} icon='slice' /&gt;) as JSX.Element[],</span>
-            },<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >            {</span>
-<span class="cstat-no" title="statement not covered" >              text: strings.SITE_ZO</span>NE_BOUNDARIES_SIZE,
-              isBold: true,
+        },<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+      },<span class="cstat-no" title="statement not covered" ></span>
+    ];<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  }, [getRenderAttributes, site.boundary, site.exclusion, site.id, theme.palette.TwClrBaseWhite, strata]);
+<span class="cstat-no" title="statement not covered" ></span>
+  const description = us<span class="cstat-no" title="statement not covered" >eMemo&lt;Description[]&gt;(</span>
+    () =&gt;<span class="fstat-no" title="function not covered" ></span>
+      activeLocale
+        ? <span class="cstat-no" title="statement not covered" >[</span>
+            { text<span class="fstat-no" title="function not covered" >: </span>strings.<span class="cstat-no" title="statement not covered" >SITE_ST</span>RATUM_BOUNDARIES_DESCRIPTION_0 },
+            {
+              text: strings.<span class="cstat-no" title="statement not covered" >SITE_STRATUM_B<span class="fstat-no" title="function not covered" >OU</span>NDARIES_DESCRIPTION_1,</span>
+              hasTutorial: true,
+<span class="cstat-no" title="statement not covered" >              handlePrefix: (prefix: string) =&gt;</span>
+                strings.format<span class="cstat-no" title="statement not covered" >String(prefix, &lt;MapIcon centerAligned={true} icon='slice' /&gt;) as JSX.Element[],</span>
 <span class="cstat-no" title="statement not covered" >            },</span>
-          ]
-<span class="cstat-no" title="statement not covered" >        : [],</span>
+<span class="cstat-no" title="statement not covered" >            {</span>
+              text: strings.SITE_STRATUM_BOUNDARIES_SIZE,
+<span class="cstat-no" title="statement not covered" >              isBold: true,</span>
+            },
+<span class="cstat-no" title="statement not covered" >          ]</span>
+        : [],
     [activeLocale]
   );
 &nbsp;
   const tutorialDescription = useMemo(() =&gt; {
     if (!activeLocale) {
       return '';
-    }
-    return strings.formatStrin<span class="cstat-no" title="statement not covered" >g(<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-<span class="cstat-no" title="statement not covered" >      strings.ADDING_ZONE_BOUNDARIES_INSTRUCTIONS_DESCRIPTION,</span>
-      &lt;MapIcon centerAligned icon='slice' /&gt;<span class="cstat-no" title="statement not covered" ></span>
-    ) as<span class="cstat-no" title="statement not covered" > JSX.Element[];</span>
-  }, [activeLocale]);
+    }<span class="cstat-no" title="statement not covered" ></span>
+    return strings.formatStri<span class="fstat-no" title="function not covered" >ng</span>(<span class="cstat-no" title="statement not covered" ></span>
+      strings.ADDING_STRATUM_BOUNDARIES_INSTRUCTIONS_DESCRIPTION,
+<span class="cstat-no" title="statement not covered" >      &lt;MapIcon centerAligned icon='slice' /&gt;</span>
+    ) as JSX.Element[];<span class="cstat-no" title="statement not covered" ></span>
+  }, [ac<span class="cstat-no" title="statement not covered" >tiveLocale]);</span>
 &nbsp;
   const onEditableBoundaryChanged = async (editableBoundary?: FeatureCollection) =&gt; {
     // pick the latest geometry that was drawn
-    const cutWithFeature = getLatestFeature(zonesData?.editableBoundary, editableBoundary);
+    const cutWithFeature = getLatestFeature(strataData?.editableBoundary, editableBoundary);
 &nbsp;
-    // update state with cut zones on success
-    cons<span class="cstat-no" title="statement not covered" >t onSuccess = (cutZones: Geome</span>tryFeature[]) =&gt; {
-      // if it is feasible to cut zones without making them too small, create new fixed zone boundaries and clear the cut geometry
-      const idGenerator = IdGenerator(cutZones);
-      const usedName<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >s:</span> Set&lt;string&gt; = new Set(</span>
-<span class="cstat-no" title="statement not covered" >        (zones?.fea<span class="fstat-no" title="function not covered" >tu</span>res ?? []<span class="cstat-no" title="statement not covered" >).map((f) =&gt; f.properties?.name).filter((name) =&gt; !!name)</span></span>
-      );
-      const zonesWithIds = cutZones.map((zone) =&gt; {
-        if (!zone.properties?.name) {
-          const zoneName = zoneNameGenerator(usedNames, strings.ZONE);
-          zone.properties = { ...zone.properties, name: zoneName };
-<span class="cstat-no" title="statement not covered" >          usedNames.add(zoneName);</span>
-        }
-        return toZoneFeature(zone, idGenerator);
+    // update state with cut strata on success
+    const onSuccess = (cutStrata: GeometryFeature[]) =&gt; {
+      //<span class="cstat-no" title="statement not covered" > if it is feasible to cut stra</span>ta without making them too small, create new fixed stratum boundaries and clear the cut geometry
+      const idGenerator = IdGenerator(cutStrata);
+      const usedNames: Set&lt;string&gt; = new Set(
+        (strata?.fea<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >tu</span>res ?? []).map((f) =&gt; f.properties?.name).filter((name) =&gt; !!name)</span>
+<span class="cstat-no" title="statement not covered" >      );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+      const strataWithIds = cutStrata.map((stratum) =&gt; {
+        if (!stratum.properties?.name) {
+          const stratumName = stratumNameGenerator(usedNames, strings.STRATUM);
+          stratum.properties = { ...stratum.properties, name: stratumName };
+          usedNames.add(stratumName);
+<span class="cstat-no" title="statement not covered" >        }</span>
+        return toStratumFeature(stratum, idGenerator);
       }) as GeometryFeature[];
 &nbsp;
-      setZonesData({
+      setStrataData({
         editableBoundary: emptyBoundary(),
         errorAnnotations: [],
         fixedBoundaries: {
           type: 'FeatureCollection',
-<span class="cstat-no" title="statement not covered" >          fe</span>atures: zonesWithIds,
-        },
-      });<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-      const leftMostNewZone = leftMostFeature(zonesWithIds.filter((unused, index) =&gt; cutZones[index].id === undefined));
+          features: strataWithIds,
+<span class="cstat-no" title="statement not covered" >        },</span>
+      });
 <span class="cstat-no" title="statement not covered" ></span>
-      if (leftMostNewZone) {
-        const { feature: zone, center: mid } = leftMostNewZone;
-        setOverridePopupInfo({
-          id: zone.id,<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" ></span>          l<span class="cstat-no" title="statement not covered" >ng: mid[0],</span>
-          lat: mid[1],
-          prop<span class="fstat-no" title="function not covered" >er</span>ties: zone.properties,
-          sourceId: 'zone',
-        });<span class="cstat-no" title="statement not covered" ></span>
-      } else {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="fstat-no" title="function not covered" ></span>      const leftMo<span class="cstat-no" title="statement not covered" >stNewStratum =<span class="fstat-no" title="function not covered" > l</span>eftMostFeature(</span>
+        strataWithIds.filter((unused, index) =&gt; cutStrata[index].id === undefined)
+<span class="cstat-no" title="statement not covered" >      );</span>
+&nbsp;
+      if (leftMostNewStratum) {
+        const { feature: stratum, center: mid } = leftMostNewStratum;
+        setOverridePopup<span class="cstat-no" title="statement not covered" >Info({</span>
+<span class="fstat-no" title="function not covered" ></span>          i<span class="cstat-no" title="statement not covered" >d: stratum.id,</span>
+          lng: mid[0],
+          lat:<span class="fstat-no" title="function not covered" > m</span>id[1],
+          properties: stratum.properties,
+          sourceId: 'stratum',<span class="cstat-no" title="statement not covered" ></span>
+        });<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+      } el<span class="cstat-no" title="statement not covered" >se {</span>
         se<span class="cstat-no" title="statement not covered" >tOverridePopupInfo(undefined);</span>
-      }<span class="cstat-no" title="statement not covered" ></span>
-    };
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-    // upd<span class="cstat-no" title="statement not covered" >ate state with error annotations and keep existing editable boundary so user can edit/correct it</span>
-    const on<span class="cstat-no" title="statement not covered" >Error = </span>(errors: Feature[]) =&gt; {
-      // no zones were cut either because there were no overlaps or they could have been too small
-      // set error annotations <span class="cstat-no" title="statement not covered" >that were cre</span>ated and keep the cut geometry in case user wants to re-edit the geometry
-      setZonesData((pre<span class="cstat-no" title="statement not covered" >v) =&gt; ({<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-        ..<span class="cstat-no" title="statement not covered" >.prev,</span>
-        edit<span class="cstat-no" title="statement not covered" >ableBoun</span>dary: cutWithFeature ? { type: 'FeatureCollection', features: [cutWithFeature] } : emptyBoundary(),
-        errorAnnotations: errors,
+      }
+    };<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ></span>
+    // updat<span class="cstat-no" title="statement not covered" >e state </span>with error annotations and keep existing editable boundary so user can edit/correct it
+    const onError = (errors: Feature[]) =&gt; {
+      // no strata were cut eith<span class="cstat-no" title="statement not covered" >er because the</span>re were no overlaps or they could have been too small
+      // set error annotat<span class="cstat-no" title="statement not covered" >ions that were created and k<span class="fstat-no" title="function not covered" >ee</span>p the<span class="cstat-no" title="statement not covered" > cut geometry in case u</span>s</span>er wants to re-edit the geometry
+      setS<span class="cstat-no" title="statement not covered" >trataData((prev) =&gt; ({</span>
+        ...p<span class="cstat-no" title="statement not covered" >rev,</span>
+        editableBoundary: cutWithFeature ? { type: 'FeatureCollection', features: [cutWithFeature] } : emptyBoundary(),
+        er<span class="cstat-no" title="statement not covered" >rorAnnotations: errors,</span>
       }));<span class="cstat-no" title="statement not covered" ></span>
-    };<span class="cstat-no" title="statement not covered" ></span>
-&nbsp;
+    };
+<span class="cstat-no" title="statement not covered" ></span>
     await <span class="cstat-no" title="statement not covered" >cutOverlappingBoundaries(</span>
-      {<span class="cstat-no" title="statement not covered" ></span>
-        cu<span class="cstat-no" title="statement not covered" >tWithFeature,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-        errorCheckLevel: 'zone',
+      {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+        cutWithFeature,
+        errorCheckLevel: 'stratum',
         createDraftSiteWith: createDraftSiteWith(site),
-        source: zones,
-      },<span class="cstat-no" title="statement not covered" ></span>
-      onSuccess,
-      onError<span class="cstat-no" title="statement not covered" ></span>
-    );<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span>
-&nbsp;
-    retu<span class="cstat-no" title="statement not covered" >rn;</span>
+        so<span class="cstat-no" title="statement not covered" >urce: str</span>ata,
+      },
+      onSuccess,<span class="cstat-no" title="statement not covered" ></span>
+      onError<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span>
+    );
+<span class="cstat-no" title="statement not covered" ></span>
+    return;
   };
 &nbsp;
-  // Pick the first zone, we won't have overlapping zones.
+  // Pick the first stratum, we won't have overlapping strata.
   const featureSelectorOnClick = useCallback(
-    (features: LayerFeature[]) =&gt; features.find((feature) =&gt; feature.layer?.source === 'zone'),
+    (features: LayerFeature[]) =&gt; features.find((feature) =&gt; feature.layer?.source === 'stratum'),
     []
   );
 &nbsp;
@@ -1284,86 +1308,86 @@ export default function Strata({ onValidate, site }: StrataProps): JSX.Element {
     (): MapPopupRenderer =&gt; ({
       sx: [mapStyles.tooltip, mapStyles.box],
       render: (properties: MapSourceProperties, onClose?: () =&gt; void): JSX.Element | null =&gt; {
-        const { id, name, targetPlantingDensity } = properties;
-<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >        const { id, name, targetPlantingDensity } = properties;</span>
+&nbsp;
         const close = () =&gt; {
           setOverridePopupInfo(undefined);
           onClose?.();
         };
 &nbsp;
         const onUpdate = (nameVal: string, targetPlantingDensityVal: number) =&gt; {
-          if (!zones) {
+          if (!strata) {
             return;
           }
-          const updatedZones = { ...zones };
-          const zone = updatedZones.features.find((f) =&gt; f.id === properties.id);
-          if (!zone) {
+          const updatedStrata = { ...strata };
+          const stratum = updatedStrata.features.find((f) =&gt; f.id === properties.id);
+          if (!stratum) {
             return;
           }
-          if (!zone.properties) {
-            zone.properties = {};
-          }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-          zone.properties.name = nameVal;
-          zone.properties.targetPlantingDensity = targetPlantingDensityVal;
-          setZonesData((prev) =&gt; ({
+          if (!stratum.properties) {
+            stratum.properties = <span class="fstat-no" title="function not covered" >{}</span>;<span class="cstat-no" title="statement not covered" ></span>
+          }
+          stratum.properties.name = nameVal;
+          stratum.properties.targetPlantingDensity = targetPlantingDensityVal;
+          setStrataData((prev) =&gt; ({
             ...prev,
-            fixeBoundaries: updatedZones,
+            fixedBoundaries: updatedStrata,
           }));
           close();
-        };
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-        const zoneNamesInUse = new Set(
-          zones?.features
+        };<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+&nbsp;
+        const stratumNamesInUse = new Set(
+          strata?.features
             .filter((feature) =&gt; feature.properties &amp;&amp; feature.properties.id !== id)
             .map((feature) =&gt; (feature.properties &amp;&amp; feature.properties.name) || '') ?? []
         );
-&nbsp;
+<span class="cstat-no" title="statement not covered" ></span>
         return (<span class="cstat-no" title="statement not covered" ></span>
           &lt;TooltipContents<span class="cstat-no" title="statement not covered" ></span>
             name={name}<span class="cstat-no" title="statement not covered" ></span>
             onClose={close}<span class="cstat-no" title="statement not covered" ></span>
-            onUpdate={onUpdate}<span class="cstat-no" title="statement not covered" ></span>
-            targ<span class="cstat-no" title="statement not covered" >etPlantingDensity={targetPlantin</span>gDensity}
-            zoneNamesInU<span class="cstat-no" title="statement not covered" >se={zoneNamesInUse}<span class="fstat-no" title="function not covered" ></span></span>
+            onUp<span class="cstat-no" title="statement not covered" >date={onUpdate}</span>
+            targetPlanti<span class="cstat-no" title="statement not covered" >ngDensity={targetPlantingDensi<span class="fstat-no" title="function not covered" >ty</span>}</span>
+            stratumNames<span class="cstat-no" title="statement not covered" >InUse</span>={stratumNamesInUse}
           /&gt;<span class="cstat-no" title="statement not covered" ></span>
-        );<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >        );</span>
 <span class="cstat-no" title="statement not covered" >      },</span>
-    })<span class="cstat-no" title="statement not covered" >,</span>
-    [mapSty<span class="cstat-no" title="statement not covered" >les.box, mapStyles.tooltip, setZonesData, zones]</span>
+    }),<span class="cstat-no" title="statement not covered" ></span>
+    [m<span class="cstat-no" title="statement not covered" >apStyles.box, mapStyles.tooltip, setStrataData, strata]</span>
   );<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  retu<span class="cstat-no" title="statement not covered" >rn (</span>
-    &lt;Box display='flex' flexDirection='column' flexGrow={1}&gt;
-<span class="cstat-no" title="statement not covered" >      &lt;StepTitleDescript</span>ion
-<span class="cstat-no" title="statement not covered" >        description={descript</span>ion}
-        dontShowAgainPreferenceName='dont-show-site-zone-boundaries-instructions'
-<span class="cstat-no" title="statement not covered" >        title={strings.ADDING_ZONE_BOUNDARIES}</span>
-<span class="cstat-no" title="statement not covered" >        tutorialDescription={tutorialDescription}</span>
-        tut<span class="cstat-no" title="statement not covered" >orialDocLinkKey='planting_site_create_zone_boundary_instructions_video'</span>
-<span class="cstat-no" title="statement not covered" >        tutorialTitle={strings.ADDING_ZONE_BOUNDARIES}</span>
-      /&gt;
+  return (
+    &lt;B<span class="cstat-no" title="statement not covered" >ox display='flex' </span>flexDirection='column' flexGrow={1}&gt;
+<span class="cstat-no" title="statement not covered" >      &lt;StepTitleDescription</span>
+        description={description}
+<span class="cstat-no" title="statement not covered" >        dontShowAgainPreferenceName='dont-show-site-stratum-boundaries-instructions'</span>
+<span class="cstat-no" title="statement not covered" >        title={strings.ADDING_STRATUM_BOUNDARIES}</span>
+        tut<span class="cstat-no" title="statement not covered" >orialDescription={tutorialDescription}</span>
+<span class="cstat-no" title="statement not covered" >        tutorialDocLinkKey='planting_site_create_stratum_boun</span>dary_instructions_video'
+        tutorialTitle={strings.ADDING_STRATUM_BOUNDARIES}
+<span class="cstat-no" title="statement not covered" >      /&gt;</span>
 <span class="cstat-no" title="statement not covered" >      &lt;EditableMap</span>
-<span class="cstat-no" title="statement not covered" >        editableBoundary={zonesD</span>ata?.editableBoundary}
-        errorAnnotations={zonesData?.errorAnnotations}
-<span class="cstat-no" title="statement not covered" >        featureSelectorOnClick={featureSelectorOn</span>Click}
-        isSliceTool
-        onEdita<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >bl</span>eBoundaryChanged={(editableBoundary) =&gt; void onEditableBoundaryChanged(editableBoundary)}</span>
+        editableBoundary={strataData?.editableBoundary}
+<span class="cstat-no" title="statement not covered" >        errorAnnotations={strataData?.errorAnnota</span>tions}
+        featureSelectorOnClick={featureSelectorOnClick}
+        isSlice<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >To</span>ol</span>
+<span class="cstat-no" title="statement not covered" >        onEditableBoundaryChanged={(editableBoundary) =&gt; void onEditableBoundaryChanged(editableBoundary)}</span>
 <span class="cstat-no" title="statement not covered" >        onRedo={redo}</span>
-<span class="cstat-no" title="statement not covered" >        onUndo={undo}</span>
-        overridePopupInfo={overridePopupInfo}
+        onUndo={undo}
+<span class="cstat-no" title="statement not covered" >        overridePopupInfo={overridePopupInfo}</span>
 <span class="cstat-no" title="statement not covered" >        popupRenderer={popupRenderer}</span>
-<span class="cstat-no" title="statement not covered" >        readOnlyBoundary={readOnlyB</span>oundary}
+        readOnlyBoundary={readOnlyBoundary}
       /&gt;
-    &lt;/Box&gt;
-<span class="cstat-no" title="statement not covered" >  );<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    &lt;/Box&gt;<span class="fstat-no" title="function not covered" ></span></span>
+  );<span class="cstat-no" title="statement not covered" ></span>
 }<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
 type TooltipContentsProps = {
-  name?: string;
-<span class="cstat-no" title="statement not covered" >  onClose: () =&gt; void;</span>
+<span class="cstat-no" title="statement not covered" >  name?: string;</span>
+  onClose: () =&gt; void;
   onUpdate: (name: string, targetPlantingDensity: number) =&gt; void;
   targetPlantingDensity: number;
-  zoneNamesInUse: Set&lt;string&gt;;
+  stratumNamesInUse: Set&lt;string&gt;;
 };
 &nbsp;
 const TooltipContents = ({
@@ -1371,11 +1395,11 @@ const TooltipContents = ({
   onClose,
   onUpdate,
   targetPlantingDensity,
-  zoneNamesInUse,
+  stratumNamesInUse,
 }: TooltipContentsProps): JSX.Element =&gt; {
-  const [zoneName, setZoneName] = useState&lt;string&gt;(name ?? '');
-  const [density, setDensity] = useState&lt;number&gt;(targetPlantingDensity);
-  const [nameError<span class="fstat-no" title="function not covered" >, </span>setNameEr<span class="cstat-no" title="statement not covered" >ror] = useState&lt;str</span>ing&gt;('');
+  const [stratumName, setStratumName] = useState&lt;string&gt;(name ?? '');
+  const [density, <span class="fstat-no" title="function not covered" >se</span>tDensity]<span class="cstat-no" title="statement not covered" > = useState&lt;number&gt;(ta</span>rgetPlantingDensity);
+  const [nameError, setNameError] = useState&lt;string&gt;('');
   const [densityError, setDensityError] = useState&lt;string&gt;('');
   const [validate, setValidate] = useState&lt;boolean&gt;(false);
   const theme = useTheme();
@@ -1384,12 +1408,12 @@ const TooltipContents = ({
     let hasNameErrors = true;
     let hasDensityErrors = true;
 &nbsp;
-    if (!zoneName) {
-      setNameError(strings.REQUIRED_FIELD);
-    } else if (zon<span class="fstat-no" title="function not covered" >eN</span>amesInUse<span class="cstat-no" title="statement not covered" >.has(zoneName)) {</span>
-      setNameError(strings.ZONE_NAME_IN_USE);
-    } else if (zoneName.length &gt; 15) {
-      setNameError(strings.ZONE_NAME_MAXIMUM_LENGTH);
+    if (!stratumName) {
+      setNameError<span class="fstat-no" title="function not covered" >(s</span>trings.RE<span class="cstat-no" title="statement not covered" >QUIRED_FIELD);</span>
+    } else if (stratumNamesInUse.has(stratumName)) {
+      setNameError(strings.STRATUM_NAME_IN_USE);
+    } else if (stratumName.length &gt; 15) {
+      setNameError(strings.STRATUM_NAME_MAXIMUM_LENGTH);
     } else {
       setNameError('');
       hasNameErrors = false;
@@ -1405,7 +1429,7 @@ const TooltipContents = ({
     }
 &nbsp;
     return !(hasNameErrors || hasDensityErrors);
-  }, [density, zoneName, zoneNamesInUse]);
+  }, [density, stratumName, stratumNamesInUse]);
 &nbsp;
   const save = () =&gt; {
     if (!validate) {
@@ -1413,7 +1437,7 @@ const TooltipContents = ({
     }
 &nbsp;
     if (validateInput()) {
-      onUpdate(zoneName, density);
+      onUpdate(stratumName, density);
     }
   };
 &nbsp;
@@ -1428,17 +1452,17 @@ const TooltipContents = ({
       cancelButton={{ title: strings.CANCEL, onClick: onClose }}
       onClose={onClose}
       saveButton={{ title: strings.SAVE, onClick: save }}
-      title={strings.ZONE}
+      title={strings.STRATUM}
     &gt;
       &lt;Box display='flex' flexDirection='column' padding={theme.spacing(2)}&gt;
-        &lt;Typography&gt;{strings.PLANTING_SITE_ZONE_NAME_HELP}&lt;/Typography&gt;
+        &lt;Typography&gt;{strings.PLANTING_SITE_STRATUM_NAME_HELP}&lt;/Typography&gt;
         &lt;Textfield
           autoFocus
           label={strings.NAME}
-          id='zone-name'
+          id='stratum-name'
           type='text'
-          onChange={(value) =&gt; setZoneName(value as string)}
-          value={zoneName}
+          onChange={(value) =&gt; setStratumName(value as string)}
+          value={stratumName}
           errorText={nameError}
           sx={{ marginTop: theme.spacing(1.5) }}
         /&gt;
@@ -1462,7 +1486,7 @@ const TooltipContents = ({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-05T19:06:18.388Z
+                at 2026-01-05T21:57:59.407Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>
