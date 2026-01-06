@@ -1,3 +1,4 @@
+7fd0a1cb180 SW-7925 Include monitoring plant count edits in history (#5029)
 3ce3f862be5 Update dependency globals to v17 (#5023)
 90364f6afae SW-7904 Rename zone->strata in newly merged files (#5025)
 ef3843bc5f7 SW-7904 Rename zone->strata in shorthand variables (#5022)
