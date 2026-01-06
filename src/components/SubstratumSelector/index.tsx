@@ -8,7 +8,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 export type SubstratumInfo = {
   id: number | string;
-  fullName: string;
+  name: string;
 };
 
 export type StratumInfo = {
@@ -45,7 +45,7 @@ export default function SubstratumSelector(props: SubstratumSelectorProps): JSX.
   const stratumToDropdownItem = (stratum?: StratumInfo) =>
     stratum ? { label: stratum.name, value: stratum.id } : { label: '', value: '' };
   const substratumToDropdownItem = (substratum?: SubstratumInfo) =>
-    substratum ? { label: substratum.fullName, value: substratum.id } : { label: '', value: '' };
+    substratum ? { label: substratum.name, value: substratum.id } : { label: '', value: '' };
 
   const onChangeStratum = (stratum: any) => {
     const foundStratum = strata.find((stratumItem) => stratumItem.id.toString() === stratum?.value?.toString());
@@ -97,7 +97,7 @@ export default function SubstratumSelector(props: SubstratumSelectorProps): JSX.
       return [];
     }
     return [...selectedStratum.substrata]
-      .sort((a, b) => a.fullName.localeCompare(b.fullName, undefined, { numeric: true }))
+      .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }))
       .map((substratum) => substratumToDropdownItem(substratum));
   }, [selectedStratum]);
 

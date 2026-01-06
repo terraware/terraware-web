@@ -17,7 +17,7 @@ import strings from 'src/strings';
 
 const columns = (): TableColumnType[] => [
   {
-    key: 'fullName',
+    key: 'name',
     name: strings.SUBSTRATUM,
     type: 'string',
   },
@@ -83,7 +83,7 @@ export default function PlantingSiteDraftStratumView(): JSX.Element | undefined 
             id='planting-site-stratum-details-table'
             columns={columns}
             rows={stratum?.substrata ?? []}
-            orderBy='fullName'
+            orderBy='name'
           />
         </Box>
       </Card>
