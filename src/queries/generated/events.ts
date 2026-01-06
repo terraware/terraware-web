@@ -70,6 +70,15 @@ export type BiomassSpeciesSubjectPayload = {
     scientificName?: string;
     speciesId?: number;
   };
+export type MonitoringSpeciesSubjectPayload = {
+  type: 'MonitoringSpecies';
+} & EventSubjectPayloadBase & {
+    monitoringPlotId: number;
+    observationId: number;
+    plantingSiteId: number;
+    scientificName?: string;
+    speciesId?: number;
+  };
 export type ObservationPlotMediaSubjectPayload = {
   type: 'ObservationPlotMedia';
 } & EventSubjectPayloadBase & {
@@ -116,6 +125,7 @@ export type EventLogEntryPayload = {
     | BiomassQuadratSpeciesSubjectPayload
     | BiomassQuadratSubjectPayload
     | BiomassSpeciesSubjectPayload
+    | MonitoringSpeciesSubjectPayload
     | ObservationPlotMediaSubjectPayload
     | ObservationPlotSubjectPayload
     | OrganizationSubjectPayload
@@ -143,6 +153,7 @@ export type ListEventLogEntriesRequestPayload = {
     | 'BiomassQuadrat'
     | 'BiomassQuadratSpecies'
     | 'BiomassSpecies'
+    | 'MonitoringSpecies'
     | 'ObservationPlot'
     | 'ObservationPlotMedia'
     | 'Organization'
