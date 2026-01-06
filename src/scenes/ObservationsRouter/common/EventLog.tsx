@@ -108,7 +108,9 @@ const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) => {
                 <Box>
                   {event.action.type === 'FieldUpdated' && (
                     <Box>
-                      {event.subject.type === 'BiomassSpecies' || event.subject.type === 'BiomassQuadratSpecies'
+                      {event.subject.type === 'BiomassSpecies' ||
+                      event.subject.type === 'BiomassQuadratSpecies' ||
+                      event.subject.type === 'MonitoringSpecies'
                         ? strings.formatString(
                             strings.SPECIES_VALUE_CHANGED_FROM_TO,
                             <Typography display={'inline'} textTransform={'capitalize'}>
