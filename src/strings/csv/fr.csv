@@ -1387,7 +1387,7 @@ PLANTING_COMPLETE_CHART,Plantation terminée,3bea077e
 PLANTING_COMPLETE_DASHBOARD,Plantation terminée,3bea077e
 PLANTING_COMPLETE_DASHBOARD_TOOLTIP,Plantation terminée comprend la surface totale et le pourcentage du site qui ont été marqués comme « Plantation terminée ».,b9bda0fe
 PLANTING_COMPLETE_ROLLED_UP_DASHBOARD_TOOLTIP,Pourcentage de « plantation terminée » de tous les sites de plantation associés au projet,969947fc
-PLANTING_COMPLETE_TOOLTIP,Avez-vous terminé toutes vos plantations dans tous les sous-strates de cette strate ?,fde094b1
+PLANTING_COMPLETE_TOOLTIP,La plantation a-t-elle été achevée dans ce substrat ?,a6bfac66
 PLANTING_DENSITY,Densité de plantation,2d5d3bcb
 PLANTING_PROGRESS,Progression de la plantation,58616da9
 PLANTING_PROGRESS_MAP_DESCRIPTION,Cliquez sur chaque sous-strate pour indiquer les zones où la plantation est terminée. La densité de plantation sera calculée une fois la plantation terminée pour chaque strate.,6c72c94f

@@ -1388,7 +1388,7 @@ PLANTING_COMPLETE_CHART,Plantación completada,3bea077e
 PLANTING_COMPLETE_DASHBOARD,Plantación completada,3bea077e
 PLANTING_COMPLETE_DASHBOARD_TOOLTIP,"La plantación completada incluye el área y el porcentaje totales del sitio que se marcó como ""Plantación completada"".",b9bda0fe
 PLANTING_COMPLETE_ROLLED_UP_DASHBOARD_TOOLTIP,"Porcentaje de ""Plantación completada"" de todos los lugares de plantación relacionados con el proyecto",969947fc
-PLANTING_COMPLETE_TOOLTIP,¿Ha completado toda la plantación en todos los subestratos de este estrato?,fde094b1
+PLANTING_COMPLETE_TOOLTIP,¿Se ha completado la plantación en este sustrato?,a6bfac66
 PLANTING_DENSITY,Densidad de siembra,2d5d3bcb
 PLANTING_PROGRESS,Avance de plantación,58616da9
 PLANTING_PROGRESS_MAP_DESCRIPTION,Haga clic en cada subestrato para marcar las áreas donde la plantación ha sido completada. La densidad de plantas se calculará una vez que la plantación haya sido completada para cada estrato.,6c72c94f
