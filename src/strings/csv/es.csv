@@ -94,7 +94,7 @@ ADD_PHOTOS_DESCRIPTION,Tome una foto (o fotos) de los lotes que serán plantados
 ADD_PHOTOS_DESCRIPTION_OPTIONAL,Tome una foto opcional (o fotos) de los lotes.,5b1fa829
 ADD_PLANT_SITE_DESCRIPTION,Añadir Planta y Descripción del Sitio,af2cccc4
 ADD_PLANTING_SITE,Añadir Sitio de Plantación,9525532c
-ADD_PLANTING_SITE_DETAILED_SITE,"Seleccione si el sitio es relativamente grande, con múltiples estratos (capas de vegetación) y condiciones de crecimiento. Los sitios de plantación detallados con múltiples estratos tendrán uno o más estratos.",d2c9cfcb
+ADD_PLANTING_SITE_DETAILED_SITE,"Seleccione esta opción si el sitio es relativamente grande, con múltiples estratos (capas de vegetación) y condiciones de crecimiento. Los sitios de plantación con más de una capa de vegetación tendrán varios estratos.",2ca39951
 ADD_PLANTING_SITE_SIMPLE_SITE,"Seleccionar si el sitio de plantación es relativamente chico, con un solo estrato.",d6732c11
 ADD_PLANTING_SITE_TITLE,Selecciona el tipo de sitio de plantación,e0ce7f80
 ADD_PROJECT,Agregar proyecto,89a74ee0

@@ -94,7 +94,7 @@ ADD_PHOTOS_DESCRIPTION,Prenez une ou plusieurs photos des lots qui seront plant�
 ADD_PHOTOS_DESCRIPTION_OPTIONAL,Prenez une (ou plusieurs) photo(s) facultative(s) des lots.,5b1fa829
 ADD_PLANT_SITE_DESCRIPTION,Ajouter une description de la plante et du site,af2cccc4
 ADD_PLANTING_SITE,Ajouter un site de plantation,9525532c
-ADD_PLANTING_SITE_DETAILED_SITE,"Sélectionnez si le site est relativement grand, avec plusieurs strates (couches de végétation) et conditions de croissance. Les sites de plantation détaillés avec plusieurs strates comporteront une ou plusieurs strates.",d2c9cfcb
+ADD_PLANTING_SITE_DETAILED_SITE,"Sélectionnez cette option si le site est relativement vaste, avec plusieurs strates (couches de végétation) et des conditions de croissance variées. Les sites de plantation comportant plus d'une couche de végétation auront plusieurs strates.",2ca39951
 ADD_PLANTING_SITE_SIMPLE_SITE,"Sélectionner si le site de plantation est relativement petit, avec une seule strate.",d6732c11
 ADD_PLANTING_SITE_TITLE,Sélectionnez le type de site de plantation,e0ce7f80
 ADD_PROJECT,Ajouter un projet,89a74ee0

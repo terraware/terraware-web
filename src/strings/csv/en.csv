@@ -94,7 +94,7 @@ ADD_PHOTOS_DESCRIPTION,Take a photo (or photos) of the batches that will be plan
 ADD_PHOTOS_DESCRIPTION_OPTIONAL,Take an optional photo (or photos) of the batches.,
 ADD_PLANT_SITE_DESCRIPTION,Add Plant and Site Description,
 ADD_PLANTING_SITE,Add Planting Site,
-ADD_PLANTING_SITE_DETAILED_SITE,"Select if the site is relatively large, with multiple strata (vegetation layers) and growing conditions. Detailed planting sites with multiple strata will have one or more strata.",
+ADD_PLANTING_SITE_DETAILED_SITE,"Select if the site is relatively large, with multiple strata (vegetation layers) and growing conditions. Planting sites with more than one vegetation layer will have multiple strata.",
 ADD_PLANTING_SITE_SIMPLE_SITE,"Select if the planting site is relatively small, with a single stratum.",
 ADD_PLANTING_SITE_TITLE,Select Planting Site Type,
 ADD_PROJECT,Add Project,
