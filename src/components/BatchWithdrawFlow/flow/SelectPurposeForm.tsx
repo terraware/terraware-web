@@ -810,7 +810,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                         onChange={(value: unknown) => setActiveGrowthQuantityWithdrawn(value as number)}
                         type='number'
                         value={activeGrowthQuantityWithdrawn}
-                        tooltipTitle={strings.ACTIVE_GROWTH_QUANTITY}
+                        tooltipTitle={strings.TOOLTIP_ACTIVE_GROWTH_QUANTITY}
                         errorText={fieldsErrors.activeGrowthQuantityWithdrawn}
                         required
                         sx={{
