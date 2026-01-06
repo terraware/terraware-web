@@ -1887,7 +1887,7 @@ SITE_STRATUM_BOUNDARY_TOO_SMALL,Límite de estrata menor a 100 m x 100 m.,d39bb7
 SITE_STRATUM_NAMES_MISSING,Falta el nombre de una o más estratas. Haga clic en una estrata para editar su nombre.,dc003708
 SITE_SUBSTRATUM_BOUNDARIES,Límites de Subestrato,71b65a41
 SITE_SUBSTRATUM_BOUNDARIES_DESCRIPTION_0,"Cada Estrata de su sitio de plantación se divide en uno o más Subestratos. Un Subestrato es el área más pequeña a la que se pueden asignar plántulas durante la plantación. Los Subestratos deben tener un tamaño tal que se pueda plantar la totalidad del Subestrato durante una sola temporada de plantación. Generalmente, los Subestratos tienen entre 50 y 200 hectáreas.",f7fdd3e2
-SITE_SUBSTRATUM_BOUNDARIES_DESCRIPTION_1,"Dibuje los Subestratos de su sitio de plantación a continuación. Primero, seleccione una Estrata en la que crear Subestratos. Use la herramienta de corte {0} para crear formas de Subestrato (polígonos) dentro de las Estratas. [Vea un tutorial] sobre cómo agregar límites de Subestrato.",fffa597e
+SITE_SUBSTRATUM_BOUNDARIES_DESCRIPTION_1,"Dibuje los Substratos de su sitio de plantación a continuación. Primero, seleccione un Estrato en el que crear Substratos. Use la herramienta de corte {0} para crear formas de Substrato (polígonos) dentro de los Estratos. [Vea un tutorial] sobre cómo agregar límites de Substrato.",1053c80f
 SITE_SUBSTRATUM_BOUNDARIES_SELECTED_STRATUM,La Estrata {0} está seleccionada actualmente para crear Subestratos.,140be362
 SITE_SUBSTRATUM_BOUNDARIES_TOO_SMALL,Uno o más Subestratos tienen un límite menor a 25 m x 25 m.,87f34c5b
 SITE_SUBSTRATUM_BOUNDARY_TOO_SMALL,Límite de Subestrato menor a 25 m x 25 m.,c014deff
