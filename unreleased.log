@@ -1,3 +1,4 @@
+6da06b7bd1b SW-7555: Ad Hoc Observations: Change Start Date to Completed Date in Observations tables (#5032)
 55f67e22ff5 SW-7927 Fix flipped coordinates in ad-hoc CSV export (#5035)
 d59976d1766 SW-7912 Rename zone->strata in strings (#5026)
 dc521844818 SW-7922 Fix active growth tooltip (#5028)
