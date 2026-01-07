@@ -41,9 +41,9 @@ export default defineConfig({
 
   output: {
     // Match CRA's output directory
-    // distPath: {
-    //   root: 'build',
-    // },
+    distPath: {
+      root: 'build',
+    },
     // Clean output directory before build
     cleanDistPath: true,
     // Asset prefix (equivalent to PUBLIC_URL)
