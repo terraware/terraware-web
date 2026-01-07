@@ -1,3 +1,4 @@
+d59976d1766 SW-7912 Rename zone->strata in strings (#5026)
 dc521844818 SW-7922 Fix active growth tooltip (#5028)
 7fd0a1cb180 SW-7925 Include monitoring plant count edits in history (#5029)
 3ce3f862be5 Update dependency globals to v17 (#5023)
