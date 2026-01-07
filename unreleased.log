@@ -1,3 +1,5 @@
+e1a83c14322 SW-7832: Observations: Not able to use Request Reassignment feature in map  (#5036)
+5e4050039d3 Simplified router for new observations route (#5030)
 c5eee91dc13 SW-7908 Reorder columns and change substratum name display (#5027)
 6da06b7bd1b SW-7555: Ad Hoc Observations: Change Start Date to Completed Date in Observations tables (#5032)
 55f67e22ff5 SW-7927 Fix flipped coordinates in ad-hoc CSV export (#5035)

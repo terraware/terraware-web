@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/93</span>
+                <span class='fraction'>0/95</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/18</span>
+                <span class='fraction'>0/19</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/87</span>
+                <span class='fraction'>0/89</span>
             </div>
         
             
@@ -276,7 +276,13 @@
 <a name='L211'></a><a href='#L211'>211</a>
 <a name='L212'></a><a href='#L212'>212</a>
 <a name='L213'></a><a href='#L213'>213</a>
-<a name='L214'></a><a href='#L214'>214</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L214'></a><a href='#L214'>214</a>
+<a name='L215'></a><a href='#L215'>215</a>
+<a name='L216'></a><a href='#L216'>216</a>
+<a name='L217'></a><a href='#L217'>217</a>
+<a name='L218'></a><a href='#L218'>218</a>
+<a name='L219'></a><a href='#L219'>219</a>
+<a name='L220'></a><a href='#L220'>220</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -339,6 +345,9 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -487,9 +496,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > useEffect, us</span>eMemo, useState } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > useCallback, </span>useEffect, useMemo, useState } from 'react';
 <span class="cstat-no" title="statement not covered" ></span>
 import { Grid, Typograp<span class="cstat-no" title="statement not covered" >hy, useTheme } from '@mui/materi</span>al';
 import { BusySpinner, Bu<span class="cstat-no" title="statement not covered" >tton, DialogBox, Dropdown, </span>Textfield } from '@terraware/web-components';
@@ -538,77 +550,81 @@ export default function ReplaceObservationPlotModal(props: ReplaceObservationPlo
   const plots = use<span class="cstat-no" title="statement not covered" >AppSelector((state) =&gt; selectMonito</span>ringPlots(state, monitoringPlotsRequestId));
   const hasCompletedObserva<span class="cstat-no" title="statement not covered" >tions = useAppSelector((state) =&gt; select</span>HasCompletedObservations(state, plantingSiteId));
 <span class="cstat-no" title="statement not covered" ></span>
-  const replaceObse<span class="cstat-no" title="statement not covered" >rvationPlot = () =&gt; {</span>
-    setValidate(<span class="cstat-no" title="statement not covered" >true);</span>
+  const stopPropaga<span class="cstat-no" title="statement not covered" >tion = useCallback((e: React.Mouse</span>Event | React.SyntheticEvent) =&gt; {
+    e.stopPropag<span class="cstat-no" title="statement not covered" >ation();</span>
+  }, []);<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+  const replaceObservationPlot = (<span class="cstat-no" title="statement not covered" >) =&gt; {</span>
+    setValidate(true);<span class="cstat-no" title="statement not covered" ></span>
     if (justification &amp;&amp; duration) {<span class="cstat-no" title="statement not covered" ></span>
       const dispatched = dispatch(<span class="cstat-no" title="statement not covered" ></span>
-        requestReplaceObservationP<span class="cstat-no" title="statement not covered" >lot({</span>
-          observationId,<span class="cstat-no" title="statement not covered" ></span>
-          plotId: monitoringPlot.monitoringPlotId,<span class="cstat-no" title="statement not covered" ></span>
-          request: { justification, durati<span class="cstat-no" title="statement not covered" >on },</span>
-        })<span class="cstat-no" title="statement not covered" ></span>
-      );<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-      setRequest<span class="cstat-no" title="statement not covered" >Id(dispatched.requestId);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-    }<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  };<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+        requestReplaceObservationPlot({<span class="cstat-no" title="statement not covered" ></span>
+          observa<span class="cstat-no" title="statement not covered" >tionId,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+          plotId<span class="cstat-no" title="statement not covered" >: monitoringPlot.monitoringPlotId<span class="fstat-no" title="function not covered" >,<span class="cstat-no" title="statement not covered" ></span></span></span>
+          request: { justification,<span class="cstat-no" title="statement not covered" > duration },<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+        })<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >      );</span>
+      setRequestId(dispatched.requestId);
+    }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  };<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  co<span class="cstat-no" title="statement not covered" >nst durations = useMemo(() =&gt; {</span>
-    if (!activeLocale) {<span class="cstat-no" title="statement not covered" ></span>
+  const durations = useMe<span class="cstat-no" title="statement not covered" >mo(() =&gt; {</span>
+    if (!activeLocale) {
       return [];
     }
 &nbsp;
     return [
       { label: strings.TEMPORARY, value: 'Temporary' },
-      { label: strings.LONG_TERM_PERMANENT, value: 'LongTerm' },
-    ];<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >      { label: strings.LONG_TERM_PERMANENT</span>, value: 'LongTerm' },
+    ];
   }, [activeLocale]);
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  us<span class="cstat-no" title="statement not covered" >eEffect(() =&gt; {</span>
+    if<span class="cstat-no" title="statement not covered" > (!result) </span>{
+      return;
+<span class="cstat-no" title="statement not covered" >    }</span>
 &nbsp;
-  useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >    if (!result) {</span>
-<span class="cstat-no" title="statement not covered" >      return;</span>
-    }
-<span class="cstat-no" title="statement not covered" ></span>
     if (result.status === 'error') {
       snackbar.toastError();
     } else if (result.status === 'success' &amp;&amp; selectedOrganization) {
-      const { addedMonitoringPlotIds, removedMonitoringPlotIds } = result.data as ReplaceObservationPlotResponsePayload;
-<span class="cstat-no" title="statement not covered" >      setAddedPlotIds(addedMon<span class="fstat-no" title="function not covered" >it</span>oringPlotIds);</span>
-<span class="cstat-no" title="statement not covered" >      setRemovedPlotIds(removedMonitoringPlotIds);</span>
-<span class="cstat-no" title="statement not covered" >      snackbar</span>.toastSuccess(strings.REASSIGNMENT_REQUEST_SENT);
-      void dispatch(requestObservationsResults(selectedOrganization?.id || -1));
-<span class="cstat-no" title="statement not covered" >      const dispatched = dispatch(</span>
-<span class="cstat-no" title="statement not covered" >        requestMonitoringPlot</span>s({
-          p<span class="cstat-no" title="statement not covered" >lantingSiteId,</span>
-          monitoringPlotIds: [...addedMonitoringPlotIds, ...removed<span class="cstat-no" title="statement not covered" >MonitoringPl</span>otIds],
+<span class="cstat-no" title="statement not covered" >      const { addedMonitoringP<span class="fstat-no" title="function not covered" >lo</span>tIds, removedMonitoringPlotIds } = result.data as ReplaceObservationPlotResponsePayload;</span>
+<span class="cstat-no" title="statement not covered" >      setAddedPlotIds(addedMonitoringPlotIds);</span>
+<span class="cstat-no" title="statement not covered" >      setRemov</span>edPlotIds(removedMonitoringPlotIds);
+      snackbar.toastSuccess(strings.REASSIGNMENT_REQUEST_SENT);
+<span class="cstat-no" title="statement not covered" >      void dispatch(requestObservationsResults(selectedOrganization?.id || -1));</span>
+<span class="cstat-no" title="statement not covered" >      const dispatched = disp</span>atch(
+        req<span class="cstat-no" title="statement not covered" >uestMonitoringPlots({</span>
+          plantingSiteId,<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >          monitoringPlotIds: [...addedMonitorin</span>gPlotIds, ...removedMonitoringPlotIds],
 <span class="cstat-no" title="statement not covered" >        })</span>
 <span class="cstat-no" title="statement not covered" >      );</span>
 <span class="cstat-no" title="statement not covered" >      setMonitoringPlotsRequestId(dispatched.requestId);</span>
     }<span class="cstat-no" title="statement not covered" ></span>
-  }, [dispatch, result, s<span class="cstat-no" title="statement not covered" >electedOrganization, snackbar, plantingSiteId]);</span>
+  }, [dispatch, result, selectedOrganization, snackbar, plantingSiteId]);
 &nbsp;
   useEffect(() =&gt; {
     if (plots?.status === 'pending') {
       return;
-    }
-    if<span class="cstat-no" title="statement not covered" > (plots &amp;&amp; plots.status === 'success') {</span>
+    }<span class="cstat-no" title="statement not covered" ></span>
+    if (plots &amp;&amp; plots.status === 'success') {
       // show page message of status
-      const addedPlotNumbers = addedPlotIds.map((id) =&gt; plots.data![Number(id)]?.plotNumber).join(', ');
-<span class="cstat-no" title="statement not covered" >      const removedPlotNumbers<span class="fstat-no" title="function not covered" > =</span> removedPlotIds.map((id) =&gt; plots.data![Number(id)]?.plotNumber).join(', ');</span>
+<span class="cstat-no" title="statement not covered" >      const addedPlotNumbers =<span class="fstat-no" title="function not covered" > a</span>ddedPlotIds.map((id) =&gt; plots.data![Number(id)]?.plotNumber).join(', ');</span>
+<span class="cstat-no" title="statement not covered" >      const removedPlotNumbers = removedPlotIds.map((id) =&gt; plots.data![Number(id)]?.plotNumber).join(', ');</span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >      // we do</span>n't add new plots for a permanent plot if the site has completed observations
-      const noReplacedPlotsFound = !addedPlotIds.length &amp;&amp; (!monitoringPlot.isPermanent || !hasCompletedObservations);
-<span class="cstat-no" title="statement not covered" ></span>
-      if (noReplacedPlotsFound)<span class="cstat-no" title="statement not covered" > {<span class="fstat-no" title="function not covered" ></span></span>
-        snackbar.pageWarning(
-<span class="cstat-no" title="statement not covered" >          [</span>
-            strings.formatString(strings.REASSIGNMENT_REQUEST_PLOTS_REMOVED, removedPlotNumbers) as string,
-            &lt;br key='warn' /&gt;,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-            strings.REASSIGNMENT_REQUEST_NO_PLOTS_ADDED_WARNING,
-<span class="cstat-no" title="statement not covered" >          ],</span>
-          strings.REASSIGNMENT_REQUEST_STATUS,
-          { label: strings.CLOSE }<span class="cstat-no" title="statement not covered" ></span>
+      // we don't add new plots for a permanent plot if the site has completed observations
+<span class="cstat-no" title="statement not covered" >      const noReplacedPlotsFound = !addedPlotIds.length &amp;&amp; (!monitoringPlot.isPermanent || !hasCompletedObservations);</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+      if (noReplacedPlotsFound) {
+<span class="cstat-no" title="statement not covered" >        snackbar.pageWarning(</span>
+          [
+            strings.formatString(<span class="cstat-no" title="statement not covered" >strings.REASSIGNMEN<span class="fstat-no" title="function not covered" >T_</span>REQUEST_PLOTS_REMOVED, removedPlotNumbers) as string,</span>
+            &lt;br key='warn' /&gt;,
+<span class="cstat-no" title="statement not covered" >            strings.REASSIGNMENT_REQUEST_NO_PLOTS_ADDED_WARNING,</span>
+          ],
+          strings.REASSIGNMENT_REQU<span class="cstat-no" title="statement not covered" >EST_STATUS,</span>
+<span class="cstat-no" title="statement not covered" >          { label: strings.CLOSE }</span>
 <span class="cstat-no" title="statement not covered" >        );</span>
-      } <span class="cstat-no" title="statement not covered" >else {</span>
+      } else {
         snackbar.pageInfo(
           [
             strings.formatString(strings.REASSIGNMENT_REQUEST_PLOTS_REMOVED, removedPlotNumbers) as string,
@@ -617,8 +633,8 @@ export default function ReplaceObservationPlotModal(props: ReplaceObservationPlo
               ? (strings.formatString(strings.REASSIGNMENT_REQUEST_PLOTS_ADDED, addedPlotNumbers) as string)
               : strings.REASSIGNMENT_REQUEST_NO_PLOTS_ADDED,
           ],
-          strings.REASSIGNMENT_REQUEST_STATUS,
-<span class="cstat-no" title="statement not covered" >          { label: strings.CLOSE }</span>
+<span class="cstat-no" title="statement not covered" >          strings.REASSIGNMENT_REQUEST_STATUS,</span>
+          { label: strings.CLOSE }
         );
       }
       onClose();
@@ -627,79 +643,81 @@ export default function ReplaceObservationPlotModal(props: ReplaceObservationPlo
 &nbsp;
   return (
     &lt;&gt;
-      {(result?.status === 'pending' || plots?.status === 'pending') &amp;&amp; &lt;BusySpinner withSkrim={true} /&gt;}
-<span class="cstat-no" title="statement not covered" >      &lt;DialogBox</span>
-        onClose={onClose}
-        open={true}
-<span class="cstat-no" title="statement not covered" >        title={strings.REQUEST_REASSIGNMENT}</span>
-        size='medium'
-        middleButtons={[
-          &lt;Button
-            id='cancelReplaceObservationPlot'
-            label={strings.CANCEL}
-            type='passive'
-            onClick={onClose}
-            priority='secondary'
-            key='button-1'
-          /&gt;,
-          &lt;Button
-            id='replaceObservationPlot'
-            onClick={replaceObservationPlot}
-            label={strings.SEND_REQUEST}
-            key='button-2'
-          /&gt;,
-        ]}
-        scrolled={false}
-      &gt;
-        &lt;Grid container item xs={12} spacing={2} textAlign='left'&gt;
-          &lt;Grid item xs={12}&gt;
-            &lt;Typography
-              fontSize='16px'
-              lineHeight='24px'
-              fontWeight={400}
-              color={theme.palette.TwClrTxt}
-              textAlign='center'
-            &gt;
-              {strings.REQUEST_REASSIGNMENT_JUSTIFICATION}
-            &lt;/Typography&gt;
-          &lt;/Grid&gt;
-          &lt;Grid item xs={12}&gt;
-            &lt;Textfield
-              id='monitoringPlot'
-              value={monitoringPlot.monitoringPlotNumber}
-              type='text'
-              label={strings.MONITORING_PLOT}
-              display={true}
-            /&gt;
-          &lt;/Grid&gt;
-          &lt;Grid item xs={12}&gt;
-            &lt;Textfield
-              id='reason'
-              value={justification}
-              type='textarea'
-              label={strings.REASON}
-              onChange={(value) =&gt; {
-                setJustification(value as string);
-              }}
-              errorText={validate &amp;&amp; !justification ? strings.REQUIRED_FIELD : ''}
-              required
-            /&gt;
-          &lt;/Grid&gt;
-          &lt;Grid item xs={12}&gt;
-            &lt;Dropdown
-              id='duration'
-              labe<span class="fstat-no" title="function not covered" >l=</span>{strings.REASSIGNMENT_DURATION}
-<span class="cstat-no" title="statement not covered" >              onChange={(value: str</span>ing) =&gt; setDuration(value as ReplaceObservationPlotDuration)}
-              options={durations}
-              selectedValue={duration}
-              errorText={validate &amp;&amp; !duration ? strings.REQUIRED_FIELD : ''}
-              fullWidth
-              required
-            /&gt;
-          &lt;/Grid&gt;
-        &lt;/Grid&gt;
-      &lt;/DialogBox&gt;
-    &lt;/&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >      {(result?.s</span>tatus === 'pending' || plots?.status === 'pending') &amp;&amp; &lt;BusySpinner withSkrim={true} /&gt;}
+      &lt;div onClick={stopPropagation} onMouseDown={stopPropagation}&gt;
+        &lt;DialogBox
+<span class="cstat-no" title="statement not covered" >          onClose={onClose}</span>
+          open={true}
+          title={strings.REQUEST_REASSIGNMENT}
+          size='medium'
+          middleButtons={[
+            &lt;Button
+              id='cancelReplaceObservationPlot'
+              label={strings.CANCEL}
+              type='passive'
+              onClick={onClose}
+              priority='secondary'
+              key='button-1'
+            /&gt;,
+            &lt;Button
+              id='replaceObservationPlot'
+              onClick={replaceObservationPlot}
+              label={strings.SEND_REQUEST}
+              key='button-2'
+            /&gt;,
+          ]}
+          scrolled={false}
+        &gt;
+          &lt;Grid container item xs={12} spacing={2} textAlign='left'&gt;
+            &lt;Grid item xs={12}&gt;
+              &lt;Typography
+                fontSize='16px'
+                lineHeight='24px'
+                fontWeight={400}
+                color={theme.palette.TwClrTxt}
+                textAlign='center'
+              &gt;
+                {strings.REQUEST_REASSIGNMENT_JUSTIFICATION}
+              &lt;/Typography&gt;
+            &lt;/Grid&gt;
+            &lt;Grid item xs={12}&gt;
+              &lt;Textfield
+                id='monitoringPlot'
+                value={monitoringPlot.monitoringPlotNumber}
+                type='text'
+                label={strings.MONITORING_PLOT}
+                display={true}
+              /&gt;
+            &lt;/Grid&gt;
+            &lt;Grid item xs={12}&gt;
+              &lt;Textfield
+                id='reason'
+                value={justification}
+                type='textarea'
+                label={strings.REASON}
+                onChange={(value) =&gt; {
+                  setJustification(value as string);
+                }}
+                errorText={validate &amp;&amp; !justification ? strings.REQUIRED_FIELD : ''}
+                required
+              /&gt;
+            &lt;/Grid&gt;
+            &lt;Grid item xs={12}&gt;
+              &lt;Dro<span class="fstat-no" title="function not covered" >pd</span>own
+<span class="cstat-no" title="statement not covered" >                id='duration'</span>
+                label={strings.REASSIGNMENT_DURATION}
+                onChange={(value: string) =&gt; setDuration(value as ReplaceObservationPlotDuration)}
+                options={durations}
+                selectedValue={duration}
+                errorText={validate &amp;&amp; !duration ? strings.REQUIRED_FIELD : ''}
+                fullWidth
+                required
+              /&gt;
+            &lt;/Grid&gt;
+          &lt;/Grid&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+        &lt;/DialogBox&gt;
+      &lt;/div&gt;
+    &lt;/&gt;
   );
 }
 &nbsp;</pre></td></tr></table></pre>
@@ -709,7 +727,7 @@ export default function ReplaceObservationPlotModal(props: ReplaceObservationPlo
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-07T19:31:33.923Z
+                at 2026-01-07T22:27:10.072Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

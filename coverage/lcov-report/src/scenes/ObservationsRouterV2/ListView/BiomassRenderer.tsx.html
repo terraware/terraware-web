@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/39</span>
+                <span class='fraction'>0/44</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/20</span>
+                <span class='fraction'>0/22</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/36</span>
+                <span class='fraction'>0/41</span>
             </div>
         
             
@@ -103,7 +103,23 @@
 <a name='L38'></a><a href='#L38'>38</a>
 <a name='L39'></a><a href='#L39'>39</a>
 <a name='L40'></a><a href='#L40'>40</a>
-<a name='L41'></a><a href='#L41'>41</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L41'></a><a href='#L41'>41</a>
+<a name='L42'></a><a href='#L42'>42</a>
+<a name='L43'></a><a href='#L43'>43</a>
+<a name='L44'></a><a href='#L44'>44</a>
+<a name='L45'></a><a href='#L45'>45</a>
+<a name='L46'></a><a href='#L46'>46</a>
+<a name='L47'></a><a href='#L47'>47</a>
+<a name='L48'></a><a href='#L48'>48</a>
+<a name='L49'></a><a href='#L49'>49</a>
+<a name='L50'></a><a href='#L50'>50</a>
+<a name='L51'></a><a href='#L51'>51</a>
+<a name='L52'></a><a href='#L52'>52</a>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -140,57 +156,89 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React fr<span class="cstat-no" title="statement not covered" >om 'react';</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React fr<span class="cstat-no" title="statement not covered" >om 'react';</span>
 <span class="cstat-no" title="statement not covered" ></span>
-import CellRenderer, { <span class="cstat-no" title="statement not covered" >TableRowType } from 'src/compone</span>nts/common/table/TableCellRenderer';
-import TableRowPopupMenu<span class="cstat-no" title="statement not covered" > from 'src/components/commo</span>n/table/TableRowPopupMenu';
-import { RendererPr<span class="cstat-no" title="statement not covered" >ops } from 'src/compon</span>ents/common/table/types';
-import { useLocaliz<span class="cstat-no" title="statement not covered" >ation } from 'src/providers';</span>
+import Link from 'src/c<span class="cstat-no" title="statement not covered" >omponents/common/Link';</span>
+import CellRenderer, { T<span class="cstat-no" title="statement not covered" >ableRowType } from 'src/com</span>ponents/common/table/TableCellRenderer';
+import TableRowPopu<span class="cstat-no" title="statement not covered" >pMenu from 'src/compon</span>ents/common/table/TableRowPopupMenu';
+import { RendererPr<span class="cstat-no" title="statement not covered" >ops } from 'src/components/commo</span>n/table/types';
+import { APP_PA<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >TH</span>S } from 'src/constants';</span>
+im<span class="cstat-no" title="statement not covered" >port { useLocalization } from 'src/providers';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+import useObservationExports from '../useObservationExports';
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-im<span class="cstat-no" title="statement not covered" >port useObservationExports from '../useObservationExports';</span>
+ex<span class="cstat-no" title="statement not covered" >port default function BiomassRenderer(props: RendererProps&lt;TableRowType&gt;): JSX.Element {</span>
+  co<span class="cstat-no" title="statement not covered" >nst { column, row, value } = props;</span>
+  cons<span class="cstat-no" title="statement not covered" >t { strings } = useLocalization();</span>
+  const <span class="cstat-no" title="statement not covered" >observationId = row.observ<span class="fstat-no" title="function not covered" >at</span>ionI<span class="cstat-no" title="statement not covered" >d as numbe</span>r;</span>
+  const { downloadBiomassObservationDetails } = useObservationExports();
 <span class="cstat-no" title="statement not covered" ></span>
-export default function BiomassRenderer(props: RendererProps&lt;TableRowType&gt;): JSX.Element {
-  const { column, <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ro</span>w } = props;</span>
-<span class="cstat-no" title="statement not covered" >  const { strings } = useLocalization();</span>
-  co<span class="cstat-no" title="statement not covered" >nst observationId = row.observationId as number;</span>
-  cons<span class="cstat-no" title="statement not covered" >t { downloadBiomassObservationDetails } = useObservationExports();</span>
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
   const textStyles = {
-<span class="cstat-no" title="statement not covered" >    fontSize:</span> '16px',
+    fontSize: <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >'1</span>6px',<span class="cstat-no" title="statement not covered" ></span></span>
     '&amp; &gt; p': {
-      fontSize<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >: </span>'16px',<span class="cstat-no" title="statement not covered" ></span></span>
+      fontSize: '16px',
     },
   };
 &nbsp;
-  if (column.key === 'actionsMenu') {
-    const menu = (
-      &lt;TableRowPopupMenu
-        menuItems={[
-          {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-            disabled<span class="cstat-no" title="statement not covered" >: f</span>alse,
-<span class="cstat-no" title="statement not covered" >            label: strings.EXPORT_BIOMASS_MONITORING_DETAILS_CSV,</span>
-<span class="fstat-no" title="function not covered" >            o</span>nCli<span class="cstat-no" title="statement not covered" >ck: () =&gt; void d</span>ownloadBiomassObservationDetails(observationId),
-          },
-<span class="cstat-no" title="statement not covered" >        ]}</span>
+  if (column.key === 'monitoringPlotNumber') {
+    const url = APP_PATHS.OBSERVATION_DETAILS_V2.replace(':observationId', observationId.toString());
+    return (<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+      &lt;CellRenderer<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >        {...props}</span>
+        val<span class="fstat-no" title="function not covered" >ue</span>={<span class="cstat-no" title="statement not covered" ></span>
+          &lt;Link fontSize='16px' to={url}&gt;
+<span class="cstat-no" title="statement not covered" >            {value as string}</span>
+          &lt;/Link&gt;<span class="cstat-no" title="statement not covered" ></span>
+        }<span class="cstat-no" title="statement not covered" ></span>
       /&gt;<span class="cstat-no" title="statement not covered" ></span>
     );<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span>
-    return &lt;CellRendere<span class="cstat-no" title="statement not covered" >r {...props} value={menu}</span> /&gt;;
   }<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" ></span>
-  return &lt;CellRenderer {..<span class="cstat-no" title="statement not covered" >.props</span>} sx={textStyles} /&gt;;
-}<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" ></span>
+  if (column.key === 'actionsMenu')<span class="cstat-no" title="statement not covered" > {</span>
+    const<span class="fstat-no" title="function not covered" > menu = (</span>
+      &lt;TableRowPopupMenu<span class="cstat-no" title="statement not covered" ></span>
+        menuItems={[<span class="cstat-no" title="statement not covered" ></span>
+          {<span class="cstat-no" title="statement not covered" ></span>
+            disabled: false,<span class="cstat-no" title="statement not covered" ></span>
+            label: st<span class="cstat-no" title="statement not covered" >rings.EXPORT_BIOMASS_MONITORING_DETAILS_CSV,</span>
+            onClick: () =&gt; void downloadBiomassObservationDetails(observationId),
+          },
+        ]}
+      /&gt;
+    );
+<span class="cstat-no" title="statement not covered" ></span>
+    return &lt;Cell<span class="cstat-no" title="statement not covered" >Renderer {...props} value={menu} /&gt;;</span>
+  }<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
+  return &lt;CellRenderer {...props} sx={textStyles} /&gt;;
+}
+&nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-07T19:31:33.923Z
+                at 2026-01-07T22:27:10.072Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
