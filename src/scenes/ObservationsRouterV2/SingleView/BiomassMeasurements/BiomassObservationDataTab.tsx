@@ -14,7 +14,6 @@ import { getConditionString } from 'src/redux/features/observations/utils';
 import ExtraData from 'src/scenes/ObservationsRouter/adhoc/ExtraData';
 import ObservationDataNumbers from 'src/scenes/ObservationsRouter/adhoc/ObservationDataNumbers';
 import LiveTreesPerSpecies from 'src/scenes/ObservationsRouter/biomass/LiveTreesPerSpecies';
-import TreesAndShrubsEditableTable from 'src/scenes/ObservationsRouter/biomass/TreesAndShrubsEditableTable';
 import EventLog from 'src/scenes/ObservationsRouter/common/EventLog';
 import MatchSpeciesModal from 'src/scenes/ObservationsRouter/common/MatchSpeciesModal';
 import MonitoringPlotPhotosWithActions from 'src/scenes/ObservationsRouter/common/MonitoringPlotPhotosWithActions';
@@ -27,6 +26,7 @@ import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import useObservationExports from '../../useObservationExports';
 import EditBiomassQualitativeDataModal, { BiomassQualitativeFormData } from './EditBiomassQualitativeDataModal';
+import TreesAndShrubsEditableTable from './TreesAndShrubsEditableTable';
 
 const BiomassObservationDataTab = () => {
   const isEditObservationsEnabled = isEnabled('Edit Observations');
@@ -308,17 +308,15 @@ const BiomassObservationDataTab = () => {
         <Typography fontSize={'20px'} fontWeight={600}>
           {strings.TREES_AND_SHRUBS}
         </Typography>
-        <Box display='flex' alignItems={'center'} paddingTop={3}>
-          <Icon name='info' fillColor={theme.palette.TwClrIcnSecondary} size='medium' />
-          <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px' paddingLeft={1}>
-            {strings.TREES_AND_SHRUBS_TABLE_INSTRUCTIONS}
-          </Typography>
-        </Box>
-        <TreesAndShrubsEditableTable
-          trees={biomassMeasurement?.trees}
-          observationId={Number(observationId)}
-          plotId={Number(monitoringPlot?.monitoringPlotId)}
-        />
+        {isEditObservationsEnabled && (
+          <Box display='flex' alignItems={'center'} paddingTop={3}>
+            <Icon name='info' fillColor={theme.palette.TwClrIcnSecondary} size='medium' />
+            <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px' paddingLeft={1}>
+              {strings.TREES_AND_SHRUBS_TABLE_INSTRUCTIONS}
+            </Typography>
+          </Box>
+        )}
+        <TreesAndShrubsEditableTable editable={isEditObservationsEnabled} />
         {monitoringPlot?.monitoringPlotId && (
           <EventLog observationId={observationId} plotId={monitoringPlot.monitoringPlotId} isBiomass />
         )}
