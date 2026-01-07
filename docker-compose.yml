@@ -48,4 +48,4 @@ services:
       - 'terraware-server'
     # Only launch nginx listening on http://localhost:3001 if
     # `--profile prod` is passed to `docker compose`.
-    profiles: [ prod ]
+    profiles: [prod]
