@@ -249,7 +249,7 @@ const BiomassObservationDataTab = () => {
           priority='ghost'
           label={strings.EXPORT_DATA}
           icon='iconImport'
-          onClick={() => downloadBiomassObservationDetails(observationId)}
+          onClick={() => void downloadBiomassObservationDetails(observationId)}
           sx={{ fontWeight: '400 !important' }}
         />
       </Box>
