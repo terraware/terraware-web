@@ -11,8 +11,8 @@ import { useLazyListPlantingSitesQuery } from 'src/queries/generated/plantingSit
 import MobileAppCard from 'src/scenes/Home/MobileAppCard';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
+import ObservationMap from '../Map/ObservationMap';
 import BiomassList from './BiomassList';
-import ObservationMap from './ObservationMap';
 import PlantMonitoringList from './PlantMonitoringList';
 
 const ObservationListView = (): JSX.Element => {

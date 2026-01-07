@@ -1,14 +1,16 @@
 import React from 'react';
 
+import Link from 'src/components/common/Link';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import TableRowPopupMenu from 'src/components/common/table/TableRowPopupMenu';
 import { RendererProps } from 'src/components/common/table/types';
+import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 
 import useObservationExports from '../useObservationExports';
 
 export default function PlantMonitoringRenderer(props: RendererProps<TableRowType>): JSX.Element {
-  const { column, row } = props;
+  const { column, row, value } = props;
   const { strings } = useLocalization();
   const observationId = row.observationId as number;
   const { downloadObservationCsv, downloadObservationGpx, downloadObservationResults } = useObservationExports();
@@ -19,6 +21,20 @@ export default function PlantMonitoringRenderer(props: RendererProps<TableRowTyp
       fontSize: '16px',
     },
   };
+
+  if (column.key === 'observationDate') {
+    const url = APP_PATHS.OBSERVATION_DETAILS_V2.replace(':observationId', observationId.toString());
+    return (
+      <CellRenderer
+        {...props}
+        value={
+          <Link fontSize='16px' to={url}>
+            {value as string}
+          </Link>
+        }
+      />
+    );
+  }
 
   if (column.key === 'actionsMenu') {
     const exportDisabled = row.state === 'Upcoming';

@@ -42,7 +42,7 @@ import {
 } from 'src/types/Observations';
 import useMapboxToken from 'src/utils/useMapboxToken';
 
-import ObservationStatsDrawer from './ObservationStatsDrawer';
+import ObservationStatsDrawer from '../ListView/ObservationStatsDrawer';
 
 type LayerFeature = {
   plantingSiteId: number;
