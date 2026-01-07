@@ -37,12 +37,15 @@ export function useOnSaveMergedSpeciesRtk(
           }).unwrap();
         });
 
-        const results = await Promise.all(promises);
-
-        if (results.every((result) => result.status === 'ok')) {
-          snackbar.toastSuccess(strings.SPECIES_MATCHED);
-          onComplete?.();
-        } else {
+        try {
+          const results = await Promise.all(promises);
+          if (results.every((result) => result.status === 'ok')) {
+            snackbar.toastSuccess(strings.SPECIES_MATCHED);
+            onComplete?.();
+          } else {
+            snackbar.toastError();
+          }
+        } catch (error) {
           snackbar.toastError();
         }
       };

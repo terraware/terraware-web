@@ -18,8 +18,7 @@ import EventLog from 'src/scenes/ObservationsRouter/common/EventLog';
 import MatchSpeciesModal from 'src/scenes/ObservationsRouter/common/MatchSpeciesModal';
 import MonitoringPlotPhotosWithActions from 'src/scenes/ObservationsRouter/common/MonitoringPlotPhotosWithActions';
 import UnrecognizedSpeciesPageMessage from 'src/scenes/ObservationsRouter/common/UnrecognizedSpeciesPageMessage';
-import { useOnSaveMergedSpeciesRtk } from 'src/scenes/ObservationsRouter/common/useOnSaveMergedSpeciesRtk';
-import strings from 'src/strings';
+import { useOnSaveMergedSpeciesRtk } from 'src/scenes/ObservationsRouterV2/useOnSaveMergedSpeciesRtk';
 import { getDateTimeDisplayValue, getShortTime } from 'src/utils/dateFormatter';
 import { getObservationSpeciesDeadPlantsCount, getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
@@ -30,7 +29,7 @@ import TreesAndShrubsEditableTable from './TreesAndShrubsEditableTable';
 
 const BiomassObservationDataTab = () => {
   const isEditObservationsEnabled = isEnabled('Edit Observations');
-
+  const { strings } = useLocalization();
   const theme = useTheme();
   const params = useParams<{ observationId: string }>();
   const observationId = Number(params.observationId);

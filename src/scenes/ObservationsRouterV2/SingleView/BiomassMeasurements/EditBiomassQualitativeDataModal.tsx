@@ -14,7 +14,6 @@ import {
   useUpdateCompletedObservationPlotMutation,
 } from 'src/queries/generated/observations';
 import { getPlotConditionsOptions } from 'src/redux/features/observations/utils';
-import strings from 'src/strings';
 import { BiomassMeasurement, PlotCondition } from 'src/types/Observations';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -34,7 +33,7 @@ type EditQualitativeDataModalProps = {
 };
 
 const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: EditQualitativeDataModalProps) => {
-  const { activeLocale } = useLocalization();
+  const { activeLocale, strings } = useLocalization();
   const snackbar = useSnackbar();
 
   const params = useParams<{ observationId: string }>();
@@ -140,7 +139,7 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
         value: 'Mangrove',
       },
     ],
-    []
+    [strings.MANGROVE, strings.TERRESTRIAL]
   );
 
   const smallTreeCountOptions = useMemo(
