@@ -1,5 +1,5 @@
 FROM nginx:1.29-alpine
-COPY ./build /usr/share/nginx/html
+COPY ./dist /usr/share/nginx/html
 COPY nginx/default.conf.template /etc/nginx/templates/
 ENV SERVER_URL=http://web:8008
 WORKDIR /usr/share/nginx
