@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Grid, Typography, useTheme } from '@mui/material';
 import { BusySpinner, Button, DialogBox, Dropdown, Textfield } from '@terraware/web-components';
@@ -46,6 +46,10 @@ export default function ReplaceObservationPlotModal(props: ReplaceObservationPlo
   const result = useAppSelector((state) => selectReplaceObservationPlot(state, requestId));
   const plots = useAppSelector((state) => selectMonitoringPlots(state, monitoringPlotsRequestId));
   const hasCompletedObservations = useAppSelector((state) => selectHasCompletedObservations(state, plantingSiteId));
+
+  const stopPropagation = useCallback((e: React.MouseEvent | React.SyntheticEvent) => {
+    e.stopPropagation();
+  }, []);
 
   const replaceObservationPlot = () => {
     setValidate(true);
@@ -137,77 +141,79 @@ export default function ReplaceObservationPlotModal(props: ReplaceObservationPlo
   return (
     <>
       {(result?.status === 'pending' || plots?.status === 'pending') && <BusySpinner withSkrim={true} />}
-      <DialogBox
-        onClose={onClose}
-        open={true}
-        title={strings.REQUEST_REASSIGNMENT}
-        size='medium'
-        middleButtons={[
-          <Button
-            id='cancelReplaceObservationPlot'
-            label={strings.CANCEL}
-            type='passive'
-            onClick={onClose}
-            priority='secondary'
-            key='button-1'
-          />,
-          <Button
-            id='replaceObservationPlot'
-            onClick={replaceObservationPlot}
-            label={strings.SEND_REQUEST}
-            key='button-2'
-          />,
-        ]}
-        scrolled={false}
-      >
-        <Grid container item xs={12} spacing={2} textAlign='left'>
-          <Grid item xs={12}>
-            <Typography
-              fontSize='16px'
-              lineHeight='24px'
-              fontWeight={400}
-              color={theme.palette.TwClrTxt}
-              textAlign='center'
-            >
-              {strings.REQUEST_REASSIGNMENT_JUSTIFICATION}
-            </Typography>
+      <div onClick={stopPropagation} onMouseDown={stopPropagation}>
+        <DialogBox
+          onClose={onClose}
+          open={true}
+          title={strings.REQUEST_REASSIGNMENT}
+          size='medium'
+          middleButtons={[
+            <Button
+              id='cancelReplaceObservationPlot'
+              label={strings.CANCEL}
+              type='passive'
+              onClick={onClose}
+              priority='secondary'
+              key='button-1'
+            />,
+            <Button
+              id='replaceObservationPlot'
+              onClick={replaceObservationPlot}
+              label={strings.SEND_REQUEST}
+              key='button-2'
+            />,
+          ]}
+          scrolled={false}
+        >
+          <Grid container item xs={12} spacing={2} textAlign='left'>
+            <Grid item xs={12}>
+              <Typography
+                fontSize='16px'
+                lineHeight='24px'
+                fontWeight={400}
+                color={theme.palette.TwClrTxt}
+                textAlign='center'
+              >
+                {strings.REQUEST_REASSIGNMENT_JUSTIFICATION}
+              </Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <Textfield
+                id='monitoringPlot'
+                value={monitoringPlot.monitoringPlotNumber}
+                type='text'
+                label={strings.MONITORING_PLOT}
+                display={true}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Textfield
+                id='reason'
+                value={justification}
+                type='textarea'
+                label={strings.REASON}
+                onChange={(value) => {
+                  setJustification(value as string);
+                }}
+                errorText={validate && !justification ? strings.REQUIRED_FIELD : ''}
+                required
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Dropdown
+                id='duration'
+                label={strings.REASSIGNMENT_DURATION}
+                onChange={(value: string) => setDuration(value as ReplaceObservationPlotDuration)}
+                options={durations}
+                selectedValue={duration}
+                errorText={validate && !duration ? strings.REQUIRED_FIELD : ''}
+                fullWidth
+                required
+              />
+            </Grid>
           </Grid>
-          <Grid item xs={12}>
-            <Textfield
-              id='monitoringPlot'
-              value={monitoringPlot.monitoringPlotNumber}
-              type='text'
-              label={strings.MONITORING_PLOT}
-              display={true}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <Textfield
-              id='reason'
-              value={justification}
-              type='textarea'
-              label={strings.REASON}
-              onChange={(value) => {
-                setJustification(value as string);
-              }}
-              errorText={validate && !justification ? strings.REQUIRED_FIELD : ''}
-              required
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <Dropdown
-              id='duration'
-              label={strings.REASSIGNMENT_DURATION}
-              onChange={(value: string) => setDuration(value as ReplaceObservationPlotDuration)}
-              options={durations}
-              selectedValue={duration}
-              errorText={validate && !duration ? strings.REQUIRED_FIELD : ''}
-              fullWidth
-              required
-            />
-          </Grid>
-        </Grid>
-      </DialogBox>
+        </DialogBox>
+      </div>
     </>
   );
 }
