@@ -677,11 +677,7 @@ CREATE TABLE accelerator.activities (
     verified_by bigint,
     verified_time timestamp with time zone,
     activity_status_id integer NOT NULL,
-    CONSTRAINT activity_status_verified CHECK (
-CASE activity_status_id
-    WHEN 2 THEN (verified_by IS NOT NULL)
-    ELSE (verified_by IS NULL)
-END),
+    CONSTRAINT activity_status_verified CHECK (((activity_status_id <> 2) OR (verified_by IS NOT NULL))),
     CONSTRAINT verified_by_requires_time CHECK (((verified_by IS NULL) = (verified_time IS NULL)))
 );
 
@@ -2232,7 +2228,8 @@ CREATE TABLE accelerator.standard_metrics (
     name text NOT NULL,
     description text,
     reference text NOT NULL COLLATE public.natural_numeric,
-    is_publishable boolean NOT NULL
+    is_publishable boolean NOT NULL,
+    unit text
 );
 
 
@@ -4523,7 +4520,7 @@ CREATE TABLE tracking.planting_sites (
 -- Name: TABLE planting_sites; Type: COMMENT; Schema: tracking; Owner: -
 --
 
-COMMENT ON TABLE tracking.planting_sites IS 'Top-level information about entire planting sites. Every planting site has at least one planting zone.';
+COMMENT ON TABLE tracking.planting_sites IS 'Top-level information about entire planting sites. Every planting site has at least one stratum.';
 
 
 --
@@ -4551,7 +4548,7 @@ COMMENT ON COLUMN tracking.planting_sites.description IS 'Optional user-supplied
 -- Name: COLUMN planting_sites.boundary; Type: COMMENT; Schema: tracking; Owner: -
 --
 
-COMMENT ON COLUMN tracking.planting_sites.boundary IS 'Boundary of the entire planting site. Planting zones will generally fall inside this boundary. This will typically be a single polygon but may be multiple polygons if a planting site has several disjoint areas. Coordinates always use SRID 4326 (WGS 84 latitude/longitude).';
+COMMENT ON COLUMN tracking.planting_sites.boundary IS 'Boundary of the entire planting site. strata will generally fall inside this boundary. This will typically be a single polygon but may be multiple polygons if a planting site has several disjoint areas. Coordinates always use SRID 4326 (WGS 84 latitude/longitude).';
 
 
 --
@@ -4597,106 +4594,6 @@ COMMENT ON COLUMN tracking.planting_sites.grid_origin IS 'Coordinates of the ori
 
 
 --
--- Name: planting_subzones; Type: TABLE; Schema: tracking; Owner: -
---
-
-CREATE TABLE tracking.planting_subzones (
-    id bigint NOT NULL,
-    planting_zone_id bigint NOT NULL,
-    name text NOT NULL COLLATE public.natural_numeric,
-    full_name text NOT NULL COLLATE public.natural_numeric,
-    boundary public.geometry(MultiPolygon) NOT NULL,
-    created_by bigint NOT NULL,
-    created_time timestamp with time zone NOT NULL,
-    modified_by bigint NOT NULL,
-    modified_time timestamp with time zone NOT NULL,
-    planting_site_id bigint NOT NULL,
-    area_ha numeric NOT NULL,
-    planting_completed_time timestamp with time zone,
-    observed_time timestamp with time zone,
-    stable_id text NOT NULL,
-    CONSTRAINT area_positive CHECK ((area_ha > (0)::numeric))
-);
-
-
---
--- Name: TABLE planting_subzones; Type: COMMENT; Schema: tracking; Owner: -
---
-
-COMMENT ON TABLE tracking.planting_subzones IS 'Regions within planting zones that are a convenient size for a planting operation. Typically <10Ha.';
-
-
---
--- Name: COLUMN planting_subzones.planting_zone_id; Type: COMMENT; Schema: tracking; Owner: -
---
-
-COMMENT ON COLUMN tracking.planting_subzones.planting_zone_id IS 'Which planting zone this subzone is part of.';
-
-
---
--- Name: COLUMN planting_subzones.name; Type: COMMENT; Schema: tracking; Owner: -
---
-
-COMMENT ON COLUMN tracking.planting_subzones.name IS 'Short name of this planting subzone. This is often just a single letter and number. Must be unique within a planting zone.';
-
-
---
--- Name: COLUMN planting_subzones.boundary; Type: COMMENT; Schema: tracking; Owner: -
---
-
-COMMENT ON COLUMN tracking.planting_subzones.boundary IS 'Boundary of the subzone. Coordinates always use SRID 4326 (WGS 84 latitude/longitude).';
-
-
---
--- Name: COLUMN planting_subzones.created_by; Type: COMMENT; Schema: tracking; Owner: -
---
-
-COMMENT ON COLUMN tracking.planting_subzones.created_by IS 'Which user created the subzone.';
-
-
---
--- Name: COLUMN planting_subzones.created_time; Type: COMMENT; Schema: tracking; Owner: -
---
-
-COMMENT ON COLUMN tracking.planting_subzones.created_time IS 'When the subzone was originally created.';
-
-
---
--- Name: COLUMN planting_subzones.modified_by; Type: COMMENT; Schema: tracking; Owner: -
---
-
-COMMENT ON COLUMN tracking.planting_subzones.modified_by IS 'Which user most recently modified the subzone.';
-
-
---
--- Name: COLUMN planting_subzones.modified_time; Type: COMMENT; Schema: tracking; Owner: -
---
-
-COMMENT ON COLUMN tracking.planting_subzones.modified_time IS 'When the subzone was most recently modified.';
-
-
---
--- Name: COLUMN planting_subzones.planting_site_id; Type: COMMENT; Schema: tracking; Owner: -
---
-
-COMMENT ON COLUMN tracking.planting_subzones.planting_site_id IS 'Which planting site this subzone is part of. This is the same as the planting site ID of this subzone''s planting zone, but is duplicated here so it can be used as the target of a foreign key constraint.';
-
-
---
--- Name: COLUMN planting_subzones.observed_time; Type: COMMENT; Schema: tracking; Owner: -
---
-
-COMMENT ON COLUMN tracking.planting_subzones.observed_time IS 'When an observation of a monitoring plot in the subzone was most recently completed.';
-
-
---
--- Name: COLUMN planting_subzones.stable_id; Type: COMMENT; Schema: tracking; Owner: -
---
-
-COMMENT ON COLUMN tracking.planting_subzones.stable_id IS 'Subzone identifier that doesn''t change even if the subzone is renamed or edited. Defaults to the full name.';
-
-
---
 -- Name: plantings; Type: TABLE; Schema: tracking; Owner: -
 --
 
@@ -4705,7 +4602,7 @@ CREATE TABLE tracking.plantings (
     delivery_id bigint NOT NULL,
     planting_type_id integer NOT NULL,
     planting_site_id bigint NOT NULL,
-    planting_subzone_id bigint,
+    substratum_id bigint,
     species_id bigint NOT NULL,
     created_by bigint NOT NULL,
     created_time timestamp with time zone NOT NULL,
@@ -4745,10 +4642,10 @@ COMMENT ON COLUMN tracking.plantings.planting_site_id IS 'Which planting site ha
 
 
 --
--- Name: COLUMN plantings.planting_subzone_id; Type: COMMENT; Schema: tracking; Owner: -
+-- Name: COLUMN plantings.substratum_id; Type: COMMENT; Schema: tracking; Owner: -
 --
 
-COMMENT ON COLUMN tracking.plantings.planting_subzone_id IS 'Which plot this planting affected, if any. Must be a plot at the planting site referenced by `planting_site_id`. Null if the planting site does not have plot information. For reassignments, this is the original plot if `num_plants` is negative, or the new plot if `num_plants` is positive.';
+COMMENT ON COLUMN tracking.plantings.substratum_id IS 'Which plot this planting affected, if any. Must be a plot at the planting site referenced by `planting_site_id`. Null if the planting site does not have plot information. For reassignments, this is the original plot if `num_plants` is negative, or the new plot if `num_plants` is positive.';
 
 
 --
@@ -4794,6 +4691,106 @@ COMMENT ON CONSTRAINT num_plants_sign_consistent_with_type ON tracking.plantings
 
 
 --
+-- Name: substrata; Type: TABLE; Schema: tracking; Owner: -
+--
+
+CREATE TABLE tracking.substrata (
+    id bigint NOT NULL,
+    stratum_id bigint NOT NULL,
+    name text NOT NULL COLLATE public.natural_numeric,
+    full_name text NOT NULL COLLATE public.natural_numeric,
+    boundary public.geometry(MultiPolygon) NOT NULL,
+    created_by bigint NOT NULL,
+    created_time timestamp with time zone NOT NULL,
+    modified_by bigint NOT NULL,
+    modified_time timestamp with time zone NOT NULL,
+    planting_site_id bigint NOT NULL,
+    area_ha numeric NOT NULL,
+    planting_completed_time timestamp with time zone,
+    observed_time timestamp with time zone,
+    stable_id text NOT NULL,
+    CONSTRAINT area_positive CHECK ((area_ha > (0)::numeric))
+);
+
+
+--
+-- Name: TABLE substrata; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON TABLE tracking.substrata IS 'Regions within strata that are a convenient size for a planting operation. Typically <10Ha.';
+
+
+--
+-- Name: COLUMN substrata.stratum_id; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON COLUMN tracking.substrata.stratum_id IS 'Which stratum this substratum is part of.';
+
+
+--
+-- Name: COLUMN substrata.name; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON COLUMN tracking.substrata.name IS 'Short name of this substratum. This is often just a single letter and number. Must be unique within a stratum.';
+
+
+--
+-- Name: COLUMN substrata.boundary; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON COLUMN tracking.substrata.boundary IS 'Boundary of the substratum. Coordinates always use SRID 4326 (WGS 84 latitude/longitude).';
+
+
+--
+-- Name: COLUMN substrata.created_by; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON COLUMN tracking.substrata.created_by IS 'Which user created the substratum.';
+
+
+--
+-- Name: COLUMN substrata.created_time; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON COLUMN tracking.substrata.created_time IS 'When the substratum was originally created.';
+
+
+--
+-- Name: COLUMN substrata.modified_by; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON COLUMN tracking.substrata.modified_by IS 'Which user most recently modified the substratum.';
+
+
+--
+-- Name: COLUMN substrata.modified_time; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON COLUMN tracking.substrata.modified_time IS 'When the substratum was most recently modified.';
+
+
+--
+-- Name: COLUMN substrata.planting_site_id; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON COLUMN tracking.substrata.planting_site_id IS 'Which planting site this substratum is part of. This is the same as the planting site ID of this substratum''s stratum, but is duplicated here so it can be used as the target of a foreign key constraint.';
+
+
+--
+-- Name: COLUMN substrata.observed_time; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON COLUMN tracking.substrata.observed_time IS 'When an observation of a monitoring plot in the substratum was most recently completed.';
+
+
+--
+-- Name: COLUMN substrata.stable_id; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON COLUMN tracking.substrata.stable_id IS 'Substratum identifier that doesn''t change even if the substratum is renamed or edited. Defaults to the full name.';
+
+
+--
 -- Name: withdrawal_summaries; Type: VIEW; Schema: nursery; Owner: -
 --
 
@@ -4816,7 +4813,7 @@ CREATE VIEW nursery.withdrawal_summaries AS
     deliveries.id AS delivery_id,
     totals.total_withdrawn,
     COALESCE(dest_nurseries.name, dest_sites.name) AS destination_name,
-    COALESCE(reassignment_subzones.plot_names, delivery_subzones.plot_names) AS planting_subzone_names,
+    COALESCE(reassignment_substrata.plot_names, delivery_substrata.plot_names) AS substratum_names,
     (EXISTS ( SELECT 1
            FROM tracking.plantings p
           WHERE ((p.delivery_id = deliveries.id) AND (p.planting_type_id = 2)))) AS has_reassignments
@@ -4828,14 +4825,14 @@ CREATE VIEW nursery.withdrawal_summaries AS
      LEFT JOIN LATERAL ( SELECT COALESCE(sum((((bw.germinating_quantity_withdrawn + bw.hardening_off_quantity_withdrawn) + bw.active_growth_quantity_withdrawn) + bw.ready_quantity_withdrawn)), (0)::bigint) AS total_withdrawn
            FROM nursery.batch_withdrawals bw
           WHERE (withdrawals.id = bw.withdrawal_id)) totals ON (true))
-     LEFT JOIN LATERAL ( SELECT string_agg(DISTINCT p.full_name, ', '::text ORDER BY p.full_name) AS plot_names
-           FROM (tracking.planting_subzones p
-             JOIN tracking.plantings pl ON ((p.id = pl.planting_subzone_id)))
-          WHERE ((pl.planting_type_id = 1) AND (pl.delivery_id = deliveries.id))) delivery_subzones ON (true))
-     LEFT JOIN LATERAL ( SELECT (((delivery_subzones.plot_names || ' ('::text) || string_agg(p.full_name, ', '::text ORDER BY p.full_name)) || ')'::text) AS plot_names
-           FROM (tracking.planting_subzones p
-             JOIN tracking.plantings pl ON ((p.id = pl.planting_subzone_id)))
-          WHERE ((pl.planting_type_id = 3) AND (pl.delivery_id = deliveries.id))) reassignment_subzones ON (true))
+     LEFT JOIN LATERAL ( SELECT string_agg(DISTINCT ss.full_name, ', '::text ORDER BY ss.full_name) AS plot_names
+           FROM (tracking.substrata ss
+             JOIN tracking.plantings pl ON ((ss.id = pl.substratum_id)))
+          WHERE ((pl.planting_type_id = 1) AND (pl.delivery_id = deliveries.id))) delivery_substrata ON (true))
+     LEFT JOIN LATERAL ( SELECT (((delivery_substrata.plot_names || ' ('::text) || string_agg(ss.full_name, ', '::text ORDER BY ss.full_name)) || ')'::text) AS plot_names
+           FROM (tracking.substrata ss
+             JOIN tracking.plantings pl ON ((ss.id = pl.substratum_id)))
+          WHERE ((pl.planting_type_id = 3) AND (pl.delivery_id = deliveries.id))) reassignment_substrata ON (true))
      LEFT JOIN LATERAL ( SELECT f.name
            FROM public.facilities f
           WHERE ((f.id = withdrawals.destination_facility_id) AND (withdrawals.purpose_id = 1))) dest_nurseries ON (true))
@@ -6965,7 +6962,8 @@ CREATE TABLE public.thumbnails (
     content_type text NOT NULL,
     created_time timestamp with time zone NOT NULL,
     size integer NOT NULL,
-    storage_url text NOT NULL
+    storage_url text NOT NULL,
+    is_full_size boolean
 );
 
 
@@ -6973,7 +6971,14 @@ CREATE TABLE public.thumbnails (
 -- Name: TABLE thumbnails; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.thumbnails IS 'Information about scaled-down versions of photos.';
+COMMENT ON TABLE public.thumbnails IS 'Information about server-generated versions of photos and still images of videos.';
+
+
+--
+-- Name: COLUMN thumbnails.is_full_size; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.thumbnails.is_full_size IS 'True if this thumbnail''s dimensions are the same as the original photo or video.';
 
 
 --
@@ -8115,8 +8120,8 @@ CREATE TABLE tracking.draft_planting_sites (
     name text NOT NULL,
     description text,
     time_zone text,
-    num_planting_zones integer,
-    num_planting_subzones integer,
+    num_strata integer,
+    num_substrata integer,
     data jsonb NOT NULL,
     created_by bigint NOT NULL,
     created_time timestamp with time zone NOT NULL,
@@ -8133,17 +8138,17 @@ COMMENT ON TABLE tracking.draft_planting_sites IS 'Details of planting sites tha
 
 
 --
--- Name: COLUMN draft_planting_sites.num_planting_zones; Type: COMMENT; Schema: tracking; Owner: -
+-- Name: COLUMN draft_planting_sites.num_strata; Type: COMMENT; Schema: tracking; Owner: -
 --
 
-COMMENT ON COLUMN tracking.draft_planting_sites.num_planting_zones IS 'Number of planting zones defined so far.';
+COMMENT ON COLUMN tracking.draft_planting_sites.num_strata IS 'Number of strata defined so far.';
 
 
 --
--- Name: COLUMN draft_planting_sites.num_planting_subzones; Type: COMMENT; Schema: tracking; Owner: -
+-- Name: COLUMN draft_planting_sites.num_substrata; Type: COMMENT; Schema: tracking; Owner: -
 --
 
-COMMENT ON COLUMN tracking.draft_planting_sites.num_planting_subzones IS 'Number of planting subzones defined so far.';
+COMMENT ON COLUMN tracking.draft_planting_sites.num_substrata IS 'Number of substrata defined so far.';
 
 
 --
@@ -8191,9 +8196,9 @@ COMMENT ON TABLE tracking.mangrove_tides IS '(Enum) High/Low tide at a mangrove 
 CREATE TABLE tracking.monitoring_plot_histories (
     id bigint NOT NULL,
     monitoring_plot_id bigint NOT NULL,
-    planting_subzone_id bigint,
+    substratum_id bigint,
     planting_site_id bigint NOT NULL,
-    planting_subzone_history_id bigint,
+    substratum_history_id bigint,
     planting_site_history_id bigint NOT NULL,
     created_by bigint NOT NULL,
     created_time timestamp with time zone NOT NULL
@@ -8218,7 +8223,7 @@ COMMENT ON COLUMN tracking.monitoring_plot_histories.created_by IS 'Which user c
 -- Name: COLUMN monitoring_plot_histories.created_time; Type: COMMENT; Schema: tracking; Owner: -
 --
 
-COMMENT ON COLUMN tracking.monitoring_plot_histories.created_time IS 'When the monitoring plot was created, edited, or associated with a new planting site history record. May differ from the time when the subzone or planting site was created or edited since plots can be created when observations start.';
+COMMENT ON COLUMN tracking.monitoring_plot_histories.created_time IS 'When the monitoring plot was created, edited, or associated with a new planting site history record. May differ from the time when the substratum or planting site was created or edited since plots can be created when observations start.';
 
 
 --
@@ -8273,7 +8278,7 @@ COMMENT ON COLUMN tracking.monitoring_plot_overlaps.overlaps_plot_id IS 'ID of t
 
 CREATE TABLE tracking.monitoring_plots (
     id bigint NOT NULL,
-    planting_subzone_id bigint,
+    substratum_id bigint,
     created_by bigint NOT NULL,
     created_time timestamp with time zone NOT NULL,
     modified_by bigint NOT NULL,
@@ -8294,14 +8299,14 @@ CREATE TABLE tracking.monitoring_plots (
 -- Name: TABLE monitoring_plots; Type: COMMENT; Schema: tracking; Owner: -
 --
 
-COMMENT ON TABLE tracking.monitoring_plots IS 'Regions within planting subzones that can be comprehensively surveyed in order to extrapolate results for the entire zone. Any monitoring plot in a subzone is expected to have roughly the same number of plants of the same species as any other monitoring plot in the same subzone.';
+COMMENT ON TABLE tracking.monitoring_plots IS 'Regions within substrata that can be comprehensively surveyed in order to extrapolate results for the entire stratum. Any monitoring plot in a substratum is expected to have roughly the same number of plants of the same species as any other monitoring plot in the same substratum.';
 
 
 --
--- Name: COLUMN monitoring_plots.planting_subzone_id; Type: COMMENT; Schema: tracking; Owner: -
+-- Name: COLUMN monitoring_plots.substratum_id; Type: COMMENT; Schema: tracking; Owner: -
 --
 
-COMMENT ON COLUMN tracking.monitoring_plots.planting_subzone_id IS 'Which planting subzone this monitoring plot is currently part of, if any. May be null if the subzone was edited or removed after the plot was created, or if the plot was created outside the site boundary.';
+COMMENT ON COLUMN tracking.monitoring_plots.substratum_id IS 'Which substratum this monitoring plot is currently part of, if any. May be null if the substratum was edited or removed after the plot was created, or if the plot was created outside the site boundary.';
 
 
 --
@@ -8343,7 +8348,7 @@ COMMENT ON COLUMN tracking.monitoring_plots.boundary IS 'Boundary of the monitor
 -- Name: COLUMN monitoring_plots.permanent_index; Type: COMMENT; Schema: tracking; Owner: -
 --
 
-COMMENT ON COLUMN tracking.monitoring_plots.permanent_index IS 'If this plot is a candidate to be a permanent monitoring plot, its position in the randomized list of plots for the planting zone. Starts at 1 for each planting zone. If null, this plot is not currently a candidate for selection as a permanent plot but may still be chosen as a temporary plot.';
+COMMENT ON COLUMN tracking.monitoring_plots.permanent_index IS 'If this plot is a candidate to be a permanent monitoring plot, its position in the randomized list of plots for the stratum. Starts at 1 for each stratum. If null, this plot is not currently a candidate for selection as a permanent plot but may still be chosen as a temporary plot.';
 
 
 --
@@ -8711,20 +8716,20 @@ COMMENT ON COLUMN tracking.observation_plots.observed_time IS 'Client-supplied o
 
 
 --
--- Name: observation_requested_subzones; Type: TABLE; Schema: tracking; Owner: -
+-- Name: observation_requested_substrata; Type: TABLE; Schema: tracking; Owner: -
 --
 
-CREATE TABLE tracking.observation_requested_subzones (
+CREATE TABLE tracking.observation_requested_substrata (
     observation_id bigint NOT NULL,
-    planting_subzone_id bigint NOT NULL
+    substratum_id bigint NOT NULL
 );
 
 
 --
--- Name: TABLE observation_requested_subzones; Type: COMMENT; Schema: tracking; Owner: -
+-- Name: TABLE observation_requested_substrata; Type: COMMENT; Schema: tracking; Owner: -
 --
 
-COMMENT ON TABLE tracking.observation_requested_subzones IS 'If an observation should only cover a specific set of subzones, the subzone IDs are stored here. If an observation is of the entire site (the default), there will be no rows for that observation in this table.';
+COMMENT ON TABLE tracking.observation_requested_substrata IS 'If an observation should only cover a specific set of substrata, the substratum IDs are stored here. If an observation is of the entire site (the default), there will be no rows for that observation in this table.';
 
 
 --
@@ -8886,8 +8891,6 @@ CREATE TABLE tracking.observed_plot_species_totals (
     total_live integer DEFAULT 0 NOT NULL,
     total_dead integer DEFAULT 0 NOT NULL,
     total_existing integer DEFAULT 0 NOT NULL,
-    mortality_rate integer DEFAULT 0,
-    cumulative_dead integer DEFAULT 0 NOT NULL,
     permanent_live integer DEFAULT 0 NOT NULL,
     survival_rate integer,
     CONSTRAINT species_identifier_for_certainty CHECK ((((certainty_id = 1) AND (species_id IS NOT NULL) AND (species_name IS NULL)) OR ((certainty_id = 2) AND (species_id IS NULL) AND (species_name IS NOT NULL)) OR ((certainty_id = 3) AND (species_id IS NULL) AND (species_name IS NULL))))
@@ -8899,20 +8902,6 @@ CREATE TABLE tracking.observed_plot_species_totals (
 --
 
 COMMENT ON TABLE tracking.observed_plot_species_totals IS 'Aggregated per-monitoring-plot, per-species totals of plants recorded during observations.';
-
-
---
--- Name: COLUMN observed_plot_species_totals.mortality_rate; Type: COMMENT; Schema: tracking; Owner: -
---
-
-COMMENT ON COLUMN tracking.observed_plot_species_totals.mortality_rate IS 'If this is a permanent monitoring plot, percentage of plants of the species observed in this plot, in either this observation or in previous ones, that were dead. Null if this is not a permanent monitoring plot in the current observation.';
-
-
---
--- Name: COLUMN observed_plot_species_totals.cumulative_dead; Type: COMMENT; Schema: tracking; Owner: -
---
-
-COMMENT ON COLUMN tracking.observed_plot_species_totals.cumulative_dead IS 'If this is a permanent monitoring plot, total number of dead plants observed in all observations including the current one.';
 
 
 --
@@ -8942,8 +8931,6 @@ CREATE TABLE tracking.observed_site_species_totals (
     total_live integer DEFAULT 0 NOT NULL,
     total_dead integer DEFAULT 0 NOT NULL,
     total_existing integer DEFAULT 0 NOT NULL,
-    mortality_rate integer DEFAULT 0,
-    cumulative_dead integer DEFAULT 0 NOT NULL,
     permanent_live integer DEFAULT 0 NOT NULL,
     survival_rate integer,
     CONSTRAINT species_identifier_for_certainty CHECK ((((certainty_id = 1) AND (species_id IS NOT NULL) AND (species_name IS NULL)) OR ((certainty_id = 2) AND (species_id IS NULL) AND (species_name IS NOT NULL)) OR ((certainty_id = 3) AND (species_id IS NULL) AND (species_name IS NULL))))
@@ -8955,20 +8942,6 @@ CREATE TABLE tracking.observed_site_species_totals (
 --
 
 COMMENT ON TABLE tracking.observed_site_species_totals IS 'Aggregated per-planting-site, per-species totals of plants recorded during observations.';
-
-
---
--- Name: COLUMN observed_site_species_totals.mortality_rate; Type: COMMENT; Schema: tracking; Owner: -
---
-
-COMMENT ON COLUMN tracking.observed_site_species_totals.mortality_rate IS 'Percentage of plants of the species observed in permanent monitoring plots in the planting site, in either this observation or in previous ones, that were dead.';
-
-
---
--- Name: COLUMN observed_site_species_totals.cumulative_dead; Type: COMMENT; Schema: tracking; Owner: -
---
-
-COMMENT ON COLUMN tracking.observed_site_species_totals.cumulative_dead IS 'Total number of dead plants of the species observed, both in this observation and in all previous ones, in plots that are included as permanent plots in this observation.';
 
 
 --
@@ -8986,20 +8959,18 @@ COMMENT ON COLUMN tracking.observed_site_species_totals.survival_rate IS 'Percen
 
 
 --
--- Name: observed_subzone_species_totals; Type: TABLE; Schema: tracking; Owner: -
+-- Name: observed_stratum_species_totals; Type: TABLE; Schema: tracking; Owner: -
 --
 
-CREATE TABLE tracking.observed_subzone_species_totals (
+CREATE TABLE tracking.observed_stratum_species_totals (
     observation_id bigint NOT NULL,
-    planting_subzone_id bigint NOT NULL,
+    stratum_id bigint NOT NULL,
     species_id bigint,
     species_name text,
     certainty_id integer NOT NULL,
     total_live integer DEFAULT 0 NOT NULL,
     total_dead integer DEFAULT 0 NOT NULL,
     total_existing integer DEFAULT 0 NOT NULL,
-    mortality_rate integer,
-    cumulative_dead integer DEFAULT 0 NOT NULL,
     permanent_live integer DEFAULT 0 NOT NULL,
     survival_rate integer,
     CONSTRAINT species_identifier_for_certainty CHECK ((((certainty_id = 1) AND (species_id IS NOT NULL) AND (species_name IS NULL)) OR ((certainty_id = 2) AND (species_id IS NULL) AND (species_name IS NOT NULL)) OR ((certainty_id = 3) AND (species_id IS NULL) AND (species_name IS NULL))))
@@ -9007,55 +8978,39 @@ CREATE TABLE tracking.observed_subzone_species_totals (
 
 
 --
--- Name: TABLE observed_subzone_species_totals; Type: COMMENT; Schema: tracking; Owner: -
+-- Name: TABLE observed_stratum_species_totals; Type: COMMENT; Schema: tracking; Owner: -
 --
 
-COMMENT ON TABLE tracking.observed_subzone_species_totals IS 'Aggregated per-planting-subzone, per-species totals of plants recorded during observations.';
-
-
---
--- Name: COLUMN observed_subzone_species_totals.mortality_rate; Type: COMMENT; Schema: tracking; Owner: -
---
-
-COMMENT ON COLUMN tracking.observed_subzone_species_totals.mortality_rate IS 'Percentage of plants of the species observed in permanent monitoring plots in the planting subzone, in either the current observation or in previous ones, that were dead.';
+COMMENT ON TABLE tracking.observed_stratum_species_totals IS 'Aggregated per-stratum, per-species totals of plants recorded during observations.';
 
 
 --
--- Name: COLUMN observed_subzone_species_totals.cumulative_dead; Type: COMMENT; Schema: tracking; Owner: -
+-- Name: COLUMN observed_stratum_species_totals.permanent_live; Type: COMMENT; Schema: tracking; Owner: -
 --
 
-COMMENT ON COLUMN tracking.observed_subzone_species_totals.cumulative_dead IS 'Total number of dead plants of the species observed, both in this observation and in all previous ones, in plots in this subzone that are included as permanent plots in this observation.';
-
-
---
--- Name: COLUMN observed_subzone_species_totals.permanent_live; Type: COMMENT; Schema: tracking; Owner: -
---
-
-COMMENT ON COLUMN tracking.observed_subzone_species_totals.permanent_live IS 'The number of live and existing plants observed in permanent monitoring plots.';
+COMMENT ON COLUMN tracking.observed_stratum_species_totals.permanent_live IS 'The number of live and existing plants observed in permanent monitoring plots.';
 
 
 --
--- Name: COLUMN observed_subzone_species_totals.survival_rate; Type: COMMENT; Schema: tracking; Owner: -
+-- Name: COLUMN observed_stratum_species_totals.survival_rate; Type: COMMENT; Schema: tracking; Owner: -
 --
 
-COMMENT ON COLUMN tracking.observed_subzone_species_totals.survival_rate IS 'Percentage of plants of the species observed in permanent monitoring plots in the planting subzone, in either the current observation or in previous ones, that have survived since the t0 point.';
+COMMENT ON COLUMN tracking.observed_stratum_species_totals.survival_rate IS 'Percentage of plants of the species observed in permanent monitoring plots in the stratum, in either the current observation or in previous ones, that have survived since the t0 point.';
 
 
 --
--- Name: observed_zone_species_totals; Type: TABLE; Schema: tracking; Owner: -
+-- Name: observed_substratum_species_totals; Type: TABLE; Schema: tracking; Owner: -
 --
 
-CREATE TABLE tracking.observed_zone_species_totals (
+CREATE TABLE tracking.observed_substratum_species_totals (
     observation_id bigint NOT NULL,
-    planting_zone_id bigint NOT NULL,
+    substratum_id bigint NOT NULL,
     species_id bigint,
     species_name text,
     certainty_id integer NOT NULL,
     total_live integer DEFAULT 0 NOT NULL,
     total_dead integer DEFAULT 0 NOT NULL,
     total_existing integer DEFAULT 0 NOT NULL,
-    mortality_rate integer DEFAULT 0,
-    cumulative_dead integer DEFAULT 0 NOT NULL,
     permanent_live integer DEFAULT 0 NOT NULL,
     survival_rate integer,
     CONSTRAINT species_identifier_for_certainty CHECK ((((certainty_id = 1) AND (species_id IS NOT NULL) AND (species_name IS NULL)) OR ((certainty_id = 2) AND (species_id IS NULL) AND (species_name IS NOT NULL)) OR ((certainty_id = 3) AND (species_id IS NULL) AND (species_name IS NULL))))
@@ -9063,38 +9018,24 @@ CREATE TABLE tracking.observed_zone_species_totals (
 
 
 --
--- Name: TABLE observed_zone_species_totals; Type: COMMENT; Schema: tracking; Owner: -
+-- Name: TABLE observed_substratum_species_totals; Type: COMMENT; Schema: tracking; Owner: -
 --
 
-COMMENT ON TABLE tracking.observed_zone_species_totals IS 'Aggregated per-planting-zone, per-species totals of plants recorded during observations.';
-
-
---
--- Name: COLUMN observed_zone_species_totals.mortality_rate; Type: COMMENT; Schema: tracking; Owner: -
---
-
-COMMENT ON COLUMN tracking.observed_zone_species_totals.mortality_rate IS 'Percentage of plants of the species observed in permanent monitoring plots in the planting zone, in either the current observation or in previous ones, that were dead.';
+COMMENT ON TABLE tracking.observed_substratum_species_totals IS 'Aggregated per-substratum, per-species totals of plants recorded during observations.';
 
 
 --
--- Name: COLUMN observed_zone_species_totals.cumulative_dead; Type: COMMENT; Schema: tracking; Owner: -
+-- Name: COLUMN observed_substratum_species_totals.permanent_live; Type: COMMENT; Schema: tracking; Owner: -
 --
 
-COMMENT ON COLUMN tracking.observed_zone_species_totals.cumulative_dead IS 'Total number of dead plants of the species observed, both in this observation and in all previous ones, in plots in this zone that are included as permanent plots in this observation.';
-
-
---
--- Name: COLUMN observed_zone_species_totals.permanent_live; Type: COMMENT; Schema: tracking; Owner: -
---
-
-COMMENT ON COLUMN tracking.observed_zone_species_totals.permanent_live IS 'The number of live and existing plants observed in permanent monitoring plots.';
+COMMENT ON COLUMN tracking.observed_substratum_species_totals.permanent_live IS 'The number of live and existing plants observed in permanent monitoring plots.';
 
 
 --
--- Name: COLUMN observed_zone_species_totals.survival_rate; Type: COMMENT; Schema: tracking; Owner: -
+-- Name: COLUMN observed_substratum_species_totals.survival_rate; Type: COMMENT; Schema: tracking; Owner: -
 --
 
-COMMENT ON COLUMN tracking.observed_zone_species_totals.survival_rate IS 'Percentage of plants of the species observed in permanent monitoring plots in the planting zone, in either the current observation or in previous ones, that have survived since the t0 point.';
+COMMENT ON COLUMN tracking.observed_substratum_species_totals.survival_rate IS 'Percentage of plants of the species observed in permanent monitoring plots in the substratum, in either the current observation or in previous ones, that have survived since the t0 point.';
 
 
 --
@@ -9275,10 +9216,10 @@ COMMENT ON TABLE tracking.planting_site_populations IS 'Total number of plants o
 
 
 --
--- Name: planting_zones; Type: TABLE; Schema: tracking; Owner: -
+-- Name: strata; Type: TABLE; Schema: tracking; Owner: -
 --
 
-CREATE TABLE tracking.planting_zones (
+CREATE TABLE tracking.strata (
     id bigint NOT NULL,
     planting_site_id bigint NOT NULL,
     name text NOT NULL,
@@ -9305,87 +9246,87 @@ CREATE TABLE tracking.planting_zones (
 
 
 --
--- Name: TABLE planting_zones; Type: COMMENT; Schema: tracking; Owner: -
+-- Name: TABLE strata; Type: COMMENT; Schema: tracking; Owner: -
 --
 
-COMMENT ON TABLE tracking.planting_zones IS 'Regions within planting sites that have a consistent set of conditions such that survey results from any part of the zone can be extrapolated to the entire zone. Planting zones are subdivided into plots. Every planting zone has at least one plot.';
-
-
---
--- Name: COLUMN planting_zones.planting_site_id; Type: COMMENT; Schema: tracking; Owner: -
---
-
-COMMENT ON COLUMN tracking.planting_zones.planting_site_id IS 'Which planting site this zone is part of.';
+COMMENT ON TABLE tracking.strata IS 'Regions within planting sites that have a consistent set of conditions such that survey results from any part of the stratum can be extrapolated to the entire stratum. strata are subdivided into plots. Every stratum has at least one plot.';
 
 
 --
--- Name: COLUMN planting_zones.name; Type: COMMENT; Schema: tracking; Owner: -
+-- Name: COLUMN strata.planting_site_id; Type: COMMENT; Schema: tracking; Owner: -
 --
 
-COMMENT ON COLUMN tracking.planting_zones.name IS 'Short name of this planting zone. This is often just a single letter. Must be unique within a planting site.';
-
-
---
--- Name: COLUMN planting_zones.boundary; Type: COMMENT; Schema: tracking; Owner: -
---
-
-COMMENT ON COLUMN tracking.planting_zones.boundary IS 'Boundary of the planting zone. This area is further subdivided into plots. This will typically be a single polygon but may be multiple polygons if a planting zone has several disjoint areas. Coordinates always use SRID 4326 (WGS 84 latitude/longitude).';
+COMMENT ON COLUMN tracking.strata.planting_site_id IS 'Which planting site this stratum is part of.';
 
 
 --
--- Name: COLUMN planting_zones.created_by; Type: COMMENT; Schema: tracking; Owner: -
+-- Name: COLUMN strata.name; Type: COMMENT; Schema: tracking; Owner: -
 --
 
-COMMENT ON COLUMN tracking.planting_zones.created_by IS 'Which user created the planting zone.';
-
-
---
--- Name: COLUMN planting_zones.created_time; Type: COMMENT; Schema: tracking; Owner: -
---
-
-COMMENT ON COLUMN tracking.planting_zones.created_time IS 'When the planting zone was originally created.';
+COMMENT ON COLUMN tracking.strata.name IS 'Short name of this stratum. This is often just a single letter. Must be unique within a planting site.';
 
 
 --
--- Name: COLUMN planting_zones.modified_by; Type: COMMENT; Schema: tracking; Owner: -
+-- Name: COLUMN strata.boundary; Type: COMMENT; Schema: tracking; Owner: -
 --
 
-COMMENT ON COLUMN tracking.planting_zones.modified_by IS 'Which user most recently modified the planting zone.';
-
-
---
--- Name: COLUMN planting_zones.modified_time; Type: COMMENT; Schema: tracking; Owner: -
---
-
-COMMENT ON COLUMN tracking.planting_zones.modified_time IS 'When the planting zone was most recently modified.';
+COMMENT ON COLUMN tracking.strata.boundary IS 'Boundary of the stratum. This area is further subdivided into plots. This will typically be a single polygon but may be multiple polygons if a stratum has several disjoint areas. Coordinates always use SRID 4326 (WGS 84 latitude/longitude).';
 
 
 --
--- Name: COLUMN planting_zones.num_permanent_plots; Type: COMMENT; Schema: tracking; Owner: -
+-- Name: COLUMN strata.created_by; Type: COMMENT; Schema: tracking; Owner: -
 --
 
-COMMENT ON COLUMN tracking.planting_zones.num_permanent_plots IS 'Number of permanent plots to assign to the next observation. This is typically derived from a statistical formula.';
-
-
---
--- Name: COLUMN planting_zones.boundary_modified_by; Type: COMMENT; Schema: tracking; Owner: -
---
-
-COMMENT ON COLUMN tracking.planting_zones.boundary_modified_by IS 'Which user most recently edited the planting zone''s boundary.';
+COMMENT ON COLUMN tracking.strata.created_by IS 'Which user created the stratum.';
 
 
 --
--- Name: COLUMN planting_zones.boundary_modified_time; Type: COMMENT; Schema: tracking; Owner: -
+-- Name: COLUMN strata.created_time; Type: COMMENT; Schema: tracking; Owner: -
 --
 
-COMMENT ON COLUMN tracking.planting_zones.boundary_modified_time IS 'When the planting zone''s boundary was most recently modified.';
+COMMENT ON COLUMN tracking.strata.created_time IS 'When the stratum was originally created.';
 
 
 --
--- Name: COLUMN planting_zones.stable_id; Type: COMMENT; Schema: tracking; Owner: -
+-- Name: COLUMN strata.modified_by; Type: COMMENT; Schema: tracking; Owner: -
 --
 
-COMMENT ON COLUMN tracking.planting_zones.stable_id IS 'Zone identifier that doesn''t change even if the zone is renamed or edited. Defaults to the zone name.';
+COMMENT ON COLUMN tracking.strata.modified_by IS 'Which user most recently modified the stratum.';
+
+
+--
+-- Name: COLUMN strata.modified_time; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON COLUMN tracking.strata.modified_time IS 'When the stratum was most recently modified.';
+
+
+--
+-- Name: COLUMN strata.num_permanent_plots; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON COLUMN tracking.strata.num_permanent_plots IS 'Number of permanent plots to assign to the next observation. This is typically derived from a statistical formula.';
+
+
+--
+-- Name: COLUMN strata.boundary_modified_by; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON COLUMN tracking.strata.boundary_modified_by IS 'Which user most recently edited the stratum''s boundary.';
+
+
+--
+-- Name: COLUMN strata.boundary_modified_time; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON COLUMN tracking.strata.boundary_modified_time IS 'When the stratum''s boundary was most recently modified.';
+
+
+--
+-- Name: COLUMN strata.stable_id; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON COLUMN tracking.strata.stable_id IS 'Stratum identifier that doesn''t change even if the stratum is renamed or edited. Defaults to the stratum name.';
 
 
 --
@@ -9403,12 +9344,12 @@ CREATE VIEW tracking.planting_site_summaries AS
     modified_by,
     modified_time,
     ( SELECT count(*) AS count
-           FROM tracking.planting_zones pz
-          WHERE (ps.id = pz.planting_site_id)) AS num_planting_zones,
+           FROM tracking.strata s
+          WHERE (ps.id = s.planting_site_id)) AS num_strata,
     ( SELECT count(*) AS count
-           FROM (tracking.planting_zones pz
-             JOIN tracking.planting_subzones sz ON ((pz.id = sz.planting_zone_id)))
-          WHERE (ps.id = pz.planting_site_id)) AS num_planting_subzones,
+           FROM (tracking.strata s
+             JOIN tracking.substrata ss ON ((s.id = ss.stratum_id)))
+          WHERE (ps.id = s.planting_site_id)) AS num_substrata,
     time_zone,
     project_id,
     exclusion,
@@ -9431,62 +9372,6 @@ ALTER TABLE tracking.planting_sites ALTER COLUMN id ADD GENERATED BY DEFAULT AS 
 
 
 --
--- Name: planting_subzone_histories; Type: TABLE; Schema: tracking; Owner: -
---
-
-CREATE TABLE tracking.planting_subzone_histories (
-    id bigint NOT NULL,
-    planting_zone_history_id bigint NOT NULL,
-    planting_subzone_id bigint,
-    name text NOT NULL,
-    full_name text NOT NULL,
-    boundary public.geometry(MultiPolygon) NOT NULL,
-    area_ha numeric,
-    stable_id text NOT NULL
-);
-
-
---
--- Name: TABLE planting_subzone_histories; Type: COMMENT; Schema: tracking; Owner: -
---
-
-COMMENT ON TABLE tracking.planting_subzone_histories IS 'Versions of planting subzone maps over time. Each time a planting site map changes, its subzones'' maps are inserted into this table.';
-
-
---
--- Name: planting_subzone_histories_id_seq; Type: SEQUENCE; Schema: tracking; Owner: -
---
-
-ALTER TABLE tracking.planting_subzone_histories ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
-    SEQUENCE NAME tracking.planting_subzone_histories_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1
-);
-
-
---
--- Name: planting_subzone_populations; Type: TABLE; Schema: tracking; Owner: -
---
-
-CREATE TABLE tracking.planting_subzone_populations (
-    planting_subzone_id bigint NOT NULL,
-    species_id bigint NOT NULL,
-    total_plants integer NOT NULL,
-    plants_since_last_observation integer
-);
-
-
---
--- Name: TABLE planting_subzone_populations; Type: COMMENT; Schema: tracking; Owner: -
---
-
-COMMENT ON TABLE tracking.planting_subzone_populations IS 'Total number of plants of each species in each subzone.';
-
-
---
 -- Name: planting_types; Type: TABLE; Schema: tracking; Owner: -
 --
 
@@ -9501,97 +9386,6 @@ CREATE TABLE tracking.planting_types (
 --
 
 COMMENT ON TABLE tracking.planting_types IS '(Enum) Type of planting associated with a delivery. Different planting types distinguish reassignments from initial plantings.';
-
-
---
--- Name: planting_zone_histories; Type: TABLE; Schema: tracking; Owner: -
---
-
-CREATE TABLE tracking.planting_zone_histories (
-    id bigint NOT NULL,
-    planting_site_history_id bigint NOT NULL,
-    planting_zone_id bigint,
-    name text NOT NULL,
-    boundary public.geometry(MultiPolygon) NOT NULL,
-    area_ha numeric,
-    stable_id text NOT NULL
-);
-
-
---
--- Name: TABLE planting_zone_histories; Type: COMMENT; Schema: tracking; Owner: -
---
-
-COMMENT ON TABLE tracking.planting_zone_histories IS 'Versions of planting zone maps over time. Each time a planting site map changes, its zones'' maps are inserted into this table.';
-
-
---
--- Name: planting_zone_histories_id_seq; Type: SEQUENCE; Schema: tracking; Owner: -
---
-
-ALTER TABLE tracking.planting_zone_histories ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
-    SEQUENCE NAME tracking.planting_zone_histories_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1
-);
-
-
---
--- Name: planting_zone_populations; Type: TABLE; Schema: tracking; Owner: -
---
-
-CREATE TABLE tracking.planting_zone_populations (
-    planting_zone_id bigint NOT NULL,
-    species_id bigint NOT NULL,
-    total_plants integer NOT NULL,
-    plants_since_last_observation integer
-);
-
-
---
--- Name: TABLE planting_zone_populations; Type: COMMENT; Schema: tracking; Owner: -
---
-
-COMMENT ON TABLE tracking.planting_zone_populations IS 'Total number of plants of each species in each zone.';
-
-
---
--- Name: planting_zone_t0_temp_densities; Type: TABLE; Schema: tracking; Owner: -
---
-
-CREATE TABLE tracking.planting_zone_t0_temp_densities (
-    planting_zone_id bigint NOT NULL,
-    species_id bigint NOT NULL,
-    zone_density numeric NOT NULL,
-    created_time timestamp with time zone DEFAULT now() NOT NULL,
-    modified_time timestamp with time zone DEFAULT now() NOT NULL,
-    created_by bigint NOT NULL,
-    modified_by bigint NOT NULL
-);
-
-
---
--- Name: TABLE planting_zone_t0_temp_densities; Type: COMMENT; Schema: tracking; Owner: -
---
-
-COMMENT ON TABLE tracking.planting_zone_t0_temp_densities IS 'Density for a zone per species, in plants per hectare. Only applies to temporary plots and only if survival_rate_includes_temp_plots is set to true for the zone''s planting site.';
-
-
---
--- Name: planting_zones_id_seq; Type: SEQUENCE; Schema: tracking; Owner: -
---
-
-ALTER TABLE tracking.planting_zones ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
-    SEQUENCE NAME tracking.planting_zones_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1
-);
 
 
 --
@@ -9655,7 +9449,7 @@ COMMENT ON TABLE tracking.plot_t0_observations IS 'Which observation to use to d
 -- Name: plots_id_seq; Type: SEQUENCE; Schema: tracking; Owner: -
 --
 
-ALTER TABLE tracking.planting_subzones ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
+ALTER TABLE tracking.substrata ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
     SEQUENCE NAME tracking.plots_id_seq
     START WITH 1
     INCREMENT BY 1
@@ -9806,6 +9600,153 @@ ALTER TABLE tracking.recorded_trees ALTER COLUMN id ADD GENERATED BY DEFAULT AS 
     NO MAXVALUE
     CACHE 1
 );
+
+
+--
+-- Name: strata_id_seq; Type: SEQUENCE; Schema: tracking; Owner: -
+--
+
+ALTER TABLE tracking.strata ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
+    SEQUENCE NAME tracking.strata_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- Name: stratum_histories; Type: TABLE; Schema: tracking; Owner: -
+--
+
+CREATE TABLE tracking.stratum_histories (
+    id bigint NOT NULL,
+    planting_site_history_id bigint NOT NULL,
+    stratum_id bigint,
+    name text NOT NULL,
+    boundary public.geometry(MultiPolygon) NOT NULL,
+    area_ha numeric,
+    stable_id text NOT NULL
+);
+
+
+--
+-- Name: TABLE stratum_histories; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON TABLE tracking.stratum_histories IS 'Versions of stratum maps over time. Each time a planting site map changes, its strata'' maps are inserted into this table.';
+
+
+--
+-- Name: stratum_histories_id_seq; Type: SEQUENCE; Schema: tracking; Owner: -
+--
+
+ALTER TABLE tracking.stratum_histories ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
+    SEQUENCE NAME tracking.stratum_histories_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- Name: stratum_populations; Type: TABLE; Schema: tracking; Owner: -
+--
+
+CREATE TABLE tracking.stratum_populations (
+    stratum_id bigint NOT NULL,
+    species_id bigint NOT NULL,
+    total_plants integer NOT NULL,
+    plants_since_last_observation integer
+);
+
+
+--
+-- Name: TABLE stratum_populations; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON TABLE tracking.stratum_populations IS 'Total number of plants of each species in each stratum.';
+
+
+--
+-- Name: stratum_t0_temp_densities; Type: TABLE; Schema: tracking; Owner: -
+--
+
+CREATE TABLE tracking.stratum_t0_temp_densities (
+    stratum_id bigint NOT NULL,
+    species_id bigint NOT NULL,
+    stratum_density numeric NOT NULL,
+    created_time timestamp with time zone DEFAULT now() NOT NULL,
+    modified_time timestamp with time zone DEFAULT now() NOT NULL,
+    created_by bigint NOT NULL,
+    modified_by bigint NOT NULL
+);
+
+
+--
+-- Name: TABLE stratum_t0_temp_densities; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON TABLE tracking.stratum_t0_temp_densities IS 'Density for a stratum per species, in plants per hectare. Only applies to temporary plots and only if survival_rate_includes_temp_plots is set to true for the stratum''s planting site.';
+
+
+--
+-- Name: substratum_histories; Type: TABLE; Schema: tracking; Owner: -
+--
+
+CREATE TABLE tracking.substratum_histories (
+    id bigint NOT NULL,
+    stratum_history_id bigint NOT NULL,
+    substratum_id bigint,
+    name text NOT NULL,
+    full_name text NOT NULL,
+    boundary public.geometry(MultiPolygon) NOT NULL,
+    area_ha numeric,
+    stable_id text NOT NULL
+);
+
+
+--
+-- Name: TABLE substratum_histories; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON TABLE tracking.substratum_histories IS 'Versions of substratum maps over time. Each time a planting site map changes, its substrata'' maps are inserted into this table.';
+
+
+--
+-- Name: substratum_histories_id_seq; Type: SEQUENCE; Schema: tracking; Owner: -
+--
+
+ALTER TABLE tracking.substratum_histories ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
+    SEQUENCE NAME tracking.substratum_histories_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- Name: substratum_populations; Type: TABLE; Schema: tracking; Owner: -
+--
+
+CREATE TABLE tracking.substratum_populations (
+    substratum_id bigint NOT NULL,
+    species_id bigint NOT NULL,
+    total_plants integer NOT NULL,
+    plants_since_last_observation integer
+);
+
+
+--
+-- Name: TABLE substratum_populations; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON TABLE tracking.substratum_populations IS 'Total number of plants of each species in each substratum.';
 
 
 --
@@ -10445,7 +10386,7 @@ COPY accelerator.score_categories (id, name) FROM stdin;
 -- Data for Name: standard_metrics; Type: TABLE DATA; Schema: accelerator; Owner: -
 --
 
-COPY accelerator.standard_metrics (id, type_id, component_id, name, description, reference, is_publishable) FROM stdin;
+COPY accelerator.standard_metrics (id, type_id, component_id, name, description, reference, is_publishable, unit) FROM stdin;
 \.
 
 
@@ -10498,9 +10439,8 @@ COPY accelerator.system_metrics (id, name, type_id, component_id, description, r
 2	Seedlings	2	2	Plants in the nursery, including those provided by partners, where available. Not applicable for mangrove projects (input 0).	1.2	t
 3	Trees Planted	2	2	Total trees (and plants) planted in the field.	1.3	t
 4	Species Planted	2	2	Total species of the plants/trees planted.	1.4	t
-5	Mortality Rate	3	2	Mortality rate of plantings.	2	t
 6	Hectares Planted	2	2	This is the hectares marked as “Planting Complete” within the Project Area.	1.1.1.1	t
-7	Survival Rate	3	2	Survival rate of plantings.	2	f
+7	Survival Rate	3	2	Survival rate of plantings.	2	t
 \.
 
 
@@ -11578,7 +11518,7 @@ COPY nursery.batch_withdrawals (batch_id, withdrawal_id, germinating_quantity_wi
 --
 
 COPY nursery.batches (id, version, organization_id, facility_id, species_id, batch_number, added_date, germinating_quantity, active_growth_quantity, ready_quantity, latest_observed_germinating_quantity, latest_observed_active_growth_quantity, latest_observed_ready_quantity, latest_observed_time, created_by, created_time, modified_by, modified_time, notes, ready_by_date, accession_id, project_id, substrate_id, substrate_notes, treatment_id, treatment_notes, germination_rate, loss_rate, initial_batch_id, total_germinated, total_germination_candidates, total_lost, total_loss_candidates, germination_started_date, seeds_sown_date, hardening_off_quantity, latest_observed_hardening_off_quantity) FROM stdin;
-1	3	1	103	3	25-2-1-001	2025-05-29	0	0	0	0	0	200	2025-05-29 18:48:31.338767+00	1	2025-05-29 18:48:31.338767+00	1	2025-05-29 18:49:17.952372+00	\N	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	0	200	\N	\N	0	0
+1	3	1	103	3	26-2-1-001	2026-01-01	0	0	0	0	0	200	2025-05-29 18:48:31.338767+00	1	2026-01-01 20:12:54.827407+00	1	2026-01-01 20:12:54.827407+00	\N	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	0	200	\N	\N	0	0
 \.
 
 
@@ -12073,6 +12013,127 @@ COPY public.event_log (id, created_by, created_time, event_class, payload, origi
 4	1	2025-05-13 20:44:57.349541+00	com.terraformation.backend.customer.event.ProjectCreatedEventV1	{"name": "Phase 0 Project", "projectId": 2, "_historical": true, "organizationId": 1}	\N	\N
 5	1	2025-05-13 20:45:07.299677+00	com.terraformation.backend.customer.event.ProjectCreatedEventV1	{"name": "Phase 1 Project", "projectId": 3, "_historical": true, "organizationId": 1}	\N	\N
 6	1	2025-11-05 17:27:54.92998+00	com.terraformation.backend.customer.event.OrganizationCreatedEventV1	{"name": "Empty Organization", "organizationId": 2}	\N	\N
+7	1	2025-05-29 18:50:07.800992+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 1, "_historical": true, "isPermanent": true, "observationId": 1, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5162, "monitoringPlotHistoryId": 1}	\N	\N
+8	1	2025-05-29 18:50:07.916665+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 15, "_historical": true, "isPermanent": true, "observationId": 1, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5176, "monitoringPlotHistoryId": 15}	\N	\N
+9	1	2025-05-29 18:50:07.800992+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 2, "_historical": true, "isPermanent": true, "observationId": 1, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5163, "monitoringPlotHistoryId": 2}	\N	\N
+10	1	2025-05-29 18:50:07.83326+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 26, "_historical": true, "isPermanent": false, "observationId": 1, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5187, "monitoringPlotHistoryId": 26}	\N	\N
+11	1	2025-05-29 18:50:07.800992+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 3, "_historical": true, "isPermanent": true, "observationId": 1, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5164, "monitoringPlotHistoryId": 3}	\N	\N
+12	1	2025-05-29 18:50:07.916665+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 16, "_historical": true, "isPermanent": true, "observationId": 1, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5177, "monitoringPlotHistoryId": 16}	\N	\N
+13	1	2025-05-29 18:50:07.800992+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 4, "_historical": true, "isPermanent": true, "observationId": 1, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5165, "monitoringPlotHistoryId": 4}	\N	\N
+14	1	2025-05-29 18:50:07.800992+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 5, "_historical": true, "isPermanent": true, "observationId": 1, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5166, "monitoringPlotHistoryId": 5}	\N	\N
+15	1	2025-05-29 18:50:08.009903+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 17, "_historical": true, "isPermanent": true, "observationId": 1, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5178, "monitoringPlotHistoryId": 17}	\N	\N
+16	1	2025-05-29 18:50:07.800992+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 6, "_historical": true, "isPermanent": true, "observationId": 1, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5167, "monitoringPlotHistoryId": 6}	\N	\N
+17	1	2025-05-29 18:50:07.83326+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 27, "_historical": true, "isPermanent": false, "observationId": 1, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5188, "monitoringPlotHistoryId": 27}	\N	\N
+18	1	2025-05-29 18:50:07.800992+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 7, "_historical": true, "isPermanent": true, "observationId": 1, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5168, "monitoringPlotHistoryId": 7}	\N	\N
+19	1	2025-05-29 18:50:08.009903+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 18, "_historical": true, "isPermanent": true, "observationId": 1, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5179, "monitoringPlotHistoryId": 18}	\N	\N
+20	1	2025-05-29 18:50:07.800992+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 8, "_historical": true, "isPermanent": true, "observationId": 1, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5169, "monitoringPlotHistoryId": 8}	\N	\N
+21	1	2025-05-29 18:50:07.916665+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 9, "_historical": true, "isPermanent": true, "observationId": 1, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5170, "monitoringPlotHistoryId": 9}	\N	\N
+22	1	2025-05-29 18:50:08.009903+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 19, "_historical": true, "isPermanent": true, "observationId": 1, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5180, "monitoringPlotHistoryId": 19}	\N	\N
+23	1	2025-05-29 18:50:07.916665+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 10, "_historical": true, "isPermanent": true, "observationId": 1, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5171, "monitoringPlotHistoryId": 10}	\N	\N
+24	1	2025-05-29 18:50:07.931507+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 28, "_historical": true, "isPermanent": false, "observationId": 1, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5189, "monitoringPlotHistoryId": 28}	\N	\N
+25	1	2025-05-29 18:50:07.916665+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 11, "_historical": true, "isPermanent": true, "observationId": 1, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5172, "monitoringPlotHistoryId": 11}	\N	\N
+26	1	2025-05-29 18:50:08.009903+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 20, "_historical": true, "isPermanent": true, "observationId": 1, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5181, "monitoringPlotHistoryId": 20}	\N	\N
+27	1	2025-05-29 18:50:07.916665+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 12, "_historical": true, "isPermanent": true, "observationId": 1, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5173, "monitoringPlotHistoryId": 12}	\N	\N
+28	1	2025-05-29 18:50:07.916665+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 13, "_historical": true, "isPermanent": true, "observationId": 1, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5174, "monitoringPlotHistoryId": 13}	\N	\N
+29	1	2025-05-29 18:50:07.931507+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 29, "_historical": true, "isPermanent": false, "observationId": 1, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5190, "monitoringPlotHistoryId": 29}	\N	\N
+30	1	2025-05-29 18:50:07.916665+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 14, "_historical": true, "isPermanent": true, "observationId": 1, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5175, "monitoringPlotHistoryId": 14}	\N	\N
+31	1	2025-05-29 18:50:08.009903+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 21, "_historical": true, "isPermanent": true, "observationId": 1, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5182, "monitoringPlotHistoryId": 21}	\N	\N
+32	1	2025-05-29 18:50:08.009903+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 22, "_historical": true, "isPermanent": true, "observationId": 1, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5183, "monitoringPlotHistoryId": 22}	\N	\N
+33	1	2025-05-29 18:50:07.931507+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 30, "_historical": true, "isPermanent": false, "observationId": 1, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5191, "monitoringPlotHistoryId": 30}	\N	\N
+34	1	2025-05-29 18:50:08.009903+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 23, "_historical": true, "isPermanent": true, "observationId": 1, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5184, "monitoringPlotHistoryId": 23}	\N	\N
+35	1	2025-05-29 18:50:08.009903+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 24, "_historical": true, "isPermanent": true, "observationId": 1, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5185, "monitoringPlotHistoryId": 24}	\N	\N
+36	1	2025-05-29 18:50:07.83326+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 25, "_historical": true, "isPermanent": false, "observationId": 1, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5186, "monitoringPlotHistoryId": 25}	\N	\N
+37	1	2025-05-29 18:50:08.024321+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 31, "_historical": true, "isPermanent": false, "observationId": 1, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5192, "monitoringPlotHistoryId": 31}	\N	\N
+38	1	2025-05-29 18:50:08.024321+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 32, "_historical": true, "isPermanent": false, "observationId": 1, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5193, "monitoringPlotHistoryId": 32}	\N	\N
+39	1	2025-05-29 18:50:08.024321+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 33, "_historical": true, "isPermanent": false, "observationId": 1, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5194, "monitoringPlotHistoryId": 33}	\N	\N
+40	1	2025-06-16 21:44:02.255935+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 1, "_historical": true, "isPermanent": true, "observationId": 2, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5162, "monitoringPlotHistoryId": 1}	\N	\N
+41	1	2025-06-16 21:44:02.255935+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 2, "_historical": true, "isPermanent": true, "observationId": 2, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5163, "monitoringPlotHistoryId": 2}	\N	\N
+42	1	2025-06-16 21:44:02.255935+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 3, "_historical": true, "isPermanent": true, "observationId": 2, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5164, "monitoringPlotHistoryId": 3}	\N	\N
+43	1	2025-06-16 21:44:02.255935+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 4, "_historical": true, "isPermanent": true, "observationId": 2, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5165, "monitoringPlotHistoryId": 4}	\N	\N
+44	1	2025-06-16 21:44:02.255935+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 5, "_historical": true, "isPermanent": true, "observationId": 2, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5166, "monitoringPlotHistoryId": 5}	\N	\N
+45	1	2025-06-16 21:44:02.255935+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 6, "_historical": true, "isPermanent": true, "observationId": 2, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5167, "monitoringPlotHistoryId": 6}	\N	\N
+46	1	2025-06-16 21:44:02.255935+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 7, "_historical": true, "isPermanent": true, "observationId": 2, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5168, "monitoringPlotHistoryId": 7}	\N	\N
+47	1	2025-06-16 21:44:02.255935+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 8, "_historical": true, "isPermanent": true, "observationId": 2, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5169, "monitoringPlotHistoryId": 8}	\N	\N
+48	1	2025-06-16 21:44:02.265322+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 34, "_historical": true, "isPermanent": false, "observationId": 2, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5195, "monitoringPlotHistoryId": 34}	\N	\N
+49	1	2025-06-16 21:44:02.265322+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 35, "_historical": true, "isPermanent": false, "observationId": 2, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5196, "monitoringPlotHistoryId": 35}	\N	\N
+50	1	2025-06-16 21:44:02.265322+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 36, "_historical": true, "isPermanent": false, "observationId": 2, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5197, "monitoringPlotHistoryId": 36}	\N	\N
+51	1	2025-06-16 21:44:02.31157+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 9, "_historical": true, "isPermanent": true, "observationId": 2, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5170, "monitoringPlotHistoryId": 9}	\N	\N
+52	1	2025-06-16 21:44:02.31157+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 10, "_historical": true, "isPermanent": true, "observationId": 2, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5171, "monitoringPlotHistoryId": 10}	\N	\N
+53	1	2025-06-16 21:44:02.31157+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 11, "_historical": true, "isPermanent": true, "observationId": 2, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5172, "monitoringPlotHistoryId": 11}	\N	\N
+54	1	2025-06-16 21:44:02.31157+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 12, "_historical": true, "isPermanent": true, "observationId": 2, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5173, "monitoringPlotHistoryId": 12}	\N	\N
+55	1	2025-06-16 21:44:02.31157+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 13, "_historical": true, "isPermanent": true, "observationId": 2, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5174, "monitoringPlotHistoryId": 13}	\N	\N
+56	1	2025-06-16 21:44:02.31157+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 14, "_historical": true, "isPermanent": true, "observationId": 2, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5175, "monitoringPlotHistoryId": 14}	\N	\N
+57	1	2025-06-16 21:44:02.31157+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 15, "_historical": true, "isPermanent": true, "observationId": 2, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5176, "monitoringPlotHistoryId": 15}	\N	\N
+58	1	2025-06-16 21:44:02.31157+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 16, "_historical": true, "isPermanent": true, "observationId": 2, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5177, "monitoringPlotHistoryId": 16}	\N	\N
+59	1	2025-06-16 21:44:02.317447+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 37, "_historical": true, "isPermanent": false, "observationId": 2, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5198, "monitoringPlotHistoryId": 37}	\N	\N
+60	1	2025-06-16 21:44:02.317447+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 38, "_historical": true, "isPermanent": false, "observationId": 2, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5199, "monitoringPlotHistoryId": 38}	\N	\N
+61	1	2025-06-16 21:44:02.317447+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 39, "_historical": true, "isPermanent": false, "observationId": 2, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5200, "monitoringPlotHistoryId": 39}	\N	\N
+62	1	2025-06-16 21:44:02.368801+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 17, "_historical": true, "isPermanent": true, "observationId": 2, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5178, "monitoringPlotHistoryId": 17}	\N	\N
+63	1	2025-06-16 21:44:02.368801+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 18, "_historical": true, "isPermanent": true, "observationId": 2, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5179, "monitoringPlotHistoryId": 18}	\N	\N
+64	1	2025-06-16 21:44:02.368801+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 19, "_historical": true, "isPermanent": true, "observationId": 2, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5180, "monitoringPlotHistoryId": 19}	\N	\N
+65	1	2025-06-16 21:44:02.368801+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 20, "_historical": true, "isPermanent": true, "observationId": 2, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5181, "monitoringPlotHistoryId": 20}	\N	\N
+66	1	2025-06-16 21:44:02.368801+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 21, "_historical": true, "isPermanent": true, "observationId": 2, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5182, "monitoringPlotHistoryId": 21}	\N	\N
+67	1	2025-06-16 21:44:02.368801+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 22, "_historical": true, "isPermanent": true, "observationId": 2, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5183, "monitoringPlotHistoryId": 22}	\N	\N
+68	1	2025-06-16 21:44:02.368801+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 23, "_historical": true, "isPermanent": true, "observationId": 2, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5184, "monitoringPlotHistoryId": 23}	\N	\N
+69	1	2025-06-16 21:44:02.368801+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 24, "_historical": true, "isPermanent": true, "observationId": 2, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5185, "monitoringPlotHistoryId": 24}	\N	\N
+70	1	2025-06-16 21:44:02.376337+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 40, "_historical": true, "isPermanent": false, "observationId": 2, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5201, "monitoringPlotHistoryId": 40}	\N	\N
+71	1	2025-06-16 21:44:02.376337+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 41, "_historical": true, "isPermanent": false, "observationId": 2, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5202, "monitoringPlotHistoryId": 41}	\N	\N
+72	1	2025-06-16 21:44:02.376337+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 42, "_historical": true, "isPermanent": false, "observationId": 2, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5203, "monitoringPlotHistoryId": 42}	\N	\N
+73	1	2025-06-16 21:44:04.223951+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 1, "_historical": true, "isPermanent": true, "observationId": 3, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5162, "monitoringPlotHistoryId": 1}	\N	\N
+74	1	2025-06-16 21:44:04.223951+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 2, "_historical": true, "isPermanent": true, "observationId": 3, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5163, "monitoringPlotHistoryId": 2}	\N	\N
+75	1	2025-06-16 21:44:04.223951+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 3, "_historical": true, "isPermanent": true, "observationId": 3, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5164, "monitoringPlotHistoryId": 3}	\N	\N
+76	1	2025-06-16 21:44:04.223951+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 4, "_historical": true, "isPermanent": true, "observationId": 3, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5165, "monitoringPlotHistoryId": 4}	\N	\N
+77	1	2025-06-16 21:44:04.223951+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 5, "_historical": true, "isPermanent": true, "observationId": 3, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5166, "monitoringPlotHistoryId": 5}	\N	\N
+78	1	2025-06-16 21:44:04.223951+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 6, "_historical": true, "isPermanent": true, "observationId": 3, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5167, "monitoringPlotHistoryId": 6}	\N	\N
+79	1	2025-06-16 21:44:04.223951+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 7, "_historical": true, "isPermanent": true, "observationId": 3, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5168, "monitoringPlotHistoryId": 7}	\N	\N
+80	1	2025-06-16 21:44:04.223951+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 8, "_historical": true, "isPermanent": true, "observationId": 3, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5169, "monitoringPlotHistoryId": 8}	\N	\N
+81	1	2025-06-16 21:44:04.228911+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 43, "_historical": true, "isPermanent": false, "observationId": 3, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5204, "monitoringPlotHistoryId": 43}	\N	\N
+82	1	2025-06-16 21:44:04.228911+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 44, "_historical": true, "isPermanent": false, "observationId": 3, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5205, "monitoringPlotHistoryId": 44}	\N	\N
+83	1	2025-06-16 21:44:04.228911+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 45, "_historical": true, "isPermanent": false, "observationId": 3, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5206, "monitoringPlotHistoryId": 45}	\N	\N
+84	1	2025-06-16 21:44:04.265433+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 9, "_historical": true, "isPermanent": true, "observationId": 3, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5170, "monitoringPlotHistoryId": 9}	\N	\N
+85	1	2025-06-16 21:44:04.265433+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 10, "_historical": true, "isPermanent": true, "observationId": 3, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5171, "monitoringPlotHistoryId": 10}	\N	\N
+86	1	2025-06-16 21:44:04.265433+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 11, "_historical": true, "isPermanent": true, "observationId": 3, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5172, "monitoringPlotHistoryId": 11}	\N	\N
+87	1	2025-06-16 21:44:04.265433+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 12, "_historical": true, "isPermanent": true, "observationId": 3, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5173, "monitoringPlotHistoryId": 12}	\N	\N
+88	1	2025-06-16 21:44:04.265433+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 13, "_historical": true, "isPermanent": true, "observationId": 3, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5174, "monitoringPlotHistoryId": 13}	\N	\N
+89	1	2025-06-16 21:44:04.265433+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 14, "_historical": true, "isPermanent": true, "observationId": 3, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5175, "monitoringPlotHistoryId": 14}	\N	\N
+90	1	2025-06-16 21:44:04.265433+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 15, "_historical": true, "isPermanent": true, "observationId": 3, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5176, "monitoringPlotHistoryId": 15}	\N	\N
+91	1	2025-06-16 21:44:04.265433+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 16, "_historical": true, "isPermanent": true, "observationId": 3, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5177, "monitoringPlotHistoryId": 16}	\N	\N
+92	1	2025-06-16 21:44:04.270569+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 46, "_historical": true, "isPermanent": false, "observationId": 3, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5207, "monitoringPlotHistoryId": 46}	\N	\N
+93	1	2025-06-16 21:44:04.270569+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 47, "_historical": true, "isPermanent": false, "observationId": 3, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5208, "monitoringPlotHistoryId": 47}	\N	\N
+94	1	2025-06-16 21:44:04.270569+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 48, "_historical": true, "isPermanent": false, "observationId": 3, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5209, "monitoringPlotHistoryId": 48}	\N	\N
+95	1	2025-06-16 21:44:04.304892+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 17, "_historical": true, "isPermanent": true, "observationId": 3, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5178, "monitoringPlotHistoryId": 17}	\N	\N
+96	1	2025-06-16 21:44:04.304892+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 18, "_historical": true, "isPermanent": true, "observationId": 3, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5179, "monitoringPlotHistoryId": 18}	\N	\N
+97	1	2025-06-16 21:44:04.304892+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 19, "_historical": true, "isPermanent": true, "observationId": 3, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5180, "monitoringPlotHistoryId": 19}	\N	\N
+98	1	2025-06-16 21:44:04.304892+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 20, "_historical": true, "isPermanent": true, "observationId": 3, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5181, "monitoringPlotHistoryId": 20}	\N	\N
+99	1	2025-06-16 21:44:04.304892+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 21, "_historical": true, "isPermanent": true, "observationId": 3, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5182, "monitoringPlotHistoryId": 21}	\N	\N
+100	1	2025-06-16 21:44:04.304892+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 22, "_historical": true, "isPermanent": true, "observationId": 3, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5183, "monitoringPlotHistoryId": 22}	\N	\N
+101	1	2025-06-16 21:44:04.304892+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 23, "_historical": true, "isPermanent": true, "observationId": 3, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5184, "monitoringPlotHistoryId": 23}	\N	\N
+102	1	2025-06-16 21:44:04.304892+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 24, "_historical": true, "isPermanent": true, "observationId": 3, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5185, "monitoringPlotHistoryId": 24}	\N	\N
+103	1	2025-06-16 21:44:04.310304+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 49, "_historical": true, "isPermanent": false, "observationId": 3, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5210, "monitoringPlotHistoryId": 49}	\N	\N
+104	1	2025-06-16 21:44:04.310304+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 50, "_historical": true, "isPermanent": false, "observationId": 3, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5211, "monitoringPlotHistoryId": 50}	\N	\N
+105	1	2025-06-16 21:44:04.310304+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 51, "_historical": true, "isPermanent": false, "observationId": 3, "organizationId": 1, "plantingSiteId": 3, "monitoringPlotId": 5212, "monitoringPlotHistoryId": 51}	\N	\N
+106	2	2025-11-05 17:26:51.11778+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 52, "_historical": true, "isPermanent": true, "observationId": 4, "organizationId": 1, "plantingSiteId": 2, "monitoringPlotId": 5213, "monitoringPlotHistoryId": 52}	\N	\N
+107	2	2025-11-05 17:26:51.11778+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 53, "_historical": true, "isPermanent": true, "observationId": 4, "organizationId": 1, "plantingSiteId": 2, "monitoringPlotId": 5214, "monitoringPlotHistoryId": 53}	\N	\N
+108	2	2025-11-05 17:26:51.11778+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 54, "_historical": true, "isPermanent": true, "observationId": 4, "organizationId": 1, "plantingSiteId": 2, "monitoringPlotId": 5215, "monitoringPlotHistoryId": 54}	\N	\N
+109	2	2025-11-05 17:26:51.11778+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 55, "_historical": true, "isPermanent": true, "observationId": 4, "organizationId": 1, "plantingSiteId": 2, "monitoringPlotId": 5216, "monitoringPlotHistoryId": 55}	\N	\N
+110	2	2025-11-05 17:26:51.11778+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 56, "_historical": true, "isPermanent": true, "observationId": 4, "organizationId": 1, "plantingSiteId": 2, "monitoringPlotId": 5217, "monitoringPlotHistoryId": 56}	\N	\N
+111	2	2025-11-05 17:26:51.11778+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 57, "_historical": true, "isPermanent": true, "observationId": 4, "organizationId": 1, "plantingSiteId": 2, "monitoringPlotId": 5218, "monitoringPlotHistoryId": 57}	\N	\N
+112	2	2025-11-05 17:26:51.11778+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 58, "_historical": true, "isPermanent": true, "observationId": 4, "organizationId": 1, "plantingSiteId": 2, "monitoringPlotId": 5219, "monitoringPlotHistoryId": 58}	\N	\N
+113	2	2025-11-05 17:26:51.11778+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 59, "_historical": true, "isPermanent": true, "observationId": 4, "organizationId": 1, "plantingSiteId": 2, "monitoringPlotId": 5220, "monitoringPlotHistoryId": 59}	\N	\N
+114	2	2025-11-05 17:26:51.131168+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 68, "_historical": true, "isPermanent": false, "observationId": 4, "organizationId": 1, "plantingSiteId": 2, "monitoringPlotId": 5229, "monitoringPlotHistoryId": 68}	\N	\N
+115	2	2025-11-05 17:26:51.131168+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 69, "_historical": true, "isPermanent": false, "observationId": 4, "organizationId": 1, "plantingSiteId": 2, "monitoringPlotId": 5230, "monitoringPlotHistoryId": 69}	\N	\N
+116	2	2025-11-05 17:26:51.131168+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 70, "_historical": true, "isPermanent": false, "observationId": 4, "organizationId": 1, "plantingSiteId": 2, "monitoringPlotId": 5231, "monitoringPlotHistoryId": 70}	\N	\N
+117	2	2025-11-05 17:26:51.159853+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 60, "_historical": true, "isPermanent": true, "observationId": 4, "organizationId": 1, "plantingSiteId": 2, "monitoringPlotId": 5221, "monitoringPlotHistoryId": 60}	\N	\N
+118	2	2025-11-05 17:26:51.159853+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 61, "_historical": true, "isPermanent": true, "observationId": 4, "organizationId": 1, "plantingSiteId": 2, "monitoringPlotId": 5222, "monitoringPlotHistoryId": 61}	\N	\N
+119	2	2025-11-05 17:26:51.159853+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 62, "_historical": true, "isPermanent": true, "observationId": 4, "organizationId": 1, "plantingSiteId": 2, "monitoringPlotId": 5223, "monitoringPlotHistoryId": 62}	\N	\N
+120	2	2025-11-05 17:26:51.159853+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 63, "_historical": true, "isPermanent": true, "observationId": 4, "organizationId": 1, "plantingSiteId": 2, "monitoringPlotId": 5224, "monitoringPlotHistoryId": 63}	\N	\N
+121	2	2025-11-05 17:26:51.159853+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 64, "_historical": true, "isPermanent": true, "observationId": 4, "organizationId": 1, "plantingSiteId": 2, "monitoringPlotId": 5225, "monitoringPlotHistoryId": 64}	\N	\N
+122	2	2025-11-05 17:26:51.159853+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 65, "_historical": true, "isPermanent": true, "observationId": 4, "organizationId": 1, "plantingSiteId": 2, "monitoringPlotId": 5226, "monitoringPlotHistoryId": 65}	\N	\N
+123	2	2025-11-05 17:26:51.159853+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 66, "_historical": true, "isPermanent": true, "observationId": 4, "organizationId": 1, "plantingSiteId": 2, "monitoringPlotId": 5227, "monitoringPlotHistoryId": 66}	\N	\N
+124	2	2025-11-05 17:26:51.159853+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 67, "_historical": true, "isPermanent": true, "observationId": 4, "organizationId": 1, "plantingSiteId": 2, "monitoringPlotId": 5228, "monitoringPlotHistoryId": 67}	\N	\N
+125	2	2025-11-05 17:26:51.163982+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 71, "_historical": true, "isPermanent": false, "observationId": 4, "organizationId": 1, "plantingSiteId": 2, "monitoringPlotId": 5232, "monitoringPlotHistoryId": 71}	\N	\N
+126	2	2025-11-05 17:26:51.163982+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 72, "_historical": true, "isPermanent": false, "observationId": 4, "organizationId": 1, "plantingSiteId": 2, "monitoringPlotId": 5233, "monitoringPlotHistoryId": 72}	\N	\N
+127	2	2025-11-05 17:26:51.163982+00	com.terraformation.backend.tracking.event.ObservationPlotCreatedEventV1	{"plotNumber": 73, "_historical": true, "isPermanent": false, "observationId": 4, "organizationId": 1, "plantingSiteId": 2, "monitoringPlotId": 5234, "monitoringPlotHistoryId": 73}	\N	\N
 \.
 
 
@@ -12588,6 +12649,21 @@ COPY public.flyway_schema_history (installed_rank, version, description, type, s
 446	422	ObservationMediaFiles	SQL	0400/V422__ObservationMediaFiles.sql	1940156532	postgres	2025-11-05 00:33:46.842325	0	t
 447	\N	Comments	SQL	R__Comments.sql	2063514733	postgres	2025-11-05 00:33:46.844651	53	t
 448	\N	TypeCodes	SQL	R__TypeCodes.sql	-284770594	postgres	2025-11-05 00:33:46.910541	64	t
+449	423	ObservationMediaFileEvents	SQL	0400/V423__ObservationMediaFileEvents.sql	2034061073	postgres	2026-01-05 22:38:27.638512	43	t
+450	424	ThumbnailsFullSize	SQL	0400/V424__ThumbnailsFullSize.sql	-37825350	postgres	2026-01-05 22:38:27.699662	1	t
+451	425	ActivityVerificationConstraints	SQL	0400/V425__ActivityVerificationConstraints.sql	833995416	postgres	2026-01-05 22:38:27.704502	11	t
+452	426	RecordedTreeCreatedEvent	SQL	0400/V426__RecordedTreeCreatedEvent.sql	-1518779810	postgres	2026-01-05 22:38:27.719958	7	t
+453	427	BiomassDetailsCreatedEvent	SQL	0400/V427__BiomassDetailsCreatedEvent.sql	-220225741	postgres	2026-01-05 22:38:27.731811	3	t
+454	428	BiomassQuadratCreatedEvent	SQL	0400/V428__BiomassQuadratCreatedEvent.sql	1157874926	postgres	2026-01-05 22:38:27.738962	10	t
+455	429	BiomassSpeciesCreatedEvent	SQL	0400/V429__BiomassSpeciesCreatedEvent.sql	-1204401117	postgres	2026-01-05 22:38:27.753369	4	t
+456	430	ObservationPlotCreatedEvent	SQL	0400/V430__ObservationPlotCreatedEvent.sql	85034091	postgres	2026-01-05 22:38:27.760832	13	t
+457	431	DeleteMortalityRateMetric	SQL	0400/V431__DeleteMortalityRateMetric.sql	-220410217	postgres	2026-01-05 22:38:27.778252	12	t
+458	432	StandardMetricUnits	SQL	0400/V432__StandardMetricUnits.sql	-1575687113	postgres	2026-01-05 22:38:27.795012	0	t
+459	433	ZoneToStrataRename	SQL	0400/V433__ZoneToStrataRename.sql	529245153	postgres	2026-01-05 22:38:27.798806	33	t
+460	434	RateLimitedZoneRename	SQL	0400/V434__RateLimitedZoneRename.sql	969032538	postgres	2026-01-05 22:38:27.839215	3	t
+461	435	DropMortalityRate	SQL	0400/V435__DropMortalityRate.sql	-1200629180	postgres	2026-01-05 22:38:27.845553	1	t
+462	\N	Comments	SQL	R__Comments.sql	-1076300067	postgres	2026-01-05 22:38:27.849411	48	t
+463	\N	TypeCodes	SQL	R__TypeCodes.sql	-1570355556	postgres	2026-01-05 22:38:27.908732	43	t
 \.
 
 
@@ -12670,9 +12746,9 @@ COPY public.growth_forms (id, name) FROM stdin;
 --
 
 COPY public.identifier_sequences (organization_id, prefix, next_value) FROM stdin;
-1	25-2-	1
 1	PlotNumber	73
-1	25-1-	1
+1	26-2-	1
+1	26-1-	1
 \.
 
 
@@ -12694,6 +12770,7 @@ COPY public.internal_tags (id, name, description, is_system, created_by, created
 
 COPY public.jobrunr_backgroundjobservers (id, workerpoolsize, pollintervalinseconds, firstheartbeat, lastheartbeat, running, systemtotalmemory, systemfreememory, systemcpuload, processmaxmemory, processfreememory, processallocatedmemory, processcpuload, deletesucceededjobsafter, permanentlydeletejobsafter, name) FROM stdin;
 098281d2-2e10-45cb-8cdc-7ce195641b54	224	15	2025-11-05 20:12:16.789256	2025-11-05 20:13:46.940418	1	8217473024	3754422272	0.01	2055208960	1818794544	236414416	0.01	PT36H	PT72H	ab58c809169a
+2762c12e-810a-4d11-93bc-f8472169f4aa	224	15	2026-01-05 22:38:31.489747	2026-01-05 22:38:31.491796	1	8216887296	3004219392	0.00	2055208960	1868781616	186427344	0.00	PT36H	PT72H	1f1c7ba514ef
 \.
 
 
@@ -13243,7 +13320,7 @@ COPY public.spring_session (primary_id, session_id, creation_time, last_access_t
 b57978b9-873d-4ea2-88c2-391fcdee5470	b9b00dda-c789-40cd-8c02-7ef21025c4d8	1747863920486	1747863989388	315360000	3000000000000	157cf509-d3e6-4bde-9e0d-d4ac07e2b721
 b3a1fd73-8ec2-4770-9a16-905a11fe1320	bd4cf519-8b47-4826-9f66-b9fdb9c025b8	1752270502225	1752270514426	315360000	3000000000000	2cd6d1dd-3135-4ef8-a817-fc6f207d1ab1
 04331063-4630-49b3-ba5c-8a4b2644ad28	4dbadd1e-771d-4ca6-bbab-6318abbca9c0	1752274911258	1752275099760	315360000	3000000000000	38256d2c-c181-46a3-84fe-2add28c6c57a
-b84131c0-7bee-4363-827e-291becc06698	276714ad-ab0a-48aa-8ef8-db65ec2e950a	1632267607787	1762373615719	315360000	2077733615719	0d04525c-7933-4cec-9647-7b6ac2642838
+b84131c0-7bee-4363-827e-291becc06698	276714ad-ab0a-48aa-8ef8-db65ec2e950a	1632267607787	1767652712489	315360000	2083012712489	0d04525c-7933-4cec-9647-7b6ac2642838
 \.
 
 
@@ -13296,7 +13373,7 @@ COPY public.test_clock (fake_time, real_time) FROM stdin;
 -- Data for Name: thumbnails; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.thumbnails (id, file_id, width, height, content_type, created_time, size, storage_url) FROM stdin;
+COPY public.thumbnails (id, file_id, width, height, content_type, created_time, size, storage_url, is_full_size) FROM stdin;
 \.
 
 
@@ -14050,7 +14127,7 @@ COPY public.users (id, auth_id, email, first_name, last_name, created_time, modi
 4	157cf509-d3e6-4bde-9e0d-d4ac07e2b721	funder@terraformation.com	Test	Funder	2025-05-21 21:42:25.83028+00	2025-05-21 21:45:27.385204+00	5	2025-05-21 21:46:29.411+00	f	\N	America/Los_Angeles	\N	\N	\N	\N
 5	2cd6d1dd-3135-4ef8-a817-fc6f207d1ab1	contributor@terraformation.com	Contributor	User	2025-07-11 21:45:26.864778+00	2025-07-11 21:48:32.894439+00	1	2025-07-11 21:48:35.525+00	f	\N	America/Los_Angeles	\N	\N	\N	\N
 6	38256d2c-c181-46a3-84fe-2add28c6c57a	readonly@terraformation.com	Read	Only	2025-07-11 23:00:24.169033+00	2025-07-11 23:01:58.394435+00	1	2025-07-11 23:04:59.783+00	f	\N	America/Los_Angeles	\N	\N	\N	\N
-1	0d04525c-7933-4cec-9647-7b6ac2642838	superadmin@terraformation.com	Super	Admin	2021-12-15 17:59:59.069723+00	2021-12-15 17:59:59.069723+00	1	2025-11-05 20:13:35.727+00	f	\N	Etc/UTC	\N	\N	t	2025-06-11 21:53:16.594086+00
+1	0d04525c-7933-4cec-9647-7b6ac2642838	superadmin@terraformation.com	Super	Admin	2021-12-15 17:59:59.069723+00	2021-12-15 17:59:59.069723+00	1	2026-01-05 22:38:32.502+00	f	\N	Etc/UTC	\N	\N	t	2025-06-11 21:53:16.594086+00
 \.
 
 
@@ -14148,7 +14225,7 @@ COPY seedbank.accessions (id, facility_id, number, collected_date, received_date
 1000	100	XYZ	\N	\N	40	\N	1	\N	\N	\N	\N	\N	\N	2021-01-03 15:31:20+00	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-10-25 17:51:45.063084+00	1	2	1	\N	\N	\N	\N	\N	1	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N
 1001	100	ABCDEFG	\N	\N	20	\N	2	\N	\N	\N	\N	\N	\N	2021-01-10 13:08:11+00	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-10-25 17:51:45.090985+00	1	2	2	\N	\N	\N	\N	\N	1	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N
 1002	100	AAF4D49R3E	\N	\N	40	\N	1	\N	\N	\N	\N	\N	\N	2021-01-03 15:31:20+00	\N	\N	\N	\N	\N	\N	\N	\N	\N	2022-10-25 17:51:45.115307+00	1	2	1	\N	\N	\N	\N	\N	2	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N
-1	101	25-1-2-001	2025-11-05	2025-11-05	5	\N	\N	\N	10	500	\N	\N	\N	2025-11-05 20:12:54.827407+00	\N	\N	\N	500	500	2	10	10	2	2025-11-05 20:13:35.628992+00	1	1	1	\N	\N	\N	\N	\N	1	500	2	2025-11-05 20:13:35.620915+00	500	500	2	\N	\N	\N	\N	\N
+1	101	26-1-2-001	2026-01-01	2026-01-01	5	\N	\N	\N	10	500	\N	\N	\N	2026-01-01 20:12:54.827407+00	\N	\N	\N	500	500	2	10	10	2	2026-01-01 20:12:54.827407+00	1	1	1	\N	\N	\N	\N	\N	1	500	2	2025-11-05 20:13:35.620915+00	500	500	2	\N	\N	\N	\N	\N
 \.
 
 
@@ -14355,7 +14432,7 @@ COPY tracking.deliveries (id, withdrawal_id, planting_site_id, created_by, creat
 -- Data for Name: draft_planting_sites; Type: TABLE DATA; Schema: tracking; Owner: -
 --
 
-COPY tracking.draft_planting_sites (id, organization_id, project_id, name, description, time_zone, num_planting_zones, num_planting_subzones, data, created_by, created_time, modified_by, modified_time) FROM stdin;
+COPY tracking.draft_planting_sites (id, organization_id, project_id, name, description, time_zone, num_strata, num_substrata, data, created_by, created_time, modified_by, modified_time) FROM stdin;
 \.
 
 
@@ -14373,7 +14450,7 @@ COPY tracking.mangrove_tides (id, name) FROM stdin;
 -- Data for Name: monitoring_plot_histories; Type: TABLE DATA; Schema: tracking; Owner: -
 --
 
-COPY tracking.monitoring_plot_histories (id, monitoring_plot_id, planting_subzone_id, planting_site_id, planting_subzone_history_id, planting_site_history_id, created_by, created_time) FROM stdin;
+COPY tracking.monitoring_plot_histories (id, monitoring_plot_id, substratum_id, planting_site_id, substratum_history_id, planting_site_history_id, created_by, created_time) FROM stdin;
 1	5162	7	3	7	3	1	2025-05-29 18:50:07.453112+00
 2	5163	7	3	7	3	1	2025-05-29 18:50:07.479146+00
 3	5164	7	3	7	3	1	2025-05-29 18:50:07.483888+00
@@ -14462,7 +14539,7 @@ COPY tracking.monitoring_plot_overlaps (monitoring_plot_id, overlaps_plot_id) FR
 -- Data for Name: monitoring_plots; Type: TABLE DATA; Schema: tracking; Owner: -
 --
 
-COPY tracking.monitoring_plots (id, planting_subzone_id, created_by, created_time, modified_by, modified_time, boundary, permanent_index, is_available, size_meters, planting_site_id, is_ad_hoc, organization_id, plot_number, elevation_meters) FROM stdin;
+COPY tracking.monitoring_plots (id, substratum_id, created_by, created_time, modified_by, modified_time, boundary, permanent_index, is_available, size_meters, planting_site_id, is_ad_hoc, organization_id, plot_number, elevation_meters) FROM stdin;
 5212	9	1	2025-06-16 21:44:04.295093+00	1	2025-06-16 21:44:04.295093+00	0103000020E6100000010000000500000098B5A005B1384340B1453E9B35532F40AB3EEB30BA384340B1453E9B35532F40AB3EEB30BA384340FA30432459532F4098B5A005B1384340FA30432459532F4098B5A005B1384340B1453E9B35532F40	\N	t	30	3	f	1	51	1049.4
 5211	9	1	2025-06-16 21:44:04.286711+00	1	2025-06-16 21:44:04.286711+00	0103000020E61000000100000005000000BEBBE2F64F3D43401253F70AD85A2F4016DE5822593D43401253F70AD85A2F4016DE5822593D43409A13F993FB5A2F40BEBBE2F64F3D43409A13F993FB5A2F40BEBBE2F64F3D43401253F70AD85A2F40	\N	t	30	3	f	1	50	1672.8
 5210	9	1	2025-06-16 21:44:04.276925+00	1	2025-06-16 21:44:04.276925+00	0103000020E61000000100000005000000D58F3D8CAF36434029F4FED7444C2F40B18060B7B836434029F4FED7444C2F40B18060B7B8364340E2BF0661684C2F40D58F3D8CAF364340E2BF0661684C2F40D58F3D8CAF36434029F4FED7444C2F40	\N	t	30	3	f	1	49	1409.7
@@ -14551,6 +14628,18 @@ COPY tracking.observable_conditions (id, name) FROM stdin;
 5	Pests
 6	SeedProduction
 7	UnfavorableWeather
+8	NaturalRegenerationWoody
+9	Logging
+10	Fire
+11	Mining
+12	Grazing
+13	Infrastructure
+14	ElectricalLines
+15	SoilErosion
+16	DifficultAccessibility
+17	Contamination
+18	SteepSlope
+19	WaterBodies
 \.
 
 
@@ -14767,10 +14856,10 @@ COPY tracking.observation_plots (observation_id, monitoring_plot_id, claimed_by,
 
 
 --
--- Data for Name: observation_requested_subzones; Type: TABLE DATA; Schema: tracking; Owner: -
+-- Data for Name: observation_requested_substrata; Type: TABLE DATA; Schema: tracking; Owner: -
 --
 
-COPY tracking.observation_requested_subzones (observation_id, planting_subzone_id) FROM stdin;
+COPY tracking.observation_requested_substrata (observation_id, substratum_id) FROM stdin;
 1	7
 1	8
 1	9
@@ -14832,489 +14921,489 @@ COPY tracking.observed_plot_coordinates (id, observation_id, monitoring_plot_id,
 -- Data for Name: observed_plot_species_totals; Type: TABLE DATA; Schema: tracking; Owner: -
 --
 
-COPY tracking.observed_plot_species_totals (observation_id, monitoring_plot_id, species_id, species_name, certainty_id, total_live, total_dead, total_existing, mortality_rate, cumulative_dead, permanent_live, survival_rate) FROM stdin;
-1	5162	4	\N	1	15	1	1	6	1	15	\N
-1	5162	2	\N	1	15	3	1	17	3	15	\N
-1	5162	3	\N	1	14	3	3	18	3	14	\N
-1	5162	1	\N	1	13	3	2	19	3	13	\N
-1	5162	\N	Other 3	2	1	0	0	0	0	1	\N
-1	5162	\N	Other 1	2	3	0	0	0	0	3	\N
-1	5162	\N	\N	3	6	0	0	0	0	6	\N
-1	5162	\N	Other 2	2	1	0	0	0	0	1	\N
-1	5163	4	\N	1	28	2	3	7	2	28	\N
-1	5163	1	\N	1	26	1	2	4	1	26	\N
-1	5163	3	\N	1	19	1	5	5	1	19	\N
-1	5163	\N	Other 2	2	2	0	0	0	0	2	\N
-1	5163	\N	Other 1	2	2	0	0	0	0	2	\N
-1	5163	2	\N	1	20	1	0	5	1	20	\N
-1	5163	\N	\N	3	3	0	0	0	0	3	\N
-1	5163	\N	Other 5	2	1	0	0	0	0	1	\N
-1	5164	2	\N	1	10	2	2	17	2	10	\N
-1	5164	3	\N	1	13	1	2	7	1	13	\N
-1	5164	\N	\N	3	3	0	0	0	0	3	\N
-1	5164	4	\N	1	7	0	2	0	0	7	\N
-1	5164	1	\N	1	8	0	1	0	0	8	\N
-1	5164	\N	Other 2	2	0	1	0	100	1	0	\N
-1	5164	\N	Other 3	2	1	0	0	0	0	1	\N
-1	5164	\N	Other 1	2	1	0	0	0	0	1	\N
-1	5165	2	\N	1	44	4	5	8	4	44	\N
-1	5165	1	\N	1	34	3	6	8	3	34	\N
-1	5165	3	\N	1	32	4	5	11	4	32	\N
-1	5165	4	\N	1	32	2	6	6	2	32	\N
-1	5165	\N	\N	3	7	1	2	13	1	7	\N
-1	5165	\N	Other 5	2	3	0	0	0	0	3	\N
-1	5165	\N	Other 4	2	2	0	0	0	0	2	\N
-1	5165	\N	Other 2	2	2	0	0	0	0	2	\N
-1	5165	\N	Other 1	2	1	0	0	0	0	1	\N
-1	5165	\N	Other 3	2	1	0	0	0	0	1	\N
-1	5166	\N	Other 1	2	2	0	0	0	0	2	\N
-1	5166	4	\N	1	7	1	2	13	1	7	\N
-1	5166	3	\N	1	12	0	0	0	0	12	\N
-1	5166	2	\N	1	2	2	0	50	2	2	\N
-1	5166	1	\N	1	2	2	0	50	2	2	\N
-1	5167	1	\N	1	29	3	5	9	3	29	\N
-1	5167	2	\N	1	39	4	0	9	4	39	\N
-1	5167	3	\N	1	28	3	4	10	3	28	\N
-1	5167	4	\N	1	39	9	6	19	9	39	\N
-1	5167	\N	\N	3	8	3	1	27	3	8	\N
-1	5167	\N	Other 1	2	2	0	0	0	0	2	\N
-1	5167	\N	Other 4	2	3	0	0	0	0	3	\N
-1	5167	\N	Other 5	2	1	0	1	0	0	1	\N
-1	5167	\N	Other 2	2	2	0	1	0	0	2	\N
-1	5167	\N	Other 3	2	1	0	0	0	0	1	\N
-1	5168	2	\N	1	21	4	4	16	4	21	\N
-1	5168	1	\N	1	29	4	2	12	4	29	\N
-1	5168	\N	Other 2	2	1	0	0	0	0	1	\N
-1	5168	3	\N	1	18	4	6	18	4	18	\N
-1	5168	4	\N	1	22	3	5	12	3	22	\N
-1	5168	\N	Other 3	2	1	1	0	50	1	1	\N
-1	5168	\N	Other 4	2	2	0	1	0	0	2	\N
-1	5168	\N	Other 5	2	2	0	0	0	0	2	\N
-1	5168	\N	\N	3	5	0	1	0	0	5	\N
-1	5169	2	\N	1	11	1	1	8	1	11	\N
-1	5169	1	\N	1	7	0	4	0	0	7	\N
-1	5169	4	\N	1	8	0	1	0	0	8	\N
-1	5169	\N	Other 4	2	1	0	0	0	0	1	\N
-1	5169	\N	\N	3	2	1	0	33	1	2	\N
-1	5169	3	\N	1	4	2	1	33	2	4	\N
-1	5169	\N	Other 5	2	1	0	0	0	0	1	\N
-1	5169	\N	Other 2	2	1	0	0	0	0	1	\N
-1	5170	2	\N	1	24	0	5	0	0	24	\N
-1	5170	3	\N	1	21	4	4	16	4	21	\N
-1	5170	4	\N	1	23	1	1	4	1	23	\N
-1	5170	\N	\N	3	4	2	1	33	2	4	\N
-1	5170	1	\N	1	16	1	0	6	1	16	\N
-1	5170	\N	Other 1	2	1	0	0	0	0	1	\N
-1	5170	\N	Other 3	2	1	0	0	0	0	1	\N
-1	5171	4	\N	1	27	2	4	7	2	27	\N
-1	5171	1	\N	1	21	6	3	22	6	21	\N
-1	5171	2	\N	1	19	3	2	14	3	19	\N
-1	5171	\N	Other 1	2	2	1	0	33	1	2	\N
-1	5171	\N	Other 2	2	0	1	1	100	1	0	\N
-1	5171	\N	\N	3	6	0	2	0	0	6	\N
-1	5171	3	\N	1	31	2	3	6	2	31	\N
-1	5171	\N	Other 3	2	1	0	0	0	0	1	\N
-1	5172	1	\N	1	30	2	3	6	2	30	\N
-1	5172	3	\N	1	25	2	6	7	2	25	\N
-1	5172	\N	\N	3	7	1	1	13	1	7	\N
-1	5172	\N	Other 2	2	1	0	0	0	0	1	\N
-1	5172	2	\N	1	23	4	2	15	4	23	\N
-1	5172	4	\N	1	22	0	1	0	0	22	\N
-1	5172	\N	Other 4	2	2	0	0	0	0	2	\N
-1	5173	2	\N	1	11	0	2	0	0	11	\N
-1	5173	4	\N	1	19	0	5	0	0	19	\N
-1	5173	1	\N	1	15	2	1	12	2	15	\N
-1	5173	3	\N	1	17	1	4	6	1	17	\N
-1	5173	\N	Other 3	2	2	0	0	0	0	2	\N
-1	5173	\N	\N	3	1	0	1	0	0	1	\N
-1	5173	\N	Other 2	2	1	0	0	0	0	1	\N
-1	5174	2	\N	1	12	0	1	0	0	12	\N
-1	5174	1	\N	1	13	0	2	0	0	13	\N
-1	5174	\N	Other 4	2	2	0	0	0	0	2	\N
-1	5174	3	\N	1	10	2	1	17	2	10	\N
-1	5174	\N	Other 3	2	2	0	0	0	0	2	\N
-1	5174	4	\N	1	6	1	0	14	1	6	\N
-1	5174	\N	Other 1	2	1	0	0	0	0	1	\N
-1	5174	\N	\N	3	2	2	1	50	2	2	\N
-1	5174	\N	Other 2	2	1	0	0	0	0	1	\N
-1	5175	\N	Other 3	2	1	0	0	0	0	1	\N
-1	5175	2	\N	1	17	2	3	11	2	17	\N
-1	5175	1	\N	1	15	3	2	17	3	15	\N
-1	5175	3	\N	1	16	1	2	6	1	16	\N
-1	5175	4	\N	1	13	2	2	13	2	13	\N
-1	5175	\N	\N	3	1	0	0	0	0	1	\N
-1	5175	\N	Other 1	2	2	0	0	0	0	2	\N
-1	5175	\N	Other 2	2	1	0	1	0	0	1	\N
-1	5175	\N	Other 5	2	2	0	0	0	0	2	\N
-1	5176	4	\N	1	7	0	2	0	0	7	\N
-1	5176	3	\N	1	11	3	1	21	3	11	\N
-1	5176	2	\N	1	4	2	0	33	2	4	\N
-1	5176	\N	Other 4	2	1	0	0	0	0	1	\N
-1	5176	\N	Other 3	2	0	1	0	100	1	0	\N
-1	5176	1	\N	1	7	1	0	13	1	7	\N
-1	5176	\N	\N	3	1	0	1	0	0	1	\N
-1	5176	\N	Other 1	2	1	0	0	0	0	1	\N
-1	5177	4	\N	1	33	5	6	13	5	33	\N
-1	5177	1	\N	1	28	2	4	7	2	28	\N
-1	5177	3	\N	1	40	4	1	9	4	40	\N
-1	5177	2	\N	1	36	2	5	5	2	36	\N
-1	5177	\N	\N	3	9	1	0	10	1	9	\N
-1	5177	\N	Other 5	2	7	0	0	0	0	7	\N
-1	5177	\N	Other 3	2	2	0	0	0	0	2	\N
-1	5177	\N	Other 4	2	1	1	0	50	1	1	\N
-1	5177	\N	Other 1	2	0	1	0	100	1	0	\N
-1	5177	\N	Other 2	2	1	0	0	0	0	1	\N
-1	5178	2	\N	1	33	1	3	3	1	33	\N
-1	5178	1	\N	1	39	3	4	7	3	39	\N
-1	5178	\N	\N	3	7	0	0	0	0	7	\N
-1	5178	3	\N	1	29	2	3	6	2	29	\N
-1	5178	4	\N	1	32	5	3	14	5	32	\N
-1	5178	\N	Other 1	2	3	0	0	0	0	3	\N
-1	5178	\N	Other 5	2	1	0	0	0	0	1	\N
-1	5178	\N	Other 3	2	1	0	1	0	0	1	\N
-1	5178	\N	Other 4	2	1	0	0	0	0	1	\N
-1	5179	3	\N	1	19	1	0	5	1	19	\N
-1	5179	1	\N	1	10	1	2	9	1	10	\N
-1	5179	4	\N	1	9	1	1	10	1	9	\N
-1	5179	2	\N	1	11	1	2	8	1	11	\N
-1	5179	\N	\N	3	2	0	1	0	0	2	\N
-1	5179	\N	Other 1	2	1	0	0	0	0	1	\N
-1	5180	1	\N	1	31	4	1	11	4	31	\N
-1	5180	2	\N	1	35	1	4	3	1	35	\N
-1	5180	\N	\N	3	14	2	1	13	2	14	\N
-1	5180	4	\N	1	27	3	3	10	3	27	\N
-1	5180	3	\N	1	21	3	6	13	3	21	\N
-1	5180	\N	Other 4	2	1	0	2	0	0	1	\N
-1	5180	\N	Other 5	2	1	0	0	0	0	1	\N
-1	5180	\N	Other 3	2	1	0	0	0	0	1	\N
-1	5181	3	\N	1	32	1	6	3	1	32	\N
-1	5181	4	\N	1	40	7	4	15	7	40	\N
-1	5181	2	\N	1	25	6	2	19	6	25	\N
-1	5181	1	\N	1	44	6	4	12	6	44	\N
-1	5181	\N	\N	3	5	1	0	17	1	5	\N
-1	5181	\N	Other 4	2	1	1	0	50	1	1	\N
-1	5181	\N	Other 3	2	1	1	0	50	1	1	\N
-1	5181	\N	Other 2	2	1	1	0	50	1	1	\N
-1	5181	\N	Other 5	2	3	1	0	25	1	3	\N
-1	5182	3	\N	1	37	1	2	3	1	37	\N
-1	5182	2	\N	1	29	3	7	9	3	29	\N
-1	5182	1	\N	1	32	2	2	6	2	32	\N
-1	5182	4	\N	1	42	5	0	11	5	42	\N
-1	5182	\N	\N	3	6	0	1	0	0	6	\N
-1	5182	\N	Other 4	2	5	0	2	0	0	5	\N
-1	5182	\N	Other 3	2	2	0	0	0	0	2	\N
-1	5182	\N	Other 5	2	1	0	0	0	0	1	\N
-1	5182	\N	Other 2	2	1	0	1	0	0	1	\N
-1	5182	\N	Other 1	2	3	0	0	0	0	3	\N
-1	5183	4	\N	1	29	7	7	19	7	29	\N
-1	5183	2	\N	1	28	3	5	10	3	28	\N
-1	5183	1	\N	1	32	3	2	9	3	32	\N
-1	5183	3	\N	1	28	3	2	10	3	28	\N
-1	5183	\N	\N	3	10	0	1	0	0	10	\N
-1	5183	\N	Other 3	2	1	0	0	0	0	1	\N
-1	5183	\N	Other 4	2	4	0	0	0	0	4	\N
-1	5184	2	\N	1	33	2	1	6	2	33	\N
-1	5184	4	\N	1	22	8	5	27	8	22	\N
-1	5184	1	\N	1	22	4	2	15	4	22	\N
-1	5184	3	\N	1	23	5	1	18	5	23	\N
-1	5184	\N	Other 4	2	0	1	0	100	1	0	\N
-1	5184	\N	Other 2	2	1	0	0	0	0	1	\N
-1	5184	\N	Other 1	2	1	0	0	0	0	1	\N
-1	5184	\N	\N	3	5	1	0	17	1	5	\N
-1	5184	\N	Other 5	2	1	0	0	0	0	1	\N
-1	5184	\N	Other 3	2	1	0	0	0	0	1	\N
-1	5185	3	\N	1	20	2	2	9	2	20	\N
-1	5185	1	\N	1	35	5	3	13	5	35	\N
-1	5185	4	\N	1	23	3	5	12	3	23	\N
-1	5185	2	\N	1	23	3	3	12	3	23	\N
-1	5185	\N	Other 5	2	1	0	1	0	0	1	\N
-1	5185	\N	Other 4	2	3	0	0	0	0	3	\N
-1	5185	\N	Other 1	2	2	0	0	0	0	2	\N
-1	5185	\N	\N	3	2	1	0	33	1	2	\N
-1	5185	\N	Other 3	2	3	0	0	0	0	3	\N
-1	5186	3	\N	1	7	0	0	\N	0	0	\N
-1	5186	4	\N	1	7	1	0	\N	0	0	\N
-1	5186	\N	Other 1	2	1	0	0	\N	0	0	\N
-1	5186	1	\N	1	8	1	0	\N	0	0	\N
-1	5186	2	\N	1	1	0	1	\N	0	0	\N
-1	5186	\N	\N	3	1	0	0	\N	0	0	\N
-1	5187	1	\N	1	16	5	0	\N	0	0	\N
-1	5187	4	\N	1	18	2	3	\N	0	0	\N
-1	5187	3	\N	1	19	1	2	\N	0	0	\N
-1	5187	2	\N	1	17	3	4	\N	0	0	\N
-1	5187	\N	Other 2	2	3	0	0	\N	0	0	\N
-1	5187	\N	Other 4	2	1	0	0	\N	0	0	\N
-1	5187	\N	\N	3	3	0	0	\N	0	0	\N
-1	5187	\N	Other 5	2	1	0	0	\N	0	0	\N
-1	5187	\N	Other 1	2	1	0	0	\N	0	0	\N
-1	5187	\N	Other 3	2	1	0	0	\N	0	0	\N
-1	5188	1	\N	1	10	3	1	\N	0	0	\N
-1	5188	4	\N	1	10	3	2	\N	0	0	\N
-1	5188	2	\N	1	17	1	1	\N	0	0	\N
-1	5188	3	\N	1	11	0	1	\N	0	0	\N
-1	5188	\N	Other 4	2	2	1	0	\N	0	0	\N
-1	5188	\N	Other 5	2	3	0	0	\N	0	0	\N
-1	5188	\N	\N	3	2	0	0	\N	0	0	\N
-1	5189	3	\N	1	16	1	3	\N	0	0	\N
-1	5189	1	\N	1	14	1	3	\N	0	0	\N
-1	5189	2	\N	1	11	1	2	\N	0	0	\N
-1	5189	\N	\N	3	4	0	1	\N	0	0	\N
-1	5189	4	\N	1	10	1	1	\N	0	0	\N
-1	5189	\N	Other 2	2	2	0	0	\N	0	0	\N
-1	5189	\N	Other 4	2	1	0	0	\N	0	0	\N
-1	5189	\N	Other 5	2	1	0	0	\N	0	0	\N
-1	5190	2	\N	1	30	3	6	\N	0	0	\N
-1	5190	3	\N	1	30	2	5	\N	0	0	\N
-1	5190	4	\N	1	26	3	6	\N	0	0	\N
-1	5190	\N	Other 5	2	3	0	0	\N	0	0	\N
-1	5190	\N	\N	3	5	2	0	\N	0	0	\N
-1	5190	1	\N	1	33	1	4	\N	0	0	\N
-1	5190	\N	Other 4	2	1	0	0	\N	0	0	\N
-1	5190	\N	Other 2	2	1	0	0	\N	0	0	\N
-1	5190	\N	Other 3	2	2	0	0	\N	0	0	\N
-1	5191	1	\N	1	14	2	0	\N	0	0	\N
-1	5191	3	\N	1	15	5	1	\N	0	0	\N
-1	5191	2	\N	1	10	0	0	\N	0	0	\N
-1	5191	4	\N	1	14	0	1	\N	0	0	\N
-1	5191	\N	Other 2	2	1	0	0	\N	0	0	\N
-1	5191	\N	\N	3	2	0	0	\N	0	0	\N
-1	5191	\N	Other 3	2	1	0	0	\N	0	0	\N
-1	5192	3	\N	1	12	1	1	\N	0	0	\N
-1	5192	4	\N	1	14	0	4	\N	0	0	\N
-1	5192	1	\N	1	13	4	2	\N	0	0	\N
-1	5192	2	\N	1	11	1	1	\N	0	0	\N
-1	5192	\N	\N	3	2	0	0	\N	0	0	\N
-1	5192	\N	Other 5	2	0	0	1	\N	0	0	\N
-1	5192	\N	Other 1	2	0	0	1	\N	0	0	\N
-1	5193	2	\N	1	44	4	1	\N	0	0	\N
-1	5193	3	\N	1	30	5	4	\N	0	0	\N
-1	5193	\N	\N	3	9	3	0	\N	0	0	\N
-1	5193	4	\N	1	31	2	3	\N	0	0	\N
-1	5193	1	\N	1	26	8	1	\N	0	0	\N
-1	5193	\N	Other 5	2	4	0	0	\N	0	0	\N
-1	5193	\N	Other 3	2	3	0	0	\N	0	0	\N
-1	5193	\N	Other 4	2	0	0	1	\N	0	0	\N
-1	5193	\N	Other 1	2	1	0	0	\N	0	0	\N
-1	5193	\N	Other 2	2	1	0	0	\N	0	0	\N
-1	5194	1	\N	1	14	0	2	\N	0	0	\N
-1	5194	3	\N	1	15	1	0	\N	0	0	\N
-1	5194	2	\N	1	9	0	1	\N	0	0	\N
-1	5194	4	\N	1	9	1	1	\N	0	0	\N
-1	5194	\N	\N	3	3	1	0	\N	0	0	\N
-2	5162	1	\N	1	0	0	0	100	3	0	\N
-2	5162	2	\N	1	0	0	0	100	3	0	\N
-2	5162	3	\N	1	0	0	0	100	3	0	\N
-2	5162	4	\N	1	0	0	0	100	1	0	\N
-2	5163	1	\N	1	0	0	0	100	1	0	\N
-2	5163	2	\N	1	0	0	0	100	1	0	\N
-2	5163	3	\N	1	0	0	0	100	1	0	\N
-2	5163	4	\N	1	0	0	0	100	2	0	\N
-2	5164	2	\N	1	0	0	0	100	2	0	\N
-2	5164	3	\N	1	0	0	0	100	1	0	\N
-2	5164	\N	Other 2	2	0	0	0	100	1	0	\N
-2	5165	1	\N	1	0	0	0	100	3	0	\N
-2	5165	2	\N	1	0	0	0	100	4	0	\N
-2	5165	3	\N	1	0	0	0	100	4	0	\N
-2	5165	4	\N	1	0	0	0	100	2	0	\N
-2	5165	\N	\N	3	0	0	0	100	1	0	\N
-2	5166	1	\N	1	0	0	0	100	2	0	\N
-2	5166	2	\N	1	0	0	0	100	2	0	\N
-2	5166	4	\N	1	0	0	0	100	1	0	\N
-2	5167	1	\N	1	0	0	0	100	3	0	\N
-2	5167	2	\N	1	0	0	0	100	4	0	\N
-2	5167	3	\N	1	0	0	0	100	3	0	\N
-2	5167	4	\N	1	0	0	0	100	9	0	\N
-2	5167	\N	\N	3	0	0	0	100	3	0	\N
-2	5168	1	\N	1	0	0	0	100	4	0	\N
-2	5168	2	\N	1	0	0	0	100	4	0	\N
-2	5168	3	\N	1	0	0	0	100	4	0	\N
-2	5168	4	\N	1	0	0	0	100	3	0	\N
-2	5168	\N	Other 3	2	0	0	0	100	1	0	\N
-2	5169	2	\N	1	0	0	0	100	1	0	\N
-2	5169	3	\N	1	0	0	0	100	2	0	\N
-2	5169	\N	\N	3	0	0	0	100	1	0	\N
-2	5170	1	\N	1	0	0	0	100	1	0	\N
-2	5170	3	\N	1	0	0	0	100	4	0	\N
-2	5170	4	\N	1	0	0	0	100	1	0	\N
-2	5170	\N	\N	3	0	0	0	100	2	0	\N
-2	5171	1	\N	1	0	0	0	100	6	0	\N
-2	5171	2	\N	1	0	0	0	100	3	0	\N
-2	5171	3	\N	1	0	0	0	100	2	0	\N
-2	5171	4	\N	1	0	0	0	100	2	0	\N
-2	5171	\N	Other 1	2	0	0	0	100	1	0	\N
-2	5171	\N	Other 2	2	0	0	0	100	1	0	\N
-2	5172	1	\N	1	0	0	0	100	2	0	\N
-2	5172	2	\N	1	0	0	0	100	4	0	\N
-2	5172	3	\N	1	0	0	0	100	2	0	\N
-2	5172	\N	\N	3	0	0	0	100	1	0	\N
-2	5173	1	\N	1	0	0	0	100	2	0	\N
-2	5173	3	\N	1	0	0	0	100	1	0	\N
-2	5174	3	\N	1	0	0	0	100	2	0	\N
-2	5174	4	\N	1	0	0	0	100	1	0	\N
-2	5174	\N	\N	3	0	0	0	100	2	0	\N
-2	5175	1	\N	1	0	0	0	100	3	0	\N
-2	5175	2	\N	1	0	0	0	100	2	0	\N
-2	5175	3	\N	1	0	0	0	100	1	0	\N
-2	5175	4	\N	1	0	0	0	100	2	0	\N
-2	5176	1	\N	1	0	0	0	100	1	0	\N
-2	5176	2	\N	1	0	0	0	100	2	0	\N
-2	5176	3	\N	1	0	0	0	100	3	0	\N
-2	5176	\N	Other 3	2	0	0	0	100	1	0	\N
-2	5177	1	\N	1	0	0	0	100	2	0	\N
-2	5177	2	\N	1	0	0	0	100	2	0	\N
-2	5177	3	\N	1	0	0	0	100	4	0	\N
-2	5177	4	\N	1	0	0	0	100	5	0	\N
-2	5177	\N	Other 1	2	0	0	0	100	1	0	\N
-2	5177	\N	Other 4	2	0	0	0	100	1	0	\N
-2	5177	\N	\N	3	0	0	0	100	1	0	\N
-2	5178	1	\N	1	0	0	0	100	3	0	\N
-2	5178	2	\N	1	0	0	0	100	1	0	\N
-2	5178	3	\N	1	0	0	0	100	2	0	\N
-2	5178	4	\N	1	0	0	0	100	5	0	\N
-2	5179	1	\N	1	0	0	0	100	1	0	\N
-2	5179	2	\N	1	0	0	0	100	1	0	\N
-2	5179	3	\N	1	0	0	0	100	1	0	\N
-2	5179	4	\N	1	0	0	0	100	1	0	\N
-2	5180	1	\N	1	0	0	0	100	4	0	\N
-2	5180	2	\N	1	0	0	0	100	1	0	\N
-2	5180	3	\N	1	0	0	0	100	3	0	\N
-2	5180	4	\N	1	0	0	0	100	3	0	\N
-2	5180	\N	\N	3	0	0	0	100	2	0	\N
-2	5181	1	\N	1	0	0	0	100	6	0	\N
-2	5181	2	\N	1	0	0	0	100	6	0	\N
-2	5181	3	\N	1	0	0	0	100	1	0	\N
-2	5181	4	\N	1	0	0	0	100	7	0	\N
-2	5181	\N	Other 2	2	0	0	0	100	1	0	\N
-2	5181	\N	Other 3	2	0	0	0	100	1	0	\N
-2	5181	\N	Other 4	2	0	0	0	100	1	0	\N
-2	5181	\N	Other 5	2	0	0	0	100	1	0	\N
-2	5181	\N	\N	3	0	0	0	100	1	0	\N
-2	5182	1	\N	1	0	0	0	100	2	0	\N
-2	5182	2	\N	1	0	0	0	100	3	0	\N
-2	5182	3	\N	1	0	0	0	100	1	0	\N
-2	5182	4	\N	1	0	0	0	100	5	0	\N
-2	5183	1	\N	1	0	0	0	100	3	0	\N
-2	5183	2	\N	1	0	0	0	100	3	0	\N
-2	5183	3	\N	1	0	0	0	100	3	0	\N
-2	5183	4	\N	1	0	0	0	100	7	0	\N
-2	5184	1	\N	1	0	0	0	100	4	0	\N
-2	5184	2	\N	1	0	0	0	100	2	0	\N
-2	5184	3	\N	1	0	0	0	100	5	0	\N
-2	5184	4	\N	1	0	0	0	100	8	0	\N
-2	5184	\N	Other 4	2	0	0	0	100	1	0	\N
-2	5184	\N	\N	3	0	0	0	100	1	0	\N
-2	5185	1	\N	1	0	0	0	100	5	0	\N
-2	5185	2	\N	1	0	0	0	100	3	0	\N
-2	5185	3	\N	1	0	0	0	100	2	0	\N
-2	5185	4	\N	1	0	0	0	100	3	0	\N
-2	5185	\N	\N	3	0	0	0	100	1	0	\N
-3	5162	1	\N	1	0	0	0	100	3	0	\N
-3	5162	2	\N	1	0	0	0	100	3	0	\N
-3	5162	3	\N	1	0	0	0	100	3	0	\N
-3	5162	4	\N	1	0	0	0	100	1	0	\N
-3	5163	1	\N	1	0	0	0	100	1	0	\N
-3	5163	2	\N	1	0	0	0	100	1	0	\N
-3	5163	3	\N	1	0	0	0	100	1	0	\N
-3	5163	4	\N	1	0	0	0	100	2	0	\N
-3	5164	2	\N	1	0	0	0	100	2	0	\N
-3	5164	3	\N	1	0	0	0	100	1	0	\N
-3	5164	\N	Other 2	2	0	0	0	100	1	0	\N
-3	5165	1	\N	1	0	0	0	100	3	0	\N
-3	5165	2	\N	1	0	0	0	100	4	0	\N
-3	5165	3	\N	1	0	0	0	100	4	0	\N
-3	5165	4	\N	1	0	0	0	100	2	0	\N
-3	5165	\N	\N	3	0	0	0	100	1	0	\N
-3	5166	1	\N	1	0	0	0	100	2	0	\N
-3	5166	2	\N	1	0	0	0	100	2	0	\N
-3	5166	4	\N	1	0	0	0	100	1	0	\N
-3	5167	1	\N	1	0	0	0	100	3	0	\N
-3	5167	2	\N	1	0	0	0	100	4	0	\N
-3	5167	3	\N	1	0	0	0	100	3	0	\N
-3	5167	4	\N	1	0	0	0	100	9	0	\N
-3	5167	\N	\N	3	0	0	0	100	3	0	\N
-3	5168	1	\N	1	0	0	0	100	4	0	\N
-3	5168	2	\N	1	0	0	0	100	4	0	\N
-3	5168	3	\N	1	0	0	0	100	4	0	\N
-3	5168	4	\N	1	0	0	0	100	3	0	\N
-3	5168	\N	Other 3	2	0	0	0	100	1	0	\N
-3	5169	2	\N	1	0	0	0	100	1	0	\N
-3	5169	3	\N	1	0	0	0	100	2	0	\N
-3	5169	\N	\N	3	0	0	0	100	1	0	\N
-3	5170	1	\N	1	0	0	0	100	1	0	\N
-3	5170	3	\N	1	0	0	0	100	4	0	\N
-3	5170	4	\N	1	0	0	0	100	1	0	\N
-3	5170	\N	\N	3	0	0	0	100	2	0	\N
-3	5171	1	\N	1	0	0	0	100	6	0	\N
-3	5171	2	\N	1	0	0	0	100	3	0	\N
-3	5171	3	\N	1	0	0	0	100	2	0	\N
-3	5171	4	\N	1	0	0	0	100	2	0	\N
-3	5171	\N	Other 1	2	0	0	0	100	1	0	\N
-3	5171	\N	Other 2	2	0	0	0	100	1	0	\N
-3	5172	1	\N	1	0	0	0	100	2	0	\N
-3	5172	2	\N	1	0	0	0	100	4	0	\N
-3	5172	3	\N	1	0	0	0	100	2	0	\N
-3	5172	\N	\N	3	0	0	0	100	1	0	\N
-3	5173	1	\N	1	0	0	0	100	2	0	\N
-3	5173	3	\N	1	0	0	0	100	1	0	\N
-3	5174	3	\N	1	0	0	0	100	2	0	\N
-3	5174	4	\N	1	0	0	0	100	1	0	\N
-3	5174	\N	\N	3	0	0	0	100	2	0	\N
-3	5175	1	\N	1	0	0	0	100	3	0	\N
-3	5175	2	\N	1	0	0	0	100	2	0	\N
-3	5175	3	\N	1	0	0	0	100	1	0	\N
-3	5175	4	\N	1	0	0	0	100	2	0	\N
-3	5176	1	\N	1	0	0	0	100	1	0	\N
-3	5176	2	\N	1	0	0	0	100	2	0	\N
-3	5176	3	\N	1	0	0	0	100	3	0	\N
-3	5176	\N	Other 3	2	0	0	0	100	1	0	\N
-3	5177	1	\N	1	0	0	0	100	2	0	\N
-3	5177	2	\N	1	0	0	0	100	2	0	\N
-3	5177	3	\N	1	0	0	0	100	4	0	\N
-3	5177	4	\N	1	0	0	0	100	5	0	\N
-3	5177	\N	Other 1	2	0	0	0	100	1	0	\N
-3	5177	\N	Other 4	2	0	0	0	100	1	0	\N
-3	5177	\N	\N	3	0	0	0	100	1	0	\N
-3	5178	1	\N	1	0	0	0	100	3	0	\N
-3	5178	2	\N	1	0	0	0	100	1	0	\N
-3	5178	3	\N	1	0	0	0	100	2	0	\N
-3	5178	4	\N	1	0	0	0	100	5	0	\N
-3	5179	1	\N	1	0	0	0	100	1	0	\N
-3	5179	2	\N	1	0	0	0	100	1	0	\N
-3	5179	3	\N	1	0	0	0	100	1	0	\N
-3	5179	4	\N	1	0	0	0	100	1	0	\N
-3	5180	1	\N	1	0	0	0	100	4	0	\N
-3	5180	2	\N	1	0	0	0	100	1	0	\N
-3	5180	3	\N	1	0	0	0	100	3	0	\N
-3	5180	4	\N	1	0	0	0	100	3	0	\N
-3	5180	\N	\N	3	0	0	0	100	2	0	\N
-3	5181	1	\N	1	0	0	0	100	6	0	\N
-3	5181	2	\N	1	0	0	0	100	6	0	\N
-3	5181	3	\N	1	0	0	0	100	1	0	\N
-3	5181	4	\N	1	0	0	0	100	7	0	\N
-3	5181	\N	Other 2	2	0	0	0	100	1	0	\N
-3	5181	\N	Other 3	2	0	0	0	100	1	0	\N
-3	5181	\N	Other 4	2	0	0	0	100	1	0	\N
-3	5181	\N	Other 5	2	0	0	0	100	1	0	\N
-3	5181	\N	\N	3	0	0	0	100	1	0	\N
-3	5182	1	\N	1	0	0	0	100	2	0	\N
-3	5182	2	\N	1	0	0	0	100	3	0	\N
-3	5182	3	\N	1	0	0	0	100	1	0	\N
-3	5182	4	\N	1	0	0	0	100	5	0	\N
-3	5183	1	\N	1	0	0	0	100	3	0	\N
-3	5183	2	\N	1	0	0	0	100	3	0	\N
-3	5183	3	\N	1	0	0	0	100	3	0	\N
-3	5183	4	\N	1	0	0	0	100	7	0	\N
-3	5184	1	\N	1	0	0	0	100	4	0	\N
-3	5184	2	\N	1	0	0	0	100	2	0	\N
-3	5184	3	\N	1	0	0	0	100	5	0	\N
-3	5184	4	\N	1	0	0	0	100	8	0	\N
-3	5184	\N	Other 4	2	0	0	0	100	1	0	\N
-3	5184	\N	\N	3	0	0	0	100	1	0	\N
-3	5185	1	\N	1	0	0	0	100	5	0	\N
-3	5185	2	\N	1	0	0	0	100	3	0	\N
-3	5185	3	\N	1	0	0	0	100	2	0	\N
-3	5185	4	\N	1	0	0	0	100	3	0	\N
-3	5185	\N	\N	3	0	0	0	100	1	0	\N
+COPY tracking.observed_plot_species_totals (observation_id, monitoring_plot_id, species_id, species_name, certainty_id, total_live, total_dead, total_existing, permanent_live, survival_rate) FROM stdin;
+1	5162	4	\N	1	15	1	1	15	\N
+1	5162	2	\N	1	15	3	1	15	\N
+1	5162	3	\N	1	14	3	3	14	\N
+1	5162	1	\N	1	13	3	2	13	\N
+1	5162	\N	Other 3	2	1	0	0	1	\N
+1	5162	\N	Other 1	2	3	0	0	3	\N
+1	5162	\N	\N	3	6	0	0	6	\N
+1	5162	\N	Other 2	2	1	0	0	1	\N
+1	5163	4	\N	1	28	2	3	28	\N
+1	5163	1	\N	1	26	1	2	26	\N
+1	5163	3	\N	1	19	1	5	19	\N
+1	5163	\N	Other 2	2	2	0	0	2	\N
+1	5163	\N	Other 1	2	2	0	0	2	\N
+1	5163	2	\N	1	20	1	0	20	\N
+1	5163	\N	\N	3	3	0	0	3	\N
+1	5163	\N	Other 5	2	1	0	0	1	\N
+1	5164	2	\N	1	10	2	2	10	\N
+1	5164	3	\N	1	13	1	2	13	\N
+1	5164	\N	\N	3	3	0	0	3	\N
+1	5164	4	\N	1	7	0	2	7	\N
+1	5164	1	\N	1	8	0	1	8	\N
+1	5164	\N	Other 2	2	0	1	0	0	\N
+1	5164	\N	Other 3	2	1	0	0	1	\N
+1	5164	\N	Other 1	2	1	0	0	1	\N
+1	5165	2	\N	1	44	4	5	44	\N
+1	5165	1	\N	1	34	3	6	34	\N
+1	5165	3	\N	1	32	4	5	32	\N
+1	5165	4	\N	1	32	2	6	32	\N
+1	5165	\N	\N	3	7	1	2	7	\N
+1	5165	\N	Other 5	2	3	0	0	3	\N
+1	5165	\N	Other 4	2	2	0	0	2	\N
+1	5165	\N	Other 2	2	2	0	0	2	\N
+1	5165	\N	Other 1	2	1	0	0	1	\N
+1	5165	\N	Other 3	2	1	0	0	1	\N
+1	5166	\N	Other 1	2	2	0	0	2	\N
+1	5166	4	\N	1	7	1	2	7	\N
+1	5166	3	\N	1	12	0	0	12	\N
+1	5166	2	\N	1	2	2	0	2	\N
+1	5166	1	\N	1	2	2	0	2	\N
+1	5167	1	\N	1	29	3	5	29	\N
+1	5167	2	\N	1	39	4	0	39	\N
+1	5167	3	\N	1	28	3	4	28	\N
+1	5167	4	\N	1	39	9	6	39	\N
+1	5167	\N	\N	3	8	3	1	8	\N
+1	5167	\N	Other 1	2	2	0	0	2	\N
+1	5167	\N	Other 4	2	3	0	0	3	\N
+1	5167	\N	Other 5	2	1	0	1	1	\N
+1	5167	\N	Other 2	2	2	0	1	2	\N
+1	5167	\N	Other 3	2	1	0	0	1	\N
+1	5168	2	\N	1	21	4	4	21	\N
+1	5168	1	\N	1	29	4	2	29	\N
+1	5168	\N	Other 2	2	1	0	0	1	\N
+1	5168	3	\N	1	18	4	6	18	\N
+1	5168	4	\N	1	22	3	5	22	\N
+1	5168	\N	Other 3	2	1	1	0	1	\N
+1	5168	\N	Other 4	2	2	0	1	2	\N
+1	5168	\N	Other 5	2	2	0	0	2	\N
+1	5168	\N	\N	3	5	0	1	5	\N
+1	5169	2	\N	1	11	1	1	11	\N
+1	5169	1	\N	1	7	0	4	7	\N
+1	5169	4	\N	1	8	0	1	8	\N
+1	5169	\N	Other 4	2	1	0	0	1	\N
+1	5169	\N	\N	3	2	1	0	2	\N
+1	5169	3	\N	1	4	2	1	4	\N
+1	5169	\N	Other 5	2	1	0	0	1	\N
+1	5169	\N	Other 2	2	1	0	0	1	\N
+1	5170	2	\N	1	24	0	5	24	\N
+1	5170	3	\N	1	21	4	4	21	\N
+1	5170	4	\N	1	23	1	1	23	\N
+1	5170	\N	\N	3	4	2	1	4	\N
+1	5170	1	\N	1	16	1	0	16	\N
+1	5170	\N	Other 1	2	1	0	0	1	\N
+1	5170	\N	Other 3	2	1	0	0	1	\N
+1	5171	4	\N	1	27	2	4	27	\N
+1	5171	1	\N	1	21	6	3	21	\N
+1	5171	2	\N	1	19	3	2	19	\N
+1	5171	\N	Other 1	2	2	1	0	2	\N
+1	5171	\N	Other 2	2	0	1	1	0	\N
+1	5171	\N	\N	3	6	0	2	6	\N
+1	5171	3	\N	1	31	2	3	31	\N
+1	5171	\N	Other 3	2	1	0	0	1	\N
+1	5172	1	\N	1	30	2	3	30	\N
+1	5172	3	\N	1	25	2	6	25	\N
+1	5172	\N	\N	3	7	1	1	7	\N
+1	5172	\N	Other 2	2	1	0	0	1	\N
+1	5172	2	\N	1	23	4	2	23	\N
+1	5172	4	\N	1	22	0	1	22	\N
+1	5172	\N	Other 4	2	2	0	0	2	\N
+1	5173	2	\N	1	11	0	2	11	\N
+1	5173	4	\N	1	19	0	5	19	\N
+1	5173	1	\N	1	15	2	1	15	\N
+1	5173	3	\N	1	17	1	4	17	\N
+1	5173	\N	Other 3	2	2	0	0	2	\N
+1	5173	\N	\N	3	1	0	1	1	\N
+1	5173	\N	Other 2	2	1	0	0	1	\N
+1	5174	2	\N	1	12	0	1	12	\N
+1	5174	1	\N	1	13	0	2	13	\N
+1	5174	\N	Other 4	2	2	0	0	2	\N
+1	5174	3	\N	1	10	2	1	10	\N
+1	5174	\N	Other 3	2	2	0	0	2	\N
+1	5174	4	\N	1	6	1	0	6	\N
+1	5174	\N	Other 1	2	1	0	0	1	\N
+1	5174	\N	\N	3	2	2	1	2	\N
+1	5174	\N	Other 2	2	1	0	0	1	\N
+1	5175	\N	Other 3	2	1	0	0	1	\N
+1	5175	2	\N	1	17	2	3	17	\N
+1	5175	1	\N	1	15	3	2	15	\N
+1	5175	3	\N	1	16	1	2	16	\N
+1	5175	4	\N	1	13	2	2	13	\N
+1	5175	\N	\N	3	1	0	0	1	\N
+1	5175	\N	Other 1	2	2	0	0	2	\N
+1	5175	\N	Other 2	2	1	0	1	1	\N
+1	5175	\N	Other 5	2	2	0	0	2	\N
+1	5176	4	\N	1	7	0	2	7	\N
+1	5176	3	\N	1	11	3	1	11	\N
+1	5176	2	\N	1	4	2	0	4	\N
+1	5176	\N	Other 4	2	1	0	0	1	\N
+1	5176	\N	Other 3	2	0	1	0	0	\N
+1	5176	1	\N	1	7	1	0	7	\N
+1	5176	\N	\N	3	1	0	1	1	\N
+1	5176	\N	Other 1	2	1	0	0	1	\N
+1	5177	4	\N	1	33	5	6	33	\N
+1	5177	1	\N	1	28	2	4	28	\N
+1	5177	3	\N	1	40	4	1	40	\N
+1	5177	2	\N	1	36	2	5	36	\N
+1	5177	\N	\N	3	9	1	0	9	\N
+1	5177	\N	Other 5	2	7	0	0	7	\N
+1	5177	\N	Other 3	2	2	0	0	2	\N
+1	5177	\N	Other 4	2	1	1	0	1	\N
+1	5177	\N	Other 1	2	0	1	0	0	\N
+1	5177	\N	Other 2	2	1	0	0	1	\N
+1	5178	2	\N	1	33	1	3	33	\N
+1	5178	1	\N	1	39	3	4	39	\N
+1	5178	\N	\N	3	7	0	0	7	\N
+1	5178	3	\N	1	29	2	3	29	\N
+1	5178	4	\N	1	32	5	3	32	\N
+1	5178	\N	Other 1	2	3	0	0	3	\N
+1	5178	\N	Other 5	2	1	0	0	1	\N
+1	5178	\N	Other 3	2	1	0	1	1	\N
+1	5178	\N	Other 4	2	1	0	0	1	\N
+1	5179	3	\N	1	19	1	0	19	\N
+1	5179	1	\N	1	10	1	2	10	\N
+1	5179	4	\N	1	9	1	1	9	\N
+1	5179	2	\N	1	11	1	2	11	\N
+1	5179	\N	\N	3	2	0	1	2	\N
+1	5179	\N	Other 1	2	1	0	0	1	\N
+1	5180	1	\N	1	31	4	1	31	\N
+1	5180	2	\N	1	35	1	4	35	\N
+1	5180	\N	\N	3	14	2	1	14	\N
+1	5180	4	\N	1	27	3	3	27	\N
+1	5180	3	\N	1	21	3	6	21	\N
+1	5180	\N	Other 4	2	1	0	2	1	\N
+1	5180	\N	Other 5	2	1	0	0	1	\N
+1	5180	\N	Other 3	2	1	0	0	1	\N
+1	5181	3	\N	1	32	1	6	32	\N
+1	5181	4	\N	1	40	7	4	40	\N
+1	5181	2	\N	1	25	6	2	25	\N
+1	5181	1	\N	1	44	6	4	44	\N
+1	5181	\N	\N	3	5	1	0	5	\N
+1	5181	\N	Other 4	2	1	1	0	1	\N
+1	5181	\N	Other 3	2	1	1	0	1	\N
+1	5181	\N	Other 2	2	1	1	0	1	\N
+1	5181	\N	Other 5	2	3	1	0	3	\N
+1	5182	3	\N	1	37	1	2	37	\N
+1	5182	2	\N	1	29	3	7	29	\N
+1	5182	1	\N	1	32	2	2	32	\N
+1	5182	4	\N	1	42	5	0	42	\N
+1	5182	\N	\N	3	6	0	1	6	\N
+1	5182	\N	Other 4	2	5	0	2	5	\N
+1	5182	\N	Other 3	2	2	0	0	2	\N
+1	5182	\N	Other 5	2	1	0	0	1	\N
+1	5182	\N	Other 2	2	1	0	1	1	\N
+1	5182	\N	Other 1	2	3	0	0	3	\N
+1	5183	4	\N	1	29	7	7	29	\N
+1	5183	2	\N	1	28	3	5	28	\N
+1	5183	1	\N	1	32	3	2	32	\N
+1	5183	3	\N	1	28	3	2	28	\N
+1	5183	\N	\N	3	10	0	1	10	\N
+1	5183	\N	Other 3	2	1	0	0	1	\N
+1	5183	\N	Other 4	2	4	0	0	4	\N
+1	5184	2	\N	1	33	2	1	33	\N
+1	5184	4	\N	1	22	8	5	22	\N
+1	5184	1	\N	1	22	4	2	22	\N
+1	5184	3	\N	1	23	5	1	23	\N
+1	5184	\N	Other 4	2	0	1	0	0	\N
+1	5184	\N	Other 2	2	1	0	0	1	\N
+1	5184	\N	Other 1	2	1	0	0	1	\N
+1	5184	\N	\N	3	5	1	0	5	\N
+1	5184	\N	Other 5	2	1	0	0	1	\N
+1	5184	\N	Other 3	2	1	0	0	1	\N
+1	5185	3	\N	1	20	2	2	20	\N
+1	5185	1	\N	1	35	5	3	35	\N
+1	5185	4	\N	1	23	3	5	23	\N
+1	5185	2	\N	1	23	3	3	23	\N
+1	5185	\N	Other 5	2	1	0	1	1	\N
+1	5185	\N	Other 4	2	3	0	0	3	\N
+1	5185	\N	Other 1	2	2	0	0	2	\N
+1	5185	\N	\N	3	2	1	0	2	\N
+1	5185	\N	Other 3	2	3	0	0	3	\N
+1	5186	3	\N	1	7	0	0	0	\N
+1	5186	4	\N	1	7	1	0	0	\N
+1	5186	\N	Other 1	2	1	0	0	0	\N
+1	5186	1	\N	1	8	1	0	0	\N
+1	5186	2	\N	1	1	0	1	0	\N
+1	5186	\N	\N	3	1	0	0	0	\N
+1	5187	1	\N	1	16	5	0	0	\N
+1	5187	4	\N	1	18	2	3	0	\N
+1	5187	3	\N	1	19	1	2	0	\N
+1	5187	2	\N	1	17	3	4	0	\N
+1	5187	\N	Other 2	2	3	0	0	0	\N
+1	5187	\N	Other 4	2	1	0	0	0	\N
+1	5187	\N	\N	3	3	0	0	0	\N
+1	5187	\N	Other 5	2	1	0	0	0	\N
+1	5187	\N	Other 1	2	1	0	0	0	\N
+1	5187	\N	Other 3	2	1	0	0	0	\N
+1	5188	1	\N	1	10	3	1	0	\N
+1	5188	4	\N	1	10	3	2	0	\N
+1	5188	2	\N	1	17	1	1	0	\N
+1	5188	3	\N	1	11	0	1	0	\N
+1	5188	\N	Other 4	2	2	1	0	0	\N
+1	5188	\N	Other 5	2	3	0	0	0	\N
+1	5188	\N	\N	3	2	0	0	0	\N
+1	5189	3	\N	1	16	1	3	0	\N
+1	5189	1	\N	1	14	1	3	0	\N
+1	5189	2	\N	1	11	1	2	0	\N
+1	5189	\N	\N	3	4	0	1	0	\N
+1	5189	4	\N	1	10	1	1	0	\N
+1	5189	\N	Other 2	2	2	0	0	0	\N
+1	5189	\N	Other 4	2	1	0	0	0	\N
+1	5189	\N	Other 5	2	1	0	0	0	\N
+1	5190	2	\N	1	30	3	6	0	\N
+1	5190	3	\N	1	30	2	5	0	\N
+1	5190	4	\N	1	26	3	6	0	\N
+1	5190	\N	Other 5	2	3	0	0	0	\N
+1	5190	\N	\N	3	5	2	0	0	\N
+1	5190	1	\N	1	33	1	4	0	\N
+1	5190	\N	Other 4	2	1	0	0	0	\N
+1	5190	\N	Other 2	2	1	0	0	0	\N
+1	5190	\N	Other 3	2	2	0	0	0	\N
+1	5191	1	\N	1	14	2	0	0	\N
+1	5191	3	\N	1	15	5	1	0	\N
+1	5191	2	\N	1	10	0	0	0	\N
+1	5191	4	\N	1	14	0	1	0	\N
+1	5191	\N	Other 2	2	1	0	0	0	\N
+1	5191	\N	\N	3	2	0	0	0	\N
+1	5191	\N	Other 3	2	1	0	0	0	\N
+1	5192	3	\N	1	12	1	1	0	\N
+1	5192	4	\N	1	14	0	4	0	\N
+1	5192	1	\N	1	13	4	2	0	\N
+1	5192	2	\N	1	11	1	1	0	\N
+1	5192	\N	\N	3	2	0	0	0	\N
+1	5192	\N	Other 5	2	0	0	1	0	\N
+1	5192	\N	Other 1	2	0	0	1	0	\N
+1	5193	2	\N	1	44	4	1	0	\N
+1	5193	3	\N	1	30	5	4	0	\N
+1	5193	\N	\N	3	9	3	0	0	\N
+1	5193	4	\N	1	31	2	3	0	\N
+1	5193	1	\N	1	26	8	1	0	\N
+1	5193	\N	Other 5	2	4	0	0	0	\N
+1	5193	\N	Other 3	2	3	0	0	0	\N
+1	5193	\N	Other 4	2	0	0	1	0	\N
+1	5193	\N	Other 1	2	1	0	0	0	\N
+1	5193	\N	Other 2	2	1	0	0	0	\N
+1	5194	1	\N	1	14	0	2	0	\N
+1	5194	3	\N	1	15	1	0	0	\N
+1	5194	2	\N	1	9	0	1	0	\N
+1	5194	4	\N	1	9	1	1	0	\N
+1	5194	\N	\N	3	3	1	0	0	\N
+2	5162	1	\N	1	0	0	0	0	\N
+2	5162	2	\N	1	0	0	0	0	\N
+2	5162	3	\N	1	0	0	0	0	\N
+2	5162	4	\N	1	0	0	0	0	\N
+2	5163	1	\N	1	0	0	0	0	\N
+2	5163	2	\N	1	0	0	0	0	\N
+2	5163	3	\N	1	0	0	0	0	\N
+2	5163	4	\N	1	0	0	0	0	\N
+2	5164	2	\N	1	0	0	0	0	\N
+2	5164	3	\N	1	0	0	0	0	\N
+2	5164	\N	Other 2	2	0	0	0	0	\N
+2	5165	1	\N	1	0	0	0	0	\N
+2	5165	2	\N	1	0	0	0	0	\N
+2	5165	3	\N	1	0	0	0	0	\N
+2	5165	4	\N	1	0	0	0	0	\N
+2	5165	\N	\N	3	0	0	0	0	\N
+2	5166	1	\N	1	0	0	0	0	\N
+2	5166	2	\N	1	0	0	0	0	\N
+2	5166	4	\N	1	0	0	0	0	\N
+2	5167	1	\N	1	0	0	0	0	\N
+2	5167	2	\N	1	0	0	0	0	\N
+2	5167	3	\N	1	0	0	0	0	\N
+2	5167	4	\N	1	0	0	0	0	\N
+2	5167	\N	\N	3	0	0	0	0	\N
+2	5168	1	\N	1	0	0	0	0	\N
+2	5168	2	\N	1	0	0	0	0	\N
+2	5168	3	\N	1	0	0	0	0	\N
+2	5168	4	\N	1	0	0	0	0	\N
+2	5168	\N	Other 3	2	0	0	0	0	\N
+2	5169	2	\N	1	0	0	0	0	\N
+2	5169	3	\N	1	0	0	0	0	\N
+2	5169	\N	\N	3	0	0	0	0	\N
+2	5170	1	\N	1	0	0	0	0	\N
+2	5170	3	\N	1	0	0	0	0	\N
+2	5170	4	\N	1	0	0	0	0	\N
+2	5170	\N	\N	3	0	0	0	0	\N
+2	5171	1	\N	1	0	0	0	0	\N
+2	5171	2	\N	1	0	0	0	0	\N
+2	5171	3	\N	1	0	0	0	0	\N
+2	5171	4	\N	1	0	0	0	0	\N
+2	5171	\N	Other 1	2	0	0	0	0	\N
+2	5171	\N	Other 2	2	0	0	0	0	\N
+2	5172	1	\N	1	0	0	0	0	\N
+2	5172	2	\N	1	0	0	0	0	\N
+2	5172	3	\N	1	0	0	0	0	\N
+2	5172	\N	\N	3	0	0	0	0	\N
+2	5173	1	\N	1	0	0	0	0	\N
+2	5173	3	\N	1	0	0	0	0	\N
+2	5174	3	\N	1	0	0	0	0	\N
+2	5174	4	\N	1	0	0	0	0	\N
+2	5174	\N	\N	3	0	0	0	0	\N
+2	5175	1	\N	1	0	0	0	0	\N
+2	5175	2	\N	1	0	0	0	0	\N
+2	5175	3	\N	1	0	0	0	0	\N
+2	5175	4	\N	1	0	0	0	0	\N
+2	5176	1	\N	1	0	0	0	0	\N
+2	5176	2	\N	1	0	0	0	0	\N
+2	5176	3	\N	1	0	0	0	0	\N
+2	5176	\N	Other 3	2	0	0	0	0	\N
+2	5177	1	\N	1	0	0	0	0	\N
+2	5177	2	\N	1	0	0	0	0	\N
+2	5177	3	\N	1	0	0	0	0	\N
+2	5177	4	\N	1	0	0	0	0	\N
+2	5177	\N	Other 1	2	0	0	0	0	\N
+2	5177	\N	Other 4	2	0	0	0	0	\N
+2	5177	\N	\N	3	0	0	0	0	\N
+2	5178	1	\N	1	0	0	0	0	\N
+2	5178	2	\N	1	0	0	0	0	\N
+2	5178	3	\N	1	0	0	0	0	\N
+2	5178	4	\N	1	0	0	0	0	\N
+2	5179	1	\N	1	0	0	0	0	\N
+2	5179	2	\N	1	0	0	0	0	\N
+2	5179	3	\N	1	0	0	0	0	\N
+2	5179	4	\N	1	0	0	0	0	\N
+2	5180	1	\N	1	0	0	0	0	\N
+2	5180	2	\N	1	0	0	0	0	\N
+2	5180	3	\N	1	0	0	0	0	\N
+2	5180	4	\N	1	0	0	0	0	\N
+2	5180	\N	\N	3	0	0	0	0	\N
+2	5181	1	\N	1	0	0	0	0	\N
+2	5181	2	\N	1	0	0	0	0	\N
+2	5181	3	\N	1	0	0	0	0	\N
+2	5181	4	\N	1	0	0	0	0	\N
+2	5181	\N	Other 2	2	0	0	0	0	\N
+2	5181	\N	Other 3	2	0	0	0	0	\N
+2	5181	\N	Other 4	2	0	0	0	0	\N
+2	5181	\N	Other 5	2	0	0	0	0	\N
+2	5181	\N	\N	3	0	0	0	0	\N
+2	5182	1	\N	1	0	0	0	0	\N
+2	5182	2	\N	1	0	0	0	0	\N
+2	5182	3	\N	1	0	0	0	0	\N
+2	5182	4	\N	1	0	0	0	0	\N
+2	5183	1	\N	1	0	0	0	0	\N
+2	5183	2	\N	1	0	0	0	0	\N
+2	5183	3	\N	1	0	0	0	0	\N
+2	5183	4	\N	1	0	0	0	0	\N
+2	5184	1	\N	1	0	0	0	0	\N
+2	5184	2	\N	1	0	0	0	0	\N
+2	5184	3	\N	1	0	0	0	0	\N
+2	5184	4	\N	1	0	0	0	0	\N
+2	5184	\N	Other 4	2	0	0	0	0	\N
+2	5184	\N	\N	3	0	0	0	0	\N
+2	5185	1	\N	1	0	0	0	0	\N
+2	5185	2	\N	1	0	0	0	0	\N
+2	5185	3	\N	1	0	0	0	0	\N
+2	5185	4	\N	1	0	0	0	0	\N
+2	5185	\N	\N	3	0	0	0	0	\N
+3	5162	1	\N	1	0	0	0	0	\N
+3	5162	2	\N	1	0	0	0	0	\N
+3	5162	3	\N	1	0	0	0	0	\N
+3	5162	4	\N	1	0	0	0	0	\N
+3	5163	1	\N	1	0	0	0	0	\N
+3	5163	2	\N	1	0	0	0	0	\N
+3	5163	3	\N	1	0	0	0	0	\N
+3	5163	4	\N	1	0	0	0	0	\N
+3	5164	2	\N	1	0	0	0	0	\N
+3	5164	3	\N	1	0	0	0	0	\N
+3	5164	\N	Other 2	2	0	0	0	0	\N
+3	5165	1	\N	1	0	0	0	0	\N
+3	5165	2	\N	1	0	0	0	0	\N
+3	5165	3	\N	1	0	0	0	0	\N
+3	5165	4	\N	1	0	0	0	0	\N
+3	5165	\N	\N	3	0	0	0	0	\N
+3	5166	1	\N	1	0	0	0	0	\N
+3	5166	2	\N	1	0	0	0	0	\N
+3	5166	4	\N	1	0	0	0	0	\N
+3	5167	1	\N	1	0	0	0	0	\N
+3	5167	2	\N	1	0	0	0	0	\N
+3	5167	3	\N	1	0	0	0	0	\N
+3	5167	4	\N	1	0	0	0	0	\N
+3	5167	\N	\N	3	0	0	0	0	\N
+3	5168	1	\N	1	0	0	0	0	\N
+3	5168	2	\N	1	0	0	0	0	\N
+3	5168	3	\N	1	0	0	0	0	\N
+3	5168	4	\N	1	0	0	0	0	\N
+3	5168	\N	Other 3	2	0	0	0	0	\N
+3	5169	2	\N	1	0	0	0	0	\N
+3	5169	3	\N	1	0	0	0	0	\N
+3	5169	\N	\N	3	0	0	0	0	\N
+3	5170	1	\N	1	0	0	0	0	\N
+3	5170	3	\N	1	0	0	0	0	\N
+3	5170	4	\N	1	0	0	0	0	\N
+3	5170	\N	\N	3	0	0	0	0	\N
+3	5171	1	\N	1	0	0	0	0	\N
+3	5171	2	\N	1	0	0	0	0	\N
+3	5171	3	\N	1	0	0	0	0	\N
+3	5171	4	\N	1	0	0	0	0	\N
+3	5171	\N	Other 1	2	0	0	0	0	\N
+3	5171	\N	Other 2	2	0	0	0	0	\N
+3	5172	1	\N	1	0	0	0	0	\N
+3	5172	2	\N	1	0	0	0	0	\N
+3	5172	3	\N	1	0	0	0	0	\N
+3	5172	\N	\N	3	0	0	0	0	\N
+3	5173	1	\N	1	0	0	0	0	\N
+3	5173	3	\N	1	0	0	0	0	\N
+3	5174	3	\N	1	0	0	0	0	\N
+3	5174	4	\N	1	0	0	0	0	\N
+3	5174	\N	\N	3	0	0	0	0	\N
+3	5175	1	\N	1	0	0	0	0	\N
+3	5175	2	\N	1	0	0	0	0	\N
+3	5175	3	\N	1	0	0	0	0	\N
+3	5175	4	\N	1	0	0	0	0	\N
+3	5176	1	\N	1	0	0	0	0	\N
+3	5176	2	\N	1	0	0	0	0	\N
+3	5176	3	\N	1	0	0	0	0	\N
+3	5176	\N	Other 3	2	0	0	0	0	\N
+3	5177	1	\N	1	0	0	0	0	\N
+3	5177	2	\N	1	0	0	0	0	\N
+3	5177	3	\N	1	0	0	0	0	\N
+3	5177	4	\N	1	0	0	0	0	\N
+3	5177	\N	Other 1	2	0	0	0	0	\N
+3	5177	\N	Other 4	2	0	0	0	0	\N
+3	5177	\N	\N	3	0	0	0	0	\N
+3	5178	1	\N	1	0	0	0	0	\N
+3	5178	2	\N	1	0	0	0	0	\N
+3	5178	3	\N	1	0	0	0	0	\N
+3	5178	4	\N	1	0	0	0	0	\N
+3	5179	1	\N	1	0	0	0	0	\N
+3	5179	2	\N	1	0	0	0	0	\N
+3	5179	3	\N	1	0	0	0	0	\N
+3	5179	4	\N	1	0	0	0	0	\N
+3	5180	1	\N	1	0	0	0	0	\N
+3	5180	2	\N	1	0	0	0	0	\N
+3	5180	3	\N	1	0	0	0	0	\N
+3	5180	4	\N	1	0	0	0	0	\N
+3	5180	\N	\N	3	0	0	0	0	\N
+3	5181	1	\N	1	0	0	0	0	\N
+3	5181	2	\N	1	0	0	0	0	\N
+3	5181	3	\N	1	0	0	0	0	\N
+3	5181	4	\N	1	0	0	0	0	\N
+3	5181	\N	Other 2	2	0	0	0	0	\N
+3	5181	\N	Other 3	2	0	0	0	0	\N
+3	5181	\N	Other 4	2	0	0	0	0	\N
+3	5181	\N	Other 5	2	0	0	0	0	\N
+3	5181	\N	\N	3	0	0	0	0	\N
+3	5182	1	\N	1	0	0	0	0	\N
+3	5182	2	\N	1	0	0	0	0	\N
+3	5182	3	\N	1	0	0	0	0	\N
+3	5182	4	\N	1	0	0	0	0	\N
+3	5183	1	\N	1	0	0	0	0	\N
+3	5183	2	\N	1	0	0	0	0	\N
+3	5183	3	\N	1	0	0	0	0	\N
+3	5183	4	\N	1	0	0	0	0	\N
+3	5184	1	\N	1	0	0	0	0	\N
+3	5184	2	\N	1	0	0	0	0	\N
+3	5184	3	\N	1	0	0	0	0	\N
+3	5184	4	\N	1	0	0	0	0	\N
+3	5184	\N	Other 4	2	0	0	0	0	\N
+3	5184	\N	\N	3	0	0	0	0	\N
+3	5185	1	\N	1	0	0	0	0	\N
+3	5185	2	\N	1	0	0	0	0	\N
+3	5185	3	\N	1	0	0	0	0	\N
+3	5185	4	\N	1	0	0	0	0	\N
+3	5185	\N	\N	3	0	0	0	0	\N
 \.
 
 
@@ -15322,213 +15411,213 @@ COPY tracking.observed_plot_species_totals (observation_id, monitoring_plot_id, 
 -- Data for Name: observed_site_species_totals; Type: TABLE DATA; Schema: tracking; Owner: -
 --
 
-COPY tracking.observed_site_species_totals (observation_id, planting_site_id, species_id, species_name, certainty_id, total_live, total_dead, total_existing, mortality_rate, cumulative_dead, permanent_live, survival_rate) FROM stdin;
-1	3	\N	Other 1	2	31	2	1	7	2	28	\N
-1	3	\N	Other 3	2	31	3	1	11	3	24	\N
-1	3	1	\N	1	686	86	70	10	61	538	\N
-1	3	4	\N	1	671	81	96	11	68	532	\N
-1	3	\N	Other 5	2	37	1	3	4	1	25	\N
-1	3	2	\N	1	675	67	77	9	54	525	\N
-1	3	3	\N	1	675	71	87	10	55	520	\N
-1	3	\N	Other 4	2	34	4	6	9	3	29	\N
-1	3	\N	\N	3	147	22	16	12	16	116	\N
-1	3	\N	Other 2	2	25	3	4	15	3	17	\N
-2	3	3	\N	1	0	0	0	100	55	0	\N
-2	3	\N	Other 5	2	0	0	0	100	1	0	\N
-2	3	\N	\N	3	0	0	0	100	16	0	\N
-2	3	4	\N	1	0	0	0	100	68	0	\N
-2	3	\N	Other 2	2	0	0	0	100	3	0	\N
-2	3	\N	Other 4	2	0	0	0	100	3	0	\N
-2	3	2	\N	1	0	0	0	100	54	0	\N
-2	3	1	\N	1	0	0	0	100	61	0	\N
-2	3	\N	Other 1	2	0	0	0	100	2	0	\N
-2	3	\N	Other 3	2	0	0	0	100	3	0	\N
-3	3	3	\N	1	0	0	0	100	55	0	\N
-3	3	\N	Other 5	2	0	0	0	100	1	0	\N
-3	3	\N	\N	3	0	0	0	100	16	0	\N
-3	3	4	\N	1	0	0	0	100	68	0	\N
-3	3	\N	Other 2	2	0	0	0	100	3	0	\N
-3	3	\N	Other 4	2	0	0	0	100	3	0	\N
-3	3	2	\N	1	0	0	0	100	54	0	\N
-3	3	1	\N	1	0	0	0	100	61	0	\N
-3	3	\N	Other 1	2	0	0	0	100	2	0	\N
-3	3	\N	Other 3	2	0	0	0	100	3	0	\N
+COPY tracking.observed_site_species_totals (observation_id, planting_site_id, species_id, species_name, certainty_id, total_live, total_dead, total_existing, permanent_live, survival_rate) FROM stdin;
+1	3	\N	Other 1	2	31	2	1	28	\N
+1	3	\N	Other 3	2	31	3	1	24	\N
+1	3	1	\N	1	686	86	70	538	\N
+1	3	4	\N	1	671	81	96	532	\N
+1	3	\N	Other 5	2	37	1	3	25	\N
+1	3	2	\N	1	675	67	77	525	\N
+1	3	3	\N	1	675	71	87	520	\N
+1	3	\N	Other 4	2	34	4	6	29	\N
+1	3	\N	\N	3	147	22	16	116	\N
+1	3	\N	Other 2	2	25	3	4	17	\N
+2	3	3	\N	1	0	0	0	0	\N
+2	3	\N	Other 5	2	0	0	0	0	\N
+2	3	\N	\N	3	0	0	0	0	\N
+2	3	4	\N	1	0	0	0	0	\N
+2	3	\N	Other 2	2	0	0	0	0	\N
+2	3	\N	Other 4	2	0	0	0	0	\N
+2	3	2	\N	1	0	0	0	0	\N
+2	3	1	\N	1	0	0	0	0	\N
+2	3	\N	Other 1	2	0	0	0	0	\N
+2	3	\N	Other 3	2	0	0	0	0	\N
+3	3	3	\N	1	0	0	0	0	\N
+3	3	\N	Other 5	2	0	0	0	0	\N
+3	3	\N	\N	3	0	0	0	0	\N
+3	3	4	\N	1	0	0	0	0	\N
+3	3	\N	Other 2	2	0	0	0	0	\N
+3	3	\N	Other 4	2	0	0	0	0	\N
+3	3	2	\N	1	0	0	0	0	\N
+3	3	1	\N	1	0	0	0	0	\N
+3	3	\N	Other 1	2	0	0	0	0	\N
+3	3	\N	Other 3	2	0	0	0	0	\N
 \.
 
 
 --
--- Data for Name: observed_subzone_species_totals; Type: TABLE DATA; Schema: tracking; Owner: -
+-- Data for Name: observed_stratum_species_totals; Type: TABLE DATA; Schema: tracking; Owner: -
 --
 
-COPY tracking.observed_subzone_species_totals (observation_id, planting_subzone_id, species_id, species_name, certainty_id, total_live, total_dead, total_existing, mortality_rate, cumulative_dead, permanent_live, survival_rate) FROM stdin;
-1	7	\N	Other 1	2	13	0	0	0	0	11	\N
-1	7	\N	Other 3	2	6	1	0	17	1	5	\N
-1	7	1	\N	1	182	25	23	10	16	148	\N
-1	7	4	\N	1	193	24	31	10	18	158	\N
-1	9	\N	Other 5	2	12	1	2	11	1	8	\N
-1	7	2	\N	1	197	25	19	11	21	162	\N
-1	7	3	\N	1	177	19	29	11	18	140	\N
-1	9	\N	Other 3	2	13	1	1	9	1	10	\N
-1	7	\N	Other 4	2	11	1	1	0	0	8	\N
-1	7	\N	Other 5	2	12	0	1	0	0	8	\N
-1	9	\N	Other 4	2	15	2	5	12	2	15	\N
-1	7	\N	\N	3	40	5	4	13	5	34	\N
-1	9	\N	Other 1	2	11	0	1	0	0	10	\N
-1	9	\N	Other 2	2	4	1	1	25	1	3	\N
-1	9	1	\N	1	298	40	25	10	28	245	\N
-1	9	3	\N	1	266	25	27	8	18	209	\N
-1	9	2	\N	1	281	25	30	8	20	217	\N
-1	9	4	\N	1	278	42	36	15	39	224	\N
-1	9	\N	\N	3	65	9	4	9	5	51	\N
-1	8	\N	Other 5	2	13	0	0	0	0	9	\N
-1	8	\N	Other 4	2	8	1	0	14	1	6	\N
-1	8	1	\N	1	206	21	22	10	17	145	\N
-1	8	3	\N	1	232	27	31	10	19	171	\N
-1	8	2	\N	1	197	17	28	8	13	146	\N
-1	8	4	\N	1	200	15	29	7	11	150	\N
-1	8	\N	Other 2	2	9	1	2	17	1	5	\N
-1	8	\N	\N	3	42	8	8	16	6	31	\N
-1	8	\N	Other 3	2	12	1	0	10	1	9	\N
-1	8	\N	Other 1	2	7	2	0	22	2	7	\N
-1	7	\N	Other 2	2	12	1	1	10	1	9	\N
-2	7	1	\N	1	0	0	0	100	16	0	\N
-2	7	2	\N	1	0	0	0	100	21	0	\N
-2	7	3	\N	1	0	0	0	100	18	0	\N
-2	7	4	\N	1	0	0	0	100	18	0	\N
-2	8	1	\N	1	0	0	0	100	17	0	\N
-2	8	2	\N	1	0	0	0	100	13	0	\N
-2	8	3	\N	1	0	0	0	100	19	0	\N
-2	8	4	\N	1	0	0	0	100	11	0	\N
-2	9	1	\N	1	0	0	0	100	28	0	\N
-2	9	2	\N	1	0	0	0	100	20	0	\N
-2	9	3	\N	1	0	0	0	100	18	0	\N
-2	9	4	\N	1	0	0	0	100	39	0	\N
-2	7	\N	Other 2	2	0	0	0	100	1	0	\N
-2	7	\N	Other 3	2	0	0	0	100	1	0	\N
-2	8	\N	Other 1	2	0	0	0	100	2	0	\N
-2	8	\N	Other 2	2	0	0	0	100	1	0	\N
-2	8	\N	Other 3	2	0	0	0	100	1	0	\N
-2	8	\N	Other 4	2	0	0	0	100	1	0	\N
-2	9	\N	Other 2	2	0	0	0	100	1	0	\N
-2	9	\N	Other 3	2	0	0	0	100	1	0	\N
-2	9	\N	Other 4	2	0	0	0	100	2	0	\N
-2	9	\N	Other 5	2	0	0	0	100	1	0	\N
-2	7	\N	\N	3	0	0	0	100	5	0	\N
-2	8	\N	\N	3	0	0	0	100	6	0	\N
-2	9	\N	\N	3	0	0	0	100	5	0	\N
-3	7	1	\N	1	0	0	0	100	16	0	\N
-3	7	2	\N	1	0	0	0	100	21	0	\N
-3	7	3	\N	1	0	0	0	100	18	0	\N
-3	7	4	\N	1	0	0	0	100	18	0	\N
-3	8	1	\N	1	0	0	0	100	17	0	\N
-3	8	2	\N	1	0	0	0	100	13	0	\N
-3	8	3	\N	1	0	0	0	100	19	0	\N
-3	8	4	\N	1	0	0	0	100	11	0	\N
-3	9	1	\N	1	0	0	0	100	28	0	\N
-3	9	2	\N	1	0	0	0	100	20	0	\N
-3	9	3	\N	1	0	0	0	100	18	0	\N
-3	9	4	\N	1	0	0	0	100	39	0	\N
-3	7	\N	Other 2	2	0	0	0	100	1	0	\N
-3	7	\N	Other 3	2	0	0	0	100	1	0	\N
-3	8	\N	Other 1	2	0	0	0	100	2	0	\N
-3	8	\N	Other 2	2	0	0	0	100	1	0	\N
-3	8	\N	Other 3	2	0	0	0	100	1	0	\N
-3	8	\N	Other 4	2	0	0	0	100	1	0	\N
-3	9	\N	Other 2	2	0	0	0	100	1	0	\N
-3	9	\N	Other 3	2	0	0	0	100	1	0	\N
-3	9	\N	Other 4	2	0	0	0	100	2	0	\N
-3	9	\N	Other 5	2	0	0	0	100	1	0	\N
-3	7	\N	\N	3	0	0	0	100	5	0	\N
-3	8	\N	\N	3	0	0	0	100	6	0	\N
-3	9	\N	\N	3	0	0	0	100	5	0	\N
+COPY tracking.observed_stratum_species_totals (observation_id, stratum_id, species_id, species_name, certainty_id, total_live, total_dead, total_existing, permanent_live, survival_rate) FROM stdin;
+1	5	\N	Other 1	2	13	0	0	11	\N
+1	7	\N	Other 1	2	11	0	1	10	\N
+1	6	\N	Other 1	2	7	2	0	7	\N
+1	5	\N	Other 3	2	6	1	0	5	\N
+1	7	\N	Other 3	2	13	1	1	10	\N
+1	6	\N	Other 3	2	12	1	0	9	\N
+1	5	1	\N	1	182	25	23	148	\N
+1	7	1	\N	1	298	40	25	245	\N
+1	6	1	\N	1	206	21	22	145	\N
+1	5	4	\N	1	193	24	31	158	\N
+1	7	4	\N	1	278	42	36	224	\N
+1	6	4	\N	1	200	15	29	150	\N
+1	7	\N	Other 5	2	12	1	2	8	\N
+1	5	\N	Other 5	2	12	0	1	8	\N
+1	6	\N	Other 5	2	13	0	0	9	\N
+1	5	2	\N	1	197	25	19	162	\N
+1	7	2	\N	1	281	25	30	217	\N
+1	6	2	\N	1	197	17	28	146	\N
+1	5	3	\N	1	177	19	29	140	\N
+1	7	3	\N	1	266	25	27	209	\N
+1	6	3	\N	1	232	27	31	171	\N
+1	5	\N	Other 4	2	11	1	1	8	\N
+1	7	\N	Other 4	2	15	2	5	15	\N
+1	6	\N	Other 4	2	8	1	0	6	\N
+1	5	\N	\N	3	40	5	4	34	\N
+1	7	\N	\N	3	65	9	4	51	\N
+1	6	\N	\N	3	42	8	8	31	\N
+1	7	\N	Other 2	2	4	1	1	3	\N
+1	6	\N	Other 2	2	9	1	2	5	\N
+1	5	\N	Other 2	2	12	1	1	9	\N
+2	5	1	\N	1	0	0	0	0	\N
+2	5	2	\N	1	0	0	0	0	\N
+2	5	3	\N	1	0	0	0	0	\N
+2	5	4	\N	1	0	0	0	0	\N
+2	6	1	\N	1	0	0	0	0	\N
+2	6	2	\N	1	0	0	0	0	\N
+2	6	3	\N	1	0	0	0	0	\N
+2	6	4	\N	1	0	0	0	0	\N
+2	7	1	\N	1	0	0	0	0	\N
+2	7	2	\N	1	0	0	0	0	\N
+2	7	3	\N	1	0	0	0	0	\N
+2	7	4	\N	1	0	0	0	0	\N
+2	5	\N	Other 2	2	0	0	0	0	\N
+2	5	\N	Other 3	2	0	0	0	0	\N
+2	6	\N	Other 1	2	0	0	0	0	\N
+2	6	\N	Other 2	2	0	0	0	0	\N
+2	6	\N	Other 3	2	0	0	0	0	\N
+2	6	\N	Other 4	2	0	0	0	0	\N
+2	7	\N	Other 2	2	0	0	0	0	\N
+2	7	\N	Other 3	2	0	0	0	0	\N
+2	7	\N	Other 4	2	0	0	0	0	\N
+2	7	\N	Other 5	2	0	0	0	0	\N
+2	5	\N	\N	3	0	0	0	0	\N
+2	6	\N	\N	3	0	0	0	0	\N
+2	7	\N	\N	3	0	0	0	0	\N
+3	5	1	\N	1	0	0	0	0	\N
+3	5	2	\N	1	0	0	0	0	\N
+3	5	3	\N	1	0	0	0	0	\N
+3	5	4	\N	1	0	0	0	0	\N
+3	6	1	\N	1	0	0	0	0	\N
+3	6	2	\N	1	0	0	0	0	\N
+3	6	3	\N	1	0	0	0	0	\N
+3	6	4	\N	1	0	0	0	0	\N
+3	7	1	\N	1	0	0	0	0	\N
+3	7	2	\N	1	0	0	0	0	\N
+3	7	3	\N	1	0	0	0	0	\N
+3	7	4	\N	1	0	0	0	0	\N
+3	5	\N	Other 2	2	0	0	0	0	\N
+3	5	\N	Other 3	2	0	0	0	0	\N
+3	6	\N	Other 1	2	0	0	0	0	\N
+3	6	\N	Other 2	2	0	0	0	0	\N
+3	6	\N	Other 3	2	0	0	0	0	\N
+3	6	\N	Other 4	2	0	0	0	0	\N
+3	7	\N	Other 2	2	0	0	0	0	\N
+3	7	\N	Other 3	2	0	0	0	0	\N
+3	7	\N	Other 4	2	0	0	0	0	\N
+3	7	\N	Other 5	2	0	0	0	0	\N
+3	5	\N	\N	3	0	0	0	0	\N
+3	6	\N	\N	3	0	0	0	0	\N
+3	7	\N	\N	3	0	0	0	0	\N
 \.
 
 
 --
--- Data for Name: observed_zone_species_totals; Type: TABLE DATA; Schema: tracking; Owner: -
+-- Data for Name: observed_substratum_species_totals; Type: TABLE DATA; Schema: tracking; Owner: -
 --
 
-COPY tracking.observed_zone_species_totals (observation_id, planting_zone_id, species_id, species_name, certainty_id, total_live, total_dead, total_existing, mortality_rate, cumulative_dead, permanent_live, survival_rate) FROM stdin;
-1	5	\N	Other 1	2	13	0	0	0	0	11	\N
-1	7	\N	Other 1	2	11	0	1	0	0	10	\N
-1	6	\N	Other 1	2	7	2	0	22	2	7	\N
-1	5	\N	Other 3	2	6	1	0	17	1	5	\N
-1	7	\N	Other 3	2	13	1	1	9	1	10	\N
-1	6	\N	Other 3	2	12	1	0	10	1	9	\N
-1	5	1	\N	1	182	25	23	10	16	148	\N
-1	7	1	\N	1	298	40	25	10	28	245	\N
-1	6	1	\N	1	206	21	22	10	17	145	\N
-1	5	4	\N	1	193	24	31	10	18	158	\N
-1	7	4	\N	1	278	42	36	15	39	224	\N
-1	6	4	\N	1	200	15	29	7	11	150	\N
-1	7	\N	Other 5	2	12	1	2	11	1	8	\N
-1	5	\N	Other 5	2	12	0	1	0	0	8	\N
-1	6	\N	Other 5	2	13	0	0	0	0	9	\N
-1	5	2	\N	1	197	25	19	11	21	162	\N
-1	7	2	\N	1	281	25	30	8	20	217	\N
-1	6	2	\N	1	197	17	28	8	13	146	\N
-1	5	3	\N	1	177	19	29	11	18	140	\N
-1	7	3	\N	1	266	25	27	8	18	209	\N
-1	6	3	\N	1	232	27	31	10	19	171	\N
-1	5	\N	Other 4	2	11	1	1	0	0	8	\N
-1	7	\N	Other 4	2	15	2	5	12	2	15	\N
-1	6	\N	Other 4	2	8	1	0	14	1	6	\N
-1	5	\N	\N	3	40	5	4	13	5	34	\N
-1	7	\N	\N	3	65	9	4	9	5	51	\N
-1	6	\N	\N	3	42	8	8	16	6	31	\N
-1	7	\N	Other 2	2	4	1	1	25	1	3	\N
-1	6	\N	Other 2	2	9	1	2	17	1	5	\N
-1	5	\N	Other 2	2	12	1	1	10	1	9	\N
-2	5	1	\N	1	0	0	0	100	16	0	\N
-2	5	2	\N	1	0	0	0	100	21	0	\N
-2	5	3	\N	1	0	0	0	100	18	0	\N
-2	5	4	\N	1	0	0	0	100	18	0	\N
-2	6	1	\N	1	0	0	0	100	17	0	\N
-2	6	2	\N	1	0	0	0	100	13	0	\N
-2	6	3	\N	1	0	0	0	100	19	0	\N
-2	6	4	\N	1	0	0	0	100	11	0	\N
-2	7	1	\N	1	0	0	0	100	28	0	\N
-2	7	2	\N	1	0	0	0	100	20	0	\N
-2	7	3	\N	1	0	0	0	100	18	0	\N
-2	7	4	\N	1	0	0	0	100	39	0	\N
-2	5	\N	Other 2	2	0	0	0	100	1	0	\N
-2	5	\N	Other 3	2	0	0	0	100	1	0	\N
-2	6	\N	Other 1	2	0	0	0	100	2	0	\N
-2	6	\N	Other 2	2	0	0	0	100	1	0	\N
-2	6	\N	Other 3	2	0	0	0	100	1	0	\N
-2	6	\N	Other 4	2	0	0	0	100	1	0	\N
-2	7	\N	Other 2	2	0	0	0	100	1	0	\N
-2	7	\N	Other 3	2	0	0	0	100	1	0	\N
-2	7	\N	Other 4	2	0	0	0	100	2	0	\N
-2	7	\N	Other 5	2	0	0	0	100	1	0	\N
-2	5	\N	\N	3	0	0	0	100	5	0	\N
-2	6	\N	\N	3	0	0	0	100	6	0	\N
-2	7	\N	\N	3	0	0	0	100	5	0	\N
-3	5	1	\N	1	0	0	0	100	16	0	\N
-3	5	2	\N	1	0	0	0	100	21	0	\N
-3	5	3	\N	1	0	0	0	100	18	0	\N
-3	5	4	\N	1	0	0	0	100	18	0	\N
-3	6	1	\N	1	0	0	0	100	17	0	\N
-3	6	2	\N	1	0	0	0	100	13	0	\N
-3	6	3	\N	1	0	0	0	100	19	0	\N
-3	6	4	\N	1	0	0	0	100	11	0	\N
-3	7	1	\N	1	0	0	0	100	28	0	\N
-3	7	2	\N	1	0	0	0	100	20	0	\N
-3	7	3	\N	1	0	0	0	100	18	0	\N
-3	7	4	\N	1	0	0	0	100	39	0	\N
-3	5	\N	Other 2	2	0	0	0	100	1	0	\N
-3	5	\N	Other 3	2	0	0	0	100	1	0	\N
-3	6	\N	Other 1	2	0	0	0	100	2	0	\N
-3	6	\N	Other 2	2	0	0	0	100	1	0	\N
-3	6	\N	Other 3	2	0	0	0	100	1	0	\N
-3	6	\N	Other 4	2	0	0	0	100	1	0	\N
-3	7	\N	Other 2	2	0	0	0	100	1	0	\N
-3	7	\N	Other 3	2	0	0	0	100	1	0	\N
-3	7	\N	Other 4	2	0	0	0	100	2	0	\N
-3	7	\N	Other 5	2	0	0	0	100	1	0	\N
-3	5	\N	\N	3	0	0	0	100	5	0	\N
-3	6	\N	\N	3	0	0	0	100	6	0	\N
-3	7	\N	\N	3	0	0	0	100	5	0	\N
+COPY tracking.observed_substratum_species_totals (observation_id, substratum_id, species_id, species_name, certainty_id, total_live, total_dead, total_existing, permanent_live, survival_rate) FROM stdin;
+1	7	\N	Other 1	2	13	0	0	11	\N
+1	7	\N	Other 3	2	6	1	0	5	\N
+1	7	1	\N	1	182	25	23	148	\N
+1	7	4	\N	1	193	24	31	158	\N
+1	9	\N	Other 5	2	12	1	2	8	\N
+1	7	2	\N	1	197	25	19	162	\N
+1	7	3	\N	1	177	19	29	140	\N
+1	9	\N	Other 3	2	13	1	1	10	\N
+1	7	\N	Other 4	2	11	1	1	8	\N
+1	7	\N	Other 5	2	12	0	1	8	\N
+1	9	\N	Other 4	2	15	2	5	15	\N
+1	7	\N	\N	3	40	5	4	34	\N
+1	9	\N	Other 1	2	11	0	1	10	\N
+1	9	\N	Other 2	2	4	1	1	3	\N
+1	9	1	\N	1	298	40	25	245	\N
+1	9	3	\N	1	266	25	27	209	\N
+1	9	2	\N	1	281	25	30	217	\N
+1	9	4	\N	1	278	42	36	224	\N
+1	9	\N	\N	3	65	9	4	51	\N
+1	8	\N	Other 5	2	13	0	0	9	\N
+1	8	\N	Other 4	2	8	1	0	6	\N
+1	8	1	\N	1	206	21	22	145	\N
+1	8	3	\N	1	232	27	31	171	\N
+1	8	2	\N	1	197	17	28	146	\N
+1	8	4	\N	1	200	15	29	150	\N
+1	8	\N	Other 2	2	9	1	2	5	\N
+1	8	\N	\N	3	42	8	8	31	\N
+1	8	\N	Other 3	2	12	1	0	9	\N
+1	8	\N	Other 1	2	7	2	0	7	\N
+1	7	\N	Other 2	2	12	1	1	9	\N
+2	7	1	\N	1	0	0	0	0	\N
+2	7	2	\N	1	0	0	0	0	\N
+2	7	3	\N	1	0	0	0	0	\N
+2	7	4	\N	1	0	0	0	0	\N
+2	8	1	\N	1	0	0	0	0	\N
+2	8	2	\N	1	0	0	0	0	\N
+2	8	3	\N	1	0	0	0	0	\N
+2	8	4	\N	1	0	0	0	0	\N
+2	9	1	\N	1	0	0	0	0	\N
+2	9	2	\N	1	0	0	0	0	\N
+2	9	3	\N	1	0	0	0	0	\N
+2	9	4	\N	1	0	0	0	0	\N
+2	7	\N	Other 2	2	0	0	0	0	\N
+2	7	\N	Other 3	2	0	0	0	0	\N
+2	8	\N	Other 1	2	0	0	0	0	\N
+2	8	\N	Other 2	2	0	0	0	0	\N
+2	8	\N	Other 3	2	0	0	0	0	\N
+2	8	\N	Other 4	2	0	0	0	0	\N
+2	9	\N	Other 2	2	0	0	0	0	\N
+2	9	\N	Other 3	2	0	0	0	0	\N
+2	9	\N	Other 4	2	0	0	0	0	\N
+2	9	\N	Other 5	2	0	0	0	0	\N
+2	7	\N	\N	3	0	0	0	0	\N
+2	8	\N	\N	3	0	0	0	0	\N
+2	9	\N	\N	3	0	0	0	0	\N
+3	7	1	\N	1	0	0	0	0	\N
+3	7	2	\N	1	0	0	0	0	\N
+3	7	3	\N	1	0	0	0	0	\N
+3	7	4	\N	1	0	0	0	0	\N
+3	8	1	\N	1	0	0	0	0	\N
+3	8	2	\N	1	0	0	0	0	\N
+3	8	3	\N	1	0	0	0	0	\N
+3	8	4	\N	1	0	0	0	0	\N
+3	9	1	\N	1	0	0	0	0	\N
+3	9	2	\N	1	0	0	0	0	\N
+3	9	3	\N	1	0	0	0	0	\N
+3	9	4	\N	1	0	0	0	0	\N
+3	7	\N	Other 2	2	0	0	0	0	\N
+3	7	\N	Other 3	2	0	0	0	0	\N
+3	8	\N	Other 1	2	0	0	0	0	\N
+3	8	\N	Other 2	2	0	0	0	0	\N
+3	8	\N	Other 3	2	0	0	0	0	\N
+3	8	\N	Other 4	2	0	0	0	0	\N
+3	9	\N	Other 2	2	0	0	0	0	\N
+3	9	\N	Other 3	2	0	0	0	0	\N
+3	9	\N	Other 4	2	0	0	0	0	\N
+3	9	\N	Other 5	2	0	0	0	0	\N
+3	7	\N	\N	3	0	0	0	0	\N
+3	8	\N	\N	3	0	0	0	0	\N
+3	9	\N	\N	3	0	0	0	0	\N
 \.
 
 
@@ -15591,50 +15680,6 @@ COPY tracking.planting_sites (id, organization_id, name, description, boundary, 
 
 
 --
--- Data for Name: planting_subzone_histories; Type: TABLE DATA; Schema: tracking; Owner: -
---
-
-COPY tracking.planting_subzone_histories (id, planting_zone_history_id, planting_subzone_id, name, full_name, boundary, area_ha, stable_id) FROM stdin;
-1	1	4	South	East-South	0106000020E61000000100000001030000000100000008000000BED4DFD7E85D52C0AC8CAD7D102E354057DE2981115D52C06ADA6966312D35409AADF8F9325D52C015105E95552C354013A1B490515E52C051229CD42F2C3540F3FBB312245E52C064E2F13FE62C354013340B1CF95D52C0D2BAB7457D2D3540753C0BD8E85D52C061160B7E102E3540BED4DFD7E85D52C0AC8CAD7D102E3540	89.4	East-South
-2	1	3	North	East-North	0106000020E610000001000000010300000001000000090000009B4E09D8E85D52C04CAC207E102E35405B6A720CE55D52C0213F4670222E35406E9F5852C95D52C053F0E58AA52E35400BD2B9B7815D52C0C84340344C2F354048061CC34E5D52C0FE94113DBD2F35402CA39223285D52C02E2FA2E58B2F354081EEBD89F35C52C0B8BD712FF62D354014392081115D52C0999CAA66312D35409B4E09D8E85D52C04CAC207E102E3540	92.8	East-North
-3	2	2	South	West-South	0106000020E6100000010000000103000000010000000B00000069E81991515E52C00D0417D42F2C3540724A13146B5E52C0EAA643762C2C354029B23E146B5E52C0BFFF99762C2C35408A6DCE54925E52C0E382B9B5642C3540CDA4B8269D5E52C0EEE3EB7F1A2E35402CD1098D855E52C08B057CC5DE2E35403FAD35D8E85D52C015396C7E102E354003B7331CF95D52C0E3DA2A467D2D3540E27EDC12245E52C0EC026540E62C3540AD01FC90515E52C0345791D42F2C354069E81991515E52C00D0417D42F2C3540	84.5	West-South
-4	2	1	North	West-North	0106000020E6100000010000000103000000010000000A0000008AD131D8E85D52C0F5CB937E102E35401B54328D855E52C09424EFC5DE2E3540C11FBCBF7E5E52C03B015258172F35401EA24957055E52C0E417E2C422303540610172399B5D52C02D1947EA1E303540006E47C34E5D52C0C6EB673DBD2F3540F954E2B7815D52C07962B3344C2F35404B198252C95D52C07F0F598BA52E35404AED9A0CE55D52C0BC5EB970222E35408AD131D8E85D52C0F5CB937E102E3540	91.3	West-North
-5	3	5	Subzone A	Zone 01-Subzone A	0106000020E61000000200000001030000000100000007000000D0381DA8C3484340889607A5E6662F40A4E10EBBC44843407ECCFDAECD662F40042F4ACD6D4C434068F110B2E46B2F409816629A1650434074E65B27C04D2F40B81F8361AB564340F815919EAA592F400038BABB2B514340F83E6571B5722F40D0381DA8C3484340889607A5E6662F40010300000001000000040000008756D5DBCC4843400E9433C710662F4004177F2C4C4A4340C837B10F44432F40E8A9E623524A43400E9D37DD4E432F408756D5DBCC4843400E9433C710662F40	3624.2	Zone 01-Subzone A
-6	4	6	Subzone A	Zone 02-Subzone A	0106000020E61000000100000001030000000100000006000000A4E10EBBC44843407ECCFDAECD662F408756D5DBCC4843400E9433C710662F40E8A9E623524A43400E9D37DD4E432F409816629A1650434074E65B27C04D2F40042F4ACD6D4C434068F110B2E46B2F40A4E10EBBC44843407ECCFDAECD662F40	3164.6	Zone 02-Subzone A
-7	5	7	Subzone A	Zone 01-Subzone A	0106000020E61000000200000001030000000100000004000000D4F9485E6F3643409002C09245472F40ACB08F477436434098ADC79949472F40BF0284C7A5364340F2D8EB6A984E2F40D4F9485E6F3643409002C09245472F400103000000010000000B0000003FBE32D2D5364340882D38CB0F552F40183F57FAA23D4340908DBDCE3E5C2F40974FB1EB1A414340752F839505502F40C83EA43D20414340301B61F209502F405C1AD258783B434020F4AE18F6632F401F0145248139434047A107C5A66C2F4004CCF01B1A3A434098F168D6F1692F40ACC5CA905D374340B0ECFA7B22672F40D1679A57C5374340AE793CCF50742F4084021CDBBE374340E0B4497C6D742F403FBE32D2D5364340882D38CB0F552F40	1499.0	Zone 01-Subzone A
-8	6	8	Subzone A	Zone 02-Subzone A	0106000020E61000000100000001030000000100000005000000ACC5CA905D374340B0ECFA7B22672F4004CCF01B1A3A434098F168D6F1692F401F0145248139434047A107C5A66C2F40D1679A57C5374340AE793CCF50742F40ACC5CA905D374340B0ECFA7B22672F40	316.9	Zone 02-Subzone A
-9	7	9	Subzone A	Zone 03-Subzone A	0106000020E61000000100000001030000000100000006000000ACB08F477436434098ADC79949472F40974FB1EB1A414340752F839505502F40183F57FAA23D4340908DBDCE3E5C2F403FBE32D2D5364340882D38CB0F552F40BF0284C7A5364340F2D8EB6A984E2F40ACB08F477436434098ADC79949472F40	2275.1	Zone 03-Subzone A
-\.
-
-
---
--- Data for Name: planting_subzone_populations; Type: TABLE DATA; Schema: tracking; Owner: -
---
-
-COPY tracking.planting_subzone_populations (planting_subzone_id, species_id, total_plants, plants_since_last_observation) FROM stdin;
-5	3	100	100
-7	3	100	0
-\.
-
-
---
--- Data for Name: planting_subzones; Type: TABLE DATA; Schema: tracking; Owner: -
---
-
-COPY tracking.planting_subzones (id, planting_zone_id, name, full_name, boundary, created_by, created_time, modified_by, modified_time, planting_site_id, area_ha, planting_completed_time, observed_time, stable_id) FROM stdin;
-1	1	North	West-North	0106000020E6100000010000000103000000010000000A0000008AD131D8E85D52C0F5CB937E102E35401B54328D855E52C09424EFC5DE2E3540C11FBCBF7E5E52C03B015258172F35401EA24957055E52C0E417E2C422303540610172399B5D52C02D1947EA1E303540006E47C34E5D52C0C6EB673DBD2F3540F954E2B7815D52C07962B3344C2F35404B198252C95D52C07F0F598BA52E35404AED9A0CE55D52C0BC5EB970222E35408AD131D8E85D52C0F5CB937E102E3540	1	2024-03-06 18:56:18.746285+00	1	2024-03-06 18:56:18.746285+00	1	94.4	\N	\N	West-North
-2	1	South	West-South	0106000020E6100000010000000103000000010000000B00000069E81991515E52C00D0417D42F2C3540724A13146B5E52C0EAA643762C2C354029B23E146B5E52C0BFFF99762C2C35408A6DCE54925E52C0E382B9B5642C3540CDA4B8269D5E52C0EEE3EB7F1A2E35402CD1098D855E52C08B057CC5DE2E35403FAD35D8E85D52C015396C7E102E354003B7331CF95D52C0E3DA2A467D2D3540E27EDC12245E52C0EC026540E62C3540AD01FC90515E52C0345791D42F2C354069E81991515E52C00D0417D42F2C3540	1	2024-03-06 18:56:18.746285+00	1	2024-03-06 18:56:18.746285+00	1	85.3	\N	\N	West-South
-3	2	North	East-North	0106000020E610000001000000010300000001000000090000009B4E09D8E85D52C04CAC207E102E35405B6A720CE55D52C0213F4670222E35406E9F5852C95D52C053F0E58AA52E35400BD2B9B7815D52C0C84340344C2F354048061CC34E5D52C0FE94113DBD2F35402CA39223285D52C02E2FA2E58B2F354081EEBD89F35C52C0B8BD712FF62D354014392081115D52C0999CAA66312D35409B4E09D8E85D52C04CAC207E102E3540	1	2024-03-06 18:56:18.746285+00	1	2024-03-06 18:56:18.746285+00	1	97.0	\N	\N	East-North
-4	2	South	East-South	0106000020E61000000100000001030000000100000008000000BED4DFD7E85D52C0AC8CAD7D102E354057DE2981115D52C06ADA6966312D35409AADF8F9325D52C015105E95552C354013A1B490515E52C051229CD42F2C3540F3FBB312245E52C064E2F13FE62C354013340B1CF95D52C0D2BAB7457D2D3540753C0BD8E85D52C061160B7E102E3540BED4DFD7E85D52C0AC8CAD7D102E3540	1	2024-03-06 18:56:18.746285+00	1	2024-03-06 18:56:18.746285+00	1	97.4	\N	\N	East-South
-5	3	Subzone A	Zone 01-Subzone A	0106000020E61000000200000001030000000100000007000000D0381DA8C3484340889607A5E6662F40A4E10EBBC44843407ECCFDAECD662F40042F4ACD6D4C434068F110B2E46B2F409816629A1650434074E65B27C04D2F40B81F8361AB564340F815919EAA592F400038BABB2B514340F83E6571B5722F40D0381DA8C3484340889607A5E6662F40010300000001000000040000008756D5DBCC4843400E9433C710662F4004177F2C4C4A4340C837B10F44432F40E8A9E623524A43400E9D37DD4E432F408756D5DBCC4843400E9433C710662F40	1	2025-05-29 18:45:59.772576+00	1	2025-05-29 18:45:59.772576+00	2	3624.2	\N	\N	Zone 01-Subzone A
-6	4	Subzone A	Zone 02-Subzone A	0106000020E61000000100000001030000000100000006000000A4E10EBBC44843407ECCFDAECD662F408756D5DBCC4843400E9433C710662F40E8A9E623524A43400E9D37DD4E432F409816629A1650434074E65B27C04D2F40042F4ACD6D4C434068F110B2E46B2F40A4E10EBBC44843407ECCFDAECD662F40	1	2025-05-29 18:45:59.772576+00	1	2025-05-29 18:45:59.772576+00	2	3164.6	\N	\N	Zone 02-Subzone A
-9	7	Subzone A	Zone 03-Subzone A	0106000020E61000000100000001030000000100000006000000ACB08F477436434098ADC79949472F40974FB1EB1A414340752F839505502F40183F57FAA23D4340908DBDCE3E5C2F403FBE32D2D5364340882D38CB0F552F40BF0284C7A5364340F2D8EB6A984E2F40ACB08F477436434098ADC79949472F40	1	2025-05-29 18:47:48.579314+00	1	2025-05-29 18:50:29.255691+00	3	2275.1	\N	2025-05-29 18:50:29+00	Zone 03-Subzone A
-7	5	Subzone A	Zone 01-Subzone A	0106000020E61000000200000001030000000100000004000000D4F9485E6F3643409002C09245472F40ACB08F477436434098ADC79949472F40BF0284C7A5364340F2D8EB6A984E2F40D4F9485E6F3643409002C09245472F400103000000010000000B0000003FBE32D2D5364340882D38CB0F552F40183F57FAA23D4340908DBDCE3E5C2F40974FB1EB1A414340752F839505502F40C83EA43D20414340301B61F209502F405C1AD258783B434020F4AE18F6632F401F0145248139434047A107C5A66C2F4004CCF01B1A3A434098F168D6F1692F40ACC5CA905D374340B0ECFA7B22672F40D1679A57C5374340AE793CCF50742F4084021CDBBE374340E0B4497C6D742F403FBE32D2D5364340882D38CB0F552F40	1	2025-05-29 18:47:48.579314+00	1	2025-05-29 18:50:28.246998+00	3	1499.0	\N	2025-05-29 18:50:28+00	Zone 01-Subzone A
-8	6	Subzone A	Zone 02-Subzone A	0106000020E61000000100000001030000000100000005000000ACC5CA905D374340B0ECFA7B22672F4004CCF01B1A3A434098F168D6F1692F401F0145248139434047A107C5A66C2F40D1679A57C5374340AE793CCF50742F40ACC5CA905D374340B0ECFA7B22672F40	1	2025-05-29 18:47:48.579314+00	1	2025-05-29 18:50:28.529262+00	3	316.9	\N	2025-05-29 18:50:28+00	Zone 02-Subzone A
-\.
-
-
---
 -- Data for Name: planting_types; Type: TABLE DATA; Schema: tracking; Owner: -
 --
 
@@ -15647,58 +15692,10 @@ COPY tracking.planting_types (id, name) FROM stdin;
 
 
 --
--- Data for Name: planting_zone_histories; Type: TABLE DATA; Schema: tracking; Owner: -
---
-
-COPY tracking.planting_zone_histories (id, planting_site_history_id, planting_zone_id, name, boundary, area_ha, stable_id) FROM stdin;
-1	1	2	East	0106000020E6100000010000000103000000010000000B000000388944C34E5D52C058B3843DBD2F3540BD6C9823285D52C07E8CD4E58B2F354081EEBD89F35C52C0B8BD712FF62D35409AADF8F9325D52C015105E95552C3540AD01FC90515E52C0345791D42F2C3540E27EDC12245E52C0EC026540E62C354003B7331CF95D52C0E3DA2A467D2D35409DDA30D8E85D52C0F5CB937E102E35404B198252C95D52C07F0F598BA52E3540F954E2B7815D52C07962B3344C2F3540388944C34E5D52C058B3843DBD2F3540	182.2	East
-2	1	1	West	0106000020E6100000010000000103000000010000000E000000EFF06FC34E5D52C0180ADB3DBD2F3540E9D70AB8815D52C0248126354C2F35403A9CAA52C95D52C0B42ECC8BA52E354079545AD8E85D52C094EB067F102E3540DE305D1CF95D52C0F6FA9D467D2D3540BFF80513245E52C07423D840E62C3540576B4291515E52C023258AD42F2C354061CD3B146B5E52C003C8B6762C2C354079F0F654925E52C0D0A32CB6642C3540BD27E1269D5E52C08F035F801A2E3540C11FBCBF7E5E52C03B015258172F35401EA24957055E52C0E417E2C422303540610172399B5D52C02D1947EA1E303540EFF06FC34E5D52C0180ADB3DBD2F3540	175.8	West
-3	2	3	Zone 01	0106000020E61000000200000001030000000100000007000000D0381DA8C3484340889607A5E6662F40A4E10EBBC44843407ECCFDAECD662F40042F4ACD6D4C434068F110B2E46B2F409816629A1650434074E65B27C04D2F40B81F8361AB564340F815919EAA592F400038BABB2B514340F83E6571B5722F40D0381DA8C3484340889607A5E6662F40010300000001000000040000008756D5DBCC4843400E9433C710662F4004177F2C4C4A4340C837B10F44432F40E8A9E623524A43400E9D37DD4E432F408756D5DBCC4843400E9433C710662F40	3624.2	Zone 01
-4	2	4	Zone 02	0106000020E61000000100000001030000000100000006000000A4E10EBBC44843407ECCFDAECD662F408756D5DBCC4843400E9433C710662F40E8A9E623524A43400E9D37DD4E432F409816629A1650434074E65B27C04D2F40042F4ACD6D4C434068F110B2E46B2F40A4E10EBBC44843407ECCFDAECD662F40	3164.6	Zone 02
-5	3	5	Zone 01	0106000020E61000000200000001030000000100000004000000D4F9485E6F3643409002C09245472F40ACB08F477436434098ADC79949472F40BF0284C7A5364340F2D8EB6A984E2F40D4F9485E6F3643409002C09245472F400103000000010000000B0000003FBE32D2D5364340882D38CB0F552F40183F57FAA23D4340908DBDCE3E5C2F40974FB1EB1A414340752F839505502F40C83EA43D20414340301B61F209502F405C1AD258783B434020F4AE18F6632F401F0145248139434047A107C5A66C2F4004CCF01B1A3A434098F168D6F1692F40ACC5CA905D374340B0ECFA7B22672F40D1679A57C5374340AE793CCF50742F4084021CDBBE374340E0B4497C6D742F403FBE32D2D5364340882D38CB0F552F40	1499.0	Zone 01
-6	3	6	Zone 02	0106000020E61000000100000001030000000100000005000000ACC5CA905D374340B0ECFA7B22672F4004CCF01B1A3A434098F168D6F1692F401F0145248139434047A107C5A66C2F40D1679A57C5374340AE793CCF50742F40ACC5CA905D374340B0ECFA7B22672F40	316.9	Zone 02
-7	3	7	Zone 03	0106000020E61000000100000001030000000100000006000000ACB08F477436434098ADC79949472F40974FB1EB1A414340752F839505502F40183F57FAA23D4340908DBDCE3E5C2F403FBE32D2D5364340882D38CB0F552F40BF0284C7A5364340F2D8EB6A984E2F40ACB08F477436434098ADC79949472F40	2275.1	Zone 03
-\.
-
-
---
--- Data for Name: planting_zone_populations; Type: TABLE DATA; Schema: tracking; Owner: -
---
-
-COPY tracking.planting_zone_populations (planting_zone_id, species_id, total_plants, plants_since_last_observation) FROM stdin;
-3	3	100	100
-5	3	100	0
-\.
-
-
---
--- Data for Name: planting_zone_t0_temp_densities; Type: TABLE DATA; Schema: tracking; Owner: -
---
-
-COPY tracking.planting_zone_t0_temp_densities (planting_zone_id, species_id, zone_density, created_time, modified_time, created_by, modified_by) FROM stdin;
-\.
-
-
---
--- Data for Name: planting_zones; Type: TABLE DATA; Schema: tracking; Owner: -
---
-
-COPY tracking.planting_zones (id, planting_site_id, name, boundary, created_by, created_time, modified_by, modified_time, variance, students_t, error_margin, num_permanent_plots, num_temporary_plots, area_ha, target_planting_density, boundary_modified_by, boundary_modified_time, stable_id) FROM stdin;
-1	1	West	0106000020E6100000010000000103000000010000000E000000EFF06FC34E5D52C0180ADB3DBD2F3540E9D70AB8815D52C0248126354C2F35403A9CAA52C95D52C0B42ECC8BA52E354079545AD8E85D52C094EB067F102E3540DE305D1CF95D52C0F6FA9D467D2D3540BFF80513245E52C07423D840E62C3540576B4291515E52C023258AD42F2C354061CD3B146B5E52C003C8B6762C2C354079F0F654925E52C0D0A32CB6642C3540BD27E1269D5E52C08F035F801A2E3540C11FBCBF7E5E52C03B015258172F35401EA24957055E52C0E417E2C422303540610172399B5D52C02D1947EA1E303540EFF06FC34E5D52C0180ADB3DBD2F3540	1	2024-03-06 18:56:18.746285+00	1	2024-03-06 18:56:18.746285+00	40000	1.282	100	5	2	179.7	1500	1	2024-03-06 18:56:18.746285+00	West
-2	1	East	0106000020E6100000010000000103000000010000000B000000388944C34E5D52C058B3843DBD2F3540BD6C9823285D52C07E8CD4E58B2F354081EEBD89F35C52C0B8BD712FF62D35409AADF8F9325D52C015105E95552C3540AD01FC90515E52C0345791D42F2C3540E27EDC12245E52C0EC026540E62C354003B7331CF95D52C0E3DA2A467D2D35409DDA30D8E85D52C0F5CB937E102E35404B198252C95D52C07F0F598BA52E3540F954E2B7815D52C07962B3344C2F3540388944C34E5D52C058B3843DBD2F3540	1	2024-03-06 18:56:18.746285+00	1	2024-03-06 18:56:18.746285+00	40000	1.282	100	5	2	194.4	1500	1	2024-03-06 18:56:18.746285+00	East
-3	2	Zone 01	0106000020E61000000200000001030000000100000007000000D0381DA8C3484340889607A5E6662F40A4E10EBBC44843407ECCFDAECD662F40042F4ACD6D4C434068F110B2E46B2F409816629A1650434074E65B27C04D2F40B81F8361AB564340F815919EAA592F400038BABB2B514340F83E6571B5722F40D0381DA8C3484340889607A5E6662F40010300000001000000040000008756D5DBCC4843400E9433C710662F4004177F2C4C4A4340C837B10F44432F40E8A9E623524A43400E9D37DD4E432F408756D5DBCC4843400E9433C710662F40	1	2025-05-29 18:45:59.772576+00	1	2025-05-29 18:45:59.772576+00	40000	1.645	100	8	3	3624.2	1500	1	2025-05-29 18:45:59.772576+00	Zone 01
-4	2	Zone 02	0106000020E61000000100000001030000000100000006000000A4E10EBBC44843407ECCFDAECD662F408756D5DBCC4843400E9433C710662F40E8A9E623524A43400E9D37DD4E432F409816629A1650434074E65B27C04D2F40042F4ACD6D4C434068F110B2E46B2F40A4E10EBBC44843407ECCFDAECD662F40	1	2025-05-29 18:45:59.772576+00	1	2025-05-29 18:45:59.772576+00	40000	1.645	100	8	3	3164.6	1500	1	2025-05-29 18:45:59.772576+00	Zone 02
-5	3	Zone 01	0106000020E61000000200000001030000000100000004000000D4F9485E6F3643409002C09245472F40ACB08F477436434098ADC79949472F40BF0284C7A5364340F2D8EB6A984E2F40D4F9485E6F3643409002C09245472F400103000000010000000B0000003FBE32D2D5364340882D38CB0F552F40183F57FAA23D4340908DBDCE3E5C2F40974FB1EB1A414340752F839505502F40C83EA43D20414340301B61F209502F405C1AD258783B434020F4AE18F6632F401F0145248139434047A107C5A66C2F4004CCF01B1A3A434098F168D6F1692F40ACC5CA905D374340B0ECFA7B22672F40D1679A57C5374340AE793CCF50742F4084021CDBBE374340E0B4497C6D742F403FBE32D2D5364340882D38CB0F552F40	1	2025-05-29 18:47:48.579314+00	1	2025-05-29 18:47:48.579314+00	40000	1.645	100	8	3	1499.0	1500	1	2025-05-29 18:47:48.579314+00	Zone 01
-6	3	Zone 02	0106000020E61000000100000001030000000100000005000000ACC5CA905D374340B0ECFA7B22672F4004CCF01B1A3A434098F168D6F1692F401F0145248139434047A107C5A66C2F40D1679A57C5374340AE793CCF50742F40ACC5CA905D374340B0ECFA7B22672F40	1	2025-05-29 18:47:48.579314+00	1	2025-05-29 18:47:48.579314+00	40000	1.645	100	8	3	316.9	1500	1	2025-05-29 18:47:48.579314+00	Zone 02
-7	3	Zone 03	0106000020E61000000100000001030000000100000006000000ACB08F477436434098ADC79949472F40974FB1EB1A414340752F839505502F40183F57FAA23D4340908DBDCE3E5C2F403FBE32D2D5364340882D38CB0F552F40BF0284C7A5364340F2D8EB6A984E2F40ACB08F477436434098ADC79949472F40	1	2025-05-29 18:47:48.579314+00	1	2025-05-29 18:47:48.579314+00	40000	1.645	100	8	3	2275.1	1500	1	2025-05-29 18:47:48.579314+00	Zone 03
-\.
-
-
---
 -- Data for Name: plantings; Type: TABLE DATA; Schema: tracking; Owner: -
 --
 
-COPY tracking.plantings (id, delivery_id, planting_type_id, planting_site_id, planting_subzone_id, species_id, created_by, created_time, num_plants, notes) FROM stdin;
+COPY tracking.plantings (id, delivery_id, planting_type_id, planting_site_id, substratum_id, species_id, created_by, created_time, num_plants, notes) FROM stdin;
 1	1	1	2	5	3	1	2025-05-29 18:49:06.017294+00	100	\N
 2	2	1	3	7	3	1	2025-05-29 18:49:17.969801+00	100	\N
 \.
@@ -19472,6 +19469,98 @@ COPY tracking.recorded_trees (id, observation_id, monitoring_plot_id, biomass_sp
 
 
 --
+-- Data for Name: strata; Type: TABLE DATA; Schema: tracking; Owner: -
+--
+
+COPY tracking.strata (id, planting_site_id, name, boundary, created_by, created_time, modified_by, modified_time, variance, students_t, error_margin, num_permanent_plots, num_temporary_plots, area_ha, target_planting_density, boundary_modified_by, boundary_modified_time, stable_id) FROM stdin;
+1	1	West	0106000020E6100000010000000103000000010000000E000000EFF06FC34E5D52C0180ADB3DBD2F3540E9D70AB8815D52C0248126354C2F35403A9CAA52C95D52C0B42ECC8BA52E354079545AD8E85D52C094EB067F102E3540DE305D1CF95D52C0F6FA9D467D2D3540BFF80513245E52C07423D840E62C3540576B4291515E52C023258AD42F2C354061CD3B146B5E52C003C8B6762C2C354079F0F654925E52C0D0A32CB6642C3540BD27E1269D5E52C08F035F801A2E3540C11FBCBF7E5E52C03B015258172F35401EA24957055E52C0E417E2C422303540610172399B5D52C02D1947EA1E303540EFF06FC34E5D52C0180ADB3DBD2F3540	1	2024-03-06 18:56:18.746285+00	1	2024-03-06 18:56:18.746285+00	40000	1.282	100	5	2	179.7	1500	1	2024-03-06 18:56:18.746285+00	West
+2	1	East	0106000020E6100000010000000103000000010000000B000000388944C34E5D52C058B3843DBD2F3540BD6C9823285D52C07E8CD4E58B2F354081EEBD89F35C52C0B8BD712FF62D35409AADF8F9325D52C015105E95552C3540AD01FC90515E52C0345791D42F2C3540E27EDC12245E52C0EC026540E62C354003B7331CF95D52C0E3DA2A467D2D35409DDA30D8E85D52C0F5CB937E102E35404B198252C95D52C07F0F598BA52E3540F954E2B7815D52C07962B3344C2F3540388944C34E5D52C058B3843DBD2F3540	1	2024-03-06 18:56:18.746285+00	1	2024-03-06 18:56:18.746285+00	40000	1.282	100	5	2	194.4	1500	1	2024-03-06 18:56:18.746285+00	East
+3	2	Stratum 01	0106000020E61000000200000001030000000100000007000000D0381DA8C3484340889607A5E6662F40A4E10EBBC44843407ECCFDAECD662F40042F4ACD6D4C434068F110B2E46B2F409816629A1650434074E65B27C04D2F40B81F8361AB564340F815919EAA592F400038BABB2B514340F83E6571B5722F40D0381DA8C3484340889607A5E6662F40010300000001000000040000008756D5DBCC4843400E9433C710662F4004177F2C4C4A4340C837B10F44432F40E8A9E623524A43400E9D37DD4E432F408756D5DBCC4843400E9433C710662F40	1	2025-05-29 18:45:59.772576+00	1	2025-05-29 18:45:59.772576+00	40000	1.645	100	8	3	3624.2	1500	1	2025-05-29 18:45:59.772576+00	Stratum 01
+4	2	Stratum 02	0106000020E61000000100000001030000000100000006000000A4E10EBBC44843407ECCFDAECD662F408756D5DBCC4843400E9433C710662F40E8A9E623524A43400E9D37DD4E432F409816629A1650434074E65B27C04D2F40042F4ACD6D4C434068F110B2E46B2F40A4E10EBBC44843407ECCFDAECD662F40	1	2025-05-29 18:45:59.772576+00	1	2025-05-29 18:45:59.772576+00	40000	1.645	100	8	3	3164.6	1500	1	2025-05-29 18:45:59.772576+00	Stratum 02
+5	3	Stratum 01	0106000020E61000000200000001030000000100000004000000D4F9485E6F3643409002C09245472F40ACB08F477436434098ADC79949472F40BF0284C7A5364340F2D8EB6A984E2F40D4F9485E6F3643409002C09245472F400103000000010000000B0000003FBE32D2D5364340882D38CB0F552F40183F57FAA23D4340908DBDCE3E5C2F40974FB1EB1A414340752F839505502F40C83EA43D20414340301B61F209502F405C1AD258783B434020F4AE18F6632F401F0145248139434047A107C5A66C2F4004CCF01B1A3A434098F168D6F1692F40ACC5CA905D374340B0ECFA7B22672F40D1679A57C5374340AE793CCF50742F4084021CDBBE374340E0B4497C6D742F403FBE32D2D5364340882D38CB0F552F40	1	2025-05-29 18:47:48.579314+00	1	2025-05-29 18:47:48.579314+00	40000	1.645	100	8	3	1499.0	1500	1	2025-05-29 18:47:48.579314+00	Stratum 01
+6	3	Stratum 02	0106000020E61000000100000001030000000100000005000000ACC5CA905D374340B0ECFA7B22672F4004CCF01B1A3A434098F168D6F1692F401F0145248139434047A107C5A66C2F40D1679A57C5374340AE793CCF50742F40ACC5CA905D374340B0ECFA7B22672F40	1	2025-05-29 18:47:48.579314+00	1	2025-05-29 18:47:48.579314+00	40000	1.645	100	8	3	316.9	1500	1	2025-05-29 18:47:48.579314+00	Stratum 02
+7	3	Stratum 03	0106000020E61000000100000001030000000100000006000000ACB08F477436434098ADC79949472F40974FB1EB1A414340752F839505502F40183F57FAA23D4340908DBDCE3E5C2F403FBE32D2D5364340882D38CB0F552F40BF0284C7A5364340F2D8EB6A984E2F40ACB08F477436434098ADC79949472F40	1	2025-05-29 18:47:48.579314+00	1	2025-05-29 18:47:48.579314+00	40000	1.645	100	8	3	2275.1	1500	1	2025-05-29 18:47:48.579314+00	Stratum 03
+\.
+
+
+--
+-- Data for Name: stratum_histories; Type: TABLE DATA; Schema: tracking; Owner: -
+--
+
+COPY tracking.stratum_histories (id, planting_site_history_id, stratum_id, name, boundary, area_ha, stable_id) FROM stdin;
+1	1	2	East	0106000020E6100000010000000103000000010000000B000000388944C34E5D52C058B3843DBD2F3540BD6C9823285D52C07E8CD4E58B2F354081EEBD89F35C52C0B8BD712FF62D35409AADF8F9325D52C015105E95552C3540AD01FC90515E52C0345791D42F2C3540E27EDC12245E52C0EC026540E62C354003B7331CF95D52C0E3DA2A467D2D35409DDA30D8E85D52C0F5CB937E102E35404B198252C95D52C07F0F598BA52E3540F954E2B7815D52C07962B3344C2F3540388944C34E5D52C058B3843DBD2F3540	182.2	East
+2	1	1	West	0106000020E6100000010000000103000000010000000E000000EFF06FC34E5D52C0180ADB3DBD2F3540E9D70AB8815D52C0248126354C2F35403A9CAA52C95D52C0B42ECC8BA52E354079545AD8E85D52C094EB067F102E3540DE305D1CF95D52C0F6FA9D467D2D3540BFF80513245E52C07423D840E62C3540576B4291515E52C023258AD42F2C354061CD3B146B5E52C003C8B6762C2C354079F0F654925E52C0D0A32CB6642C3540BD27E1269D5E52C08F035F801A2E3540C11FBCBF7E5E52C03B015258172F35401EA24957055E52C0E417E2C422303540610172399B5D52C02D1947EA1E303540EFF06FC34E5D52C0180ADB3DBD2F3540	175.8	West
+3	2	3	Stratum 01	0106000020E61000000200000001030000000100000007000000D0381DA8C3484340889607A5E6662F40A4E10EBBC44843407ECCFDAECD662F40042F4ACD6D4C434068F110B2E46B2F409816629A1650434074E65B27C04D2F40B81F8361AB564340F815919EAA592F400038BABB2B514340F83E6571B5722F40D0381DA8C3484340889607A5E6662F40010300000001000000040000008756D5DBCC4843400E9433C710662F4004177F2C4C4A4340C837B10F44432F40E8A9E623524A43400E9D37DD4E432F408756D5DBCC4843400E9433C710662F40	3624.2	Stratum 01
+4	2	4	Stratum 02	0106000020E61000000100000001030000000100000006000000A4E10EBBC44843407ECCFDAECD662F408756D5DBCC4843400E9433C710662F40E8A9E623524A43400E9D37DD4E432F409816629A1650434074E65B27C04D2F40042F4ACD6D4C434068F110B2E46B2F40A4E10EBBC44843407ECCFDAECD662F40	3164.6	Stratum 02
+5	3	5	Stratum 01	0106000020E61000000200000001030000000100000004000000D4F9485E6F3643409002C09245472F40ACB08F477436434098ADC79949472F40BF0284C7A5364340F2D8EB6A984E2F40D4F9485E6F3643409002C09245472F400103000000010000000B0000003FBE32D2D5364340882D38CB0F552F40183F57FAA23D4340908DBDCE3E5C2F40974FB1EB1A414340752F839505502F40C83EA43D20414340301B61F209502F405C1AD258783B434020F4AE18F6632F401F0145248139434047A107C5A66C2F4004CCF01B1A3A434098F168D6F1692F40ACC5CA905D374340B0ECFA7B22672F40D1679A57C5374340AE793CCF50742F4084021CDBBE374340E0B4497C6D742F403FBE32D2D5364340882D38CB0F552F40	1499.0	Stratum 01
+6	3	6	Stratum 02	0106000020E61000000100000001030000000100000005000000ACC5CA905D374340B0ECFA7B22672F4004CCF01B1A3A434098F168D6F1692F401F0145248139434047A107C5A66C2F40D1679A57C5374340AE793CCF50742F40ACC5CA905D374340B0ECFA7B22672F40	316.9	Stratum 02
+7	3	7	Stratum 03	0106000020E61000000100000001030000000100000006000000ACB08F477436434098ADC79949472F40974FB1EB1A414340752F839505502F40183F57FAA23D4340908DBDCE3E5C2F403FBE32D2D5364340882D38CB0F552F40BF0284C7A5364340F2D8EB6A984E2F40ACB08F477436434098ADC79949472F40	2275.1	Stratum 03
+\.
+
+
+--
+-- Data for Name: stratum_populations; Type: TABLE DATA; Schema: tracking; Owner: -
+--
+
+COPY tracking.stratum_populations (stratum_id, species_id, total_plants, plants_since_last_observation) FROM stdin;
+3	3	100	100
+5	3	100	0
+\.
+
+
+--
+-- Data for Name: stratum_t0_temp_densities; Type: TABLE DATA; Schema: tracking; Owner: -
+--
+
+COPY tracking.stratum_t0_temp_densities (stratum_id, species_id, stratum_density, created_time, modified_time, created_by, modified_by) FROM stdin;
+\.
+
+
+--
+-- Data for Name: substrata; Type: TABLE DATA; Schema: tracking; Owner: -
+--
+
+COPY tracking.substrata (id, stratum_id, name, full_name, boundary, created_by, created_time, modified_by, modified_time, planting_site_id, area_ha, planting_completed_time, observed_time, stable_id) FROM stdin;
+1	1	North	West-North	0106000020E6100000010000000103000000010000000A0000008AD131D8E85D52C0F5CB937E102E35401B54328D855E52C09424EFC5DE2E3540C11FBCBF7E5E52C03B015258172F35401EA24957055E52C0E417E2C422303540610172399B5D52C02D1947EA1E303540006E47C34E5D52C0C6EB673DBD2F3540F954E2B7815D52C07962B3344C2F35404B198252C95D52C07F0F598BA52E35404AED9A0CE55D52C0BC5EB970222E35408AD131D8E85D52C0F5CB937E102E3540	1	2024-03-06 18:56:18.746285+00	1	2024-03-06 18:56:18.746285+00	1	94.4	\N	\N	West-North
+2	1	South	West-South	0106000020E6100000010000000103000000010000000B00000069E81991515E52C00D0417D42F2C3540724A13146B5E52C0EAA643762C2C354029B23E146B5E52C0BFFF99762C2C35408A6DCE54925E52C0E382B9B5642C3540CDA4B8269D5E52C0EEE3EB7F1A2E35402CD1098D855E52C08B057CC5DE2E35403FAD35D8E85D52C015396C7E102E354003B7331CF95D52C0E3DA2A467D2D3540E27EDC12245E52C0EC026540E62C3540AD01FC90515E52C0345791D42F2C354069E81991515E52C00D0417D42F2C3540	1	2024-03-06 18:56:18.746285+00	1	2024-03-06 18:56:18.746285+00	1	85.3	\N	\N	West-South
+3	2	North	East-North	0106000020E610000001000000010300000001000000090000009B4E09D8E85D52C04CAC207E102E35405B6A720CE55D52C0213F4670222E35406E9F5852C95D52C053F0E58AA52E35400BD2B9B7815D52C0C84340344C2F354048061CC34E5D52C0FE94113DBD2F35402CA39223285D52C02E2FA2E58B2F354081EEBD89F35C52C0B8BD712FF62D354014392081115D52C0999CAA66312D35409B4E09D8E85D52C04CAC207E102E3540	1	2024-03-06 18:56:18.746285+00	1	2024-03-06 18:56:18.746285+00	1	97.0	\N	\N	East-North
+4	2	South	East-South	0106000020E61000000100000001030000000100000008000000BED4DFD7E85D52C0AC8CAD7D102E354057DE2981115D52C06ADA6966312D35409AADF8F9325D52C015105E95552C354013A1B490515E52C051229CD42F2C3540F3FBB312245E52C064E2F13FE62C354013340B1CF95D52C0D2BAB7457D2D3540753C0BD8E85D52C061160B7E102E3540BED4DFD7E85D52C0AC8CAD7D102E3540	1	2024-03-06 18:56:18.746285+00	1	2024-03-06 18:56:18.746285+00	1	97.4	\N	\N	East-South
+5	3	Substratum A	Stratum 01-Substratum A	0106000020E61000000200000001030000000100000007000000D0381DA8C3484340889607A5E6662F40A4E10EBBC44843407ECCFDAECD662F40042F4ACD6D4C434068F110B2E46B2F409816629A1650434074E65B27C04D2F40B81F8361AB564340F815919EAA592F400038BABB2B514340F83E6571B5722F40D0381DA8C3484340889607A5E6662F40010300000001000000040000008756D5DBCC4843400E9433C710662F4004177F2C4C4A4340C837B10F44432F40E8A9E623524A43400E9D37DD4E432F408756D5DBCC4843400E9433C710662F40	1	2025-05-29 18:45:59.772576+00	1	2025-05-29 18:45:59.772576+00	2	3624.2	\N	\N	Stratum 01-Substratum A
+6	4	Substratum A	Stratum 02-Substratum A	0106000020E61000000100000001030000000100000006000000A4E10EBBC44843407ECCFDAECD662F408756D5DBCC4843400E9433C710662F40E8A9E623524A43400E9D37DD4E432F409816629A1650434074E65B27C04D2F40042F4ACD6D4C434068F110B2E46B2F40A4E10EBBC44843407ECCFDAECD662F40	1	2025-05-29 18:45:59.772576+00	1	2025-05-29 18:45:59.772576+00	2	3164.6	\N	\N	Stratum 02-Substratum A
+9	7	Substratum A	Stratum 03-Substratum A	0106000020E61000000100000001030000000100000006000000ACB08F477436434098ADC79949472F40974FB1EB1A414340752F839505502F40183F57FAA23D4340908DBDCE3E5C2F403FBE32D2D5364340882D38CB0F552F40BF0284C7A5364340F2D8EB6A984E2F40ACB08F477436434098ADC79949472F40	1	2025-05-29 18:47:48.579314+00	1	2025-05-29 18:50:29.255691+00	3	2275.1	\N	2025-05-29 18:50:29+00	Stratum 03-Substratum A
+7	5	Substratum A	Stratum 01-Substratum A	0106000020E61000000200000001030000000100000004000000D4F9485E6F3643409002C09245472F40ACB08F477436434098ADC79949472F40BF0284C7A5364340F2D8EB6A984E2F40D4F9485E6F3643409002C09245472F400103000000010000000B0000003FBE32D2D5364340882D38CB0F552F40183F57FAA23D4340908DBDCE3E5C2F40974FB1EB1A414340752F839505502F40C83EA43D20414340301B61F209502F405C1AD258783B434020F4AE18F6632F401F0145248139434047A107C5A66C2F4004CCF01B1A3A434098F168D6F1692F40ACC5CA905D374340B0ECFA7B22672F40D1679A57C5374340AE793CCF50742F4084021CDBBE374340E0B4497C6D742F403FBE32D2D5364340882D38CB0F552F40	1	2025-05-29 18:47:48.579314+00	1	2025-05-29 18:50:28.246998+00	3	1499.0	\N	2025-05-29 18:50:28+00	Stratum 01-Substratum A
+8	6	Substratum A	Stratum 02-Substratum A	0106000020E61000000100000001030000000100000005000000ACC5CA905D374340B0ECFA7B22672F4004CCF01B1A3A434098F168D6F1692F401F0145248139434047A107C5A66C2F40D1679A57C5374340AE793CCF50742F40ACC5CA905D374340B0ECFA7B22672F40	1	2025-05-29 18:47:48.579314+00	1	2025-05-29 18:50:28.529262+00	3	316.9	\N	2025-05-29 18:50:28+00	Stratum 02-Substratum A
+\.
+
+
+--
+-- Data for Name: substratum_histories; Type: TABLE DATA; Schema: tracking; Owner: -
+--
+
+COPY tracking.substratum_histories (id, stratum_history_id, substratum_id, name, full_name, boundary, area_ha, stable_id) FROM stdin;
+1	1	4	South	East-South	0106000020E61000000100000001030000000100000008000000BED4DFD7E85D52C0AC8CAD7D102E354057DE2981115D52C06ADA6966312D35409AADF8F9325D52C015105E95552C354013A1B490515E52C051229CD42F2C3540F3FBB312245E52C064E2F13FE62C354013340B1CF95D52C0D2BAB7457D2D3540753C0BD8E85D52C061160B7E102E3540BED4DFD7E85D52C0AC8CAD7D102E3540	89.4	East-South
+2	1	3	North	East-North	0106000020E610000001000000010300000001000000090000009B4E09D8E85D52C04CAC207E102E35405B6A720CE55D52C0213F4670222E35406E9F5852C95D52C053F0E58AA52E35400BD2B9B7815D52C0C84340344C2F354048061CC34E5D52C0FE94113DBD2F35402CA39223285D52C02E2FA2E58B2F354081EEBD89F35C52C0B8BD712FF62D354014392081115D52C0999CAA66312D35409B4E09D8E85D52C04CAC207E102E3540	92.8	East-North
+3	2	2	South	West-South	0106000020E6100000010000000103000000010000000B00000069E81991515E52C00D0417D42F2C3540724A13146B5E52C0EAA643762C2C354029B23E146B5E52C0BFFF99762C2C35408A6DCE54925E52C0E382B9B5642C3540CDA4B8269D5E52C0EEE3EB7F1A2E35402CD1098D855E52C08B057CC5DE2E35403FAD35D8E85D52C015396C7E102E354003B7331CF95D52C0E3DA2A467D2D3540E27EDC12245E52C0EC026540E62C3540AD01FC90515E52C0345791D42F2C354069E81991515E52C00D0417D42F2C3540	84.5	West-South
+4	2	1	North	West-North	0106000020E6100000010000000103000000010000000A0000008AD131D8E85D52C0F5CB937E102E35401B54328D855E52C09424EFC5DE2E3540C11FBCBF7E5E52C03B015258172F35401EA24957055E52C0E417E2C422303540610172399B5D52C02D1947EA1E303540006E47C34E5D52C0C6EB673DBD2F3540F954E2B7815D52C07962B3344C2F35404B198252C95D52C07F0F598BA52E35404AED9A0CE55D52C0BC5EB970222E35408AD131D8E85D52C0F5CB937E102E3540	91.3	West-North
+5	3	5	Substratum A	Stratum 01-Substratum A	0106000020E61000000200000001030000000100000007000000D0381DA8C3484340889607A5E6662F40A4E10EBBC44843407ECCFDAECD662F40042F4ACD6D4C434068F110B2E46B2F409816629A1650434074E65B27C04D2F40B81F8361AB564340F815919EAA592F400038BABB2B514340F83E6571B5722F40D0381DA8C3484340889607A5E6662F40010300000001000000040000008756D5DBCC4843400E9433C710662F4004177F2C4C4A4340C837B10F44432F40E8A9E623524A43400E9D37DD4E432F408756D5DBCC4843400E9433C710662F40	3624.2	Stratum 01-Substratum A
+6	4	6	Substratum A	Stratum 02-Substratum A	0106000020E61000000100000001030000000100000006000000A4E10EBBC44843407ECCFDAECD662F408756D5DBCC4843400E9433C710662F40E8A9E623524A43400E9D37DD4E432F409816629A1650434074E65B27C04D2F40042F4ACD6D4C434068F110B2E46B2F40A4E10EBBC44843407ECCFDAECD662F40	3164.6	Stratum 02-Substratum A
+7	5	7	Substratum A	Stratum 01-Substratum A	0106000020E61000000200000001030000000100000004000000D4F9485E6F3643409002C09245472F40ACB08F477436434098ADC79949472F40BF0284C7A5364340F2D8EB6A984E2F40D4F9485E6F3643409002C09245472F400103000000010000000B0000003FBE32D2D5364340882D38CB0F552F40183F57FAA23D4340908DBDCE3E5C2F40974FB1EB1A414340752F839505502F40C83EA43D20414340301B61F209502F405C1AD258783B434020F4AE18F6632F401F0145248139434047A107C5A66C2F4004CCF01B1A3A434098F168D6F1692F40ACC5CA905D374340B0ECFA7B22672F40D1679A57C5374340AE793CCF50742F4084021CDBBE374340E0B4497C6D742F403FBE32D2D5364340882D38CB0F552F40	1499.0	Stratum 01-Substratum A
+8	6	8	Substratum A	Stratum 02-Substratum A	0106000020E61000000100000001030000000100000005000000ACC5CA905D374340B0ECFA7B22672F4004CCF01B1A3A434098F168D6F1692F401F0145248139434047A107C5A66C2F40D1679A57C5374340AE793CCF50742F40ACC5CA905D374340B0ECFA7B22672F40	316.9	Stratum 02-Substratum A
+9	7	9	Substratum A	Stratum 03-Substratum A	0106000020E61000000100000001030000000100000006000000ACB08F477436434098ADC79949472F40974FB1EB1A414340752F839505502F40183F57FAA23D4340908DBDCE3E5C2F403FBE32D2D5364340882D38CB0F552F40BF0284C7A5364340F2D8EB6A984E2F40ACB08F477436434098ADC79949472F40	2275.1	Stratum 03-Substratum A
+\.
+
+
+--
+-- Data for Name: substratum_populations; Type: TABLE DATA; Schema: tracking; Owner: -
+--
+
+COPY tracking.substratum_populations (substratum_id, species_id, total_plants, plants_since_last_observation) FROM stdin;
+5	3	100	100
+7	3	100	0
+\.
+
+
+--
 -- Data for Name: tree_growth_forms; Type: TABLE DATA; Schema: tracking; Owner: -
 --
 
@@ -19759,7 +19848,7 @@ SELECT pg_catalog.setval('public.disclaimers_id_seq', 1, false);
 -- Name: event_log_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.event_log_id_seq', 6, true);
+SELECT pg_catalog.setval('public.event_log_id_seq', 127, true);
 
 
 --
@@ -19829,7 +19918,7 @@ SELECT pg_catalog.setval('public.site_module_id_seq', 104, true);
 -- Name: species_id_seq1; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.species_id_seq1', 62, true);
+SELECT pg_catalog.setval('public.species_id_seq1', 64, true);
 
 
 --
@@ -20036,27 +20125,6 @@ SELECT pg_catalog.setval('tracking.planting_sites_id_seq', 3, true);
 
 
 --
--- Name: planting_subzone_histories_id_seq; Type: SEQUENCE SET; Schema: tracking; Owner: -
---
-
-SELECT pg_catalog.setval('tracking.planting_subzone_histories_id_seq', 9, true);
-
-
---
--- Name: planting_zone_histories_id_seq; Type: SEQUENCE SET; Schema: tracking; Owner: -
---
-
-SELECT pg_catalog.setval('tracking.planting_zone_histories_id_seq', 7, true);
-
-
---
--- Name: planting_zones_id_seq; Type: SEQUENCE SET; Schema: tracking; Owner: -
---
-
-SELECT pg_catalog.setval('tracking.planting_zones_id_seq', 7, true);
-
-
---
 -- Name: plantings_id_seq; Type: SEQUENCE SET; Schema: tracking; Owner: -
 --
 
@@ -20082,6 +20150,27 @@ SELECT pg_catalog.setval('tracking.recorded_plants_id_seq', 3713, true);
 --
 
 SELECT pg_catalog.setval('tracking.recorded_trees_id_seq', 1, false);
+
+
+--
+-- Name: strata_id_seq; Type: SEQUENCE SET; Schema: tracking; Owner: -
+--
+
+SELECT pg_catalog.setval('tracking.strata_id_seq', 7, true);
+
+
+--
+-- Name: stratum_histories_id_seq; Type: SEQUENCE SET; Schema: tracking; Owner: -
+--
+
+SELECT pg_catalog.setval('tracking.stratum_histories_id_seq', 7, true);
+
+
+--
+-- Name: substratum_histories_id_seq; Type: SEQUENCE SET; Schema: tracking; Owner: -
+--
+
+SELECT pg_catalog.setval('tracking.substratum_histories_id_seq', 9, true);
 
 
 --
@@ -22973,11 +23062,11 @@ ALTER TABLE ONLY tracking.observation_plots
 
 
 --
--- Name: observation_requested_subzones observation_requested_subzones_pkey; Type: CONSTRAINT; Schema: tracking; Owner: -
+-- Name: observation_requested_substrata observation_requested_substrata_pkey; Type: CONSTRAINT; Schema: tracking; Owner: -
 --
 
-ALTER TABLE ONLY tracking.observation_requested_subzones
-    ADD CONSTRAINT observation_requested_subzones_pkey PRIMARY KEY (observation_id, planting_subzone_id);
+ALTER TABLE ONLY tracking.observation_requested_substrata
+    ADD CONSTRAINT observation_requested_substrata_pkey PRIMARY KEY (observation_id, substratum_id);
 
 
 --
@@ -23101,91 +23190,11 @@ ALTER TABLE ONLY tracking.planting_sites
 
 
 --
--- Name: planting_subzone_histories planting_subzone_histories_pkey; Type: CONSTRAINT; Schema: tracking; Owner: -
---
-
-ALTER TABLE ONLY tracking.planting_subzone_histories
-    ADD CONSTRAINT planting_subzone_histories_pkey PRIMARY KEY (id);
-
-
---
--- Name: planting_subzone_populations planting_subzone_populations_pkey; Type: CONSTRAINT; Schema: tracking; Owner: -
---
-
-ALTER TABLE ONLY tracking.planting_subzone_populations
-    ADD CONSTRAINT planting_subzone_populations_pkey PRIMARY KEY (planting_subzone_id, species_id);
-
-
---
--- Name: planting_subzones planting_subzones_planting_site_id_stable_id_key; Type: CONSTRAINT; Schema: tracking; Owner: -
---
-
-ALTER TABLE ONLY tracking.planting_subzones
-    ADD CONSTRAINT planting_subzones_planting_site_id_stable_id_key UNIQUE (planting_site_id, stable_id);
-
-
---
 -- Name: planting_types planting_types_pkey; Type: CONSTRAINT; Schema: tracking; Owner: -
 --
 
 ALTER TABLE ONLY tracking.planting_types
     ADD CONSTRAINT planting_types_pkey PRIMARY KEY (id);
-
-
---
--- Name: planting_zone_histories planting_zone_histories_pkey; Type: CONSTRAINT; Schema: tracking; Owner: -
---
-
-ALTER TABLE ONLY tracking.planting_zone_histories
-    ADD CONSTRAINT planting_zone_histories_pkey PRIMARY KEY (id);
-
-
---
--- Name: planting_zone_populations planting_zone_populations_pkey; Type: CONSTRAINT; Schema: tracking; Owner: -
---
-
-ALTER TABLE ONLY tracking.planting_zone_populations
-    ADD CONSTRAINT planting_zone_populations_pkey PRIMARY KEY (planting_zone_id, species_id);
-
-
---
--- Name: planting_zone_t0_temp_densities planting_zone_t0_temp_densities_pkey; Type: CONSTRAINT; Schema: tracking; Owner: -
---
-
-ALTER TABLE ONLY tracking.planting_zone_t0_temp_densities
-    ADD CONSTRAINT planting_zone_t0_temp_densities_pkey PRIMARY KEY (planting_zone_id, species_id);
-
-
---
--- Name: planting_zones planting_zones_pkey; Type: CONSTRAINT; Schema: tracking; Owner: -
---
-
-ALTER TABLE ONLY tracking.planting_zones
-    ADD CONSTRAINT planting_zones_pkey PRIMARY KEY (id);
-
-
---
--- Name: planting_zones planting_zones_planting_site_id_id_key; Type: CONSTRAINT; Schema: tracking; Owner: -
---
-
-ALTER TABLE ONLY tracking.planting_zones
-    ADD CONSTRAINT planting_zones_planting_site_id_id_key UNIQUE (planting_site_id, id);
-
-
---
--- Name: planting_zones planting_zones_planting_site_id_name_key; Type: CONSTRAINT; Schema: tracking; Owner: -
---
-
-ALTER TABLE ONLY tracking.planting_zones
-    ADD CONSTRAINT planting_zones_planting_site_id_name_key UNIQUE (planting_site_id, name);
-
-
---
--- Name: planting_zones planting_zones_planting_site_id_stable_id_key; Type: CONSTRAINT; Schema: tracking; Owner: -
---
-
-ALTER TABLE ONLY tracking.planting_zones
-    ADD CONSTRAINT planting_zones_planting_site_id_stable_id_key UNIQUE (planting_site_id, stable_id);
 
 
 --
@@ -23218,30 +23227,6 @@ ALTER TABLE ONLY tracking.plot_t0_densities
 
 ALTER TABLE ONLY tracking.plot_t0_observations
     ADD CONSTRAINT plot_t0_observations_pkey PRIMARY KEY (monitoring_plot_id);
-
-
---
--- Name: planting_subzones plots_pkey; Type: CONSTRAINT; Schema: tracking; Owner: -
---
-
-ALTER TABLE ONLY tracking.planting_subzones
-    ADD CONSTRAINT plots_pkey PRIMARY KEY (id);
-
-
---
--- Name: planting_subzones plots_planting_site_id_id_key; Type: CONSTRAINT; Schema: tracking; Owner: -
---
-
-ALTER TABLE ONLY tracking.planting_subzones
-    ADD CONSTRAINT plots_planting_site_id_id_key UNIQUE (planting_site_id, id);
-
-
---
--- Name: planting_subzones plots_planting_zone_id_name_key; Type: CONSTRAINT; Schema: tracking; Owner: -
---
-
-ALTER TABLE ONLY tracking.planting_subzones
-    ADD CONSTRAINT plots_planting_zone_id_name_key UNIQUE (planting_zone_id, name);
 
 
 --
@@ -23298,6 +23283,110 @@ ALTER TABLE ONLY tracking.recorded_trees
 
 ALTER TABLE ONLY tracking.recorded_trees
     ADD CONSTRAINT recorded_trees_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: strata strata_pkey; Type: CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.strata
+    ADD CONSTRAINT strata_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: strata strata_planting_site_id_id_key; Type: CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.strata
+    ADD CONSTRAINT strata_planting_site_id_id_key UNIQUE (planting_site_id, id);
+
+
+--
+-- Name: strata strata_planting_site_id_name_key; Type: CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.strata
+    ADD CONSTRAINT strata_planting_site_id_name_key UNIQUE (planting_site_id, name);
+
+
+--
+-- Name: strata strata_planting_site_id_stable_id_key; Type: CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.strata
+    ADD CONSTRAINT strata_planting_site_id_stable_id_key UNIQUE (planting_site_id, stable_id);
+
+
+--
+-- Name: stratum_histories stratum_histories_pkey; Type: CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.stratum_histories
+    ADD CONSTRAINT stratum_histories_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: stratum_populations stratum_populations_pkey; Type: CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.stratum_populations
+    ADD CONSTRAINT stratum_populations_pkey PRIMARY KEY (stratum_id, species_id);
+
+
+--
+-- Name: stratum_t0_temp_densities stratum_t0_temp_densities_pkey; Type: CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.stratum_t0_temp_densities
+    ADD CONSTRAINT stratum_t0_temp_densities_pkey PRIMARY KEY (stratum_id, species_id);
+
+
+--
+-- Name: substrata substrata_pkey; Type: CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.substrata
+    ADD CONSTRAINT substrata_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: substrata substrata_planting_site_id_id_key; Type: CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.substrata
+    ADD CONSTRAINT substrata_planting_site_id_id_key UNIQUE (planting_site_id, id);
+
+
+--
+-- Name: substrata substrata_planting_site_id_stable_id_key; Type: CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.substrata
+    ADD CONSTRAINT substrata_planting_site_id_stable_id_key UNIQUE (planting_site_id, stable_id);
+
+
+--
+-- Name: substrata substrata_stratum_id_name_key; Type: CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.substrata
+    ADD CONSTRAINT substrata_stratum_id_name_key UNIQUE (stratum_id, name);
+
+
+--
+-- Name: substratum_histories substratum_histories_pkey; Type: CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.substratum_histories
+    ADD CONSTRAINT substratum_histories_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: substratum_populations substratum_populations_pkey; Type: CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.substratum_populations
+    ADD CONSTRAINT substratum_populations_pkey PRIMARY KEY (substratum_id, species_id);
 
 
 --
@@ -23870,6 +23959,13 @@ CREATE INDEX event_log_batchid_idx ON public.event_log USING btree ((((payload -
 
 
 --
+-- Name: event_log_biomassspeciesid_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX event_log_biomassspeciesid_idx ON public.event_log USING btree ((((payload ->> 'biomassSpeciesId'::text))::bigint), event_class) WHERE ((payload ->> 'biomassSpeciesId'::text) IS NOT NULL);
+
+
+--
 -- Name: event_log_created_by_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -23898,6 +23994,20 @@ CREATE INDEX event_log_facilityid_idx ON public.event_log USING btree ((((payloa
 
 
 --
+-- Name: event_log_fileid_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX event_log_fileid_idx ON public.event_log USING btree ((((payload ->> 'fileId'::text))::bigint), event_class) WHERE ((payload ->> 'fileId'::text) IS NOT NULL);
+
+
+--
+-- Name: event_log_monitoringplotid_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX event_log_monitoringplotid_idx ON public.event_log USING btree ((((payload ->> 'monitoringPlotId'::text))::bigint), event_class) WHERE ((payload ->> 'monitoringPlotId'::text) IS NOT NULL);
+
+
+--
 -- Name: event_log_observationid_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -23923,6 +24033,20 @@ CREATE INDEX event_log_plantingsiteid_idx ON public.event_log USING btree ((((pa
 --
 
 CREATE INDEX event_log_projectid_idx ON public.event_log USING btree ((((payload ->> 'projectId'::text))::bigint), event_class) WHERE ((payload ->> 'projectId'::text) IS NOT NULL);
+
+
+--
+-- Name: event_log_recordedtreeid_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX event_log_recordedtreeid_idx ON public.event_log USING btree ((((payload ->> 'recordedTreeId'::text))::bigint), event_class) WHERE ((payload ->> 'recordedTreeId'::text) IS NOT NULL);
+
+
+--
+-- Name: event_log_speciesid_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX event_log_speciesid_idx ON public.event_log USING btree ((((payload ->> 'speciesId'::text))::bigint), event_class) WHERE ((payload ->> 'speciesId'::text) IS NOT NULL);
 
 
 --
@@ -24409,17 +24533,17 @@ CREATE INDEX monitoring_plot_histories_planting_site_id_idx ON tracking.monitori
 
 
 --
--- Name: monitoring_plot_histories_planting_subzone_history_id_idx; Type: INDEX; Schema: tracking; Owner: -
+-- Name: monitoring_plot_histories_substratum_history_id_idx; Type: INDEX; Schema: tracking; Owner: -
 --
 
-CREATE INDEX monitoring_plot_histories_planting_subzone_history_id_idx ON tracking.monitoring_plot_histories USING btree (planting_subzone_history_id);
+CREATE INDEX monitoring_plot_histories_substratum_history_id_idx ON tracking.monitoring_plot_histories USING btree (substratum_history_id);
 
 
 --
--- Name: monitoring_plot_histories_planting_subzone_id_idx; Type: INDEX; Schema: tracking; Owner: -
+-- Name: monitoring_plot_histories_substratum_id_idx; Type: INDEX; Schema: tracking; Owner: -
 --
 
-CREATE INDEX monitoring_plot_histories_planting_subzone_id_idx ON tracking.monitoring_plot_histories USING btree (planting_subzone_id);
+CREATE INDEX monitoring_plot_histories_substratum_id_idx ON tracking.monitoring_plot_histories USING btree (substratum_id);
 
 
 --
@@ -24437,10 +24561,10 @@ CREATE INDEX monitoring_plots_planting_site_id_idx ON tracking.monitoring_plots 
 
 
 --
--- Name: monitoring_plots_planting_subzone_id_idx; Type: INDEX; Schema: tracking; Owner: -
+-- Name: monitoring_plots_substratum_id_idx; Type: INDEX; Schema: tracking; Owner: -
 --
 
-CREATE INDEX monitoring_plots_planting_subzone_id_idx ON tracking.monitoring_plots USING btree (planting_subzone_id);
+CREATE INDEX monitoring_plots_substratum_id_idx ON tracking.monitoring_plots USING btree (substratum_id);
 
 
 --
@@ -24528,10 +24652,10 @@ CREATE INDEX observation_plots_monitoring_plot_id_idx ON tracking.observation_pl
 
 
 --
--- Name: observation_requested_subzones_planting_subzone_id_idx; Type: INDEX; Schema: tracking; Owner: -
+-- Name: observation_requested_substrata_substratum_id_idx; Type: INDEX; Schema: tracking; Owner: -
 --
 
-CREATE INDEX observation_requested_subzones_planting_subzone_id_idx ON tracking.observation_requested_subzones USING btree (planting_subzone_id);
+CREATE INDEX observation_requested_substrata_substratum_id_idx ON tracking.observation_requested_substrata USING btree (substratum_id);
 
 
 --
@@ -24633,87 +24757,87 @@ CREATE INDEX observed_site_species_totals_species_id_idx ON tracking.observed_si
 
 
 --
--- Name: observed_subzone_species_tota_observation_id_planting_subz_idx1; Type: INDEX; Schema: tracking; Owner: -
+-- Name: observed_stratum_sp_totals_observation_id_stratum_idx; Type: INDEX; Schema: tracking; Owner: -
 --
 
-CREATE UNIQUE INDEX observed_subzone_species_tota_observation_id_planting_subz_idx1 ON tracking.observed_subzone_species_totals USING btree (observation_id, planting_subzone_id, species_name) WHERE (species_name IS NOT NULL);
-
-
---
--- Name: observed_subzone_species_tota_observation_id_planting_subz_idx2; Type: INDEX; Schema: tracking; Owner: -
---
-
-CREATE UNIQUE INDEX observed_subzone_species_tota_observation_id_planting_subz_idx2 ON tracking.observed_subzone_species_totals USING btree (observation_id, planting_subzone_id) WHERE ((species_id IS NULL) AND (species_name IS NULL));
+CREATE UNIQUE INDEX observed_stratum_sp_totals_observation_id_stratum_idx ON tracking.observed_stratum_species_totals USING btree (observation_id, stratum_id, species_id) WHERE (species_id IS NOT NULL);
 
 
 --
--- Name: observed_subzone_species_tota_observation_id_planting_subzo_idx; Type: INDEX; Schema: tracking; Owner: -
+-- Name: observed_stratum_sp_totals_observation_id_stratum_idx1; Type: INDEX; Schema: tracking; Owner: -
 --
 
-CREATE UNIQUE INDEX observed_subzone_species_tota_observation_id_planting_subzo_idx ON tracking.observed_subzone_species_totals USING btree (observation_id, planting_subzone_id, species_id) WHERE (species_id IS NOT NULL);
-
-
---
--- Name: observed_subzone_species_totals_observation_id_idx; Type: INDEX; Schema: tracking; Owner: -
---
-
-CREATE INDEX observed_subzone_species_totals_observation_id_idx ON tracking.observed_subzone_species_totals USING btree (observation_id);
+CREATE UNIQUE INDEX observed_stratum_sp_totals_observation_id_stratum_idx1 ON tracking.observed_stratum_species_totals USING btree (observation_id, stratum_id, species_name) WHERE (species_name IS NOT NULL);
 
 
 --
--- Name: observed_subzone_species_totals_planting_subzone_id_idx; Type: INDEX; Schema: tracking; Owner: -
+-- Name: observed_stratum_sp_totals_observation_id_stratum_idx2; Type: INDEX; Schema: tracking; Owner: -
 --
 
-CREATE INDEX observed_subzone_species_totals_planting_subzone_id_idx ON tracking.observed_subzone_species_totals USING btree (planting_subzone_id);
-
-
---
--- Name: observed_subzone_species_totals_species_id_idx; Type: INDEX; Schema: tracking; Owner: -
---
-
-CREATE INDEX observed_subzone_species_totals_species_id_idx ON tracking.observed_subzone_species_totals USING btree (species_id);
+CREATE UNIQUE INDEX observed_stratum_sp_totals_observation_id_stratum_idx2 ON tracking.observed_stratum_species_totals USING btree (observation_id, stratum_id) WHERE ((species_id IS NULL) AND (species_name IS NULL));
 
 
 --
--- Name: observed_zone_species_totals_observation_id_idx; Type: INDEX; Schema: tracking; Owner: -
+-- Name: observed_stratum_species_totals_observation_id_idx; Type: INDEX; Schema: tracking; Owner: -
 --
 
-CREATE INDEX observed_zone_species_totals_observation_id_idx ON tracking.observed_zone_species_totals USING btree (observation_id);
-
-
---
--- Name: observed_zone_species_totals_observation_id_planting_zone__idx1; Type: INDEX; Schema: tracking; Owner: -
---
-
-CREATE UNIQUE INDEX observed_zone_species_totals_observation_id_planting_zone__idx1 ON tracking.observed_zone_species_totals USING btree (observation_id, planting_zone_id, species_name) WHERE (species_name IS NOT NULL);
+CREATE INDEX observed_stratum_species_totals_observation_id_idx ON tracking.observed_stratum_species_totals USING btree (observation_id);
 
 
 --
--- Name: observed_zone_species_totals_observation_id_planting_zone__idx2; Type: INDEX; Schema: tracking; Owner: -
+-- Name: observed_stratum_species_totals_species_id_idx; Type: INDEX; Schema: tracking; Owner: -
 --
 
-CREATE UNIQUE INDEX observed_zone_species_totals_observation_id_planting_zone__idx2 ON tracking.observed_zone_species_totals USING btree (observation_id, planting_zone_id) WHERE ((species_id IS NULL) AND (species_name IS NULL));
-
-
---
--- Name: observed_zone_species_totals_observation_id_planting_zone_i_idx; Type: INDEX; Schema: tracking; Owner: -
---
-
-CREATE UNIQUE INDEX observed_zone_species_totals_observation_id_planting_zone_i_idx ON tracking.observed_zone_species_totals USING btree (observation_id, planting_zone_id, species_id) WHERE (species_id IS NOT NULL);
+CREATE INDEX observed_stratum_species_totals_species_id_idx ON tracking.observed_stratum_species_totals USING btree (species_id);
 
 
 --
--- Name: observed_zone_species_totals_planting_zone_id_idx; Type: INDEX; Schema: tracking; Owner: -
+-- Name: observed_stratum_species_totals_stratum_id_idx; Type: INDEX; Schema: tracking; Owner: -
 --
 
-CREATE INDEX observed_zone_species_totals_planting_zone_id_idx ON tracking.observed_zone_species_totals USING btree (planting_zone_id);
+CREATE INDEX observed_stratum_species_totals_stratum_id_idx ON tracking.observed_stratum_species_totals USING btree (stratum_id);
 
 
 --
--- Name: observed_zone_species_totals_species_id_idx; Type: INDEX; Schema: tracking; Owner: -
+-- Name: observed_substratum_sp_totals_observation_id_substr_idx; Type: INDEX; Schema: tracking; Owner: -
 --
 
-CREATE INDEX observed_zone_species_totals_species_id_idx ON tracking.observed_zone_species_totals USING btree (species_id);
+CREATE UNIQUE INDEX observed_substratum_sp_totals_observation_id_substr_idx ON tracking.observed_substratum_species_totals USING btree (observation_id, substratum_id, species_id) WHERE (species_id IS NOT NULL);
+
+
+--
+-- Name: observed_substratum_sp_totals_observation_id_substr_idx1; Type: INDEX; Schema: tracking; Owner: -
+--
+
+CREATE UNIQUE INDEX observed_substratum_sp_totals_observation_id_substr_idx1 ON tracking.observed_substratum_species_totals USING btree (observation_id, substratum_id, species_name) WHERE (species_name IS NOT NULL);
+
+
+--
+-- Name: observed_substratum_sp_totals_observation_id_substr_idx2; Type: INDEX; Schema: tracking; Owner: -
+--
+
+CREATE UNIQUE INDEX observed_substratum_sp_totals_observation_id_substr_idx2 ON tracking.observed_substratum_species_totals USING btree (observation_id, substratum_id) WHERE ((species_id IS NULL) AND (species_name IS NULL));
+
+
+--
+-- Name: observed_substratum_species_totals_observation_id_idx; Type: INDEX; Schema: tracking; Owner: -
+--
+
+CREATE INDEX observed_substratum_species_totals_observation_id_idx ON tracking.observed_substratum_species_totals USING btree (observation_id);
+
+
+--
+-- Name: observed_substratum_species_totals_species_id_idx; Type: INDEX; Schema: tracking; Owner: -
+--
+
+CREATE INDEX observed_substratum_species_totals_species_id_idx ON tracking.observed_substratum_species_totals USING btree (species_id);
+
+
+--
+-- Name: observed_substratum_species_totals_substratum_id_idx; Type: INDEX; Schema: tracking; Owner: -
+--
+
+CREATE INDEX observed_substratum_species_totals_substratum_id_idx ON tracking.observed_substratum_species_totals USING btree (substratum_id);
 
 
 --
@@ -24752,34 +24876,6 @@ CREATE INDEX planting_sites_project_id_idx ON tracking.planting_sites USING btre
 
 
 --
--- Name: planting_subzone_histories_planting_subzone_id_idx; Type: INDEX; Schema: tracking; Owner: -
---
-
-CREATE INDEX planting_subzone_histories_planting_subzone_id_idx ON tracking.planting_subzone_histories USING btree (planting_subzone_id);
-
-
---
--- Name: planting_subzone_histories_planting_zone_history_id_idx; Type: INDEX; Schema: tracking; Owner: -
---
-
-CREATE INDEX planting_subzone_histories_planting_zone_history_id_idx ON tracking.planting_subzone_histories USING btree (planting_zone_history_id);
-
-
---
--- Name: planting_zone_histories_planting_site_history_id_idx; Type: INDEX; Schema: tracking; Owner: -
---
-
-CREATE INDEX planting_zone_histories_planting_site_history_id_idx ON tracking.planting_zone_histories USING btree (planting_site_history_id);
-
-
---
--- Name: planting_zone_histories_planting_zone_id_idx; Type: INDEX; Schema: tracking; Owner: -
---
-
-CREATE INDEX planting_zone_histories_planting_zone_id_idx ON tracking.planting_zone_histories USING btree (planting_zone_id);
-
-
---
 -- Name: plantings_delivery_id_idx; Type: INDEX; Schema: tracking; Owner: -
 --
 
@@ -24787,17 +24883,17 @@ CREATE INDEX plantings_delivery_id_idx ON tracking.plantings USING btree (delive
 
 
 --
--- Name: plantings_plot_id_idx; Type: INDEX; Schema: tracking; Owner: -
---
-
-CREATE INDEX plantings_plot_id_idx ON tracking.plantings USING btree (planting_subzone_id);
-
-
---
 -- Name: plantings_species_id_idx; Type: INDEX; Schema: tracking; Owner: -
 --
 
 CREATE INDEX plantings_species_id_idx ON tracking.plantings USING btree (species_id);
+
+
+--
+-- Name: plantings_substratum_id_idx; Type: INDEX; Schema: tracking; Owner: -
+--
+
+CREATE INDEX plantings_substratum_id_idx ON tracking.plantings USING btree (substratum_id);
 
 
 --
@@ -24819,6 +24915,34 @@ CREATE INDEX recorded_plants_observation_id_monitoring_plot_id_idx ON tracking.r
 --
 
 CREATE INDEX recorded_plants_species_id_idx ON tracking.recorded_plants USING btree (species_id);
+
+
+--
+-- Name: stratum_histories_planting_site_history_id_idx; Type: INDEX; Schema: tracking; Owner: -
+--
+
+CREATE INDEX stratum_histories_planting_site_history_id_idx ON tracking.stratum_histories USING btree (planting_site_history_id);
+
+
+--
+-- Name: stratum_histories_stratum_id_idx; Type: INDEX; Schema: tracking; Owner: -
+--
+
+CREATE INDEX stratum_histories_stratum_id_idx ON tracking.stratum_histories USING btree (stratum_id);
+
+
+--
+-- Name: substratum_histories_stratum_history_id_idx; Type: INDEX; Schema: tracking; Owner: -
+--
+
+CREATE INDEX substratum_histories_stratum_history_id_idx ON tracking.substratum_histories USING btree (stratum_history_id);
+
+
+--
+-- Name: substratum_histories_substratum_id_idx; Type: INDEX; Schema: tracking; Owner: -
+--
+
+CREATE INDEX substratum_histories_substratum_id_idx ON tracking.substratum_histories USING btree (substratum_id);
 
 
 --
@@ -28748,19 +28872,19 @@ ALTER TABLE ONLY tracking.monitoring_plot_histories
 
 
 --
--- Name: monitoring_plot_histories monitoring_plot_histories_planting_subzone_history_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+-- Name: monitoring_plot_histories monitoring_plot_histories_substratum_history_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
 --
 
 ALTER TABLE ONLY tracking.monitoring_plot_histories
-    ADD CONSTRAINT monitoring_plot_histories_planting_subzone_history_id_fkey FOREIGN KEY (planting_subzone_history_id) REFERENCES tracking.planting_subzone_histories(id) ON DELETE CASCADE DEFERRABLE;
+    ADD CONSTRAINT monitoring_plot_histories_substratum_history_id_fkey FOREIGN KEY (substratum_history_id) REFERENCES tracking.substratum_histories(id) ON DELETE CASCADE DEFERRABLE;
 
 
 --
--- Name: monitoring_plot_histories monitoring_plot_histories_planting_subzone_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+-- Name: monitoring_plot_histories monitoring_plot_histories_substratum_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
 --
 
 ALTER TABLE ONLY tracking.monitoring_plot_histories
-    ADD CONSTRAINT monitoring_plot_histories_planting_subzone_id_fkey FOREIGN KEY (planting_subzone_id) REFERENCES tracking.planting_subzones(id) ON DELETE SET NULL;
+    ADD CONSTRAINT monitoring_plot_histories_substratum_id_fkey FOREIGN KEY (substratum_id) REFERENCES tracking.substrata(id) ON DELETE SET NULL;
 
 
 --
@@ -28812,11 +28936,11 @@ ALTER TABLE ONLY tracking.monitoring_plots
 
 
 --
--- Name: monitoring_plots monitoring_plots_planting_subzone_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+-- Name: monitoring_plots monitoring_plots_substratum_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
 --
 
 ALTER TABLE ONLY tracking.monitoring_plots
-    ADD CONSTRAINT monitoring_plots_planting_subzone_id_fkey FOREIGN KEY (planting_subzone_id) REFERENCES tracking.planting_subzones(id) ON DELETE SET NULL;
+    ADD CONSTRAINT monitoring_plots_substratum_id_fkey FOREIGN KEY (substratum_id) REFERENCES tracking.substrata(id) ON DELETE SET NULL;
 
 
 --
@@ -29100,19 +29224,19 @@ ALTER TABLE ONLY tracking.observation_plots
 
 
 --
--- Name: observation_requested_subzones observation_requested_subzones_observation_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+-- Name: observation_requested_substrata observation_requested_substrata_observation_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
 --
 
-ALTER TABLE ONLY tracking.observation_requested_subzones
-    ADD CONSTRAINT observation_requested_subzones_observation_id_fkey FOREIGN KEY (observation_id) REFERENCES tracking.observations(id) ON DELETE CASCADE;
+ALTER TABLE ONLY tracking.observation_requested_substrata
+    ADD CONSTRAINT observation_requested_substrata_observation_id_fkey FOREIGN KEY (observation_id) REFERENCES tracking.observations(id) ON DELETE CASCADE;
 
 
 --
--- Name: observation_requested_subzones observation_requested_subzones_planting_subzone_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+-- Name: observation_requested_substrata observation_requested_substrata_substratum_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
 --
 
-ALTER TABLE ONLY tracking.observation_requested_subzones
-    ADD CONSTRAINT observation_requested_subzones_planting_subzone_id_fkey FOREIGN KEY (planting_subzone_id) REFERENCES tracking.planting_subzones(id) ON DELETE CASCADE;
+ALTER TABLE ONLY tracking.observation_requested_substrata
+    ADD CONSTRAINT observation_requested_substrata_substratum_id_fkey FOREIGN KEY (substratum_id) REFERENCES tracking.substrata(id) ON DELETE CASCADE;
 
 
 --
@@ -29244,67 +29368,67 @@ ALTER TABLE ONLY tracking.observed_site_species_totals
 
 
 --
--- Name: observed_subzone_species_totals observed_subzone_species_totals_certainty_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+-- Name: observed_stratum_species_totals observed_stratum_species_totals_certainty_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
 --
 
-ALTER TABLE ONLY tracking.observed_subzone_species_totals
-    ADD CONSTRAINT observed_subzone_species_totals_certainty_id_fkey FOREIGN KEY (certainty_id) REFERENCES tracking.recorded_species_certainties(id);
-
-
---
--- Name: observed_subzone_species_totals observed_subzone_species_totals_observation_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
---
-
-ALTER TABLE ONLY tracking.observed_subzone_species_totals
-    ADD CONSTRAINT observed_subzone_species_totals_observation_id_fkey FOREIGN KEY (observation_id) REFERENCES tracking.observations(id) ON DELETE CASCADE;
+ALTER TABLE ONLY tracking.observed_stratum_species_totals
+    ADD CONSTRAINT observed_stratum_species_totals_certainty_id_fkey FOREIGN KEY (certainty_id) REFERENCES tracking.recorded_species_certainties(id);
 
 
 --
--- Name: observed_subzone_species_totals observed_subzone_species_totals_planting_subzone_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+-- Name: observed_stratum_species_totals observed_stratum_species_totals_observation_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
 --
 
-ALTER TABLE ONLY tracking.observed_subzone_species_totals
-    ADD CONSTRAINT observed_subzone_species_totals_planting_subzone_id_fkey FOREIGN KEY (planting_subzone_id) REFERENCES tracking.planting_subzones(id) ON DELETE CASCADE;
-
-
---
--- Name: observed_subzone_species_totals observed_subzone_species_totals_species_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
---
-
-ALTER TABLE ONLY tracking.observed_subzone_species_totals
-    ADD CONSTRAINT observed_subzone_species_totals_species_id_fkey FOREIGN KEY (species_id) REFERENCES public.species(id);
+ALTER TABLE ONLY tracking.observed_stratum_species_totals
+    ADD CONSTRAINT observed_stratum_species_totals_observation_id_fkey FOREIGN KEY (observation_id) REFERENCES tracking.observations(id) ON DELETE CASCADE;
 
 
 --
--- Name: observed_zone_species_totals observed_zone_species_totals_certainty_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+-- Name: observed_stratum_species_totals observed_stratum_species_totals_species_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
 --
 
-ALTER TABLE ONLY tracking.observed_zone_species_totals
-    ADD CONSTRAINT observed_zone_species_totals_certainty_id_fkey FOREIGN KEY (certainty_id) REFERENCES tracking.recorded_species_certainties(id);
-
-
---
--- Name: observed_zone_species_totals observed_zone_species_totals_observation_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
---
-
-ALTER TABLE ONLY tracking.observed_zone_species_totals
-    ADD CONSTRAINT observed_zone_species_totals_observation_id_fkey FOREIGN KEY (observation_id) REFERENCES tracking.observations(id) ON DELETE CASCADE;
+ALTER TABLE ONLY tracking.observed_stratum_species_totals
+    ADD CONSTRAINT observed_stratum_species_totals_species_id_fkey FOREIGN KEY (species_id) REFERENCES public.species(id);
 
 
 --
--- Name: observed_zone_species_totals observed_zone_species_totals_planting_zone_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+-- Name: observed_stratum_species_totals observed_stratum_species_totals_stratum_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
 --
 
-ALTER TABLE ONLY tracking.observed_zone_species_totals
-    ADD CONSTRAINT observed_zone_species_totals_planting_zone_id_fkey FOREIGN KEY (planting_zone_id) REFERENCES tracking.planting_zones(id) ON DELETE CASCADE;
+ALTER TABLE ONLY tracking.observed_stratum_species_totals
+    ADD CONSTRAINT observed_stratum_species_totals_stratum_id_fkey FOREIGN KEY (stratum_id) REFERENCES tracking.strata(id) ON DELETE CASCADE;
 
 
 --
--- Name: observed_zone_species_totals observed_zone_species_totals_species_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+-- Name: observed_substratum_species_totals observed_substratum_species_totals_certainty_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
 --
 
-ALTER TABLE ONLY tracking.observed_zone_species_totals
-    ADD CONSTRAINT observed_zone_species_totals_species_id_fkey FOREIGN KEY (species_id) REFERENCES public.species(id);
+ALTER TABLE ONLY tracking.observed_substratum_species_totals
+    ADD CONSTRAINT observed_substratum_species_totals_certainty_id_fkey FOREIGN KEY (certainty_id) REFERENCES tracking.recorded_species_certainties(id);
+
+
+--
+-- Name: observed_substratum_species_totals observed_substratum_species_totals_observation_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.observed_substratum_species_totals
+    ADD CONSTRAINT observed_substratum_species_totals_observation_id_fkey FOREIGN KEY (observation_id) REFERENCES tracking.observations(id) ON DELETE CASCADE;
+
+
+--
+-- Name: observed_substratum_species_totals observed_substratum_species_totals_species_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.observed_substratum_species_totals
+    ADD CONSTRAINT observed_substratum_species_totals_species_id_fkey FOREIGN KEY (species_id) REFERENCES public.species(id);
+
+
+--
+-- Name: observed_substratum_species_totals observed_substratum_species_totals_substratum_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.observed_substratum_species_totals
+    ADD CONSTRAINT observed_substratum_species_totals_substratum_id_fkey FOREIGN KEY (substratum_id) REFERENCES tracking.substrata(id) ON DELETE CASCADE;
 
 
 --
@@ -29412,134 +29536,6 @@ ALTER TABLE ONLY tracking.planting_sites
 
 
 --
--- Name: planting_subzone_histories planting_subzone_histories_planting_subzone_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
---
-
-ALTER TABLE ONLY tracking.planting_subzone_histories
-    ADD CONSTRAINT planting_subzone_histories_planting_subzone_id_fkey FOREIGN KEY (planting_subzone_id) REFERENCES tracking.planting_subzones(id) ON DELETE SET NULL;
-
-
---
--- Name: planting_subzone_histories planting_subzone_histories_planting_zone_history_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
---
-
-ALTER TABLE ONLY tracking.planting_subzone_histories
-    ADD CONSTRAINT planting_subzone_histories_planting_zone_history_id_fkey FOREIGN KEY (planting_zone_history_id) REFERENCES tracking.planting_zone_histories(id) ON DELETE CASCADE DEFERRABLE;
-
-
---
--- Name: planting_subzone_populations planting_subzone_populations_planting_subzone_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
---
-
-ALTER TABLE ONLY tracking.planting_subzone_populations
-    ADD CONSTRAINT planting_subzone_populations_planting_subzone_id_fkey FOREIGN KEY (planting_subzone_id) REFERENCES tracking.planting_subzones(id) ON DELETE CASCADE;
-
-
---
--- Name: planting_subzone_populations planting_subzone_populations_species_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
---
-
-ALTER TABLE ONLY tracking.planting_subzone_populations
-    ADD CONSTRAINT planting_subzone_populations_species_id_fkey FOREIGN KEY (species_id) REFERENCES public.species(id) ON DELETE CASCADE;
-
-
---
--- Name: planting_zone_histories planting_zone_histories_planting_site_history_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
---
-
-ALTER TABLE ONLY tracking.planting_zone_histories
-    ADD CONSTRAINT planting_zone_histories_planting_site_history_id_fkey FOREIGN KEY (planting_site_history_id) REFERENCES tracking.planting_site_histories(id) ON DELETE CASCADE DEFERRABLE;
-
-
---
--- Name: planting_zone_histories planting_zone_histories_planting_zone_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
---
-
-ALTER TABLE ONLY tracking.planting_zone_histories
-    ADD CONSTRAINT planting_zone_histories_planting_zone_id_fkey FOREIGN KEY (planting_zone_id) REFERENCES tracking.planting_zones(id) ON DELETE SET NULL;
-
-
---
--- Name: planting_zone_populations planting_zone_populations_planting_zone_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
---
-
-ALTER TABLE ONLY tracking.planting_zone_populations
-    ADD CONSTRAINT planting_zone_populations_planting_zone_id_fkey FOREIGN KEY (planting_zone_id) REFERENCES tracking.planting_zones(id) ON DELETE CASCADE;
-
-
---
--- Name: planting_zone_populations planting_zone_populations_species_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
---
-
-ALTER TABLE ONLY tracking.planting_zone_populations
-    ADD CONSTRAINT planting_zone_populations_species_id_fkey FOREIGN KEY (species_id) REFERENCES public.species(id) ON DELETE CASCADE;
-
-
---
--- Name: planting_zone_t0_temp_densities planting_zone_t0_temp_densities_created_by_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
---
-
-ALTER TABLE ONLY tracking.planting_zone_t0_temp_densities
-    ADD CONSTRAINT planting_zone_t0_temp_densities_created_by_fkey FOREIGN KEY (created_by) REFERENCES public.users(id);
-
-
---
--- Name: planting_zone_t0_temp_densities planting_zone_t0_temp_densities_modified_by_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
---
-
-ALTER TABLE ONLY tracking.planting_zone_t0_temp_densities
-    ADD CONSTRAINT planting_zone_t0_temp_densities_modified_by_fkey FOREIGN KEY (modified_by) REFERENCES public.users(id);
-
-
---
--- Name: planting_zone_t0_temp_densities planting_zone_t0_temp_densities_planting_zone_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
---
-
-ALTER TABLE ONLY tracking.planting_zone_t0_temp_densities
-    ADD CONSTRAINT planting_zone_t0_temp_densities_planting_zone_id_fkey FOREIGN KEY (planting_zone_id) REFERENCES tracking.planting_zones(id) ON DELETE CASCADE;
-
-
---
--- Name: planting_zone_t0_temp_densities planting_zone_t0_temp_densities_species_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
---
-
-ALTER TABLE ONLY tracking.planting_zone_t0_temp_densities
-    ADD CONSTRAINT planting_zone_t0_temp_densities_species_id_fkey FOREIGN KEY (species_id) REFERENCES public.species(id) ON DELETE CASCADE;
-
-
---
--- Name: planting_zones planting_zones_boundary_modified_by_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
---
-
-ALTER TABLE ONLY tracking.planting_zones
-    ADD CONSTRAINT planting_zones_boundary_modified_by_fkey FOREIGN KEY (boundary_modified_by) REFERENCES public.users(id);
-
-
---
--- Name: planting_zones planting_zones_created_by_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
---
-
-ALTER TABLE ONLY tracking.planting_zones
-    ADD CONSTRAINT planting_zones_created_by_fkey FOREIGN KEY (created_by) REFERENCES public.users(id);
-
-
---
--- Name: planting_zones planting_zones_modified_by_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
---
-
-ALTER TABLE ONLY tracking.planting_zones
-    ADD CONSTRAINT planting_zones_modified_by_fkey FOREIGN KEY (modified_by) REFERENCES public.users(id);
-
-
---
--- Name: planting_zones planting_zones_planting_site_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
---
-
-ALTER TABLE ONLY tracking.planting_zones
-    ADD CONSTRAINT planting_zones_planting_site_id_fkey FOREIGN KEY (planting_site_id) REFERENCES tracking.planting_sites(id) ON DELETE CASCADE;
-
-
---
 -- Name: plantings plantings_created_by_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
 --
 
@@ -29572,19 +29568,11 @@ ALTER TABLE ONLY tracking.plantings
 
 
 --
--- Name: plantings plantings_planting_site_id_plot_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+-- Name: plantings plantings_planting_site_id_substratum_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
 --
 
 ALTER TABLE ONLY tracking.plantings
-    ADD CONSTRAINT plantings_planting_site_id_plot_id_fkey FOREIGN KEY (planting_site_id, planting_subzone_id) REFERENCES tracking.planting_subzones(planting_site_id, id);
-
-
---
--- Name: plantings plantings_planting_subzone_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
---
-
-ALTER TABLE ONLY tracking.plantings
-    ADD CONSTRAINT plantings_planting_subzone_id_fkey FOREIGN KEY (planting_subzone_id) REFERENCES tracking.planting_subzones(id) ON DELETE CASCADE;
+    ADD CONSTRAINT plantings_planting_site_id_substratum_id_fkey FOREIGN KEY (planting_site_id, substratum_id) REFERENCES tracking.substrata(planting_site_id, id);
 
 
 --
@@ -29601,6 +29589,14 @@ ALTER TABLE ONLY tracking.plantings
 
 ALTER TABLE ONLY tracking.plantings
     ADD CONSTRAINT plantings_species_id_fkey FOREIGN KEY (species_id) REFERENCES public.species(id);
+
+
+--
+-- Name: plantings plantings_substratum_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.plantings
+    ADD CONSTRAINT plantings_substratum_id_fkey FOREIGN KEY (substratum_id) REFERENCES tracking.substrata(id) ON DELETE CASCADE;
 
 
 --
@@ -29676,43 +29672,11 @@ ALTER TABLE ONLY tracking.plot_t0_observations
 
 
 --
--- Name: planting_subzones plots_created_by_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+-- Name: observation_biomass_quadrat_species quadrat_species_requires_quadrat_details; Type: FK CONSTRAINT; Schema: tracking; Owner: -
 --
 
-ALTER TABLE ONLY tracking.planting_subzones
-    ADD CONSTRAINT plots_created_by_fkey FOREIGN KEY (created_by) REFERENCES public.users(id);
-
-
---
--- Name: planting_subzones plots_modified_by_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
---
-
-ALTER TABLE ONLY tracking.planting_subzones
-    ADD CONSTRAINT plots_modified_by_fkey FOREIGN KEY (modified_by) REFERENCES public.users(id);
-
-
---
--- Name: planting_subzones plots_planting_site_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
---
-
-ALTER TABLE ONLY tracking.planting_subzones
-    ADD CONSTRAINT plots_planting_site_id_fkey FOREIGN KEY (planting_site_id) REFERENCES tracking.planting_sites(id) ON DELETE CASCADE;
-
-
---
--- Name: planting_subzones plots_planting_site_id_planting_zone_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
---
-
-ALTER TABLE ONLY tracking.planting_subzones
-    ADD CONSTRAINT plots_planting_site_id_planting_zone_id_fkey FOREIGN KEY (planting_site_id, planting_zone_id) REFERENCES tracking.planting_zones(planting_site_id, id);
-
-
---
--- Name: planting_subzones plots_planting_zone_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
---
-
-ALTER TABLE ONLY tracking.planting_subzones
-    ADD CONSTRAINT plots_planting_zone_id_fkey FOREIGN KEY (planting_zone_id) REFERENCES tracking.planting_zones(id) ON DELETE CASCADE;
+ALTER TABLE ONLY tracking.observation_biomass_quadrat_species
+    ADD CONSTRAINT quadrat_species_requires_quadrat_details FOREIGN KEY (observation_id, monitoring_plot_id, position_id) REFERENCES tracking.observation_biomass_quadrat_details(observation_id, monitoring_plot_id, position_id) ON DELETE CASCADE;
 
 
 --
@@ -29801,6 +29765,174 @@ ALTER TABLE ONLY tracking.recorded_trees
 
 ALTER TABLE ONLY tracking.recorded_trees
     ADD CONSTRAINT recorded_trees_tree_growth_form_id_fkey FOREIGN KEY (tree_growth_form_id) REFERENCES tracking.tree_growth_forms(id);
+
+
+--
+-- Name: strata strata_boundary_modified_by_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.strata
+    ADD CONSTRAINT strata_boundary_modified_by_fkey FOREIGN KEY (boundary_modified_by) REFERENCES public.users(id);
+
+
+--
+-- Name: strata strata_created_by_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.strata
+    ADD CONSTRAINT strata_created_by_fkey FOREIGN KEY (created_by) REFERENCES public.users(id);
+
+
+--
+-- Name: strata strata_modified_by_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.strata
+    ADD CONSTRAINT strata_modified_by_fkey FOREIGN KEY (modified_by) REFERENCES public.users(id);
+
+
+--
+-- Name: strata strata_planting_site_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.strata
+    ADD CONSTRAINT strata_planting_site_id_fkey FOREIGN KEY (planting_site_id) REFERENCES tracking.planting_sites(id) ON DELETE CASCADE;
+
+
+--
+-- Name: stratum_histories stratum_histories_planting_site_history_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.stratum_histories
+    ADD CONSTRAINT stratum_histories_planting_site_history_id_fkey FOREIGN KEY (planting_site_history_id) REFERENCES tracking.planting_site_histories(id) ON DELETE CASCADE DEFERRABLE;
+
+
+--
+-- Name: stratum_histories stratum_histories_stratum_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.stratum_histories
+    ADD CONSTRAINT stratum_histories_stratum_id_fkey FOREIGN KEY (stratum_id) REFERENCES tracking.strata(id) ON DELETE SET NULL;
+
+
+--
+-- Name: stratum_populations stratum_populations_species_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.stratum_populations
+    ADD CONSTRAINT stratum_populations_species_id_fkey FOREIGN KEY (species_id) REFERENCES public.species(id) ON DELETE CASCADE;
+
+
+--
+-- Name: stratum_populations stratum_populations_stratum_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.stratum_populations
+    ADD CONSTRAINT stratum_populations_stratum_id_fkey FOREIGN KEY (stratum_id) REFERENCES tracking.strata(id) ON DELETE CASCADE;
+
+
+--
+-- Name: stratum_t0_temp_densities stratum_t0_temp_densities_created_by_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.stratum_t0_temp_densities
+    ADD CONSTRAINT stratum_t0_temp_densities_created_by_fkey FOREIGN KEY (created_by) REFERENCES public.users(id);
+
+
+--
+-- Name: stratum_t0_temp_densities stratum_t0_temp_densities_modified_by_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.stratum_t0_temp_densities
+    ADD CONSTRAINT stratum_t0_temp_densities_modified_by_fkey FOREIGN KEY (modified_by) REFERENCES public.users(id);
+
+
+--
+-- Name: stratum_t0_temp_densities stratum_t0_temp_densities_species_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.stratum_t0_temp_densities
+    ADD CONSTRAINT stratum_t0_temp_densities_species_id_fkey FOREIGN KEY (species_id) REFERENCES public.species(id) ON DELETE CASCADE;
+
+
+--
+-- Name: stratum_t0_temp_densities stratum_t0_temp_densities_stratum_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.stratum_t0_temp_densities
+    ADD CONSTRAINT stratum_t0_temp_densities_stratum_id_fkey FOREIGN KEY (stratum_id) REFERENCES tracking.strata(id) ON DELETE CASCADE;
+
+
+--
+-- Name: substrata substrata_created_by_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.substrata
+    ADD CONSTRAINT substrata_created_by_fkey FOREIGN KEY (created_by) REFERENCES public.users(id);
+
+
+--
+-- Name: substrata substrata_modified_by_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.substrata
+    ADD CONSTRAINT substrata_modified_by_fkey FOREIGN KEY (modified_by) REFERENCES public.users(id);
+
+
+--
+-- Name: substrata substrata_planting_site_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.substrata
+    ADD CONSTRAINT substrata_planting_site_id_fkey FOREIGN KEY (planting_site_id) REFERENCES tracking.planting_sites(id) ON DELETE CASCADE;
+
+
+--
+-- Name: substrata substrata_planting_site_id_stratum_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.substrata
+    ADD CONSTRAINT substrata_planting_site_id_stratum_id_fkey FOREIGN KEY (planting_site_id, stratum_id) REFERENCES tracking.strata(planting_site_id, id);
+
+
+--
+-- Name: substrata substrata_stratum_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.substrata
+    ADD CONSTRAINT substrata_stratum_id_fkey FOREIGN KEY (stratum_id) REFERENCES tracking.strata(id) ON DELETE CASCADE;
+
+
+--
+-- Name: substratum_histories substratum_histories_stratum_history_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.substratum_histories
+    ADD CONSTRAINT substratum_histories_stratum_history_id_fkey FOREIGN KEY (stratum_history_id) REFERENCES tracking.stratum_histories(id) ON DELETE CASCADE DEFERRABLE;
+
+
+--
+-- Name: substratum_histories substratum_histories_substratum_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.substratum_histories
+    ADD CONSTRAINT substratum_histories_substratum_id_fkey FOREIGN KEY (substratum_id) REFERENCES tracking.substrata(id) ON DELETE SET NULL;
+
+
+--
+-- Name: substratum_populations substratum_populations_species_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.substratum_populations
+    ADD CONSTRAINT substratum_populations_species_id_fkey FOREIGN KEY (species_id) REFERENCES public.species(id) ON DELETE CASCADE;
+
+
+--
+-- Name: substratum_populations substratum_populations_substratum_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.substratum_populations
+    ADD CONSTRAINT substratum_populations_substratum_id_fkey FOREIGN KEY (substratum_id) REFERENCES tracking.substrata(id) ON DELETE CASCADE;
 
 
 --
