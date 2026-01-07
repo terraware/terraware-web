@@ -90,7 +90,7 @@ export default function NurseryReassignmentView(): JSX.Element {
         const stratumInfos = response.site.strata.map((stratum) => ({
           id: stratum.id,
           name: stratum.name,
-          substrata: stratum.substrata.map((substratum) => ({ id: substratum.id, name: substratum.fullName })),
+          substrata: stratum.substrata.map((substratum) => ({ id: substratum.id, name: substratum.name })),
         }));
 
         setStrata(stratumInfos);

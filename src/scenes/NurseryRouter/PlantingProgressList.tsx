@@ -43,6 +43,16 @@ const columnsWithoutStrata = (): TableColumnType[] => [
 
 const columnsWithStrata = (): TableColumnType[] => [
   {
+    key: 'siteName',
+    name: strings.PLANTING_SITE,
+    type: 'string',
+  },
+  {
+    key: 'stratumName',
+    name: strings.STRATUM,
+    type: 'string',
+  },
+  {
     key: 'substratumName',
     name: strings.SUBSTRATUM,
     type: 'string',
@@ -54,18 +64,8 @@ const columnsWithStrata = (): TableColumnType[] => [
     type: 'boolean',
   },
   {
-    key: 'siteName',
-    name: strings.PLANTING_SITE,
-    type: 'string',
-  },
-  {
     key: 'projectName',
     name: strings.PROJECT,
-    type: 'string',
-  },
-  {
-    key: 'stratumName',
-    name: strings.STRATUM,
     type: 'string',
   },
   {

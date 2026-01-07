@@ -20,7 +20,7 @@ import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 const columns = (): TableColumnType[] => [
   {
-    key: 'fullName',
+    key: 'name',
     name: strings.SUBSTRATUM,
     type: 'string',
   },
@@ -93,7 +93,7 @@ export default function GenericStratumView({ plantingSite, stratum }: GenericStr
             id='planting-site-stratum-details-table'
             columns={columns}
             rows={stratum?.substrata ?? []}
-            orderBy='fullName'
+            orderBy='name'
             Renderer={DetailsRenderer(timeZone)}
           />
         </Box>

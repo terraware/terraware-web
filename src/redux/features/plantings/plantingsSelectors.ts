@@ -61,7 +61,7 @@ export const selectPlantingProgress = createSelector(
                 .filter((_substratum) => plantingsBySubstratum[_substratum.id])
                 .map((_substratum) => ({
                   substratumId: _substratum.id,
-                  substratumName: _substratum.fullName,
+                  substratumName: _substratum.name,
                   plantingCompleted: _substratum.plantingCompleted,
                   plantingSite: ps.name,
                   stratumName: stratum.name,
