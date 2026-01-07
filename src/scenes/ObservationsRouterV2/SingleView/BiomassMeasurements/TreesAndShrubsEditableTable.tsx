@@ -28,9 +28,7 @@ export default function TreesAndShrubsEditableTable({ editable }: TreesAndShrubs
   const { strings } = useLocalization();
 
   const observationId = Number(params.observationId);
-  const { data: observationResultsResponse } = useGetObservationResultsQuery({
-    observationId,
-  });
+  const { data: observationResultsResponse } = useGetObservationResultsQuery({ observationId });
   const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);
 
   const [update] = useUpdateCompletedObservationPlotMutation();

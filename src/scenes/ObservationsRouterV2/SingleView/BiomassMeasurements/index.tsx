@@ -12,6 +12,7 @@ import { useGetObservationResultsQuery } from 'src/queries/generated/observation
 import useStickyTabs from 'src/utils/useStickyTabs';
 
 import BiomassObservationDataTab from './BiomassObservationDataTab';
+import InvasiveAndThreatenedSpeciesTab from './InvasiveAndThreatenedSpeciesTab';
 
 const BiomassMeasurementsView = (): JSX.Element => {
   const theme = useTheme();
@@ -30,9 +31,7 @@ const BiomassMeasurementsView = (): JSX.Element => {
     return crumbsData;
   }, [strings.OBSERVATIONS]);
 
-  const { data: observationResultsResponse } = useGetObservationResultsQuery({
-    observationId,
-  });
+  const { data: observationResultsResponse } = useGetObservationResultsQuery({ observationId });
 
   const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);
 
@@ -49,8 +48,13 @@ const BiomassMeasurementsView = (): JSX.Element => {
         label: strings.OBSERVATION_DATA,
         children: <BiomassObservationDataTab />,
       },
+      {
+        id: 'invasiveAndThreatenedSpecies',
+        label: strings.INVASIVE_AND_THREATENED_SPECIES,
+        children: <InvasiveAndThreatenedSpeciesTab />,
+      },
     ];
-  }, [strings.OBSERVATION_DATA]);
+  }, [strings.INVASIVE_AND_THREATENED_SPECIES, strings.OBSERVATION_DATA]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'observationData',

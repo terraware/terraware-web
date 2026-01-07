@@ -9,10 +9,7 @@ type EditQualitativeDataConfirmationModalProps = {
   onSubmit: () => void;
 };
 
-const EditBiomassQualitativeDataConfirmationModal = ({
-  onClose,
-  onSubmit,
-}: EditQualitativeDataConfirmationModalProps) => {
+const EditQualitativeDataConfirmationModal = ({ onClose, onSubmit }: EditQualitativeDataConfirmationModalProps) => {
   const { strings } = useLocalization();
 
   return (
@@ -46,4 +43,4 @@ const EditBiomassQualitativeDataConfirmationModal = ({
   );
 };
 
-export default EditBiomassQualitativeDataConfirmationModal;
+export default EditQualitativeDataConfirmationModal;

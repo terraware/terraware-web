@@ -29,15 +29,14 @@ import TreesAndShrubsEditableTable from './TreesAndShrubsEditableTable';
 
 const BiomassObservationDataTab = () => {
   const isEditObservationsEnabled = isEnabled('Edit Observations');
+
   const { strings } = useLocalization();
   const theme = useTheme();
   const params = useParams<{ observationId: string }>();
   const observationId = Number(params.observationId);
 
   const [getPlantingSite, plantingSiteResponse] = useLazyGetPlantingSiteQuery();
-  const { data: observationResultsResponse } = useGetObservationResultsQuery({
-    observationId,
-  });
+  const { data: observationResultsResponse } = useGetObservationResultsQuery({ observationId });
   const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);
   const monitoringPlot = useMemo(() => results?.adHocPlot, [results?.adHocPlot]);
   const plotLocation = useMemo(() => {
