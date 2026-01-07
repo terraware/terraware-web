@@ -81,7 +81,7 @@ export default function TooltipContents(props: TooltipContentsProps): JSX.Elemen
               </Typography>
 
               {monitoringPlot.isBiomassMeasurement ? (
-                <Typography>{`${strings.DATE}: ${getDateDisplayValue(monitoringPlot?.completedTime || '')} `}</Typography>
+                <Typography>{`${strings.DATE_OBSERVED}: ${getDateDisplayValue(monitoringPlot?.completedTime || '')} `}</Typography>
               ) : (
                 <>
                   <Typography fontSize='16px' fontWeight={400}>
