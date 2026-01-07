@@ -29,6 +29,7 @@ import TreesAndShrubsEditableTable from './TreesAndShrubsEditableTable';
 
 const BiomassObservationDataTab = () => {
   const isEditObservationsEnabled = isEnabled('Edit Observations');
+
   const { strings } = useLocalization();
   const theme = useTheme();
   const params = useParams<{ observationId: string }>();
