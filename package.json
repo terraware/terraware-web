@@ -10,8 +10,8 @@
     "start:dev": "rsbuild dev",
     "build-with-version": "export REACT_APP_TERRAWARE_FE_BUILD_VERSION=$(git rev-parse --short HEAD) && yarn build",
     "build-version-file": "echo $(git rev-parse --short HEAD) > public/build-version.txt",
-    "test": "TZ=America/Los_Angeles craco test",
-    "test-coverage": "TZ=America/Los_Angeles craco test --coverage --coverageDirectory='docs/coverage'",
+    "test": "TZ=America/Los_Angeles jest",
+    "test-coverage": "TZ=America/Los_Angeles jest --coverage --coverageDirectory='docs/coverage'",
     "generate-collateral": "yarn build-version-file && yarn generate-strings",
     "generate-strings": "node scripts/generate-strings.js && node scripts/unused-strings.js",
     "alphabetize-strings": "node scripts/alphabetize-strings.js",
@@ -148,16 +148,11 @@
     "not dead",
     "not op_mini all"
   ],
-  "jest": {
-    "moduleNameMapper": {
-      "^axios$": "axios/dist/axios.js",
-      "react-map-gl/mapbox": "react-map-gl/dist/mapbox.cjs"
-    }
-  },
   "devDependencies": {
     "@babel/cli": "^7.28.3",
     "@babel/core": "^7.28.5",
     "@babel/preset-env": "^7.28.5",
+    "@babel/preset-react": "^7.28.5",
     "@babel/preset-typescript": "^7.28.5",
     "@eslint/compat": "^2.0.0",
     "@eslint/js": "^9.0.0",
@@ -193,6 +188,7 @@
     "@typescript-eslint/eslint-plugin": "^7.7.0",
     "@typescript-eslint/eslint-plugin-tslint": "^7.0.2",
     "@typescript-eslint/parser": "^7.7.0",
+    "babel-jest": "^30.2.0",
     "babel-plugin-named-exports-order": "^0.0.2",
     "btoa": "^1.2.1",
     "csv": "^6.2.8",
@@ -209,7 +205,8 @@
     "express": "^5.0.0",
     "globals": "^17.0.0",
     "http-proxy-middleware": "^2.0.1",
-    "jest": "^30.0.0",
+    "jest": "^30.2.0",
+    "jest-environment-jsdom": "^30.2.0",
     "jest-mock-axios": "^4.4.1",
     "jest-mock-extended": "^4.0.0",
     "license-report": "^6.0.0",
