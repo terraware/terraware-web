@@ -6,7 +6,7 @@ import { BusySpinner } from '@terraware/web-components';
 import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
 
 import AdHocPlotDetails from './AdHocPlotDetails';
-import BiomassDetails from './BiomassDetails';
+import BiomassMeasurementsView from './BiomassMeasurements';
 import SiteDetails from './SiteDetails';
 
 const ObservationSingleView = (): JSX.Element => {
@@ -24,7 +24,7 @@ const ObservationSingleView = (): JSX.Element => {
   }
 
   if (results.type === 'Biomass Measurements') {
-    return <BiomassDetails />;
+    return <BiomassMeasurementsView />;
   } else {
     if (results.isAdHoc) {
       return <AdHocPlotDetails />;
