@@ -26,9 +26,7 @@ const SiteDetails = (): JSX.Element => {
     return crumbsData;
   }, [strings.OBSERVATIONS]);
 
-  const { data: observationResultsResponse } = useGetObservationResultsQuery({
-    observationId,
-  });
+  const { data: observationResultsResponse } = useGetObservationResultsQuery({ observationId });
 
   const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);
 

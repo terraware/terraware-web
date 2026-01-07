@@ -18,7 +18,7 @@ import { BiomassMeasurement, PlotCondition } from 'src/types/Observations';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
-import EditBiomassQualitativeDataConfirmationModal from './EditBiomassQualitativeDataConfirmationModal';
+import EditQualitativeDataConfirmationModal from '../../EditQualitativeDataConfirmationModal';
 
 export type BiomassQualitativeFormData = {
   biomassMeasurement: BiomassMeasurement;
@@ -38,9 +38,7 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
 
   const params = useParams<{ observationId: string }>();
   const observationId = Number(params.observationId);
-  const { data: observationResultsResponse } = useGetObservationResultsQuery({
-    observationId,
-  });
+  const { data: observationResultsResponse } = useGetObservationResultsQuery({ observationId });
   const [update] = useUpdateCompletedObservationPlotMutation();
   const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);
 
@@ -219,7 +217,7 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
     open && (
       <>
         {showConfirmationModalOpened && (
-          <EditBiomassQualitativeDataConfirmationModal
+          <EditQualitativeDataConfirmationModal
             onClose={() => setShowConfirmationModalOpened(false)}
             onSubmit={saveEditedData}
           />

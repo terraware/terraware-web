@@ -35,9 +35,7 @@ const BiomassObservationDataTab = () => {
   const observationId = Number(params.observationId);
 
   const [getPlantingSite, plantingSiteResponse] = useLazyGetPlantingSiteQuery();
-  const { data: observationResultsResponse } = useGetObservationResultsQuery({
-    observationId,
-  });
+  const { data: observationResultsResponse } = useGetObservationResultsQuery({ observationId });
   const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);
   const monitoringPlot = useMemo(() => results?.adHocPlot, [results?.adHocPlot]);
   const plotLocation = useMemo(() => {
