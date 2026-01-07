@@ -34,4 +34,4 @@ const ObservationSingleView = (): JSX.Element => {
   }
 };
 
-export default ObservatioSingleView;
+export default ObservationSingleView;
