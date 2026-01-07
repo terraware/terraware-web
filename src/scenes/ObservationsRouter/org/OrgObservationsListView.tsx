@@ -176,9 +176,10 @@ export default function OrgObservationsListView({
         type: 'string',
       },
       {
-        key: 'observationDate',
-        name: strings.DATE,
-        type: 'string',
+        key: 'completedTime',
+        name: strings.DATE_OBSERVED,
+        tooltipTitle: strings.DATE_OBSERVED_TOOLTIP,
+        type: 'date',
       },
       {
         key: 'totalLive',

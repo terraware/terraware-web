@@ -31,8 +31,9 @@ export default function BiomassMeasurementList({ adHocObservationResults }: Biom
       type: 'string',
     },
     {
-      key: 'startDate',
-      name: strings.DATE,
+      key: 'completedTime',
+      name: strings.DATE_OBSERVED,
+      tooltipTitle: strings.DATE_OBSERVED_TOOLTIP,
       type: 'date',
     },
     {

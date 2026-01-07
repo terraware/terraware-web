@@ -37,7 +37,8 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
       },
       {
         key: 'completedDate',
-        name: strings.DATE,
+        name: strings.DATE_OBSERVED,
+        tooltipTitle: strings.DATE_OBSERVED_TOOLTIP,
         type: 'date',
       },
       {
