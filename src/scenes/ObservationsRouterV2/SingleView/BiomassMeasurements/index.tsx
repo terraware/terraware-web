@@ -1,15 +1,19 @@
 import React, { useMemo } from 'react';
 import { useParams } from 'react-router';
 
-import { Typography, useTheme } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
+import { Tabs } from '@terraware/web-components';
 
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
+import useStickyTabs from 'src/utils/useStickyTabs';
 
-const BiomassDetails = (): JSX.Element => {
+import BiomassObservationDataTab from './BiomassObservationDataTab';
+
+const BiomassMeasurementsView = (): JSX.Element => {
   const theme = useTheme();
   const { strings } = useLocalization();
   const params = useParams<{ observationId: string }>();
@@ -38,11 +42,29 @@ const BiomassDetails = (): JSX.Element => {
     </Typography>
   );
 
+  const tabs = useMemo(() => {
+    return [
+      {
+        id: 'observationData',
+        label: strings.OBSERVATION_DATA,
+        children: <BiomassObservationDataTab />,
+      },
+    ];
+  }, [strings.OBSERVATION_DATA]);
+
+  const { activeTab, onChangeTab } = useStickyTabs({
+    defaultTab: 'observationData',
+    tabs,
+    viewIdentifier: 'biomassObservation',
+  });
+
   return (
     <Page crumbs={crumbs} title={title} titleContainerStyle={{ paddingTop: 3, paddingBottom: 1 }}>
-      Biomass Observation Placeholder
+      <Box width='100%'>
+        <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />
+      </Box>
     </Page>
   );
 };
 
-export default BiomassDetails;
+export default BiomassMeasurementsView;
