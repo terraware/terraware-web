@@ -16,14 +16,14 @@ const SiteDetails = (): JSX.Element => {
   const observationId = Number(params.observationId);
 
   const crumbs: Crumb[] = useMemo(() => {
-    const curmbsData: Crumb[] = [
+    const crumbsData: Crumb[] = [
       {
         name: strings.OBSERVATIONS,
         to: `${APP_PATHS.OBSERVATIONS}`,
       },
     ];
 
-    return curmbsData;
+    return crumbsData;
   }, [strings.OBSERVATIONS]);
 
   const { data: observationResultsResponse } = useGetObservationResultsQuery({
