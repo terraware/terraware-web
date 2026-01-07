@@ -3,15 +3,15 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/scenes/ObservationsRouterV2/SingleView/BiomassMeasurements/EditBiomassQualitativeDataConfirmationModal.tsx</title>
+    <title>Code coverage report for src/scenes/ObservationsRouterV2/EditQualitativeDataConfirmationModal.tsx</title>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="../../../../../prettify.css" />
-    <link rel="stylesheet" href="../../../../../base.css" />
-    <link rel="shortcut icon" type="image/x-icon" href="../../../../../favicon.png" />
+    <link rel="stylesheet" href="../../../prettify.css" />
+    <link rel="stylesheet" href="../../../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../../favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style type='text/css'>
         .coverage-summary .sorter {
-            background-image: url(../../../../../sort-arrow-sprite.png);
+            background-image: url(../../../sort-arrow-sprite.png);
         }
     </style>
 </head>
@@ -19,7 +19,7 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../../../index.html">All files</a> / <a href="index.html">src/scenes/ObservationsRouterV2/SingleView/BiomassMeasurements</a> EditBiomassQualitativeDataConfirmationModal.tsx</h1>
+        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/scenes/ObservationsRouterV2</a> EditQualitativeDataConfirmationModal.tsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
@@ -109,10 +109,7 @@
 <a name='L44'></a><a href='#L44'>44</a>
 <a name='L45'></a><a href='#L45'>45</a>
 <a name='L46'></a><a href='#L46'>46</a>
-<a name='L47'></a><a href='#L47'>47</a>
-<a name='L48'></a><a href='#L48'>48</a>
-<a name='L49'></a><a href='#L49'>49</a>
-<a name='L50'></a><a href='#L50'>50</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L47'></a><a href='#L47'>47</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -148,9 +145,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -172,34 +166,31 @@ type EditQualit<span class="cstat-no" title="statement not covered" ><span class
   on<span class="cstat-no" title="statement not covered" >Submit: () =&gt; void;</span>
 };
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-co<span class="cstat-no" title="statement not covered" >nst EditBiomassQualitativeDataConfirmationModal = ({</span>
-  on<span class="cstat-no" title="statement not covered" >Close,</span>
-  onSu<span class="cstat-no" title="statement not covered" >bmit,</span>
-}: EditQ<span class="cstat-no" title="statement not covered" >ualitativeDataConfirmation<span class="fstat-no" title="function not covered" >Mo</span>dalP<span class="cstat-no" title="statement not covered" >rops) =&gt; {</span></span>
-  const { strings } = useLocalization();
+co<span class="cstat-no" title="statement not covered" >nst EditQualitativeDataConfirmationModal = ({ onClose, onSubmit }: EditQualitativeDataConfirmationModalProps) =&gt; {</span>
+  co<span class="cstat-no" title="statement not covered" >nst { strings } = useLocalization();</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  return (
-    &lt;DialogBox<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-      onClose={onClose}
+  return<span class="cstat-no" title="statement not covered" > (<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+    &lt;DialogBox
+<span class="cstat-no" title="statement not covered" >      onClose</span>={onClose}
       open={true}
-      title={strings.SAVE_OBSERVATION_DATA}
+      title={s<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >tr</span>ings.SAVE_OBSERVATION_DATA}<span class="cstat-no" title="statement not covered" ></span></span>
       size='medium'
       middleButtons={[
         &lt;Button
           id='cancelSaving'
-          label={st<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ri</span>ngs.CAN<span class="cstat-no" title="statement not covered" >CEL}</span></span>
-          priority='<span class="cstat-no" title="statement not covered" >sec</span>ondary'
-<span class="cstat-no" title="statement not covered" >          type='passive'</span>
-          o<span class="fstat-no" title="function not covered" >nC</span>lick<span class="cstat-no" title="statement not covered" >={onClose}</span>
-          size='medium'
+          label={strings.CANCEL}
+          priority='secondary'
+          type='passive'
+          onClick={<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >on</span>Close}<span class="cstat-no" title="statement not covered" ></span></span>
+          size='medi<span class="cstat-no" title="statement not covered" >um'</span>
 <span class="cstat-no" title="statement not covered" >          key='button-1'</span>
-        /&gt;,<span class="cstat-no" title="statement not covered" ></span>
-        &lt;Button<span class="cstat-no" title="statement not covered" ></span>
-          id='confirmSa<span class="cstat-no" title="statement not covered" >ving'</span>
-          label={strings.CONTINUE}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-          type='destructive'
-          onClick={onSubmit}
-          size='medium'
+        /&gt;,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+        &lt;Button
+<span class="cstat-no" title="statement not covered" >          id='confirmSaving'</span>
+          label={st<span class="cstat-no" title="statement not covered" >rings.CONTINUE}</span>
+          type='destructive'<span class="cstat-no" title="statement not covered" ></span>
+          onClick={onSu<span class="cstat-no" title="statement not covered" >bmit}</span>
+          size='medium'<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
           key='button-<span class="cstat-no" title="statement not covered" >2'</span>
 <span class="cstat-no" title="statement not covered" >        /&gt;,</span>
       ]}
@@ -209,7 +200,7 @@ co<span class="cstat-no" title="statement not covered" >nst EditBiomassQualitati
   );
 };
 &nbsp;
-export default EditBiomassQualitativeDataConfirmationModal;
+export default EditQualitativeDataConfirmationModal;
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -217,16 +208,16 @@ export default EditBiomassQualitativeDataConfirmationModal;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-07T22:37:44.636Z
+                at 2026-01-07T22:51:34.188Z
             </div>
-        <script src="../../../../../prettify.js"></script>
+        <script src="../../../prettify.js"></script>
         <script>
             window.onload = function () {
                 prettyPrint();
             };
         </script>
-        <script src="../../../../../sorter.js"></script>
-        <script src="../../../../../block-navigation.js"></script>
+        <script src="../../../sorter.js"></script>
+        <script src="../../../block-navigation.js"></script>
     </body>
 </html>
     

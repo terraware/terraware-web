@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/51</span>
+                <span class='fraction'>0/52</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/47</span>
+                <span class='fraction'>0/48</span>
             </div>
         
             
@@ -133,7 +133,11 @@
 <a name='L68'></a><a href='#L68'>68</a>
 <a name='L69'></a><a href='#L69'>69</a>
 <a name='L70'></a><a href='#L70'>70</a>
-<a name='L71'></a><a href='#L71'>71</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a>
+<a name='L73'></a><a href='#L73'>73</a>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -176,27 +180,31 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -217,56 +225,60 @@ import { useGetObs<span class="cstat-no" title="statement not covered" ><span cl
 im<span class="cstat-no" title="statement not covered" >port useStickyTabs from 'src/utils/useStickyTabs';</span>
 <span class="cstat-no" title="statement not covered" ></span>
 import<span class="cstat-no" title="statement not covered" > BiomassObservationDataTab from './BiomassObservationDataTab';</span>
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-const BiomassMeasurementsView = (): JSX.Element =&gt; {
-<span class="cstat-no" title="statement not covered" >  const theme</span> = useTheme();
-  const { strings } = useLocalization();
-  const params<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > =</span> useParams&lt;{ observationId: <span class="cstat-no" title="statement not covered" >string }&gt;();</span></span>
+import I<span class="cstat-no" title="statement not covered" >nvasiveAndThreatenedSpecie<span class="fstat-no" title="function not covered" >sT</span>ab f<span class="cstat-no" title="statement not covered" >rom './Inv</span>asiveAndThreatenedSpeciesTab';</span>
+&nbsp;
+co<span class="cstat-no" title="statement not covered" >nst Biomass</span>MeasurementsView = (): JSX.Element =&gt; {
+  const theme = useTheme();
+  const { stri<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ng</span>s } = useLocalization();<span class="cstat-no" title="statement not covered" ></span></span>
+  const params = useParams&lt;{ observationId: string }&gt;();
   const observationId = Number(params.observationId);
 &nbsp;
   const crumbs: Crumb[] = useMemo(() =&gt; {
     const crumbsData: Crumb[] = [
       {
         name: strings.OBSERVATIONS,
-        to: `${APP_PATHS.OBSERVATIONS}`,
-      },<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-    ];<span class="cstat-no" title="statement not covered" ></span>
+        to: `${APP_<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >PA</span>THS.OBS<span class="cstat-no" title="statement not covered" >ERVATIONS}`,</span></span>
+      },<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >    ];</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+    return crumbsData;
+<span class="cstat-no" title="statement not covered" >  }, [strings.OBSERVATIONS]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-    return <span class="fstat-no" title="function not covered" >cr</span>umbs<span class="cstat-no" title="statement not covered" >Data;</span>
-  }, [strings.OBSERVATIONS]);
+  const { data: observatio<span class="cstat-no" title="statement not covered" >nResultsResponse } = use</span>GetObservationResultsQuery({ observationId });
 <span class="cstat-no" title="statement not covered" ></span>
-  const { data: obs<span class="cstat-no" title="statement not covered" >ervationResultsResponse } </span>= useGetObservationResultsQuery({
-    observationId,<span class="cstat-no" title="statement not covered" ></span>
-  });<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span>
-  const results = <span class="cstat-no" title="statement not covered" >useMemo(() =&gt; observationResultsResponse</span>?.observation, [observationResultsResponse?.observation]);
+  const results = useMemo(()<span class="cstat-no" title="statement not covered" > =&gt; observationResultsResponse?.obser</span>vation, [observationResultsResponse?.observation]);
 <span class="cstat-no" title="statement not covered" ></span>
   const title = (<span class="cstat-no" title="statement not covered" ></span>
-    &lt;Typography fontSize='<span class="cstat-no" title="statement not covered" >20px' lineHeight='28px' fontWeight={600} color</span>={theme.palette.TwClrTxt}&gt;
-      {results?.adHocPlot?.<span class="cstat-no" title="statement not covered" >monitoringPlotNumber}</span>
+    &lt;Typography fontSiz<span class="cstat-no" title="statement not covered" >e='20px' lineHeight='28px</span>' fontWeight={600} color={theme.palette.TwClrTxt}&gt;
+      {results?.adHocPlot?<span class="cstat-no" title="statement not covered" >.monitoringPlotNumber}</span>
     &lt;/Typography&gt;<span class="cstat-no" title="statement not covered" ></span>
-  );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-&nbsp;
-  const tabs = u<span class="cstat-no" title="statement not covered" >seMemo(() =&gt; {</span>
-    return [<span class="cstat-no" title="statement not covered" ></span>
+  );<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+  const tabs = useMemo(() =&gt; {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+    return [
       {<span class="cstat-no" title="statement not covered" ></span>
-        id: 'observation<span class="cstat-no" title="statement not covered" >Data',</span>
-        label: st<span class="cstat-no" title="statement not covered" >rings.OBSERVATION_DATA,<span class="fstat-no" title="function not covered" ></span></span>
-        children: &lt;Biom<span class="cstat-no" title="statement not covered" >assObservationDataTab /&gt;,</span>
+        id: 'observati<span class="cstat-no" title="statement not covered" >onData',</span>
+        label: st<span class="cstat-no" title="statement not covered" >rings.OBSERVATION_DATA,</span>
+        children: &lt;Bioma<span class="cstat-no" title="statement not covered" >ssObservationDataTab /&gt;,</span>
+      },<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+      {<span class="cstat-no" title="statement not covered" ></span>
+        id: 'invasiveAndThreatenedSpecies',
+        label: strings.INVASIVE_AND_THREATENED_SPECIES,
+        children: &lt;InvasiveAndThreatenedSpeciesTab /&gt;,
       },
     ];
-  }, [strings.OBSERVATION_DATA]);
+  },<span class="cstat-no" title="statement not covered" > [strings.INVASIVE_</span>AND_THREATENED_SPECIES, strings.OBSERVATION_DATA]);
 &nbsp;
-  const { activeTab, onChangeTab } = useStickyTabs({
-<span class="cstat-no" title="statement not covered" >    defaultTab: 'observ</span>ationData',
-    tabs,
-    viewIdentifier: 'biomassObservation',<span class="cstat-no" title="statement not covered" ></span>
-  });
+  const { activeTab, onChangeTab } = useStickyT<span class="cstat-no" title="statement not covered" >abs({</span>
+    defaultTab: 'o<span class="cstat-no" title="statement not covered" >bservationData',<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+    tabs,<span class="cstat-no" title="statement not covered" ></span>
+    viewIdentif<span class="cstat-no" title="statement not covered" >ier: 'biomassObservation',<span class="fstat-no" title="function not covered" ></span></span>
+  })<span class="cstat-no" title="statement not covered" >;</span>
 &nbsp;
-  return (<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-    &lt;Page crumbs={crumbs} title=<span class="cstat-no" title="statement not covered" >{title} titleContainerStyle={{ paddingTop: 3, paddingBottom: 1 }}&gt;</span>
-      &lt;Box widt<span class="cstat-no" title="statement not covered" >h='100%'&gt;<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >        &lt;Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} /&gt;</span>
+  return (
+    &lt;Page crumbs={crumbs} title={title} titleContainerStyle={{ paddingTop: 3, paddingBottom: 1 }}&gt;
+      &lt;Box width='100%'&gt;
+        &lt;Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} /&gt;
       &lt;/Box&gt;
     &lt;/Page&gt;
   );
@@ -280,7 +292,7 @@ export default BiomassMeasurementsView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-07T22:37:44.636Z
+                at 2026-01-07T22:51:34.188Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

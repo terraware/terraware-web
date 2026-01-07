@@ -472,9 +472,7 @@
 <a name='L407'></a><a href='#L407'>407</a>
 <a name='L408'></a><a href='#L408'>408</a>
 <a name='L409'></a><a href='#L409'>409</a>
-<a name='L410'></a><a href='#L410'>410</a>
-<a name='L411'></a><a href='#L411'>411</a>
-<a name='L412'></a><a href='#L412'>412</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L410'></a><a href='#L410'>410</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -524,8 +522,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -905,7 +901,7 @@ im<span class="cstat-no" title="statement not covered" >port { Biom</span>assMea
 import useForm from 'src/utils/useForm';
 import useSnac<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >kb</span>ar from 'src/utils/useSnackb<span class="cstat-no" title="statement not covered" >ar';</span></span>
 &nbsp;
-import EditBiomassQualitativeDataConfirmationModal from './EditBiomassQualitativeDataConfirmationModal';
+import EditQualitativeDataConfirmationModal from '../../EditQualitativeDataConfirmationModal';
 &nbsp;
 export type BiomassQualitativeFormData = {
   biomassMeasurement: BiomassMeasurement;
@@ -925,18 +921,16 @@ const EditBiomassQuali<span class="cstat-no" title="statement not covered" >tati
 <span class="cstat-no" title="statement not covered" ></span>
   const params = useParams<span class="cstat-no" title="statement not covered" >&lt;{ observationId: string }&gt;();</span>
   const observation<span class="cstat-no" title="statement not covered" >Id = Number(params.observationId);</span>
-  const { data: obser<span class="cstat-no" title="statement not covered" >vationResultsResponse } = useGetObserv</span>ationResultsQuery({
-    observationId,<span class="cstat-no" title="statement not covered" ></span>
-  });<span class="cstat-no" title="statement not covered" ></span>
-  const [update] = useUpdateCompletedObs<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >er</span>vationPlotMutation();</span>
-  const results = useMemo(() =&gt; observationResultsResponse?.observation, [observationResultsResponse?.observation]);
+  const { data: obser<span class="cstat-no" title="statement not covered" >vationResultsResponse } = useGetObserv</span>ationResultsQuery({ observationId });
+  const [update] = useUpd<span class="cstat-no" title="statement not covered" >ateCompletedObservationPlotMutation();</span>
+  const results = useMemo(() =&gt; observationResults<span class="cstat-no" title="statement not covered" >Response?.observation, [observationResultsResponse?.observation</span>]);
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  const soilFileId = results?.adHocPlot?.media?.find((m) =&gt; m.type === 'Soil')?.fileId;
+  const photoUrl =<span class="cstat-no" title="statement not covered" ></span>
+    results &amp;&amp; resu<span class="cstat-no" title="statement not covered" >lts.adHocPlot &amp;&amp; soilFileId</span>
+      ? `/api/v1/<span class="cstat-no" title="statement not covered" >tracking/observations/${results.obser</span>vationId}/plots/${results.adHocPlot.monitoringPlotId}/photos/${soilFileId}`
+      : undefined;<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const soilFileId <span class="cstat-no" title="statement not covered" >= results?.adHocPlot?.media?.find(</span>(m) =&gt; m.type === 'Soil')?.fileId;
-  const photoUrl <span class="cstat-no" title="statement not covered" >=</span>
-    results &amp;&amp; results.a<span class="cstat-no" title="statement not covered" >dHocPlot &amp;&amp; soilFileId</span>
-      ? `/api/v1/tracking/observations/${result<span class="cstat-no" title="statement not covered" >s.observationId}/plots/${results.adHocPlot.monitoringPlotId}/photos/${soilFileId}`</span>
-      : undefined;
-&nbsp;
   const plotConditi<span class="cstat-no" title="statement not covered" >onsMap = React.useMemo(() =&gt; {</span>
     const options <span class="cstat-no" title="statement not covered" >= getPlotConditionsOptions<span class="fstat-no" title="function not covered" >(a</span>ctiv<span class="cstat-no" title="statement not covered" >eLocale);</span></span>
     return new Map(op<span class="cstat-no" title="statement not covered" >tions.map((option) =&gt; [option.value, option]));<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
@@ -1106,7 +1100,7 @@ const EditBiomassQuali<span class="cstat-no" title="statement not covered" >tati
     open &amp;&amp; (
       &lt;&gt;
         {showConfirmationModalOpened &amp;&amp; (
-          &lt;EditBiomassQualitativeDataConfirmationModal
+          &lt;EditQualitativeDataConfirmationModal
             onClose={() =&gt; setShowConfirmationModalOpened(false)}
             onSubmit={saveEditedData}
           /&gt;
@@ -1303,7 +1297,7 @@ export default EditBiomassQualitativeDataModal;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-07T22:37:44.636Z
+                at 2026-01-07T22:51:34.188Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

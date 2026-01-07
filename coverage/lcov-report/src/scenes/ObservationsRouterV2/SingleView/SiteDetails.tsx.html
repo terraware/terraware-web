@@ -109,9 +109,7 @@
 <a name='L44'></a><a href='#L44'>44</a>
 <a name='L45'></a><a href='#L45'>45</a>
 <a name='L46'></a><a href='#L46'>46</a>
-<a name='L47'></a><a href='#L47'>47</a>
-<a name='L48'></a><a href='#L48'>48</a>
-<a name='L49'></a><a href='#L49'>49</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L47'></a><a href='#L47'>47</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -157,8 +155,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > useMemo } fro</span>m 'react';
 import { usePara<span class="cstat-no" title="statement not covered" >ms } from 'react-route</span>r';
 <span class="cstat-no" title="statement not covered" ></span>
@@ -187,26 +183,24 @@ co<span class="cstat-no" title="statement not covered" >nst SiteDetails = (): JS
     return crumbsData;
   }, [strings.OBSER<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >VA</span>TIONS])<span class="cstat-no" title="statement not covered" >;</span></span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  const { data: observationResultsResponse } = useGetObservationResultsQuery({</span>
-    observa<span class="fstat-no" title="function not covered" >ti</span>onId<span class="cstat-no" title="statement not covered" >,</span>
-  });
-<span class="cstat-no" title="statement not covered" ></span>
-  const results = u<span class="cstat-no" title="statement not covered" >seMemo(() =&gt; observationRe</span>sultsResponse?.observation, [observationResultsResponse?.observation]);
+<span class="cstat-no" title="statement not covered" >  const { data: observationResultsResponse } = useGetObservationResultsQuery({ observationId });</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  const results = useMemo(() =&gt; observationResultsResponse?.observation, [observationResultsResponse?.observation]);
 <span class="cstat-no" title="statement not covered" ></span>
   const title = (<span class="cstat-no" title="statement not covered" ></span>
-    &lt;Typography fo<span class="cstat-no" title="statement not covered" >ntSize='20px' lineHeight='28px' fontWeig</span>ht={600} color={theme.palette.TwClrTxt}&gt;
-      {`Observation ${r<span class="cstat-no" title="statement not covered" >esults?.observationId}`}</span>
+    &lt;Typography fontSize='<span class="cstat-no" title="statement not covered" >20px' lineHeight='28px' </span>fontWeight={600} color={theme.palette.TwClrTxt}&gt;
+      {`Observation ${<span class="cstat-no" title="statement not covered" >results?.observationId}`}</span>
     &lt;/Typography&gt;<span class="cstat-no" title="statement not covered" ></span>
   );<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ></span>
   return (<span class="cstat-no" title="statement not covered" ></span>
-    &lt;Page crumbs={crum<span class="cstat-no" title="statement not covered" >bs} title={title} titleContainerStyle={{</span> paddingTop: 3, paddingBottom: 1 }}&gt;
-      Site Observ<span class="cstat-no" title="statement not covered" >ation Placeholder</span>
+    &lt;Page crumbs={cr<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >um</span>bs} title={title} titleContainerStyle={{ paddingTop: 3, paddingBottom: 1 }}&gt;</span>
+      Site Obser<span class="cstat-no" title="statement not covered" >vation Placeholder</span>
     &lt;/Page&gt;<span class="cstat-no" title="statement not covered" ></span>
-  );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  );<span class="cstat-no" title="statement not covered" ></span>
 };<span class="cstat-no" title="statement not covered" ></span>
-&nbsp;
-export default SiteDetails;
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+export default SiteDeta<span class="cstat-no" title="statement not covered" >ils;</span>
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -214,7 +208,7 @@ export default SiteDetails;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-07T22:37:44.636Z
+                at 2026-01-07T22:51:34.188Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
