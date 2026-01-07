@@ -27,26 +27,31 @@ export function useOnSaveMergedSpeciesRtk(
         const mergeSpeciesPayloads = mergedSpeciesPayloads.filter(
           (payload): payload is MergeOtherSpeciesRequestPayload => !!payload.otherSpeciesName && !!payload.speciesId
         );
-        const promises = mergeSpeciesPayloads.map((payload) => {
-          return mergeOtherSpecies({
-            observationId,
-            mergeOtherSpeciesRequestPayload: {
-              otherSpeciesName: payload.otherSpeciesName,
-              speciesId: payload.speciesId,
-            },
-          }).unwrap();
-        });
 
-        try {
-          const results = await Promise.all(promises);
-          if (results.every((result) => result.status === 'ok')) {
-            snackbar.toastSuccess(strings.SPECIES_MATCHED);
-            onComplete?.();
-          } else {
+        if (mergeSpeciesPayloads.length > 0) {
+          const promises = mergeSpeciesPayloads.map((payload) => {
+            return mergeOtherSpecies({
+              observationId,
+              mergeOtherSpeciesRequestPayload: {
+                otherSpeciesName: payload.otherSpeciesName,
+                speciesId: payload.speciesId,
+              },
+            }).unwrap();
+          });
+
+          try {
+            const results = await Promise.all(promises);
+            if (results.every((result) => result.status === 'ok')) {
+              snackbar.toastSuccess(strings.SPECIES_MATCHED);
+              onComplete?.();
+            } else {
+              snackbar.toastError();
+            }
+          } catch (error) {
             snackbar.toastError();
           }
-        } catch (error) {
-          snackbar.toastError();
+        } else {
+          onComplete?.();
         }
       };
 
