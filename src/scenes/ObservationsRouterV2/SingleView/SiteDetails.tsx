@@ -34,7 +34,7 @@ const SiteDetails = (): JSX.Element => {
 
   const title = (
     <Typography fontSize='20px' lineHeight='28px' fontWeight={600} color={theme.palette.TwClrTxt}>
-      {`Obsevation ${results?.observationId}`}
+      {`Observation ${results?.observationId}`}
     </Typography>
   );
 

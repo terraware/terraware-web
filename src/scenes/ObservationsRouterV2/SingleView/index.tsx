@@ -9,7 +9,7 @@ import AdHocPlotDetails from './AdHocPlotDetails';
 import BiomassDetails from './BiomassDetails';
 import SiteDetails from './SiteDetails';
 
-const ObservatioSingleView = (): JSX.Element => {
+const ObservationSingleView = (): JSX.Element => {
   const params = useParams<{ observationId: string }>();
   const observationId = Number(params.observationId);
 
