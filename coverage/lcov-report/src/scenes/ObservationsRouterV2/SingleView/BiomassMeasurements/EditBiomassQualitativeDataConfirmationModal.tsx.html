@@ -3,15 +3,15 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/scenes/ObservationsRouterV2/SingleView/BiomassDetails.tsx</title>
+    <title>Code coverage report for src/scenes/ObservationsRouterV2/SingleView/BiomassMeasurements/EditBiomassQualitativeDataConfirmationModal.tsx</title>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="../../../../prettify.css" />
-    <link rel="stylesheet" href="../../../../base.css" />
-    <link rel="shortcut icon" type="image/x-icon" href="../../../../favicon.png" />
+    <link rel="stylesheet" href="../../../../../prettify.css" />
+    <link rel="stylesheet" href="../../../../../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../../../../favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style type='text/css'>
         .coverage-summary .sorter {
-            background-image: url(../../../../sort-arrow-sprite.png);
+            background-image: url(../../../../../sort-arrow-sprite.png);
         }
     </style>
 </head>
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../../index.html">All files</a> / <a href="index.html">src/scenes/ObservationsRouterV2/SingleView</a> BiomassDetails.tsx</h1>
+        <h1><a href="../../../../../index.html">All files</a> / <a href="index.html">src/scenes/ObservationsRouterV2/SingleView/BiomassMeasurements</a> EditBiomassQualitativeDataConfirmationModal.tsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/45</span>
+                <span class='fraction'>0/31</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/26</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/41</span>
+                <span class='fraction'>0/28</span>
             </div>
         
             
@@ -111,7 +111,8 @@
 <a name='L46'></a><a href='#L46'>46</a>
 <a name='L47'></a><a href='#L47'>47</a>
 <a name='L48'></a><a href='#L48'>48</a>
-<a name='L49'></a><a href='#L49'>49</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L49'></a><a href='#L49'>49</a>
+<a name='L50'></a><a href='#L50'>50</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -147,66 +148,68 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > useMemo } fro</span>m 'react';
-import { usePara<span class="cstat-no" title="statement not covered" >ms } from 'react-route</span>r';
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React fr<span class="cstat-no" title="statement not covered" >om 'react';</span>
 <span class="cstat-no" title="statement not covered" ></span>
-import { Typography, use<span class="cstat-no" title="statement not covered" >Theme } from '@mui/material</span>';
+import { Button, Dialog<span class="cstat-no" title="statement not covered" >Box } from '@terraware/web-compo</span>nents';
 <span class="cstat-no" title="statement not covered" ></span>
-import { Crumb } fr<span class="cstat-no" title="statement not covered" >om 'src/components/BreadCrumbs';</span>
-import Page fro<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >m </span>'src/components/Page';</span>
-im<span class="cstat-no" title="statement not covered" >port { APP_PATHS } from 'src/constants';</span>
-impo<span class="cstat-no" title="statement not covered" >rt { useLocalization } from 'src/providers';</span>
-import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
+import { useLocaliz<span class="cstat-no" title="statement not covered" >ation } from 'src/prov</span>iders';
+<span class="cstat-no" title="statement not covered" ></span>
+type EditQualit<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >at</span>iveDataConfirmationModalProps = {</span>
+<span class="cstat-no" title="statement not covered" >  onClose: () =&gt; void;</span>
+  on<span class="cstat-no" title="statement not covered" >Submit: () =&gt; void;</span>
+};
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-co<span class="cstat-no" title="statement not covered" >nst BiomassDetails = (): JSX.Element =&gt; {</span>
-  co<span class="cstat-no" title="statement not covered" >nst theme = useTheme();</span>
-  cons<span class="cstat-no" title="statement not covered" >t { strings } = useLocalization();</span>
-  const <span class="cstat-no" title="statement not covered" >params = useParams&lt;{ obser<span class="fstat-no" title="function not covered" >va</span>tion<span class="cstat-no" title="statement not covered" >Id: string</span> }&gt;();</span>
-  const observationId = Number(params.observationId);
+co<span class="cstat-no" title="statement not covered" >nst EditBiomassQualitativeDataConfirmationModal = ({</span>
+  on<span class="cstat-no" title="statement not covered" >Close,</span>
+  onSu<span class="cstat-no" title="statement not covered" >bmit,</span>
+}: EditQ<span class="cstat-no" title="statement not covered" >ualitativeDataConfirmation<span class="fstat-no" title="function not covered" >Mo</span>dalP<span class="cstat-no" title="statement not covered" >rops) =&gt; {</span></span>
+  const { strings } = useLocalization();
 <span class="cstat-no" title="statement not covered" ></span>
-  const crumbs: Crumb[] = useMemo(() =&gt; {
-    const crum<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >bs</span>Data: Crumb[] = [<span class="cstat-no" title="statement not covered" ></span></span>
-      {
-        name: strings.OBSERVATIONS,
-        to: `${APP_PATHS.OBSERVATIONS}`,
-      },
-    ];
-&nbsp;
-    return crumbsData;
-  }, [strings.OBSER<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >VA</span>TIONS])<span class="cstat-no" title="statement not covered" >;</span></span>
-<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  const { data: observationResultsResponse } = useGetObservationResultsQuery({</span>
-    observa<span class="fstat-no" title="function not covered" >ti</span>onId<span class="cstat-no" title="statement not covered" >,</span>
-  });
-<span class="cstat-no" title="statement not covered" ></span>
-  const results = u<span class="cstat-no" title="statement not covered" >seMemo(() =&gt; observationRe</span>sultsResponse?.observation, [observationResultsResponse?.observation]);
-<span class="cstat-no" title="statement not covered" ></span>
-  const title = (<span class="cstat-no" title="statement not covered" ></span>
-    &lt;Typography fo<span class="cstat-no" title="statement not covered" >ntSize='20px' lineHeight='28px' fontWeig</span>ht={600} color={theme.palette.TwClrTxt}&gt;
-      {results?.adHocPl<span class="cstat-no" title="statement not covered" >ot?.monitoringPlotNumber}</span>
-    &lt;/Typography&gt;<span class="cstat-no" title="statement not covered" ></span>
-  );<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
   return (
-    &lt;Page crumbs<span class="cstat-no" title="statement not covered" >={crumbs} title={title} titleCon</span>tainerStyle={{ paddingTop: 3, paddingBottom: 1 }}&gt;
-      Biomass Observat<span class="cstat-no" title="statement not covered" >ion Placeholder</span>
-    &lt;/Page&gt;<span class="cstat-no" title="statement not covered" ></span>
-  );<span class="cstat-no" title="statement not covered" ></span>
-};<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" ></span>
-export default BiomassDetails;
+    &lt;DialogBox<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+      onClose={onClose}
+      open={true}
+      title={strings.SAVE_OBSERVATION_DATA}
+      size='medium'
+      middleButtons={[
+        &lt;Button
+          id='cancelSaving'
+          label={st<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ri</span>ngs.CAN<span class="cstat-no" title="statement not covered" >CEL}</span></span>
+          priority='<span class="cstat-no" title="statement not covered" >sec</span>ondary'
+<span class="cstat-no" title="statement not covered" >          type='passive'</span>
+          o<span class="fstat-no" title="function not covered" >nC</span>lick<span class="cstat-no" title="statement not covered" >={onClose}</span>
+          size='medium'
+<span class="cstat-no" title="statement not covered" >          key='button-1'</span>
+        /&gt;,<span class="cstat-no" title="statement not covered" ></span>
+        &lt;Button<span class="cstat-no" title="statement not covered" ></span>
+          id='confirmSa<span class="cstat-no" title="statement not covered" >ving'</span>
+          label={strings.CONTINUE}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+          type='destructive'
+          onClick={onSubmit}
+          size='medium'
+          key='button-<span class="cstat-no" title="statement not covered" >2'</span>
+<span class="cstat-no" title="statement not covered" >        /&gt;,</span>
+      ]}
+      skrim={true}
+      message={strings.SAVE_OBSERVATION_DATA_DESCRIPTION}
+    /&gt;
+  );
+};
+&nbsp;
+export default EditBiomassQualitativeDataConfirmationModal;
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -214,16 +217,16 @@ export default BiomassDetails;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-07T22:27:10.072Z
+                at 2026-01-07T22:37:44.636Z
             </div>
-        <script src="../../../../prettify.js"></script>
+        <script src="../../../../../prettify.js"></script>
         <script>
             window.onload = function () {
                 prettyPrint();
             };
         </script>
-        <script src="../../../../sorter.js"></script>
-        <script src="../../../../block-navigation.js"></script>
+        <script src="../../../../../sorter.js"></script>
+        <script src="../../../../../block-navigation.js"></script>
     </body>
 </html>
     
