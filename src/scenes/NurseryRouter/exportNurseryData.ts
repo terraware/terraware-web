@@ -24,6 +24,14 @@ const makePlantingProgressCsv = ({
 
   const columnHeadersWithStrata = [
     {
+      key: 'siteName',
+      displayLabel: strings.PLANTING_SITE,
+    },
+    {
+      key: 'stratumName',
+      displayLabel: strings.STRATUM,
+    },
+    {
       key: 'substratumName',
       displayLabel: strings.SUBSTRATUM,
     },
@@ -32,16 +40,8 @@ const makePlantingProgressCsv = ({
       displayLabel: strings.PLANTING_COMPLETE,
     },
     {
-      key: 'siteName',
-      displayLabel: strings.PLANTING_SITE,
-    },
-    {
       key: 'projectName',
       displayLabel: strings.PROJECT,
-    },
-    {
-      key: 'stratumName',
-      displayLabel: strings.STRATUM,
     },
     {
       key: 'targetPlantingDensity',
