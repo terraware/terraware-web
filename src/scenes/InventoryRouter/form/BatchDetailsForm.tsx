@@ -400,6 +400,7 @@ export default function BatchDetailsForm({
                 label={strings.DATE_ADDED_REQUIRED}
                 aria-label={strings.DATE_ADDED}
                 value={record.addedDate}
+                maxDate={getTodaysDateFormatted(timeZone)}
                 onChange={getOnChangeDate('addedDate')}
                 defaultTimeZone={timeZone}
               />
