@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 import { navigateToProjectProfile } from '../utils/navigation';
 import { changeToSuperAdmin } from '../utils/userUtils';
 
-test.describe.only('ProjectDeliverablesTests', () => {
+test.describe('ProjectDeliverablesTests', () => {
   test.beforeEach(async ({ context, baseURL }, testInfo) => {
     await changeToSuperAdmin(context, baseURL);
   });
