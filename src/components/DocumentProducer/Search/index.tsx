@@ -23,9 +23,11 @@ export type SearchProps = {
 
   // filters
   filterProps?: SearchFiltersProp;
+
+  tableId?: string;
 };
 
-const Search = ({ searchValue, onSearch, filterProps }: SearchProps): JSX.Element => {
+const Search = ({ searchValue, onSearch, filterProps, tableId }: SearchProps): JSX.Element => {
   const theme = useTheme();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -65,7 +67,7 @@ const Search = ({ searchValue, onSearch, filterProps }: SearchProps): JSX.Elemen
           placeholder={strings.SEARCH}
           iconLeft='search'
           label=''
-          id='search'
+          id={`search${tableId ? `-${tableId}` : ''}`}
           type='text'
           iconRight='cancel'
           onClickRightIcon={() => onSearch('')}

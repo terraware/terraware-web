@@ -49,11 +49,13 @@ const TableContent = <T extends TableRowType>({ searchProps, tableProps }: Table
 
   const tableOrder = tableProps.tableOrder || 'asc';
 
+  const tableId = `table-content-${Date.now()}`;
+
   return (
     <Grid container>
       {searchProps && (
         <Box>
-          <Search {...searchProps} />
+          <Search {...searchProps} tableId={tableId} />
         </Box>
       )}
       <Grid item xs={12}>
@@ -61,7 +63,7 @@ const TableContent = <T extends TableRowType>({ searchProps, tableProps }: Table
           <Grid container spacing={4}>
             <Grid item xs={12}>
               <Table
-                id={`table-content-${Date.now()}`}
+                id={tableId}
                 columns={() => tableColumns}
                 rows={tableRows}
                 orderBy={tableOrderBy}

@@ -14,7 +14,7 @@ test.describe('ProjectDocumentsTests', () => {
   test('View Project Documents Table', async ({ page }, testInfo) => {
     await expect(page.getByRole('heading', { name: 'Documents' })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Add Document' })).toBeVisible();
-    await expect(page.locator('#search')).toBeVisible();
+    await expect(page.locator('#search-documents-list')).toBeVisible();
 
     // table column headers
     await expect(page.getByRole('columnheader', { name: 'Name' })).toBeVisible();

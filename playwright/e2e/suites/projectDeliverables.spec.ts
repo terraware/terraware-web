@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 import { navigateToProjectProfile } from '../utils/navigation';
 import { changeToSuperAdmin } from '../utils/userUtils';
 
-test.describe('ProjectDeliverablesTests', () => {
+test.describe.only('ProjectDeliverablesTests', () => {
   test.beforeEach(async ({ context, baseURL }, testInfo) => {
     await changeToSuperAdmin(context, baseURL);
   });
@@ -13,7 +13,7 @@ test.describe('ProjectDeliverablesTests', () => {
     await page.getByRole('tab', { name: 'Deliverables' }).click();
 
     await expect(page.getByRole('heading', { name: 'Deliverables' })).toBeVisible();
-    await expect(page.locator('#search')).toBeVisible();
+    await expect(page.locator('#search-participantDeliverablesTable')).toBeVisible();
 
     // table filters
     await expect(
@@ -36,11 +36,12 @@ test.describe('ProjectDeliverablesTests', () => {
     ).toBeVisible();
 
     // table column headers
-    await expect(page.getByRole('columnheader', { name: 'Name' })).toBeVisible();
-    await expect(page.getByRole('columnheader', { name: 'Due Date' })).toBeVisible();
-    await expect(page.getByRole('columnheader', { name: 'Status' })).toBeVisible();
-    await expect(page.getByRole('columnheader', { name: 'Module' })).toBeVisible();
-    await expect(page.getByRole('columnheader', { name: 'Category' })).toBeVisible();
-    await expect(page.getByRole('columnheader', { name: 'Type' })).toBeVisible();
+    const deliverablesTable = await page.locator('#participantDeliverablesTable');
+    await expect(deliverablesTable.getByRole('columnheader', { name: 'Name' })).toBeVisible();
+    await expect(deliverablesTable.getByRole('columnheader', { name: 'Due Date' })).toBeVisible();
+    await expect(deliverablesTable.getByRole('columnheader', { name: 'Status' })).toBeVisible();
+    await expect(deliverablesTable.getByRole('columnheader', { name: 'Module' })).toBeVisible();
+    await expect(deliverablesTable.getByRole('columnheader', { name: 'Category' })).toBeVisible();
+    await expect(deliverablesTable.getByRole('columnheader', { name: 'Type' })).toBeVisible();
   });
 });

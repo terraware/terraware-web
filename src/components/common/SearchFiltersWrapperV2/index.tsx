@@ -179,7 +179,7 @@ export default function SearchFiltersWrapperV2({
             placeholder={searchPlaceholder || strings.SEARCH}
             iconLeft='search'
             label=''
-            id='search'
+            id={`search-${tableId}`}
             type='text'
             onChange={(val) => onSearch(val as string)}
             value={search}

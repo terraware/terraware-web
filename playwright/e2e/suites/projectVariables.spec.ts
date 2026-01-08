@@ -14,7 +14,7 @@ test.describe('ProjectVariablesTests', () => {
     await page.getByRole('tab', { name: 'Variables' }).click();
 
     await expect(page.getByRole('heading', { name: 'Variables' })).toBeVisible();
-    await expect(page.locator('#search')).toBeVisible();
+    await expect(page.locator("[id*='search-table-content-']")).toBeVisible();
 
     // table column headers
     await expect(page.getByRole('columnheader', { name: 'Name' })).toBeVisible();
