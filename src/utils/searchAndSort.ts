@@ -241,7 +241,6 @@ export const sortResults = <T extends Record<string, unknown>>(
       return comparison !== 0 ? comparison : a.index - b.index;
     });
   } else {
-    // eslint-disable-next-line @typescript-eslint/no-base-to-string, @typescript-eslint/restrict-template-expressions
     indexedResults.sort((a, b) => {
       const comparison = String(a.item[field] || '').localeCompare(String(b.item[field] || ''), locale || undefined);
       return comparison !== 0 ? comparison : a.index - b.index;

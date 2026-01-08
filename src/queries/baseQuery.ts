@@ -28,6 +28,7 @@ const baseQueryWithInterceptors: BaseQueryFn<string | FetchArgs, unknown, FetchB
 
   if (process.env.NODE_ENV === 'development') {
     // TODO determine whether to log this elsewhere
+    // eslint-disable-next-line no-console
     console.log(`[RTKQ] ${typeof args === 'string' ? args : args.url} took ${responseTime}ms`);
   }
 

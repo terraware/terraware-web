@@ -110,7 +110,7 @@ export default function RescheduleObservationForm({
               <Dropdown
                 id='site'
                 label={strings.PLANTING_SITE}
-                // eslint-disable-next-line react/jsx-no-bind, @typescript-eslint/no-empty-function
+                // eslint-disable-next-line @typescript-eslint/no-empty-function
                 onChange={() => {}}
                 options={siteOptions}
                 selectedValue={plantingSite?.id}

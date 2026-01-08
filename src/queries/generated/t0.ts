@@ -14,6 +14,12 @@ const injectedRtkApi = api.injectEndpoints({
     getAllT0SiteDataSet: build.query<GetAllT0SiteDataSetApiResponse, GetAllT0SiteDataSetApiArg>({
       query: (queryArg) => ({ url: `/api/v1/tracking/t0/site/${queryArg}/allSet` }),
     }),
+    getPlotObservationDensitiesForPlantingSite: build.query<
+      GetPlotObservationDensitiesForPlantingSiteApiResponse,
+      GetPlotObservationDensitiesForPlantingSiteApiArg
+    >({
+      query: (queryArg) => ({ url: `/api/v1/tracking/t0/site/${queryArg}/observations` }),
+    }),
     getT0SpeciesForPlantingSite: build.query<GetT0SpeciesForPlantingSiteApiResponse, GetT0SpeciesForPlantingSiteApiArg>(
       {
         query: (queryArg) => ({ url: `/api/v1/tracking/t0/site/${queryArg}/species` }),
@@ -31,6 +37,9 @@ export type GetT0SiteDataApiResponse = /** status 200 OK */ GetSiteT0DataRespons
 export type GetT0SiteDataApiArg = number;
 export type GetAllT0SiteDataSetApiResponse = /** status 200 OK */ GetAllSiteT0DataSetResponsePayload;
 export type GetAllT0SiteDataSetApiArg = number;
+export type GetPlotObservationDensitiesForPlantingSiteApiResponse =
+  /** status 200 OK */ GetSitePlotObservationDensitiesResponsePayload;
+export type GetPlotObservationDensitiesForPlantingSiteApiArg = number;
 export type GetT0SpeciesForPlantingSiteApiResponse = /** status 200 OK */ GetSitePlotSpeciesResponsePayload;
 export type GetT0SpeciesForPlantingSiteApiArg = number;
 export type SuccessOrError = 'ok' | 'error';
@@ -80,6 +89,20 @@ export type GetAllSiteT0DataSetResponsePayload = {
   allSet: boolean;
   status: SuccessOrError;
 };
+export type ObservationSpeciesDensityPayload = {
+  observationCompletedTime: string;
+  observationId: number;
+  observationStartDate: string;
+  species: SpeciesDensityPayload[];
+};
+export type PlotObservationSpeciesDensityPayload = {
+  monitoringPlotId: number;
+  observations: ObservationSpeciesDensityPayload[];
+};
+export type GetSitePlotObservationDensitiesResponsePayload = {
+  data: PlotObservationSpeciesDensityPayload[];
+  status: SuccessOrError;
+};
 export type OptionalSpeciesDensityPayload = {
   density?: number;
   speciesId: number;
@@ -99,6 +122,8 @@ export const {
   useLazyGetT0SiteDataQuery,
   useGetAllT0SiteDataSetQuery,
   useLazyGetAllT0SiteDataSetQuery,
+  useGetPlotObservationDensitiesForPlantingSiteQuery,
+  useLazyGetPlotObservationDensitiesForPlantingSiteQuery,
   useGetT0SpeciesForPlantingSiteQuery,
   useLazyGetT0SpeciesForPlantingSiteQuery,
 } = injectedRtkApi;

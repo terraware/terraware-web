@@ -96,7 +96,7 @@ const associateValues = (
     if (variable.columns) {
       columns = variable.columns.map((col) => ({
         ...col,
-        variable: associateValues(col.variable as Variable, values, variableList) as VariableWithValues,
+        variable: associateValues(col.variable, values, variableList) as VariableWithValues,
       }));
     }
     return {
@@ -162,7 +162,7 @@ const associateNonSectionVariableValues = (
     if (variable.columns) {
       columns = variable.columns.map((col) => ({
         ...col,
-        variable: associateNonSectionVariableValues(col.variable as Variable, values, variableList),
+        variable: associateNonSectionVariableValues(col.variable, values, variableList),
       }));
     }
     return {
