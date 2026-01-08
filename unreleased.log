@@ -1,3 +1,4 @@
+106d56a5326 SW-7480 Disallow future dates for batches (#5038)
 7f286a9a412 SW-7868 Implemented biomass species tab (#5033)
 427aa1076b7 Implemented biomass data tab and updates (#5031)
 e1a83c14322 SW-7832: Observations: Not able to use Request Reassignment feature in map  (#5036)
