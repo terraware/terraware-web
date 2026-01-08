@@ -13,11 +13,6 @@ import ReactMapGL, {
 import { Box, useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';
 import centroid from '@turf/centroid';
-/**
- * The following is needed to deal with a mapbox bug
- * See: https://docs.mapbox.com/mapbox-gl-js/guides/install/#transpiling
- */
-import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 import { useIsVisible } from 'src/hooks/useIsVisible';
@@ -39,9 +34,6 @@ import { useMaintainLayerOrder } from '../NewMap/useMaintainLayerOrder';
 import MapBanner from './MapBanner';
 import MapViewStyleControl, { useMapViewStyle } from './MapViewStyleControl';
 import { getMapDrawingLayer } from './utils';
-
-const mapboxImpl: any = mapboxgl;
-mapboxImpl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default; /* eslint-disable-line */
 
 type FeatureStateId = Record<string, Record<string, number | undefined>>;
 
