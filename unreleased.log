@@ -1,1 +1,2 @@
+927330cf6ea Remove unnecessary worker-loader now that we're beyond ES5 (#5043)
 3c02bf35fb8 Change from ES5 to ES2017 (#5042)

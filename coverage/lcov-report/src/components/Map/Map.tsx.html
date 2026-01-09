@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/256</span>
+                <span class='fraction'>0/253</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/237</span>
+                <span class='fraction'>0/234</span>
             </div>
         
             
@@ -694,15 +694,7 @@
 <a name='L629'></a><a href='#L629'>629</a>
 <a name='L630'></a><a href='#L630'>630</a>
 <a name='L631'></a><a href='#L631'>631</a>
-<a name='L632'></a><a href='#L632'>632</a>
-<a name='L633'></a><a href='#L633'>633</a>
-<a name='L634'></a><a href='#L634'>634</a>
-<a name='L635'></a><a href='#L635'>635</a>
-<a name='L636'></a><a href='#L636'>636</a>
-<a name='L637'></a><a href='#L637'>637</a>
-<a name='L638'></a><a href='#L638'>638</a>
-<a name='L639'></a><a href='#L639'>639</a>
-<a name='L640'></a><a href='#L640'>640</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L632'></a><a href='#L632'>632</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -749,9 +741,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1215,11 +1204,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1356,50 +1340,42 @@ import ReactMapG<span class="cstat-no" title="statement not covered" >L, {</span
 impo<span class="cstat-no" title="statement not covered" >rt { Box, useTheme } from '@mui/material';</span>
 import<span class="cstat-no" title="statement not covered" > { Icon } from '@terraware/web-components';</span>
 import c<span class="cstat-no" title="statement not covered" >entroid from '@turf/centro<span class="fstat-no" title="function not covered" >id</span>';<span class="cstat-no" title="statement not covered" ></span></span>
-/**
- *<span class="cstat-no" title="statement not covered" > The follow</span>ing is needed to deal with a mapbox bug
- * See: https://docs.mapbox.com/mapbox-gl-js/guides/install/#transpiling
- */<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-&nbsp;
+<span class="cstat-no" title="statement not covered" ></span>
 import { useIsVisible } from 'src/hooks/useIsVisible';
-import { MapService } from 'src/services';
+import { MapSe<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >rv</span>ice } from 'src/services';<span class="cstat-no" title="statement not covered" ></span></span>
 import {
   MapControl,
-  MapEntityId,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  MapEntityOptions,<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  MapGeometry,</span>
-  MapOption<span class="fstat-no" title="function not covered" >s,<span class="cstat-no" title="statement not covered" ></span></span>
+  MapEntityId,
+  MapEntityOptions,
+  MapGeometry,
+  MapOptions,
   MapPopupRenderer,
-<span class="cstat-no" title="statement not covered" >  MapViewStyle,</span>
+  MapViewStyle,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
   MapViewStyles,<span class="cstat-no" title="statement not covered" ></span>
-  PopupInfo,<span class="cstat-no" title="statement not covered" ></span>
-} from 'src/types/Map'<span class="cstat-no" title="statement not covered" >;</span>
-import useSnackbar from 'src<span class="cstat-no" title="statement not covered" >/utils/useSnackbar';</span>
+<span class="cstat-no" title="statement not covered" >  PopupInfo,</span>
+} from 'src<span class="fstat-no" title="function not covered" >/t</span>ypes<span class="cstat-no" title="statement not covered" >/Map</span>';
+import useSnackbar from 'src/utils/useSnackbar';
 <span class="cstat-no" title="statement not covered" ></span>
-import { useMaintainLay<span class="cstat-no" title="statement not covered" >erOrder } from '../NewMap/useM</span>aintainLayerOrder';
-import MapBanner from '.<span class="cstat-no" title="statement not covered" >/MapBanner';</span>
-import MapViewStyleControl<span class="cstat-no" title="statement not covered" >, { useMapViewStyle } from './MapV</span>iewStyleControl';
-import { getMapDrawing<span class="cstat-no" title="statement not covered" >Layer } from './utils';</span>
+import { useMaintai<span class="cstat-no" title="statement not covered" >nLayerOrder } from '../New</span>Map/useMaintainLayerOrder';
+import MapBanner fro<span class="cstat-no" title="statement not covered" >m './MapBanner';</span>
+import MapViewStyleCon<span class="cstat-no" title="statement not covered" >trol, { useMapViewStyle }</span> from './MapViewStyleControl';
+import { getMapDrawingLayer <span class="cstat-no" title="statement not covered" >} from './utils';</span>
 <span class="cstat-no" title="statement not covered" ></span>
-const mapboxImpl: any = m<span class="cstat-no" title="statement not covered" >apboxgl;</span>
-mapboxImpl.workerClass = require('w<span class="cstat-no" title="statement not covered" >orker-loader!mapbox-gl/dist/mapbox-gl-csp-w</span>orker').default; /* eslint-disable-line */
+type FeatureStateId = R<span class="cstat-no" title="statement not covered" >ecord&lt;string, Record&lt;string, number | un</span>defined&gt;&gt;;
 <span class="cstat-no" title="statement not covered" ></span>
-type FeatureStateId = Record&lt;stri<span class="cstat-no" title="statement not covered" >ng, Record&lt;string, number | undefined&gt;&gt;;</span>
-<span class="cstat-no" title="statement not covered" ></span>
-export type MapImag<span class="cstat-no" title="statement not covered" >e = {</span>
-<span class="cstat-no" title="statement not covered" >  name: string;</span>
+export type MapImage =<span class="cstat-no" title="statement not covered" > {</span>
+  name: string;<span class="cstat-no" title="statement not covered" ></span>
   url: string;<span class="cstat-no" title="statement not covered" ></span>
-};
-&nbsp;
-const navControlStyle = {
-  marginR<span class="fstat-no" title="function not covered" >ight</span>: '5px',
-  marginBottom: '20px',
+};<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+const navControlStyle = {<span class="cstat-no" title="statement not covered" ></span>
+  marginRight: '5px<span class="cstat-no" title="statement not covered" >',</span>
+  marginBottom: '20px',<span class="cstat-no" title="statement not covered" ></span>
 };
 &nbsp;
 export type MapProps = {
-  token: string;
+  token: <span class="fstat-no" title="function not covered" >stri</span>ng;
   options: MapOptions;
   onTokenExpired?: () =&gt; void;
   popupRenderer?: MapPopupRenderer;
@@ -1415,277 +1391,277 @@ export type MapProps = {
   entityOptions?: MapEntityOptions;
   mapImages?: MapImage[];
   showSiteMarker?: boolean;
-  laye<span class="cstat-no" title="statement not covered" >rIdOrd</span>er?: string[];
-} &amp; MapControl;<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span>
-export default function Map(props:<span class="cstat-no" title="statement not covered" > MapProps): JSX.Element {</span>
-  const {<span class="cstat-no" title="statement not covered" ></span>
-    token,<span class="cstat-no" title="statement not covered" ></span>
-    onTokenExpired,<span class="cstat-no" title="statement not covered" ></span>
+  layerIdOrder?: string[];
+} &amp; MapControl;
+&nbsp;
+export default function Map(props: MapProps): JSX.Element {
+  const {
+    to<span class="cstat-no" title="statement not covered" >ken,</span>
+    onTokenExpir<span class="cstat-no" title="statement not covered" >ed,</span>
     options,<span class="cstat-no" title="statement not covered" ></span>
     popupRenderer,<span class="cstat-no" title="statement not covered" ></span>
-    mapId,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-    style,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-    bannerMessage,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-    bottomRightLabel,<span class="cstat-no" title="statement not covered" ></span>
+    mapId,<span class="cstat-no" title="statement not covered" ></span>
+    style,<span class="cstat-no" title="statement not covered" ></span>
+    bannerMessage,<span class="cstat-no" title="statement not covered" ></span>
+    bottomRightLa<span class="cstat-no" title="statement not covered" >bel,</span>
     entityOptions,<span class="cstat-no" title="statement not covered" ></span>
-    mapImages,<span class="cstat-no" title="statement not covered" ></span>
-    hideFullScreen,<span class="cstat-no" title="statement not covered" ></span>
-    topRightMapCon<span class="cstat-no" title="statement not covered" >trol,</span>
-    bottomLeftMapCo<span class="cstat-no" title="statement not covered" >ntrol,</span>
-<span class="cstat-no" title="statement not covered" >    hideAllControls,</span>
-<span class="cstat-no" title="statement not covered" >    disableZoom,<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >    mapViewStyl<span class="fstat-no" title="function not covered" >e:</span> ini<span class="cstat-no" title="statement not covered" >tialMapViewStyle<span class="fstat-no" title="function not covered" >,<span class="cstat-no" title="statement not covered" ></span></span></span></span>
-    showSiteMarker,
+    mapImages,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+    hideFullScreen,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+    topRightMapControl,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+    bottomLeftMapControl,<span class="cstat-no" title="statement not covered" ></span>
+    hideAllControls,<span class="cstat-no" title="statement not covered" ></span>
+    disableZoom,<span class="cstat-no" title="statement not covered" ></span>
+    mapViewStyle: initialMapViewStyle,<span class="cstat-no" title="statement not covered" ></span>
+    showSiteMarker<span class="cstat-no" title="statement not covered" >,</span>
     layerIdOrder,<span class="cstat-no" title="statement not covered" ></span>
-  } <span class="fstat-no" title="function not covered" >= </span>props;
-  cons<span class="cstat-no" title="statement not covered" >t theme = useTheme();<span class="fstat-no" title="function not covered" ></span></span>
-  const <span class="cstat-no" title="statement not covered" >[geoData, setGeoData] = useState&lt;any[]&gt;();</span>
-  const [l<span class="cstat-no" title="statement not covered" >ayerIds, setLayerId<span class="fstat-no" title="function not covered" >s]</span> = useState&lt;string[]&gt;([]);</span>
-  const [popupInfo, setPopupInfo] = useState&lt;PopupInfo | null&gt;(null);
-  const [def<span class="cstat-no" title="statement not covered" >erredHighlightEntity, setDeferredHighlightEntity] = useState&lt;MapEntityId[] | undefined&gt;();</span>
-  const [defer<span class="cstat-no" title="statement not covered" >redFocusEntity, setDeferredFocusEntity] = useState&lt;MapEntityId[] | undefined&gt;();</span>
-  const mapRef = useRef&lt;MapRef | null&gt;(null);
-  const contai<span class="cstat-no" title="statement not covered" >nerRef = useRef(null);</span>
+<span class="cstat-no" title="statement not covered" >  } = props;</span>
+<span class="cstat-no" title="statement not covered" >  const theme = useTheme();<span class="fstat-no" title="function not covered" ></span></span>
+  co<span class="cstat-no" title="statement not covered" >nst [geoDat<span class="fstat-no" title="function not covered" >a,</span> set<span class="cstat-no" title="statement not covered" >GeoData] = useSt<span class="fstat-no" title="function not covered" >at</span>e&lt;any[<span class="cstat-no" title="statement not covered" >]&gt;();</span></span></span>
+  const [layerIds, setLayerIds] = useState&lt;string[]&gt;([]);
+  const [popupInfo, s<span class="cstat-no" title="statement not covered" >etPopupInfo] = useState&lt;PopupInfo | null&gt;(null);</span>
+  co<span class="fstat-no" title="function not covered" >ns</span>t [deferredHighlightEntity, setDeferredHighlightEntity] = useState&lt;MapEntityId[] | undefined&gt;();
+  cons<span class="cstat-no" title="statement not covered" >t [deferredFocusEntity, setDeferredFocusEntity]<span class="fstat-no" title="function not covered" > =</span> useState&lt;MapEntityId[] | undefined&gt;();</span>
+  const <span class="cstat-no" title="statement not covered" >mapRef = useRef&lt;MapRef | null&gt;(null);</span>
+  const co<span class="cstat-no" title="statement not covered" >ntainerRef = useRef<span class="fstat-no" title="function not covered" >(n</span>ull);</span>
   const hoverStateId: FeatureStateId = useMemo(() =&gt; ({}), []);
-  const selectStateId: FeatureStateId = useMemo(() =&gt; ({}), []);
-  const highlightStateId: FeatureStateId = useMemo(() =&gt; ({}), []);
+  const sele<span class="cstat-no" title="statement not covered" >ctStateId: FeatureStateId = useMemo(() =&gt; ({}), []);</span>
+  const highli<span class="cstat-no" title="statement not covered" >ghtStateId: FeatureStateId = useMemo(() =&gt; ({}), []);</span>
   const [firstVisible, setFirstVisible] = useState&lt;boolean&gt;(false);
-  const [resized, setResized] = useState&lt;boolean&gt;(false);
+  const [resiz<span class="cstat-no" title="statement not covered" >ed, setResized] = useState&lt;boolean&gt;(false)</span>;
   const [mapViewStyle, onChangeMapViewStyle] = useMapViewStyle(initialMapViewStyle);
   const [reloadSources, setReloadSources] = useState(false);
-  const visible = u<span class="cstat-no" title="statement not covered" >seIsVisible(containerRef);</span>
-  co<span class="fstat-no" title="function not covered" >ns</span>t snackbar = useSnackbar();
-<span class="cstat-no" title="statement not covered" ></span>
-  useMai<span class="cstat-no" title="statement not covered" >ntainLayerOrder(mapRef</span>, layerIdOrder ?? []);
-<span class="cstat-no" title="statement not covered" ></span>
-  useEffect(() =&gt; {
-    // `firstVisible` detects when the box containing the map is first visible in the viewport. The map should only be
-    // rendered if `firstVisible` is true. This accounts for cases in which the map is initially rendered hidden, and
-    // is improperly resized when it first becomes visible.
-<span class="cstat-no" title="statement not covered" >    // A timeout was added to <span class="fstat-no" title="function not covered" >fi</span>x non-static height maps, which were also improperly resized on initial render.</span>
-    setTimeout(() =&gt; setFirstVi<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >si</span>ble((fv) =&gt; fv || visible), 200);</span>
-  }, [<span class="cstat-no" title="statement not covered" >visible]);</span>
-<span class="cstat-no" title="statement not covered" ></span>
+  const visible = useIsVisible(containerRef);
+  const snackbar = useSnackbar();
+&nbsp;
+  useMaintainLayerOrder(mapRef, layerIdOrder ?? []);
+&nbsp;
+  useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" >    //</span> `firstVisible` detects when the box containing the map is first visible in the viewport. The map should only be
+    //<span class="cstat-no" title="statement not covered" > rendered if `firstVisible` is true. This accounts for cases in which the map is initially rendered hidden, and</span>
+    // i<span class="cstat-no" title="statement not covered" >s improperly resized w</span>hen it first becomes visible.
+    // A<span class="cstat-no" title="statement not covered" > timeout was adde</span>d to fix non-static height maps, which were also improperly resized on initial render.
+    setTimeout(() =&gt; setFirstVisible((fv) =&gt; fv || visible), 200);
+  }, [visible]);
+&nbsp;
   const loadImages = useCallback(
-    (map: MapRef) =&gt; {
-<span class="cstat-no" title="statement not covered" >      mapImages?.forEach(({ name, url }) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >        if <span class="fstat-no" title="function not covered" >(!</span>map.hasImage(name)) {</span>
-<span class="cstat-no" title="statement not covered" >          map.loadImage(url, (error, image) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    (map: MapRef) =&gt; {<span class="fstat-no" title="function not covered" ></span></span>
+      mapImages?.forEach(({ nam<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >e,</span> url }) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        if (!map.hasImage(name)) {</span>
+<span class="cstat-no" title="statement not covered" >          map.loadImage(url,</span> (error, image) =&gt; {
             if (error || !image) {
               snackbar.toastError(error?.message ?? 'Error loading map image.');
-            } else {<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" ></span>              map.addImage(name, image, { sdf: true });
-            }
-<span class="cstat-no" title="statement not covered" >          });</span>
-<span class="cstat-no" title="statement not covered" >        }</span>
-      })<span class="cstat-no" title="statement not covered" >;</span>
-    },<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >            } else {</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span>              map.addImage(name, image, { sdf: true });</span>
+<span class="cstat-no" title="statement not covered" >            }</span>
+          });
+        }
+      });<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" >    },</span>
     [mapImages, snackbar]
-  );
-&nbsp;
-  const mapRefCb = useCallback(
-    (map: MapRef | null) =&gt; {
-      if (map !== null) {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-        mapRef.c<span class="cstat-no" title="statement not covered" >urrent = map;</span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >        // Load all needed map images here<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >        // It is done in the callbackRef to ensure the images are available quickly enough for the map layers to use</span>
-        //<span class="cstat-no" title="statement not covered" > See https://github.com/visgl/react-map-gl/issues/1118#issuecomment-1139976172</span>
-        loadImages(map);
-      }
-    },<span class="cstat-no" title="statement not covered" ></span>
-    [loadImages]
-  );
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  useEffect(() =<span class="cstat-no" title="statement not covered" >&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    const handleClickOutside = (event: MouseEvent) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >      // Check</span> if click is outside the map container
-      if (popupInfo &amp;&amp; mapRef.current &amp;&amp; !mapRef.current.getContainer().contains(event.target as Node)) {
-<span class="cstat-no" title="statement not covered" >        setPopupInfo(null);</span>
-<span class="cstat-no" title="statement not covered" >      }<span class="fstat-no" title="function not covered" ></span></span>
-    };<span class="cstat-no" title="statement not covered" ></span>
-    do<span class="cstat-no" title="statement not covered" >cument.addEventListener('click', handleClickOutside);</span>
-    retu<span class="cstat-no" title="statement not covered" >rn () =&gt; {</span>
-      document.removeEventListener('click', handleClickOutside);
-    };<span class="cstat-no" title="statement not covered" ></span>
-  }, [po<span class="cstat-no" title="statement not covered" >pupInfo]);</span>
+  );<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const onMapError = useCallback(
-    (event: any) =&gt; {
-      if (event?.error?.status === 401) {
-        // eslint-dis<span class="cstat-no" title="statement not covered" >able-next-line no-console</span>
-<span class="fstat-no" title="function not covered" ></span>        console.error('Mapbox token expired');
-        if (onTokenExpired) {
-          onTokenExpired();<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >        }</span>
+  const <span class="cstat-no" title="statement not covered" >mapRefCb = useCallback(</span>
+    (map: <span class="cstat-no" title="statement not covered" >MapRef | null) =&gt; </span>{
+      if (map !== null) {
+        mapRef.current = map;
+&nbsp;
+        // Load all needed map images here
+        // It is done in the callbackRef to ensure the images are available quickly enough for the map layers to use
+        // See https://git<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >hu</span>b.com/visgl/react-map-gl/issues/1118#issuecomment-1139976172</span>
+        loadImag<span class="cstat-no" title="statement not covered" >es(map);</span>
+<span class="cstat-no" title="statement not covered" >      }<span class="fstat-no" title="function not covered" ></span></span>
+    },<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+    [loa<span class="cstat-no" title="statement not covered" >dImages]</span>
+  );<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
+  useEffect(() =&gt; {
+    co<span class="cstat-no" title="statement not covered" >nst handleClickOutside = (eve</span>nt: MouseEvent) =&gt; {
+      // Check if click is outside the map container
+      if (popupInfo &amp;&amp; mapRef.current &amp;&amp; !mapRef.current.getContainer().contains(event.target as Node)) {
+        setPopupInfo(null);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
       }<span class="cstat-no" title="statement not covered" ></span>
-    },<span class="cstat-no" title="statement not covered" ></span>
-    [onT<span class="cstat-no" title="statement not covered" >okenExpired]</span>
-  );
-&nbsp;
-  const clearFeatureVar = (featureVar: any, property?: string) =&gt; {
-    const map: any = mapRef &amp;&amp; mapRef.current;
-&nbsp;
-    Obje<span class="cstat-no" title="statement not covered" >ct.keys(featureVar).forEach((sourceId) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    };</span>
+    do<span class="cstat-no" title="statement not covered" >cument.a</span>ddEventListener('click', handleClickOutside);
+    return () =&gt; {
+<span class="cstat-no" title="statement not covered" >      document.removeEventListener('click',</span> handleClickOutside);
+<span class="cstat-no" title="statement not covered" >    };<span class="fstat-no" title="function not covered" ></span></span>
+  }, [popupInfo]);<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+  const <span class="cstat-no" title="statement not covered" >onMapError = useCallback(</span>
+    (event: any) =&gt; {
+<span class="cstat-no" title="statement not covered" >      if (event?.error?.status === 401) {</span>
+<span class="cstat-no" title="statement not covered" >        // eslint-disable-next-line no-console</span>
+<span class="cstat-no" title="statement not covered" >        console.error('Mapbox token exp</span>ired');
+        if (onTokenExpired) {
+          onTokenExpired();
+        }
+      }<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" >    },</span>
+    [onTokenExpired]
+  );<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+  const clearFeatureVar = (featureVar: any<span class="cstat-no" title="statement not covered" >, property?: strin</span>g) =&gt; {
+    const map: any = mapR<span class="cstat-no" title="statement not covered" >ef &amp;&amp; mapRef.current;</span>
+<span class="cstat-no" title="statement not covered" ></span>
+    Object.keys(featureVar).forEach((sourceId) =&gt; {
       Object.keys(featureVar[sourceId]).forEach((id) =&gt; {
         if (map &amp;&amp; property) {
           map.setFeatureState({ source: sourceId, id: featureVar[sourceId][id] }, { [property]: false });
         }
-      });<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" ></span>      delete featureVar[sourceId];
-    })<span class="cstat-no" title="statement not covered" >;</span>
-  };<span class="cstat-no" title="statement not covered" ></span>
+      })<span class="cstat-no" title="statement not covered" >;</span>
+      delete featureVar[sourceId];
+    });
+  };
 &nbsp;
-  const updateFeat<span class="cstat-no" title="statement not covered" >ureState = useCallback((featureVar: any, </span>property: string, mapEntityId: MapEntityId[]) =&gt; {
-    co<span class="cstat-no" title="statement not covered" >nst map: any = mapRef &amp;&amp; mapRef.current;</span>
-    if (<span class="cstat-no" title="statement not covered" >!map) {</span>
-      return;
-    }<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-    // c<span class="cstat-no" title="statement not covered" >lear previous features of this property</span>
-    clearF<span class="cstat-no" title="statement not covered" >eatureVa</span>r(featureVar, property);
+  const updateFeatureS<span class="cstat-no" title="statement not covered" >tate = useCallback((featureVar: any, property: string, mapEntityId: MapEntityId[]) =&gt; {</span>
+<span class="fstat-no" title="function not covered" >    co</span>nst map: any = mapRef &amp;&amp; mapRef.current;
+    if<span class="cstat-no" title="statement not covered" > (!map) {</span>
+      re<span class="cstat-no" title="statement not covered" >turn;</span>
+    }
+<span class="cstat-no" title="statement not covered" ></span>
+    //<span class="cstat-no" title="statement not covered" > clear previous features of this property</span>
+    clea<span class="cstat-no" title="statement not covered" >rFeature</span>Var(featureVar, property);
 &nbsp;
-    // set new<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-    mapE<span class="cstat-no" title="statement not covered" >ntityId.forEach((entity) =&gt; {</span>
-      cons<span class="cstat-no" title="statement not covered" >t { id, </span>sourceId } = entity;
-      if (!featureVar[sourceId]) {
-        featureVar[source<span class="cstat-no" title="statement not covered" >Id] = {};<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-      }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-      if (<span class="cstat-no" title="statement not covered" >id) {</span>
-        map.setFeatureState({ source: sourceId, id }, { [property]: true });
+    // set new<span class="cstat-no" title="statement not covered" ></span>
+    ma<span class="cstat-no" title="statement not covered" >pEntityId.forEach(<span class="fstat-no" title="function not covered" >(e</span>ntity) =&gt; {</span>
+      co<span class="cstat-no" title="statement not covered" >nst { id, sourceId } = entity;</span>
+      if (<span class="cstat-no" title="statement not covered" >!feature</span>Var[sourceId]) {
+        featureVar[sourceId] = {};
+      }<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+      if<span class="cstat-no" title="statement not covered" > (id) {</span>
+        ma<span class="cstat-no" title="statement not covered" >p.setFea</span>tureState({ source: sourceId, id }, { [property]: true });
         featureVar[sourceId][id] = id;
-<span class="cstat-no" title="statement not covered" >      }</span>
-    });<span class="cstat-no" title="statement not covered" ></span>
-  }, [])<span class="cstat-no" title="statement not covered" >;<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" ></span>
+      }<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+    });<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  }, []);<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
   const onMapClick = useCallback(
-    (event: any) =&gt; {
-      const { lat, lng } = event.lngLat;
-      if (event?.features?.[0]?.properties) {
-        const { id, properties, layer } = event.features[0];
-        const source<span class="cstat-no" title="statement not covered" >Id = layer.id.replace(/-fill$/<span class="fstat-no" title="function not covered" >, </span>'');</span>
-        setPopup<span class="cstat-no" title="statement not covered" >Info({</span>
-<span class="cstat-no" title="statement not covered" >          lng,</span>
+    (e<span class="cstat-no" title="statement not covered" >vent: any) =&gt; {</span>
+      const { lat, ln<span class="cstat-no" title="statement not covered" >g } = event.lngLat;</span>
+      if<span class="cstat-no" title="statement not covered" > (event?.fe<span class="fstat-no" title="function not covered" >at</span>ures?.[0]?.properties) {</span>
+        co<span class="cstat-no" title="statement not covered" >nst { id, properties, layer } = event.features[0];</span>
+        const sourceId = layer.id.replace(/-fill$/, '');
+        setPopupInfo({
+          lng,
           lat,
-<span class="cstat-no" title="statement not covered" >          properties,<span class="fstat-no" title="function not covered" ></span></span>
-          source<span class="cstat-no" title="statement not covered" >Id,</span>
-<span class="cstat-no" title="statement not covered" >        });</span>
-<span class="cstat-no" title="statement not covered" >        update</span>FeatureState(selectStateId, 'select', [{ sourceId, id }]);
-      }
-    },<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >    [updateFeatureState, selectStat</span>eId]
-  );<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span>
-  cons<span class="cstat-no" title="statement not covered" >t drawFocusTo = useCallback(</span>
-    (mapEntity: MapEntityId[]) =&gt; {
-      if (mapEntity.length &lt;= 0<span class="cstat-no" title="statement not covered" >) {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span>
-        return;<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >      }</span>
-      const map: an<span class="fstat-no" title="function not covered" >y </span>= mapRef?.current;
-      if (<span class="cstat-no" title="statement not covered" >!map) {</span>
-        retu<span class="cstat-no" title="statement not covered" >rn;</span>
-      }
-      const coordinates:<span class="cstat-no" title="statement not covered" > MapGeometry = []</span>;
-      mapE<span class="cstat-no" title="statement not covered" >ntity.forEach((entity) =&gt; {</span>
-        if (!entity.id || !entity.sourceId) {
-          return;
-        }
-        const foundSource = geoD<span class="cstat-no" title="statement not covered" >ata &amp;&amp; geoData.<span class="fstat-no" title="function not covered" >fi</span>nd((geo) =<span class="cstat-no" title="statement not covered" >&gt; geo.id === entity.s</span>ource<span class="fstat-no" title="function not covered" >Id</span>);</span>
-        if (!foundSour<span class="cstat-no" title="statement not covered" >ce || !foundSource.d</span>ata) {
-<span class="cstat-no" title="statement not covered" >          return;</span>
-        }<span class="fstat-no" title="function not covered" ></span>
-        co<span class="cstat-no" title="statement not covered" >nst features = foundSource.data.features.filter((featureData: any) =&gt; </span>featureData.id === entity.id);
-        features.forEach((feature: any) =&gt; {
-          coordinates.push(feature.geometry.coordinates);
-        });
-<span class="cstat-no" title="statement not covered" >      });<span class="fstat-no" title="function not covered" ></span></span>
-      if (coordinates.<span class="cstat-no" title="statement not covered" >length &gt; 0) {</span>
-<span class="cstat-no" title="statement not covered" >        const bbox = MapService.getBoundingBox([c</span>oordinates]);
-        // this is a hack to allow zooming to geometry while data is being updated, otherwise the zoom was not taking effect
-<span class="cstat-no" title="statement not covered" >        setTimeout(() =&gt; {<span class="fstat-no" title="function not covered" ></span></span>
-          map.fitBound<span class="cstat-no" title="statement not covered" >s([bbox.lowerLeft, </span>bbox.upperRight], { padding: 20, linear: true });
-<span class="cstat-no" title="statement not covered" >        }, 0);</span>
+          properties,
+          sourceId,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+        });<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >        updateFeatureState(selectStateId, 'select', [{ sourceId, id }]);</span>
       }
 <span class="cstat-no" title="statement not covered" >    },<span class="fstat-no" title="function not covered" ></span></span>
-    [g<span class="cstat-no" title="statement not covered" >eoData]<span class="fstat-no" title="function not covered" ></span></span>
+    [updateFeatu<span class="cstat-no" title="statement not covered" >reState, selectStateId]</span>
+  );<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+  const drawFocusTo = useCallback(
+    (mapEntity: MapEntit<span class="cstat-no" title="statement not covered" >yId[]) =</span>&gt; {
+<span class="cstat-no" title="statement not covered" >      if (mapEntity.length &lt;= 0) {</span>
+<span class="cstat-no" title="statement not covered" >        return;</span>
+<span class="cstat-no" title="statement not covered" >      }</span>
+<span class="cstat-no" title="statement not covered" >      const map: any = mapRef?.current</span>;
+      if (!map) {
+        return;<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span>
+      }<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >      const coordinates: MapGeometry = [];</span>
+      mapEntity.for<span class="fstat-no" title="function not covered" >Ea</span>ch((entity) =&gt; {
+        if<span class="cstat-no" title="statement not covered" > (!entity.id || !entity.sourceId) {</span>
+          re<span class="cstat-no" title="statement not covered" >turn;</span>
+        }
+        const foundSourc<span class="cstat-no" title="statement not covered" >e = geoData &amp;&amp; ge</span>oData.find((geo) =&gt; geo.id === entity.sourceId);
+        if<span class="cstat-no" title="statement not covered" > (!foundSource || !foundSource.data) {</span>
+          return;
+        }
+        const features = foundSource.data.features.filter((featureData: any) =&gt; featureData.id === entity.id);
+        features.forEach((featur<span class="cstat-no" title="statement not covered" >e: any) =&gt; {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span>
+          coordinates.<span class="cstat-no" title="statement not covered" >push(feature.geometr</span>y.coordinates);
+<span class="cstat-no" title="statement not covered" >        });</span>
+      });<span class="fstat-no" title="function not covered" ></span>
+      if (<span class="cstat-no" title="statement not covered" >coordinates.length &gt; 0) {</span>
+        const bbox = MapService.getBoundingBox([coordinates]);
+        // this is a hack to allow zooming to geometry while data is being updated, otherwise the zoom was not taking effect
+        setTimeout(() =&gt; {
+<span class="cstat-no" title="statement not covered" >          map.fitBounds([bbox.l<span class="fstat-no" title="function not covered" >ow</span>erLeft, bbox.upperRight], { padding: 20, linear: true });</span>
+        }, 0);<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >      }</span>
+    },
+<span class="cstat-no" title="statement not covered" >    [geoData]<span class="fstat-no" title="function not covered" ></span></span>
   );<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
   const zoomToFit = useCallback(() =&gt; {
-    co<span class="cstat-no" title="statement not covered" >nst map: any = mapRef?.curre<span class="fstat-no" title="function not covered" >nt</span>;</span>
-    map?.fitBounds([opti<span class="cstat-no" title="statement not covered" >ons.bbox.lowerLeft,</span> options.bbox.upperRight], { padding: 20, linear: true });
-  }, [op<span class="cstat-no" title="statement not covered" >tions.bbox.lowerLeft, options.bbox.upperRight</span>]);
-&nbsp;
-  useEffect(() =&gt; {
-    const map: any = mapRef &amp;&amp; mapRef.current;
-    if (!map) {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >      return;</span>
-    }<span class="cstat-no" title="statement not covered" ></span>
-    co<span class="cstat-no" title="statement not covered" >nst { sources } = options;</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    clearFeatureVar(hoverStateId);</span>
-    cl<span class="cstat-no" title="statement not covered" >earFeatureVar(highlightStateId);</span>
-    if<span class="cstat-no" title="statement not covered" > (!popupInfo) {</span>
-      // don't clear select state if popup is open
-      clearFeatureVar(selectStateId);
-<span class="cstat-no" title="statement not covered" >    }<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    const m<span class="fstat-no" title="function not covered" >ap</span>: any = mapRef?.current;</span>
+    ma<span class="cstat-no" title="statement not covered" >p?.fitBounds([options.bbox.<span class="fstat-no" title="function not covered" >lo</span>werLeft, options.bbox.upperRight], { padding: 20, linear: true });</span>
+  }, [options.bbox.lower<span class="cstat-no" title="statement not covered" >Left, options.bbox.</span>upperRight]);
 <span class="cstat-no" title="statement not covered" ></span>
-    const mouseM<span class="cstat-no" title="statement not covered" >oveCallbacks<span class="fstat-no" title="function not covered" > =</span> sources</span>
-      .filter((source) <span class="cstat-no" title="statement not covered" >=&gt; source.isInteract<span class="fstat-no" title="function not covered" >iv</span>e)</span>
-      .map((source) =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >        const layerId = `${source.id}-fill`;</span>
-        re<span class="cstat-no" title="statement not covered" >turn {</span>
-          [layerId]: (e: any) =&gt; {
-<span class="cstat-no" title="statement not covered" >            if (!e.features.lengt<span class="fstat-no" title="function not covered" >h </span>|| !e.features[0]<span class="cstat-no" title="statement not covered" >.properties) {</span></span>
-              return;
-            }
-            const newId = e.features[0].id;
+  useEffect(() =&gt; {
+    co<span class="cstat-no" title="statement not covered" >nst map: any = mapRef &amp;&amp; map<span class="fstat-no" title="function not covered" >Re</span>f.current;</span>
+    if (!map) {<span class="cstat-no" title="statement not covered" ></span>
+      re<span class="cstat-no" title="statement not covered" >turn;</span>
+    }
+    const { sources } = options;
+&nbsp;
+    clearFeatureV<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ar</span>(hoverStateId);</span>
+<span class="cstat-no" title="statement not covered" >    clearFeatureVar(highlightStateId);</span>
+    if<span class="cstat-no" title="statement not covered" > (!popupInfo) {</span>
+<span class="cstat-no" title="statement not covered" >      // don't clear select state if popup</span> is open
+      clearFeatureVar(selectStateId);
+<span class="cstat-no" title="statement not covered" >    }</span>
+<span class="cstat-no" title="statement not covered" ></span>
+    co<span class="cstat-no" title="statement not covered" >nst mouseMoveCallbacks = sources</span>
+      .filter((source) =&gt; source.isInteractive)
+      .map((source) =&gt; {
+<span class="cstat-no" title="statement not covered" >        const layerId = `${sou<span class="fstat-no" title="function not covered" >rc</span>e.id}-fill`;</span>
+        return {<span class="cstat-no" title="statement not covered" ></span>
+          [layer<span class="cstat-no" title="statement not covered" >Id]: (e: any<span class="fstat-no" title="function not covered" >) </span>=&gt; {</span>
+            if (!e.feat<span class="cstat-no" title="statement not covered" >ures.length || !e.fe<span class="fstat-no" title="function not covered" >at</span>ures[0].properties) {</span>
+              return;<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >            }</span>
+<span class="cstat-no" title="statement not covered" >            const newId</span> = e.features[0].id;
             updateFeatureState(hoverStateId, 'hover', [{ sourceId: source.id, id: newId }]);
-          },
+<span class="cstat-no" title="statement not covered" >          },<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
         };
       });
 &nbsp;
-    const mouseL<span class="fstat-no" title="function not covered" >ea</span>veCal<span class="cstat-no" title="statement not covered" >lb</span>acks = so<span class="fstat-no" title="function not covered" >ur</span>ces<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >      .filter((source) =&gt; source.isInteractive)</span>
+    const mouseLeaveCallbacks = sources
+      .filter((source) =&gt; source.isInteractive)
       .map((source) =&gt; {
         const layerId = `${source.id}-fill`;
         return {
-          [lay<span class="fstat-no" title="function not covered" >er</span>Id]: <span class="cstat-no" title="statement not covered" >()</span> =&gt; {
-<span class="cstat-no" title="statement not covered" >            updateFea</span>tureState(hoverStateId, 'hover', [{ sourceId: source.id }]);
-<span class="cstat-no" title="statement not covered" >          },</span>
-<span class="cstat-no" title="statement not covered" >        };<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
+          [layer<span class="fstat-no" title="function not covered" >Id</span>]: ()<span class="cstat-no" title="statement not covered" > =</span>&gt; {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >            updateFeatureState(hoverStateId, 'hover', [{ sourceId: source.id }]);</span>
+          },
+        };
       });
-&nbsp;
-    mouseMoveCallback<span class="cstat-no" title="statement not covered" >s.forEach((cb) =&gt; {<span class="fstat-no" title="function not covered" ></span></span>
-      const layerId = Object.keys(cb)[0];
-<span class="cstat-no" title="statement not covered" >      map.on('mousemove', layerId, cb[layerId]);</span>
-    })<span class="cstat-no" title="statement not covered" >;</span>
-    mouseLeaveCallbacks.forEach((cb) =&gt; {
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    mouseMoveCallback</span>s.forEach((cb) =&gt; {
 <span class="cstat-no" title="statement not covered" >      const layerId = Object.keys(cb)[0];</span>
-<span class="cstat-no" title="statement not covered" >      map.on('mouse</span>leave', layerId, cb[layerId]);
+<span class="cstat-no" title="statement not covered" >      map.on('mousemove', lay<span class="fstat-no" title="function not covered" >er</span>Id, c<span class="cstat-no" title="statement not covered" >b[layerId]);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span>
     });
+    mouseLeaveCallbacks.forEach((cb) =&gt; {
+      const layerId =<span class="cstat-no" title="statement not covered" > Object.keys(cb)[0];<span class="fstat-no" title="function not covered" ></span></span>
+      map.on('mouseleave', layerId, cb[layerId]);
+<span class="cstat-no" title="statement not covered" >    });</span>
 <span class="cstat-no" title="statement not covered" ></span>
-    return () =&gt; {<span class="cstat-no" title="statement not covered" ></span>
+    return () =&gt; {
 <span class="cstat-no" title="statement not covered" >      mouseMoveCallbacks.forEach((cb) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >        const layerId = Object.keys<span class="fstat-no" title="function not covered" >(c</span>b)[0];<span class="cstat-no" title="statement not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >        const layer</span>Id = Object.keys(cb)[0];
         map.off('mousemove', layerId, cb[layerId]);
-      });<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-<span class="cstat-no" title="statement not covered" >      mouseLeaveCall</span>backs.forEach((cb) =&gt; {
-        const layerId = Object.keys(cb)[0];
-        map.off('mouseleave<span class="cstat-no" title="statement not covered" >', layerId, cb[layerId]);<span class="fstat-no" title="function not covered" ></span></span>
+      });<span class="cstat-no" title="statement not covered" ></span>
+      mouseLeaveCallba<span class="cstat-no" title="statement not covered" >cks.forE</span>ach((cb) =&gt; {
+<span class="cstat-no" title="statement not covered" >        const layerId = Object.keys(cb)[0];</span>
+<span class="cstat-no" title="statement not covered" >        map.off('mouseleave', layer<span class="fstat-no" title="function not covered" >Id</span>, cb[la<span class="cstat-no" title="statement not covered" >yerId]);</span></span>
       });
-<span class="cstat-no" title="statement not covered" >    };</span>
-  }, [<span class="cstat-no" title="statement not covered" >options, high</span>lightStateId, selectStateId, hoverStateId, popupInfo, updateFeatureState]);
+    };<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  },<span class="cstat-no" title="statement not covered" > [options, highl</span>ightStateId, selectStateId, hoverStateId, popupInfo, updateFeatureState]);
 &nbsp;
-  const onLoad =<span class="cstat-no" title="statement not covered" > () =&gt; {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-    if (deferredHig<span class="cstat-no" title="statement not covered" >hlightEntity) {</span>
-      updateFeatureState(highlight<span class="cstat-no" title="statement not covered" >StateId, 'highlight', deferr</span>edHighlightEntity);
-<span class="cstat-no" title="statement not covered" >      setDeferredHighlightEntity(undefined);</span>
+  const onLoad = () =&gt; {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+    if (deferredHighlightEntity) {
+<span class="cstat-no" title="statement not covered" >      updateFeatureState(highlightStateId, 'highlight', deferredHighlightEntity);</span>
+<span class="cstat-no" title="statement not covered" >      setDeferredHi</span>ghlightEntity(undefined);
     }
-    if (deferredFocusEntity) {
-      drawFocusTo(deferredFocusEntity);
-      setDeferredFocusEntity(undefined);
-    }
+    if (deferred<span class="cstat-no" title="statement not covered" >FocusEntity) <span class="fstat-no" title="function not covered" >{<span class="cstat-no" title="statement not covered" ></span></span></span>
+      drawFocusTo(d<span class="cstat-no" title="statement not covered" >eferredFocusEntity);</span>
+      setDeferredFocusEntity(undef<span class="cstat-no" title="statement not covered" >ined);</span>
+<span class="cstat-no" title="statement not covered" >    }</span>
   };
 &nbsp;
   useEffect(() =&gt; {
@@ -1700,49 +1676,49 @@ export default function Map(props:<span class="cstat-no" title="statement not co
     const geo = sources
       .map((source) =&gt; {
         const features = source.entities
-<span class="cstat-no" title="statement not covered" >          .map((entity) =&gt; {<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >            const multiPolygons = MapService.getMapEntityGeometry(entity);</span>
-<span class="cstat-no" title="statement not covered" >            if (!multiPolygons.length) {</span>
-<span class="cstat-no" title="statement not covered" >              return null;</span>
+          .map((entity) =&gt; {
+            const multiPolygons = MapService.getMapEntityGeometry(entity);
+            if (!multiPolygons.length) {
+              return null;
             }
-<span class="cstat-no" title="statement not covered" >            return multiPolygons.map((multiPolygon) =&gt; ({</span>
-              type: 'Feature',
-              geometry: {
-                type: 'Polygon',
-<span class="cstat-no" title="statement not covered" >                coordinates: m<span class="fstat-no" title="function not covered" >ul</span>tiPolygon,</span>
+<span class="cstat-no" title="statement not covered" >            return multiPolygo<span class="fstat-no" title="function not covered" >ns</span>.map((multiPolygon) =&gt; ({</span>
+<span class="cstat-no" title="statement not covered" >              type: 'Feature',</span>
+<span class="cstat-no" title="statement not covered" >              geometry: {</span>
+<span class="cstat-no" title="statement not covered" >                type: 'Polygon',</span>
+                coordinates: multiPolygon,
 <span class="cstat-no" title="statement not covered" >              },</span>
-<span class="cstat-no" title="statement not covered" >              properties: entity.properties,</span>
-<span class="cstat-no" title="statement not covered" >              id: entity.id,</span>
+              properties: entity.properties,
+              id: entity.id,
             }));
-<span class="cstat-no" title="statement not covered" >          })</span>
-          .filter((f) =&gt; f)
-          .flatMap((f) =&gt; f);
+<span class="cstat-no" title="statement not covered" >          })<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >          .filter((f) =&gt; f)</span>
+<span class="cstat-no" title="statement not covered" >          .flatMap((f) =&gt; f);</span>
 <span class="cstat-no" title="statement not covered" ></span>
         return {
-          data: { type: 'FeatureCollection', features },
-          ...getMapDra<span class="cstat-no" title="statement not covered" >wingLayer(source, source.id),<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >          data: { type: 'FeatureCollection', features },</span>
+          ...getMapDrawingLayer(source, source.id),
         };
-<span class="cstat-no" title="statement not covered" >      })<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >      })</span>
       .filter((g) =&gt; g);
-    se<span class="cstat-no" title="statement not covered" >tGeoData(geo as any);</span>
-    if (popupRenderer) {
+    setGeoData(geo as any);
+    if (popupRenderer)<span class="cstat-no" title="statement not covered" > {<span class="fstat-no" title="function not covered" ></span></span>
       setLayerIds(geo.filter((g: any) =&gt; g.isInteractive).map((g: any) =&gt; g.layer.id));
-    }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  },<span class="cstat-no" title="statement not covered" > [options, setGeoData, token, popupRenderer]);</span>
+<span class="cstat-no" title="statement not covered" >    }<span class="fstat-no" title="function not covered" ></span></span>
+  }, [options, setGeoData, token, popupRenderer]);
 <span class="cstat-no" title="statement not covered" ></span>
   const mapSources = useMemo(() =&gt; {
-<span class="cstat-no" title="statement not covered" >    if (mapImages &amp;&amp; mapRef.current !== null &amp;&amp; !mapRef</span>.current?.hasImage(mapImages[0].name)) {
-      loadImages(mapRef.current);
-    }<span class="cstat-no" title="statement not covered" ></span>
-    if (!geoData) {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >      return null;</span>
-    }
-<span class="cstat-no" title="statement not covered" ></span>
-    const totalLayers = geoData.length;
-    let layersToUse = geoData;
+    if (mapImages &amp;&amp; mapRef.current !== null &amp;&amp; !mapRef.current?.hasImage(mapImages[0].name)) {
+      loadImages(mapRef.<span class="cstat-no" title="statement not covered" >current);<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    }</span>
+    if<span class="cstat-no" title="statement not covered" > (!geoData) {</span>
+      return null;
+<span class="cstat-no" title="statement not covered" >    }</span>
 &nbsp;
+    const totalLaye<span class="cstat-no" title="statement not covered" >rs = g</span>eoData.length;
+    let layersToUse = geoData<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >;</span></span>
+<span class="cstat-no" title="statement not covered" ></span>
     // if siteMarker is showing and there is more than one layer, that means the planting site layer doesn't have to be rendered, site layer is added only for the site marker
-    if (showSiteMarker &amp;&amp; totalLayers &gt; 1) {
+<span class="cstat-no" title="statement not covered" >    if (showSiteMarker &amp;&amp; totalLayers &gt; 1) {</span>
       layersToUse = geoData.filter((geo) =&gt; geo.id !== 'sites');
     }
 &nbsp;
@@ -1766,19 +1742,19 @@ export default function Map(props:<span class="cstat-no" title="statement not co
   const annotationMarker = useMemo(() =&gt; {
     if (!geoData || !showSiteMarker) {
       return null;
-    }<span class="fstat-no" title="function not covered" ></span>
-    const <span class="cstat-no" title="statement not covered" >geo = geoData.find(</span>(gd) =&gt; gd.id === 'sites');
+    }
+    const geo = geoData.find((gd) =&gt; gd.id === 'sites');
     const center = centroid(geo?.data);
     const [longitude, latitude] = center.geometry.coordinates;
-<span class="fstat-no" title="function not covered" ></span>
-    return<span class="cstat-no" title="statement not covered" > (</span>
-      &lt;Marke<span class="cstat-no" title="statement not covered" >r key={0} longitud</span>e={longitude} latitude={latitude} anchor='center'&gt;
-        &lt;div<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
+    return (<span class="fstat-no" title="function not covered" ></span>
+      &lt;Mar<span class="cstat-no" title="statement not covered" >ker key={0} longitu</span>de={longitude} latitude={latitude} anchor='center'&gt;
+        &lt;div
           style={{
-            background: 'rgba(255, 255, 255, 0.6)',
-            padding: '4px 8px',
-            borderRadius: '4px',
-            border: '1px solid #ccc',
+            backgr<span class="fstat-no" title="function not covered" >ou</span>nd: 'rgba(255, 255, 255, 0.6)',
+<span class="cstat-no" title="statement not covered" >            padding: '4px 8px',</span>
+<span class="cstat-no" title="statement not covered" >            borderRadius: '4px</span>',
+<span class="cstat-no" title="statement not covered" >            border: '1px solid #ccc</span>',
             fontSize: '12px',
             fontWeight: 'bold',
             color: '#000000',
@@ -1807,17 +1783,17 @@ export default function Map(props:<span class="cstat-no" title="statement not co
     if (entityOptions?.focus) {
       if (!mapRef || !mapRef.current) {
         setDeferredFocusEntity(entityOptions?.focus);
-      } else {<span class="fstat-no" title="function not covered" ></span>
-        draw<span class="cstat-no" title="statement not covered" >FocusTo(entityOptions?.focus);</span>
-      }<span class="cstat-no" title="statement not covered" ></span>
+      } else {
+        drawFocusTo(entityOptions?.focus);
+      }
     } else {
-      zoomTo<span class="cstat-no" title="statement not covered" >Fit();</span>
-    }<span class="cstat-no" title="statement not covered" ></span>
-  }, [drawFocusTo, entityOptions?.focus, geoData, zoomToFit]);
-&nbsp;
+      zoomToFit();
+    }<span class="fstat-no" title="function not covered" ></span>
+  }, [drawFo<span class="cstat-no" title="statement not covered" >cusTo, entityOptions?.focus, geoData, zoomToFit]);</span>
+<span class="cstat-no" title="statement not covered" ></span>
   const hasEntities = options.sources?.some((source) =&gt; {
-    return source.entities?.some((entity) =&gt; entity?.boundary?.length);
-  });
+    return s<span class="cstat-no" title="statement not covered" >ource.entities?.some</span>((entity) =&gt; entity?.boundary?.length);
+  });<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
   const renderedPopup = useMemo&lt;JSX.Element | null&gt;(() =&gt; {
     if (!popupInfo || !popupRenderer) {
@@ -1851,14 +1827,14 @@ export default function Map(props:<span class="cstat-no" title="statement not co
           mapStyle={MapViewStyles[mapViewStyle]}
           initialViewState={{
             bounds: hasEntities ? [options.bbox.lowerLeft, options.bbox.upperRight] : undefined,
-            fitBoundsOpti<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >on</span>s: hasEntities ? { padding: 20 } : undefined,</span>
-          }}<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >          interactiveLayerIds={layerIds}</span>
+            fitBoundsOptions: hasEntities ? { padding: 20 } : undefined,
+          }}
+          interactiveLayerIds={layerIds}
           onError={onMapError}
           onClick={onMapClick}
-          style={style}
-          onStyleData={onStyleDataHandler}
-          attributionControl={false}
+          style={style}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+          onStyl<span class="cstat-no" title="statement not covered" >eData={onStyleDataHandler}</span>
+<span class="cstat-no" title="statement not covered" >          attributionControl={false}</span>
           onLoad={onLoad}
           onRemove={() =&gt; {
             destroying = true;
@@ -1987,7 +1963,7 @@ const ZoomToFitControl = ({ onClick }: ZoomToFitControlProps): JSX.Element =&gt;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-09T16:13:25.495Z
+                at 2026-01-09T16:25:43.391Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
