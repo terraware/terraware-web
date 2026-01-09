@@ -567,6 +567,7 @@ EDIT_FEEDBACK,Modifier les commentaires,6b52e0e6
 EDIT_FUNDING_ENTITY,Modifier l'organisme de financement,f21be0e0
 EDIT_FUNDING_ENTITY_DESC,Modifier l'entité de financement et les projets associés,779189ac
 EDIT_LOCATION,Modifier l'emplacement,f120fad8
+EDIT_MODULES,Modifier les modules,43c229be
 EDIT_NOTES,Modifier les notes,f02400ad
 EDIT_NURSERY,Modifier la pépinière,8813669e
 EDIT_OBSERVATION_DATA,Modifier les données d'observation,49681fee
@@ -1054,6 +1055,7 @@ MODULE_CONTENT,Contenu du module,0ec0af7d
 MODULE_DETAILS,Détails du module,66959ca8
 MODULE_ID,Identifiant du module,9c2e85f6
 MODULES,Modules,474ac433
+MODULES_FOR_PROJECT,Modules pour {0},5d950bb2
 MODULES_IMPORT_COMPLETE,Importation des données des modules terminée !,76a99df8
 MONITORING,Surveillance,c607ad35
 MONITORING_PLOT,Placette de suivi,97de3243

@@ -65,6 +65,7 @@ type PermissionParticipantProject =
   | 'UPDATE_PARTICIPANT_PROJECT_SCORING_VOTING'
   | 'EXPORT_PARTICIPANT_PROJECT'
   | 'PUBLISH_PROJECT_DETAILS';
+type PermissionProjectModules = 'UPDATE_PROJECT_MODULES';
 type PermissionSurvivalRate = 'EDIT_SURVIVAL_RATE_SETTINGS';
 
 export type GlobalRolePermission =
@@ -80,6 +81,7 @@ export type GlobalRolePermission =
   | PermissionOrganization
   | PermissionParticipant
   | PermissionParticipantProject
+  | PermissionProjectModules
   | PermissionSurvivalRate;
 
 type PermissionCheckFn<T = any> = (user: User, permission: GlobalRolePermission, metadata?: T) => boolean;
@@ -327,6 +329,7 @@ const ACL: Record<GlobalRolePermission, UserGlobalRoles | PermissionCheckFn> = {
   UPDATE_REPORTS_SETTINGS: AcceleratorAdminPlus,
   UPDATE_REPORTS_TARGETS: isAllowedUpdateReportsTargets,
   UPDATE_PARTICIPANT_PROJECT: TFExpertPlus,
+  UPDATE_PROJECT_MODULES: AcceleratorAdminPlus,
   UPDATE_SUBMISSION_STATUS: TFExpertPlus,
   VIEW_CONSOLE: ReadOnlyPlus,
   VIEW_PARTICIPANT_PROJECT_SCORING_VOTING: TFExpertPlus,

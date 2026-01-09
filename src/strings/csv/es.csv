@@ -568,6 +568,7 @@ EDIT_FEEDBACK,Editar retroalimentación,6b52e0e6
 EDIT_FUNDING_ENTITY,Editar entidad financiadora,f21be0e0
 EDIT_FUNDING_ENTITY_DESC,Editar la entidad financiadora y los proyectos asociados.,779189ac
 EDIT_LOCATION,Editar ubicación,f120fad8
+EDIT_MODULES,Editar módulos,43c229be
 EDIT_NOTES,Editar notas,f02400ad
 EDIT_NURSERY,Editar vivero,8813669e
 EDIT_OBSERVATION_DATA,Editar datos de observación,49681fee
@@ -1055,6 +1056,7 @@ MODULE_CONTENT,Contenido del módulo,0ec0af7d
 MODULE_DETAILS,Detalles del módulo,66959ca8
 MODULE_ID,ID del módulo,9c2e85f6
 MODULES,Módulos,474ac433
+MODULES_FOR_PROJECT,Módulos para {0},5d950bb2
 MODULES_IMPORT_COMPLETE,¡Completada la importación de datos de los módulos!,76a99df8
 MONITORING,Monitoreo,c607ad35
 MONITORING_PLOT,Parcela de vigilancia,97de3243
