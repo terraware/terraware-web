@@ -551,9 +551,7 @@
 <a name='L486'></a><a href='#L486'>486</a>
 <a name='L487'></a><a href='#L487'>487</a>
 <a name='L488'></a><a href='#L488'>488</a>
-<a name='L489'></a><a href='#L489'>489</a>
-<a name='L490'></a><a href='#L490'>490</a>
-<a name='L491'></a><a href='#L491'>491</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L489'></a><a href='#L489'>489</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -957,8 +955,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1060,81 +1056,79 @@ import<span class="cstat-no" title="statement not covered" > { requestUpdateVari
 import {<span class="cstat-no" title="statement not covered" > useAppDispatch, useAppSel<span class="fstat-no" title="function not covered" >ec</span>tor <span class="cstat-no" title="statement not covered" >} from 'sr</span>c/redux/store';</span>
 import strings from 'src/strings';
 im<span class="cstat-no" title="statement not covered" >port {</span>
-  NumberVariable,
-  SelectVariab<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >le</span>,<span class="cstat-no" title="statement not covered" ></span></span>
   TableColumn,
-  TableVariableWithValues,
+  TableVariabl<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >eW</span>ithValues,<span class="cstat-no" title="statement not covered" ></span></span>
   UpdateVariableWorkflowDetailsPayload,
 } from 'src/types/documentProducer/Variable';
 import {
   AppendVariableValueOperation,
   NewSelectValuePayload,
-  UpdateVariableVal<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ue</span>sReques<span class="cstat-no" title="statement not covered" >tWithProjectId,</span></span>
-  VariableValue,<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  VariableValueSelectValue,</span>
-} from 'src/type<span class="fstat-no" title="function not covered" >s/</span>docu<span class="cstat-no" title="statement not covered" >mentProducer/</span>VariableValue';
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-import { VariableTableCell, cellValue, getInitialCellValues, newValueFromEntry } from './helpers';
+  UpdateVariableValuesRequestWithProjectId,
+  VariableValue,
+  VariableValueSele<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ct</span>Value,<span class="cstat-no" title="statement not covered" ></span></span>
+} from 'src/types/do<span class="cstat-no" title="statement not covered" >cum</span>entProducer/VariableValue';
 <span class="cstat-no" title="statement not covered" ></span>
-type EditableTableE<span class="cstat-no" title="statement not covered" >ditProps = {</span>
-  display?: boolean;<span class="cstat-no" title="statement not covered" ></span>
-  variable: TableVariableWit<span class="cstat-no" title="statement not covered" >hValues;</span>
+import { Variabl<span class="fstat-no" title="function not covered" >eT</span>able<span class="cstat-no" title="statement not covered" >Cell, cellVal</span>ue, getInitialCellValues, newValueFromEntry } from './helpers';
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+type EditableTableEditProps = {
+<span class="cstat-no" title="statement not covered" >  display?: boolean;</span>
+  variable: TableVa<span class="cstat-no" title="statement not covered" >riableWithValues;</span>
   projectId: number;<span class="cstat-no" title="statement not covered" ></span>
-  onFinish: (edited: boolean) =&gt; void<span class="cstat-no" title="statement not covered" >;</span>
+  onFinish: (edited: boolean<span class="cstat-no" title="statement not covered" >) =&gt; void;</span>
   onCancel: () =&gt; void;<span class="cstat-no" title="statement not covered" ></span>
-  setUpdateWorkflowRequ<span class="cstat-no" title="statement not covered" >estId?: (requestId: strin</span>g) =&gt; void;
-  showVariableHistory: () =&gt;<span class="cstat-no" title="statement not covered" > void;</span>
+  setUpdateWorkflowRequestId?: (reque<span class="cstat-no" title="statement not covered" >stId: string) =&gt; void;</span>
+  showVariableHistory: ()<span class="cstat-no" title="statement not covered" > =&gt; void;</span>
 };<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-const EditableTableEdit = ({<span class="cstat-no" title="statement not covered" ></span>
-  display: displayP<span class="cstat-no" title="statement not covered" >rop = false,</span>
+const EditableTableEdit = <span class="cstat-no" title="statement not covered" >({</span>
+  display: displayProp = false,<span class="cstat-no" title="statement not covered" ></span>
   variable,<span class="cstat-no" title="statement not covered" ></span>
   projectId,<span class="cstat-no" title="statement not covered" ></span>
-  onCancel,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  onFinish,<span class="branch-0 cbranch-no" title="branch not covered" ></span>
-  setUpdateWorkflowRequestId,
-  showVariableHistory,
+  onCancel,<span class="cstat-no" title="statement not covered" ></span>
+  onFinish,<span class="cstat-no" title="statement not covered" ></span>
+  setUpdateWorkflowRequest<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Id</span>,</span>
+  showVariableHistory,<span class="branch-0 cbranch-no" title="branch not covered" ></span>
 }: EditableTableEditProps) =&gt; {
   const activeLocale = useLocalization();
   const columns = useMemo&lt;TableColumn[]&gt;(() =&gt; variable.columns, [variable]);
   const initialCellValues = useMemo&lt;VariableTableCell[][]&gt;(() =&gt; getInitialCellValues(variable), [variable]);
   const [cellValues, setCellValues] = useState&lt;VariableTableCell[][]&gt;(initialCellValues);
-  const { isAllowed } =<span class="cstat-no" title="statement not covered" > useUser();</span>
-  const [display, <span class="cstat-no" title="statement not covered" >setDisplay] = useState&lt;boo<span class="fstat-no" title="function not covered" >le</span>an&gt;(<span class="cstat-no" title="statement not covered" >displayProp);</span></span>
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  const dispatch = useAppDispatch();<span class="cstat-no" title="statement not covered" ></span>
-  const [updateVariableV<span class="cstat-no" title="statement not covered" >aluesRequestId, setUpdateVariabl</span>eValuesRequestId] = useState&lt;string&gt;('');
-  const updateVariableValuesRequ<span class="cstat-no" title="statement not covered" >est = useAppSelector(selectUpdateVariabl</span>eValues(updateVariableValuesRequestId));
+  const { isAllowed } = useUser();
+  const [display, setDisplay] = useState&lt;boolean&gt;(displayProp);
 <span class="cstat-no" title="statement not covered" ></span>
-  const [updateVariableWorkflowDetailsRequestId, setUpdateVariableWorkflowDe<span class="cstat-no" title="statement not covered" >tailsRequestId] = useState&lt;stri</span>ng&gt;('');
-  const updateVariableWorkflowDetailsR<span class="cstat-no" title="statement not covered" >equest = useAppSelector(</span>
-    selectUpdateVariableWorkflowDetails(updateVariableWorkflowDetailsRequestId)<span class="cstat-no" title="statement not covered" ></span>
+  const dispatch =<span class="cstat-no" title="statement not covered" > useAppDispatch();<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  const [updateVariableValue<span class="cstat-no" title="statement not covered" >sRequestId, setUpdateVaria<span class="fstat-no" title="function not covered" >bl</span>eVal<span class="cstat-no" title="statement not covered" >uesRequestId] = useState&lt;string&gt;('');</span></span>
+  const updateVariableValuesRequest = <span class="cstat-no" title="statement not covered" >useAppSelector(selectUpdateVariableValues(upda</span>teVariableValuesRequestId));
+<span class="cstat-no" title="statement not covered" ></span>
+  const [updateVariableWorkflowD<span class="cstat-no" title="statement not covered" >etailsRequestId, setUpdateVariableWorkfl</span>owDetailsRequestId] = useState&lt;string&gt;('');
+  const updateVaria<span class="cstat-no" title="statement not covered" >bleWorkflowDetailsRequest = useAppS</span>elector(
+    selectUpdateVariableWorkflowDetails(updateVariableWorkflowDetailsRequest<span class="cstat-no" title="statement not covered" >Id)</span>
   );<span class="cstat-no" title="statement not covered" ></span>
-&nbsp;
-  const variableValue: VariableValue | undefined = (variable?.variableValues || []).find(
-    (value) =&gt; value.var<span class="cstat-no" title="statement not covered" >iableId === variable.id</span>
-  );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-&nbsp;
-  const [variableWorkflowDetails, setVariableWorkflowDetails] = <span class="cstat-no" title="statement not covered" >useState&lt;UpdateVariableWorkflowDetailsPayload&gt;({</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  const variableValue: VariableValue | undefine<span class="cstat-no" title="statement not covered" >d = (variable?.variableValues || []).find(</span>
+    (value) =&gt; value.variableId === variable.id
+  );
+<span class="cstat-no" title="statement not covered" ></span>
+  co<span class="fstat-no" title="function not covered" >ns</span>t [variab<span class="cstat-no" title="statement not covered" >leWorkflowDetails, setVariableWor</span>kflowDetails] = useState&lt;UpdateVariableWorkflowDetailsPayload&gt;({
     feedback: variableValue?.feedback,
-    internalComment: variableValue?.internalComment,
+    internalComment: variableValue?.internalComment,<span class="cstat-no" title="statement not covered" ></span>
     status: variableValue?.status || 'Not Submitted',
   });
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  us<span class="cstat-no" title="statement not covered" >eEffect(() =&gt; {</span>
-    if (updateVariable<span class="cstat-no" title="statement not covered" >ValuesRequest?.status === 'success' &amp;&amp; !updateVariableWorkflowDetailsRequestId) {</span>
-      const request = dispatch(
-        requestUpdateVariableWorkflowDetails({
+&nbsp;
+  useEffect(() =&gt; {
+<span class="cstat-no" title="statement not covered" >    if (updateVariableValuesRe<span class="fstat-no" title="function not covered" >qu</span>est?.status === 'success' &amp;&amp; !updateVariableWorkflowDetailsRequestId) {</span>
+<span class="cstat-no" title="statement not covered" >      const request = dispatch(</span>
+        requestUpdateV<span class="cstat-no" title="statement not covered" >ariableWorkflowDetails({</span>
           feedback: variableWorkflowDetails?.feedback,
           internalComment: variableWorkflowDetails?.internalComment,
           projectId,
           status: variableWorkflowDetails.status,
           variableId: variable.id,
         })
-<span class="cstat-no" title="statement not covered" >      );</span>
-<span class="cstat-no" title="statement not covered" >      setUpdateVariableWorkflowDetailsRequestId(request.requestId);</span>
-      setUpdateWorkflowRequestId?.(request.requestId);
-    }
+      );
+      setUpdateVariableWorkflowDetailsRequestId(request.requestId);
+<span class="cstat-no" title="statement not covered" >      setUpdateWorkflowRequestId?.(request.requestId);</span>
+    }<span class="cstat-no" title="statement not covered" ></span>
   }, [
     dispatch,
     projectId,
@@ -1143,56 +1137,56 @@ const EditableTableEdit = ({<span class="cstat-no" title="statement not covered"
     updateVariableWorkflowDetailsRequestId,
     variable.id,
     variableWorkflowDetails,
-  ]);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" ></span>
-  co<span class="cstat-no" title="statement not covered" >nst addRow = use<span class="fstat-no" title="function not covered" >Ca</span>llback(() =&gt; {</span>
-    co<span class="cstat-no" title="statement not covered" >nst newRow: VariableTableCell[] = [];</span>
-    columns.forEach((col) =&gt; {
-      newRow.push({
+  ]);
+&nbsp;
+  const addRow = <span class="cstat-no" title="statement not covered" >useCallback(() =&gt; {<span class="fstat-no" title="function not covered" ></span></span>
+    const newRow: V<span class="cstat-no" title="statement not covered" >ari</span>ableTableCell[] = [];
+<span class="cstat-no" title="statement not covered" >    columns.forEach(<span class="fstat-no" title="function not covered" >(c</span>ol) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      newRow.push({</span>
         type: col.variable.type,
         rowId: undefined,
         colId: col.variable.id,
         values: undefined,
         changed: false,
-<span class="cstat-no" title="statement not covered" >      });</span>
+      });
     });
-<span class="cstat-no" title="statement not covered" >    setCellValues([...cellValu<span class="fstat-no" title="function not covered" >es</span>, newRow]);</span>
-  },<span class="cstat-no" title="statement not covered" > [cellValues, columns]);</span>
-<span class="cstat-no" title="statement not covered" ></span>
-  useEffect(() =&gt; {
-    if (initialCellValues.length === 0 &amp;&amp; cellValues.length === 0) {
-      // if there are<span class="cstat-no" title="statement not covered" > no initial values, add a row<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >      addRow();</span>
-    }<span class="cstat-no" title="statement not covered" ></span>
-  }, [addRow, cellValues, initialCellValues]);
+<span class="cstat-no" title="statement not covered" >    setCellValues([...cellValues, newRow]);</span>
+  }, [cellValues, columns]);
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  us<span class="cstat-no" title="statement not covered" >eEffect(() =&gt; {</span>
+    if<span class="cstat-no" title="statement not covered" > (initialC</span>ellValues.length === 0 &amp;&amp; cellValues.length === 0) {
+      // if there are no initial values, add a row
+      addRow();
+    }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  },<span class="cstat-no" title="statement not covered" > [addRow, cellValues, initialCellValues]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
   const handleSave = useCallback(() =&gt; {
-    if (columns.length === 0) {
+    if (columns.len<span class="cstat-no" title="statement not covered" >gth === 0) {</span>
       return;
-<span class="cstat-no" title="statement not covered" >    }<span class="fstat-no" title="function not covered" ></span></span>
-    const update: Up<span class="cstat-no" title="statement not covered" >dateVariableV</span>aluesRequestWithProjectId = {
-<span class="cstat-no" title="statement not covered" >      operations: [],</span>
-      projectId,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+    }
+    const update: UpdateVariableValuesRequestWithProjectId = {
+<span class="cstat-no" title="statement not covered" >      operations: [],<span class="fstat-no" title="function not covered" ></span></span>
+      projectId,<span class="cstat-no" title="statement not covered" ></span>
     };<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span>
-    initialCellValues.forEach((row) =&gt; {
-      const rowId = row[0].rowId;
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+    init<span class="cstat-no" title="statement not covered" >ialCellValues.forEach((row) =&gt; {</span>
+      cons<span class="cstat-no" title="statement not covered" >t rowId = row[0].rowId;</span>
       if (rowId !== undefined) {
         const foundRow = cellValues.find((r) =&gt; r[0].rowId === rowId);
         if (foundRow === undefined) {
-<span class="cstat-no" title="statement not covered" >          // delete op<span class="fstat-no" title="function not covered" >er</span>ations</span>
+          // delete operations
           update.operations.push({
-            operation: 'Delete<span class="cstat-no" title="statement not covered" >',<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-<span class="cstat-no" title="statement not covered" >            valueId: rowId,</span>
-            existingValueId: row<span class="cstat-no" title="statement not covered" >Id,</span>
-          });
-        } else {
+<span class="cstat-no" title="statement not covered" >            operation:<span class="fstat-no" title="function not covered" > '</span>Delete',</span>
+            valueId: rowId,
+            existingValueId: r<span class="cstat-no" title="statement not covered" >owId,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+          })<span class="cstat-no" title="statement not covered" >;</span>
+        } else {<span class="cstat-no" title="statement not covered" ></span>
           // replace operations
           row.forEach((cell) =&gt; {
-            const foundCell = foundRow.find((c) =&gt; c.colId === cell.col<span class="fstat-no" title="function not covered" >Id</span>);<span class="cstat-no" title="statement not covered" ></span>
-            if<span class="cstat-no" title="statement not covered" > (foundCell !== undefined &amp;&amp; foundCell.changed) {</span>
-              const newValues =
-                foundCell.values &amp;&amp; foundCell.type === 'Select'
+            const foundCell = foundRow.find((c) =&gt; c.colId === cell.colId);
+            if (foundCell !== undefined &amp;&amp; foundCell.changed) {
+              const newValues =<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >                foundCell.values &amp;&amp; foundCell.type === 'Select'</span>
                   ? [
                       {
                         ...(foundCell.values[0] as VariableValueSelectValue),
@@ -1201,20 +1195,20 @@ const EditableTableEdit = ({<span class="cstat-no" title="statement not covered"
                     ]
                   : foundCell.values?.filter((v): v is NonSelectTableCellValue =&gt; v.type !== 'Deleted');
               update.operations.push({
-                oper<span class="cstat-no" title="statement not covered" >ation: 'Replace',<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-<span class="cstat-no" title="statement not covered" >                rowV<span class="fstat-no" title="function not covered" >al</span>ueId: rowId,</span>
-<span class="cstat-no" title="statement not covered" >                variableId: cell.colId,</span>
-                values: newValues ?? [],
-              });
+                operation: 'Replace',
+                rowValueId: rowId,
+                vari<span class="cstat-no" title="statement not covered" >ableId: cell.colId<span class="fstat-no" title="function not covered" >,<span class="cstat-no" title="statement not covered" ></span></span></span>
+<span class="cstat-no" title="statement not covered" >                valu<span class="fstat-no" title="function not covered" >es</span>: newValues ?? [],</span>
+<span class="cstat-no" title="statement not covered" >              });</span>
             }
           });
         }
       }
-    })<span class="cstat-no" title="statement not covered" >;<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" ></span>
-    // add row operation<span class="cstat-no" title="statement not covered" >s</span>
-    const newRows = cellValues.filter((row) =&gt; row[0].rowId === undefined);
-    newRows.forEach((newRow) =&gt; {
+    });
+&nbsp;
+    //<span class="cstat-no" title="statement not covered" > add row operat<span class="fstat-no" title="function not covered" >io</span>ns</span>
+    cons<span class="cstat-no" title="statement not covered" >t newRows = cellValues.filter((row) =&gt; row[0].rowId === undefined);</span>
+    newRows.forEach((new<span class="cstat-no" title="statement not covered" >Row) =&gt; {</span>
       // append row
       update.operations.push({
         operation: 'Append',
@@ -1224,63 +1218,63 @@ const EditableTableEdit = ({<span class="cstat-no" title="statement not covered"
         },
       });
 &nbsp;
-      // c<span class="cstat-no" title="statement not covered" >reate values (will automaticall</span>y assign to the last created row)
+      // create values (will automatically assign to the last created row)
       newRow.forEach((newCell) =&gt; {
-        if (newCell.values !== undefined) {
+        if<span class="cstat-no" title="statement not covered" > (newCell.values !== undefined)</span> {
           const newOp: AppendVariableValueOperation =
-            newCell.<span class="cstat-no" title="statement not covered" >type === 'Select'</span>
-<span class="cstat-no" title="statement not covered" >              ? {</span>
-                  operation: 'Append',
-                  varia<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >bl</span>eId: newCell.colId,</span>
-                  value: {<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >                    ...<span class="fstat-no" title="function not covered" >ne</span>wCell.values[0],</span>
-                    o<span class="cstat-no" title="statement not covered" >pti</span>onIds: (newCell.values[0] as VariableValueSelectValue).optionValues,
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >                  } </span>as NewSelectValuePayload,</span>
-<span class="cstat-no" title="statement not covered" >                }</span>
-              : {<span class="cstat-no" title="statement not covered" ></span>
+            newCell.type === 'Select'
+              ? {
+                  op<span class="cstat-no" title="statement not covered" >eration: 'Append',</span>
+<span class="cstat-no" title="statement not covered" >                  variableId: newCell.colId,</span>
+                  value: {
+                    ...<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ne</span>wCell.values[0],</span>
+                    option<span class="cstat-no" title="statement not covered" >Ids</span>: (newCell.values[0] as VariableValueSelectValue).optionValues,
+<span class="cstat-no" title="statement not covered" >                  } as <span class="fstat-no" title="function not covered" >Ne</span>wSelectValuePayload,</span>
+                }<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >              : {<span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >                  operation: 'Append',</span>
-                  variableId: newCell.colId,
-                  value: newCell.values[0] as NonSelectTableCellValue,
+                  variabl<span class="cstat-no" title="statement not covered" >eId: newCell.colId,</span>
+<span class="cstat-no" title="statement not covered" >                  value: newCell.values[0] as NonSelectTableCellValue,</span>
                 };
           update.operations.push(newOp);
         }
       });
     });
-<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
     // dispatch
-    const request = dispatch(requestUpdateVariableValues(update));
-    se<span class="cstat-no" title="statement not covered" >tUpdateVariableValuesRequest</span>Id(request.requestId);
+    const <span class="cstat-no" title="statement not covered" >request = dispatch(</span>requestUpdateVariableValues(update));
+    setUpdateVariableValuesRequestId(request.requestId);
   }, [initialCellValues, cellValues, columns.length, dispatch, projectId, variable.id]);
 <span class="cstat-no" title="statement not covered" ></span>
   const setCellValue = (rowNum: number, colNum: number, newValue: string | number) =&gt; {
-    const newCellVal<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ue</span>s: VariableTableCell[][] = [];</span>
-    cellValues.forEach((ro<span class="cstat-no" title="statement not covered" >w, rowIndex) =&gt; </span>{
-<span class="cstat-no" title="statement not covered" >      const newRow: VariableTableCell</span>[] = [];
-<span class="cstat-no" title="statement not covered" >      row.forEach((cell, colIndex)</span> =&gt; {
-        if (rowNum === rowIndex &amp;&amp; colNum === colIndex) {
-          const values<span class="cstat-no" title="statement not covered" > = newValueFromEntry(newValue, cell.type);</span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span>          newRow.push({</span>
-            type: cell.type,
-            rowId: cell.rowId,
+<span class="cstat-no" title="statement not covered" >    const newCellValues: VariableT</span>ableCell[][] = [];
+    cellValues.forEach((row, rowIndex) =&gt; {
+      const newRow: <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Va</span>riableTableCell[] = [];</span>
+      row.forEach((cell, c<span class="cstat-no" title="statement not covered" >olIndex) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        if (rowNum === rowIndex &amp;&amp; co</span>lNum === colIndex) {
+<span class="cstat-no" title="statement not covered" >          const values = newValueF</span>romEntry(newValue, cell.type);
+          newRow.push({
+            type: cell<span class="cstat-no" title="statement not covered" >.type,</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span>            rowId: cell.rowId,</span>
             colId: cell.colId,
             values: values ? [values] : [],
             changed: true,
           });
         } else {
-          newRow.push(cell);<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" ></span>        }
-<span class="cstat-no" title="statement not covered" >      });</span>
-      ne<span class="branch-0 cbranch-no" title="branch not covered" >wCellValues.push(newRow);</span>
-    });<span class="cstat-no" title="statement not covered" ></span>
-    setCel<span class="cstat-no" title="statement not covered" >lValues</span>(newCellValues);
-  };
-&nbsp;
+          newRow.push(cell);
+        }
+      });<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" ></span>      newCellValues.push(newRow);
+    })<span class="cstat-no" title="statement not covered" >;</span>
+    setC<span class="branch-0 cbranch-no" title="branch not covered" >ellValues(newCellValues);</span>
+  };<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
   const removeRow = (rowNum: number) =&gt; {
     const newCellValues = [...cellValues];
     newCellValues.splice(rowNum, 1);
-<span class="cstat-no" title="statement not covered" >    setCellValues(newCellValues);</span>
+    setCellValues(newCellValues);
   };
-&nbsp;
+<span class="cstat-no" title="statement not covered" ></span>
   const optionItems = useMemo(
     (): DropdownItem[] =&gt;
       activeLocale
@@ -1319,17 +1313,17 @@ const EditableTableEdit = ({<span class="cstat-no" title="statement not covered"
       title={strings.VARIABLE_DETAILS}
       size='x-large'
       scrolled={true}
-      middleButto<span class="fstat-no" title="function not covered" >ns</span>={
-        di<span class="cstat-no" title="statement not covered" >splay</span>
-          ? undefined
-          : [
+      middleButtons={
+        display
+          ? undef<span class="fstat-no" title="function not covered" >in</span>ed
+<span class="cstat-no" title="statement not covered" >          : [</span>
               &lt;Button
                 id='edit-table-cancel'
                 label={strings.CANCEL}
                 priority='secondary'
-                type='passive'<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+                type='passive'
                 onClick={onCancel}
-                key='button-1'
+                key='button-1'<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
               /&gt;,
               &lt;Button id='edit-table-save' label={strings.SAVE} onClick={handleSave} key='button-2' /&gt;,
             ]
@@ -1339,47 +1333,47 @@ const EditableTableEdit = ({<span class="cstat-no" title="statement not covered"
         &lt;OptionsMenu
           onOptionItemClick={onOptionItemClick}
           optionItems={optionItems}
-          priority='secondary'<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+          priority='secondary'
           size='small'
-<span class="cstat-no" title="statement not covered" >          sx={{ float: 'right' }}</span>
+          sx={{ float: 'right' }}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
           type='passive'
-        /&gt;
+<span class="cstat-no" title="statement not covered" >        /&gt;</span>
         {display &amp;&amp; isAllowed('UPDATE_DELIVERABLE') &amp;&amp; (
           &lt;Button
             icon='iconEdit'
-            id='edit<span class="fstat-no" title="function not covered" >-v</span>ariable'<span class="cstat-no" title="statement not covered" ></span>
+            id='edit-variable'
             label={strings.EDIT}
-            onClick={() =&gt; {
+            onClick=<span class="fstat-no" title="function not covered" >{(</span>) =&gt; {<span class="cstat-no" title="statement not covered" ></span>
               setDisplay(false);
             }}
             priority='secondary'
             sx={{ float: 'right' }}
-            type=<span class="fstat-no" title="function not covered" >'p</span>assi<span class="cstat-no" title="statement not covered" >ve'</span>
+            type='passive'
           /&gt;
-        )}
+        )}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
       &lt;/&gt;
       {variable.tableStyle === 'Horizontal' &amp;&amp; (
         &lt;TableContainer sx={{ overflowX: 'visible' }}&gt;
           &lt;Table aria-labelledby='tableTitle' size='medium' aria-label='variable-table'&gt;
-            &lt;TableHead sx={{ borderBottom: 'groove' }}&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+            &lt;TableHead sx={{ borderBottom: 'groove' }}&gt;
               &lt;TableRow&gt;
-                {columns.map((colu<span class="cstat-no" title="statement not covered" >mn, index) =&gt; (<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-<span class="cstat-no" title="statement not covered" >                  &lt;TableCell</span>
-                    colSpan={columns.length + 1}
-                    align='left'
+                {columns.map((column, index) =&gt; (<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+                  &lt;TableCell
+                    colSpan={colum<span class="cstat-no" title="statement not covered" >ns.length + 1}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+<span class="cstat-no" title="statement not covered" >                    align='left'</span>
                     sx={{ fontSize: '14px', padding: '8px' }}
                     key={index}
                   &gt;
-<span class="fstat-no" title="function not covered" >                    {c</span>olumn.var<span class="cstat-no" title="statement not covered" >iable.name}</span>
+                    {column.variable.name}
                   &lt;/TableCell&gt;
-                ))}
+                ))}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 &nbsp;
                 {cellValues.length &gt; 1 ? (
                   // Empty column for remove button
                   &lt;TableCell colSpan={columns.length + 1} align='left' sx={{ fontSize: '14px', padding: '8px' }} /&gt;
-                )<span class="fstat-no" title="function not covered" > :</span> nul<span class="cstat-no" title="statement not covered" >l}</span>
+                ) : null}
               &lt;/TableRow&gt;
-            &lt;/TableHead&gt;
+            &lt;/Tab<span class="fstat-no" title="function not covered" >le</span>Head<span class="cstat-no" title="statement not covered" >&gt;</span>
 &nbsp;
             &lt;TableBody&gt;
               {cellValues.map((row, rowNum) =&gt; (
@@ -1406,14 +1400,14 @@ const EditableTableEdit = ({<span class="cstat-no" title="statement not covered"
                       /&gt;
                     &lt;/TableCell&gt;
                   ) : null}
-                &lt;/Tab<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >le</span>Row&gt;</span>
-<span class="cstat-no" title="statement not covered" >              ))}</span>
-            &lt;/TableBody&gt;
+                &lt;/TableRow&gt;
+              ))}
+            &lt;/TableBo<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >dy</span>&gt;</span>
 <span class="cstat-no" title="statement not covered" >          &lt;/Table&gt;</span>
         &lt;/TableContainer&gt;
 <span class="cstat-no" title="statement not covered" >      )}</span>
 &nbsp;
-      {variable.tableStyle === 'Vertical' &amp;&amp; (
+<span class="cstat-no" title="statement not covered" >      {variable.tableStyle === 'Vertical' &amp;&amp; (</span>
         &lt;&gt;
           {cellValues.map((row, index) =&gt; (
             &lt;Box key={`table-${index}`}&gt;
@@ -1425,16 +1419,16 @@ const EditableTableEdit = ({<span class="cstat-no" title="statement not covered"
                       return (
                         &lt;TableRow key={`row-${colNum}`}&gt;
                           &lt;TableCell align='left' sx={{ fontSize: '14px', padding: '8px' }}&gt;
-<span class="cstat-no" title="statement not covered" >                            {correspondingColumn?.variable.name}</span>
+                            {correspondingColumn?.variable.name}
                           &lt;/TableCell&gt;
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >                          &lt;TableCell align='left' sx={{ padding: '8px' }}&gt;</span>
-                            {correspondingColumn &amp;&amp; (
-                              &lt;EditableCell
+                          &lt;TableCell align='left' sx={{ padding: '8px' }}&gt;
+<span class="cstat-no" title="statement not covered" >                            {correspondingColu</span>mn &amp;&amp; (
+<span class="cstat-no" title="statement not covered" >                              &lt;EditableCell</span>
                                 display={display}
-<span class="fstat-no" title="function not covered" >                                i</span>d={`${co<span class="cstat-no" title="statement not covered" >l.rowId}-${col.colId}`}</span>
+                                id={`${col.rowId}-${col.colId}`}
                                 column={correspondingColumn}
-                                onChange={(value) =&gt; setCellValue(index, colNum, value as string | number)}
+<span class="fstat-no" title="function not covered" >                                o</span>nChange=<span class="cstat-no" title="statement not covered" >{(value) =&gt; setCellValue(index, colNum, value as string | number)}</span>
                                 value={(col.values?.length ?? 0) &gt; 0 ? cellValue(col.values![0]) : undefined}
                               /&gt;
                             )}
@@ -1443,12 +1437,12 @@ const EditableTableEdit = ({<span class="cstat-no" title="statement not covered"
                       );
                     })}
                   &lt;/TableBody&gt;
-<span class="cstat-no" title="statement not covered" >                &lt;/T</span>able&gt;
+                &lt;/Table&gt;
               &lt;/TableContainer&gt;
-&nbsp;
-              {!disp<span class="cstat-no" title="statement not covered" >lay &amp;&amp; (</span>
+<span class="cstat-no" title="statement not covered" ></span>
+              {!display &amp;&amp; (
                 &lt;Button
-                  onClick={() =&gt; removeRow(index)}
+                  on<span class="cstat-no" title="statement not covered" >Click={() =&gt; remov</span>eRow(index)}
                   icon='cancel'
                   type='passive'
                   priority='ghost'
@@ -1502,8 +1496,8 @@ export const EditableCell = ({ display, id, column, onChange, value }: EditableC
           label=''
           id={id}
           type='number'
-          min={(column.variable as NumberVariable).minValue}
-          max={(column.variable as NumberVariable).maxValue}
+          min={column.variable.minValue}
+          max={column.variable.maxValue}
           onChange={onChange}
           value={value}
         /&gt;
@@ -1513,7 +1507,7 @@ export const EditableCell = ({ display, id, column, onChange, value }: EditableC
         &lt;DatePicker id={id} label='' onChange={onChange} value={value as string} aria-label={`${id}-datepicker`} /&gt;
       );
     case 'Select': {
-      const options = (column.variable as SelectVariable).options;
+      const options = column.variable.options;
       return (
         &lt;Dropdown
           onChange={onChange}
@@ -1540,7 +1534,7 @@ export default EditableTableEdit;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-09T16:25:43.391Z
+                at 2026-01-09T19:24:31.383Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

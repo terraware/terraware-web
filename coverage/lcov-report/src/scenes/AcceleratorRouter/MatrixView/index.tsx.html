@@ -1175,8 +1175,7 @@
 <a name='L1110'></a><a href='#L1110'>1110</a>
 <a name='L1111'></a><a href='#L1111'>1111</a>
 <a name='L1112'></a><a href='#L1112'>1112</a>
-<a name='L1113'></a><a href='#L1113'>1113</a>
-<a name='L1114'></a><a href='#L1114'>1114</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L1113'></a><a href='#L1113'>1113</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -2113,7 +2112,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2987,44 +2985,43 @@ const MatrixView = () =&gt; {
             &lt;TextField<span class="cstat-no" title="statement not covered" ></span>
               type='number'<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
               value={value}<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >              // eslint-disable-next-line react/jsx-no-bind</span>
 <span class="cstat-no" title="statement not covered" >              onChange={(e) =&gt; {</span>
-                const numValue = e.target.value;
+<span class="cstat-no" title="statement not covered" >                const numValue = e.target.value;</span>
                 setValue(numValue);
               }}
               onKeyDown={(e) =&gt; {
                 if (e.key === 'Enter') {
-<span class="cstat-no" title="statement not covered" >                  handleSave();</span>
-                } else if (e.key === 'Escape') {
-<span class="cstat-no" title="statement not covered" >                  table.setEdi<span class="fstat-no" title="function not covered" >ti</span>ngCell(null);</span>
-<span class="cstat-no" title="statement not covered" >                }</span>
+                  handleSave();
+<span class="cstat-no" title="statement not covered" >                } else if (e.key === 'Escape') {</span>
+                  table.setEditingCell(null);
+<span class="cstat-no" title="statement not covered" >                }<span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >              }}</span>
-<span class="cstat-no" title="statement not covered" >              onBlur={han</span>dleSave}
-              size='small'
-<span class="cstat-no" title="statement not covered" >              fullWidth</span>
+<span class="cstat-no" title="statement not covered" >              onBlur={handleSave</span>}
+<span class="cstat-no" title="statement not covered" >              size='small</span>'
+              fullWidth
 <span class="cstat-no" title="statement not covered" >            /&gt;</span>
-          );
+<span class="cstat-no" title="statement not covered" >          );</span>
         };
-      }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >      if (correspondingValue?.l</span>inkUrl) {
-        Cell = undefined;
-        // URL input<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >        // eslint-disable-next-line react/display-name</span>
-        Edit = ({
-          cell,<span class="cstat-no" title="statement not covered" ></span>
-          row,
+      }
+      if (correspondingValue?.li<span class="cstat-no" title="statement not covered" >nkUrl) {<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >        Cell = undefined;</span>
+        // URL input
+        // eslint-disable-nex<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >t-</span>line react/display-name</span>
+<span class="cstat-no" title="statement not covered" >        Edit = ({</span>
+          cell,
+          row,<span class="cstat-no" title="statement not covered" ></span>
           table,
         }: {
           cell: MRT_Cell&lt;ProjectsWithVariablesSearchResult&gt;;
           column: MRT_Column&lt;ProjectsWithVariablesSearchResult&gt;;
-          row: MRT_Row&lt;ProjectsWit<span class="fstat-no" title="function not covered" >hV</span>ariablesSearchResult&gt;;
-          table: MRT_TableInstance<span class="cstat-no" title="statement not covered" >&lt;ProjectsWithVariablesSearchR</span>esult&gt;;
-<span class="cstat-no" title="statement not covered" >        }) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >          const [value, setValue] </span>= useState(cell.getValue&lt;string&gt;() || '');
-&nbsp;
+          row: MRT_Row&lt;ProjectsWithVariablesSearchResult&gt;;
+          table: MRT_TableInstance<span class="fstat-no" title="function not covered" >&lt;P</span>rojectsWithVariablesSearchResult&gt;;
+        }) =&gt; {<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >          const [value, setValue]</span> = useState(cell.getValue&lt;string&gt;() || '');
+<span class="cstat-no" title="statement not covered" ></span>
           const handleSave = () =&gt; {
-            table.setEditingCell(n<span class="fstat-no" title="function not covered" >ul</span>l);<span class="cstat-no" title="statement not covered" ></span>
-            const variable = row.original.variables?.find((_variable) =&gt; _variable.stableId === variableId);
+            table.setEditingCell(null);
+            const variable = row.o<span class="fstat-no" title="function not covered" >ri</span>ginal.variables?.find((_varia<span class="cstat-no" title="statement not covered" >ble) =&gt; _variable.stableId === variableId);</span>
             const variableToProcess = variable ?? (correspondingVariable || selectedVariable);
             if (variableToProcess) {
               onSaveHandler(row.original.id, value, variableToProcess);
@@ -3068,8 +3065,8 @@ const MatrixView = () =&gt; {
           const variable = row.variables?.find((_variable) =&gt; _variable.stableId === variableId);
           const variableValue = variable?.values?.[0];
 &nbsp;
-          if (!variableValu<span class="fstat-no" title="function not covered" >e </span>|| variable?.is<span class="cstat-no" title="statement not covered" >List?.toString() === 'true') {</span>
-            return '';
+          if (!variableValue || variable?.isList?.toString() === 'true') {
+            return '';<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
           }
 &nbsp;
           if (variableValue['numberValue(raw)']) {
@@ -3090,10 +3087,10 @@ const MatrixView = () =&gt; {
 &nbsp;
           return '';
         },
-        Cell,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-        // Handle saving the <span class="cstat-no" title="statement not covered" >edited value<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
-        muiEditTextF<span class="cstat-no" title="statement not covered" >ieldProps: ({</span>
-          row,
+        Cell,
+        // Handle savi<span class="cstat-no" title="statement not covered" >ng the edited value<span class="fstat-no" title="function not covered" ></span></span>
+        muiEditTextFieldProps<span class="cstat-no" title="statement not covered" >: ({<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
+          row,<span class="cstat-no" title="statement not covered" ></span>
         }: {
           cell: MRT_Cell&lt;ProjectsWithVariablesSearchResult&gt;;
           column: MRT_Column&lt;ProjectsWithVariablesSearchResult&gt;;
@@ -3141,82 +3138,82 @@ const MatrixView = () =&gt; {
     enableEditing: true,
     renderColumnActionsMenuItems: ({ internalColumnMenuItems }) =&gt; {
       // remove the last element (show all columns)
-<span class="cstat-no" title="statement not covered" >      const columnMenuItemsCopy = [..</span>.internalColumnMenuItems];
-      columnMenuItemsCopy.pop();
-<span class="cstat-no" title="statement not covered" >      return columnMenuItemsCo<span class="fstat-no" title="function not covered" >py</span>;</span>
-<span class="cstat-no" title="statement not covered" >    },</span>
-    ed<span class="cstat-no" title="statement not covered" >itDisplayMode: </span>'cell',
-    renderToolbarInternalActions: ({ table }) =&gt; (
-<span class="cstat-no" title="statement not covered" >      &lt;Box&gt;</span>
-<span class="cstat-no" title="statement not covered" >        &lt;MRT_ToggleGlobalFilt</span>erButton table={table} /&gt;
-<span class="cstat-no" title="statement not covered" >        &lt;MRT_ToggleFilter</span>sButton table={table} /&gt;
-        &lt;Tooltip title={strings.MANAGE_COLUMNS}&gt;
+      const columnMenuItemsCopy = [...internalColumnMenuItems];
+<span class="cstat-no" title="statement not covered" >      columnMenuItemsCopy.pop();</span>
+      return columnMenuItemsCopy;
+<span class="cstat-no" title="statement not covered" >    },<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    editDisplayMode: 'cell',</span>
+    re<span class="cstat-no" title="statement not covered" >nderToolbarInte</span>rnalActions: ({ table }) =&gt; (
+      &lt;Box&gt;
+<span class="cstat-no" title="statement not covered" >        &lt;MRT_ToggleGlobalFilterButton table={table} /&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;MRT_ToggleFiltersBut</span>ton table={table} /&gt;
+<span class="cstat-no" title="statement not covered" >        &lt;Tooltip title={s</span>trings.MANAGE_COLUMNS}&gt;
           &lt;IconButton onClick={onColumnsClickHandler} id='manageColumns'&gt;
-<span class="cstat-no" title="statement not covered" >            &lt;Icon name='iconCo<span class="fstat-no" title="function not covered" >lu</span>mns' /&gt;</span>
-<span class="cstat-no" title="statement not covered" >          &lt;/IconBut</span>ton&gt;
-        &lt;/Tooltip&gt;
-<span class="cstat-no" title="statement not covered" >        &lt;MRT_ToggleDensePaddin<span class="fstat-no" title="function not covered" >gB</span>utton table={table} /&gt;</span>
-        &lt;MRT_ToggleFullScreenButt<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >on</span> table={table} /&gt;</span>
-      &lt;/Box&gt;<span class="cstat-no" title="statement not covered" ></span>
+            &lt;Icon name='iconColumns' /&gt;
+<span class="cstat-no" title="statement not covered" >          &lt;/IconButton&gt;<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >        &lt;/Tooltip&gt;</span>
+        &lt;MRT_ToggleDensePaddingButton table={table} /&gt;
+<span class="cstat-no" title="statement not covered" >        &lt;MRT_ToggleFullScreenB<span class="fstat-no" title="function not covered" >ut</span>ton table={table} /&gt;</span>
+      &lt;/Box&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
     ),<span class="cstat-no" title="statement not covered" ></span>
-    state: {<span class="cstat-no" title="statement not covered" ></span>
-      co<span class="cstat-no" title="statement not covered" >lumnFilters,</span>
-      sorting,<span class="cstat-no" title="statement not covered" ></span>
-      colu<span class="cstat-no" title="statement not covered" >mnPinning,<span class="fstat-no" title="function not covered" ></span></span>
-      column<span class="cstat-no" title="statement not covered" >Order,</span>
-    },
-    onColu<span class="cstat-no" title="statement not covered" >mnFiltersChange: setCo<span class="fstat-no" title="function not covered" >lu</span>mnFilters,</span>
-    onSortin<span class="cstat-no" title="statement not covered" >gChange: setSorting,</span>
-    onColumnPinningChange: setColumnPinning,
-    onColu<span class="cstat-no" title="statement not covered" >mnOrderChange: setColumnOrder,</span>
-    muiTableBodyProps: {
+    st<span class="cstat-no" title="statement not covered" >ate: {</span>
+      columnFilters,<span class="cstat-no" title="statement not covered" ></span>
+      so<span class="cstat-no" title="statement not covered" >rting,</span>
+      columnPinning,<span class="cstat-no" title="statement not covered" ></span>
+      colu<span class="cstat-no" title="statement not covered" >mnOrder,<span class="fstat-no" title="function not covered" ></span></span>
+    },<span class="cstat-no" title="statement not covered" ></span>
+    onColumnFiltersChange: setColumnFilters,
+    onSort<span class="cstat-no" title="statement not covered" >ingChange: setSorting,<span class="fstat-no" title="function not covered" ></span></span>
+    onColumn<span class="cstat-no" title="statement not covered" >PinningChange: setColumnPinni</span>ng,
+    onColumnOrderChange: setColumnOrder,
+    muiTab<span class="cstat-no" title="statement not covered" >leBodyProps: {</span>
       sx: {
-<span class="cstat-no" title="statement not covered" >        '&amp; tr:nth-of-type(odd) &gt; td': {</span>
-          backgroundColor: theme.pa<span class="cstat-no" title="statement not covered" >lette.TwClrBaseGray025,<span class="fstat-no" title="function not covered" ></span></span>
-        },<span class="cstat-no" title="statement not covered" ></span>
+        '&amp; tr:nth-of-type(odd) &gt; td': {
+<span class="cstat-no" title="statement not covered" >          backgroundColor: theme.palette.TwClrBaseGray025,</span>
+        },<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
       },<span class="cstat-no" title="statement not covered" ></span>
-    },
-    muiTab<span class="cstat-no" title="statement not covered" >lePaperProps: {</span>
-      elevation: 0,
+    },<span class="cstat-no" title="statement not covered" ></span>
+    muiTablePaperProps: {
+      elev<span class="cstat-no" title="statement not covered" >ation: 0,</span>
     },
     muiTableBodyRowProps: {
-<span class="cstat-no" title="statement not covered" >      sx: {</span>
-<span class="cstat-no" title="statement not covered" >        '&amp; td': {</span>
-          borderBottom: 'none',
-        },
-      },<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >    },</span>
-    muiTableBodyCellProps: {
-      sx: {<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" ></span>        '&amp;[data-pinned="true"]:before': {
-          backgroundColor: 'tra<span class="cstat-no" title="statement not covered" >nsp</span>arent !important',
-<span class="cstat-no" title="statement not covered" >        },<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >        '&amp;[data-pinned="true"]': {</span>
-<span class="cstat-no" title="statement not covered" >          filter: 'brightness(0.97)',</span>
-          boxShadow: '-4px 0 4px -4px rgba(97, 97, 97, 0.5) inset',
-          zIndex: 1,
-<span class="cstat-no" title="statement not covered" >        },<span class="fstat-no" title="function not covered" ></span></span>
-      },<span class="cstat-no" title="statement not covered" ></span>
-    },
-    mu<span class="cstat-no" title="statement not covered" >iTableProps: {<span class="fstat-no" title="function not covered" ></span></span>
-      sx<span class="cstat-no" title="statement not covered" >: {</span>
-        tableLayout: 'fixed',
-      },<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
-    },<span class="cstat-no" title="statement not covered" ></span>
-    muiT<span class="fstat-no" title="function not covered" >ab</span>leHeadCe<span class="cstat-no" title="statement not covered" >llProps: ({ <span class="fstat-no" title="function not covered" >co</span>lumn }) =&gt;<span class="cstat-no" title="statement not covered" > ({</span></span>
       sx: {
-<span class="cstat-no" title="statement not covered" >        height: '56px',<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-        maxWidth: '200px',
+<span class="cstat-no" title="statement not covered" >        '&amp; td': {</span>
+<span class="cstat-no" title="statement not covered" >          borderBottom: 'none'</span>,
+        },
+      },
+    },<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    muiTableBodyCellProps: {</span>
+      sx: {
+        '&amp;[data-pinned="true<span class="cstat-no" title="statement not covered" >"]:before': {</span>
+<span class="fstat-no" title="function not covered" ></span>          backgroundColor: 'transparent !important',
+        },<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >        '&amp;[data-pinned="true"]': {<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >          filter: 'brightness(0.97)',</span>
+<span class="cstat-no" title="statement not covered" >          boxShadow: '-4px 0 4px -4px rgba(9</span>7, 97, 97, 0.5) inset',
+          zIndex: 1,
+        },
+<span class="cstat-no" title="statement not covered" >      },<span class="fstat-no" title="function not covered" ></span></span>
+    },<span class="cstat-no" title="statement not covered" ></span>
+    muiTableProps: {
+<span class="cstat-no" title="statement not covered" >      sx: {<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >        tableLayout: 'fixed',</span>
+      },
+    },<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
+    mu<span class="cstat-no" title="statement not covered" >iTableHeadCellProps: ({ column }) =&gt; ({</span>
+      sx<span class="fstat-no" title="function not covered" >: </span>{<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+        height: '56px',
+<span class="cstat-no" title="statement not covered" >        maxWidth: '200px',<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
         padding: '8px',
         '&amp;.MuiTableCell-head': {
-<span class="cstat-no" title="statement not covered" >          height: '56px !import</span>ant',
+          height: '56px !important',
 <span class="cstat-no" title="statement not covered" >        },</span>
-<span class="cstat-no" title="statement not covered" >        '&amp;.MuiTableCe</span>ll-head .Mui-TableHeadCell-Content-Wrapper': {
-          display: '-webkit-box',
+<span class="cstat-no" title="statement not covered" >        '&amp;.MuiTableCell-head .Mui-TableHeadCell-Content-Wrapper': {</span>
+<span class="cstat-no" title="statement not covered" >          display: '-</span>webkit-box',
           WebkitLineClamp: 3,
           WebkitBoxOrient: 'vertical',
-<span class="cstat-no" title="statement not covered" >          overflow: 'hidden',</span>
-          textOverflow: 'ellipsis',
+          overflow: 'hidden',
+<span class="cstat-no" title="statement not covered" >          textOverflow: 'ellipsis',</span>
           lineHeight: '1.2em',
           maxHeight: '3.4em',
           whiteSpace: 'normal',
@@ -3225,8 +3222,8 @@ const MatrixView = () =&gt; {
       title: column.columnDef.header,
     }),
   });
-<span class="cstat-no" title="statement not covered" ></span>
-  const reloadTable = useCallback(() =&gt; {
+&nbsp;
+  const reloadTable <span class="cstat-no" title="statement not covered" >= useCallba</span>ck(() =&gt; {
     const visibleColumnIds = dataForMaterialReactTable
       .getVisibleFlatColumns()
       .filter((col) =&gt; !isNaN(Number(col.id)))
@@ -3409,7 +3406,7 @@ export default MatrixView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-09T16:25:43.391Z
+                at 2026-01-09T19:24:31.383Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
