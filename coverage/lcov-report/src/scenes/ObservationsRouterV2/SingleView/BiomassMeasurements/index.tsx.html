@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/52</span>
+                <span class='fraction'>0/53</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/48</span>
+                <span class='fraction'>0/49</span>
             </div>
         
             
@@ -137,7 +137,13 @@
 <a name='L72'></a><a href='#L72'>72</a>
 <a name='L73'></a><a href='#L73'>73</a>
 <a name='L74'></a><a href='#L74'>74</a>
-<a name='L75'></a><a href='#L75'>75</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a>
+<a name='L77'></a><a href='#L77'>77</a>
+<a name='L78'></a><a href='#L78'>78</a>
+<a name='L79'></a><a href='#L79'>79</a>
+<a name='L80'></a><a href='#L80'>80</a>
+<a name='L81'></a><a href='#L81'>81</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -181,18 +187,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -200,6 +194,24 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -225,32 +237,33 @@ import { useGetObs<span class="cstat-no" title="statement not covered" ><span cl
 im<span class="cstat-no" title="statement not covered" >port useStickyTabs from 'src/utils/useStickyTabs';</span>
 <span class="cstat-no" title="statement not covered" ></span>
 import<span class="cstat-no" title="statement not covered" > BiomassObservationDataTab from './BiomassObservationDataTab';</span>
-import I<span class="cstat-no" title="statement not covered" >nvasiveAndThreatenedSpecie<span class="fstat-no" title="function not covered" >sT</span>ab f<span class="cstat-no" title="statement not covered" >rom './Inv</span>asiveAndThreatenedSpeciesTab';</span>
-&nbsp;
-co<span class="cstat-no" title="statement not covered" >nst Biomass</span>MeasurementsView = (): JSX.Element =&gt; {
-  const theme = useTheme();
-  const { stri<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ng</span>s } = useLocalization();<span class="cstat-no" title="statement not covered" ></span></span>
+import B<span class="cstat-no" title="statement not covered" >iomassPhotosTab from './Bi<span class="fstat-no" title="function not covered" >om</span>assP<span class="cstat-no" title="statement not covered" >hotosTab';</span></span>
+import InvasiveAndThreatenedSpeciesTab from './InvasiveAndThreatenedSpeciesTab';
+<span class="cstat-no" title="statement not covered" ></span>
+const BiomassMeasurementsView = (): JSX.Element =&gt; {
+  const theme <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >= </span>useTheme();<span class="cstat-no" title="statement not covered" ></span></span>
+  const { strings } = useLocalization();
   const params = useParams&lt;{ observationId: string }&gt;();
   const observationId = Number(params.observationId);
 &nbsp;
   const crumbs: Crumb[] = useMemo(() =&gt; {
     const crumbsData: Crumb[] = [
       {
-        name: strings.OBSERVATIONS,
-        to: `${APP_<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >PA</span>THS.OBS<span class="cstat-no" title="statement not covered" >ERVATIONS}`,</span></span>
-      },<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >    ];</span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-    return crumbsData;
-<span class="cstat-no" title="statement not covered" >  }, [strings.OBSERVATIONS]);</span>
+        name: strin<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >gs</span>.OBSERV<span class="cstat-no" title="statement not covered" >ATIONS,</span></span>
+        to: `${APP_P<span class="cstat-no" title="statement not covered" >ATH</span>S.OBSERVATIONS}`,
+<span class="cstat-no" title="statement not covered" >      },</span>
+    ];<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    return crumbsData;</span>
+  }, [strings.OBSER<span class="cstat-no" title="statement not covered" >VATIONS]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const { data: observatio<span class="cstat-no" title="statement not covered" >nResultsResponse } = use</span>GetObservationResultsQuery({ observationId });
+  const { data: observ<span class="cstat-no" title="statement not covered" >ationResultsResponse } = </span>useGetObservationResultsQuery({ observationId });
 <span class="cstat-no" title="statement not covered" ></span>
-  const results = useMemo(()<span class="cstat-no" title="statement not covered" > =&gt; observationResultsResponse?.obser</span>vation, [observationResultsResponse?.observation]);
+  const results = <span class="cstat-no" title="statement not covered" >useMemo(() =&gt; observationResultsResponse</span>?.observation, [observationResultsResponse?.observation]);
 <span class="cstat-no" title="statement not covered" ></span>
   const title = (<span class="cstat-no" title="statement not covered" ></span>
-    &lt;Typography fontSiz<span class="cstat-no" title="statement not covered" >e='20px' lineHeight='28px</span>' fontWeight={600} color={theme.palette.TwClrTxt}&gt;
-      {results?.adHocPlot?<span class="cstat-no" title="statement not covered" >.monitoringPlotNumber}</span>
+    &lt;Typography fontSize='<span class="cstat-no" title="statement not covered" >20px' lineHeight='28px' fontWeight={600} color</span>={theme.palette.TwClrTxt}&gt;
+      {results?.adHocPlot?.<span class="cstat-no" title="statement not covered" >monitoringPlotNumber}</span>
     &lt;/Typography&gt;<span class="cstat-no" title="statement not covered" ></span>
   );<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
@@ -266,14 +279,19 @@ co<span class="cstat-no" title="statement not covered" >nst Biomass</span>Measur
         label: strings.INVASIVE_AND_THREATENED_SPECIES,
         children: &lt;InvasiveAndThreatenedSpeciesTab /&gt;,
       },
-    ];
-  },<span class="cstat-no" title="statement not covered" > [strings.INVASIVE_</span>AND_THREATENED_SPECIES, strings.OBSERVATION_DATA]);
-&nbsp;
-  const { activeTab, onChangeTab } = useStickyT<span class="cstat-no" title="statement not covered" >abs({</span>
-    defaultTab: 'o<span class="cstat-no" title="statement not covered" >bservationData',<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-    tabs,<span class="cstat-no" title="statement not covered" ></span>
-    viewIdentif<span class="cstat-no" title="statement not covered" >ier: 'biomassObservation',<span class="fstat-no" title="function not covered" ></span></span>
-  })<span class="cstat-no" title="statement not covered" >;</span>
+      {
+<span class="cstat-no" title="statement not covered" >        id: 'photosAndV</span>ideos',
+        label: strings.PHOTOS_AND_VIDEOS,
+        children: &lt;BiomassPhotosTab /&gt;,<span class="cstat-no" title="statement not covered" ></span>
+      },<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+    ];<span class="cstat-no" title="statement not covered" ></span>
+  }, [strings.I<span class="cstat-no" title="statement not covered" >NVASIVE_AND_THREATENED_SPE<span class="fstat-no" title="function not covered" >CI</span>ES, strings.OBSERVATION_DATA, strings.PHOTOS_AND_VIDEOS]);</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  const { activeTab, onChangeTab } = useStickyTabs({
+    defaultTab: 'observationData',
+    tabs,
+    viewIdentifier: 'biomassObservation',
+  });
 &nbsp;
   return (
     &lt;Page crumbs={crumbs} title={title} titleContainerStyle={{ paddingTop: 3, paddingBottom: 1 }}&gt;
@@ -292,7 +310,7 @@ export default BiomassMeasurementsView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-09T19:38:32.550Z
+                at 2026-01-09T22:13:38.921Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>
