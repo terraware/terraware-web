@@ -7,7 +7,7 @@ import CellRenderer from 'src/components/common/table/TableCellRenderer';
 import { APP_PATHS } from 'src/constants';
 
 export type ProjectModulesCellRendererProps = {
-  editing: boolean;
+  editing?: boolean;
   onClickName?: (id: string) => void;
 };
 

@@ -17,7 +17,7 @@ import ProjectModulesCellRenderer from './ProjectModulesCellRenderer';
 
 type ProjectModulesListProps = {
   projectId: number;
-  editing: boolean;
+  editing?: boolean;
 };
 
 const defaultSortOrder: SearchSortOrder = {

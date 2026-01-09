@@ -23,7 +23,7 @@ const ProjectDeliverablesView = ({ projectId }: ProjectDeliverablesViewProps) =>
     >
       <DeliverablesList projectId={projectId} maxItemsPerPage={10} />
 
-      {projectId && <ProjectModulesList projectId={projectId} editing={false} />}
+      {projectId && <ProjectModulesList projectId={projectId} />}
     </Card>
   );
 };
