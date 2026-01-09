@@ -82,7 +82,11 @@ export default function useNavigateTo() {
       },
 
       goToAcceleratorProject: (projectId: number) => {
-        navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_VOTES.replace(':projectId', `${projectId}`) });
+        navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', `${projectId}`) });
+      },
+
+      goToAcceleratorProjectModulesEdit: (projectId: number) => {
+        navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_MODULES_EDIT.replace(':projectId', `${projectId}`) });
       },
 
       goToAcceleratorProjectScore: (projectId: number) => {

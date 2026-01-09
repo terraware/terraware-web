@@ -5,9 +5,8 @@ import { TableColumnType } from '@terraware/web-components/components/table/type
 
 import ClientSideFilterTable from 'src/components/Tables/ClientSideFilterTable';
 import Button from 'src/components/common/button/Button';
-import { APP_PATHS } from 'src/constants';
 import useBoolean from 'src/hooks/useBoolean';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
+import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization, useUser } from 'src/providers';
 import { ProjectModulePayload, useListProjectModulesQuery } from 'src/queries/generated/projectModules';
 import { SearchSortOrder } from 'src/types/Search';
@@ -29,7 +28,7 @@ const fuzzySearchColumns = ['title', 'name', 'id'];
 
 const ProjectModulesList = ({ projectId, editing }: ProjectModulesListProps): JSX.Element => {
   const { strings } = useLocalization();
-  const navigate = useSyncNavigate();
+  const { goToAcceleratorProjectModulesEdit } = useNavigateTo();
   const { isAllowed } = useUser();
   const [addModuleModalOpened, , openAddModuleModal, closeAddModuleModal] = useBoolean(false);
   const [selectedRows, setSelectedRows] = useState<TableRowType[]>([]);
@@ -54,8 +53,8 @@ const ProjectModulesList = ({ projectId, editing }: ProjectModulesListProps): JS
   }, [strings]);
 
   const goToEditModulesPage = useCallback(
-    () => navigate(APP_PATHS.ACCELERATOR_PROJECT_MODULES_EDIT.replace(':projectId', `${projectId}`)),
-    [navigate, projectId]
+    () => goToAcceleratorProjectModulesEdit(projectId),
+    [goToAcceleratorProjectModulesEdit, projectId]
   );
 
   const isAllowedEdit = useMemo(() => isAllowed('UPDATE_PROJECT_MODULES'), [isAllowed]);
@@ -100,10 +99,10 @@ const ProjectModulesList = ({ projectId, editing }: ProjectModulesListProps): JS
   };
 
   const onEditHandler = useCallback(
-    (id: string) => {
-      const clickedModule = pendingProjectModules.find((module) => String(module.id) === id);
+    (id: number) => {
+      const clickedModule = pendingProjectModules.find((module) => module.id === id);
       setModuleToEdit(clickedModule as ProjectModulePayload);
-      openAddModuleModal(); // todo change to edit modal in later PR
+      openAddModuleModal();
     },
     [openAddModuleModal, pendingProjectModules]
   );
@@ -119,17 +118,30 @@ const ProjectModulesList = ({ projectId, editing }: ProjectModulesListProps): JS
     closeAddModuleModal();
   }, [closeAddModuleModal]);
 
-  const onModalSaveHandler = useCallback((module: ProjectModulePayload) => {
-    // TODO later PR
-    console.log('onModalSaveHandler', module);
-    // if (moduleToEdit) {
-    //   setModuleToEdit(undefined);
-    //   onEditedModule(module);
-    // } else {
-    //   onAddModule(module);
-    // }
-    // closeAddModuleModal();
+  const onAddModule = useCallback((module: ProjectModulePayload) => {
+    setPendingProjectModules((prev) => [...prev, module]);
   }, []);
+
+  const onEditedModule = useCallback((updatedModule: ProjectModulePayload) => {
+    setPendingProjectModules((prev) => {
+      // filter out updated module, then add edited module
+      const unchangedModules = prev.filter((existingModule) => existingModule.id !== updatedModule.id);
+      return [...unchangedModules, updatedModule];
+    });
+  }, []);
+
+  const onModalSaveHandler = useCallback(
+    (module: ProjectModulePayload) => {
+      if (moduleToEdit) {
+        setModuleToEdit(undefined);
+        onEditedModule(module);
+      } else {
+        onAddModule(module);
+      }
+      closeAddModuleModal();
+    },
+    [closeAddModuleModal, moduleToEdit, onAddModule, onEditedModule]
+  );
 
   const falseCallback = useCallback(() => false, []);
 
