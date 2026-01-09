@@ -70,7 +70,7 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
     isLoading: userServerNotificationLoading,
     isError: userServerNotificationError,
   } = useReadAllQuery(undefined, {
-    pollingInterval: !process.env.REACT_APP_DISABLE_RECURRENT_REQUESTS ? API_PULL_INTERVAL : undefined,
+    pollingInterval: !import.meta.env.PUBLIC_DISABLE_RECURRENT_REQUESTS ? API_PULL_INTERVAL : undefined,
   });
 
   const {
@@ -78,7 +78,7 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
     isLoading: organizationServerNotificationLoading,
     isError: organizationServerNotificationError,
   } = useReadAllQuery(organizationId, {
-    pollingInterval: !process.env.REACT_APP_DISABLE_RECURRENT_REQUESTS ? API_PULL_INTERVAL : undefined,
+    pollingInterval: !import.meta.env.PUBLIC_DISABLE_RECURRENT_REQUESTS ? API_PULL_INTERVAL : undefined,
     skip: organizationId === undefined,
   });
 

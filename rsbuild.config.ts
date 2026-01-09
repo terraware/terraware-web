@@ -6,15 +6,7 @@ import chokidar from 'chokidar';
 
 const { convertAllLocales } = require('./src/strings/export');
 
-// Load environment variables with REACT_APP_ prefix for CRA compatibility
-const { publicVars } = loadEnv({ prefixes: ['REACT_APP_'] });
-const publicVarsWithDefaults = Object.entries(publicVars).reduce(
-  (acc, [key, value]) => {
-    acc[key] = value ?? 'undefined';
-    return acc;
-  },
-  {} as Record<string, any>
-);
+const terrawareApi = process.env.PUBLIC_TERRAWARE_API;
 
 export default defineConfig({
   plugins: [
@@ -26,8 +18,6 @@ export default defineConfig({
   ],
 
   source: {
-    // Inject REACT_APP_ environment variables
-    define: { ...publicVarsWithDefaults },
     // Entry point
     entry: {
       index: './src/index.tsx',
@@ -53,37 +43,37 @@ export default defineConfig({
   server: {
     proxy: {
       '/admin': {
-        target: process.env.REACT_APP_TERRAWARE_API,
+        target: terrawareApi,
         secure: false,
         changeOrigin: false,
         xfwd: true,
       },
       '/api': {
-        target: process.env.REACT_APP_TERRAWARE_API,
+        target: terrawareApi,
         secure: false,
         changeOrigin: false,
         xfwd: true,
       },
       '/sso': {
-        target: process.env.REACT_APP_TERRAWARE_API,
+        target: terrawareApi,
         secure: false,
         changeOrigin: false,
         xfwd: true,
       },
       '/swagger-ui.html': {
-        target: process.env.REACT_APP_TERRAWARE_API,
+        target: terrawareApi,
         secure: false,
         changeOrigin: false,
         xfwd: true,
       },
       '/swagger-ui': {
-        target: process.env.REACT_APP_TERRAWARE_API,
+        target: terrawareApi,
         secure: false,
         changeOrigin: false,
         xfwd: true,
       },
       '/v3': {
-        target: process.env.REACT_APP_TERRAWARE_API,
+        target: terrawareApi,
         secure: false,
         changeOrigin: false,
         xfwd: true,
