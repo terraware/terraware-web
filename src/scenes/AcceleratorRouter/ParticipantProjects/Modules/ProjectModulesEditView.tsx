@@ -95,6 +95,7 @@ export default function ProjectModulesEditView(): JSX.Element {
         const responses = await Promise.all([...deletePromises, ...updatePromises]);
         if (responses.some((response) => response.status !== 'ok')) {
           snackbar.toastError();
+          return;
         }
         snackbar.toastSuccess(strings.CHANGES_SAVED);
         goToAcceleratorProject(projectId);
