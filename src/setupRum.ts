@@ -3,10 +3,10 @@ import { reactPlugin } from '@datadog/browser-rum-react';
 
 import packageJson from '../package.json';
 
-const tier = process.env.REACT_APP_TERRAWARE_TIER || 'dev';
-const appVersion = process.env.REACT_APP_TERRAWARE_FE_BUILD_VERSION || packageJson.version;
-const applicationId = process.env.REACT_APP_DATADOG_APP_ID;
-const clientToken = process.env.REACT_APP_DATADOG_CLIENT_TOKEN;
+const tier = import.meta.env.PUBLIC_TERRAWARE_TIER || 'dev';
+const appVersion = import.meta.env.PUBLIC_TERRAWARE_FE_BUILD_VERSION || packageJson.version;
+const applicationId = import.meta.env.PUBLIC_DATADOG_APP_ID;
+const clientToken = import.meta.env.PUBLIC_DATADOG_CLIENT_TOKEN;
 
 export const canEnableRum = (): boolean => {
   return !(tier === 'test' || !appVersion || !applicationId || !clientToken);
