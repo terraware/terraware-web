@@ -3,8 +3,10 @@ import { useParams } from 'react-router';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 
+import ConfirmModal from 'src/components/Application/ConfirmModal';
 import PageForm from 'src/components/common/PageForm';
 import TfMain from 'src/components/common/TfMain';
+import useBoolean from 'src/hooks/useBoolean';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
 import { useListModulesQuery } from 'src/queries/generated/modules';
@@ -34,6 +36,8 @@ export default function ProjectModulesEditView(): JSX.Element {
   const { strings } = useLocalization();
   const theme = useTheme();
   const { goToAcceleratorProject } = useNavigateTo();
+  const [saveIsLoading, , setSaveIsLoadingTrue, setSaveIsLoadingFalse] = useBoolean(false);
+  const [confirmModalOpen, , openConfirmModal, closeConfirmModal] = useBoolean(false);
   const { projectId: projectIdString } = useParams<{ projectId: string }>();
   const projectId = useMemo(() => Number(projectIdString || -1), [projectIdString]);
   const { data: projectData } = useGetProjectQuery(projectId);
@@ -65,6 +69,8 @@ export default function ProjectModulesEditView(): JSX.Element {
     }
     const save = async () => {
       try {
+        closeConfirmModal();
+        setSaveIsLoadingTrue();
         const toDelete = projectModules.filter(
           (oldModule) => pendingModules.find((newModule) => newModule.id === oldModule.id) === undefined
         );
@@ -101,6 +107,8 @@ export default function ProjectModulesEditView(): JSX.Element {
         goToAcceleratorProject(projectId);
       } catch (e) {
         snackbar.toastError();
+      } finally {
+        setSaveIsLoadingFalse();
       }
     };
     void save();
@@ -114,10 +122,20 @@ export default function ProjectModulesEditView(): JSX.Element {
     projectId,
     deleteProjectModule,
     updateProjectModule,
+    closeConfirmModal,
+    setSaveIsLoadingTrue,
+    setSaveIsLoadingFalse,
   ]);
 
   return (
     <TfMain>
+      <ConfirmModal
+        open={confirmModalOpen}
+        title={strings.CONFIRM_UPDATE_ALL_COHORT_MODULES_TITLE}
+        body={strings.CONFIRM_UPDATE_ALL_COHORT_MODULES}
+        onClose={closeConfirmModal}
+        onConfirm={saveModules}
+      />
       <Box padding={theme.spacing(3)}>
         <Typography fontSize='24px' fontWeight={600}>
           {strings.formatString(strings.MODULES_FOR_PROJECT, project.name)}
@@ -127,11 +145,9 @@ export default function ProjectModulesEditView(): JSX.Element {
         cancelID={'cancelEditModules'}
         saveID={'saveEditModules'}
         onCancel={backToProjectDeliverables}
-        onSave={saveModules}
-        style={{
-          display: 'flex',
-          flexGrow: 1,
-        }}
+        onSave={openConfirmModal}
+        style={{ display: 'flex', flexGrow: 1 }}
+        busy={saveIsLoading}
       >
         <Grid
           container
