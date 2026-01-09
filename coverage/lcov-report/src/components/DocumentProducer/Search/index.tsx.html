@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/28</span>
+                <span class='fraction'>0/30</span>
             </div>
         
             
@@ -193,7 +193,9 @@
 <a name='L128'></a><a href='#L128'>128</a>
 <a name='L129'></a><a href='#L129'>129</a>
 <a name='L130'></a><a href='#L130'>130</a>
-<a name='L131'></a><a href='#L131'>131</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L131'></a><a href='#L131'>131</a>
+<a name='L132'></a><a href='#L132'>132</a>
+<a name='L133'></a><a href='#L133'>133</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -323,7 +325,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > useMemo, useS</span>tate } from 'react';
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > useMemo, useS</span>tate } from 'react';
 <span class="cstat-no" title="statement not covered" ></span>
 import { Grid, Popover,<span class="cstat-no" title="statement not covered" > useTheme } from '@mui/material'</span>;
 import { Textfield } fro<span class="cstat-no" title="statement not covered" >m '@terraware/web-component</span>s';
@@ -348,68 +352,70 @@ export type Se<span class="cstat-no" title="statement not covered" ><span class=
 &nbsp;
   // filters
   filterProps?: SearchFiltersProp;
-};
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-const Search = ({ se<span class="cstat-no" title="statement not covered" >arc</span>hValue, onSearch, filterProps }: SearchProps): JSX.Element =&gt; {
-<span class="cstat-no" title="statement not covered" >  const theme = useTheme();</span>
-  const [an<span class="fstat-no" title="function not covered" >ch</span>orEl<span class="cstat-no" title="statement not covered" >, setAnchorEl]</span> = useState&lt;null | HTMLElement&gt;(null);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  const handleFilterClick = (event: React.Mous</span>eEvent&lt;HTMLElement&gt;) =&gt; {
-    setAnchorEl(eve<span class="cstat-no" title="statement not covered" >nt.currentTarget);</span>
+  tableId?: string;<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+};<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+const Searc<span class="fstat-no" title="function not covered" >h </span>= ({<span class="cstat-no" title="statement not covered" > searchValue, </span>onSearch, filterProps, tableId }: SearchProps): JSX.Element =&gt; {
+  const theme = useTheme();
+<span class="cstat-no" title="statement not covered" >  const [anchorEl, setAnchorEl] = useState&lt;nul</span>l | HTMLElement&gt;(null);
+<span class="cstat-no" title="statement not covered" ></span>
+  const handleFilterCl<span class="cstat-no" title="statement not covered" >ick = (event: React.Mouse</span>Event&lt;HTMLElement&gt;) =&gt; {
+    setAnchorEl(event.curren<span class="cstat-no" title="statement not covered" >tTarget);</span>
   };<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const handleFilterClose = (<span class="cstat-no" title="statement not covered" >) =&gt; {</span>
-    setAnchorEl(null);<span class="cstat-no" title="statement not covered" ></span>
-  };<span class="cstat-no" title="statement not covered" ></span>
+  const handleFilterClose<span class="cstat-no" title="statement not covered" > = () =&gt; {</span>
+    setAnchorEl(null)<span class="cstat-no" title="statement not covered" >;</span>
+  };<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const filterP<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >il</span>lData = useMemo(() =&gt; {</span>
-    if (!filterP<span class="cstat-no" title="statement not covered" >rops) {</span>
-      return [];<span class="cstat-no" title="statement not covered" ></span>
-    }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >    const { filters, filterColumns, se</span>tFilters } = filterProps;
-    return Object.keys(filters).map((key) =&gt; {
-      const removeFilter = (<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >k:</span> string) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >        const result = </span>{ ...filters };
-        delete result[k];
-        setFilters(result<span class="cstat-no" title="statement not covered" >);<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >      };</span>
+  const filterPillData = useMemo((<span class="cstat-no" title="statement not covered" >) =&gt; {</span>
+    if (!filterProps) {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >      return [];</span>
+    }
+    const { filters, filterC<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ol</span>umns, setFilters } = filterProps;</span>
+<span class="cstat-no" title="statement not covered" >    return Object.keys(</span>filters).map((key) =&gt; {
+      const removeFilter = (k: string) =&gt; {
+        const result = { <span class="cstat-no" title="statement not covered" >...filters };<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >        delete result[k];</span>
+<span class="cstat-no" title="statement not covered" >        setFilter</span>s(result);
+      };
 <span class="cstat-no" title="statement not covered" ></span>
-      return {
-        id: key,<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >        label: filterColumns.find((f<span class="fstat-no" title="function not covered" >: </span>any) =&gt; key === f.name)?.label ?? '',</span>
-        value: filters[key].values.join(', '),
-        onRemove: () =&gt; rem<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ov</span>eFilter(key),</span>
+<span class="cstat-no" title="statement not covered" >      return {<span class="fstat-no" title="function not covered" ></span></span>
+        id: key,
+        label: filterColumn<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >s.</span>find((f: any) =&gt; key === f.name)?.label ?? '',</span>
+        value: filters[<span class="cstat-no" title="statement not covered" >key].values.joi</span>n(', '),
+<span class="cstat-no" title="statement not covered" >        onRemove: () =&gt; re</span>moveFilter(key),
       };<span class="cstat-no" title="statement not covered" ></span>
-    });<span class="cstat-no" title="statement not covered" ></span>
-  }, [fi<span class="cstat-no" title="statement not covered" >lterProps]);</span>
+    });
+  }, [<span class="cstat-no" title="statement not covered" >filterProps]);</span>
 &nbsp;
-  retu<span class="cstat-no" title="statement not covered" >rn (</span>
+  return (<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
     &lt;Grid container&gt;
-      &lt;Grid item xs={12} sx={{ display: 'flex'<span class="fstat-no" title="function not covered" >, </span>margi<span class="cstat-no" title="statement not covered" >nBottom: '16px'</span>, alignItems: 'center' }}&gt;
+      &lt;Grid item x<span class="fstat-no" title="function not covered" >s=</span>{12}<span class="cstat-no" title="statement not covered" > sx={{ display: 'f</span>lex', marginBottom: '16px', alignItems: 'center' }}&gt;
         &lt;Textfield
-          placehol<span class="fstat-no" title="function not covered" >de</span>r={s<span class="cstat-no" title="statement not covered" >trings.SEARCH}</span>
+          placeholder={strings.SEARCH}
           iconLeft='search'
-          label=''
-          id='search'
-<span class="cstat-no" title="statement not covered" >          type='text'</span>
+<span class="cstat-no" title="statement not covered" >          label=''</span>
+          id={`search${tableId ? `-${tableId}` : ''}`}
+          type='text'
           iconRight='cancel'
           onClickRightIcon={() =&gt; onSearch('')}
           value={searchValue}
           onChange={(value: any) =&gt; onSearch(value as string)}
           sx={{ width: '300px' }}
         /&gt;
-        {filterProps &amp;&amp; (
+        {filterProps &amp;&amp; <span class="fstat-no" title="function not covered" >(<span class="cstat-no" title="statement not covered" ></span></span>
           &lt;&gt;
-            &lt;Tooltip tit<span class="fstat-no" title="function not covered" >le</span>={st<span class="cstat-no" title="statement not covered" >rings.FILTER}</span>&gt;
+            &lt;Too<span class="fstat-no" title="function not covered" >lt</span>ip title=<span class="cstat-no" title="statement not covered" >{strings.FILTER}</span>&gt;
               &lt;Button
-<span class="fstat-no" title="function not covered" >                id</span>='filterN<span class="cstat-no" title="statement not covered" >urseryWithdrawal</span>'
+                id='filterNurseryWithdrawal'
                 onClick={(event) =&gt; event &amp;&amp; handleFilterClick(event)}
                 type='passive'
                 priority='ghost'
                 icon='filter'
-              /&gt;
+              /<span class="fstat-no" title="function not covered" >&gt;<span class="cstat-no" title="statement not covered" ></span></span>
             &lt;/Tooltip&gt;
-            &lt;Po<span class="fstat-no" title="function not covered" >po</span>ver<span class="cstat-no" title="statement not covered" ></span>
+            &lt;Popover
               id='simple-popover'
               open={Boolean(anchorEl)}
               anchorEl={anchorEl}
@@ -442,25 +448,25 @@ const Search = ({ se<span class="cstat-no" title="statement not covered" >arc</s
                 onCancel={handleFilterClose}
               /&gt;
             &lt;/Popover&gt;
-          &lt;/&gt;
-        )}
-      &lt;/Grid&gt;<span class="fstat-no" title="function not covered" ></span>
-      &lt;Gri<span class="cstat-no" title="statement not covered" >d item xs={12} displa</span>y='flex'&gt;
-        &lt;P<span class="cstat-no" title="statement not covered" >illList data={filterPillData</span>} /&gt;
+          &lt;/&gt;<span class="fstat-no" title="function not covered" ></span>
+        )}<span class="cstat-no" title="statement not covered" ></span>
+      &lt;/Gr<span class="cstat-no" title="statement not covered" >id&gt;</span>
+      &lt;Grid item xs={12} display='flex'&gt;
+        &lt;PillList data={filterPillData} /&gt;
       &lt;/Grid&gt;
     &lt;/Grid&gt;
   );
 };
-&nbsp;
+<span class="cstat-no" title="statement not covered" ></span>
 export default Search;
-<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
+&nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-09T19:24:31.383Z
+                at 2026-01-09T19:38:32.550Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
