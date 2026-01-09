@@ -7112,7 +7112,7 @@ export interface components {
             type: "Point" | "LineString" | "Polygon" | "MultiPoint" | "MultiLineString" | "MultiPolygon" | "GeometryCollection";
         };
         GeometryCollection: Omit<WithRequired<components["schemas"]["Geometry"], "type">, "type"> & {
-            geometries: Record<string, never>[];
+            geometries: (components["schemas"]["GeometryCollection"] | components["schemas"]["LineString"] | components["schemas"]["MultiLineString"] | components["schemas"]["MultiPoint"] | components["schemas"]["MultiPolygon"] | components["schemas"]["Point"] | components["schemas"]["Polygon"])[];
             /** @enum {string} */
             type: "GeometryCollection";
         } & {

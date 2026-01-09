@@ -5,6 +5,8 @@ import { useTheme } from '@mui/material';
 import Card from 'src/components/common/Card';
 import DeliverablesList from 'src/scenes/DeliverablesRouter/DeliverablesList';
 
+import ProjectModulesList from './ProjectModulesList';
+
 type ProjectDeliverablesViewProps = {
   projectId: number;
 };
@@ -20,6 +22,8 @@ const ProjectDeliverablesView = ({ projectId }: ProjectDeliverablesViewProps) =>
       }}
     >
       <DeliverablesList projectId={projectId} />
+
+      {projectId && <ProjectModulesList projectId={projectId} />}
     </Card>
   );
 };
