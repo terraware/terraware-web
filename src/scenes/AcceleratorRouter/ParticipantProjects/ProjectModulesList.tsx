@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import { TableRowType } from '@terraware/web-components';
 import { TableColumnType } from '@terraware/web-components/components/table/types';
@@ -8,16 +8,12 @@ import Button from 'src/components/common/button/Button';
 import useBoolean from 'src/hooks/useBoolean';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization, useUser } from 'src/providers';
-import { ProjectModulePayload, useListProjectModulesQuery } from 'src/queries/generated/projectModules';
+import { ModulePayload } from 'src/queries/generated/modules';
+import { ProjectModulePayload } from 'src/queries/generated/projectModules';
 import { SearchSortOrder } from 'src/types/Search';
 
 import AddModuleModal from '../Cohorts/AddModuleModal';
 import ProjectModulesCellRenderer from './ProjectModulesCellRenderer';
-
-type ProjectModulesListProps = {
-  projectId: number;
-  editing?: boolean;
-};
 
 const defaultSortOrder: SearchSortOrder = {
   field: 'startDate',
@@ -26,21 +22,29 @@ const defaultSortOrder: SearchSortOrder = {
 
 const fuzzySearchColumns = ['title', 'name', 'id'];
 
-const ProjectModulesList = ({ projectId, editing }: ProjectModulesListProps): JSX.Element => {
+type ProjectModulesListProps = {
+  projectId: number;
+  editing?: boolean;
+  isLoading: boolean;
+  projectModules: ProjectModulePayload[];
+  setProjectModules?: React.Dispatch<React.SetStateAction<ProjectModulePayload[]>>;
+  allModules?: ModulePayload[];
+};
+
+const ProjectModulesList = ({
+  projectId,
+  editing,
+  isLoading,
+  allModules,
+  projectModules,
+  setProjectModules,
+}: ProjectModulesListProps): JSX.Element => {
   const { strings } = useLocalization();
   const { goToAcceleratorProjectModulesEdit } = useNavigateTo();
   const { isAllowed } = useUser();
   const [addModuleModalOpened, , openAddModuleModal, closeAddModuleModal] = useBoolean(false);
   const [selectedRows, setSelectedRows] = useState<TableRowType[]>([]);
   const [moduleToEdit, setModuleToEdit] = useState<ProjectModulePayload>();
-
-  const { data, isLoading } = useListProjectModulesQuery(projectId);
-  const modules = useMemo(() => data?.modules || [], [data?.modules]);
-  const [pendingProjectModules, setPendingProjectModules] = useState<ProjectModulePayload[]>(modules);
-
-  useEffect(() => {
-    setPendingProjectModules(modules);
-  }, [modules]);
 
   const columns: TableColumnType[] = useMemo(() => {
     return [
@@ -52,12 +56,67 @@ const ProjectModulesList = ({ projectId, editing }: ProjectModulesListProps): JS
     ];
   }, [strings]);
 
+  const isAllowedEdit = useMemo(() => isAllowed('UPDATE_PROJECT_MODULES'), [isAllowed]);
+
   const goToEditModulesPage = useCallback(
     () => goToAcceleratorProjectModulesEdit(projectId),
     [goToAcceleratorProjectModulesEdit, projectId]
   );
 
-  const isAllowedEdit = useMemo(() => isAllowed('UPDATE_PROJECT_MODULES'), [isAllowed]);
+  const deleteModules = useCallback(() => {
+    setProjectModules?.((prev) =>
+      prev.filter(
+        (existingModule) => selectedRows.find((deletedModule) => deletedModule.id === existingModule.id) === undefined
+      )
+    );
+  }, [selectedRows, setProjectModules]);
+
+  const onEditHandler = useCallback(
+    (id: number) => {
+      const clickedModule = projectModules?.find((module) => module.id === id);
+      setModuleToEdit(clickedModule as ProjectModulePayload);
+      openAddModuleModal();
+    },
+    [openAddModuleModal, projectModules]
+  );
+
+  const onCloseModalHandler = useCallback(() => {
+    setModuleToEdit(undefined);
+    closeAddModuleModal();
+  }, [closeAddModuleModal]);
+
+  const onAddModule = useCallback(
+    (module: ProjectModulePayload) => {
+      setProjectModules?.((prev) => [...prev, module]);
+    },
+    [setProjectModules]
+  );
+
+  const onEditedModule = useCallback(
+    (updatedModule: ProjectModulePayload) => {
+      setProjectModules?.((prev) => {
+        // filter out updated module, then add edited module
+        const unchangedModules = prev.filter((existingModule) => existingModule.id !== updatedModule.id);
+        return [...unchangedModules, updatedModule];
+      });
+    },
+    [setProjectModules]
+  );
+
+  const onModalSaveHandler = useCallback(
+    (module: ProjectModulePayload) => {
+      if (moduleToEdit) {
+        setModuleToEdit(undefined);
+        onEditedModule(module);
+      } else {
+        onAddModule(module);
+      }
+      closeAddModuleModal();
+    },
+    [closeAddModuleModal, moduleToEdit, onAddModule, onEditedModule]
+  );
+
+  const falseCallback = useCallback(() => false, []);
 
   const editButton = useMemo(
     () =>
@@ -90,60 +149,11 @@ const ProjectModulesList = ({ projectId, editing }: ProjectModulesListProps): JS
     [openAddModuleModal, strings.ADD_MODULE]
   );
 
-  const deleteModules = () => {
-    setPendingProjectModules?.((prev) =>
-      prev.filter(
-        (existingModule) => selectedRows.find((deletedModule) => deletedModule.id === existingModule.id) === undefined
-      )
-    );
-  };
-
-  const onEditHandler = useCallback(
-    (id: number) => {
-      const clickedModule = pendingProjectModules.find((module) => module.id === id);
-      setModuleToEdit(clickedModule as ProjectModulePayload);
-      openAddModuleModal();
-    },
-    [openAddModuleModal, pendingProjectModules]
-  );
-
   const unusedModules = useMemo(() => {
-    return modules.filter(
-      (module) => pendingProjectModules.find((existingModule) => module.id === existingModule.id) === undefined
+    return (allModules || []).filter(
+      (module) => projectModules?.find((existingModule) => module.id === existingModule.id) === undefined
     );
-  }, [pendingProjectModules, modules]);
-
-  const onCloseModalHandler = useCallback(() => {
-    setModuleToEdit(undefined);
-    closeAddModuleModal();
-  }, [closeAddModuleModal]);
-
-  const onAddModule = useCallback((module: ProjectModulePayload) => {
-    setPendingProjectModules((prev) => [...prev, module]);
-  }, []);
-
-  const onEditedModule = useCallback((updatedModule: ProjectModulePayload) => {
-    setPendingProjectModules((prev) => {
-      // filter out updated module, then add edited module
-      const unchangedModules = prev.filter((existingModule) => existingModule.id !== updatedModule.id);
-      return [...unchangedModules, updatedModule];
-    });
-  }, []);
-
-  const onModalSaveHandler = useCallback(
-    (module: ProjectModulePayload) => {
-      if (moduleToEdit) {
-        setModuleToEdit(undefined);
-        onEditedModule(module);
-      } else {
-        onAddModule(module);
-      }
-      closeAddModuleModal();
-    },
-    [closeAddModuleModal, moduleToEdit, onAddModule, onEditedModule]
-  );
-
-  const falseCallback = useCallback(() => false, []);
+  }, [projectModules, allModules]);
 
   return (
     <>
@@ -161,7 +171,7 @@ const ProjectModulesList = ({ projectId, editing }: ProjectModulesListProps): JS
         defaultSortOrder={defaultSortOrder}
         columns={columns}
         fuzzySearchColumns={fuzzySearchColumns}
-        rows={pendingProjectModules}
+        rows={projectModules}
         selectedRows={selectedRows}
         setSelectedRows={setSelectedRows}
         title={strings.MODULES}

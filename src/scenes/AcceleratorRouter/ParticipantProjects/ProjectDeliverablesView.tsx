@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { useTheme } from '@mui/material';
 
 import Card from 'src/components/common/Card';
+import { useListProjectModulesQuery } from 'src/queries/generated/projectModules';
 import DeliverablesList from 'src/scenes/DeliverablesRouter/DeliverablesList';
 
 import ProjectModulesList from './ProjectModulesList';
@@ -13,6 +14,8 @@ type ProjectDeliverablesViewProps = {
 
 const ProjectDeliverablesView = ({ projectId }: ProjectDeliverablesViewProps) => {
   const theme = useTheme();
+  const { data, isLoading } = useListProjectModulesQuery(Number(projectId));
+  const projectModules = useMemo(() => data?.modules || [], [data?.modules]);
 
   return (
     <Card
@@ -23,7 +26,13 @@ const ProjectDeliverablesView = ({ projectId }: ProjectDeliverablesViewProps) =>
     >
       <DeliverablesList projectId={projectId} maxItemsPerPage={10} />
 
-      {projectId && <ProjectModulesList projectId={projectId} />}
+      {projectId && (
+        <ProjectModulesList
+          projectId={projectId}
+          isLoading={isLoading}
+          projectModules={projectModules}
+        />
+      )}
     </Card>
   );
 };

@@ -18,6 +18,9 @@ const config: ConfigFile = {
     './src/queries/generated/fundingEntities.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/funder/entities'),
     },
+    './src/queries/generated/modules.ts': {
+      filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/accelerator/modules'),
+    },
     './src/queries/generated/notifications.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/notifications'),
     },
