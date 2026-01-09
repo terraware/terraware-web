@@ -856,6 +856,45 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/accelerator/projects/{projectId}/modules": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Lists the modules for a project. */
+        get: operations["listProjectModules"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/accelerator/projects/{projectId}/modules/{moduleId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Gets one of a project's modules. */
+        get: operations["getProjectModule"];
+        /**
+         * Updates the information about a module's use by a project.
+         * @description Adds the module to the project if it is not already associated.
+         */
+        put: operations["updateProjectModule"];
+        post?: never;
+        /** Deletes a module from a cohort if it is currently associated. */
+        delete: operations["deleteProjectModule"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/accelerator/projects/{projectId}/reports": {
         parameters: {
             query?: never;
@@ -4274,6 +4313,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/tracking/t0/site/{plantingSiteId}/observations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Lists all permanent plots with completed observations, and the observations' recorded species for a planting site */
+        get: operations["getPlotObservationDensitiesForPlantingSite"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/tracking/t0/site/{plantingSiteId}/species": {
         parameters: {
             query?: never;
@@ -6611,7 +6667,7 @@ export interface components {
         };
         EventLogEntryPayload: {
             action: components["schemas"]["CreatedActionPayload"] | components["schemas"]["DeletedActionPayload"] | components["schemas"]["FieldUpdatedActionPayload"];
-            subject: components["schemas"]["BiomassDetailsSubjectPayload"] | components["schemas"]["BiomassQuadratSpeciesSubjectPayload"] | components["schemas"]["BiomassQuadratSubjectPayload"] | components["schemas"]["BiomassSpeciesSubjectPayload"] | components["schemas"]["ObservationPlotMediaSubjectPayload"] | components["schemas"]["ObservationPlotSubjectPayload"] | components["schemas"]["OrganizationSubjectPayload"] | components["schemas"]["ProjectSubjectPayload"] | components["schemas"]["RecordedTreeSubjectPayload"];
+            subject: components["schemas"]["BiomassDetailsSubjectPayload"] | components["schemas"]["BiomassQuadratSpeciesSubjectPayload"] | components["schemas"]["BiomassQuadratSubjectPayload"] | components["schemas"]["BiomassSpeciesSubjectPayload"] | components["schemas"]["MonitoringSpeciesSubjectPayload"] | components["schemas"]["ObservationPlotMediaSubjectPayload"] | components["schemas"]["ObservationPlotSubjectPayload"] | components["schemas"]["OrganizationSubjectPayload"] | components["schemas"]["ProjectSubjectPayload"] | components["schemas"]["RecordedTreeSubjectPayload"];
             /** Format: date-time */
             timestamp: string;
             /** Format: int64 */
@@ -7315,6 +7371,10 @@ export interface components {
             details: components["schemas"]["ProjectAcceleratorDetailsPayload"];
             status: components["schemas"]["SuccessOrError"];
         };
+        GetProjectModuleResponsePayload: {
+            module: components["schemas"]["ProjectModulePayload"];
+            status: components["schemas"]["SuccessOrError"];
+        };
         GetProjectOverallScoreResponsePayload: {
             score: components["schemas"]["ProjectOverallScorePayload"];
             status: components["schemas"]["SuccessOrError"];
@@ -7423,6 +7483,10 @@ export interface components {
             /** Format: int64 */
             totalSeedsStoredForProject?: number;
             workers: components["schemas"]["WorkersPayloadV1"];
+        };
+        GetSitePlotObservationDensitiesResponsePayload: {
+            data: components["schemas"]["PlotObservationSpeciesDensityPayload"][];
+            status: components["schemas"]["SuccessOrError"];
         };
         GetSitePlotSpeciesResponsePayload: {
             plots: components["schemas"]["PlotSpeciesDensitiesPayload"][];
@@ -7775,7 +7839,7 @@ export interface components {
             /** Format: int64 */
             projectId?: number;
             /** @description If specified, only return event log entries for specific subject types. This can be used to narrow the scope of the results in cases where there might be events related to child entities and you don't care about those. */
-            subjects?: ("BiomassDetails" | "BiomassQuadrat" | "BiomassQuadratSpecies" | "BiomassSpecies" | "ObservationPlot" | "ObservationPlotMedia" | "Organization" | "Project" | "RecordedTree")[];
+            subjects?: ("BiomassDetails" | "BiomassQuadrat" | "BiomassQuadratSpecies" | "BiomassSpecies" | "MonitoringSpecies" | "ObservationPlot" | "ObservationPlotMedia" | "Organization" | "Project" | "RecordedTree")[];
         };
         ListEventLogEntriesResponsePayload: {
             events: components["schemas"]["EventLogEntryPayload"][];
@@ -7893,6 +7957,10 @@ export interface components {
         };
         ListProjectMetricsResponsePayload: {
             metrics: components["schemas"]["ExistingProjectMetricPayload"][];
+            status: components["schemas"]["SuccessOrError"];
+        };
+        ListProjectModulesResponsePayload: {
+            modules: components["schemas"]["ProjectModulePayload"][];
             status: components["schemas"]["SuccessOrError"];
         };
         ListProjectsResponsePayload: {
@@ -8108,6 +8176,23 @@ export interface components {
             plotNumber: number;
             /** Format: int32 */
             sizeMeters: number;
+        };
+        MonitoringSpeciesSubjectPayload: Omit<WithRequired<components["schemas"]["EventSubjectPayload"], "fullText" | "shortText">, "type"> & {
+            /** Format: int64 */
+            monitoringPlotId: number;
+            /** Format: int64 */
+            observationId: number;
+            /** Format: int64 */
+            plantingSiteId: number;
+            scientificName?: string;
+            /** Format: int64 */
+            speciesId?: number;
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "MonitoringSpecies";
         };
         MonitoringSpeciesUpdateOperationPayload: Omit<components["schemas"]["ObservationUpdateOperationPayload"], "type"> & {
             /** @enum {string} */
@@ -8824,6 +8909,15 @@ export interface components {
             /** @enum {string} */
             type: "Monitoring" | "Biomass Measurements";
         };
+        ObservationSpeciesDensityPayload: {
+            /** Format: date-time */
+            observationCompletedTime: string;
+            /** Format: int64 */
+            observationId: number;
+            /** Format: date */
+            observationStartDate: string;
+            species: components["schemas"]["SpeciesDensityPayload"][];
+        };
         /** @description Information about observed plants of a particular species in a region. */
         ObservationSpeciesResultsPayload: {
             /** @enum {string} */
@@ -9478,6 +9572,11 @@ export interface components {
             /** Format: int32 */
             totalSpecies: number;
         };
+        PlotObservationSpeciesDensityPayload: {
+            /** Format: int64 */
+            monitoringPlotId: number;
+            observations: components["schemas"]["ObservationSpeciesDensityPayload"][];
+        };
         PlotSpeciesDensitiesPayload: {
             /** Format: int64 */
             monitoringPlotId: number;
@@ -9636,6 +9735,23 @@ export interface components {
             roleName?: string;
             /** Format: int64 */
             userId: number;
+        };
+        ProjectModulePayload: {
+            additionalResources?: string;
+            /** Format: date */
+            endDate: string;
+            eventDescriptions: {
+                [key: string]: string;
+            };
+            /** Format: int64 */
+            id: number;
+            isActive: boolean;
+            name: string;
+            overview?: string;
+            preparationMaterials?: string;
+            /** Format: date */
+            startDate: string;
+            title: string;
         };
         ProjectOverallScorePayload: {
             /** Format: uri */
@@ -10717,7 +10833,7 @@ export interface components {
         };
         TableColumnPayload: {
             isHeader: boolean;
-            variable: components["schemas"]["VariablePayload"];
+            variable: components["schemas"]["DateVariablePayload"] | components["schemas"]["EmailVariablePayload"] | components["schemas"]["ImageVariablePayload"] | components["schemas"]["LinkVariablePayload"] | components["schemas"]["NumberVariablePayload"] | components["schemas"]["SectionVariablePayload"] | components["schemas"]["SelectVariablePayload"] | components["schemas"]["TableVariablePayload"] | components["schemas"]["TextVariablePayload"];
         };
         TableVariablePayload: Omit<WithRequired<components["schemas"]["VariablePayload"], "id" | "internalOnly" | "isList" | "isRequired" | "name" | "stableId" | "type">, "type"> & {
             columns: components["schemas"]["TableColumnPayload"][];
@@ -11279,6 +11395,13 @@ export interface components {
              * @enum {string}
              */
             type: "project";
+        };
+        UpdateProjectModuleRequestPayload: {
+            /** Format: date */
+            endDate: string;
+            /** Format: date */
+            startDate: string;
+            title: string;
         };
         UpdateProjectOverallScorePayload: {
             /** Format: uri */
@@ -13680,6 +13803,137 @@ export interface operations {
                 "application/json": components["schemas"]["UpdateProjectAcceleratorDetailsRequestPayload"];
             };
         };
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+            /** @description The requested resource was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    listProjectModules: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListProjectModulesResponsePayload"];
+                };
+            };
+            /** @description The requested resource was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    getProjectModule: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: number;
+                moduleId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetProjectModuleResponsePayload"];
+                };
+            };
+            /** @description The requested resource was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    updateProjectModule: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: number;
+                moduleId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateProjectModuleRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+            /** @description The requested resource was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    deleteProjectModule: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: number;
+                moduleId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             /** @description The requested operation succeeded. */
             200: {
@@ -21087,6 +21341,28 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["GetAllSiteT0DataSetResponsePayload"];
+                };
+            };
+        };
+    };
+    getPlotObservationDensitiesForPlantingSite: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                plantingSiteId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetSitePlotObservationDensitiesResponsePayload"];
                 };
             };
         };

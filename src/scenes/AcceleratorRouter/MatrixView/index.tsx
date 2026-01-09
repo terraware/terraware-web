@@ -696,7 +696,6 @@ const MatrixView = () => {
             <TextField
               type='number'
               value={value}
-              // eslint-disable-next-line react/jsx-no-bind
               onChange={(e) => {
                 const numValue = e.target.value;
                 setValue(numValue);

@@ -15,8 +15,6 @@ import { requestUpdateVariableWorkflowDetails } from 'src/redux/features/documen
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import {
-  NumberVariable,
-  SelectVariable,
   TableColumn,
   TableVariableWithValues,
   UpdateVariableWorkflowDetailsPayload,
@@ -457,8 +455,8 @@ export const EditableCell = ({ display, id, column, onChange, value }: EditableC
           label=''
           id={id}
           type='number'
-          min={(column.variable as NumberVariable).minValue}
-          max={(column.variable as NumberVariable).maxValue}
+          min={column.variable.minValue}
+          max={column.variable.maxValue}
           onChange={onChange}
           value={value}
         />
@@ -468,7 +466,7 @@ export const EditableCell = ({ display, id, column, onChange, value }: EditableC
         <DatePicker id={id} label='' onChange={onChange} value={value as string} aria-label={`${id}-datepicker`} />
       );
     case 'Select': {
-      const options = (column.variable as SelectVariable).options;
+      const options = column.variable.options;
       return (
         <Dropdown
           onChange={onChange}
