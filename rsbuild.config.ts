@@ -51,28 +51,24 @@ export default defineConfig({
   },
 
   server: {
-    // Proxy configuration (replaces setupProxy.js)
     proxy: {
       '/admin': {
         target: process.env.REACT_APP_TERRAWARE_API,
         secure: false,
         changeOrigin: false,
         xfwd: true,
-        cookieDomainRewrite: 'localhost',
       },
       '/api': {
         target: process.env.REACT_APP_TERRAWARE_API,
         secure: false,
         changeOrigin: false,
         xfwd: true,
-        cookieDomainRewrite: 'localhost',
       },
       '/sso': {
         target: process.env.REACT_APP_TERRAWARE_API,
         secure: false,
         changeOrigin: false,
         xfwd: true,
-        cookieDomainRewrite: 'localhost',
       },
       '/swagger-ui.html': {
         target: process.env.REACT_APP_TERRAWARE_API,
