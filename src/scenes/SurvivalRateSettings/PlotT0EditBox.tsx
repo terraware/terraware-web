@@ -135,23 +135,6 @@ const PlotT0EditBox = ({
     [plotToSave.observationId, selectedPlotSpecies?.observations]
   );
 
-  const otherObservationSpecies = useMemo(() => {
-    const selectedObservationSpeciesIds = new Set(selectedObservationSpecies?.species.map((sp) => sp.speciesId) || []);
-    const allSpecies: { speciesId: number; density: number }[] = [];
-
-    selectedPlotSpecies?.observations
-      .filter((obs) => obs.observationId !== plotToSave.observationId)
-      .forEach((obs) => {
-        obs.species.forEach((sp) => {
-          if (!selectedObservationSpeciesIds.has(sp.speciesId)) {
-            allSpecies.push({ speciesId: sp.speciesId, density: sp.density });
-          }
-        });
-      });
-
-    return allSpecies.length > 0 ? { species: allSpecies } : undefined;
-  }, [plotToSave.observationId, selectedPlotSpecies?.observations, selectedObservationSpecies?.species]);
-
   const onChangeT0Origin = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>, value: string) => {
       setT0Origin(value);
@@ -456,42 +439,6 @@ const PlotT0EditBox = ({
                               <tr key={index}>
                                 <td>{species.find((iSp) => sp.speciesId === iSp.id)?.scientificName}</td>
                                 <td>{sp.density}</td>
-                              </tr>
-                            );
-                          })}
-                        </tbody>
-                      </table>
-                      <table>
-                        <thead>
-                          <tr>
-                            <th style={{ textAlign: 'left', width: '40%' }}>
-                              <Box display='flex'>
-                                {strings.SPECIES_FROM_OTHER_OBSERVATIONS}
-                                <IconTooltip title={strings.SPECIES_FROM_OTHER_OBSERVATIONS_TOOLTIP} />
-                              </Box>
-                            </th>
-                            <th style={{ textAlign: 'left', width: '10%' }}>
-                              <Box display={'flex'} />
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {otherObservationSpecies?.species.map((sp, index) => {
-                            return (
-                              <tr key={index}>
-                                <td>{species.find((iSp) => sp.speciesId === iSp.id)?.scientificName}</td>
-                                <td>
-                                  <TextField
-                                    type='number'
-                                    id={`${sp.speciesId}`}
-                                    value={densityValue(sp)}
-                                    onChange={onChangeDensity}
-                                    label={''}
-                                    min={0}
-                                    onKeyDown={allowOneDecimal}
-                                    sx={{ width: '85px' }}
-                                  />
-                                </td>
                               </tr>
                             );
                           })}
