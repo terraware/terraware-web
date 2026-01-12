@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/62</span>
+                <span class='fraction'>0/61</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/59</span>
+                <span class='fraction'>0/58</span>
             </div>
         
             
@@ -176,9 +176,7 @@
 <a name='L111'></a><a href='#L111'>111</a>
 <a name='L112'></a><a href='#L112'>112</a>
 <a name='L113'></a><a href='#L113'>113</a>
-<a name='L114'></a><a href='#L114'>114</a>
-<a name='L115'></a><a href='#L115'>115</a>
-<a name='L116'></a><a href='#L116'>116</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L114'></a><a href='#L114'>114</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -209,7 +207,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -276,7 +273,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -321,34 +317,33 @@ import NavBar from './NavBar';
 import Organizations from './Organizations';
 import Overview fro<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >m </span>'./Over<span class="cstat-no" title="statement not covered" >view';</span></span>
 import ParticipantPr<span class="cstat-no" title="statement not covered" >oje</span>cts from './ParticipantProjects';
-<span class="cstat-no" title="statement not covered" >import Participants from './Participants';</span>
-import Peop<span class="fstat-no" title="function not covered" >le</span> fro<span class="cstat-no" title="statement not covered" >m './People';</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >interface AcceleratorRouterProps {</span>
-  showNavBar: boole<span class="cstat-no" title="statement not covered" >an;</span>
-  setShowNavBar: (value: b<span class="cstat-no" title="statement not covered" >oolean) =&gt; void;</span>
+<span class="cstat-no" title="statement not covered" >import People from './People';</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+interface AcceleratorRouterProps {
+<span class="cstat-no" title="statement not covered" >  showNavBar: boolean;</span>
+  setShowNavBar: (v<span class="cstat-no" title="statement not covered" >alue: boolean) =&gt; void;</span>
 }<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-const AcceleratorRouter<span class="cstat-no" title="statement not covered" > = ({ showNavBar, setShow</span>NavBar }: AcceleratorRouterProps) =&gt; {
-  const { type } = useDev<span class="cstat-no" title="statement not covered" >iceInfo();</span>
-  const location = useStateLo<span class="cstat-no" title="statement not covered" >cation();</span>
+const AcceleratorRouter = (<span class="cstat-no" title="statement not covered" >{ showNavBar, setShowNavBar }: Acceler</span>atorRouterProps) =&gt; {
+  const { type } = useD<span class="cstat-no" title="statement not covered" >eviceInfo();</span>
+  const location = useSta<span class="cstat-no" title="statement not covered" >teLocation();</span>
   const theme = useTheme();<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const viewHasBackgroundIm<span class="cstat-no" title="statement not covered" >age = useCallback((): boolean =&gt; {</span>
-    return location.pathname.s<span class="cstat-no" title="statement not covered" >tartsWith(APP_PATHS.ACCELERATOR_OVERVIEW);</span>
+  const viewHasBack<span class="cstat-no" title="statement not covered" >groundImage = useCallback((</span>): boolean =&gt; {
+    return location.pathnam<span class="cstat-no" title="statement not covered" >e.startsWith(APP_PATHS.ACCELERATOR_OVERVIEW)</span>;
   }, [location]);<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const navBarOpened <span class="cstat-no" title="statement not covered" >= {</span>
-    backdropFilter: 'blur(<span class="cstat-no" title="statement not covered" >8px)',</span>
-    background: getRgba<span class="cstat-no" title="statement not covered" >FromHex(theme.palette.TwClrBgSec</span>ondary as string, 0.8),
+  const navBarOpened = {<span class="cstat-no" title="statement not covered" ></span>
+    backdropFilter: '<span class="cstat-no" title="statement not covered" >blur(8px)',</span>
+    background: getRgbaFro<span class="cstat-no" title="statement not covered" >mHex(theme.palette.TwClrBgSecondary</span> as string, 0.8),
     height: '100%',<span class="cstat-no" title="statement not covered" ></span>
-    alignItems: 'center'<span class="cstat-no" title="statement not covered" >,</span>
-    position: 'fixed'<span class="cstat-no" title="statement not covered" >,</span>
+    alignItems: 'center',<span class="cstat-no" title="statement not covered" ></span>
+    position: 'fixed',<span class="cstat-no" title="statement not covered" ></span>
     zIndex: 1300,<span class="cstat-no" title="statement not covered" ></span>
     inset: '0px',<span class="cstat-no" title="statement not covered" ></span>
   };<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const contentStyles <span class="cstat-no" title="statement not covered" >= {</span>
+  const contentStyles = {<span class="cstat-no" title="statement not covered" ></span>
     height: '100%',<span class="cstat-no" title="statement not covered" ></span>
     overflow: 'auto',<span class="cstat-no" title="statement not covered" ></span>
     '&amp; &gt; div, &amp; &gt; ma<span class="cstat-no" title="statement not covered" >in': {</span>
@@ -392,7 +387,6 @@ const AcceleratorRouter<span class="cstat-no" title="statement not covered" > = 
                 &lt;Route path={`${APP_PATHS.ACCELERATOR_MODULE_CONTENT}/*`} element={&lt;ModuleView /&gt;} /&gt;
                 &lt;Rou<span class="cstat-no" title="statement not covered" >te path={`${APP_PA</span>THS.ACCELERATOR_MODULE_EVENTS_EDIT}/*`} element={&lt;EventEdit /&gt;} /&gt;
                 &lt;Route path={`${APP_PATHS.ACCELERATOR_PEOPLE}/*`} element={&lt;People /&gt;} /&gt;
-                &lt;Route path={`${APP_PATHS.ACCELERATOR_PARTICIPANTS}/*`} element={&lt;Participants /&gt;} /&gt;
                 &lt;Route path={`${APP_PATHS.ACCELERATOR_PROJECT_VIEW}/*`} element={&lt;ParticipantProjects /&gt;} /&gt;
                 &lt;Route path={`${APP_PATHS.ACCELERATOR_ORGANIZATIONS}/*`} element={&lt;Organizations /&gt;} /&gt;
                 &lt;Route path={`${APP_PATHS.ACCELERATOR_FUNDING_ENTITIES}/*`} element={&lt;FundingEntities /&gt;} /&gt;
@@ -415,7 +409,7 @@ export default AcceleratorRouter;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-12T15:56:09.242Z
+                at 2026-01-12T19:06:02.137Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

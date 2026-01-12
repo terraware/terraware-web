@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/43</span>
+                <span class='fraction'>0/31</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/22</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/30</span>
+                <span class='fraction'>0/24</span>
             </div>
         
             
@@ -72,16 +72,7 @@
 <a name='L7'></a><a href='#L7'>7</a>
 <a name='L8'></a><a href='#L8'>8</a>
 <a name='L9'></a><a href='#L9'>9</a>
-<a name='L10'></a><a href='#L10'>10</a>
-<a name='L11'></a><a href='#L11'>11</a>
-<a name='L12'></a><a href='#L12'>12</a>
-<a name='L13'></a><a href='#L13'>13</a>
-<a name='L14'></a><a href='#L14'>14</a>
-<a name='L15'></a><a href='#L15'>15</a>
-<a name='L16'></a><a href='#L16'>16</a>
-<a name='L17'></a><a href='#L17'>17</a>
-<a name='L18'></a><a href='#L18'>18</a>
-<a name='L19'></a><a href='#L19'>19</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L10'></a><a href='#L10'>10</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -89,34 +80,16 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { RootSta<span class="cstat-no" title="statement not covered" >te } from 'src/redux/r</span>ootReducer';
 <span class="cstat-no" title="statement not covered" ></span>
-export const selectParti<span class="cstat-no" title="statement not covered" >cipantCreateRequest = (requ</span>estId: string) =&gt; (state: RootState) =&gt;
-  state.participant<span class="cstat-no" title="statement not covered" >Create[requestId];</span>
+export const selectParti<span class="cstat-no" title="statement not covered" >cipant = (participantId: nu</span>mber) =&gt; (state: RootState) =&gt;
+  state.participant<span class="cstat-no" title="statement not covered" >[participantId]?.data;</span>
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-ex<span class="cstat-no" title="statement not covered" >port const selectParticipantDeleteRequest = (requestId: string) =&gt; (state: RootState) =&gt;</span>
-  st<span class="cstat-no" title="statement not covered" >ate.participantDelete[requestId];</span>
-&nbsp;
-export const selec<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >tP</span>articipant = (participantId: number) =&gt; (state: RootState) =&gt;</span>
-<span class="cstat-no" title="statement not covered" >  state.participant[participantId]?.data;</span>
+ex<span class="cstat-no" title="statement not covered" >port const selectParticipantGetRequest = (requestId: string) =&gt; (state: RootState) =&gt; state.participant[requestId];</span>
 <span class="cstat-no" title="statement not covered" ></span>
-export<span class="cstat-no" title="statement not covered" > const selectParticipantGetRequest = (requestId: string) =&gt; (state: RootState) =&gt; state.participant[requestId];</span>
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 export const selectParticipantListRequest = (requestId: string) =&gt; (state: RootState) =&gt;
-<span class="cstat-no" title="statement not covered" >  state.parti</span>cipantList[requestId];
-&nbsp;
-export const select<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Pa</span>rticipa<span class="cstat-no" title="statement not covered" >ntUpdateRequest = (requestId: string) =&gt; (state: RootState) =&gt;</span></span>
-  state.participantU<span class="cstat-no" title="statement not covered" >pda</span>te[requestId];
+  state.participan<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >tL</span>ist[requestId];</span>
 <span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -124,7 +97,7 @@ export const select<span class="cstat-no" title="statement not covered" ><span c
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-12T15:56:09.242Z
+                at 2026-01-12T19:06:02.137Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

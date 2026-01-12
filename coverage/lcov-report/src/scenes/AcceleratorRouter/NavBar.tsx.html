@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/77</span>
+                <span class='fraction'>0/76</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/34</span>
+                <span class='fraction'>0/33</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/74</span>
+                <span class='fraction'>0/73</span>
             </div>
         
             
@@ -242,8 +242,7 @@
 <a name='L177'></a><a href='#L177'>177</a>
 <a name='L178'></a><a href='#L178'>178</a>
 <a name='L179'></a><a href='#L179'>179</a>
-<a name='L180'></a><a href='#L180'>180</a>
-<a name='L181'></a><a href='#L181'>181</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L180'></a><a href='#L180'>180</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -290,7 +289,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -458,23 +456,22 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
   const isModuleCon<span class="cstat-no" title="statement not covered" >tentRoute = useMatch({ pat</span>h: APP_PATHS.ACCELERATOR_MODULES, end: false });
   const isOrganizationRoute = useMat<span class="cstat-no" title="statement not covered" >ch({ path: APP_PATHS.ACCELERATOR_O</span>RGANIZATIONS, end: false });
   const isOverviewRoute = <span class="cstat-no" title="statement not covered" >useMatch({ path: APP_PAT</span>HS.ACCELERATOR_OVERVIEW, end: false });
-  const isParticipantsRoute <span class="cstat-no" title="statement not covered" >= useMatch({ path: APP_PATHS.ACCELERA</span>TOR_PARTICIPANTS_VIEW, end: false });
-  const isPeopleRoute = useM<span class="cstat-no" title="statement not covered" >atch({ path: APP_PATHS.ACCELERATOR_PEOPLE, end: fa</span>lse });
-  const isScoringRoute <span class="cstat-no" title="statement not covered" >= useMatch({ path: APP_PATHS.ACCELERATOR_PROJECT_SCORES, en</span>d: false });
-  const isVotingRoute<span class="cstat-no" title="statement not covered" > = useMatch({ path: APP_PATHS.ACCELERATOR_PROJECT_VOTES, </span>end: false });
-  const isMatrixView<span class="cstat-no" title="statement not covered" >Route = useMatch({ path: APP_PATHS.ACCELERATOR_MATRIX_VI</span>EW, end: false });
+  const isPeopleRoute = useM<span class="cstat-no" title="statement not covered" >atch({ path: APP_PATHS.ACCELERATOR_PE</span>OPLE, end: false });
+  const isScoringRoute = use<span class="cstat-no" title="statement not covered" >Match({ path: APP_PATHS.ACCELERATOR_PROJECT_SCORES</span>, end: false });
+  const isVotingRoute =<span class="cstat-no" title="statement not covered" > useMatch({ path: APP_PATHS.ACCELERATOR_PROJECT_VOTES, end:</span> false });
+  const isMatrixViewR<span class="cstat-no" title="statement not covered" >oute = useMatch({ path: APP_PATHS.ACCELERATOR_MATRIX_VIEW</span>, end: false });
 <span class="cstat-no" title="statement not covered" ></span>
-  const isAllowedViewPeople =<span class="cstat-no" title="statement not covered" > isAllowed('READ_GLOBAL_ROLES');</span>
-  const isAllowedViewFunding<span class="cstat-no" title="statement not covered" >Entities = isAllowed('READ_FUN</span>DING_ENTITIES');
+  const isAllowedViewPe<span class="cstat-no" title="statement not covered" >ople = isAllowed('READ_GL</span>OBAL_ROLES');
+  const isAllowedViewFundingE<span class="cstat-no" title="statement not covered" >ntities = isAllowed('READ_FUNDING_ENT</span>ITIES');
 <span class="cstat-no" title="statement not covered" ></span>
-  const closeAndNavig<span class="cstat-no" title="statement not covered" >ateTo = (path: string) =&gt; {</span>
+  const closeAndNavigat<span class="cstat-no" title="statement not covered" >eTo = (path: string) =&gt; {</span>
     closeNavBar();<span class="cstat-no" title="statement not covered" ></span>
-    if (p<span class="fstat-no" title="function not covered" >ath) {</span>
-      navigate(path);<span class="cstat-no" title="statement not covered" ></span>
+    if (path) {<span class="cstat-no" title="statement not covered" ></span>
+      nav<span class="fstat-no" title="function not covered" >igate(p</span>ath);
     }<span class="cstat-no" title="statement not covered" ></span>
   };<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const closeNavBar = () =&gt; {<span class="cstat-no" title="statement not covered" ></span>
+  const closeNavBar<span class="cstat-no" title="statement not covered" > = () =&gt; {</span>
     if (!isDesktop) {<span class="cstat-no" title="statement not covered" ></span>
       setShowNavBar(false);<span class="cstat-no" title="statement not covered" ></span>
     }<span class="cstat-no" title="statement not covered" ></span>
@@ -482,7 +479,7 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
 <span class="cstat-no" title="statement not covered" ></span>
   return (<span class="cstat-no" title="statement not covered" ></span>
     &lt;Navbar<span class="cstat-no" title="statement not covered" ></span>
-      backgroundTransparent={b<span class="cstat-no" title="statement not covered" >ackgroundTransparent}</span>
+      backgroundTransparen<span class="cstat-no" title="statement not covered" >t={backgroundTransparent}</span>
       setShowNavBar={set<span class="cstat-no" title="statement not covered" >ShowNavBar as React.Dispatch&lt;React.SetStateAction&lt;boolean&gt;&gt;}</span>
     &gt;<span class="cstat-no" title="statement not covered" ></span>
       {!isDesktop &amp;&amp; (<span class="cstat-no" title="statement not covered" ></span>
@@ -503,7 +500,7 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
 <span class="cstat-no" title="statement not covered" >        id='overview'</span>
         label={strings.OVERVIEW}
         onClick={() =&gt; closeAndNavigateTo(APP_PATHS.ACCELERATOR_OVERVIEW)}
-        selected={!!isOverviewRoute || !!isParticipantsRoute || !!isScoringRoute || !!isVotingRoute}
+        selected={!!isOverviewRoute || !!isScoringRoute || !!isVotingRoute}
       /&gt;
 &nbsp;
       &lt;NavItem
@@ -610,7 +607,7 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-12T15:56:09.242Z
+                at 2026-01-12T19:06:02.137Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

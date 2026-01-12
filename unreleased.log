@@ -1,3 +1,5 @@
+3fa3490878d SW-7933 Add initial Edit project modules page (#5046)
+678bc6dd4ce SW-7947 Remove participants tab from console Overview page (#5051)
 cf60bf61e0f Fix useSyncNavigate so that react-router can be upgraded (#5052)
 b3ef4c09d31 SW-7867 Implemented biomass photos tab (#5037)
 e31e648c6e0 SW-7932 Add modules table to Project's Deliverables tab (#5040)

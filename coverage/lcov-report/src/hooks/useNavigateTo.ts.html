@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/119</span>
+                <span class='fraction'>0/117</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/64</span>
+                <span class='fraction'>0/62</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/117</span>
+                <span class='fraction'>0/115</span>
             </div>
         
             
@@ -434,18 +434,7 @@
 <a name='L369'></a><a href='#L369'>369</a>
 <a name='L370'></a><a href='#L370'>370</a>
 <a name='L371'></a><a href='#L371'>371</a>
-<a name='L372'></a><a href='#L372'>372</a>
-<a name='L373'></a><a href='#L373'>373</a>
-<a name='L374'></a><a href='#L374'>374</a>
-<a name='L375'></a><a href='#L375'>375</a>
-<a name='L376'></a><a href='#L376'>376</a>
-<a name='L377'></a><a href='#L377'>377</a>
-<a name='L378'></a><a href='#L378'>378</a>
-<a name='L379'></a><a href='#L379'>379</a>
-<a name='L380'></a><a href='#L380'>380</a>
-<a name='L381'></a><a href='#L381'>381</a>
-<a name='L382'></a><a href='#L382'>382</a>
-<a name='L383'></a><a href='#L383'>383</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L372'></a><a href='#L372'>372</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -705,14 +694,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -745,10 +727,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1087,46 +1065,46 @@ export default fun<span class="cstat-no" title="statement not covered" ><span cl
       goToHelpSupport: () =&gt; {
 <span class="cstat-no" title="statement not covered" >        navigate({ pathname: AP</span>P_PATHS.HELP_SUPPORT });
       },
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-      goToHome: () =&gt;
-        navigate({
-          pathname: APP_PATH<span class="fstat-no" title="function not covered" >S.</span>HOME<span class="cstat-no" title="statement not covered" >,</span>
-        }),
-&nbsp;
+<span class="fstat-no" title="function not covered" ></span>
+      goToHome: () =&gt;<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >        navigate({</span>
+<span class="cstat-no" title="statement not covered" >          pathname: APP_PATHS.HOME,</span>
+        })<span class="cstat-no" title="statement not covered" >,</span>
+<span class="cstat-no" title="statement not covered" ></span>
       goToModule: (projectId: number, moduleId: number) =&gt; {
-        navigate({<span class="fstat-no" title="function not covered" ></span>
-          pathname: APP<span class="cstat-no" title="statement not covered" >_PATHS.PROJECT_MODULE.replace('</span>:projectId', `${projectId}`).replace(':moduleId', `${moduleId}`),
-<span class="cstat-no" title="statement not covered" >        });</span>
-        wi<span class="cstat-no" title="statement not covered" >ndow.scrollTo(0, 0);</span>
-      },<span class="cstat-no" title="statement not covered" ></span>
-      goToMo<span class="cstat-no" title="statement not covered" >duleContent: (projectId:</span> number, moduleId: number, type: ModuleContentType) =&gt; {
-        let pathname = '';
-        switch (type) {
-<span class="cstat-no" title="statement not covered" >          case 'additionalResources':</span>
+        navigate({
+<span class="cstat-no" title="statement not covered" >          pathname: APP_PATHS.PROJECT_MODULE.replace(':projectId', `${projectId}`).replace(':moduleId', `${moduleId}`),</span>
+        });
+        window.scrollTo(0, 0);
+      },
+      goToModuleContent: (projectId: number, moduleId: number, type: ModuleContentType) =&gt; {
+        let pathname = '';<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+        switch (type) {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+          case 'additionalResources':
             pathname = APP_PATHS.PROJECT_MODULE_ADDITIONAL_RESOURCES;
             break;
-          case 'preparationMaterials':
+          case 'preparationMaterials'<span class="fstat-no" title="function not covered" >:<span class="cstat-no" title="statement not covered" ></span></span>
             pathname = APP_PATHS.PROJECT_MODULE_PREPARATION_MATERIALS;
-            break;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-          default:<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+            break;
+          default:
             return;
         }
-&nbsp;
-        navigate({<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-          pathname: pathname.replace(':projectId', `${projectId}`).replace(':moduleId', `${moduleId}`),
-        });
-      },
-&nbsp;
-      goToModuleEventSession: (projectId: number, moduleId: number, sessionId: number) =&gt;
-        navigate({<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-          pathname: APP_PATHS.PROJECT_MODULE_SESSION.replace(':projectId', `${projectId}`)
-            .replace(':moduleId', `${moduleId}`)
-            .replace(':sessi<span class="fstat-no" title="function not covered" >on</span>Id', `${sessionId}<span class="cstat-no" title="statement not covered" >`),</span>
-        }),<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-      goToModules: (projectId: number) =&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+        navigate({
+          pathname: pathname.replace(':projectId', `${projectId}`).replace(':moduleId', `${moduleId}`),
+        });<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+      },<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+      goToModuleEventSession: (projectId:<span class="fstat-no" title="function not covered" > n</span>umber, module<span class="cstat-no" title="statement not covered" >Id: number, sessionId: number) =&gt;</span>
         navigate({<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-          pathname: APP_PATHS<span class="fstat-no" title="function not covered" >.P</span>ROJECT_MODULE<span class="cstat-no" title="statement not covered" >S.replace(':projectId', `${projectId}`),</span>
+          pathname: APP_PATHS<span class="fstat-no" title="function not covered" >.P</span>ROJECT_MODULE<span class="cstat-no" title="statement not covered" >_SESSION.replace(':projectId', `${projectId}`)</span>
+            .replace(':moduleId', `${moduleId}`)
+            .replace(':sessionId', `${sessionId}`),
+        }),
+&nbsp;
+      goToModules: (projectId: number) =&gt;
+        navigate({
+          pathname: APP_PATHS.PROJECT_MODULES.replace(':projectId', `${projectId}`),
         }),
 &nbsp;
       goToNewAccession: () =&gt; {
@@ -1135,17 +1113,6 @@ export default fun<span class="cstat-no" title="statement not covered" ><span cl
         });
         window.scrollTo(0, 0);
       },
-&nbsp;
-      goToParticipant: (participantId: number) =&gt;
-        navigate({
-          pathname: APP_PATHS.ACCELERATOR_PARTICIPANTS_VIEW.replace(':participantId', `${participantId}`),
-        }),
-&nbsp;
-      goToParticipantsList: () =&gt;
-        navigate({
-          pathname: APP_PATHS.ACCELERATOR_OVERVIEW,
-          search: 'tab=participants',
-        }),
 &nbsp;
       goToParticipantProject: (projectId: number, activityId?: number, tab?: string) =&gt; {
         const params = searchParamsWithMapViewState();
@@ -1216,7 +1183,7 @@ export default fun<span class="cstat-no" title="statement not covered" ><span cl
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-12T15:56:09.242Z
+                at 2026-01-12T19:06:02.137Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

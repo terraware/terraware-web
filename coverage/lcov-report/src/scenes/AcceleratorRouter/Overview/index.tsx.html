@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/52</span>
+                <span class='fraction'>0/49</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/26</span>
+                <span class='fraction'>0/24</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/49</span>
+                <span class='fraction'>0/46</span>
             </div>
         
             
@@ -147,20 +147,7 @@
 <a name='L82'></a><a href='#L82'>82</a>
 <a name='L83'></a><a href='#L83'>83</a>
 <a name='L84'></a><a href='#L84'>84</a>
-<a name='L85'></a><a href='#L85'>85</a>
-<a name='L86'></a><a href='#L86'>86</a>
-<a name='L87'></a><a href='#L87'>87</a>
-<a name='L88'></a><a href='#L88'>88</a>
-<a name='L89'></a><a href='#L89'>89</a>
-<a name='L90'></a><a href='#L90'>90</a>
-<a name='L91'></a><a href='#L91'>91</a>
-<a name='L92'></a><a href='#L92'>92</a>
-<a name='L93'></a><a href='#L93'>93</a>
-<a name='L94'></a><a href='#L94'>94</a>
-<a name='L95'></a><a href='#L95'>95</a>
-<a name='L96'></a><a href='#L96'>96</a>
-<a name='L97'></a><a href='#L97'>97</a>
-<a name='L98'></a><a href='#L98'>98</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L85'></a><a href='#L85'>85</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -209,18 +196,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -250,9 +227,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -265,62 +239,49 @@ import { Tabs } fro<span class="cstat-no" title="statement not covered" >m '@ter
 <span class="cstat-no" title="statement not covered" ></span>
 import Page fro<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >m </span>'src/components/Page';</span>
 im<span class="cstat-no" title="statement not covered" >port { MIXPANEL_EVENTS } from 'src/mixpanelEvents';</span>
-impo<span class="cstat-no" title="statement not covered" >rt { useLocalization, useUser } from 'src/providers';</span>
+impo<span class="cstat-no" title="statement not covered" >rt { useLocalization } from 'src/providers';</span>
 import CohortsListView from 'src/scenes/AcceleratorRouter/Cohorts/CohortsListView';
 import Participant<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Pr</span>ojectsList from 'src/scenes/AcceleratorRouter/ParticipantProjects/ListView';</span>
-im<span class="cstat-no" title="statement not covered" >port ParticipantsList from 'src/scenes/AcceleratorRouter/Participants/ParticipantsList';</span>
-impo<span class="cstat-no" title="statement not covered" >rt strings from 'src/strings';</span>
-import<span class="cstat-no" title="statement not covered" > useStickyTabs from 'src/utils/useStickyTabs';</span>
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-const OverviewView = () =&gt; {
-<span class="cstat-no" title="statement not covered" >  const { isA</span>llowed } = useUser();
+im<span class="cstat-no" title="statement not covered" >port strings from 'src/strings';</span>
+impo<span class="cstat-no" title="statement not covered" >rt useStickyTabs from 'src/utils/useStickyTabs';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+const Ov<span class="cstat-no" title="statement not covered" >erviewView = () =&gt; {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
   const { activeLocale } = useLocalization();
-  const mixpan<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >el</span> = useMixpanel();<span class="cstat-no" title="statement not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >  const mixpa</span>nel = useMixpanel();
 &nbsp;
-  const tabs = useMemo(() =&gt; {
+  const tabs =<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > u</span>seMemo(() =&gt; {<span class="cstat-no" title="statement not covered" ></span></span>
     if (!activeLocale) {
       return [];
     }
 &nbsp;
-    const canReadParticipants = isAllowed('READ_PARTICIPANTS');
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-    return [<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >      {</span>
-        id:<span class="fstat-no" title="function not covered" > '</span>proj<span class="cstat-no" title="statement not covered" >ects',</span>
-        label: strings.PROJECTS,
-<span class="cstat-no" title="statement not covered" >        children: &lt;ParticipantProjectsList /&gt;,</span>
-      },<span class="cstat-no" title="statement not covered" ></span>
-      ...(canReadParticipants<span class="cstat-no" title="statement not covered" ></span>
-        ? [<span class="cstat-no" title="statement not covered" ></span>
-            {<span class="cstat-no" title="statement not covered" ></span>
-              id: <span class="cstat-no" title="statement not covered" >'participants',</span>
-              label: strings<span class="cstat-no" title="statement not covered" >.PARTICIPANTS,</span>
-              children:<span class="cstat-no" title="statement not covered" > &lt;ParticipantsList /&gt;,</span>
-            },<span class="cstat-no" title="statement not covered" ></span>
-          ]<span class="cstat-no" title="statement not covered" ></span>
-        : []),<span class="cstat-no" title="statement not covered" ></span>
-      {<span class="cstat-no" title="statement not covered" ></span>
-        id: 'cohorts',<span class="cstat-no" title="statement not covered" ></span>
-        label: string<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >s.</span>COHORTS,</span>
-        children: &lt;Cohor<span class="cstat-no" title="statement not covered" >tsListView /&gt;,</span>
+    return [
+      {
+        id: 'projects',
+        label: stri<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ng</span>s.PROJE<span class="cstat-no" title="statement not covered" >CTS,</span></span>
+        children: &lt;P<span class="cstat-no" title="statement not covered" >art</span>icipantProjectsList /&gt;,
+<span class="cstat-no" title="statement not covered" >      },</span>
+      {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+        id: 'cohorts',
+<span class="cstat-no" title="statement not covered" >        label: strings.COHORTS,</span>
+        children: &lt;<span class="cstat-no" title="statement not covered" >CohortsListView /&gt;,</span>
       },<span class="cstat-no" title="statement not covered" ></span>
     ];<span class="cstat-no" title="statement not covered" ></span>
-  }, [activeLoc<span class="cstat-no" title="statement not covered" >ale, isAllowed]);<span class="fstat-no" title="function not covered" ></span></span>
+  }, [activeLocale]);<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  cons<span class="cstat-no" title="statement not covered" >t { activeT</span>ab, onChangeTab } = useStickyTabs({
-    defaultTab: 'projects',
+  const { activeTab, onChang<span class="cstat-no" title="statement not covered" >eTab } = useStickyTabs({</span>
+    defaultTab: 'projec<span class="cstat-no" title="statement not covered" >ts',</span>
     tabs,<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >    viewIdentifier: 'accelerator-overview',</span>
-  });
-&nbsp;
-  const onChangeTabHandler = useCallback(
-    (tab: string) =&gt; {
-      if (tab !== 'projects') {
-        mixpanel?.track(MIXPANEL_EVENTS.CONSOLE_OVERVIEW_TAB, {
-          tab,
-        });
+    viewIdentifier: 'a<span class="cstat-no" title="statement not covered" >ccelerator-overview',</span>
+  });<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+  const onChangeTabHa<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >nd</span>ler = useCallback(</span>
+    (tab: string) =&gt; {<span class="cstat-no" title="statement not covered" ></span>
+      if (tab !== '<span class="cstat-no" title="statement not covered" >projects') {</span>
+        mixpane<span class="cstat-no" title="statement not covered" >l?.track(MIXPANEL_EVENTS.C<span class="fstat-no" title="function not covered" >ON</span>SOLE_OVERVIEW_TAB, {</span>
+<span class="cstat-no" title="statement not covered" >          tab,</span>
+<span class="cstat-no" title="statement not covered" >        });</span>
       }
-      onChangeTab(tab);
+<span class="cstat-no" title="statement not covered" >      onChangeTab(tab);</span>
     },
     [mixpanel, onChangeTab]
   );
@@ -330,26 +291,26 @@ const OverviewView = () =&gt; {
       &lt;Box
         display='flex'
         flexDirection='column'
-        flexGrow={1}<span class="cstat-no" title="statement not covered" ></span>
+        flexGrow={1}
         sx={{
           '&amp; .MuiTabPanel-root[hidden]': {
-            flexGrow: 0,
+            flexGrow: 0,<span class="cstat-no" title="statement not covered" ></span>
           },
-          '&amp; .MuiTabPanel-roo<span class="cstat-no" title="statement not covered" >t': {</span>
-<span class="fstat-no" title="function not covered" ></span>            display: 'flex',
-<span class="cstat-no" title="statement not covered" >            flexDirection: 'column',</span>
-<span class="cstat-no" title="statement not covered" >            flexGrow: 1,</span>
-          },
-          '&amp; &gt;.MuiBox-root': {
+          '&amp; .MuiTabPanel-root': {
             display: 'flex',
-<span class="cstat-no" title="statement not covered" >            flexDirectio</span>n: 'column',
+            flexDirection: 'column',
+            flexGrow: 1,<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" ></span>          },
+<span class="cstat-no" title="statement not covered" >          '&amp; &gt;.MuiBox-root': {</span>
+<span class="cstat-no" title="statement not covered" >            display: 'flex',</span>
+            flexDirection: 'column',
             flexGrow: 1,
           },
-        }}
-<span class="cstat-no" title="statement not covered" >      &gt;</span>
+<span class="cstat-no" title="statement not covered" >        }}</span>
+      &gt;
         &lt;Tabs activeTab={activeTab} onChangeTab={onChangeTabHandler} tabs={tabs} /&gt;
       &lt;/Box&gt;
-    &lt;/Page&gt;
+<span class="cstat-no" title="statement not covered" >    &lt;/Page&gt;</span>
   );
 };
 &nbsp;
@@ -361,7 +322,7 @@ export default OverviewView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-12T15:56:09.242Z
+                at 2026-01-12T19:06:02.137Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

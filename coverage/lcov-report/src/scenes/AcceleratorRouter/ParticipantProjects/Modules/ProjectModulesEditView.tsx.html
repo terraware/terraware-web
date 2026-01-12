@@ -3,15 +3,15 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/scenes/AcceleratorRouter/Participants/RemoveParticipant.tsx</title>
+    <title>Code coverage report for src/scenes/AcceleratorRouter/ParticipantProjects/Modules/ProjectModulesEditView.tsx</title>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="../../../../prettify.css" />
-    <link rel="stylesheet" href="../../../../base.css" />
-    <link rel="shortcut icon" type="image/x-icon" href="../../../../favicon.png" />
+    <link rel="stylesheet" href="../../../../../prettify.css" />
+    <link rel="stylesheet" href="../../../../../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../../../../favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style type='text/css'>
         .coverage-summary .sorter {
-            background-image: url(../../../../sort-arrow-sprite.png);
+            background-image: url(../../../../../sort-arrow-sprite.png);
         }
     </style>
 </head>
@@ -19,20 +19,20 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../../index.html">All files</a> / <a href="index.html">src/scenes/AcceleratorRouter/Participants</a> RemoveParticipant.tsx</h1>
+        <h1><a href="../../../../../index.html">All files</a> / <a href="index.html">src/scenes/AcceleratorRouter/ParticipantProjects/Modules</a> ProjectModulesEditView.tsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/47</span>
+                <span class='fraction'>0/42</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/32</span>
+                <span class='fraction'>0/22</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/44</span>
+                <span class='fraction'>0/39</span>
             </div>
         
             
@@ -118,7 +118,11 @@
 <a name='L53'></a><a href='#L53'>53</a>
 <a name='L54'></a><a href='#L54'>54</a>
 <a name='L55'></a><a href='#L55'>55</a>
-<a name='L56'></a><a href='#L56'>56</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -158,14 +162,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -173,78 +169,94 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > useCallback, </span>useEffect, useState } from 'react';
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > useCallback }</span> from 'react';
+import { usePara<span class="cstat-no" title="statement not covered" >ms } from 'react-route</span>r';
 <span class="cstat-no" title="statement not covered" ></span>
-import { BusySpinner, C<span class="cstat-no" title="statement not covered" >onfirm } from '@terraware/web-co</span>mponents';
+import { Box, Grid, Typo<span class="cstat-no" title="statement not covered" >graphy, useTheme } from '@m</span>ui/material';
 <span class="cstat-no" title="statement not covered" ></span>
-import useNavigateT<span class="cstat-no" title="statement not covered" >o from 'src/hooks/useN</span>avigateTo';
-import { requestDel<span class="cstat-no" title="statement not covered" >eteParticipant } from 'src/redux</span>/features/participants/participantsAsyncThunks';
-import { select<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Pa</span>rticipantDeleteRequest } from 'src/redux/features/participants/participantsSelectors';</span>
-im<span class="cstat-no" title="statement not covered" >port { useAppDispatch, useAppSelector } from 'src/redux/store';</span>
-impo<span class="cstat-no" title="statement not covered" >rt strings from 'src/strings';</span>
-import { Participant } from 'src/types/Participant';
-import useSnackbar<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > f</span>rom 'src/utils/useSnackbar';</span>
-<span class="cstat-no" title="statement not covered" ></span>
-expo<span class="cstat-no" title="statement not covered" >rt type Props = {</span>
-  onCl<span class="cstat-no" title="statement not covered" >ose: () =&gt; void;</span>
-  partic<span class="cstat-no" title="statement not covered" >ipant: Participant;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-};
-<span class="cstat-no" title="statement not covered" ></span>
-export default function RemoveParticipant({ onClose, participant }: Props): JSX.Element {
-  const snackb<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ar</span> = useSnackbar();<span class="cstat-no" title="statement not covered" ></span></span>
-  const dispatch = useAppDispatch();
-  const { goToParticipantsList } = useNavigateTo();
-&nbsp;
-  const [requestId, setRequestId] = useState&lt;string&gt;('');
-  const result = useAppSelector(selectParticipantDeleteRequest(requestId));
-&nbsp;
-  const onConfirm = useCallback(() =&gt; {
-    const request =<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > d</span>ispatch<span class="cstat-no" title="statement not covered" >(requestDeleteParticipant(participant.id));</span></span>
-    setRequestId(req<span class="cstat-no" title="statement not covered" >ues</span>t.requestId);
-<span class="cstat-no" title="statement not covered" >  }, [dispatch, participant.id]);</span>
+import PageForm fro<span class="cstat-no" title="statement not covered" >m 'src/components/common/PageFor</span>m';
+import TfMain f<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ro</span>m 'src/components/common/TfMain';</span>
+im<span class="cstat-no" title="statement not covered" >port { APP_PATHS } from 'src/constants';</span>
+impo<span class="cstat-no" title="statement not covered" >rt { useSyncNavigate } from 'src/hooks/useSyncNavigate';</span>
+import { useLocalization } from 'src/providers';
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  useEffect(() =&gt; {
-<span class="cstat-no" title="statement not covered" >    if (result?.status === 'error') {</span>
-      snackbar.toas<span class="cstat-no" title="statement not covered" >tError();</span>
-    } else if (result?.statu<span class="cstat-no" title="statement not covered" >s === 'success') {</span>
-      snackbar.toastSuccess<span class="cstat-no" title="statement not covered" >(strings.CHANGES_SAVED);</span>
-      goToParticipantsList();<span class="cstat-no" title="statement not covered" ></span>
-    }<span class="cstat-no" title="statement not covered" ></span>
-  }, [goToParticipa<span class="cstat-no" title="statement not covered" >ntsList, result?.status, sn</span>ackbar]);
+im<span class="cstat-no" title="statement not covered" >port ProjectModulesList from '../ProjectModulesList';</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  return (<span class="cstat-no" title="statement not covered" ></span>
-    &lt;&gt;<span class="fstat-no" title="function not covered" ></span>
-      {result?.stat<span class="cstat-no" title="statement not covered" >us === 'pending' &amp;&amp; &lt;BusySpinner w</span>ithSkrim={true} /&gt;}
-      &lt;Confirm<span class="cstat-no" title="statement not covered" ></span>
-        closeButtonText={strings.CA<span class="cstat-no" title="statement not covered" >NCEL}</span>
-        confirmButtonIcon='iconTrash<span class="cstat-no" title="statement not covered" >Can'</span>
-        confirmBu<span class="cstat-no" title="statement not covered" >ttonText={strings.REMOVE}</span>
-        confirmButto<span class="cstat-no" title="statement not covered" >nType='destructive'<span class="fstat-no" title="function not covered" ></span></span>
-        message={str<span class="cstat-no" title="statement not covered" >ings.formatString(strings.REMOVE_PARTICIPANT_CONFIRMATION, participant.name)}</span>
-<span class="cstat-no" title="statement not covered" >        onClose={onClose}</span>
-        onConfirm={onConfirm}
-<span class="cstat-no" title="statement not covered" >        title={strings.REMOVE_<span class="fstat-no" title="function not covered" >PA</span>RTICIPANT}</span>
-<span class="cstat-no" title="statement not covered" >      /&gt;</span>
-    &lt;/<span class="cstat-no" title="statement not covered" >&gt;</span>
-  );<span class="cstat-no" title="statement not covered" ></span>
-}<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
+export<span class="cstat-no" title="statement not covered" > default function ProjectModulesEditView(): JSX.Element {</span>
+  const <span class="cstat-no" title="statement not covered" >{ strings } = useLocalizat<span class="fstat-no" title="function not covered" >io</span>n();<span class="cstat-no" title="statement not covered" ></span></span>
+  const projectName = 'Stuff'; // TODO later PR
+<span class="cstat-no" title="statement not covered" >  const theme</span> = useTheme();
+  const navigate = useSyncNavigate();
+  const { proj<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ec</span>tId } = useParams&lt;{ projectI<span class="cstat-no" title="statement not covered" >d: string }&gt;();</span></span>
+&nbsp;
+  const backToProjectDeliverables = useCallback(
+    () =&gt; navigate(APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', projectId || '')),
+    [projectId, navigate]
+  );
+&nbsp;
+  const saveModules = useCallback(() =&gt; {
+    // no op TODO l<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >at</span>er PR<span class="cstat-no" title="statement not covered" ></span></span>
+  }, []);<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+  return (<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+    &lt;TfMain&gt;
+<span class="cstat-no" title="statement not covered" >      &lt;Box padding={theme.spacing(3)}&gt;</span>
+        &lt;Typography<span class="cstat-no" title="statement not covered" > fontSize='24px' fontWeigh</span>t={600}&gt;
+          {strings.formatS<span class="cstat-no" title="statement not covered" >tring(strings.MODULES_FO</span>R_PROJECT, projectName)}
+        &lt;/Typography&gt;<span class="cstat-no" title="statement not covered" ></span>
+      &lt;/Box&gt;<span class="cstat-no" title="statement not covered" ></span>
+      &lt;PageForm<span class="cstat-no" title="statement not covered" ></span>
+        cancelID={'canc<span class="cstat-no" title="statement not covered" >elEditModules'}</span>
+        saveID={'saveEditModu<span class="cstat-no" title="statement not covered" >les'}</span>
+        onCancel={backT<span class="cstat-no" title="statement not covered" >oProjectDeliverables}</span>
+        onSave={saveModules}<span class="cstat-no" title="statement not covered" ></span>
+        s<span class="fstat-no" title="function not covered" >tyle={{</span>
+          display: 'fl<span class="cstat-no" title="statement not covered" >ex',</span>
+          flexGrow: 1,<span class="cstat-no" title="statement not covered" ></span>
+        }}<span class="cstat-no" title="statement not covered" ></span>
+      &gt;<span class="cstat-no" title="statement not covered" ></span>
+        &lt;Grid<span class="cstat-no" title="statement not covered" ></span>
+          container<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span>          spacing={theme.spacing(3)}</span>
+          borderRadius={theme.spacing(3)}
+          padding={theme.spacing(0, 3, 3, 0)}
+          margin={0}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+        &gt;
+<span class="cstat-no" title="statement not covered" >          {projectId &amp;&amp; &lt;ProjectModulesList projectId={Number(projectId)} editing={true} /&gt;}</span>
+        &lt;/Grid&gt;
+      &lt;/PageForm&gt;
+    &lt;/TfMain&gt;
+  );
+}
+&nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-12T15:56:09.242Z
+                at 2026-01-12T19:06:02.137Z
             </div>
-        <script src="../../../../prettify.js"></script>
+        <script src="../../../../../prettify.js"></script>
         <script>
             window.onload = function () {
                 prettyPrint();
             };
         </script>
-        <script src="../../../../sorter.js"></script>
-        <script src="../../../../block-navigation.js"></script>
+        <script src="../../../../../sorter.js"></script>
+        <script src="../../../../../block-navigation.js"></script>
     </body>
 </html>
     

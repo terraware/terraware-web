@@ -257,7 +257,9 @@
 <a name='L192'></a><a href='#L192'>192</a>
 <a name='L193'></a><a href='#L193'>193</a>
 <a name='L194'></a><a href='#L194'>194</a>
-<a name='L195'></a><a href='#L195'>195</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L195'></a><a href='#L195'>195</a>
+<a name='L196'></a><a href='#L196'>196</a>
+<a name='L197'></a><a href='#L197'>197</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -415,7 +417,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -478,43 +482,44 @@ import {
 &nbsp;
 type DeliverablesListProps = {
   projectId?: numbe<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >r;<span class="cstat-no" title="statement not covered" ></span></span></span>
-};<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span>
-const Deliv<span class="fstat-no" title="function not covered" >er</span>able<span class="cstat-no" title="statement not covered" >sList = ({ pro</span>jectId }: DeliverablesListProps): JSX.Element =&gt; {
-  const { activeLocale } = useLocalization();
-<span class="cstat-no" title="statement not covered" >  const { selectedOrganization } = useOrganiza</span>tion();
+  maxItemsPerPage?: <span class="cstat-no" title="statement not covered" >num</span>ber;
+<span class="cstat-no" title="statement not covered" >};</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+const DeliverablesList = ({ projectId, maxItemsPerPage }: DeliverablesListProps): JSX.Element =&gt; {
+<span class="cstat-no" title="statement not covered" >  const { activeLocale } = useLocalization();</span>
+  const { selectedO<span class="cstat-no" title="statement not covered" >rganization } = useOrganiz</span>ation();
   const {<span class="cstat-no" title="statement not covered" ></span>
-    currentParticipant<span class="cstat-no" title="statement not covered" >Project,</span>
-    projectsWithModules: mod<span class="cstat-no" title="statement not covered" >uleProjects,</span>
-    setCurrentParticipantProjec<span class="cstat-no" title="statement not covered" >t,</span>
-  } = useParticipantData<span class="cstat-no" title="statement not covered" >();</span>
-  const [projectFilter, setPro<span class="cstat-no" title="statement not covered" >jectFilter] = useState&lt;{ projectId?: number | string</span> }&gt;({
-    projectId: (projectId ? pro<span class="cstat-no" title="statement not covered" >jectId : currentParticipantProject?.id) || '',</span>
+    currentParticipantProjec<span class="cstat-no" title="statement not covered" >t,</span>
+    projectsWithModules: module<span class="cstat-no" title="statement not covered" >Projects,</span>
+    setCurrentParticipan<span class="cstat-no" title="statement not covered" >tProject,</span>
+  } = useParticipantData();<span class="cstat-no" title="statement not covered" ></span>
+  const [projectFilter, setProj<span class="cstat-no" title="statement not covered" >ectFilter] = useState&lt;{ projectId?: number | string }&gt;({</span>
+    projectId: (proj<span class="cstat-no" title="statement not covered" >ectId ? projectId : currentParticipantProject?.id</span>) || '',
   });<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
   useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-    if (projectFilter<span class="cstat-no" title="statement not covered" >.projectId) {</span>
-      setCurrentPar<span class="cstat-no" title="statement not covered" >ticipantProject(projectFilter.</span>projectId);
+    if (projectFilt<span class="cstat-no" title="statement not covered" >er.projectId) {</span>
+      setCurrentParticipan<span class="cstat-no" title="statement not covered" >tProject(projectFilter.projectId);</span>
     }<span class="cstat-no" title="statement not covered" ></span>
-  }, [projectFilter, setCur<span class="cstat-no" title="statement not covered" >rentParticipantProject]);</span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  const extraTableFilters: <span class="cstat-no" title="statement not covered" >SearchNodePayload[] = useMemo(</span>
-    () =&gt;<span class="cstat-no" title="statement not covered" ></span>
+  }, [projectFilter, setC<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ur</span>rentParticipantProject]);</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  const extraTableFilters: SearchNo<span class="cstat-no" title="statement not covered" >dePayload[] = useMemo(</span>
+    () =&gt;
       projectFilter.projectId
         ? [
             {
-              operation: 'field',
-<span class="cstat-no" title="statement not covered" >              field: 'projectId',</span>
-              type: 'Exact',<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >              operation: 'field',</span>
+              field: 'projectId',<span class="cstat-no" title="statement not covered" ></span>
+              type: 'Exact',
               values: [`${projectFilter.projectId}`],
-            },
-<span class="cstat-no" title="statement not covered" >          ]<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >            },<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >          ]</span>
 <span class="cstat-no" title="statement not covered" >        : [],</span>
-    [p<span class="cstat-no" title="statement not covered" >rojectFilter.projectId]</span>
+    [projectFilter.projectId]
   );
-&nbsp;
-  const filterModifiers = us<span class="cstat-no" title="statement not covered" >eCallback(</span>
-<span class="fstat-no" title="function not covered" >    (f</span>ilte<span class="cstat-no" title="statement not covered" >rs: FilterConfig[]) =&gt;</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  co<span class="fstat-no" title="function not covered" >ns</span>t fi<span class="cstat-no" title="statement not covered" >lterModifiers = useCallback(</span>
+    (filters: FilterConfig[]) =&gt;
       filters.map((filter: FilterConfig) =&gt; {
         if (filter.field !== 'status') {
           return filter;
@@ -523,55 +528,55 @@ const Deliv<span class="fstat-no" title="function not covered" >er</span>able<sp
         // In the participant view, "needs translation" needs to be "in review", so we will remove "needs translation" as an option
         return {
           ...filter,
-          options: filter.options.filter((option) =&gt; option !== 'Needs Translation'),
-        };<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" ></span>      }),<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+          options: filter.<span class="cstat-no" title="statement not covered" >options.filter((option) =&gt; option !== 'Needs Translation'),</span>
+<span class="fstat-no" title="function not covered" ></span>        };<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >      }),</span>
     []<span class="cstat-no" title="statement not covered" ></span>
-  );<span class="cstat-no" title="statement not covered" ></span>
-&nbsp;
-  cons<span class="cstat-no" title="statement not covered" >t searchAndSort: SearchAndSortFn&lt;ListDeliverablesElementWithOverdue&gt; = useCallback(</span>
-    (
-      results: ListDeliverablesElementW<span class="fstat-no" title="function not covered" >it</span>hOverdue[]<span class="cstat-no" title="statement not covered" >,</span>
+  );
+<span class="cstat-no" title="statement not covered" ></span>
+  const searchAndSort: SearchAndSortFn&lt;ListDeliverablesElementWithOverdue&gt; = useCallback(
+    (<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+      results: ListDeliverablesElementWithOverdue[],
       search?: SearchNodePayload,
       sortOrderConfig?: SearchOrderConfig
     ) =&gt; {
-      // In the participant view, "needs translation" needs to be "in review", so we will coerce results with "needs translation"
-      // into the filter<span class="cstat-no" title="statement not covered" > rules for "in review"</span>
-<span class="fstat-no" title="function not covered" ></span>      // We need to find the search node payload that contains the "status" filter and add "needs translation" as a search value
-      const modifyStatus: S<span class="cstat-no" title="statement not covered" >earchNodeModifyConfig = {</span>
+      // In the particip<span class="cstat-no" title="statement not covered" >ant view, "needs translation" needs to be "in review", so we will coerce results with "needs translation"</span>
+<span class="fstat-no" title="function not covered" ></span>      // into the filter rules for "in review"
+      // We need to find th<span class="cstat-no" title="statement not covered" >e search node payload that contains the "status" filter and add "needs translation" as a search value</span>
+      const modifyStatus: SearchNodeModifyConfig = {
         field: 'status',
         operation: 'APPEND',
-        values: ['Needs Translation'],
-        condition: <span class="fstat-no" title="function not covered" >(v</span>alues) =&gt; <span class="cstat-no" title="statement not covered" >values.includes('In Review'),</span>
-      };
+        values: ['N<span class="fstat-no" title="function not covered" >ee</span>ds Transla<span class="cstat-no" title="statement not covered" >tion'],</span>
+        condition: (values) =&gt; values.includes('In Review'),
+      };<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-      const modifiedSear<span class="cstat-no" title="statement not covered" >ch = modifySearchNode(modifyStatus, search);</span>
-<span class="cstat-no" title="statement not covered" >      const firstSort = genericSearchAndSort(results, modifiedSearch, sortOrderConfig);</span>
-      if (sortOrderConfig?<span class="cstat-no" title="statement not covered" >.sortOrder.field === 'status') {</span>
-<span class="cstat-no" title="statement not covered" >        const direction = sort<span class="fstat-no" title="function not covered" >Or</span>derConfig?.sortOrder.direction;</span>
-        re<span class="cstat-no" title="statement not covered" >turn firstSort.sort((a, b) =&gt; {</span>
-          if<span class="cstat-no" title="statement not covered" > (a.status !== b.status) {</span>
-            if<span class="cstat-no" title="statement not covered" > (direction === 'Descending') {</span>
-              return DeliverableStatusOrder[b.status] - DeliverableStatusOrder[a.status];
-            } <span class="cstat-no" title="statement not covered" >else {</span>
+<span class="cstat-no" title="statement not covered" >      const modifiedSearch = modifySearchNode(modifyStatus, search);</span>
+      const firstSort = ge<span class="cstat-no" title="statement not covered" >nericSearchAndSort(results, modifiedSearch, sortOrderConfig);</span>
+      if<span class="cstat-no" title="statement not covered" > (sortOrderConfig?.sor<span class="fstat-no" title="function not covered" >tO</span>rder.field === 'status') {</span>
+        co<span class="cstat-no" title="statement not covered" >nst direction = sortOrderConfig?.sortOrder.direction;</span>
+        retu<span class="cstat-no" title="statement not covered" >rn firstSort.sort((a, b) =&gt; {</span>
+          if (<span class="cstat-no" title="statement not covered" >a.status !== b.status) {</span>
+            if (direction === 'Descending') {
+<span class="cstat-no" title="statement not covered" >              return DeliverableStatusOrder[b.status] - DeliverableStatusOrder[a.status];</span>
+            } else {
               return DeliverableStatusOrder[a.status] - DeliverableStatusOrder[b.status];
-            }
-          } <span class="cstat-no" title="statement not covered" >else {</span>
-            //<span class="cstat-no" title="statement not covered" > if the hav</span>e same status sort by due date
-            if ((a.<span class="cstat-no" title="statement not covered" >dueDate || 0) &lt; (b.dueDate || 0)) {</span>
-<span class="cstat-no" title="statement not covered" >              return -1;</span>
-            } else if ((a.dueDate || 0) &gt; (b.dueDate || 0)) {
-<span class="cstat-no" title="statement not covered" >              return 1</span>;
+<span class="cstat-no" title="statement not covered" >            }</span>
+          } el<span class="cstat-no" title="statement not covered" >se {</span>
+            // if t<span class="cstat-no" title="statement not covered" >he have same status sort by due date</span>
+            if<span class="cstat-no" title="statement not covered" > ((a.dueDa</span>te || 0) &lt; (b.dueDate || 0)) {
+              return -1;
+<span class="cstat-no" title="statement not covered" >            } else if </span>((a.dueDate || 0) &gt; (b.dueDate || 0)) {
+              return 1;
             }
             return 0;
-          }
-<span class="cstat-no" title="statement not covered" >        });</span>
+<span class="cstat-no" title="statement not covered" >          }</span>
+        });
       } else {
         return firstSort;
       }
-    },
-    []<span class="cstat-no" title="statement not covered" ></span>
-  );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+    },<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" >    []<span class="cstat-no" title="statement not covered" ></span></span>
+  );
 &nbsp;
   const PageHeaderLeftComponent = useMemo(
     () =&gt;
@@ -583,9 +588,9 @@ const Deliv<span class="fstat-no" title="function not covered" >er</span>able<sp
             &lt;/Grid&gt;
             {moduleProjects?.length &gt; 0 &amp;&amp; (
               &lt;Grid item&gt;
-                {moduleProjects?.length &gt; 1 ? (
+                {m<span class="cstat-no" title="statement not covered" >oduleProjects?.length &gt; 1 ? (</span>
 <span class="cstat-no" title="statement not covered" >                  &lt;Box display='flex'&gt;</span>
-<span class="cstat-no" title="statement not covered" >                    &lt;Typography sx={{ lineHeight: '40px', marginRight: theme.spacing(1.5) }} component={'span'}&gt;</span>
+                    &lt;Typography sx={{ lineHeight: '40px', marginRight: theme.spacing(1.5) }} component={'span'}&gt;
                       {strings.PROJECT}
                     &lt;/Typography&gt;
                     &lt;ProjectsDropdown
@@ -638,6 +643,7 @@ const Deliv<span class="fstat-no" title="function not covered" >er</span>able<sp
           searchAndSort={searchAndSort}
           tableId={'participantDeliverablesTable'}
           projectId={projectId}
+          maxItemsPerPage={maxItemsPerPage}
         /&gt;
       )}
     &lt;/Wrapper&gt;
@@ -652,7 +658,7 @@ export default DeliverablesList;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-12T15:56:09.242Z
+                at 2026-01-12T19:06:02.137Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

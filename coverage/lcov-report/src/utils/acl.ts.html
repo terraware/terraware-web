@@ -420,7 +420,10 @@
 <a name='L355'></a><a href='#L355'>355</a>
 <a name='L356'></a><a href='#L356'>356</a>
 <a name='L357'></a><a href='#L357'>357</a>
-<a name='L358'></a><a href='#L358'>358</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L358'></a><a href='#L358'>358</a>
+<a name='L359'></a><a href='#L359'>359</a>
+<a name='L360'></a><a href='#L360'>360</a>
+<a name='L361'></a><a href='#L361'>361</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -556,6 +559,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">76x</span>
 <span class="cline-any cline-yes">76x</span>
@@ -565,6 +569,8 @@
 <span class="cline-any cline-yes">114x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">20x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -844,26 +850,28 @@ type PermissionParticipantPro<span class="fstat-no" title="function not covered"
   | 'UPDATE_PARTICIPANT_PROJECT_SCORING_VOTING'
   | 'EXPORT_PARTICIPANT_PROJECT'<span class="fstat-no" title="function not covered" ></span>
 <span class="cstat-no" title="statement not covered" >  | 'PUBLISH_PROJECT_DETAILS';</span>
-type PermissionSurvivalRate = 'EDIT_SURVIVAL_RATE_SETTINGS';
-<span class="fstat-no" title="function not covered" ></span>
-ex<span class="cstat-no" title="statement not covered" >port type GlobalRolePermission =</span>
-  | PermissionAcceleratorReports
-  | PermissionActivities<span class="fstat-no" title="function not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  | PermissionApplication</span>
-  | PermissionCohort
-  | PermissionConsole<span class="fstat-no" title="function not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  | PermissionDeliverable</span>
-  | PermissionDocuments
-  | PermissionFunder<span class="fstat-no" title="function not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  | PermissionGlobalRole</span>
-  | PermissionOrganization
-  | PermissionParticipant<span class="fstat-no" title="function not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  | PermissionParticipantProject</span>
-  | PermissionSurvivalRate;
-<span class="fstat-no" title="function not covered" ></span>
-ty<span class="cstat-no" title="statement not covered" >pe PermissionCheckFn&lt;T = any&gt; = (user: User, permission: GlobalRolePermission, metadata?: T) =&gt; boolean;</span>
+type PermissionProjectModules = 'UPDATE_PROJECT_MODULES';
+type PermissionSurvivalRate = '<span class="fstat-no" title="function not covered" >ED</span>IT_SURVIVAL_RATE_SETTINGS';
+<span class="cstat-no" title="statement not covered" ></span>
+export type GlobalRolePermission =
+  | PermissionAcceleratorReports<span class="fstat-no" title="function not covered" ></span>
+<span class="cstat-no" title="statement not covered" >  | PermissionActivities</span>
+  | PermissionApplication
+  | PermissionCohort<span class="fstat-no" title="function not covered" ></span>
+<span class="cstat-no" title="statement not covered" >  | PermissionConsole</span>
+  | PermissionDeliverable
+  | PermissionDocuments<span class="fstat-no" title="function not covered" ></span>
+<span class="cstat-no" title="statement not covered" >  | PermissionFunder</span>
+  | PermissionGlobalRole
+  | PermissionOrganization<span class="fstat-no" title="function not covered" ></span>
+<span class="cstat-no" title="statement not covered" >  | PermissionParticipant</span>
+  | PermissionParticipantProject
+  | PermissionProjectModules<span class="fstat-no" title="function not covered" ></span>
+<span class="cstat-no" title="statement not covered" >  | PermissionSurvivalRate;</span>
 &nbsp;
-/**<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+type PermissionCheckFn&lt;T = any&gt; = (u<span class="fstat-no" title="function not covered" >se</span>r: User, permission: <span class="cstat-no" title="statement not covered" >GlobalRolePermission, metadata?: T) =&gt; boolean;</span>
+&nbsp;
+/**
  * Many of the permissions are "XYZ role _or higher_", so these RolePlus arrays are used in many cases
  */
 const SuperAdminPlus: UserGlobalRoles = [GLOBAL_ROLE_SUPER_ADMIN];
@@ -914,9 +922,9 @@ const isAllowedAssignSomeGlobalRoles: PermissionCheckFn = (user: User): boolean 
  */
 type CreateSubmissionMetadata = { organization: Organization };
 const isAllowedCreateSubmission: PermissionCheckFn&lt;CreateSubmissionMetadata&gt; = (
-  user: User,
-  <span class="missing-if-branch" title="if path not taken" >I</span>_: GlobalRolePermission,
-  me<span class="cstat-no" title="statement not covered" >tadata?: Creat</span>eSubmissionMetadata
+  <span class="missing-if-branch" title="if path not taken" >I</span>user: User,
+  _:<span class="cstat-no" title="statement not covered" > GlobalRolePer</span>mission,
+  metadata?: CreateSubmissionMetadata
 ): boolean =&gt; {
   return isAcceleratorAdmin(user) || isManagerOrHigher(metadata?.organization);
 };
@@ -1106,6 +1114,7 @@ const ACL: Record&lt;GlobalRolePermission, UserGlobalRoles | PermissionCheckFn&g
   UPDATE_REPORTS_SETTINGS: AcceleratorAdminPlus,
   UPDATE_REPORTS_TARGETS: isAllowedUpdateReportsTargets,
   UPDATE_PARTICIPANT_PROJECT: TFExpertPlus,
+  UPDATE_PROJECT_MODULES: AcceleratorAdminPlus,
   UPDATE_SUBMISSION_STATUS: TFExpertPlus,
   VIEW_CONSOLE: ReadOnlyPlus,
   VIEW_PARTICIPANT_PROJECT_SCORING_VOTING: TFExpertPlus,
@@ -1141,7 +1150,7 @@ export const isAllowed: PermissionCheckFn = (
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-12T15:56:09.242Z
+                at 2026-01-12T19:06:02.137Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

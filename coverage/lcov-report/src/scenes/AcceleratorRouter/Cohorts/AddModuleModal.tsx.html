@@ -211,7 +211,8 @@
 <a name='L146'></a><a href='#L146'>146</a>
 <a name='L147'></a><a href='#L147'>147</a>
 <a name='L148'></a><a href='#L148'>148</a>
-<a name='L149'></a><a href='#L149'>149</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L149'></a><a href='#L149'>149</a>
+<a name='L150'></a><a href='#L150'>150</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -350,6 +351,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -368,61 +370,62 @@ import { DateTime }<span class="cstat-no" title="statement not covered" > from '
 import DialogBo<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >x </span>from 'src/components/common/DialogBox/DialogBox';</span>
 im<span class="cstat-no" title="statement not covered" >port TextField from 'src/components/common/Textfield/Textfield';</span>
 impo<span class="cstat-no" title="statement not covered" >rt Button from 'src/components/common/button/Button';</span>
-import strings from 'src/strings';
-import { CohortMod<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ul</span>e, Module } from 'src/types/Module';</span>
-im<span class="cstat-no" title="statement not covered" >port useForm from 'src/utils/useForm';</span>
+import { ProjectModulePayload } from 'src/queries/generated/projectModules';
+import strings fro<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >m </span>'src/strings';</span>
+im<span class="cstat-no" title="statement not covered" >port { CohortModule, Module } from 'src/types/Module';</span>
+impo<span class="cstat-no" title="statement not covered" >rt useForm from 'src/utils/useForm';</span>
 <span class="cstat-no" title="statement not covered" ></span>
-export<span class="cstat-no" title="statement not covered" > interface AddModuleModalProps {</span>
-  onClos<span class="cstat-no" title="statement not covered" >e: () =&gt; void;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  onSave: (cohortModule: CohortModule) =&gt; void;
-<span class="cstat-no" title="statement not covered" >  selectedMod</span>ule?: CohortModule;
-  unusedModules: Module[];
-}<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+export i<span class="cstat-no" title="statement not covered" >nterface AddModuleModalPro<span class="fstat-no" title="function not covered" >ps</span> {<span class="cstat-no" title="statement not covered" ></span></span>
+  onClose: () =&gt; void;
+<span class="cstat-no" title="statement not covered" >  onSave: (co</span>hortModule: CohortModule | ProjectModulePayload) =&gt; void;
+  selectedModule?: CohortModule | ProjectModulePayload;
+  unusedModule<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >s:</span> Module[] | ProjectModulePay<span class="cstat-no" title="statement not covered" >load[];</span></span>
+}
 &nbsp;
 export default function AddModuleModal(props: AddModuleModalProps): JSX.Element {
   const { onClose, onSave, selectedModule, unusedModules } = props;
 &nbsp;
   const theme = useTheme();
 &nbsp;
-  const [record, , onChange, onChangeCallback] = useForm&lt;Partial&lt;CohortModule&gt;&gt;(selectedModule ?? {});
-  const [validate, <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >se</span>tValida<span class="cstat-no" title="statement not covered" >te] = useState(false);</span></span>
+  const [record, , <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >on</span>Change,<span class="cstat-no" title="statement not covered" > onChangeCallback] = useForm&lt;Partial&lt;CohortModule&gt;&gt;(selectedMod</span></span>ule ?? {});
+  const [validate, s<span class="cstat-no" title="statement not covered" >etV</span>alidate] = useState(false);
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  const save = () =&gt; {</span>
-    if (!re<span class="fstat-no" title="function not covered" >co</span>rd.t<span class="cstat-no" title="statement not covered" >itle || !record</span>.id || !record.endDate || !record.startDate) {
-      setValidate(true);
-<span class="cstat-no" title="statement not covered" >      return;</span>
+  const sav<span class="fstat-no" title="function not covered" >e </span>= ()<span class="cstat-no" title="statement not covered" > =&gt; {</span>
+    if (!record.title || !record.id || !record.endDate || !record.startDate) {
+<span class="cstat-no" title="statement not covered" >      setValidate(true);</span>
+      return;<span class="cstat-no" title="statement not covered" ></span>
     }<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-    const endDateDate = new <span class="cstat-no" title="statement not covered" >Date(record.endDate);</span>
+    const endDateDate =<span class="cstat-no" title="statement not covered" > new Date(record.endDate);</span>
     const startDateDate<span class="cstat-no" title="statement not covered" > = new Date(record.startDate);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-    if (endDateDate <span class="cstat-no" title="statement not covered" >&lt; startDateDate) {</span>
+    if (endDateDate &lt;<span class="cstat-no" title="statement not covered" > startDateDate) {</span>
       setValidate(tru<span class="cstat-no" title="statement not covered" >e);</span>
-      return;<span class="cstat-no" title="statement not covered" ></span>
-    }<span class="fstat-no" title="function not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span>
-    if (selected<span class="cstat-no" title="statement not covered" >Module) {</span>
-      onSave({ ...selectedModule, ...record });<span class="cstat-no" title="statement not covered" ></span>
-    } else {<span class="cstat-no" title="statement not covered" ></span>
-      const mod<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ul</span>e = unusedModules.find((_module) =&gt; _module.id === record.id);</span>
-<span class="cstat-no" title="statement not covered" >      if (module !== undefined) {</span>
-<span class="cstat-no" title="statement not covered" >        const today = Dat</span>e.now();
-<span class="cstat-no" title="statement not covered" >        const </span>isActive = startDateDate.valueOf() &lt;= today &amp;&amp; today &lt;= endDateDate.valueOf();
-        onSave({
-          ...module,<span class="cstat-no" title="statement not covered" ></span>
-          title: record.ti<span class="cstat-no" title="statement not covered" >tle,</span>
-<span class="cstat-no" title="statement not covered" >          startDate: record.startDate,</span>
-<span class="cstat-no" title="statement not covered" >          endDate: record</span>.endDate,
-<span class="cstat-no" title="statement not covered" >          isAc</span>tive,
-        });
-<span class="cstat-no" title="statement not covered" >      }</span>
+      ret<span class="fstat-no" title="function not covered" >urn;</span>
     }<span class="cstat-no" title="statement not covered" ></span>
-  };
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  cons<span class="cstat-no" title="statement not covered" >t dropdownOptions: DropdownItem[] = useMemo(() =&gt; {</span>
-    const unusedOption<span class="cstat-no" title="statement not covered" >s = unusedM</span>odules.map((module) =&gt; ({
-      label: `(${module.i<span class="cstat-no" title="statement not covered" >d}) ${module.name}`,</span>
-      va<span class="cstat-no" title="statement not covered" >lue: module.id,</span>
+<span class="cstat-no" title="statement not covered" ></span>
+    if (selectedModule) {<span class="cstat-no" title="statement not covered" ></span>
+      onSave({ ...selectedModule, <span class="cstat-no" title="statement not covered" >...record });</span>
+    } else {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >      const module = unusedModules.find((_module) =&gt; _module.id === record.id);</span>
+<span class="cstat-no" title="statement not covered" >      if (module !== unde</span>fined) {
+<span class="cstat-no" title="statement not covered" >        const </span>today = Date.now();
+        const isActive = startDateDate.valueOf() &lt;= today &amp;&amp; today &lt;= endDateDate.valueOf();
+        onSave({<span class="cstat-no" title="statement not covered" ></span>
+          ...module,<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >          title: record.title,</span>
+<span class="cstat-no" title="statement not covered" >          startDate: reco</span>rd.startDate,
+<span class="cstat-no" title="statement not covered" >          endD</span>ate: record.endDate,
+          isActive,
+<span class="cstat-no" title="statement not covered" >        });</span>
+<span class="cstat-no" title="statement not covered" >      }</span>
+    }
+  };<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+<span class="cstat-no" title="statement not covered" ></span>
+  const dropdownOption<span class="cstat-no" title="statement not covered" >s: Dropdown</span>Item[] = useMemo(() =&gt; {
+    const unusedOptions =<span class="cstat-no" title="statement not covered" > unusedModules.map((module) =&gt; ({</span>
+      la<span class="cstat-no" title="statement not covered" >bel: `(${module.id}) ${module.name}`,</span>
+      value: module.id,
     }));
 &nbsp;
     const selectedOption = selectedModule
@@ -431,21 +434,21 @@ export default function AddModuleModal(props: AddModuleModalProps): JSX.Element 
             label: `(${selectedModule.id}), ${selectedModule.name}`,
             value: selectedModule.id,
           },
-        ]
-      : [];<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+        ]<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+      : [];<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+&nbsp;
     return [...unusedOptions, ...selectedOption].toSorted((a, b) =&gt; a.value - b.value);
   }, [unusedModules, selectedModule]);
-&nbsp;
-  return (<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+  return (
     &lt;DialogBox
       onClose={onClose}
       open={true}
       title={strings.MODULE_DETAILS}
-      size='medium'
-<span class="cstat-no" title="statement not covered" >      middleButtons={[<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-        &lt;Button
-<span class="cstat-no" title="statement not covered" >          id='cancel'</span>
+<span class="cstat-no" title="statement not covered" >      size='medium'<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+      middleButtons={[
+<span class="cstat-no" title="statement not covered" >        &lt;Button</span>
+          id='cancel'
           label={strings.CANCEL}
           type='passive'
           onClick={onClose}
@@ -480,13 +483,13 @@ export default function AddModuleModal(props: AddModuleModalProps): JSX.Element 
           /&gt;
         &lt;/Grid&gt;
         &lt;Grid item xs={6} sx={{ marginTop: theme.spacing(2), paddingRight: 1 }}&gt;
-          &lt;DatePicker
-            id='st<span class="fstat-no" title="function not covered" >ar</span>tDate'
-            label={strings.<span class="cstat-no" title="statement not covered" >START_D</span>ATE_REQUIRED}
-<span class="cstat-no" title="statement not covered" >            value={record.startDate}</span>
+          &lt;DatePic<span class="fstat-no" title="function not covered" >ke</span>r
+            id='startDate'<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >            label={strings.START_DATE_REQU</span>IRED}
+            value={record.startDate}
             onDateChange={(value?: DateTime) =&gt; {
-              onChange('startDate', value?.toFormat('yyyy-MM-dd'));
-            }}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+              onChange('startDate', val<span class="fstat-no" title="function not covered" >ue</span>?.toFormat<span class="cstat-no" title="statement not covered" >('yyyy-MM-dd'));</span>
+            }}
             aria-label='date-picker'
             errorText={validate ? strings.INVALID_DATE : undefined}
           /&gt;
@@ -495,9 +498,9 @@ export default function AddModuleModal(props: AddModuleModalProps): JSX.Element 
           &lt;DatePicker
             id='endDate'
             label={strings.END_DATE_REQUIRED}
-            value={record.endDate}
-            onDateChan<span class="fstat-no" title="function not covered" >ge</span>={(value) =&gt; {
-<span class="cstat-no" title="statement not covered" >              onChange('endDate', value?.toFormat('yyyy-MM-dd'));</span>
+            value={rec<span class="fstat-no" title="function not covered" >or</span>d.endDate}
+<span class="cstat-no" title="statement not covered" >            onDateChange={(value) =&gt; {</span>
+              onChange('endDate', value?.toFormat('yyyy-MM-dd'));
             }}
             aria-label='date-picker'
             errorText={validate ? strings.INVALID_DATE : undefined}
@@ -507,14 +510,14 @@ export default function AddModuleModal(props: AddModuleModalProps): JSX.Element 
     &lt;/DialogBox&gt;
   );
 }
-&nbsp;</pre></td></tr></table></pre>
+<span class="fstat-no" title="function not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-12T15:56:09.242Z
+                at 2026-01-12T19:06:02.137Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
