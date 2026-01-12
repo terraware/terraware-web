@@ -8,7 +8,7 @@ import { APP_PATHS } from 'src/constants';
 
 export type ProjectModulesCellRendererProps = {
   editing?: boolean;
-  onClickName?: (id: string) => void;
+  onClickName?: (id: number) => void;
 };
 
 export default function ProjectModulesCellRenderer({ editing, onClickName }: ProjectModulesCellRendererProps) {

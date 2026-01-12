@@ -5,8 +5,7 @@ import { Box, Grid, Typography, useTheme } from '@mui/material';
 
 import PageForm from 'src/components/common/PageForm';
 import TfMain from 'src/components/common/TfMain';
-import { APP_PATHS } from 'src/constants';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
+import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
 import { ProjectPayload, useGetProjectQuery } from 'src/queries/generated/projects';
 
@@ -15,14 +14,14 @@ import ProjectModulesList from '../ProjectModulesList';
 export default function ProjectModulesEditView(): JSX.Element {
   const { strings } = useLocalization();
   const theme = useTheme();
-  const navigate = useSyncNavigate();
+  const { goToAcceleratorProject } = useNavigateTo();
   const { projectId } = useParams<{ projectId: string }>();
   const { data } = useGetProjectQuery(Number(projectId || -1));
   const project = useMemo(() => (data?.project || {}) as ProjectPayload, [data]);
 
   const backToProjectDeliverables = useCallback(
-    () => navigate(APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', projectId || '')),
-    [projectId, navigate]
+    () => goToAcceleratorProject(Number(projectId || -1)),
+    [projectId, goToAcceleratorProject]
   );
 
   const saveModules = useCallback(() => {
