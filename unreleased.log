@@ -1,3 +1,4 @@
+619fc56f634 SW-7934 Implement save for add/edit/delete project modules (#5049)
 c90528553de SW-7934 Implement Add/Edit modal for editing modules (#5048)
 695d744b67e SW-7933 Add correct project name to edit modules page (#5047)
 3fa3490878d SW-7933 Add initial Edit project modules page (#5046)

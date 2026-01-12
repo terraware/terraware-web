@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/33</span>
+                <span class='fraction'>0/37</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/20</span>
+                <span class='fraction'>0/26</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/30</span>
+                <span class='fraction'>0/33</span>
             </div>
         
             
@@ -94,7 +94,10 @@
 <a name='L29'></a><a href='#L29'>29</a>
 <a name='L30'></a><a href='#L30'>30</a>
 <a name='L31'></a><a href='#L31'>31</a>
-<a name='L32'></a><a href='#L32'>32</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L32'></a><a href='#L32'>32</a>
+<a name='L33'></a><a href='#L33'>33</a>
+<a name='L34'></a><a href='#L34'>34</a>
+<a name='L35'></a><a href='#L35'>35</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -125,37 +128,43 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React fr<span class="cstat-no" title="statement not covered" >om 'react';</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > useMemo } fro</span>m 'react';
 <span class="cstat-no" title="statement not covered" ></span>
 import { useTheme } fro<span class="cstat-no" title="statement not covered" >m '@mui/material';</span>
 <span class="cstat-no" title="statement not covered" ></span>
 import Card from 's<span class="cstat-no" title="statement not covered" >rc/components/common/C</span>ard';
-import Deliverables<span class="cstat-no" title="statement not covered" >List from 'src/scenes/Deliverabl</span>esRouter/DeliverablesList';
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-im<span class="cstat-no" title="statement not covered" >port ProjectModulesList from './ProjectModulesList';</span>
+import { useListPro<span class="cstat-no" title="statement not covered" >jectModulesQuery } from 'src/que</span>ries/generated/projectModules';
+import Delivera<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >bl</span>esList from 'src/scenes/DeliverablesRouter/DeliverablesList';</span>
 <span class="cstat-no" title="statement not covered" ></span>
-type ProjectDeliverablesViewProps = {
-  projectId: numbe<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >r;</span></span>
+impo<span class="cstat-no" title="statement not covered" >rt ProjectModulesList from './ProjectModulesList';</span>
+&nbsp;
+type ProjectDelive<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ra</span>blesViewProps = {</span>
+<span class="cstat-no" title="statement not covered" >  projectId: number;</span>
 };<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-const <span class="cstat-no" title="statement not covered" >ProjectDeliverablesView = ({ projectId }: ProjectDeliverablesViewProps) =&gt; {</span>
-  const <span class="cstat-no" title="statement not covered" >theme = useTheme();<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+const Pr<span class="cstat-no" title="statement not covered" >ojectDeliverablesView = ({<span class="fstat-no" title="function not covered" > p</span>roje<span class="cstat-no" title="statement not covered" >ctId }: Pr</span>ojectDeliverablesViewProps) =&gt; {</span>
+  const theme = useTheme();
+<span class="cstat-no" title="statement not covered" >  const { dat</span>a, isLoading } = useListProjectModulesQuery(Number(projectId));
+  const projectModules = useMemo(() =&gt; data?.modules || [], [data?.modules]);
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  return (
     &lt;Card
-      style={{<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+      style={{
         borderRadius: theme.spacing(1),
         padding: 0,
       }}
     &gt;
-      &lt;DeliverablesList projectId={projectId} maxItemsPerPage={10} /&gt;
-&nbsp;
-      {projectId &amp;&amp; &lt;ProjectModulesList projectId={projectId} /&gt;}
-    &lt;/Card&gt;<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  );<span class="cstat-no" title="statement not covered" ></span>
+      &lt;Deliverables<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Li</span>st proj<span class="cstat-no" title="statement not covered" >ectId={projectId} maxItemsPerPage={10} /&gt;</span></span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >      {projectId &amp;&amp; &lt;ProjectModulesList projectId={projectId} isLoading={isLoading} projectModules={projectModules} /&gt;}</span>
+    &lt;/Card&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  );
 <span class="cstat-no" title="statement not covered" >};</span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-export default ProjectDeliverablesView;
+<span class="cstat-no" title="statement not covered" ></span>
+export default Project<span class="cstat-no" title="statement not covered" >DeliverablesView;</span>
 <span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -163,7 +172,7 @@ export default ProjectDeliverablesView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-12T19:32:36.484Z
+                at 2026-01-12T19:44:01.067Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
