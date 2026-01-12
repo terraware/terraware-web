@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/117</span>
+                <span class='fraction'>0/118</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/62</span>
+                <span class='fraction'>0/63</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/115</span>
+                <span class='fraction'>0/116</span>
             </div>
         
             
@@ -434,7 +434,11 @@
 <a name='L369'></a><a href='#L369'>369</a>
 <a name='L370'></a><a href='#L370'>370</a>
 <a name='L371'></a><a href='#L371'>371</a>
-<a name='L372'></a><a href='#L372'>372</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L372'></a><a href='#L372'>372</a>
+<a name='L373'></a><a href='#L373'>373</a>
+<a name='L374'></a><a href='#L374'>374</a>
+<a name='L375'></a><a href='#L375'>375</a>
+<a name='L376'></a><a href='#L376'>376</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -541,6 +545,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -727,6 +734,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -889,215 +897,219 @@ export default fun<span class="cstat-no" title="statement not covered" ><span cl
       },
 &nbsp;
       goToAcceleratorProject: (projectId: number) =&gt; {
-        navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_VOTES.replace(':projectId', `${projectId}`) });
+        navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', `${projectId}`) });
       },
 &nbsp;
-      goToAcceleratorProjectScore: (p<span class="fstat-no" title="function not covered" >ro</span>jectId: number) =&gt; {
-<span class="cstat-no" title="statement not covered" >        navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_SCORES.replace(':projectId', `${projectId}`) });</span>
+      goToAcceleratorProjectModulesEd<span class="fstat-no" title="function not covered" >it</span>: (projectId: number) =&gt; {
+<span class="cstat-no" title="statement not covered" >        navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_MODULES_EDIT.replace(':projectId', `${projectId}`) });</span>
       },
 &nbsp;
-      goToAcceleratorProjectScoreEdit: (projectId: number) =&gt; {
-        navigate({ pathname: A<span class="fstat-no" title="function not covered" >PP</span>_PATHS.ACCELERATOR_PROJECT_SCORES_EDIT.replace(':projectId', `${projectId}`) });
+      goToAcceleratorProjectScore: (projectId: number) =&gt; {
+        navigate({ pathname: A<span class="fstat-no" title="function not covered" >PP</span>_PATHS.ACCELERATOR_PROJECT_SCORES.replace(':projectId', `${projectId}`) });
       },<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
-      goToAcceleratorProjectVote: (<span class="fstat-no" title="function not covered" >pr</span>ojectId: number) =&gt; {
-<span class="cstat-no" title="statement not covered" >        navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_VOTES.replace(':projectId', `${projectId}`) });</span>
+      goToAcceleratorProjectScoreEdit: (p<span class="fstat-no" title="function not covered" >ro</span>jectId: number) =&gt; {
+<span class="cstat-no" title="statement not covered" >        navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_SCORES_EDIT.replace(':projectId', `${projectId}`) });</span>
       },
 <span class="fstat-no" title="function not covered" ></span>
-      go<span class="cstat-no" title="statement not covered" >ToAcceleratorProjectVoteEdit: (projectId: number) =&gt; {</span>
-        navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_VOTES_EDIT.replace(':projectId', `${projectId}`) });
+      go<span class="cstat-no" title="statement not covered" >ToAcceleratorProjectVote: (projectId: number) =&gt; {</span>
+        navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_VOTES.replace(':projectId', `${projectId}`) });
       },<span class="fstat-no" title="function not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-      goToAcceleratorReport: (reportId: number, projectId: number) =&gt;
-        navigate({<span class="fstat-no" title="function not covered" ></span>
-<span class="cstat-no" title="statement not covered" >          pathname: APP_PATHS.REPORTS_VIEW.replace(':reportId', `${reportId}`).replace(':projectId', `${projectId}`),</span>
-        }),
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-      goToAcceleratorReportEdit: (reportId: number, projectId: number) =&gt;
-        navigate({
-          pathname: APP_PATHS.REP<span class="fstat-no" title="function not covered" >OR</span>TS_EDIT.replace(':repor<span class="cstat-no" title="statement not covered" >tId', `${reportId}`).replace(':projectId', `${projectId}`),</span>
-        }),
+      goToAcceleratorProjectVoteEdit: (projectId: number) =&gt; {
+        navigate({ pathname: APP_P<span class="fstat-no" title="function not covered" >AT</span>HS.ACCELERATOR_PROJECT_VOTES_EDIT.replace(':projectId', `${projectId}`) });
+      },<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
-      goToActivityCreate: <span class="fstat-no" title="function not covered" >(p</span>rojectId: number) =&gt; {
-        const params = <span class="cstat-no" title="statement not covered" >searchParamsWithMapViewState();</span>
+      goToAcceleratorReport: (reportId<span class="fstat-no" title="function not covered" >: </span>number, projectId: number) =&gt;
 <span class="cstat-no" title="statement not covered" >        navigate({</span>
+          pathname: APP_PATHS.REPORTS_VIEW.replace(':reportId', `${reportId}`).replace(':projectId', `${projectId}`),
+        }),<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+&nbsp;
+      goToAcceleratorReportEdit: (reportId: number, projectId: number) =&gt;
+        navigate({<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+          pathname: APP_PATHS.REPORTS_EDIT.replace(':reportId', `${reportId}`).replace(':projectId', `${projectId}`),
+        }),
+<span class="fstat-no" title="function not covered" ></span>
+      goToActivityCreat<span class="cstat-no" title="statement not covered" >e: (projectId: number) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        const params = searchParamsWithMapViewState();</span>
+        navigate({
           pathname: APP_PATHS.ACTIVITY_LOG_NEW.replace(':projectId', `${projectId}`),
           search: params.toString(),
         });
-      },
-<span class="fstat-no" title="function not covered" ></span>
-      goToActivityEdit:<span class="cstat-no" title="statement not covered" > (projectId: number, activityId</span>: number) =&gt; {
-<span class="cstat-no" title="statement not covered" >        const params = searchParamsWithMapViewState();</span>
+      },<span class="fstat-no" title="function not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+      go<span class="cstat-no" title="statement not covered" >ToActivityEdit: (projectId: number, activityId: number) =&gt; {</span>
+        const params = searchParamsWithMapViewState();
         navigate({
           pathname: APP_PATHS.ACTIVITY_LOG_EDIT.replace(':projectId', `${projectId}`).replace(
             ':activityId',
             `${activityId}`
           ),
           search: params.toString(),
-        });
-      },<span class="fstat-no" title="function not covered" ></span>
+        });<span class="fstat-no" title="function not covered" ></span>
+      },<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-      go<span class="cstat-no" title="statement not covered" >ToActivityLog: (activityId?: number) =&gt; {</span>
-        co<span class="cstat-no" title="statement not covered" >nst params = searchParamsWithMapViewState();</span>
-        if (activityId !== undefined) {
-<span class="cstat-no" title="statement not covered" >          params.set('activityId', activityId.toString());</span>
+      goTo<span class="cstat-no" title="statement not covered" >ActivityLog: (activityId?: number) =&gt; {</span>
+        const params = searchParamsWithMapViewState();
+<span class="cstat-no" title="statement not covered" >        if (activityId !== undefined) {</span>
+          params.set('activityId', activityId.toString());
         }
         navigate({
           pathname: APP_PATHS.ACTIVITY_LOG,
-          search: params.toString(),
-        });<span class="fstat-no" title="function not covered" ></span>
-      },<span class="cstat-no" title="statement not covered" ></span>
-&nbsp;
-      goToApplication: (app<span class="fstat-no" title="function not covered" >li</span>cationId: number) =&gt; {
-<span class="cstat-no" title="statement not covered" >        navigate({ pathname: APP_PATHS.APPLICATION_OVERVIEW.replace(':app</span>licationId', `${applicationId}`) });
+          search: param<span class="fstat-no" title="function not covered" >s.</span>toString(),
+<span class="cstat-no" title="statement not covered" >        });</span>
       },
 <span class="fstat-no" title="function not covered" ></span>
-      go<span class="cstat-no" title="statement not covered" >ToApplicationList: () =&gt; {</span>
+      go<span class="cstat-no" title="statement not covered" >ToApplication: (applicationId: number) =&gt; {</span>
+        navigate({ pathname: APP_PATHS.APPLICATION_OVERVIEW.replace(':applicationId', `${applicationId}`) });
+      },<span class="fstat-no" title="function not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+      goToApplicationList: () =&gt; {
         navigate({ pathname: APP_PATHS.APPLICATIONS });
       },
-&nbsp;
-      goToApplicationMap: (appli<span class="fstat-no" title="function not covered" >ca</span>tionId: number) =&gt; {
-<span class="cstat-no" title="statement not covered" >        navigate({</span>
-          pathname: APP_PATHS.APPLICATION_MAP.replace(':applicationId', `${applicationId}`),
-        });
-      },
 <span class="fstat-no" title="function not covered" ></span>
-      go<span class="cstat-no" title="statement not covered" >ToApplicationMapUpdate: (applicationId: number) =&gt; {</span>
+      go<span class="cstat-no" title="statement not covered" >ToApplicationMap: (applicationId: number) =&gt; {</span>
         navigate({
-          pathname: APP_PATHS.APPLICATION_MAP_UPDATE.replace(':applicationId', `${applicationId}`),
+          pathname: APP_PATHS.APPLICATION_MAP.replace(':applicationId', `${applicationId}`),
         });
       },<span class="fstat-no" title="function not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-      goToApplicationPrescreen: (applicationId: number) =&gt; {
+      goToApplicationMapUpdate: (applicationId: number) =&gt; {
         navigate({
-          pathname: APP_PATHS.APPLICATION_PRESCREEN.replace(':applicationId', `${applicationId}`),
+          pathname: APP_PATHS.APPLICATION_MAP_UPDATE.replace(':applicationId', `${applicationId}`),
         });<span class="fstat-no" title="function not covered" ></span>
       },<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
-      goToApplicationPrescreenResult: (applicationId: number) =&gt; {
+      goToApplicationPrescreen: (applicationId: number) =&gt; {
         navigate({
-          pathname: APP_PATHS.<span class="fstat-no" title="function not covered" >AP</span>PLICATION_PRESCREEN_RESULT.replace(':applicationId', `${applicationId}`),
+          pathname: APP_PATHS<span class="fstat-no" title="function not covered" >.A</span>PPLICATION_PRESCREEN.replace(':applicationId', `${applicationId}`),
 <span class="cstat-no" title="statement not covered" >        });</span>
+      },
+&nbsp;
+      goToApplicationPrescreenResult: (applicationId: number) =&gt; {
+        navigate({<span class="fstat-no" title="function not covered" ></span>
+<span class="cstat-no" title="statement not covered" >          pathname: APP_PATHS.APPLICATION_PRESCREEN_RESULT.replace(':applicationId', `${applicationId}`),</span>
+        });
       },
 &nbsp;
       goToApplicationReview: (applicationId: number) =&gt; {
         navigate({
           pathname: APP_PATHS.APPLICATION_REVIEW.replace(':applicationId', `${applicationId}`),
-        });
-      },<span class="fstat-no" title="function not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span>
+        });<span class="fstat-no" title="function not covered" ></span>
+      },<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
       goToApplicationSection: (applicationId: number, sectionId: number) =&gt; {
         navigate({
-          pathname: APP_PATHS.APPLICATION_SECTION.replace(':applicationId', `${applicationId}`).replace(
-            ':sectionId',<span class="fstat-no" title="function not covered" ></span>
-<span class="cstat-no" title="statement not covered" >            `${sectionId}`</span>
+          pathname: APP_PATHS.APPLICATION_SEC<span class="fstat-no" title="function not covered" >TI</span>ON.replace(':applicationId', `${applicationId}`).replace(
+<span class="cstat-no" title="statement not covered" >            ':sectionId',</span>
+            `${sectionId}`
           ),
         });
       },
-&nbsp;
-      goToApplicationSect<span class="fstat-no" title="function not covered" >io</span>nDeliverable: (applicationId: number, sectionId: number, deliverableId: number) =&gt; {
-<span class="cstat-no" title="statement not covered" >        navigate({</span>
+<span class="fstat-no" title="function not covered" ></span>
+      go<span class="cstat-no" title="statement not covered" >ToApplicationSectionDeliverable: (applicationId: number, sectionId: number, deliverableId: number) =&gt; {</span>
+        navigate({
           pathname: APP_PATHS.APPLICATION_SECTION_DELIVERABLE.replace(':applicationId', `${applicationId}`)
             .replace(':sectionId', `${sectionId}`)
-            .replace(':deliverableId', `${deliverableId}`),
-        });<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+            .replace(':<span class="fstat-no" title="function not covered" >de</span>liverableId', `${deliverable<span class="cstat-no" title="statement not covered" >Id}`),</span>
+        });
       },
 &nbsp;
       goToApplicationSectionDeliverableEdit: (
         applicationId: number,
-        sectionId: number,
-        deliverableId: numb<span class="fstat-no" title="function not covered" >er</span>,<span class="cstat-no" title="statement not covered" ></span>
+        sectionId: number,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+        deliverableId: number,
         variableId?: number
       ) =&gt; {
         navigate({
           pathname: APP_PATHS.APPLICATION_SECTION_DELIVERABLE_EDIT.replace(':applicationId', `${applicationId}`)
             .replace(':sectionId', `${sectionId}`)
-            .replace(':deliverableId', `${deliverableId}`),
-          ...(variabl<span class="fstat-no" title="function not covered" >eI</span>d ? <span class="cstat-no" title="statement not covered" >{ search: `variableId=${variableId}` } : {}),</span>
+            .replace(<span class="fstat-no" title="function not covered" >':</span>deli<span class="cstat-no" title="statement not covered" >verableId', `${deliverableId}`),</span>
+          ...(variableId ? { search: `variableId=${variableId}` } : {}),
         });
-      },
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-      goToContactUsForm: (requestType: SupportRequestType) =&gt; {
-        navigate({
-          pathname: APP_PATHS<span class="fstat-no" title="function not covered" >.H</span>ELP_SUPPORT_FORM.re<span class="cstat-no" title="statement not covered" >place(':requestType', getSupportRequestSubpath(requestType)),</span>
-        });<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
       },<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 &nbsp;
-      goToDeliverable: (deliverableId: number, projectId: number) =&gt;
+      goToContactUsForm: (requestType: SupportRequestType) =&gt; {
         navigate({<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-          pathname: APP<span class="fstat-no" title="function not covered" >_P</span>ATHS.DELIVERABLE_VIEW.replace(':deliverableId', `${deliverableId}`).replace(
+          pathname: APP_PAT<span class="fstat-no" title="function not covered" >HS</span>.HEL<span class="cstat-no" title="statement not covered" >P_SUPPORT_FORM.replace(':requestType', getSupportRequestSubpath(requestType)),</span>
+        });<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+      },
+&nbsp;
+      goToDeliverable: (deli<span class="fstat-no" title="function not covered" >ve</span>rabl<span class="cstat-no" title="statement not covered" >eId: number, projectId: number) =&gt;</span>
+        navigate({<span class="fstat-no" title="function not covered" ></span>
+<span class="cstat-no" title="statement not covered" >          pathname: APP_PATHS.DELIVERABLE_VIEW.replace(':deliverableId', </span>`${deliverableId}`).replace(
+            ':projectId',
+            `${p<span class="fstat-no" title="function not covered" >ro</span>ject<span class="cstat-no" title="statement not covered" >Id}`</span>
+          ),
+        }),
+<span class="fstat-no" title="function not covered" ></span>
+      go<span class="cstat-no" title="statement not covered" >ToDeliverableEdit: (deliverableId: number, projectId: number, variableId?: number) =&gt;</span>
+        navigate({
+          pathname: APP_PATHS.DELIVERABLE_EDIT.replace(':deliverableId', `${deliverableId}`).replace(
 <span class="cstat-no" title="statement not covered" >            ':projectId',</span>
             `${projectId}`
-          ),<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-        }),
+          ),<span class="fstat-no" title="function not covered" ></span>
+          ...(variableI<span class="cstat-no" title="statement not covered" >d ?</span> { search: `variableId=${variableId}` } : {}),
+<span class="cstat-no" title="statement not covered" >        }),</span>
 &nbsp;
-      goToDelivera<span class="fstat-no" title="function not covered" >bl</span>eEdit: (deliverableId: number, projectId: number, variableId?: number) =&gt;
-<span class="cstat-no" title="statement not covered" >        navigate({</span>
-          pathname: APP_PATHS.DELIVERABLE_EDIT.replace(':deliverableId', `${deliverableId}`).replace(
-            ':projectId',
-<span class="cstat-no" title="statement not covered" >            `${projectId}`</span>
-          ),
-          ...(variableId <span class="fstat-no" title="function not covered" >? </span>{ search: `variableId=${variableId}` } : {}),
+      goToDo<span class="cstat-no" title="statement not covered" >cuments: () =&gt;</span>
+        navi<span class="cstat-no" title="statement not covered" >gate({</span>
+          pathname: APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENTS,
         }),<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-      goToDocuments: () =&gt;
+      goToDocumentNew: () =&gt;
         navi<span class="cstat-no" title="statement not covered" >gate({</span>
-          pa<span class="cstat-no" title="statement not covered" >thname:</span> APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENTS,
-        }),
-<span class="cstat-no" title="statement not covered" ></span>
-      goToDo<span class="cstat-no" title="statement not covered" >cumentN</span>ew: () =&gt;
-        navigate({
-          pa<span class="cstat-no" title="statement not covered" >thname: </span>APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENT_NEW,
-        }),
-<span class="cstat-no" title="statement not covered" ></span>
+          pathname: APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENT_NEW,
+<span class="cstat-no" title="statement not covered" >        }),</span>
+&nbsp;
       goToEditFundingEntity: (fundingEntityId: number | string) =&gt;
         navigate(APP_PATHS.ACCELERATOR_FUNDING_ENTITIES_EDIT.replace(':fundingEntityId', `${fundingEntityId}`)),
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+      goToFundingEntities: () =&gt; navigate({ pathname: APP_PATHS.ACCELERATOR_FUNDING_ENTITIES }),
 &nbsp;
-      goToFundingEntities: () <span class="fstat-no" title="function not covered" >=&gt;</span> navigate({ pathname: APP_PATHS.AC<span class="cstat-no" title="statement not covered" >CELERATOR_FUNDING_ENTITIES }),</span>
-&nbsp;
-      goToFundingEntity: (fundingEntityId: number | string) =&gt;
-        navigate({<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-          pathname: APP_PATHS.ACCELERATOR_FUNDING_ENTITIES_VIEW.replace(':fundingEntityId', String(fundingEntityId)),
-        }),
-<span class="fstat-no" title="function not covered" ></span>
-      go<span class="cstat-no" title="statement not covered" >ToNewFundingEntity: () =&gt; navigate({ pathname: APP_PATHS.ACCELERATOR_FUNDING_ENTITIES_NEW }),</span>
-&nbsp;
-      goToHelpSupport: () =&gt; {
-<span class="cstat-no" title="statement not covered" >        navigate({ pathname: AP</span>P_PATHS.HELP_SUPPORT });
-      },
-<span class="fstat-no" title="function not covered" ></span>
-      goToHome: () =&gt;<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >        navigate({</span>
-<span class="cstat-no" title="statement not covered" >          pathname: APP_PATHS.HOME,</span>
-        })<span class="cstat-no" title="statement not covered" >,</span>
-<span class="cstat-no" title="statement not covered" ></span>
-      goToModule: (projectId: number, moduleId: number) =&gt; {
+      goToFundingEn<span class="fstat-no" title="function not covered" >ti</span>ty: (fundingE<span class="cstat-no" title="statement not covered" >ntityId: number | string) =&gt;</span>
         navigate({
-<span class="cstat-no" title="statement not covered" >          pathname: APP_PATHS.PROJECT_MODULE.replace(':projectId', `${projectId}`).replace(':moduleId', `${moduleId}`),</span>
+          pathname: APP_PATHS.ACCELERATOR_FUNDING_ENTITIES_VIEW.replace(':fundingEntityId', String(fundingEntityId)),
+        }),<span class="fstat-no" title="function not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+      goToNewFundingEntity: () =&gt; navigate({ pathname: APP_PATHS.ACCELERATOR_FUNDING_ENTITIES_NEW }),
+&nbsp;
+      go<span class="cstat-no" title="statement not covered" >ToHelpSupport: () =&gt; {</span>
+        navigate({ pathname: APP_PATHS.HELP_SUPPORT });
+      },<span class="fstat-no" title="function not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+      go<span class="cstat-no" title="statement not covered" >ToHome: () =&gt;</span>
+        na<span class="cstat-no" title="statement not covered" >vigate({</span>
+<span class="cstat-no" title="statement not covered" >          pathname: APP_PATHS.HOME,</span>
+        }),<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
+      goToModule: (projectId: number, moduleId: number) =&gt; {
+<span class="cstat-no" title="statement not covered" >        navigate({</span>
+          pathname: APP_PATHS.PROJECT_MODULE.replace(':projectId', `${projectId}`).replace(':moduleId', `${moduleId}`),
         });
         window.scrollTo(0, 0);
       },
-      goToModuleContent: (projectId: number, moduleId: number, type: ModuleContentType) =&gt; {
+      goToModuleContent: (projectI<span class="fstat-no" title="function not covered" >d:</span> number, modu<span class="cstat-no" title="statement not covered" >leId: number, type: ModuleContentType) =&gt; {</span>
         let pathname = '';<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-        switch (type) {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+        switch (type) {
           case 'additionalResources':
             pathname = APP_PATHS.PROJECT_MODULE_ADDITIONAL_RESOURCES;
-            break;
-          case 'preparationMaterials'<span class="fstat-no" title="function not covered" >:<span class="cstat-no" title="statement not covered" ></span></span>
+            break;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+          case 'preparationMaterials':
             pathname = APP_PATHS.PROJECT_MODULE_PREPARATION_MATERIALS;
             break;
           default:
             return;
-        }
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+        }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+&nbsp;
         navigate({
-          pathname: pathname.replace(':projectId', `${projectId}`).replace(':moduleId', `${moduleId}`),
+          pathname: pathname<span class="fstat-no" title="function not covered" >.r</span>eplace(':projectId<span class="cstat-no" title="statement not covered" >', `${projectId}`).replace(':moduleId', `${moduleId}`),</span>
         });<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
       },<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-      goToModuleEventSession: (projectId:<span class="fstat-no" title="function not covered" > n</span>umber, module<span class="cstat-no" title="statement not covered" >Id: number, sessionId: number) =&gt;</span>
+      goToModuleEventSession<span class="fstat-no" title="function not covered" >: </span>(projectId: n<span class="cstat-no" title="statement not covered" >umber, moduleId: number, sessionId: number) =&gt;</span>
         navigate({<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-          pathname: APP_PATHS<span class="fstat-no" title="function not covered" >.P</span>ROJECT_MODULE<span class="cstat-no" title="statement not covered" >_SESSION.replace(':projectId', `${projectId}`)</span>
+          pathname: APP_PATHS.PROJECT_MODULE_SESSION.replace(':projectId', `${projectId}`)
             .replace(':moduleId', `${moduleId}`)
             .replace(':sessionId', `${sessionId}`),
         }),
@@ -1183,7 +1195,7 @@ export default fun<span class="cstat-no" title="statement not covered" ><span cl
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-12T19:18:52.647Z
+                at 2026-01-12T19:32:36.484Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

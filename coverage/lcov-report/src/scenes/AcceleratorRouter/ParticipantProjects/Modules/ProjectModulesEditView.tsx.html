@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/45</span>
+                <span class='fraction'>0/44</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/41</span>
+                <span class='fraction'>0/40</span>
             </div>
         
             
@@ -123,8 +123,7 @@
 <a name='L58'></a><a href='#L58'>58</a>
 <a name='L59'></a><a href='#L59'>59</a>
 <a name='L60'></a><a href='#L60'>60</a>
-<a name='L61'></a><a href='#L61'>61</a>
-<a name='L62'></a><a href='#L62'>62</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L61'></a><a href='#L61'>61</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -155,7 +154,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -192,36 +190,35 @@ import { Box, Grid, Typo<span class="cstat-no" title="statement not covered" >gr
 <span class="cstat-no" title="statement not covered" ></span>
 import PageForm fro<span class="cstat-no" title="statement not covered" >m 'src/components/common/PageFor</span>m';
 import TfMain f<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ro</span>m 'src/components/common/TfMain';</span>
-im<span class="cstat-no" title="statement not covered" >port { APP_PATHS } from 'src/constants';</span>
-impo<span class="cstat-no" title="statement not covered" >rt { useSyncNavigate } from 'src/hooks/useSyncNavigate';</span>
-import { useLocalization } from 'src/providers';
-import { ProjectPa<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >yl</span>oad, useGetProjectQuery } from 'src/queries/generated/projects';</span>
+im<span class="cstat-no" title="statement not covered" >port useNavigateTo from 'src/hooks/useNavigateTo';</span>
+impo<span class="cstat-no" title="statement not covered" >rt { useLocalization } from 'src/providers';</span>
+import { ProjectPayload, useGetProjectQuery } from 'src/queries/generated/projects';
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+im<span class="cstat-no" title="statement not covered" >port ProjectModulesList from '../ProjectModulesList';</span>
 <span class="cstat-no" title="statement not covered" ></span>
-impo<span class="cstat-no" title="statement not covered" >rt ProjectModulesList from '../ProjectModulesList';</span>
-<span class="cstat-no" title="statement not covered" ></span>
-export d<span class="cstat-no" title="statement not covered" >efault function ProjectMod<span class="fstat-no" title="function not covered" >ul</span>esEd<span class="cstat-no" title="statement not covered" >itView(): </span>JSX.Element {</span>
-  const { strings } = useLocalization();
-<span class="cstat-no" title="statement not covered" >  const theme</span> = useTheme();
-  const navigate = useSyncNavigate();
-  const { proj<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ec</span>tId } = useParams&lt;{ projectI<span class="cstat-no" title="statement not covered" >d: string }&gt;();</span></span>
-  const { data } = useGetProjectQuery(Number(projectId || -1));
+export<span class="cstat-no" title="statement not covered" > default function ProjectModulesEditView(): JSX.Element {</span>
+  const <span class="cstat-no" title="statement not covered" >{ strings } = useLocalizat<span class="fstat-no" title="function not covered" >io</span>n();<span class="cstat-no" title="statement not covered" ></span></span>
+  const theme = useTheme();
+<span class="cstat-no" title="statement not covered" >  const { goT</span>oAcceleratorProject } = useNavigateTo();
+  const { projectId } = useParams&lt;{ projectId: string }&gt;();
+  const { data<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > }</span> = useGetProjectQuery(Number<span class="cstat-no" title="statement not covered" >(projectId || -1));</span></span>
   const project = useMemo(() =&gt; (data?.project || {}) as ProjectPayload, [data]);
 &nbsp;
   const backToProjectDeliverables = useCallback(
-    () =&gt; navigate(APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', projectId || '')),
-    [projectId, navigate]
+    () =&gt; goToAcceleratorProject(Number(projectId || -1)),
+    [projectId, goToAcceleratorProject]
   );
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  const saveModules <span class="cstat-no" title="statement not covered" >= u</span>seCallback(() =&gt; {
-<span class="cstat-no" title="statement not covered" >    // no op TODO later PR</span>
-  }, []);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;TfMain&gt;<span class="cstat-no" title="statement not covered" ></span>
-      &lt;Box padding={theme.<span class="cstat-no" title="statement not covered" >spacing(3)}&gt;</span>
-        &lt;Typography fo<span class="cstat-no" title="statement not covered" >ntSize='24px' fontWeight=</span>{600}&gt;
-          {strings.for<span class="cstat-no" title="statement not covered" >matString(strings.MODULES_FOR_PROJECT, project.name</span>)}
-        &lt;/Typography<span class="cstat-no" title="statement not covered" >&gt;</span>
+  const saveModules<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > =</span> useCal<span class="cstat-no" title="statement not covered" >lback(() =&gt; {</span></span>
+    // no op TODO la<span class="cstat-no" title="statement not covered" >ter</span> PR
+<span class="cstat-no" title="statement not covered" >  }, []);</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  return (
+<span class="cstat-no" title="statement not covered" >    &lt;TfMain&gt;</span>
+      &lt;Box padding=<span class="cstat-no" title="statement not covered" >{theme.spacing(3)}&gt;</span>
+        &lt;Typography fontSi<span class="cstat-no" title="statement not covered" >ze='24px' fontWeight={60</span>0}&gt;
+          {strings.for<span class="cstat-no" title="statement not covered" >matString(strings.MODULES</span>_FOR_PROJECT, project.name)}
+        &lt;/Typography&gt;<span class="cstat-no" title="statement not covered" ></span>
       &lt;/Box&gt;<span class="cstat-no" title="statement not covered" ></span>
       &lt;PageForm<span class="cstat-no" title="statement not covered" ></span>
         cancelID={'canc<span class="cstat-no" title="statement not covered" >elEditModules'}</span>
@@ -230,7 +227,7 @@ export d<span class="cstat-no" title="statement not covered" >efault function Pr
         o<span class="fstat-no" title="function not covered" >nSave={saveModules}</span>
         style={{<span class="cstat-no" title="statement not covered" ></span>
           displa<span class="cstat-no" title="statement not covered" >y: 'flex',</span>
-          flexGrow:<span class="cstat-no" title="statement not covered" > 1,</span>
+          flexGrow: 1,<span class="cstat-no" title="statement not covered" ></span>
         }}<span class="cstat-no" title="statement not covered" ></span>
       &gt;<span class="cstat-no" title="statement not covered" ></span>
         &lt;Grid<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
@@ -253,7 +250,7 @@ export d<span class="cstat-no" title="statement not covered" >efault function Pr
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-12T19:18:52.647Z
+                at 2026-01-12T19:32:36.484Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>
