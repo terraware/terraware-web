@@ -341,6 +341,12 @@ const PlotT0EditBox = ({
     [plotToSave?.densityData]
   );
 
+  const filtedObservationPlotsOptions = useMemo(() => {
+    return plot.observationPlots.filter((op) =>
+      selectedPlotSpecies?.observations.find((obv) => obv.observationId.toString() === op.observation_id.toString())
+    );
+  }, [plot.observationPlots, selectedPlotSpecies?.observations]);
+
   return (
     <>
       <Box
@@ -389,7 +395,7 @@ const PlotT0EditBox = ({
                     <Box display='flex' paddingRight={2} sx={{ alignItems: 'center' }}>
                       <FormControlLabel
                         control={<Radio />}
-                        disabled={(plot.observationPlots.length || 0) < 1}
+                        disabled={(filtedObservationPlotsOptions.length || 0) < 1}
                         label={strings.USE_OBSERVATION_DATA}
                         value={'useObservation'}
                         sx={{ marginRight: '8px' }}
@@ -397,7 +403,7 @@ const PlotT0EditBox = ({
                       <IconTooltip title={strings.USE_OBSERVATION_DATA_TOOLTIP} />
                     </Box>
                     <SelectT<PlotT0Observation>
-                      options={plot.observationPlots}
+                      options={filtedObservationPlotsOptions}
                       placeholder={strings.SELECT}
                       onChange={onChangeObservation}
                       isEqual={isEqualObservation}
