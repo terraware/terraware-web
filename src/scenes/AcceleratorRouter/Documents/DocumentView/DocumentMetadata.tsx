@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
-import { useProjects } from 'src/hooks/useProjects';
+import { useParticipantProjects } from 'src/hooks/useParticipantProjects';
 import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
 import { selectUser } from 'src/redux/features/user/usersSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -23,7 +23,7 @@ const DocumentMetadata = ({ document, documentTemplate }: DocumentMetadataProps)
 
   const dispatch = useAppDispatch();
   const theme = useTheme();
-  const { availableProjects } = useProjects();
+  const { participantProjects } = useParticipantProjects();
 
   const [modifiedByUser, setModifiedByUser] = useState<User>();
 
@@ -41,7 +41,7 @@ const DocumentMetadata = ({ document, documentTemplate }: DocumentMetadataProps)
   const modifiedByName = useMemo(() => getUserDisplayName(modifiedByUser), [modifiedByUser]);
   const modifiedTimeDisplay = useMemo(() => getDateTimeDisplayValue(new Date(modifiedTime).getTime()), [modifiedTime]);
 
-  const project = availableProjects?.find((proj) => proj.id === projectId);
+  const project = participantProjects?.find((proj) => proj.projectId === projectId);
 
   return (
     <Box display='flex' flexDirection='column' marginTop={3}>
@@ -52,7 +52,7 @@ const DocumentMetadata = ({ document, documentTemplate }: DocumentMetadataProps)
         color={theme.palette.TwClrTxt}
         margin={theme.spacing(1, 0)}
       >
-        {project?.name}
+        {project?.dealName}
       </Typography>
       <Typography
         fontWeight={600}
