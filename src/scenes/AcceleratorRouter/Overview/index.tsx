@@ -6,15 +6,13 @@ import { Tabs } from '@terraware/web-components';
 
 import Page from 'src/components/Page';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
-import { useLocalization, useUser } from 'src/providers';
+import { useLocalization } from 'src/providers';
 import CohortsListView from 'src/scenes/AcceleratorRouter/Cohorts/CohortsListView';
 import ParticipantProjectsList from 'src/scenes/AcceleratorRouter/ParticipantProjects/ListView';
-import ParticipantsList from 'src/scenes/AcceleratorRouter/Participants/ParticipantsList';
 import strings from 'src/strings';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
 const OverviewView = () => {
-  const { isAllowed } = useUser();
   const { activeLocale } = useLocalization();
   const mixpanel = useMixpanel();
 
@@ -23,30 +21,19 @@ const OverviewView = () => {
       return [];
     }
 
-    const canReadParticipants = isAllowed('READ_PARTICIPANTS');
-
     return [
       {
         id: 'projects',
         label: strings.PROJECTS,
         children: <ParticipantProjectsList />,
       },
-      ...(canReadParticipants
-        ? [
-            {
-              id: 'participants',
-              label: strings.PARTICIPANTS,
-              children: <ParticipantsList />,
-            },
-          ]
-        : []),
       {
         id: 'cohorts',
         label: strings.COHORTS,
         children: <CohortsListView />,
       },
     ];
-  }, [activeLocale, isAllowed]);
+  }, [activeLocale]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'projects',

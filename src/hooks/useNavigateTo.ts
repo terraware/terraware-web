@@ -307,17 +307,6 @@ export default function useNavigateTo() {
         window.scrollTo(0, 0);
       },
 
-      goToParticipant: (participantId: number) =>
-        navigate({
-          pathname: APP_PATHS.ACCELERATOR_PARTICIPANTS_VIEW.replace(':participantId', `${participantId}`),
-        }),
-
-      goToParticipantsList: () =>
-        navigate({
-          pathname: APP_PATHS.ACCELERATOR_OVERVIEW,
-          search: 'tab=participants',
-        }),
-
       goToParticipantProject: (projectId: number, activityId?: number, tab?: string) => {
         const params = searchParamsWithMapViewState();
         if (activityId !== undefined) {
