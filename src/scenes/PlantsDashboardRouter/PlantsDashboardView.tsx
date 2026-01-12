@@ -442,7 +442,6 @@ export default function PlantsDashboardView({
       projectId={projectId}
       onSelectProjectId={onSelectProject}
       organizationId={organizationId}
-      isEmptyState={isLoading ? false : (allPlantingSites?.length ?? 0) <= 1}
       onSelect={onSelect}
       allowAllAsSiteSelection={isAcceleratorRoute || projectId !== undefined}
     >
