@@ -27,6 +27,9 @@ const config: ConfigFile = {
     './src/queries/generated/plantingSites.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/tracking/sites'),
     },
+    './src/queries/generated/projects.ts': {
+      filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/projects'),
+    },
     './src/queries/generated/projectModules.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/accelerator/projects/{projectId}/modules'),
     },
