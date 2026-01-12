@@ -48,7 +48,6 @@ export default function PlantsDashboardView({
     plantingSite,
     latestResult,
     observationSummaries,
-    isLoading,
     acceleratorOrganizationId,
   } = usePlantingSiteData();
 
