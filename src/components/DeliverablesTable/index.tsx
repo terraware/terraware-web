@@ -37,6 +37,7 @@ interface DeliverablesTableProps {
   tableId: string;
   iconFilters?: FilterConfig[];
   projectId?: number;
+  maxItemsPerPage?: number;
 }
 
 const columns =
@@ -118,6 +119,7 @@ const DeliverablesTable = ({
   tableId,
   iconFilters,
   projectId,
+  maxItemsPerPage,
 }: DeliverablesTableProps) => {
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
@@ -313,6 +315,7 @@ const DeliverablesTable = ({
       onFilterApplied={ofFilterAppliedHandler}
       stickyFilters
       iconFilters={iconFilters}
+      maxItemsPerPage={maxItemsPerPage}
     />
   );
 };

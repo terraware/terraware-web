@@ -6,6 +6,7 @@ import DocumentProducerProvider from 'src/providers/DocumentProducer/Provider';
 import ProjectProvider from 'src/providers/Project/ProjectProvider';
 
 import ProjectProfileEdit from './EditView/ProjectProfileEdit';
+import ProjectModulesEditView from './Modules/ProjectModulesEditView';
 import ParticipantProjectProvider from './ParticipantProjectProvider';
 import ProjectPage from './ProjectPage';
 import ProjectProfileGisMaps from './ProjectProfileGisMaps';
@@ -22,6 +23,7 @@ const ParticipantProjectsRouter = () => {
           <DocumentProducerProvider>
             <Routes>
               <Route path={'edit'} element={<ProjectProfileEdit />} />
+              <Route path={'modules/edit'} element={<ProjectModulesEditView />} />
               <Route path={''} element={<ProjectPage />} />
               <Route path={'maps/*'} element={<ProjectProfileGisMaps />} />
               <Route path={'votes/*'} element={<Voting />} />

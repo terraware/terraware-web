@@ -50,6 +50,7 @@ export enum APP_PATHS {
   ACCELERATOR_PROJECT_BASE = '/accelerator/projects/',
   ACCELERATOR_PROJECT_EDIT = '/accelerator/projects/:projectId/edit',
   ACCELERATOR_PROJECT_GIS_MAPS_VIEW = '/accelerator/projects/:projectId/maps',
+  ACCELERATOR_PROJECT_MODULES_EDIT = '/accelerator/projects/:projectId/modules/edit',
   ACCELERATOR_PROJECT_VIEW = '/accelerator/projects/:projectId',
   ACCELERATOR_PROJECT_REPORTS = '/accelerator/projects/:projectId/reports',
   ACCELERATOR_PROJECT_REPORTS_EDIT = '/accelerator/projects/:projectId/reports/edit',

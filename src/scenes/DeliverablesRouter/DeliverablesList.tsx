@@ -25,9 +25,10 @@ import {
 
 type DeliverablesListProps = {
   projectId?: number;
+  maxItemsPerPage?: number;
 };
 
-const DeliverablesList = ({ projectId }: DeliverablesListProps): JSX.Element => {
+const DeliverablesList = ({ projectId, maxItemsPerPage }: DeliverablesListProps): JSX.Element => {
   const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const {
@@ -185,6 +186,7 @@ const DeliverablesList = ({ projectId }: DeliverablesListProps): JSX.Element => 
           searchAndSort={searchAndSort}
           tableId={'participantDeliverablesTable'}
           projectId={projectId}
+          maxItemsPerPage={maxItemsPerPage}
         />
       )}
     </Wrapper>
