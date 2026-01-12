@@ -1,3 +1,4 @@
+695d744b67e SW-7933 Add correct project name to edit modules page (#5047)
 3fa3490878d SW-7933 Add initial Edit project modules page (#5046)
 678bc6dd4ce SW-7947 Remove participants tab from console Overview page (#5051)
 cf60bf61e0f Fix useSyncNavigate so that react-router can be upgraded (#5052)
