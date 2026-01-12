@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
@@ -7,26 +7,114 @@ import PageForm from 'src/components/common/PageForm';
 import TfMain from 'src/components/common/TfMain';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
+import { useListModulesQuery } from 'src/queries/generated/modules';
+import {
+  ProjectModulePayload,
+  UpdateProjectModuleApiArg,
+  useDeleteProjectModuleMutation,
+  useListProjectModulesQuery,
+  useUpdateProjectModuleMutation,
+} from 'src/queries/generated/projectModules';
 import { ProjectPayload, useGetProjectQuery } from 'src/queries/generated/projects';
+import useSnackbar from 'src/utils/useSnackbar';
 
 import ProjectModulesList from '../ProjectModulesList';
+
+const modulePayloadToUpdatePayload = (projectId: number, module: ProjectModulePayload): UpdateProjectModuleApiArg => {
+  return {
+    projectId,
+    moduleId: module.id,
+    updateProjectModuleRequestPayload: {
+      ...module,
+    },
+  };
+};
 
 export default function ProjectModulesEditView(): JSX.Element {
   const { strings } = useLocalization();
   const theme = useTheme();
   const { goToAcceleratorProject } = useNavigateTo();
-  const { projectId } = useParams<{ projectId: string }>();
-  const { data } = useGetProjectQuery(Number(projectId || -1));
-  const project = useMemo(() => (data?.project || {}) as ProjectPayload, [data]);
+  const { projectId: projectIdString } = useParams<{ projectId: string }>();
+  const projectId = useMemo(() => Number(projectIdString || -1), [projectIdString]);
+  const { data: projectData } = useGetProjectQuery(projectId);
+  const project = useMemo(() => (projectData?.project || {}) as ProjectPayload, [projectData]);
+  const snackbar = useSnackbar();
+
+  const [deleteProjectModule] = useDeleteProjectModuleMutation();
+  const [updateProjectModule] = useUpdateProjectModuleMutation();
+  const { data: allModulesData, isLoading: isAllModulesListLoading } = useListModulesQuery();
+  const allModules = useMemo(() => allModulesData?.modules || [], [allModulesData?.modules]);
+  const { data: projectModulesData, isLoading: isProjectModulesListLoading } = useListProjectModulesQuery(projectId);
+  const projectModules = useMemo(() => projectModulesData?.modules || [], [projectModulesData?.modules]);
+  const [pendingModules, setPendingModules] = useState<ProjectModulePayload[]>(projectModules);
+
+  useEffect(() => {
+    setPendingModules(projectModules);
+  }, [projectModules]);
 
   const backToProjectDeliverables = useCallback(
-    () => goToAcceleratorProject(Number(projectId || -1)),
-    [projectId, goToAcceleratorProject]
+    () => goToAcceleratorProject(projectId),
+    [goToAcceleratorProject, projectId]
   );
 
+  // TODO fix Add Module modal showing incorrect validate fields
+
   const saveModules = useCallback(() => {
-    // no op TODO later PR
-  }, []);
+    if (!projectIdString) {
+      return;
+    }
+    const save = async () => {
+      try {
+        const toDelete = projectModules.filter(
+          (oldModule) => pendingModules.find((newModule) => newModule.id === oldModule.id) === undefined
+        );
+
+        const toAdd = pendingModules.filter(
+          (newModule) => projectModules.find((oldModule) => oldModule.id === newModule.id) === undefined
+        );
+
+        const toUpdate = pendingModules.filter((newModule) => {
+          const oldModule = projectModules.find((module) => module.id === newModule.id);
+          return (
+            oldModule !== undefined &&
+            !(
+              oldModule.title === newModule.title &&
+              oldModule.startDate === newModule.startDate &&
+              oldModule.endDate === newModule.endDate
+            )
+          );
+        });
+
+        const deletePromises = toDelete.map((module) =>
+          deleteProjectModule({ projectId, moduleId: module.id }).unwrap()
+        );
+        const updatePromises = [...toAdd, ...toUpdate].map((module) =>
+          updateProjectModule(modulePayloadToUpdatePayload(projectId, module)).unwrap()
+        );
+
+        const responses = await Promise.all([...deletePromises, ...updatePromises]);
+        if (responses.some((response) => response.status !== 'ok')) {
+          snackbar.toastError();
+          return;
+        }
+        snackbar.toastSuccess(strings.CHANGES_SAVED);
+        goToAcceleratorProject(projectId);
+      } catch (e) {
+        snackbar.toastError();
+      }
+    };
+    void save();
+  }, [
+    projectIdString,
+    projectModules,
+    pendingModules,
+    snackbar,
+    strings,
+    goToAcceleratorProject,
+    projectId,
+    deleteProjectModule,
+    updateProjectModule,
+  ]);
 
   return (
     <TfMain>
@@ -52,7 +140,16 @@ export default function ProjectModulesEditView(): JSX.Element {
           padding={theme.spacing(0, 3, 3, 0)}
           margin={0}
         >
-          {projectId && <ProjectModulesList projectId={Number(projectId)} editing={true} />}
+          {projectIdString && (
+            <ProjectModulesList
+              projectId={projectId}
+              editing={true}
+              allModules={allModules}
+              projectModules={pendingModules}
+              setProjectModules={setPendingModules}
+              isLoading={isProjectModulesListLoading || isAllModulesListLoading}
+            />
+          )}
         </Grid>
       </PageForm>
     </TfMain>
