@@ -1,6 +1,5 @@
 import { useCallback } from 'react';
-import { useNavigate as useNavigateRouter } from 'react-router';
-import { N as NavigateOptions, T as To } from 'react-router/dist/development/route-data-C12CLHiN';
+import { NavigateOptions, To, useNavigate as useNavigateRouter } from 'react-router';
 
 interface SyncNavigateFunction {
   (to: To, options?: NavigateOptions): void;
