@@ -353,6 +353,8 @@ COMPLIANCE,Conformité,a255a475
 COMPONENT,Composant,301be073
 CONDITIONAL,Conditionnel,605c68a6
 CONFIRM,Confirmer,fe564422
+CONFIRM_UPDATE_ALL_COHORT_MODULES,Les modifications apportées aux modules de ce projet affecteront tous les projets du groupe de projets. Ceci est temporaire pendant la suppression des groupes de Terraware. Êtes-vous sûr de vouloir modifier les modules pour tous les projets du groupe ?,db947325
+CONFIRM_UPDATE_ALL_COHORT_MODULES_TITLE,Confirmer la mise à jour de tous les modules du groupe,1b173015
 CONFIRMED_RESTORABLE_LAND,TF Terres restaurables (ha),efa25d21
 CONSERVATION_CATEGORY,Catégorie de la liste rouge de l'UICN,115916f3
 CONTACT_TYPE,Type de contact,413b6c0e
