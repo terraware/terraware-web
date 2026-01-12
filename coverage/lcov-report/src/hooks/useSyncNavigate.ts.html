@@ -89,8 +89,7 @@
 <a name='L24'></a><a href='#L24'>24</a>
 <a name='L25'></a><a href='#L25'>25</a>
 <a name='L26'></a><a href='#L26'>26</a>
-<a name='L27'></a><a href='#L27'>27</a>
-<a name='L28'></a><a href='#L28'>28</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L27'></a><a href='#L27'>27</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -116,42 +115,40 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useCall<span class="cstat-no" title="statement not covered" >back } from 'react';</span>
-import { useNavigate as<span class="cstat-no" title="statement not covered" > useNavigateRouter } from 'react</span>-router';
-import { N as NavigateOp<span class="cstat-no" title="statement not covered" >tions, T as To } from 'reac</span>t-router/dist/development/route-data-C12CLHiN';
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useCall<span class="cstat-no" title="statement not covered" >back } from 'react';</span>
+import { NavigateOption<span class="cstat-no" title="statement not covered" >s, To, useNavigate as useNavigat</span>eRouter } from 'react-router';
 <span class="cstat-no" title="statement not covered" ></span>
-interface SyncN<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >av</span>igateFunction {</span>
-<span class="cstat-no" title="statement not covered" >  (to: To, options?: NavigateOptions): void;</span>
+interface SyncNavig<span class="cstat-no" title="statement not covered" >ateFunction {</span>
+  (to: To, opti<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >on</span>s?: NavigateOptions): void;</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  (delta: number): void;
-}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  (d<span class="cstat-no" title="statement not covered" >elta: number): void;</span>
+}
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+/*<span class="cstat-no" title="statement not covered" >*</span>
+ * R<span class="cstat-no" title="statement not covered" >eplaces the useNavigate hook to remove the need for adding `void navigate` to all usages to fix linting issues</span>
+ */<span class="cstat-no" title="statement not covered" ></span>
+export c<span class="cstat-no" title="statement not covered" >onst useSyncNavigate = ():<span class="fstat-no" title="function not covered" > S</span>yncN<span class="cstat-no" title="statement not covered" >avigateFun</span>ction =&gt; {</span>
+  const routerNavigate = useNavigateRouter();
 <span class="cstat-no" title="statement not covered" ></span>
-/**<span class="cstat-no" title="statement not covered" ></span>
- * Rep<span class="cstat-no" title="statement not covered" >laces the useNavigate hook to remove the need for adding `void navigate` to all usages to fix linting issues</span>
- */<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-export const useSyncNavigate = (): SyncNavigateFunction =&gt; {
-<span class="cstat-no" title="statement not covered" >  const route</span>rNavigate = useNavigateRouter();
-&nbsp;
-  return useCallbac<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >k(<span class="cstat-no" title="statement not covered" ></span></span></span>
-    (toOrDelta, opti<span class="cstat-no" title="statement not covered" >ons</span>?: NavigateOptions) =&gt; {
-<span class="cstat-no" title="statement not covered" >      if (typeof toOrDelta === 'number') {</span>
-        void router<span class="fstat-no" title="function not covered" >Na</span>viga<span class="cstat-no" title="statement not covered" >te(toOrDelta);</span>
-      } else {
-<span class="cstat-no" title="statement not covered" >        void routerNavigate(toOrDelta, options</span>);
-      }<span class="cstat-no" title="statement not covered" ></span>
+  return useCallback(
+    (toOrDelta, opt<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >io</span>ns?: Na<span class="cstat-no" title="statement not covered" >vigateOptions) =&gt; {</span></span>
+      if (typeof toO<span class="cstat-no" title="statement not covered" >rDe</span>lta === 'number') {
+<span class="cstat-no" title="statement not covered" >        void routerNavigate(toOrDelta);</span>
+      } else {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+        void routerNavigate(toOrDelta, options);
+<span class="cstat-no" title="statement not covered" >      }</span>
     },<span class="cstat-no" title="statement not covered" ></span>
-    [routerNavigate]<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  );<span class="cstat-no" title="statement not covered" ></span>
+    [routerNavigate]<span class="cstat-no" title="statement not covered" ></span>
+  );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 };<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" ></span></pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-09T22:13:38.921Z
+                at 2026-01-12T15:56:09.242Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
