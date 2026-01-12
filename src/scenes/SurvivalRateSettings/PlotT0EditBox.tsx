@@ -441,7 +441,9 @@ const PlotT0EditBox = ({
                               </Box>
                             </th>
                             <th style={{ textAlign: 'left', width: '10%' }}>
-                              <Box display={'flex'}>{strings.PLANT_DENSITY}</Box>
+                              <Box display={'flex'}>
+                                {strings.PLANT_DENSITY} <IconTooltip title={strings.PLANT_DENSITY_TOOLTIP} />
+                              </Box>
                               <Typography fontSize={'14px'} fontWeight={600}>
                                 ({strings.PLANTS_PER_HA_LC})
                               </Typography>
