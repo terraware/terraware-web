@@ -2359,7 +2359,7 @@ VINE,Vigne,c39d21fb
 VOTER,Électeur : {0},46578e94
 VOTING_DECISION,Décision de vote,9bb0be97
 WATER_BODIES,Plans d'eau,c13f37d6
-WATER_DEPTH_M,Profondeur d'eau (m),ca8ca1fb
+WATER_DEPTH_CM,Profondeur de l'eau (cm),de1ca335
 WEIGHT,Poids,8d79d02a
 WEIGHT_GRAMS,Poids (g),7f5ac0db
 WEIGHT_KILOGRAMS,Poids (kg),222d89cc

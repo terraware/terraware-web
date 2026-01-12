@@ -140,7 +140,7 @@ const BiomassObservationDataTab = () => {
       value: biomassMeasurement?.herbaceousCoverPercent,
     },
     {
-      label: strings.WATER_DEPTH_M,
+      label: strings.WATER_DEPTH_CM,
       value: biomassMeasurement?.waterDepth,
     },
     {
