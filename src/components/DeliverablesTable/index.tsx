@@ -4,7 +4,6 @@ import { useMixpanel } from 'react-mixpanel-browser';
 import { TableColumnType } from '@terraware/web-components';
 
 import { FilterConfig, FilterConfigWithValues } from 'src/components/common/SearchFiltersWrapperV2';
-import { useParticipants } from 'src/hooks/useParticipants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
@@ -32,7 +31,6 @@ interface DeliverablesTableProps {
   filterModifiers?: (filters: FilterConfig[]) => FilterConfig[];
   isAcceleratorRoute?: boolean;
   organizationId: number;
-  participantId?: number;
   searchAndSort?: SearchAndSortFn<ListDeliverablesElementWithOverdue>;
   tableId: string;
   iconFilters?: FilterConfig[];
@@ -114,7 +112,6 @@ const DeliverablesTable = ({
   filterModifiers,
   isAcceleratorRoute,
   organizationId,
-  participantId,
   searchAndSort,
   tableId,
   iconFilters,
@@ -125,7 +122,6 @@ const DeliverablesTable = ({
   const { activeLocale } = useLocalization();
   const { isAllowed } = useUser();
   const { selectedOrganization } = useOrganization();
-  const { selectedParticipant } = useParticipants(participantId);
 
   const [deliverables, setDeliverables] = useState<ListDeliverablesElementWithOverdue[]>([]);
   const [deliverablesSearchRequestId, setDeliverablesSearchRequestId] = useState('');
@@ -152,16 +148,6 @@ const DeliverablesTable = ({
   );
 
   const isAllowedReadDeliverable = isAllowed('READ_DELIVERABLE', { organization: selectedOrganization });
-  useCallback(
-    (_projectId: number | string) => {
-      return (
-        (participantId
-          ? selectedParticipant?.projects?.find((p) => p.projectId === Number(_projectId))?.projectId
-          : projectsFilterOptions?.find((p) => p.id === Number(_projectId))?.name) || ''
-      );
-    },
-    [participantId, projectsFilterOptions, selectedParticipant?.projects]
-  );
 
   const removeParam = useCallback(() => {
     if (projectParam) {
@@ -206,14 +192,7 @@ const DeliverablesTable = ({
 
     // show the project filter only in the accelerator route
     // the participant view already has a projects filter above the table
-    const availableProjects =
-      selectedParticipant?.projects.map((project) => ({
-        id: project.projectId,
-        name: project.projectName,
-        dealName: project.projectDealName,
-      })) ||
-      projectsFilterOptions ||
-      [];
+    const availableProjects = projectsFilterOptions || [];
     if (isAcceleratorRoute && availableProjects && availableProjects.length > 0 && !projectId) {
       const paramValue = projectParam
         ? availableProjects.find((project) => project.id.toString() === projectParam)
@@ -231,16 +210,7 @@ const DeliverablesTable = ({
     }
 
     return activeLocale ? filters : [];
-  }, [
-    activeLocale,
-    isAcceleratorRoute,
-    iconFilters,
-    selectedParticipant?.projects,
-    projectsFilterOptions,
-    projectId,
-    projectParam,
-    removeParam,
-  ]);
+  }, [activeLocale, isAcceleratorRoute, iconFilters, projectsFilterOptions, projectId, projectParam, removeParam]);
 
   const dispatchSearchRequest = useCallback(
     (locale: string | null, search: SearchNodePayload, searchSortOrder: SearchSortOrder) => {
