@@ -6,7 +6,7 @@ import { IconName, Separator } from '@terraware/web-components';
 import Page from 'src/components/Page';
 import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { useParticipants } from 'src/hooks/useParticipants';
+import { useParticipantProjects } from 'src/hooks/useParticipantProjects';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useUser } from 'src/providers';
 import strings from 'src/strings';
@@ -21,21 +21,21 @@ export default function DocumentsView(): JSX.Element | null {
   const { goToDocumentNew } = useNavigateTo();
   const { activeLocale } = useLocalization();
   const theme = useTheme();
-  const { availableParticipants } = useParticipants();
+  const { participantProjects } = useParticipantProjects();
   const { isAllowed } = useUser();
   const canAddDocument = useMemo(() => isAllowed('CREATE_DOCUMENTS'), [isAllowed]);
 
   const query = useQuery();
 
-  const availableProjects = useMemo(() => {
-    return availableParticipants.flatMap((participant) =>
-      participant.projects.map((project) => ({
+  const availableProjects = useMemo(
+    () =>
+      participantProjects.map((project) => ({
         id: project.projectId,
-        name: project.projectName,
-        dealName: project.projectDealName,
-      }))
-    );
-  }, [availableParticipants]);
+        name: project.dealName || '',
+        dealName: project.dealName,
+      })),
+    [participantProjects]
+  );
 
   const filteredProject = useMemo(() => {
     if (availableProjects && query.get('dealName')) {
