@@ -1927,6 +1927,10 @@ SPECIES_DENSITY_WARNING_MESSAGE,"No ha ingresado valores de densidad de plantas 
 SPECIES_DENSITY_WARNING_MESSAGE_TEMPORARY_PLOTS,"No ha ingresado valores de densidad de plantas para todas las especies en todas las estratas. Si no ingresa valores de densidad de plantas para todas las especies en una estrata, no se establecerán las densidades de plantas para esa estrata y no se calculará la tasa de supervivencia para esa especie. Ingrese 0 para cualquier especie que no haya sido plantada en una estrata.",685a0c64
 SPECIES_DESCRIPTION,"Gestione la lista de especies de su organización para fines de planificación, operación y elaboración de informes.",b1943eab
 SPECIES_EMPTY_MSG_BODY,Ingrese ahora la especie que recolecta o planta para simplificar su experiencia cuando esté en campo.,20250069
+SPECIES_FROM_OTHER_OBSERVATIONS,Especies de otras Observaciones,a87a4f5e
+SPECIES_FROM_OTHER_OBSERVATIONS_TOOLTIP,Las especies de otras Observaciones fueron observadas en una Observación posterior a la Observación t0. Edite para cambiar la densidad.,4c12811f
+SPECIES_FROM_T0_OBSERVATION,Especies de la Observación t0,08a77070
+SPECIES_FROM_T0_OBSERVATION_TOOLTIP,Las especies de la Observación t0 fueron observadas en la Observación seleccionada para usar como datos t0.,ee679aa8
 SPECIES_FROM_WITHDRAWALS,Especies a partir de retiros,66d674b5
 SPECIES_FROM_WITHDRAWALS_TOOLTIP,Todas las especies registradas como plantadas en el Sitio de Plantación a través de Retiros.,fc05e7a4
 SPECIES_IMPORT_COMPLETE,¡Se completó la importación de los datos de especies!,74b00dc5
