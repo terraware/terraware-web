@@ -283,8 +283,10 @@ const StratumT0EditBox = ({
           alignItems='center'
           flexDirection={'column'}
         >
-          <Typography fontWeight={600}>{strings.STRATUM}</Typography>
-          <Typography>{plotsWithObservations?.[0].substratum_stratum_name}</Typography>
+          <Box textAlign={'center'}>
+            <Typography fontWeight={600}>{strings.STRATUM}</Typography>
+            <Typography>{plotsWithObservations?.[0].substratum_stratum_name}</Typography>
+          </Box>
         </Box>
         <Box width={'100%'}>
           <table>
