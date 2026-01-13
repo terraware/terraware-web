@@ -344,10 +344,7 @@
 <a name='L279'></a><a href='#L279'>279</a>
 <a name='L280'></a><a href='#L280'>280</a>
 <a name='L281'></a><a href='#L281'>281</a>
-<a name='L282'></a><a href='#L282'>282</a>
-<a name='L283'></a><a href='#L283'>283</a>
-<a name='L284'></a><a href='#L284'>284</a>
-<a name='L285'></a><a href='#L285'>285</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L282'></a><a href='#L282'>282</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -413,7 +410,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -570,9 +566,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -672,10 +666,9 @@ type ObservationDataTa<span class="cstat-no" title="statement not covered" >bPro
   unrecognizedSpecies?: string[];<span class="cstat-no" title="statement not covered" ></span>
   onExportData?: () =&gt; voi<span class="cstat-no" title="statement not covered" >d;</span>
   onMatchSpecies?: (<span class="cstat-no" title="statement not covered" >) =&gt; void;</span>
-  reloadAll: () =&gt; vo<span class="cstat-no" title="statement not covered" >id;</span>
 };<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-const ObservationData<span class="cstat-no" title="statement not covered" >Tab = ({</span>
+const ObservationDataTab <span class="cstat-no" title="statement not covered" >= ({</span>
   monitoringPlot,<span class="cstat-no" title="statement not covered" ></span>
   species,<span class="cstat-no" title="statement not covered" ></span>
   type,<span class="cstat-no" title="statement not covered" ></span>
@@ -683,13 +676,12 @@ const ObservationData<span class="cstat-no" title="statement not covered" >Tab =
   onExportData,<span class="cstat-no" title="statement not covered" ></span>
   onMatchSpecies,<span class="cstat-no" title="statement not covered" ></span>
   observationId,<span class="cstat-no" title="statement not covered" ></span>
-  reloadAll,<span class="cstat-no" title="statement not covered" ></span>
-}: ObservationDataTabPr<span class="cstat-no" title="statement not covered" >ops) =&gt; {</span>
-  const { plantingSite, reload } = u<span class="cstat-no" title="statement not covered" >sePlantingSiteData();</span>
-  const defaultTimeZone = useDefau<span class="cstat-no" title="statement not covered" >ltTimeZone();</span>
-  const { activeLocale } = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >us</span>eLocalization();</span>
-  const [editQualitativeDataModalOpen, setEditQualitativeDataModalOpen] = useState(false);
-  const [showConfirmationModalOpened, setShowConfirmationModalOpened] = useState(false);
+}: ObservationDataTabProps) =&gt; {<span class="cstat-no" title="statement not covered" ></span>
+  const { plantingSite, reload } = us<span class="cstat-no" title="statement not covered" >ePlantingSiteData();</span>
+  const defaultTimeZone<span class="cstat-no" title="statement not covered" > = useDefaultTimeZone();</span>
+  const { activeLocale } = useLocali<span class="cstat-no" title="statement not covered" >zation();</span>
+  const [editQualitativeDataModalO<span class="cstat-no" title="statement not covered" >pen, setEditQualitativeDataModalOpen] = use</span>State(false);
+  const [showConfirmationMo<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >da</span>lOpened, setShowConfirmationModalOpened] = useState(false);</span>
   const [update] = useUpdateCompletedObservationPlotMutation();
   const snackbar = useSnackbar();
   const theme = useTheme();
@@ -698,20 +690,20 @@ const ObservationData<span class="cstat-no" title="statement not covered" >Tab =
   const [record, setRecord] = useForm(monitoringPlot);
 &nbsp;
   const livePlants = useMemo(() =&gt; getObservationSpeciesLivePlantsCount(species), [species]);
-  const deadPlants = useMemo(() =&gt; <span class="cstat-no" title="statement not covered" >getObservationSpeciesDeadPlantsCount(species), [specie</span>s]);
+  const deadPlants = useMemo(() =&gt; getObservationSpeciesDeadPlantsCount(species), [species]);
 <span class="cstat-no" title="statement not covered" ></span>
   const items = [<span class="cstat-no" title="statement not covered" ></span>
     {<span class="cstat-no" title="statement not covered" ></span>
       label: strings.TOTAL_PLANTS,<span class="cstat-no" title="statement not covered" ></span>
-      tooltip: type<span class="cstat-no" title="statement not covered" > === 'adHoc' ? strings.AD_HOC_PLOT_TOTAL_PLANTS_TOOLTIP : strings.PLO</span>T_TOTAL_PLANTS_TOOLTIP,
+      tooltip: type === 'adHoc' ? strings.AD_HOC_PLOT_TOTAL_PLANTS_TOOLT<span class="cstat-no" title="statement not covered" >IP : strings.PLOT_TOTAL_PLANTS_TOO</span>LTIP,
       value: monito<span class="cstat-no" title="statement not covered" >ringPlot?.totalPlants,</span>
     },<span class="cstat-no" title="statement not covered" ></span>
     {<span class="cstat-no" title="statement not covered" ></span>
-      label: strings.LIVE_PLAN<span class="cstat-no" title="statement not covered" >TS,</span>
-      tooltip: type =<span class="cstat-no" title="statement not covered" >== 'adHoc' ? strings.AD_HO<span class="fstat-no" title="function not covered" >C_</span>PLOT<span class="cstat-no" title="statement not covered" >_LIVE_PLANTS_TOOLTIP : strings.PLOT_LIVE_PLANTS_TOOLTIP,</span></span>
+      label: strings.LIV<span class="cstat-no" title="statement not covered" >E_PLANTS,</span>
+      tooltip: type === 'adHoc<span class="cstat-no" title="statement not covered" >' ? strings.AD_HOC_PLOT_LIVE_PLANTS_TOOLTIP </span>: strings.PLOT_LIVE_PLANTS_TOOLTIP,
       value: livePlan<span class="cstat-no" title="statement not covered" >ts,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-    },<span class="cstat-no" title="statement not covered" ></span>
-    {
+    },<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+    {<span class="cstat-no" title="statement not covered" ></span>
       label: strings.DEAD_PLANTS,
       tooltip: strings.PLOT_DEAD_PLANTS_TOOLTIP,
       value: deadPlants,
@@ -744,36 +736,36 @@ const ObservationData<span class="cstat-no" title="statement not covered" >Tab =
   const extraItems = [
     {
       label: strings.PLOT_CONDITIONS,
-      value: monitoringPlot?.con<span class="cstat-no" title="statement not covered" >ditions?.map((condition) =&gt; ge<span class="fstat-no" title="function not covered" >tC</span>onditionString(condition)).join(', ') || '- -',</span>
-<span class="cstat-no" title="statement not covered" >    },</span>
-    {
-      label: strings.<span class="cstat-no" title="statement not covered" >FIELD_NOTES,</span>
-      value: monitoringPlot?.notes || '- -',
+      value: monitoringPlot?.conditions?.map((condition) =&gt; getConditionString(condition)).join(', ') || '- -',
+    },<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    {</span>
+      label: strings.FIELD_NOTES,
+      value: monitori<span class="cstat-no" title="statement not covered" >ngPlot?.notes || '- -',</span>
     },
-  ];<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-&nbsp;
+  ];
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
   const closeEditQualitativeDataModal = useCallback(() =&gt; {
     setEditQualitativeDataModalOpen(false);
     setRecord(monitoringPlot);
   }, [monitoringPlot, setRecord]);
 &nbsp;
-  const showConfirmationModal = useCallb<span class="cstat-no" title="statement not covered" >ack(() =&gt; {<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >    setEditQualitativeDataModalOpen(false);</span>
-<span class="cstat-no" title="statement not covered" >    setShowConfirmationModalOpe</span>ned(true);
-  }, []);
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  co<span class="cstat-no" title="statement not covered" >nst closeConfirmationModal = useCallback</span>(() =&gt; {
+  const showConfirmationModal = useCallback(() =&gt; {
+    setEditQualitativeDataModalOpen(fals<span class="cstat-no" title="statement not covered" >e);<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    setShowConfirmationModalOpened(true);</span>
+  },<span class="cstat-no" title="statement not covered" > []);</span>
+&nbsp;
+  const closeConfirmationModal =<span class="cstat-no" title="statement not covered" > useCallback(() =&gt; {<span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >    setShowConfirmationModalOpened(false);</span>
-    setRecord(monitoringPlot);
-  }, [monitoringPlot, setRecord])<span class="cstat-no" title="statement not covered" >;<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" ></span>
-  co<span class="cstat-no" title="statement not covered" >nst saveEditedData = useCal</span>lback(() =&gt; {
-    void (async () =&gt; {
-      if (monitoringPlot.<span class="cstat-no" title="statement not covered" >monitoringPlotId) {<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >        co<span class="fstat-no" title="function not covered" >ns</span>t updatePayload: UpdateCompletedObservationPlotApiArg = {</span>
-<span class="cstat-no" title="statement not covered" >          observationId,</span>
-          plotId: monitoringPl<span class="cstat-no" title="statement not covered" >ot.monitoringPlotId,</span>
-          updateObservationRequestPayload: {
+<span class="cstat-no" title="statement not covered" >    setRecord(monitoringPlot);</span>
+  }, [monitoringPlot, setRecord]);
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  co<span class="cstat-no" title="statement not covered" >nst saveEditedData = useCallback(() =&gt; </span>{
+<span class="cstat-no" title="statement not covered" >    void (async () =&gt; {</span>
+      if (monitoringPlot.monitoringPlotId) {
+        const updatePaylo<span class="cstat-no" title="statement not covered" >ad: UpdateCompletedObservation<span class="fstat-no" title="function not covered" >Pl</span>otApiArg = {</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >          ob</span>servationId,</span>
+<span class="cstat-no" title="statement not covered" >          plotId: monitoringPlot.monitoringPlotId,</span>
+          updateObservationReq<span class="cstat-no" title="statement not covered" >uestPayload: {</span>
             updates: [
               {
                 type: 'ObservationPlot',
@@ -785,18 +777,18 @@ const ObservationData<span class="cstat-no" title="statement not covered" >Tab =
         };
 &nbsp;
         const result = await update(updatePayload);
-<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >        if ('error' in result) {</span>
+&nbsp;
+        if ('error' in <span class="cstat-no" title="statement not covered" >result) {</span>
 <span class="cstat-no" title="statement not covered" >          snackbar.toastError();</span>
 <span class="cstat-no" title="statement not covered" >          return;</span>
-        }
-<span class="cstat-no" title="statement not covered" >        reload();</span>
-<span class="cstat-no" title="statement not covered" >        setShowConfirmationModalOpened(false);</span>
-      }
+        }<span class="cstat-no" title="statement not covered" ></span>
+        reload();
+<span class="cstat-no" title="statement not covered" >        setShowCon</span>firmationModalOpened(false);
+      }<span class="cstat-no" title="statement not covered" ></span>
     })();
   }, [monitoringPlot, observationId, record, update, snackbar, reload]);
-<span class="cstat-no" title="statement not covered" ></span>
-  return (
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Card radius='24px'&gt;
       {showConfirmationModalOpened &amp;&amp; (
         &lt;EditQualitativeDataConfirmationModal onClose={closeConfirmationModal} onSubmit={saveEditedData} /&gt;
@@ -901,7 +893,6 @@ const ObservationData<span class="cstat-no" title="statement not covered" >Tab =
           species={species}
           observationId={Number(observationId)}
           plotId={Number(monitoringPlot?.monitoringPlotId)}
-          reload={reloadAll}
           isCompleted={!!monitoringPlot.completedTime}
           type={type}
           unknownSpecies={monitoringPlot.unknownSpecies}
@@ -922,7 +913,7 @@ export default ObservationDataTab;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-13T18:11:17.673Z
+                at 2026-01-13T18:41:32.602Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

@@ -524,8 +524,7 @@
 <a name='L459'></a><a href='#L459'>459</a>
 <a name='L460'></a><a href='#L460'>460</a>
 <a name='L461'></a><a href='#L461'>461</a>
-<a name='L462'></a><a href='#L462'>462</a>
-<a name='L463'></a><a href='#L463'>463</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L462'></a><a href='#L462'>462</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -807,7 +806,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1016,7 +1014,7 @@ import {
 } from 'src/types/O<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >bs</span>ervatio<span class="cstat-no" title="statement not covered" >ns';</span></span>
 import { getShortTim<span class="cstat-no" title="statement not covered" >e }</span> from 'src/utils/dateFormatter';
 <span class="cstat-no" title="statement not covered" >import { getObservationSpeciesLivePlantsCount } from 'src/utils/observation';</span>
-import useD<span class="fstat-no" title="function not covered" >ev</span>iceI<span class="cstat-no" title="statement not covered" >nfo from 'src/utils/useDev</span>iceInfo';
+import useD<span class="fstat-no" title="function not covered" >ev</span>iceI<span class="cstat-no" title="statement not covered" >nfo from 'src/utils/useDeviceInfo</span>';
 import useStickyTabs from 'src/utils/useStickyTabs';
 <span class="cstat-no" title="statement not covered" >import { useDefaultTimeZone } from 'src/utils/</span>useTimeZoneUtils';
 <span class="cstat-no" title="statement not covered" ></span>
@@ -1024,7 +1022,7 @@ import SpeciesSurvivalRate<span class="cstat-no" title="statement not covered" >
 import ObservationData<span class="cstat-no" title="statement not covered" >Tab from './ObservationDa</span>taTab';
 import PhotosAndVideosTab fr<span class="cstat-no" title="statement not covered" >om './PhotosAndVideosTab';</span>
 <span class="cstat-no" title="statement not covered" ></span>
-export default fun<span class="cstat-no" title="statement not covered" >ction ObservationMonitoringPlot({ reloadAll }: </span>{ reloadAll: () =&gt; void }): JSX.Element | undefined {
+export default fun<span class="cstat-no" title="statement not covered" >ction ObservationMonitoringPlotDetails(): JSX.E</span>lement | undefined {
   const params = u<span class="cstat-no" title="statement not covered" >seParams&lt;{</span>
     plantingSiteId: strin<span class="cstat-no" title="statement not covered" >g;</span>
     observationId: stri<span class="cstat-no" title="statement not covered" >ng;</span>
@@ -1046,7 +1044,7 @@ export default fun<span class="cstat-no" title="statement not covered" >ction Ob
   const { species } = useSpeciesData()<span class="cstat-no" title="statement not covered" >;</span>
   const { plantingSite, adHocObs<span class="cstat-no" title="statement not covered" >ervationResults, observationResults } = u</span>sePlantingSiteData();
   const [stratumResult, setStrat<span class="cstat-no" title="statement not covered" >umResult] = useState&lt;ObservationStratumRe</span>sultsPayload&gt;();
-  const [<span class="fstat-no" title="function not covered" >substratumResult, setSubst</span>ratumResult] = useState&lt;ObservationSubstratumResultsPayload&gt;();
+  const [<span class="fstat-no" title="function not covered" >substratumResult, setSubstratumRe</span>sult] = useState&lt;ObservationSubstratumResultsPayload&gt;();
   const [monitori<span class="cstat-no" title="statement not covered" >ngPlotResult, setMonitoringPlotResult</span>] = useState&lt;ObservationMonitoringPlotResultsPayload&gt;();
   const isEditObservation<span class="cstat-no" title="statement not covered" >sEnabled = isEnabled('Edit Obs</span>ervations');
 <span class="cstat-no" title="statement not covered" ></span>
@@ -1295,16 +1293,16 @@ export default fun<span class="cstat-no" title="statement not covered" >ction Ob
         return undefined;
       }) || [];
 &nbsp;
-    const elements = (names ?? []).filter((element): element is JSX.Element =&gt; element !== undefined);
-    return elements;<span class="cstat-no" title="statement not covered" ></span>
+    const elements = (names ?? []).fi<span class="cstat-no" title="statement not covered" >lter((element): element is JSX.Element =&gt; element !== undefined);</span>
+    return elements;
   }, [monitoringPlotResult?.overlapsWithPlotIds, observationResults, plantingSiteId, stratumName]);
 &nbsp;
   const tabs = useMemo(() =&gt; {
-    if (!activeLocale) {
+<span class="cstat-no" title="statement not covered" >    if (!activeLocale) {</span>
 <span class="cstat-no" title="statement not covered" >      return [];</span>
-<span class="cstat-no" title="statement not covered" >    }</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    return [</span>
+    }
+<span class="cstat-no" title="statement not covered" ></span>
+    return [
       {
         id: 'observationData',
         label: strings.OBSERVATION_DATA,
@@ -1313,7 +1311,6 @@ export default fun<span class="cstat-no" title="statement not covered" >ction Ob
             monitoringPlot={monitoringPlotResult}
             species={monitoringPlotSpecies}
             observationId={observationId}
-            reloadAll={reloadAll}
           /&gt;
         ) : null,
       },
@@ -1329,7 +1326,7 @@ export default fun<span class="cstat-no" title="statement not covered" >ction Ob
         ),
       },
     ];
-  }, [activeLocale, monitoringPlotResult, monitoringPlotSpecies, observationId, reloadAll, plantingSite]);
+  }, [activeLocale, monitoringPlotResult, monitoringPlotSpecies, observationId, plantingSite]);
 &nbsp;
   const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'observationData',
@@ -1456,7 +1453,7 @@ export default fun<span class="cstat-no" title="statement not covered" >ction Ob
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-13T18:11:17.673Z
+                at 2026-01-13T18:41:32.602Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

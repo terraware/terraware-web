@@ -1,3 +1,4 @@
+6a1b07a31c6 Remove unnecessary reload (#5066)
 45c3ec9bb89 SW-7960 Make project cohort search sublist singular (#5065)
 5a08b1d4dce SW-7777 Round densities in edit view (#5064)
 0c2158bf11d SW-7928 Permanent Plot plot sections missing "Plot" title (#5063)
