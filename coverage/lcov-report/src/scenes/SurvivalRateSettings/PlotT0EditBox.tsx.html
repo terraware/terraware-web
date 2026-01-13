@@ -706,7 +706,10 @@
 <a name='L641'></a><a href='#L641'>641</a>
 <a name='L642'></a><a href='#L642'>642</a>
 <a name='L643'></a><a href='#L643'>643</a>
-<a name='L644'></a><a href='#L644'>644</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L644'></a><a href='#L644'>644</a>
+<a name='L645'></a><a href='#L645'>645</a>
+<a name='L646'></a><a href='#L646'>646</a>
+<a name='L647'></a><a href='#L647'>647</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1173,6 +1176,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1732,9 +1738,12 @@ const PlotT0EditBox = <span class="cstat-no" title="statement not covered" >({</
           display='flex'
           alignItems='center'
         &gt;
-          &lt;Typography&gt;{plot.name}&lt;/Typography&gt;<span class="fstat-no" title="function not covered" ></span>
+          &lt;Box textAlign={'center'}&gt;<span class="fstat-no" title="function not covered" ></span>
+            &lt;Typography fontWeight={600}&gt;{strings.PLOT}&lt;/Typography&gt;
+<span class="cstat-no" title="statement not covered" >            &lt;Typography&gt;{plot.name}&lt;/Typography&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+          &lt;/Box&gt;
         &lt;/Box&gt;
-<span class="cstat-no" title="statement not covered" >        &lt;Box display='flex' flexGrow={1} alignItems='start' flexDirection={'column'}&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+        &lt;Box display='flex' flexGrow={1} alignItems='start' flexDirection={'column'}&gt;
           &lt;Box display='flex' flexGrow={1} alignItems={'start'} width={'100%'}&gt;
             &lt;Box flexGrow={1} display={'flex'} alignItems={'center'}&gt;
               &lt;RadioGroup name='radio-buttons-t0' onChange={onChangeT0Origin} value={t0Origin}&gt;
@@ -1753,11 +1762,11 @@ const PlotT0EditBox = <span class="cstat-no" title="statement not covered" >({</
                     &lt;SelectT&lt;ObservationSpeciesDensityPayload&gt;
                       options={selectedPlotSpecies?.observations}
                       placeholder={strings.SELECT}
-                      onChange={onChangeObservation}
-                      isEqual={isEqualObservation}
+                      onChange={onChangeObservation}<span class="fstat-no" title="function not covered" ></span>
+<span class="cstat-no" title="statement not covered" >                      isEqual={isEqualObservation}</span>
                       renderOption={renderOptionObservation}
-                      displayLabel={displayLabelObservation}<span class="fstat-no" title="function not covered" ></span>
-<span class="cstat-no" title="statement not covered" >                      selectedValue={selectedPlotSpecies?.observations.find(</span>
+                      displayLabel={displayLabelObservation}
+                      selectedValue={selectedPlotSpecies?.observations.find(
                         (obsPlot: ObservationSpeciesDensityPayload) =&gt;
                           obsPlot.observationId.toString() === plotToSave.observationId?.toString()
                       )}
@@ -1793,7 +1802,7 @@ const PlotT0EditBox = <span class="cstat-no" title="statement not covered" >({</
                             return (
                               &lt;tr key={index}&gt;
                                 &lt;td&gt;{species.find((iSp) =&gt; sp.speciesId === iSp.id)?.scientificName}&lt;/td&gt;
-                                &lt;td&gt;{sp.density}&lt;/td&gt;
+                                &lt;td&gt;{roundToDecimal(sp.density, 1)}&lt;/td&gt;
                               &lt;/tr&gt;
                             );
                           })}
@@ -1812,10 +1821,10 @@ const PlotT0EditBox = <span class="cstat-no" title="statement not covered" >({</
                   &lt;IconTooltip title={strings.PROVIDE_PLANT_DENSITY_PER_SPECIES_TOOLTIP} /&gt;
                 &lt;/Box&gt;
               &lt;/RadioGroup&gt;
-            &lt;/Box&gt;
+            &lt;/Box&gt;<span class="cstat-no" title="statement not covered" ></span>
             {!isMobile &amp;&amp; (
               &lt;Box sx={{ background: theme.palette.TwClrBgSecondary }} display='flex' padding={1} height='fit-content'&gt;
-                &lt;Box<span class="cstat-no" title="statement not covered" > display='flex</span>' paddingRight={3}&gt;
+                &lt;Box display='flex' paddingRight={3}&gt;
                   &lt;Typography fontWeight={600} paddingRight={0.5}&gt;
                     {strings.STRATUM}
                   &lt;/Typography&gt;
@@ -1999,7 +2008,7 @@ export default PlotT0EditBox;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-13T14:21:13.633Z
+                at 2026-01-13T17:24:39.780Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
