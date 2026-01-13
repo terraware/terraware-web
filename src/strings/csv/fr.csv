@@ -1930,6 +1930,10 @@ SPECIES_DENSITY_WARNING_MESSAGE,"Vous n'avez pas saisi de valeurs de densité de
 SPECIES_DENSITY_WARNING_MESSAGE_TEMPORARY_PLOTS,"Vous n’avez pas saisi de valeurs de densité de plantation pour toutes les espèces dans toutes les strates. Si vous n’indiquez pas de densité de plantation pour toutes les espèces d’une strate, les densités de plantation de cette strate ne seront pas définies et aucun taux de survie ne sera calculé pour cette espèce. Saisissez 0 pour toute espèce qui n’a pas été plantée dans une strate.",685a0c64
 SPECIES_DESCRIPTION,"Gérez la liste des espèces de votre organisation pour la planification, les opérations et les rapports.",b1943eab
 SPECIES_EMPTY_MSG_BODY,Saisissez les espèces que vous collectez ou plantez actuellement pour simplifier votre expérience lorsque vous êtes sur le terrain.,20250069
+SPECIES_FROM_OTHER_OBSERVATIONS,Espèces provenant d'autres observations,a87a4f5e
+SPECIES_FROM_OTHER_OBSERVATIONS_TOOLTIP,Des espèces provenant d'autres observations ont été observées lors d'une observation postérieure à l'observation t0. Modifiez pour changer la densité.,4c12811f
+SPECIES_FROM_T0_OBSERVATION,Espèces de l'observation t0,08a77070
+SPECIES_FROM_T0_OBSERVATION_TOOLTIP,Les espèces de l'observation t0 ont été observées dans l'observation sélectionnée pour être utilisée comme données t0.,ee679aa8
 SPECIES_FROM_WITHDRAWALS,Espèces issues des retraits,66d674b5
 SPECIES_FROM_WITHDRAWALS_TOOLTIP,Toutes les espèces enregistrées comme plantées sur le site de plantation via les retraits.,fc05e7a4
 SPECIES_IMPORT_COMPLETE,L'importation des données sur les espèces est terminée !,74b00dc5

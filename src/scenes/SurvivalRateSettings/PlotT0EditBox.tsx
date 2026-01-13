@@ -8,7 +8,11 @@ import TextField from 'src/components/common/TextField';
 import usePlantingSite from 'src/hooks/usePlantingSite';
 import { useLocalization } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
-import { PlotT0Observation, PlotsWithObservationsSearchResult } from 'src/redux/features/tracking/trackingThunks';
+import {
+  ObservationSpeciesDensityPayload,
+  useGetPlotObservationDensitiesForPlantingSiteQuery,
+} from 'src/queries/generated/t0';
+import { PlotsWithObservationsSearchResult } from 'src/redux/features/tracking/trackingThunks';
 import strings from 'src/strings';
 import { Species } from 'src/types/Species';
 import { AssignSiteT0Data, PlotT0Data, SpeciesPlot } from 'src/types/Tracking';
@@ -46,6 +50,14 @@ const PlotT0EditBox = ({
 
   const [selectedWithdrawalCheckboxes, setSelectedWithdrawalCheckboxes] = useState<Set<number>>(new Set());
 
+  const { data: observationPlotsResponse } = useGetPlotObservationDensitiesForPlantingSiteQuery(plantingSiteId);
+  const plotsSpecies = useMemo(() => observationPlotsResponse?.data, [observationPlotsResponse]);
+
+  const selectedPlotSpecies = useMemo(
+    () => plotsSpecies?.find((plotSpecies) => plotSpecies.monitoringPlotId === plot.id),
+    [plot.id, plotsSpecies]
+  );
+
   const initialNewSpecies = useMemo(() => {
     const withdrawnSpeciesIds = withdrawnSpeciesPlot?.species.map((ws) => ws.speciesId) || [];
     const speciesToShow: AddedSpecies[] = [];
@@ -63,17 +75,17 @@ const PlotT0EditBox = ({
   const [newSpeciesRows, setNewSpeciesRows] = useState<AddedSpecies[]>(initialNewSpecies);
 
   const isEqualObservation = useCallback(
-    (a: PlotT0Observation, b: PlotT0Observation) => a.observation_id === b.observation_id,
+    (a: ObservationSpeciesDensityPayload, b: ObservationSpeciesDensityPayload) => a.observationId === b.observationId,
     []
   );
 
   const renderOptionObservation = useCallback(
-    (option: PlotT0Observation) => {
+    (option: ObservationSpeciesDensityPayload) => {
       if (option) {
         const timeZone = plantingSite?.timeZone ?? defaultTimeZone.id;
-        const completedDate = getDateDisplayValue(option.observation_completedTime, timeZone);
-        return option?.observation_startDate
-          ? `${getShortDate(option.observation_startDate, locale)} ${strings.COMPLETED_ON} ${completedDate}`
+        const completedDate = getDateDisplayValue(option.observationCompletedTime, timeZone);
+        return option?.observationStartDate
+          ? `${getShortDate(option.observationStartDate, locale)} ${strings.COMPLETED_ON} ${completedDate}`
           : '';
       }
       return '';
@@ -82,12 +94,12 @@ const PlotT0EditBox = ({
   );
 
   const displayLabelObservation = useCallback(
-    (option: PlotT0Observation) => {
+    (option: ObservationSpeciesDensityPayload) => {
       if (option) {
         const timeZone = plantingSite?.timeZone ?? defaultTimeZone.id;
-        const completedDate = getDateDisplayValue(option.observation_completedTime, timeZone);
-        return option?.observation_startDate
-          ? `${getShortDate(option.observation_startDate, locale)} ${strings.COMPLETED_ON} ${completedDate}`
+        const completedDate = getDateDisplayValue(option.observationCompletedTime, timeZone);
+        return option?.observationStartDate
+          ? `${getShortDate(option.observationStartDate, locale)} ${strings.COMPLETED_ON} ${completedDate}`
           : '';
       }
       return '';
@@ -96,7 +108,7 @@ const PlotT0EditBox = ({
   );
 
   const toTObservation = useCallback(
-    (startDate: string) => ({ observation_startDate: startDate }) as PlotT0Observation,
+    (startDate: string) => ({ observationStartDate: startDate }) as ObservationSpeciesDensityPayload,
     []
   );
 
@@ -121,6 +133,11 @@ const PlotT0EditBox = ({
     };
   }, [plot.id, record]);
 
+  const selectedObservationSpecies = useMemo(
+    () => selectedPlotSpecies?.observations.find((obs) => obs.observationId === plotToSave.observationId),
+    [plotToSave.observationId, selectedPlotSpecies?.observations]
+  );
+
   const onChangeT0Origin = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>, value: string) => {
       setT0Origin(value);
@@ -138,10 +155,10 @@ const PlotT0EditBox = ({
   );
 
   const onChangeObservation = useCallback(
-    (newValue: PlotT0Observation) => {
+    (newValue: ObservationSpeciesDensityPayload) => {
       if (plotToSave) {
         const plotCopy = { ...plotToSave };
-        plotCopy.observationId = Number(newValue.observation_id);
+        plotCopy.observationId = Number(newValue.observationId);
         plotCopy.densityData = [];
         // Remove the existing plot, then add the updated one
         const otherPlots = record.plots.filter((p) => p.monitoringPlotId.toString() !== plot.id.toString());
@@ -172,7 +189,11 @@ const PlotT0EditBox = ({
 
         if (value !== undefined) {
           if (densityDataToUpdate?.plotDensity !== undefined) {
-            const densityDataToUpdateCopy = { ...densityDataToUpdate, plotDensity: Number(value) };
+            const densityDataToUpdateCopy = {
+              ...densityDataToUpdate,
+              plotDensity: Number(value),
+              density: Number(value),
+            };
 
             // Udated plot with modified densityData array
             plotCopy = {
@@ -366,32 +387,69 @@ const PlotT0EditBox = ({
           <Box display='flex' flexGrow={1} alignItems={'start'} width={'100%'}>
             <Box flexGrow={1} display={'flex'} alignItems={'center'}>
               <RadioGroup name='radio-buttons-t0' onChange={onChangeT0Origin} value={t0Origin}>
-                <Box display='flex' flexDirection={isMobile ? 'column' : 'row'}>
-                  <Box display='flex' paddingRight={2} sx={{ alignItems: 'center' }}>
-                    <FormControlLabel
-                      control={<Radio />}
-                      disabled={(plot.observationPlots.length || 0) < 1}
-                      label={strings.USE_OBSERVATION_DATA}
-                      value={'useObservation'}
-                      sx={{ marginRight: '8px' }}
+                <Box>
+                  <Box display='flex' flexDirection={isMobile ? 'column' : 'row'}>
+                    <Box display='flex' paddingRight={2} sx={{ alignItems: 'center' }}>
+                      <FormControlLabel
+                        control={<Radio />}
+                        disabled={(selectedPlotSpecies?.observations.length || 0) < 1}
+                        label={strings.USE_OBSERVATION_DATA}
+                        value={'useObservation'}
+                        sx={{ marginRight: '8px' }}
+                      />
+                      <IconTooltip title={strings.USE_OBSERVATION_DATA_TOOLTIP} />
+                    </Box>
+                    <SelectT<ObservationSpeciesDensityPayload>
+                      options={selectedPlotSpecies?.observations}
+                      placeholder={strings.SELECT}
+                      onChange={onChangeObservation}
+                      isEqual={isEqualObservation}
+                      renderOption={renderOptionObservation}
+                      displayLabel={displayLabelObservation}
+                      selectedValue={selectedPlotSpecies?.observations.find(
+                        (obsPlot: ObservationSpeciesDensityPayload) =>
+                          obsPlot.observationId.toString() === plotToSave.observationId?.toString()
+                      )}
+                      toT={toTObservation}
+                      fullWidth={true}
+                      disabled={t0Origin === 'manual'}
+                      sx={{ width: '375px' }}
                     />
-                    <IconTooltip title={strings.USE_OBSERVATION_DATA_TOOLTIP} />
                   </Box>
-                  <SelectT<PlotT0Observation>
-                    options={plot.observationPlots}
-                    placeholder={strings.SELECT}
-                    onChange={onChangeObservation}
-                    isEqual={isEqualObservation}
-                    renderOption={renderOptionObservation}
-                    displayLabel={displayLabelObservation}
-                    selectedValue={plot.observationPlots.find(
-                      (obsPlot) => obsPlot.observation_id === plotToSave.observationId?.toString()
-                    )}
-                    toT={toTObservation}
-                    fullWidth={true}
-                    disabled={t0Origin === 'manual'}
-                    sx={{ width: '375px' }}
-                  />
+                  {t0Origin !== 'manual' && !!plotToSave.observationId && (
+                    <Box>
+                      <table>
+                        <thead>
+                          <tr>
+                            <th style={{ textAlign: 'left', width: '40%' }}>
+                              <Box display='flex'>
+                                {strings.SPECIES_FROM_T0_OBSERVATION}
+                                <IconTooltip title={strings.SPECIES_FROM_T0_OBSERVATION_TOOLTIP} />
+                              </Box>
+                            </th>
+                            <th style={{ textAlign: 'left', width: '10%' }}>
+                              <Box display={'flex'}>
+                                {strings.PLANT_DENSITY} <IconTooltip title={strings.PLANT_DENSITY_TOOLTIP} />
+                              </Box>
+                              <Typography fontSize={'14px'} fontWeight={600}>
+                                ({strings.PLANTS_PER_HA_LC})
+                              </Typography>
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {selectedObservationSpecies?.species.map((sp, index) => {
+                            return (
+                              <tr key={index}>
+                                <td>{species.find((iSp) => sp.speciesId === iSp.id)?.scientificName}</td>
+                                <td>{sp.density}</td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    </Box>
+                  )}
                 </Box>
                 <Box display='flex' sx={{ alignItems: 'center' }}>
                   <FormControlLabel
