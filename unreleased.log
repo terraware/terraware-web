@@ -1,3 +1,4 @@
+804e08d7a7e SW-7777 Edit View does not show Species for selected t0 Observation (#5053)
 152ec2daac9 SW-7960 Remove remainder of participant endpoints usages (#5060)
 7dc797884f7 SW-7960 Remove useParticipant hook (#5059)
 52a74c36dd2 SW-7960 Remove participant references Documents (#5058)
