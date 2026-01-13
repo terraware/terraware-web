@@ -39,7 +39,6 @@ type ObservationDataTabProps = {
   unrecognizedSpecies?: string[];
   onExportData?: () => void;
   onMatchSpecies?: () => void;
-  reloadAll: () => void;
 };
 
 const ObservationDataTab = ({
@@ -50,7 +49,6 @@ const ObservationDataTab = ({
   onExportData,
   onMatchSpecies,
   observationId,
-  reloadAll,
 }: ObservationDataTabProps) => {
   const { plantingSite, reload } = usePlantingSiteData();
   const defaultTimeZone = useDefaultTimeZone();
@@ -268,7 +266,6 @@ const ObservationDataTab = ({
           species={species}
           observationId={Number(observationId)}
           plotId={Number(monitoringPlot?.monitoringPlotId)}
-          reload={reloadAll}
           isCompleted={!!monitoringPlot.completedTime}
           type={type}
           unknownSpecies={monitoringPlot.unknownSpecies}
