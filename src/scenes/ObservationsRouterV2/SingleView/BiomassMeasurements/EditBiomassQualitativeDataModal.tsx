@@ -293,7 +293,7 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
                     <Box sx={{ flex: 1 }}>
                       <TextField
                         type='text'
-                        label={strings.WATER_DEPTH_M}
+                        label={strings.WATER_DEPTH_CM}
                         value={record.biomassMeasurement?.waterDepth}
                         id={'waterDepth'}
                         onChange={onChangeHandler('biomassMeasurement.waterDepth')}

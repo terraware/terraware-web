@@ -94,7 +94,7 @@ export default function BiomassMeasurementsDetails(props: BiomassMeasurementDeta
         label: '',
         value: undefined,
       },
-      { label: strings.WATER_DEPTH_M, value: biomassMeasurements?.waterDepth || '- -' },
+      { label: strings.WATER_DEPTH_CM, value: biomassMeasurements?.waterDepth || '- -' },
       { label: strings.SALINITY_PPT, value: biomassMeasurements?.salinity || '- -' },
       { label: strings.PH, value: biomassMeasurements?.ph || '- -' },
       { label: strings.TIDE, value: biomassMeasurements?.tide || '- -' },

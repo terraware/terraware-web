@@ -2359,7 +2359,7 @@ VINE,Vine,A type of plant.
 VOTER,Voter: {0},Displays the name of a person voter.
 VOTING_DECISION,Voting Decision,
 WATER_BODIES,Water Bodies,
-WATER_DEPTH_M,Water Depth (m),
+WATER_DEPTH_CM,Water Depth (cm),
 WEIGHT,Weight,
 WEIGHT_GRAMS,Weight (g),
 WEIGHT_KILOGRAMS,Weight (kg),
