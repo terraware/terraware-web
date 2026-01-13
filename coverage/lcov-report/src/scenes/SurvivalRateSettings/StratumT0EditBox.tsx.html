@@ -505,7 +505,9 @@
 <a name='L440'></a><a href='#L440'>440</a>
 <a name='L441'></a><a href='#L441'>441</a>
 <a name='L442'></a><a href='#L442'>442</a>
-<a name='L443'></a><a href='#L443'>443</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L443'></a><a href='#L443'>443</a>
+<a name='L444'></a><a href='#L444'>444</a>
+<a name='L445'></a><a href='#L445'>445</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -780,7 +782,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -863,6 +864,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1220,10 +1224,10 @@ const StratumT0EditBox = ({
     &lt;&gt;
       &lt;Box
         display='flex'
-        flexDirection={isMobile ? 'column' : 'row'}
-        paddingY={theme.spacing(2)}<span class="fstat-no" title="function not covered" ></span>
-        gap={theme.spacing(2)}
-<span class="cstat-no" title="statement not covered" >      &gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+        flexDirection={isMobile ? 'column' : 'row'}<span class="fstat-no" title="function not covered" ></span>
+        paddingY={theme.spacing(2)}
+<span class="cstat-no" title="statement not covered" >        gap={theme.spacing(2)}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+      &gt;
         &lt;Box
           minHeight='100px'
           minWidth='80px'
@@ -1232,8 +1236,10 @@ const StratumT0EditBox = ({
           alignItems='center'
           flexDirection={'column'}
         &gt;
-          &lt;Typography fontWeight={600}&gt;{strings.STRATUM}&lt;/Typography&gt;
-          &lt;Typography&gt;{plotsWithObservations?.[0].substratum_stratum_name}&lt;/Typography&gt;
+          &lt;Box textAlign={'center'}&gt;
+            &lt;Typography fontWeight={600}&gt;{strings.STRATUM}&lt;/Typography&gt;
+            &lt;Typography&gt;{plotsWithObservations?.[0].substratum_stratum_name}&lt;/Typography&gt;
+          &lt;/Box&gt;
         &lt;/Box&gt;
         &lt;Box width={'100%'}&gt;
           &lt;table&gt;
@@ -1242,11 +1248,11 @@ const StratumT0EditBox = ({
                 &lt;th style={{ textAlign: 'left', width: '40%' }}&gt;
                   &lt;Box display='flex'&gt;
                     {strings.SPECIES_FROM_WITHDRAWALS}
-                    &lt;IconTooltip title={strings.SPECIES_FROM_WITHDRAWALS_TOOLTIP} /&gt;
-                  &lt;/Box&gt;
+                    &lt;IconTooltip title={strings.SPECIES_FROM_WITHDRAWALS_TOOLTIP} /&gt;<span class="fstat-no" title="function not covered" ></span>
+<span class="cstat-no" title="statement not covered" >                  &lt;/Box&gt;</span>
                 &lt;/th&gt;
-                &lt;th style={{ textAlign: 'left', width: '10%' }}&gt;<span class="fstat-no" title="function not covered" ></span>
-<span class="cstat-no" title="statement not covered" >                  &lt;Box display={'flex'}&gt;</span>
+                &lt;th style={{ textAlign: 'left', width: '10%' }}&gt;
+                  &lt;Box display={'flex'}&gt;
                     {strings.PLANT_DENSITY} &lt;IconTooltip title={strings.PLANT_DENSITY_TITLE_TOOLTIP} /&gt;
                   &lt;/Box&gt;
                   &lt;Typography fontSize={'14px'} fontWeight={600}&gt;
@@ -1301,10 +1307,10 @@ const StratumT0EditBox = ({
                       &lt;IconTooltip title={strings.ADDED_SPECIES_TOOLTIP} /&gt;
                     &lt;/Box&gt;
                   &lt;/td&gt;
-                &lt;/tr&gt;
+                &lt;/tr<span class="cstat-no" title="statement not covered" >&gt;</span>
               )}
               {newSpeciesRows.map((row) =&gt; {
-                retu<span class="cstat-no" title="statement not covered" >rn (</span>
+                return (
                   &lt;tr key={row.id}&gt;
                     &lt;td&gt;
                       &lt;SelectT&lt;Species&gt;
@@ -1396,7 +1402,7 @@ export default StratumT0EditBox;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-13T18:41:32.602Z
+                at 2026-01-13T19:37:24.954Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
