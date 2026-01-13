@@ -15,6 +15,7 @@ import ExtraData from 'src/scenes/ObservationsRouter/adhoc/ExtraData';
 import ObservationDataNumbers from 'src/scenes/ObservationsRouter/adhoc/ObservationDataNumbers';
 import EventLog from 'src/scenes/ObservationsRouter/common/EventLog';
 import MatchSpeciesModal from 'src/scenes/ObservationsRouter/common/MatchSpeciesModal';
+import UnrecognizedSpeciesPageMessage from 'src/scenes/ObservationsRouter/common/UnrecognizedSpeciesPageMessage';
 import useObservationExports from 'src/scenes/ObservationsRouterV2/useObservationExports';
 import { useOnSaveMergedSpeciesRtk } from 'src/scenes/ObservationsRouterV2/useOnSaveMergedSpeciesRtk';
 import { getShortTime } from 'src/utils/dateFormatter';
@@ -28,7 +29,6 @@ import EditMonitoringPlotQualitativeDataModal, {
   MonitoringPlotQualitativeFormData,
 } from './EditMonitoringPlotQualitativeDataModal';
 import MonitoringPlotSpeciesEditableTable from './MonitoringPlotSpeciesEditableTable';
-import UnrecognizedSpeciesPageMessage from 'src/scenes/ObservationsRouter/common/UnrecognizedSpeciesPageMessage';
 
 const MonitoringPlotObservationDataTab = () => {
   const isEditObservationsEnabled = isEnabled('Edit Observations');
