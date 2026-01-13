@@ -18,13 +18,24 @@ import MonitoringPlotPhotosTab from './MonitoringPlotPhotosTab';
 const MonitoringPlotDetails = (): JSX.Element => {
   const theme = useTheme();
   const { strings } = useLocalization();
-  const params = useParams<{ observationId: string; stratumName: string }>();
+  const params = useParams<{ observationId: string; stratumName: string; monitoringPlotId: string }>();
   const observationId = Number(params.observationId);
   const stratumName = params.stratumName;
+  const monitoringPlotId = Number(params.monitoringPlotId);
   const { data: observationResultsResponse } = useGetObservationResultsQuery({ observationId });
   const [getPlantingSite, getPlantingSiteResult] = useLazyGetPlantingSiteQuery();
   const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);
   const plantingSite = useMemo(() => getPlantingSiteResult.data?.site, [getPlantingSiteResult.data?.site]);
+  const monitoringPlot = useMemo(
+    () =>
+      results?.isAdHoc
+        ? results?.adHocPlot
+        : results?.strata
+            .flatMap((stratum) => stratum.substrata)
+            ?.flatMap((substratum) => substratum?.monitoringPlots)
+            .find((plot) => plot.monitoringPlotId === monitoringPlotId),
+    [monitoringPlotId, results?.adHocPlot, results?.isAdHoc, results?.strata]
+  );
 
   useEffect(() => {
     if (results) {
@@ -47,7 +58,7 @@ const MonitoringPlotDetails = (): JSX.Element => {
       });
       crumbsData.push({
         name: plantingSite.name,
-        to: `/stratum/${stratumName}}`,
+        to: `/stratum/${stratumName}`,
       });
     }
 
@@ -56,7 +67,7 @@ const MonitoringPlotDetails = (): JSX.Element => {
 
   const title = (
     <Typography fontSize='20px' lineHeight='28px' fontWeight={600} color={theme.palette.TwClrTxt}>
-      {results?.adHocPlot?.monitoringPlotNumber}
+      {monitoringPlot?.monitoringPlotNumber}
     </Typography>
   );
 
