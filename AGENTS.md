@@ -20,4 +20,4 @@
 Install new dependencies with `yarn` instead of `npm`.
 
 Format the code, run the typescript checker, and run the linter when you're done working. There's no need to rerun tests
-after code formatting. 
+after code formatting.
