@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/87</span>
+                <span class='fraction'>0/85</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/70</span>
+                <span class='fraction'>0/66</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/83</span>
+                <span class='fraction'>0/81</span>
             </div>
         
             
@@ -209,11 +209,7 @@
 <a name='L144'></a><a href='#L144'>144</a>
 <a name='L145'></a><a href='#L145'>145</a>
 <a name='L146'></a><a href='#L146'>146</a>
-<a name='L147'></a><a href='#L147'>147</a>
-<a name='L148'></a><a href='#L148'>148</a>
-<a name='L149'></a><a href='#L149'>149</a>
-<a name='L150'></a><a href='#L150'>150</a>
-<a name='L151'></a><a href='#L151'>151</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L147'></a><a href='#L147'>147</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -261,9 +257,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -359,130 +352,126 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > useCallback, </span>useEffect, useMemo, useState } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > useCallback, </span>useEffect, useMemo, useState } from 'react';
 <span class="cstat-no" title="statement not covered" ></span>
 import { Crumb } from '<span class="cstat-no" title="statement not covered" >src/components/BreadCrumbs';</span>
 import { APP_PATHS } fro<span class="cstat-no" title="statement not covered" >m 'src/constants';</span>
 import { useAcceler<span class="cstat-no" title="statement not covered" >atorOrgs } from 'src/h</span>ooks/useAcceleratorOrgs';
-import { usePartici<span class="cstat-no" title="statement not covered" >pant } from 'src/hooks/usePartic</span>ipant';
-import { useLoc<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >al</span>ization } from 'src/providers';</span>
-im<span class="cstat-no" title="statement not covered" >port { useProjectData } from 'src/providers/Project/ProjectContext';</span>
-impo<span class="cstat-no" title="statement not covered" >rt { requestGetParticipantProject } from 'src/redux/features/pa</span>rticipantProjects/participantProjectsAsyncThunks';
-import { selectParticipantProjectRequest } from 'src/redux/features/participantProjects/participantProjectsSelectors';
-import { requestGe<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >tU</span>ser } from 'src/redux/features/user/usersAsyncThunks';</span>
-im<span class="cstat-no" title="statement not covered" >port { selectUser } from 'src/redux/features/user/usersSelectors';</span>
-impo<span class="cstat-no" title="statement not covered" >rt { useAppDispatch, useAppSelector } from 'src/redux/store';</span>
-import<span class="cstat-no" title="statement not covered" > strings from 'src/strings';</span>
-import {<span class="cstat-no" title="statement not covered" > AcceleratorOrg } from 'sr<span class="fstat-no" title="function not covered" >c/</span>type<span class="cstat-no" title="statement not covered" >s/Accelera</span>tor';</span>
-import { ParticipantProject } from 'src/types/ParticipantProject';
-im<span class="cstat-no" title="statement not covered" >port { Proj</span>ectMeta } from 'src/types/Project';
-import useSnackbar from 'src/utils/useSnackbar';
-import { getUs<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >er</span>DisplayName } from 'src/util<span class="cstat-no" title="statement not covered" >s/user';</span></span>
-&nbsp;
+import { useLocaliz<span class="cstat-no" title="statement not covered" >ation } from 'src/providers';</span>
+import { usePro<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >je</span>ctData } from 'src/providers/Project/ProjectContext';</span>
+im<span class="cstat-no" title="statement not covered" >port { requestGetParticipantProject } from 'src/redux/features/participantProjects/participantProjectsAsyncThunks';</span>
+impo<span class="cstat-no" title="statement not covered" >rt { selectParticipantProjectRequest } from 'src/redux/features</span>/participantProjects/participantProjectsSelectors';
+import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
+import { selectUse<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >r </span>} from 'src/redux/features/user/usersSelectors';</span>
+im<span class="cstat-no" title="statement not covered" >port { useAppDispatch, useAppSelector } from 'src/redux/store';</span>
+impo<span class="cstat-no" title="statement not covered" >rt strings from 'src/strings';</span>
+import<span class="cstat-no" title="statement not covered" > { AcceleratorOrg } from 'src/types/Accelerator';</span>
+import {<span class="cstat-no" title="statement not covered" > ParticipantProject } from<span class="fstat-no" title="function not covered" > '</span>src/<span class="cstat-no" title="statement not covered" >types/Part</span>icipantProject';</span>
+import { ProjectMeta } from 'src/types/Project';
+im<span class="cstat-no" title="statement not covered" >port useSna</span>ckbar from 'src/utils/useSnackbar';
+import { getUserDisplayName } from 'src/utils/user';
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 import { ParticipantProjectContext, ParticipantProjectData } from './ParticipantProjectContext';
 &nbsp;
 export type Props = {
   children: React.ReactNode;
 };
 &nbsp;
-const ParticipantPr<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >oj</span>ectProv<span class="cstat-no" title="statement not covered" >ider = ({ children }: Props) =&gt; {</span></span>
-  const dispatch = u<span class="cstat-no" title="statement not covered" >seA</span>ppDispatch();
-<span class="cstat-no" title="statement not covered" >  const snackbar = useSnackbar();</span>
-  const { a<span class="fstat-no" title="function not covered" >ct</span>iveL<span class="cstat-no" title="statement not covered" >ocale } = useL</span>ocalization();
-  const { project, projectId } = useProjectData();
-<span class="cstat-no" title="statement not covered" >  const { participant } = useParticipant(proje</span>ct?.participantId ?? -1);
-  const { accelerat<span class="cstat-no" title="statement not covered" >orOrgs, reload: reloadAll </span>} = useAcceleratorOrgs({
-    hasProjectApplicati<span class="cstat-no" title="statement not covered" >on: true,</span>
-    includeParticipants: true,<span class="cstat-no" title="statement not covered" ></span>
+const ParticipantProjectProvider = ({ children }: Props) =&gt; {
+  const dispatch = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >us</span>eAppDis<span class="cstat-no" title="statement not covered" >patch();</span></span>
+  const snackbar = u<span class="cstat-no" title="statement not covered" >seS</span>nackbar();
+<span class="cstat-no" title="statement not covered" >  const { activeLocale } = useLocalization();</span>
+  const { p<span class="fstat-no" title="function not covered" >ro</span>ject<span class="cstat-no" title="statement not covered" >, projectId } </span>= useProjectData();
+  const { acceleratorOrgs, reload: reloadAll } = useAcceleratorOrgs({
+<span class="cstat-no" title="statement not covered" >    hasProjectApplication: true,</span>
+    includeParticip<span class="cstat-no" title="statement not covered" >ants: true,</span>
   });<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const [participantProject,<span class="cstat-no" title="statement not covered" > setParticipantProject] = useState&lt;ParticipantPr</span>oject&gt;();
-  const [participantProjectData, setParticip<span class="cstat-no" title="statement not covered" >antProjectData] = useState&lt;ParticipantProjectData&gt;({</span>
+  const [participantPro<span class="cstat-no" title="statement not covered" >ject, setParticipantProje</span>ct] = useState&lt;ParticipantProject&gt;();
+  const [participantProjectD<span class="cstat-no" title="statement not covered" >ata, setParticipantProjectData] = useState&lt;Parti</span>cipantProjectData&gt;({
     crumbs: [],<span class="cstat-no" title="statement not covered" ></span>
     projectId,<span class="cstat-no" title="statement not covered" ></span>
-    // eslint-disable-next-l<span class="cstat-no" title="statement not covered" >ine @typescript-eslint/no-empty-function</span>
-    reload: () =&gt; {<span class="cstat-no" title="statement not covered" >},</span>
+    // eslint-disable-next-lin<span class="cstat-no" title="statement not covered" >e @typescript-eslint/no-empty-function</span>
+    reload: () =&gt; {},<span class="cstat-no" title="statement not covered" ></span>
   });<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const getPartici<span class="cstat-no" title="statement not covered" >pantProjectResult = useApp</span>Selector(selectParticipantProjectRequest(projectId));
+  const getParticipantPro<span class="cstat-no" title="statement not covered" >jectResult = useAppSelector(selectParticip</span>antProjectRequest(projectId));
 <span class="cstat-no" title="statement not covered" ></span>
-  const createdByUser = useAppSelec<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >to</span>r(selectUser(project?.createdBy));</span>
-  const modifiedByUser = useAppSelector(selectUser(project?.modifiedBy));
+  const createdByUser = useAppSelector(<span class="cstat-no" title="statement not covered" >selectUser(project?.createdBy));</span>
+  const modifiedByUser = useAppSele<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ct</span>or(selectUser(project?.modifiedBy));</span>
   const [projectMet<span class="cstat-no" title="statement not covered" >a, setProjectMeta] = useState&lt;Proje</span>ctMeta&gt;({});
 <span class="cstat-no" title="statement not covered" ></span>
   const [organization, setO<span class="cstat-no" title="statement not covered" >rganization] = useState&lt;AcceleratorOrg&gt;(</span>);
 <span class="cstat-no" title="statement not covered" ></span>
-  const crumbs: Crumb[] = <span class="cstat-no" title="statement not covered" >useMemo(</span>
-    () =&gt;<span class="cstat-no" title="statement not covered" ></span>
+  const crumbs: Crumb[] = useMemo(<span class="cstat-no" title="statement not covered" ></span>
+    () =&gt;
       activeLocale
         ? [
-            {
+            {<span class="cstat-no" title="statement not covered" ></span>
               name: strings.OVERVIEW,<span class="cstat-no" title="statement not covered" ></span>
-              to: `${APP_PATHS.ACCELERATOR_OVERVIEW}?tab=proje<span class="cstat-no" title="statement not covered" >cts`,</span>
+              to: `${APP_PATHS.ACCELERATOR_OVERVIEW}?tab=projects`,
             },
           ]
-        : [],
-    [activeL<span class="fstat-no" title="function not covered" >oc</span>ale]
+        : []<span class="fstat-no" title="function not covered" >,</span>
+    [activeLocale]
   );
-&nbsp;
-  const reload = useCallback(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+  const reload = useCall<span class="cstat-no" title="statement not covered" >back(() =&gt; {</span>
     reloadAll();<span class="cstat-no" title="statement not covered" ></span>
-    if (projectId !== -1)<span class="cstat-no" title="statement not covered" > {</span>
-      void dispatch(requestGetParticipan<span class="cstat-no" title="statement not covered" >tProject(projectId));</span>
+    if (projectId !== -1) {<span class="cstat-no" title="statement not covered" ></span>
+      void dispatch(requestGetParticipantP<span class="cstat-no" title="statement not covered" >roject(projectId));</span>
     }<span class="cstat-no" title="statement not covered" ></span>
-  }, [dispatch, p<span class="cstat-no" title="statement not covered" >rojectId, reloadAll]);</span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  },<span class="fstat-no" title="function not covered" > [</span>disp<span class="cstat-no" title="statement not covered" >atch, projectId, reloadAll]);</span>
+&nbsp;
   useEffect(() =&gt; {
     if (projectId !== -1) {
       void dispatch(requestGetParticipantProject(projectId));
     }
   }, [dispatch, projectId]);
 &nbsp;
-  useEffect(() =&gt; {
-    const userIds<span class="cstat-no" title="statement not covered" > = new Set([project?.createdBy<span class="fstat-no" title="function not covered" >, </span>project?.modifiedBy]);</span>
-<span class="cstat-no" title="statement not covered" >    userIds.forEa</span>ch((userId) =&gt; {
+  useEffect(() =&gt;<span class="cstat-no" title="statement not covered" > {<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    const userIds</span> = new Set([project?.createdBy, project?.modifiedBy]);
+<span class="cstat-no" title="statement not covered" >    userIds.forEach((userId) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      if (userId) {</span>
-<span class="cstat-no" title="statement not covered" >        void dispatch(requestGetUser(userId));</span>
+        void dispatch(requestGetUser(userId));
       }
-    });
-<span class="cstat-no" title="statement not covered" >  }, [dispatch, project?.creat<span class="fstat-no" title="function not covered" >ed</span>By, project?.modifiedBy]);</span>
+<span class="cstat-no" title="statement not covered" >    });<span class="fstat-no" title="function not covered" ></span></span>
+  },<span class="cstat-no" title="statement not covered" > [dispatch, project?.createdBy, project?.modifiedBy]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  useE<span class="cstat-no" title="statement not covered" >ffect(() =&gt; {</span>
+  useEffect(() =&gt; {
     setProjectMeta({
-      createdByUserName: getUserDisplayName(createdByUser),
-<span class="cstat-no" title="statement not covered" >      modifiedByUserName: getU<span class="fstat-no" title="function not covered" >se</span>rDisplayName(modifiedByUser),</span>
-    });<span class="cstat-no" title="statement not covered" ></span>
-  },<span class="cstat-no" title="statement not covered" > [createdByUser,<span class="fstat-no" title="function not covered" > m</span>odifiedByUser]);</span>
+<span class="cstat-no" title="statement not covered" >      createdByUserName: getUs<span class="fstat-no" title="function not covered" >er</span>DisplayName(createdByUser),</span>
+      modifiedByUserName: getUserDis<span class="cstat-no" title="statement not covered" >playName(modifiedByUser),</span>
+<span class="cstat-no" title="statement not covered" >    });<span class="fstat-no" title="function not covered" ></span></span>
+  }, [<span class="cstat-no" title="statement not covered" >createdByUser, modifiedByUser]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  useEff<span class="cstat-no" title="statement not covered" >ect(() =&gt; {</span>
+  useEffect(() =&gt; {
     if (!getParticipantProjectResult) {
       return;
-    }
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >    if (getParticipantProjectResult?.status === 'error') {</span>
+<span class="cstat-no" title="statement not covered" >    }<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ></span>
+    if (getParticipantProjectResult?.status === 'error') {
       snackbar.toastError(strings.GENERIC_ERROR);
     } else if (getParticipantProjectResult?.status === 'success' &amp;&amp; getParticipantProjectResult?.data) {
       setParticipantProject(getParticipantProjectResult.data);
-    }
-<span class="cstat-no" title="statement not covered" >  }, [getParticipantProjectRes<span class="fstat-no" title="function not covered" >ul</span>t, snackbar]);</span>
+<span class="cstat-no" title="statement not covered" >    }<span class="fstat-no" title="function not covered" ></span></span>
+  },<span class="cstat-no" title="statement not covered" > [getParticipantProjectResult, snackbar]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  useE<span class="cstat-no" title="statement not covered" >ffect(()</span> =&gt; {
-    if (!acceleratorOrgs || !project?.organizationId) {
+  useEffect(() =&gt; {
+<span class="cstat-no" title="statement not covered" >    if (!acceleratorOrgs || !project?.organizationId) {</span>
 <span class="cstat-no" title="statement not covered" >      return;</span>
     }<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-    se<span class="cstat-no" title="statement not covered" >tOrganization(acceleratorOrgs.find((org) =&gt; org.id === pr</span>oject.organizationId));
+    setOrganization(acceleratorOrgs.find((org) =&gt; org.id === project.organizationId));
   }, [acceleratorOrgs, project?.organizationId]);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  const participantProjectData<span class="fstat-no" title="function not covered" >Va</span>lues = useMemo(</span>
-<span class="cstat-no" title="statement not covered" >    () =&gt; ({</span>
-<span class="cstat-no" title="statement not covered" >      crumbs,</span>
-      organization,
-<span class="cstat-no" title="statement not covered" >      participant,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  co<span class="cstat-no" title="statement not covered" >nst participantProjectDataValues = useMemo(</span>
+    ()<span class="cstat-no" title="statement not covered" > =&gt; ({</span>
+      crumbs,
+<span class="cstat-no" title="statement not covered" >      organization,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
       participantProject,
       project,<span class="cstat-no" title="statement not covered" ></span>
 <span class="fstat-no" title="function not covered" ></span>      projectId,
@@ -494,7 +483,6 @@ const ParticipantPr<span class="cstat-no" title="statement not covered" ><span c
       crumbs,
       getParticipantProjectResult?.status,
       organization,
-      participant,
       participantProject,
       project,
       projectId,
@@ -510,17 +498,17 @@ const ParticipantPr<span class="cstat-no" title="statement not covered" ><span c
   return (
     &lt;ParticipantProjectContext.Provider value={participantProjectData}&gt;{children}&lt;/ParticipantProjectContext.Provider&gt;
   );
-};
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-expo<span class="cstat-no" title="statement not covered" >rt default ParticipantProjectProvider;</span>
-&nbsp;</pre></td></tr></table></pre>
+};<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ></span>
+export default ParticipantProjectProvider;
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-13T03:24:42.116Z
+                at 2026-01-13T03:36:31.431Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

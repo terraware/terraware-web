@@ -91,9 +91,7 @@
 <a name='L26'></a><a href='#L26'>26</a>
 <a name='L27'></a><a href='#L27'>27</a>
 <a name='L28'></a><a href='#L28'>28</a>
-<a name='L29'></a><a href='#L29'>29</a>
-<a name='L30'></a><a href='#L30'>30</a>
-<a name='L31'></a><a href='#L31'>31</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L29'></a><a href='#L29'>29</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -118,8 +116,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -128,39 +124,37 @@
 import { Crumb } from 's<span class="cstat-no" title="statement not covered" >rc/components/BreadCrumbs';</span>
 import { Statuses }<span class="cstat-no" title="statement not covered" > from 'src/redux/features/asyncU</span>tils';
 import { Accele<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ra</span>torOrg } from 'src/types/Accelerator';</span>
-im<span class="cstat-no" title="statement not covered" >port { Participant } from 'src/types/Participant';</span>
-impo<span class="cstat-no" title="statement not covered" >rt { ParticipantProject } from 'src/types/ParticipantProject';</span>
-import { Project, ProjectMeta } from 'src/types/Project';
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-ex<span class="cstat-no" title="statement not covered" >port type ParticipantProjectData = {</span>
-  cr<span class="cstat-no" title="statement not covered" >umbs: Crumb[];</span>
-  orga<span class="cstat-no" title="statement not covered" >nization?: AcceleratorOrg;</span>
-  partic<span class="cstat-no" title="statement not covered" >ipant?: Participant;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  participantProject?: ParticipantProject;
-<span class="cstat-no" title="statement not covered" >  projectId: </span>number;
+im<span class="cstat-no" title="statement not covered" >port { ParticipantProject } from 'src/types/ParticipantProject';</span>
+impo<span class="cstat-no" title="statement not covered" >rt { Project, ProjectMeta } from 'src/types/Project';</span>
+&nbsp;
+export type Partic<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ip</span>antProjectData = {</span>
+<span class="cstat-no" title="statement not covered" >  crumbs: Crumb[];</span>
+  or<span class="cstat-no" title="statement not covered" >ganization?: AcceleratorOrg;</span>
+  part<span class="cstat-no" title="statement not covered" >icipantProject?: ParticipantProject;</span>
+  projec<span class="cstat-no" title="statement not covered" >tId: number;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
   project?: Project;
-  projectMeta?: Pro<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >je</span>ctMeta;<span class="cstat-no" title="statement not covered" ></span></span>
-  status?: Statuses;<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  reload: () =&gt; void;</span>
-};<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-// default values pointing to nothing
-<span class="cstat-no" title="statement not covered" >export const ParticipantProjectContext = creat</span>eContext&lt;ParticipantProjectData&gt;({
-  crumbs: [],<span class="cstat-no" title="statement not covered" ></span>
-  projectId: -1,<span class="cstat-no" title="statement not covered" ></span>
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  reload: () =&gt; {},
+<span class="cstat-no" title="statement not covered" >  projectMeta</span>?: ProjectMeta;
+  status?: Statuses;
+  reload: () =&gt; voi<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >d;<span class="cstat-no" title="statement not covered" ></span></span></span>
+};<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+// default values pointing to<span class="fstat-no" title="function not covered" > n</span>othi<span class="cstat-no" title="statement not covered" >ng</span>
+export const ParticipantProje<span class="fstat-no" title="function not covered" >ct</span>Cont<span class="cstat-no" title="statement not covered" >ext = createContext&lt;Partic</span>ipantProjectData&gt;({
+  crumbs: [],
+<span class="cstat-no" title="statement not covered" >  projectId: -1,</span>
+  // eslint-disable<span class="cstat-no" title="statement not covered" >-next-line @types</span>cript-eslint/no-empty-function
+  reload: () =&gt; {},<span class="cstat-no" title="statement not covered" ></span>
 });
-<span class="fstat-no" title="function not covered" ></span>
+&nbsp;
 export const useParticipantProjectData = () =&gt; useContext(ParticipantProjectContext);
-&nbsp;</pre></td></tr></table></pre>
+<span class="fstat-no" title="function not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-13T03:24:42.116Z
+                at 2026-01-13T03:36:31.431Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

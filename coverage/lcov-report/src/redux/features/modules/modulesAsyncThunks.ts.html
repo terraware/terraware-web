@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/52</span>
+                <span class='fraction'>0/48</span>
             </div>
         
             
@@ -173,9 +173,7 @@
 <a name='L108'></a><a href='#L108'>108</a>
 <a name='L109'></a><a href='#L109'>109</a>
 <a name='L110'></a><a href='#L110'>110</a>
-<a name='L111'></a><a href='#L111'>111</a>
-<a name='L112'></a><a href='#L112'>112</a>
-<a name='L113'></a><a href='#L113'>113</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L111'></a><a href='#L111'>111</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -285,8 +283,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { create<span class="cstat-no" title="statement not covered" >AsyncThunk } f</span>rom '@reduxjs/toolkit';
 <span class="cstat-no" title="statement not covered" ></span>
 import { SearchService <span class="cstat-no" title="statement not covered" >} from 'src/services';</span>
@@ -323,7 +319,7 @@ export const requestListModul<span class="fstat-no" title="function not covered"
   async (organizationId:<span class="fstat-no" title="function not covered" > n</span>umbe<span class="cstat-no" title="statement not covered" >r, { rejectWithValue </span>}) =&gt; {
     const searchParams: SearchRequestPayload = {
 <span class="cstat-no" title="statement not covered" >      prefix: 'projects',</span>
-      fields: ['id', <span class="cstat-no" title="statement not covered" >'participant.cohort.cohortMo</span>dules.module_id'],
+      fields: ['id', <span class="cstat-no" title="statement not covered" >'cohorts.cohortModules.modul</span>e_id'],
       search: {<span class="cstat-no" title="statement not covered" ></span>
         operation: 'field',<span class="cstat-no" title="statement not covered" ></span>
         field: 'organ<span class="cstat-no" title="statement not covered" >ization.id',</span>
@@ -338,20 +334,18 @@ export const requestListModul<span class="fstat-no" title="function not covered"
 <span class="cstat-no" title="statement not covered" >    if (response) {</span>
       const moduleProjectIds = response
         .filter(
-          (moduleProject) =<span class="cstat-no" title="statement not covered" >&gt;<span class="fstat-no" title="function not covered" ></span></span>
-            moduleProject.participant?.cohort?.cohortModules &amp;&amp;
-            moduleP<span class="cstat-no" title="statement not covered" >roject.participant?.cohort?.cohortModules.</span>length &gt; 0
-<span class="cstat-no" title="statement not covered" >        )</span>
-<span class="cstat-no" title="statement not covered" >        .map(({ id }) =&gt; Number(id</span>));
-      return moduleProjectIds;
+          (moduleProject) =<span class="cstat-no" title="statement not covered" >&gt; moduleProject.cohorts?.cohortModules &amp;&amp; moduleProje<span class="fstat-no" title="function not covered" >ct</span>.cohorts?.cohortModules.length &gt; 0</span>
+        )
+        .map(({ id <span class="cstat-no" title="statement not covered" >}) =&gt; Number(id));</span>
+<span class="cstat-no" title="statement not covered" >      return moduleProjectIds;</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
 &nbsp;
-    return rejectWithValue(strings<span class="cstat-no" title="statement not covered" >.GENERIC_ERROR);</span>
+<span class="cstat-no" title="statement not covered" >    return rejectWithValue(strings.GENERIC_ERROR);</span>
   }
-);<span class="fstat-no" title="function not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span>
-export const requestListModuleCohorts = createAsyncThunk(
-  'module/cohortsAndProjects',
+);<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
+ex<span class="fstat-no" title="function not covered" >po</span>rt const requestListModuleCohorts = createAsyncThunk(
+  'module/cohortsAndProje<span class="cstat-no" title="statement not covered" >cts',</span>
   async (moduleId: string, { rejectWithValue }) =&gt; {
     const searchParams: SearchRequestPayload = {
       prefix: 'modules',
@@ -360,25 +354,25 @@ export const requestListModuleCohorts = createAsyncThunk(
         'cohortModules.startDate',
         'cohortModules.endDate',
         'cohortModules.cohort.id',
-        'cohortModule<span class="cstat-no" title="statement not covered" >s.cohort.name',</span>
-<span class="cstat-no" title="statement not covered" >        'cohortModules.cohort.participants.id',</span>
-        'cohortModules.cohort.p<span class="cstat-no" title="statement not covered" >articipants.name',</span>
-<span class="fstat-no" title="function not covered" >        'c</span>ohortModules.cohort.participants.projects.id',
-        'cohortModules.cohort.participants.projects.name',
-      ],<span class="cstat-no" title="statement not covered" ></span>
+        'cohortModules.cohort.name',
+        'cohortModules.cohort.participants.id',
+        'cohortModule<span class="cstat-no" title="statement not covered" >s.cohort.participants.name',</span>
+<span class="cstat-no" title="statement not covered" >        'cohortModules.cohort.participants.projects.id',</span>
+        'cohortModules.cohort.p<span class="cstat-no" title="statement not covered" >articipants.projects.name',</span>
+      ],<span class="fstat-no" title="function not covered" ></span>
       search: {
-        oper<span class="fstat-no" title="function not covered" >at</span>ion: 'fiel<span class="cstat-no" title="statement not covered" >d',</span>
-<span class="cstat-no" title="statement not covered" >        field: 'id',</span>
-        type: 'Exact',
-<span class="cstat-no" title="statement not covered" >        values: [moduleId.toString()],</span>
+        op<span class="cstat-no" title="statement not covered" >eration: 'field',</span>
+        field: 'id',
+        type<span class="fstat-no" title="function not covered" >: </span>'Exact',<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >        values: [moduleId.toStr</span>ing()],
       },
-      count: 20,
-    };<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >      count: 20,</span>
+    };
 &nbsp;
-<span class="fstat-no" title="function not covered" ></span>    const response: ModuleCohortsSearchResult[] | null = await SearchService.search(searchParams);
-<span class="cstat-no" title="statement not covered" ></span>
-    if (response) {
-      return response[0];
+    const response: ModuleCohorts<span class="cstat-no" title="statement not covered" >SearchResult[] | null = await SearchService.search(searchParams);</span>
+&nbsp;
+<span class="fstat-no" title="function not covered" ></span>    if (response) {
+      return response[0];<span class="cstat-no" title="statement not covered" ></span>
     }
 &nbsp;
     return rejectWithValue(strings.GENERIC_ERROR);
@@ -397,8 +391,8 @@ export const requestSearchModules = createAsyncThunk(
     }
 &nbsp;
     return rejectWithValue(strings.GENERIC_ERROR);
-  }<span class="cstat-no" title="statement not covered" ></span>
-);<span class="cstat-no" title="statement not covered" ></span>
+  }
+);
 <span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -406,7 +400,7 @@ export const requestSearchModules = createAsyncThunk(
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-13T03:24:42.116Z
+                at 2026-01-13T03:36:31.431Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

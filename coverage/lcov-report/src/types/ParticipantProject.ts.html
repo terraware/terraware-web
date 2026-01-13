@@ -132,23 +132,7 @@
 <a name='L67'></a><a href='#L67'>67</a>
 <a name='L68'></a><a href='#L68'>68</a>
 <a name='L69'></a><a href='#L69'>69</a>
-<a name='L70'></a><a href='#L70'>70</a>
-<a name='L71'></a><a href='#L71'>71</a>
-<a name='L72'></a><a href='#L72'>72</a>
-<a name='L73'></a><a href='#L73'>73</a>
-<a name='L74'></a><a href='#L74'>74</a>
-<a name='L75'></a><a href='#L75'>75</a>
-<a name='L76'></a><a href='#L76'>76</a>
-<a name='L77'></a><a href='#L77'>77</a>
-<a name='L78'></a><a href='#L78'>78</a>
-<a name='L79'></a><a href='#L79'>79</a>
-<a name='L80'></a><a href='#L80'>80</a>
-<a name='L81'></a><a href='#L81'>81</a>
-<a name='L82'></a><a href='#L82'>82</a>
-<a name='L83'></a><a href='#L83'>83</a>
-<a name='L84'></a><a href='#L84'>84</a>
-<a name='L85'></a><a href='#L85'>85</a>
-<a name='L86'></a><a href='#L86'>86</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L70'></a><a href='#L70'>70</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -217,107 +201,75 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { compon<span class="cstat-no" title="statement not covered" >ents } from 's</span>rc/api/types/generated-schema';
 import strings f<span class="cstat-no" title="statement not covered" >rom 'src/strings';</span>
 <span class="cstat-no" title="statement not covered" ></span>
-import { CohortPhaseType<span class="cstat-no" title="statement not covered" > } from './Cohort';</span>
+// These will all change<span class="cstat-no" title="statement not covered" > when the BE is done, some </span>of the props might even come from different models
+export type Partici<span class="cstat-no" title="statement not covered" >pantProject = componen</span>ts['schemas']['ProjectAcceleratorDetailsPayload'];
 <span class="cstat-no" title="statement not covered" ></span>
-// These will all c<span class="cstat-no" title="statement not covered" >hange when the BE is done, some </span>of the props might even come from different models
-export type Par<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ti</span>cipantProject = components['schemas']['ProjectAcceleratorDetailsPayload'];</span>
+export type Car<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >bo</span>nCertifications = ParticipantProject['carbonCertifications'];</span>
 <span class="cstat-no" title="statement not covered" ></span>
-expo<span class="cstat-no" title="statement not covered" >rt type CarbonCertifications = ParticipantProject['carbonCertif</span>ications'];
+expo<span class="cstat-no" title="statement not covered" >rt type LandUseModelType = ParticipantProject['landUseModelType</span>s'][0];
 &nbsp;
-export type Partic<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ip</span>antProjectSearchResult = {</span>
-<span class="cstat-no" title="statement not covered" >  acceleratorDetails_confirmedReforestableLand: string;</span>
-  co<span class="cstat-no" title="statement not covered" >untry_name: string;</span>
-  coun<span class="cstat-no" title="statement not covered" >try_region: string;</span>
-  id: nu<span class="cstat-no" title="statement not covered" >mber;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  'landUseModelTypes.landUseModelType': string[];
-<span class="cstat-no" title="statement not covered" >  name: strin</span>g;
-  participant_cohort_id: number;
-  participant_<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >co</span>hort_name: string;<span class="cstat-no" title="statement not covered" ></span></span>
-  acceleratorDetails_fileNaming: string;
-  participant_cohort_phase: CohortPhaseType;
-  participant_name: string;
-};
-&nbsp;
-export type LandUseModelType = ParticipantProject['landUseModelTypes'][0];
-&nbsp;
-export type MetricP<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ro</span>gress =<span class="cstat-no" title="statement not covered" > ParticipantProject['metricProgress'][0];</span></span>
+export type Metric<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Pr</span>ogress = ParticipantProject['metricProgress'][0];</span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >// Types are in the preferred sorting order:</span>
-export const LAND_USE_MO<span class="fstat-no" title="function not covered" >DE</span>L_TY<span class="cstat-no" title="statement not covered" >PES: LandUseModelType</span>[] = [
-  'Native F<span class="fstat-no" title="function not covered" >or</span>est'<span class="cstat-no" title="statement not covered" >,</span>
-  'Monoculture',<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  'Sustainable Tim<span class="fstat-no" title="function not covered" >be</span>r',<span class="cstat-no" title="statement not covered" ></span>
-  'Other Timber',<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  'Mangroves',
-<span class="cstat-no" title="statement not covered" >  'Agroforestry',</span>
-  'Silvopasture',<span class="cstat-no" title="statement not covered" ></span>
-  'Other Land-Use Model',<span class="cstat-no" title="statement not covered" ></span>
+// T<span class="cstat-no" title="statement not covered" >ypes are in the preferred sorting order:</span>
+export<span class="cstat-no" title="statement not covered" > const LAND_USE_MODEL_TYPES: LandUseModelType[] = [</span>
+  'Nativ<span class="cstat-no" title="statement not covered" >e Forest',<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  'Monoculture',
+<span class="cstat-no" title="statement not covered" >  'Sustainabl</span>e Timber',
+  'Other Timber',
+  'Mangroves',<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  'Agroforestry',
+  'Silvopasture',
+  'Other Land-Use Model',
 ];
 &nbsp;
 export const getLandUseModelType = (input: LandUseModelType): string =&gt; {
   switch (input) {
-    case 'Native Forest':
-      return strings.NATIVE_FOREST;
-    case 'Monoculture':
-      return strings.MONOCULTURE;
-    case 'Sustainable Timber':
-      return strings.SUSTAIN<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >AB</span>LE_TIMBER;</span>
-<span class="cstat-no" title="statement not covered" >    case 'Other Timber':</span>
-      return strings.OTHER_TIMBER;
-    ca<span class="cstat-no" title="statement not covered" >se 'Mangroves':</span>
-      return strings.MANGROVES;
-    ca<span class="cstat-no" title="statement not covered" >se 'Agroforestry':</span>
-      return strings.AGROFORESTRY;
-    ca<span class="cstat-no" title="statement not covered" >se 'Silvopasture':</span>
+    case 'Native Fo<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >re</span>st':<span class="cstat-no" title="statement not covered" ></span></span>
+      return strings<span class="cstat-no" title="statement not covered" >.NA</span>TIVE_FOREST;
+<span class="cstat-no" title="statement not covered" >    case 'Monoculture':</span>
+      return strings.MON<span class="fstat-no" title="function not covered" >OC</span>ULTU<span class="cstat-no" title="statement not covered" >RE;</span>
+    case 'S<span class="fstat-no" title="function not covered" >us</span>tain<span class="cstat-no" title="statement not covered" >able Tim</span>ber':
+      return strings.SU<span class="fstat-no" title="function not covered" >ST</span>AINA<span class="cstat-no" title="statement not covered" >BLE_TIMBER;</span>
+    case 'Other Ti<span class="fstat-no" title="function not covered" >mb</span>er':<span class="cstat-no" title="statement not covered" ></span>
+      return strin<span class="fstat-no" title="function not covered" >gs</span>.OTH<span class="cstat-no" title="statement not covered" >ER_TIMBER;</span>
+    case 'Mangroves':
+<span class="cstat-no" title="statement not covered" >      return strings.MANGROVES;</span>
+    case 'Agroforestr<span class="cstat-no" title="statement not covered" >y':</span>
+      return strings.AGROFORE<span class="cstat-no" title="statement not covered" >STRY;</span>
+    case 'Silvopasture':
       return strings.SILVOPASTURE;
-    ca<span class="cstat-no" title="statement not covered" >se 'Other Land-Use Model':</span>
+    case 'Other Land-Use Model':
       return strings.OTHER_LAND_USE_MODEL;
-  }<span class="cstat-no" title="statement not covered" ></span>
+  }
 };
-<span class="cstat-no" title="statement not covered" ></span>
-export type Region = ParticipantProject['region'];
-<span class="cstat-no" title="statement not covered" ></span>
-export type RegionLabel = {
-  regi<span class="cstat-no" title="statement not covered" >on: Region;</span>
-  label: string;
-};
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-export const REGIONS = (): RegionLabel[] =&gt; [
-  { region: 'Antarctica', label: strings.REGION_ANTARCTICA },
-  { region: 'East Asia &amp; Pacific', label: strings.REGION_EAST_ASIA_PACIFIC },
-  { region: 'Europe &amp; Central Asia', label: strings.REGION_EUROPE_CENTRAL_ASIA },
-  { region: 'Latin America &amp; Caribbean', label: strings.REGION_LATIN_AMERICA_CARIBBEAN },
-  { region: 'Middle East &amp; North Africa', label: strings.REGION_MIDDLE_EAST_NORTH_AFRICA },
-  { region: 'North America', label: strings.REGION_NORTH_AMERICA },
-  { region: 'Oceania', label: strings.REGION_OCEANIA },
-  { region: 'South Asia', label: strings.REGION_SOUTH_ASIA },
-  { region: 'Sub-Saharan Africa', label: strings.REGION_SUB_SAHARAN_AFRICA },
-];<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 &nbsp;
-ex<span class="cstat-no" title="statement not covered" >port const getRegionLabel = (input<span class="fstat-no" title="function not covered" >: </span>Region)<span class="cstat-no" title="statement not covered" >: string =&gt;</span></span>
+export type Region = ParticipantProject['region'];
+&nbsp;
+export type RegionLabel = {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >  region: Region;</span>
+  label: string;
+};<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
+export<span class="cstat-no" title="statement not covered" > const REGIONS = (): RegionLabel[] =&gt; [</span>
+  { region: 'Antarctica', label: strings.REGION_ANTARCTICA },
+  { re<span class="cstat-no" title="statement not covered" >gion: 'East Asia &amp; Pacific', label: strings.REGION</span>_EAST_ASIA_PACIFIC },
+  { region: 'Europe &amp; Central Asia', label: strings.REGION_EUROPE_CENTRAL_ASIA },
+  { re<span class="cstat-no" title="statement not covered" >gion: 'Latin America &amp; Caribbean', label: st</span>rings.REGION_LATIN_AMERICA_CARIBBEAN },
+  { region: 'Middle East &amp; North Africa', label: strings.REGION_MIDDLE_EAST_NORTH_AFRICA },
+  { re<span class="cstat-no" title="statement not covered" >gion: 'North America', label: strings.REG</span>ION_NORTH_AMERICA },
+  { region: 'Oceania', label: strings.REGION_OCEANIA },
+  { re<span class="cstat-no" title="statement not covered" >gion: 'South Asia', label: strings.REGION_SO</span>UTH_ASIA },
+  { region: 'Sub-Saharan Africa', label: strings.REGION_SUB_SAHARAN_AFRICA },
+];<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
+export<span class="cstat-no" title="statement not covered" > const getRegionLabel = (input: Region): string =&gt;</span>
   REGIONS().find((obj) =&gt; obj.region === input)?.label ?? (input as string);
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-export const getRegionValue = (input: string): Region | undefined =&gt;
-<span class="cstat-no" title="statement not covered" >  REGIONS().find((obj) =&gt; obj.<span class="fstat-no" title="function not covered" >la</span>bel ===<span class="cstat-no" title="statement not covered" > input)?.region;</span></span>
+&nbsp;
+export const get<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Re</span>gion<span class="cstat-no" title="statement not covered" >Value = (input: string): Region | undefined =&gt;</span></span>
+  REGIONS().find((obj) =&gt; obj.label === input)?.region;
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -325,7 +277,7 @@ export const getRegionValue = (input: string): Region | undefined =&gt;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-13T03:24:42.116Z
+                at 2026-01-13T03:36:31.431Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
