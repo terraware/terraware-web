@@ -14,7 +14,6 @@ export type PlantsPrimaryPageProps = {
   actionButton?: ButtonProps;
   allowAllAsSiteSelection?: boolean; // whether to support 'All' as a planting site selection
   children: React.ReactNode; // primary content for this page
-  isEmptyState?: boolean; // optional boolean to indicate this is an empty state view
   lastVisitedPreferenceName: string;
   pagePath: string;
   plantsSitePreferences?: Record<string, unknown>;
@@ -37,7 +36,6 @@ export default function PlantsPrimaryPage({
   actionButton,
   allowAllAsSiteSelection,
   children,
-  isEmptyState,
   lastVisitedPreferenceName,
   pagePath,
   plantsSitePreferences,
@@ -163,7 +161,6 @@ export default function PlantsPrimaryPage({
       actionButton={actionButton}
       // eslint-disable-next-line react/no-children-prop
       children={children}
-      isEmptyState={isEmptyState}
       onSelect={setActivePlantingSite}
       plantingSites={plantingSitesList}
       selectedPlantingSiteId={selectedPlantingSite?.id}

@@ -32,7 +32,6 @@ export type ButtonProps = {
 export type PlantsPrimaryPageViewProps = {
   actionButton?: ButtonProps;
   children: React.ReactNode; // primary content for this page
-  isEmptyState?: boolean; // optional boolean to indicate this is an empty state view
   onSelect: (plantingSite?: PlantingSite) => void; // planting site selected, id of -1 refers to All
   plantingSites: PlantingSite[] | undefined;
   selectedPlantingSiteId?: number;
@@ -59,7 +58,6 @@ export default function PlantsPrimaryPageView({
   showSurvivalRateMessage,
   latestObservationId,
   projectId,
-  isEmptyState,
   onSelectProjectId,
   newHeader,
   title,
@@ -278,7 +276,7 @@ export default function PlantsPrimaryPageView({
               </Grid>
             </Card>
           )}
-          {isEmptyState && !isAcceleratorRoute && !isLoading && delayedIsPlantingSiteSet && (
+          {!hasSites && !isAcceleratorRoute && !isLoading && delayedIsPlantingSiteSet && (
             <PlantsDashboardEmptyMessage />
           )}
         </>
