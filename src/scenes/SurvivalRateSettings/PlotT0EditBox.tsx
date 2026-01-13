@@ -8,8 +8,11 @@ import TextField from 'src/components/common/TextField';
 import usePlantingSite from 'src/hooks/usePlantingSite';
 import { useLocalization } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
-import { useGetPlotObservationDensitiesForPlantingSiteQuery } from 'src/queries/generated/t0';
-import { PlotT0Observation, PlotsWithObservationsSearchResult } from 'src/redux/features/tracking/trackingThunks';
+import {
+  ObservationSpeciesDensityPayload,
+  useGetPlotObservationDensitiesForPlantingSiteQuery,
+} from 'src/queries/generated/t0';
+import { PlotsWithObservationsSearchResult } from 'src/redux/features/tracking/trackingThunks';
 import strings from 'src/strings';
 import { Species } from 'src/types/Species';
 import { AssignSiteT0Data, PlotT0Data, SpeciesPlot } from 'src/types/Tracking';
@@ -72,17 +75,17 @@ const PlotT0EditBox = ({
   const [newSpeciesRows, setNewSpeciesRows] = useState<AddedSpecies[]>(initialNewSpecies);
 
   const isEqualObservation = useCallback(
-    (a: PlotT0Observation, b: PlotT0Observation) => a.observation_id === b.observation_id,
+    (a: ObservationSpeciesDensityPayload, b: ObservationSpeciesDensityPayload) => a.observationId === b.observationId,
     []
   );
 
   const renderOptionObservation = useCallback(
-    (option: PlotT0Observation) => {
+    (option: ObservationSpeciesDensityPayload) => {
       if (option) {
         const timeZone = plantingSite?.timeZone ?? defaultTimeZone.id;
-        const completedDate = getDateDisplayValue(option.observation_completedTime, timeZone);
-        return option?.observation_startDate
-          ? `${getShortDate(option.observation_startDate, locale)} ${strings.COMPLETED_ON} ${completedDate}`
+        const completedDate = getDateDisplayValue(option.observationCompletedTime, timeZone);
+        return option?.observationStartDate
+          ? `${getShortDate(option.observationStartDate, locale)} ${strings.COMPLETED_ON} ${completedDate}`
           : '';
       }
       return '';
@@ -91,12 +94,12 @@ const PlotT0EditBox = ({
   );
 
   const displayLabelObservation = useCallback(
-    (option: PlotT0Observation) => {
+    (option: ObservationSpeciesDensityPayload) => {
       if (option) {
         const timeZone = plantingSite?.timeZone ?? defaultTimeZone.id;
-        const completedDate = getDateDisplayValue(option.observation_completedTime, timeZone);
-        return option?.observation_startDate
-          ? `${getShortDate(option.observation_startDate, locale)} ${strings.COMPLETED_ON} ${completedDate}`
+        const completedDate = getDateDisplayValue(option.observationCompletedTime, timeZone);
+        return option?.observationStartDate
+          ? `${getShortDate(option.observationStartDate, locale)} ${strings.COMPLETED_ON} ${completedDate}`
           : '';
       }
       return '';
@@ -105,7 +108,7 @@ const PlotT0EditBox = ({
   );
 
   const toTObservation = useCallback(
-    (startDate: string) => ({ observation_startDate: startDate }) as PlotT0Observation,
+    (startDate: string) => ({ observationStartDate: startDate }) as ObservationSpeciesDensityPayload,
     []
   );
 
@@ -152,10 +155,10 @@ const PlotT0EditBox = ({
   );
 
   const onChangeObservation = useCallback(
-    (newValue: PlotT0Observation) => {
+    (newValue: ObservationSpeciesDensityPayload) => {
       if (plotToSave) {
         const plotCopy = { ...plotToSave };
-        plotCopy.observationId = Number(newValue.observation_id);
+        plotCopy.observationId = Number(newValue.observationId);
         plotCopy.densityData = [];
         // Remove the existing plot, then add the updated one
         const otherPlots = record.plots.filter((p) => p.monitoringPlotId.toString() !== plot.id.toString());
@@ -341,12 +344,6 @@ const PlotT0EditBox = ({
     [plotToSave?.densityData]
   );
 
-  const filtedObservationPlotsOptions = useMemo(() => {
-    return plot.observationPlots.filter((op) =>
-      selectedPlotSpecies?.observations.find((obv) => obv.observationId.toString() === op.observation_id.toString())
-    );
-  }, [plot.observationPlots, selectedPlotSpecies?.observations]);
-
   return (
     <>
       <Box
@@ -395,22 +392,23 @@ const PlotT0EditBox = ({
                     <Box display='flex' paddingRight={2} sx={{ alignItems: 'center' }}>
                       <FormControlLabel
                         control={<Radio />}
-                        disabled={(filtedObservationPlotsOptions.length || 0) < 1}
+                        disabled={(selectedPlotSpecies?.observations.length || 0) < 1}
                         label={strings.USE_OBSERVATION_DATA}
                         value={'useObservation'}
                         sx={{ marginRight: '8px' }}
                       />
                       <IconTooltip title={strings.USE_OBSERVATION_DATA_TOOLTIP} />
                     </Box>
-                    <SelectT<PlotT0Observation>
-                      options={filtedObservationPlotsOptions}
+                    <SelectT<ObservationSpeciesDensityPayload>
+                      options={selectedPlotSpecies?.observations}
                       placeholder={strings.SELECT}
                       onChange={onChangeObservation}
                       isEqual={isEqualObservation}
                       renderOption={renderOptionObservation}
                       displayLabel={displayLabelObservation}
-                      selectedValue={plot.observationPlots.find(
-                        (obsPlot) => obsPlot.observation_id === plotToSave.observationId?.toString()
+                      selectedValue={selectedPlotSpecies?.observations.find(
+                        (obsPlot: ObservationSpeciesDensityPayload) =>
+                          obsPlot.observationId.toString() === plotToSave.observationId?.toString()
                       )}
                       toT={toTObservation}
                       fullWidth={true}
