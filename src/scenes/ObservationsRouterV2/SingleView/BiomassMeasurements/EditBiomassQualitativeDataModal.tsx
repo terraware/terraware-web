@@ -2,8 +2,15 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box } from '@mui/material';
-import { Button, DatePicker, DialogBox, Dropdown, DropdownItem, MultiSelect } from '@terraware/web-components';
-import TextField from '@terraware/web-components/components/Textfield/Textfield';
+import {
+  Button,
+  DatePicker,
+  DialogBox,
+  Dropdown,
+  DropdownItem,
+  MultiSelect,
+  Textfield,
+} from '@terraware/web-components';
 import { DateTime } from 'luxon';
 
 import { useLocalization } from 'src/providers';
@@ -195,20 +202,20 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
       };
 
       if (results?.adHocPlot?.monitoringPlotId) {
-        const result = await update({
-          observationId,
-          plotId: results.adHocPlot.monitoringPlotId,
-          updateObservationRequestPayload: {
-            updates: [biomassPayload, plotPayload],
-          },
-        });
-
-        if ('error' in result) {
+        try {
+          await update({
+            observationId,
+            plotId: results.adHocPlot.monitoringPlotId,
+            updateObservationRequestPayload: {
+              updates: [biomassPayload, plotPayload],
+            },
+          }).unwrap();
+          setShowConfirmationModalOpened(false);
+          setOpen(false);
+        } catch (e) {
           snackbar.toastError();
           return;
         }
-        setShowConfirmationModalOpened(false);
-        setOpen(false);
       }
     })();
   }, [record, results, setOpen, update, observationId, snackbar]);
@@ -250,7 +257,7 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
             scrolled
           >
             <Box sx={{ textAlign: 'left' }}>
-              <TextField
+              <Textfield
                 type='textarea'
                 label={strings.PLOT_DESCRIPTION}
                 value={record.biomassMeasurement?.description}
@@ -278,7 +285,7 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
                 </Box>
 
                 <Box sx={{ flex: 1 }}>
-                  <TextField
+                  <Textfield
                     type='text'
                     label={strings.HERBACEOUS_COVER_PERCENT}
                     value={record.biomassMeasurement?.herbaceousCoverPercent}
@@ -291,7 +298,7 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
                 <>
                   <Box sx={{ display: 'flex', gap: 2, paddingTop: '16px' }}>
                     <Box sx={{ flex: 1 }}>
-                      <TextField
+                      <Textfield
                         type='text'
                         label={strings.WATER_DEPTH_CM}
                         value={record.biomassMeasurement?.waterDepth}
@@ -301,7 +308,7 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
                     </Box>
 
                     <Box sx={{ flex: 1 }}>
-                      <TextField
+                      <Textfield
                         type='text'
                         label={strings.SALINITY_PPT}
                         value={record.biomassMeasurement?.salinity}
@@ -313,7 +320,7 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
 
                   <Box sx={{ display: 'flex', gap: 2, paddingTop: '16px' }}>
                     <Box sx={{ flex: 1 }}>
-                      <TextField
+                      <Textfield
                         type='text'
                         label={strings.PH}
                         value={record.biomassMeasurement?.ph}
@@ -358,10 +365,10 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
                 options={plotConditionsMap}
                 valueRenderer={valueRender}
                 selectedOptions={record.conditions || []}
-                sx={'biomassMeasurement' in record ? { paddingTop: '16px' } : undefined}
+                sx={{ paddingTop: '16px' }}
               />
 
-              <TextField
+              <Textfield
                 type='textarea'
                 label={strings.FIELD_NOTES}
                 value={record.notes}
@@ -388,7 +395,7 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
                 </Box>
 
                 <Box sx={{ paddingTop: '16px', flex: 1 }}>
-                  <TextField
+                  <Textfield
                     type='textarea'
                     label={strings.SOIL_ASSESSMENT_DESCRIPTION_NOTES}
                     value={record.biomassMeasurement?.soilAssessment}

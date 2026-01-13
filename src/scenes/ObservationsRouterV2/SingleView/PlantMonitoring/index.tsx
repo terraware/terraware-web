@@ -5,8 +5,7 @@ import { BusySpinner } from '@terraware/web-components';
 
 import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
 
-import AdHocPlotDetails from './AdHocPlotDetails';
-import MonitoringPlotDetails from './MonitoringPlotDetails';
+import MonitoringPlotDetails from './MonitoringPlot';
 import SiteDetails from './SiteDetails';
 import StratumDetails from './StratumDetails';
 
@@ -25,7 +24,7 @@ const PlantMonitoringView = (): JSX.Element => {
   }
 
   if (results.isAdHoc) {
-    return <AdHocPlotDetails />;
+    return <MonitoringPlotDetails />;
   }
 
   return (

@@ -19,7 +19,7 @@ const SiteDetails = (): JSX.Element => {
     const crumbsData: Crumb[] = [
       {
         name: strings.OBSERVATIONS,
-        to: `${APP_PATHS.OBSERVATIONS}`,
+        to: APP_PATHS.OBSERVATIONS,
       },
     ];
 
