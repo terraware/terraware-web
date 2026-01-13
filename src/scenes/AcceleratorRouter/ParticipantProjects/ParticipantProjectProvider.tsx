@@ -3,7 +3,6 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Crumb } from 'src/components/BreadCrumbs';
 import { APP_PATHS } from 'src/constants';
 import { useAcceleratorOrgs } from 'src/hooks/useAcceleratorOrgs';
-import { useParticipant } from 'src/hooks/useParticipant';
 import { useLocalization } from 'src/providers';
 import { useProjectData } from 'src/providers/Project/ProjectContext';
 import { requestGetParticipantProject } from 'src/redux/features/participantProjects/participantProjectsAsyncThunks';
@@ -29,7 +28,6 @@ const ParticipantProjectProvider = ({ children }: Props) => {
   const snackbar = useSnackbar();
   const { activeLocale } = useLocalization();
   const { project, projectId } = useProjectData();
-  const { participant } = useParticipant(project?.participantId ?? -1);
   const { acceleratorOrgs, reload: reloadAll } = useAcceleratorOrgs({
     hasProjectApplication: true,
     includeParticipants: true,
@@ -117,7 +115,6 @@ const ParticipantProjectProvider = ({ children }: Props) => {
     () => ({
       crumbs,
       organization,
-      participant,
       participantProject,
       project,
       projectId,
@@ -129,7 +126,6 @@ const ParticipantProjectProvider = ({ children }: Props) => {
       crumbs,
       getParticipantProjectResult?.status,
       organization,
-      participant,
       participantProject,
       project,
       projectId,

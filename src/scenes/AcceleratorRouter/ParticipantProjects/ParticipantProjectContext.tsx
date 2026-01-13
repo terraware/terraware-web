@@ -3,14 +3,12 @@ import { createContext, useContext } from 'react';
 import { Crumb } from 'src/components/BreadCrumbs';
 import { Statuses } from 'src/redux/features/asyncUtils';
 import { AcceleratorOrg } from 'src/types/Accelerator';
-import { Participant } from 'src/types/Participant';
 import { ParticipantProject } from 'src/types/ParticipantProject';
 import { Project, ProjectMeta } from 'src/types/Project';
 
 export type ParticipantProjectData = {
   crumbs: Crumb[];
   organization?: AcceleratorOrg;
-  participant?: Participant;
   participantProject?: ParticipantProject;
   projectId: number;
   project?: Project;

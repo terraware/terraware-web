@@ -36,12 +36,10 @@ export const getEventType = (input: ModuleEventType): string => {
 
 export type ModuleProjectSearchResult = {
   id: number;
-  participant?: {
-    cohort?: {
-      cohortModules?: {
-        module_id: string;
-      }[];
-    };
+  cohorts?: {
+    cohortModules?: {
+      module_id: string;
+    }[];
   };
 };
 
