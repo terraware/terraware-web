@@ -48,8 +48,8 @@ const DocumentMetadataEdit = ({
   const snackbar = useSnackbar();
   const { activeLocale } = useLocalization();
   const { documentTemplates, error: getDocumentTemplatesError } = useAppSelector(selectDocumentTemplates);
-  const { availableProjects: availableProjectsOption } = useProjects();
-  const availableProjects = useMemo(() => availableProjectsOption || [], [availableProjectsOption]);
+  const { availableProjects: availableProjectOptions } = useProjects();
+  const availableProjects = useMemo(() => availableProjectOptions || [], [availableProjectOptions]);
 
   const [documentNameFieldHasBeenFocused, setDocumentNameFieldHasBeenFocused] = useState(false);
   const [documentOwnerOptions, setDocumentOwnerOptions] = useState<DropdownItem[]>([]);
