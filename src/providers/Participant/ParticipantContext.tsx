@@ -1,12 +1,10 @@
 import { createContext, useContext } from 'react';
 
 import { CohortModule } from 'src/types/Module';
-import { Participant } from 'src/types/Participant';
 import { Project } from 'src/types/Project';
 
 export type ParticipantData = {
   allParticipantProjects: Project[];
-  currentParticipant?: Participant;
   currentParticipantProject?: Project;
   isLoading: boolean;
   modules?: CohortModule[];

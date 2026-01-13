@@ -30,7 +30,6 @@ import organizationUsersReducers from './features/organizationUser/organizationU
 import organizationsReducers from './features/organizations/organizationsSlice';
 import participantProjectSpeciesReducers from './features/participantProjectSpecies/participantProjectSpeciesSlice';
 import participantProjectsReducers from './features/participantProjects/participantProjectsSlice';
-import participantsReducers from './features/participants/participantsSlice';
 import plantingSiteReducers from './features/plantingSite/plantingSiteSlice';
 import plantingsReducers from './features/plantings/plantingsSlice';
 import projectSpeciesReducers from './features/projectSpecies/projectSpeciesSlice';
@@ -78,7 +77,6 @@ export const reducers = {
   ...observationsReducers,
   ...organizationsReducers,
   ...organizationUsersReducers,
-  ...participantsReducers,
   ...participantProjectsReducers,
   ...participantProjectSpeciesReducers,
   ...plantingsReducers,
