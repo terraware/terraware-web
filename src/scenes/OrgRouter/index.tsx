@@ -50,6 +50,7 @@ import useEnvironment from 'src/utils/useEnvironment';
 import useStateLocation from 'src/utils/useStateLocation';
 
 import ActivityLogRouter from '../ActivityLogRouter';
+import PreviewRouter from '../PreviewRouter';
 
 interface OrgRouterProps {
   showNavBar: boolean;
@@ -239,6 +240,7 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
             <Route path={APP_PATHS.DELIVERABLES + '/*'} element={<DeliverablesRouter />} />
             <Route path={APP_PATHS.APPLICATIONS + '/*'} element={<ApplicationRouter />} />
             <Route path={APP_PATHS.ACTIVITY_LOG + '/*'} element={<ActivityLogRouter />} />
+            <Route path={APP_PATHS.PREVIEW} element={<PreviewRouter />} />
 
             {!isProduction && (
               <Route path={APP_PATHS.OPT_IN} element={<OptInFeaturesView refresh={reloadPreferences} />} />

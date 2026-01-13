@@ -81,6 +81,7 @@ export default function NavBar({
   const isProjectRoute = useMatch({ path: APP_PATHS.PROJECT_VIEW + '/', end: true });
   const isProjectModulesRoute = useMatch({ path: APP_PATHS.PROJECT_MODULES + '/', end: false });
   const isActivityLogRoute = useMatch({ path: APP_PATHS.ACTIVITY_LOG + '/', end: false });
+  const isPreviewRoute = useMatch({ path: APP_PATHS.PREVIEW + '/', end: false });
 
   const closeNavBar = useCallback(() => {
     if (!isDesktop) {
@@ -346,6 +347,15 @@ export default function NavBar({
           closeAndNavigateTo(APP_PATHS.HOME);
         }}
         id='home'
+      />
+      <NavItem
+        label='Preview'
+        icon='iconFolder'
+        selected={!!isPreviewRoute}
+        onClick={() => {
+          closeAndNavigateTo(APP_PATHS.PREVIEW);
+        }}
+        id='preview'
       />
       <NavItem
         label={strings.SPECIES}

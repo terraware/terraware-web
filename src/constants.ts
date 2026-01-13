@@ -173,5 +173,6 @@ export enum APP_PATHS {
   SPECIES_NEW = '/species/new',
   SURVIVAL_RATE_SETTINGS = '/observations/:plantingSiteId/survival-rate-settings',
   EDIT_SURVIVAL_RATE_SETTINGS = '/observations/:plantingSiteId/survival-rate-settings/edit',
+  PREVIEW = '/preview',
   WELCOME = '/welcome',
 }
