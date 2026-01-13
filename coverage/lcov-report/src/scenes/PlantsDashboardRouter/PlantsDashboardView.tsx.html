@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/223</span>
+                <span class='fraction'>0/217</span>
             </div>
         
             
@@ -521,9 +521,7 @@
 <a name='L456'></a><a href='#L456'>456</a>
 <a name='L457'></a><a href='#L457'>457</a>
 <a name='L458'></a><a href='#L458'>458</a>
-<a name='L459'></a><a href='#L459'>459</a>
-<a name='L460'></a><a href='#L460'>460</a>
-<a name='L461'></a><a href='#L461'>461</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L459'></a><a href='#L459'>459</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -581,7 +579,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -589,7 +586,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1033,12 +1029,11 @@ type PlantsDashboar<span class="cstat-no" title="statement not covered" ><span c
     plantingSite,<span class="cstat-no" title="statement not covered" ></span>
     latestResult,<span class="cstat-no" title="statement not covered" ></span>
     observationSummaries,<span class="cstat-no" title="statement not covered" ></span>
-    isLoading,<span class="cstat-no" title="statement not covered" ></span>
     acceleratorOrganizationId,<span class="cstat-no" title="statement not covered" ></span>
   } = usePlantingSiteData();<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const h<span class="fstat-no" title="function not covered" >asObservations = use</span>Memo(() =&gt; !!latestResult, [latestResult]);
-&nbsp;
+  const hasObservations = useM<span class="cstat-no" title="statement not covered" >emo(() =&gt; !!latestResult, [latestResult]);</span>
+<span class="fstat-no" title="function not covered" ></span>
   const onPreferences = useCallback(
     (preferences: Record&lt;string, unknown&gt;) =&gt; setPlantsDashboardPreferences(preferences),
     [setPlantsDashboardPreferences]
@@ -1057,34 +1052,34 @@ type PlantsDashboar<span class="cstat-no" title="statement not covered" ><span c
         plantingSite.strata[0].boundaryModifiedTime
       );
       return isAfter(siteBoundaryModifiedTime, latestResult.completedTime);
-    } else {
-<span class="cstat-no" title="statement not covered" >      return false;</span>
-    }<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  }, [latestResult, plan<span class="cstat-no" title="statement not covered" >tingSite]);</span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  useEffect(() =&gt; {
-    if (organizationId) {
-      setAcceleratorOrgan<span class="cstat-no" title="statement not covered" >izationId(organizationId);<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >    } else if (!isAcceleratorRoute &amp;&amp; selectedOrganization?.id) {</span>
-      setAcceleratorOrganizationId(selectedOrganization?.id);
+    } <span class="cstat-no" title="statement not covered" >else {</span>
+      return false;<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
     }<span class="cstat-no" title="statement not covered" ></span>
-  }, [<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-    acceleratorOrganizationId,
-<span class="cstat-no" title="statement not covered" >    dispatch,</span>
-    isAcceleratorRoute,<span class="cstat-no" title="statement not covered" ></span>
-    orga<span class="fstat-no" title="function not covered" >ni</span>zationId,<span class="cstat-no" title="statement not covered" ></span>
-    selectedOrganization?.id,
-    setAcceleratorOrganizationId,
-  ]);<span class="cstat-no" title="statement not covered" ></span>
+  },<span class="fstat-no" title="function not covered" > [</span>latestResult, p<span class="cstat-no" title="statement not covered" >lantingSite]);</span>
 &nbsp;
-  cons<span class="cstat-no" title="statement not covered" >t latestSummar</span>y = useMemo(
-    () =&gt; (observationSummaries &amp;&amp; observationSummaries.length &gt; 0 ? observationSummaries[0] : undefined),
-    [observationSummaries]
-<span class="cstat-no" title="statement not covered" >  );<span class="fstat-no" title="function not covered" ></span></span>
+  useEffect(() =&gt; {
+    if (organizationId) {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >      setAcceleratorOrganizationId(organizationId);</span>
+    } else if (!isAcceleratorRoute &amp;&amp; selectedOrganization?.id) {
+      setAcceleratorOrganizationI<span class="cstat-no" title="statement not covered" >d(selectedOrganization?.id);</span>
+    }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  }, [
+<span class="cstat-no" title="statement not covered" >    acceleratorOrganizationId,</span>
+    dispatch,<span class="cstat-no" title="statement not covered" ></span>
+    isAc<span class="fstat-no" title="function not covered" >ce</span>leratorRoute,<span class="cstat-no" title="statement not covered" ></span>
+    organizationId,
+    selectedOrganization?.id,
+    se<span class="cstat-no" title="statement not covered" >tAcceleratorOrganizationId,</span>
+  ]);
 <span class="cstat-no" title="statement not covered" ></span>
-  cons<span class="cstat-no" title="statement not covered" >t showSurvivalRateMessage = useMemo(() =&gt; {</span>
-    return <span class="cstat-no" title="statement not covered" >hasObservations &amp;&amp; latestSummary?.survivalRate === undefined;</span>
-  }, [<span class="cstat-no" title="statement not covered" >hasObservations, latestSummary]);</span>
+  const latestSummary = useMemo(
+    () =&gt; (observationSummaries &amp;&amp; observationSummaries.length &gt; 0 ? observationSummaries[0] : undefined),
+<span class="cstat-no" title="statement not covered" >    [observationSummaries]<span class="fstat-no" title="function not covered" ></span></span>
+  );<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+  const sho<span class="cstat-no" title="statement not covered" >wSurvivalRateMessage = useMemo(() =&gt; {</span>
+    re<span class="cstat-no" title="statement not covered" >turn hasObservations &amp;&amp; latestSummary?.survivalRate === undefined;</span>
+  }, [hasObservations, latestSummary]);
 &nbsp;
   const sectionHeader = (title: string) =&gt; (
     &lt;Grid item xs={12}&gt;
@@ -1093,17 +1088,17 @@ type PlantsDashboar<span class="cstat-no" title="statement not covered" ><span c
       &lt;/Typography&gt;
     &lt;/Grid&gt;
   );
-&nbsp;
-  const renderLatestObse<span class="cstat-no" title="statement not covered" >rvationLink = useCallback(() =&gt; {</span>
-<span class="fstat-no" title="function not covered" >    re</span>turn<span class="cstat-no" title="statement not covered" > plantingSite?.latestObservationId &amp;&amp; plantingSite.latestObservationCompletedTime ? (</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  co<span class="fstat-no" title="function not covered" >ns</span>t re<span class="cstat-no" title="statement not covered" >nderLatestObservationLink = useCallback(() =&gt; {</span>
+    return plantingSite?.latestObservationId &amp;&amp; plantingSite.latestObservationCompletedTime ? (
       isAcceleratorRoute ? (
-        &lt;Typography fontSize={'16px'} display={'inline'}&gt;
-          {strings.formatString(<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >            strings.DATE_OBSERVATION,</span>
-            DateTime.fromISO(plantingSite.latestObservationCompletedTime).toFormat('yyyy-MM-dd')
-          )}<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-        &lt;/Typography&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >      ) : (</span>
+        &lt;Typography fontSize={'16p<span class="cstat-no" title="statement not covered" >x'} display={'inline'}&gt;<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >          {strings.formatString(</span>
+            strings.DATE_OBSERVATION,
+            DateTime.fro<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >mI</span>SO(plantingSite.latestObs<span class="cstat-no" title="statement not covered" >ervationCompletedTime).toFormat('yyyy-MM-dd')</span></span>
+          )}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >        &lt;/Typography&gt;</span>
+      ) : (
         &lt;Link
           fontSize={'16px'}
           to={APP_PATHS.OBSERVATION_DETAILS.replace(':plantingSiteId', plantingSite?.id.toString()).replace(
@@ -1120,9 +1115,9 @@ type PlantsDashboar<span class="cstat-no" title="statement not covered" ><span c
     ) : (
       ''
     );
-  }, [plantingSite, isAcceleratorRoute]);
-<span class="cstat-no" title="statement not covered" ></span>
-  co<span class="fstat-no" title="function not covered" >ns</span>t re<span class="cstat-no" title="statement not covered" >nderSurvivalRate = useCallback(</span>
+  }, [plantingSite, isAcceler<span class="cstat-no" title="statement not covered" >atorRoute]);</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  const renderSurvivalRate = useCallback(
     () =&gt;
       plantingSite ? (
         &lt;&gt;
@@ -1135,8 +1130,8 @@ type PlantsDashboar<span class="cstat-no" title="statement not covered" ><span c
               }}
             &gt;
               &lt;Typography fontWeight={600} fontSize={'20px'} paddingRight={1} paddingLeft={3}&gt;
-                {strings.SURVIVAL_RATE}
-              &lt;/Typography&gt;<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+                {strings.SURVIVAL_RATE<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >}<span class="cstat-no" title="statement not covered" ></span></span></span>
+              &lt;/Typography&gt;
               {hasObservations &amp;&amp; (
                 &lt;Typography&gt;{strings.formatString(strings.AS_OF_X, renderLatestObservationLink())}&lt;/Typography&gt;
               )}
@@ -1147,9 +1142,9 @@ type PlantsDashboar<span class="cstat-no" title="statement not covered" ><span c
           &lt;/Grid&gt;
         &lt;/&gt;
       ) : undefined,
-    [plantingSite, isMobile, hasObservations, renderLatestObservationLink]
-  );<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+    [plantingSite, isMobile, hasObservation<span class="cstat-no" title="statement not covered" >s, renderLatestObservationLink]</span>
+  );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+&nbsp;
   const renderTotalPlantsAndSpecies = () =&gt; (
     &lt;&gt;
       &lt;Grid item xs={12}&gt;
@@ -1163,13 +1158,13 @@ type PlantsDashboar<span class="cstat-no" title="statement not covered" ><span c
         &gt;
           &lt;Typography fontWeight={600} fontSize={'20px'} paddingRight={1}&gt;
             {plantingSite?.id === -1 ? strings.PROJECT_AREA_TOTALS : strings.PLANTING_SITE_TOTALS}
-          &lt;/Typography&gt;
-        &lt;/Box&gt;<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" ></span>      &lt;/Gr<span class="cstat-no" title="statement not covered" >id&gt;</span>
+          &lt;/Typography&gt;<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" ></span>        &lt;/<span class="cstat-no" title="statement not covered" >Box&gt;</span>
+      &lt;/Grid&gt;
       &lt;Grid item xs={12}&gt;
-        &lt;PlantsAndSpeciesCard projectId={projectId} /&gt;
-      &lt;/Grid&gt;<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" >    &lt;/</span>&gt;<span class="cstat-no" title="statement not covered" ></span>
+        &lt;PlantsAndSpeciesCard pro<span class="cstat-no" title="statement not covered" >jectId={projectId} /&gt;</span>
+<span class="fstat-no" title="function not covered" ></span>      &lt;/Gr<span class="cstat-no" title="statement not covered" >id&gt;</span>
+    &lt;/&gt;
   );
 &nbsp;
   const renderPlantingProgressAndDensity = useCallback(
@@ -1206,9 +1201,9 @@ type PlantsDashboar<span class="cstat-no" title="statement not covered" ><span c
       plantingSite ? (
         &lt;&gt;
           &lt;Grid item xs={12}&gt;
-            &lt;Box sx={{ display: 'flex', alignItems: 'center', paddingLeft: theme.spacing(3) }}&gt;
-              &lt;Typography font<span class="cstat-no" title="statement not covered" >Weight={600} fontSize={'20px'} paddingRight={1}&gt;</span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span>                {strings.STRATUM_TRENDS}</span>
+            &lt;Box sx={{ display<span class="cstat-no" title="statement not covered" >: 'flex', alignItems: 'center', paddingLeft: theme.spacing(3) }}&gt;</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span>              &lt;Typography fontWeight={600} fontSize={'20px'} paddingRight={1}&gt;</span>
+                {strings.STRATUM_TRENDS}
               &lt;/Typography&gt;
 &nbsp;
               &lt;Typography&gt;{strings.ALL_OBSERVATIONS}&lt;/Typography&gt;
@@ -1221,44 +1216,44 @@ type PlantsDashboar<span class="cstat-no" title="statement not covered" ><span c
       ) : undefined,
     [plantingSite, theme]
   );
-&nbsp;
-  const renderStratumL<span class="cstat-no" title="statement not covered" >evelData = useCallback(</span>
-<span class="fstat-no" title="function not covered" >    ()</span> =&gt;
-      plantingSite ? (
-<span class="cstat-no" title="statement not covered" >        &lt;&gt;</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  co<span class="fstat-no" title="function not covered" >ns</span>t renderStratumLevelData = useCallback(
+    () =&gt;
+<span class="cstat-no" title="statement not covered" >      plantingSite ? (</span>
+        &lt;&gt;
           &lt;Grid item xs={12}&gt;
             &lt;Box
-              sx={{
-                disp<span class="cstat-no" title="statement not covered" >lay: 'flex',</span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span>                alignItems: isMobile ? 'flex-start' : 'center',</span>
-                flexDirection: isMobile ? 'column' : 'row',
-              }}
-            &gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-              &lt;Typography fontWeight={600} fontSize={'20px'} paddingRight={1} paddingLeft={3}&gt;
-                {strings.SITE_<span class="cstat-no" title="statement not covered" >MAP}</span>
-<span class="fstat-no" title="function not covered" ></span>              &lt;/Typo<span class="cstat-no" title="statement not covered" >graphy&gt;</span>
-<span class="fstat-no" title="function not covered" ></span>              {hasObserva<span class="cstat-no" title="statement not covered" >tions &amp;&amp; (<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-                &lt;Typography&gt;{strings.formatString(strings.AS_OF_X, renderLatestObservationLink())}&lt;/Typography&gt;
-<span class="fstat-no" title="function not covered" >              )</span>}<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >            &lt;/Box&gt;</span>
-          &lt;/Grid&gt;
-          &lt;Grid item xs={12}&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-            &lt;Box
               sx={{<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" ></span>                disp<span class="cstat-no" title="statement not covered" >lay: 'flex',</span>
-<span class="fstat-no" title="function not covered" ></span>                flexDirec<span class="cstat-no" title="statement not covered" >tion: 'column',<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-                background: theme.palette.TwClrBg,
-<span class="fstat-no" title="function not covered" ></span>                borderRadius<span class="cstat-no" title="statement not covered" >: '8px',</span>
-<span class="cstat-no" title="statement not covered" >                padding: theme.spacing(1),</span>
-                gap: theme.spacing(3),
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span>                display: 'flex',</span>
+                alignItems: isMobile ? 'flex-start' : 'center',
+                flexDirection: isMobile ? 'column' : 'row',
               }}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
             &gt;
+              &lt;Typography font<span class="cstat-no" title="statement not covered" >Weight={600} fontSize={'20px'} paddingRight={1} paddingLeft={3}&gt;</span>
+<span class="fstat-no" title="function not covered" ></span>                {str<span class="cstat-no" title="statement not covered" >ings.SITE_MAP}</span>
+<span class="fstat-no" title="function not covered" ></span>              &lt;/Typograph<span class="cstat-no" title="statement not covered" >y&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+              {hasObservations &amp;&amp; (
+<span class="fstat-no" title="function not covered" ></span>                &lt;Typography&gt;<span class="cstat-no" title="statement not covered" >{strings.fo</span>rmatString(strings.AS_OF_X, renderLatestObservationLink())}&lt;/Typography&gt;
+<span class="cstat-no" title="statement not covered" >              )}</span>
+            &lt;/Box&gt;
+          &lt;/Grid&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+          &lt;Grid item xs={12}&gt;
+            &lt;Box<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" ></span>              sx={{<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" ></span>                display: <span class="cstat-no" title="statement not covered" >'flex',<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+                flexDirection: 'column',
+<span class="fstat-no" title="function not covered" ></span>                background: <span class="cstat-no" title="statement not covered" >theme.palet</span>te.TwClrBg,
+<span class="cstat-no" title="statement not covered" >                borderRadius: '8px',</span>
+                padding: theme.spacing(1),
+                gap: theme.spa<span class="cstat-no" title="statement not covered" >cing(3),<span class="fstat-no" title="function not covered" ></span></span>
+              }}
+<span class="cstat-no" title="statement not covered" >            &gt;</span>
 <span class="cstat-no" title="statement not covered" >              &lt;Typography fontSize='20px' fontWeight={600}&gt;</span>
-<span class="cstat-no" title="statement not covered" >                {plantingSite?.areaHa !== undefined &amp;&amp;</span>
-                  strings.formatString(
-                    strin<span class="cstat-no" title="statement not covered" >gs.X_HA_IN_TOTAL_PLANTING_AREA,</span>
-                    &lt;Fo<span class="cstat-no" title="statement not covered" >rmattedNumber value={Math.round(plantingSite.areaHa * 100) / 100} /&gt;</span>
-<span class="cstat-no" title="statement not covered" >                  )}</span>
+                {plantingSite?.areaHa !== undefined &amp;&amp;
+                  strings<span class="cstat-no" title="statement not covered" >.formatString(</span>
+                    str<span class="cstat-no" title="statement not covered" >ings.X_HA_IN_TOTAL_PLANTING_AREA,</span>
+<span class="cstat-no" title="statement not covered" >                    &lt;FormattedNumber value={Math.round(plantingSite.areaHa * 100) / 100} /&gt;</span>
+                  )}
               &lt;/Typography&gt;
               &lt;PlantDashboardMap
                 observationResults={observationResults ? [observationResults] : []}
@@ -1268,19 +1263,19 @@ type PlantsDashboar<span class="cstat-no" title="statement not covered" ><span c
             &lt;/Box&gt;
           &lt;/Grid&gt;
         &lt;/&gt;
-      ) : undefined,
-    [hasObservation<span class="cstat-no" title="statement not covered" >s, isMobile, observationResults, latestSummary, plantingSite, renderLatestObservationLink, theme]</span>
-  );<span class="fstat-no" title="function not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span>
+      ) : undefined<span class="cstat-no" title="statement not covered" >,</span>
+<span class="fstat-no" title="function not covered" >    [h</span>asObservations, isMobile, observationResults, latestSummary, plantingSite, renderLatestObservationLink, theme]
+  );<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
   const renderSimpleSiteMap = useCallback(
     () =&gt;
-      plantingSite ? (
-        &lt;&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >          {sectionHeader(strings.SITE_MAP)}</span>
-          &lt;Grid item xs={12}&gt;
-            &lt;Box<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-              sx={{
-<span class="cstat-no" title="statement not covered" >                background: theme.palette.TwClrBg,</span>
+      plantingSite ? (<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >        &lt;&gt;</span>
+          {sectionHeader(strings.SITE_MAP)}
+          &lt;Grid item xs={12}&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+            &lt;Box
+<span class="cstat-no" title="statement not covered" >              sx={{</span>
+                background: theme.palette.TwClrBg,
                 borderRadius: '24px',
                 padding: theme.spacing(3),
                 gap: theme.spacing(3),
@@ -1298,8 +1293,8 @@ type PlantsDashboar<span class="cstat-no" title="statement not covered" ><span c
     () =&gt; !!plantingSite &amp;&amp; !!plantingSite.boundary &amp;&amp; plantingSite.boundary.coordinates?.length &gt; 0,
     [plantingSite]
   );
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  const hasStrata = useMemo(</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  const hasStrata = useMemo(
     () =&gt; !!plantingSite &amp;&amp; !!plantingSite.strata &amp;&amp; plantingSite.strata.length &gt; 0,
     [plantingSite]
   );
@@ -1427,7 +1422,6 @@ type PlantsDashboar<span class="cstat-no" title="statement not covered" ><span c
       projectId={projectId}
       onSelectProjectId={onSelectProject}
       organizationId={organizationId}
-      isEmptyState={isLoading ? false : (allPlantingSites?.length ?? 0) &lt;= 1}
       onSelect={onSelect}
       allowAllAsSiteSelection={isAcceleratorRoute || projectId !== undefined}
     &gt;
@@ -1450,7 +1444,7 @@ type PlantsDashboar<span class="cstat-no" title="statement not covered" ><span c
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-12T19:55:52.530Z
+                at 2026-01-13T01:16:05.151Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

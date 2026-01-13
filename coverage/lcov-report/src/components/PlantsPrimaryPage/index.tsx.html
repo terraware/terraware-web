@@ -242,10 +242,7 @@
 <a name='L177'></a><a href='#L177'>177</a>
 <a name='L178'></a><a href='#L178'>178</a>
 <a name='L179'></a><a href='#L179'>179</a>
-<a name='L180'></a><a href='#L180'>180</a>
-<a name='L181'></a><a href='#L181'>181</a>
-<a name='L182'></a><a href='#L182'>182</a>
-<a name='L183'></a><a href='#L183'>183</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L180'></a><a href='#L180'>180</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -305,7 +302,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -395,8 +391,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -443,32 +437,30 @@ expo<span class="cstat-no" title="statement not covered" >rt type PlantsPrimaryP
   acti<span class="cstat-no" title="statement not covered" >onButton?: ButtonProps;</span>
   allowA<span class="cstat-no" title="statement not covered" >llAsSiteSelection?: boolea<span class="fstat-no" title="function not covered" >n;</span> // <span class="cstat-no" title="statement not covered" >whether to</span> support 'All' as a planting site selection</span>
   children: React.ReactNode; // primary content for this page
-<span class="cstat-no" title="statement not covered" >  isEmptyStat</span>e?: boolean; // optional boolean to indicate this is an empty state view
-  lastVisitedPreferenceName: string;
-  pagePath: st<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ri</span>ng;<span class="cstat-no" title="statement not covered" ></span></span>
-  plantsSitePreferences?: Record&lt;string, unknown&gt;;
+<span class="cstat-no" title="statement not covered" >  lastVisited</span>PreferenceName: string;
+  pagePath: string;
+  plantsSitePr<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ef</span>erences?: Record&lt;string, unk<span class="cstat-no" title="statement not covered" >nown&gt;;</span></span>
   plantingSitesData: PlantingSite[];
   setPlantsSitePreferences: (preferences: Record&lt;string, unknown&gt;) =&gt; void;
   style?: Record&lt;string, string | number&gt;;
   title: string;
   text?: string;
   newHeader?: boolean;
-  showGeometryNote?<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >: </span>boolean<span class="cstat-no" title="statement not covered" >;</span></span>
-  showSurvivalRateMe<span class="cstat-no" title="statement not covered" >ssa</span>ge?: boolean;
-<span class="cstat-no" title="statement not covered" >  latestObservationId?: number;</span>
-  projectId<span class="fstat-no" title="function not covered" >?:</span> num<span class="cstat-no" title="statement not covered" >ber;</span>
-  organizationId?: number;
-<span class="cstat-no" title="statement not covered" >  onSelect: (plantingSiteId: number) =&gt; void;</span>
-  onSelectProjectId<span class="cstat-no" title="statement not covered" >?: (projectId: number) =&gt; </span>void;
+  showGeometryNote?: boolean;
+  showSurvivalRateM<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >es</span>sage?: <span class="cstat-no" title="statement not covered" >boolean;</span></span>
+  latestObservationI<span class="cstat-no" title="statement not covered" >d?:</span> number;
+<span class="cstat-no" title="statement not covered" >  projectId?: number;</span>
+  organizat<span class="fstat-no" title="function not covered" >io</span>nId?<span class="cstat-no" title="statement not covered" >: number;</span>
+  onSelect: (plantingSiteId: number) =&gt; void;
+<span class="cstat-no" title="statement not covered" >  onSelectProjectId?: (projectId: number) =&gt; v</span>oid;
 };<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-export default function Plant<span class="cstat-no" title="statement not covered" >sPrimaryPage({</span>
+export default funct<span class="cstat-no" title="statement not covered" >ion PlantsPrimaryPage({</span>
   actionButton,<span class="cstat-no" title="statement not covered" ></span>
-  allowAllAsSiteSelect<span class="cstat-no" title="statement not covered" >ion,</span>
+  allowAllAsSiteSel<span class="cstat-no" title="statement not covered" >ection,</span>
   children,<span class="cstat-no" title="statement not covered" ></span>
-  isEmpty<span class="fstat-no" title="function not covered" >State,</span>
-  lastVisitedPreferenceName,
-  pagePath,
+  lastVisitedPreferenceName,<span class="cstat-no" title="statement not covered" ></span>
+  pagePat<span class="fstat-no" title="function not covered" >h,</span>
   plantsSitePreferences,
   plantingSitesData,
   setPlantsSitePreferences,
@@ -488,80 +480,80 @@ export default function Plant<span class="cstat-no" title="statement not covered
   const { selectedOrganization } = useOrganization();
   const [selectedPlantingSite, setSelectedPlantingSite] = useState&lt;PlantingSite&gt;();
   const { plantingSiteId } = useParams&lt;{ plantingSiteId: string }&gt;();
-  const navigate = useSyncN<span class="cstat-no" title="statement not covered" >avigate();</span>
+  const navigate = useSyncNavigate();
 <span class="cstat-no" title="statement not covered" ></span>
   useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-    if (plantsSitePreferences<span class="cstat-no" title="statement not covered" > &amp;&amp; selectedOrganization) {</span>
-      const respons<span class="cstat-no" title="statement not covered" >e = CachedUserService.getUserOrgPreferences(se</span>lectedOrganization.id);
-<span class="cstat-no" title="statement not covered" >      if (!_.isEqual(response[<span class="fstat-no" title="function not covered" >la</span>stVisitedPreferenceName], plantsSitePreferences)) {</span>
-<span class="cstat-no" title="statement not covered" >        void PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {</span>
-          [lastVisitedP<span class="cstat-no" title="statement not covered" >referenceName]: plantsSitePreferences,</span>
-<span class="cstat-no" title="statement not covered" >        });</span>
-      }<span class="cstat-no" title="statement not covered" ></span>
-    }
+    if (plantsSitePreferences &amp;&amp; selectedOrganization) {<span class="cstat-no" title="statement not covered" ></span>
+      const response = Cached<span class="cstat-no" title="statement not covered" >UserService.getUserOrgPreferences(sel</span>ectedOrganization.id);
+      if (!_.isEqua<span class="cstat-no" title="statement not covered" >l(response[lastVisitedPreferenceName], plantsS</span>itePreferences)) {
+<span class="cstat-no" title="statement not covered" >        void PreferencesServic<span class="fstat-no" title="function not covered" >e.</span>updateUserOrgPreferences(selectedOrganization.id, {</span>
+<span class="cstat-no" title="statement not covered" >          [lastVisitedPreferenceName]: plantsSitePreferences,</span>
+        });<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >      }</span>
+    }<span class="cstat-no" title="statement not covered" ></span>
   }, [plantsSitePreferences, lastVisitedPreferenceName, selectedOrganization]);
 &nbsp;
   const plantingSitesList = useMemo((): PlantingSite[] =&gt; {
     const projectSites = projectId
-      ? plantingSitesData.fi<span class="cstat-no" title="statement not covered" >lter((site) =&gt; site.projec<span class="fstat-no" title="function not covered" >tI</span>d === projectId || site.id === -1)</span>
-      : plantingSitesData<span class="cstat-no" title="statement not covered" >;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-    const projectSitesWithAll =<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-<span class="cstat-no" title="statement not covered" >      allowAllAsSiteSelection &amp;&amp; project<span class="fstat-no" title="function not covered" >Si</span>tes.length &gt; 2 ? projectSites : projectSites.filter((site) =&gt; site.id !== -1);</span>
-    re<span class="cstat-no" title="statement not covered" >turn projectSitesWithAll.toSorted((a, b) =&gt; {</span>
-      //<span class="cstat-no" title="statement not covered" > Keep site </span>with id -1 (allSites) always first
-      if (a.id === -1) {
-<span class="cstat-no" title="statement not covered" >        return -1;</span>
-      }<span class="cstat-no" title="statement not covered" ></span>
-      if (b.id === -1) {
-<span class="cstat-no" title="statement not covered" >        return 1;</span>
-      }
+      ? plantingSitesData.filter((site) =&gt; site.projectId === projectId || site.id === -1)
+      : plantingSitesData;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+    const projectSitesWit<span class="cstat-no" title="statement not covered" >hAll =<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+      allowAllAsSiteSelection &amp;&amp;<span class="cstat-no" title="statement not covered" > projectSites.length &gt; 2 ? projectSites : projectSites.filter((site) =&gt; site.id !== -1);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+<span class="cstat-no" title="statement not covered" >    return projectSitesWithAll.toSorted(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      // Keep site with id -1 (allSites) always first</span>
+      if<span class="cstat-no" title="statement not covered" > (a.id === </span>-1) {
+        return -1;
+<span class="cstat-no" title="statement not covered" >      }</span>
+      if<span class="cstat-no" title="statement not covered" > (b.id ===</span> -1) {
+        return 1;
+<span class="cstat-no" title="statement not covered" >      }</span>
       // Sort other sites
-      return a.name.localeCompar<span class="cstat-no" title="statement not covered" >e(b.name, activeLocale || undefined);</span>
-<span class="fstat-no" title="function not covered" >    })</span>;
-  }, [<span class="cstat-no" title="statement not covered" >activeLocale, allowAllAsSiteSelection, plantingSitesData, projectId]);</span>
+      return a.name.localeCompare(b.name, activeLocale || undefined);
+    });<span class="cstat-no" title="statement not covered" ></span>
+  },<span class="fstat-no" title="function not covered" > [</span>activeLocale, allowAllAsSiteSelection, plantingSitesData, projectId]);
 <span class="cstat-no" title="statement not covered" ></span>
-  const <span class="cstat-no" title="statement not covered" >setActivePlantingSite = useCallback(</span>
-    (site:<span class="cstat-no" title="statement not covered" > PlantingSite | undefined) =&gt; {</span>
-      if (site) {
+  const <span class="cstat-no" title="statement not covered" >setActivePlantingSite = useCall</span>back(
+    (sit<span class="cstat-no" title="statement not covered" >e: PlantingSite | undefined) =&gt; {</span>
+      if (<span class="cstat-no" title="statement not covered" >site) {</span>
         setSelectedPlantingSite(site);
-<span class="cstat-no" title="statement not covered" >        if (projectId === undefined) {</span>
-          navigate(pagePath.replace(':plantingSiteId', site.id.toString()));
+        if (projectId === undefined) {
+<span class="cstat-no" title="statement not covered" >          navigate(pagePath.replace(':pla</span>ntingSiteId', site.id.toString()));
         }
       } else {
         setSelectedPlantingSite(undefined);
-<span class="cstat-no" title="statement not covered" >      }<span class="fstat-no" title="function not covered" ></span></span>
-    },<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-    [navigate, pagePath, projectId, setSelectedPlantingSite]
-  );<span class="cstat-no" title="statement not covered" ></span>
+      }
+<span class="cstat-no" title="statement not covered" >    },<span class="fstat-no" title="function not covered" ></span></span>
+    [navigate, pagePath, projectId,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > s</span>etSelectedPlantingSite]</span>
+  );
 <span class="cstat-no" title="statement not covered" ></span>
-  useEff<span class="cstat-no" title="statement not covered" >ect(() =&gt; {</span>
-    const initializePlantin<span class="cstat-no" title="statement not covered" >gSite = async () =&gt; {</span>
-      if (<span class="cstat-no" title="statement not covered" >plantingSitesList &amp;&amp; plantingSitesList.length) {</span>
-        let <span class="cstat-no" title="statement not covered" >lastVisitedPlantingSite: any = {};</span>
-        if (selectedOrganization &amp;&amp; !projectId) {
+  useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
+    cons<span class="cstat-no" title="statement not covered" >t initializePlantingSite = async () =&gt; {</span>
+      if (plantingSitesList<span class="cstat-no" title="statement not covered" > &amp;&amp; plantingSitesList.length) {</span>
+        le<span class="cstat-no" title="statement not covered" >t lastVisitedPlantingSite: any = {};</span>
+        if (<span class="cstat-no" title="statement not covered" >selectedOrganization &amp;&amp; !projectId) {</span>
           const response = CachedUserService.getUserOrgPreferences(selectedOrganization.id);
-          if (response[lastVisitedP<span class="cstat-no" title="statement not covered" >referenceName]) {</span>
-            lastVisitedPlantingSite <span class="cstat-no" title="statement not covered" >= response[lastVisitedPreferenceName];</span>
+          if (response[lastVisitedPreferenceName]) {
+            lastVisitedPlantingSite<span class="cstat-no" title="statement not covered" > = response[lastVisitedPreferenceName];</span>
           }<span class="cstat-no" title="statement not covered" ></span>
-        }<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-        const lastPlantingSiteId = <span class="cstat-no" title="statement not covered" >Number(lastVisitedPl</span>antingSite.plantingSiteId);
-<span class="cstat-no" title="statement not covered" >        const paramPlantingSiteId = plantingSiteId ? Number(plantingSiteId) : undefined;</span>
+        }<span class="cstat-no" title="statement not covered" ></span>
+        const lastPlantingSiteId <span class="cstat-no" title="statement not covered" >= Number(lastVisitedPlantingS<span class="fstat-no" title="function not covered" >it</span>e.plantingSiteId<span class="cstat-no" title="statement not covered" >);</span></span>
+        const paramPlantingSiteId =<span class="cstat-no" title="statement not covered" > plantingSiteId ? Nu</span>mber(plantingSiteId) : undefined;
 <span class="cstat-no" title="statement not covered" ></span>
-        cons<span class="cstat-no" title="statement not covered" >t plantingSiteIdToUse = !projectId ? paramPlantingSiteId ?? lastPlantingSiteId : lastPlantingSiteId;</span>
-        const nextPlantingSite =
+        co<span class="cstat-no" title="statement not covered" >nst plantingSiteIdToUse = !projectId ? paramPlantingSiteId ?? lastPlantingSiteId : lastPlantingSiteId;</span>
+        cons<span class="cstat-no" title="statement not covered" >t nextPlantingSite =</span>
           plantingSitesList.find((plantingSite) =&gt; plantingSite?.id === plantingSiteIdToUse) ?? plantingSitesList[0];
         const nextPlantingSiteId = nextPlantingSite.id;
-<span class="cstat-no" title="statement not covered" ></span>
-        if (selectedOrganization &amp;&amp; !projectId) {
-<span class="cstat-no" title="statement not covered" >          if (nextPlantingSiteId !== lastPlantingSiteId) {</span>
-<span class="cstat-no" title="statement not covered" >            await PreferencesService.updateUserOrgPre</span>ferences(selectedOrganization.id, {
-              [lastVisitedPreferenceName]: { plantingSiteId: nextPlantingSiteId },
-<span class="cstat-no" title="statement not covered" >            });</span>
-          }
+&nbsp;
+        if<span class="cstat-no" title="statement not covered" > (selectedOrganization &amp;&amp; !projectId) {</span>
+          if (nextPlantingSiteId !== lastPlantingSiteId) {
+<span class="cstat-no" title="statement not covered" >            await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {</span>
+<span class="cstat-no" title="statement not covered" >              [lastVisitedPreferenceName]: { planting</span>SiteId: nextPlantingSiteId },
+            });
+<span class="cstat-no" title="statement not covered" >          }</span>
           setPlantsSitePreferences({ plantingSiteId: nextPlantingSiteId });
         }
-<span class="cstat-no" title="statement not covered" ></span>
-        if (nextPlantingSiteId === plantingSiteIdToUse) {
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        if (nextPlantingSiteId === </span>plantingSiteIdToUse) {
           setSelectedPlantingSite(nextPlantingSite);
         } else {
           setActivePlantingSite(nextPlantingSite);
@@ -571,13 +563,13 @@ export default function Plant<span class="cstat-no" title="statement not covered
 &nbsp;
     void initializePlantingSite();
   }, [
-<span class="cstat-no" title="statement not covered" >    projectId,<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >    plantingSitesList,</span>
-    pl<span class="cstat-no" title="statement not covered" >antingSiteId,</span>
-    setActivePlantingSite,
+    projectId,
+<span class="cstat-no" title="statement not covered" >    plantingSitesList,<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    plantingSiteId,</span>
+    se<span class="cstat-no" title="statement not covered" >tActivePlantingSite,</span>
     selectedOrganization,
-<span class="cstat-no" title="statement not covered" >    lastVisitedPreferenceName,</span>
-    setPlantsSitePreferences,
+    lastVisitedPreferenceName,
+<span class="cstat-no" title="statement not covered" >    setPlantsSitePreferences,</span>
     organizationId,
   ]);
 &nbsp;
@@ -592,7 +584,6 @@ export default function Plant<span class="cstat-no" title="statement not covered
       actionButton={actionButton}
       // eslint-disable-next-line react/no-children-prop
       children={children}
-      isEmptyState={isEmptyState}
       onSelect={setActivePlantingSite}
       plantingSites={plantingSitesList}
       selectedPlantingSiteId={selectedPlantingSite?.id}
@@ -616,7 +607,7 @@ export default function Plant<span class="cstat-no" title="statement not covered
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-12T19:55:52.530Z
+                at 2026-01-13T01:16:05.151Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

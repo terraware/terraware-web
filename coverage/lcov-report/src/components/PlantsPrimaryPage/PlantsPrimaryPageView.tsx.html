@@ -430,9 +430,7 @@
 <a name='L365'></a><a href='#L365'>365</a>
 <a name='L366'></a><a href='#L366'>366</a>
 <a name='L367'></a><a href='#L367'>367</a>
-<a name='L368'></a><a href='#L368'>368</a>
-<a name='L369'></a><a href='#L369'>369</a>
-<a name='L370'></a><a href='#L370'>370</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L368'></a><a href='#L368'>368</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -502,7 +500,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -669,7 +666,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -835,26 +831,25 @@ export type ButtonProps = {
 <span class="cstat-no" title="statement not covered" >export type PlantsPrimaryPageViewProps = {</span>
   actionButton?: Bu<span class="cstat-no" title="statement not covered" >ttonProps;</span>
   children: React.Reac<span class="cstat-no" title="statement not covered" >tNode; // primary content</span> for this page
-  isEmptyState?: boolean; //<span class="cstat-no" title="statement not covered" > optional boolean to indicate this is</span> an empty state view
-  onSelect: (planti<span class="cstat-no" title="statement not covered" >ngSite?: PlantingSite) =&gt; void; // planting</span> site selected, id of -1 refers to All
-  plantingSites: PlantingS<span class="cstat-no" title="statement not covered" >ite[] | undefined;</span>
-  selectedPlanting<span class="cstat-no" title="statement not covered" >SiteId?: number;</span>
+  onSelect: (plantingSite?: <span class="cstat-no" title="statement not covered" >PlantingSite) =&gt; void; // planting si</span>te selected, id of -1 refers to All
+  plantingSites: Pl<span class="cstat-no" title="statement not covered" >antingSite[] | undefined;</span>
+  selectedPlantingSiteId?:<span class="cstat-no" title="statement not covered" > number;</span>
   style?: Record&lt;s<span class="cstat-no" title="statement not covered" >tring, string | number&gt;;</span>
-  text?: string; // <span class="cstat-no" title="statement not covered" >optional text to show at the bottom of the header</span>
+  text?: string; /<span class="cstat-no" title="statement not covered" >/ optional text to show at the bottom of the he</span>ader
   title: string;<span class="cstat-no" title="statement not covered" ></span>
   newHeader?: boolean;<span class="cstat-no" title="statement not covered" ></span>
-  showGeometryNote?: bo<span class="cstat-no" title="statement not covered" >olean;</span>
-  showSurvivalRateMessage?: boole<span class="cstat-no" title="statement not covered" >an;</span>
+  showGeometryNote?: boolean;<span class="cstat-no" title="statement not covered" ></span>
+  showSurvivalRateMessa<span class="cstat-no" title="statement not covered" >ge?: boolean;</span>
   latestObservationId?: number;<span class="cstat-no" title="statement not covered" ></span>
   projectId?: number;<span class="cstat-no" title="statement not covered" ></span>
-  onSelectProjectId<span class="cstat-no" title="statement not covered" >?: (projectId: number) =&gt; v</span>oid;
-  allowAllAsSiteSelec<span class="cstat-no" title="statement not covered" >tion?: boolean;</span>
+  onSelectProjectId?: (proje<span class="cstat-no" title="statement not covered" >ctId: number) =&gt; void;</span>
+  allowAllAsSiteSel<span class="cstat-no" title="statement not covered" >ection?: boolean;</span>
 };<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-export default function PlantsP<span class="cstat-no" title="statement not covered" >rimaryPageView({</span>
+export default function Plant<span class="cstat-no" title="statement not covered" >sPrimaryPageView({</span>
   children,<span class="cstat-no" title="statement not covered" ></span>
-  onSelec<span class="fstat-no" title="function not covered" >t,</span>
-  plantingSites,
+  onSelect,<span class="cstat-no" title="statement not covered" ></span>
+  plantin<span class="fstat-no" title="function not covered" >gSites,</span>
   selectedPlantingSiteId,
   style,
   text,
@@ -862,7 +857,6 @@ export default function PlantsP<span class="cstat-no" title="statement not cover
   showSurvivalRateMessage,
   latestObservationId,
   projectId,
-  isEmptyState,
   onSelectProjectId,
   newHeader,
   title,
@@ -872,81 +866,81 @@ export default function PlantsP<span class="cstat-no" title="statement not cover
   const theme = useTheme();
   const { isDesktop, isMobile } = useDeviceInfo();
   const contentRef = useRef(null);
-  const { isAcce<span class="cstat-no" title="statement not covered" >leratorRoute } = useAcceleratorC</span>onsole();
-  const { selectedOrganization } =<span class="cstat-no" title="statement not covered" > useOrganization();</span>
-  const { activeLocal<span class="cstat-no" title="statement not covered" >e } = useLocalization();</span>
-  const projects = useAppSelector<span class="cstat-no" title="statement not covered" >(selectProjects);</span>
-  const dispatch = useAppDispatch()<span class="cstat-no" title="statement not covered" >;</span>
-  const { allPlantingSites,<span class="cstat-no" title="statement not covered" > isLoading, isInitiated, plantingSite } </span>= usePlantingSiteData();
-  const [delayedIsP<span class="cstat-no" title="statement not covered" >lantingSiteSet, setDelayedIsPlantingSiteSet] = useState(false);</span>
+  const { isAcceleratorRoute } = useAcceleratorConsole();
+  const { select<span class="cstat-no" title="statement not covered" >edOrganization } = useOrganizati</span>on();
+  const { activeLocale } = useLoca<span class="cstat-no" title="statement not covered" >lization();</span>
+  const projects = us<span class="cstat-no" title="statement not covered" >eAppSelector(selectProjects);</span>
+  const dispatch = useAppDispatch<span class="cstat-no" title="statement not covered" >();</span>
+  const { allPlantingSites, isLoadi<span class="cstat-no" title="statement not covered" >ng, isInitiated, plantingSite } = usePla</span>ntingSiteData();
+  const [delayedIsPlantingS<span class="cstat-no" title="statement not covered" >iteSet, setDelayedIsPlantingSiteSet] = u</span>seState(false);
 <span class="cstat-no" title="statement not covered" ></span>
-  const hasSites = useMemo(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
+  const hasSites = <span class="cstat-no" title="statement not covered" >useMemo(() =&gt; {</span>
     return (<span class="cstat-no" title="statement not covered" ></span>
-      (!isAccelerat<span class="cstat-no" title="statement not covered" >orRoute &amp;&amp; (allPlantingSit<span class="fstat-no" title="function not covered" >es</span>?.length ?? 0) &gt; 1) ||</span>
-      (isAcceleratorRoute &amp;&amp; (plantingSites?.length ?? 0) &gt; 0)
-<span class="cstat-no" title="statement not covered" >    );</span>
-  }, [allPlantingSites, isAcceleratorRoute, plantingSites]);
+      (!isAcceleratorRoute &amp;&amp; (allPlantingSites?.length ?? 0) &gt; 1)<span class="cstat-no" title="statement not covered" > ||</span>
+      (isAccelerato<span class="cstat-no" title="statement not covered" >rRoute &amp;&amp; (plantingSites?.<span class="fstat-no" title="function not covered" >le</span>ngth ?? 0) &gt; 0)</span>
+    );
+  },<span class="cstat-no" title="statement not covered" > [allPlantingSites, isAcceleratorRoute, plantingSites]);</span>
+&nbsp;
+  const plantingSiteSelected = <span class="cstat-no" title="statement not covered" >useMemo(() =&gt; {<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    return plantingSite !== undefine</span>d;
+  }, [plantingSite]);
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  co<span class="cstat-no" title="statement not covered" >nst plantingSiteSelected = useMe</span>mo(() =&gt; {
-    return plantingSite !== undefined;
-  }, [plantingSite]);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  co<span class="cstat-no" title="statement not covered" >nst isPlantingSiteSet = useMemo(() =&gt; {</span>
+    return isInitiated &amp;&amp; ((hasSites &amp;&amp; plantingSiteSelected) || (!hasSites &amp;&amp; !plantingSiteSelected));
+<span class="cstat-no" title="statement not covered" >  }, [isInitiated, hasSites, p<span class="fstat-no" title="function not covered" >la</span>ntingSiteSelected]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const isPlantingSiteSet = useMemo(() =&gt; {
-<span class="cstat-no" title="statement not covered" >    return isInitiated &amp;&amp; ((ha<span class="fstat-no" title="function not covered" >sS</span>ites &amp;&amp; plantingSiteSelected) || (!hasSites &amp;&amp; !plantingSiteSelected));</span>
-  },<span class="cstat-no" title="statement not covered" > [isInitiated, hasSites, plantingSiteSelected]);</span>
+  useE<span class="cstat-no" title="statement not covered" >ffect(() =&gt; {</span>
+    if (selectedOrganization) {
+      void dispatch(requestProjects(selectedOrganization.id, activeLocale || undefined));
+<span class="cstat-no" title="statement not covered" >    }<span class="fstat-no" title="function not covered" ></span></span>
+  }, [activeLocale<span class="cstat-no" title="statement not covered" >, dispatch,<span class="fstat-no" title="function not covered" > s</span>electedOrganization]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
   useEffect(() =&gt; {
-    if (selectedOrganization) {
-<span class="cstat-no" title="statement not covered" >      void dispatch(requestPro<span class="fstat-no" title="function not covered" >je</span>cts(selectedOrganization.id, activeLocale || undefined));</span>
+<span class="cstat-no" title="statement not covered" >    const t<span class="fstat-no" title="function not covered" >im</span>er =<span class="cstat-no" title="statement not covered" > setTimeout(() =&gt; {</span></span>
+      setDelayedIsPlantingSiteSet(isPlantingSiteSet);
+    }, 1000);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ></span>
+    re<span class="cstat-no" title="statement not covered" >turn () =&gt; </span>clearTimeout(timer); // Cancel timeout if dependencies change
+  }, [isPlantingSiteSet]);
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  const projectsWithPlantingS<span class="cstat-no" title="statement not covered" >ites = useMemo(() =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (!allPlantingSites) {</span>
+      return [];
     }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  }, [<span class="cstat-no" title="statement not covered" >activeLocale, dispatch, selectedOrganization]);</span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
+<span class="cstat-no" title="statement not covered" >    const projectIds = allPlantingSites.map((ps) =&gt; ps.projectId);</span>
+<span class="cstat-no" title="statement not covered" >    const uniqueProje</span>ctIds = Array.from(new Set(projectIds));
 &nbsp;
-  us<span class="cstat-no" title="statement not covered" >eEffect<span class="fstat-no" title="function not covered" >((</span>) =&gt;<span class="cstat-no" title="statement not covered" > {</span></span>
-    const timer = setTimeout(() =&gt; {
-      setDelayedIsPlantingSiteSet(is<span class="cstat-no" title="statement not covered" >PlantingSiteSet);<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >    }, 1000);</span>
-<span class="cstat-no" title="statement not covered" ></span>
-    return () =&gt; clearTimeout(timer); // Cancel timeout if dependencies change
-  }, [isPlantingSiteSet<span class="cstat-no" title="statement not covered" >]);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-<span class="cstat-no" title="statement not covered" ></span>
-  co<span class="cstat-no" title="statement not covered" >nst projectsWithPlantingS</span>ites = useMemo(() =&gt; {
-    if (!allPlantingSites) {
-      return [];<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-    }<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
-<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >    const projectIds </span>= allPlantingSites.map((ps) =&gt; ps.projectId);
-    const uniqueProjectIds = Array.from(new Set(projectIds));
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >    return uniqueProjectIds;</span>
-  }, [allPlantingSites]);
-<span class="cstat-no" title="statement not covered" ></span>
-  co<span class="fstat-no" title="function not covered" >ns</span>t projectsOptions = useMemo(() =&gt; {
-    const iOptions = projects<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-<span class="cstat-no" title="statement not covered" >      ?.filter((p) =&gt; projectsWithPlantingSites.includes(p.id))</span>
-      .m<span class="cstat-no" title="statement not covered" >ap((proj) =&gt; ({ label: proj.name</span>, value: proj.id }));
-    iOptions?.unshift({ label: strings.NO_PROJECT, value: -1 });
+    return uniqueProjectI<span class="cstat-no" title="statement not covered" >ds;<span class="fstat-no" title="function not covered" ></span></span>
+  },<span class="cstat-no" title="statement not covered" > [allPlantingSites]);</span>
+&nbsp;
+  const projectsOptions = useMemo<span class="cstat-no" title="statement not covered" >(() =&gt; {</span>
+<span class="fstat-no" title="function not covered" >    co</span>nst iOptions = projects
+      ?.filter((p) =&gt; projectsWithP<span class="cstat-no" title="statement not covered" >lantingSites.includes(p.id))<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+<span class="cstat-no" title="statement not covered" >      .map((proj) =&gt; ({ label: proj.name, value: proj.id }));</span>
+    iOpt<span class="cstat-no" title="statement not covered" >ions?.unshift({ label: strings.N</span>O_PROJECT, value: -1 });
     return iOptions;
   }, [projects, projectsWithPlantingSites]);
 &nbsp;
-  const isRolledUp<span class="cstat-no" title="statement not covered" >View = useMemo(() =&gt; {</span>
-<span class="fstat-no" title="function not covered" >    re</span>turn projectId !== undefined &amp;&amp; selectedPlantingSiteId === -1;
-  }, [projectId, selectedPlantingSiteId]);
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  const onChangePlantingSiteId = useCallback(
+  const isRolledUpView = useMemo(() =&gt; {
+    return project<span class="cstat-no" title="statement not covered" >Id !== undefined &amp;&amp; selectedPlantingSiteId === -1;</span>
+  },<span class="fstat-no" title="function not covered" > [</span>projectId, selectedPlantingSiteId]);
+&nbsp;
+  cons<span class="cstat-no" title="statement not covered" >t onChangePlantingSiteId = useCallback(<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
     (siteId: number) =&gt; {
       const selectedPlantingSite = plantingSites?.find((ps) =&gt; ps.id === siteId);
-      if (selectedPl<span class="cstat-no" title="statement not covered" >antingSite) {<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >        onSelect(selectedPlantingSite);<span class="fstat-no" title="function not covered" ></span></span>
-      }
-    },<span class="cstat-no" title="statement not covered" ></span>
-    [onSelect, plantingSites]
+      if (selectedPlantingSite) {
+        onSelect(sel<span class="cstat-no" title="statement not covered" >ectedPlantingSite);<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >      }<span class="fstat-no" title="function not covered" ></span></span>
+    },
+    [o<span class="cstat-no" title="statement not covered" >nSelect, plantingSites]</span>
   );
-<span class="cstat-no" title="statement not covered" ></span>
-  co<span class="cstat-no" title="statement not covered" >nst options = useMemo(</span>
-    () =&gt; plantingSites?.map((site) =&gt; ({ label: site.name, value: site.id })) ?? [],
-    [plantingSites<span class="cstat-no" title="statement not covered" >]</span>
-<span class="cstat-no" title="statement not covered" >  );</span>
 &nbsp;
+<span class="cstat-no" title="statement not covered" >  const options = useMemo(</span>
+<span class="cstat-no" title="statement not covered" >    () =&gt; plantingSites?.map((site) =&gt; ({ label: site.name, value: site.id })) ?? [],</span>
+    [plantingSites]
+  );<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
   const totalArea = useMemo(() =&gt; {
     return plantingSites?.reduce((sum, site) =&gt; sum + (site?.areaHa ?? 0), 0) || 0;
   }, [plantingSites]);
@@ -971,8 +965,8 @@ export default function PlantsP<span class="cstat-no" title="statement not cover
           {title &amp;&amp; (
             &lt;Grid item xs={12} paddingLeft={theme.spacing(3)} marginBottom={theme.spacing(4)}&gt;
               &lt;Typography sx={{ fontSize: '24px', fontWeight: 600, alignItems: 'center' }}&gt;{title}&lt;/Typography&gt;
-            &lt;/Gr<span class="fstat-no" title="function not covered" >id</span>&gt;<span class="cstat-no" title="statement not covered" ></span>
-          )}
+            &lt;/Grid&gt;
+          )}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
           {showGeometryNote &amp;&amp; selectedPlantingSiteId &amp;&amp; latestObservationId &amp;&amp; (
             &lt;Box marginBottom={theme.spacing(4)}&gt;
               &lt;Message
@@ -990,8 +984,8 @@ export default function PlantsP<span class="cstat-no" title="statement not cover
                           ).replace(':observationId', latestObservationId.toString())}?map=true`}
                           target='_blank'
                         &gt;
-<span class="fstat-no" title="function not covered" ></span>                          {str<span class="cstat-no" title="statement not covered" >ings.HAS_CHANGED}</span>
-                        &lt;/Link&gt;
+                          {strings.HAS_CHANGED}
+<span class="fstat-no" title="function not covered" ></span>                        &lt;/Link<span class="cstat-no" title="statement not covered" >&gt;</span>
                       ) : (
                         &lt;Typography fontSize={'16px'} display={'inline'}&gt;
                           {strings.HAS_CHANGED}
@@ -1002,8 +996,8 @@ export default function PlantsP<span class="cstat-no" title="statement not cover
                 }
                 priority='info'
                 type='page'
-              /&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-            &lt;/Box&gt;
+              /&gt;
+            &lt;/Box&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
           )}
           {showSurvivalRateMessage &amp;&amp; selectedPlantingSiteId &amp;&amp; (
             &lt;SurvivalRateMessage selectedPlantingSiteId={selectedPlantingSiteId} /&gt;
@@ -1037,8 +1031,8 @@ export default function PlantsP<span class="cstat-no" title="statement not cover
                               borderBottom: `1px solid ${theme.palette.TwClrBrdrSecondary}`,
                             },
                           }}
-<span class="fstat-no" title="function not covered" ></span>                        /&gt;<span class="cstat-no" title="statement not covered" ></span>
-                      )}
+                        /&gt;
+<span class="fstat-no" title="function not covered" ></span>                      )}<span class="cstat-no" title="statement not covered" ></span>
                       &lt;Dropdown
                         placeholder={strings.SELECT}
                         id='planting-site-selector'
@@ -1081,7 +1075,7 @@ export default function PlantsP<span class="cstat-no" title="statement not cover
               &lt;/Grid&gt;
             &lt;/Card&gt;
           )}
-          {isEmptyState &amp;&amp; !isAcceleratorRoute &amp;&amp; !isLoading &amp;&amp; delayedIsPlantingSiteSet &amp;&amp; (
+          {!hasSites &amp;&amp; !isAcceleratorRoute &amp;&amp; !isLoading &amp;&amp; delayedIsPlantingSiteSet &amp;&amp; (
             &lt;PlantsDashboardEmptyMessage /&gt;
           )}
         &lt;/&gt;
@@ -1177,7 +1171,7 @@ export default function PlantsP<span class="cstat-no" title="statement not cover
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-12T19:55:52.530Z
+                at 2026-01-13T01:16:05.151Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
