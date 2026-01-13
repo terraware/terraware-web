@@ -4,6 +4,7 @@ import { Box, useTheme } from '@mui/material';
 import { MRT_ColumnDef, MRT_Row, MaterialReactTable, useMaterialReactTable } from 'material-react-table';
 
 import { useLocalization } from 'src/providers';
+import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import {
   MonitoringSpeciesUpdateOperationPayload,
   useUpdateCompletedObservationPlotMutation,
@@ -14,7 +15,6 @@ type SpeciesEditableTableProps = {
   species?: ObservationSpeciesResults[];
   observationId: number;
   plotId: number;
-  reload: () => void;
   isCompleted: boolean;
   type?: string;
   unknownSpecies?: ObservationSpeciesResultsPayload;
@@ -22,7 +22,6 @@ type SpeciesEditableTableProps = {
 
 export default function SpeciesEditableTable({
   species,
-  reload,
   observationId,
   plotId,
   isCompleted,
@@ -32,6 +31,7 @@ export default function SpeciesEditableTable({
   const theme = useTheme();
   const { strings } = useLocalization();
   const [update, updateResult] = useUpdateCompletedObservationPlotMutation();
+  const { reload: reloadPlantingSiteData } = usePlantingSiteData();
 
   const unknownObservationSpeciesResult: ObservationSpeciesResults | undefined = useMemo(() => {
     if (!unknownSpecies) {
@@ -54,9 +54,9 @@ export default function SpeciesEditableTable({
 
   useEffect(() => {
     if (updateResult.isSuccess) {
-      reload();
+      reloadPlantingSiteData();
     }
-  }, [reload, updateResult]);
+  }, [reloadPlantingSiteData, updateResult]);
 
   const saveValue = useCallback(
     (fieldId: string, certainty: 'Other' | 'Unknown' | 'Known', speciesId?: number, speciesName?: string) =>
