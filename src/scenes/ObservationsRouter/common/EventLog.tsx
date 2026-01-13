@@ -130,7 +130,7 @@ const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) => {
                             strings.VALUE_CHANGED_FROM_TO,
                             <Typography display={'inline'} textTransform={'capitalize'}>
                               {event.subject.type === 'ObservationPlotMedia'
-                                ? `${event.subject.fileId} ${event.action.fieldName}`
+                                ? `${event.subject.fileId} ${event.subject.mediaKind} ${event.action.fieldName}`
                                 : event.action.fieldName}
                             </Typography>,
                             <Typography display={'inline'} color={theme.palette.TwClrTxtWarning} fontWeight={600}>
