@@ -40,7 +40,7 @@ const COHORT_ID_EXISTS_PREDICATE: SearchNodePayload = {
   operation: 'not',
   child: {
     operation: 'field',
-    field: 'cohorts_id',
+    field: 'cohort_id',
     values: [null],
   },
 };
@@ -51,9 +51,9 @@ const getSearchParams = (search?: SearchNodePayload, sortOrder?: SearchSortOrder
     fields: [
       'id',
       'name',
-      'cohorts_id',
-      'cohorts_name',
-      'cohorts_phase',
+      'cohort_id',
+      'cohort_name',
+      'cohort_phase',
       'acceleratorDetails_fileNaming',
       'country_name',
       'country_region',
