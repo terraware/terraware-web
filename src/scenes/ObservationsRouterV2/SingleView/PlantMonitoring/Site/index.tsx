@@ -9,6 +9,8 @@ import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
 
+import StratumList from './StratumList';
+
 const SiteDetails = (): JSX.Element => {
   const theme = useTheme();
   const { strings } = useLocalization();
@@ -39,6 +41,7 @@ const SiteDetails = (): JSX.Element => {
   return (
     <Page crumbs={crumbs} title={title} titleContainerStyle={{ paddingTop: 3, paddingBottom: 1 }}>
       Site Observation Placeholder
+      <StratumList />
     </Page>
   );
 };

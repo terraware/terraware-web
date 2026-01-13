@@ -10,6 +10,8 @@ import { useLocalization } from 'src/providers';
 import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 
+import MonitoringPlotList from './MonitoringPlotList';
+
 const StratumDetails = (): JSX.Element => {
   const theme = useTheme();
   const { strings } = useLocalization();
@@ -54,6 +56,7 @@ const StratumDetails = (): JSX.Element => {
   return (
     <Page crumbs={crumbs} title={title} titleContainerStyle={{ paddingTop: 3, paddingBottom: 1 }}>
       Stratum Observation Placeholder
+      <MonitoringPlotList />
     </Page>
   );
 };

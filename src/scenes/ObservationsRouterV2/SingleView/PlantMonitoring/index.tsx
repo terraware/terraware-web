@@ -7,7 +7,7 @@ import { useGetObservationResultsQuery } from 'src/queries/generated/observation
 
 import MonitoringPlotDetails from './MonitoringPlot';
 import SiteDetails from './Site';
-import StratumDetails from './StratumDetails';
+import StratumDetails from './Stratum';
 
 const PlantMonitoringView = (): JSX.Element => {
   const params = useParams<{ observationId: string }>();

@@ -64,6 +64,7 @@ export default function PlantMonitoringRenderer(props: RendererProps<TableRowTyp
               void downloadObservationResults(observationId);
             },
           },
+          // TODO add reschedule and end observations
         ]}
       />
     ) : null;
