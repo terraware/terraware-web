@@ -14,7 +14,6 @@ import ObservationsService from './ObservationsService';
 import OrganizationService from './OrganizationService';
 import OrganizationUserService from './OrganizationUserService';
 import ParticipantProjectService from './ParticipantProjectService';
-import ParticipantsService from './ParticipantsService';
 import PlantingsService from './PlantingsService';
 import PreferencesService from './PreferencesService';
 import SearchService from './SearchService';
@@ -45,7 +44,6 @@ export {
   OrganizationService,
   OrganizationUserService,
   ParticipantProjectService,
-  ParticipantsService,
   PlantingsService,
   PreferencesService,
   SearchService,

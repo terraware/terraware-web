@@ -42,7 +42,7 @@ const phases = [
 export default function ListView(): JSX.Element {
   const theme = useTheme();
 
-  const { currentParticipant } = useParticipantData();
+  const { currentParticipantProject } = useParticipantData();
 
   // TODO - where will this be stored? Is this stored in the back end within another enum table?
   // Should we store it and localize it in the front end? Will it be stored somewhere an admin can edit it?
@@ -58,14 +58,14 @@ export default function ListView(): JSX.Element {
     'Terraformation conducts due diligence to help the company identify and verify potential partners. Terraformation may be required by law to collect certain information to meet its international compliance obligations. In other instances, Terraformation may be required by investors to collect certain information before they will invest in the project. Finally, some information is required in order to register the project with Verra or another carbon registry.';
 
   const currentPhaseIndex = useMemo(
-    () => phases.findIndex((phase) => phase.name === currentParticipant?.cohortPhase),
-    [currentParticipant]
+    () => phases.findIndex((phase) => phase.name === currentParticipantProject?.cohortPhase),
+    [currentParticipantProject]
   );
 
   return (
     <ParticipantPage
       title={strings.ALL_MODULES}
-      isLoading={!currentParticipant}
+      isLoading={!currentParticipantProject}
       contentStyle={{ paddingLeft: '24px' }}
       titleStyle={{ marginBottom: 2 }}
     >

@@ -20,13 +20,13 @@ import { SearchNodePayload } from 'src/types/Search';
 
 const DeliverablesList = () => {
   const { activeLocale } = useLocalization();
-  const { availableProjects: availableProjectsOption } = useProjects();
+  const { availableProjects: availableProjectOptions } = useProjects();
   const { availableCohorts } = useCohorts();
   const contentRef = useRef(null);
 
   const [cohortFilter, setCohortFilter] = useState<{ id?: number }>({ id: undefined });
 
-  const availableProjects = useMemo(() => availableProjectsOption || [], [availableProjectsOption]);
+  const availableProjects = useMemo(() => availableProjectOptions || [], [availableProjectOptions]);
 
   const extraTableFilters: SearchNodePayload[] = useMemo(
     () =>
