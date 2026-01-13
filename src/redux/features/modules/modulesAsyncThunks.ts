@@ -34,7 +34,7 @@ export const requestListModuleProjects = createAsyncThunk(
   async (organizationId: number, { rejectWithValue }) => {
     const searchParams: SearchRequestPayload = {
       prefix: 'projects',
-      fields: ['id', 'participant.cohort.cohortModules.module_id'],
+      fields: ['id', 'cohorts.cohortModules.module_id'],
       search: {
         operation: 'field',
         field: 'organization.id',
@@ -49,9 +49,7 @@ export const requestListModuleProjects = createAsyncThunk(
     if (response) {
       const moduleProjectIds = response
         .filter(
-          (moduleProject) =>
-            moduleProject.participant?.cohort?.cohortModules &&
-            moduleProject.participant?.cohort?.cohortModules.length > 0
+          (moduleProject) => moduleProject.cohorts?.cohortModules && moduleProject.cohorts?.cohortModules.length > 0
         )
         .map(({ id }) => Number(id));
       return moduleProjectIds;

@@ -297,10 +297,10 @@ const MatrixView = () => {
         },
       },
       {
-        accessorKey: 'participant_cohort_phase',
+        accessorKey: 'cohorts_phase',
         header: strings.PHASE,
         size: 200,
-        id: 'participantCohortPhase',
+        id: 'cohortPhase',
         enableEditing: false,
       },
       {
@@ -945,7 +945,7 @@ const MatrixView = () => {
         fields: [
           'id',
           'name',
-          'participant_cohort_phase',
+          'cohorts_phase',
           'acceleratorDetails_confirmedReforestableLand(raw)',
           'country_name',
           'internalUsers.role',

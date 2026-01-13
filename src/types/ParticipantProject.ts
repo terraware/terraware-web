@@ -1,26 +1,10 @@
 import { components } from 'src/api/types/generated-schema';
 import strings from 'src/strings';
 
-import { CohortPhaseType } from './Cohort';
-
 // These will all change when the BE is done, some of the props might even come from different models
 export type ParticipantProject = components['schemas']['ProjectAcceleratorDetailsPayload'];
 
 export type CarbonCertifications = ParticipantProject['carbonCertifications'];
-
-export type ParticipantProjectSearchResult = {
-  acceleratorDetails_confirmedReforestableLand: string;
-  country_name: string;
-  country_region: string;
-  id: number;
-  'landUseModelTypes.landUseModelType': string[];
-  name: string;
-  participant_cohort_id: number;
-  participant_cohort_name: string;
-  acceleratorDetails_fileNaming: string;
-  participant_cohort_phase: CohortPhaseType;
-  participant_name: string;
-};
 
 export type LandUseModelType = ParticipantProject['landUseModelTypes'][0];
 
