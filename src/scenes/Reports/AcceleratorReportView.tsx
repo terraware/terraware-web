@@ -129,7 +129,7 @@ const AcceleratorReportView = () => {
           label={strings.SUBMIT_FOR_APPROVAL}
           onClick={openApprovalDialog}
           size='medium'
-          sx={{ '&.button': { whiteSpace: 'nowrap' } }}
+          sx={{ '&.button': { whiteSpace: 'nowrap', minWidth: 'auto' } }}
         />
       </>
     );
