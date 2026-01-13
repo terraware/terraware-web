@@ -91,9 +91,7 @@
 <a name='L26'></a><a href='#L26'>26</a>
 <a name='L27'></a><a href='#L27'>27</a>
 <a name='L28'></a><a href='#L28'>28</a>
-<a name='L29'></a><a href='#L29'>29</a>
-<a name='L30'></a><a href='#L30'>30</a>
-<a name='L31'></a><a href='#L31'>31</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L29'></a><a href='#L29'>29</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -118,38 +116,34 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { createC<span class="cstat-no" title="statement not covered" >ontext, useContext } f</span>rom 'react';
 <span class="cstat-no" title="statement not covered" ></span>
 import { CohortModule } <span class="cstat-no" title="statement not covered" >from 'src/types/Module';</span>
-import { Participan<span class="cstat-no" title="statement not covered" >t } from 'src/types/Participant'</span>;
-import { Projec<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >t </span>} from 'src/types/Project';</span>
-<span class="cstat-no" title="statement not covered" ></span>
-expo<span class="cstat-no" title="statement not covered" >rt type ParticipantData = {</span>
-  allParticipantProjects: Project[];
-  currentParticipa<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >nt</span>?: Participant;</span>
-<span class="cstat-no" title="statement not covered" >  currentParticipantProject?: Project;</span>
-  is<span class="cstat-no" title="statement not covered" >Loading: boolean;</span>
-  modu<span class="cstat-no" title="statement not covered" >les?: CohortModule[];</span>
-  orgHas<span class="cstat-no" title="statement not covered" >Modules: boolean | undefin<span class="fstat-no" title="function not covered" >ed</span>; //<span class="cstat-no" title="statement not covered" > undefined</span> for unknown, useful for showing loading spinner</span>
-  orgHasParticipants: boolean | undefined; // undefined for unknown, useful for showing loading spinner
-<span class="cstat-no" title="statement not covered" >  projectsWit</span>hModules: Project[];
+import { Project } <span class="cstat-no" title="statement not covered" >from 'src/types/Project';</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+ex<span class="cstat-no" title="statement not covered" >port type ParticipantData = {</span>
+  al<span class="cstat-no" title="statement not covered" >lParticipantProjects: Project[];</span>
+  currentParticipantProject?: Project;
+  isLoading: boole<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >an</span>;</span>
+<span class="cstat-no" title="statement not covered" >  modules?: CohortModule[];</span>
+  or<span class="cstat-no" title="statement not covered" >gHasModules: boolean | undefined; // undefined for unknown, useful for showing loading spinner</span>
+  orgH<span class="cstat-no" title="statement not covered" >asParticipants: boolean | undefined; // undefined for unknown, useful for showing loading spinner</span>
+  projec<span class="cstat-no" title="statement not covered" >tsWithModules: Project[];<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
   setCurrentParticipantProject: (projectId: string | number) =&gt; void;
-};<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >// default values pointing to nothing</span>
-export const Participa<span class="fstat-no" title="function not covered" >nt</span>Cont<span class="cstat-no" title="statement not covered" >ext = createContext</span>&lt;ParticipantData&gt;({
-  allParticipantProjec<span class="fstat-no" title="function not covered" >ts</span>: []<span class="cstat-no" title="statement not covered" >,</span>
-  isLoading: true,
-<span class="cstat-no" title="statement not covered" >  orgHasModules: false,</span>
-  orgHasParticipant<span class="cstat-no" title="statement not covered" >s: false,</span>
-  projectsWithModules: [],<span class="cstat-no" title="statement not covered" ></span>
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  setCurrentParticipantProject: () =&gt; {},
+};<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
+// default values p<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >oi</span>nting t<span class="cstat-no" title="statement not covered" >o nothing</span></span>
+export const Partici<span class="cstat-no" title="statement not covered" >pan</span>tContext = createContext&lt;ParticipantData&gt;({
+<span class="cstat-no" title="statement not covered" >  allParticipantProjects: [],</span>
+  isLoading: true,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  orgHasModules: false<span class="fstat-no" title="function not covered" >,<span class="cstat-no" title="statement not covered" ></span></span>
+  orgHasParticipants: false,
+<span class="cstat-no" title="statement not covered" >  projectsWithModules: [],</span>
+  // eslint-disable<span class="cstat-no" title="statement not covered" >-next-line @types</span>cript-eslint/no-empty-function
+  setCurrentParticipantProj<span class="cstat-no" title="statement not covered" >ect: () =&gt; {},</span>
 });
 &nbsp;
 export const useParticipantData = () =&gt; useContext(ParticipantContext);
@@ -160,7 +154,7 @@ export const useParticipantData = () =&gt; useContext(ParticipantContext);
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-13T03:36:31.431Z
+                at 2026-01-13T03:49:41.438Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

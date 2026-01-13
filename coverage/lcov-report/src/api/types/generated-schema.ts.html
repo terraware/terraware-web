@@ -22346,19 +22346,7 @@
 <a name='L22281'></a><a href='#L22281'>22281</a>
 <a name='L22282'></a><a href='#L22282'>22282</a>
 <a name='L22283'></a><a href='#L22283'>22283</a>
-<a name='L22284'></a><a href='#L22284'>22284</a>
-<a name='L22285'></a><a href='#L22285'>22285</a>
-<a name='L22286'></a><a href='#L22286'>22286</a>
-<a name='L22287'></a><a href='#L22287'>22287</a>
-<a name='L22288'></a><a href='#L22288'>22288</a>
-<a name='L22289'></a><a href='#L22289'>22289</a>
-<a name='L22290'></a><a href='#L22290'>22290</a>
-<a name='L22291'></a><a href='#L22291'>22291</a>
-<a name='L22292'></a><a href='#L22292'>22292</a>
-<a name='L22293'></a><a href='#L22293'>22293</a>
-<a name='L22294'></a><a href='#L22294'>22294</a>
-<a name='L22295'></a><a href='#L22295'>22295</a>
-<a name='L22296'></a><a href='#L22296'>22296</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L22284'></a><a href='#L22284'>22284</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -22373,18 +22361,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -51053,9 +51029,6 @@ export interface components {
             /** Format: int64 */
             organizationId: number;
             organizationName: string;
-            /** Format: int64 */
-            participantId?: number;
-            participantName?: string;
             /** Format: int32 */
             position: number;
             projectDealName?: string;
@@ -52447,9 +52420,6 @@ export interface components {
             /** Format: int64 */
             organizationId: number;
             organizationName: string;
-            /** Format: int64 */
-            participantId?: number;
-            participantName?: string;
             /** Format: int32 */
             position: number;
             projectDealName?: string;
@@ -52792,9 +52762,6 @@ export interface components {
             /** Format: int64 */
             cohortId: number;
             cohortName: string;
-            /** Format: int64 */
-            participantId: number;
-            participantName: string;
             /** Format: int64 */
             projectId: number;
             projectName: string;
@@ -54347,9 +54314,6 @@ export interface components {
             numCommunities?: number;
             /** Format: int32 */
             numNativeSpecies?: number;
-            /** Format: int64 */
-            participantId?: number;
-            participantName?: string;
             perHectareBudget?: number;
             /** @enum {string} */
             pipeline?: "Accelerator Projects" | "Carbon Supply" | "Carbon Waitlist";
@@ -54971,7 +54935,7 @@ export interface components {
             cursor?: string;
             fields: string[];
             filters?: components["schemas"]["PrefixedSearch"][];
-            prefix?: "accessionCollectors" | "accessions" | "bags" | "batchSubLocations" | "batchWithdrawals" | "batches" | "cohortModules" | "cohorts" | "countries" | "countrySubdivisions" | "deliverables" | "deliveries" | "documentTemplates" | "documents" | "draftPlantingSites" | "events" | "facilities" | "facilityInventories" | "facilityInventoryTotals" | "geolocations" | "internalTags" | "inventories" | "modules" | "monitoringPlotHistories" | "monitoringPlots" | "nurserySpeciesProjects" | "nurseryWithdrawals" | "observationBiomassDetails" | "observationBiomassQuadratSpecies" | "observationBiomassSpecies" | "observationPlotConditions" | "observationPlots" | "observations" | "organizationInternalTags" | "organizationUsers" | "organizations" | "participantProjectSpecies" | "participants" | "plantingSeasons" | "plantingSiteHistories" | "plantingSitePopulations" | "plantingSites" | "plantings" | "projectAcceleratorDetails" | "projectDeliverables" | "projectInternalUsers" | "projectLandUseModelTypes" | "projectVariableValues" | "projectVariables" | "projects" | "recordedTrees" | "reports" | "species" | "speciesEcosystemTypes" | "speciesGrowthForms" | "speciesPlantMaterialSourcingMethods" | "speciesProblems" | "speciesSuccessionalGroups" | "strata" | "stratumHistories" | "stratumPopulations" | "subLocations" | "substrata" | "substratumHistories" | "substratumPopulations" | "users" | "variableSelectOptions" | "viabilityTestResults" | "viabilityTests" | "withdrawals";
+            prefix?: "accessionCollectors" | "accessions" | "bags" | "batchSubLocations" | "batchWithdrawals" | "batches" | "cohortModules" | "cohorts" | "countries" | "countrySubdivisions" | "deliverables" | "deliveries" | "documentTemplates" | "documents" | "draftPlantingSites" | "events" | "facilities" | "facilityInventories" | "facilityInventoryTotals" | "geolocations" | "internalTags" | "inventories" | "modules" | "monitoringPlotHistories" | "monitoringPlots" | "nurserySpeciesProjects" | "nurseryWithdrawals" | "observationBiomassDetails" | "observationBiomassQuadratSpecies" | "observationBiomassSpecies" | "observationPlotConditions" | "observationPlots" | "observations" | "organizationInternalTags" | "organizationUsers" | "organizations" | "participantProjectSpecies" | "plantingSeasons" | "plantingSiteHistories" | "plantingSitePopulations" | "plantingSites" | "plantings" | "projectAcceleratorDetails" | "projectDeliverables" | "projectInternalUsers" | "projectLandUseModelTypes" | "projectVariableValues" | "projectVariables" | "projects" | "recordedTrees" | "reports" | "species" | "speciesEcosystemTypes" | "speciesGrowthForms" | "speciesPlantMaterialSourcingMethods" | "speciesProblems" | "speciesSuccessionalGroups" | "strata" | "stratumHistories" | "stratumPopulations" | "subLocations" | "substrata" | "substratumHistories" | "substratumPopulations" | "users" | "variableSelectOptions" | "viabilityTestResults" | "viabilityTests" | "withdrawals";
             search?: components["schemas"]["SearchNodePayload"];
             sortOrder?: components["schemas"]["SearchSortOrderElement"][];
         };
@@ -66955,7 +66919,7 @@ type WithRequired&lt;T, K extends keyof T&gt; = T &amp; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-13T03:36:31.431Z
+                at 2026-01-13T03:49:41.438Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
