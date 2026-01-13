@@ -10,7 +10,7 @@ import { FilterField } from 'src/components/common/FilterGroup';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
 import { useCohorts } from 'src/hooks/useCohorts';
-import { useParticipants } from 'src/hooks/useParticipants';
+import { useProjects } from 'src/hooks/useProjects';
 import { useLocalization } from 'src/providers';
 import AcceleratorMain from 'src/scenes/AcceleratorRouter/AcceleratorMain';
 import strings from 'src/strings';
@@ -20,11 +20,13 @@ import { SearchNodePayload } from 'src/types/Search';
 
 const DeliverablesList = () => {
   const { activeLocale } = useLocalization();
-  const { availableParticipants } = useParticipants();
+  const { availableProjects: availableProjectsOption } = useProjects();
   const { availableCohorts } = useCohorts();
   const contentRef = useRef(null);
 
   const [cohortFilter, setCohortFilter] = useState<{ id?: number }>({ id: undefined });
+
+  const availableProjects = useMemo(() => availableProjectsOption || [], [availableProjectsOption]);
 
   const extraTableFilters: SearchNodePayload[] = useMemo(
     () =>
@@ -73,16 +75,16 @@ const DeliverablesList = () => {
   const iconFilters: FilterConfig[] = useMemo(() => {
     const _filters = [
       {
-        field: 'participantId',
-        label: strings.PARTICIPANT,
+        field: 'projectId',
+        label: strings.PROJECT,
         type: 'multiple_selection' as FilterField['type'],
-        options: availableParticipants?.map((pp) => pp.id),
+        options: availableProjects?.map((p) => p.id),
         pillValueRenderer: (values: (string | number | null)[]) =>
           values
-            ?.map((value) => availableParticipants.find((pp) => pp.id.toString() === value?.toString())?.name || '')
+            ?.map((value) => availableProjects.find((p) => p.id.toString() === value?.toString())?.name || '')
             .join(', '),
         renderOption: (value: string | number) => {
-          return availableParticipants.find((pp) => pp.id.toString() === value.toString())?.name || '';
+          return availableProjects.find((p) => p.id.toString() === value.toString())?.name || '';
         },
       },
       {
@@ -98,7 +100,7 @@ const DeliverablesList = () => {
     ];
 
     return activeLocale ? _filters : [];
-  }, [activeLocale, availableParticipants]);
+  }, [activeLocale, availableProjects]);
 
   return (
     <AcceleratorMain>

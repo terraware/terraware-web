@@ -119,7 +119,7 @@ const list = async (
     searchOrderConfig = {
       locale,
       sortOrder: searchSortOrder,
-      numberFields: ['id', 'numDocuments', 'organizationId', 'participantId'],
+      numberFields: ['id', 'numDocuments', 'organizationId', 'projectId'],
     };
   }
 
