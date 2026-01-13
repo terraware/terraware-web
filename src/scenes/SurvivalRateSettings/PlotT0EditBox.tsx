@@ -381,7 +381,10 @@ const PlotT0EditBox = ({
           display='flex'
           alignItems='center'
         >
-          <Typography>{plot.name}</Typography>
+          <Box textAlign={'center'}>
+            <Typography fontWeight={600}>{strings.PLOT}</Typography>
+            <Typography>{plot.name}</Typography>
+          </Box>
         </Box>
         <Box display='flex' flexGrow={1} alignItems='start' flexDirection={'column'}>
           <Box display='flex' flexGrow={1} alignItems={'start'} width={'100%'}>
