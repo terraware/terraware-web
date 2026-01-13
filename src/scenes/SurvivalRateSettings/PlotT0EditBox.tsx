@@ -442,7 +442,7 @@ const PlotT0EditBox = ({
                             return (
                               <tr key={index}>
                                 <td>{species.find((iSp) => sp.speciesId === iSp.id)?.scientificName}</td>
-                                <td>{sp.density}</td>
+                                <td>{roundToDecimal(sp.density, 1)}</td>
                               </tr>
                             );
                           })}
