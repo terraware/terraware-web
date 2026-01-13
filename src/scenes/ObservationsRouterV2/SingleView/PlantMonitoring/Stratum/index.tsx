@@ -10,6 +10,8 @@ import { useLocalization } from 'src/providers';
 import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 
+import AggregatedPlantsStats from '../AggregatedPlantsStats';
+import useObservationSpecies from '../useObservationSpecies';
 import MonitoringPlotList from './MonitoringPlotList';
 
 const StratumDetails = (): JSX.Element => {
@@ -17,10 +19,15 @@ const StratumDetails = (): JSX.Element => {
   const { strings } = useLocalization();
   const params = useParams<{ observationId: string; stratumName: string }>();
   const observationId = Number(params.observationId);
+  const stratumName = params.stratumName;
 
   const { data: observationResultsResponse } = useGetObservationResultsQuery({ observationId });
   const [getPlantingSite, getPlantingSiteResult] = useLazyGetPlantingSiteQuery();
   const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);
+  const stratumResult = useMemo(
+    () => results?.strata.find((stratum) => stratum.name === stratumName),
+    [results?.strata, stratumName]
+  );
   const plantingSite = useMemo(() => getPlantingSiteResult.data?.site, [getPlantingSiteResult.data?.site]);
 
   useEffect(() => {
@@ -53,9 +60,17 @@ const StratumDetails = (): JSX.Element => {
     </Typography>
   );
 
+  const species = useObservationSpecies(stratumResult?.species ?? []);
+
   return (
     <Page crumbs={crumbs} title={title} titleContainerStyle={{ paddingTop: 3, paddingBottom: 1 }}>
-      Stratum Observation Placeholder
+      <AggregatedPlantsStats
+        completedTime={stratumResult?.completedTime}
+        totalSpecies={stratumResult?.totalSpecies}
+        plantingDensity={stratumResult?.plantingDensity}
+        survivalRate={stratumResult?.survivalRate}
+        species={species}
+      />
       <MonitoringPlotList />
     </Page>
   );
