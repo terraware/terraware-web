@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/54</span>
+                <span class='fraction'>0/53</span>
             </div>
         
             
@@ -39,7 +39,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
@@ -231,7 +231,7 @@
 <span class="cstat-no" title="statement not covered" ></span>
 import { Box, Typograph<span class="cstat-no" title="statement not covered" >y, useTheme } from '@mui/materia</span>l';
 <span class="cstat-no" title="statement not covered" ></span>
-import { usePartici<span class="cstat-no" title="statement not covered" >pants } from 'src/hook</span>s/useParticipants';
+import { usePartici<span class="cstat-no" title="statement not covered" >pantProjects } from 's</span>rc/hooks/useParticipantProjects';
 import { requestGet<span class="cstat-no" title="statement not covered" >User } from 'src/redux/features/</span>user/usersAsyncThunks';
 import { select<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Us</span>er } from 'src/redux/features/user/usersSelectors';</span>
 im<span class="cstat-no" title="statement not covered" >port { useAppDispatch, useAppSelector } from 'src/redux/store';</span>
@@ -252,7 +252,7 @@ const DocumentMetadata = ({ document, documentTemplate }: DocumentMetadataProps)
 &nbsp;
   const dispatch = useAppDispatch();
   const theme = useTheme();
-  const { availableParticipants } = useParticipants();
+  const { participantProjects } = useParticipantProjects();
 <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
   const [modifiedByU<span class="cstat-no" title="statement not covered" >ser</span>, setModifiedByUser] = useState&lt;User&gt;();
 <span class="cstat-no" title="statement not covered" ></span>
@@ -270,7 +270,7 @@ const DocumentMetadata = ({ document, documentTemplate }: DocumentMetadataProps)
   const modifiedBy<span class="cstat-no" title="statement not covered" >Name = useMemo(() =&gt; getUs</span>erDisplayName(modifiedByUser), [modifiedByUser]);
   const modifiedTimeDispl<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ay</span> = useMemo(() =&gt; getDateTimeDisplayValue(new Date(modifiedTime).getTime()), [modifiedTime]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const participant<span class="cstat-no" title="statement not covered" > = availableParticipants?.find((par</span>t) =&gt; part.projects.find((proj) =&gt; proj.projectId === projectId));
+  const project = p<span class="cstat-no" title="statement not covered" >articipantProjects?.find((proj) =&gt; </span>proj.projectId === projectId);
 <span class="cstat-no" title="statement not covered" ></span>
   return (<span class="cstat-no" title="statement not covered" ></span>
     &lt;Box display='flex' flexDirection='column'<span class="cstat-no" title="statement not covered" > marginTop={3}&gt;</span>
@@ -281,10 +281,10 @@ const DocumentMetadata = ({ document, documentTemplate }: DocumentMetadataProps)
 <span class="cstat-no" title="statement not covered" >        color={theme.palette.T<span class="fstat-no" title="function not covered" >wC</span>lrTxt}</span>
 <span class="cstat-no" title="statement not covered" >        margin={theme.spacing(1, 0)}</span>
 <span class="cstat-no" title="statement not covered" >      &gt;</span>
-        {participant?.name}
+        {project?.dealName}
       &lt;/Typography&gt;<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
       &lt;Typography<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-        fontWeight={60<span class="cstat-no" title="statement not covered" >0}<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
+        fontWeight<span class="cstat-no" title="statement not covered" >={600}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 <span class="cstat-no" title="statement not covered" >        fontSize='24px'</span>
         lineHeight='32px'
         color={theme.palette.TwClrTxt}
@@ -316,7 +316,7 @@ export default DocumentMetadata;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-13T01:27:19.520Z
+                at 2026-01-13T03:24:42.116Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>
