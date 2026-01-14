@@ -1,112 +1,95 @@
 import React, { useEffect, useRef } from 'react';
 
 import { Box } from '@mui/material';
-import { SplatMesh } from '@sparkjsdev/spark';
-import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { Application, Entity } from '@playcanvas/react';
+import { Camera, GSplat } from '@playcanvas/react/components';
+import { useApp, useAppEvent, useSplat } from '@playcanvas/react/hooks';
+import { OrbitControls } from '@playcanvas/react/scripts';
 
-const PreviewRouter = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const animationIdRef = useRef<number | null>(null);
-  const autoRotateRef = useRef<boolean>(true);
+const AutoRotate = () => {
+  const app = useApp();
+  const autoRotateRef = useRef(true);
   const inactivityTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    if (!containerRef.current) {
-      return;
-    }
-
-    const scene = new THREE.Scene();
-
-    const camera = new THREE.PerspectiveCamera(
-      60,
-      containerRef.current.clientWidth / containerRef.current.clientHeight,
-      0.1,
-      100
-    );
-
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(containerRef.current.clientWidth * 0.8, containerRef.current.clientHeight * 0.8);
-    renderer.setPixelRatio(window.devicePixelRatio);
-    containerRef.current.appendChild(renderer.domElement);
-
-    const plyUrl = '/assets/models/test/PlyExamples/backyard.ply';
-    const splatMesh = new SplatMesh({ url: plyUrl });
-    scene.add(splatMesh);
-
-    // Note that each model might have different xyz needs
-    splatMesh.rotation.x = -Math.PI / 2;
-    splatMesh.position.y = -0.1;
-
-    renderer.setAnimationLoop(() => {
-      renderer.render(scene, camera);
-      if (autoRotateRef.current) {
-        splatMesh.rotation.z += 0.005;
-      }
-    });
-
-    const handleResize = () => {
-      if (!containerRef.current || !camera || !renderer) {
-        return;
-      }
-
-      const width = containerRef.current.clientWidth * 0.8;
-      const height = containerRef.current.clientHeight * 0.8;
-
-      camera.aspect = width / height;
-      camera.updateProjectionMatrix();
-      renderer.setSize(width, height);
-    };
-
-    window.addEventListener('resize', handleResize);
-
-    // Setup mouse controls to orbit the camera around
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.target.set(0.2, 0, 0);
-    controls.minDistance = 0.8;
-    controls.maxDistance = 2.3;
-    controls.update();
+    const canvas = app.graphicsDevice.canvas;
 
     const resetInactivityTimer = () => {
       if (inactivityTimerRef.current) {
         clearTimeout(inactivityTimerRef.current);
       }
+      autoRotateRef.current = false;
       inactivityTimerRef.current = setTimeout(() => {
         autoRotateRef.current = true;
       }, 3000);
     };
 
     const handleUserInteraction = () => {
-      autoRotateRef.current = false;
       resetInactivityTimer();
     };
 
-    controls.addEventListener('start', handleUserInteraction);
-    controls.addEventListener('change', handleUserInteraction);
-
-    const container = containerRef.current;
+    canvas.addEventListener('mousedown', handleUserInteraction);
+    canvas.addEventListener('wheel', handleUserInteraction);
 
     return () => {
-      window.removeEventListener('resize', handleResize);
-      if (animationIdRef.current !== null) {
-        cancelAnimationFrame(animationIdRef.current);
-      }
-      renderer.dispose();
-      if (container && renderer.domElement && container.contains(renderer.domElement)) {
-        container.removeChild(renderer.domElement);
+      canvas.removeEventListener('mousedown', handleUserInteraction);
+      canvas.removeEventListener('wheel', handleUserInteraction);
+      if (inactivityTimerRef.current) {
+        clearTimeout(inactivityTimerRef.current);
       }
     };
-  }, []);
+  }, [app]);
 
+  useAppEvent('update', (dt: number) => {
+    const splatEntity = app.root.findByName('splat');
+    if (autoRotateRef.current && splatEntity) {
+      const currentRotation = splatEntity.getEulerAngles();
+      splatEntity.setEulerAngles(currentRotation.x, currentRotation.y + dt * 5, currentRotation.z);
+    }
+  });
+
+  return null;
+};
+
+const SplatModel = () => {
+  const { asset } = useSplat('/assets/models/test/PlyExamples/backyard.ply');
+  if (!asset) {
+    return null;
+  }
+  return (
+    <Entity name='splat' position={[0, -0.1, 0]} rotation={[-90, 0, 0]}>
+      <GSplat asset={asset} />
+    </Entity>
+  );
+};
+
+const PreviewRouter = () => {
   return (
     <Box
-      ref={containerRef}
       sx={{
         width: '100%',
         height: 'calc(100vh - 96px)',
         position: 'relative',
       }}
-    />
+    >
+      <Application
+        style={{
+          width: '80%',
+          height: '80%',
+          display: 'block',
+          margin: '0 auto',
+        }}
+        graphicsDeviceOptions={{ antialias: false }}
+      >
+        <Entity name='camera'>
+          <Camera clearColor='#1a1a1a' fov={60} />
+          <OrbitControls distanceMin={0.8} distanceMax={2.3} />
+        </Entity>
+
+        <SplatModel />
+        <AutoRotate />
+      </Application>
+    </Box>
   );
 };
 
