@@ -51,13 +51,13 @@ const MonitoringPlotDetails = (): JSX.Element => {
       },
     ];
 
-    if (!results?.isAdHoc && plantingSite) {
+    if (!results?.isAdHoc && plantingSite && stratumName) {
       crumbsData.push({
         name: plantingSite.name,
         to: `/${observationId}`,
       });
       crumbsData.push({
-        name: plantingSite.name,
+        name: stratumName,
         to: `/stratum/${stratumName}`,
       });
     }
