@@ -1,15 +1,18 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useParams } from 'react-router';
 
 import { TableColumnType } from '@terraware/web-components';
+import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import ClientSideFilterTable from 'src/components/Tables/ClientSideFilterTable';
 import Card from 'src/components/common/Card';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
+import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import { MonitoringPlotStatus, ObservationState } from 'src/types/Observations';
 import { SearchSortOrder } from 'src/types/Search';
 import { isManagerOrHigher } from 'src/utils/organization';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import MonitoringPlotRenderer from './MonitoringPlotRenderer';
 
@@ -32,6 +35,7 @@ type MonitoringPlotRow = {
 
 export default function MonitoringPlotList(): JSX.Element {
   const { strings } = useLocalization();
+  const defaultTimeZone = useDefaultTimeZone().get().id;
   const params = useParams<{ observationId: string; stratumName: string }>();
   const observationId = Number(params.observationId);
   const stratumName = params.stratumName;
@@ -78,6 +82,7 @@ export default function MonitoringPlotList(): JSX.Element {
 
   const fuzzySearchColumns = ['monitoringPlotNumber', 'substratumName'];
   const { data: observationResultsResponse, isLoading } = useGetObservationResultsQuery({ observationId });
+  const [getPlantingSite, plantingSiteResponse] = useLazyGetPlantingSiteQuery();
 
   const observationResult = useMemo(
     () => observationResultsResponse?.observation,
@@ -87,6 +92,15 @@ export default function MonitoringPlotList(): JSX.Element {
   const stratumResult = useMemo(() => {
     return observationResult?.strata.find((stratum) => stratum.name === stratumName);
   }, [observationResult, stratumName]);
+
+  useEffect(() => {
+    if (observationResult) {
+      void getPlantingSite(observationResult.plantingSiteId, true);
+    }
+  }, [getPlantingSite, observationResult, observationResultsResponse]);
+
+  const plantingSite = useMemo(() => plantingSiteResponse.data?.site, [plantingSiteResponse.data?.site]);
+  const timeZone = useMemo(() => plantingSite?.timeZone ?? defaultTimeZone, [defaultTimeZone, plantingSite?.timeZone]);
 
   const rows = useMemo((): MonitoringPlotRow[] => {
     if (observationResult && stratumResult) {
@@ -101,7 +115,7 @@ export default function MonitoringPlotList(): JSX.Element {
             monitoringPlotNumber: plot.monitoringPlotNumber,
             stratumName: stratumResult.name,
             substratumName: substratum.name,
-            completedDate: plot.completedTime,
+            completedDate: plot.completedTime ? getDateDisplayValue(plot.completedTime, timeZone) : undefined,
             status: plot.status,
             isPermanent: plot.isPermanent,
             totalLive,
@@ -115,7 +129,7 @@ export default function MonitoringPlotList(): JSX.Element {
     } else {
       return [];
     }
-  }, [observationId, observationResult, stratumResult]);
+  }, [observationId, observationResult, stratumResult, timeZone]);
 
   return (
     <Card radius={'8px'} style={{ width: '100%' }}>

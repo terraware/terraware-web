@@ -41,7 +41,7 @@ export default function MonitoringPlotRenderer(props: RendererProps<TableRowType
   }
 
   // don't render data if we don't have data
-  if (!row.completedTime && value === 0 && NO_DATA_FIELDS.indexOf(column.key) !== -1) {
+  if (!row.completedDate && value === 0 && NO_DATA_FIELDS.indexOf(column.key) !== -1) {
     return <CellRenderer {...props} value={''} />;
   }
 
@@ -62,7 +62,7 @@ export default function MonitoringPlotRenderer(props: RendererProps<TableRowType
       <TableRowPopupMenu
         menuItems={[
           {
-            disabled: row.completedTime || observationState === 'Abandoned', // cannot replace observation plots that are completed
+            disabled: row.completedDate || observationState === 'Abandoned', // cannot replace observation plots that are completed
             label: strings.REQUEST_REASSIGNMENT,
             onClick: () => {
               // TODO show reassignment

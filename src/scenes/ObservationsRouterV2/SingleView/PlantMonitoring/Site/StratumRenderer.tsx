@@ -29,7 +29,7 @@ export default function StratumRenderer(props: RendererProps<TableRowType>): JSX
   }
 
   // don't render data if we don't have data
-  if (!row.completedTime && value === 0 && NO_DATA_FIELDS.indexOf(column.key) !== -1) {
+  if (!row.completedDate && value === 0 && NO_DATA_FIELDS.indexOf(column.key) !== -1) {
     return <CellRenderer {...props} value={''} />;
   }
 

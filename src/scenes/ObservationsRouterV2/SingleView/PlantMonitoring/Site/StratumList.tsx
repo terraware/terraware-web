@@ -1,13 +1,16 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useParams } from 'react-router';
 
 import { TableColumnType } from '@terraware/web-components';
+import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import ClientSideFilterTable from 'src/components/Tables/ClientSideFilterTable';
 import Card from 'src/components/common/Card';
 import { useLocalization } from 'src/providers/hooks';
 import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
+import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import { SearchSortOrder } from 'src/types/Search';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import StratumRenderer from './StratumRenderer';
 
@@ -24,6 +27,7 @@ type StratumRow = {
 
 export default function StratumList(): JSX.Element {
   const { strings } = useLocalization();
+  const defaultTimeZone = useDefaultTimeZone().get().id;
   const params = useParams<{ observationId: string }>();
   const observationId = Number(params.observationId);
 
@@ -52,6 +56,16 @@ export default function StratumList(): JSX.Element {
 
   const fuzzySearchColumns = ['stratumName'];
   const { data: observationResultsResponse, isLoading } = useGetObservationResultsQuery({ observationId });
+  const [getPlantingSite, plantingSiteResponse] = useLazyGetPlantingSiteQuery();
+
+  useEffect(() => {
+    if (observationResultsResponse) {
+      void getPlantingSite(observationResultsResponse.observation.plantingSiteId, true);
+    }
+  }, [getPlantingSite, observationResultsResponse]);
+
+  const plantingSite = useMemo(() => plantingSiteResponse.data?.site, [plantingSiteResponse.data?.site]);
+  const timeZone = useMemo(() => plantingSite?.timeZone ?? defaultTimeZone, [defaultTimeZone, plantingSite?.timeZone]);
 
   const rows = useMemo((): StratumRow[] => {
     if (observationResultsResponse) {
@@ -59,7 +73,7 @@ export default function StratumList(): JSX.Element {
         return {
           observationId: observationResultsResponse.observation.observationId,
           stratumName: stratum.name,
-          completedDate: stratum.completedTime,
+          completedDate: stratum.completedTime ? getDateDisplayValue(stratum.completedTime, timeZone) : undefined,
           totalLive: 0,
           totalPlants: stratum.totalPlants,
           totalSpecies: stratum.totalSpecies,
@@ -70,7 +84,7 @@ export default function StratumList(): JSX.Element {
     } else {
       return [];
     }
-  }, [observationResultsResponse]);
+  }, [observationResultsResponse, timeZone]);
 
   return (
     <Card radius={'8px'} style={{ width: '100%' }}>
