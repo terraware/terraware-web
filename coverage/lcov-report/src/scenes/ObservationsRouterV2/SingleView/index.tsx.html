@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/45</span>
+                <span class='fraction'>0/42</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/30</span>
+                <span class='fraction'>0/28</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/41</span>
+                <span class='fraction'>0/38</span>
             </div>
         
             
@@ -95,12 +95,7 @@
 <a name='L30'></a><a href='#L30'>30</a>
 <a name='L31'></a><a href='#L31'>31</a>
 <a name='L32'></a><a href='#L32'>32</a>
-<a name='L33'></a><a href='#L33'>33</a>
-<a name='L34'></a><a href='#L34'>34</a>
-<a name='L35'></a><a href='#L35'>35</a>
-<a name='L36'></a><a href='#L36'>36</a>
-<a name='L37'></a><a href='#L37'>37</a>
-<a name='L38'></a><a href='#L38'>38</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L33'></a><a href='#L33'>33</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -131,11 +126,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > useMemo } fro</span>m 'react';
 import { usePara<span class="cstat-no" title="statement not covered" >ms } from 'react-route</span>r';
@@ -144,36 +134,31 @@ import { BusySpinner } f<span class="cstat-no" title="statement not covered" >ro
 <span class="cstat-no" title="statement not covered" ></span>
 import { useGetObse<span class="cstat-no" title="statement not covered" >rvationResultsQuery } from 'src/</span>queries/generated/observations';
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-im<span class="cstat-no" title="statement not covered" >port AdHocPlotDetails from './AdHocPlotDetails';</span>
-impo<span class="cstat-no" title="statement not covered" >rt BiomassMeasurementsView from './BiomassMeasurements';</span>
-import SiteDetails from './SiteDetails';
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-co<span class="cstat-no" title="statement not covered" >nst ObservationSingleView = (): JSX.Element =&gt; {</span>
-  co<span class="cstat-no" title="statement not covered" >nst params = useParams&lt;{ observationId: string }&gt;();</span>
-  cons<span class="cstat-no" title="statement not covered" >t observationId = Number(params.observationId);</span>
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  const { data: observationResultsResponse, isLoading: observationResultsLoading } = useGetObservationResultsQuery({
-<span class="cstat-no" title="statement not covered" >    observati</span>onId,
-  });
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  const results = useMemo(() =&gt; observationResultsResponse?.observation, [observationResultsResponse?.observation]);
+im<span class="cstat-no" title="statement not covered" >port BiomassMeasurementsView from './BiomassMeasurements';</span>
+impo<span class="cstat-no" title="statement not covered" >rt PlantMonitoringView from './PlantMonitoring';</span>
+&nbsp;
+const ObservationS<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >in</span>gleView = (): JSX.Element =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  const params = useParams&lt;{ observationId: string }&gt;();</span>
+  co<span class="cstat-no" title="statement not covered" >nst observationId = Number(params.observationId);</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  const <span class="cstat-no" title="statement not covered" >{ data: observationResults<span class="fstat-no" title="function not covered" >Re</span>spon<span class="cstat-no" title="statement not covered" >se, isLoad</span>ing: observationResultsLoading } = useGetObservationResultsQuery({</span>
+    observationId,
+<span class="cstat-no" title="statement not covered" >  });</span>
+&nbsp;
+  const result<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >s </span>= useMemo(() =&gt; observationR<span class="cstat-no" title="statement not covered" >esultsResponse?.observation, [observationResultsResponse?.observation]);</span></span>
 &nbsp;
   if (observationResultsLoading || !results) {
     return &lt;BusySpinner /&gt;;
   }
 &nbsp;
   if (results.type === 'Biomass Measurements') {
-    return &lt;Biomass<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Me</span>asureme<span class="cstat-no" title="statement not covered" >ntsView /&gt;;</span></span>
-  } else {<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >    if (results.isAdHoc) {</span>
-      retur<span class="fstat-no" title="function not covered" >n </span>&lt;AdH<span class="cstat-no" title="statement not covered" >ocPlotDetails </span>/&gt;;
-    } else {
-<span class="cstat-no" title="statement not covered" >      return &lt;SiteDetails /&gt;;</span>
-    }<span class="cstat-no" title="statement not covered" ></span>
-  }<span class="cstat-no" title="statement not covered" ></span>
-};<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span>
-export default ObservationSing<span class="cstat-no" title="statement not covered" >leView;</span>
+    return &lt;BiomassMeasurementsView /&gt;;
+  } else {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+    return &lt;PlantMon<span class="cstat-no" title="statement not covered" >ito</span>ringView /&gt;;
+<span class="cstat-no" title="statement not covered" >  }</span>
+};<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >export default ObservationSingleView;</span>
 <span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -181,7 +166,7 @@ export default ObservationSing<span class="cstat-no" title="statement not covere
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-14T01:46:15.504Z
+                at 2026-01-14T20:43:52.782Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

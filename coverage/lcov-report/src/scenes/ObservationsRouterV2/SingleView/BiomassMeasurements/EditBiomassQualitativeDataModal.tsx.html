@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/115</span>
+                <span class='fraction'>0/111</span>
             </div>
         
             
@@ -472,7 +472,15 @@
 <a name='L407'></a><a href='#L407'>407</a>
 <a name='L408'></a><a href='#L408'>408</a>
 <a name='L409'></a><a href='#L409'>409</a>
-<a name='L410'></a><a href='#L410'>410</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L410'></a><a href='#L410'>410</a>
+<a name='L411'></a><a href='#L411'>411</a>
+<a name='L412'></a><a href='#L412'>412</a>
+<a name='L413'></a><a href='#L413'>413</a>
+<a name='L414'></a><a href='#L414'>414</a>
+<a name='L415'></a><a href='#L415'>415</a>
+<a name='L416'></a><a href='#L416'>416</a>
+<a name='L417'></a><a href='#L417'>417</a>
+<a name='L418'></a><a href='#L418'>418</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -515,7 +523,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -660,21 +667,23 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -852,6 +861,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -885,237 +901,245 @@
 import { usePara<span class="cstat-no" title="statement not covered" >ms } from 'react-route</span>r';
 <span class="cstat-no" title="statement not covered" ></span>
 import { Box } from '@mu<span class="cstat-no" title="statement not covered" >i/material';</span>
-import { Button, Da<span class="cstat-no" title="statement not covered" >tePicker, DialogBox, D</span>ropdown, DropdownItem, MultiSelect } from '@terraware/web-components';
-import TextField fr<span class="cstat-no" title="statement not covered" >om '@terraware/web-components/co</span>mponents/Textfield/Textfield';
-import { DateTi<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >me</span> } from 'luxon';</span>
-<span class="cstat-no" title="statement not covered" ></span>
-impo<span class="cstat-no" title="statement not covered" >rt { useLocalization } from 'src/providers';</span>
-import {
-  BiomassUpdateOpe<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ra</span>tionPayload,</span>
-<span class="cstat-no" title="statement not covered" >  ObservationPlotUpdateOperationPayload,</span>
-  us<span class="cstat-no" title="statement not covered" >eGetObservationResultsQuery,</span>
-  useU<span class="cstat-no" title="statement not covered" >pdateCompletedObservationPlotMutation,</span>
-} from '<span class="cstat-no" title="statement not covered" >src/queries/generated/obse<span class="fstat-no" title="function not covered" >rv</span>atio<span class="cstat-no" title="statement not covered" >ns';</span></span>
+import {<span class="cstat-no" title="statement not covered" ></span>
+  Button,<span class="cstat-no" title="statement not covered" ></span>
+  DatePicker,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >  DialogBox,</span>
+  Dr<span class="cstat-no" title="statement not covered" >opdown,</span>
+  DropdownItem,
+  MultiSelect,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >  Textfield,</span>
+} fr<span class="cstat-no" title="statement not covered" >om '@terraware/web-components';</span>
+import<span class="cstat-no" title="statement not covered" > { DateTime } from 'luxon';</span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+import { useLocalization } from 'src/providers';
+im<span class="cstat-no" title="statement not covered" >port {</span>
+  BiomassUpdateOperationPayload,
+  ObservationP<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >lo</span>tUpdateOperationPayload,<span class="cstat-no" title="statement not covered" ></span></span>
+  useGetObservationResultsQuery,
+  useUpdateCompletedObservationPlotMutation,
+} from 'src/queries/generated/observations';
 import { getPlotConditionsOptions } from 'src/redux/features/observations/utils';
-im<span class="cstat-no" title="statement not covered" >port { Biom</span>assMeasurement, PlotCondition } from 'src/types/Observations';
+import { BiomassMeasurement, PlotCondition } from 'src/types/Observations';
 import useForm from 'src/utils/useForm';
-import useSnac<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >kb</span>ar from 'src/utils/useSnackb<span class="cstat-no" title="statement not covered" >ar';</span></span>
-&nbsp;
-import EditQualitativeDataConfirmationModal from '../../EditQualitativeDataConfirmationModal';
-&nbsp;
-export type BiomassQualitativeFormData = {
-  biomassMeasurement: BiomassMeasurement;
-  conditions?: PlotCondition[];
-  notes?: string;
-};<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+import useSnackbar from 'src/utils/useSnackbar';
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+import EditQualitati<span class="cstat-no" title="statement not covered" >veD</span>ataConfirmationModal from '../../EditQualitativeDataConfirmationModal';
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >type EditQualitativeDataModalProps = {</span>
-  initialFo<span class="fstat-no" title="function not covered" >rm</span>Data<span class="cstat-no" title="statement not covered" >: BiomassQuali</span>tativeFormData;
-  open: boolean;
-<span class="cstat-no" title="statement not covered" >  setOpen: (open: boolean) =&gt; void;</span>
+export type<span class="fstat-no" title="function not covered" > B</span>ioma<span class="cstat-no" title="statement not covered" >ssQualitativeF</span>ormData = {
+  biomassMeasurement: BiomassMeasurement;
+<span class="cstat-no" title="statement not covered" >  conditions?: PlotCondition[];</span>
+  notes?: string;<span class="cstat-no" title="statement not covered" ></span>
 };<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-const EditBiomassQuali<span class="cstat-no" title="statement not covered" >tativeDataModal = ({ init</span>ialFormData, open, setOpen }: EditQualitativeDataModalProps) =&gt; {
-  const { activeLocale, stri<span class="cstat-no" title="statement not covered" >ngs } = useLocalization();</span>
-  const snackbar = useS<span class="cstat-no" title="statement not covered" >nackbar();</span>
+type EditQualitativeDataModa<span class="cstat-no" title="statement not covered" >lProps = {</span>
+  initialFormData: Biom<span class="cstat-no" title="statement not covered" >assQualitativeFormData;</span>
+  open: boolean;<span class="cstat-no" title="statement not covered" ></span>
+  setOpen: (open: b<span class="cstat-no" title="statement not covered" >oolean) =&gt; void;</span>
+};<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const params = useParams<span class="cstat-no" title="statement not covered" >&lt;{ observationId: string }&gt;();</span>
-  const observation<span class="cstat-no" title="statement not covered" >Id = Number(params.observationId);</span>
-  const { data: obser<span class="cstat-no" title="statement not covered" >vationResultsResponse } = useGetObserv</span>ationResultsQuery({ observationId });
-  const [update] = useUpd<span class="cstat-no" title="statement not covered" >ateCompletedObservationPlotMutation();</span>
-  const results = useMemo(() =&gt; observationResults<span class="cstat-no" title="statement not covered" >Response?.observation, [observationResultsResponse?.observation</span>]);
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  const soilFileId = results?.adHocPlot?.media?.find((m) =&gt; m.type === 'Soil')?.fileId;
+const EditBiomassQualitativeDataModal = ({ initial<span class="cstat-no" title="statement not covered" >FormData, open, setOpen }: EditQualitativeDataModalProps) =&gt; {</span>
+  const { activeLocale, strings } = useL<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >oc</span>alization();</span>
+  const snackbar = useSnackbar();
+<span class="cstat-no" title="statement not covered" ></span>
+  const params = us<span class="cstat-no" title="statement not covered" >eParams&lt;{ observationId: string }&gt;</span>();
+  const observati<span class="cstat-no" title="statement not covered" >onId = Number(params.observationId);</span>
+  const { data: observat<span class="cstat-no" title="statement not covered" >ionResultsResponse } = useGet</span>ObservationResultsQuery({ observationId });
+  const [update] = useUpdateCompletedObservatio<span class="cstat-no" title="statement not covered" >nPlotMutation();</span>
+  const results = u<span class="cstat-no" title="statement not covered" >seMemo(() =&gt; observationResultsResponse?.observation, [observationRes</span>ultsResponse?.observation]);
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  const soilFileId = <span class="cstat-no" title="statement not covered" >results?.adHocPlot?.media?.find((m) =&gt; m.type === 'Soil')?.fileId;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
   const photoUrl =<span class="cstat-no" title="statement not covered" ></span>
-    results &amp;&amp; resu<span class="cstat-no" title="statement not covered" >lts.adHocPlot &amp;&amp; soilFileId</span>
-      ? `/api/v1/<span class="cstat-no" title="statement not covered" >tracking/observations/${results.obser</span>vationId}/plots/${results.adHocPlot.monitoringPlotId}/photos/${soilFileId}`
-      : undefined;<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span>
-  const plotConditi<span class="cstat-no" title="statement not covered" >onsMap = React.useMemo(() =&gt; {</span>
-    const options <span class="cstat-no" title="statement not covered" >= getPlotConditionsOptions<span class="fstat-no" title="function not covered" >(a</span>ctiv<span class="cstat-no" title="statement not covered" >eLocale);</span></span>
-    return new Map(op<span class="cstat-no" title="statement not covered" >tions.map((option) =&gt; [option.value, option]));<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  }, [activeLocale]<span class="cstat-no" title="statement not covered" >);</span>
+    results &amp;&amp; results.adHoc<span class="cstat-no" title="statement not covered" >Plot &amp;&amp; soilFileId<span class="fstat-no" title="function not covered" ></span></span>
+      ? `/api/v1/tra<span class="cstat-no" title="statement not covered" >cking/observations/${results.observationId}/plots/${resul</span>ts.adHocPlot.monitoringPlotId}/photos/${soilFileId}`
+<span class="cstat-no" title="statement not covered" >      : undefined;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+&nbsp;
+  const plotConditionsMap = Re<span class="cstat-no" title="statement not covered" >act.useMemo(() =&gt; {</span>
+    const options = getPlotConditionsOptions(activeLocale);<span class="cstat-no" title="statement not covered" ></span>
+    return new Map(options.ma<span class="cstat-no" title="statement not covered" >p((option) =&gt; [option.value, option]));</span>
+  },<span class="fstat-no" title="function not covered" > [</span>activeLocale]);
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  const [record, set<span class="cstat-no" title="statement not covered" >Record] = useForm&lt;BiomassQualitativeFormData&gt;(initialForm</span>Data);
-  co<span class="cstat-no" title="statement not covered" >nst [showConfirmationModalO<span class="fstat-no" title="function not covered" >pe</span>ned, setSh<span class="cstat-no" title="statement not covered" >owConfirmationModalOpen</span>ed]</span> = useState(false);
-&nbsp;
-  const onAddPlotCondition = u<span class="cstat-no" title="statement not covered" >seCallback(</span>
-    (conditionId: PlotCondition) =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-      setRecord((prev) =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" ></span>        const newConditions = prev.conditions ? [...prev.conditions] : [];
-<span class="cstat-no" title="statement not covered" >        newCondi<span class="fstat-no" title="function not covered" >ti</span>ons.push(conditionId);</span>
-        return { ...prev, cond<span class="cstat-no" title="statement not covered" >itions: newConditions };</span>
-      })<span class="cstat-no" title="statement not covered" >;</span>
-    },<span class="cstat-no" title="statement not covered" ></span>
-    [setRecord]
-  );
-&nbsp;
-  const onRemovePlotCondition = useCallback(
-    (conditionId: string) =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" ></span>      setRecord((prev) =&gt; {
-<span class="cstat-no" title="statement not covered" >        const ne<span class="fstat-no" title="function not covered" >wC</span>onditions = prev.conditions ? [...prev.conditions] : [];</span>
-        const foundIndex = new<span class="cstat-no" title="statement not covered" >Conditions.findIndex((cId) =&gt; cId === condit</span>ionId);
-        if (foundIndex !== <span class="cstat-no" title="statement not covered" >-1) {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-<span class="cstat-no" title="statement not covered" >          newConditions.splice(foundIndex, 1);</span>
-        }<span class="cstat-no" title="statement not covered" ></span>
-        return { ...prev, conditions: newConditions };
-      })<span class="cstat-no" title="statement not covered" >;</span>
-    },
-    [setRecord]
-  );
-&nbsp;
-  const valueRender = <span class="cstat-no" title="statement not covered" >useCallback((option: DropdownI<span class="fstat-no" title="function not covered" >te</span>m) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    return option.label;</span>
-  }, []);
+  const [record, setRecord] = <span class="cstat-no" title="statement not covered" >useForm&lt;BiomassQualitativeFormData&gt;(initialF</span>ormData);
+  const <span class="cstat-no" title="statement not covered" >[showConfirmationModalOpened, set</span>ShowConfirmationModalOpened] = useState(false);
 <span class="cstat-no" title="statement not covered" ></span>
-  co<span class="fstat-no" title="function not covered" >ns</span>t onChangeField = useCallback(
-    (v<span class="cstat-no" title="statement not covered" >alue: stri<span class="fstat-no" title="function not covered" >ng</span>, fieldId: string) =&gt; {</span>
-      se<span class="cstat-no" title="statement not covered" >tRecord((prev) =&gt; {</span>
-        if (fieldId.includes('.'))<span class="cstat-no" title="statement not covered" > {</span>
-<span class="cstat-no" title="statement not covered" >          const [parent, child] = fieldId.split('.');</span>
+  const onAddPlotCondition = useCallback(
+    (conditionId: PlotCondition) =&gt; {
+      setRecord((prev) =&gt; {
+        const newConditions = prev.conditions ? [...prev.conditions] : [];
+        newConditions.push(condi<span class="cstat-no" title="statement not covered" >tionId);</span>
+<span class="fstat-no" title="function not covered" ></span>        return { ...prev, conditions: newConditions };
+<span class="cstat-no" title="statement not covered" >      });<span class="fstat-no" title="function not covered" ></span></span>
+    },<span class="cstat-no" title="statement not covered" ></span>
+    [setRecord]<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  );<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+  const onRemovePlotCondition = useCallback(
+    (con<span class="cstat-no" title="statement not covered" >ditionId: string) =&gt; {</span>
+      setRecord((prev) =&gt; {
+        const newConditions = prev.conditions ? [...prev.conditions] : [];
+        const foundIndex = newConditions.findIndex((cId) =&gt; cId === conditionId);
+        if (foundIndex !== -1) {
+          newCondition<span class="cstat-no" title="statement not covered" >s.splice(foundIndex, 1);<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >        }</span>
+        return { ...prev, conditions: newConditions };
+      });<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" >    },</span>
+    [s<span class="cstat-no" title="statement not covered" >etRecord]<span class="fstat-no" title="function not covered" ></span></span>
+  );<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+  const va<span class="cstat-no" title="statement not covered" >lueRender = useCallback((option: DropdownItem) =&gt; {</span>
+    return option.label;
+  }, []);
+&nbsp;
+  const onChangeField = useCallback(
+    (value: string, fieldId: string) =&gt; {
+      setRecord((prev) =&gt; {
+        if (fieldId.includes('.')) {
+<span class="cstat-no" title="statement not covered" >          const [parent, child] = fieldId.spli</span>t('.');
           return {
             ...prev,
             [parent]: {
               ...(prev as any)[parent],
-              [child]: value,
-            },
-          };
-<span class="cstat-no" title="statement not covered" >        }</span>
+              [child]: val<span class="cstat-no" title="statement not covered" >ue,</span>
+<span class="fstat-no" title="function not covered" ></span>            },<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >          };</span>
+        }
         return { ...prev, [fieldId]: value };
       });
-    },
-    [setRecord]
+    },<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" >    [s</span>etRecord]
   );<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  cons<span class="cstat-no" title="statement not covered" >t onChangeHandler = useCallback</span>(
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  const onChangeHandler = useCallback(
     (fieldId: string) =&gt; (value: unknown) =&gt; {
       onChangeField(value as string, fieldId);
     },
-    [onChangeField]<span class="cstat-no" title="statement not covered" ></span>
-  );<span class="fstat-no" title="function not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span>
-  cons<span class="cstat-no" title="statement not covered" >t onChange<span class="fstat-no" title="function not covered" >Nu</span>mberOfSma<span class="cstat-no" title="statement not covered" >llTrees = useCallback(</span></span>
+    [onChangeField]
+  );
+&nbsp;
+  const onChangeNumberOfSmallTrees = useCallback(
     (value: unknown) =&gt; {
       const [low, high] = value as [number, number];
-      setRecord((prev) =&gt; ({
-        ...prev,
+      setRecord((prev) =&gt; ({<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" ></span>        ..<span class="cstat-no" title="statement not covered" >.prev,</span>
         biomassMeasurement: {
           ...prev.biomassMeasurement,
           smallTreeCountLow: low,
           smallTreeCountHigh: high,
         },
       }));
-    },<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" >    [s</span>etRe<span class="cstat-no" title="statement not covered" >cord]</span>
+    },
+    [setRecord]
   );
 &nbsp;
   const forestTypeOptions = useMemo(
-    () =&gt; [
-      {
+    () =&gt; [<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" ></span>      {<span class="cstat-no" title="statement not covered" ></span>
         label: strings.TERRESTRIAL,
         value: 'Terrestrial',
       },
       {
         label: strings.MANGROVE,
         value: 'Mangrove',
-      },<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" >    ],<span class="cstat-no" title="statement not covered" ></span></span>
+      },
+    ],
     [strings.MANGROVE, strings.TERRESTRIAL]
   );
-&nbsp;
-  const smallTreeCountOptions = useMemo(
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  co<span class="cstat-no" title="statement not covered" >nst smallTreeCountOptions = useMemo(</span>
     () =&gt; [
-      { label: '0', value: [0, 0] },
-      { label: '1-10', value: [1, 10] },
-      { label: '11-50', value: [11, 50] },
-      { label: '51-100', value: [51, 100] },
-      { label: '101-500', value: [101, 500] },
-      { label: '501-1<span class="cstat-no" title="statement not covered" >000', value: [501, 1000] }<span class="fstat-no" title="function not covered" >,</span></span>
+      { label: '0', value: [0,<span class="cstat-no" title="statement not covered" > 0] },<span class="fstat-no" title="function not covered" ></span></span>
+      { label: '<span class="cstat-no" title="statement not covered" >1-10', value: [1, 10] },</span>
+      { label: '1<span class="cstat-no" title="statement not covered" >1-50', value: [11, 50] },</span>
+<span class="cstat-no" title="statement not covered" >      { label: '51-100', value: [51, 100] },</span>
+<span class="cstat-no" title="statement not covered" >      { label: '10</span>1-500', value: [101, 500] },
+      { label: '501-1000', value: [501, 1000] },
 <span class="cstat-no" title="statement not covered" >      { label: '+1000', value: [1001, 1001] },</span>
-    ],
-    []<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+    ],<span class="cstat-no" title="statement not covered" ></span>
+    []
   );<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span>
-  co<span class="cstat-no" title="statement not covered" >nst isMangrove = useMemo(() =&gt; {</span>
-    re<span class="cstat-no" title="statement not covered" >turn record.</span>biomassMeasurement.forestType === 'Mangrove';
-  }, [record]);
-<span class="cstat-no" title="statement not covered" ></span>
-  cons<span class="cstat-no" title="statement not covered" >t smallTreeCount</span>Value = useMemo(() =&gt; {
+&nbsp;
+  const isMangrove = useMemo(() =&gt; {
+    return record.biomass<span class="cstat-no" title="statement not covered" >Measurement.forestType === 'Ma<span class="fstat-no" title="function not covered" >ng</span>rove';</span>
+  },<span class="cstat-no" title="statement not covered" > [reco<span class="fstat-no" title="function not covered" >rd</span>]);</span>
+&nbsp;
+  const smallTreeCountValue =<span class="cstat-no" title="statement not covered" > useMemo(() =&gt; {</span>
     const low = record.biomassMeasurement.smallTreeCountLow.toString();
-    co<span class="cstat-no" title="statement not covered" >nst high = record.biomass</span>Measurement.smallTreeCountHigh.toString();
+    const high = record.biomassMeasurement.smallTreeCountHigh.toString();
 &nbsp;
     if (low === '0' &amp;&amp; high === '0') {
-      return '0';<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >    }<span class="fstat-no" title="function not covered" ></span></span>
+      return '0';
+    }
     if (low === '1001' &amp;&amp; high === '1001') {
-      return '+1000';<span class="cstat-no" title="statement not covered" ></span>
+      return '+1000';
     } else {
       return `${low}-${high}`;
     }
   }, [record]);
 &nbsp;
-  const saveEditedData = useCallback(() =&gt; {
+  const saveEditedData = u<span class="cstat-no" title="statement not covered" >seCallback(() =&gt; {</span>
     void (async () =&gt; {
       const biomassPayload: BiomassUpdateOperationPayload = {
         type: 'Biomass',
         description: record.biomassMeasurement?.description,
-        soilAssessment: record.biomassMeasurement?.soilAssessment,
-        forestType: record.biomassMeasurement?.forestType,
-        ph: record.biomassMeasurement?.ph,
-        salinity: record.b<span class="cstat-no" title="statement not covered" >iomassMeasurement?.salinity,</span>
+<span class="cstat-no" title="statement not covered" >        soilAssessment: record.biomassMeasurement?.soilAssessment,</span>
+<span class="cstat-no" title="statement not covered" >        forestType: record.biomassMeasurement?.forestType,</span>
+        ph<span class="cstat-no" title="statement not covered" >: record.biomassMeasurement?.ph,</span>
+        salinity: record.biomassMeasurement?.salinity,
         smallTreeCountHigh: record.biomassMeasurement?.smallTreeCountHigh,
         smallTreeCountLow: record.biomassMeasurement?.smallTreeCountLow,
         tide: record.biomassMeasurement?.tide,
         tideTime: record.biomassMeasurement?.tideTime,
-<span class="cstat-no" title="statement not covered" >        waterDepth: record.biomassMeasurement?.waterDepth,</span>
-        herbaceousCover<span class="cstat-no" title="statement not covered" >Percent: record.biomassMeasurement?.herbaceousCoverPercent,</span>
+        waterDepth: record.biomassMeasurement?.waterDepth,
+        he<span class="cstat-no" title="statement not covered" >rbaceousCoverPercent: record.biomassMea</span>surement?.herbaceousCoverPercent,
+      };<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
+      cons<span class="cstat-no" title="statement not covered" >t plotPayload: Observat</span>ionPlotUpdateOperationPayload = {
+        ty<span class="cstat-no" title="statement not covered" >pe: 'ObservationPlot',</span>
+        co<span class="cstat-no" title="statement not covered" >nditions</span>: record.conditions,
+        notes: record.notes,
       };
 &nbsp;
-      const plotPayload: ObservationPlotUpdateOperationPayload = {
-        type: 'ObservationPlot',
-        conditions: record.conditions,
-        notes: record.notes,
-      };<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span>
-      if (<span class="cstat-no" title="statement not covered" >results?</span>.adHocPlot?.monitoringPlotId) {
-        const result = await update({
-<span class="cstat-no" title="statement not covered" >          observationId,</span>
-<span class="cstat-no" title="statement not covered" >          plotId: result</span>s.adHocPlot.monitoringPlotId,
-          updateObservationRequestPayload: {
-            updates: [biomassPayload, plotPayload],
-          },
-<span class="cstat-no" title="statement not covered" >        });</span>
-&nbsp;
-        if ('error' in result) {
-          snack<span class="fstat-no" title="function not covered" >ba</span>r.to<span class="cstat-no" title="statement not covered" >astError();</span>
+      if (results?.adHocPlot?.monitoringPlotId) {
+<span class="cstat-no" title="statement not covered" >        try {</span>
+          await update({
+            observationId,
+            plo<span class="fstat-no" title="function not covered" >tI</span>d: r<span class="cstat-no" title="statement not covered" >esults.adHocPlot.monitoringPlotId,</span>
+            updateObservationRequestPayload: {
+              updates: [biomassPayload, plotPayload],
+            },
+          }).unwrap();
+          setShowConfirmationModalOpened(false);
+          setOp<span class="fstat-no" title="function not covered" >en</span>(fal<span class="cstat-no" title="statement not covered" >se);</span>
+        } catch (e) {
+          snackbar.toastError();
+          setShowConfirmationModalOpened(false);
           return;
         }
-        setShowConfirmationModalOpened(false);
-        setOpen(false);
       }
-    })();<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+    })();
   }, [record, results, setOpen, update, observationId, snackbar]);
 &nbsp;
   return (
     open &amp;&amp; (
-      &lt;&gt;
+      &lt;&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
         {showConfirmationModalOpened &amp;&amp; (
           &lt;EditQualitativeDataConfirmationModal
             onClose={() =&gt; setShowConfirmationModalOpened(false)}
             onSubmit={saveEditedData}
           /&gt;
         )}
-        {!showConfirm<span class="fstat-no" title="function not covered" >at</span>ionM<span class="cstat-no" title="statement not covered" >odalOpened &amp;&amp; (</span>
+        {!showConfirmationModalOpened &amp;&amp; (
           &lt;DialogBox
             onClose={() =&gt; setOpen(false)}
-            open={true}
+            open={tru<span class="fstat-no" title="function not covered" >e}<span class="cstat-no" title="statement not covered" ></span></span>
             title={strings.EDIT_OBSERVATION_DATA}
             size='medium'
             middleButtons={[
               &lt;Button
                 id='cancelEditData'
                 label={strings.CANCEL}
-                prior<span class="fstat-no" title="function not covered" >it</span>y='s<span class="cstat-no" title="statement not covered" >econdary'</span>
+                priority='secondary'
                 type='passive'
                 onClick={() =&gt; setOpen(false)}
                 size='medium'
@@ -1133,7 +1157,7 @@ const EditBiomassQuali<span class="cstat-no" title="statement not covered" >tati
             scrolled
           &gt;
             &lt;Box sx={{ textAlign: 'left' }}&gt;
-              &lt;TextField
+              &lt;Textfield
                 type='textarea'
                 label={strings.PLOT_DESCRIPTION}
                 value={record.biomassMeasurement?.description}
@@ -1161,7 +1185,7 @@ const EditBiomassQuali<span class="cstat-no" title="statement not covered" >tati
                 &lt;/Box&gt;
 &nbsp;
                 &lt;Box sx={{ flex: 1 }}&gt;
-                  &lt;TextField
+                  &lt;Textfield
                     type='text'
                     label={strings.HERBACEOUS_COVER_PERCENT}
                     value={record.biomassMeasurement?.herbaceousCoverPercent}
@@ -1174,7 +1198,7 @@ const EditBiomassQuali<span class="cstat-no" title="statement not covered" >tati
                 &lt;&gt;
                   &lt;Box sx={{ display: 'flex', gap: 2, paddingTop: '16px' }}&gt;
                     &lt;Box sx={{ flex: 1 }}&gt;
-                      &lt;TextField
+                      &lt;Textfield
                         type='text'
                         label={strings.WATER_DEPTH_CM}
                         value={record.biomassMeasurement?.waterDepth}
@@ -1184,7 +1208,7 @@ const EditBiomassQuali<span class="cstat-no" title="statement not covered" >tati
                     &lt;/Box&gt;
 &nbsp;
                     &lt;Box sx={{ flex: 1 }}&gt;
-                      &lt;TextField
+                      &lt;Textfield
                         type='text'
                         label={strings.SALINITY_PPT}
                         value={record.biomassMeasurement?.salinity}
@@ -1196,17 +1220,17 @@ const EditBiomassQuali<span class="cstat-no" title="statement not covered" >tati
 &nbsp;
                   &lt;Box sx={{ display: 'flex', gap: 2, paddingTop: '16px' }}&gt;
                     &lt;Box sx={{ flex: 1 }}&gt;
-                      &lt;TextField
+                      &lt;Textfield
                         type='text'
-                        label={strings.PH}
-                        value={record.biomassMeasurement?.ph}
+<span class="fstat-no" title="function not covered" ></span>                        label={strings.PH}
+<span class="cstat-no" title="statement not covered" >                        value={record.biomassMeasurement?.ph}</span>
                         id={'ph'}
                         onChange={onChangeHandler('biomassMeasurement.ph')}
                       /&gt;
                     &lt;/Box&gt;
 &nbsp;
-                    &lt;B<span class="fstat-no" title="function not covered" >ox</span> sx={{ flex: 1 }}&gt;
-<span class="cstat-no" title="statement not covered" >                      &lt;Dropdown</span>
+                    &lt;Box sx={{ flex: 1 }}&gt;
+                      &lt;Dropdown
                         label={strings.TIDE}
                         selectedValue={record.biomassMeasurement?.tide}
                         id={'tide'}
@@ -1241,10 +1265,10 @@ const EditBiomassQuali<span class="cstat-no" title="statement not covered" >tati
                 options={plotConditionsMap}
                 valueRenderer={valueRender}
                 selectedOptions={record.conditions || []}
-                sx={'biomassMeasurement' in record ? { paddingTop: '16px' } : undefined}
+                sx={{ paddingTop: '16px' }}
               /&gt;
 &nbsp;
-              &lt;TextField
+              &lt;Textfield
                 type='textarea'
                 label={strings.FIELD_NOTES}
                 value={record.notes}
@@ -1253,14 +1277,14 @@ const EditBiomassQuali<span class="cstat-no" title="statement not covered" >tati
                 onChange={onChangeHandler('notes')}
               /&gt;
 &nbsp;
-              &lt;Box display='flex'&gt;
+              &lt;Box d<span class="cstat-no" title="statement not covered" >isplay='flex'&gt;</span>
                 &lt;Box paddingRight={'16px'} paddingTop={'16px'}&gt;
                   {photoUrl &amp;&amp; (
                     &lt;img
                       src={`${photoUrl}?maxHeight=120`}
                       alt={'soilAssessmentImage'}
                       style={{
-<span class="cstat-no" title="statement not covered" >                        margin: 'auto auto',</span>
+                        margin: 'auto auto',
                         objectFit: 'contain',
                         display: 'flex',
                         maxWidth: '210px',
@@ -1271,7 +1295,7 @@ const EditBiomassQuali<span class="cstat-no" title="statement not covered" >tati
                 &lt;/Box&gt;
 &nbsp;
                 &lt;Box sx={{ paddingTop: '16px', flex: 1 }}&gt;
-                  &lt;TextField
+                  &lt;Textfield
                     type='textarea'
                     label={strings.SOIL_ASSESSMENT_DESCRIPTION_NOTES}
                     value={record.biomassMeasurement?.soilAssessment}
@@ -1297,7 +1321,7 @@ export default EditBiomassQualitativeDataModal;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-14T01:46:15.504Z
+                at 2026-01-14T20:43:52.782Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>
