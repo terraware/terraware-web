@@ -49,7 +49,7 @@ const EditMonitoringPlotQualitativeDataModal = ({ initialFormData, open, setOpen
   );
   const [update] = useUpdateCompletedObservationPlotMutation();
 
-  const plotConditionsMap = React.useMemo(() => {
+  const plotConditionsMap = useMemo(() => {
     const options = getPlotConditionsOptions(activeLocale);
     return new Map(options.map((option) => [option.value, option]));
   }, [activeLocale]);
