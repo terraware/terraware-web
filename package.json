@@ -54,6 +54,7 @@
     "@emotion/styled": "^11.11.3",
     "@mapbox/mapbox-gl-draw": "^1.5.0",
     "@mapbox/search-js-core": "^1.0.0-beta.21",
+    "@mkkellogg/gaussian-splats-3d": "^0.4.7",
     "@mui/base": "^5.0.0-beta.20",
     "@mui/icons-material": "^6.0.0",
     "@mui/lab": "^6.0.1-beta.36",
