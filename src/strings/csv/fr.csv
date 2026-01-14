@@ -418,6 +418,7 @@ DATA_CHECK_COMPLETED,Vérification de la base de données terminée. Aucune erre
 DATA_CHECK_WITH_PROBLEMS,Vérification de la base de données terminée. {0} erreurs potentielles ont été trouvées.,6e41111d
 DATA_IMPORT_FAILED,Échec de l'importation des données,9b2691f0
 DATA_IMPORT_ROW_MESSAGE,Ligne {0} : {1},3a694eb9
+DATA_IS_NOT_YET_AVAILABLE,Les données ne sont pas encore disponibles.,ea3a0d36
 DATE,Date,3b0a1ef9
 DATE_ADDED,Date Ajouté,597eea90
 DATE_ADDED_REQUIRED,Date Ajouté *,443f82cc
@@ -1169,6 +1170,7 @@ NORTHWEST_CORNER,Coin nord-ouest,2c0842da
 NORTHWEST_CORNER_LATITUDE,Latitude de l’angle nord-ouest,bef5fb10
 NORTHWEST_CORNER_LONGITUDE,Longitude de l’angle nord-ouest,355e9d22
 NOT_ACCEPTED,Non accepté,c3102621
+NOT_CALCULATED_FOR_TEMPORARY_PLOTS,Non calculé pour les parcelles temporaires.,ca983c30
 NOT_COMPLETE,Pas terminé,a8606bc8
 NOT_ENOUGH_SEEDS_IN_ACCESSION,Pas assez de semences dans l'accession,1d7be036
 NOT_NEEDED,Non nécessaire,dc4188cf
@@ -2055,6 +2057,7 @@ SUMMARY_OF_PROGRESS_REQUIRED,Résumé des progrès accomplis *,35c72f75
 SUPPLEMENTAL_FILES,Fichiers supplémentaires,b655103c
 SURVIVAL_RATE,Taux de survie,b1a831cf
 SURVIVAL_RATE_COLUMN_TOOLTIP,"Les taux de survie sont calculés en fonction des densités initiales de plants. Si les densités initiales de plants ne sont pas définies pour un site de plantation, le taux de survie ne sera pas disponible.",426f186d
+SURVIVAL_RATE_NOT_CALCULATED_FOR_TEMPORARY_PLOTS,Le taux de survie n'est pas calculé pour les parcelles temporaires.,2d32c87c
 SURVIVAL_RATE_PER_SPECIES,Taux de survie par espèce,523afab7
 SURVIVAL_RATE_PER_SPECIES_AS_OF_THIS_OBSERVATION,Taux de survie par espèce à la date de cette observation,76a96a8d
 SURVIVAL_RATE_PER_SPECIES_AS_OF_THIS_OBSERVATION_TOOLTIP,"Le taux de survie par espèce à la date de cette observation indique les taux de survie des espèces observées dans toutes les parcelles à la date de cette observation, ce qui inclut l'observation actuelle et toutes les observations précédentes. Les plantes enregistrées comme préexistantes ou dont l'espèce est inconnue ne sont pas incluses.",5e0d4528

@@ -419,6 +419,7 @@ DATA_CHECK_COMPLETED,Se ha completado la comprobación de la base de datos. No s
 DATA_CHECK_WITH_PROBLEMS,La comprobación de la base de datos ha finalizado. Se han encontrado {0} errores potenciales.,6e41111d
 DATA_IMPORT_FAILED,Se ha producido un error en la importación de datos,9b2691f0
 DATA_IMPORT_ROW_MESSAGE,Fila {0}: {1},3a694eb9
+DATA_IS_NOT_YET_AVAILABLE,Los datos aún no están disponibles.,ea3a0d36
 DATE,Fecha,3b0a1ef9
 DATE_ADDED,Fecha en la que se añadió,597eea90
 DATE_ADDED_REQUIRED,Fecha de adición *,443f82cc
@@ -1170,6 +1171,7 @@ NORTHWEST_CORNER,Esquina noroeste,2c0842da
 NORTHWEST_CORNER_LATITUDE,Latitud de la esquina noroeste,bef5fb10
 NORTHWEST_CORNER_LONGITUDE,Longitud de la esquina noroeste,355e9d22
 NOT_ACCEPTED,No aceptado(a),c3102621
+NOT_CALCULATED_FOR_TEMPORARY_PLOTS,No calculado para Parcelas Temporales.,ca983c30
 NOT_COMPLETE,Sin completar,a8606bc8
 NOT_ENOUGH_SEEDS_IN_ACCESSION,No hay suficientes semillas en la accesión.,1d7be036
 NOT_NEEDED,No es necesario,dc4188cf
@@ -2055,6 +2057,7 @@ SUMMARY_OF_PROGRESS_REQUIRED,Resumen de progresos *,35c72f75
 SUPPLEMENTAL_FILES,Archivos suplementarios,b655103c
 SURVIVAL_RATE,Tasa de supervivencia,b1a831cf
 SURVIVAL_RATE_COLUMN_TOOLTIP,"Las tasas de supervivencia se calculan en función de las densidades iniciales de plantas. Si no se establecen densidades iniciales de plantas para un Sitio de Plantación, la tasa de supervivencia no estará disponible.",426f186d
+SURVIVAL_RATE_NOT_CALCULATED_FOR_TEMPORARY_PLOTS,La tasa de supervivencia no se calcula para Parcelas Temporales.,2d32c87c
 SURVIVAL_RATE_PER_SPECIES,Tasa de supervivencia por especie,523afab7
 SURVIVAL_RATE_PER_SPECIES_AS_OF_THIS_OBSERVATION,Tasa de supervivencia por especie según esta observación,76a96a8d
 SURVIVAL_RATE_PER_SPECIES_AS_OF_THIS_OBSERVATION_TOOLTIP,"La Tasa de Supervivencia por Especie en esta Observación muestra las tasas de supervivencia para las especies observadas en todas las parcelas hasta esta Observación, lo que incluye la observación actual y todas las anteriores. No se incluyen las plantas registradas como preexistentes ni aquellas cuyo nombre científico se desconoce.",5e0d4528

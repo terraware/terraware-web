@@ -66,9 +66,7 @@ export default function SpeciesSurvivalRateChart({
             zIndex: 1,
           }}
         >
-          {isTemporary
-            ? strings.SURVIVAL_RATE_NOT_CALCULATED_FOR_TEMPORARY_PLOTS
-            : strings.DATA_IS_NOT_YET_AVAILABLE}
+          {isTemporary ? strings.SURVIVAL_RATE_NOT_CALCULATED_FOR_TEMPORARY_PLOTS : strings.DATA_IS_NOT_YET_AVAILABLE}
         </Box>
       )}
       <Box>
