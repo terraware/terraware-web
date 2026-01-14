@@ -64,6 +64,7 @@ export default function NavBar({
   const isDeliverableViewRoute = useMatch({ path: APP_PATHS.DELIVERABLE_VIEW + '/', end: false });
   const isHomeRoute = useMatch({ path: APP_PATHS.HOME + '/', end: false });
   const isPeopleRoute = useMatch({ path: APP_PATHS.PEOPLE + '/', end: false });
+  const isPreviewRoute = useMatch({ path: APP_PATHS.PREVIEW + '/', end: false });
   const isSpeciesRoute = useMatch({ path: APP_PATHS.SPECIES + '/', end: false });
   const isOrganizationRoute = useMatch({ path: APP_PATHS.ORGANIZATION + '/', end: false });
   const isSeedBanksRoute = useMatch({ path: APP_PATHS.SEED_BANKS + '/', end: false });
@@ -346,6 +347,15 @@ export default function NavBar({
           closeAndNavigateTo(APP_PATHS.HOME);
         }}
         id='home'
+      />
+      <NavItem
+        label='Preview'
+        icon='iconFile'
+        selected={!!isPreviewRoute}
+        onClick={() => {
+          closeAndNavigateTo(APP_PATHS.PREVIEW);
+        }}
+        id='preview'
       />
       <NavItem
         label={strings.SPECIES}

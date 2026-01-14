@@ -38,6 +38,7 @@ import OrganizationRouter from 'src/scenes/OrganizationRouter';
 import PeopleRouter from 'src/scenes/PeopleRouter';
 import PlantingSites from 'src/scenes/PlantingSitesRouter';
 import PlantsDashboardRouter from 'src/scenes/PlantsDashboardRouter';
+import PreviewRouter from 'src/scenes/PreviewRouter';
 import AcceleratorReportsRouter from 'src/scenes/Reports';
 import SeedBanksRouter from 'src/scenes/SeedBanksRouter';
 import SeedsDashboard from 'src/scenes/SeedsDashboard';
@@ -239,6 +240,7 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
             <Route path={APP_PATHS.DELIVERABLES + '/*'} element={<DeliverablesRouter />} />
             <Route path={APP_PATHS.APPLICATIONS + '/*'} element={<ApplicationRouter />} />
             <Route path={APP_PATHS.ACTIVITY_LOG + '/*'} element={<ActivityLogRouter />} />
+            <Route path={APP_PATHS.PREVIEW} element={<PreviewRouter />} />
 
             {!isProduction && (
               <Route path={APP_PATHS.OPT_IN} element={<OptInFeaturesView refresh={reloadPreferences} />} />

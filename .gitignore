@@ -38,3 +38,5 @@ src/strings/strings-*.js
 # playwright
 /playwright-report/
 /playwright/test-results/
+
+/public/assets/models/test
