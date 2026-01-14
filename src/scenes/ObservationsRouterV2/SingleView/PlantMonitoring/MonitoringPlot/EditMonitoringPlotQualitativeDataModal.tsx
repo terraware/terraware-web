@@ -135,6 +135,7 @@ const EditMonitoringPlotQualitativeDataModal = ({ initialFormData, open, setOpen
           setOpen(false);
         } catch (e) {
           snackbar.toastError();
+          setShowConfirmationModalOpened(false);
           return;
         }
       }

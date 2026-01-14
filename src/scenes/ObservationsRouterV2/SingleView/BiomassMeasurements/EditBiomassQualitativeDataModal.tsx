@@ -214,6 +214,7 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
           setOpen(false);
         } catch (e) {
           snackbar.toastError();
+          setShowConfirmationModalOpened(false);
           return;
         }
       }
