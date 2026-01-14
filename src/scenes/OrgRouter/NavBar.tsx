@@ -213,7 +213,7 @@ export default function NavBar({
 
   const seedFundReportsMenu = useMemo<JSX.Element | null>(
     () =>
-      selectedOrganization?.canSubmitReports && !!orgFeatures?.data?.seedFundReports?.enabled && activeLocale ? (
+      selectedOrganization?.canSubmitReports && activeLocale ? (
         <NavItem
           icon='iconGraphReport'
           label={strings.SEED_FUND_REPORTS}
