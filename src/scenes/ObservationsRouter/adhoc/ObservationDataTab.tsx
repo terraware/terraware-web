@@ -91,15 +91,13 @@ const ObservationDataTab = ({
       tooltip: type === 'adHoc' ? strings.AD_HOC_PLOT_PLANT_DENSITY_TOOLTIP : strings.PLOT_PLANT_DENSITY_TOOLTIP,
       value: monitoringPlot?.plantingDensity,
     },
-    ...(monitoringPlot?.survivalRate !== undefined
-      ? [
-          {
-            label: strings.SURVIVAL_RATE,
-            tooltip: strings.PLOT_SURVIVAL_RATE_TOOLTIP,
-            value: `${monitoringPlot?.survivalRate}%`,
-          },
-        ]
-      : []),
+    {
+      label: strings.SURVIVAL_RATE,
+      tooltip: strings.PLOT_SURVIVAL_RATE_TOOLTIP,
+      value: monitoringPlot.isPermanent
+        ? `${monitoringPlot?.survivalRate}%`
+        : strings.NOT_CALCULATED_FOR_TEMPORARY_PLOTS,
+    },
   ];
 
   const onEditQualitativeData = useCallback(() => {
@@ -193,28 +191,31 @@ const ObservationDataTab = ({
             </Box>
 
             <Box height='245px'>
-              <SpeciesTotalPlantsChart minHeight='245px' species={species} />
-            </Box>
-          </Box>
-        )}
-
-        {monitoringPlot?.isPermanent && (
-          <Box flex={1} minWidth='500px'>
-            <Box display='flex' alignItems={'center'}>
-              <Typography fontSize={'20px'} fontWeight={600}>
-                {strings.SURVIVAL_RATE_PER_SPECIES_AS_OF_THIS_OBSERVATION}
-              </Typography>
-              <IconTooltip title={strings.SURVIVAL_RATE_PER_SPECIES_AS_OF_THIS_OBSERVATION_TOOLTIP} />
-            </Box>
-            <Box height='245px'>
-              <SpeciesSurvivalRateChart
+              <SpeciesTotalPlantsChart
                 minHeight='245px'
                 species={species}
-                isCompleted={!!monitoringPlot.completedTime}
+                isNotCompleted={!monitoringPlot.completedTime}
               />
             </Box>
           </Box>
         )}
+
+        <Box flex={1} minWidth='500px'>
+          <Box display='flex' alignItems={'center'}>
+            <Typography fontSize={'20px'} fontWeight={600}>
+              {strings.SURVIVAL_RATE_PER_SPECIES_AS_OF_THIS_OBSERVATION}
+            </Typography>
+            <IconTooltip title={strings.SURVIVAL_RATE_PER_SPECIES_AS_OF_THIS_OBSERVATION_TOOLTIP} />
+          </Box>
+          <Box height='245px'>
+            <SpeciesSurvivalRateChart
+              minHeight='245px'
+              species={species}
+              isNotCompleted={!monitoringPlot.completedTime}
+              isTemporary={!monitoringPlot.isPermanent}
+            />
+          </Box>
+        </Box>
       </Box>
       {type === 'adHoc' && onExportData && onMatchSpecies && (
         <PlotActions

@@ -183,7 +183,9 @@ export default function ObservationMonitoringPlotDetails(): JSX.Element | undefi
         ? [
             {
               label: strings.SURVIVAL_RATE,
-              value: monitoringPlotResult?.survivalRate ? `${monitoringPlotResult?.survivalRate}%` : '',
+              value: monitoringPlotResult?.isPermanent
+                ? `${monitoringPlotResult?.survivalRate}%`
+                : strings.NOT_CALCULATED_FOR_TEMPORARY_PLOTS,
             },
           ]
         : []),
@@ -432,21 +434,19 @@ export default function ObservationMonitoringPlotDetails(): JSX.Element | undefi
             <Box height='360px'>
               <SpeciesTotalPlantsChart minHeight='360px' species={monitoringPlotSpecies} />
             </Box>
-            {monitoringPlotResult?.isPermanent && (
-              <>
-                <Box display='flex' alignItems={'center'}>
-                  {title(strings.SURVIVAL_RATE_PER_SPECIES_AS_OF_THIS_OBSERVATION)}
-                  <IconTooltip title={strings.SURVIVAL_RATE_PER_SPECIES_AS_OF_THIS_OBSERVATION_TOOLTIP} />
-                </Box>
-                <Box height='360px'>
-                  <SpeciesSurvivalRateChart
-                    minHeight='360px'
-                    species={monitoringPlotSpecies}
-                    isCompleted={!!monitoringPlotResult?.completedTime}
-                  />
-                </Box>
-              </>
-            )}
+            <Box display='flex' alignItems={'center'}>
+              {title(strings.SURVIVAL_RATE_PER_SPECIES_AS_OF_THIS_OBSERVATION)}
+              <IconTooltip title={strings.SURVIVAL_RATE_PER_SPECIES_AS_OF_THIS_OBSERVATION_TOOLTIP} />
+            </Box>
+            <Box height='360px'>
+              <SpeciesSurvivalRateChart
+                minHeight='360px'
+                species={monitoringPlotSpecies}
+                isNotCompleted={!monitoringPlotResult?.completedTime}
+                isTemporary={!monitoringPlotResult?.isPermanent}
+              />
+            </Box>
+
             {title(strings.PHOTOS)}
             <MonitoringPlotPhotos
               observationId={Number(observationId)}

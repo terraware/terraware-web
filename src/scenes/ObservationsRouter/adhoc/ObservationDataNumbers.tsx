@@ -3,6 +3,8 @@ import React from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
 import { Icon, Tooltip } from '@terraware/web-components';
 
+import strings from 'src/strings';
+
 type ObservationDataNumbersProps = {
   items: { label: string; tooltip: string; value?: string | number }[];
   isCompleted: boolean;
@@ -13,6 +15,8 @@ const ObservationDataNumbers = ({ items, isCompleted }: ObservationDataNumbersPr
   return (
     <Box display='grid' paddingBottom={3} gridTemplateColumns={`repeat(${items.length}, 1fr)`} gap={2}>
       {items.map((item, index) => {
+        const isTemporarySurvivalRateItem =
+          item.label === strings.SURVIVAL_RATE && item.value === strings.NOT_CALCULATED_FOR_TEMPORARY_PLOTS;
         return (
           <Box
             key={index}
@@ -29,8 +33,11 @@ const ObservationDataNumbers = ({ items, isCompleted }: ObservationDataNumbersPr
               </Tooltip>
             </Box>
             <Box>
-              <Typography fontWeight={600} fontSize={'24px'}>
-                {isCompleted ? item.value : ''}
+              <Typography
+                fontWeight={isTemporarySurvivalRateItem ? 400 : 600}
+                fontSize={isTemporarySurvivalRateItem ? '16px' : '24px'}
+              >
+                {isCompleted ? item.value : isTemporarySurvivalRateItem ? item.value : '-'}
               </Typography>
             </Box>
           </Box>
