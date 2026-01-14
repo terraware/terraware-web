@@ -1,14 +1,15 @@
 import React, { useMemo } from 'react';
-import { useParams } from 'react-router';
+import { Route, Routes, useParams } from 'react-router';
 
 import { BusySpinner } from '@terraware/web-components';
 
 import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
 
-import BiomassMeasurementsView from './BiomassMeasurements';
-import PlantMonitoringView from './PlantMonitoring';
+import MonitoringPlotDetails from './MonitoringPlot';
+import SiteDetails from './SiteDetails';
+import StratumDetails from './StratumDetails';
 
-const ObservationSingleView = (): JSX.Element => {
+const PlantMonitoringView = (): JSX.Element => {
   const params = useParams<{ observationId: string }>();
   const observationId = Number(params.observationId);
 
@@ -22,11 +23,17 @@ const ObservationSingleView = (): JSX.Element => {
     return <BusySpinner />;
   }
 
-  if (results.type === 'Biomass Measurements') {
-    return <BiomassMeasurementsView />;
-  } else {
-    return <PlantMonitoringView />;
+  if (results.isAdHoc) {
+    return <MonitoringPlotDetails />;
   }
+
+  return (
+    <Routes>
+      <Route path={'/stratum/:stratumName/plot/:monitoringPlotId'} element={<MonitoringPlotDetails />} />
+      <Route path={'/stratum/:stratumName'} element={<StratumDetails />} />
+      <Route path={'/*'} element={<SiteDetails />} />
+    </Routes>
+  );
 };
 
-export default ObservationSingleView;
+export default PlantMonitoringView;
