@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography } from '@mui/material';
 import { Dropdown, Separator } from '@terraware/web-components';
+import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import ClientSideFilterTable from 'src/components/Tables/ClientSideFilterTable';
 import Card from 'src/components/common/Card';
@@ -17,7 +18,9 @@ import {
 import { PlantingSitePayload, useLazyListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
 import { ObservationState } from 'src/types/Observations';
 import { SearchSortOrder } from 'src/types/Search';
+import { getShortDate } from 'src/utils/dateFormatter';
 import { isAdmin } from 'src/utils/organization';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import PlantMonitoringCellRenderer from './PlantMonitoringCellRenderer';
 
@@ -42,8 +45,9 @@ export type PlantMonitoringListProps = {
 
 const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
   const { selectedOrganization } = useOrganization();
+  const defaultTimezone = useDefaultTimeZone().get().id;
   const scheduleObservationsEnabled = isAdmin(selectedOrganization);
-  const { strings } = useLocalization();
+  const { activeLocale, strings } = useLocalization();
 
   const columns = useMemo((): TableColumnType[] => {
     const defaultColumns: TableColumnType[] = [
@@ -271,9 +275,14 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           }
         }, '');
 
+        const completedDate = observationResult.completedTime
+          ? getDateDisplayValue(observationResult.completedTime, plantingSite?.timeZone ?? defaultTimezone)
+          : undefined;
+        const observationDate = getShortDate(completedDate ?? observation.startDate, activeLocale);
+
         return {
           observationId: observationResult.observationId,
-          observationDate: observation?.endDate,
+          observationDate,
           state: observationResult.state,
           plantingSiteName: plantingSite?.name,
           strata,
@@ -284,7 +293,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           completedDate: observationResult.completedTime,
         };
       }),
-    [observationResults, observationsById, plantingSitesById]
+    [activeLocale, defaultTimezone, observationResults, observationsById, plantingSitesById]
   );
 
   const rightComponent = useMemo(() => {
