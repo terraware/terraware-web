@@ -37,7 +37,7 @@ const DeliverablesList = ({ projectId, maxItemsPerPage }: DeliverablesListProps)
     setCurrentParticipantProject,
   } = useParticipantData();
   const [projectFilter, setProjectFilter] = useState<{ projectId?: number | string }>({
-    projectId: (projectId ? projectId : currentParticipantProject?.id) || '',
+    projectId: projectId ? projectId : currentParticipantProject?.id,
   });
 
   useEffect(() => {
