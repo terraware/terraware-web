@@ -20,6 +20,7 @@ import { Species } from 'src/types/Species';
 import { Delivery } from 'src/types/Tracking';
 import { isTrue } from 'src/utils/boolean';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import useSnackbar from 'src/utils/useSnackbar';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
@@ -66,6 +67,7 @@ export default function NurseryWithdrawalsDetailsView({
   const [batches, setBatches] = useState<Batch[] | undefined>(undefined);
   const [undoWithdrawalModalOpened, setUndoWithdrawalModalOpened] = useState(false);
   const [reload, setReload] = useState(false);
+  const numberFormatter = useNumberFormatter(activeLocale);
 
   const reloadWithdrawal = () => {
     setReload(true);
@@ -105,7 +107,7 @@ export default function NurseryWithdrawalsDetailsView({
             destinationName: withdrawalSummaryRecord.destinationName as string,
             substratumNames: withdrawalSummaryRecord.substratumNames as string,
             scientificNames: withdrawalSummaryRecord.speciesScientificNames as string[],
-            totalWithdrawn: withdrawalSummaryRecord.totalWithdrawn as string,
+            totalWithdrawn: numberFormatter.format((withdrawalSummaryRecord['totalWithdrawn(raw)'] || 0) as number),
             hasReassignments: isTrue(withdrawalSummaryRecord.hasReassignments),
           });
         }
@@ -113,7 +115,7 @@ export default function NurseryWithdrawalsDetailsView({
     };
 
     void updateWithdrawal();
-  }, [selectedOrganization, withdrawalId, snackbar, reload]);
+  }, [selectedOrganization, withdrawalId, snackbar, reload, numberFormatter]);
 
   const contentPanelProps = {
     borderRadius: '32px',

@@ -98,7 +98,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
       { key: 'project_names', name: strings.PROJECTS, type: 'string' },
       { key: 'substratumNames', name: strings.TO_SUBSTRATUM, type: 'string' },
       { key: 'speciesScientificNames', name: strings.SPECIES, type: 'string' },
-      { key: 'totalWithdrawn', name: strings.TOTAL_QUANTITY, type: 'number' },
+      { key: 'totalWithdrawn(raw)', name: strings.TOTAL_QUANTITY, type: 'number' },
       { key: 'menu', name: '', type: 'string' },
     ],
     [strings]
@@ -151,7 +151,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         displayLabel: strings.SPECIES,
       },
       {
-        key: 'totalWithdrawn',
+        key: 'totalWithdrawn(raw)',
         displayLabel: strings.TOTAL_QUANTITY,
       },
     ],

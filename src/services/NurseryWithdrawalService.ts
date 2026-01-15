@@ -124,6 +124,7 @@ const listNurseryWithdrawals = async (
       'substratumNames',
       'batchWithdrawals.batch_species_scientificName',
       'totalWithdrawn',
+      'totalWithdrawn(raw)',
       'hasReassignments',
       'batchWithdrawals.batch_project_id',
       'batchWithdrawals.batch_project_name',
