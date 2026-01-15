@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useMemo } from 'react';
 import { Box, useTheme } from '@mui/material';
 import { MRT_ColumnDef, MRT_Row, MaterialReactTable, useMaterialReactTable } from 'material-react-table';
 
-import { useLocalization } from 'src/providers';
+import { useLocalization, useOrganization, useUser } from 'src/providers';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import {
   MonitoringSpeciesUpdateOperationPayload,
@@ -32,6 +32,9 @@ export default function SpeciesEditableTable({
   const { strings } = useLocalization();
   const [update, updateResult] = useUpdateCompletedObservationPlotMutation();
   const { reload: reloadPlantingSiteData } = usePlantingSiteData();
+  const { selectedOrganization } = useOrganization();
+  const { isAllowed } = useUser();
+  const isAllowedUpdatePlantCounts = isAllowed('UPDATE_PLANT_COUNTS', { organization: selectedOrganization });
 
   const unknownObservationSpeciesResult: ObservationSpeciesResults | undefined = useMemo(() => {
     if (!unknownSpecies) {
@@ -93,6 +96,7 @@ export default function SpeciesEditableTable({
             {
               accessorKey: 'totalExisting',
               header: strings.PREEXISTING,
+              enableEditing: isAllowedUpdatePlantCounts,
               muiEditTextFieldProps: ({ row }: { row: MRT_Row<ObservationSpeciesResults> }) => ({
                 onBlur: saveValue(
                   'totalExisting',
@@ -107,6 +111,7 @@ export default function SpeciesEditableTable({
       {
         accessorKey: 'totalLive',
         header: strings.LIVE_PLANTS,
+        enableEditing: isAllowedUpdatePlantCounts,
         muiEditTextFieldProps: ({ row }) => ({
           onBlur: saveValue('totalLive', row.original.certainty, row.original.speciesId, row.original.speciesName),
         }),
@@ -114,12 +119,13 @@ export default function SpeciesEditableTable({
       {
         accessorKey: 'totalDead',
         header: strings.DEAD_PLANTS,
+        enableEditing: isAllowedUpdatePlantCounts,
         muiEditTextFieldProps: ({ row }) => ({
           onBlur: saveValue('totalDead', row.original.certainty, row.original.speciesId, row.original.speciesName),
         }),
       },
     ],
-    [strings, saveValue, type]
+    [strings, saveValue, type, isAllowedUpdatePlantCounts]
   );
 
   const table = useMaterialReactTable({

@@ -5,7 +5,7 @@ import { Button, Icon, IconTooltip } from '@terraware/web-components';
 import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/utils';
 
 import Card from 'src/components/common/Card';
-import { useLocalization } from 'src/providers';
+import { useLocalization, useOrganization, useUser } from 'src/providers';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import {
   ObservationPlotUpdateOperationPayload,
@@ -59,6 +59,9 @@ const ObservationDataTab = ({
   const snackbar = useSnackbar();
   const theme = useTheme();
   const { isDesktop } = useDeviceInfo();
+  const { selectedOrganization } = useOrganization();
+  const { isAllowed } = useUser();
+  const isAllowedUpdatePlantCounts = isAllowed('UPDATE_PLANT_COUNTS', { organization: selectedOrganization });
 
   const [record, setRecord] = useForm(monitoringPlot);
 
@@ -251,17 +254,19 @@ const ObservationDataTab = ({
       </Box>
       <ExtraData items={extraItems} />
       <Box paddingTop={2}>
-        <Box display='flex' alignItems={'self-start'} paddingTop={3}>
-          <Icon name='info' fillColor={theme.palette.TwClrIcnSecondary} size='medium' />
-          <Box>
-            <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px' paddingLeft={1}>
-              {strings.SPECIES_TABLE_INSTRUCTIONS}
-            </Typography>
-            <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px' paddingLeft={1}>
-              {strings.SPECIES_TABLE_INSTRUCTIONS_NOTE}
-            </Typography>
+        {isAllowedUpdatePlantCounts && (
+          <Box display='flex' alignItems={'self-start'} paddingTop={3}>
+            <Icon name='info' fillColor={theme.palette.TwClrIcnSecondary} size='medium' />
+            <Box>
+              <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px' paddingLeft={1}>
+                {strings.SPECIES_TABLE_INSTRUCTIONS}
+              </Typography>
+              <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px' paddingLeft={1}>
+                {strings.SPECIES_TABLE_INSTRUCTIONS_NOTE}
+              </Typography>
+            </Box>
           </Box>
-        </Box>
+        )}
         <SpeciesEditableTable
           species={species}
           observationId={Number(observationId)}
