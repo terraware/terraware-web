@@ -263,7 +263,7 @@ test.describe('InventoryTests', () => {
     await expect(page.locator('#row1-destinationName')).toContainText('Planting Site');
     await expect(page.locator('#row1-substratumNames')).toContainText('North');
     await expect(page.locator('#row1-speciesScientificNames')).toContainText('Kousa Dogwood');
-    await expect(page.locator('#row1-totalWithdrawn')).toContainText('60');
+    await expect(page.locator('#row1-totalWithdrawn(raw)')).toContainText('60');
   });
 
   test('Plants dashboard after outplanting', async ({ page }, testInfo) => {
