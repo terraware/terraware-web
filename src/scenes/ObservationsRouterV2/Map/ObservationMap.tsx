@@ -3,7 +3,7 @@ import { MapRef } from 'react-map-gl/mapbox';
 
 import MapComponent from 'src/components/NewMap';
 import { MapDrawerSize } from 'src/components/NewMap/MapDrawer';
-import { MapLegendGroup } from 'src/components/NewMap/MapLegend';
+import { MapDropdownLegendGroup, MapDropdownLegendItem, MapLegendGroup } from 'src/components/NewMap/MapLegend';
 import {
   MapHighlightGroup,
   MapLayer,
@@ -23,7 +23,7 @@ import usePlantingSiteMapLegend from 'src/components/NewMap/usePlantingSiteMapLe
 import usePlotPhotosMapLegend from 'src/components/NewMap/usePlotPhotosMapLegend';
 import useSurvivalRateMapLegend from 'src/components/NewMap/useSurvivalRateMapLegend';
 import { getBoundingBoxFromPoints } from 'src/components/NewMap/utils';
-import { useOrganization } from 'src/providers';
+import { useLocalization, useOrganization } from 'src/providers';
 import {
   ObservationMonitoringPlotResultsPayload,
   useLazyListAdHocObservationResultsQuery,
@@ -40,6 +40,7 @@ import {
   RecordedPlant,
   RecordedPlantStatus,
 } from 'src/types/Observations';
+import { getShortDate } from 'src/utils/dateFormatter';
 import useMapboxToken from 'src/utils/useMapboxToken';
 
 import ObservationStatsDrawer from '../ListView/ObservationStatsDrawer';
@@ -56,6 +57,7 @@ type ObservationMapProps = {
 };
 
 const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: ObservationMapProps) => {
+  const { activeLocale, strings } = useLocalization();
   const { mapId, token } = useMapboxToken();
   const { selectedOrganization } = useOrganization();
   const mapRef = useRef<MapRef | null>(null);
@@ -163,16 +165,48 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
     }
   }, [isBiomass, listAdHocObservationResultsResponse]);
 
-  // TODO: Filter by timeline
+  const observationResultsOptions = useMemo((): MapDropdownLegendItem[] => {
+    return observationResults.map((observation): MapDropdownLegendItem => {
+      const observationDate = observation.completedTime
+        ? getShortDate(observation.completedTime, activeLocale)
+        : getShortDate(observation.startDate, activeLocale);
+
+      return {
+        label: observationDate,
+        value: `${observation.observationId}`,
+      };
+    }, []);
+  }, [activeLocale, observationResults]);
+
+  const [selectedObservationId, setSelectedObservationId] = useState<number>();
+
+  useEffect(() => {
+    if (observationResultsOptions.length) {
+      setSelectedObservationId(Number(observationResultsOptions[0].value));
+    } else {
+      setSelectedObservationId(undefined);
+    }
+  }, [observationResultsOptions]);
+
+  const observationDropdownLegendGroup = useMemo((): MapDropdownLegendGroup => {
+    return {
+      title: strings.OBSERVATION,
+      type: 'dropdown',
+      items: observationResultsOptions,
+      selectedValue: `${selectedObservationId}`,
+      setSelectedValue: (value: string | undefined) => setSelectedObservationId(value ? Number(value) : undefined),
+    };
+  }, [observationResultsOptions, selectedObservationId, strings.OBSERVATION]);
+
   const selectedResults = useMemo(() => {
     if (observationResults.length) {
-      return observationResults[0];
+      return observationResults.find((observation) => observation.observationId === selectedObservationId);
     } else if (adHocObservationResults.length) {
       return adHocObservationResults[0];
     } else {
       return undefined;
     }
-  }, [adHocObservationResults, observationResults]);
+  }, [adHocObservationResults, observationResults, selectedObservationId]);
 
   const monitoringPlots = useMemo(() => {
     if (selectedResults) {
@@ -812,13 +846,15 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
         : plantingSiteLegendGroup;
 
     return [
+      ...(isBiomass ? [] : [observationDropdownLegendGroup]),
       siteLegendGroup,
       monitoringPlotsLegendGroup,
       plotPhotosLegendGroup,
       plantMakersLegendGroup,
-      !isBiomass ? survivalRateLegendGroup : undefined,
-    ].filter((group): group is MapLegendGroup => group !== undefined);
+      ...(isBiomass ? [] : [survivalRateLegendGroup]),
+    ];
   }, [
+    observationDropdownLegendGroup,
     plantingSiteId,
     plantingSiteLegendGroup,
     monitoringPlotsLegendGroup,

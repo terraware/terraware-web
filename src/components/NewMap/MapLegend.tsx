@@ -13,16 +13,16 @@ type BaseMapLegendGroup = {
   tooltip?: string;
 };
 
-type MapDropdownItem = {
+export type MapDropdownLegendItem = {
   label: string;
   value: string;
 };
 
 export type MapDropdownLegendGroup = {
   type: 'dropdown';
-  options: MapDropdownItem[];
-  selectedValue: string;
-  setSelectedValue: (value: string) => void;
+  items: MapDropdownLegendItem[];
+  selectedValue: string | undefined;
+  setSelectedValue: (value: string | undefined) => void;
 } & BaseMapLegendGroup;
 
 export type MapSingleSelectLegendItem = {
@@ -71,7 +71,11 @@ export type MapLegendGroup =
   | MapGroupToggleLegendGroup
   | MapDropdownLegendGroup;
 
-export type MapLegendItem = MapMultiSelectLegendItem | MapSingleSelectLegendItem | MapGroupToggleLegendItem;
+export type MapLegendItem =
+  | MapMultiSelectLegendItem
+  | MapSingleSelectLegendItem
+  | MapGroupToggleLegendItem
+  | MapDropdownLegendItem;
 
 export type MapLegendProps = {
   legends: MapLegendGroup[];
@@ -136,7 +140,7 @@ const MapLegend = ({ legends }: MapLegendProps): JSX.Element => {
             <Dropdown
               fullWidth
               required
-              options={legend.options}
+              options={legend.items}
               selectedValue={legend.selectedValue}
               onChange={legend.setSelectedValue}
             />
