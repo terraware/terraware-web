@@ -49,6 +49,7 @@ type PermissionDeliverable =
 type PermissionDocuments = 'CREATE_DOCUMENTS';
 type PermissionFunder = 'READ_FUNDING_ENTITIES' | 'MANAGE_FUNDING_ENTITIES' | 'INVITE_FUNDER';
 type PermissionGlobalRole = 'READ_GLOBAL_ROLES' | 'ASSIGN_GLOBAL_ROLE_TO_USER' | 'ASSIGN_SOME_GLOBAL_ROLES';
+type PermissionObservations = 'UPDATE_PLANT_COUNTS';
 type PermissionOrganization = 'CREATE_PLANTING_SITE';
 type PermissionParticipant =
   | 'CREATE_PARTICIPANTS'
@@ -78,6 +79,7 @@ export type GlobalRolePermission =
   | PermissionDocuments
   | PermissionFunder
   | PermissionGlobalRole
+  | PermissionObservations
   | PermissionOrganization
   | PermissionParticipant
   | PermissionParticipantProject
@@ -203,6 +205,15 @@ const isAllowedUpdateReportsTargets: PermissionCheckFn<UpdateReportsTargetsMetad
   return isTFExpertOrHigher(user) || isAdmin(metadata?.organization);
 };
 
+type UpdatePlantCounts = { organization: Organization };
+const isAllowedUpdatePlantCounts: PermissionCheckFn<UpdatePlantCounts> = (
+  user: User,
+  _: GlobalRolePermission,
+  metadata?: UpdateReportsTargetsMetadata
+): boolean => {
+  return isTFExpertOrHigher(user) || isManagerOrHigher(metadata?.organization);
+};
+
 /**
  * Function related to funder invites
  */
@@ -326,6 +337,7 @@ const ACL: Record<GlobalRolePermission, UserGlobalRoles | PermissionCheckFn> = {
   UPDATE_MATRIX_VIEW: TFExpertPlus,
   UPDATE_PARTICIPANTS: AcceleratorAdminPlus,
   UPDATE_PARTICIPANT_PROJECT_SCORING_VOTING: TFExpertPlus,
+  UPDATE_PLANT_COUNTS: isAllowedUpdatePlantCounts,
   UPDATE_REPORTS_SETTINGS: AcceleratorAdminPlus,
   UPDATE_REPORTS_TARGETS: isAllowedUpdateReportsTargets,
   UPDATE_PARTICIPANT_PROJECT: TFExpertPlus,
