@@ -1,6 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { MapRef } from 'react-map-gl/mapbox';
 
+import { getDateDisplayValue } from '@terraware/web-components/utils';
+
 import MapComponent from 'src/components/NewMap';
 import { MapDrawerSize } from 'src/components/NewMap/MapDrawer';
 import { MapDropdownLegendGroup, MapDropdownLegendItem, MapLegendGroup } from 'src/components/NewMap/MapLegend';
@@ -42,6 +44,7 @@ import {
 } from 'src/types/Observations';
 import { getShortDate } from 'src/utils/dateFormatter';
 import useMapboxToken from 'src/utils/useMapboxToken';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import ObservationStatsDrawer from '../ListView/ObservationStatsDrawer';
 
@@ -58,6 +61,7 @@ type ObservationMapProps = {
 
 const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: ObservationMapProps) => {
   const { activeLocale, strings } = useLocalization();
+  const defaultTimezone = useDefaultTimeZone().get().id;
   const { mapId, token } = useMapboxToken();
   const { selectedOrganization } = useOrganization();
   const mapRef = useRef<MapRef | null>(null);
@@ -167,16 +171,17 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
 
   const observationResultsOptions = useMemo((): MapDropdownLegendItem[] => {
     return observationResults.map((observation): MapDropdownLegendItem => {
-      const observationDate = observation.completedTime
-        ? getShortDate(observation.completedTime, activeLocale)
-        : getShortDate(observation.startDate, activeLocale);
+      const completedDate = observation.completedTime
+        ? getDateDisplayValue(observation.completedTime, plantingSite?.timeZone ?? defaultTimezone)
+        : undefined;
+      const observationDate = getShortDate(completedDate ?? observation.startDate, activeLocale);
 
       return {
         label: observationDate,
         value: `${observation.observationId}`,
       };
-    }, []);
-  }, [activeLocale, observationResults]);
+    });
+  }, [activeLocale, defaultTimezone, observationResults, plantingSite?.timeZone]);
 
   const [selectedObservationId, setSelectedObservationId] = useState<number>();
 
