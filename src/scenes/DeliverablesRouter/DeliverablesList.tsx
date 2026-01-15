@@ -37,7 +37,7 @@ const DeliverablesList = ({ projectId, maxItemsPerPage }: DeliverablesListProps)
     setCurrentParticipantProject,
   } = useParticipantData();
   const [projectFilter, setProjectFilter] = useState<{ projectId?: number | string }>({
-    projectId: (projectId ? projectId : currentParticipantProject?.id) || '',
+    projectId: projectId ? projectId : currentParticipantProject?.id,
   });
 
   useEffect(() => {
@@ -178,17 +178,15 @@ const DeliverablesList = ({ projectId, maxItemsPerPage }: DeliverablesListProps)
         </PageHeaderWrapper>
       )}
 
-      {selectedOrganization && (
-        <DeliverablesTable
-          extraTableFilters={extraTableFilters}
-          filterModifiers={filterModifiers}
-          organizationId={selectedOrganization.id}
-          searchAndSort={searchAndSort}
-          tableId={'participantDeliverablesTable'}
-          projectId={projectId}
-          maxItemsPerPage={maxItemsPerPage}
-        />
-      )}
+      <DeliverablesTable
+        extraTableFilters={extraTableFilters}
+        filterModifiers={filterModifiers}
+        maxItemsPerPage={maxItemsPerPage}
+        organizationId={selectedOrganization?.id}
+        projectId={projectId}
+        searchAndSort={searchAndSort}
+        tableId='participantDeliverablesTable'
+      />
     </Wrapper>
   );
 };
