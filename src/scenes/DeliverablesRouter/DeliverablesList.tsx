@@ -178,17 +178,15 @@ const DeliverablesList = ({ projectId, maxItemsPerPage }: DeliverablesListProps)
         </PageHeaderWrapper>
       )}
 
-      {selectedOrganization && (
-        <DeliverablesTable
-          extraTableFilters={extraTableFilters}
-          filterModifiers={filterModifiers}
-          organizationId={selectedOrganization.id}
-          searchAndSort={searchAndSort}
-          tableId={'participantDeliverablesTable'}
-          projectId={projectId}
-          maxItemsPerPage={maxItemsPerPage}
-        />
-      )}
+      <DeliverablesTable
+        extraTableFilters={extraTableFilters}
+        filterModifiers={filterModifiers}
+        maxItemsPerPage={maxItemsPerPage}
+        organizationId={selectedOrganization?.id}
+        projectId={projectId}
+        searchAndSort={searchAndSort}
+        tableId='participantDeliverablesTable'
+      />
     </Wrapper>
   );
 };

@@ -30,7 +30,7 @@ interface DeliverablesTableProps {
   extraTableFilters?: SearchNodePayload[];
   filterModifiers?: (filters: FilterConfig[]) => FilterConfig[];
   isAcceleratorRoute?: boolean;
-  organizationId: number;
+  organizationId?: number;
   searchAndSort?: SearchAndSortFn<ListDeliverablesElementWithOverdue>;
   tableId: string;
   iconFilters?: FilterConfig[];
