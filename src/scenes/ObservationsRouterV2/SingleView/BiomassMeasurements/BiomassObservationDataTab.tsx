@@ -93,7 +93,7 @@ const BiomassObservationDataTab = () => {
     {
       label: strings.TOTAL_PLANTS,
       tooltip: strings.BIOMASS_PLOT_TOTAL_PLANTS_TOOLTIP,
-      value: monitoringPlot?.totalPlants,
+      value: biomassMeasurement?.trees.length,
     },
     {
       label: strings.LIVE_PLANTS,
