@@ -179,16 +179,12 @@ export default function ObservationMonitoringPlotDetails(): JSX.Element | undefi
       { label: strings.TOTAL_PLANTS, value: handleMissingData(monitoringPlotResult?.totalPlants) },
       { label: strings.SPECIES, value: handleMissingData(monitoringPlotResult?.totalSpecies) },
       { label: strings.PLANT_DENSITY, value: handleMissingData(monitoringPlotResult?.plantingDensity) },
-      ...(monitoringPlotResult?.isPermanent
-        ? [
-            {
-              label: strings.SURVIVAL_RATE,
-              value: monitoringPlotResult?.isPermanent
-                ? `${monitoringPlotResult?.survivalRate}%`
-                : strings.NOT_CALCULATED_FOR_TEMPORARY_PLOTS,
-            },
-          ]
-        : []),
+      {
+        label: strings.SURVIVAL_RATE,
+        value: monitoringPlotResult?.isPermanent
+          ? `${monitoringPlotResult.survivalRate ?? '-'}%`
+          : strings.NOT_CALCULATED_FOR_TEMPORARY_PLOTS,
+      },
       { label: strings.NUMBER_OF_PHOTOS, value: handleMissingData(monitoringPlotResult?.photos.length) },
       {
         label: strings.PLOT_CONDITIONS,

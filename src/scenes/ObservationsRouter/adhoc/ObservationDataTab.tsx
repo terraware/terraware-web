@@ -94,8 +94,8 @@ const ObservationDataTab = ({
     {
       label: strings.SURVIVAL_RATE,
       tooltip: strings.PLOT_SURVIVAL_RATE_TOOLTIP,
-      value: monitoringPlot.isPermanent
-        ? `${monitoringPlot?.survivalRate}%`
+      value: monitoringPlot?.isPermanent
+        ? `${monitoringPlot.survivalRate ?? '-'}%`
         : strings.NOT_CALCULATED_FOR_TEMPORARY_PLOTS,
     },
   ];

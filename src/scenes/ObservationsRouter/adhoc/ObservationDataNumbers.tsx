@@ -3,7 +3,7 @@ import React from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
 import { Icon, Tooltip } from '@terraware/web-components';
 
-import strings from 'src/strings';
+import { useLocalization } from 'src/providers';
 
 type ObservationDataNumbersProps = {
   items: { label: string; tooltip: string; value?: string | number }[];
@@ -12,6 +12,7 @@ type ObservationDataNumbersProps = {
 
 const ObservationDataNumbers = ({ items, isCompleted }: ObservationDataNumbersProps) => {
   const theme = useTheme();
+  const { strings } = useLocalization();
   return (
     <Box display='grid' paddingBottom={3} gridTemplateColumns={`repeat(${items.length}, 1fr)`} gap={2}>
       {items.map((item, index) => {
@@ -37,7 +38,7 @@ const ObservationDataNumbers = ({ items, isCompleted }: ObservationDataNumbersPr
                 fontWeight={isTemporarySurvivalRateItem ? 400 : 600}
                 fontSize={isTemporarySurvivalRateItem ? '16px' : '24px'}
               >
-                {isCompleted ? item.value : isTemporarySurvivalRateItem ? item.value : '-'}
+                {isCompleted || isTemporarySurvivalRateItem ? item.value : '-'}
               </Typography>
             </Box>
           </Box>
