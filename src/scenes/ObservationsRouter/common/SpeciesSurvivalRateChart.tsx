@@ -1,23 +1,31 @@
 import React, { useMemo } from 'react';
 
+import { Box, useTheme } from '@mui/material';
+
 import BarChart from 'src/components/common/Chart/BarChart';
+import isEnabled from 'src/features';
+import strings from 'src/strings';
 import { ObservationSpeciesResults } from 'src/types/Observations';
 
 export type SpeciesSurvivalRateChartProps = {
   minHeight?: string;
   species?: ObservationSpeciesResults[];
-  isCompleted: boolean;
+  isNotCompleted?: boolean;
+  isTemporary?: boolean;
 };
 
 export default function SpeciesSurvivalRateChart({
   minHeight,
   species,
-  isCompleted,
+  isNotCompleted,
+  isTemporary,
 }: SpeciesSurvivalRateChartProps): JSX.Element {
   type Data = {
     labels: string[];
     values: number[];
   };
+  const theme = useTheme();
+  const isEditObservationsEnabled = isEnabled('Edit Observations');
 
   const chartData = useMemo(() => {
     const data: Data = { labels: [], values: [] };
@@ -37,13 +45,38 @@ export default function SpeciesSurvivalRateChart({
       labels: data.labels,
       datasets: [
         {
-          values: isCompleted ? data.values : [],
+          values: !isNotCompleted && !isTemporary ? data.values : [],
         },
       ],
     };
-  }, [species, isCompleted]);
+  }, [species, isNotCompleted, isTemporary]);
 
   return (
-    <BarChart chartId='observationsSurvivalRateBySpecies' chartData={chartData} barWidth={0} minHeight={minHeight} />
+    <Box position='relative'>
+      {isEditObservationsEnabled && (isTemporary || isNotCompleted) && (
+        <Box
+          sx={{
+            backgroundColor: theme.palette.TwClrBgSecondary,
+            padding: '10px',
+            color: theme.palette.TwClrBaseBlack,
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            zIndex: 1,
+          }}
+        >
+          {isTemporary ? strings.SURVIVAL_RATE_NOT_CALCULATED_FOR_TEMPORARY_PLOTS : strings.DATA_IS_NOT_YET_AVAILABLE}
+        </Box>
+      )}
+      <Box>
+        <BarChart
+          chartId='observationsSurvivalRateBySpecies'
+          chartData={chartData}
+          barWidth={0}
+          minHeight={minHeight}
+        />
+      </Box>
+    </Box>
   );
 }
