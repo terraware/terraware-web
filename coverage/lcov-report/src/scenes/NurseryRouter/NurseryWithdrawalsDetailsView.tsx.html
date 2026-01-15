@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/95</span>
+                <span class='fraction'>0/97</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/90</span>
+                <span class='fraction'>0/92</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/91</span>
+                <span class='fraction'>0/93</span>
             </div>
         
             
@@ -354,7 +354,9 @@
 <a name='L289'></a><a href='#L289'>289</a>
 <a name='L290'></a><a href='#L290'>290</a>
 <a name='L291'></a><a href='#L291'>291</a>
-<a name='L292'></a><a href='#L292'>292</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L292'></a><a href='#L292'>292</a>
+<a name='L293'></a><a href='#L293'>293</a>
+<a name='L294'></a><a href='#L294'>294</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -409,11 +411,13 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -667,33 +671,34 @@ import { Speci<span class="cstat-no" title="statement not covered" ><span class=
 import { Delivery } from 'src/types/Tracking';
 import { isTrue } from 'src/utils/boolean';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import useSnackbar from 'src/utils/useSnackbar';
 import useStickyTabs from 'src/utils/useStickyTabs';
 &nbsp;
-import UndoWithdrawalModal from './UndoWithdrawalModal';
-import NonOutplantW<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >it</span>hdrawal<span class="cstat-no" title="statement not covered" >Content from './WithdrawalDetails/NonOutplantWithdrawalContent'</span></span>;
-import ReassignmentT<span class="cstat-no" title="statement not covered" >abP</span>anelContent from './WithdrawalDetails/ReassignmentTabPanelContent';
-<span class="cstat-no" title="statement not covered" >import WithdrawalTabPanelContent from './WithdrawalDetails/WithdrawalTabPanelContent';</span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-export interface WithdrawalSummary {
-<span class="cstat-no" title="statement not covered" >  id: string;</span>
-  delivery_id: stri<span class="cstat-no" title="statement not covered" >ng;</span>
-  withdrawnDate: string;<span class="cstat-no" title="statement not covered" ></span>
+import UndoWithdraw<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >al</span>Modal f<span class="cstat-no" title="statement not covered" >rom './UndoWithdrawalModal';</span></span>
+import NonOutplantWi<span class="cstat-no" title="statement not covered" >thd</span>rawalContent from './WithdrawalDetails/NonOutplantWithdrawalContent';
+<span class="cstat-no" title="statement not covered" >import ReassignmentTabPanelContent from './WithdrawalDetails/ReassignmentTabPanelContent';</span>
+import With<span class="fstat-no" title="function not covered" >dr</span>awal<span class="cstat-no" title="statement not covered" >TabPanelContent from './Withdr</span>awalDetails/WithdrawalTabPanelContent';
+&nbsp;
+<span class="cstat-no" title="statement not covered" >export interface WithdrawalSummary {</span>
+  id: string;<span class="cstat-no" title="statement not covered" ></span>
+  delivery_id: string;<span class="cstat-no" title="statement not covered" ></span>
+  withdrawnDate: strin<span class="cstat-no" title="statement not covered" >g;</span>
   purpose: string;<span class="cstat-no" title="statement not covered" ></span>
   facilityName: string;<span class="cstat-no" title="statement not covered" ></span>
-  destinationName: string;<span class="cstat-no" title="statement not covered" ></span>
-  substratumNames: strin<span class="cstat-no" title="statement not covered" >g;</span>
-  scientificNames: string<span class="cstat-no" title="statement not covered" >[];</span>
-  totalWithdrawn: string;<span class="cstat-no" title="statement not covered" ></span>
-  hasReassignments: <span class="cstat-no" title="statement not covered" >boolean;</span>
+  destinationName: strin<span class="cstat-no" title="statement not covered" >g;</span>
+  substratumNames: string<span class="cstat-no" title="statement not covered" >;</span>
+  scientificNames: string[];<span class="cstat-no" title="statement not covered" ></span>
+  totalWithdrawn: st<span class="cstat-no" title="statement not covered" >ring;</span>
+  hasReassignments: boo<span class="cstat-no" title="statement not covered" >lean;</span>
 }<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-type NurseryWithdra<span class="cstat-no" title="statement not covered" >walsDetailsViewProps = {</span>
+type NurseryWithdrawal<span class="cstat-no" title="statement not covered" >sDetailsViewProps = {</span>
   species: Species[];<span class="cstat-no" title="statement not covered" ></span>
-  substratumNames: Re<span class="cstat-no" title="statement not covered" >cord&lt;number, string&gt;;</span>
+  substratumNames: R<span class="cstat-no" title="statement not covered" >ecord&lt;number, string&gt;;</span>
 };<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-export default function Nur<span class="cstat-no" title="statement not covered" >seryWithdrawalsDetailsView({</span>
+export default function NurseryW<span class="cstat-no" title="statement not covered" >ithdrawalsDetailsView({</span>
   species,<span class="cstat-no" title="statement not covered" ></span>
   substratumNames,<span class="cstat-no" title="statement not covered" ></span>
 }: NurseryWithdrawalsDetailsViewP<span class="cstat-no" title="statement not covered" >rops): JSX.Element {</span>
@@ -713,13 +718,14 @@ export default function Nur<span class="cstat-no" title="statement not covered" 
   const [batches, set<span class="cstat-no" title="statement not covered" >Batches] = useState&lt;Batch[] | u</span>ndefined&gt;(undefined);
   const [undoWithdr<span class="cstat-no" title="statement not covered" >awalModalOpened, setUndoWithdrawal</span>ModalOpened] = useState(false);
   const [reload, setReload] = useState(fa<span class="cstat-no" title="statement not covered" >lse);</span>
+  const numberForma<span class="cstat-no" title="statement not covered" >tter = useNumberFormatter(activeLocale);</span>
 <span class="cstat-no" title="statement not covered" ></span>
   const reloadWithdrawal = () =&gt; {<span class="cstat-no" title="statement not covered" ></span>
     setReload(true);<span class="cstat-no" title="statement not covered" ></span>
   };<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
   useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-    const updateWithdrawal = a<span class="cstat-no" title="statement not covered" >sync () =&gt; {</span>
+    const updateWithdrawal<span class="cstat-no" title="statement not covered" > = async () =&gt; {</span>
       const withdrawalRespo<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ns</span>e = await NurseryWithdrawalService.getNurseryWithdrawal(Number(withdrawalId));</span>
 <span class="cstat-no" title="statement not covered" >      if (!withdrawal</span>Response.requestSucceeded || withdrawalResponse.error) {
         setWithdrawal(undefined);
@@ -752,7 +758,7 @@ export default function Nur<span class="cstat-no" title="statement not covered" 
             destinationName: withdrawalSummaryRecord.destinationName as string,
             substratumNames: withdrawalSummaryRecord.substratumNames as string,
             scientificNames: withdrawalSummaryRecord.speciesScientificNames as string[],
-            totalWithdrawn: withdrawalSummaryRecord.totalWithdrawn as string,
+            totalWithdrawn: numberFormatter.format((withdrawalSummaryRecord['totalWithdrawn(raw)'] || 0) as number),
             hasReassignments: isTrue(withdrawalSummaryRecord.hasReassignments),
           });
         }
@@ -760,7 +766,7 @@ export default function Nur<span class="cstat-no" title="statement not covered" 
     };
 &nbsp;
     void updateWithdrawal();
-  }, [selectedOrganization, withdrawalId, snackbar, reload]);
+  }, [selectedOrganization, withdrawalId, snackbar, reload, numberFormatter]);
 &nbsp;
   co<span class="cstat-no" title="statement not covered" >nst contentPanelProps = {</span>
     borderRadius: '32px',
@@ -943,7 +949,7 @@ export default function Nur<span class="cstat-no" title="statement not covered" 
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-14T21:50:45.072Z
+                at 2026-01-15T19:12:14.892Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
