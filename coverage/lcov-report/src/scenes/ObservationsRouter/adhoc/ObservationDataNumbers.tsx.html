@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/32</span>
+                <span class='fraction'>0/35</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/22</span>
+                <span class='fraction'>0/30</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/29</span>
+                <span class='fraction'>0/32</span>
             </div>
         
             
@@ -106,7 +106,15 @@
 <a name='L41'></a><a href='#L41'>41</a>
 <a name='L42'></a><a href='#L42'>42</a>
 <a name='L43'></a><a href='#L43'>43</a>
-<a name='L44'></a><a href='#L44'>44</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L44'></a><a href='#L44'>44</a>
+<a name='L45'></a><a href='#L45'>45</a>
+<a name='L46'></a><a href='#L46'>46</a>
+<a name='L47'></a><a href='#L47'>47</a>
+<a name='L48'></a><a href='#L48'>48</a>
+<a name='L49'></a><a href='#L49'>49</a>
+<a name='L50'></a><a href='#L50'>50</a>
+<a name='L51'></a><a href='#L51'>51</a>
+<a name='L52'></a><a href='#L52'>52</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -145,6 +153,14 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -154,40 +170,48 @@
 import { Box, Typograph<span class="cstat-no" title="statement not covered" >y, useTheme } from '@mui/materia</span>l';
 import { Icon, Tooltip }<span class="cstat-no" title="statement not covered" > from '@terraware/web-compo</span>nents';
 <span class="cstat-no" title="statement not covered" ></span>
-type ObservationDat<span class="cstat-no" title="statement not covered" >aNumbersProps = {</span>
-  items: { labe<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >l:</span> string; tooltip: string; value?: string | number }[];</span>
-<span class="cstat-no" title="statement not covered" >  isCompleted: boolean;</span>
-};<span class="cstat-no" title="statement not covered" ></span>
-&nbsp;
-const ObservationD<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >at</span>aNumbers = ({ items, isCompleted }: ObservationDataNumbersProps) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >  const theme = useTheme();</span>
-  re<span class="cstat-no" title="statement not covered" >turn (</span>
-    &lt;B<span class="cstat-no" title="statement not covered" >ox display='grid' paddingBottom={3} gridTemplateColumns={`repeat(${items.length}, 1fr)`} gap={2}&gt;</span>
-      {i<span class="cstat-no" title="statement not covered" >tems.map((item, index) =&gt; <span class="fstat-no" title="function not covered" >{<span class="cstat-no" title="statement not covered" ></span></span></span>
+import { useLocaliz<span class="cstat-no" title="statement not covered" >ation } from 'src/providers';</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+ty<span class="cstat-no" title="statement not covered" >pe ObservationDataNumbersProps = {</span>
+  it<span class="cstat-no" title="statement not covered" >ems: { label: string; tooltip: string; value?: string | number </span>}[];
+  isCompleted: boolean;
+};<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ></span>
+cons<span class="cstat-no" title="statement not covered" >t ObservationDataNumbers = ({ items, isCompleted }: ObservationDataNumbersProps) =&gt; {</span>
+  cons<span class="cstat-no" title="statement not covered" >t theme = useTheme();</span>
+  const <span class="cstat-no" title="statement not covered" >{ strings } = useLocalizat<span class="fstat-no" title="function not covered" >io</span>n();<span class="cstat-no" title="statement not covered" ></span></span>
+  return (
+<span class="cstat-no" title="statement not covered" >    &lt;Box disp</span>lay='grid' paddingBottom={3} gridTemplateColumns={`repeat(${items.length}, 1fr)`} gap={2}&gt;
+      {items.map((item, index) =&gt; {
+        const <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >is</span>TemporarySurvivalRateItem =<span class="cstat-no" title="statement not covered" ></span></span>
+          item.label === strings.SURVIVAL_RATE &amp;&amp; item.value === strings.NOT_CALCULATED_FOR_TEMPORARY_PLOTS;
         return (
-<span class="cstat-no" title="statement not covered" >          &lt;Bo</span>x
+          &lt;Box
             key={index}
-            bo<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >rd</span>erLeft={index !== 0 ? `1px s<span class="cstat-no" title="statement not covered" >olid ${theme.palette.TwClrBrdrTertiary}` : 'none'}</span></span>
+            borderLeft={index !== 0 ? `1px solid ${theme.palette.TwClrBrdrTertiary}` : 'none'}
             paddingLeft={2}
             paddingBottom={2}
-          &gt;
-            &lt;Box display='flex'&gt;
-              &lt;Typography fontWeight={600} paddingRight={0.5}&gt;
-                {item.label}
+          &gt;<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+            &lt;Box dis<span class="cstat-no" title="statement not covered" >pla</span>y='flex'&gt;
+<span class="cstat-no" title="statement not covered" >              &lt;Typography fontWeight={600} paddingRight={0.5}&gt;</span>
+<span class="fstat-no" title="function not covered" ></span>                {<span class="cstat-no" title="statement not covered" >item.label}</span>
               &lt;/Typography&gt;
-              &lt;Tool<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ti</span>p title<span class="cstat-no" title="statement not covered" >={item.tooltip}&gt;</span></span>
-                &lt;Ico<span class="cstat-no" title="statement not covered" >n n</span>ame='info' fillColor={theme.palette.TwClrIcnSecondary} /&gt;
-<span class="cstat-no" title="statement not covered" >              &lt;/Tooltip&gt;</span>
-<span class="fstat-no" title="function not covered" >            &lt;</span>/Box<span class="cstat-no" title="statement not covered" >&gt;</span>
-            &lt;Box&gt;
-<span class="cstat-no" title="statement not covered" >              &lt;Typography fontWeight={600} fon</span>tSize={'24px'}&gt;
-                {is<span class="cstat-no" title="statement not covered" >Completed ? item.value : '</span>'}
-              &lt;/Typogr<span class="cstat-no" title="statement not covered" >aphy&gt;</span>
+<span class="cstat-no" title="statement not covered" >              &lt;Tooltip title={item.tooltip}&gt;</span>
+                &lt;Ic<span class="cstat-no" title="statement not covered" >on name='info' fillColor={</span>theme.palette.TwClrIcnSecondary} /&gt;
+              &lt;/Toolti<span class="cstat-no" title="statement not covered" >p&gt;</span>
             &lt;/Box&gt;<span class="cstat-no" title="statement not covered" ></span>
-          &lt;/Box&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-        );<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >      })}<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >    &lt;/Box&gt;</span>
+            &lt;Box&gt;<span class="cstat-no" title="statement not covered" ></span>
+              &lt;Typography<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >                fontWeight={isTemporarySurvivalR</span>ateItem ? 400 : 600}
+                fontSi<span class="cstat-no" title="statement not covered" >ze={isTemporarySurvivalRateItem ? '16px'</span> : '24px'}
+<span class="cstat-no" title="statement not covered" >              &gt;<span class="fstat-no" title="function not covered" ></span></span>
+                {isCompleted || isTempor<span class="cstat-no" title="statement not covered" >arySurvivalRateItem ? item.value : '-'}</span>
+<span class="cstat-no" title="statement not covered" >              &lt;/Typography&gt;</span>
+            &lt;/Box&gt;
+          &lt;/Box&gt;
+        );
+      })}
+    &lt;/Box&gt;
   );
 };
 &nbsp;
@@ -199,7 +223,7 @@ export default ObservationDataNumbers;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-15T19:12:14.892Z
+                at 2026-01-15T19:47:36.315Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

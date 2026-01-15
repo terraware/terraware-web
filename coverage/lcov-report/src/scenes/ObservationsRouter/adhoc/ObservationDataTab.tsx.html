@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/91</span>
+                <span class='fraction'>0/87</span>
             </div>
         
             
@@ -344,7 +344,8 @@
 <a name='L279'></a><a href='#L279'>279</a>
 <a name='L280'></a><a href='#L280'>280</a>
 <a name='L281'></a><a href='#L281'>281</a>
-<a name='L282'></a><a href='#L282'>282</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L282'></a><a href='#L282'>282</a>
+<a name='L283'></a><a href='#L283'>283</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -454,8 +455,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -566,12 +565,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -718,15 +720,13 @@ const ObservationDataTab <span class="cstat-no" title="statement not covered" >=
       tooltip: type === 'adHoc' ? strings.AD_HOC_PLOT_PLANT_DENSITY_TOOLTIP : strings.PLOT_PLANT_DENSITY_TOOLTIP,
       value: monitoringPlot?.plantingDensity,
     },
-    ...(monitoringPlot?.survivalRate !== undefined
-      ? [
-          {
-            label: strings.SURVIVAL_RATE,
-            tooltip: strings.PLOT_SURVIVAL_RATE_TOOLTIP,
-            value: `${monitoringPlot?.survivalRate}%`,
-          },
-        ]
-      : []),
+    {
+      label: strings.SURVIVAL_RATE,
+      tooltip: strings.PLOT_SURVIVAL_RATE_TOOLTIP,
+      value: monitoringPlot?.isPermanent
+        ? `${monitoringPlot.survivalRate ?? '-'}%`
+        : strings.NOT_CALCULATED_FOR_TEMPORARY_PLOTS,
+    },
   ];
 &nbsp;
   const onEditQualitativeData = useCallback(() =&gt; {
@@ -820,39 +820,42 @@ const ObservationDataTab <span class="cstat-no" title="statement not covered" >=
             &lt;/Box&gt;
 &nbsp;
             &lt;Box height='245px'&gt;
-              &lt;SpeciesTotalPlantsChart minHeight='245px' species={species} /&gt;
-            &lt;/Box&gt;
-          &lt;/Box&gt;
-        )}
-&nbsp;
-        {monitoringPlot?.isPermanent &amp;&amp; (
-          &lt;Box flex={1} minWidth='500px'&gt;
-            &lt;Box display='flex' alignItems={'center'}&gt;
-              &lt;Typography fontSize={'20px'} fontWeight={600}&gt;
-                {strings.SURVIVAL_RATE_PER_SPECIES_AS_OF_THIS_OBSERVATION}
-              &lt;/Typography&gt;
-              &lt;IconTooltip title={strings.SURVIVAL_RATE_PER_SPECIES_AS_OF_THIS_OBSERVATION_TOOLTIP} /&gt;
-            &lt;/Box&gt;
-            &lt;Box height='245px'&gt;
-              &lt;SpeciesSurvivalRateChart
+              &lt;SpeciesTotalPlantsChart
                 minHeight='245px'
                 species={species}
-                isCompleted={!!monitoringPlot.completedTime}
+                isNotCompleted={!monitoringPlot.completedTime}
               /&gt;
             &lt;/Box&gt;
           &lt;/Box&gt;
         )}
+&nbsp;
+        &lt;Box flex={1} minWidth='500px'&gt;
+          &lt;Box display='flex' alignItems={'center'}&gt;
+            &lt;Typography fontSize={'20px'} fontWeight={600}&gt;
+              {strings.SURVIVAL_RATE_PER_SPECIES_AS_OF_THIS_OBSERVATION}
+            &lt;/Typography&gt;
+            &lt;IconTooltip title={strings.SURVIVAL_RATE_PER_SPECIES_AS_OF_THIS_OBSERVATION_TOOLTIP} /&gt;
+          &lt;/Box&gt;
+          &lt;Box height='245px'&gt;
+            &lt;SpeciesSurvivalRateChart
+              minHeight='245px'
+              species={species}
+              isNotCompleted={!monitoringPlot.completedTime}
+              isTemporary={!monitoringPlot.isPermanent}
+            /&gt;
+          &lt;/Box&gt;
+        &lt;/Box&gt;
       &lt;/Box&gt;
       {type === 'adHoc' &amp;&amp; onExportData &amp;&amp; onMatchSpecies &amp;&amp; (
         &lt;PlotActions
           unrecognizedSpecies={unrecognizedSpecies}
           onExportData={onExportData}
-          onMatchSpe<span class="cstat-no" title="statement not covered" >cies={onMatchSpecie</span>s}
+          onMatchSpecies={onMatchSpecies}
         /&gt;
       )}
       &lt;Box paddingY={2} display={'flex'} justifyContent={'space-between'} alignItems={'center'}&gt;
         {monitoringPlot?.claimedByName &amp;&amp; monitoringPlot?.completedTime &amp;&amp; (
-          &lt;Typography fontSize={'14px'}&gt;
+          &lt;Typograph<span class="cstat-no" title="statement not covered" >y fontSize={'14px'}</span>&gt;
             {strings.formatString(
               strings.OBSERVED_BY_ON,
               monitoringPlot.claimedByName,
@@ -913,7 +916,7 @@ export default ObservationDataTab;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-15T19:12:14.892Z
+                at 2026-01-15T19:47:36.315Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

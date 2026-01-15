@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/237</span>
+                <span class='fraction'>0/231</span>
             </div>
         
             
@@ -520,11 +520,7 @@
 <a name='L455'></a><a href='#L455'>455</a>
 <a name='L456'></a><a href='#L456'>456</a>
 <a name='L457'></a><a href='#L457'>457</a>
-<a name='L458'></a><a href='#L458'>458</a>
-<a name='L459'></a><a href='#L459'>459</a>
-<a name='L460'></a><a href='#L460'>460</a>
-<a name='L461'></a><a href='#L461'>461</a>
-<a name='L462'></a><a href='#L462'>462</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L458'></a><a href='#L458'>458</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -708,8 +704,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -890,8 +884,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1166,14 +1158,12 @@ export default fun<span class="cstat-no" title="statement not covered" >ction Ob
       { label: strings.TOTAL_PLANTS, value: handleMissingData(monitoringPlotResult?.totalPlants) },
       { label: strings.SPECIES, value: handleMissingData(monitoringPlotResult?.totalSpecies) },
       { label: strings.PLANT_DENSITY, value: handleMissingData(monitoringPlotResult?.plantingDensity) },
-      ...(monitoringPlotResult?.isPermanent
-        ? [
-            {
-              label: strings.SURVIVAL_RATE,
-              value: monitoringPlotResult?.survivalRate ? `${monitoringPlotResult?.survivalRate}%` : '',
-            },<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-          ]
-        : []),
+      {
+        label: strings.SURVIVAL_RATE,
+        value: monitoringPlotResult?.isPermanent
+          ? `${monitoringPlotResult.survivalRate ?? '-'}%`<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+          : strings.NOT_CALCULATED_FOR_TEMPORARY_PLOTS,
+      },
       { label: strings.NUMBER_OF_PHOTOS, value: handleMissingData(monitoringPlotResult?.photos.length) },
       {
         label: strings.PLOT_CONDITIONS,
@@ -1419,21 +1409,19 @@ export default fun<span class="cstat-no" title="statement not covered" >ction Ob
             &lt;Box height='360px'&gt;
               &lt;SpeciesTotalPlantsChart minHeight='360px' species={monitoringPlotSpecies} /&gt;
             &lt;/Box&gt;
-            {monitoringPlotResult?.isPermanent &amp;&amp; (
-              &lt;&gt;
-                &lt;Box display='flex' alignItems={'center'}&gt;
-                  {title(strings.SURVIVAL_RATE_PER_SPECIES_AS_OF_THIS_OBSERVATION)}
-                  &lt;IconTooltip title={strings.SURVIVAL_RATE_PER_SPECIES_AS_OF_THIS_OBSERVATION_TOOLTIP} /&gt;
-                &lt;/Box&gt;
-                &lt;Box height='360px'&gt;
-                  &lt;SpeciesSurvivalRateChart
-                    minHeight='360px'
-                    species={monitoringPlotSpecies}
-                    isCompleted={!!monitoringPlotResult?.completedTime}
-                  /&gt;
-                &lt;/Box&gt;
-              &lt;/&gt;
-            )}
+            &lt;Box display='flex' alignItems={'center'}&gt;
+              {title(strings.SURVIVAL_RATE_PER_SPECIES_AS_OF_THIS_OBSERVATION)}
+              &lt;IconTooltip title={strings.SURVIVAL_RATE_PER_SPECIES_AS_OF_THIS_OBSERVATION_TOOLTIP} /&gt;
+            &lt;/Box&gt;
+            &lt;Box height='360px'&gt;
+              &lt;SpeciesSurvivalRateChart
+                minHeight='360px'
+                species={monitoringPlotSpecies}
+                isNotCompleted={!monitoringPlotResult?.completedTime}
+                isTemporary={!monitoringPlotResult?.isPermanent}
+              /&gt;
+            &lt;/Box&gt;
+&nbsp;
             {title(strings.PHOTOS)}
             &lt;MonitoringPlotPhotos
               observationId={Number(observationId)}
@@ -1453,7 +1441,7 @@ export default fun<span class="cstat-no" title="statement not covered" >ction Ob
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-15T19:12:14.892Z
+                at 2026-01-15T19:47:36.315Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

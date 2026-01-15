@@ -1,3 +1,4 @@
+7ce711a4bbc SW-7924 Zero state not showing Survival Rate card and chart (#5072)
 9b7ecefd3d9 SW-7939: Console Project Deliverables tab does not render table after refresh in console (#5076)
 f26c1726a5c SW-7944 Incorrect thousandths separators showing for Totals in Withdrawals tables (#5078)
 2d3edf321fe SW-7952 Link to reports not appearing in navigation for Orgs with "Reporting" tab (#5073)
