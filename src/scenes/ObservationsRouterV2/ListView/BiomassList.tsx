@@ -9,7 +9,7 @@ import { useLazyListAdHocObservationResultsQuery } from 'src/queries/generated/o
 import { useLazyListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
 import { SearchSortOrder } from 'src/types/Search';
 
-import BiomassRenderer from './BiomassRenderer';
+import BiomassCellRenderer from './BiomassCellRenderer';
 
 export type BiomassListProps = {
   plantingSiteId?: number;
@@ -121,7 +121,7 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
         defaultSortOrder={defaultSearchOrder}
         fuzzySearchColumns={fuzzySearchColumns}
         id='biomass-measurement-table'
-        Renderer={BiomassRenderer}
+        Renderer={BiomassCellRenderer}
         rows={adHocObservationsResults}
         title={strings.BIOMASS_MONITORING}
       />

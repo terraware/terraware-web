@@ -9,7 +9,7 @@ import { useLocalization } from 'src/providers';
 
 import useObservationExports from '../useObservationExports';
 
-export default function BiomassRenderer(props: RendererProps<TableRowType>): JSX.Element {
+export default function BiomassCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const { column, row, value } = props;
   const { strings } = useLocalization();
   const observationId = row.observationId as number;

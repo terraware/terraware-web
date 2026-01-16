@@ -12,7 +12,7 @@ import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites
 import { SearchSortOrder } from 'src/types/Search';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
-import StratumRenderer from './StratumRenderer';
+import StratumCellRenderer from './StratumCellRenderer';
 
 type StratumRow = {
   observationId: number;
@@ -94,7 +94,7 @@ export default function StratumList(): JSX.Element {
         defaultSortOrder={defaultSearchOrder}
         fuzzySearchColumns={fuzzySearchColumns}
         id='observation-site-table'
-        Renderer={StratumRenderer}
+        Renderer={StratumCellRenderer}
         rows={rows}
         title={strings.STRATA}
       />

@@ -14,7 +14,7 @@ import { SearchSortOrder } from 'src/types/Search';
 import { isManagerOrHigher } from 'src/utils/organization';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
-import MonitoringPlotRenderer from './MonitoringPlotRenderer';
+import MonitoringPlotCellRenderer from './MonitoringPlotCellRenderer';
 
 type MonitoringPlotRow = {
   observationId: number;
@@ -139,7 +139,7 @@ export default function MonitoringPlotList(): JSX.Element {
         defaultSortOrder={defaultSearchOrder}
         fuzzySearchColumns={fuzzySearchColumns}
         id='observation-stratum-table'
-        Renderer={MonitoringPlotRenderer}
+        Renderer={MonitoringPlotCellRenderer}
         rows={rows}
         title={strings.MONITORING_PLOTS}
       />

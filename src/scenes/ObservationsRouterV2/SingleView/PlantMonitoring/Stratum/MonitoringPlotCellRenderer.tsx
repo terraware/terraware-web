@@ -8,7 +8,7 @@ import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import { MonitoringPlotStatus, ObservationState, getPlotStatus } from 'src/types/Observations';
 
-export default function MonitoringPlotRenderer(props: RendererProps<TableRowType>): JSX.Element {
+export default function MonitoringPlotCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const NO_DATA_FIELDS = ['totalPlants', 'totalSpecies'];
   const { column, row, value } = props;
   const { strings } = useLocalization();

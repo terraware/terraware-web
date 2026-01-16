@@ -6,7 +6,7 @@ import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import { MonitoringPlotStatus, getPlotStatus } from 'src/types/Observations';
 
-export default function StratumRenderer(props: RendererProps<TableRowType>): JSX.Element {
+export default function StratumCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const NO_DATA_FIELDS = ['totalPlants', 'totalSpecies'];
   const { column, row, value } = props;
   const observationId = row.observationId as number;
