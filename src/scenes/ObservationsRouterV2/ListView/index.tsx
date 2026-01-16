@@ -11,7 +11,7 @@ import { useLazyListPlantingSitesQuery } from 'src/queries/generated/plantingSit
 import MobileAppCard from 'src/scenes/Home/MobileAppCard';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
-import ObservationMap from '../Map/ObservationMap';
+import Map from '../Map';
 import BiomassList from './BiomassList';
 import PlantMonitoringList from './PlantMonitoringList';
 
@@ -98,7 +98,7 @@ const ObservationListView = (): JSX.Element => {
     <Page title={strings.OBSERVATIONS} leftComponent={PageHeaderPlantingSiteDropdown}>
       <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs}>
         <Card radius={'8px'} style={{ marginBottom: theme.spacing(3), width: '100%' }}>
-          <ObservationMap
+          <Map
             isBiomass={isBiomass}
             plantingSiteId={selectedPlantingSiteId === -1 ? undefined : selectedPlantingSiteId}
             selectPlantingSiteId={selectPlantingSite}
