@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/27</span>
+                <span class='fraction'>0/39</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/19</span>
+                <span class='fraction'>0/23</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/16</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/23</span>
+                <span class='fraction'>0/33</span>
             </div>
         
             
@@ -76,7 +76,26 @@
 <a name='L11'></a><a href='#L11'>11</a>
 <a name='L12'></a><a href='#L12'>12</a>
 <a name='L13'></a><a href='#L13'>13</a>
-<a name='L14'></a><a href='#L14'>14</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L14'></a><a href='#L14'>14</a>
+<a name='L15'></a><a href='#L15'>15</a>
+<a name='L16'></a><a href='#L16'>16</a>
+<a name='L17'></a><a href='#L17'>17</a>
+<a name='L18'></a><a href='#L18'>18</a>
+<a name='L19'></a><a href='#L19'>19</a>
+<a name='L20'></a><a href='#L20'>20</a>
+<a name='L21'></a><a href='#L21'>21</a>
+<a name='L22'></a><a href='#L22'>22</a>
+<a name='L23'></a><a href='#L23'>23</a>
+<a name='L24'></a><a href='#L24'>24</a>
+<a name='L25'></a><a href='#L25'>25</a>
+<a name='L26'></a><a href='#L26'>26</a>
+<a name='L27'></a><a href='#L27'>27</a>
+<a name='L28'></a><a href='#L28'>28</a>
+<a name='L29'></a><a href='#L29'>29</a>
+<a name='L30'></a><a href='#L30'>30</a>
+<a name='L31'></a><a href='#L31'>31</a>
+<a name='L32'></a><a href='#L32'>32</a>
+<a name='L33'></a><a href='#L33'>33</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -89,27 +108,65 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Observa<span class="cstat-no" title="statement not covered" >tionSpeciesResults, Ob</span>servationSpeciesResultsPayload } from 'src/types/Observations';
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Existin<span class="cstat-no" title="statement not covered" >gBiomassMeasurementPay</span>load } from 'src/queries/generated/observations';
+import { ObservationSpe<span class="cstat-no" title="statement not covered" >ciesResults, ObservationSpeciesR</span>esultsPayload } from 'src/types/Observations';
 <span class="cstat-no" title="statement not covered" ></span>
-export const getObservat<span class="cstat-no" title="statement not covered" >ionSpeciesLivePlantsCount =</span> (
-  species: Observat<span class="cstat-no" title="statement not covered" >ionSpeciesResults[] | Observatio</span>nSpeciesResultsPayload[] | undefined
-): number | und<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ef</span>ined =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >  return species?.reduce((sum, s) =&gt; sum + (s.totalLive || 0), 0);</span>
-};<span class="cstat-no" title="statement not covered" ></span>
+export const getObs<span class="cstat-no" title="statement not covered" >ervationSpeciesLivePlantsCount =</span> (
+  species: Obse<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >rv</span>ationSpeciesResults[] | ObservationSpeciesResultsPayload[] | undefined</span>
+):<span class="cstat-no" title="statement not covered" > number | undefined =&gt; {</span>
+  re<span class="cstat-no" title="statement not covered" >turn species?.reduce((sum, s) =&gt; sum + (s.totalLive || 0), 0);</span>
+};
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+ex<span class="cstat-no" title="statement not covered" >port const getObservationSpeciesDeadPlantsCount = (</span>
+  sp<span class="cstat-no" title="statement not covered" >ecies: ObservationSpeciesResults[] | ObservationSpeciesResultsPayload[] | undefined</span>
+): num<span class="cstat-no" title="statement not covered" >ber | undefined =&gt; {</span>
+  return<span class="cstat-no" title="statement not covered" > species?.reduce((sum, s) <span class="fstat-no" title="function not covered" >=&gt;</span> sum<span class="cstat-no" title="statement not covered" > + (s.tota</span>lDead || 0), 0);</span>
+};
+<span class="cstat-no" title="statement not covered" ></span>
+export const getBiomassObservationLiveTreeCount = (
+  biomassMeasuremen<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >t:</span> Existi<span class="cstat-no" title="statement not covered" >ngBiomassMeasurementPayload | undefined</span></span>
+) =&gt; {<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >  if (!biomassMeasurement) {</span>
+    return 0;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  return biomassMeasurement.trees.filter<span class="fstat-no" title="function not covered" >((</span>tree<span class="cstat-no" title="statement not covered" >) =&gt; !tree.isDead).length;</span>
+};<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 &nbsp;
-export const getOb<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >se</span>rvationSpeciesDeadPlantsCount = (</span>
-<span class="cstat-no" title="statement not covered" >  species: ObservationSpeciesResults[] | ObservationSpeciesResultsPayload[] | undefined</span>
-): n<span class="cstat-no" title="statement not covered" >umber | undefined =&gt; {</span>
-  retu<span class="cstat-no" title="statement not covered" >rn species?.reduce((sum, s) =&gt; sum + (s.totalDead || 0), 0);</span>
-};<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-&nbsp;</pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" >export const getBiomassObservationDeadTreeCoun</span>t = (
+  biomassMeasurement: ExistingBiomassMeasurem<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >en</span>tPayload | undefined</span>
+) <span class="cstat-no" title="statement not covered" >=&gt; {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  if (!biomassMeasurement) {
+    return 0;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >  }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  return biomassMeasurement.trees.filter((tree) =&gt; tree.isDead).length;
+};<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-16T15:07:48.633Z
+                at 2026-01-16T15:27:10.814Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

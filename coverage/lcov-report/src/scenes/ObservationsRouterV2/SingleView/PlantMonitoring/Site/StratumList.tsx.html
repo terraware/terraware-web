@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/57</span>
+                <span class='fraction'>0/59</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>0/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/54</span>
+                <span class='fraction'>0/55</span>
             </div>
         
             
@@ -166,7 +166,9 @@
 <a name='L101'></a><a href='#L101'>101</a>
 <a name='L102'></a><a href='#L102'>102</a>
 <a name='L103'></a><a href='#L103'>103</a>
-<a name='L104'></a><a href='#L104'>104</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L104'></a><a href='#L104'>104</a>
+<a name='L105'></a><a href='#L105'>105</a>
+<a name='L106'></a><a href='#L106'>106</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -255,6 +257,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -269,7 +272,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > useEffect, us</span>eMemo } from 'react';
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > useEffect, us</span>eMemo } from 'react';
 import { usePara<span class="cstat-no" title="statement not covered" >ms } from 'react-route</span>r';
 <span class="cstat-no" title="statement not covered" ></span>
 import { TableColumnType<span class="cstat-no" title="statement not covered" > } from '@terraware/web-com</span>ponents';
@@ -341,23 +345,25 @@ export default funct<span class="cstat-no" title="statement not covered" >ion</s
   const rows = useMemo((): St<span class="cstat-no" title="statement not covered" >ratumRow[] =&gt; {</span>
     if (observationResultsResponse) {<span class="cstat-no" title="statement not covered" ></span>
       return observationResultsResponse.observatio<span class="cstat-no" title="statement not covered" >n.strata.map((stratum): StratumRow =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >        return {<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >          observationId: observationResultsResponse.observation.observationId,</span>
-<span class="cstat-no" title="statement not covered" >          stratumName: stratum.name,</span>
-          completedDate: stratum.completedTime ? getDateDisplayValue(stratum.completedTime, timeZone) : undefined,
-          totalLive: 0,
-          totalPlants: <span class="cstat-no" title="statement not covered" >stratum.totalPlants,<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >        const totalLive = stra<span class="fstat-no" title="function not covered" >tu</span>m.species.reduce((total, plotSpecies) =&gt; total + plotSpecies.totalLive, 0);</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >        return {</span>
+          observationId: observationResultsResponse.observation.observationId,
+          stratumName: stratum.name,
+          completedDate<span class="cstat-no" title="statement not covered" >: stratum.completedTime ? <span class="fstat-no" title="function not covered" >ge</span>tDateDisplayValue(stratum.completedTime, timeZone) : undefined,</span>
+          totalLive,
+<span class="cstat-no" title="statement not covered" >          totalPlants: stratum.totalPlants,</span>
           totalSpecies: stratum.totalSpecies,
-<span class="cstat-no" title="statement not covered" >          plantingDensity: stratum.plantingDensity,</span>
+          plantingD<span class="cstat-no" title="statement not covered" >ensity: stratum.plantingDe<span class="fstat-no" title="function not covered" >ns</span>ity,</span>
           survivalRate: stratum.survivalRate,
-        };<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >        };</span>
       });
-<span class="cstat-no" title="statement not covered" >    } else {</span>
-      return [];
+    } else {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >      return [];</span>
     }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  },<span class="cstat-no" title="statement not covered" > [observationResultsResponse, timeZone]);</span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  return<span class="cstat-no" title="statement not covered" > (</span>
+  }, [observationResultsRe<span class="cstat-no" title="statement not covered" >sponse, timeZone]);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+<span class="cstat-no" title="statement not covered" ></span>
+  return (
     &lt;Card radius={'8px'} style={{ width: '100%' }}&gt;
       &lt;ClientSideFilterTable
         busy={isLoading}
@@ -368,18 +374,18 @@ export default funct<span class="cstat-no" title="statement not covered" >ion</s
         Renderer={StratumCellRenderer}
         rows={rows}
         title={strings.STRATA}
-      /&gt;
-    &lt;/<span class="cstat-no" title="statement not covered" >Card&gt;</span>
+<span class="cstat-no" title="statement not covered" >      /&gt;</span>
+    &lt;/Card&gt;
   );
-}
-<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
+}<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-16T15:07:48.633Z
+                at 2026-01-16T15:27:10.814Z
             </div>
         <script src="../../../../../../prettify.js"></script>
         <script>
