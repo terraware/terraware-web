@@ -20,7 +20,7 @@ import MonitoringPlotPhotosWithActions from 'src/scenes/ObservationsRouter/commo
 import UnrecognizedSpeciesPageMessage from 'src/scenes/ObservationsRouter/common/UnrecognizedSpeciesPageMessage';
 import { useOnSaveMergedSpeciesRtk } from 'src/scenes/ObservationsRouterV2/useOnSaveMergedSpeciesRtk';
 import { getDateTimeDisplayValue, getShortTime } from 'src/utils/dateFormatter';
-import { getObservationSpeciesDeadPlantsCount, getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
+import { getBiomassObservationDeadTreeCount, getBiomassObservationLiveTreeCount } from 'src/utils/observation';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import useObservationExports from '../../useObservationExports';
@@ -93,22 +93,22 @@ const BiomassObservationDataTab = () => {
     {
       label: strings.TOTAL_PLANTS,
       tooltip: strings.BIOMASS_PLOT_TOTAL_PLANTS_TOOLTIP,
-      value: monitoringPlot?.totalPlants,
+      value: biomassMeasurement?.trees.length,
     },
     {
       label: strings.LIVE_PLANTS,
       tooltip: strings.BIOMASS_PLOT_LIVE_PLANTS_TOOLTIP,
-      value: getObservationSpeciesLivePlantsCount(monitoringPlot?.species),
+      value: getBiomassObservationLiveTreeCount(biomassMeasurement),
     },
     {
       label: strings.DEAD_PLANTS,
       tooltip: strings.BIOMASS_PLOT_DEAD_PLANTS_TOOLTIP,
-      value: getObservationSpeciesDeadPlantsCount(monitoringPlot?.species),
+      value: getBiomassObservationDeadTreeCount(biomassMeasurement),
     },
     {
       label: strings.SPECIES,
       tooltip: strings.BIOMASS_PLOT_SPECIES_TOOLTIP,
-      value: monitoringPlot?.totalSpecies,
+      value: biomassMeasurement?.treeSpeciesCount,
     },
     {
       label: strings.PLOT_LOCATION,
