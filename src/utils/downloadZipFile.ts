@@ -30,6 +30,20 @@ interface DownloadZipFileParams {
   suffix?: string;
 }
 
+/**
+ * Adds UTF-8 BOM to the beginning of content to ensure proper Excel parsing.
+ * The BOM helps Excel recognize UTF-8 encoding and properly parse CSV delimiters.
+ */
+function addUtf8Bom(content: string | Blob): string | Blob {
+  const BOM = '\uFEFF';
+
+  if (typeof content === 'string') {
+    return BOM + content;
+  }
+
+  return new Blob([BOM, content], { type: content.type });
+}
+
 /** Downloads a binary file to the user's system. */
 function downloadBlob(fileName: string, content: Blob) {
   const url = URL.createObjectURL(content);
@@ -62,16 +76,19 @@ export default async function downloadZipFile(params: DownloadZipFileParams) {
 
   const contentPromises = files.map(async ({ fileName, content }) => {
     const fullFileName = sanitize(fileName + effectiveSuffix);
+    const isCsv = effectiveSuffix.toLowerCase() === '.csv';
 
     if (typeof content === 'string' || content instanceof Blob) {
-      folder.file(fullFileName, content);
+      const fileContent = isCsv ? addUtf8Bom(content) : content;
+      folder.file(fullFileName, fileContent);
     } else {
       const generatedContent = await content();
       if (generatedContent === null) {
         throw new Error(`Failed to generate content for file "${fullFileName}"`);
       }
 
-      folder.file(fullFileName, generatedContent);
+      const fileContent = isCsv ? addUtf8Bom(generatedContent) : generatedContent;
+      folder.file(fullFileName, fileContent);
     }
   });
 
