@@ -19,7 +19,7 @@ import { ObservationState } from 'src/types/Observations';
 import { SearchSortOrder } from 'src/types/Search';
 import { isAdmin } from 'src/utils/organization';
 
-import PlantMonitoringRenderer from './PlantMonitorignRenderer';
+import PlantMonitoringCellRenderer from './PlantMonitoringCellRenderer';
 
 type PlotSelectionType = 'assigned' | 'adHoc';
 type PlantMonitoringRow = {
@@ -320,7 +320,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
         defaultSortOrder={defaultSearchOrder}
         fuzzySearchColumns={fuzzySearchColumns}
         id='biomass-measurement-table'
-        Renderer={PlantMonitoringRenderer}
+        Renderer={PlantMonitoringCellRenderer}
         rows={rows}
         title={strings.PLANT_MONITORING}
         rightComponent={rightComponent}

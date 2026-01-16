@@ -6,8 +6,8 @@ import { BusySpinner } from '@terraware/web-components';
 import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
 
 import MonitoringPlotDetails from './MonitoringPlot';
-import SiteDetails from './SiteDetails';
-import StratumDetails from './StratumDetails';
+import SiteDetails from './Site';
+import StratumDetails from './Stratum';
 
 const PlantMonitoringView = (): JSX.Element => {
   const params = useParams<{ observationId: string }>();

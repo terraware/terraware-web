@@ -9,7 +9,7 @@ import { useLocalization } from 'src/providers';
 
 import useObservationExports from '../useObservationExports';
 
-export default function PlantMonitoringRenderer(props: RendererProps<TableRowType>): JSX.Element {
+export default function PlantMonitoringCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const { column, row, value } = props;
   const { strings } = useLocalization();
   const observationId = row.observationId as number;
@@ -64,6 +64,7 @@ export default function PlantMonitoringRenderer(props: RendererProps<TableRowTyp
               void downloadObservationResults(observationId);
             },
           },
+          // TODO add reschedule and end observations
         ]}
       />
     ) : null;

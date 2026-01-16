@@ -9,6 +9,10 @@ import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
 
+import AggregatedPlantsStats from '../AggregatedPlantsStats';
+import useObservationSpecies from '../useObservationSpecies';
+import StratumList from './StratumList';
+
 const SiteDetails = (): JSX.Element => {
   const theme = useTheme();
   const { strings } = useLocalization();
@@ -36,9 +40,18 @@ const SiteDetails = (): JSX.Element => {
     </Typography>
   );
 
+  const species = useObservationSpecies(results?.species ?? []);
+
   return (
     <Page crumbs={crumbs} title={title} titleContainerStyle={{ paddingTop: 3, paddingBottom: 1 }}>
-      Site Observation Placeholder
+      <AggregatedPlantsStats
+        completedTime={results?.completedTime}
+        totalSpecies={results?.totalSpecies}
+        plantingDensity={results?.plantingDensity}
+        survivalRate={results?.survivalRate}
+        species={species}
+      />
+      <StratumList />
     </Page>
   );
 };
