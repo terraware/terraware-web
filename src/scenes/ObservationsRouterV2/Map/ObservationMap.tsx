@@ -851,7 +851,7 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
         : plantingSiteLegendGroup;
 
     return [
-      ...(isBiomass ? [] : [observationDropdownLegendGroup]),
+      ...(isBiomass || plantingSiteId === undefined ? [] : [observationDropdownLegendGroup]),
       siteLegendGroup,
       monitoringPlotsLegendGroup,
       plotPhotosLegendGroup,
