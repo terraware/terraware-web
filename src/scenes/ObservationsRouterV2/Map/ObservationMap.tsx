@@ -198,7 +198,7 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
       title: strings.OBSERVATION,
       type: 'dropdown',
       items: observationResultsOptions,
-      selectedValue: `${selectedObservationId}`,
+      selectedValue: selectedObservationId !== undefined ? `${selectedObservationId}` : undefined,
       setSelectedValue: (value: string | undefined) => setSelectedObservationId(value ? Number(value) : undefined),
     };
   }, [observationResultsOptions, selectedObservationId, strings.OBSERVATION]);
