@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/51</span>
+                <span class='fraction'>0/58</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/28</span>
+                <span class='fraction'>0/34</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/48</span>
+                <span class='fraction'>0/55</span>
             </div>
         
             
@@ -146,7 +146,24 @@
 <a name='L81'></a><a href='#L81'>81</a>
 <a name='L82'></a><a href='#L82'>82</a>
 <a name='L83'></a><a href='#L83'>83</a>
-<a name='L84'></a><a href='#L84'>84</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L84'></a><a href='#L84'>84</a>
+<a name='L85'></a><a href='#L85'>85</a>
+<a name='L86'></a><a href='#L86'>86</a>
+<a name='L87'></a><a href='#L87'>87</a>
+<a name='L88'></a><a href='#L88'>88</a>
+<a name='L89'></a><a href='#L89'>89</a>
+<a name='L90'></a><a href='#L90'>90</a>
+<a name='L91'></a><a href='#L91'>91</a>
+<a name='L92'></a><a href='#L92'>92</a>
+<a name='L93'></a><a href='#L93'>93</a>
+<a name='L94'></a><a href='#L94'>94</a>
+<a name='L95'></a><a href='#L95'>95</a>
+<a name='L96'></a><a href='#L96'>96</a>
+<a name='L97'></a><a href='#L97'>97</a>
+<a name='L98'></a><a href='#L98'>98</a>
+<a name='L99'></a><a href='#L99'>99</a>
+<a name='L100'></a><a href='#L100'>100</a>
+<a name='L101'></a><a href='#L101'>101</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -184,6 +201,13 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -204,17 +228,27 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -261,48 +295,65 @@ interface Down<span class="cstat-no" title="statement not covered" ><span class=
   suffix?: <span class="fstat-no" title="function not covered" >st</span>ring<span class="cstat-no" title="statement not covered" >;</span>
 }
 <span class="cstat-no" title="statement not covered" ></span>
-/** Downloads a bin<span class="cstat-no" title="statement not covered" >ary file to the user's sys</span>tem. */
-function downloadBlob(fileName:<span class="cstat-no" title="statement not covered" > string, content: Blob) {</span>
-  const u<span class="fstat-no" title="function not covered" >rl = URL.crea</span>teObjectURL(content);
-  try {<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >    const link = document.createElement('a');</span>
-    link.href = u<span class="cstat-no" title="statement not covered" >rl;</span>
-<span class="cstat-no" title="statement not covered" >    link.download = f</span>ileName;
-<span class="cstat-no" title="statement not covered" >    link.click();</span>
-  } <span class="cstat-no" title="statement not covered" >finally {</span>
-    URL.revokeObjectURL(url);
-  }<span class="cstat-no" title="statement not covered" ></span>
-}
-&nbsp;
-/**<span class="fstat-no" title="function not covered" ></span>
- * Generates and downloads a zip arch<span class="cstat-no" title="statement not covered" >ive of </span>a set of files.
- *<span class="cstat-no" title="statement not covered" ></span>
- * @throws Error The zipfi<span class="cstat-no" title="statement not covered" >le couldn't be constructed, e.g.</span>, because one of the content generation
- * functions r<span class="cstat-no" title="statement not covered" >eturned null.</span>
+/**<span class="cstat-no" title="statement not covered" ></span>
+ * Adds UTF-8 BOM to the beginn<span class="cstat-no" title="statement not covered" >ing of content to ensure proper Excel </span>parsing.
+ * The BO<span class="fstat-no" title="function not covered" >M helps Exc</span>el recognize UTF-8 encoding and properly parse CSV delimiters.
  */<span class="cstat-no" title="statement not covered" ></span>
-ex<span class="cstat-no" title="statement not covered" >port default async function downloadZipFile(params: DownloadZipFileParams) {</span>
-  co<span class="cstat-no" title="statement not covered" >nst { dirName, files, suffix } = params;</span>
-  const sanitizedDirName = sanitize(dirName);
-  const effectiveSuffix = <span class="cstat-no" title="statement not covered" >suffix !==<span class="fstat-no" title="function not covered" > u</span>ndefined ? suffix : '';</span>
-  const zip = new JSZip()<span class="cstat-no" title="statement not covered" >;</span>
+fu<span class="cstat-no" title="statement not covered" >nction addUtf8Bom(content: string | Blob): string | Blob {</span>
+  co<span class="cstat-no" title="statement not covered" >nst BOM = '\uFEFF';</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  if (typeof content === 'string') {</span>
+    return BOM + content;
+  }<span class="fstat-no" title="function not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  cons<span class="cstat-no" title="statement not covered" >t folder = zip.folder(sanitizedDirNa</span>me);
-  if (!folder) {
-    throw new Error('Failed to <span class="cstat-no" title="statement not covered" >create folder in</span> zip archive');
+<span class="cstat-no" title="statement not covered" >  return new Blob([BOM, content], { type: content.type });</span>
+}<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+/** <span class="cstat-no" title="statement not covered" >Downloads a binary file to</span> the user's system. */
+func<span class="cstat-no" title="statement not covered" >tion downloadB</span>lob(fileName: string, content: Blob) {
+  const url = URL.createObjectURL(content);
+  tr<span class="cstat-no" title="statement not covered" >y {</span>
+    const link = document.createElement('a');
+    link.href = url;
+    link.downlo<span class="fstat-no" title="function not covered" >ad = fileName;</span>
+    link.click();<span class="cstat-no" title="statement not covered" ></span>
+  } finally {<span class="cstat-no" title="statement not covered" ></span>
+    URL.revokeObjectURL(ur<span class="cstat-no" title="statement not covered" >l);</span>
   }<span class="cstat-no" title="statement not covered" ></span>
+}<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const contentPromises = files.map(async ({ fileName, content }) =&gt; {
-    co<span class="cstat-no" title="statement not covered" >nst fullFileName = sanitize(fileName + effect</span>iveSuffix);
+/**<span class="cstat-no" title="statement not covered" ></span>
+ * Generates and downloads a zip archive of a set of files.
+ *<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+ * @throws Error The zipf<span class="cstat-no" title="statement not covered" >ile couldn't be constructed, e.g., because one of the content gene</span>ration
+ * functions retur<span class="cstat-no" title="statement not covered" >ned null.</span>
+ */<span class="cstat-no" title="statement not covered" ></span>
+export default async funct<span class="cstat-no" title="statement not covered" >ion downloadZipFile(params: DownloadZi</span>pFileParams) {
+  cons<span class="cstat-no" title="statement not covered" >t { dirName, files, suffix } = params;</span>
+  const sanitizedDirName = sanitize(dirName);
+  const effectiveSuffix = suffi<span class="cstat-no" title="statement not covered" >x !== undefined </span>? suffix : '';
+  cons<span class="cstat-no" title="statement not covered" >t zip = new JSZip();</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  const folder = zip.folder(sanitizedDirName);
+  if (!folder) {<span class="cstat-no" title="statement not covered" ></span>
+    th<span class="cstat-no" title="statement not covered" >row new Error('Failed to create folder i</span>n zip archive');
+  }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  const contentPromises = files.map(as</span>ync ({ fileName, content }) =&gt; {
+    const fullFileNam<span class="cstat-no" title="statement not covered" >e = sanitize(fileName + effectiveSuffix);</span>
+<span class="cstat-no" title="statement not covered" >    const isCsv = effectiveSuffix.toLowerCase() === '.c</span>sv';
 &nbsp;
     if (typeof content === 'string' || content instanceof Blob) {
-<span class="cstat-no" title="statement not covered" >      folder.file(fullFileName, conten</span>t);
-    } else {<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >      const generatedContent = await content();</span>
+      const fileContent = isCsv ? addUtf8Bom(content) : content;
+      folder.file(fullFileName, fileContent);
+    } else {
+      const generatedContent = await content();
       if (generatedContent === null) {
         throw new Error(`Failed to generate content for file "${fullFileName}"`);
       }
 &nbsp;
-      folder.file(fullFileName, generatedContent);
+      const fileContent = isCsv ? addUtf8Bom(generatedContent) : generatedContent;
+      folder.file(fullFileName, fileContent);
     }
   });
 &nbsp;
@@ -319,7 +370,7 @@ ex<span class="cstat-no" title="statement not covered" >port default async funct
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-16T15:27:10.814Z
+                at 2026-01-16T17:57:49.519Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
