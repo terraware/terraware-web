@@ -2,22 +2,22 @@ import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography } from '@mui/material';
 import { Dropdown, Separator } from '@terraware/web-components';
+import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import ClientSideFilterTable from 'src/components/Tables/ClientSideFilterTable';
 import Card from 'src/components/common/Card';
 import { TableColumnType } from 'src/components/common/table/types';
 import { useLocalization, useOrganization } from 'src/providers';
 import {
-  ObservationPayload,
   useLazyListAdHocObservationResultsQuery,
-  useLazyListAdHocObservationsQuery,
   useLazyListObservationResultsQuery,
-  useLazyListObservationsQuery,
 } from 'src/queries/generated/observations';
 import { PlantingSitePayload, useLazyListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
 import { ObservationState } from 'src/types/Observations';
 import { SearchSortOrder } from 'src/types/Search';
+import { getShortDate } from 'src/utils/dateFormatter';
 import { isAdmin } from 'src/utils/organization';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import PlantMonitoringCellRenderer from './PlantMonitoringCellRenderer';
 
@@ -42,8 +42,9 @@ export type PlantMonitoringListProps = {
 
 const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
   const { selectedOrganization } = useOrganization();
+  const defaultTimezone = useDefaultTimeZone().get().id;
   const scheduleObservationsEnabled = isAdmin(selectedOrganization);
-  const { strings } = useLocalization();
+  const { activeLocale, strings } = useLocalization();
 
   const columns = useMemo((): TableColumnType[] => {
     const defaultColumns: TableColumnType[] = [
@@ -125,25 +126,13 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
   const fuzzySearchColumns = ['plantingSiteName', 'strata'];
 
   const [selectedPlotSelection, setSelectedPlotSelection] = useState<PlotSelectionType>('assigned');
-
-  const [listObservations, listObservationsResponse] = useLazyListObservationsQuery();
-  const [listAdHocObservations, listAdHocObservationsResponse] = useLazyListAdHocObservationsQuery();
   const [listObservationResults, listObservationsResultsResponse] = useLazyListObservationResultsQuery();
   const [listAdHocObservationResults, listAdHocObservationResultsResponse] = useLazyListAdHocObservationResultsQuery();
   const [listPlantingSites, listPlantingSitesResult] = useLazyListPlantingSitesQuery();
 
   const isLoading = useMemo(
-    () =>
-      listObservationsResponse.isLoading ||
-      listAdHocObservationsResponse.isLoading ||
-      listObservationsResultsResponse.isLoading ||
-      listAdHocObservationResultsResponse.isLoading,
-    [
-      listAdHocObservationResultsResponse.isLoading,
-      listAdHocObservationsResponse.isLoading,
-      listObservationsResponse.isLoading,
-      listObservationsResultsResponse.isLoading,
-    ]
+    () => listObservationsResultsResponse.isLoading || listAdHocObservationResultsResponse.isLoading,
+    [listAdHocObservationResultsResponse.isLoading, listObservationsResultsResponse.isLoading]
   );
 
   const plantingSitesById = useMemo(
@@ -162,13 +151,6 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
     if (selectedOrganization) {
       void listPlantingSites({ organizationId: selectedOrganization.id, full: true }, true);
       if (selectedPlotSelection === 'adHoc') {
-        void listAdHocObservations(
-          {
-            organizationId: selectedOrganization.id,
-            plantingSiteId,
-          },
-          true
-        );
         void listAdHocObservationResults(
           {
             organizationId: selectedOrganization.id,
@@ -178,13 +160,6 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           true
         );
       } else {
-        void listObservations(
-          {
-            organizationId: selectedOrganization.id,
-            plantingSiteId,
-          },
-          true
-        );
         void listObservationResults(
           {
             organizationId: selectedOrganization.id,
@@ -197,44 +172,12 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
     }
   }, [
     listAdHocObservationResults,
-    listAdHocObservations,
     listObservationResults,
-    listObservations,
     listPlantingSites,
     selectedPlotSelection,
     selectedOrganization,
     plantingSiteId,
   ]);
-
-  const observations = useMemo(() => {
-    if (selectedPlotSelection === 'adHoc') {
-      if (listAdHocObservationsResponse.isSuccess) {
-        return listAdHocObservationsResponse.data.observations.filter(
-          (observation) => observation.type === 'Monitoring'
-        );
-      } else {
-        return [];
-      }
-    } else {
-      if (listObservationsResponse.isSuccess) {
-        return listObservationsResponse.data.observations.filter((observation) => observation.type === 'Monitoring');
-      } else {
-        return [];
-      }
-    }
-  }, [listAdHocObservationsResponse, listObservationsResponse, selectedPlotSelection]);
-
-  const observationsById = useMemo(
-    () =>
-      observations.reduce(
-        (observationMap, observation) => {
-          observationMap[observation.id] = observation;
-          return observationMap;
-        },
-        {} as { [observationId: number]: ObservationPayload }
-      ),
-    [observations]
-  );
 
   const observationResults = useMemo(() => {
     if (selectedPlotSelection === 'adHoc') {
@@ -259,7 +202,6 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
   const rows = useMemo(
     () =>
       observationResults.map((observationResult): PlantMonitoringRow => {
-        const observation = observationsById[observationResult.observationId];
         const plantingSite = plantingSitesById[observationResult.plantingSiteId];
 
         const strata = observationResult.strata.reduce((stratumNames, stratumResult) => {
@@ -271,9 +213,14 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           }
         }, '');
 
+        const completedDate = observationResult.completedTime
+          ? getDateDisplayValue(observationResult.completedTime, plantingSite?.timeZone ?? defaultTimezone)
+          : undefined;
+        const observationDate = getShortDate(completedDate ?? observationResult.startDate, activeLocale);
+
         return {
           observationId: observationResult.observationId,
-          observationDate: observation?.endDate,
+          observationDate,
           state: observationResult.state,
           plantingSiteName: plantingSite?.name,
           strata,
@@ -284,7 +231,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           completedDate: observationResult.completedTime,
         };
       }),
-    [observationResults, observationsById, plantingSitesById]
+    [activeLocale, defaultTimezone, observationResults, plantingSitesById]
   );
 
   const rightComponent = useMemo(() => {
