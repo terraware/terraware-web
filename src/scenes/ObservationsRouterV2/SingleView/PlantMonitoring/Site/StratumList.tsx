@@ -70,11 +70,13 @@ export default function StratumList(): JSX.Element {
   const rows = useMemo((): StratumRow[] => {
     if (observationResultsResponse) {
       return observationResultsResponse.observation.strata.map((stratum): StratumRow => {
+        const totalLive = stratum.species.reduce((total, plotSpecies) => total + plotSpecies.totalLive, 0);
+
         return {
           observationId: observationResultsResponse.observation.observationId,
           stratumName: stratum.name,
           completedDate: stratum.completedTime ? getDateDisplayValue(stratum.completedTime, timeZone) : undefined,
-          totalLive: 0,
+          totalLive,
           totalPlants: stratum.totalPlants,
           totalSpecies: stratum.totalSpecies,
           plantingDensity: stratum.plantingDensity,
