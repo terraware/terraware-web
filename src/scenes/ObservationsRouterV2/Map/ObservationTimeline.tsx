@@ -3,17 +3,13 @@ import React, { useCallback, useMemo } from 'react';
 import TimelineSlider from '@terraware/web-components/components/TimelineSlider';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 
-import { useLocalization } from 'src/providers';
 import { ObservationResultsPayload } from 'src/queries/generated/observations';
-import { getQuarter } from 'src/utils/dateUtils';
 
 type ObservationClusterMode = 'Month' | 'Quarter' | 'Year';
 
 type ObservationTimelineProps = {
   adHocObservationResults: ObservationResultsPayload[];
   observationResults: ObservationResultsPayload[];
-  setSelectedAdHocObservationResults: ObservationResultsPayload[];
-  setSelectedObservationResults: ObservationResultsPayload[];
   timezone: string;
 };
 
@@ -22,8 +18,6 @@ const ObservationTimeline = ({
   observationResults,
   timezone,
 }: ObservationTimelineProps): JSX.Element => {
-  const { activeLocale } = useLocalization();
-
   const observationDates = useMemo(() => {
     return [...adHocObservationResults, ...observationResults].map((observation) => {
       const completedDate = observation.completedTime
@@ -54,6 +48,7 @@ const ObservationTimeline = ({
     }
   }, [observationDates]);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const clusterMode = useMemo((): ObservationClusterMode => {
     if (!earliestDate || !latestDate) {
       return 'Month';
@@ -73,25 +68,9 @@ const ObservationTimeline = ({
     }
   }, [earliestDate, latestDate]);
 
-  const dateLabel = useCallback(
-    (date: Date) => {
-      if (clusterMode === 'Month') {
-        const dateFormatter = new Intl.DateTimeFormat(activeLocale || 'en-US', {
-          month: 'long',
-          year: 'numeric',
-          timeZone: timezone,
-        });
-        return dateFormatter.format(earliestDate);
-      } else if (clusterMode === 'Quarter') {
-        const year = date.getFullYear().toString();
-        const quarter = getQuarter(date);
-        return `Q${quarter} ${year}`;
-      } else if (clusterMode === 'Year') {
-        return date.getFullYear().toString();
-      }
-    },
-    [activeLocale, clusterMode, earliestDate, timezone]
-  );
+  const dateLabel = useCallback((date: Date) => {
+    return date.getFullYear().toString();
+  }, []);
 
   return (
     <TimelineSlider

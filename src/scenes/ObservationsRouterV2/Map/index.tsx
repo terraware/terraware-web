@@ -1,6 +1,9 @@
 import React, { useEffect, useMemo } from 'react';
 
-import { useOrganization } from 'src/providers';
+import { Box, Typography, useTheme } from '@mui/material';
+
+import FormattedNumber from 'src/components/common/FormattedNumber';
+import { useLocalization, useOrganization } from 'src/providers';
 import {
   useLazyListAdHocObservationResultsQuery,
   useLazyListObservationResultsQuery,
@@ -9,6 +12,7 @@ import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import ObservationMap from './ObservationMap';
+import ObservationTimeline from './ObservationTimeline';
 
 type MapProps = {
   isBiomass?: boolean;
@@ -18,6 +22,8 @@ type MapProps = {
 
 const Map = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: MapProps): JSX.Element => {
   const { selectedOrganization } = useOrganization();
+  const { strings } = useLocalization();
+  const theme = useTheme();
   const defaultTimezone = useDefaultTimeZone().get().id;
 
   const [getPlantingSite, getPlantingSiteResult] = useLazyGetPlantingSiteQuery();
@@ -76,13 +82,44 @@ const Map = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: MapProps): JSX
   }, [isBiomass, listObservationsResultsResponse]);
 
   return (
-    <ObservationMap
-      adHocObservationResults={adHocObservationResults}
-      isBiomass={isBiomass}
-      observationResults={observationResults}
-      plantingSiteId={plantingSiteId}
-      selectPlantingSiteId={selectPlantingSiteId}
-    />
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        background: theme.palette.TwClrBg,
+        borderRadius: '8px',
+        padding: theme.spacing(1),
+        gap: theme.spacing(3),
+      }}
+    >
+      {plantingSite && (
+        <Box display={'flex'} flexDirection={'row'} width={'100%'} alignItems={'center'}>
+          <Box marginRight={theme.spacing(2)}>
+            <Typography fontSize='20px' fontWeight={600} lineHeight={'28px'}>
+              {plantingSite?.areaHa !== undefined &&
+                strings.formatString(
+                  strings.X_HA_IN_TOTAL_PLANTING_AREA,
+                  <FormattedNumber value={Math.round(plantingSite.areaHa * 100) / 100} />
+                )}
+            </Typography>
+          </Box>
+          <Box display={'flex'} flexGrow={1} justifyContent={'flex-end'}>
+            <ObservationTimeline
+              adHocObservationResults={adHocObservationResults}
+              observationResults={observationResults}
+              timezone={plantingSite?.timeZone ?? defaultTimezone}
+            />
+          </Box>
+        </Box>
+      )}
+      <ObservationMap
+        adHocObservationResults={adHocObservationResults}
+        isBiomass={isBiomass}
+        observationResults={observationResults}
+        plantingSiteId={plantingSiteId}
+        selectPlantingSiteId={selectPlantingSiteId}
+      />
+    </Box>
   );
 };
 

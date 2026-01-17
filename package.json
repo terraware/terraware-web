@@ -62,7 +62,7 @@
     "@mux/mux-player": "^3.6.1",
     "@mux/mux-player-react": "^3.6.1",
     "@reduxjs/toolkit": "^1.9.3",
-    "@terraware/web-components": "^3.9.11",
+    "@terraware/web-components": "^3.9.13-rc.1",
     "@testing-library/jest-dom": "^6.0.0",
     "@testing-library/react": "^16.0.0",
     "@testing-library/user-event": "^14.4.3",
