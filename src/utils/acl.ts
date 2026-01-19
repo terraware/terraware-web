@@ -211,7 +211,7 @@ const isAllowedUpdatePlantCounts: PermissionCheckFn<UpdatePlantCounts> = (
   _: GlobalRolePermission,
   metadata?: UpdateReportsTargetsMetadata
 ): boolean => {
-  return isTFExpertOrHigher(user) || isManagerOrHigher(metadata?.organization);
+  return isManagerOrHigher(metadata?.organization);
 };
 
 /**

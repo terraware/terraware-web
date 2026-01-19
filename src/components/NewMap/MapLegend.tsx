@@ -1,7 +1,7 @@
 import React, { type JSX, useCallback, useMemo } from 'react';
 
 import { Box, Tooltip, Typography, useTheme } from '@mui/material';
-import { AntSwitch, Icon } from '@terraware/web-components';
+import { AntSwitch, Dropdown, Icon } from '@terraware/web-components';
 
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
@@ -12,6 +12,18 @@ type BaseMapLegendGroup = {
   title: string;
   tooltip?: string;
 };
+
+export type MapDropdownLegendItem = {
+  label: string;
+  value: string;
+};
+
+export type MapDropdownLegendGroup = {
+  type: 'dropdown';
+  items: MapDropdownLegendItem[];
+  selectedValue: string | undefined;
+  setSelectedValue: (value: string | undefined) => void;
+} & BaseMapLegendGroup;
 
 export type MapSingleSelectLegendItem = {
   disabled?: boolean;
@@ -53,9 +65,17 @@ export type MapGroupToggleLegendGroup = {
   visible: boolean;
 } & BaseMapLegendGroup;
 
-export type MapLegendGroup = MapMultiSelectLegendGroup | MapSingleSelectLegendGroup | MapGroupToggleLegendGroup;
+export type MapLegendGroup =
+  | MapMultiSelectLegendGroup
+  | MapSingleSelectLegendGroup
+  | MapGroupToggleLegendGroup
+  | MapDropdownLegendGroup;
 
-export type MapLegendItem = MapMultiSelectLegendItem | MapSingleSelectLegendItem | MapGroupToggleLegendItem;
+export type MapLegendItem =
+  | MapMultiSelectLegendItem
+  | MapSingleSelectLegendItem
+  | MapGroupToggleLegendItem
+  | MapDropdownLegendItem;
 
 export type MapLegendProps = {
   legends: MapLegendGroup[];
@@ -115,113 +135,129 @@ const MapLegend = ({ legends }: MapLegendProps): JSX.Element => {
           </Typography>
         );
 
-        const itemComponents = legend.items.map((item, itemIndex) => {
-          const itemOnClck = onClick(legend, item);
+        const itemComponents =
+          legend.type === 'dropdown' ? (
+            <Dropdown
+              fullWidth
+              required
+              options={legend.items}
+              selectedValue={legend.selectedValue}
+              onChange={legend.setSelectedValue}
+            />
+          ) : (
+            legend.items.map((item, itemIndex) => {
+              const itemOnClck = onClick(legend, item);
 
-          const disabled =
-            legend.disabled ||
-            (legend.type === 'single-select'
-              ? (item as MapSingleSelectLegendItem).disabled
-              : legend.type === 'multi-select'
-                ? (item as MapMultiSelectLegendItem).disabled
-                : false) ||
-            false;
+              const disabled =
+                legend.disabled ||
+                (legend.type === 'single-select'
+                  ? (item as MapSingleSelectLegendItem).disabled
+                  : legend.type === 'multi-select'
+                    ? (item as MapMultiSelectLegendItem).disabled
+                    : false) ||
+                false;
 
-          const selected =
-            legend.type === 'single-select'
-              ? (item as MapSingleSelectLegendItem).id === legend.selectedLayer
-              : legend.type === 'multi-select'
-                ? (item as MapMultiSelectLegendItem).visible
-                : false;
+              const selected =
+                legend.type === 'single-select'
+                  ? (item as MapSingleSelectLegendItem).id === legend.selectedLayer
+                  : legend.type === 'multi-select'
+                    ? (item as MapMultiSelectLegendItem).visible
+                    : false;
 
-          const logoComponent = () => {
-            if (item.style.type === 'icon') {
-              return (
-                <Icon
-                  name={item.style.iconName}
-                  fillColor={item.style.iconColor}
-                  style={{ marginRight: theme.spacing(1) }}
-                  size={'small'}
-                />
-              );
-            } else {
+              const logoComponent = () => {
+                if (item.style.type === 'icon') {
+                  return (
+                    <Icon
+                      name={item.style.iconName}
+                      fillColor={item.style.iconColor}
+                      style={{ marginRight: theme.spacing(1) }}
+                      size={'small'}
+                    />
+                  );
+                } else {
+                  return (
+                    <Box
+                      display={'flex'}
+                      sx={{
+                        border: `2px solid ${item.style.borderColor ?? theme.palette.TwClrBaseGreen300}`,
+                        opacity: disabled ? 0.7 : 1.0,
+                        height: '16px',
+                        width: '24px',
+                        minWidth: '24px',
+                        marginRight: theme.spacing(1),
+                      }}
+                      overflow={'clip'}
+                    >
+                      <Box
+                        height={'100%'}
+                        width={'100%'}
+                        sx={{
+                          backgroundColor: item.style.fillColor,
+                          backgroundImage: item.style.fillPatternUrl
+                            ? `url('${item.style.fillPatternUrl}')`
+                            : undefined,
+                          backgroundRepeat: 'repeat',
+                          opacity: item.style.opacity ?? 0.2,
+                        }}
+                      />
+                    </Box>
+                  );
+                }
+              };
+
+              const visibleComponent = () => {
+                switch (legend.type) {
+                  case 'multi-select': {
+                    const featureItem = item as MapMultiSelectLegendItem;
+
+                    const visibleIcon = featureItem.visible ? <Icon name='iconEye' /> : <Icon name='iconEyeOff' />;
+
+                    return <Box display='flex'>{visibleIcon}</Box>;
+                  }
+                  case 'single-select': {
+                    const layerItem = item as MapSingleSelectLegendItem;
+
+                    return (
+                      <Box
+                        display='flex'
+                        sx={{ visibility: layerItem.id === legend.selectedLayer ? 'visible' : 'hidden' }}
+                      >
+                        <Icon name='checkmark' style={{ marginRight: theme.spacing(1) }} />
+                      </Box>
+                    );
+                  }
+
+                  case 'group-toggle':
+                    return undefined;
+                }
+              };
+
               return (
                 <Box
-                  display={'flex'}
+                  onClick={itemOnClck}
+                  display='flex'
+                  alignItems='center'
                   sx={{
-                    border: `2px solid ${item.style.borderColor ?? theme.palette.TwClrBaseGreen300}`,
-                    opacity: disabled ? 0.7 : 1.0,
-                    height: '16px',
-                    width: '24px',
-                    minWidth: '24px',
-                    marginRight: theme.spacing(1),
+                    cursor: itemOnClck ? 'pointer' : 'default',
+                    background: selected ? theme.palette.TwClrBgSecondary : 'none',
+                    borderRadius: theme.spacing(1),
+                    padding: theme.spacing(1, 1),
+                    opacity: disabled ? '0.5' : 1,
                   }}
-                  overflow={'clip'}
+                  justifyContent={'space-between'}
+                  key={`${index}-${itemIndex}`}
                 >
-                  <Box
-                    height={'100%'}
-                    width={'100%'}
-                    sx={{
-                      backgroundColor: item.style.fillColor,
-                      backgroundImage: item.style.fillPatternUrl ? `url('${item.style.fillPatternUrl}')` : undefined,
-                      backgroundRepeat: 'repeat',
-                      opacity: item.style.opacity ?? 0.2,
-                    }}
-                  />
+                  <Box display='flex' alignItems='center' paddingRight={theme.spacing(1)}>
+                    {logoComponent()}
+                    <Typography fontSize='14px' fontWeight={400}>
+                      {item.label}
+                    </Typography>
+                  </Box>
+                  <Box display='flex'>{visibleComponent()}</Box>
                 </Box>
               );
-            }
-          };
-
-          const visibleComponent = () => {
-            switch (legend.type) {
-              case 'multi-select': {
-                const featureItem = item as MapMultiSelectLegendItem;
-
-                const visibleIcon = featureItem.visible ? <Icon name='iconEye' /> : <Icon name='iconEyeOff' />;
-
-                return <Box display='flex'>{visibleIcon}</Box>;
-              }
-              case 'single-select': {
-                const layerItem = item as MapSingleSelectLegendItem;
-
-                return (
-                  <Box display='flex' sx={{ visibility: layerItem.id === legend.selectedLayer ? 'visible' : 'hidden' }}>
-                    <Icon name='checkmark' style={{ marginRight: theme.spacing(1) }} />
-                  </Box>
-                );
-              }
-
-              case 'group-toggle':
-                return undefined;
-            }
-          };
-
-          return (
-            <Box
-              onClick={itemOnClck}
-              display='flex'
-              alignItems='center'
-              sx={{
-                cursor: itemOnClck ? 'pointer' : 'default',
-                background: selected ? theme.palette.TwClrBgSecondary : 'none',
-                borderRadius: theme.spacing(1),
-                padding: theme.spacing(1, 1),
-                opacity: disabled ? '0.5' : 1,
-              }}
-              justifyContent={'space-between'}
-              key={`${index}-${itemIndex}`}
-            >
-              <Box display='flex' alignItems='center' paddingRight={theme.spacing(1)}>
-                {logoComponent()}
-                <Typography fontSize='14px' fontWeight={400}>
-                  {item.label}
-                </Typography>
-              </Box>
-              <Box display='flex'>{visibleComponent()}</Box>
-            </Box>
+            })
           );
-        });
 
         return (
           <Box
