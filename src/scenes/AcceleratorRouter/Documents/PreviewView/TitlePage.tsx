@@ -23,7 +23,7 @@ export default function TitlePage({
   documentVariables,
   projectName,
   titleSection,
-}: TitlePageProps): ReactElement | null {
+}: TitlePageProps): ReactElement<any> | null {
   const isoDate: string | null = useMemo(() => DateTime.fromJSDate(new Date()).toISODate(), []);
 
   if (!(documentVariables.length > 0 && allVariables.length > 0)) {

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useState } from 'react';
 
 import { Grid } from '@mui/material';
 import { Checkbox, Confirm, Dropdown } from '@terraware/web-components';

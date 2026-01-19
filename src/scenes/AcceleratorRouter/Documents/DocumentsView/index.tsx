@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { type JSX, useCallback, useMemo } from 'react';
 
 import { Grid, Typography, useTheme } from '@mui/material';
 import { IconName, Separator } from '@terraware/web-components';

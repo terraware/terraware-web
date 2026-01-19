@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { type JSX, useState } from 'react';
 
 import { Box } from '@mui/material';
 import { Message } from '@terraware/web-components';

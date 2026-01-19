@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { type JSX, useEffect, useState } from 'react';
 
 import { Box, Divider, List, ListItemButton, ListSubheader, Popover, Typography, useTheme } from '@mui/material';
 import { Button, Tooltip } from '@terraware/web-components';

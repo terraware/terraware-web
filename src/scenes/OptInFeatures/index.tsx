@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { type JSX, useEffect, useState } from 'react';
 
 import { Box, Grid, LinearProgress, Stack, Switch, useTheme } from '@mui/material';
 

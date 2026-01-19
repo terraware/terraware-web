@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { type JSX, useCallback, useEffect } from 'react';
 
 import { BusySpinner } from '@terraware/web-components';
 

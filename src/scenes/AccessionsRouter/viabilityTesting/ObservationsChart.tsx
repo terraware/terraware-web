@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { type JSX, useEffect, useRef } from 'react';
 
 import { useTheme } from '@mui/material';
 import { Chart } from 'chart.js';

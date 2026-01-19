@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo } from 'react';
 
 import { Box, useTheme } from '@mui/material';
 import { MRT_ColumnDef, MRT_TableInstance, MaterialReactTable, useMaterialReactTable } from 'material-react-table';

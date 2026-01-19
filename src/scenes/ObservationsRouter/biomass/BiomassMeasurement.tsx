@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useMemo, useState } from 'react';
 
 import { Typography, useTheme } from '@mui/material';
 import sanitize from 'sanitize-filename';

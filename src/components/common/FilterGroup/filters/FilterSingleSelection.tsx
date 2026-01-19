@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type JSX } from 'react';
 
 import { Box, useTheme } from '@mui/material';
 import { Dropdown, DropdownItem } from '@terraware/web-components';
@@ -61,7 +61,13 @@ export default function SingleSelection(props: Props): JSX.Element {
   return (
     <Box id={`filter-list-${props.field}`} sx={{ padding: theme.spacing(1.75) }}>
       <Dropdown
-        options={options.map(({ label, value }) => ({ label, value }) as DropdownItem)}
+        options={options.map(
+          ({ label, value }) =>
+            ({
+              label,
+              value,
+            }) as DropdownItem
+        )}
         onChange={(val) => handleChange(val)}
         selectedValue={props.value}
         fullWidth={true}

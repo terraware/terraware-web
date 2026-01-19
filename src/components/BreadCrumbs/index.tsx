@@ -1,4 +1,4 @@
-import React, { MouseEvent, SyntheticEvent } from 'react';
+import React, { type JSX, MouseEvent, SyntheticEvent } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 

@@ -27,7 +27,7 @@ import { getSourceVariable } from './util';
 
 const dateVariablePreview = (variableValue: DateVariableValue) => variableValue.dateValue;
 
-const linkVariablePreview = (variableValue: LinkVariableValue): React.ReactElement => (
+const linkVariablePreview = (variableValue: LinkVariableValue): React.ReactElement<any> => (
   <a href={variableValue.url}>{variableValue.url}</a>
 );
 

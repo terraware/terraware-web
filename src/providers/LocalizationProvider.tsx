@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { type JSX, useEffect, useState } from 'react';
 import LocalizedStrings from 'react-localization';
 
 import { requestListCountries, requestListTimezones } from 'src/redux/features/location/locationAsyncThunks';

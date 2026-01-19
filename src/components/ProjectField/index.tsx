@@ -1,4 +1,4 @@
-import React, { isValidElement, useMemo } from 'react';
+import React, { type JSX, isValidElement, useMemo } from 'react';
 
 import { Typography } from '@mui/material';
 import { Props } from '@terraware/web-components/components/Textfield/Textfield';

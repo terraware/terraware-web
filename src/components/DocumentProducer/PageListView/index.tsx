@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type JSX } from 'react';
 
 import Page, { PrimaryButtonType } from 'src/components/Page';
 import TableWithSearchFilters, { TableWithSearchFiltersProps } from 'src/components/TableWithSearchFilters';

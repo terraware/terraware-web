@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { type JSX, useEffect } from 'react';
 
 import { Box, useTheme } from '@mui/material';
 import { Button, Message } from '@terraware/web-components';

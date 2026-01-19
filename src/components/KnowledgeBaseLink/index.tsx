@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type JSX } from 'react';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
 

@@ -1,4 +1,4 @@
-import React, { CSSProperties, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { CSSProperties, type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Grid, IconButton, SxProps, Theme, Typography, useTheme } from '@mui/material';
 import MuxPlayer from '@mux/mux-player-react';

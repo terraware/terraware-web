@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type JSX } from 'react';
 
 import CommonTitleBar from 'src/components/common/TitleBar';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';

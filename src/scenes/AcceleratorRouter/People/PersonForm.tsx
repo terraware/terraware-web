@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Container, Grid, useTheme } from '@mui/material';
 import { MultiSelect, Textfield } from '@terraware/web-components';

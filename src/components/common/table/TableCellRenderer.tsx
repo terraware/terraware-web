@@ -1,3 +1,5 @@
+import type { JSX } from 'react';
+
 import { CellDateRenderer, TableRowType, CellRenderer as WebComponentsCellRenderer } from '@terraware/web-components';
 import { LocalizationProps } from '@terraware/web-components/components/table';
 import { RendererProps } from '@terraware/web-components/components/table/types';

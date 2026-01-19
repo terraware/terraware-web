@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type JSX } from 'react';
 import { useParams } from 'react-router';
 
 import TfMain from 'src/components/common/TfMain';

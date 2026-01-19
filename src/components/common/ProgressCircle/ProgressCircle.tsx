@@ -1,3 +1,5 @@
+import type { JSX } from 'react';
+
 import { ProgressCircle as WebComponentsProgressCircle } from '@terraware/web-components';
 import { Props } from '@terraware/web-components/components/ProgressCircle/ProgressCircle';
 

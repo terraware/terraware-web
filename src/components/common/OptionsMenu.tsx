@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { type JSX, useState } from 'react';
 
 import { Box, SxProps } from '@mui/material';
 import { Button, DropdownItem, Popover, Tooltip } from '@terraware/web-components';

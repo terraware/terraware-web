@@ -1,4 +1,4 @@
-import React, { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { useMixpanel } from 'react-mixpanel-browser';
 
 import { DropdownItem, TableColumnType } from '@terraware/web-components';

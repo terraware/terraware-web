@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useState } from 'react';
 
 import { FormControlLabel, Grid, Radio, RadioGroup, useTheme } from '@mui/material';
 import { BusySpinner, Dropdown, DropdownItem } from '@terraware/web-components';

@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { type JSX, useCallback, useMemo } from 'react';
 import { matchPath, useMatch } from 'react-router';
 
 import { NavSection, theme } from '@terraware/web-components';

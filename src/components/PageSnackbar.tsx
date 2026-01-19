@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
 
 import { Box, Snackbar as SnackbarUI } from '@mui/material';

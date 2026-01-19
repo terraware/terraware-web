@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { type JSX, useCallback } from 'react';
 import { Route, Routes } from 'react-router';
 
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';

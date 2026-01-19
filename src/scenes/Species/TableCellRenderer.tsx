@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from 'react';
+import React, { type JSX, ReactNode, useState } from 'react';
 
 import { ClickAwayListener, IconButton, Popover, useTheme } from '@mui/material';
 

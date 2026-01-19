@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Box, Container, Grid, List, ListItem, Typography, useTheme } from '@mui/material';
 import { Message, TableColumnType, Tabs } from '@terraware/web-components';

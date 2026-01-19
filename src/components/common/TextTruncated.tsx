@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type JSX } from 'react';
 
 import { useTheme } from '@mui/material';
 import { TextTruncated as Truncated } from '@terraware/web-components';

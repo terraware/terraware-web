@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { type JSX, useState } from 'react';
 
 import { FormControlLabel, Radio, RadioGroup, Typography, useTheme } from '@mui/material';
 import { Button, DialogBox } from '@terraware/web-components';

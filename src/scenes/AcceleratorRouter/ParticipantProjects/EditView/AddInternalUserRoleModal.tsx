@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { type JSX, useCallback, useState } from 'react';
 
 import { Grid } from '@mui/material';
 import { Textfield } from '@terraware/web-components';

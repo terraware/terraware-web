@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { type JSX, useMemo } from 'react';
 import { Route, Routes, useParams } from 'react-router';
 
 import { BusySpinner } from '@terraware/web-components';

@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useMemo, useState } from 'react';
 
 import { Box, useTheme } from '@mui/material';
 import { DropdownItem, PopoverMenu } from '@terraware/web-components';

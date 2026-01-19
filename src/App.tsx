@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useEffect, useMemo, useState } from 'react';
 import { MixpanelProvider } from 'react-mixpanel-browser';
 import { useMixpanel } from 'react-mixpanel-browser';
 import { Provider } from 'react-redux';

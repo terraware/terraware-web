@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type JSX } from 'react';
 
 import { Props as ButtonProps } from '@terraware/web-components/components/Button/Button';
 import Tooltip from '@terraware/web-components/components/Tooltip/Tooltip';

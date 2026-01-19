@@ -1,4 +1,4 @@
-import React, { CSSProperties } from 'react';
+import React, { CSSProperties, type JSX } from 'react';
 
 import TfMain from 'src/components/common/TfMain';
 import { useUser } from 'src/providers';

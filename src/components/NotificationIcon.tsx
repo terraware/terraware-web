@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type JSX } from 'react';
 
 import { CalendarToday, Warning, WifiTethering } from '@mui/icons-material';
 import { Fab, useTheme } from '@mui/material';

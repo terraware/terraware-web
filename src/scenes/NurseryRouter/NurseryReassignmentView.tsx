@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { type JSX, useEffect, useMemo, useRef, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, CircularProgress, Grid, useTheme } from '@mui/material';

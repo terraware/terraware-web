@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { type JSX, useState } from 'react';
 
 import { IconButton } from '@mui/material';
 import { DropdownItem, Icon, Popover } from '@terraware/web-components';

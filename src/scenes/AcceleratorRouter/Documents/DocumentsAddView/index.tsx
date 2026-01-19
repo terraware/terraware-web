@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { type JSX, useCallback, useState } from 'react';
 
 import DocumentMetadataEdit from 'src/components/DocumentProducer/DocumentMetadataEdit';
 import PageContent from 'src/components/DocumentProducer/PageContent';

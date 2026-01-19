@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { type JSX, useCallback, useState } from 'react';
 
 import { Portal } from '@mui/base';
 import { Box, Typography, useTheme } from '@mui/material';

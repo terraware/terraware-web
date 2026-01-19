@@ -24,7 +24,7 @@ const SectionVariable = ({
   sectionVariableValue,
   projectId,
   suppressCaptions,
-}: SectionVariableProps): React.ReactElement => {
+}: SectionVariableProps): React.ReactElement<any> => {
   const injectedValue = sectionVariable.variableValues.find(
     (value: VariableValue) =>
       'variableId' in sectionVariableValue && sectionVariableValue.variableId === value.variableId
@@ -63,7 +63,7 @@ const SectionVariable = ({
   return (
     <span>
       {(combinedInjectedValue.values || ([] as ExistingVariableValueUnion[])).map(
-        (value: ExistingVariableValueUnion, index: number): React.ReactElement => {
+        (value: ExistingVariableValueUnion, index: number): React.ReactElement<any> => {
           const printValue = getPrintValue(combinedInjectedValue, value, sectionVariable);
 
           // Default to inline

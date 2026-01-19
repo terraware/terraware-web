@@ -36,7 +36,7 @@ export const PreviewImage = ({
   sectionVariable,
   sourceImageVariable,
   suppressCaptions,
-}: PreviewImageProps): React.ReactElement => {
+}: PreviewImageProps): React.ReactElement<any> => {
   const relevantImageVariable = sectionVariable.relevantVariables.find(
     (variable: VariableWithValues) => variable.id === sourceImageVariable.id
   );

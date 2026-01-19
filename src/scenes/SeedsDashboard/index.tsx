@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type JSX } from 'react';
 
 import { Box, CircularProgress, Container, Grid, SxProps, Typography, useTheme } from '@mui/material';
 import Cookies from 'cookies-js';

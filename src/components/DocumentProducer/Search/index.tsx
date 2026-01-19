@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { type JSX, useMemo, useState } from 'react';
 
 import { Grid, Popover, useTheme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';

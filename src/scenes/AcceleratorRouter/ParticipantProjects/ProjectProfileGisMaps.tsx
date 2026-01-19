@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, CircularProgress, Typography, useTheme } from '@mui/material';
 import { SelectT } from '@terraware/web-components';
@@ -256,8 +256,20 @@ const ProjectProfileGisMaps = () => {
   }, [plantingSitesData]);
 
   const strataAndSites = useMemo(() => {
-    const strata = uniqueStrata?.map((_stratum) => ({ name: _stratum, type: 'stratum' }) as StratumOrSiteOption);
-    const sites = uniqueSites?.map((s) => ({ name: s, type: 'site' }) as StratumOrSiteOption);
+    const strata = uniqueStrata?.map(
+      (_stratum) =>
+        ({
+          name: _stratum,
+          type: 'stratum',
+        }) as StratumOrSiteOption
+    );
+    const sites = uniqueSites?.map(
+      (s) =>
+        ({
+          name: s,
+          type: 'site',
+        }) as StratumOrSiteOption
+    );
     if (strata.length > 0 && sites[0]) {
       sites[0].showSeparator = true;
     }

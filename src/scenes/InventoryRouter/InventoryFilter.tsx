@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type JSX } from 'react';
 
 import FilterMultiSelectContainer from 'src/components/common/FilterMultiSelectContainer';
 
