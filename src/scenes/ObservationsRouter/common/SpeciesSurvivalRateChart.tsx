@@ -64,6 +64,9 @@ export default function SpeciesSurvivalRateChart({
             left: '50%',
             transform: 'translate(-50%, -50%)',
             zIndex: 1,
+            borderRadius: '4px',
+            textAlign: 'center',
+            whiteSpace: 'nowrap',
           }}
         >
           {isTemporary ? strings.SURVIVAL_RATE_NOT_CALCULATED_FOR_TEMPORARY_PLOTS : strings.DATA_IS_NOT_YET_AVAILABLE}
