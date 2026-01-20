@@ -6,7 +6,6 @@ import { Button, Icon, IconTooltip } from '@terraware/web-components';
 import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/utils';
 
 import Card from 'src/components/common/Card';
-import isEnabled from 'src/features';
 import { useLocalization } from 'src/providers';
 import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
@@ -31,8 +30,6 @@ import EditMonitoringPlotQualitativeDataModal, {
 import MonitoringPlotSpeciesEditableTable from './MonitoringPlotSpeciesEditableTable';
 
 const MonitoringPlotObservationDataTab = () => {
-  const isEditObservationsEnabled = isEnabled('Edit Observations');
-
   const { isDesktop } = useDeviceInfo();
   const { strings } = useLocalization();
   const theme = useTheme();
@@ -290,7 +287,7 @@ const MonitoringPlotObservationDataTab = () => {
             </Typography>
           </Box>
         </Box>
-        <MonitoringPlotSpeciesEditableTable editable={isEditObservationsEnabled} />
+        <MonitoringPlotSpeciesEditableTable />
       </Box>
       {monitoringPlot?.monitoringPlotId && (
         <EventLog observationId={observationId} plotId={monitoringPlot?.monitoringPlotId} />

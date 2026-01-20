@@ -3,7 +3,6 @@ import { useParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
-import isEnabled from 'src/features';
 import { useLocalization } from 'src/providers';
 import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
 import MonitoringPlotPhotos from 'src/scenes/ObservationsRouter/common/MonitoringPlotPhotos';
@@ -19,7 +18,6 @@ const QuadratComponent = ({ position }: QuadratComponentProps) => {
   const theme = useTheme();
   const params = useParams<{ observationId: string }>();
   const { strings } = useLocalization();
-  const isEditObservationsEnabled = isEnabled('Edit Observations');
 
   const observationId = Number(params.observationId);
   const { data: observationResultsResponse } = useGetObservationResultsQuery({ observationId });
@@ -51,7 +49,7 @@ const QuadratComponent = ({ position }: QuadratComponentProps) => {
       </Box>
       {position && (
         <QuadratSpeciesEditableTable
-          editable={isEditObservationsEnabled}
+          editable={true}
           species={biomassMeasurements?.quadrats.find((quad) => quad.position === position)?.species}
           position={position}
         />

@@ -5,7 +5,6 @@ import { Box, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
-import isEnabled from 'src/features';
 import { useLocalization } from 'src/providers';
 import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
@@ -13,7 +12,6 @@ import EventLog from 'src/scenes/ObservationsRouter/common/EventLog';
 import MonitoringPlotPhotosWithActions from 'src/scenes/ObservationsRouter/common/MonitoringPlotPhotosWithActions';
 
 const MonitoringPlotPhotosTab = () => {
-  const isEditObservationsEnabled = isEnabled('Edit Observations');
   const theme = useTheme();
   const { strings } = useLocalization();
 
@@ -63,7 +61,7 @@ const MonitoringPlotPhotosTab = () => {
         <Typography fontSize={'20px'} fontWeight={600}>
           {strings.PLOT_CORNER_PHOTOS}
         </Typography>
-        {isCompleted && isEditObservationsEnabled && (
+        {isCompleted && (
           <Button id='edit' label={strings.EDIT} onClick={goToEdit} icon='iconEdit' priority='secondary' size='small' />
         )}
       </Box>

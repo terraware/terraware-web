@@ -15,11 +15,7 @@ import { ObservationSpeciesResults } from 'src/types/Observations';
 
 import useObservationSpecies from '../useObservationSpecies';
 
-type MonitoringPlotSpeciesEditableTableProps = { editable: boolean };
-
-export default function MonitoringPlotSpeciesEditableTable({
-  editable,
-}: MonitoringPlotSpeciesEditableTableProps): JSX.Element {
+export default function MonitoringPlotSpeciesEditableTable(): JSX.Element {
   const theme = useTheme();
   const params = useParams<{ observationId: string; monitoringPlotId: string }>();
   const { strings } = useLocalization();
@@ -113,7 +109,7 @@ export default function MonitoringPlotSpeciesEditableTable({
     editDisplayMode: 'cell',
     enableColumnOrdering: false,
     enableColumnPinning: false,
-    enableEditing: editable,
+    enableEditing: true,
     enableSorting: true,
     enableFilters: false,
     enablePagination: false,
