@@ -121,53 +121,22 @@ test.describe('ObservationDetailsTests', () => {
     await waitFor(page, '#home');
 
     // details
-    await expect(page.getByText('Details')).toBeVisible();
-    await expect(page.locator('label.textfield-label:has-text("Date")')).toBeVisible();
-    await expect(
-      page.locator('label.textfield-label:has-text("Date") + p.textfield-value--display:has-text("2025-05-29")')
-    ).toBeVisible();
-    await expect(page.locator('label.textfield-label:has-text("Time")')).toBeVisible();
-    await expect(
-      page.locator('label.textfield-label:has-text("Time") + p.textfield-value--display:has-text("6:50 PM")')
-    ).toBeVisible();
-    await expect(page.locator('label.textfield-label:has-text("Observer")')).toBeVisible();
-    await expect(
-      page.locator('label.textfield-label:has-text("Observer") + p.textfield-value--display:has-text("Super Admin")')
-    ).toBeVisible();
-    await expect(page.getByText('Stratum', { exact: true })).toBeVisible();
-    await expect(
-      page.locator('label.textfield-label:has-text("Stratum") + p.textfield-value--display:has-text("Stratum 01")')
-    ).toBeVisible();
-    await expect(page.locator('label.textfield-label:has-text("Substratum")')).toBeVisible();
-    await expect(
-      page.locator('label.textfield-label:has-text("Substratum") + p.textfield-value--display:has-text("Substratum A")')
-    ).toBeVisible();
-    await expect(page.locator('label.textfield-label:has-text("Monitoring Plot Type")')).toBeVisible();
-    await expect(
-      page.locator(
-        'label.textfield-label:has-text("Monitoring Plot Type") + p.textfield-value--display:has-text("Permanent")'
-      )
-    ).toBeVisible();
-    await expect(page.locator('label.textfield-label:has-text("Total Plants")')).toBeVisible();
-    await expect(
-      page.locator('label.textfield-label:has-text("Total Plants") + p.textfield-value--display:has-text("85")')
-    ).toBeVisible();
-    await expect(page.locator('label.textfield-label:has-text("Species")')).toBeVisible();
-    await expect(
-      page.locator('label.textfield-label:has-text("Species") + p.textfield-value--display:has-text("7")')
-    ).toBeVisible();
-    await expect(page.locator('label.textfield-label:has-text("Plant Density")')).toBeVisible();
-    await expect(
-      page.locator('label.textfield-label:has-text("Plant Density") + p.textfield-value--display:has-text("756")')
-    ).toBeVisible();
-    await expect(page.locator('label.textfield-label:has-text("Survival Rate")')).toBeVisible();
+    await expect(page.getByText('Observed by Super Admin on 2025-05-29 at 6:50 PM')).toBeVisible();
+    await page.getByText('Plot Info').hover();
+    await expect(page.getByText('Stratum: Stratum 01')).toBeVisible();
+    await expect(page.getByText('Substratum: Substratum A')).toBeVisible();
+    await expect(page.getByText('Plot Type: Permanent')).toBeVisible();
+    await expect(page.getByText('Location: 38.44150597, 15.6977629')).toBeVisible();
+    await expect(page.locator('p:has-text("Total Plants")')).toBeVisible();
+    await expect(page.getByText('85')).toBeVisible();
+    await expect(page.locator('p').filter({ hasText: /^Species$/ })).toBeVisible();
+    await expect(page.getByText('7', { exact: true })).toBeVisible();
+    await expect(page.locator('p:has-text("Plant Density")')).toBeVisible();
+    await expect(page.getByText('756')).toBeVisible();
+    await expect(page.getByText('Survival Rate', { exact: true })).toBeVisible();
     // await expect(
     //   page.locator('label.textfield-label:has-text("Survival Rate") + p.textfield-value--display:has-text("13")')
     // ).toBeVisible();
-    await expect(page.locator('label.textfield-label:has-text("Number of Photos")')).toBeVisible();
-    await expect(
-      page.locator('label.textfield-label:has-text("Number of Photos") + p.textfield-value--display:has-text("0")')
-    ).toBeVisible();
     await expect(page.locator('label.textfield-label:has-text("Plot Conditions")')).toBeVisible();
     await expect(
       page.locator('label.textfield-label:has-text("Plot Conditions") + p.textfield-value--display:has-text("- -")')
@@ -178,12 +147,6 @@ test.describe('ObservationDetailsTests', () => {
         'label.textfield-label:has-text("Field Notes") + p.textfield-value--display:has-text("Notes for plot 5162")'
       )
     ).toBeVisible();
-    await expect(page.locator('label.textfield-label:has-text("Plot Location")')).toBeVisible();
-    await expect(
-      page.locator(
-        'label.textfield-label:has-text("Plot Location") + p.textfield-value--display:has-text("SW Corner Latitude: 38.44150597 SW Corner Longitude: 15.6977629")'
-      )
-    ).toBeVisible();
 
     // charts
     await expect(page.getByText('Number of Live Plants per Species')).toBeVisible();
@@ -192,6 +155,6 @@ test.describe('ObservationDetailsTests', () => {
     await expect(page.locator('#observationsSurvivalRateBySpecies')).toBeVisible();
 
     // photos
-    await expect(page.getByText('Photos', { exact: true })).toBeVisible();
+    await expect(page.getByRole('tab', { name: 'Photos & Videos' })).toBeVisible();
   });
 });
