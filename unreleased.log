@@ -1,3 +1,4 @@
+bc43e633444 SW-7981 Message on empty chart should be wider and rounded corners (#5095)
 bb5a9fcbbde Added dropdown legend to map and for selecting observation (#5082)
 5e5584bd03a SW-7963 Issue in viewing data in CSV file for plot in Excel (#5081)
 45243692d63 SW-7913 Remove global users from updating plant counts permission (#5080)
