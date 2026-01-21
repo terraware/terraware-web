@@ -100,7 +100,7 @@ const PlotT0Box = ({ plot, plantingSiteId, t0Plot, withdrawnSpeciesPlot }: PlotT
                           t0Plot.observationId.toString()
                         )}
                       >
-                        {observationPlot ? getShortDate(observationPlot.observation_startDate, activeLocale) : ''}
+                        {observationPlot ? getShortDate(observationPlot.observation_completedTime, activeLocale) : ''}
                       </Link>
                     )}
                   </Typography>
