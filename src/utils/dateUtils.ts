@@ -27,24 +27,28 @@ export const isAfter = (dateString1: string | undefined, dateString2: string | u
 
 export const today = DateTime.now().toUTC().startOf('day');
 
-export const getQuarter = (date: Date): number => {
-  const month = date.getMonth();
+export const startOfMonth = (date: Date): Date => {
+  return new Date(date.getFullYear(), date.getMonth(), 1);
+};
 
-  if (month >= 1 && month <= 3) {
-    return 1;
-  }
+export const endOfMonth = (date: Date): Date => {
+  return new Date(date.getFullYear(), date.getMonth() + 1, 0);
+};
 
-  if (month >= 4 && month <= 6) {
-    return 2;
-  }
+export const startOfQuarter = (date: Date): Date => {
+  const quarterStartMonth = Math.floor(date.getMonth() / 3) * 3;
+  return new Date(date.getFullYear(), quarterStartMonth, 1);
+};
 
-  if (month >= 7 && month <= 9) {
-    return 3;
-  }
+export const endOfQuarter = (date: Date): Date => {
+  const quarterStartMonth = Math.floor(date.getMonth() / 3) * 3;
+  return new Date(date.getFullYear(), quarterStartMonth + 3, 0);
+};
 
-  if (month >= 10 && month <= 12) {
-    return 4;
-  }
+export const startOfYear = (date: Date): Date => {
+  return new Date(date.getFullYear(), 0, 1);
+};
 
-  return -1;
+export const endOfYear = (date: Date): Date => {
+  return new Date(date.getFullYear(), 12, 0);
 };
