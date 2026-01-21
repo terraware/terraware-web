@@ -4,6 +4,8 @@ import { Entity } from '@playcanvas/react';
 import { GSplat } from '@playcanvas/react/components';
 import { useSplat } from '@playcanvas/react/hooks';
 
+import BlockingSpinner from '../common/BlockingSpinner';
+
 interface SplatModelProps {
   splatSrc: string;
   position?: [number, number, number];
@@ -11,7 +13,14 @@ interface SplatModelProps {
 }
 
 const SplatModel = ({ splatSrc, position, rotation }: SplatModelProps) => {
-  const { asset } = useSplat(splatSrc);
+  const { asset, loading } = useSplat(splatSrc);
+
+  if (loading) {
+    return <BlockingSpinner />;
+  }
+
+  // todo add error handling
+
   if (!asset) {
     return null;
   }
