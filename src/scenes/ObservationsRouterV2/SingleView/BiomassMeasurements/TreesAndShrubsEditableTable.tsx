@@ -19,9 +19,7 @@ type TreeRow = ExistingTreePayload & {
   speciesName?: string;
 };
 
-type TreesAndShrubsEditableTableProps = { editable: boolean };
-
-export default function TreesAndShrubsEditableTable({ editable }: TreesAndShrubsEditableTableProps): JSX.Element {
+export default function TreesAndShrubsEditableTable(): JSX.Element {
   const { species: availableSpecies } = useSpeciesData();
   const theme = useTheme();
   const params = useParams<{ observationId: string }>();
@@ -206,7 +204,7 @@ export default function TreesAndShrubsEditableTable({ editable }: TreesAndShrubs
     editDisplayMode: 'cell',
     enableColumnOrdering: false,
     enableColumnPinning: false,
-    enableEditing: editable,
+    enableEditing: true,
     enableSorting: true,
     enableFilters: false,
     enablePagination: false,

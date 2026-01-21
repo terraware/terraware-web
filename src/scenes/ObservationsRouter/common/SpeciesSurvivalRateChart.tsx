@@ -3,7 +3,6 @@ import React, { useMemo } from 'react';
 import { Box, useTheme } from '@mui/material';
 
 import BarChart from 'src/components/common/Chart/BarChart';
-import isEnabled from 'src/features';
 import strings from 'src/strings';
 import { ObservationSpeciesResults } from 'src/types/Observations';
 
@@ -25,7 +24,6 @@ export default function SpeciesSurvivalRateChart({
     values: number[];
   };
   const theme = useTheme();
-  const isEditObservationsEnabled = isEnabled('Edit Observations');
 
   const chartData = useMemo(() => {
     const data: Data = { labels: [], values: [] };
@@ -53,7 +51,7 @@ export default function SpeciesSurvivalRateChart({
 
   return (
     <Box position='relative'>
-      {isEditObservationsEnabled && (isTemporary || isNotCompleted) && (
+      {(isTemporary || isNotCompleted) && (
         <Box
           sx={{
             backgroundColor: theme.palette.TwClrBgSecondary,

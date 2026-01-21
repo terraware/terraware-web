@@ -6,7 +6,6 @@ import { Button, Icon, Textfield, Tooltip } from '@terraware/web-components';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import Card from 'src/components/common/Card';
-import isEnabled from 'src/features';
 import { useLocalization } from 'src/providers';
 import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
@@ -28,8 +27,6 @@ import EditBiomassQualitativeDataModal, { BiomassQualitativeFormData } from './E
 import TreesAndShrubsEditableTable from './TreesAndShrubsEditableTable';
 
 const BiomassObservationDataTab = () => {
-  const isEditObservationsEnabled = isEnabled('Edit Observations');
-
   const { strings } = useLocalization();
   const theme = useTheme();
   const params = useParams<{ observationId: string }>();
@@ -266,7 +263,7 @@ const BiomassObservationDataTab = () => {
             )}
           </Typography>
         )}
-        {monitoringPlot && isEditObservationsEnabled && (
+        {monitoringPlot && (
           <Button
             id='edit'
             label={strings.EDIT}
@@ -306,15 +303,13 @@ const BiomassObservationDataTab = () => {
         <Typography fontSize={'20px'} fontWeight={600}>
           {strings.TREES_AND_SHRUBS}
         </Typography>
-        {isEditObservationsEnabled && (
-          <Box display='flex' alignItems={'center'} paddingTop={3}>
-            <Icon name='info' fillColor={theme.palette.TwClrIcnSecondary} size='medium' />
-            <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px' paddingLeft={1}>
-              {strings.TREES_AND_SHRUBS_TABLE_INSTRUCTIONS}
-            </Typography>
-          </Box>
-        )}
-        <TreesAndShrubsEditableTable editable={isEditObservationsEnabled} />
+        <Box display='flex' alignItems={'center'} paddingTop={3}>
+          <Icon name='info' fillColor={theme.palette.TwClrIcnSecondary} size='medium' />
+          <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px' paddingLeft={1}>
+            {strings.TREES_AND_SHRUBS_TABLE_INSTRUCTIONS}
+          </Typography>
+        </Box>
+        <TreesAndShrubsEditableTable />
         {monitoringPlot?.monitoringPlotId && (
           <EventLog observationId={observationId} plotId={monitoringPlot.monitoringPlotId} isBiomass />
         )}

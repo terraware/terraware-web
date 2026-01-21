@@ -1,7 +1,7 @@
 import { CachedUserService } from 'src/services';
 import env from 'src/utils/useEnvironment';
 
-export type FeatureName = 'Show Production View' | 'Edit Observations' | 'New Observation View';
+export type FeatureName = 'Show Production View' | 'New Observation View';
 
 export type Feature = {
   name: FeatureName;
@@ -34,15 +34,6 @@ export const OPT_IN_FEATURES: Feature[] = [
     ],
     get: env().isForcedProductionView,
     set: env().forceProductionView,
-  },
-  {
-    name: 'Edit Observations',
-    preferenceName: 'editObservations',
-    active: true,
-    enabled: false,
-    allowInternalProduction: false,
-    description: ['Support for editing observation data'],
-    disclosure: ['This is a WIP'],
   },
   {
     name: 'New Observation View',
