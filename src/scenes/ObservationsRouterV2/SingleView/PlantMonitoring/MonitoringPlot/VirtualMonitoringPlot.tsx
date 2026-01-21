@@ -9,6 +9,7 @@ import { CameraControls } from 'playcanvas/scripts/esm/camera-controls.mjs';
 
 import Annotation from 'src/components/GaussianSplat/Annotation';
 import SplatAutoRotate from 'src/components/GaussianSplat/SplatAutoRotate';
+import SplatControls from 'src/components/GaussianSplat/SplatControls';
 import SplatModel from 'src/components/GaussianSplat/SplatModel';
 
 const VirtualMonitoringPlot = () => {
@@ -54,6 +55,7 @@ const VirtualMonitoringPlot = () => {
           title={'An annotation'}
           text={'This annotation is for testing stuff.'}
         />
+        <SplatControls />
       </Application>
     </Box>
   );
