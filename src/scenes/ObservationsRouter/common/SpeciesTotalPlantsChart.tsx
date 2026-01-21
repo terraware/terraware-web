@@ -64,6 +64,9 @@ export default function SpeciesTotalPlantsChart({
             left: '50%',
             transform: 'translate(-50%, -50%)',
             zIndex: 1,
+            borderRadius: '4px',
+            textAlign: 'center',
+            whiteSpace: 'nowrap',
           }}
         >
           {strings.DATA_IS_NOT_YET_AVAILABLE}
