@@ -1,12 +1,17 @@
 import React, { type JSX, useMemo } from 'react';
 
 import { Box, CircularProgress } from '@mui/material';
+import { Button } from '@terraware/web-components';
 
 import MapDrawerTable, { MapDrawerTableRow } from 'src/components/MapDrawerTable';
 import { MapLayerFeatureId } from 'src/components/NewMap/types';
+import isEnabled from 'src/features';
+import useBoolean from 'src/hooks/useBoolean';
 import { useLocalization } from 'src/providers';
 import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
 import { useGetPlantingSiteQuery, useLazyGetPlantingSiteHistoryQuery } from 'src/queries/generated/plantingSites';
+
+import VirtualPlotModal from '../SingleView/PlantMonitoring/MonitoringPlot/VirtualPlotModal';
 
 type ObservationStatsProperties = {
   name: string | undefined;
@@ -30,6 +35,8 @@ const ObservationStatsDrawer = ({
   observationId,
 }: ObservationStatsDrawerProps): JSX.Element | undefined => {
   const { strings } = useLocalization();
+  const [virtualPlotOpen, , setVirtualPlotOpenTrue, setVirtualPlotOpenFalse] = useBoolean(false);
+  const isVirtualPlotsEnabled = isEnabled('Virtual Monitoring Plots');
 
   const { data: observationResultsResponse, isLoading: observationResultsLoading } = useGetObservationResultsQuery({
     observationId,
@@ -174,11 +181,15 @@ const ObservationStatsDrawer = ({
   }
 
   return (
-    properties && (
-      <Box display={'flex'} width={'100%'}>
-        <MapDrawerTable header={properties.name} rows={rows} />
-      </Box>
-    )
+    <>
+      {virtualPlotOpen && <VirtualPlotModal onClose={setVirtualPlotOpenFalse} />}
+      {properties && (
+        <Box display={'flex'} width={'100%'} flexDirection={'column'}>
+          <MapDrawerTable header={properties.name} rows={rows} />
+          {isVirtualPlotsEnabled && <Button onClick={setVirtualPlotOpenTrue} label={strings.VISIT_VIRTUAL_PLOT} />}
+        </Box>
+      )}
+    </>
   );
 };
 
