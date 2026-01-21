@@ -330,7 +330,7 @@ const extractSubstrata = (site: MinimalPlantingSite): MapSourceBaseData => {
       return substrata.map((substratum) => {
         const { id, name, fullName, boundary } = substratum;
         return {
-          properties: { id, name, fullName, type: 'substratum', stratumId: stratum.id },
+          properties: { id, name, fullName, type: 'substratum', stratumId: stratum.id, stratumName: stratum.name },
           boundary: getPolygons(boundary),
           id,
         };
