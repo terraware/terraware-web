@@ -296,14 +296,39 @@ const getFilterOptions = async (organizationId: number): Promise<FieldOptionsMap
  * 'substratum (substratum)'
  * 'substratum (substratum1, substratum2)' [basically (substratum1, substratum2..., substratumN)]
  */
-const parseSubstrata = (value: string): string[] =>
-  (value || '')
-    .replaceAll('(', '') // remove ( and ) and ,
-    .replaceAll(')', '')
-    .replaceAll(',', '')
-    .split(' ') // split on space
-    .map((s) => s.trim()) // return trimmed value and filter out empty values
-    .filter((x) => x);
+const parseSubstrata = (value: string): string[] => {
+  if (!value) {
+    return [];
+  }
+
+  const parenIndex = value.indexOf('(');
+
+  if (parenIndex === -1) {
+    // No parentheses, return the whole value as a single substratum
+    return [value.trim()].filter((x) => x);
+  }
+
+  const result: string[] = [];
+
+  // Add the part before the parentheses if it exists
+  const beforeParen = value.substring(0, parenIndex).trim();
+  if (beforeParen) {
+    result.push(beforeParen);
+  }
+
+  // Extract and split the part inside parentheses by commas
+  const closingParenIndex = value.indexOf(')');
+  if (closingParenIndex > parenIndex) {
+    const insideParen = value.substring(parenIndex + 1, closingParenIndex);
+    const substrata = insideParen
+      .split(',')
+      .map((s) => s.trim())
+      .filter((x) => x);
+    result.push(...substrata);
+  }
+
+  return result;
+};
 
 const undoNurseryWithdrawal = async (withdrawalId: number): Promise<Response> => {
   const serverResponse: Response = await HttpService.root(UNDO_WITHDRAWAL_ENDPOINT).post({
