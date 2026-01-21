@@ -1,3 +1,4 @@
+d707df35260 SW-7983 Show seed fund report nav item only for admin (#5102)
 aac88131267 SW-7982 Show completed date in select options (#5103)
 4ecdbc21a0d SW-7985 Remove Edit observations feature flag (#5096)
 23a66a0db0b SW-7982 Survival Rate Settings Observations dropdown showing incorrect date names (#5099)
