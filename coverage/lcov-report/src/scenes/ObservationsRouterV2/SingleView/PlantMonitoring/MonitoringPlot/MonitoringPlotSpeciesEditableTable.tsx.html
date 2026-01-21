@@ -208,11 +208,7 @@
 <a name='L143'></a><a href='#L143'>143</a>
 <a name='L144'></a><a href='#L144'>144</a>
 <a name='L145'></a><a href='#L145'>145</a>
-<a name='L146'></a><a href='#L146'>146</a>
-<a name='L147'></a><a href='#L147'>147</a>
-<a name='L148'></a><a href='#L148'>148</a>
-<a name='L149'></a><a href='#L149'>149</a>
-<a name='L150'></a><a href='#L150'>150</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L146'></a><a href='#L146'>146</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -251,8 +247,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -331,8 +325,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -378,73 +370,69 @@ import<span class="cstat-no" title="statement not covered" > { ObservationSpecie
 <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 import useObservationSpecies from '../useObservationSpecies';
 <span class="cstat-no" title="statement not covered" ></span>
-type MonitoringPlotSpeciesEditableTableProps = { editable: boolean };
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-export default function MonitoringPlotSpeciesEditableTable({
-  editable,
-}: MonitoringPlotSpeciesEditableTableProps): JSX.Element {
-  const theme = useTheme();
+export default function MonitoringPlotSpeciesEditableTable(): JSX.Element {
+  const theme <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >= </span>useTheme();<span class="cstat-no" title="statement not covered" ></span></span>
   const params = useParams&lt;{ observationId: string; monitoringPlotId: string }&gt;();
   const { strings } = useLocalization();
 &nbsp;
-  const observation<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Id</span> = Numb<span class="cstat-no" title="statement not covered" >er(params.observationId);</span></span>
-  const monitoringPl<span class="cstat-no" title="statement not covered" >otI</span>d = Number(params.monitoringPlotId);
-<span class="cstat-no" title="statement not covered" ></span>
-  const { d<span class="fstat-no" title="function not covered" >at</span>a: o<span class="cstat-no" title="statement not covered" >bservationResultsResponse } = useGe</span>tObservationResultsQuery({ observationId });
-  const results = useMemo(() =&gt; observationResultsResponse?.observation, [observationResultsResponse?.observation]);
-<span class="cstat-no" title="statement not covered" >  const monitoringPlot = useMemo(</span>
-    () =&gt;<span class="cstat-no" title="statement not covered" ></span>
-      results?.isAdHoc<span class="cstat-no" title="statement not covered" ></span>
-        ? results?.adH<span class="cstat-no" title="statement not covered" >ocPlot</span>
-        : results?.strata<span class="cstat-no" title="statement not covered" ></span>
-            .flatMap((s<span class="cstat-no" title="statement not covered" >tratum) =&gt; stratum.substr</span>ata)
-            ?.flatMap((sub<span class="cstat-no" title="statement not covered" >stratum) =&gt; substratum?.monitoringPlots)</span>
-            .find((plot) =&gt; plot.mo<span class="cstat-no" title="statement not covered" >nitoringPlotId === monitoringPlotId),</span>
-    [moni<span class="fstat-no" title="function not covered" >toringPlotId, results?.adHocPlot, r</span>esults?.isAdHoc, results?.strata]
-  );
+  const observationId = Number(params.observationId);
+  const monitoringPlotId = Number(params.monitoringPlotId);
 &nbsp;
-  const monitoringPlotSpecies = useObservationSpecies(monitoringPlot?.species ?? [], monitoringPlot?.unknownSpecies);
+  const { data: observationResultsResponse } = useGetObservationResultsQuery({ observationId });
+  const results = u<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >se</span>Memo(()<span class="cstat-no" title="statement not covered" > =&gt; observationResultsResponse?.observation, [observationResult</span></span>sResponse?.observation]);
+  const monitoringPl<span class="cstat-no" title="statement not covered" >ot </span>= useMemo(
+<span class="cstat-no" title="statement not covered" >    () =&gt;</span>
+      resul<span class="fstat-no" title="function not covered" >ts</span>?.is<span class="cstat-no" title="statement not covered" >AdHoc</span>
+        ? results?.adHocPlot
+<span class="cstat-no" title="statement not covered" >        : results?.strata</span>
+            .flatMa<span class="cstat-no" title="statement not covered" >p((stratum) =&gt; stratum.sub</span>strata)
+            ?.flatMap((sub<span class="cstat-no" title="statement not covered" >stratum) =&gt; substratum?.</span>monitoringPlots)
+            .find((plo<span class="cstat-no" title="statement not covered" >t) =&gt; plot.monitoringPlot</span>Id === monitoringPlotId),
+    [monitoringPlotId, results?.ad<span class="cstat-no" title="statement not covered" >HocPlot, results?.isAdHoc, resul</span>ts?.strata]
+  );<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const [update] <span class="cstat-no" title="statement not covered" >= useUpdateCompletedObservationPlotMu</span>tation();
-  const saveValue = us<span class="cstat-no" title="statement not covered" >eCallback(</span>
-    (fieldId: string, ce<span class="cstat-no" title="statement not covered" >rtainty: 'Other' | 'Unknown' </span>| 'Known', speciesId?: number, speciesName?: string) =&gt;
-      (event: { currentTarg<span class="cstat-no" title="statement not covered" >et: { value: any }; target: { va</span>lue: any } }) =&gt; {
-        const value = event.currentTarget.value<span class="cstat-no" title="statement not covered" > || event.target.value;</span>
-        if (monito<span class="cstat-no" title="statement not covered" >ringPlot &amp;&amp; value !== unde<span class="fstat-no" title="function not covered" >fi</span>ned <span class="cstat-no" title="statement not covered" >&amp;&amp; !isNaN(value)) {</span></span>
-          const uploadPay<span class="cstat-no" title="statement not covered" >load: MonitoringSpeciesUpdateOperationPayload = {</span>
-<span class="fstat-no" title="function not covered" ></span>            type: 'MonitoringSpecies',
-            speciesId,
-<span class="cstat-no" title="statement not covered" >            certainty,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span></span></span>
+  const monitoringPlotSpecies = use<span class="cstat-no" title="statement not covered" >ObservationSpecies(monitoringPlot?.species ??</span> [], monitoringPlot?.unknownSpecies);
+<span class="fstat-no" title="function not covered" ></span>
+  const [update] = useUpdateCompletedObservationPlotMutation();
+  const saveValu<span class="cstat-no" title="statement not covered" >e = useCallback(</span>
+    (fieldId: str<span class="cstat-no" title="statement not covered" >ing, certainty: 'Other' | 'Unknown' |</span> 'Known', speciesId?: number, speciesName?: string) =&gt;
+      (event: { curren<span class="cstat-no" title="statement not covered" >tTarget: { value: any }; target: { value</span>: any } }) =&gt; {
+        const value = ev<span class="cstat-no" title="statement not covered" >ent.currentTarget.value || ev</span>ent.target.value;
+        if (monitoringPlot <span class="cstat-no" title="statement not covered" >&amp;&amp; value !== undefined &amp;&amp; !isNaN</span>(value)) {
+          const uploadPayload: MonitoringSpecie<span class="cstat-no" title="statement not covered" >sUpdateOperationPayload = {</span>
+            type: <span class="cstat-no" title="statement not covered" >'MonitoringSpecies',<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+            speciesId,<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" ></span>            certainty,
             speciesName,
-            [fieldId]: Number(value),
+<span class="cstat-no" title="statement not covered" >            [fieldId]: Number(value),<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span></span></span>
           };
-          const mainPayload: Upd<span class="cstat-no" title="statement not covered" >ateCompletedObservationPlotApiArg = {</span>
-            observa<span class="cstat-no" title="statement not covered" >tionId,</span>
-            plotId: <span class="cstat-no" title="statement not covered" >monitoringPlot.monitoringPlotId,</span>
-<span class="fstat-no" title="function not covered" ></span>            updateObservationRequestPayload: { updat<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >es</span>: [uploadPayload] },</span>
+          const mainPayload: UpdateCompletedObservationPlotApiArg = {
+            observationId,
+            plotId: monitoringPl<span class="cstat-no" title="statement not covered" >ot.monitoringPlotId,</span>
+            updateO<span class="cstat-no" title="statement not covered" >bservationRequestPayload: { updates: [uploadPayload] },</span>
           };<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >          void update(mainPayload);</span>
+<span class="fstat-no" title="function not covered" ></span>          void update(mainPayload);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
         }<span class="cstat-no" title="statement not covered" ></span>
-      },
-    [observationId, monitoringPlot, update]
+<span class="cstat-no" title="statement not covered" >      },</span>
+    [observationId, monitoring<span class="cstat-no" title="statement not covered" >Plot, update]</span>
   );
 &nbsp;
   const columns = useMemo&lt;MRT_ColumnDef&lt;ObservationSpeciesResults&gt;[]&gt;(
     () =&gt; [
-      {<span class="cstat-no" title="statement not covered" ></span>
+      {
         accessorKey: 'speciesScientificName',
-        header: strings.SPECIES,
+        header: strings.SPEC<span class="cstat-no" title="statement not covered" >IES,</span>
         enableEditing: false,
       },
-      ..<span class="cstat-no" title="statement not covered" >.(!results?.isAdHoc</span>
+      ...(!results?.isAdHoc
         ? [
-            {
+<span class="cstat-no" title="statement not covered" >            {</span>
               accessorKey: 'totalExisting',
               header: strings.PREEXISTING,
-              muiE<span class="cstat-no" title="statement not covered" >ditTextFieldProps: ({ row }: { row: MRT_Row&lt;ObservationSpeciesResults&gt; }) =&gt; ({</span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span>                onBlur: saveValue(</span>
-                  'totalExisting',
-                  row.original.certainty,
+              muiEditTextFieldProps: ({ row }: { row: MRT_Row&lt;ObservationSpeciesResults&gt; }) =&gt; ({
+                onBlur: saveValue(
+<span class="cstat-no" title="statement not covered" >                  'totalExisting',</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span>                  row.original.certainty,</span>
                   row.original.speciesId,
                   row.original.speciesName
                 ),
@@ -452,9 +440,9 @@ export default function MonitoringPlotSpeciesEditableTable({
             },
           ]
         : []),
-      {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+      {
         accessorKey: 'totalLive',
-        header: strings.LIVE_PLANTS,
+        header: strings.LIVE_PLAN<span class="fstat-no" title="function not covered" >TS</span>,<span class="cstat-no" title="statement not covered" ></span>
         muiEditTextFieldProps: ({ row }) =&gt; ({
           onBlur: saveValue('totalLive', row.original.certainty, row.original.speciesId, row.original.speciesName),
         }),
@@ -465,23 +453,23 @@ export default function MonitoringPlotSpeciesEditableTable({
         muiEditTextFieldProps: ({ row }) =&gt; ({
           onBlur: saveValue('totalDead', row.original.certainty, row.original.speciesId, row.original.speciesName),
         }),
-      },<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+      },
     ],
-    [strings.SPECIES, strings.PREEXISTING, strings.LIVE_PLANTS, strings.DEAD_PLANTS, results?.isAdHoc, saveValue]
+    [strings.SPECIES, strings.P<span class="fstat-no" title="function not covered" >RE</span>EXISTING, st<span class="cstat-no" title="statement not covered" >rings.LIVE_PLANTS, strings.DEAD_PLANTS, results?.isAdHoc, saveValue]</span>
   );
 &nbsp;
   const table = useMaterialReactTable({
     columns,
-    data: monitoringPlotSpecies<span class="fstat-no" title="function not covered" >,<span class="cstat-no" title="statement not covered" ></span></span>
+    data: monitoringPlotSpecies,
     editDisplayMode: 'cell',
-    enableColumnOrdering: false,
+    enableColumnOrdering: false<span class="fstat-no" title="function not covered" >,<span class="cstat-no" title="statement not covered" ></span></span>
     enableColumnPinning: false,
-    enableEditing: editable,
+    enableEditing: true,
     enableSorting: true,
     enableFilters: false,
-    enablePagina<span class="cstat-no" title="statement not covered" >tion: false,</span>
+    enablePagination: false,
     enableBottomToolbar: false,
-    enableTopToolbar: false,
+    enableTopToo<span class="cstat-no" title="statement not covered" >lbar: false,</span>
     initialState: {
       sorting: [{ id: 'speciesName', desc: false }],
     },
@@ -517,7 +505,7 @@ export default function MonitoringPlotSpeciesEditableTable({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-20T19:34:21.264Z
+                at 2026-01-21T18:53:33.744Z
             </div>
         <script src="../../../../../../prettify.js"></script>
         <script>

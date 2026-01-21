@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/52</span>
+                <span class='fraction'>0/50</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/45</span>
+                <span class='fraction'>0/43</span>
             </div>
         
             
@@ -124,9 +124,7 @@
 <a name='L59'></a><a href='#L59'>59</a>
 <a name='L60'></a><a href='#L60'>60</a>
 <a name='L61'></a><a href='#L61'>61</a>
-<a name='L62'></a><a href='#L62'>62</a>
-<a name='L63'></a><a href='#L63'>63</a>
-<a name='L64'></a><a href='#L64'>64</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L62'></a><a href='#L62'>62</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -167,9 +165,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -194,55 +190,53 @@ import { usePara<span class="cstat-no" title="statement not covered" >ms } from 
 <span class="cstat-no" title="statement not covered" ></span>
 import { Box, Typography<span class="cstat-no" title="statement not covered" >, useTheme } from '@mui/mat</span>erial';
 <span class="cstat-no" title="statement not covered" ></span>
-import isEnabled fr<span class="cstat-no" title="statement not covered" >om 'src/features';</span>
-import { useLoc<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >al</span>ization } from 'src/providers';</span>
-im<span class="cstat-no" title="statement not covered" >port { useGetObservationResultsQuery } from 'src/queries/generated/observations';</span>
-impo<span class="cstat-no" title="statement not covered" >rt MonitoringPlotPhotos from 'src/scenes/ObservationsRouter/com</span>mon/MonitoringPlotPhotos';
-import { ObservationMonitoringPlotPosition, getQuadratLabel } from 'src/types/Observations';
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-im<span class="cstat-no" title="statement not covered" >port QuadratSpeciesEditableTable from './QuadratSpeciesEditableTable';</span>
+import { useLocaliz<span class="cstat-no" title="statement not covered" >ation } from 'src/providers';</span>
+import { useGet<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Ob</span>servationResultsQuery } from 'src/queries/generated/observations';</span>
+im<span class="cstat-no" title="statement not covered" >port MonitoringPlotPhotos from 'src/scenes/ObservationsRouter/common/MonitoringPlotPhotos';</span>
+impo<span class="cstat-no" title="statement not covered" >rt { ObservationMonitoringPlotPosition, getQuadratLabel } from </span>'src/types/Observations';
+&nbsp;
+import QuadratSpec<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ie</span>sEditableTable from './QuadratSpeciesEditableTable';</span>
 <span class="cstat-no" title="statement not covered" ></span>
-type Q<span class="cstat-no" title="statement not covered" >uadratComponentProps = {</span>
-  positi<span class="cstat-no" title="statement not covered" >on: ObservationMonitoringP<span class="fstat-no" title="function not covered" >lo</span>tPos<span class="cstat-no" title="statement not covered" >ition;</span></span>
-};
-<span class="cstat-no" title="statement not covered" ></span>
-const QuadratComponent = ({ position }: QuadratComponentProps) =&gt; {
-  const theme <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >= </span>useTheme();<span class="cstat-no" title="statement not covered" ></span></span>
-  const params = useParams&lt;{ observationId: string }&gt;();
+type<span class="cstat-no" title="statement not covered" > QuadratComponentProps = {</span>
+  posi<span class="cstat-no" title="statement not covered" >tion: ObservationMonitoringPlotPosition;</span>
+};<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+&nbsp;
+co<span class="cstat-no" title="statement not covered" >nst Quadrat</span>Component = ({ position }: QuadratComponentProps) =&gt; {
+  const theme = useTheme();
+  const params<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > =</span> useParams&lt;{ observationId: <span class="cstat-no" title="statement not covered" >string }&gt;();</span></span>
   const { strings } = useLocalization();
-  const isEditObservationsEnabled = isEnabled('Edit Observations');
 &nbsp;
   const observationId = Number(params.observationId);
   const { data: observationResultsResponse } = useGetObservationResultsQuery({ observationId });
   const results = useMemo(() =&gt; observationResultsResponse?.observation, [observationResultsResponse?.observation]);
-  const monitoringP<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >lo</span>t = use<span class="cstat-no" title="statement not covered" >Memo(() =&gt; results?.adHocPlot, [results?.adHocPlot]);</span></span>
-  const biomassMeasu<span class="cstat-no" title="statement not covered" >rem</span>ents = useMemo(() =&gt; results?.biomassMeasurements, [results?.biomassMeasurements]);
-<span class="cstat-no" title="statement not covered" ></span>
-  return (<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-    &lt;Box&gt;
-<span class="cstat-no" title="statement not covered" >      &lt;Typography fontSize='20px' lineHeight='</span>28px' fontWeight={600} color={theme.palette.TwClrTxt} paddingBottom={2}&gt;
-        {getQuadrat<span class="cstat-no" title="statement not covered" >Label(position)}</span>
-      &lt;/Typography&gt;<span class="cstat-no" title="statement not covered" ></span>
-      &lt;Box display={'f<span class="cstat-no" title="statement not covered" >lex'}&gt;</span>
-        &lt;MonitoringPlo<span class="cstat-no" title="statement not covered" >tPhotos</span>
-          observationId<span class="cstat-no" title="statement not covered" >={observationId}</span>
-          monitoringPlotId<span class="cstat-no" title="statement not covered" >={Number(monitoringPlot?.monitoringPlotId)}</span>
-          photos={monitoringPlot?.<span class="cstat-no" title="statement not covered" >photos</span>
-            ?.filter((phot<span class="cstat-no" title="statement not covered" >o) =&gt; photo.type === 'Quadrat' &amp;&amp; </span>photo.position === position)
-            ?.filter((pic, index) =&gt; inde<span class="cstat-no" title="statement not covered" >x === 0)}</span>
-        /&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-        &lt;Box&gt;
-          &lt;Typog<span class="cstat-no" title="statement not covered" >raphy fontSize='14px' lineHeight</span>='28px' fontWeight={400} color={theme.palette.TwClrTxt}&gt;
-            {stri<span class="cstat-no" title="statement not covered" >ngs.DESCRIPTION_NOTES}</span>
-          &lt;/Typography<span class="cstat-no" title="statement not covered" >&gt;</span>
-          &lt;Typography fontSize='16px<span class="cstat-no" title="statement not covered" >' lineHeight='24px' fontWeight={500} color={theme.</span>palette.TwClrTxt}&gt;
+  const monitoringPlot = useMemo(() =&gt; results?.adHocPlot, [results?.adHocPlot]);
+  const biomassMeasurements = useMemo(() =&gt; results?.biomassMeasurements, [results?.biomassMeasurements]);
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  return (<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >    &lt;Box&gt;</span>
+      &lt;Typo<span class="fstat-no" title="function not covered" >gr</span>aphy<span class="cstat-no" title="statement not covered" > fontSize='20p</span>x' lineHeight='28px' fontWeight={600} color={theme.palette.TwClrTxt} paddingBottom={2}&gt;
+        {getQuadratLabel(position)}
+<span class="cstat-no" title="statement not covered" >      &lt;/Typography&gt;</span>
+      &lt;Box display=<span class="cstat-no" title="statement not covered" >{'flex'}&gt;</span>
+        &lt;MonitoringPlotPho<span class="cstat-no" title="statement not covered" >tos</span>
+          observationI<span class="cstat-no" title="statement not covered" >d={observationId}</span>
+          monitoringPlo<span class="cstat-no" title="statement not covered" >tId={Number(monitoringPlo</span>t?.monitoringPlotId)}
+          photos={monitori<span class="cstat-no" title="statement not covered" >ngPlot?.photos</span>
+            ?.filter((photo) =&gt; ph<span class="cstat-no" title="statement not covered" >oto.type === 'Quadrat' &amp;&amp; photo.position === position)</span>
+            ?.filter((pic,<span class="cstat-no" title="statement not covered" > index) =&gt; index === 0)}</span>
+        /&gt;<span class="cstat-no" title="statement not covered" ></span>
+        &lt;Box&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+          &lt;Typography fontSize='14px' lineHeight='28px' fontWeight={400} color={theme.palette.TwClrTxt}&gt;
+            {str<span class="cstat-no" title="statement not covered" >ings.DESCRIPTION_NOTES}</span>
+          &lt;/Typog<span class="cstat-no" title="statement not covered" >raphy&gt;</span>
+          &lt;Typography <span class="cstat-no" title="statement not covered" >fontSize='16px' lineHeight='24px' fontWe</span>ight={500} color={theme.palette.TwClrTxt}&gt;
             {biomassMeas<span class="cstat-no" title="statement not covered" >urements?.quadrats.find((quad</span>) =&gt; quad.position === position)?.description}
           &lt;/Typography&gt;<span class="cstat-no" title="statement not covered" ></span>
         &lt;/Box&gt;<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
       &lt;/Box&gt;<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
       {position &amp;&amp; (<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 <span class="cstat-no" title="statement not covered" >        &lt;QuadratSpeciesEditableTable</span>
-          editable={isEditObservationsEnabled}
+          editable={true}
           species={biomassMeasurements?.quadrats.find((quad) =&gt; quad.position === position)?.species}
           position={position}
         /&gt;
@@ -259,7 +253,7 @@ export default QuadratComponent;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-20T19:34:21.264Z
+                at 2026-01-21T18:53:33.744Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

@@ -303,9 +303,7 @@
 <a name='L238'></a><a href='#L238'>238</a>
 <a name='L239'></a><a href='#L239'>239</a>
 <a name='L240'></a><a href='#L240'>240</a>
-<a name='L241'></a><a href='#L241'>241</a>
-<a name='L242'></a><a href='#L242'>242</a>
-<a name='L243'></a><a href='#L243'>243</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L241'></a><a href='#L241'>241</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -518,8 +516,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -568,73 +564,71 @@ type TreeRow = ExistingTreePayload &amp; {
   speciesName?<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >: </span>string;<span class="cstat-no" title="statement not covered" ></span></span>
 };
 &nbsp;
-type TreesAndShrubsEditableTableProps = { editable: boolean };
-&nbsp;
-export default function TreesAndShrubsEditableTable({ editable }: TreesAndShrubsEditableTableProps): JSX.Element {
+export default function TreesAndShrubsEditableTable(): JSX.Element {
   const { species: availableSpecies } = useSpeciesData();
   const theme = useTheme();
-  const params = us<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >eP</span>arams&lt;{<span class="cstat-no" title="statement not covered" > observationId: string }&gt;();</span></span>
-  const { strings } <span class="cstat-no" title="statement not covered" >= u</span>seLocalization();
+  const params = useParams&lt;{ observationId: string }&gt;();
+  const { strings } = useLocalization();
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  const observationI<span class="cstat-no" title="statement not covered" >d =</span> Number(params.observationId);
+<span class="cstat-no" title="statement not covered" >  const { data: observationResultsResponse } = useGetObservationResultsQuery({ observationId });</span>
+  const res<span class="fstat-no" title="function not covered" >ul</span>ts =<span class="cstat-no" title="statement not covered" > useMemo(() =&gt; observationRe</span>sultsResponse?.observation, [observationResultsResponse?.observation]);
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  const [update] = useUpdateCompletedObservati</span>onPlotMutation();
 <span class="cstat-no" title="statement not covered" ></span>
-  const obs<span class="fstat-no" title="function not covered" >er</span>vati<span class="cstat-no" title="statement not covered" >onId = Number(params.observa</span>tionId);
-  const { data: observationResultsResponse } = useGetObservationResultsQuery({ observationId });
-<span class="cstat-no" title="statement not covered" >  const results = useMemo(() =&gt; observationRes</span>ultsResponse?.observation, [observationResultsResponse?.observation]);
-<span class="cstat-no" title="statement not covered" ></span>
-  const [update] = useUpda<span class="cstat-no" title="statement not covered" >teCompletedObservationPl</span>otMutation();
-<span class="cstat-no" title="statement not covered" ></span>
-  const updateObservation = useCal<span class="cstat-no" title="statement not covered" >lback(</span>
-    (updatePayload: Upd<span class="cstat-no" title="statement not covered" >ateObservationRequestPayl</span>oad) =&gt; {
-      if (results?.adHocPlot<span class="cstat-no" title="statement not covered" >) {</span>
-        const payload = {<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" >          observationId,</span>
-          plotId: results.adHocPlot.moni<span class="cstat-no" title="statement not covered" >toringPlotId,</span>
-          update<span class="cstat-no" title="statement not covered" >ObservationRequestPayload: updat</span>ePayload,
+  const updateObservation <span class="cstat-no" title="statement not covered" >= useCallback(</span>
+    (updatePayload: Up<span class="cstat-no" title="statement not covered" >dateObservationRequestPay</span>load) =&gt; {
+      if (results?.adHocPlot) {<span class="cstat-no" title="statement not covered" ></span>
+        const payload =<span class="cstat-no" title="statement not covered" > {</span>
+          observationId,<span class="cstat-no" title="statement not covered" ></span>
+          plotId: results.<span class="cstat-no" title="statement not covered" >adHocPlot.monitoringPlotId,</span>
+<span class="fstat-no" title="function not covered" >          updateObservationRequestPay</span>load: updatePayload,
         };<span class="cstat-no" title="statement not covered" ></span>
-        void update(pa<span class="cstat-no" title="statement not covered" >yload);</span>
+        void upd<span class="cstat-no" title="statement not covered" >ate(payload);</span>
       }<span class="cstat-no" title="statement not covered" ></span>
     },<span class="cstat-no" title="statement not covered" ></span>
-    [observationId<span class="cstat-no" title="statement not covered" >, results, update]<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+    [observationId, resu<span class="cstat-no" title="statement not covered" >lts, update]</span>
   );<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span>
-  co<span class="fstat-no" title="function not covered" >ns</span>t updateRecordedTree = useCallback(
-    (f<span class="cstat-no" title="statement not covered" >ieldId: string, recordedTreeId: number) =&gt; (event: { currentTarget: { value: any }; target: { value: any } }) =&gt; {</span>
-      const value = even<span class="cstat-no" title="statement not covered" >t.currentTarget.value || event.target.value;</span>
-      if (value !== undefined) {
-        const uploadPayload: RecordedTreeUpdateOperationPayload = {
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  const updateRecor<span class="cstat-no" title="statement not covered" >dedTree = useCallback(</span>
+    (fieldId: string, record<span class="cstat-no" title="statement not covered" >edTreeId: number) =&gt; (event: { currentTarget: { value: any }; target: { value: any } }) =&gt; {</span>
+<span class="fstat-no" title="function not covered" ></span>      const value = event.currentTarget.value || event.target.value;
+<span class="cstat-no" title="statement not covered" >      if (value !== undefined) {</span>
+        const uploadPayl<span class="cstat-no" title="statement not covered" >oad: RecordedTreeUpdateOperationPayload = {</span>
           type: 'RecordedTree',
           recordedTreeId,
-<span class="cstat-no" title="statement not covered" >          [fieldId]: value,</span>
+          [fieldId]: value,
         };
-        updateObservation({ updates: [uploadPayload] });
+<span class="cstat-no" title="statement not covered" >        updateObservation({ up</span>dates: [uploadPayload] });
       }
     },
-    [updateObservation]<span class="cstat-no" title="statement not covered" ></span>
-  );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+    [updateObservation]
+  );
 <span class="cstat-no" title="statement not covered" ></span>
-  cons<span class="cstat-no" title="statement not covered" >t columns = useMemo&lt;MRT_ColumnDef&lt;TreeRow&gt;[]&gt;(</span>
+  co<span class="fstat-no" title="function not covered" >ns</span>t columns = useMemo&lt;MRT_Col<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >um</span>nDef&lt;TreeRow&gt;[]&gt;(</span>
     () =&gt; [<span class="cstat-no" title="statement not covered" ></span>
-      {
-        accessorKey: 'treeNumber',
+<span class="cstat-no" title="statement not covered" >      {</span>
+        accessorKey: 'treeNumb<span class="cstat-no" title="statement not covered" >er',</span>
         header: strings.ID,
         enableEditing: false,
-<span class="cstat-no" title="statement not covered" >        Cell: ({ row }) =&gt; {</span>
+        Cell: ({ row }) =&gt; {
           if (row.original.treeGrowthForm === 'Trunk') {
-            return `${row.original.treeNumber}_${row.original.trunkNumber}`;
+<span class="cstat-no" title="statement not covered" >            return `${row.original.treeNumber}_${row.orig</span>inal.trunkNumber}`;
           }
           return row.original.treeNumber;
-        },<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" ></span>      },<span class="cstat-no" title="statement not covered" ></span>
-      {
-        accessorKey: 'speciesName',
+        },
+      },
+      {<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" ></span>        ac<span class="cstat-no" title="statement not covered" >cessorKey: 'speciesName',</span>
         header: strings.SPECIES,
         enableEditing: false,
-      },<span class="fstat-no" title="function not covered" ></span>
-      {<span class="cstat-no" title="statement not covered" ></span>
-        acce<span class="cstat-no" title="statement not covered" >ssorKey: 'treeGrowthForm',</span>
-        header: strings.GROWTH_FORM,
-        en<span class="cstat-no" title="statement not covered" >ableEditing: false,</span>
+      },
+      {
+        access<span class="fstat-no" title="function not covered" >or</span>Key: 'treeGrowthForm',
+        he<span class="cstat-no" title="statement not covered" >ader: strings.GROWTH_FORM,</span>
+        enab<span class="cstat-no" title="statement not covered" >leEditing: false,</span>
         Cell: ({ row }) =&gt; {
-          return row.original.treeGrowthForm === 'Trunk' ? 'Tree' : row.original.treeGrowthForm;
+<span class="cstat-no" title="statement not covered" >          return row.original.treeGrowthFo</span>rm === 'Trunk' ? 'Tree' : row.original.treeGrowthForm;
         },
       },
       {
@@ -644,124 +638,124 @@ export default function TreesAndShrubsEditableTable({ editable }: TreesAndShrubs
           onBlur: updateRecordedTree('diameterAtBreastHeight', row.original.id),
         }),
         enableEditing: (row) =&gt; row.original.treeGrowthForm !== 'Shrub',
-      },<span class="fstat-no" title="function not covered" ></span>
-      {<span class="cstat-no" title="statement not covered" ></span>
-        accessorKey: 'pointOfMeasurement',
-        header: strings.POM_M,
+      },
+      {
+        access<span class="fstat-no" title="function not covered" >or</span>Key: 'pointOfMeasurement',
+        he<span class="cstat-no" title="statement not covered" >ader: strings.POM_M,</span>
         muiEditTextFieldProps: ({ row }) =&gt; ({
           onBlur: updateRecordedTree('pointOfMeasurement', row.original.id),
         }),
-        enableEditing: (row) =&gt;<span class="fstat-no" title="function not covered" > r</span>ow.original.<span class="cstat-no" title="statement not covered" >treeGrowthForm !== 'Shrub',</span>
+        enableEditing: (row) =&gt; row.original.treeGrowthForm !== 'Shrub',
       },
-      {
-        accessorKey: 'h<span class="fstat-no" title="function not covered" >ei</span>ght',<span class="cstat-no" title="statement not covered" ></span>
+      {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+        accessorKey: 'height',
         header: strings.HEIGHT_M,
-        muiEditTextFieldProps: ({ row }) =&gt; ({
+        muiEditTextFiel<span class="fstat-no" title="function not covered" >dP</span>rops: (<span class="cstat-no" title="statement not covered" >{ row }) =&gt; ({</span>
           onBlur: updateRecordedTree('height', row.original.id),
         }),
-        enableEditing: (row) =&gt;<span class="fstat-no" title="function not covered" > r</span>ow.original.<span class="cstat-no" title="statement not covered" >treeGrowthForm !== 'Shrub',</span>
+        enableEditing: (row) =&gt; row.original.treeGrowthForm !== 'Shrub',
       },
-      {
-        accessorKey: 's<span class="fstat-no" title="function not covered" >hr</span>ubDiame<span class="cstat-no" title="statement not covered" >ter',</span>
+      {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+        accessorKey: 'shrubDiameter',
         header: strings.CROWN_DIAMETER_CM,
-        muiEditTextFieldProps: ({ row }) =&gt; ({
+        muiEditTextFiel<span class="fstat-no" title="function not covered" >dP</span>rops: (<span class="cstat-no" title="statement not covered" >{ row }) =&gt; ({</span>
           onBlur: updateRecordedTree('shrubDiameter', row.original.id),
         }),
-      },<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+      },
       {
-        accessorKey: 'isInvasive',
-        Cell: ({ cell }<span class="fstat-no" title="function not covered" >) </span>=&gt; {<span class="cstat-no" title="statement not covered" ></span>
+        accessorKey: 'isInvasiv<span class="fstat-no" title="function not covered" >e'</span>,<span class="cstat-no" title="statement not covered" ></span>
+        Cell: ({ cell }) =&gt; {
           const value = cell.getValue();
-          return value === true || value === 'true' ? strings.YES : strings.NO;
+          return value <span class="fstat-no" title="function not covered" >==</span>= true <span class="cstat-no" title="statement not covered" >|| value === 'true' ? strings.YES : stri</span>ngs.NO;
         },
         header: strings.INVASIVE,
-        editVariant: 'select',<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+        editVariant: 'select',
         editSelectOptions: [
-          { label: strings.YES, value: 'true' },
+          { label: strings.YES,<span class="fstat-no" title="function not covered" > v</span>alue: 'true'<span class="cstat-no" title="statement not covered" > },</span>
           { label: strings.NO, value: 'false' },
         ],
         muiEditTextFieldProps: ({ row }) =&gt; ({
-          sele<span class="fstat-no" title="function not covered" >ct</span>: true,
-          onBlur: (event<span class="cstat-no" title="statement not covered" >: React.FocusEve</span>nt&lt;HTMLInputElement&gt;) =&gt; {
-<span class="cstat-no" title="statement not covered" >            const value = event.target.value === 'true';</span>
-            const uploadPayload: BiomassSpeciesUpdateOperationPayload = {
-              type: 'BiomassSpecies',
+          select: true,
+          onBlur: (event: React.FocusEvent&lt;HTMLInputElement&gt;) =&gt; {
+            co<span class="fstat-no" title="function not covered" >ns</span>t value = event.target.value === 'true';
+            const upload<span class="cstat-no" title="statement not covered" >Payload: Biomass</span>SpeciesUpdateOperationPayload = {
+<span class="cstat-no" title="statement not covered" >              type: 'BiomassSpecies',</span>
               speciesId: row.original.speciesId,
               isInvasive: value,
             };
             updateObservation({ updates: [uploadPayload] });
           },
-        }),<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+        }),
       },
-      {<span class="fstat-no" title="function not covered" ></span>
-        accessorKey: 'isTh<span class="cstat-no" title="statement not covered" >reatened',</span>
-        header: strings.THREATENED<span class="cstat-no" title="statement not covered" >,</span>
-        Cell: ({ cell }) =&gt; {
-          const value = cell.getValue();
+      {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+        accessorKey: 'isThreatened',
+        header: st<span class="fstat-no" title="function not covered" >ri</span>ngs.THREATENED,
+        Cell: ({ cell }) =<span class="cstat-no" title="statement not covered" >&gt; {</span>
+          const value = cell.getVa<span class="cstat-no" title="statement not covered" >lue();</span>
           return value === true || value === 'true' ? strings.YES : strings.NO;
         },
-        edit<span class="cstat-no" title="statement not covered" >Variant: 'select',</span>
+        editVariant: 'select',
         editSelectOptions: [
-          { label: strings.YES, value: 'true' },
+          { <span class="cstat-no" title="statement not covered" >label: strings.YES, value: 'true' },</span>
           { label: strings.NO, value: 'false' },
         ],
         muiEditTextFieldProps: ({ row }) =&gt; ({
           select: true,
-          onBl<span class="fstat-no" title="function not covered" >ur</span>: (event: React.FocusEvent&lt;HTMLInputElement&gt;) =&gt; {
-            const value <span class="cstat-no" title="statement not covered" >= event.target.v</span>alue === 'true';
-<span class="cstat-no" title="statement not covered" >            const uploadPayload: BiomassSpeciesUpdateOperationPayload = {</span>
-              type: 'BiomassSpecies',
-              speciesId: row.original.speciesId,
+          onBlur: (event: React.FocusEvent&lt;HTMLInputElement&gt;) =&gt; {
+            const value = event.target.value === 'true';
+            co<span class="fstat-no" title="function not covered" >ns</span>t uploadPayload: BiomassSpeciesUpdateOperationPayload = {
+              type: 'Bio<span class="cstat-no" title="statement not covered" >massSpecies',</span>
+<span class="cstat-no" title="statement not covered" >              speciesId: row.original.speciesId,</span>
               isThreatened: value,
             };
             updateObservation({ updates: [uploadPayload] });
           },
-        }),<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+        }),
       },
-      {<span class="fstat-no" title="function not covered" ></span>
-        accessorKey: 'isDe<span class="cstat-no" title="statement not covered" >ad',</span>
-        header: strings.DEAD,<span class="cstat-no" title="statement not covered" ></span>
-        Cell: ({ cell }) =&gt; {
-          const value = cell.getValue();
+      {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+        accessorKey: 'isDead',
+        header: st<span class="fstat-no" title="function not covered" >ri</span>ngs.DEAD,
+        Cell: ({ cell }) =<span class="cstat-no" title="statement not covered" >&gt; {</span>
+          const value = cell.getVa<span class="cstat-no" title="statement not covered" >lue();</span>
           return value === true || value === 'true' ? strings.YES : strings.NO;
         },
-        edit<span class="cstat-no" title="statement not covered" >Variant: 'select',</span>
+        editVariant: 'select',
         editSelectOptions: [
-          { label: strings.YES, value: 'true' },
+          { <span class="cstat-no" title="statement not covered" >label: strings.YES, value: 'true' },</span>
           { label: strings.NO, value: 'false' },
         ],
         muiEditTextFieldProps: ({ row }) =&gt; ({
           select: true,
-          onBl<span class="fstat-no" title="function not covered" >ur</span>: updateRecordedTree('isDead', row.original.id),
-        }),<span class="cstat-no" title="statement not covered" ></span>
-      },<span class="cstat-no" title="statement not covered" ></span>
-    ],
-    [updateRecordedTree, strings, updateObservation]
+          onBlur: updateRecordedTree('isDead', row.original.id),
+        }),
+      },<span class="fstat-no" title="function not covered" ></span>
+    ],<span class="cstat-no" title="statement not covered" ></span>
+    [updat<span class="cstat-no" title="statement not covered" >eRecordedTree, strings, updateObservation]</span>
   );
 &nbsp;
   const treesWithData = useMemo(() =&gt; {
     return results?.biomassMeasurements?.trees?.map((tree) =&gt; {
-      const foundSpecies = avai<span class="fstat-no" title="function not covered" >la</span>bleSpecies.f<span class="cstat-no" title="statement not covered" >ind((avSpecies) =&gt; avSpecies.id === tree.speciesId);</span>
+      const foundSpecies = availableSpecies.find((avSpecies) =&gt; avSpecies.id === tree.speciesId);
       return {
-        ...tree,
+        ...tree,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
         speciesName: tree.speciesName || foundSpecies?.scientificName,
       };
     });
   }, [availableSpecies, results]);
 &nbsp;
-  const table = useMater<span class="cstat-no" title="statement not covered" >ialReactTable({<span class="fstat-no" title="function not covered" ></span></span>
+  const table = useMaterialReactTable({
     columns,
-<span class="cstat-no" title="statement not covered" >    data: treesWithData || [],<span class="fstat-no" title="function not covered" ></span></span>
-    editDisplayMode: 'cell'<span class="cstat-no" title="statement not covered" >,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-    en<span class="cstat-no" title="statement not covered" >ableColumnOrdering: false,</span>
-    enableColumnPinning: false,
-    enableEditing: editable,
+    data: treesWithData <span class="cstat-no" title="statement not covered" >|| [],<span class="fstat-no" title="function not covered" ></span></span>
+    editDisplayMode: 'cell',
+<span class="cstat-no" title="statement not covered" >    enableColumnOrdering: false,<span class="fstat-no" title="function not covered" ></span></span>
+    enableColumnPinning: fa<span class="cstat-no" title="statement not covered" >lse,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+    en<span class="cstat-no" title="statement not covered" >ableEditing: true,</span>
     enableSorting: true,
     enableFilters: false,
     enablePagination: false,
-    enableBottom<span class="cstat-no" title="statement not covered" >Toolbar: false,</span>
+    enableBottomToolbar: false,
     enableTopToolbar: false,
-    initialState: {
+    initialState<span class="cstat-no" title="statement not covered" >: {</span>
       sorting: [{ id: 'speciesName', desc: false }],
     },
     muiTableBodyProps: {
@@ -796,7 +790,7 @@ export default function TreesAndShrubsEditableTable({ editable }: TreesAndShrubs
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-20T19:34:21.264Z
+                at 2026-01-21T18:53:33.744Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

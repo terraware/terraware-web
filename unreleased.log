@@ -1,3 +1,6 @@
+4ecdbc21a0d SW-7985 Remove Edit observations feature flag (#5096)
+23a66a0db0b SW-7982 Survival Rate Settings Observations dropdown showing incorrect date names (#5099)
+41947f1c84e SW-7981 Fix Plants chart message style (#5098)
 bc43e633444 SW-7981 Message on empty chart should be wider and rounded corners (#5095)
 bb5a9fcbbde Added dropdown legend to map and for selecting observation (#5082)
 5e5584bd03a SW-7963 Issue in viewing data in CSV file for plot in Excel (#5081)

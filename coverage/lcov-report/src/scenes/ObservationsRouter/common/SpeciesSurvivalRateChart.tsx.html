@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/42</span>
+                <span class='fraction'>0/40</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/37</span>
+                <span class='fraction'>0/36</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/39</span>
+                <span class='fraction'>0/37</span>
             </div>
         
             
@@ -146,9 +146,7 @@
 <a name='L81'></a><a href='#L81'>81</a>
 <a name='L82'></a><a href='#L82'>82</a>
 <a name='L83'></a><a href='#L83'>83</a>
-<a name='L84'></a><a href='#L84'>84</a>
-<a name='L85'></a><a href='#L85'>85</a>
-<a name='L86'></a><a href='#L86'>86</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L84'></a><a href='#L84'>84</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -184,14 +182,12 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -238,46 +234,44 @@
 import { Box, useTheme <span class="cstat-no" title="statement not covered" >} from '@mui/material';</span>
 <span class="cstat-no" title="statement not covered" ></span>
 import BarChart fro<span class="cstat-no" title="statement not covered" >m 'src/components/comm</span>on/Chart/BarChart';
-import isEnabled fr<span class="cstat-no" title="statement not covered" >om 'src/features';</span>
-import strings <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >fr</span>om 'src/strings';</span>
-im<span class="cstat-no" title="statement not covered" >port { ObservationSpeciesResults } from 'src/types/Observations';</span>
+import strings from<span class="cstat-no" title="statement not covered" > 'src/strings';</span>
+import { Observ<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >at</span>ionSpeciesResults } from 'src/types/Observations';</span>
 <span class="cstat-no" title="statement not covered" ></span>
-export type SpeciesSurvivalRateChartProps = {
-  minHeight?: stri<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ng</span>;</span>
-<span class="cstat-no" title="statement not covered" >  species?: ObservationSpeciesResults[];</span>
-  is<span class="cstat-no" title="statement not covered" >NotCompleted?: boolean;</span>
-  isTe<span class="cstat-no" title="statement not covered" >mporary?: boolean;</span>
-};<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-&nbsp;
-ex<span class="cstat-no" title="statement not covered" >port defaul</span>t function SpeciesSurvivalRateChart({
-  minHeight,
-  species,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  isNotCompleted,
+expo<span class="cstat-no" title="statement not covered" >rt type SpeciesSurvivalRateChartProps = {</span>
+  minHeight?: string;
+  species?: Observ<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >at</span>ionSpeciesResults[];</span>
+<span class="cstat-no" title="statement not covered" >  isNotCompleted?: boolean;</span>
+  is<span class="cstat-no" title="statement not covered" >Temporary?: boolean;</span>
+};<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+export default function SpeciesSurvivalRateChart({
+<span class="cstat-no" title="statement not covered" >  minHeight,</span>
+  species,
+  isNotComplet<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ed</span>,<span class="cstat-no" title="statement not covered" ></span></span>
   isTemporary,
 }: SpeciesSurvivalRateChartProps): JSX.Element {
   type Data = {
     labels: string[];
     values: number[];
   };
-  const theme = use<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Th</span>eme();<span class="cstat-no" title="statement not covered" ></span></span>
-  const isEditObserv<span class="cstat-no" title="statement not covered" >ati</span>onsEnabled = isEnabled('Edit Observations');
+  const theme = useTheme();
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  const chartData = <span class="cstat-no" title="statement not covered" >use</span>Memo(() =&gt; {
+<span class="cstat-no" title="statement not covered" >    const data: Data = { labels: [], values: [] };</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+    species?.forEach((speciesData) =&gt; {
+<span class="cstat-no" title="statement not covered" >      const { speciesName, speciesScientificNa</span>me, survivalRate } = speciesData;
 <span class="cstat-no" title="statement not covered" ></span>
-  const cha<span class="fstat-no" title="function not covered" >rt</span>Data<span class="cstat-no" title="statement not covered" > = useMemo(() =&gt; {</span>
-    const data: Data = { labels: [], values: [] };
-<span class="cstat-no" title="statement not covered" ></span>
-    species?.forEac<span class="cstat-no" title="statement not covered" >h((speciesData) =&gt; {</span>
-      const { speciesN<span class="cstat-no" title="statement not covered" >ame, speciesScientificNam</span>e, survivalRate } = speciesData;
-<span class="cstat-no" title="statement not covered" ></span>
-      if (survivalRate<span class="cstat-no" title="statement not covered" > !== undefined &amp;&amp; survivalRate !=</span>= null) {
-        const label: <span class="cstat-no" title="statement not covered" >string = speciesScientificName |</span>| speciesName || '';
-        c<span class="fstat-no" title="function not covered" >onst value: number = surv</span>ivalRate;
-        data.labels.push(label);
+      if (survivalRate<span class="cstat-no" title="statement not covered" > !== undefined &amp;&amp; surviva</span>lRate !== null) {
+        const label: s<span class="cstat-no" title="statement not covered" >tring = speciesScientificName || speciesName || '';</span>
+        const value: <span class="cstat-no" title="statement not covered" >number = survivalRate;</span>
+        d<span class="fstat-no" title="function not covered" >ata.labels.push(label);</span>
         data.values.push(value);
       }
     });
 &nbsp;
-    return {<span class="cstat-no" title="statement not covered" ></span>
-      labels: data.labels,<span class="cstat-no" title="statement not covered" ></span>
+    return {
+      labels: da<span class="cstat-no" title="statement not covered" >ta.labels,</span>
       datasets: [<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
         {<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >          values: !isNotCompleted &amp;&amp; !isTempora<span class="fstat-no" title="function not covered" >ry</span> ? data.values : [],</span>
@@ -288,7 +282,7 @@ ex<span class="cstat-no" title="statement not covered" >port defaul</span>t func
 <span class="cstat-no" title="statement not covered" ></span>
   return<span class="cstat-no" title="statement not covered" > (</span>
     &lt;Box position='relative'&gt;
-      {isEditObservationsEnabled &amp;&amp; (isTemporary || isNotCompleted) &amp;&amp; (
+      {(isTemporary || isNotCompleted) &amp;&amp; (
 <span class="cstat-no" title="statement not covered" >        &lt;Box</span>
           sx={{
             backgroundColor: theme.palette.TwClrBgSecondary,
@@ -325,7 +319,7 @@ ex<span class="cstat-no" title="statement not covered" >port defaul</span>t func
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-20T19:34:21.264Z
+                at 2026-01-21T18:53:33.744Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
