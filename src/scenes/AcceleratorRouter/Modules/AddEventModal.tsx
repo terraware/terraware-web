@@ -107,9 +107,7 @@ export default function AddEventModal(props: AddEventModalProps): JSX.Element {
     projectsSections.forEach((ps) =>
       ps.projectIds.forEach((projId) => {
         const foundCohort = availableCohorts?.find((coh) => coh.id === ps.cohort.id);
-        const allCohortProjects = foundCohort?.participants?.flatMap((participant) =>
-          participant.projects.flatMap((project) => project)
-        );
+        const allCohortProjects = foundCohort?.projects?.flatMap((project) => project);
         const foundProject = allCohortProjects?.find((pr) => pr.id.toString() === projId.toString());
         projectsWithCohort.push({ cohortId: ps.cohort.id, projectId: Number(projId), projectName: foundProject?.name });
       })
@@ -120,10 +118,8 @@ export default function AddEventModal(props: AddEventModalProps): JSX.Element {
 
   const getProjectsForCohort = (selectedCohort: CohortModuleWithProject) => {
     const allProjects: DropdownItem[] = [];
-    selectedCohort?.participants?.forEach((pp) => {
-      pp.projects.forEach((proj) => {
-        allProjects.push({ label: proj.name, value: proj.id });
-      });
+    selectedCohort?.projects?.forEach((proj) => {
+      allProjects.push({ label: proj.name, value: proj.id });
     });
 
     return allProjects;
