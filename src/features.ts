@@ -1,10 +1,7 @@
 import { CachedUserService } from 'src/services';
 import env from 'src/utils/useEnvironment';
 
-export type FeatureName =
-  | 'Show Production View'
-  | 'New Observation View'
-  | 'Virtual Monitoring Plots';
+export type FeatureName = 'Show Production View' | 'New Observation View' | 'Virtual Monitoring Plots';
 
 export type Feature = {
   name: FeatureName;
