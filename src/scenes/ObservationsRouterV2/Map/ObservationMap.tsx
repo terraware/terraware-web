@@ -73,9 +73,11 @@ const ObservationMap = ({
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
 
   const { selectedLayer, plantingSiteLegendGroup } = usePlantingSiteMapLegend('sites', plantingSiteId === undefined);
-  const { livePlantsVisible, deadPlantsVisible, plantMakersLegendGroup } = usePlantMarkersMapLegend(
-    plantingSiteId === undefined
-  );
+  const {
+    livePlantsVisible,
+    deadPlantsVisible,
+    plantMarkersLegendGroup: plantMakersLegendGroup,
+  } = usePlantMarkersMapLegend(plantingSiteId === undefined);
   const { plotPhotosVisible, plotPhotosLegendGroup } = usePlotPhotosMapLegend(plantingSiteId === undefined);
   const { survivalRateVisible, survivalRateLegendGroup } = useSurvivalRateMapLegend(plantingSiteId === undefined);
   const { adHocPlotsVisible, permanentPlotsVisible, temporaryPlotsVisible, monitoringPlotsLegendGroup } =
@@ -509,10 +511,10 @@ const ObservationMap = ({
       sortFeatureBySurvivalRate(stratumId, stratum.survivalRate);
 
       stratum.substrata.forEach((substratum) => {
-        const selectedSubstratumistory = selectedStratumHistory?.substrata.find(
-          (substratumistory) => substratumistory.substratumId === substratum.substratumId
+        const selectedSubstratumHistory = selectedStratumHistory?.substrata.find(
+          (substratumHistory) => substratumHistory.substratumId === substratum.substratumId
         );
-        const substratumId = { layerId: 'substrata', featureId: `${selectedSubstratumistory?.substratumId}` };
+        const substratumId = { layerId: 'substrata', featureId: `${selectedSubstratumHistory?.substratumId}` };
         sortFeatureBySurvivalRate(substratumId, substratum.survivalRate);
       });
     });

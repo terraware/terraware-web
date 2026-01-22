@@ -1,10 +1,11 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import { useLocalization, useOrganization } from 'src/providers';
 import {
+  ObservationResultsPayload,
   useLazyListAdHocObservationResultsQuery,
   useLazyListObservationResultsQuery,
 } from 'src/queries/generated/observations';
@@ -29,6 +30,10 @@ const Map = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: MapProps): JSX
   const [getPlantingSite, getPlantingSiteResult] = useLazyGetPlantingSiteQuery();
   const [listObservationResults, listObservationsResultsResponse] = useLazyListObservationResultsQuery();
   const [listAdHocObservationResults, listAdHocObservationResultsResponse] = useLazyListAdHocObservationResultsQuery();
+  const [selectedObservationResults, setSelectedObservationResults] = useState<ObservationResultsPayload[]>([]);
+  const [selectedAdHocObservationResults, setSelectedAdHocObservationResults] = useState<ObservationResultsPayload[]>(
+    []
+  );
 
   useEffect(() => {
     if (plantingSiteId !== undefined) {
@@ -108,14 +113,16 @@ const Map = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: MapProps): JSX
               adHocObservationResults={adHocObservationResults}
               observationResults={observationResults}
               timezone={plantingSite?.timeZone ?? defaultTimezone}
+              selectAdHocObservationResults={setSelectedAdHocObservationResults}
+              selectObservationResults={setSelectedObservationResults}
             />
           </Box>
         </Box>
       )}
       <ObservationMap
-        adHocObservationResults={adHocObservationResults}
+        adHocObservationResults={selectedAdHocObservationResults}
         isBiomass={isBiomass}
-        observationResults={observationResults}
+        observationResults={selectedObservationResults}
         plantingSiteId={plantingSiteId}
         selectPlantingSiteId={selectPlantingSiteId}
       />

@@ -11,7 +11,7 @@ const usePlantMarkersMapLegend = (disabled?: boolean) => {
   const [deadPlantsVisible, setDeadPlantsVisible] = useState<boolean>(false);
 
   const { livePlantStyle, deadPlantStyle } = useMapFeatureStyles();
-  const plantMakersLegendGroup = useMemo((): MapMultiSelectLegendGroup => {
+  const plantMarkersLegendGroup = useMemo((): MapMultiSelectLegendGroup => {
     return {
       disabled,
       items: [
@@ -47,7 +47,7 @@ const usePlantMarkersMapLegend = (disabled?: boolean) => {
   return {
     deadPlantsVisible,
     livePlantsVisible,
-    plantMakersLegendGroup,
+    plantMarkersLegendGroup,
     setDeadPlantsVisible,
     setLivePlantsVisible,
   };
