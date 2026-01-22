@@ -37,7 +37,8 @@ const VirtualMonitoringPlot = () => {
         rotation={[-90, 0, 0]}
         cropAabbMin={[-1, -1, -1]}
         cropAabbMax={[1, 1, 1]}
-        cropEdgeScaleFactor={1}
+        cropFade={true}
+        cropFadeDistance={8}
       />
 
       <Script
