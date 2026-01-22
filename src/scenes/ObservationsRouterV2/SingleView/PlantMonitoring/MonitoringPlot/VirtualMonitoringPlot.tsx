@@ -6,9 +6,10 @@ import { Camera, Script } from '@playcanvas/react/components';
 import { Color } from 'playcanvas';
 import { AnnotationManager } from 'playcanvas/scripts/esm/annotations.mjs';
 import { CameraControls } from 'playcanvas/scripts/esm/camera-controls.mjs';
+import { Grid } from 'playcanvas/scripts/esm/grid.mjs';
 
 import Annotation from 'src/components/GaussianSplat/Annotation';
-import SplatAutoRotate from 'src/components/GaussianSplat/SplatAutoRotate';
+import CameraPosition from 'src/components/GaussianSplat/CameraPosition';
 import SplatControls from 'src/components/GaussianSplat/SplatControls';
 import SplatModel from 'src/components/GaussianSplat/SplatModel';
 
@@ -31,16 +32,17 @@ const VirtualMonitoringPlot = () => {
         graphicsDeviceOptions={{ antialias: false }}
       >
         <Entity name='camera'>
-          <Camera clearColor='#1a1a1a' fov={60} />
-          <Script script={CameraControls} />
+          <Camera clearColor='#000000' fov={60} />
+          <Script script={CameraControls} moveSpeed={0.3} moveFastSpeed={0.5} moveSlowSpeed={0.15} rotateSpeed={0.1} />
         </Entity>
 
-        <SplatModel
-          splatSrc={'/assets/models/test/PlyExamples/outside.ply'}
-          position={[0, -0.1, 0]}
-          rotation={[-90, 0, 0]}
-        />
-        <SplatAutoRotate />
+        <CameraPosition focus={[0, 0.1, 0]} position={[0, 0.1, 0]} />
+
+        <Entity name={'grid'} scale={[100, 100, 100]}>
+          <Script script={Grid} />
+        </Entity>
+
+        <SplatModel splatSrc={'/assets/models/test/PlyExamples/outside.ply'} rotation={[-90, 0, 0]} />
 
         <Script
           script={AnnotationManager}
