@@ -21,10 +21,10 @@ const VirtualMonitoringPlot = () => {
   }, [setCamera]);
   return (
     <>
-      <GradientSky topColor='#1e90ff' horizonColor='#87ceeb' groundColor='#8b7355' />
+      <GradientSky topColor='#FFFFFF' horizonColor='#EAF8FF' groundColor='#C3BDB7' />
 
       <Entity name='camera'>
-        <Camera clearColor='#000000' fov={60} />
+        <Camera clearColor='#EAF8FF' fov={60} />
         <Script script={CameraControls} moveSpeed={0.3} moveFastSpeed={0.5} moveSlowSpeed={0.15} rotateSpeed={0.1} />
       </Entity>
 
@@ -32,14 +32,7 @@ const VirtualMonitoringPlot = () => {
         <Script script={Grid} />
       </Entity>
 
-      <SplatModel
-        splatSrc={'/assets/models/test/PlyExamples/outside.ply'}
-        rotation={[-90, 0, 0]}
-        cropAabbMin={[-1, -1, -1]}
-        cropAabbMax={[1, 1, 1]}
-        cropFade={true}
-        cropFadeDistance={8}
-      />
+      <SplatModel splatSrc={'/assets/models/test/PlyExamples/outside.ply'} rotation={[-90, 0, 0]} />
 
       <Script
         script={AnnotationManager}
