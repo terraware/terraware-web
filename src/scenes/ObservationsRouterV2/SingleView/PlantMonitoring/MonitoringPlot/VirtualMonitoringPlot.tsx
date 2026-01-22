@@ -8,7 +8,7 @@ import { CameraControls } from 'playcanvas/scripts/esm/camera-controls.mjs';
 import SplatAutoRotate from 'src/components/GaussianSplat/SplatAutoRotate';
 import SplatModel from 'src/components/GaussianSplat/SplatModel';
 
-const VirtualMonitoringPlot = (): JSX.Element => {
+const VirtualMonitoringPlot = () => {
   // http://localhost:3000/observations/358/stratum/2/plot/40321018/virtual?organizationId=243
 
   return (
