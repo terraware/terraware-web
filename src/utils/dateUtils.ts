@@ -26,3 +26,29 @@ export const isAfter = (dateString1: string | undefined, dateString2: string | u
 };
 
 export const today = DateTime.now().toUTC().startOf('day');
+
+export const startOfMonth = (date: Date): Date => {
+  return new Date(date.getFullYear(), date.getMonth(), 1);
+};
+
+export const endOfMonth = (date: Date): Date => {
+  return new Date(date.getFullYear(), date.getMonth() + 1, 0);
+};
+
+export const startOfQuarter = (date: Date): Date => {
+  const quarterStartMonth = Math.floor(date.getMonth() / 3) * 3;
+  return new Date(date.getFullYear(), quarterStartMonth, 1);
+};
+
+export const endOfQuarter = (date: Date): Date => {
+  const quarterStartMonth = Math.floor(date.getMonth() / 3) * 3;
+  return new Date(date.getFullYear(), quarterStartMonth + 3, 0);
+};
+
+export const startOfYear = (date: Date): Date => {
+  return new Date(date.getFullYear(), 0, 1);
+};
+
+export const endOfYear = (date: Date): Date => {
+  return new Date(date.getFullYear(), 12, 0);
+};

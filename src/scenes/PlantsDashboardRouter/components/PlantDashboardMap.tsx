@@ -73,9 +73,11 @@ const PlantDashboardMap = ({
   const { photoDrawerContent, photoDrawerHeader, photoDrawerSize, selectedPhotos, selectPhotos } = useMapPhotoDrawer();
 
   const { selectedLayer, plantingSiteLegendGroup } = usePlantingSiteMapLegend('strata');
-  const { deadPlantsVisible, livePlantsVisible, plantMakersLegendGroup } = usePlantMarkersMapLegend(
-    disablePlantMarkers || observationResults.length === 0
-  );
+  const {
+    deadPlantsVisible,
+    livePlantsVisible,
+    plantMarkersLegendGroup: plantMakersLegendGroup,
+  } = usePlantMarkersMapLegend(disablePlantMarkers || observationResults.length === 0);
   const { observationEventsVisible, observationEventsLegendGroup } = useObservationEventsMapLegend(
     disableObserationEvents || observationResults.length === 0
   );
