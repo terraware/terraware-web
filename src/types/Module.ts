@@ -51,13 +51,9 @@ export type ModuleCohortsSearchResult = {
     cohort: {
       id: number;
       name: string;
-      participants: {
+      projects: {
         id: number;
         name: string;
-        projects: {
-          id: number;
-          name: string;
-        }[];
       }[];
     };
   }[];
