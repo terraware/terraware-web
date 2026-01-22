@@ -65,7 +65,7 @@ const ObservationTimeline = ({
     const yearDiff = latestDate.getFullYear() - earliestDate.getFullYear();
     const monthDiff = latestDate.getMonth() - earliestDate.getMonth();
 
-    const totalMonthlyDiff = yearDiff * 12 - monthDiff;
+    const totalMonthlyDiff = yearDiff * 12 + monthDiff;
 
     if (totalMonthlyDiff <= 12) {
       return 'Month';

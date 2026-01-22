@@ -118,7 +118,7 @@ const ObservationMap = ({
     } else if (selectedOrganization && plantingSiteId !== undefined) {
       void getPlantingSite(plantingSiteId, true);
     }
-  }, [getPlantingSite, isBiomass, listPlantingSites, plantingSiteId, selectedOrganization]);
+  }, [getPlantingSite, listPlantingSites, plantingSiteId, selectedOrganization]);
 
   const allPlantingSites = useMemo(
     () => listPlantingSitesResult.data?.sites ?? [],
