@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/145</span>
+                <span class='fraction'>0/143</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/52</span>
+                <span class='fraction'>0/50</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/138</span>
+                <span class='fraction'>0/136</span>
             </div>
         
             
@@ -390,11 +390,7 @@
 <a name='L325'></a><a href='#L325'>325</a>
 <a name='L326'></a><a href='#L326'>326</a>
 <a name='L327'></a><a href='#L327'>327</a>
-<a name='L328'></a><a href='#L328'>328</a>
-<a name='L329'></a><a href='#L329'>329</a>
-<a name='L330'></a><a href='#L330'>330</a>
-<a name='L331'></a><a href='#L331'>331</a>
-<a name='L332'></a><a href='#L332'>332</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L328'></a><a href='#L328'>328</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -522,8 +518,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -534,8 +528,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -834,39 +826,35 @@ export default functio<span class="cstat-no" title="statement not covered" >n Ad
     projectsSections.forEach((ps) =&gt;
 <span class="cstat-no" title="statement not covered" >      ps.projectIds.forEach((projId) =&gt; {<span class="fstat-no" title="function not covered" ></span></span>
         const foundCohort = availableCohorts?.find((coh) =&gt; coh.id === ps.cohort.id);
-<span class="cstat-no" title="statement not covered" >        const allCohortProjects = foundCohort?.participants?.flatMap((participant) =&gt;</span>
-          participant.projects.flatMap((project) =&gt; project)
-        );
-        const f<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ou</span>ndProject = allCohortProjects?.find((pr) =&gt; pr.id.toString() === projId.toString());</span>
-        projectsWithCohort.push<span class="cstat-no" title="statement not covered" >({ </span>cohortId: ps.cohort.id, projectId: Number(projId), projectName: foundProject?.name });
-<span class="cstat-no" title="statement not covered" >      })</span>
+<span class="cstat-no" title="statement not covered" >        const allCohortProjects = foundCohort?.projects?.flatMap((project) =&gt; project);</span>
+        const foundProject = allCohortProjects?.find((pr) =&gt; pr.id.toString() === projId.toString());
+        projectsWithCohort.push({ cohortId: ps.cohort.id, projectId: Number(projId), projectName: foundProject?.name });
+      })<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
     );<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-    on<span class="cstat-no" title="statement not covered" >Save({ ...record, projects: projectsWithCohort });</span>
+    onSave({ ...record, pr<span class="cstat-no" title="statement not covered" >ojects: projectsWithCohor</span>t });
   };<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const getProjectsForCohort = (selectedCohort: CohortModuleWithProject) =&gt; {
-    const allProjects: DropdownItem[] = [];
-<span class="cstat-no" title="statement not covered" >    selectedCohort?.participants?.forEach((pp) =&gt; {</span>
-<span class="fstat-no" title="function not covered" >      pp</span>.proje<span class="cstat-no" title="statement not covered" >cts.forEach((proj) =&gt; <span class="fstat-no" title="function not covered" >{</span></span>
-        allProjects.push({ label: proj.name, value: proj.id });
-      });<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-    });<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span>
+  const <span class="cstat-no" title="statement not covered" >getProjectsForCohort</span> = (selectedCohort: CohortModuleWithProject) =&gt; {
+    cons<span class="cstat-no" title="statement not covered" >t allPro</span>jects: DropdownItem[] = [];
+    selectedCohort?.projects?.forEach((proj) =&gt; {
+      allProjects.push({ label: proj.name, value: proj.id });
+<span class="cstat-no" title="statement not covered" >    });</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
     return allProjects;
   };<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-<span class="cstat-no" title="statement not covered" ></span>
-  const updateProjectSectionCohort = (index: number, newCohort: CohortModuleWithProject) =&gt; {
-    setProjectsSections((prev) =&gt; {
-<span class="cstat-no" title="statement not covered" >      const oldProjectSections = [...prev];</span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  const updateProjectSectionC<span class="cstat-no" title="statement not covered" >ohort = (index: number, newCohort: CohortModuleWithProject) <span class="fstat-no" title="function not covered" >=&gt;</span> {<span class="cstat-no" title="statement not covered" ></span></span>
+    setP<span class="cstat-no" title="statement not covered" >rojectsSections((prev) =&gt; {</span>
+      const oldProjectSections = [...prev];
       if (oldProjectSections[index]) {
-        oldProjectSections[inde<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >x]</span>.cohort = newCohort;</span>
+<span class="cstat-no" title="statement not covered" >        oldProjectSections[index].cohort = newCohort;</span>
       } else {
-        oldProjectSectio<span class="cstat-no" title="statement not covered" >ns[</span>index] = { cohort: newCohort, projectIds: [] };
-<span class="cstat-no" title="statement not covered" >      }<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-      re<span class="cstat-no" title="statement not covered" >turn oldProjectSections;</span>
-    });
+        oldProjectSections[inde<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >x]</span> = { cohort: newCohort, projectIds: [] };</span>
+      }
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >      return oldProjectSections;<span class="fstat-no" title="function not covered" ></span></span>
+    })<span class="cstat-no" title="statement not covered" >;</span>
   };
 <span class="cstat-no" title="statement not covered" ></span>
   const onAddProject = (index: number, projectId: string) =&gt; {
@@ -1063,7 +1051,7 @@ export default functio<span class="cstat-no" title="statement not covered" >n Ad
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-21T23:04:25.721Z
+                at 2026-01-22T18:14:47.452Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
