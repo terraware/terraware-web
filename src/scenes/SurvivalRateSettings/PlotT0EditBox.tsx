@@ -84,8 +84,8 @@ const PlotT0EditBox = ({
       if (option) {
         const timeZone = plantingSite?.timeZone ?? defaultTimeZone.id;
         const completedDate = getDateDisplayValue(option.observationCompletedTime, timeZone);
-        return option?.observationStartDate
-          ? `${getShortDate(option.observationStartDate, locale)} ${strings.COMPLETED_ON} ${completedDate}`
+        return option?.observationCompletedTime
+          ? `${getShortDate(option.observationCompletedTime, locale)} ${strings.COMPLETED_ON} ${completedDate}`
           : '';
       }
       return '';
@@ -98,8 +98,8 @@ const PlotT0EditBox = ({
       if (option) {
         const timeZone = plantingSite?.timeZone ?? defaultTimeZone.id;
         const completedDate = getDateDisplayValue(option.observationCompletedTime, timeZone);
-        return option?.observationStartDate
-          ? `${getShortDate(option.observationStartDate, locale)} ${strings.COMPLETED_ON} ${completedDate}`
+        return option?.observationCompletedTime
+          ? `${getShortDate(option.observationCompletedTime, locale)} ${strings.COMPLETED_ON} ${completedDate}`
           : '';
       }
       return '';

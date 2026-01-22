@@ -3,7 +3,6 @@ import React, { type JSX, useMemo } from 'react';
 import { Box, useTheme } from '@mui/material';
 
 import BarChart from 'src/components/common/Chart/BarChart';
-import isEnabled from 'src/features';
 import strings from 'src/strings';
 import { ObservationSpeciesResults } from 'src/types/Observations';
 
@@ -22,7 +21,6 @@ export default function SpeciesTotalPlantsChart({
     labels: string[];
     values: number[];
   };
-  const isEditObservationsEnabled = isEnabled('Edit Observations');
   const theme = useTheme();
 
   const totals = useMemo((): Data => {
@@ -53,7 +51,7 @@ export default function SpeciesTotalPlantsChart({
 
   return (
     <Box position='relative'>
-      {isEditObservationsEnabled && isNotCompleted && (
+      {isNotCompleted && (
         <Box
           sx={{
             backgroundColor: theme.palette.TwClrBgSecondary,
@@ -64,6 +62,9 @@ export default function SpeciesTotalPlantsChart({
             left: '50%',
             transform: 'translate(-50%, -50%)',
             zIndex: 1,
+            borderRadius: '4px',
+            textAlign: 'center',
+            whiteSpace: 'nowrap',
           }}
         >
           {strings.DATA_IS_NOT_YET_AVAILABLE}
