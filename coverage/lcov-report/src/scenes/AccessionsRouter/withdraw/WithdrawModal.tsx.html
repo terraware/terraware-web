@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/189</span>
+                <span class='fraction'>0/190</span>
             </div>
         
             
@@ -602,7 +602,13 @@
 <a name='L537'></a><a href='#L537'>537</a>
 <a name='L538'></a><a href='#L538'>538</a>
 <a name='L539'></a><a href='#L539'>539</a>
-<a name='L540'></a><a href='#L540'>540</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L540'></a><a href='#L540'>540</a>
+<a name='L541'></a><a href='#L541'>541</a>
+<a name='L542'></a><a href='#L542'>542</a>
+<a name='L543'></a><a href='#L543'>543</a>
+<a name='L544'></a><a href='#L544'>544</a>
+<a name='L545'></a><a href='#L545'>545</a>
+<a name='L546'></a><a href='#L546'>546</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -932,8 +938,13 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1061,6 +1072,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1141,7 +1153,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > useCallback, </span>useEffect, useMemo, useState } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > type JSX, use</span>Callback, useEffect, useMemo, useState } from 'react';
 <span class="cstat-no" title="statement not covered" ></span>
 import { Box, FormContr<span class="cstat-no" title="statement not covered" >olLabel, Grid, Radio, RadioGroup</span>, Typography, useTheme } from '@mui/material';
 import { Dropdown, Selec<span class="cstat-no" title="statement not covered" >tT, Textfield } from '@terr</span>aware/web-components';
@@ -1468,20 +1480,20 @@ export default functi<span class="cstat-no" title="statement not covered" >on Wi
 <span class="fstat-no" title="function not covered" >    },<span class="cstat-no" title="statement not covered" ></span></span>
     [onChange, setIsNurseryTransfer]
   );
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  const onChangeReadyByDate =<span class="cstat-no" title="statement not covered" > useCallback((value: any) =&gt; onChangeDate('readyByDate', value), [onChangeDate]);</span>
-<span class="fstat-no" title="function not covered" ></span>
-  cons<span class="cstat-no" title="statement not covered" >t onChangeDateHandler = useCallback((value: a</span>ny) =&gt; onChangeDate('date', value), [onChangeDate]);
 <span class="cstat-no" title="statement not covered" ></span>
-  const onChangeNotesHandler = useCallback((value: unknown) =&gt; onChangeNotes('notes', value), [onChangeNotes]);
+  co<span class="fstat-no" title="function not covered" >ns</span>t onChangeRead<span class="cstat-no" title="statement not covered" >yByDate = useCallback((value: any) =&gt; onChangeDate('readyByDate', value), [onChangeDate]);</span>
 &nbsp;
-  const onClickAddNotes = useCallback(() =&gt; setIsNotesOpened(true), []);
+  const onChangeDateHandler = useCallback((value: any) =&gt; onChangeDate('date', value), [onChangeDate]);
+&nbsp;
+  const onChangeNotesHandler = useCallback((value: unknown) =&gt; onChangeNotes('notes', value), [onChangeNotes]);
 <span class="cstat-no" title="statement not covered" ></span>
-  const isEqualUsers = useCallback((a: OrganizationUser, b: OrganizationUser) =&gt; a.id === b.id, []);
+  co<span class="fstat-no" title="function not covered" >ns</span>t onClickAddNotes = useCallback(() =&gt; setIsNotesOpened(true), []);
+<span class="cstat-no" title="statement not covered" ></span>
+  cons<span class="cstat-no" title="statement not covered" >t isEqualUsers = useCallback((a: Or</span>ganizationUser, b: OrganizationUser) =&gt; a.id === b.id, []);
 &nbsp;
   const renderOptionUser = useCallback(
     (option: OrganizationUser) =&gt; renderUser(option, user, contributor),
-    [user, contributor]
+<span class="cstat-no" title="statement not covered" >    [user, contributor]</span>
   );
 &nbsp;
   const displayLabelUser = useCallback(
@@ -1489,7 +1501,13 @@ export default functi<span class="cstat-no" title="statement not covered" >on Wi
     [user, contributor]
   );
 &nbsp;
-  const toTUser = useCallback((firstName: string) =&gt; ({ firstName }) as OrganizationUser, []);
+  const toTUser = useCallback(
+    (firstName: string) =&gt;
+      ({
+        firstName,
+      }) as OrganizationUser,
+    []
+  );
 &nbsp;
   const onChangeWithdrawBy = useCallback(
     (_: React.ChangeEvent&lt;HTMLInputElement&gt;, value: string) =&gt; {
@@ -1523,8 +1541,8 @@ export default functi<span class="cstat-no" title="statement not covered" >on Wi
         /&gt;,
       ]}
       scrolled={true}
-    &gt;
-      &lt;Grid container textAlign='left'&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+    &gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+      &lt;Grid container textAlign='left'&gt;
         &lt;Grid item xs={12} paddingBottom={2}&gt;
           &lt;Dropdown
             label={strings.PURPOSE}
@@ -1598,8 +1616,8 @@ export default functi<span class="cstat-no" title="statement not covered" >on Wi
           &lt;Grid item xs={12} textAlign='left'&gt;
             &lt;Typography color={theme.palette.TwClrTxtSecondary} display='flex' fontSize={14}&gt;
               {strings.WITHDRAW_BY}
-            &lt;/Typography&gt;
-            &lt;RadioGroup<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+            &lt;/Typography&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+            &lt;RadioGroup
               name='radio-buttons-withdraw-by'
               defaultValue={accession.remainingQuantity?.units === 'Seeds' ? 'count' : 'weight'}
               onChange={onChangeWithdrawBy}
@@ -1687,7 +1705,7 @@ export default functi<span class="cstat-no" title="statement not covered" >on Wi
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-22T20:18:02.561Z
+                at 2026-01-22T21:06:53.141Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

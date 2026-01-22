@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/209</span>
+                <span class='fraction'>0/211</span>
             </div>
         
             
@@ -587,7 +587,19 @@
 <a name='L522'></a><a href='#L522'>522</a>
 <a name='L523'></a><a href='#L523'>523</a>
 <a name='L524'></a><a href='#L524'>524</a>
-<a name='L525'></a><a href='#L525'>525</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L525'></a><a href='#L525'>525</a>
+<a name='L526'></a><a href='#L526'>526</a>
+<a name='L527'></a><a href='#L527'>527</a>
+<a name='L528'></a><a href='#L528'>528</a>
+<a name='L529'></a><a href='#L529'>529</a>
+<a name='L530'></a><a href='#L530'>530</a>
+<a name='L531'></a><a href='#L531'>531</a>
+<a name='L532'></a><a href='#L532'>532</a>
+<a name='L533'></a><a href='#L533'>533</a>
+<a name='L534'></a><a href='#L534'>534</a>
+<a name='L535'></a><a href='#L535'>535</a>
+<a name='L536'></a><a href='#L536'>536</a>
+<a name='L537'></a><a href='#L537'>537</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -858,6 +870,16 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1085,6 +1107,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1111,7 +1135,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > useCallback, </span>useEffect, useMemo, useState } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > type JSX, use</span>Callback, useEffect, useMemo, useState } from 'react';
 <span class="cstat-no" title="statement not covered" ></span>
 import { Box, CircularP<span class="cstat-no" title="statement not covered" >rogress, Typography, useTheme } </span>from '@mui/material';
 import { SelectT } from <span class="cstat-no" title="statement not covered" >'@terraware/web-components'</span>;
@@ -1369,53 +1393,65 @@ const ProjectProfile<span class="cstat-no" title="statement not covered" >Gis</s
   }, [plantingSitesData]);
 <span class="cstat-no" title="statement not covered" ></span>
   cons<span class="cstat-no" title="statement not covered" >t strataAndSites = useMemo(() =&gt; {</span>
-    const strata = uniqueStrata?.map((_stratum) =&gt; ({ name: _stratum, type: 'stratum' }) as StratumOrSiteOption);
-<span class="cstat-no" title="statement not covered" >    const sites = uniqueSi</span>tes?.map((s) =&gt; ({ name: s, type: 'site' }) as StratumOrSiteOption);
+    const strata = uniqueStrata?.map(
+<span class="cstat-no" title="statement not covered" >      (_stratum) =&gt;</span>
+        ({
+          name: _strat<span class="cstat-no" title="statement not covered" >um,<span class="fstat-no" title="function not covered" ></span></span>
+          type: 'stratum',
+<span class="cstat-no" title="statement not covered" >        }) as StratumOrSiteOption<span class="fstat-no" title="function not covered" ></span></span>
+    );
+    co<span class="cstat-no" title="statement not covered" >nst sites = uniqueSites?.map(</span>
+      (s) =&gt;
+        ({
+          name: s,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+          type: 'si<span class="cstat-no" title="statement not covered" >te',</span>
+<span class="fstat-no" title="function not covered" ></span>        }) as Stratum<span class="cstat-no" title="statement not covered" >OrSiteOption</span>
+    );
     if (strata.length &gt; 0 &amp;&amp; sites[0]) {
-      sites[0].showSep<span class="cstat-no" title="statement not covered" >arator = true;<span class="fstat-no" title="function not covered" ></span></span>
+      sites[0].showSeparator = true;
     }
-<span class="cstat-no" title="statement not covered" >    return [...strata, ...sites];<span class="fstat-no" title="function not covered" ></span></span>
-  }, [uniqueStrata, uniqueSites]);
-<span class="cstat-no" title="statement not covered" ></span>
+    return [...str<span class="cstat-no" title="statement not covered" >ata, ...sites];</span>
+  }, [<span class="fstat-no" title="function not covered" >un</span>iqueSt<span class="cstat-no" title="statement not covered" >rata, uniqueSites]);</span>
+&nbsp;
   useEffect(() =&gt; {
     if (!stratumOrSite &amp;&amp; strataAndSites) {
-      setStratumOrSite(st<span class="cstat-no" title="statement not covered" >rataAndSites[0]);<span class="fstat-no" title="function not covered" ></span></span>
-    }<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  }, [stratumOrSit<span class="cstat-no" title="statement not covered" >e, strataAndSites]);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-<span class="cstat-no" title="statement not covered" ></span>
-  useE<span class="cstat-no" title="statement not covered" >ffect(() =&gt; {</span>
+      setStratumOrSite(strataAndSites[0]);
+<span class="cstat-no" title="statement not covered" >    }</span>
+  }, [<span class="cstat-no" title="statement not covered" >stratumOrSite, strataAndSites])</span>;
+&nbsp;
+  us<span class="cstat-no" title="statement not covered" >eEffect(() =&gt; {</span>
     if (stratumOrSite) {
-<span class="cstat-no" title="statement not covered" >      if (stratumOrSite.name === s</span>trings.ALL_PROJECT_ZONES) {
-        setShowBoundaryMap(true);
-<span class="cstat-no" title="statement not covered" >        setShowSiteMap(false);<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >        setSelectedLayer(undefined);</span>
-<span class="cstat-no" title="statement not covered" >      } else if (stratumOrSite.type === 'si</span>te' &amp;&amp; uniqueSites.includes(stratumOrSite.name)) {
-        setShowSiteMap(true);
-        setShowBoundaryMap(false);
-<span class="cstat-no" title="statement not covered" >        setSelectedLayer('Plan<span class="fstat-no" title="function not covered" >ti</span>ng Site');</span>
-<span class="cstat-no" title="statement not covered" >      } else if (stratumOrSite.type === 'stratum' &amp;&amp; uniqueStrata.includes(stratumOrSite.name)) {</span>
+<span class="cstat-no" title="statement not covered" >      if (stratumOrSite.name =<span class="fstat-no" title="function not covered" >==</span> strings.ALL_PROJECT_ZONES) {</span>
 <span class="cstat-no" title="statement not covered" >        setShowBoundaryMap(true);</span>
 <span class="cstat-no" title="statement not covered" >        setShowSiteMap(false);</span>
-<span class="cstat-no" title="statement not covered" >        setSelectedLayer(undefi</span>ned);
+        setSelectedLayer(undefined);
+      } else if (stratumOrSite.type === 'site' &amp;&amp; uniqueSites.includes(stratumOrSite.name)) {
+<span class="cstat-no" title="statement not covered" >        setShowSiteMap(true);<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >        setShowBoundaryMap(false);</span>
+<span class="cstat-no" title="statement not covered" >        setSelectedLayer('Planting Site');</span>
+      } <span class="cstat-no" title="statement not covered" >else if (stratumOrSite.typ</span>e === 'stratum' &amp;&amp; uniqueStrata.includes(stratumOrSite.name)) {
+<span class="cstat-no" title="statement not covered" >        setShowBoundaryMap(true</span>);
+<span class="cstat-no" title="statement not covered" >        setShowSiteMap(false);</span>
+        setSe<span class="cstat-no" title="statement not covered" >lectedLayer(undefined);</span>
       }<span class="cstat-no" title="statement not covered" ></span>
     }<span class="cstat-no" title="statement not covered" ></span>
-  }, [un<span class="cstat-no" title="statement not covered" >iqueSites, uniqueStrat</span>a, stratumOrSite, strataAndSites]);
+  }, [un<span class="cstat-no" title="statement not covered" >iqueSites, uniqueStrata, stratumOrS</span>ite, strataAndSites]);
 <span class="cstat-no" title="statement not covered" ></span>
-  const <span class="cstat-no" title="statement not covered" >labelHandler = useCallback((iStratu</span>mOrSite: StratumOrSiteOption) =&gt; iStratumOrSite?.name, []);
-  const isEqu<span class="cstat-no" title="statement not covered" >alHandler = useCallback(</span>
+  const <span class="cstat-no" title="statement not covered" >labelHandler = useCallback</span>((iStratumOrSite: StratumOrSiteOption) =&gt; iStratumOrSite?.name, []);
+  const <span class="cstat-no" title="statement not covered" >isEqualHandler = useCal</span>lback(
     (str<span class="cstat-no" title="statement not covered" >atumOrSiteA: StratumOrSite</span>Option, stratumOrSiteB: StratumOrSiteOption) =&gt;
-      st<span class="cstat-no" title="statement not covered" >ratumOrSiteA.name === s</span>tratumOrSiteB.name &amp;&amp; stratumOrSiteA.type === stratumOrSiteB.type,
-    []<span class="cstat-no" title="statement not covered" ></span>
+      stratumOrSiteA.name === stratumOrSiteB.name &amp;&amp; stratumOrSiteA.type === stratumOrSiteB.type,
+    []
   );
-&nbsp;
-  const renderOptionHandler = useCallback((iStratumOrSite: StratumOrSiteOption) =&gt; {
-    return (<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-      &lt;Typography<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" ></span>        component='div'<span class="cstat-no" title="statement not covered" ></span>
-        sx={{
-          borderTop: iStratumOrSite.showSeparator ? '1px solid' : 'none',
-          padding: '8px 16px',<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >        }}</span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  const renderOptionHandl<span class="cstat-no" title="statement not covered" >er = useCallback((iStratumOrSite: StratumOrSiteOption) =&gt; {</span>
+<span class="fstat-no" title="function not covered" >    re</span>turn (<span class="cstat-no" title="statement not covered" ></span>
+      &lt;Typography
+        component='div'
+        sx={{<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >          borderTop: iStratumOrSite.showSeparator ? '1px solid' : 'none',</span>
+          padding: '8px 16px',
+        }}
       &gt;
         {iStratumOrSite.name}
       &lt;/Typography&gt;
@@ -1425,15 +1461,15 @@ const ProjectProfile<span class="cstat-no" title="statement not covered" >Gis</s
   const toTHandler = useCallback(
     (input: string) =&gt;
       ({
-        name: input,
-      }) as StratumOrSiteOption,
-    []<span class="cstat-no" title="statement not covered" ></span>
-  );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+        name: input,<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" ></span>      }) as Stra<span class="cstat-no" title="statement not covered" >tumOrSiteOption,</span>
+    []
+  );
 &nbsp;
   const strataAndSitesDropdown = (
-    &lt;Box display='flex' alignItems='center' gap={1}&gt;
+    &lt;Box display='flex' alignItems='center' gap={<span class="cstat-no" title="statement not covered" >1}&gt;</span>
       &lt;SelectT
-        id='stratumOrSite'<span class="cstat-no" title="statement not covered" ></span>
+        id='stratumOrSite'
         label=''
         onChange={setStratumOrSite}
         options={strataAndSites}
@@ -1447,58 +1483,58 @@ const ProjectProfile<span class="cstat-no" title="statement not covered" >Gis</s
       /&gt;
       {isProcessingSite &amp;&amp; &lt;CircularProgress size={16} sx={{ color: theme.palette.TwClrTxtSecondary }} /&gt;}
     &lt;/Box&gt;
-  );
-&nbsp;
-  const projectViewTitle = (<span class="cstat-no" title="statement not covered" ></span>
-    &lt;Box paddingLeft={1}&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >      &lt;Typography fontSize={'</span>24px'} fontWeight={600}&gt;
+  );<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  co<span class="cstat-no" title="statement not covered" >nst projectViewTitle = (</span>
+    &lt;Box paddingLeft={1}&gt;
+      &lt;Typography fontSize<span class="cstat-no" title="statement not covered" >={'24px'} fontWeight={600}<span class="fstat-no" title="function not covered" >&gt;</span></span>
         {strings.MAPS_FOR} {projectData.participantProject?.dealName}
       &lt;/Typography&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
     &lt;/Box&gt;
-  );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  );<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
-  cons<span class="cstat-no" title="statement not covered" >t onChangeLayerHandler = useCallback((layer: string) =&gt; {</span>
-    setSelectedLayer(layer as MapLayer);
-  }, []);<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
-<span class="cstat-no" title="statement not covered" ></span>
-  co<span class="cstat-no" title="statement not covered" >nst lastUpdatedDate </span>= useMemo(() =&gt; {
-    const allDates = plantingSitesData?.features?.map((f) =&gt; f.properties?.created_at);
-    const validDates = all<span class="cstat-no" title="statement not covered" >Dates?.filter((date) =&gt; date)?.map((date) =&gt; new Date(date).getTime());</span>
-<span class="fstat-no" title="function not covered" >    co</span>nst lastUpdated = validDates?.length ? new Date(Math.max(...validDates)) : null;
-    return lastUpdated;
+  const onChangeLayerHa<span class="cstat-no" title="statement not covered" >ndler = useCallback((layer: string) =&gt; {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
+    setSelectedLayer(lay<span class="cstat-no" title="statement not covered" >er as MapLayer);</span>
+  },<span class="cstat-no" title="statement not covered" > []);</span>
+&nbsp;
+  const lastUpdatedDate = <span class="cstat-no" title="statement not covered" >useMemo(() =&gt; {</span>
+<span class="fstat-no" title="function not covered" >    co</span>nst allDates = plantingSitesData?.features?.map((f) =&gt; f.properties?.created_at);
+    const validDates = allDates?.filter((date) =&gt; date)?.map((date) =&gt; new Date(date).getTime());
+    const lastUpdated = validDat<span class="cstat-no" title="statement not covered" >es?.length ? new Date(Math.max(...validDates)) : null;</span>
+    re<span class="cstat-no" title="statement not covered" >turn lastUpdated;</span>
   }, [plantingSitesData]);<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span>
-  const contextRenderer = useCallba<span class="cstat-no" title="statement not covered" >ck(</span>
-    (prope<span class="fstat-no" title="function not covered" >rt</span>ies: Ma<span class="cstat-no" title="statement not covered" >pSourceProperties): JSX.E</span>lement | null =&gt; {
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  const contextRenderer = useCallback(
+    (pro<span class="cstat-no" title="statement not covered" >perties: MapSourceProperties): JSX.Element | null =&gt; {</span>
       const tooltipProperties: TooltipProperty[] = [{ key: strings.TYPE, value: properties.type }];
-<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
       if (properties.type === 'substratum') {
-        const selectedSubstratum = filteredSiteData?.substratum?.entities?.find(
+<span class="cstat-no" title="statement not covered" >        const selectedSubstratum = filteredSiteData?.substratum?.entities?.find(</span>
           (ent: MapEntity) =&gt; ent.id === properties.id
-<span class="cstat-no" title="statement not covered" >        );</span>
+        );
         tooltipProperties.push({
           key: strings.STRATUM,
-          value: filteredSiteData?.substratum?.entities?.[0].properties.stratumId,
-        });
+<span class="cstat-no" title="statement not covered" >          value: filteredSiteData?.substratum?.entities?.[0].properties.stratumId,</span>
+        });<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 <span class="cstat-no" title="statement not covered" >        tooltipProperties.push({</span>
-          key: strings.AREA_HA,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-<span class="cstat-no" title="statement not covered" >          value: selectedSubstratum &amp;&amp; 'totalArea' in selectedSubstratum ? String(selectedSubstratum.totalArea) : '',</span>
+          key: strings.AREA_HA,
+          value: selectedSubstratum &amp;&amp; 'totalArea' in selectedSubstratum ? String(selectedSubstratum.totalArea) : '',
         });
       }
-&nbsp;
-      if (properties.type === 'stratum') {
+<span class="cstat-no" title="statement not covered" ></span>
+      if (properties.type =<span class="cstat-no" title="statement not covered" >== 'stratum') {</span>
 <span class="cstat-no" title="statement not covered" >        const selectedStratum = filteredSiteData?.stratum?.entities?.find((ent: MapEntity) =&gt; ent.id === properties.id);</span>
-        tooltipProperties.p<span class="cstat-no" title="statement not covered" >ush({</span>
-<span class="cstat-no" title="statement not covered" >          key: strings.AREA_HA,</span>
-          value: selectedStratum &amp;&amp; 'totalArea' in selectedStratum ? String(selectedStratum.totalArea) : '',
-        });
-      }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >      if (properties.type === 'site') {</span>
-        const siteEntity = filteredSiteData?.site?.entities?.[0];
         tooltipProperties.push({
           key: strings.AREA_HA,
-<span class="cstat-no" title="statement not covered" >          value: siteEntity &amp;&amp; 'totalArea' in siteEntity ? String(siteEntity.totalArea) : '',</span>
+          value: selectedStratum &amp;&amp; 'totalArea' in selectedStratum ? String(selectedStratum.totalArea) : '',
+        });
+<span class="cstat-no" title="statement not covered" >      }</span>
+&nbsp;
+      if (properties.type === 'site') {
+        const siteEntity = filteredSiteData?.site?.entities?.[0];
+<span class="cstat-no" title="statement not covered" >        tooltipProperties.push({</span>
+          key: strings.AREA_HA,
+          value: siteEntity &amp;&amp; 'totalArea' in siteEntity ? String(siteEntity.totalArea) : '',
         });
       }
 &nbsp;
@@ -1606,9 +1642,9 @@ const ProjectProfile<span class="cstat-no" title="statement not covered" >Gis</s
                   left: 0,
                   right: 0,
                   bottom: 0,
-                  backgroundColor: 'rgba(255, 255, 255, 0.5)',
+                  ba<span class="cstat-no" title="statement not covered" >ckgroundColor: 'rgba(2</span>55, 255, 255, 0.5)',
                   zIndex: 1000,
-                  cu<span class="cstat-no" title="statement not covered" >rsor: 'not-allowed',</span>
+                  cursor: 'not-allowed',
                   display: 'flex',
                   justifyContent: 'center',
                   verticalAlign: 'middle',
@@ -1642,7 +1678,7 @@ export default ProjectProfileGisMaps;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-22T20:18:02.561Z
+                at 2026-01-22T21:06:53.141Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

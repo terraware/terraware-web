@@ -261,7 +261,9 @@
 <a name='L196'></a><a href='#L196'>196</a>
 <a name='L197'></a><a href='#L197'>197</a>
 <a name='L198'></a><a href='#L198'>198</a>
-<a name='L199'></a><a href='#L199'>199</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L199'></a><a href='#L199'>199</a>
+<a name='L200'></a><a href='#L200'>200</a>
+<a name='L201'></a><a href='#L201'>201</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -424,6 +426,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -459,7 +463,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > useCallback, </span>useEffect, useState } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > type JSX, use</span>Callback, useEffect, useState } from 'react';
 <span class="cstat-no" title="statement not covered" ></span>
 import { Box, Grid, use<span class="cstat-no" title="statement not covered" >Theme } from '@mui/material';</span>
 import { BusySpinner, Dr<span class="cstat-no" title="statement not covered" >opdown, SelectT } from '@te</span>rraware/web-components';
@@ -576,23 +580,21 @@ export default func<span class="cstat-no" title="statement not covered" >tion Ad
       {isOpenConfirmAddToProjectModal &amp;&amp; (
         &lt;AddToProjectConfirmModal onClose={onClose} onConfirm={handleOnSubmit} projects={projectsWithDeliverables} /&gt;
       )}
-&nbsp;
       {isBusy &amp;&amp; &lt;BusySpinner withSkrim={true} /&gt;}
-&nbsp;
       &lt;DialogBox
         onClose={onClose}
-        open={!isOpen<span class="fstat-no" title="function not covered" >Co</span>nfir<span class="cstat-no" title="statement not covered" >mAddToProj</span>ectModal}
+        open={!isOpenConfirmAddToProjectModal}
         title={strings.ADD_TO_PROJECT}
-        size='small'
+        size='small'<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
         middleButtons={[
           &lt;Button
             id='cancel'
             label={strings.CANCEL}
             type='passive'
-            onClick={() =&gt; onClose()}<span class="fstat-no" title="function not covered" ></span>
-<span class="cstat-no" title="statement not covered" >            priority='secondary'</span>
-            key='button-1'
-          /&gt;,
+            onClick={() =&gt; onClose()}
+            priority='secondary'
+            key='button-1'<span class="fstat-no" title="function not covered" ></span>
+<span class="cstat-no" title="statement not covered" >          /&gt;,</span>
           &lt;Button id='save' onClick={save} label={strings.ADD} key='button-2' /&gt;,
         ]}
       &gt;
@@ -607,20 +609,24 @@ export default func<span class="cstat-no" title="statement not covered" >tion Ad
                   marginBottom: 2,
                 }}
                 key={`project-${index}`}
-              &gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+              &gt;
                 &lt;Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}&gt;
-                  &lt;SelectT&lt;Project&gt;
-                    i<span class="fstat-no" title="function not covered" >d=</span>'project<span class="cstat-no" title="statement not covered" >'</span>
-                    label=<span class="fstat-no" title="function not covered" >{s</span>trings.PROJ<span class="cstat-no" title="statement not covered" >ECT}</span>
-                    placeh<span class="fstat-no" title="function not covered" >ol</span>der={string<span class="cstat-no" title="statement not covered" >s.SELECT}</span>
-<span class="fstat-no" title="function not covered" ></span>                    options=<span class="cstat-no" title="statement not covered" >{projects</span> || []}
-                    onChange={(project) =&gt; onProjectSpeciesChange('project', project, index)}
-                    selectedValue={ps.project}
+                  &lt;Sel<span class="fstat-no" title="function not covered" >ec</span>tT&lt;Project&gt;<span class="cstat-no" title="statement not covered" ></span>
+                    id='project'
+                    label={strings.PROJECT}
+                    p<span class="fstat-no" title="function not covered" >la</span>ceholder<span class="cstat-no" title="statement not covered" >={strings.SELE</span>CT}
+                    option<span class="fstat-no" title="function not covered" >s=</span>{projects |<span class="cstat-no" title="statement not covered" >| []}</span>
+                    onChan<span class="fstat-no" title="function not covered" >ge</span>={(project)<span class="cstat-no" title="statement not covered" > =&gt; onProjectSpeciesChange('project', project, i</span>ndex)}
+<span class="fstat-no" title="function not covered" ></span>                    selected<span class="cstat-no" title="statement not covered" >Value={ps.project}</span>
                     fullWidth={true}
                     isEqual={(a: Project, b: Project) =&gt; a.id === b.id}
                     renderOption={(project: Project) =&gt; project?.name || ''}
                     displayLabel={(project: Project) =&gt; project?.name || ''}
-                    toT={(name: string) =&gt; ({ name }) as Project}
+                    toT={(name: string) =&gt;
+                      ({
+                        name,
+                      }) as Project
+                    }
                     required
                   /&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
                 &lt;/Grid&gt;
@@ -664,7 +670,7 @@ export default func<span class="cstat-no" title="statement not covered" >tion Ad
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-22T20:18:02.561Z
+                at 2026-01-22T21:06:53.141Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
