@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type JSX } from 'react';
 
 import ExportCsvModal from 'src/components/common/ExportCsvModal';
 import { NurseryBatchService } from 'src/services';

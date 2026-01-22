@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { type JSX, useMemo } from 'react';
 
 import BarChart from 'src/components/common/Chart/BarChart';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';

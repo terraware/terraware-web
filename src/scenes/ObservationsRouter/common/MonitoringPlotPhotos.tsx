@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { type JSX, useMemo } from 'react';
 
 import PhotosList from 'src/components/common/PhotosList';
 import { ObservationMonitoringPlotPhoto } from 'src/types/Observations';

@@ -19,7 +19,7 @@ const EditableSectionDisplay = ({
   projectId,
   onEditVariableValue,
   sectionValues,
-}: EditableSectionDisplayProps): React.ReactElement | null => {
+}: EditableSectionDisplayProps): React.ReactElement<any> | null => {
   return sectionValues ? (
     <Typography fontSize='14px' fontWeight={400}>
       {sectionValues.map((v, index) => (
@@ -47,7 +47,7 @@ const SectionValue = ({
   projectId,
   onEditVariableValue,
   value,
-}: SectionValueProps): React.ReactElement | null => {
+}: SectionValueProps): React.ReactElement<any> | null => {
   switch (value.type) {
     case 'SectionText':
       return <span style={{ fontSize: '16px', whiteSpace: 'pre-wrap' }}>{value.textValue}</span>;

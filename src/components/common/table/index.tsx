@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { TableColumnType, TableRowType, Table as WebComponentsTable } from '@terraware/web-components';
 import { LocalizationProps, Props, TextAlignment } from '@terraware/web-components/components/table';

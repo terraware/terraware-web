@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type JSX } from 'react';
 
 import ImportModal from 'src/components/common/ImportModal';
 import { SeedBankService } from 'src/services';

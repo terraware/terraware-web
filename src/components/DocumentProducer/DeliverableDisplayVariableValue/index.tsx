@@ -18,7 +18,7 @@ type DeliverableDisplayVariableValueProps = {
 export default function DeliverableDisplayVariableValue({
   projectId,
   variable,
-}: DeliverableDisplayVariableValueProps): React.ReactElement {
+}: DeliverableDisplayVariableValueProps): React.ReactElement<any> {
   const theme = useTheme();
 
   const variableStyles = {

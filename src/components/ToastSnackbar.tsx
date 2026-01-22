@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { type JSX, useEffect, useState } from 'react';
 
 import { Box, Snackbar as SnackbarUI } from '@mui/material';
 import { Message } from '@terraware/web-components';

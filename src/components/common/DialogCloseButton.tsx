@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type JSX } from 'react';
 
 import { Close } from '@mui/icons-material';
 import { IconButton, SxProps, useTheme } from '@mui/material';

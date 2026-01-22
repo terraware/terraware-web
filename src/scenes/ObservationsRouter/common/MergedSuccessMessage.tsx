@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type JSX } from 'react';
 
 import { MergeOtherSpeciesRequestData } from 'src/redux/features/species/speciesThunks';
 

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-extra-non-null-assertion */
-import React from 'react';
+import React, { type JSX } from 'react';
 
 import { Box, Typography } from '@mui/material';
 import { Autocomplete, DropdownItem, Textfield } from '@terraware/web-components';

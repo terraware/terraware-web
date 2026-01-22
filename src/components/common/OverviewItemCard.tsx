@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type JSX } from 'react';
 
 import { Box, SxProps, Typography, useTheme } from '@mui/material';
 import { Button, IconTooltip, Tooltip } from '@terraware/web-components';

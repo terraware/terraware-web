@@ -1,7 +1,9 @@
-import React, { CSSProperties, MouseEvent, ReactNode, SyntheticEvent } from 'react';
+import React, { CSSProperties, type JSX, MouseEvent, ReactNode, SyntheticEvent } from 'react';
 import { Link as RouterLink } from 'react-router';
 
 import { Link as MuiLink, useTheme } from '@mui/material';
+
+import 'src/theme';
 
 export type LinkProps = {
   children: ReactNode;
@@ -24,7 +26,7 @@ export default function Link(props: LinkProps): JSX.Element {
 
   const theme = useTheme();
 
-  const styleToUse = {
+  const baseStyle = {
     fontSize: fontSize || '14px',
     fontWeight: fontWeight || 500,
     lineHeight: lineHeight || '21px',
@@ -34,12 +36,18 @@ export default function Link(props: LinkProps): JSX.Element {
     '&:hover': {
       textDecoration: 'underline',
     },
-    ...style,
   };
 
   if (to) {
     return (
-      <RouterLink to={to} className={className} target={target} id={id} replace={replace} style={styleToUse}>
+      <RouterLink
+        to={to}
+        className={className}
+        target={target}
+        id={id}
+        replace={replace}
+        style={{ ...baseStyle, ...style }}
+      >
         {children}
       </RouterLink>
     );
@@ -53,7 +61,7 @@ export default function Link(props: LinkProps): JSX.Element {
       id={id}
       disabled={disabled}
       sx={{
-        ...styleToUse,
+        ...baseStyle,
         opacity: disabled ? 0.5 : 1,
         '&[disabled]:hover': {
           textDecoration: 'none',

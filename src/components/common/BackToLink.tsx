@@ -1,4 +1,4 @@
-import React, { CSSProperties, MouseEvent, SyntheticEvent } from 'react';
+import React, { CSSProperties, type JSX, MouseEvent, SyntheticEvent } from 'react';
 
 import { useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';

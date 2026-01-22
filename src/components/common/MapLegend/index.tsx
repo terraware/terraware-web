@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { type JSX, useCallback } from 'react';
 
 import { Box, Tooltip, Typography, useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';
@@ -73,7 +73,7 @@ export default function MapLegend({
                 <AntSwitch
                   disabled={legend.disabled}
                   checked={!legend.disabled && legend.checked}
-                  onChange={(event, isChecked) => {
+                  onChange={(_event: React.SyntheticEvent, isChecked: boolean) => {
                     if (setLegends) {
                       setLegends((prev) => {
                         const newLegends = [...prev];

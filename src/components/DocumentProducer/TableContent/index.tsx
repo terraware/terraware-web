@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type JSX } from 'react';
 
 import { Box, Grid } from '@mui/material';
 import { SortOrder, TableColumnType, TableRowType } from '@terraware/web-components';

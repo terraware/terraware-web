@@ -1,5 +1,5 @@
 // flattened info for shapes relating to planting site data
-import React from 'react';
+import React, { type JSX } from 'react';
 import { LayerProps } from 'react-map-gl/mapbox';
 
 import { SxProps } from '@mui/material';

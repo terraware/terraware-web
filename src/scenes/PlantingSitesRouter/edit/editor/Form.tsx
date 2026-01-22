@@ -1,4 +1,4 @@
-import React, { CSSProperties, useMemo } from 'react';
+import React, { CSSProperties, type JSX, useMemo } from 'react';
 
 import { Step, StepLabel, Stepper, Typography, useTheme } from '@mui/material';
 import { FormButton, PageForm } from '@terraware/web-components';

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useEffect, useMemo, useState } from 'react';
 
 import { Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown, Message, SelectT } from '@terraware/web-components';
@@ -182,7 +182,11 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
             isEqual={(a: Species, b: Species) => a.id === b.id}
             renderOption={(_species: Species) => _species?.scientificName || ''}
             displayLabel={(_species: Species) => _species?.scientificName || ''}
-            toT={(scientificName: string) => ({ scientificName }) as Species}
+            toT={(scientificName: string) =>
+              ({
+                scientificName,
+              }) as Species
+            }
             required
             disabled={selectableSpecies.length === 0}
             errorText={error && !record?.speciesId ? error : ''}

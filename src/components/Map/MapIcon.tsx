@@ -1,4 +1,4 @@
-import React, { CSSProperties } from 'react';
+import React, { CSSProperties, type JSX } from 'react';
 
 import { useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';

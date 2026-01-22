@@ -21,7 +21,7 @@ const PreviewSection = ({
   docId,
   projectId,
   suppressCaptions,
-}: PreviewSectionProps): ReactElement | null => {
+}: PreviewSectionProps): ReactElement<any> | null => {
   const isLeaf = !sectionVariableWithRelevantVariables.renderHeading;
   const isMinor = !isTopLevel && !isLeaf;
 

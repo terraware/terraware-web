@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { type JSX, useEffect, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';

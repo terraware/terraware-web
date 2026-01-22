@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { type JSX, useMemo, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';

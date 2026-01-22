@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
   Close as CloseIcon,
@@ -508,7 +508,6 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
               <Typography variant='subtitle1' gutterBottom>
                 {strings.VARIABLES} ({filteredVariables.length})
               </Typography>
-
               <TextField
                 size='small'
                 placeholder='Search Variables'
@@ -523,7 +522,6 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
                   ),
                 }}
               />
-
               <List dense>
                 <>
                   {baseColumns().map((col) => listElement(col.id, col.name))}

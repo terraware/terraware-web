@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { type JSX, useMemo } from 'react';
 
 import { useOrganization } from 'src/providers';
 import { DraftPlantingSite, SiteType } from 'src/types/PlantingSite';

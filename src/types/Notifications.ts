@@ -1,3 +1,5 @@
+import type { JSX } from 'react';
+
 import { NotificationPayload } from 'src/queries/generated/notifications';
 
 export type Notification = NotificationPayload;

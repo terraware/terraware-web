@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { type JSX, useState } from 'react';
 
 import { Grid, useTheme } from '@mui/material';
 

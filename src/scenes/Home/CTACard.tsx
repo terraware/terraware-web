@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type JSX } from 'react';
 
 import { Box, SxProps, Typography, useTheme } from '@mui/material';
 import { Props as ButtonProps } from '@terraware/web-components/components/Button/Button';

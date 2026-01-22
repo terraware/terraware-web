@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { type JSX, useState } from 'react';
 import { useMixpanel } from 'react-mixpanel-browser';
 
 import { BusySpinner } from '@terraware/web-components';

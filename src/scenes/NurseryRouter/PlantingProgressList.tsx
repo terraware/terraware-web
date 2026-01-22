@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useState } from 'react';
 
 import { Box, CircularProgress } from '@mui/material';
 import { BusySpinner, TableColumnType } from '@terraware/web-components';

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type JSX } from 'react';
 
 import DeliverableStatusBadge from 'src/components/DeliverableView/DeliverableStatusBadge';
 import Link from 'src/components/common/Link';

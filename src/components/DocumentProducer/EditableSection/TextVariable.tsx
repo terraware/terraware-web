@@ -21,7 +21,7 @@ export type TextVariableProps = {
 
 const EMPTY_VARIABLE = '--';
 
-export default function TextVariable(props: TextVariableProps): React.ReactElement {
+export default function TextVariable(props: TextVariableProps): React.ReactElement<any> {
   const theme = useTheme();
   const { isEditing, reference, variable, icon, onClick } = props;
   const attributes = props.attributes || {};

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type JSX } from 'react';
 
 import Form, { PageFormProps as FormProps } from '@terraware/web-components/components/PageForm';
 

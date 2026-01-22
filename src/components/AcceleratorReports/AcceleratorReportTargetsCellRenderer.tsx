@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { type JSX, useCallback, useMemo } from 'react';
 
 import Link from 'src/components/common/Link';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type JSX } from 'react';
 import { Route, Routes } from 'react-router';
 
 import DeliverableProvider from 'src/providers/Deliverable/DeliverableProvider';

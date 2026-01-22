@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type JSX } from 'react';
 import { Route, Routes } from 'react-router';
 
 import ReportSettingsEdit from 'src/components/SeedFundReports/ReportSettingsEdit';

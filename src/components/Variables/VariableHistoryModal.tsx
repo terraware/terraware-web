@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { type JSX, useCallback } from 'react';
 
 import DialogBox from 'src/components/common/ScrollableDialogBox';
 import Button from 'src/components/common/button/Button';

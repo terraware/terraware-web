@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Typography } from '@mui/material';
 import { FormButton, theme } from '@terraware/web-components';

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { type JSX, useEffect, useMemo } from 'react';
 
 import { Box } from '@mui/material';
 import { Feature, FeatureCollection } from 'geojson';

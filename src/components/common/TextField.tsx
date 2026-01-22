@@ -1,4 +1,4 @@
-import React, { KeyboardEventHandler } from 'react';
+import React, { type JSX, KeyboardEventHandler } from 'react';
 
 import { TextField as MUITextField, SxProps } from '@mui/material';
 

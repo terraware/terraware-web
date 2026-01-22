@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { type JSX, useEffect, useMemo } from 'react';
 
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 

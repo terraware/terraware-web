@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useState } from 'react';
 
 import Page from 'src/components/Page';
 import { APP_PATHS } from 'src/constants';

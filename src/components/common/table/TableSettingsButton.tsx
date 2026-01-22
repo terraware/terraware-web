@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { type JSX, useMemo, useState } from 'react';
 
 import { DropdownItem, Tooltip } from '@terraware/web-components';
 import PopoverMenu, { Section } from '@terraware/web-components/components/PopoverMenu/Popover';

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type JSX } from 'react';
 
 import Metadata from 'src/components/DeliverableView/Metadata';
 import { EditProps } from 'src/components/DeliverableView/types';

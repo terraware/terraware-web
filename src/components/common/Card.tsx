@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type JSX } from 'react';
 import { ReactNode } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';

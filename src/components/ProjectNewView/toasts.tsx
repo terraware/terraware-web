@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type JSX } from 'react';
 
 import { SearchResponseAccession } from 'src/components/ProjectNewView/flow/SelectAccessions';
 import { SearchResponseBatches } from 'src/services/NurseryBatchService';

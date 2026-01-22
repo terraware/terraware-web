@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Grid } from '@mui/material';
 import { SortOrder } from '@terraware/web-components';
@@ -405,9 +405,11 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
       convertRow: (withdrawal: SearchResponseElement) =>
         ({
           ...withdrawal,
+
           project_names: (withdrawal.project_names as string[] | undefined)
             ?.filter((projectName) => !!projectName)
             .join(', '),
+
           speciesScientificNames: (withdrawal.speciesScientificNames as string[] | undefined)?.join(', '),
         }) as CsvData,
     };

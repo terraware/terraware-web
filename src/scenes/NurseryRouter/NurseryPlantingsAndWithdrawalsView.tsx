@@ -1,7 +1,7 @@
 /**
  * Nursery plantings and withdrawals
  */
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { type JSX, useEffect, useMemo, useRef } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Tabs } from '@terraware/web-components';

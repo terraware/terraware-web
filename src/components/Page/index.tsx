@@ -1,6 +1,6 @@
-import React, { CSSProperties, useRef } from 'react';
+import React, { CSSProperties, type JSX, useRef } from 'react';
 
-import { CircularProgress, Grid, Typography, useTheme } from '@mui/material';
+import { CircularProgress, Grid, SxProps, Theme, Typography, useTheme } from '@mui/material';
 import { Button, IconName } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
@@ -21,9 +21,9 @@ export type PrimaryButtonType = ButtonType & {
 export type PageProps = {
   children?: React.ReactNode;
   containerStyles?: CSSProperties;
-  titleStyle?: CSSProperties;
+  titleStyle?: SxProps<Theme>;
   contentStyle?: Record<string, string | number>;
-  titleContainerStyle?: CSSProperties;
+  titleContainerStyle?: SxProps<Theme>;
   crumbs?: Crumb[];
   hierarchicalCrumbs?: boolean;
   isLoading?: boolean;
@@ -32,7 +32,7 @@ export type PageProps = {
   rightComponent?: React.ReactNode;
   title?: React.ReactNode;
   description?: string;
-  descriptionStyle?: CSSProperties;
+  descriptionStyle?: SxProps<Theme>;
 };
 
 /**

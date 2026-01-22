@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { type JSX, useState } from 'react';
 
 import { SxProps } from '@mui/material';
 import { RendererProps, TableRowType } from '@terraware/web-components';

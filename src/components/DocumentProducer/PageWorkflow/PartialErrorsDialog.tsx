@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type JSX } from 'react';
 
 import { Box, Typography } from '@mui/material';
 import { Button, DialogBox } from '@terraware/web-components';

@@ -42,7 +42,7 @@ const PreviewTableHorizontal = ({
   sectionVariable,
   relevantTableVariable,
   rows,
-}: PreviewTableRenderProps): React.ReactElement => {
+}: PreviewTableRenderProps): React.ReactElement<any> => {
   return (
     <table>
       <thead>
@@ -74,14 +74,14 @@ const PreviewTableVertical = ({
   sectionVariable,
   relevantTableVariable,
   rows,
-}: PreviewTableRenderProps): React.ReactElement => {
+}: PreviewTableRenderProps): React.ReactElement<any> => {
   return (
     <>
       {rows.map((value, index: number) => (
         <table key={index}>
           <tbody>
             {(relevantTableVariable.columns as TableColumnWithValues[]).map(
-              (column: TableColumnWithValues, _index: number): React.ReactElement => {
+              (column: TableColumnWithValues, _index: number): React.ReactElement<any> => {
                 const rowValue: VariableValue = column.variable.variableValues[index];
                 return (
                   <tr key={_index}>
@@ -107,7 +107,7 @@ export const PreviewTable = ({
   sectionVariable,
   sourceTableVariable,
   suppressCaptions,
-}: PreviewTableProps): React.ReactElement => {
+}: PreviewTableProps): React.ReactElement<any> => {
   const relevantTableVariable = sectionVariable.relevantVariables.find(
     (variable: VariableWithValues) => variable.id === sourceTableVariable.id
   );

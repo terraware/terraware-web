@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { type JSX, useEffect, useRef, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
@@ -366,7 +366,7 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
           : undefined
       }
     >
-      {children && !error && !loading && !completed && !warning && (
+      {!!children && !error && !loading && !completed && !warning && (
         <Box sx={{ paddingBottom: 3, color: theme.palette.TwClrTxt, textAlign: 'left' }}> {children} </Box>
       )}
       <div ref={divRef} tabIndex={0}>

@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useMemo, useState } from 'react';
 
 import { Box, Grid, GridProps, Typography, useTheme } from '@mui/material';
 import { BusySpinner, Button, DropdownItem } from '@terraware/web-components';

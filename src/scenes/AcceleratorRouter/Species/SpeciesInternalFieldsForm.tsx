@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { type JSX, useCallback } from 'react';
 
 import { Grid, GridProps, Typography, useTheme } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';

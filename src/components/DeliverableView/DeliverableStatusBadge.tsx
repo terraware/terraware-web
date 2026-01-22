@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { type JSX, useMemo } from 'react';
 
 import { useTheme } from '@mui/material';
 import { Badge } from '@terraware/web-components';

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { type JSX, useState } from 'react';
 
 import { Box, useTheme } from '@mui/material';
 import { ViewPhotosDialog } from '@terraware/web-components';

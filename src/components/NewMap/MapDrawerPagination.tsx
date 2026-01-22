@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { type JSX, useCallback, useMemo } from 'react';
 
 import FirstPageIcon from '@mui/icons-material/FirstPage';
 import LastPageIcon from '@mui/icons-material/LastPage';

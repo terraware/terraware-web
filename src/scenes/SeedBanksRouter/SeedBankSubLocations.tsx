@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { type JSX, useCallback } from 'react';
 
 import SubLocations from 'src/components/common/SubLocations';
 import { APP_PATHS } from 'src/constants';

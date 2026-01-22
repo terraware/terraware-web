@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, FormControlLabel, Grid, Radio, RadioGroup, Typography, useTheme } from '@mui/material';
 import { Dropdown, SelectT, Textfield } from '@terraware/web-components';
@@ -346,7 +346,13 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
     [user, contributor]
   );
 
-  const toTUser = useCallback((firstName: string) => ({ firstName }) as OrganizationUser, []);
+  const toTUser = useCallback(
+    (firstName: string) =>
+      ({
+        firstName,
+      }) as OrganizationUser,
+    []
+  );
 
   const onChangeWithdrawBy = useCallback(
     (_: React.ChangeEvent<HTMLInputElement>, value: string) => {
