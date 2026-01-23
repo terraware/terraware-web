@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/109</span>
+                <span class='fraction'>0/110</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/166</span>
+                <span class='fraction'>0/168</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/99</span>
+                <span class='fraction'>0/100</span>
             </div>
         
             
@@ -384,7 +384,11 @@
 <a name='L319'></a><a href='#L319'>319</a>
 <a name='L320'></a><a href='#L320'>320</a>
 <a name='L321'></a><a href='#L321'>321</a>
-<a name='L322'></a><a href='#L322'>322</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L322'></a><a href='#L322'>322</a>
+<a name='L323'></a><a href='#L323'>323</a>
+<a name='L324'></a><a href='#L324'>324</a>
+<a name='L325'></a><a href='#L325'>325</a>
+<a name='L326'></a><a href='#L326'>326</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -441,6 +445,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -674,6 +679,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -724,41 +732,42 @@ import EventLog from 'src/scenes/ObservationsRouter/common/EventLog';
 im<span class="cstat-no" title="statement not covered" >port MatchS</span>peciesModal from 'src/scenes/ObservationsRouter/common/MatchSpeciesModal';
 import MonitoringPlotPhotosWithActions from 'src/scenes/ObservationsRouter/common/MonitoringPlotPhotosWithActions';
 import Unrecog<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ni</span>zedSpeciesPageMessage from '<span class="cstat-no" title="statement not covered" >src/scenes/ObservationsRouter/common/UnrecognizedSpeciesPageMessage';</span></span>
+import ObservationMapWrapper from 'src/scenes/ObservationsRouterV2/Map';
+import useObservationExports from 'src/scenes/ObservationsRouterV2/useObservationExports';
 import { useOnSaveMergedSpeciesRtk } from 'src/scenes/ObservationsRouterV2/useOnSaveMergedSpeciesRtk';
 import { getDateTimeDisplayValue, getShortTime } from 'src/utils/dateFormatter';
 import { getBiomassObservationDeadTreeCount, getBiomassObservationLiveTreeCount } from 'src/utils/observation';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 &nbsp;
-import useObservationExports from '../../useObservationExports';
-import EditBiomassQualitativeDataModal, { BiomassQualitativeFormData } from './EditBiomassQualitativeDataModal';
-import TreesAndShru<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >bs</span>Editabl<span class="cstat-no" title="statement not covered" >eTable from './TreesAndShrubsEditableTable';</span></span>
+import EditBiomassQ<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ua</span>litativ<span class="cstat-no" title="statement not covered" >eDataModal, { BiomassQualitativeFormData } from './EditBiomassQ</span></span>ualitativeDataModal';
+import TreesAndShrub<span class="cstat-no" title="statement not covered" >sEd</span>itableTable from './TreesAndShrubsEditableTable';
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >const BiomassObservationDataTab = () =&gt; {</span>
-  const { s<span class="fstat-no" title="function not covered" >tr</span>ings<span class="cstat-no" title="statement not covered" > } = useLocali</span>zation();
-  const theme = useTheme();
-<span class="cstat-no" title="statement not covered" >  const params = useParams&lt;{ observationId: st</span>ring }&gt;();
-  const observation<span class="cstat-no" title="statement not covered" >Id = Number(params.observa</span>tionId);
+const Bioma<span class="fstat-no" title="function not covered" >ss</span>Obse<span class="cstat-no" title="statement not covered" >rvationDataTab</span> = () =&gt; {
+  const { strings } = useLocalization();
+<span class="cstat-no" title="statement not covered" >  const theme = useTheme();</span>
+  const params = us<span class="cstat-no" title="statement not covered" >eParams&lt;{ observationId: s</span>tring }&gt;();
+  const observationId = Nu<span class="cstat-no" title="statement not covered" >mber(params.observationI</span>d);
 <span class="cstat-no" title="statement not covered" ></span>
-  const [getPlantingSi<span class="cstat-no" title="statement not covered" >te, plantingSiteResponse]</span> = useLazyGetPlantingSiteQuery();
-  const { data: observationR<span class="cstat-no" title="statement not covered" >esultsResponse } = useGetObservationR</span>esultsQuery({ observationId });
-  const results = u<span class="cstat-no" title="statement not covered" >seMemo(() =&gt; observationResultsResponse?.ob</span>servation, [observationResultsResponse?.observation]);
-  const monitoring<span class="cstat-no" title="statement not covered" >Plot = useMemo(() =&gt; results?.adHocPlot, [resul</span>ts?.adHocPlot]);
-  const plotLocation = <span class="cstat-no" title="statement not covered" >useMemo(() =&gt; {</span>
-    const swCoordinatesLat<span class="cstat-no" title="statement not covered" > = monitoringPlot?.boundary?.coordinates?.[0]?</span>.[0]?.[0];
-    const swCoordinatesLong<span class="cstat-no" title="statement not covered" > = monitoringPlot?.boundary?.coordinates?.[0]?.</span>[0]?.[1];
-    if (swCoordinate<span class="cstat-no" title="statement not covered" >sLat &amp;&amp; swCoordinatesLong) {</span>
-      return `${swCoord<span class="cstat-no" title="statement not covered" >inatesLat}, ${swCoordinatesLong}`;</span>
+  const [getPlantingSite, pl<span class="cstat-no" title="statement not covered" >antingSiteResponse] = useLazyGetPlant</span>ingSiteQuery();
+  const { data: obs<span class="cstat-no" title="statement not covered" >ervationResultsResponse } = useGetObservati</span>onResultsQuery({ observationId });
+  const results = <span class="cstat-no" title="statement not covered" >useMemo(() =&gt; observationResultsResponse?.obser</span>vation, [observationResultsResponse?.observation]);
+  const monitoringPlot <span class="cstat-no" title="statement not covered" >= useMemo(() =&gt; results?.</span>adHocPlot, [results?.adHocPlot]);
+  const plotLocation = use<span class="cstat-no" title="statement not covered" >Memo(() =&gt; {</span>
+    const swCoordinatesLat <span class="cstat-no" title="statement not covered" >= monitoringPlot?.boundary?.coordinates?.[0]?.[</span>0]?.[0];
+    const swCoordina<span class="cstat-no" title="statement not covered" >tesLong = monitoringPlot?.boundary?.coordinates?.</span>[0]?.[0]?.[1];
+    if (swCoordinatesLa<span class="cstat-no" title="statement not covered" >t &amp;&amp; swCoordinatesLong) {</span>
+      return `${swCoordinatesLat}, $<span class="cstat-no" title="statement not covered" >{swCoordinatesLong}`;</span>
     } else {<span class="cstat-no" title="statement not covered" ></span>
-      return undefined;<span class="cstat-no" title="statement not covered" ></span>
+      return undefined<span class="cstat-no" title="statement not covered" >;</span>
     }<span class="cstat-no" title="statement not covered" ></span>
-  }, [monitoringPlot?.boundary?<span class="cstat-no" title="statement not covered" >.coordinates]);</span>
-  const biomassMeasurement = useMemo(() =&gt; re<span class="cstat-no" title="statement not covered" >sults?.biomassMeasurements, [results?.biomassMeasurements]);</span>
+  }, [monitoringPlot?.boundary?.coordinates])<span class="cstat-no" title="statement not covered" >;</span>
+  const biomassMeasurement = useMemo(() =&gt; r<span class="cstat-no" title="statement not covered" >esults?.biomassMeasurements, [results?.biomassMeasurements]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
   useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
     if (results) {<span class="cstat-no" title="statement not covered" ></span>
-      void getPlantingSit<span class="cstat-no" title="statement not covered" >e(results.plantingSiteId, true);</span>
+      void getPlantingSite(<span class="cstat-no" title="statement not covered" >results.plantingSiteId, true);</span>
     }<span class="cstat-no" title="statement not covered" ></span>
-  }, [getPlantingSite, results]);<span class="cstat-no" title="statement not covered" ></span>
+  }, [getPlantingSite, results<span class="cstat-no" title="statement not covered" >]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
   const plantingSite = useMemo(() =&gt; plan<span class="cstat-no" title="statement not covered" >tingSiteResponse.data?.site, [plantingSiteResponse</span>.data?.site]);
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
@@ -920,10 +929,13 @@ import TreesAndShru<span class="cstat-no" title="statement not covered" ><span c
         /&gt;
       )}
       &lt;ObservationDataNumbers items={items} isCompleted={!!results?.completedTime} /&gt;
-      &lt;Box display='flex' sx={{ paddingBottom: 2, paddingTop: 3, alignItems: 'center' }}&gt;
+      &lt;Card radius={'8px'} style={{ marginBottom: theme.spacing(3), width: '100%' }}&gt;
+        &lt;ObservationMapWrapper isBiomass observationId={observationId} plantingSiteId={results?.plantingSiteId} /&gt;
+      &lt;/Card&gt;
+      &lt;Box disp<span class="fstat-no" title="function not covered" >la</span>y='f<span class="cstat-no" title="statement not covered" >lex' sx={{ paddingBottom: 2, pad</span>dingTop: 3, alignItems: 'center' }}&gt;
         &lt;Typography fontSize='20px' lineHeight='28px' fontWeight={600} color={theme.palette.TwClrTxt} paddingRight={1}&gt;
           {strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES}
-        &lt;/Typog<span class="fstat-no" title="function not covered" >ra</span>phy&gt;<span class="cstat-no" title="statement not covered" ></span>
+        &lt;/Typography&gt;
         &lt;Tooltip title={strings.BIOMASS_NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP}&gt;
           &lt;Box display='flex'&gt;
             &lt;Icon name='info' fillColor={theme.palette.TwClrIcnSecondary} /&gt;
@@ -938,10 +950,10 @@ import TreesAndShru<span class="cstat-no" title="statement not covered" ><span c
         justifyContent={'end'}
         borderBottom={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
         paddingBottom={1.5}
-      &gt;
+      &gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
         &lt;Button
           priority='ghost'
-          label={<span class="fstat-no" title="function not covered" >st</span>ring<span class="cstat-no" title="statement not covered" >s.MATCH_UNRECOGNIZED_SPECIES}</span>
+          label={strings.MATCH_UNRECOGNIZED_SPECIES}
           icon='iconSynced'
           onClick={() =&gt; setShowMatchSpeciesModal(true)}
           disabled={!unrecognizedSpecies || unrecognizedSpecies.length === 0}
@@ -949,10 +961,10 @@ import TreesAndShru<span class="cstat-no" title="statement not covered" ><span c
         /&gt;
         &lt;Button
           priority='ghost'
-          label={strings.EXPORT_DATA}
+          label={<span class="fstat-no" title="function not covered" >st</span>ring<span class="cstat-no" title="statement not covered" >s.EXPORT_DATA}</span>
           icon='iconImport'
           onClick={() =&gt; void downloadBiomassObservationDetails(observationId)}
-          sx={{ f<span class="fstat-no" title="function not covered" >on</span>tWei<span class="cstat-no" title="statement not covered" >ght: '400 !important' }}</span>
+          sx={{ fontWeight: '400 !important' }}
         /&gt;
       &lt;/Box&gt;
       &lt;Box paddingY={2} display={'flex'} justifyContent={'space-between'} alignItems={'center'}&gt;
@@ -991,10 +1003,10 @@ import TreesAndShru<span class="cstat-no" title="statement not covered" ><span c
             &lt;MonitoringPlotPhotosWithActions
               observationId={Number(observationId)}
               monitoringPlotId={Number(monitoringPlot?.monitoringPlotId)}
-              photos={[soilPhoto]}
+              photos<span class="cstat-no" title="statement not covered" >={[soilPhoto]}</span>
             /&gt;
           )}
-          &lt;Box&gt;<span class="cstat-no" title="statement not covered" ></span>
+          &lt;Box&gt;
             &lt;Textfield
               id='soilDescription'
               label={strings.DESCRIPTION_NOTES}
@@ -1033,7 +1045,7 @@ export default BiomassObservationDataTab;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-23T18:41:20.301Z
+                at 2026-01-23T19:11:44.920Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

@@ -1,3 +1,4 @@
+1bf0f7a6389 SW-7866 Map in observation views (#5114)
 27ea39199de Implemented biomass observation drawer (#5113)
 c1eead2f73d Disable terraware-server SQS integration (#5115)
 7416ac376d9 Update dependency lodash to v4.17.23 [SECURITY] (#5108)

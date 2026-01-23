@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/254</span>
+                <span class='fraction'>0/257</span>
             </div>
         
             
@@ -988,7 +988,10 @@
 <a name='L923'></a><a href='#L923'>923</a>
 <a name='L924'></a><a href='#L924'>924</a>
 <a name='L925'></a><a href='#L925'>925</a>
-<a name='L926'></a><a href='#L926'>926</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L926'></a><a href='#L926'>926</a>
+<a name='L927'></a><a href='#L927'>927</a>
+<a name='L928'></a><a href='#L928'>928</a>
+<a name='L929'></a><a href='#L929'>929</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1048,6 +1051,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1747,6 +1751,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1838,6 +1843,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1968,27 +1974,29 @@ type LayerFeature = {<span class="cstat-no" title="statement not covered" ></spa
 type ObservationMapProp<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >s </span>= {</span>
   adHocObservationResults: ObservationResultsPayload[];
   isBiomass?: boolean;
+  isSingleView?: boolean;
   observationResults: ObservationResultsPayload[];
   plantingSiteId?: number;
-  selectPlantingSiteId: (siteId: number) =&gt; void;
+  selectPlantingSiteId?: (siteId: number) =&gt; void;
 };
 &nbsp;
 const ObservationMap = ({<span class="cstat-no" title="statement not covered" ></span>
   adHocObservationResults,<span class="cstat-no" title="statement not covered" ></span>
   isBiomass,<span class="cstat-no" title="statement not covered" ></span>
-  observationResults,<span class="cstat-no" title="statement not covered" ></span>
+  isSingleView,<span class="cstat-no" title="statement not covered" ></span>
+  observationResu<span class="cstat-no" title="statement not covered" >lts,</span>
   plantingSiteId,<span class="cstat-no" title="statement not covered" ></span>
   selectPlantingSiteId,<span class="cstat-no" title="statement not covered" ></span>
 }: ObservationMapProps) =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-  const { activeLocale, strings } = useLocalization()<span class="cstat-no" title="statement not covered" >;</span>
+  const { activeLocale, strings } = useLocalization();
   const defaultTimezone = useDefaultTimeZone().get().id;
   const { mapId, token } = useMapboxToken();
   const { selectedOrganization } = useOrganization();
-  const mapRef = useRef&lt;MapRef | null&gt;(null);
-  cons<span class="cstat-no" title="statement not covered" >t { fitBounds } = useMapUtils(mapRef);</span>
-  const [drawerOpen, setDrawerOpen] = useState&lt;boolean&gt;<span class="cstat-no" title="statement not covered" >(false);</span>
+  cons<span class="cstat-no" title="statement not covered" >t mapRef = useRef&lt;MapRef | null&gt;(null);</span>
+  const { fitBounds } = useMapUtils(mapRef);<span class="cstat-no" title="statement not covered" ></span>
+  const [drawerOpen, setDrawerOpen] = useState&lt;boolean&gt;(fal<span class="cstat-no" title="statement not covered" >se);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const { selectedLayer, plantingSiteLegendGroup } = usePlantingSiteMapLegend('sites', plantingSiteId === <span class="cstat-no" title="statement not covered" >undefined);</span>
+  const { selectedLayer, plantingSiteLegendGroup } = usePlantingSiteMapLegend('sites', plantingSiteId === undefined);
   const {
     livePlantsVisible,
     deadPlantsVisible,
@@ -2001,88 +2009,88 @@ const ObservationMap = ({<span class="cstat-no" title="statement not covered" ><
 &nbsp;
   const {
     sitesLayerStyle,
-    strataLayerStyle,
-    su<span class="cstat-no" title="statement not covered" >bstrataLayerStyle,</span>
+    st<span class="cstat-no" title="statement not covered" >rataLayerStyle,</span>
+    substrataLayerStyle,<span class="cstat-no" title="statement not covered" ></span>
     adHocPlotsLayerStyle,<span class="cstat-no" title="statement not covered" ></span>
     permanentPlotsLayerStyle,<span class="cstat-no" title="statement not covered" ></span>
     temporaryPlotsLayerStyle,<span class="cstat-no" title="statement not covered" ></span>
     survivalRate50To75,<span class="cstat-no" title="statement not covered" ></span>
     survivalRateLessThan50,<span class="cstat-no" title="statement not covered" ></span>
-    survivalRateMoreThan75,<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >    plotPhotoStyle,<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >    livePlantStyle,</span>
-    de<span class="cstat-no" title="statement not covered" >adPlantStyle,</span>
+<span class="cstat-no" title="statement not covered" >    survivalRateMoreThan75,<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    plotPhotoStyle,</span>
+    li<span class="cstat-no" title="statement not covered" >vePlantStyle,</span>
+    deadPlantStyle,
   } = useMapFeatureStyles();
 &nbsp;
   const [selectedFeature, setSelectedFeature] = useState&lt;LayerFeature&gt;();
   const { plantDrawerContent, plantDrawerHeader, plantDrawerSize, selectedPlants, selectPlants } = useMapPlantDrawer();
   const { photoDrawerContent, photoDrawerHeader, photoDrawerSize, selectedPhotos, selectPhotos } = useMapPhotoDrawer();
-&nbsp;
-  const [li<span class="cstat-no" title="statement not covered" >stPlantingSites, listPlantingSitesResult] = useLazyListPlantingSitesQuery();</span>
-  cons<span class="cstat-no" title="statement not covered" >t [getPlantingSite, getPlantingSiteResult] =</span> useLazyGetPlantingSiteQuery();
+<span class="cstat-no" title="statement not covered" ></span>
+  cons<span class="cstat-no" title="statement not covered" >t [listPlantingSites, listPlantingSitesResul</span>t] = useLazyListPlantingSitesQuery();
+  const [getPlantingSite, getPlantingSiteResult] = useLazyGetPlantingSiteQuery();
   const [getPlantingSiteHistory, getPlantingSiteHistoryResult] = useLazyGetPlantingSiteHistoryQuery();
-&nbsp;
-  useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" >    if</span> (selectedOrganization &amp;&amp; plantingSiteId === undefined) {
-      void listPlantingSites(
-<span class="cstat-no" title="statement not covered" >        {</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  us<span class="fstat-no" title="function not covered" >eE</span>ffect(() =&gt; {
+    if (selectedOrganization &amp;&amp; plantingSiteId === undefined) {
+<span class="cstat-no" title="statement not covered" >      void listPlantingSites(</span>
+        {
           organizationId: selectedOrganization.id,
           full: false,
-        },
-        true<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-      );
-<span class="cstat-no" title="statement not covered" >    } else if (selectedOrganization &amp;&amp; plantingSiteId !== undefined) {</span>
-      void getPlantingSite(plantingSiteId, true);
-    }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  },<span class="cstat-no" title="statement not covered" > [getPlantingSite, listPlantin<span class="fstat-no" title="function not covered" >gS</span>ites, plantingSiteId, selectedOrganization]);</span>
-&nbsp;
-  const allPlantingSites = u<span class="cstat-no" title="statement not covered" >seMemo(</span>
-    () =&gt; listPlantingSitesRes<span class="cstat-no" title="statement not covered" >ult.data?.sites ?? [],</span>
-    [l<span class="cstat-no" title="statement not covered" >istPlantingSitesResult.data?.sites]</span>
+        },<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+        true
+<span class="cstat-no" title="statement not covered" >      );</span>
+    } else if (selectedOrganization &amp;&amp; plantingSiteId !== undefined) {
+      void getPlantingSite(plantingS<span class="cstat-no" title="statement not covered" >iteId, true);<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    }<span class="fstat-no" title="function not covered" ></span></span>
+  }, [getPlantingSite, listPlantingSites, plantingSiteId, selectedOrganization]);
+<span class="cstat-no" title="statement not covered" ></span>
+  const allPlantingSites = use<span class="cstat-no" title="statement not covered" >Memo(</span>
+    ()<span class="cstat-no" title="statement not covered" > =&gt; listPlantingSitesResult.data?.sites ?? [],</span>
+    [listPlantingSitesResult.data?.sites]
   );
 &nbsp;
   const plantingSite = useMemo(() =&gt; getPlantingSiteResult.data?.site, [getPlantingSiteResult.data?.site]);
 &nbsp;
-  const observationResultsOptions = useMemo((): MapDropdownLegendItem[] =&gt; {
-    return observationResults.map((observation): MapDropdown<span class="cstat-no" title="statement not covered" >LegendItem =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >      const completedDate = ob<span class="fstat-no" title="function not covered" >se</span>rvation.completedTime</span>
-<span class="cstat-no" title="statement not covered" >        ? getDateDisplayValue(observation.completedTime, plantingSite?.timeZone ?? defaultTimezone)</span>
-<span class="cstat-no" title="statement not covered" >        : undefined;</span>
-      const observationDate = getShortDate(completedDate ?? observation.startDate, activeLocale);
-<span class="cstat-no" title="statement not covered" ></span>
+  const observationResultsOptions = useMemo((): MapDropdownL<span class="cstat-no" title="statement not covered" >egendItem[] =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    return observationResults.<span class="fstat-no" title="function not covered" >ma</span>p((observation): MapDropdownLegendItem =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      const completedDate = observation.completedTime</span>
+<span class="cstat-no" title="statement not covered" >        ? getDateDisplayValue(observation.completedTime, plantingSite?.timeZ</span>one ?? defaultTimezone)
+        : undefined;
+<span class="cstat-no" title="statement not covered" >      const observationDate = getShortDa</span>te(completedDate ?? observation.startDate, activeLocale);
+&nbsp;
       return {
-        label: observationDate,
-        value: `${observation.observation<span class="cstat-no" title="statement not covered" >Id}`,<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >      };</span>
+        label: observationDate,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >        value: `${observation.observationId}`,</span>
+      };
     });
   }, [activeLocale, defaultTimezone, observationResults, plantingSite?.timeZone]);
 &nbsp;
-  const [selectedObservationId, setSelectedObservationId] = useState&lt;number&gt;();
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  const [selectedObserva<span class="fstat-no" title="function not covered" >ti</span>onId, set<span class="cstat-no" title="statement not covered" >SelectedObservationId] = useState&lt;number&gt;();</span>
+&nbsp;
   useEffect(() =&gt; {
-    if (observationResultsOptions.length) {
-      setSelectedObservati<span class="cstat-no" title="statement not covered" >onId(Number(observationRes<span class="fstat-no" title="function not covered" >ul</span>tsOptions[0].value));</span>
-<span class="cstat-no" title="statement not covered" >    } else {</span>
-<span class="cstat-no" title="statement not covered" >      setSelectedObservationId(undefi<span class="fstat-no" title="function not covered" >ne</span>d);<span class="cstat-no" title="statement not covered" ></span></span>
+    if (observationResults<span class="cstat-no" title="statement not covered" >Options.length) {<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >      setSelectedObservationId(Number(observationResultsOptions[0].value));</span>
+    } <span class="cstat-no" title="statement not covered" >else {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+      setSe<span class="cstat-no" title="statement not covered" >lectedObservationId(undefined);</span>
     }<span class="cstat-no" title="statement not covered" ></span>
-  }, [<span class="cstat-no" title="statement not covered" >observationResultsOptions]);</span>
-&nbsp;
-  cons<span class="cstat-no" title="statement not covered" >t observationDr</span>opdownLegendGroup = useMemo((): MapDropdownLegendGroup =&gt; {
+  }, [observationResultsOptions]);
+<span class="cstat-no" title="statement not covered" ></span>
+  const observationDropdownLegendGroup = useMemo((): MapDropdownLegendGroup =&gt; {
     return {
-      title: strings.OBSERVATION,
-      type: 'dropdown',<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >      items: observationResultsOptions,</span>
-<span class="cstat-no" title="statement not covered" >      selectedValue: selectedObservationId !<span class="fstat-no" title="function not covered" >==</span> undefined <span class="cstat-no" title="statement not covered" >? `${selectedObser</span>vationId}<span class="fstat-no" title="function not covered" >` </span>: undefined,<span class="cstat-no" title="statement not covered" ></span></span>
-      setSelectedValue: (value: string | undefined) =&gt; setSelectedObservationId(value ? Number(value) : undefined),
-    };<span class="cstat-no" title="statement not covered" ></span>
+      title: strings.OBSER<span class="cstat-no" title="statement not covered" >VATION,<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >      type: 'dropdown',</span>
+<span class="cstat-no" title="statement not covered" >      items: observationResultsOptions,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
+      selectedValue: selectedObservationId !== undefined ? `${selectedObservationId}` : undefined,
+<span class="cstat-no" title="statement not covered" >      setSelected</span>Value: (value: string | undefined) =&gt; setSelectedObservationId(value ? Number(value) : undefined),
+    };
   }, [observationResultsOptions, selectedObservationId, strings.OBSERVATION]);
-&nbsp;
-  const selectedResul<span class="cstat-no" title="statement not covered" >ts = useMemo(() =&gt; {<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >    if (observationResults.length) {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span></span></span>
-      return observationResults.find((observation) =&gt; observation.observationId === selectedObservationId);
-<span class="cstat-no" title="statement not covered" >    } else if (adHocObservatio<span class="fstat-no" title="function not covered" >nR</span>esults.length) {</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  co<span class="cstat-no" title="statement not covered" >nst selectedResults = useMemo(() =&gt; {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span></span></span>
+    if (observationResults.length) {
+<span class="cstat-no" title="statement not covered" >      return observationResult<span class="fstat-no" title="function not covered" >s.</span>find((observation) =&gt; observation.observationId === selectedObservationId);</span>
+<span class="cstat-no" title="statement not covered" >    } else if (adHocObservationResults.length) {</span>
 <span class="cstat-no" title="statement not covered" >      return adHocObservationResults[0];</span>
-    } <span class="cstat-no" title="statement not covered" >else {</span>
+    } else {
       return undefined;
     }
   }, [adHocObservationResults, observationResults, selectedObservationId]);
@@ -2090,30 +2098,30 @@ const ObservationMap = ({<span class="cstat-no" title="statement not covered" ><
   const monitoringPlots = useMemo(() =&gt; {
     if (selectedResults) {
       return selectedResults.strata
-        .flatMap((stratum) =&gt; stratum.substrata)
-        .flatMap((substrat<span class="cstat-no" title="statement not covered" >um) =&gt; substratum.monitoringPlots);</span>
-<span class="fstat-no" title="function not covered" >    } </span>else {
-      return [];
-    }<span class="cstat-no" title="statement not covered" ></span>
+        .flatMap((stratum)<span class="cstat-no" title="statement not covered" > =&gt; stratum.substrata)</span>
+<span class="fstat-no" title="function not covered" ></span>        .flatMap((substratum) =&gt; substratum.monitoringPlots);
+    } else {
+<span class="cstat-no" title="statement not covered" >      return [];</span>
+    }
   }, [selectedResults]);
 &nbsp;
-  const adHocPlots = useMemo(() =&gt; {
-    return adHocObservat<span class="cstat-no" title="statement not covered" >ionResults</span>
-<span class="fstat-no" title="function not covered" ></span>      .filter((observatio<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >n)</span> =&gt; observation.isAdHo<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >c)</span></span></span>
-<span class="cstat-no" title="statement not covered" >      .map((observation) =&gt; observation.adHocPlot)</span>
-<span class="cstat-no" title="statement not covered" >      .filter((plot): pl</span>ot is ObservationMonitoringPlotResultsPayload =&gt; plot !== undefined);
-  }, [<span class="cstat-no" title="statement not covered" >adHocObservationResul</span>ts]);
+  const adHocPlots = use<span class="cstat-no" title="statement not covered" >Memo(() =&gt; {</span>
+<span class="fstat-no" title="function not covered" >    re</span>turn adHocObservati<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >on</span>Results<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+<span class="cstat-no" title="statement not covered" >      .filter((observation) =&gt; observation.isAdHoc)</span>
+<span class="cstat-no" title="statement not covered" >      .map((observation)</span> =&gt; observation.adHocPlot)
+<span class="cstat-no" title="statement not covered" >      .filter((plot): plot </span>is ObservationMonitoringPlotResultsPayload =&gt; plot !== undefined);
+  }, [adHocObservationResults]);
 &nbsp;
   useEffect(() =&gt; {
-    if (selectedResults &amp;&amp; selectedResults.plantingSiteHistoryId) {
-      void getPla<span class="cstat-no" title="statement not covered" >ntingSiteHistory(<span class="fstat-no" title="function not covered" ></span></span>
-        {
+    if (selectedR<span class="cstat-no" title="statement not covered" >esults &amp;&amp; selectedResults.<span class="fstat-no" title="function not covered" >pl</span>antingSiteHistoryId) {</span>
+      void getPlantingSiteHistory(
+<span class="cstat-no" title="statement not covered" >        {</span>
 <span class="cstat-no" title="statement not covered" >          id: selectedResults.plantingSiteId,</span>
-<span class="cstat-no" title="statement not covered" >          historyId: selectedResults.plantingSiteHistoryId,</span>
-        },
-        true<span class="fstat-no" title="function not covered" ></span>
-      );
-    }<span class="cstat-no" title="statement not covered" ></span>
+          historyId: selectedResults.plantingSiteHistoryId,
+        },<span class="fstat-no" title="function not covered" ></span>
+        true
+      );<span class="cstat-no" title="statement not covered" ></span>
+    }
   }, [getPlantingSiteHistory, selectedResults]);
 &nbsp;
   const selectedHistory = useMemo(
@@ -2125,13 +2133,13 @@ const ObservationMap = ({<span class="cstat-no" title="statement not covered" ><
     (_plantingSiteId: number) =&gt; (layerId: string, featureId: string) =&gt; () =&gt; {
       setSelectedFeature({ layerFeatureId: { layerId, featureId }, plantingSiteId: _plantingSiteId });
       selectPhotos([]);
-      setDrawerOpen(true);
+      setDr<span class="cstat-no" title="statement not covered" >awerOpen(true);</span>
     },<span class="cstat-no" title="statement not covered" ></span>
-    [s<span class="cstat-no" title="statement not covered" >electPhotos]</span>
-  );
-<span class="fstat-no" title="function not covered" ></span>
-  const layers = useMemo((): MapLayer[] =&gt; {
-    if (plan<span class="cstat-no" title="statement not covered" >tingSiteId === undefined) {</span>
+    [selectPhotos]
+  );<span class="fstat-no" title="function not covered" ></span>
+&nbsp;
+  const laye<span class="cstat-no" title="statement not covered" >rs = useMemo((): MapLayer[] =&gt; {</span>
+    if (plantingSiteId === undefined) {
       // Show only sites if no layers selected.
       return [
         {
@@ -2146,10 +2154,10 @@ const ObservationMap = ({<span class="cstat-no" title="statement not covered" ><
           style: sitesLayerStyle,
           visible: true,
         },
-      ];
-    } else if (selectedHistory) {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-      return [
-        {<span class="cstat-no" title="statement not covered" ></span>
+      ];<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+    } else if (selectedHistory) {
+      return<span class="cstat-no" title="statement not covered" > [</span>
+        {
           features: adHocPlots.map((plot) =&gt; ({
             featureId: `${plot.monitoringPlotId}`,
             geometry: {
@@ -2164,10 +2172,10 @@ const ObservationMap = ({<span class="cstat-no" title="statement not covered" ><
           })),
           layerId: 'adHocPlots',
           style: adHocPlotsLayerStyle,
-          visible: adHocPlotsVisible,
-        },<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-        {
-          fe<span class="cstat-no" title="statement not covered" >atures: monitoringPlots</span>
+          visible: adHocPlotsVisible,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+        },
+        {<span class="cstat-no" title="statement not covered" ></span>
+          features: monitoringPlots
             .filter((plot) =&gt; !plot.isPermanent)
             .map((plot) =&gt; ({
               featureId: `${plot.monitoringPlotId}`,
@@ -2183,10 +2191,10 @@ const ObservationMap = ({<span class="cstat-no" title="statement not covered" ><
             })),
           layerId: 'temporaryPlots',
           style: temporaryPlotsLayerStyle,
-          visible: temporaryPlotsVisible,
-        },<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-        {
-          feat<span class="cstat-no" title="statement not covered" >ures: monitoringPlots</span>
+          vi<span class="fstat-no" title="function not covered" >si</span>ble: tempor<span class="cstat-no" title="statement not covered" >aryPlotsVisible,<span class="fstat-no" title="function not covered" ></span></span>
+        },
+        {<span class="cstat-no" title="statement not covered" ></span>
+          features: monitoringPlots
             .filter((plot) =&gt; plot.isPermanent)
             .map((plot) =&gt; ({
               featureId: `${plot.monitoringPlotId}`,
@@ -2202,10 +2210,10 @@ const ObservationMap = ({<span class="cstat-no" title="statement not covered" ><
             })),
           layerId: 'permanentPlots',
           style: permanentPlotsLayerStyle,
-          visible: permanentPlotsVisible,
-        },<span class="fstat-no" title="function not covered" ></span>
-        {
-          fe<span class="cstat-no" title="statement not covered" >atures:</span>
+          visible: permanentPlotsVisible,<span class="fstat-no" title="function not covered" ></span>
+        },
+        {<span class="cstat-no" title="statement not covered" ></span>
+          features:
             selectedHistory.strata?.flatMap((stratum) =&gt;
               stratum.substrata.map((substratum) =&gt; ({
                 featureId: `${substratum.substratumId}`,
@@ -2236,9 +2244,9 @@ const ObservationMap = ({<span class="cstat-no" title="statement not covered" ><
               onClick: selectFeature(selectedHistory.plantingSiteId)('strata', `${stratum.stratumId}`),
               selected:
                 selectedFeature?.layerFeatureId.layerId === 'strata' &amp;&amp;
-                selectedFeature?.layerFeatureId.featureId === `${stratum.stratumId}`,
+<span class="cstat-no" title="statement not covered" >                selectedFeature?.layerFeatureId.featureId === `${stratum.stratumId}`,</span>
 <span class="cstat-no" title="statement not covered" >            })) ?? [],</span>
-<span class="cstat-no" title="statement not covered" >          layerId: 'strata',</span>
+          layerId: 'strata',
           style: strataLayerStyle,
           visible: selectedLayer === 'strata',
         },
@@ -2253,10 +2261,10 @@ const ObservationMap = ({<span class="cstat-no" title="statement not covered" ><
               onClick: selectFeature(selectedHistory.plantingSiteId)('sites', `${selectedHistory.plantingSiteId}`),
               selected:
                 selectedFeature?.layerFeatureId.layerId === 'sites' &amp;&amp;
-                selectedFeature?.layerFeatureId.featureId === `${selectedHistory.plantingSiteId}`,
-            },<span class="fstat-no" title="function not covered" ></span>
-          ],
-          la<span class="cstat-no" title="statement not covered" >yerId: 'sites',</span>
+                selectedFeature?.layerFeatureId.featureId === `${selectedHistor<span class="fstat-no" title="function not covered" >y.</span>plantingSiteId}`,
+            },
+          ],<span class="cstat-no" title="statement not covered" ></span>
+          layerId: 'sites',
           style: sitesLayerStyle,
           visible: selectedLayer === 'sites',
         },
@@ -2270,10 +2278,10 @@ const ObservationMap = ({<span class="cstat-no" title="statement not covered" ><
               geometry: {
                 type: 'MultiPolygon',
                 coordinates: plantingSite.boundary?.coordinates ?? [],
-              },
-<span class="fstat-no" title="function not covered" >            },<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-          ],
-          laye<span class="cstat-no" title="statement not covered" >rId: 'sites',</span>
+<span class="fstat-no" title="function not covered" ></span>              },<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+            },
+          ],<span class="cstat-no" title="statement not covered" ></span>
+          layerId: 'sites',
           style: sitesLayerStyle,
           visible: selectedLayer === 'sites',
         },
@@ -2288,8 +2296,8 @@ const ObservationMap = ({<span class="cstat-no" title="statement not covered" ><
               label: stratum.name,
             })) ?? [],
           layerId: 'strata',
-          style: strataLayerStyle,
-<span class="cstat-no" title="statement not covered" >          visib</span>le: selectedLayer === 'strata',
+<span class="cstat-no" title="statement not covered" >          style</span>: strataLayerStyle,
+          visible: selectedLayer === 'strata',
         },
         {
           features:
@@ -2310,99 +2318,99 @@ const ObservationMap = ({<span class="cstat-no" title="statement not covered" ><
       ];
     }
     return [];
-  }, [
-    adHocPlots,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >    adHocPlotsLayerStyle,</span>
-    ad<span class="cstat-no" title="statement not covered" >HocPlotsVisible,<span class="fstat-no" title="function not covered" ></span></span>
-    allP<span class="cstat-no" title="statement not covered" >lantingSites,</span>
-    monitoringPlots,<span class="cstat-no" title="statement not covered" ></span>
-    permanen<span class="fstat-no" title="function not covered" >tP</span>lotsLayerStyle,<span class="cstat-no" title="statement not covered" ></span>
+  }, [<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    adHocPlots,</span>
+    ad<span class="cstat-no" title="statement not covered" >HocPlotsLayerStyle,<span class="fstat-no" title="function not covered" ></span></span>
+    adHo<span class="cstat-no" title="statement not covered" >cPlotsVisible,</span>
+    allPlantingSites,<span class="cstat-no" title="statement not covered" ></span>
+    monitori<span class="fstat-no" title="function not covered" >ng</span>Plots,<span class="cstat-no" title="statement not covered" ></span>
+    permanentPlotsLayerStyle,
     permanentPlotsVisible,
     plantingSite,
     plantingSiteId,
-    selectFeature,
-    selectedFeature?.la<span class="cstat-no" title="statement not covered" >yerFeatureId.featureId,</span>
-    selectedFeature?.layerF<span class="cstat-no" title="statement not covered" >eatureId.layerId,</span>
-    selectedHistory,<span class="cstat-no" title="statement not covered" ></span>
-    select<span class="cstat-no" title="statement not covered" >edLayer,</span>
+    selectFeature,<span class="cstat-no" title="statement not covered" ></span>
+    selectedFeature?.layerF<span class="cstat-no" title="statement not covered" >eatureId.featureId,</span>
+    selectedFeature?.layerFe<span class="cstat-no" title="statement not covered" >atureId.layerId,</span>
+    select<span class="cstat-no" title="statement not covered" >edHistory,</span>
+    selectedLayer,
     sitesLayerStyle,
     substrataLayerStyle,
-    temporaryPlotsLayerStyle,
-    temporaryPlotsVis<span class="fstat-no" title="function not covered" >ib</span>le,
+    temporaryPlotsLay<span class="fstat-no" title="function not covered" >er</span>Style,
+    temporaryP<span class="cstat-no" title="statement not covered" >lotsVisible,</span>
     strataLaye<span class="cstat-no" title="statement not covered" >rStyle,</span>
-  ]);<span class="cstat-no" title="statement not covered" ></span>
+  ]);
 &nbsp;
   const nameTags = useMemo((): MapNameTag[] | undefined =&gt; {
-    if (plantingSiteId === undefined) {
-      return all<span class="fstat-no" title="function not covered" >Pl</span>antingSites<span class="cstat-no" title="statement not covered" ></span>
-        .ma<span class="cstat-no" title="statement not covered" >p((site): MapNameTag | undefined =&gt; {</span>
-          if (site.bo<span class="cstat-no" title="statement not covered" >undary) {</span>
-<span class="fstat-no" title="function not covered" ></span>            const points <span class="cstat-no" title="statement not covered" >= site.boundary.coordinates</span>
+    if (planting<span class="fstat-no" title="function not covered" >Si</span>teId === un<span class="cstat-no" title="statement not covered" >defined) {</span>
+      retur<span class="cstat-no" title="statement not covered" >n allPlantingSites</span>
+        .map((site): <span class="cstat-no" title="statement not covered" >MapNameTag | undefined =&gt; {</span>
+<span class="fstat-no" title="function not covered" ></span>          if (site.bounda<span class="cstat-no" title="statement not covered" >ry) {</span>
+            const points = site.boundary.coordinates
               .flat()
               .flat()
               .map(
-                ([lng, lat]): MapPoint =&gt; ({
-                  l<span class="cstat-no" title="statement not covered" >at,</span>
+                ([l<span class="cstat-no" title="statement not covered" >ng, lat]): MapPoint =&gt; ({</span>
+                  lat,<span class="cstat-no" title="statement not covered" ></span>
                   lng,<span class="cstat-no" title="statement not covered" ></span>
-                })<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >              );</span>
+<span class="cstat-no" title="statement not covered" >                })</span>
+              );
 &nbsp;
             const bbox = getBoundingBoxFromPoints(points);
             const latitude = (bbox.maxLat + bbox.minLat) / 2;
-            const longitude = (bbox.maxLng + bbox.minLng) / 2;
-<span class="fstat-no" title="function not covered" ></span>
-<span class="cstat-no" title="statement not covered" >            return {</span>
+            const l<span class="fstat-no" title="function not covered" >on</span>gitude = (bbox.maxLng + bbox.minLng) / 2;
+<span class="cstat-no" title="statement not covered" ></span>
+            return {
               label: site.name,
               longitude,
               latitude,
               onClick: () =&gt; {
-                selectPlantingSiteId(site.id);
-                fitBounds(bbox);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+                selectPlantingSit<span class="cstat-no" title="statement not covered" >eId?.(site.id);<span class="fstat-no" title="function not covered" ></span></span>
+                fitBounds(<span class="cstat-no" title="statement not covered" >bbo</span>x);
               },<span class="cstat-no" title="statement not covered" ></span>
             };<span class="cstat-no" title="statement not covered" ></span>
-          }<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >          }</span>
 <span class="cstat-no" title="statement not covered" >        })</span>
-<span class="cstat-no" title="statement not covered" >        .filter((nameTag): nameTag is MapNameTag =&gt; nameTag !== undefined);</span>
+        .filter((nameTag): nameTag is MapNameTag =&gt; nameTag !== undefined);
     } else if (plantingSite !== undefined &amp;&amp; plantingSite.boundary !== undefined) {
       const points = plantingSite.boundary.coordinates
         .flat()
         .flat()
-        .map(
-          ([lng, lat]): MapPoint =&gt; ({<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+        .map(<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >          ([lng, lat]): MapPoint =&gt; ({</span>
 <span class="cstat-no" title="statement not covered" >            lat,</span>
 <span class="cstat-no" title="statement not covered" >            lng,</span>
-<span class="cstat-no" title="statement not covered" >          })</span>
+          })<span class="cstat-no" title="statement not covered" ></span>
         );<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span>
-      const bbox = getBoundingBoxFromPoints(points);
-      cons<span class="cstat-no" title="statement not covered" >t latitude = (bbox.maxLat + bbox.minLat</span>) / 2;
+&nbsp;
+      cons<span class="cstat-no" title="statement not covered" >t bbox = getBoundingBoxFromPoints(point</span>s);
+      const latitude = (bbox.maxLat + bbox.minLat) / 2;
       const longitude = (bbox.maxLng + bbox.minLng) / 2;
 &nbsp;
-      return [
-        {<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >          label: plantingSite.name,</span>
-<span class="cstat-no" title="statement not covered" >          longitude,<span class="fstat-no" title="function not covered" ></span></span>
-          latitude,<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" ></span>          onClick: () =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-            fitBounds(bbox);
-          },<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >        },</span>
-<span class="cstat-no" title="statement not covered" >      ];<span class="fstat-no" title="function not covered" ></span></span>
-    }<span class="cstat-no" title="statement not covered" ></span>
-  }, [allP<span class="fstat-no" title="function not covered" >la</span>ntingSites, fitBounds<span class="cstat-no" title="statement not covered" >, plantingSite, plantingSiteId, selectPlantingSiteId]);</span>
-&nbsp;
-  const survivalRateHighlight<span class="cstat-no" title="statement not covered" >s = useMemo(() =&gt; {</span>
-    cons<span class="cstat-no" title="statement not covered" >t lessThanFifty: MapLayerFeatureId[] = [];</span>
-    const lessThanSeventyFive: MapLayerFeatureId[] = [];
-    const greaterThanSeventyFive: MapLayerFeatureId[] = [];
+      return [<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >        {</span>
+<span class="cstat-no" title="statement not covered" >          label: plantingSite.name,<span class="fstat-no" title="function not covered" ></span></span>
+          longitude,<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" ></span>          latitude,<span class="cstat-no" title="statement not covered" ></span>
+          onClick: () =&gt; {
+            fitBounds(bb<span class="cstat-no" title="statement not covered" >ox);</span>
+<span class="cstat-no" title="statement not covered" >          },</span>
+<span class="cstat-no" title="statement not covered" >        },<span class="fstat-no" title="function not covered" ></span></span>
+      ];<span class="cstat-no" title="statement not covered" ></span>
+    }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  }, [allPlantingSites, fitBounds, plantingSite, plantingSiteId, selectPlantingSiteId]);
 <span class="cstat-no" title="statement not covered" ></span>
+  const <span class="cstat-no" title="statement not covered" >survivalRateHighlights = useMemo(() =&gt; {</span>
+    const lessThanFifty: MapLayerFeatureId[] = [];
+    const lessThanSeventyFive: MapLayerFeatureId[] = [];
+<span class="cstat-no" title="statement not covered" >    const greaterThanSeventyFive: MapLayerFeatureId[] = [];</span>
+&nbsp;
     if (selectedResults === undefined || selectedHistory === undefined) {
       return {
         lessThanFifty,
         lessThanSeventyFive,
-        greaterThanSeventyFive,
-      };<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >    }</span>
+        greaterThanSe<span class="cstat-no" title="statement not covered" >ventyFive,<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >      };</span>
+    }
 &nbsp;
     const sortFeatureBySurvivalRate = (entityId: MapLayerFeatureId, survivalRate: number | undefined) =&gt; {
       if (survivalRate !== undefined) {
@@ -2422,89 +2430,89 @@ const ObservationMap = ({<span class="cstat-no" title="statement not covered" ><
     selectedResults.strata.forEach((stratum) =&gt; {
       const selectedStratumHistory = selectedHistory.strata.find(
         (stratumHistory) =&gt; stratumHistory.stratumId === stratum.stratumId
-      );
-      const stratumId <span class="cstat-no" title="statement not covered" >= { layerId: 'strata', featureId: `${selectedStratumHistory?.stratumId}` };</span>
-<span class="fstat-no" title="function not covered" ></span>      sortFeatureBySurvivalRate(stratumId, strat<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >um</span>.survivalRate);</span>
+      );<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" ></span>      const stratumId = { layerId: 'strata', fea<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >tu</span>reId: `${selectedStratumHistory?.stratumId}` };</span>
+<span class="cstat-no" title="statement not covered" >      sortFeatureBySurvivalRate(stratumId, stratum.survivalRate);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >      stratum.substrata.</span>forEach((substratum) =&gt; {
-<span class="cstat-no" title="statement not covered" >        const selectedSubstratumHi</span>story = selectedStratumHistory?.substrata.find(
-<span class="cstat-no" title="statement not covered" >          (substratumHistor</span>y) =&gt; substratumHistory.substratumId === substratum.substratumId
+<span class="cstat-no" title="statement not covered" >      stratum.substrata.forEach((s</span>ubstratum) =&gt; {
+<span class="cstat-no" title="statement not covered" >        const selectedSubst</span>ratumHistory = selectedStratumHistory?.substrata.find(
+          (substratumHistory) =&gt; substratumHistory.substratumId === substratum.substratumId
         );
         const substratumId = { layerId: 'substrata', featureId: `${selectedSubstratumHistory?.substratumId}` };
-        sortFeatureBySurvivalRate(substratumId, substratum.survivalRate);
-      });<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" >    })</span>;
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-    retu<span class="cstat-no" title="statement not covered" >rn {</span>
+        sortFeatureBySurvivalRate(<span class="cstat-no" title="statement not covered" >substratumId, substratum.survivalRate);</span>
+<span class="fstat-no" title="function not covered" ></span>      });
+    });<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ></span>
+    return {<span class="cstat-no" title="statement not covered" ></span>
       lessThanFifty,<span class="cstat-no" title="statement not covered" ></span>
-      lessThanSeventyFive,<span class="cstat-no" title="statement not covered" ></span>
-      greaterThanSeventy<span class="cstat-no" title="statement not covered" >Five,</span>
-    };<span class="cstat-no" title="statement not covered" ></span>
-  }, [selectedHistory, selectedResults]);
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  cons<span class="cstat-no" title="statement not covered" >t highlights = useMemo</span>((): MapHighlightGroup[] =&gt; {
+      lessThanSeventyFiv<span class="cstat-no" title="statement not covered" >e,</span>
+      grea<span class="cstat-no" title="statement not covered" >terThanSeventyFive,</span>
+    };
+  }, [selectedHi<span class="fstat-no" title="function not covered" >st</span>ory, sele<span class="cstat-no" title="statement not covered" >ctedResults]);</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  cons<span class="cstat-no" title="statement not covered" >t highlights = use</span>Memo((): MapHighlightGroup[] =&gt; {
     re<span class="cstat-no" title="statement not covered" >turn [</span>
 <span class="cstat-no" title="statement not covered" >      {</span>
-<span class="cstat-no" title="statement not covered" >        highlightId: 'survi</span>valRate',
+        highlightId: 'survivalRate',
         highlights: [
           {
-            featureIds: survivalRateHighlights.lessThanFifty,
-            style: sur<span class="cstat-no" title="statement not covered" >vivalRateLessThan50,</span>
-<span class="fstat-no" title="function not covered" ></span>          },<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >          {</span>
-<span class="cstat-no" title="statement not covered" >            featureIds: survivalRateHighlights.lessThanSeventyFive</span>,
-<span class="cstat-no" title="statement not covered" >            style: survivalRate50T</span>o75,
+            featureIds<span class="cstat-no" title="statement not covered" >: survivalRateHighlights.lessThanFifty,</span>
+<span class="fstat-no" title="function not covered" ></span>            style: survivalRateLessThan50,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >          },</span>
+<span class="cstat-no" title="statement not covered" >          {</span>
+<span class="cstat-no" title="statement not covered" >            featureIds: survivalRa</span>teHighlights.lessThanSeventyFive,
+<span class="cstat-no" title="statement not covered" >            style: survival</span>Rate50To75,
+          },
           {
             featureIds: survivalRateHighlights.greaterThanSeventyFive,
-            style: survivalRateMoreThan75,
-          },<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" ></span>        ],
-        visible: surv<span class="cstat-no" title="statement not covered" >ivalRateVisible,<span class="fstat-no" title="function not covered" ></span></span>
+            style: survivalRateMor<span class="cstat-no" title="statement not covered" >eThan75,</span>
+<span class="fstat-no" title="function not covered" ></span>          },
+        ],<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >        visible: survivalRateVisible,</span>
       },<span class="cstat-no" title="statement not covered" ></span>
     ];<span class="cstat-no" title="statement not covered" ></span>
-  }, [survivalRate50To75, survivalR<span class="cstat-no" title="statement not covered" >ateHighlights, survivalRateLessThan</span>50, survivalRateMoreThan75, survivalRateVisible]);
+  }, [survivalRate50To75<span class="cstat-no" title="statement not covered" >, survivalRateHighlights</span>, survivalRateLessThan50, survivalRateMoreThan75, survivalRateVisible]);
 <span class="cstat-no" title="statement not covered" ></span>
-  const se<span class="cstat-no" title="statement not covered" >lectPhoto = useCallback(</span>
-    (monitoringPlotId: number, observationId: number, photo: ObservationMonitoringPlotPhotoWithGps) =&gt; () =&gt; {
-      selectPhot<span class="fstat-no" title="function not covered" >os</span>([{ monit<span class="cstat-no" title="statement not covered" >oringPlotId, obse</span>rvationId, photo }]);
+  const selectPhoto = useCallback(
+    (monitoringP<span class="fstat-no" title="function not covered" >lo</span>tId: numb<span class="cstat-no" title="statement not covered" >er, observationId</span>: number, photo: ObservationMonitoringPlotPhotoWithGps) =&gt; () =&gt; {
+<span class="cstat-no" title="statement not covered" >      selectPhotos([{ mo</span>nitoringPlotId, observationId, photo }]);
 <span class="cstat-no" title="statement not covered" >      selectPlants([]);</span>
-<span class="cstat-no" title="statement not covered" >      setSelectedFeature(und</span>efined);
+<span class="cstat-no" title="statement not covered" >      setSelectedFeature(undefined</span>);
 <span class="cstat-no" title="statement not covered" >      setDrawerOpen(true);</span>
-    },<span class="cstat-no" title="statement not covered" ></span>
+    },
     [selectPhotos, selectPlants]
   );
-&nbsp;
-  const selectPhotosFro<span class="cstat-no" title="statement not covered" >mMarkers = useCallback(<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >    (selectedMarkers: MapMarker[]) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >      const photo</span>s = selectedMarkers
-        .map((marker): PlotPhoto | undefined =&gt; {
-          if (marker.propertie<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >s)</span> {<span class="cstat-no" title="statement not covered" ></span></span>
-            const observatio<span class="cstat-no" title="statement not covered" >nId = marker.properties.observationId as number;</span>
-<span class="fstat-no" title="function not covered" ></span>            cons<span class="cstat-no" title="statement not covered" >t monitoringPlotId = marker.properties.mon<span class="fstat-no" title="function not covered" >it</span>oringPlotId as number;</span>
-            const photo = marker.properties.photo as ObservationMonitoringPlotPhotoWithGps;
-<span class="cstat-no" title="statement not covered" >            return { monitoringPlotId, observationId, photo };</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  co<span class="cstat-no" title="statement not covered" >nst selectPhotosFromMarkers = useCallback(</span>
+    (s<span class="cstat-no" title="statement not covered" >electedMark</span>ers: MapMarker[]) =&gt; {
+      const photos = selectedMarkers
+        .map((marker): PlotPho<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >to</span> | undefi<span class="cstat-no" title="statement not covered" >ned =&gt; {</span></span>
+          if (marker.propert<span class="cstat-no" title="statement not covered" >ies) {</span>
+<span class="fstat-no" title="function not covered" ></span>            cons<span class="cstat-no" title="statement not covered" >t observationId = marker.properties.observ<span class="fstat-no" title="function not covered" >at</span>ionId as number;</span>
+            const monitoringPlotId = marker.properties.monitoringPlotId as number;
+<span class="cstat-no" title="statement not covered" >            const photo = marker.properties.photo as ObservationMonitoringPlotPhotoWithGps;</span>
+            return { monitoringPlotId, observationId, photo };
           }
         })
         .filter((photo): photo is PlotPhoto =&gt; photo !== undefined);
-      selectPhotos(photos);
-      selectPlants([]);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+      selectPhotos(photos);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+      selectPlants([]);
       setSelectedFeature(undefined);
       setDrawerOpen(true);
     },
     [selectPhotos, selectPlants]
   );
 &nbsp;
-  const selectPlant = useCallback(
-    (monitoringPlotId: number, ob<span class="cstat-no" title="statement not covered" >servationId: number, plant: Rec<span class="fstat-no" title="function not covered" >or</span>dedPlant) =<span class="cstat-no" title="statement not covered" >&gt; () =&gt; {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span>
-<span class="fstat-no" title="function not covered" >      se</span>lectPhot<span class="cstat-no" title="statement not covered" >os([]);<span class="fstat-no" title="function not covered" ></span></span>
-      selectPlants([{ monitoringPlotId, observationId, plant }]);
-      se<span class="cstat-no" title="statement not covered" >tSelectedFeature(undefined);</span>
+  const selectPlant = useCallback<span class="cstat-no" title="statement not covered" >(<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
+    (m<span class="fstat-no" title="function not covered" >on</span>itoringP<span class="cstat-no" title="statement not covered" >lotId: number, observationId: number, plan<span class="fstat-no" title="function not covered" >t:</span> RecordedPlant) =&gt; () =&gt; {</span>
+      selectPhotos([]);
+      se<span class="cstat-no" title="statement not covered" >lectPlants([{ monitoringPlotId, observationId, plant }]);</span>
+      setSelectedFeature(undefined);
       setDrawerOpen(true);
     },
     [selectPhotos, selectPlants]
-  );
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+&nbsp;
   const selectPlantsFromMarkers = useCallback(
     (selectedMarkers: MapMarker[]) =&gt; {
       const plants = selectedMarkers
@@ -2512,49 +2520,49 @@ const ObservationMap = ({<span class="cstat-no" title="statement not covered" ><
           if (marker.properties) {
             const observationId = marker.properties.observationId as number;
             const monitoringPlotId = marker.properties.monitoringPlotId as number;
-            const plant = marker.properties.plant as RecordedPlant;
-<span class="cstat-no" title="statement not covered" >            return { monitoringPlotId, observationId, plan</span>t };
-          }
-        })<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" ></span>        .filter((plant): plant is PlotPlant =&gt; plant !== undefined);
-<span class="cstat-no" title="statement not covered" >      selectPhotos([]);</span>
-      se<span class="cstat-no" title="statement not covered" >lectPlants(plants);<span class="fstat-no" title="function not covered" ></span></span>
-      setSelectedFeature(undefined);
-      setDrawerOpen(true<span class="cstat-no" title="statement not covered" >);</span>
-    },<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span>
-    [selectP<span class="cstat-no" title="statement not covered" >hotos, selectPlants]</span>
-  );<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >            const plant = marker.properties.plant as Recor</span>dedPlant;
+            return { monitoringPlotId, observationId, plant };
+          }<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" ></span>        })
+<span class="cstat-no" title="statement not covered" >        .filter((plant): plant is PlotPlant =&gt; plant !== undefined);</span>
+      se<span class="cstat-no" title="statement not covered" >lectPhotos([]);<span class="fstat-no" title="function not covered" ></span></span>
+      selectPlants(plants);
+      setSelectedFeature<span class="cstat-no" title="statement not covered" >(undefined);</span>
+      setD<span class="cstat-no" title="statement not covered" >rawerOpen(true);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span>
+    },<span class="cstat-no" title="statement not covered" ></span>
+    [selectPho<span class="cstat-no" title="statement not covered" >tos, selectPlants]</span>
+  );
 &nbsp;
   const photoMarkers = useMemo((): MapMarker[] =&gt; {
     if (!selectedResults) {
       return [];
-    }
-<span class="cstat-no" title="statement not covered" ></span>
-    const hasGpsCoordinates = (photo: ObservationMonitoringPlotPhoto): photo is ObservationMonitoringPlotPhotoWithGps =&gt;
-      !!photo.gpsCoo<span class="fstat-no" title="function not covered" >rd</span>inates;<span class="cstat-no" title="statement not covered" ></span>
+    }<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
-    const adHocPlotPhotos = adHocPlots.flatMap((plot): MapMarker[] =&gt;
-      pl<span class="cstat-no" title="statement not covered" >ot.photos.f</span>ilter(hasGpsCoordinates).map((photo) =&gt; {
+    const hasGpsCoor<span class="fstat-no" title="function not covered" >di</span>nates = (p<span class="cstat-no" title="statement not covered" >hoto: ObservationM</span>onitoringPlotPhoto): photo is ObservationMonitoringPlotPhotoWithGps =&gt;
+      !!photo.gpsCoordinates;
+&nbsp;
+    cons<span class="cstat-no" title="statement not covered" >t adHocPlot</span>Photos = adHocPlots.flatMap((plot): MapMarker[] =&gt;
+      plot.photos.filter(hasGpsCoordinates).map((photo) =&gt; {
         return {
           id: `photos/${photo.fileId}`,
           longitude: photo.gpsCoordinates?.coordinates[1],
-          latitude: photo.gpsCoordinates?.coordinates[0],
-          onClick: selec<span class="cstat-no" title="statement not covered" >tPhoto(plot.monitoringPlotId, selectedResults.observationId, photo),</span>
-<span class="fstat-no" title="function not covered" ></span>          selected: selectedPhotos.find((selected) =&gt; selected.photo.fileId === photo.fileId) !== undefined,
-<span class="cstat-no" title="statement not covered" >          properties: {</span>
-<span class="cstat-no" title="statement not covered" >            adHocPl</span>otId: plot.monitoringPlotId,
-            photo,
-<span class="cstat-no" title="statement not covered" >          },</span>
-        };<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span></span>
-      })<span class="cstat-no" title="statement not covered" ></span>
-    );<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-    const mo<span class="cstat-no" title="statement not covered" >nitoringPlotPhotos = selectedResults.strata</span>
-      .flatMap<span class="fstat-no" title="function not covered" >((</span>stratum) =<span class="cstat-no" title="statement not covered" >&gt; stratum.substrata)</span>
+          latitude: phot<span class="cstat-no" title="statement not covered" >o.gpsCoordinates?.coordinates[0],</span>
+<span class="fstat-no" title="function not covered" ></span>          onClick: selectPhoto(plot.monitoringPlotId, selectedResults.observationId, photo),
+<span class="cstat-no" title="statement not covered" >          selected: selectedPhotos.find((selected) =&gt; selected.photo.fileId === photo.fileId) !== undefined,</span>
+<span class="cstat-no" title="statement not covered" >          propertie</span>s: {
+            adHocPlotId: plot.monitoringPlotId,
+<span class="cstat-no" title="statement not covered" >            photo,</span>
+          },<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span></span>
+        };<span class="cstat-no" title="statement not covered" ></span>
+      })<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+    );<span class="cstat-no" title="statement not covered" ></span>
+    const moni<span class="fstat-no" title="function not covered" >to</span>ringPlotPh<span class="cstat-no" title="statement not covered" >otos = selectedResults.strata</span>
+      .flatMap((stratum) =&gt; stratum.substrata)
       .flatMap((substratum) =&gt; substratum.monitoringPlots)
       .flatMap((plot): MapMarker[] =&gt;
         plot.photos.filter(hasGpsCoordinates).map((photo) =&gt; {
-          return {
-            id: `photos/${photo.fileId}`,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+          return {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+            id: `photos/${photo.fileId}`,
             longitude: photo.gpsCoordinates?.coordinates[1],
             latitude: photo.gpsCoordinates?.coordinates[0],
             onClick: selectPhoto(plot.monitoringPlotId, selectedResults.observationId, photo),
@@ -2562,15 +2570,15 @@ const ObservationMap = ({<span class="cstat-no" title="statement not covered" ><
             properties: {
               monitoringPlotId: plot.monitoringPlotId,
               observationId: selectedResults.observationId,
-              photo,
-<span class="cstat-no" title="statement not covered" >            },</span>
+<span class="cstat-no" title="statement not covered" >              photo,</span>
+            },
           };
-        })
-      );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" ></span>
-    return [...adHocPlotPhotos, ...<span class="cstat-no" title="statement not covered" >monitoringPlotPhoto<span class="fstat-no" title="function not covered" >s]</span>;<span class="cstat-no" title="statement not covered" ></span></span>
-  }, [adHocP<span class="cstat-no" title="statement not covered" >lots, selectPhoto, selectedPhotos, selectedResults]);</span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+        })<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+      );<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+    return [<span class="cstat-no" title="statement not covered" >...adHocPlotPhotos, ...monitoringPlotPhotos];</span>
+  }, [adHocPlo<span class="fstat-no" title="function not covered" >ts</span>, selectPh<span class="cstat-no" title="statement not covered" >oto, selectedPhotos, selectedResults]);</span>
+&nbsp;
   const treesMarkers = useCallback(
     (isDead: boolean): MapMarker[] =&gt; {
       if (isBiomass) {
@@ -2581,19 +2589,19 @@ const ObservationMap = ({<span class="cstat-no" title="statement not covered" ><
             .map((tree): MapMarker | undefined =&gt; {
               if (tree.gpsCoordinates) {
                 return {
-                  id: `trees/${tree.id}`,
-<span class="cstat-no" title="statement not covered" >                  longi</span>tude: tree.gpsCoordinates.coordinates[1],
+<span class="cstat-no" title="statement not covered" >                  id: `</span>trees/${tree.id}`,
+                  longitude: tree.gpsCoordinates.coordinates[1],
                   latitude: tree.gpsCoordinates.coordinates[0],
-                };
-<span class="cstat-no" title="statement not covered" >              } else {</span>
-                return undefined;
-<span class="cstat-no" title="statement not covered" >              }</span>
+<span class="cstat-no" title="statement not covered" >                };</span>
+              } else {
+<span class="cstat-no" title="statement not covered" >                ret</span>urn undefined;
+              }
             })
             .filter((marker): marker is MapMarker =&gt; marker !== undefined);
         });
-      } else {
-        return [];<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >      }</span>
+      } else {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >        return [];</span>
+      }
     },
     [adHocObservationResults, isBiomass]
   );
@@ -2648,13 +2656,13 @@ const ObservationMap = ({<span class="cstat-no" title="statement not covered" ><
           }
         });
 &nbsp;
-        return [...adHocPlotPlants, ...monitoringPlotPlants];
-      } else {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-        return [];<span class="cstat-no" title="statement not covered" ></span>
+        return [..<span class="cstat-no" title="statement not covered" >.adHocPlotPlants, ...monit<span class="fstat-no" title="function not covered" >or</span>ingPlotPlants];</span>
+      } else {<span class="cstat-no" title="statement not covered" ></span>
+        return [];
       }
     },
-    [adHocPlots, isBiomass, selectPlant, selectedPlants, selectedResults]
-  );<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >    [adHocPlots, isBiomass, selectPlant, selectedPlants, selectedResults]</span>
+  );
 &nbsp;
   const markers = useMemo((): MapMarkerGroup[] =&gt; {
     return [
@@ -2725,7 +2733,7 @@ const ObservationMap = ({<span class="cstat-no" title="statement not covered" ><
         : plantingSiteLegendGroup;
 &nbsp;
     return [<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >      ...(isBiomass || plantingSiteId === undefined ? [] : [observationDropdownLegendGroup]),</span>
+<span class="cstat-no" title="statement not covered" >      ...(isBiomass || isSingleView || plantingSiteId === undefined ? [] : [observationDropdownLegendGroup]),</span>
 <span class="cstat-no" title="statement not covered" >      siteLegendGroup,</span>
       monit<span class="cstat-no" title="statement not covered" >oringPlotsLegendGroup,</span>
 <span class="cstat-no" title="statement not covered" >      plotPhotosLegendGroup,</span>
@@ -2740,9 +2748,10 @@ const ObservationMap = ({<span class="cstat-no" title="statement not covered" ><
     pl<span class="cstat-no" title="statement not covered" >otPhotosLegendGroup,</span>
     plantMakersLegendGroup,
     is<span class="cstat-no" title="statement not covered" >Biomass,</span>
+    isSingleView,
     survivalRateLegendGroup,
-  ]);
-<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >  ]);</span>
+&nbsp;
   const setDrawerOpenCallback = useCallback(
     (open: boolean) =&gt; {
       if (open) {
@@ -2761,8 +2770,8 @@ const ObservationMap = ({<span class="cstat-no" title="statement not covered" ><
     // Close drawer on data changes
     setDrawerOpenCallback(false);
   }, [plantingSiteId, observationResults, adHocObservationResults, setDrawerOpenCallback]);
-&nbsp;
-  const drawerConten<span class="cstat-no" title="statement not covered" >t = useMemo(() </span>=&gt; {
+<span class="cstat-no" title="statement not covered" ></span>
+  const drawerContent = useMemo(() =&gt; {
     if (selectedFeature &amp;&amp; selectedResults) {
       if (isBiomass) {
         return (
@@ -2845,7 +2854,7 @@ export default ObservationMap;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-23T18:41:20.301Z
+                at 2026-01-23T19:11:44.920Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
