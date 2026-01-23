@@ -1,7 +1,7 @@
 import React, { type JSX, useEffect, useMemo, useState } from 'react';
-import { MixpanelProvider } from 'react-mixpanel-browser';
-import { useMixpanel } from 'react-mixpanel-browser';
+import { MixpanelProvider, useMixpanel } from 'react-mixpanel-browser';
 import { Provider } from 'react-redux';
+import { useMatch } from 'react-router';
 
 import { Box, CssBaseline, StyledEngineProvider, useTheme } from '@mui/material';
 
@@ -25,6 +25,7 @@ import useApplicationPortal from './hooks/useApplicationPortal';
 import useFunderPortal from './hooks/useFunderPortal';
 import DisclaimerProvider from './providers/Disclaimer/Provider';
 import ApplicationPortalRouter from './scenes/ApplicationRouter/portal';
+import EmbeddedRouter from './scenes/EmbeddedRouter';
 
 // Mixpanel setup
 const MIXPANEL_TOKEN = process.env.REACT_APP_MIXPANEL_TOKEN;
@@ -35,7 +36,10 @@ const MIXPANEL_CONFIG = {
 };
 
 function AppContent() {
-  // manager hooks
+  //  embedded routes should not show TopBar/NavBar
+  const isEmbeddedRoute = useMatch('/embed/*');
+
+  // manager hooks - must be called unconditionally
   useAppVersion();
   const { isDesktop, type } = useDeviceInfo();
   const { user, isAllowed } = useUser();
@@ -109,6 +113,17 @@ function AppContent() {
     };
   }, [isDesktop, theme]);
 
+  // Render minimal embedded view for iframe routes
+  if (isEmbeddedRoute) {
+    return (
+      <StyledEngineProvider injectFirst>
+        <CssBaseline />
+        <EmbeddedRouter />
+      </StyledEngineProvider>
+    );
+  }
+
+  // Render normal app with TopBar and NavBar
   return (
     <StyledEngineProvider injectFirst>
       <CssBaseline />

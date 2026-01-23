@@ -3,11 +3,9 @@ import React from 'react';
 import { Grid } from '@mui/material';
 import { OverlayModal } from '@terraware/web-components';
 
-import Application from 'src/components/GaussianSplat/Application';
-
-import VirtualMonitoringPlot from './VirtualMonitoringPlot';
-
 interface VirtualPlotModalProps {
+  observationId: number;
+  monitoringPlotId: number;
   onClose?: () => void;
 }
 
@@ -37,24 +35,14 @@ const BelowComponent = () => {
   );
 };
 
-const VirtualPlotModal = ({ onClose }: VirtualPlotModalProps) => {
+const VirtualPlotModal = ({ observationId, monitoringPlotId, onClose }: VirtualPlotModalProps) => {
   return (
     <OverlayModal open={true} onClose={onClose} belowComponent={<BelowComponent />}>
-      <Application
-        boxSx={{
-          width: '100%',
-          height: '100%',
-          position: 'relative',
-        }}
-        style={{
-          width: '100%',
-          height: '100%',
-          display: 'block',
-          margin: '0 auto',
-        }}
-      >
-        <VirtualMonitoringPlot />
-      </Application>
+      <iframe
+        src={`/embed/observations/${observationId}/plot/${monitoringPlotId}/virtual`}
+        title='Virtual Monitoring Plot'
+        style={{ width: '100%', height: '100%', border: 'none' }}
+      />
     </OverlayModal>
   );
 };

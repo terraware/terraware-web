@@ -13,7 +13,14 @@ import SplatControls from 'src/components/GaussianSplat/SplatControls';
 import SplatModel from 'src/components/GaussianSplat/SplatModel';
 import { useCameraPosition } from 'src/hooks/useCameraPosition';
 
-const VirtualMonitoringPlot = () => {
+interface VirtualMonitoringPlotProps {
+  observationId?: string;
+  monitoringPlotId?: string;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const VirtualMonitoringPlot = (_props: VirtualMonitoringPlotProps) => {
+  // TODO: Use observationId and monitoringPlotId to fetch and render actual plot data
   const { setCamera } = useCameraPosition();
 
   useEffect(() => {
