@@ -251,6 +251,10 @@ const DetailsRenderer = (props: RendererProps<TableRowType>): JSX.Element => {
     );
   };
 
+  if (column.key === 'targetPlantingDensity') {
+    return <CellRenderer {...props} value={<FormattedNumber value={row.targetPlantingDensity} />} sx={textStyles} />;
+  }
+
   if (column.key === 'totalSeedlingsSent') {
     return <CellRenderer {...props} value={createLinkToWithdrawals()} sx={textStyles} />;
   }
