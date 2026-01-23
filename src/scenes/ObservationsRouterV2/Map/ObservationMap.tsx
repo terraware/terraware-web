@@ -828,6 +828,25 @@ const ObservationMap = ({
     survivalRateLegendGroup,
   ]);
 
+  const setDrawerOpenCallback = useCallback(
+    (open: boolean) => {
+      if (open) {
+        setDrawerOpen(true);
+      } else {
+        setDrawerOpen(false);
+        setSelectedFeature(undefined);
+        selectPhotos([]);
+        selectPlants([]);
+      }
+    },
+    [selectPhotos, selectPlants]
+  );
+
+  useEffect(() => {
+    // Close drawer on data changes
+    setDrawerOpenCallback(false);
+  }, [plantingSiteId, observationResults, adHocObservationResults, setDrawerOpenCallback]);
+
   const drawerContent = useMemo(() => {
     if (selectedFeature && selectedResults) {
       if (isBiomass) {
@@ -882,19 +901,6 @@ const ObservationMap = ({
       return 'small';
     }
   }, [photoDrawerSize, plantDrawerSize, selectedPhotos.length, selectedPlants.length]);
-
-  const setDrawerOpenCallback = useCallback(
-    (open: boolean) => {
-      if (open) {
-        setDrawerOpen(true);
-      } else {
-        setDrawerOpen(false);
-        selectPhotos([]);
-        selectPlants([]);
-      }
-    },
-    [selectPhotos, selectPlants]
-  );
 
   return (
     <MapComponent
