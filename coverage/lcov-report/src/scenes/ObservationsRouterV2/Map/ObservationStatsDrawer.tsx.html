@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/97</span>
+                <span class='fraction'>0/103</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/172</span>
+                <span class='fraction'>0/176</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/79</span>
+                <span class='fraction'>0/85</span>
             </div>
         
             
@@ -248,7 +248,18 @@
 <a name='L183'></a><a href='#L183'>183</a>
 <a name='L184'></a><a href='#L184'>184</a>
 <a name='L185'></a><a href='#L185'>185</a>
-<a name='L186'></a><a href='#L186'>186</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L186'></a><a href='#L186'>186</a>
+<a name='L187'></a><a href='#L187'>187</a>
+<a name='L188'></a><a href='#L188'>188</a>
+<a name='L189'></a><a href='#L189'>189</a>
+<a name='L190'></a><a href='#L190'>190</a>
+<a name='L191'></a><a href='#L191'>191</a>
+<a name='L192'></a><a href='#L192'>192</a>
+<a name='L193'></a><a href='#L193'>193</a>
+<a name='L194'></a><a href='#L194'>194</a>
+<a name='L195'></a><a href='#L195'>195</a>
+<a name='L196'></a><a href='#L196'>196</a>
+<a name='L197'></a><a href='#L197'>197</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -287,12 +298,18 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -400,6 +417,11 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -436,109 +458,116 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > type JSX, use</span>Memo } from 'react';
 <span class="cstat-no" title="statement not covered" ></span>
 import { Box, CircularP<span class="cstat-no" title="statement not covered" >rogress } from '@mui/material';</span>
+import { Button } from '<span class="cstat-no" title="statement not covered" >@terraware/web-components';</span>
 <span class="cstat-no" title="statement not covered" ></span>
-import MapDrawerTab<span class="cstat-no" title="statement not covered" >le, { MapDrawerTableRo</span>w } from 'src/components/MapDrawerTable';
-import { MapLayerFe<span class="cstat-no" title="statement not covered" >atureId } from 'src/components/N</span>ewMap/types';
-import { useLoc<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >al</span>ization } from 'src/providers';</span>
-im<span class="cstat-no" title="statement not covered" >port { useGetObservationResultsQuery } from 'src/queries/generated/observations';</span>
-impo<span class="cstat-no" title="statement not covered" >rt { useGetPlantingSiteQuery, useLazyGetPlantingSiteHistoryQuer</span>y } from 'src/queries/generated/plantingSites';
-&nbsp;
-type ObservationSt<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >at</span>sProperties = {</span>
-<span class="cstat-no" title="statement not covered" >  name: string | undefined;</span>
-  ob<span class="cstat-no" title="statement not covered" >servedPlants: number | undefined;</span>
-  obse<span class="cstat-no" title="statement not covered" >rvedSpecies: number | undefined;</span>
-  observ<span class="cstat-no" title="statement not covered" >edDensity: number | undefi<span class="fstat-no" title="function not covered" >ne</span>d;<span class="cstat-no" title="statement not covered" ></span></span>
-  plotType?: 'permanent' | 'temporary' | 'adHoc';
-<span class="cstat-no" title="statement not covered" >  survivalRat</span>e: number | undefined;
-};
+import MapDrawerTab<span class="cstat-no" title="statement not covered" >le, { MapDrawerTableRow } from '</span>src/components/MapDrawerTable';
+import { MapLay<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >er</span>FeatureId } from 'src/components/NewMap/types';</span>
+im<span class="cstat-no" title="statement not covered" >port isEnabled from 'src/features';</span>
+impo<span class="cstat-no" title="statement not covered" >rt useBoolean from 'src/hooks/useBoolean';</span>
+import { useLocalization } from 'src/providers';
+import { useGetObs<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >er</span>vationResultsQuery } from 'src/queries/generated/observations';</span>
+im<span class="cstat-no" title="statement not covered" >port { useGetPlantingSiteQuery, useLazyGetPlantingSiteHistoryQuery } from 'src/queries/generated/plantingSites';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+import<span class="cstat-no" title="statement not covered" > VirtualPlotModal from '../SingleView/PlantMonitoring/MonitoringPlot/VirtualPlotModal';</span>
 <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+type ObservationStatsProperties = {
+<span class="cstat-no" title="statement not covered" >  name: strin</span>g | undefined;
+  observedPlants: number | undefined;
+  observedSpec<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ie</span>s: number | undefined;<span class="cstat-no" title="statement not covered" ></span></span>
+  observedDensity: number | undefined;
+  plotType?: 'permanent' | 'temporary' | 'adHoc';
+  survivalRate: number | undefined;
+};
+&nbsp;
 type ObservationStatsDrawerProps = {
   isBiomass?: boolean;
-  layerFeatureId: MapLayerFeatureId;
-  plantingSiteId: number;
-  observationId: number;
-};
+  layerFeatureId: M<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ap</span>LayerFe<span class="cstat-no" title="statement not covered" >atureId;</span></span>
+  plantingSiteId: nu<span class="cstat-no" title="statement not covered" >mbe</span>r;
+<span class="cstat-no" title="statement not covered" >  observationId: number;</span>
+};<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 &nbsp;
-const ObservationSt<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >at</span>sDrawer<span class="cstat-no" title="statement not covered" > = ({</span></span>
+<span class="cstat-no" title="statement not covered" >const ObservationStatsDrawer = ({</span>
   layerFeatureId,<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  plantingSiteId,</span>
-  observati<span class="fstat-no" title="function not covered" >on</span>Id,<span class="cstat-no" title="statement not covered" ></span>
-}: ObservationStatsDrawerProps): JSX.Element | undefined =&gt; {
-<span class="cstat-no" title="statement not covered" >  const { strings } = useLocalization();</span>
+  plantingSiteId,<span class="cstat-no" title="statement not covered" ></span>
+  observationId,<span class="cstat-no" title="statement not covered" ></span>
+}: ObservationStatsDrawerPro<span class="cstat-no" title="statement not covered" >ps): JSX.Element | undefined =&gt; {</span>
+  const { strings } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
+  const [virtualPlotOpen<span class="cstat-no" title="statement not covered" >, , setVirtualPlotOpenTrue, setVirtualPlo</span>tOpenFalse] = useBoolean(false);
+  const isVirtualPlotsE<span class="cstat-no" title="statement not covered" >nabled = isEnabled('Virtu</span>al Monitoring Plots');
 <span class="cstat-no" title="statement not covered" ></span>
-  const { data: observ<span class="cstat-no" title="statement not covered" >ationResultsResponse, isL</span>oading: observationResultsLoading } = useGetObservationResultsQuery({
+  const { data: observation<span class="cstat-no" title="statement not covered" >ResultsResponse, isLoading: observationResultsL</span>oading } = useGetObservationResultsQuery({
     observationId,<span class="cstat-no" title="statement not covered" ></span>
-  });<span class="cstat-no" title="statement not covered" ></span>
-  const { data: plantingSi<span class="cstat-no" title="statement not covered" >teResponse, isLoading: plantingSiteLoading } =</span> useGetPlantingSiteQuery(plantingSiteId);
-  const [getHistory, { data<span class="cstat-no" title="statement not covered" >: plantingSiteHistoryResponse, isLoading: plant</span>ingSiteHistoryLoading }] =
-    useLazyGetPlantingSiteHisto<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ry</span>Query();</span>
+  });<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  const { data: plantingSiteResponse, isLoading: plantingSiteLoading } = useGetPlantingSiteQuery(plantingSiteId);
+  const [getHistory, { data: plantingSiteHistoryResponse, isLoading: plantingSiteHistoryLoading }] =
+    useLazyGetPlantingSiteHistoryQuery();
 &nbsp;
-  const results = useMemo(() =&gt; observationResultsResponse?.observation, [observationResultsResponse?.observation]);
-  const plantingSite = useMemo(() =&gt; plantingSiteResponse?.site, [plantingSiteResponse?.site]);
-  const siteHistory = useMemo(() =&gt; plantingSiteHistoryResponse?.site, [plantingSiteHistoryResponse?.site]);
+  const results = useM<span class="cstat-no" title="statement not covered" >emo(() =&gt; observationResultsResponse?.ob</span>servation, [observationResultsResponse?.observation]);
+  const plantingSite = useMemo(() =&gt; plantingSiteResponse?.site, [plantingSiteR<span class="cstat-no" title="statement not covered" >esponse?.site]);</span>
+  const siteHistory = useMemo(()<span class="cstat-no" title="statement not covered" > =&gt; plantingSiteHistoryResponse?.site, [plantingSiteHisto</span>ryResponse?.site]);
 <span class="cstat-no" title="statement not covered" ></span>
-  const isLoading = useMemo(<span class="cstat-no" title="statement not covered" ></span>
+  const isLoading = useMemo(
     () =&gt; observationResultsLoading || plantingSiteLoading || plantingSiteHistoryLoading,
-    [observationResultsLoading, plantingSiteHistoryLoading, plantingSiteLoading]
+    [observationResultsLoading, plantingSiteHistoryLoading, plantingSiteL<span class="cstat-no" title="statement not covered" >oading]</span>
   );<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
   useMemo(() =&gt; {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-    if (results?.planti<span class="cstat-no" title="statement not covered" >ngSiteHistoryId) {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-      void getHistory(<span class="cstat-no" title="statement not covered" >{ id: plantingSiteId, hist<span class="fstat-no" title="function not covered" >or</span>yId:<span class="cstat-no" title="statement not covered" > results.plantingSiteHistoryId }, true);</span></span>
-    }<span class="cstat-no" title="statement not covered" ></span>
-  },<span class="fstat-no" title="function not covered" > [</span>getH<span class="cstat-no" title="statement not covered" >istory, plantingSiteId, results?.plantingSiteHistoryId]);</span>
+    if (results?.plant<span class="cstat-no" title="statement not covered" >ingSiteHistoryId) {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+      void getHistor<span class="cstat-no" title="statement not covered" >y({ id: plantingSiteId, historyId: results.plantingSiteHistoryId }, true);</span>
+<span class="fstat-no" title="function not covered" >    }<span class="cstat-no" title="statement not covered" ></span></span>
+  }, [getHistory, plantingSiteId, results?.plantingSiteHistoryId]);
 &nbsp;
-  const properties = useMemo((): ObservationStatsProperties | undefined =&gt; {
-<span class="cstat-no" title="statement not covered" >    if (layerFeatureId.layer<span class="fstat-no" title="function not covered" >Id</span> === 'sites') {</span>
+<span class="cstat-no" title="statement not covered" >  const properties = useMemo<span class="fstat-no" title="function not covered" >((</span>): ObservationStatsProperties | undefined =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (layerFeatureId.layerId === 'sites') {</span>
 <span class="cstat-no" title="statement not covered" >      return {</span>
-<span class="cstat-no" title="statement not covered" >        name: plantingSite?.name,</span>
+        name: plantingSite?.name,
         observedPlants: results?.totalPlants,
-        observedSpecies: results?.totalSpecies,
-        observedDensi<span class="cstat-no" title="statement not covered" >ty: results?.plantingDensi<span class="fstat-no" title="function not covered" >ty</span>,</span>
-        survivalRate: results?.survivalRate,
+        observedSpeci<span class="cstat-no" title="statement not covered" >es: results?.totalSpecies,<span class="fstat-no" title="function not covered" ></span></span>
+        observedDensity: results?.plantingDensity,
+<span class="cstat-no" title="statement not covered" >        survivalRate: results?.survivalRate,</span>
 <span class="cstat-no" title="statement not covered" >      };</span>
-    } <span class="cstat-no" title="statement not covered" >else if (layerFeatureId.layerId === 'strata') {</span>
+    } else if (layerFeatureId.layerId === 'strata') {
       const stratumHistory = siteHistory?.strata?.find(
         (_stratum) =&gt; _stratum.stratumId === Number(layerFeatureId.featureId)
       );
       const stratum = plantingSite?.strata?.find((_stratum) =&gt; _stratum.id === Number(layerFeatureId.featureId));
       const stratumResults = results?.strata?.find(
-        (_stratum) =&gt; _stratum.stratumId === Number(layerFeatureId.featureId)
+        (_s<span class="cstat-no" title="statement not covered" >tratum) =&gt; _stratum.stratumId === Number(layerFeatureId.featureId)</span>
       );<span class="cstat-no" title="statement not covered" ></span>
-      return {<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" >        na</span>me: stratumH<span class="cstat-no" title="statement not covered" >istory?.name ?? stratum?.name,</span>
-        observedPlants: stratumResults?.totalPlants,
-        observedSpecie<span class="cstat-no" title="statement not covered" >s: stratumResults?.totalSpecies,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-        observedDensity: stra<span class="cstat-no" title="statement not covered" >tumResults?.plantingDensity,</span>
-<span class="fstat-no" title="function not covered" >        su</span>rvivalRate: <span class="cstat-no" title="statement not covered" >stratumResults?.survivalRate,</span>
-      };
-    } <span class="cstat-no" title="statement not covered" >else if (layerFeatureId.layerId === 'substrata') {</span>
+      re<span class="fstat-no" title="function not covered" >tu</span>rn {<span class="cstat-no" title="statement not covered" ></span>
+        name: stratumHistory?.name ?? stratum?.name,
+        observedPlants<span class="cstat-no" title="statement not covered" >: stratumResults?.totalPlants,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+        observedSpecies: stra<span class="cstat-no" title="statement not covered" >tumResults?.totalSpecies,</span>
+<span class="fstat-no" title="function not covered" >        ob</span>servedDensit<span class="cstat-no" title="statement not covered" >y: stratumResults?.plantingDensity,</span>
+        survivalRate: stratumResults?.survivalRate,
+<span class="cstat-no" title="statement not covered" >      };</span>
+    } else if (layerFeatureId.layerId === 'substrata') {
       const substratumHistory = siteHistory?.strata
         ?.flatMap((_stratum) =&gt; _stratum.substrata)
         .find((_substratum) =&gt; _substratum.substratumId === Number(layerFeatureId.featureId));
       const substratum = plantingSite?.strata
         ?.flatMap((_stratum) =&gt; _stratum.substrata)
-        .find((_substratum) =&gt; _substratum.id === Number(layerFeatureId.featureId));
-      const<span class="cstat-no" title="statement not covered" > substratumResults = results?.strata</span>
-        ?.flatMap((_stratum) =&gt; <span class="cstat-no" title="statement not covered" >_stratum.substrata)<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
-        ?.find((_substrat<span class="cstat-no" title="statement not covered" >um) =&gt; _substratum.substratumId === Number(layerFeatureId.featureId));<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
-      return {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
-<span class="cstat-no" title="statement not covered" >        name: substratumHistory?.name ?? substratum?.name,</span>
+        .fi<span class="cstat-no" title="statement not covered" >nd((_substratum) =&gt; _substratum.id === Number(layerFeatureId.featureId));</span>
+      const substratumResults = <span class="cstat-no" title="statement not covered" >results?.strata<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
+        ?.flatMap((_strat<span class="cstat-no" title="statement not covered" >um) =&gt; _stratum.substrata)<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
+        ?.find((_substratum) =&gt; <span class="cstat-no" title="statement not covered" >_substratum.substratumId === Number(layerFeatureId.featureId));<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
+<span class="cstat-no" title="statement not covered" >      return {</span>
+        name: substratumHistory?.name ?? substratum?.name,
         observedPlants: substratumResults?.totalPlants,
         observedSpecies: substratumResults?.totalSpecies,
         observedDensity: substratumResults?.plantingDensity,
         survivalRate: substratumResults?.survivalRate,
       };
-    } else if (
-      layer<span class="cstat-no" title="statement not covered" >FeatureId.layerId === 'permanentPlots' ||</span>
-      layerFeatureI<span class="cstat-no" title="statement not covered" >d.layerId === 'temporaryPlots' ||<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span></span></span>
-      layerFeatureId.layerId <span class="cstat-no" title="statement not covered" >=== 'adHocPlots'<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
+    } else <span class="cstat-no" title="statement not covered" >if (</span>
+      layerFeatureI<span class="cstat-no" title="statement not covered" >d.layerId === 'permanentPlots' ||<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span></span></span>
+      layerFeatureId.layerId <span class="cstat-no" title="statement not covered" >=== 'temporaryPlots' ||<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
+      layerFeatureId.laye<span class="cstat-no" title="statement not covered" >rId === 'adHocPlots'</span>
     ) {<span class="cstat-no" title="statement not covered" ></span>
-      const plot = plantin<span class="cstat-no" title="statement not covered" >gSite?.strata</span>
-<span class="fstat-no" title="function not covered" >        ?.</span>flatMap((<span class="cstat-no" title="statement not covered" >_stratum) =&gt; _stratum.substrata)</span>
-        ?.flatMap((_substratum) =&gt; _substratum.monitoringPlots)
-        .find((_plot) =<span class="cstat-no" title="statement not covered" >&gt; _plot.id === Number(layerFeatureId.featureId));</span>
-<span class="cstat-no" title="statement not covered" >      const allplotResults =</span>
+      co<span class="fstat-no" title="function not covered" >ns</span>t plot = <span class="cstat-no" title="statement not covered" >plantingSite?.strata</span>
+        ?.flatMap((_stratum) =&gt; _stratum.substrata)
+        ?.flatMap((_sub<span class="cstat-no" title="statement not covered" >stratum) =&gt; _substratum.monitoringPlots)</span>
+<span class="cstat-no" title="statement not covered" >        .find((_plot) =&gt; _plot.id === Number(layerFeatureId.featureId));</span>
+      const allplotResults =
         results?.strata
           ?.flatMap((_stratum) =&gt; _stratum.substrata)
           ?.flatMap((_substratum) =&gt; _substratum.monitoringPlots) ?? [];
@@ -546,45 +575,45 @@ const ObservationSt<span class="cstat-no" title="statement not covered" ><span c
       const plotResults = [...allplotResults, ...adHocPlots].find(
         (_plot) =&gt; _plot.monitoringPlotId === Number(layerFeatureId.featureId)
       );
-      const plotType = plotResults?.isAdHoc ? 'adHoc' : plotResults?.isPermanent ? 'permanent' : 'temporary';
-<span class="cstat-no" title="statement not covered" >      return {</span>
+<span class="cstat-no" title="statement not covered" >      const plotType </span>= plotResults?.isAdHoc ? 'adHoc' : plotResults?.isPermanent ? 'permanent' : 'temporary';
+      return {
         name: plot ? `${plot.plotNumber}` : undefined,
-        observedPlants: plotResults?.totalPlants,
-        observe<span class="cstat-no" title="statement not covered" >dSpecies: plotResults?.tot<span class="fstat-no" title="function not covered" >al</span>Species,</span>
-        observedDensity<span class="cstat-no" title="statement not covered" >: p</span>lotResults?.plantingDensity,
+        observe<span class="cstat-no" title="statement not covered" >dPlants: plotResults?.tota<span class="fstat-no" title="function not covered" >lP</span>lants,</span>
+        observedSpecies<span class="cstat-no" title="statement not covered" >: p</span>lotResults?.totalSpecies,
+<span class="cstat-no" title="statement not covered" >        observedDensity: plotResults?.plantingDensity,</span>
 <span class="cstat-no" title="statement not covered" >        plotType,</span>
-<span class="cstat-no" title="statement not covered" >        survivalRate: plotResults?.survivalRate,</span>
+        survivalRate: <span class="cstat-no" title="statement not covered" >plotResults?.survivalRate,</span>
       };<span class="cstat-no" title="statement not covered" ></span>
-    } el<span class="cstat-no" title="statement not covered" >se {</span>
+    } else {
       return undefined;
     }
   }, [layerFeatureId, plantingSite, results, siteHistory?.strata]);
-&nbsp;
-  cons<span class="cstat-no" title="statement not covered" >t rows = useMemo((): MapDrawerTableRow[] =&gt; {</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  const rows = useMemo((): MapDrawerTableRow[] =&gt; {
     const drawerRows: MapDrawerTableRow[] = [];
 &nbsp;
-    if (properties) {
-<span class="cstat-no" title="statement not covered" >      if (properties.plotType) {</span>
+    if<span class="cstat-no" title="statement not covered" > (properties) {</span>
+      if (properties.plotType) {
         const value =
           properties.plotType === 'adHoc'
-            ? strings.AD_HOC
-<span class="cstat-no" title="statement not covered" >            : properties.plotType === 'permanent'</span>
+<span class="cstat-no" title="statement not covered" >            ? strings.AD_HOC</span>
+            : properties.plotType === 'permanent'
               ? strings.PERMANENT
               : strings.TEMPORARY;
-        drawerRows.push({
-<span class="cstat-no" title="statement not covered" >          key: strings.PLOT_TYPE,</span>
+<span class="cstat-no" title="statement not covered" >        drawerRows.push({</span>
+          key: strings.PLOT_TYPE,
           value,
         });
       }
-      drawerRows.push({
-<span class="cstat-no" title="statement not covered" >        key: strings.OB</span>SERVED_PLANTS,
-        value: properties.observedPlants ? `${properties.observedPlants}` : strings.NO_DATA_YET,
+<span class="cstat-no" title="statement not covered" >      drawerRows.push({</span>
+        key: strings.OBSERVED_PLANTS,
+<span class="cstat-no" title="statement not covered" >        value: properties.observedPlants ? `${properties.observedPlants}` : strings.NO_DATA_YET,</span>
 <span class="cstat-no" title="statement not covered" >      });</span>
-<span class="cstat-no" title="statement not covered" ></span>
-      drawerRows.push({
-<span class="cstat-no" title="statement not covered" >        key: strings.OBSERVED_SPECIES,</span>
-        value: properties.observedSpecies ? `${properties.observedSpecies}` : strings.NO_DATA_YET,
-      });<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      drawerRows.push({</span>
+        key: strings.OBSERVED_SPECIES,
+        value: prope<span class="cstat-no" title="statement not covered" >rties.observedSpecies ?</span> `${properties.observedSpecies}` : strings.NO_DATA_YET,
+      });
 &nbsp;
       drawerRows.push({
         key: strings.PLANTING_DENSITY,
@@ -609,11 +638,15 @@ const ObservationSt<span class="cstat-no" title="statement not covered" ><span c
   }
 &nbsp;
   return (
-    properties &amp;&amp; (
-      &lt;Box display={'flex'} width={'100%'}&gt;
-        &lt;MapDrawerTable header={properties.name} rows={rows} /&gt;
-      &lt;/Box&gt;
-    )
+    &lt;&gt;
+      {virtualPlotOpen &amp;&amp; &lt;VirtualPlotModal onClose={setVirtualPlotOpenFalse} /&gt;}
+      {properties &amp;&amp; (
+        &lt;Box display={'flex'} width={'100%'} flexDirection={'column'}&gt;
+          &lt;MapDrawerTable header={properties.name} rows={rows} /&gt;
+          {isVirtualPlotsEnabled &amp;&amp; &lt;Button onClick={setVirtualPlotOpenTrue} label={strings.VISIT_VIRTUAL_PLOT} /&gt;}
+        &lt;/Box&gt;
+      )}
+    &lt;/&gt;
   );
 };
 &nbsp;
@@ -625,7 +658,7 @@ export default ObservationStatsDrawer;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-23T22:45:52.276Z
+                at 2026-01-23T22:59:55.169Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
