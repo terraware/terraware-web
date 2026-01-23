@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/48</span>
+                <span class='fraction'>0/50</span>
             </div>
         
             
@@ -196,7 +196,10 @@
 <a name='L131'></a><a href='#L131'>131</a>
 <a name='L132'></a><a href='#L132'>132</a>
 <a name='L133'></a><a href='#L133'>133</a>
-<a name='L134'></a><a href='#L134'>134</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L134'></a><a href='#L134'>134</a>
+<a name='L135'></a><a href='#L135'>135</a>
+<a name='L136'></a><a href='#L136'>136</a>
+<a name='L137'></a><a href='#L137'>137</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -257,7 +260,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -372,25 +378,28 @@ const Map = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: MapProps): JSX
     }<span class="cstat-no" title="statement not covered" ></span>
   }, [getPla<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >nt</span>ingSite, isBiomass, plantingSiteId, selectedOrganization]);</span>
 &nbsp;
-  const plantingSite = useMemo(() =<span class="cstat-no" title="statement not covered" >&gt; getPlantingSiteResult.data?.site, [get</span>PlantingSiteResult.data?.site]);
+  const plantingSite = useMemo(<span class="cstat-no" title="statement not covered" ></span>
+    () =&gt; (plantingSit<span class="cstat-no" title="statement not covered" >eId !== undefined ? getPlantingSiteResul</span>t.data?.site : undefined),
+    [getPlanting<span class="cstat-no" title="statement not covered" >SiteResult.data?.site, plantingS</span>iteId]
+  );<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  useEffect(() =<span class="cstat-no" title="statement not covered" >&gt; {</span>
-    if (selectedOrganizati<span class="cstat-no" title="statement not covered" >on &amp;&amp; plantingSiteId !== undefined) {</span>
+  useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
+    if (selectedOrganization &amp;&amp; plantingSiteId !== undefined) {<span class="cstat-no" title="statement not covered" ></span>
       void listAdHocObservationResults(<span class="cstat-no" title="statement not covered" ></span>
         {<span class="cstat-no" title="statement not covered" ></span>
-          organizationId: selectedOrganization.id,<span class="cstat-no" title="statement not covered" ></span>
-          plantingSiteId,<span class="cstat-no" title="statement not covered" ></span>
-          includePlants: true,<span class="cstat-no" title="statement not covered" ></span>
-        },
-        true
-<span class="cstat-no" title="statement not covered" >      );<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >      if (!isBiomass) {</span>
-<span class="cstat-no" title="statement not covered" >        void listObservationResults(</span>
-          {
+          organizationId: selectedOrganization.id,
+          plantingSiteId,
+<span class="cstat-no" title="statement not covered" >          includePlants: true,<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >        },</span>
+<span class="cstat-no" title="statement not covered" >        true</span>
+      );
+      if (!isBiomass) {
+        void listObserv<span class="cstat-no" title="statement not covered" >ationResults(</span>
+<span class="fstat-no" title="function not covered" ></span>          {
             organizationId: selectedOrganization.id,
-            plantingSit<span class="cstat-no" title="statement not covered" >eId,<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >            plantingSiteId,</span>
             includePlants: true,
-<span class="cstat-no" title="statement not covered" >          },</span>
+          },
           true
 <span class="cstat-no" title="statement not covered" >        );<span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >      }</span>
@@ -469,7 +478,7 @@ export default Map;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-23T17:46:33.682Z
+                at 2026-01-23T18:41:20.301Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
