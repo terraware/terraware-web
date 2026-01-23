@@ -1,3 +1,4 @@
+123fe14b1ab SW-7975 Add start of support for annotations in the model (#5104)
 686781ec688 SW-7959 Use new OverlayModal component for the virtual monitoring plots, add to observations drawer (#5101)
 e6cf6c9ebc8 SW-7959 Initial Viewer for Virtual Monitoring Plots (#5084)
 1bf0f7a6389 SW-7866 Map in observation views (#5114)

@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/52</span>
+                <span class='fraction'>0/51</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/50</span>
+                <span class='fraction'>0/49</span>
             </div>
         
             
@@ -193,12 +193,12 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useEffe<span class="cstat-no" title="statement not covered" >ct, useRef } from 'rea</span>ct';
 <span class="cstat-no" title="statement not covered" ></span>
 import { useApp, useAppE<span class="cstat-no" title="statement not covered" >vent } from '@playcanvas/re</span>act/hooks';
@@ -214,59 +214,59 @@ inte<span class="cstat-no" title="statement not covered" >rface SplatAutoRotateP
   restar<span class="cstat-no" title="statement not covered" >tRotateTimeoutMs?: number;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 }
 <span class="cstat-no" title="statement not covered" ></span>
-const SplatAutoRotate = ({
-  stopOnInteraction<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > =</span> true,<span class="cstat-no" title="statement not covered" ></span></span>
-  restartRotateTimeo<span class="cstat-no" title="statement not covered" >utM</span>s = DEFAULT_RESTART_ROTATE_TIME_MS,
-<span class="cstat-no" title="statement not covered" >}: SplatAutoRotateProps) =&gt; {</span>
-  const app<span class="fstat-no" title="function not covered" > =</span> use<span class="cstat-no" title="statement not covered" >App();</span>
-  const autoRotateRef = useRef(true);
-<span class="cstat-no" title="statement not covered" >  const inactivityTimerRef = useRef&lt;NodeJS.Tim</span>eout | null&gt;(null);
+// TODO change this to script - https://developer.playcanvas.com/user-manual/react/guide/interactivity/#the-script-component
+const SplatAutoRota<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >te</span> = ({<span class="cstat-no" title="statement not covered" ></span></span>
+  stopOnInteraction <span class="cstat-no" title="statement not covered" >= t</span>rue,
+<span class="cstat-no" title="statement not covered" >  restartRotateTimeoutMs = DEFAULT_RESTART_ROTATE_TIME_MS,</span>
+}: SplatAut<span class="fstat-no" title="function not covered" >oR</span>otat<span class="cstat-no" title="statement not covered" >eProps) =&gt; {</span>
+  const app = useApp();
+<span class="cstat-no" title="statement not covered" >  const autoRotateRef = useRef(true);</span>
+  const inactivityT<span class="cstat-no" title="statement not covered" >imerRef = useRef&lt;</span>NodeJS.Timeout | null&gt;(null);
 <span class="cstat-no" title="statement not covered" ></span>
   useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-    const canvas = app.graphicsDevice.c<span class="cstat-no" title="statement not covered" >anva</span>s;
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-    const resetInactiv<span class="branch-0 cbranch-no" title="branch not covered" >ityTi</span>mer = () =&gt; {
-      if (inactivityTimerRe<span class="branch-0 cbranch-no" title="branch not covered" >f.current) {</span>
-        clearTimeout(inactivityTimerRef.current);
+    const canvas = app.g<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ra</span>phicsDevice.canvas;</span>
+<span class="branch-0 cbranch-no" title="branch not covered" ></span>
+    const resetInactivityTi<span class="branch-0 cbranch-no" title="branch not covered" >mer = () =&gt; {</span>
+      if (inactivityTimerRef.current) {
+        clearT<span class="cstat-no" title="statement not covered" >imeout(inactivityTimerRef.c</span>urrent);
       }<span class="cstat-no" title="statement not covered" ></span>
-      autoRotateRef.curr<span class="cstat-no" title="statement not covered" >ent = false;</span>
-      inactivityTimerRef.curr<span class="cstat-no" title="statement not covered" >ent = setTimeout(() =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >        autoRotateRef.current <span class="fstat-no" title="function not covered" >= </span>true;</span>
-      }, restartRot<span class="cstat-no" title="statement not covered" >ateTimeoutMs || DEFAULT_RE</span>START_ROTATE_TIME_MS);
-    };<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" ></span>
-    cons<span class="cstat-no" title="statement not covered" >t handleUserInteraction = () =&gt; {</span>
-      if (stopOnInteraction) {
-<span class="cstat-no" title="statement not covered" >        resetInactivityTimer();</span>
-<span class="cstat-no" title="statement not covered" >      }<span class="fstat-no" title="function not covered" ></span></span>
+      autoRotateRef.current =<span class="cstat-no" title="statement not covered" > false;</span>
+<span class="cstat-no" title="statement not covered" >      inactivityTimerRef.curre<span class="fstat-no" title="function not covered" >nt</span> = setTimeout(() =&gt; {</span>
+        autoRotateR<span class="cstat-no" title="statement not covered" >ef.current = true;</span>
+      }, restartRotateTimeoutMs |<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >| </span>DEFAULT_RESTART_ROTATE_TIME_MS);</span>
     };<span class="cstat-no" title="statement not covered" ></span>
-&nbsp;
-    // todo change this so that mousedown stops interaction until mouseup
-    canvas.addEventListener('mouse<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >do</span>wn', handleUserInteraction);</span>
-    ca<span class="cstat-no" title="statement not covered" >nvas.addEventListener('wheel', handleUserInteraction);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-    return () =&gt; {
-      canvas.removeEventListener('mousedown', handleUserInteraction);
-<span class="cstat-no" title="statement not covered" >      canvas.removeEventListener('wheel', handleUserInteraction);</span>
+    const handleUserInteraction = () =&gt; {
+<span class="cstat-no" title="statement not covered" >      if (stopOnInteraction) {</span>
+<span class="cstat-no" title="statement not covered" >        resetInactivityTimer();<span class="fstat-no" title="function not covered" ></span></span>
+      }<span class="cstat-no" title="statement not covered" ></span>
+    };
+&nbsp;
+    // todo change this so that mo<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >us</span>edown stops interaction until mouseup, also add keyboard events</span>
+    ca<span class="cstat-no" title="statement not covered" >nvas.addEventListener('mousedown', handleUserInteraction);</span>
+    canv<span class="cstat-no" title="statement not covered" >as.addEventListener('whe</span>el', handleUserInteraction);
+    // todo could also change these to useAppEvent - https://developer.playcanvas.com/user-manual/react/api/hooks/use-app-event/
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    return () =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      canvas.removeEventListener('mousedown', handleUserInter</span>action);
+<span class="cstat-no" title="statement not covered" >      canva<span class="fstat-no" title="function not covered" >s.</span>removeEventListener('wheel', handleUserInteraction);</span>
 <span class="cstat-no" title="statement not covered" >      if (inactivityTimerRef.current) {</span>
-<span class="cstat-no" title="statement not covered" >        cle<span class="fstat-no" title="function not covered" >ar</span>Timeout(inactivityTimerRef.current);</span>
+<span class="cstat-no" title="statement not covered" >        clearTimeout(inactivityTimerRef.current);</span>
 <span class="cstat-no" title="statement not covered" >      }</span>
     };<span class="cstat-no" title="statement not covered" ></span>
-  }, [<span class="cstat-no" title="statement not covered" >app, restartRotateTimeoutMs, stopOnInteraction]);</span>
-<span class="cstat-no" title="statement not covered" ></span>
+  }, [app, restartRotateTimeoutMs, stopOnInteraction]);
+&nbsp;
   useAppEvent('update', (dt: number) =&gt; {
-    const splatEntity = app.root.findByName('splat');
-    if (autoRotateRef.current &amp;&amp; splatEntity) {
-<span class="cstat-no" title="statement not covered" >      const currentRotation = splatEntity.<span class="fstat-no" title="function not covered" >ge</span>tEulerAngles();</span>
-      // TODO fix this w<span class="cstat-no" title="statement not covered" >hen it gets stuck on 90. Perh</span>aps &gt;90 gets changed to &lt;90
-<span class="cstat-no" title="statement not covered" >      splatEntity.setEulerAngles(currentRotation.x, currentRotation.y + dt * 5, currentRotation.z);</span>
+<span class="cstat-no" title="statement not covered" >    const splatEntity = app.root.findByNam<span class="fstat-no" title="function not covered" >e(</span>'splat');</span>
+    if (autoRotateRef.cu<span class="cstat-no" title="statement not covered" >rrent &amp;&amp; splatEntity) {</span>
+<span class="cstat-no" title="statement not covered" >      splatEntity.rotate(0, dt * 5, 0);</span>
     }<span class="cstat-no" title="statement not covered" ></span>
-  });<span class="cstat-no" title="statement not covered" ></span>
+  });
 &nbsp;
-  return null;
-};<span class="cstat-no" title="statement not covered" ></span>
-&nbsp;
-export default Splat<span class="cstat-no" title="statement not covered" >AutoRotate;</span>
+<span class="cstat-no" title="statement not covered" >  return null;</span>
+};
+<span class="cstat-no" title="statement not covered" ></span>
+export default SplatAutoRotate;
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -274,7 +274,7 @@ export default Splat<span class="cstat-no" title="statement not covered" >AutoRo
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-23T22:59:55.169Z
+                at 2026-01-23T23:14:47.428Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
