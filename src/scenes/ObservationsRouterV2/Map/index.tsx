@@ -41,7 +41,10 @@ const Map = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: MapProps): JSX
     }
   }, [getPlantingSite, isBiomass, plantingSiteId, selectedOrganization]);
 
-  const plantingSite = useMemo(() => getPlantingSiteResult.data?.site, [getPlantingSiteResult.data?.site]);
+  const plantingSite = useMemo(
+    () => (plantingSiteId !== undefined ? getPlantingSiteResult.data?.site : undefined),
+    [getPlantingSiteResult.data?.site, plantingSiteId]
+  );
 
   useEffect(() => {
     if (selectedOrganization && plantingSiteId !== undefined) {

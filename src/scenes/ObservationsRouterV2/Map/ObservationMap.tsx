@@ -42,7 +42,8 @@ import { getShortDate } from 'src/utils/dateFormatter';
 import useMapboxToken from 'src/utils/useMapboxToken';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
-import ObservationStatsDrawer from '../ListView/ObservationStatsDrawer';
+import BiomassObservationStatsDrawer from './BiomassObservationStatsDrawer';
+import ObservationStatsDrawer from './ObservationStatsDrawer';
 
 type LayerFeature = {
   plantingSiteId: number;
@@ -829,13 +830,22 @@ const ObservationMap = ({
 
   const drawerContent = useMemo(() => {
     if (selectedFeature && selectedResults) {
-      return (
-        <ObservationStatsDrawer
-          layerFeatureId={selectedFeature.layerFeatureId}
-          observationId={selectedResults.observationId}
-          plantingSiteId={selectedFeature.plantingSiteId}
-        />
-      );
+      if (isBiomass) {
+        return (
+          <BiomassObservationStatsDrawer
+            observationId={selectedResults.observationId}
+            plantingSiteId={selectedFeature.plantingSiteId}
+          />
+        );
+      } else {
+        return (
+          <ObservationStatsDrawer
+            layerFeatureId={selectedFeature.layerFeatureId}
+            observationId={selectedResults.observationId}
+            plantingSiteId={selectedFeature.plantingSiteId}
+          />
+        );
+      }
     }
     if (selectedPhotos.length > 0) {
       return photoDrawerContent;
@@ -844,6 +854,7 @@ const ObservationMap = ({
       return plantDrawerContent;
     }
   }, [
+    isBiomass,
     photoDrawerContent,
     plantDrawerContent,
     selectedFeature,
