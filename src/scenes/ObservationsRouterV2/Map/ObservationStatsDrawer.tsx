@@ -18,6 +18,7 @@ type ObservationStatsProperties = {
 };
 
 type ObservationStatsDrawerProps = {
+  isBiomass?: boolean;
   layerFeatureId: MapLayerFeatureId;
   plantingSiteId: number;
   observationId: number;

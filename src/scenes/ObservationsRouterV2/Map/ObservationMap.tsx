@@ -42,7 +42,8 @@ import { getShortDate } from 'src/utils/dateFormatter';
 import useMapboxToken from 'src/utils/useMapboxToken';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
-import ObservationStatsDrawer from '../ListView/ObservationStatsDrawer';
+import BiomassObservationStatsDrawer from './BiomassObservationStatsDrawer';
+import ObservationStatsDrawer from './ObservationStatsDrawer';
 
 type LayerFeature = {
   plantingSiteId: number;
@@ -827,15 +828,43 @@ const ObservationMap = ({
     survivalRateLegendGroup,
   ]);
 
+  const setDrawerOpenCallback = useCallback(
+    (open: boolean) => {
+      if (open) {
+        setDrawerOpen(true);
+      } else {
+        setDrawerOpen(false);
+        setSelectedFeature(undefined);
+        selectPhotos([]);
+        selectPlants([]);
+      }
+    },
+    [selectPhotos, selectPlants]
+  );
+
+  useEffect(() => {
+    // Close drawer on data changes
+    setDrawerOpenCallback(false);
+  }, [plantingSiteId, observationResults, adHocObservationResults, setDrawerOpenCallback]);
+
   const drawerContent = useMemo(() => {
     if (selectedFeature && selectedResults) {
-      return (
-        <ObservationStatsDrawer
-          layerFeatureId={selectedFeature.layerFeatureId}
-          observationId={selectedResults.observationId}
-          plantingSiteId={selectedFeature.plantingSiteId}
-        />
-      );
+      if (isBiomass) {
+        return (
+          <BiomassObservationStatsDrawer
+            observationId={selectedResults.observationId}
+            plantingSiteId={selectedFeature.plantingSiteId}
+          />
+        );
+      } else {
+        return (
+          <ObservationStatsDrawer
+            layerFeatureId={selectedFeature.layerFeatureId}
+            observationId={selectedResults.observationId}
+            plantingSiteId={selectedFeature.plantingSiteId}
+          />
+        );
+      }
     }
     if (selectedPhotos.length > 0) {
       return photoDrawerContent;
@@ -844,6 +873,7 @@ const ObservationMap = ({
       return plantDrawerContent;
     }
   }, [
+    isBiomass,
     photoDrawerContent,
     plantDrawerContent,
     selectedFeature,
@@ -871,19 +901,6 @@ const ObservationMap = ({
       return 'small';
     }
   }, [photoDrawerSize, plantDrawerSize, selectedPhotos.length, selectedPlants.length]);
-
-  const setDrawerOpenCallback = useCallback(
-    (open: boolean) => {
-      if (open) {
-        setDrawerOpen(true);
-      } else {
-        setDrawerOpen(false);
-        selectPhotos([]);
-        selectPlants([]);
-      }
-    },
-    [selectPhotos, selectPlants]
-  );
 
   return (
     <MapComponent
