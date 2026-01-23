@@ -69,6 +69,7 @@ export class TfAnnotationManager extends PcAnnotationManager {
 
   /**
    * Override the scale update to clamp the world size to a maximum value.
+   * Also scales the hotspot DOM element to match.
    * @private
    */
   _updateAnnotationRotationAndScale(annotation: any) {
@@ -83,11 +84,21 @@ export class TfAnnotationManager extends PcAnnotationManager {
     const projMatrix = (this as any)._camera.camera.projectionMatrix;
 
     // Calculate world size based on screen size and distance
-    let worldSize = ((this as any)._hotspotSize / screenHeight) * ((2 * distance) / projMatrix.data[5]);
+    const unclamped = ((this as any)._hotspotSize / screenHeight) * ((2 * distance) / projMatrix.data[5]);
 
     // Clamp to maximum world size
-    worldSize = Math.min(worldSize, this._maxWorldSize);
+    const worldSize = Math.min(unclamped, this._maxWorldSize);
 
     annotation.entity.setLocalScale(worldSize, worldSize, worldSize);
+
+    // Scale the hotspot DOM element proportionally when clamped
+    const resources = (this as any)._annotationResources.get(annotation);
+    if (resources && resources.hotspotDom) {
+      const scaleFactor = worldSize / unclamped;
+      const baseSize = (this as any)._hotspotSize + 5; // Match the +5 from the stylesheet
+      const scaledSize = baseSize * scaleFactor;
+      resources.hotspotDom.style.width = `${scaledSize}px`;
+      resources.hotspotDom.style.height = `${scaledSize}px`;
+    }
   }
 }
