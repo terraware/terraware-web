@@ -1,0 +1,4 @@
+/* Allow pointer events on annotation hotspots while container blocks events */
+.annotation-container > * {
+    pointer-events: auto;
+}

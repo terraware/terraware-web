@@ -8,6 +8,8 @@ import Application from 'src/components/GaussianSplat/Application';
 import VirtualMonitoringPlot from './VirtualMonitoringPlot';
 
 interface VirtualPlotModalProps {
+  observationId: number;
+  monitoringPlotId: number;
   onClose?: () => void;
 }
 
@@ -37,15 +39,10 @@ const BelowComponent = () => {
   );
 };
 
-const VirtualPlotModal = ({ onClose }: VirtualPlotModalProps) => {
+const VirtualPlotModal = ({ observationId, monitoringPlotId, onClose }: VirtualPlotModalProps) => {
   return (
     <OverlayModal open={true} onClose={onClose} belowComponent={<BelowComponent />}>
       <Application
-        boxSx={{
-          width: '100%',
-          height: '100%',
-          position: 'relative',
-        }}
         style={{
           width: '100%',
           height: '100%',
@@ -53,7 +50,10 @@ const VirtualPlotModal = ({ onClose }: VirtualPlotModalProps) => {
           margin: '0 auto',
         }}
       >
-        <VirtualMonitoringPlot />
+        <VirtualMonitoringPlot
+          observationId={observationId.toString()}
+          monitoringPlotId={monitoringPlotId.toString()}
+        />
       </Application>
     </OverlayModal>
   );

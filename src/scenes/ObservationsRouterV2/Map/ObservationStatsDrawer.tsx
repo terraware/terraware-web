@@ -172,6 +172,17 @@ const ObservationStatsDrawer = ({
     return drawerRows;
   }, [properties, strings]);
 
+  const monitoringPlotId = useMemo(() => {
+    if (
+      layerFeatureId.layerId === 'permanentPlots' ||
+      layerFeatureId.layerId === 'temporaryPlots' ||
+      layerFeatureId.layerId === 'adHocPlots'
+    ) {
+      return Number(layerFeatureId.featureId);
+    }
+    return undefined;
+  }, [layerFeatureId]);
+
   if (isLoading) {
     return (
       <Box display={'flex'} width={'100%'} justifyContent={'center'}>
@@ -182,11 +193,19 @@ const ObservationStatsDrawer = ({
 
   return (
     <>
-      {virtualPlotOpen && <VirtualPlotModal onClose={setVirtualPlotOpenFalse} />}
+      {virtualPlotOpen && monitoringPlotId && (
+        <VirtualPlotModal
+          observationId={observationId}
+          monitoringPlotId={monitoringPlotId}
+          onClose={setVirtualPlotOpenFalse}
+        />
+      )}
       {properties && (
         <Box display={'flex'} width={'100%'} flexDirection={'column'}>
           <MapDrawerTable header={properties.name} rows={rows} />
-          {isVirtualPlotsEnabled && <Button onClick={setVirtualPlotOpenTrue} label={strings.VISIT_VIRTUAL_PLOT} />}
+          {isVirtualPlotsEnabled && monitoringPlotId && (
+            <Button onClick={setVirtualPlotOpenTrue} label={strings.VISIT_VIRTUAL_PLOT} />
+          )}
         </Box>
       )}
     </>
