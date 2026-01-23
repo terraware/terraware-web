@@ -15,14 +15,14 @@ const VirtualMonitoringPlot = () => {
     <Box
       sx={{
         width: '100%',
-        height: 'calc(100vh - 96px)',
+        height: '100%',
         position: 'relative',
       }}
     >
       <Application
         style={{
-          width: '80%',
-          height: '80%',
+          width: '100%',
+          height: '100%',
           display: 'block',
           margin: '0 auto',
         }}
