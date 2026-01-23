@@ -1,3 +1,4 @@
+e6cf6c9ebc8 SW-7959 Initial Viewer for Virtual Monitoring Plots (#5084)
 1bf0f7a6389 SW-7866 Map in observation views (#5114)
 27ea39199de Implemented biomass observation drawer (#5113)
 c1eead2f73d Disable terraware-server SQS integration (#5115)
