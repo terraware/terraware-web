@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { type JSX, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Grid, Typography, useTheme } from '@mui/material';

@@ -22,7 +22,7 @@ export default function DisplayVariableValue({
   onEditVariableValue,
   variable,
   reference,
-}: DisplayVariableValueProps): React.ReactElement {
+}: DisplayVariableValueProps): React.ReactElement<any> {
   const theme = useTheme();
 
   const variableStyles = {

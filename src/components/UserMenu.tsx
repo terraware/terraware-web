@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { type JSX, useMemo } from 'react';
 import { useMixpanel } from 'react-mixpanel-browser';
 
 import { useTheme } from '@mui/material';

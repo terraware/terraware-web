@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type JSX } from 'react';
 
 import { SelectT } from '@terraware/web-components';
 
@@ -28,7 +28,11 @@ export default function FacilitySelector(props: FacilitySelectorProps): JSX.Elem
       renderOption={(facility) => facility.name}
       displayLabel={(facility) => facility?.name || ''}
       selectedValue={selectedFacility}
-      toT={(name: string) => ({ name }) as Facility}
+      toT={(name: string) =>
+        ({
+          name,
+        }) as Facility
+      }
       fullWidth={true}
       errorText={errorText}
       tooltipTitle={strings.TOOLTIP_ACCESSIONS_LOCATION}

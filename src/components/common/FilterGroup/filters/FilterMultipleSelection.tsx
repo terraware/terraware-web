@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { type JSX, useMemo } from 'react';
 
 import { Box, useTheme } from '@mui/material';
 import { MultiSelect } from '@terraware/web-components';
@@ -17,7 +17,7 @@ interface Props {
 
 export default function MultipleSelection(props: Props): JSX.Element {
   const theme = useTheme();
-  const filter = React.useRef<FieldNodePayload>();
+  const filter = React.useRef<FieldNodePayload>(undefined);
   const [selections, setSelections] = React.useState<(string | null)[]>(props.values);
 
   React.useEffect(() => {

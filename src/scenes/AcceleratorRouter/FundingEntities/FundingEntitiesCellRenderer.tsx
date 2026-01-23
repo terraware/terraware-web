@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type JSX } from 'react';
 
 import { RendererProps, TableRowType } from '@terraware/web-components';
 

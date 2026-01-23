@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useState } from 'react';
 
 import { Box, Grid, useTheme } from '@mui/material';
 import { BusySpinner, Dropdown, SelectT } from '@terraware/web-components';
@@ -115,9 +115,7 @@ export default function AddToProjectModal(props: AddToProjectModalProps): JSX.El
       {isOpenConfirmAddToProjectModal && (
         <AddToProjectConfirmModal onClose={onClose} onConfirm={handleOnSubmit} projects={projectsWithDeliverables} />
       )}
-
       {isBusy && <BusySpinner withSkrim={true} />}
-
       <DialogBox
         onClose={onClose}
         open={!isOpenConfirmAddToProjectModal}
@@ -159,7 +157,11 @@ export default function AddToProjectModal(props: AddToProjectModalProps): JSX.El
                     isEqual={(a: Project, b: Project) => a.id === b.id}
                     renderOption={(project: Project) => project?.name || ''}
                     displayLabel={(project: Project) => project?.name || ''}
-                    toT={(name: string) => ({ name }) as Project}
+                    toT={(name: string) =>
+                      ({
+                        name,
+                      }) as Project
+                    }
                     required
                   />
                 </Grid>

@@ -1,4 +1,4 @@
-import React, { ReactNode, useCallback, useEffect, useState } from 'react';
+import React, { type JSX, ReactNode, useCallback, useEffect, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import getDateDisplayValue from '@terraware/web-components/utils/date';

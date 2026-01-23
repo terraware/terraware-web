@@ -1,4 +1,4 @@
-import React, { MutableRefObject, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, MutableRefObject, useCallback, useEffect, useMemo, useState } from 'react';
 import Map, {
   FullscreenControl,
   Layer,

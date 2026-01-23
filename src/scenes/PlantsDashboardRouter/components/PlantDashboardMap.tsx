@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { type JSX, useCallback, useMemo, useRef, useState } from 'react';
 import { MapRef } from 'react-map-gl/mapbox';
 
 import { Box } from '@mui/material';
@@ -73,9 +73,11 @@ const PlantDashboardMap = ({
   const { photoDrawerContent, photoDrawerHeader, photoDrawerSize, selectedPhotos, selectPhotos } = useMapPhotoDrawer();
 
   const { selectedLayer, plantingSiteLegendGroup } = usePlantingSiteMapLegend('strata');
-  const { deadPlantsVisible, livePlantsVisible, plantMakersLegendGroup } = usePlantMarkersMapLegend(
-    disablePlantMarkers || observationResults.length === 0
-  );
+  const {
+    deadPlantsVisible,
+    livePlantsVisible,
+    plantMarkersLegendGroup: plantMakersLegendGroup,
+  } = usePlantMarkersMapLegend(disablePlantMarkers || observationResults.length === 0);
   const { observationEventsVisible, observationEventsLegendGroup } = useObservationEventsMapLegend(
     disableObserationEvents || observationResults.length === 0
   );

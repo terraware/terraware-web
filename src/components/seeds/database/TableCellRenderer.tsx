@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type JSX } from 'react';
 
 import { FiberManualRecord } from '@mui/icons-material';
 import { Box, TableCell, Typography, useTheme } from '@mui/material';

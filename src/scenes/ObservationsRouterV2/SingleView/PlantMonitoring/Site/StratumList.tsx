@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { type JSX, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router';
 
 import { TableColumnType } from '@terraware/web-components';

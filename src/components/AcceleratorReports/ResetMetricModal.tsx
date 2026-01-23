@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type JSX } from 'react';
 
 import { Typography } from '@mui/material';
 import { Confirm } from '@terraware/web-components';

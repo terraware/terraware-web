@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { type JSX, useEffect, useState } from 'react';
 
 import { Close } from '@mui/icons-material';
 import { Box, Grid, IconButton, Typography, useTheme } from '@mui/material';
@@ -616,7 +616,11 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
               renderOption={(option) => renderUser(option, user, contributor)}
               displayLabel={(option) => renderUser(option, user, contributor)}
               selectedValue={users?.find((userSel) => userSel.id === record?.withdrawnByUserId)}
-              toT={(firstName: string) => ({ firstName }) as OrganizationUser}
+              toT={(firstName: string) =>
+                ({
+                  firstName,
+                }) as OrganizationUser
+              }
               fullWidth={true}
               disabled={contributor || readOnly}
             />

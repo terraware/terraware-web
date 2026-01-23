@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useState } from 'react';
 
 import { Grid, useTheme } from '@mui/material';
 import getDateDisplayValue, { isInTheFuture } from '@terraware/web-components/utils/date';

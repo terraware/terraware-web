@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { type JSX, useRef, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button, Checkbox, Textfield } from '@terraware/web-components';

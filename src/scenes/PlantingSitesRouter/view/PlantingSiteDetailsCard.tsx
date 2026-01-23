@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { type JSX, useEffect, useState } from 'react';
 
 import { Grid, List, ListItem, useTheme } from '@mui/material';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';

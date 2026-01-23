@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type JSX } from 'react';
 
 import Link from 'src/components/common/Link';
 import TextTruncated from 'src/components/common/TextTruncated';

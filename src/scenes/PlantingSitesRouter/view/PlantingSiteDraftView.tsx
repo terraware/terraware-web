@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { type JSX, useCallback, useMemo } from 'react';
 import { useState } from 'react';
 import { useParams } from 'react-router';
 

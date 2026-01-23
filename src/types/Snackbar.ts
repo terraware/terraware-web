@@ -1,3 +1,5 @@
+import type { JSX } from 'react';
+
 export type Priority = 'info' | 'critical' | 'warning' | 'success';
 export type Title = string | string[] | undefined;
 export type Message = string | (string | JSX.Element)[];

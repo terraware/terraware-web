@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { type JSX, useEffect, useState } from 'react';
 
 import { useOrganization } from 'src/providers/hooks';
 import { NurseryInventoryService, SpeciesService } from 'src/services';

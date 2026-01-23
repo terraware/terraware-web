@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { type JSX, useCallback } from 'react';
 
 import { AppBar, Box, Toolbar, useTheme } from '@mui/material';
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type JSX } from 'react';
 
 import { SpeciesService } from 'src/services';
 import strings from 'src/strings';

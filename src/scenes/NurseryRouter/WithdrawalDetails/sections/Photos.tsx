@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-extra-non-null-assertion */
-import React, { useEffect, useState } from 'react';
+import React, { type JSX, useEffect, useState } from 'react';
 
 import { Box, Typography } from '@mui/material';
 

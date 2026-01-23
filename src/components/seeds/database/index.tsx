@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router';
 
 import { Box, CircularProgress, Container, Grid, useTheme } from '@mui/material';

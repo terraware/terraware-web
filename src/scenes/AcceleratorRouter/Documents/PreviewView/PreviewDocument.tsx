@@ -12,7 +12,7 @@ type PreviewDocumentProps = {
   projectName: string;
 };
 
-export default function PreviewDocument({ projectName }: PreviewDocumentProps): ReactElement | null {
+export default function PreviewDocument({ projectName }: PreviewDocumentProps): ReactElement<any> | null {
   const { allVariables, document, documentId, documentVariables, projectId } = useDocumentProducerData();
 
   const [sectionVariables, setSectionVariables] = useState<SectionVariableWithValues[]>([]);

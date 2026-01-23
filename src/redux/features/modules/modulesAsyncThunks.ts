@@ -70,10 +70,8 @@ export const requestListModuleCohorts = createAsyncThunk(
         'cohortModules.endDate',
         'cohortModules.cohort.id',
         'cohortModules.cohort.name',
-        'cohortModules.cohort.participants.id',
-        'cohortModules.cohort.participants.name',
-        'cohortModules.cohort.participants.projects.id',
-        'cohortModules.cohort.participants.projects.name',
+        'cohortModules.cohort.projects.id',
+        'cohortModules.cohort.projects.name',
       ],
       search: {
         operation: 'field',

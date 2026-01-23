@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { type JSX, useCallback } from 'react';
 
 import { Typography } from '@mui/material';
 import { Button, DialogBox } from '@terraware/web-components';

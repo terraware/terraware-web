@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { type JSX, useCallback } from 'react';
 
 import { RendererProps, TableRowType } from '@terraware/web-components';
 

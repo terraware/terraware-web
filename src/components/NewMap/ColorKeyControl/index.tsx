@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { type JSX, useCallback, useState } from 'react';
 
 import { Popover, Typography, useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';

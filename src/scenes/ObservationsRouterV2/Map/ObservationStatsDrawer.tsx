@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { type JSX, useMemo } from 'react';
 
 import { Box, CircularProgress } from '@mui/material';
 
@@ -18,6 +18,7 @@ type ObservationStatsProperties = {
 };
 
 type ObservationStatsDrawerProps = {
+  isBiomass?: boolean;
   layerFeatureId: MapLayerFeatureId;
   plantingSiteId: number;
   observationId: number;

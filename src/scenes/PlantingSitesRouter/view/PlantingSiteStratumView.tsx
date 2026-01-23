@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { type JSX, useMemo } from 'react';
 import { useParams } from 'react-router';
 
 import { useGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';

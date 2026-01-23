@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef, useState } from 'react';
+import React, { type JSX, useLayoutEffect, useRef, useState } from 'react';
 
 import { Box, useTheme } from '@mui/material';
 import { keyframes } from '@mui/system';
@@ -16,7 +16,7 @@ const LEFT_NAV_WIDTH = 220;
  * nextElement The HTMLElement immediately following the header element
  */
 interface Props {
-  children?: React.ReactChild | React.ReactChild[];
+  children?: React.ReactNode | React.ReactNode[];
   hasNav?: boolean;
   nextElement?: HTMLElement | null;
   nextElementInitialMargin?: number;

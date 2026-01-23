@@ -27,11 +27,7 @@ import useSurvivalRateMapLegend from 'src/components/NewMap/useSurvivalRateMapLe
 import useVirtualPlotMapLegend from 'src/components/NewMap/useVirtualPlotMapLegend';
 import { getBoundingBoxFromPoints } from 'src/components/NewMap/utils';
 import { useLocalization, useOrganization } from 'src/providers';
-import {
-  ObservationMonitoringPlotResultsPayload,
-  useLazyListAdHocObservationResultsQuery,
-  useLazyListObservationResultsQuery,
-} from 'src/queries/generated/observations';
+import { ObservationMonitoringPlotResultsPayload, ObservationResultsPayload } from 'src/queries/generated/observations';
 import {
   useLazyGetPlantingSiteHistoryQuery,
   useLazyGetPlantingSiteQuery,
@@ -47,7 +43,8 @@ import { getShortDate } from 'src/utils/dateFormatter';
 import useMapboxToken from 'src/utils/useMapboxToken';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
-import ObservationStatsDrawer from '../ListView/ObservationStatsDrawer';
+import BiomassObservationStatsDrawer from './BiomassObservationStatsDrawer';
+import ObservationStatsDrawer from './ObservationStatsDrawer';
 
 type LayerFeature = {
   plantingSiteId: number;
@@ -55,12 +52,20 @@ type LayerFeature = {
 };
 
 type ObservationMapProps = {
+  adHocObservationResults: ObservationResultsPayload[];
   isBiomass?: boolean;
+  observationResults: ObservationResultsPayload[];
   plantingSiteId?: number;
   selectPlantingSiteId: (siteId: number) => void;
 };
 
-const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: ObservationMapProps) => {
+const ObservationMap = ({
+  adHocObservationResults,
+  isBiomass,
+  observationResults,
+  plantingSiteId,
+  selectPlantingSiteId,
+}: ObservationMapProps) => {
   const { activeLocale, strings } = useLocalization();
   const defaultTimezone = useDefaultTimeZone().get().id;
   const { mapId, token } = useMapboxToken();
@@ -70,9 +75,11 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
 
   const { selectedLayer, plantingSiteLegendGroup } = usePlantingSiteMapLegend('sites', plantingSiteId === undefined);
-  const { livePlantsVisible, deadPlantsVisible, plantMakersLegendGroup } = usePlantMarkersMapLegend(
-    plantingSiteId === undefined
-  );
+  const {
+    livePlantsVisible,
+    deadPlantsVisible,
+    plantMarkersLegendGroup: plantMakersLegendGroup,
+  } = usePlantMarkersMapLegend(plantingSiteId === undefined);
   const { plotPhotosVisible, plotPhotosLegendGroup } = usePlotPhotosMapLegend(plantingSiteId === undefined);
   const { virtualPlotVisible, virtualPlotLegendGroup } = useVirtualPlotMapLegend(plantingSiteId === undefined);
   const { survivalRateVisible, survivalRateLegendGroup } = useSurvivalRateMapLegend(plantingSiteId === undefined);
@@ -101,8 +108,6 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
   const [listPlantingSites, listPlantingSitesResult] = useLazyListPlantingSitesQuery();
   const [getPlantingSite, getPlantingSiteResult] = useLazyGetPlantingSiteQuery();
   const [getPlantingSiteHistory, getPlantingSiteHistoryResult] = useLazyGetPlantingSiteHistoryQuery();
-  const [listObservationResults, listObservationsResultsResponse] = useLazyListObservationResultsQuery();
-  const [listAdHocObservationResults, listAdHocObservationResultsResponse] = useLazyListAdHocObservationResultsQuery();
 
   useEffect(() => {
     if (selectedOrganization && plantingSiteId === undefined) {
@@ -115,34 +120,8 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
       );
     } else if (selectedOrganization && plantingSiteId !== undefined) {
       void getPlantingSite(plantingSiteId, true);
-      void listAdHocObservationResults(
-        {
-          organizationId: selectedOrganization.id,
-          plantingSiteId,
-          includePlants: true,
-        },
-        true
-      );
-      if (!isBiomass) {
-        void listObservationResults(
-          {
-            organizationId: selectedOrganization.id,
-            plantingSiteId,
-            includePlants: true,
-          },
-          true
-        );
-      }
     }
-  }, [
-    getPlantingSite,
-    isBiomass,
-    listAdHocObservationResults,
-    listObservationResults,
-    listPlantingSites,
-    plantingSiteId,
-    selectedOrganization,
-  ]);
+  }, [getPlantingSite, listPlantingSites, plantingSiteId, selectedOrganization]);
 
   const allPlantingSites = useMemo(
     () => listPlantingSitesResult.data?.sites ?? [],
@@ -150,26 +129,6 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
   );
 
   const plantingSite = useMemo(() => getPlantingSiteResult.data?.site, [getPlantingSiteResult.data?.site]);
-
-  const observationResults = useMemo(() => {
-    if (listObservationsResultsResponse.isSuccess) {
-      return listObservationsResultsResponse.data.observations.filter(
-        (observation) => observation.type === (isBiomass ? 'Biomass Measurements' : 'Monitoring')
-      );
-    } else {
-      return [];
-    }
-  }, [isBiomass, listObservationsResultsResponse]);
-
-  const adHocObservationResults = useMemo(() => {
-    if (listAdHocObservationResultsResponse.isSuccess) {
-      return listAdHocObservationResultsResponse.data.observations.filter(
-        (observation) => observation.type === (isBiomass ? 'Biomass Measurements' : 'Monitoring')
-      );
-    } else {
-      return [];
-    }
-  }, [isBiomass, listAdHocObservationResultsResponse]);
 
   const observationResultsOptions = useMemo((): MapDropdownLegendItem[] => {
     return observationResults.map((observation): MapDropdownLegendItem => {
@@ -555,10 +514,10 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
       sortFeatureBySurvivalRate(stratumId, stratum.survivalRate);
 
       stratum.substrata.forEach((substratum) => {
-        const selectedSubstratumistory = selectedStratumHistory?.substrata.find(
-          (substratumistory) => substratumistory.substratumId === substratum.substratumId
+        const selectedSubstratumHistory = selectedStratumHistory?.substrata.find(
+          (substratumHistory) => substratumHistory.substratumId === substratum.substratumId
         );
-        const substratumId = { layerId: 'substrata', featureId: `${selectedSubstratumistory?.substratumId}` };
+        const substratumId = { layerId: 'substrata', featureId: `${selectedSubstratumHistory?.substratumId}` };
         sortFeatureBySurvivalRate(substratumId, substratum.survivalRate);
       });
     });
@@ -943,15 +902,43 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
     survivalRateLegendGroup,
   ]);
 
+  const setDrawerOpenCallback = useCallback(
+    (open: boolean) => {
+      if (open) {
+        setDrawerOpen(true);
+      } else {
+        setDrawerOpen(false);
+        setSelectedFeature(undefined);
+        selectPhotos([]);
+        selectPlants([]);
+      }
+    },
+    [selectPhotos, selectPlants]
+  );
+
+  useEffect(() => {
+    // Close drawer on data changes
+    setDrawerOpenCallback(false);
+  }, [plantingSiteId, observationResults, adHocObservationResults, setDrawerOpenCallback]);
+
   const drawerContent = useMemo(() => {
     if (selectedFeature && selectedResults) {
-      return (
-        <ObservationStatsDrawer
-          layerFeatureId={selectedFeature.layerFeatureId}
-          observationId={selectedResults.observationId}
-          plantingSiteId={selectedFeature.plantingSiteId}
-        />
-      );
+      if (isBiomass) {
+        return (
+          <BiomassObservationStatsDrawer
+            observationId={selectedResults.observationId}
+            plantingSiteId={selectedFeature.plantingSiteId}
+          />
+        );
+      } else {
+        return (
+          <ObservationStatsDrawer
+            layerFeatureId={selectedFeature.layerFeatureId}
+            observationId={selectedResults.observationId}
+            plantingSiteId={selectedFeature.plantingSiteId}
+          />
+        );
+      }
     }
     if (selectedPhotos.length > 0) {
       return photoDrawerContent;
@@ -960,6 +947,7 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
       return plantDrawerContent;
     }
   }, [
+    isBiomass,
     photoDrawerContent,
     plantDrawerContent,
     selectedFeature,
@@ -987,19 +975,6 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
       return 'small';
     }
   }, [photoDrawerSize, plantDrawerSize, selectedPhotos.length, selectedPlants.length]);
-
-  const setDrawerOpenCallback = useCallback(
-    (open: boolean) => {
-      if (open) {
-        setDrawerOpen(true);
-      } else {
-        setDrawerOpen(false);
-        selectPhotos([]);
-        selectPlants([]);
-      }
-    },
-    [selectPhotos, selectPlants]
-  );
 
   return (
     <MapComponent

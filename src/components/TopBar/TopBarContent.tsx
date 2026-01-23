@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type JSX } from 'react';
 import { useMixpanel } from 'react-mixpanel-browser';
 
 import { Box, Grid, IconButton, useTheme } from '@mui/material';

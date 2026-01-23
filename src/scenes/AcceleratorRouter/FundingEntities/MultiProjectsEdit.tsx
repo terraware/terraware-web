@@ -1,4 +1,4 @@
-import React, { Fragment, useCallback, useEffect, useState } from 'react';
+import React, { Fragment, type JSX, useCallback, useEffect, useState } from 'react';
 
 import { Box, Grid } from '@mui/material';
 

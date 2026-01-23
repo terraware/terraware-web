@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useMemo, useState } from 'react';
 
 import { Grid } from '@mui/material';
 import { FileChooser } from '@terraware/web-components';

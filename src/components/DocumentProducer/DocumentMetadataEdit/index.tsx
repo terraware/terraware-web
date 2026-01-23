@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useEffect, useMemo, useState } from 'react';
 
 import { Box, useTheme } from '@mui/material';
 import { styled } from '@mui/material/styles';

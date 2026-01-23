@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type JSX } from 'react';
 
 import { Box, Grid, useTheme } from '@mui/material';
 
@@ -30,7 +30,7 @@ export default function FilterCountWeight(props: Props): JSX.Element {
   const defaultWeightUnit = 'Grams' as Unit;
 
   const theme = useTheme();
-  const filter = React.useRef<OrNodePayload>();
+  const filter = React.useRef<OrNodePayload>(undefined);
   const [countMinValue, setCountMinValue] = React.useState<(string | null) | undefined>();
   const [countMaxValue, setCountMaxValue] = React.useState<(string | null) | undefined>();
   const [weightMinValue, setWeightMinValue] = React.useState<(string | null) | undefined>();

@@ -1,3 +1,5 @@
+import type { JSX } from 'react';
+
 import React, { BusySpinner } from '@terraware/web-components';
 import PageForm, { PageFormProps as FormProps } from '@terraware/web-components/components/PageForm';
 

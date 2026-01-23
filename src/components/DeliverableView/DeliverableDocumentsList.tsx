@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { type JSX, useMemo, useState } from 'react';
 
 import { Box, Grid } from '@mui/material';
 

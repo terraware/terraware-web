@@ -850,7 +850,7 @@ const MatrixView = () => {
     renderColumnActionsMenuItems: ({ internalColumnMenuItems }) => {
       // remove the last element (show all columns)
       const columnMenuItemsCopy = [...internalColumnMenuItems];
-      columnMenuItemsCopy.pop();
+      void columnMenuItemsCopy.pop();
       return columnMenuItemsCopy;
     },
     editDisplayMode: 'cell',

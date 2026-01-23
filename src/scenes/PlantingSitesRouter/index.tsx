@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type JSX } from 'react';
 import { Route, Routes, useParams } from 'react-router';
 
 import PlantingSiteCreate from './edit/PlantingSiteCreate';
