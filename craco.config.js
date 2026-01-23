@@ -1,5 +1,6 @@
 const chokidar = require('chokidar');
 const fs = require('fs');
+const webpack = require('webpack');
 const { whenDev } = require('@craco/craco');
 const { convertAllLocales } = require('./src/strings/export');
 const CracoEsbuildPlugin = require('craco-esbuild');
@@ -28,6 +29,14 @@ module.exports = {
     },
   }),
   webpack: {
+    configure: (webpackConfig) => {
+      webpackConfig.plugins.push(
+        new webpack.IgnorePlugin({
+          resourceRegExp: /^sync-ammo$/,
+        })
+      );
+      return webpackConfig;
+    },
     snapshot: {
       ...whenDev(() => ({
         // Watch web-components, but not other modules, for changes.
