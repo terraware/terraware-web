@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/37</span>
+                <span class='fraction'>0/38</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/34</span>
+                <span class='fraction'>0/35</span>
             </div>
         
             
@@ -125,7 +125,9 @@
 <a name='L60'></a><a href='#L60'>60</a>
 <a name='L61'></a><a href='#L61'>61</a>
 <a name='L62'></a><a href='#L62'>62</a>
-<a name='L63'></a><a href='#L63'>63</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L63'></a><a href='#L63'>63</a>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -169,6 +171,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -198,35 +202,36 @@ im<span class="cstat-no" title="statement not covered" >port { CameraControls } 
 <span class="cstat-no" title="statement not covered" ></span>
 import Annotation from 'src/components/GaussianSplat/Annotation';
 import SplatAutoRo<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ta</span>te from 'src/components/GaussianSplat/SplatAutoRotate';</span>
-im<span class="cstat-no" title="statement not covered" >port SplatModel from 'src/components/GaussianSplat/SplatModel';</span>
+im<span class="cstat-no" title="statement not covered" >port SplatControls from 'src/components/GaussianSplat/SplatControls';</span>
+impo<span class="cstat-no" title="statement not covered" >rt SplatModel from 'src/components/GaussianSplat/SplatModel';</span>
 <span class="cstat-no" title="statement not covered" ></span>
-const <span class="cstat-no" title="statement not covered" >VirtualMonitoringPlot = () =&gt; {</span>
-  return<span class="cstat-no" title="statement not covered" > (<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-    &lt;Box
-<span class="cstat-no" title="statement not covered" >      sx={{</span>
-        width: '100%',
-        height<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >: </span>'100%',<span class="cstat-no" title="statement not covered" ></span></span>
+const Vi<span class="cstat-no" title="statement not covered" >rtualMonitoringPlot = () =<span class="fstat-no" title="function not covered" >&gt; </span>{<span class="cstat-no" title="statement not covered" ></span></span>
+  return (
+<span class="cstat-no" title="statement not covered" >    &lt;Box</span>
+      sx={{
+        width:<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > '</span>100%',<span class="cstat-no" title="statement not covered" ></span></span>
+        height: '100%',
         position: 'relative',
       }}
     &gt;
       &lt;Application
         style={{
           width: '100%',
-          height: '100%',
-          display: <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >'b</span>lock',<span class="cstat-no" title="statement not covered" ></span></span>
-          margin: '0<span class="cstat-no" title="statement not covered" > au</span>to',
-<span class="cstat-no" title="statement not covered" >        }}</span>
-        gra<span class="fstat-no" title="function not covered" >ph</span>icsD<span class="cstat-no" title="statement not covered" >eviceOptions={</span>{ antialias: false }}
-      &gt;
-<span class="cstat-no" title="statement not covered" >        &lt;Entity name='camera'&gt;</span>
-          &lt;Camera c<span class="cstat-no" title="statement not covered" >learColor='#1a1a1a' fov={6</span>0} /&gt;
-          &lt;Script scri<span class="cstat-no" title="statement not covered" >pt={CameraControls} /&gt;</span>
+          height: '<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >10</span>0%',<span class="cstat-no" title="statement not covered" ></span></span>
+          display: '<span class="cstat-no" title="statement not covered" >blo</span>ck',
+<span class="cstat-no" title="statement not covered" >          margin: '0 auto',</span>
+        }}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+        graphicsDeviceOptions={{ antialias: false }}
+<span class="cstat-no" title="statement not covered" >      &gt;</span>
+        &lt;Entity nam<span class="cstat-no" title="statement not covered" >e='camera'&gt;</span>
+          &lt;Camera clea<span class="cstat-no" title="statement not covered" >rColor='#1a1a1a' fov={60}</span> /&gt;
+          &lt;Script sc<span class="cstat-no" title="statement not covered" >ript={CameraControls} /&gt;</span>
         &lt;/Entity&gt;<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
         &lt;SplatModel<span class="cstat-no" title="statement not covered" ></span>
-          splatSrc={'/ass<span class="cstat-no" title="statement not covered" >ets/models/test/PlyExamples/outside.ply'}</span>
-          position={[0, -0.1,<span class="cstat-no" title="statement not covered" > 0]}</span>
-          rotation={[-90<span class="cstat-no" title="statement not covered" >, 0, 0]}</span>
+          splatSrc={'/assets/<span class="cstat-no" title="statement not covered" >models/test/PlyExamples/outside.ply'}</span>
+          position={[0, <span class="cstat-no" title="statement not covered" >-0.1, 0]}</span>
+          rotation={[-90, 0, <span class="cstat-no" title="statement not covered" >0]}</span>
         /&gt;<span class="cstat-no" title="statement not covered" ></span>
         &lt;SplatAutoRotate<span class="cstat-no" title="statement not covered" > /&gt;</span>
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
@@ -243,6 +248,7 @@ const <span class="cstat-no" title="statement not covered" >VirtualMonitoringPlo
           title={'An annotation'}
           text={'This annotation is for testing stuff.'}
         /&gt;
+        &lt;SplatControls /&gt;
       &lt;/Application&gt;
     &lt;/Box&gt;
   );
@@ -256,7 +262,7 @@ export default VirtualMonitoringPlot;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-23T23:37:14.338Z
+                at 2026-01-23T23:56:38.481Z
             </div>
         <script src="../../../../../../prettify.js"></script>
         <script>
