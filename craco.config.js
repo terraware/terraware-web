@@ -32,6 +32,7 @@ module.exports = {
     configure: (webpackConfig) => {
       webpackConfig.plugins.push(
         new webpack.IgnorePlugin({
+          // sync-ammo is only needed for playcancas when usePhysics is enabled, but we don't need this and it causes a compilation error, so ignore it
           resourceRegExp: /^sync-ammo$/,
         })
       );
