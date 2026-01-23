@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 
+import { ObservationSplatPayload } from 'src/queries/generated/observations';
 import { ObservationMonitoringPlotPhotoWithGps } from 'src/types/Observations';
 
 import { MapDrawerSize } from './MapDrawer';
@@ -10,6 +11,11 @@ export type PlotPhoto = {
   observationId: number;
   monitoringPlotId: number;
   photo: ObservationMonitoringPlotPhotoWithGps;
+};
+export type PlotSplat = {
+  observationId: number;
+  monitoringPlotId: number;
+  splat: ObservationSplatPayload;
 };
 
 const useMapPhotoDrawer = () => {
