@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/34</span>
+                <span class='fraction'>0/38</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/20</span>
+                <span class='fraction'>0/22</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/31</span>
+                <span class='fraction'>0/35</span>
             </div>
         
             
@@ -109,7 +109,12 @@
 <a name='L44'></a><a href='#L44'>44</a>
 <a name='L45'></a><a href='#L45'>45</a>
 <a name='L46'></a><a href='#L46'>46</a>
-<a name='L47'></a><a href='#L47'>47</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L47'></a><a href='#L47'>47</a>
+<a name='L48'></a><a href='#L48'>48</a>
+<a name='L49'></a><a href='#L49'>49</a>
+<a name='L50'></a><a href='#L50'>50</a>
+<a name='L51'></a><a href='#L51'>51</a>
+<a name='L52'></a><a href='#L52'>52</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -147,10 +152,15 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -162,41 +172,46 @@ import { Box, Typography<span class="cstat-no" title="statement not covered" >, 
 <span class="cstat-no" title="statement not covered" ></span>
 import TwLink from <span class="cstat-no" title="statement not covered" >'src/components/common/Link';</span>
 import { APP_PA<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >TH</span>S } from 'src/constants';</span>
-im<span class="cstat-no" title="statement not covered" >port useDeviceInfo from 'src/utils/useDeviceInfo';</span>
+im<span class="cstat-no" title="statement not covered" >port { useLocalization } from 'src/providers/hooks';</span>
+impo<span class="cstat-no" title="statement not covered" >rt useDeviceInfo from 'src/utils/useDeviceInfo';</span>
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+in<span class="cstat-no" title="statement not covered" >terface Props {</span>
+  la<span class="cstat-no" title="statement not covered" >bel: string;</span>
+  stat<span class="cstat-no" title="statement not covered" >us: string;</span>
+  quanti<span class="cstat-no" title="statement not covered" >ty: number | undefined;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+}
 <span class="cstat-no" title="statement not covered" ></span>
-interface Props {
-  label: string;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >  status: string;</span>
-  qu<span class="cstat-no" title="statement not covered" >antity: number | undefined;</span>
-}<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 export default function AccessionByStatus({ label, status, quantity }: Props): JSX.Element {
-<span class="cstat-no" title="statement not covered" >  const { isM</span>obile } = useDeviceInfo();
+  const { isMo<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >bi</span>le } = useDeviceInfo();<span class="cstat-no" title="statement not covered" ></span></span>
   const theme = useTheme();
-  return (<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  const { activeLocale } = useLocalization();
+  const numberFormatter = useNumberFormatter(activeLocale);
+&nbsp;
+  return (
     &lt;Link
       id={`update-${status}`}
-      to={`${APP_PATHS.ACCESSIONS}?accessions_filter_state=${status}`}
-      style={{
-        textDecoration: 'none',
-        padding: '22px 10px 40px 10px',
+      to={`${APP_PA<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >TH</span>S.ACCES<span class="cstat-no" title="statement not covered" >SIONS}?accessions_filter_state=${status}`}</span></span>
+      style={{<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >        textDecoration: 'none',</span>
+        pad<span class="fstat-no" title="function not covered" >di</span>ng: <span class="cstat-no" title="statement not covered" >'22px 10px 40px 10</span>px',
         width: isMobile ? '100%' : '33%',
-        margin: '12<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >px</span>',<span class="cstat-no" title="statement not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >        margin: '12px',</span>
       }}<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >    &gt;</span>
-      &lt;Box <span class="fstat-no" title="function not covered" >te</span>xtAl<span class="cstat-no" title="statement not covered" >ign='center'&gt;</span>
-        &lt;TwLink
-<span class="cstat-no" title="statement not covered" >          onClick={() =&gt; {</span>
+    &gt;<span class="cstat-no" title="statement not covered" ></span>
+      &lt;Box textAlign='<span class="cstat-no" title="statement not covered" >center'&gt;</span>
+        &lt;TwLink<span class="cstat-no" title="statement not covered" ></span>
+          onClick={() =<span class="cstat-no" title="statement not covered" >&gt; {</span>
             return;<span class="cstat-no" title="statement not covered" ></span>
           }}<span class="cstat-no" title="statement not covered" ></span>
         &gt;<span class="cstat-no" title="statement not covered" ></span>
-          &lt;Typogra<span class="cstat-no" title="statement not covered" >phy color={theme.palette.TwClrTxtBrand} fontSiz</span>e='36px' fontWeight={600}&gt;
-            {quantity}<span class="cstat-no" title="statement not covered" ></span>
-          &lt;/Typography&gt;<span class="cstat-no" title="statement not covered" ></span>
-        &lt;<span class="fstat-no" title="function not covered" >/TwLink&gt;</span>
-        &lt;Typography col<span class="cstat-no" title="statement not covered" >or={theme.palette.TwClrTxt} fontSize</span>='16px' fontWeight={500}&gt;
-          {label<span class="cstat-no" title="statement not covered" >}</span>
-<span class="cstat-no" title="statement not covered" >        &lt;/Typography&gt;</span>
+<span class="fstat-no" title="function not covered" >          &lt;Typography color</span>={theme.palette.TwClrTxtBrand} fontSize='36px' fontWeight={600}&gt;
+            {numberForm<span class="cstat-no" title="statement not covered" >atter.format(quantity ?? 0)}</span>
+          &lt;/Typo<span class="cstat-no" title="statement not covered" >graphy&gt;</span>
+        &lt;/TwLink&gt;<span class="cstat-no" title="statement not covered" ></span>
+        &lt;Typography color=<span class="cstat-no" title="statement not covered" >{theme.palette.TwClrTxt} fontSize='16px' fontWeight={500}&gt;</span>
+<span class="cstat-no" title="statement not covered" >          {label}</span>
+        &lt;/Typography&gt;
       &lt;/Box&gt;
     &lt;/Link&gt;
   );
@@ -208,7 +223,7 @@ export default function AccessionByStatus({ label, status, quantity }: Props): J
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-23T23:14:47.428Z
+                at 2026-01-23T23:37:14.338Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
