@@ -16,7 +16,7 @@ import {
   MapPoint,
 } from 'src/components/NewMap/types';
 import useMapFeatureStyles from 'src/components/NewMap/useMapFeatureStyles';
-import useMapPhotoDrawer, { PlotPhoto } from 'src/components/NewMap/useMapPhotoDrawer';
+import useMapPhotoDrawer, { PlotPhoto, PlotSplat } from 'src/components/NewMap/useMapPhotoDrawer';
 import useMapPlantDrawer, { PlotPlant } from 'src/components/NewMap/useMapPlantDrawer';
 import useMapUtils from 'src/components/NewMap/useMapUtils';
 import useMonitoringPlotsMapLegend from 'src/components/NewMap/useMonitoringPlotsMapLegend';
@@ -24,10 +24,14 @@ import usePlantMarkersMapLegend from 'src/components/NewMap/usePlantMarkersMapLe
 import usePlantingSiteMapLegend from 'src/components/NewMap/usePlantingSiteMapLegend';
 import usePlotPhotosMapLegend from 'src/components/NewMap/usePlotPhotosMapLegend';
 import useSurvivalRateMapLegend from 'src/components/NewMap/useSurvivalRateMapLegend';
-import useVirtualPlotMapLegend from 'src/components/NewMap/useVirtualPlotMapLegend';
 import { getBoundingBoxFromPoints } from 'src/components/NewMap/utils';
 import { useLocalization, useOrganization } from 'src/providers';
-import { ObservationMonitoringPlotResultsPayload, ObservationResultsPayload } from 'src/queries/generated/observations';
+import {
+  ObservationMonitoringPlotResultsPayload,
+  ObservationResultsPayload,
+  ObservationSplatPayload,
+} from 'src/queries/generated/observations';
+import { useLazyListObservationSplatsQuery } from 'src/queries/generated/observations';
 import {
   useLazyGetPlantingSiteHistoryQuery,
   useLazyGetPlantingSiteQuery,
@@ -80,8 +84,9 @@ const ObservationMap = ({
     deadPlantsVisible,
     plantMarkersLegendGroup: plantMakersLegendGroup,
   } = usePlantMarkersMapLegend(plantingSiteId === undefined);
-  const { plotPhotosVisible, plotPhotosLegendGroup } = usePlotPhotosMapLegend(plantingSiteId === undefined);
-  const { virtualPlotVisible, virtualPlotLegendGroup } = useVirtualPlotMapLegend(plantingSiteId === undefined);
+  const { plotPhotosVisible, plotPhotosLegendGroup, virtualPlotVisible } = usePlotPhotosMapLegend(
+    plantingSiteId === undefined
+  );
   const { survivalRateVisible, survivalRateLegendGroup } = useSurvivalRateMapLegend(plantingSiteId === undefined);
   const { adHocPlotsVisible, permanentPlotsVisible, temporaryPlotsVisible, monitoringPlotsLegendGroup } =
     useMonitoringPlotsMapLegend(plantingSiteId === undefined, isBiomass, isBiomass);
@@ -97,6 +102,7 @@ const ObservationMap = ({
     survivalRateLessThan50,
     survivalRateMoreThan75,
     plotPhotoStyle,
+    virtualPlotStyle,
     livePlantStyle,
     deadPlantStyle,
   } = useMapFeatureStyles();
@@ -108,6 +114,7 @@ const ObservationMap = ({
   const [listPlantingSites, listPlantingSitesResult] = useLazyListPlantingSitesQuery();
   const [getPlantingSite, getPlantingSiteResult] = useLazyGetPlantingSiteQuery();
   const [getPlantingSiteHistory, getPlantingSiteHistoryResult] = useLazyGetPlantingSiteHistoryQuery();
+  const [listObservationSplats, listObservationSplatsResult] = useLazyListObservationSplatsQuery();
 
   useEffect(() => {
     if (selectedOrganization && plantingSiteId === undefined) {
@@ -202,6 +209,12 @@ const ObservationMap = ({
       );
     }
   }, [getPlantingSiteHistory, selectedResults]);
+
+  useEffect(() => {
+    if (selectedResults && selectedObservationId) {
+      void listObservationSplats({ observationId: selectedObservationId }, true);
+    }
+  }, [listObservationSplats, selectedObservationId, selectedResults]);
 
   const selectedHistory = useMemo(
     () => getPlantingSiteHistoryResult.data?.site,
@@ -585,15 +598,15 @@ const ObservationMap = ({
   const selectSplatFromMarkers = useCallback(
     (selectedMarkers: MapMarker[]) => {
       const photos = selectedMarkers
-        .map((marker): PlotPhoto | undefined => {
+        .map((marker): PlotSplat | undefined => {
           if (marker.properties) {
             const observationId = marker.properties.observationId as number;
             const monitoringPlotId = marker.properties.monitoringPlotId as number;
-            const splat = marker.properties.splat as ObservationMonitoringPlotSplat;
+            const splat = marker.properties.splat as ObservationSplatPayload;
             return { monitoringPlotId, observationId, splat };
           }
         })
-        .filter((photo): photo is PlotPhoto => photo !== undefined);
+        .filter((photo): photo is PlotSplat => photo !== undefined);
       selectPhotos(photos);
       selectPlants([]);
       setSelectedFeature(undefined);
@@ -647,7 +660,9 @@ const ObservationMap = ({
           longitude: photo.gpsCoordinates?.coordinates[1],
           latitude: photo.gpsCoordinates?.coordinates[0],
           onClick: selectPhoto(plot.monitoringPlotId, selectedResults.observationId, photo),
-          selected: selectedPhotos.find((selected) => selected.photo.fileId === photo.fileId) !== undefined,
+          selected:
+            selectedPhotos.find((selected) => 'photo' in selected && selected.photo.fileId === photo.fileId) !==
+            undefined,
           properties: {
             adHocPlotId: plot.monitoringPlotId,
             photo,
@@ -665,7 +680,9 @@ const ObservationMap = ({
             longitude: photo.gpsCoordinates?.coordinates[1],
             latitude: photo.gpsCoordinates?.coordinates[0],
             onClick: selectPhoto(plot.monitoringPlotId, selectedResults.observationId, photo),
-            selected: selectedPhotos.find((selected) => selected.photo.fileId === photo.fileId) !== undefined,
+            selected:
+              selectedPhotos.find((selected) => 'photo' in selected && selected.photo.fileId === photo.fileId) !==
+              undefined,
             properties: {
               monitoringPlotId: plot.monitoringPlotId,
               observationId: selectedResults.observationId,
@@ -678,51 +695,64 @@ const ObservationMap = ({
     return [...adHocPlotPhotos, ...monitoringPlotPhotos];
   }, [adHocPlots, selectPhoto, selectedPhotos, selectedResults]);
 
+  const selectSplat = useCallback(
+    (monitoringPlotId: number, observationId: number, splat: ObservationSplatPayload) => () => {
+      selectPhotos([{ monitoringPlotId, observationId, splat }]);
+      selectPlants([]);
+      setSelectedFeature(undefined);
+      setDrawerOpen(true);
+    },
+    [selectPhotos, selectPlants]
+  );
+
   const virtualPlotMarker = useMemo((): MapMarker[] => {
-    if (!selectedResults) {
+    if (!selectedResults || !listObservationSplatsResult.data) {
       return [];
     }
 
-    const hasGpsCoordinates = (photo: ObservationMonitoringPlotPhoto): photo is ObservationMonitoringPlotPhotoWithGps =>
-      !!photo.gpsCoordinates;
+    const splats = listObservationSplatsResult.data.splats.filter((splat) => splat.status === 'Ready');
+    const allPlots = [
+      ...adHocPlots,
+      ...selectedResults.strata
+        .flatMap((stratum) => stratum.substrata)
+        .flatMap((substratum) => substratum.monitoringPlots),
+    ];
 
-    const adHocPlotPhotos = adHocPlots.flatMap((plot): MapMarker[] =>
-      plot.photos.filter(hasGpsCoordinates).map((photo) => {
+    return splats
+      .map((splat): MapMarker | undefined => {
+        const plot = allPlots.find((p) => p.monitoringPlotId === splat.monitoringPlotId);
+        if (!plot || !plot.boundary?.coordinates?.length) {
+          return undefined;
+        }
+
+        const points = plot.boundary.coordinates[0].map(
+          ([lng, lat]): MapPoint => ({
+            lat,
+            lng,
+          })
+        );
+
+        const bbox = getBoundingBoxFromPoints(points);
+        const latitude = (bbox.maxLat + bbox.minLat) / 2;
+        const longitude = (bbox.maxLng + bbox.minLng) / 2;
+
         return {
-          id: `photos/${photo.fileId}`,
-          longitude: photo.gpsCoordinates?.coordinates[1],
-          latitude: photo.gpsCoordinates?.coordinates[0],
-          onClick: selectPhoto(plot.monitoringPlotId, selectedResults.observationId, photo),
-          selected: selectedPhotos.find((selected) => selected.photo.fileId === photo.fileId) !== undefined,
+          id: `splats/${splat.fileId}`,
+          longitude,
+          latitude,
+          onClick: selectSplat(splat.monitoringPlotId, selectedResults.observationId, splat),
+          selected:
+            selectedPhotos.find((selected) => 'splat' in selected && selected.splat?.fileId === splat.fileId) !==
+            undefined,
           properties: {
-            adHocPlotId: plot.monitoringPlotId,
-            photo,
+            monitoringPlotId: splat.monitoringPlotId,
+            observationId: selectedResults.observationId,
+            splat,
           },
         };
       })
-    );
-    const monitoringPlotPhotos = selectedResults.strata
-      .flatMap((stratum) => stratum.substrata)
-      .flatMap((substratum) => substratum.monitoringPlots)
-      .flatMap((plot): MapMarker[] =>
-        plot.photos.filter(hasGpsCoordinates).map((photo) => {
-          return {
-            id: `photos/${photo.fileId}`,
-            longitude: photo.gpsCoordinates?.coordinates[1],
-            latitude: photo.gpsCoordinates?.coordinates[0],
-            onClick: selectPhoto(plot.monitoringPlotId, selectedResults.observationId, photo),
-            selected: selectedPhotos.find((selected) => selected.photo.fileId === photo.fileId) !== undefined,
-            properties: {
-              monitoringPlotId: plot.monitoringPlotId,
-              observationId: selectedResults.observationId,
-              photo,
-            },
-          };
-        })
-      );
-
-    return [...adHocPlotPhotos, ...monitoringPlotPhotos];
-  }, [adHocPlots, selectPhoto, selectedPhotos, selectedResults]);
+      .filter((marker): marker is MapMarker => marker !== undefined);
+  }, [adHocPlots, listObservationSplatsResult.data, selectSplat, selectedPhotos, selectedResults]);
 
   const treesMarkers = useCallback(
     (isDead: boolean): MapMarker[] => {
@@ -822,7 +852,7 @@ const ObservationMap = ({
         markers: virtualPlotMarker,
         markerGroupId: 'virtual-plot',
         onClusterClick: selectSplatFromMarkers,
-        style: plotPhotoStyle,
+        style: virtualPlotStyle,
         visible: virtualPlotVisible,
       },
       {
@@ -871,7 +901,11 @@ const ObservationMap = ({
     plotPhotosVisible,
     selectPhotosFromMarkers,
     selectPlantsFromMarkers,
+    selectSplatFromMarkers,
     treesMarkers,
+    virtualPlotMarker,
+    virtualPlotStyle,
+    virtualPlotVisible,
   ]);
 
   const legends = useMemo((): MapLegendGroup[] => {

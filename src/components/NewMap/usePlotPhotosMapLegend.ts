@@ -8,8 +8,9 @@ import useMapFeatureStyles from './useMapFeatureStyles';
 const usePlotPhotosMapLegend = (disabled?: boolean) => {
   const { strings } = useLocalization();
   const [plotPhotosVisible, setPlotPhotosVisible] = useState<boolean>(false);
+  const [virtualPlotVisible, setVirtualPlotVisible] = useState<boolean>(false);
 
-  const { plotPhotoStyle } = useMapFeatureStyles();
+  const { plotPhotoStyle, virtualPlotStyle } = useMapFeatureStyles();
   const plotPhotosLegendGroup = useMemo((): MapMultiSelectLegendGroup => {
     return {
       disabled,
@@ -21,16 +22,34 @@ const usePlotPhotosMapLegend = (disabled?: boolean) => {
           style: plotPhotoStyle,
           visible: plotPhotosVisible,
         },
+        {
+          id: 'virtual-plot',
+          label: strings.VIRTUAL_PLOTS,
+          setVisible: setVirtualPlotVisible,
+          style: virtualPlotStyle,
+          visible: virtualPlotVisible,
+        },
       ],
       title: strings.PHOTOS,
       type: 'multi-select',
     };
-  }, [disabled, plotPhotoStyle, plotPhotosVisible, strings.MONITORING_PLOTS, strings.PHOTOS]);
+  }, [
+    disabled,
+    plotPhotoStyle,
+    plotPhotosVisible,
+    virtualPlotStyle,
+    virtualPlotVisible,
+    strings.MONITORING_PLOTS,
+    strings.PHOTOS,
+    strings.VIRTUAL_PLOTS,
+  ]);
 
   return {
     plotPhotosLegendGroup,
     plotPhotosVisible,
     setPlotPhotosVisible,
+    virtualPlotVisible,
+    setVirtualPlotVisible,
   };
 };
 

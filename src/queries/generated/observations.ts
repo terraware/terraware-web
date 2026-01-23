@@ -392,9 +392,9 @@ export type GenerateObservationSplatFileApiArg = {
   observationId: number;
   generateSplatRequestPayload: GenerateSplatRequestPayload;
 };
-export type GetObservationSplatFileApiResponse = /** status 200 The requested operation succeeded. */
-  | object
-  | /** status 202 The video is still being processed and the model is not ready yet. */ object;
+export type GetObservationSplatFileApiResponse =
+  /** status 200 The requested operation succeeded. */
+  object | /** status 202 The video is still being processed and the model is not ready yet. */ object;
 export type GetObservationSplatFileApiArg = {
   observationId: number;
   fileId: number;

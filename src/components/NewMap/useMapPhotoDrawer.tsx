@@ -19,7 +19,7 @@ export type PlotSplat = {
 };
 
 const useMapPhotoDrawer = () => {
-  const [selectedPhotos, setSelectedPhotos] = useState<PlotPhoto[]>([]);
+  const [selectedPhotos, setSelectedPhotos] = useState<(PlotPhoto | PlotSplat)[]>([]);
   const [photoDrawerPage, setPhotoDrawerPage] = useState<number>(1);
 
   const photoDrawerSize: MapDrawerSize = 'medium';
@@ -45,13 +45,14 @@ const useMapPhotoDrawer = () => {
         <MapPhotoDrawer
           monitoringPlotId={selectedPhoto.monitoringPlotId}
           observationId={selectedPhoto.observationId}
-          photo={selectedPhoto.photo}
+          photo={'photo' in selectedPhoto ? selectedPhoto.photo : undefined}
+          splat={'splat' in selectedPhoto ? selectedPhoto.splat : undefined}
         />
       );
     }
   }, [photoDrawerPage, selectedPhotos]);
 
-  const selectPhotos = useCallback((photos: PlotPhoto[]) => {
+  const selectPhotos = useCallback((photos: (PlotPhoto | PlotSplat)[]) => {
     setSelectedPhotos(photos);
     setPhotoDrawerPage(1);
   }, []);
