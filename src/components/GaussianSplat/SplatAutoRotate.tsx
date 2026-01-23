@@ -13,6 +13,7 @@ interface SplatAutoRotateProps {
   restartRotateTimeoutMs?: number;
 }
 
+// TODO change this to script - https://developer.playcanvas.com/user-manual/react/guide/interactivity/#the-script-component
 const SplatAutoRotate = ({
   stopOnInteraction = true,
   restartRotateTimeoutMs = DEFAULT_RESTART_ROTATE_TIME_MS,
@@ -40,9 +41,10 @@ const SplatAutoRotate = ({
       }
     };
 
-    // todo change this so that mousedown stops interaction until mouseup
+    // todo change this so that mousedown stops interaction until mouseup, also add keyboard events
     canvas.addEventListener('mousedown', handleUserInteraction);
     canvas.addEventListener('wheel', handleUserInteraction);
+    // todo could also change these to useAppEvent - https://developer.playcanvas.com/user-manual/react/api/hooks/use-app-event/
 
     return () => {
       canvas.removeEventListener('mousedown', handleUserInteraction);
@@ -56,9 +58,7 @@ const SplatAutoRotate = ({
   useAppEvent('update', (dt: number) => {
     const splatEntity = app.root.findByName('splat');
     if (autoRotateRef.current && splatEntity) {
-      const currentRotation = splatEntity.getEulerAngles();
-      // TODO fix this when it gets stuck on 90. Perhaps >90 gets changed to <90
-      splatEntity.setEulerAngles(currentRotation.x, currentRotation.y + dt * 5, currentRotation.z);
+      splatEntity.rotate(0, dt * 5, 0);
     }
   });
 
