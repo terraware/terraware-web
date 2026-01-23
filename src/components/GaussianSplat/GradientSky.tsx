@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 
 import { Entity } from '@playcanvas/react';
 import { Render } from '@playcanvas/react/components';
@@ -64,6 +64,15 @@ const GradientSky = ({
 
     return mat;
   }, [app, topColor, horizonColor, groundColor, resolution]);
+
+  useEffect(() => {
+    // remove material to avoid memory leak
+    return () => {
+      if (material) {
+        material.destroy();
+      }
+    };
+  }, [material]);
 
   if (!material) {
     return null;
