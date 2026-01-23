@@ -53,14 +53,16 @@ type LayerFeature = {
 type ObservationMapProps = {
   adHocObservationResults: ObservationResultsPayload[];
   isBiomass?: boolean;
+  isSingleView?: boolean;
   observationResults: ObservationResultsPayload[];
   plantingSiteId?: number;
-  selectPlantingSiteId: (siteId: number) => void;
+  selectPlantingSiteId?: (siteId: number) => void;
 };
 
 const ObservationMap = ({
   adHocObservationResults,
   isBiomass,
+  isSingleView,
   observationResults,
   plantingSiteId,
   selectPlantingSiteId,
@@ -441,7 +443,7 @@ const ObservationMap = ({
               longitude,
               latitude,
               onClick: () => {
-                selectPlantingSiteId(site.id);
+                selectPlantingSiteId?.(site.id);
                 fitBounds(bbox);
               },
             };
@@ -810,7 +812,7 @@ const ObservationMap = ({
         : plantingSiteLegendGroup;
 
     return [
-      ...(isBiomass || plantingSiteId === undefined ? [] : [observationDropdownLegendGroup]),
+      ...(isBiomass || isSingleView || plantingSiteId === undefined ? [] : [observationDropdownLegendGroup]),
       siteLegendGroup,
       monitoringPlotsLegendGroup,
       plotPhotosLegendGroup,
@@ -825,6 +827,7 @@ const ObservationMap = ({
     plotPhotosLegendGroup,
     plantMakersLegendGroup,
     isBiomass,
+    isSingleView,
     survivalRateLegendGroup,
   ]);
 
