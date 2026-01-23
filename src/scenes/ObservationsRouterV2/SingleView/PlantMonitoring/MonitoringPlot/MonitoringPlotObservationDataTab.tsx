@@ -15,6 +15,7 @@ import ObservationDataNumbers from 'src/scenes/ObservationsRouter/adhoc/Observat
 import EventLog from 'src/scenes/ObservationsRouter/common/EventLog';
 import MatchSpeciesModal from 'src/scenes/ObservationsRouter/common/MatchSpeciesModal';
 import UnrecognizedSpeciesPageMessage from 'src/scenes/ObservationsRouter/common/UnrecognizedSpeciesPageMessage';
+import ObservationMapWrapper from 'src/scenes/ObservationsRouterV2/Map';
 import useObservationExports from 'src/scenes/ObservationsRouterV2/useObservationExports';
 import { useOnSaveMergedSpeciesRtk } from 'src/scenes/ObservationsRouterV2/useOnSaveMergedSpeciesRtk';
 import { getShortTime } from 'src/utils/dateFormatter';
@@ -183,6 +184,9 @@ const MonitoringPlotObservationDataTab = () => {
         />
       )}
       <ObservationDataNumbers items={items} isCompleted={!!monitoringPlot?.completedTime} />
+      <Card radius={'8px'} style={{ marginBottom: theme.spacing(3), width: '100%' }}>
+        <ObservationMapWrapper observationId={observationId} plantingSiteId={results?.plantingSiteId} />
+      </Card>
       <Box display='flex' gap={3} flexDirection={isDesktop ? 'row' : 'column'} flexWrap='wrap'>
         <Box flex={1} minWidth='500px'>
           <Box display='flex' alignContent={'center'}>

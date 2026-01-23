@@ -6,6 +6,7 @@ import FormattedNumber from 'src/components/common/FormattedNumber';
 import { useLocalization, useOrganization } from 'src/providers';
 import {
   ObservationResultsPayload,
+  useLazyGetObservationResultsQuery,
   useLazyListAdHocObservationResultsQuery,
   useLazyListObservationResultsQuery,
 } from 'src/queries/generated/observations';
@@ -15,19 +16,26 @@ import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 import ObservationMap from './ObservationMap';
 import ObservationTimeline from './ObservationTimeline';
 
-type MapProps = {
+type ObservationMapWrapperProps = {
   isBiomass?: boolean;
+  observationId?: number;
   plantingSiteId?: number;
-  selectPlantingSiteId: (siteId: number) => void;
+  selectPlantingSiteId?: (siteId: number) => void;
 };
 
-const Map = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: MapProps): JSX.Element => {
+const ObservationMapWrapper = ({
+  isBiomass,
+  observationId,
+  plantingSiteId,
+  selectPlantingSiteId,
+}: ObservationMapWrapperProps): JSX.Element => {
   const { selectedOrganization } = useOrganization();
   const { strings } = useLocalization();
   const theme = useTheme();
   const defaultTimezone = useDefaultTimeZone().get().id;
 
   const [getPlantingSite, getPlantingSiteResult] = useLazyGetPlantingSiteQuery();
+  const [getObservationResult, getObservationResultResponse] = useLazyGetObservationResultsQuery();
   const [listObservationResults, listObservationsResultsResponse] = useLazyListObservationResultsQuery();
   const [listAdHocObservationResults, listAdHocObservationResultsResponse] = useLazyListAdHocObservationResultsQuery();
   const [selectedObservationResults, setSelectedObservationResults] = useState<ObservationResultsPayload[]>([]);
@@ -47,7 +55,13 @@ const Map = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: MapProps): JSX
   );
 
   useEffect(() => {
-    if (selectedOrganization && plantingSiteId !== undefined) {
+    if (observationId) {
+      void getObservationResult({ observationId });
+    }
+  }, [getObservationResult, observationId]);
+
+  useEffect(() => {
+    if (selectedOrganization && plantingSiteId !== undefined && !observationId) {
       void listAdHocObservationResults(
         {
           organizationId: selectedOrganization.id,
@@ -67,7 +81,19 @@ const Map = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: MapProps): JSX
         );
       }
     }
-  }, [isBiomass, listAdHocObservationResults, listObservationResults, plantingSiteId, selectedOrganization]);
+  }, [
+    isBiomass,
+    listAdHocObservationResults,
+    listObservationResults,
+    observationId,
+    plantingSiteId,
+    selectedOrganization,
+  ]);
+
+  const singleObservationResult = useMemo(
+    () => getObservationResultResponse.data?.observation,
+    [getObservationResultResponse.data?.observation]
+  );
 
   const adHocObservationResults = useMemo(() => {
     if (listAdHocObservationResultsResponse.isSuccess) {
@@ -100,7 +126,7 @@ const Map = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: MapProps): JSX
         gap: theme.spacing(3),
       }}
     >
-      {plantingSite && (
+      {plantingSite && !singleObservationResult && (
         <Box display={'flex'} flexDirection={'row'} width={'100%'} alignItems={'center'}>
           <Box marginRight={theme.spacing(2)}>
             <Typography fontSize='20px' fontWeight={600} lineHeight={'28px'}>
@@ -123,9 +149,10 @@ const Map = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: MapProps): JSX
         </Box>
       )}
       <ObservationMap
-        adHocObservationResults={selectedAdHocObservationResults}
+        adHocObservationResults={singleObservationResult ? [singleObservationResult] : selectedAdHocObservationResults}
         isBiomass={isBiomass}
-        observationResults={selectedObservationResults}
+        isSingleView={!!singleObservationResult}
+        observationResults={singleObservationResult ? [singleObservationResult] : selectedObservationResults}
         plantingSiteId={plantingSiteId}
         selectPlantingSiteId={selectPlantingSiteId}
       />
@@ -133,4 +160,4 @@ const Map = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: MapProps): JSX
   );
 };
 
-export default Map;
+export default ObservationMapWrapper;

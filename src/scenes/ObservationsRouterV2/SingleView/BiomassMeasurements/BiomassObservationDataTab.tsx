@@ -17,12 +17,13 @@ import EventLog from 'src/scenes/ObservationsRouter/common/EventLog';
 import MatchSpeciesModal from 'src/scenes/ObservationsRouter/common/MatchSpeciesModal';
 import MonitoringPlotPhotosWithActions from 'src/scenes/ObservationsRouter/common/MonitoringPlotPhotosWithActions';
 import UnrecognizedSpeciesPageMessage from 'src/scenes/ObservationsRouter/common/UnrecognizedSpeciesPageMessage';
+import ObservationMapWrapper from 'src/scenes/ObservationsRouterV2/Map';
+import useObservationExports from 'src/scenes/ObservationsRouterV2/useObservationExports';
 import { useOnSaveMergedSpeciesRtk } from 'src/scenes/ObservationsRouterV2/useOnSaveMergedSpeciesRtk';
 import { getDateTimeDisplayValue, getShortTime } from 'src/utils/dateFormatter';
 import { getBiomassObservationDeadTreeCount, getBiomassObservationLiveTreeCount } from 'src/utils/observation';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
-import useObservationExports from '../../useObservationExports';
 import EditBiomassQualitativeDataModal, { BiomassQualitativeFormData } from './EditBiomassQualitativeDataModal';
 import TreesAndShrubsEditableTable from './TreesAndShrubsEditableTable';
 
@@ -213,6 +214,9 @@ const BiomassObservationDataTab = () => {
         />
       )}
       <ObservationDataNumbers items={items} isCompleted={!!results?.completedTime} />
+      <Card radius={'8px'} style={{ marginBottom: theme.spacing(3), width: '100%' }}>
+        <ObservationMapWrapper isBiomass observationId={observationId} plantingSiteId={results?.plantingSiteId} />
+      </Card>
       <Box display='flex' sx={{ paddingBottom: 2, paddingTop: 3, alignItems: 'center' }}>
         <Typography fontSize='20px' lineHeight='28px' fontWeight={600} color={theme.palette.TwClrTxt} paddingRight={1}>
           {strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES}
