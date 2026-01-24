@@ -8,6 +8,7 @@ import { CameraControls } from 'playcanvas/scripts/esm/camera-controls.mjs';
 import { Grid } from 'playcanvas/scripts/esm/grid.mjs';
 
 import Annotation from 'src/components/GaussianSplat/Annotation';
+import GradientSky from 'src/components/GaussianSplat/GradientSky';
 import SplatControls from 'src/components/GaussianSplat/SplatControls';
 import SplatModel from 'src/components/GaussianSplat/SplatModel';
 import { useCameraPosition } from 'src/hooks/useCameraPosition';
@@ -20,8 +21,10 @@ const VirtualMonitoringPlot = () => {
   }, [setCamera]);
   return (
     <>
+      <GradientSky topColor='#FFFFFF' horizonColor='#EAF8FF' groundColor='#C3BDB7' />
+
       <Entity name='camera'>
-        <Camera clearColor='#000000' fov={60} />
+        <Camera clearColor='#EAF8FF' fov={60} />
         <Script script={CameraControls} moveSpeed={0.3} moveFastSpeed={0.5} moveSlowSpeed={0.15} rotateSpeed={0.1} />
       </Entity>
 
