@@ -3,6 +3,7 @@ import React from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
 import { Icon, Tooltip } from '@terraware/web-components';
 
+import FormattedNumber from 'src/components/common/FormattedNumber';
 import { useLocalization } from 'src/providers';
 
 type ObservationDataNumbersProps = {
@@ -38,7 +39,15 @@ const ObservationDataNumbers = ({ items, isCompleted }: ObservationDataNumbersPr
                 fontWeight={isTemporarySurvivalRateItem ? 400 : 600}
                 fontSize={isTemporarySurvivalRateItem ? '16px' : '24px'}
               >
-                {isCompleted || isTemporarySurvivalRateItem ? item.value : '-'}
+                {isCompleted || isTemporarySurvivalRateItem ? (
+                  typeof item.value === 'number' ? (
+                    <FormattedNumber value={item.value} />
+                  ) : (
+                    item.value
+                  )
+                ) : (
+                  '-'
+                )}
               </Typography>
             </Box>
           </Box>

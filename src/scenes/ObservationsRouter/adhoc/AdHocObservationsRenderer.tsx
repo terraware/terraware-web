@@ -2,6 +2,7 @@ import React, { type JSX } from 'react';
 
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 
+import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
@@ -61,15 +62,28 @@ const AdHocObservationsRenderer =
       );
     }
 
+    if (column.key === 'totalLive') {
+      return (
+        <CellRenderer
+          {...props}
+          sx={textStyles}
+          title={value as string}
+          value={typeof value === 'number' ? <FormattedNumber value={value} /> : undefined}
+        />
+      );
+    }
+
     if (column.key === 'totalPlants') {
       return (
         <CellRenderer
-          index={index}
-          column={column}
-          value={row.adHocPlot?.totalPlants}
-          row={row}
+          {...props}
           sx={textStyles}
           title={value as string}
+          value={
+            typeof row.adHocPlot?.totalPlants === 'number' ? (
+              <FormattedNumber value={row.adHocPlot?.totalPlants} />
+            ) : undefined
+          }
         />
       );
     }
@@ -77,12 +91,14 @@ const AdHocObservationsRenderer =
     if (column.key === 'totalSpecies') {
       return (
         <CellRenderer
-          index={index}
-          column={column}
-          value={row.adHocPlot?.totalSpecies}
-          row={row}
+          {...props}
           sx={textStyles}
           title={value as string}
+          value={
+            typeof row.adHocPlot?.totalSpecies === 'number' ? (
+              <FormattedNumber value={row.adHocPlot?.totalSpecies} />
+            ) : undefined
+          }
         />
       );
     }

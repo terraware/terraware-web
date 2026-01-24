@@ -1,5 +1,6 @@
 import React, { type JSX } from 'react';
 
+import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import TableRowPopupMenu from 'src/components/common/table/TableRowPopupMenu';
@@ -65,7 +66,11 @@ export default function BiomassMeasurementRenderer(props: RendererProps<TableRow
       <CellRenderer
         index={index}
         column={column}
-        value={row.biomassMeasurements?.trees?.length}
+        value={
+          typeof row.biomassMeasurements?.trees?.length === 'number' ? (
+            <FormattedNumber value={row.biomassMeasurements?.trees?.length} />
+          ) : undefined
+        }
         row={row}
         sx={textStyles}
         title={value as string}
@@ -78,7 +83,11 @@ export default function BiomassMeasurementRenderer(props: RendererProps<TableRow
       <CellRenderer
         index={index}
         column={column}
-        value={row.biomassMeasurements?.treeSpeciesCount}
+        value={
+          typeof row.biomassMeasurements?.treeSpeciesCount === 'number' ? (
+            <FormattedNumber value={row.biomassMeasurements?.treeSpeciesCount} />
+          ) : undefined
+        }
         row={row}
         sx={textStyles}
         title={value as string}
