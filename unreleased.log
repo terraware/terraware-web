@@ -1,3 +1,4 @@
+b8ae284660f SW-6638: Use localized number formatting in Planting Progress Table (#5120)
 9a73380b500 SW-7959 Add ability to specify initial camera position via a hook (#5111)
 0fb082d4e78 SW-7996 Add control panel for enabling AR and VR (#5106)
 99eef368cde SW-6639: Use localized number formatting in Seed Dashboard (#5119)
