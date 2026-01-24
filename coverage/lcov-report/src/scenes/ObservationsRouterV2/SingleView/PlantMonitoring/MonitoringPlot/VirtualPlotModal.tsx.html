@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/33</span>
+                <span class='fraction'>0/34</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/30</span>
+                <span class='fraction'>0/31</span>
             </div>
         
             
@@ -109,7 +109,23 @@
 <a name='L44'></a><a href='#L44'>44</a>
 <a name='L45'></a><a href='#L45'>45</a>
 <a name='L46'></a><a href='#L46'>46</a>
-<a name='L47'></a><a href='#L47'>47</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L47'></a><a href='#L47'>47</a>
+<a name='L48'></a><a href='#L48'>48</a>
+<a name='L49'></a><a href='#L49'>49</a>
+<a name='L50'></a><a href='#L50'>50</a>
+<a name='L51'></a><a href='#L51'>51</a>
+<a name='L52'></a><a href='#L52'>52</a>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a>
+<a name='L63'></a><a href='#L63'>63</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -147,10 +163,26 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -160,43 +192,59 @@
 import { Grid } from '@<span class="cstat-no" title="statement not covered" >mui/material';</span>
 import { OverlayModal } <span class="cstat-no" title="statement not covered" >from '@terraware/web-compon</span>ents';
 <span class="cstat-no" title="statement not covered" ></span>
-import VirtualMonit<span class="cstat-no" title="statement not covered" >oringPlot from './VirtualMonitor</span>ingPlot';
+import Application <span class="cstat-no" title="statement not covered" >from 'src/components/GaussianSpl</span>at/Application';
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-in<span class="cstat-no" title="statement not covered" >terface VirtualPlotModalProps {</span>
-  on<span class="cstat-no" title="statement not covered" >Close?: () =&gt; void;</span>
-}
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-co<span class="cstat-no" title="statement not covered" >nst BelowComponent = () =&gt; {</span>
-  re<span class="cstat-no" title="statement not covered" >turn (</span>
-    &lt;G<span class="cstat-no" title="statement not covered" >rid</span>
-      co<span class="cstat-no" title="statement not covered" >ntainer<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+im<span class="cstat-no" title="statement not covered" >port VirtualMonitoringPlot from './VirtualMonitoringPlot';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+interface VirtualPlotModalProps {
+  onClose?: () =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >vo</span>id;</span>
+}<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+const <span class="cstat-no" title="statement not covered" >BelowComponent = () =&gt; {</span>
+  return<span class="cstat-no" title="statement not covered" > (<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+    &lt;Grid
+<span class="cstat-no" title="statement not covered" >      contain</span>er
       spacing={2}
-<span class="cstat-no" title="statement not covered" >      sx={{</span>
+      sx={{<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
         backgroundColor: 'black',
-        color:<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > '</span>white',<span class="cstat-no" title="statement not covered" ></span></span>
+        color: 'white',
         padding: '1rem',
         textAlign: 'center',
         borderRadius: '1rem',
       }}
     &gt;
-      &lt;Grid item style={{ paddingTop: 0 }}&gt;
-        Plot Captured: 2026-01-14
-      &lt;/Grid&gt;<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-      &lt;Grid item sty<span class="cstat-no" title="statement not covered" >le=</span>{{ paddingTop: 0 }}&gt;
-<span class="cstat-no" title="statement not covered" >        Live Plants: 247</span>
-      &lt;/Gri<span class="fstat-no" title="function not covered" >d&gt;<span class="cstat-no" title="statement not covered" ></span></span>
-      &lt;Grid item style={{ paddingTop: 0 }}&gt;
-<span class="cstat-no" title="statement not covered" >        Species: 47</span>
+      &lt;Grid item st<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >yl</span>e={{ pa<span class="cstat-no" title="statement not covered" >ddingTop: 0 }}&gt;</span></span>
+        Plot Capture<span class="cstat-no" title="statement not covered" >d: </span>2026-01-14
+<span class="cstat-no" title="statement not covered" >      &lt;/Grid&gt;</span>
+      &lt;Grid<span class="fstat-no" title="function not covered" > i</span>tem <span class="cstat-no" title="statement not covered" >style={{ paddi</span>ngTop: 0 }}&gt;
+        Live Plants: 247
+<span class="cstat-no" title="statement not covered" >      &lt;/Grid&gt;</span>
+      &lt;Grid item st<span class="cstat-no" title="statement not covered" >yle={{ paddingTop: 0 }}&gt;</span>
+        Species: 47<span class="cstat-no" title="statement not covered" ></span>
       &lt;/Grid&gt;<span class="cstat-no" title="statement not covered" ></span>
     &lt;/Grid&gt;<span class="cstat-no" title="statement not covered" ></span>
   );<span class="cstat-no" title="statement not covered" ></span>
-};<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-co<span class="cstat-no" title="statement not covered" >nst VirtualPlotModal = ({ onClose }: VirtualPlotModalProps) =&gt; {</span>
+};<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ></span>
+const VirtualPlotModal = ({ onClose }: VirtualPlotModalProps) =&gt; {
   return (
     &lt;OverlayModal open={true} onClose={onClose} belowComponent={&lt;BelowComponent /&gt;}&gt;
-      &lt;VirtualMonitoringPlot /&gt;
-    &lt;/OverlayModal&gt;
+      &lt;Application
+        boxSx={{
+          width: '100%',
+          height: '100%',
+          position: 'relative',
+        }}
+        style={{
+          width: '100%',
+          height: '100%',
+          display: 'block',
+          margin: '0 auto',
+        }}
+      &gt;
+        &lt;VirtualMonitoringPlot /&gt;
+      &lt;/Application&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    &lt;/OverlayModal&gt;</span>
   );
 };
 &nbsp;
@@ -208,7 +256,7 @@ export default VirtualPlotModal;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-23T23:56:38.481Z
+                at 2026-01-24T00:14:42.530Z
             </div>
         <script src="../../../../../../prettify.js"></script>
         <script>
