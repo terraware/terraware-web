@@ -85,7 +85,23 @@
 <a name='L20'></a><a href='#L20'>20</a>
 <a name='L21'></a><a href='#L21'>21</a>
 <a name='L22'></a><a href='#L22'>22</a>
-<a name='L23'></a><a href='#L23'>23</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L23'></a><a href='#L23'>23</a>
+<a name='L24'></a><a href='#L24'>24</a>
+<a name='L25'></a><a href='#L25'>25</a>
+<a name='L26'></a><a href='#L26'>26</a>
+<a name='L27'></a><a href='#L27'>27</a>
+<a name='L28'></a><a href='#L28'>28</a>
+<a name='L29'></a><a href='#L29'>29</a>
+<a name='L30'></a><a href='#L30'>30</a>
+<a name='L31'></a><a href='#L31'>31</a>
+<a name='L32'></a><a href='#L32'>32</a>
+<a name='L33'></a><a href='#L33'>33</a>
+<a name='L34'></a><a href='#L34'>34</a>
+<a name='L35'></a><a href='#L35'>35</a>
+<a name='L36'></a><a href='#L36'>36</a>
+<a name='L37'></a><a href='#L37'>37</a>
+<a name='L38'></a><a href='#L38'>38</a>
+<a name='L39'></a><a href='#L39'>39</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -106,28 +122,60 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React fr<span class="cstat-no" title="statement not covered" >om 'react';</span>
 <span class="cstat-no" title="statement not covered" ></span>
-import { Box, SxProps }<span class="cstat-no" title="statement not covered" > from '@mui/material';</span>
-import { Application as <span class="cstat-no" title="statement not covered" >PcApplication } from '@play</span>canvas/react';
+import { Application as<span class="cstat-no" title="statement not covered" > PcApplication } from '@playcanv</span>as/react';
 <span class="cstat-no" title="statement not covered" ></span>
-interface Applicati<span class="cstat-no" title="statement not covered" >onProps {</span>
-  children: Rea<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ct</span>.ReactNode;</span>
-<span class="cstat-no" title="statement not covered" >  boxSx: SxProps;</span>
-  st<span class="cstat-no" title="statement not covered" >yle: React.CSSProperties;</span>
+import './applicati<span class="cstat-no" title="statement not covered" >on-styles.css';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+interface Appli<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ca</span>tionProps {</span>
+<span class="cstat-no" title="statement not covered" >  children: React.ReactNode;</span>
+  st<span class="cstat-no" title="statement not covered" >yle?: Record&lt;string, unknown&gt;;</span>
 }
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-co<span class="cstat-no" title="statement not covered" >nst Application = ({ children, boxSx, style }: ApplicationProps) =&gt; {</span>
+co<span class="cstat-no" title="statement not covered" >nst Application = ({ children, style }: ApplicationProps) =&gt; {</span>
   re<span class="cstat-no" title="statement not covered" >turn (</span>
-    &lt;B<span class="cstat-no" title="statement not covered" >ox sx={boxSx}&gt;</span>
+    &lt;&gt;<span class="cstat-no" title="statement not covered" ></span>
       &lt;P<span class="cstat-no" title="statement not covered" >cApplication style={style <span class="fstat-no" title="function not covered" >as</span> Rec<span class="cstat-no" title="statement not covered" >ord&lt;string</span>, unknown&gt;} graphicsDeviceOptions={{ antialias: false }}&gt;</span>
         {children}
 <span class="cstat-no" title="statement not covered" >      &lt;/PcApp</span>lication&gt;
-    &lt;/Box&gt;
-  );<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-};
-&nbsp;
+      {/* Container for annotation hotspots - positioned to match canvas */}
+      &lt;div<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+        data-annotation-container
+        className='annotation-container'
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >10</span>0%',<span class="cstat-no" title="statement not covered" ></span></span>
+          pointerEve<span class="cstat-no" title="statement not covered" >nts</span>: 'none',
+<span class="cstat-no" title="statement not covered" >          zIndex: 1000,</span>
+        }}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+      &gt;
+<span class="cstat-no" title="statement not covered" >        {/* Hotspot elements will be appended </span>here by TfAnnotationManager */}
+      &lt;/div&gt;<span class="cstat-no" title="statement not covered" ></span>
+    &lt;/&gt;<span class="cstat-no" title="statement not covered" ></span>
+  );<span class="cstat-no" title="statement not covered" ></span>
+};<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ></span>
 export default Application;
 &nbsp;</pre></td></tr></table></pre>
 
@@ -136,7 +184,7 @@ export default Application;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-24T00:31:54.985Z
+                at 2026-01-24T00:47:51.809Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
