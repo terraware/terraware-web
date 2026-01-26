@@ -1,3 +1,4 @@
+1f9dbf7c99b Fix padding on links in the project profile (#5124)
 6d2ef89d9bf SW-7975 Allow react components to be used for annotation boxes (#5123)
 df2ffb61f8e Bump lodash-es from 4.17.21 to 4.17.23 (#5105)
 e587d694933 SW-7975 Add cameraPosition to annotations to move camera (#5122)
