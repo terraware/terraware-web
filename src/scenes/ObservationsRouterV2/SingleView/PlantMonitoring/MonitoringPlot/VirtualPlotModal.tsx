@@ -9,7 +9,7 @@ import VirtualMonitoringPlot from './VirtualMonitoringPlot';
 
 interface VirtualPlotModalProps {
   observationId: number;
-  monitoringPlotId: number;
+  fileId: number;
   onClose?: () => void;
 }
 
@@ -39,7 +39,7 @@ const BelowComponent = () => {
   );
 };
 
-const VirtualPlotModal = ({ observationId, monitoringPlotId, onClose }: VirtualPlotModalProps) => {
+const VirtualPlotModal = ({ observationId, fileId, onClose }: VirtualPlotModalProps) => {
   return (
     <OverlayModal open={true} onClose={onClose} belowComponent={<BelowComponent />}>
       <Application
@@ -50,10 +50,7 @@ const VirtualPlotModal = ({ observationId, monitoringPlotId, onClose }: VirtualP
           margin: '0 auto',
         }}
       >
-        <VirtualMonitoringPlot
-          observationId={observationId.toString()}
-          monitoringPlotId={monitoringPlotId.toString()}
-        />
+        <VirtualMonitoringPlot observationId={observationId.toString()} fileId={fileId.toString()} />
       </Application>
     </OverlayModal>
   );

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 
 import { Box, Typography } from '@mui/material';
 import { Entity } from '@playcanvas/react';
@@ -16,14 +16,16 @@ import { useCameraPosition } from 'src/hooks/useCameraPosition';
 
 interface VirtualMonitoringPlotProps {
   observationId: string;
-  monitoringPlotId: string;
+  fileId: string;
 }
 
-const VirtualMonitoringPlot = ({ observationId, monitoringPlotId }: VirtualMonitoringPlotProps) => {
-  // TODO: Use observationId and monitoringPlotId to fetch and render actual plot data
-  console.log('VirtualMonitoringPlot', observationId, monitoringPlotId);
-
+const VirtualMonitoringPlot = ({ observationId, fileId }: VirtualMonitoringPlotProps) => {
   const { setCamera } = useCameraPosition();
+
+  const splatSrc = useMemo(
+    () => `/api/v1/tracking/observations/${observationId}/splats/${fileId}`,
+    [observationId, fileId]
+  );
 
   useEffect(() => {
     setCamera([0, 0.1, 0], [0, 0.1, 0]);
@@ -42,7 +44,7 @@ const VirtualMonitoringPlot = ({ observationId, monitoringPlotId }: VirtualMonit
         <Script script={Grid} />
       </Entity>
 
-      <SplatModel splatSrc={'/assets/models/test/PlyExamples/outside.ply'} rotation={[-90, 0, 0]} />
+      <SplatModel splatSrc={splatSrc} rotation={[-90, 0, 0]} />
 
       <Script
         script={TfAnnotationManager}

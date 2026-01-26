@@ -27,7 +27,7 @@ const SplatModel = ({
   cropFade = false,
   cropFadeDistance = 0.5,
 }: SplatModelProps) => {
-  const { asset, loading } = useSplat(splatSrc);
+  const { asset, loading } = useSplat(splatSrc, { file: { filename: 'model.sog' } });
 
   if (loading) {
     return <BlockingSpinner />;
