@@ -30,11 +30,6 @@ services:
       - 'TERRAWARE_PHOTO_DIR=/photos'
       - 'TERRAWARE_ENABLE_AWAITING_CHECK_IN=true'
       - 'TERRAWARE_ALLOW_ADMIN_UI_FOR_NON_ADMINS=true'
-      - 'TERRAWARE_S3BUCKETNAME=terraware-photos-staging'
-      - 'TERRAWARE_S3KEYPREFIX=constanza'
-      - 'TERRAWARE_SPLATTER_ENABLED=true'
-      - 'TERRAWARE_SPLATTER_REQUESTQUEUEURL=https://sqs.us-west-2.amazonaws.com/463283439014/staging-splatter-requests'
-      - 'TERRAWARE_SPLATTER_RESPONSEQUEUEURL=https://sqs.us-west-2.amazonaws.com/463283439014/dev-splatter-responses-constanza'
     volumes:
       - './photo-data:/photos'
     depends_on:
