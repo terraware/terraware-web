@@ -60,6 +60,7 @@ export default function Link(props: LinkProps): JSX.Element {
       onClick={onClick}
       id={id}
       disabled={disabled}
+      style={style}
       sx={{
         ...baseStyle,
         opacity: disabled ? 0.5 : 1,
