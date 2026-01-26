@@ -7,6 +7,7 @@ import { MapLayerFeatureId } from 'src/components/NewMap/types';
 import usePlantingSite from 'src/hooks/usePlantingSite';
 import { useLocalization } from 'src/providers';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 type MapStatsProperties = {
   areaHa: number | undefined;
@@ -28,7 +29,8 @@ type MapStatsDrawerProps = {
 };
 
 const MapStatsDrawer = ({ layerFeatureId, plantingSiteId }: MapStatsDrawerProps): JSX.Element | undefined => {
-  const { strings } = useLocalization();
+  const { activeLocale, strings } = useLocalization();
+  const numberFormatter = useNumberFormatter(activeLocale);
   const { isLoading, plantingSite, plantingSiteReportedPlants } = usePlantingSite(plantingSiteId);
   const { observationSummaries } = usePlantingSiteData();
   const [delayedLoading, setDelayedLoading] = useState(isLoading);
@@ -137,7 +139,7 @@ const MapStatsDrawer = ({ layerFeatureId, plantingSiteId }: MapStatsDrawerProps)
 
       results.push({
         key: strings.AREA_HA,
-        value: properties.areaHa ? `${properties.areaHa}` : strings.UNKNOWN,
+        value: properties.areaHa ? `${numberFormatter.format(properties.areaHa)}` : strings.UNKNOWN,
       });
 
       if (properties.observed) {
@@ -149,7 +151,7 @@ const MapStatsDrawer = ({ layerFeatureId, plantingSiteId }: MapStatsDrawerProps)
           {
             key: strings.PLANTING_DENSITY,
             value: properties.plantingDensity
-              ? `${properties.plantingDensity} ${strings.PLANTS_PER_HECTARE}`
+              ? `${numberFormatter.format(properties.plantingDensity)} ${strings.PLANTS_PER_HECTARE}`
               : strings.NO_DATA_YET,
           }
         );
@@ -157,31 +159,35 @@ const MapStatsDrawer = ({ layerFeatureId, plantingSiteId }: MapStatsDrawerProps)
 
       results.push({
         key: strings.PLANTED_PLANTS,
-        value: properties.plantedPlants ? `${properties.plantedPlants}` : strings.NO_DATA_YET,
+        value: properties.plantedPlants ? `${numberFormatter.format(properties.plantedPlants)}` : strings.NO_DATA_YET,
       });
 
       if (properties.observed) {
         results.push({
           key: strings.OBSERVED_PLANTS,
-          value: properties.observedPlants ? `${properties.observedPlants}` : strings.NO_DATA_YET,
+          value: properties.observedPlants
+            ? `${numberFormatter.format(properties.observedPlants)}`
+            : strings.NO_DATA_YET,
         });
       }
 
       results.push({
         key: strings.PLANTED_SPECIES,
-        value: properties.plantedSpecies ? `${properties.plantedSpecies}` : strings.NO_DATA_YET,
+        value: properties.plantedSpecies ? `${numberFormatter.format(properties.plantedSpecies)}` : strings.NO_DATA_YET,
       });
 
       if (properties.observed) {
         results.push({
           key: strings.OBSERVED_SPECIES,
-          value: properties.observedSpecies ? `${properties.observedSpecies}` : strings.NO_DATA_YET,
+          value: properties.observedSpecies
+            ? `${numberFormatter.format(properties.observedSpecies)}`
+            : strings.NO_DATA_YET,
         });
       }
     }
 
     return results;
-  }, [properties, strings]);
+  }, [numberFormatter, properties, strings]);
 
   if (delayedLoading) {
     return (

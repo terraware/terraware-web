@@ -123,6 +123,8 @@ type PlantingSiteMapViewProps = {
 };
 
 function PlantingSiteMapView({ search }: PlantingSiteMapViewProps): JSX.Element | null {
+  const { activeLocale } = useLocalization();
+  const numberFormatter = useNumberFormatter(activeLocale);
   const { isDesktop } = useDeviceInfo();
   const [searchStratumEntities, setSearchStratumEntities] = useState<MapEntityId[]>([]);
   const [includedLayers, setIncludedLayers] = useState<MapLayer[]>(['Planting Site', 'Strata', 'Monitoring Plots']);
@@ -239,9 +241,15 @@ function PlantingSiteMapView({ search }: PlantingSiteMapViewProps): JSX.Element 
           properties = [
             {
               key: strings.AREA_HA,
-              value: stratumHistory?.areaHa && stratumHistory?.areaHa > 0 ? stratumHistory?.areaHa : '',
+              value:
+                stratumHistory?.areaHa && stratumHistory?.areaHa > 0
+                  ? numberFormatter.format(stratumHistory?.areaHa)
+                  : '',
             },
-            { key: strings.TARGET_PLANTING_DENSITY, value: stratum?.targetPlantingDensity ?? 0 },
+            {
+              key: strings.TARGET_PLANTING_DENSITY,
+              value: numberFormatter.format(stratum?.targetPlantingDensity ?? 0),
+            },
             {
               key: strings.PLANTING_COMPLETE,
               value: stratum?.substrata?.every((substratum) => substratum.plantingCompleted) ? strings.YES : strings.NO,
@@ -265,7 +273,10 @@ function PlantingSiteMapView({ search }: PlantingSiteMapViewProps): JSX.Element 
           properties = [
             {
               key: strings.AREA_HA,
-              value: substratumHistory?.areaHa && substratumHistory?.areaHa > 0 ? substratumHistory?.areaHa : '',
+              value:
+                substratumHistory?.areaHa && substratumHistory?.areaHa > 0
+                  ? numberFormatter.format(substratumHistory?.areaHa)
+                  : '',
             },
             { key: strings.PLANTING_COMPLETE, value: substratum?.plantingCompleted ? strings.YES : strings.NO },
           ];
@@ -278,7 +289,7 @@ function PlantingSiteMapView({ search }: PlantingSiteMapViewProps): JSX.Element 
         return null;
       }
     },
-    [plantingSite, selectedHistory, timeZone]
+    [numberFormatter, plantingSite, selectedHistory, timeZone]
   );
 
   if (!plantingSite?.boundary) {
