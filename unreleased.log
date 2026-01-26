@@ -1,3 +1,4 @@
+1154910fbfc SW-6636: Use localized number formatting in Maps (#5128)
 3cf72b80a1b SW-6640: Use localized number formatting in Accessions Quantity (#5127)
 c1796015ba1 SW-6637: Use localized number formatting in Observation Tables and Details (#5126)
 1f9dbf7c99b Fix padding on links in the project profile (#5124)
