@@ -87,7 +87,7 @@ const useMapFeatureStyles = () => {
   const virtualPlotStyle = useMemo(
     (): MapIconComponentStyle => ({
       iconColor: '#CC79A7',
-      iconName: 'iconFolder',
+      iconName: 'iconVideo',
       type: 'icon',
     }),
     []
