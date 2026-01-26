@@ -4,6 +4,7 @@ import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { IconTooltip } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
+import FormattedNumber from 'src/components/common/FormattedNumber';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import { useLocalization } from 'src/providers/hooks';
 import { ObservationSpeciesResults } from 'src/types/Observations';
@@ -61,9 +62,11 @@ export default function AggregatedPlantsStats({
         {getData().map((data) => (
           <Grid item xs={infoCardGridSize} key={data.label}>
             <OverviewItemCard
+              contents={
+                typeof data.value === 'number' ? <FormattedNumber value={data.value} /> : (data.value as string | null)
+              }
               isEditable={false}
               title={data.label}
-              contents={data.value?.toString() ?? null}
               titleInfoTooltip={data.tooltip}
             />
           </Grid>

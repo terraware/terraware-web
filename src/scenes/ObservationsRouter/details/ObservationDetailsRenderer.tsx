@@ -1,5 +1,6 @@
 import React, { type JSX } from 'react';
 
+import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
@@ -35,6 +36,17 @@ const ObservationDetailsRenderer =
     if (column.key === 'stratumName') {
       return (
         <CellRenderer {...props} value={createLinkToStratumObservation(value as string)} title={value as string} />
+      );
+    }
+
+    if (
+      column.key === 'totalLive' ||
+      column.key === 'totalPlants' ||
+      column.key === 'totalSpecies' ||
+      column.key === 'plantingDensity'
+    ) {
+      return (
+        <CellRenderer {...props} value={typeof value === 'number' ? <FormattedNumber value={value} /> : undefined} />
       );
     }
 
