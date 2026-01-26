@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/48</span>
+                <span class='fraction'>0/49</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/40</span>
+                <span class='fraction'>0/38</span>
             </div>
         
             
@@ -189,7 +189,10 @@
 <a name='L124'></a><a href='#L124'>124</a>
 <a name='L125'></a><a href='#L125'>125</a>
 <a name='L126'></a><a href='#L126'>126</a>
-<a name='L127'></a><a href='#L127'>127</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L127'></a><a href='#L127'>127</a>
+<a name='L128'></a><a href='#L128'>128</a>
+<a name='L129'></a><a href='#L129'>129</a>
+<a name='L130'></a><a href='#L130'>130</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -231,6 +234,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -261,9 +265,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -295,6 +296,11 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -321,36 +327,37 @@ import { Box, Grid, Typ<span class="cstat-no" title="statement not covered" >ogr
 import { IconTooltip } f<span class="cstat-no" title="statement not covered" >rom '@terraware/web-compone</span>nts';
 <span class="cstat-no" title="statement not covered" ></span>
 import Card from 's<span class="cstat-no" title="statement not covered" >rc/components/common/Card';</span>
-import Overview<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >It</span>emCard from 'src/components/common/OverviewItemCard';</span>
-im<span class="cstat-no" title="statement not covered" >port { useLocalization } from 'src/providers/hooks';</span>
-impo<span class="cstat-no" title="statement not covered" >rt { ObservationSpeciesResults } from 'src/types/Observations';</span>
-import { getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
-import useDeviceIn<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >fo</span> from 'src/utils/useDeviceInfo';</span>
+import Formatte<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >dN</span>umber from 'src/components/common/FormattedNumber';</span>
+im<span class="cstat-no" title="statement not covered" >port OverviewItemCard from 'src/components/common/OverviewItemCard';</span>
+impo<span class="cstat-no" title="statement not covered" >rt { useLocalization } from 'src/providers/hooks';</span>
+import { ObservationSpeciesResults } from 'src/types/Observations';
+import { getObserv<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >at</span>ionSpeciesLivePlantsCount } from 'src/utils/observation';</span>
+im<span class="cstat-no" title="statement not covered" >port useDeviceInfo from 'src/utils/useDeviceInfo';</span>
 <span class="cstat-no" title="statement not covered" ></span>
-impo<span class="cstat-no" title="statement not covered" >rt SpeciesSurvivalRateChart from './SpeciesSurvivalRateChart';</span>
-import<span class="cstat-no" title="statement not covered" > SpeciesTotalPlantsChart from './SpeciesTotalPlantsChart';</span>
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-export type AggregatedPlantsStatsProps = {
-<span class="cstat-no" title="statement not covered" >  completedTi</span>me?: string;
-  totalPlants?: number;
-  totalSpecies<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >?:</span> number;<span class="cstat-no" title="statement not covered" ></span></span>
+import<span class="cstat-no" title="statement not covered" > SpeciesSurvivalRateChart from './SpeciesSurvivalRateChart';</span>
+import S<span class="cstat-no" title="statement not covered" >peciesTotalPlantsChart fro<span class="fstat-no" title="function not covered" >m </span>'./S<span class="cstat-no" title="statement not covered" >peciesTota</span>lPlantsChart';</span>
+&nbsp;
+ex<span class="cstat-no" title="statement not covered" >port type A</span>ggregatedPlantsStatsProps = {
+  completedTime?: string;
+  totalPlants?<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >: </span>number;<span class="cstat-no" title="statement not covered" ></span></span>
+  totalSpecies?: number;
   plantingDensity?: number;
   survivalRate?: number;
   species?: ObservationSpeciesResults[];
   hasObservedPermanentPlots?: boolean;
 };
 &nbsp;
-export default function AggregatedPlantsStats({
-  completedTime,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  totalSpecies,<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  plantingDensity,</span>
-  survivalR<span class="fstat-no" title="function not covered" >at</span>e,<span class="cstat-no" title="statement not covered" ></span>
-  species,
-<span class="cstat-no" title="statement not covered" >  hasObservedPermanentPlots,</span>
-}: AggregatedPlants<span class="cstat-no" title="statement not covered" >StatsProps): JSX.Element {</span>
-  const { strings } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
-  const { isMobile } = useDe<span class="cstat-no" title="statement not covered" >viceInfo();</span>
-  const infoCardGr<span class="cstat-no" title="statement not covered" >idSize = isMobile ? 12 : 3;</span>
+export default func<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ti</span>on Aggr<span class="cstat-no" title="statement not covered" >egatedPlantsStats({</span></span>
+  completedTime,<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >  totalSpecies,</span>
+  plantingD<span class="fstat-no" title="function not covered" >en</span>sity<span class="cstat-no" title="statement not covered" >,</span>
+  survivalRate,
+<span class="cstat-no" title="statement not covered" >  species,</span>
+  hasObservedPerman<span class="cstat-no" title="statement not covered" >entPlots,</span>
+}: AggregatedPlantsSta<span class="cstat-no" title="statement not covered" >tsProps): JSX.Element {</span>
+  const { strings } = useLoc<span class="cstat-no" title="statement not covered" >alization();</span>
+  const { isMobile<span class="cstat-no" title="statement not covered" > } = useDeviceInfo();</span>
+  const infoCardGridSize = is<span class="cstat-no" title="statement not covered" >Mobile ? 12 : 3;</span>
   const chartGridSize = isMobi<span class="cstat-no" title="statement not covered" >le ? 12 : 6;</span>
 <span class="cstat-no" title="statement not covered" ></span>
   const livePlants = getO<span class="cstat-no" title="statement not covered" >bservationSpeciesLivePlantsCount(</span>species);
@@ -378,16 +385,18 @@ export default function AggregatedPlantsStats({
         {getData().map((data) =&gt; (
           &lt;Grid item xs={infoCardGridSize} key={data.label}&gt;
             &lt;OverviewItemCard
+              contents={
+                typeof data.value === 'number' ? &lt;FormattedNumber value={data.value} /&gt; : (data.value as string | null)
+              }
               isEditable={false}
               title={data.label}
-              contents={data.value?.toString() ?? null}
               titleInfoTooltip={data.tooltip}
             /&gt;
-          &lt;/Grid&gt;
+<span class="cstat-no" title="statement not covered" >          &lt;/Grid&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
         ))}
-<span class="cstat-no" title="statement not covered" >      &lt;/Grid&gt;<span class="fstat-no" title="function not covered" ></span></span>
+      &lt;/Grid&gt;
       &lt;Grid container spacing={3}&gt;
-<span class="cstat-no" title="statement not covered" >        &lt;Grid item xs={chartGridSize}&gt;</span>
+        &lt;Grid item xs={chartGridSize}&gt;
           &lt;ChartWrapper
             title={
               &lt;Box display='flex'&gt;
@@ -413,14 +422,14 @@ export default function AggregatedPlantsStats({
         &lt;/Grid&gt;
       &lt;/Grid&gt;
     &lt;/Box&gt;
-  );
-}
-&nbsp;
+  );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+}<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
 type ChartWrapperProps = {
   title: string | React.ReactNode;
-  children: React.Rea<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ct</span>Node;</span>
-  tooltip?: stri<span class="cstat-no" title="statement not covered" >ng;</span>
-};<span class="cstat-no" title="statement not covered" ></span>
+  children: React.ReactNode;
+  tooltip?: string;
+};
 &nbsp;
 const ChartWrapper = ({ title, children, tooltip }: ChartWrapperProps): JSX.Element =&gt; {
   const theme = useTheme();
@@ -448,7 +457,7 @@ const ChartWrapper = ({ title, children, tooltip }: ChartWrapperProps): JSX.Elem
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-26T20:25:53.928Z
+                at 2026-01-26T22:35:33.911Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

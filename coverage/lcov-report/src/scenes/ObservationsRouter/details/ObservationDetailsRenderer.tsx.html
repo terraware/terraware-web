@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/47</span>
+                <span class='fraction'>0/50</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/35</span>
+                <span class='fraction'>0/43</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/44</span>
+                <span class='fraction'>0/47</span>
             </div>
         
             
@@ -115,7 +115,19 @@
 <a name='L50'></a><a href='#L50'>50</a>
 <a name='L51'></a><a href='#L51'>51</a>
 <a name='L52'></a><a href='#L52'>52</a>
-<a name='L53'></a><a href='#L53'>53</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a>
+<a name='L63'></a><a href='#L63'>63</a>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -155,50 +167,63 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > type JSX } fr</span>om 'react';
 <span class="cstat-no" title="statement not covered" ></span>
-import Link from 'src/c<span class="cstat-no" title="statement not covered" >omponents/common/Link';</span>
-import CellRenderer, { T<span class="cstat-no" title="statement not covered" >ableRowType } from 'src/com</span>ponents/common/table/TableCellRenderer';
-import { RendererPr<span class="cstat-no" title="statement not covered" >ops } from 'src/compon</span>ents/common/table/types';
-import { APP_PATHS <span class="cstat-no" title="statement not covered" >} from 'src/constants';</span>
-import { has25m<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Pl</span>ots } from 'src/redux/features/observations/utils';</span>
-im<span class="cstat-no" title="statement not covered" >port { MonitoringPlotStatus, getPlotStatus } from 'src/types/Observations';</span>
+import FormattedNumber <span class="cstat-no" title="statement not covered" >from 'src/components/common/Form</span>attedNumber';
+import Link from 'src/co<span class="cstat-no" title="statement not covered" >mponents/common/Link';</span>
+import CellRenderer<span class="cstat-no" title="statement not covered" >, { TableRowType } fro</span>m 'src/components/common/table/TableCellRenderer';
+import { RendererPr<span class="cstat-no" title="statement not covered" >ops } from 'src/components/commo</span>n/table/types';
+import { APP_PA<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >TH</span>S } from 'src/constants';</span>
+im<span class="cstat-no" title="statement not covered" >port { has25mPlots } from 'src/redux/features/observations/utils';</span>
+impo<span class="cstat-no" title="statement not covered" >rt { MonitoringPlotStatus, getPlotStatus } from 'src/types/Obse</span>rvations';
+&nbsp;
+const NO_DATA_FIEL<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >DS</span> = ['totalPlants', 'totalSpecies'];</span>
 <span class="cstat-no" title="statement not covered" ></span>
-const NO_DATA_FIELDS = ['totalPlants', 'totalSpecies'];
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-co<span class="cstat-no" title="statement not covered" >nst ObservationDetailsRenderer =</span>
-  (p<span class="cstat-no" title="statement not covered" >lantingSiteId: number, observationId: number) =&gt;</span>
-  // e<span class="cstat-no" title="statement not covered" >slint-disable-next-line react/display-name</span>
-  (props<span class="cstat-no" title="statement not covered" >: RendererProps&lt;TableRowTy<span class="fstat-no" title="function not covered" >pe</span>&gt;): <span class="cstat-no" title="statement not covered" >JSX.Elemen</span>t =&gt; {</span>
-    const { column, row, value } = props;
-<span class="cstat-no" title="statement not covered" ></span>
-    const createLinkToStratumObservation = (name: string) =&gt; {
-      const ur<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >l </span>= APP_PATHS.OBSERVATION_STRA<span class="cstat-no" title="statement not covered" >TUM_DETAILS.replace(':plantingSiteId', plantingSiteId.toString())</span></span>
+cons<span class="cstat-no" title="statement not covered" >t ObservationDetailsRenderer =</span>
+  (pla<span class="cstat-no" title="statement not covered" >ntingSiteId: number, observationId: number) =&gt;</span>
+  // esl<span class="cstat-no" title="statement not covered" >int-disable-next-line reac<span class="fstat-no" title="function not covered" >t/</span>disp<span class="cstat-no" title="statement not covered" >lay-name</span></span>
+  (props: RendererProps&lt;TableRowType&gt;): JSX.Element =&gt; {
+<span class="cstat-no" title="statement not covered" >    const { c</span>olumn, row, value } = props;
+&nbsp;
+    const crea<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >te</span>LinkToStratumObservation = (<span class="cstat-no" title="statement not covered" >name: string) =&gt; {</span></span>
+      const url = APP_PATHS.OBSERVATION_STRATUM_DETAILS.replace(':plantingSiteId', plantingSiteId.toString())
         .replace(':observationId', observationId.toString())
         .replace(':stratumName', encodeURIComponent(row.stratumName));
       return (
         &lt;Link fontSize='16px' to={url}&gt;
           {name as React.ReactNode}
           {has25mPlots(row.substrata) ? '*' : ''}
-        &lt;/Link&gt;
-      );<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-    };<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span>
-    // don'<span class="fstat-no" title="function not covered" >t </span>rend<span class="cstat-no" title="statement not covered" >er data if we </span>don't have data
-    if (!row.completedTime &amp;&amp; value === 0 &amp;&amp; NO_DATA_FIELDS.indexOf(column.key) !== -1) {
-<span class="cstat-no" title="statement not covered" >      return &lt;CellRenderer {...props} value={'</span>'} /&gt;;
+        &lt;/Link&gt;<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+      );<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >    };</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+    // don't render data if we don't have data
+<span class="cstat-no" title="statement not covered" >    if (!row.completedTime &amp;&amp; value === 0 &amp;&amp; N</span>O_DATA_FIELDS.indexOf(column.key) !== -1) {
+      return &lt;CellR<span class="cstat-no" title="statement not covered" >enderer {...props} value={</span>''} /&gt;;
     }<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
     if (column.key === 'stratum<span class="cstat-no" title="statement not covered" >Name') {</span>
@@ -207,18 +232,29 @@ co<span class="cstat-no" title="statement not covered" >nst ObservationDetailsRe
       );<span class="cstat-no" title="statement not covered" ></span>
     }<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-    if (column.key === 'survivalRate') {
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span>      return &lt;CellRenderer {...props} value={value !== undefined &amp;&amp; value !== null ? `${value as number}%` : ''} /&gt;;</span>
-    }<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-    if (column.key<span class="cstat-no" title="statement not covered" > === 'status') {</span>
-<span class="cstat-no" title="statement not covered" >      return &lt;CellRenderer {...props} value={getPlotStatus(value as MonitoringPlotStatus)} /&gt;;</span>
+    if (
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span>      column.key === 'totalLive' ||</span>
+      column.key === 'totalPlants' <span class="cstat-no" title="statement not covered" >||</span>
+      column.key === 'totalSpecies' ||<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+      column.key =<span class="cstat-no" title="statement not covered" >== 'plantingDensity'</span>
+    ) <span class="cstat-no" title="statement not covered" >{</span>
+      return (
+<span class="cstat-no" title="statement not covered" >        &lt;CellRenderer {...props} value={typeof value === 'number' ? &lt;FormattedNumber value={value} /&gt; : undefined} /&gt;</span>
+<span class="cstat-no" title="statement not covered" >      );</span>
     }
 <span class="cstat-no" title="statement not covered" ></span>
-    re<span class="cstat-no" title="statement not covered" >turn &lt;CellRenderer {...props} /&gt;;</span>
-  };
+    if<span class="cstat-no" title="statement not covered" > (column.key === 'survivalRate') {</span>
+      return &lt;CellRenderer {...props} value={value !== undefined &amp;&amp; value !== null ? `${value as number}%` : ''} /&gt;;
+<span class="cstat-no" title="statement not covered" >    }</span>
 <span class="cstat-no" title="statement not covered" ></span>
-export<span class="cstat-no" title="statement not covered" > default ObservationDetailsRenderer;</span>
+    if (column.key === 'status') {
+<span class="cstat-no" title="statement not covered" >      return &lt;CellRenderer {...props} value={getPlotStatus(value as MonitoringPlotStatus)} /&gt;;</span>
+    }<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    return &lt;CellRenderer {...props} /&gt;;</span>
+  };<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
+expo<span class="cstat-no" title="statement not covered" >rt default ObservationDetailsRenderer;</span>
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -226,7 +262,7 @@ export<span class="cstat-no" title="statement not covered" > default Observation
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-26T20:25:53.928Z
+                at 2026-01-26T22:35:33.911Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

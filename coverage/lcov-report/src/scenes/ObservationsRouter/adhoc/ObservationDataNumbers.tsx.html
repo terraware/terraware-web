@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/35</span>
+                <span class='fraction'>0/36</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/30</span>
+                <span class='fraction'>0/32</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/32</span>
+                <span class='fraction'>0/33</span>
             </div>
         
             
@@ -114,7 +114,16 @@
 <a name='L49'></a><a href='#L49'>49</a>
 <a name='L50'></a><a href='#L50'>50</a>
 <a name='L51'></a><a href='#L51'>51</a>
-<a name='L52'></a><a href='#L52'>52</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L52'></a><a href='#L52'>52</a>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -156,6 +165,15 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -170,43 +188,52 @@
 import { Box, Typograph<span class="cstat-no" title="statement not covered" >y, useTheme } from '@mui/materia</span>l';
 import { Icon, Tooltip }<span class="cstat-no" title="statement not covered" > from '@terraware/web-compo</span>nents';
 <span class="cstat-no" title="statement not covered" ></span>
-import { useLocaliz<span class="cstat-no" title="statement not covered" >ation } from 'src/providers';</span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-ty<span class="cstat-no" title="statement not covered" >pe ObservationDataNumbersProps = {</span>
-  it<span class="cstat-no" title="statement not covered" >ems: { label: string; tooltip: string; value?: string | number </span>}[];
-  isCompleted: boolean;
-};<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+import FormattedNum<span class="cstat-no" title="statement not covered" >ber from 'src/components/common/</span>FormattedNumber';
+import { useLoc<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >al</span>ization } from 'src/providers';</span>
 <span class="cstat-no" title="statement not covered" ></span>
-cons<span class="cstat-no" title="statement not covered" >t ObservationDataNumbers = ({ items, isCompleted }: ObservationDataNumbersProps) =&gt; {</span>
-  cons<span class="cstat-no" title="statement not covered" >t theme = useTheme();</span>
-  const <span class="cstat-no" title="statement not covered" >{ strings } = useLocalizat<span class="fstat-no" title="function not covered" >io</span>n();<span class="cstat-no" title="statement not covered" ></span></span>
-  return (
-<span class="cstat-no" title="statement not covered" >    &lt;Box disp</span>lay='grid' paddingBottom={3} gridTemplateColumns={`repeat(${items.length}, 1fr)`} gap={2}&gt;
-      {items.map((item, index) =&gt; {
-        const <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >is</span>TemporarySurvivalRateItem =<span class="cstat-no" title="statement not covered" ></span></span>
+type<span class="cstat-no" title="statement not covered" > ObservationDataNumbersProps = {</span>
+  items: { label: string; tooltip: string; value?: string | number }[];
+  isCompleted: boo<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >le</span>an;</span>
+};<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+const <span class="cstat-no" title="statement not covered" >ObservationDataNumbers = ({ items, isCompleted }: ObservationDataNumbersProps) =&gt; {</span>
+  const <span class="cstat-no" title="statement not covered" >theme = useTheme();<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  const { strings } = useLocalization();
+<span class="cstat-no" title="statement not covered" >  return (</span>
+    &lt;Box display='grid' paddingBottom={3} gridTemplateColumns={`repeat(${items.length}, 1fr)`} gap={2}&gt;
+      {items.m<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ap</span>((item, index) =&gt; {<span class="cstat-no" title="statement not covered" ></span></span>
+        const isTemporarySurvivalRateItem =
           item.label === strings.SURVIVAL_RATE &amp;&amp; item.value === strings.NOT_CALCULATED_FOR_TEMPORARY_PLOTS;
         return (
           &lt;Box
             key={index}
             borderLeft={index !== 0 ? `1px solid ${theme.palette.TwClrBrdrTertiary}` : 'none'}
             paddingLeft={2}
-            paddingBottom={2}
-          &gt;<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-            &lt;Box dis<span class="cstat-no" title="statement not covered" >pla</span>y='flex'&gt;
-<span class="cstat-no" title="statement not covered" >              &lt;Typography fontWeight={600} paddingRight={0.5}&gt;</span>
-<span class="fstat-no" title="function not covered" ></span>                {<span class="cstat-no" title="statement not covered" >item.label}</span>
-              &lt;/Typography&gt;
-<span class="cstat-no" title="statement not covered" >              &lt;Tooltip title={item.tooltip}&gt;</span>
-                &lt;Ic<span class="cstat-no" title="statement not covered" >on name='info' fillColor={</span>theme.palette.TwClrIcnSecondary} /&gt;
-              &lt;/Toolti<span class="cstat-no" title="statement not covered" >p&gt;</span>
+            padding<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Bo</span>ttom={2<span class="cstat-no" title="statement not covered" >}</span></span>
+          &gt;<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >            &lt;Box display='flex'&gt;</span>
+<span class="fstat-no" title="function not covered" ></span>              &lt;Ty<span class="cstat-no" title="statement not covered" >pography fontW</span>eight={600} paddingRight={0.5}&gt;
+                {item.label}
+<span class="cstat-no" title="statement not covered" >              &lt;/Typography&gt;</span>
+              &lt;Tool<span class="cstat-no" title="statement not covered" >tip title={item.tooltip}&gt;</span>
+                &lt;Icon <span class="cstat-no" title="statement not covered" >name='info' fillColor={th</span>eme.palette.TwClrIcnSecondary} /&gt;
+              &lt;/Tooltip&gt;<span class="cstat-no" title="statement not covered" ></span>
             &lt;/Box&gt;<span class="cstat-no" title="statement not covered" ></span>
             &lt;Box&gt;<span class="cstat-no" title="statement not covered" ></span>
               &lt;Typography<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >                fontWeight={isTemporarySurvivalR</span>ateItem ? 400 : 600}
                 fontSi<span class="cstat-no" title="statement not covered" >ze={isTemporarySurvivalRateItem ? '16px'</span> : '24px'}
 <span class="cstat-no" title="statement not covered" >              &gt;<span class="fstat-no" title="function not covered" ></span></span>
-                {isCompleted || isTempor<span class="cstat-no" title="statement not covered" >arySurvivalRateItem ? item.value : '-'}</span>
-<span class="cstat-no" title="statement not covered" >              &lt;/Typography&gt;</span>
+                {isCompleted || isTempor<span class="cstat-no" title="statement not covered" >arySurvivalRateItem ? (</span>
+<span class="cstat-no" title="statement not covered" >                  typeof item.value === 'number' ? (</span>
+                    &lt;FormattedNumber value={item.value} /&gt;
+                  ) : (
+                    item.value
+                  )
+                ) : (
+                  '-'
+                )}
+              &lt;/Typography&gt;
             &lt;/Box&gt;
           &lt;/Box&gt;
         );
@@ -223,7 +250,7 @@ export default ObservationDataNumbers;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-26T20:25:53.928Z
+                at 2026-01-26T22:35:33.911Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

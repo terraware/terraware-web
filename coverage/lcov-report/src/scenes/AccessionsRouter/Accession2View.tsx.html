@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/210</span>
+                <span class='fraction'>0/213</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/291</span>
+                <span class='fraction'>0/301</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/206</span>
+                <span class='fraction'>0/209</span>
             </div>
         
             
@@ -776,7 +776,10 @@
 <a name='L711'></a><a href='#L711'>711</a>
 <a name='L712'></a><a href='#L712'>712</a>
 <a name='L713'></a><a href='#L713'>713</a>
-<a name='L714'></a><a href='#L714'>714</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L714'></a><a href='#L714'>714</a>
+<a name='L715'></a><a href='#L715'>715</a>
+<a name='L716'></a><a href='#L716'>716</a>
+<a name='L717'></a><a href='#L717'>717</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -846,8 +849,10 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -983,11 +988,13 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1345,7 +1352,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1516,34 +1522,35 @@ import { stateName } from 'src/types/Accession';
 import { getUnitName, isUnitInPreferredSystem } from 'src/units';
 import { getSeedBank, isContributor } from 'src/utils/organization';
 import useDeviceInf<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >o </span>from 's<span class="cstat-no" title="statement not covered" >rc/utils/useDeviceInfo';</span></span>
-import useSnackbar f<span class="cstat-no" title="statement not covered" >rom</span> 'src/utils/useSnackbar';
-<span class="cstat-no" title="statement not covered" >import useStickyTabs from 'src/utils/useStickyTabs';</span>
-import { us<span class="fstat-no" title="function not covered" >eL</span>ocat<span class="cstat-no" title="statement not covered" >ionTimeZone } f</span>rom 'src/utils/useTimeZoneUtils';
-&nbsp;
-<span class="cstat-no" title="statement not covered" >import DeleteAccessionModal from './edit/Delet</span>eAccessionModal';
-import EditLocation<span class="cstat-no" title="statement not covered" >Modal from './edit/EditLoc</span>ationModal';
-import EditStateModal from<span class="cstat-no" title="statement not covered" > './edit/EditStateModal'</span>;
-import EndDryingRemind<span class="cstat-no" title="statement not covered" >erModal from './edit/EndD</span>ryingReminderModal';
-import QuantityModal from '.<span class="cstat-no" title="statement not covered" >/edit/QuantityModal';</span>
-import ViabilityModa<span class="cstat-no" title="statement not covered" >l from './edit/ViabilityMod</span>al';
-import Accession2Hi<span class="cstat-no" title="statement not covered" >story from './his</span>tory/Accession2History';
-import NewViabilityTestModal<span class="cstat-no" title="statement not covered" > from './viabilityTesting/NewViabilityTestModal';</span>
-import ViabilityTestingPan<span class="cstat-no" title="statement not covered" >el from './viabilityTesting/ViabilityTestingPane</span>l';
-import ViewViabilityTestModal from '.<span class="cstat-no" title="statement not covered" >/viabilityTesting/ViewViabilityTestModal';</span>
-import DetailPanel from <span class="cstat-no" title="statement not covered" >'./view/DetailPanel';</span>
-import WithdrawModal from<span class="cstat-no" title="statement not covered" > './withdraw/WithdrawModal';</span>
+import { useNumberFo<span class="cstat-no" title="statement not covered" >rma</span>tter } from 'src/utils/useNumberFormatter';
+<span class="cstat-no" title="statement not covered" >import useSnackbar from 'src/utils/useSnackbar';</span>
+import useS<span class="fstat-no" title="function not covered" >ti</span>ckyT<span class="cstat-no" title="statement not covered" >abs from 'src/u</span>tils/useStickyTabs';
+import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 <span class="cstat-no" title="statement not covered" ></span>
-export default function Accessi<span class="cstat-no" title="statement not covered" >on2View(): JSX.Element {</span>
-  const { user } = u<span class="cstat-no" title="statement not covered" >seUser();</span>
+import DeleteAccess<span class="cstat-no" title="statement not covered" >ionModal from './edit/Dele</span>teAccessionModal';
+import EditLocationModal f<span class="cstat-no" title="statement not covered" >rom './edit/EditLocation</span>Modal';
+import EditStateModal <span class="cstat-no" title="statement not covered" >from './edit/EditStateMod</span>al';
+import EndDryingReminderModa<span class="cstat-no" title="statement not covered" >l from './edit/EndDryingReminderModal</span>';
+import QuantityModal<span class="cstat-no" title="statement not covered" > from './edit/QuantityModal</span>';
+import ViabilityMod<span class="cstat-no" title="statement not covered" >al from './edit/V</span>iabilityModal';
+import Accession2History fro<span class="cstat-no" title="statement not covered" >m './history/Accession2History';</span>
+import NewViabilityTestMod<span class="cstat-no" title="statement not covered" >al from './viabilityTesting/NewViabilityTestModa</span>l';
+import ViabilityTestingPanel from './<span class="cstat-no" title="statement not covered" >viabilityTesting/ViabilityTestingPanel';</span>
+import ViewViabilityTest<span class="cstat-no" title="statement not covered" >Modal from './viabilityTesting/ViewViabilityTestModal</span>';
+import DetailPanel from '<span class="cstat-no" title="statement not covered" >./view/DetailPanel';</span>
+import WithdrawModal from './w<span class="cstat-no" title="statement not covered" >ithdraw/WithdrawModal';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+export default funct<span class="cstat-no" title="statement not covered" >ion Accession2View(): JSX.Element {</span>
+  const { user } = useU<span class="cstat-no" title="statement not covered" >ser();</span>
   const { selectedOrgan<span class="cstat-no" title="statement not covered" >ization } = useOrganizati</span>on();
-  const { userPreferenc<span class="cstat-no" title="statement not covered" >es } = useUser();</span>
-  const { accession<span class="cstat-no" title="statement not covered" >Id } = useParams&lt;{ accessionId:</span> string }&gt;();
-  const [accession, se<span class="cstat-no" title="statement not covered" >tAccession] = useState&lt;A</span>ccession&gt;();
-  const [openEditLoca<span class="cstat-no" title="statement not covered" >tionModal, setOpenEditLocationMo</span>dal] = useState(false);
-  const [openEditStateMo<span class="cstat-no" title="statement not covered" >dal, setOpenEditStateModal] = u</span>seState(false);
-  const [openEndDry<span class="cstat-no" title="statement not covered" >ingReminderModal, set</span>OpenEndDryingReminderModal] = useState(false);
-  const [openDeleteAccessi<span class="cstat-no" title="statement not covered" >on, setOpenDeleteAccession] = useS</span>tate(false);
-  const [openWithdrawModal,<span class="cstat-no" title="statement not covered" > setOpenWithdrawModal] = useState(false);</span>
+  const { userPrefe<span class="cstat-no" title="statement not covered" >rences } = useUser();</span>
+  const { accessionId <span class="cstat-no" title="statement not covered" >} = useParams&lt;{ accessio</span>nId: string }&gt;();
+  const [accession, s<span class="cstat-no" title="statement not covered" >etAccession] = useState&lt;Accessio</span>n&gt;();
+  const [openEditLocatio<span class="cstat-no" title="statement not covered" >nModal, setOpenEditLocationModa</span>l] = useState(false);
+  const [openEditSt<span class="cstat-no" title="statement not covered" >ateModal, setOpenEdit</span>StateModal] = useState(false);
+  const [openEndDryingRemi<span class="cstat-no" title="statement not covered" >nderModal, setOpenEndDryingReminde</span>rModal] = useState(false);
+  const [openDeleteAccessio<span class="cstat-no" title="statement not covered" >n, setOpenDeleteAccession] = useState(false)</span>;
+  const [openWithdrawModal, setO<span class="cstat-no" title="statement not covered" >penWithdrawModal] = useState(false);</span>
   const [openQuantityModa<span class="cstat-no" title="statement not covered" >l, setOpenQuantityModal] = useState(false)</span>;
   const [hasPendingTests, s<span class="cstat-no" title="statement not covered" >etHasPendingTests] = useState(false);</span>
   const [openViabilityModal, s<span class="cstat-no" title="statement not covered" >etOpenViabilityModal] = useState(false</span>);
@@ -1560,8 +1567,9 @@ export default function Accessi<span class="cstat-no" title="statement not cover
   const contentRef = useR<span class="cstat-no" title="statement not covered" >ef(null);</span>
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const l<span class="fstat-no" title="function not covered" >ocationTimeZone</span> = useLocationTimeZone();
-&nbsp;
-  const fullSizeBut<span class="cstat-no" title="statement not covered" >tonStyles = {</span>
+  const numberFormatter = useNumberFormatter(activeLocale);
+<span class="cstat-no" title="statement not covered" ></span>
+  const fullSizeButtonStyles = {<span class="cstat-no" title="statement not covered" ></span>
     width: '100%',<span class="cstat-no" title="statement not covered" ></span>
   };<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
@@ -1577,16 +1585,16 @@ export default function Accessi<span class="cstat-no" title="statement not cover
     width: '20px',<span class="cstat-no" title="statement not covered" ></span>
   };<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const seedBankTimeZone<span class="cstat-no" title="statement not covered" > = useMemo(() =&gt; {</span>
-    const facility =<span class="cstat-no" title="statement not covered" ></span>
-      accession?.fa<span class="cstat-no" title="statement not covered" >cilityId &amp;&amp; selectedOrganization</span>
-        ? FacilityServ<span class="cstat-no" title="statement not covered" >ice.getFacility({</span>
-            organization: selecte<span class="cstat-no" title="statement not covered" >dOrganization,</span>
-            faci<span class="cstat-no" title="statement not covered" >lityId: accession.facilityId,</span>
-            type: '<span class="cstat-no" title="statement not covered" >Seed Bank',</span>
+  const seedBankTimeZone = useMemo(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
+    const facility <span class="cstat-no" title="statement not covered" >=</span>
+      accession?.facil<span class="cstat-no" title="statement not covered" >ityId &amp;&amp; selectedOrganization</span>
+        ? FacilityService.getFaci<span class="cstat-no" title="statement not covered" >lity({</span>
+            orga<span class="cstat-no" title="statement not covered" >nization: selectedOrganization,</span>
+            facilit<span class="cstat-no" title="statement not covered" >yId: accession.facilityId,</span>
+            type: 'Se<span class="cstat-no" title="statement not covered" >ed Bank',</span>
           })<span class="cstat-no" title="statement not covered" ></span>
         : undefined;<span class="cstat-no" title="statement not covered" ></span>
-    const tz = locationTime<span class="cstat-no" title="statement not covered" >Zone.get(facility);</span>
+    const tz = locationTim<span class="cstat-no" title="statement not covered" >eZone.get(facility);</span>
     return tz.id;<span class="cstat-no" title="statement not covered" ></span>
   }, [accession?.facilityId, selectedOrganization, locationTimeZone]);
 &nbsp;
@@ -1687,121 +1695,122 @@ export default function Accessi<span class="cstat-no" title="statement not cover
   };<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
   const showValueAndConversion = (quantity: number, unit: string, isEstimated?: boolean) =&gt; {
+    const formattedQuantity = numberFormatter.format(quantity ?? 0);
     if (!isUnitInPreferredSystem(unit, userPreferences.preferredWeightSystem as string)) {
-      return (
-<span class="cstat-no" title="statement not covered" >        &lt;Box marginBottom={1}&gt;</span>
-          {isEstimated &amp;&amp; '~'} {quantity} {getUnitName(unit)}
+      re<span class="cstat-no" title="statement not covered" >turn (</span>
+        &lt;Box marginBottom={1}&gt;
+          {isEstimated &amp;&amp; '~'} {formattedQuantity} {getUnitName(unit)}
           &lt;ConvertedValue quantity={quantity} unit={unit} isEstimated={isEstimated} /&gt;
-        &lt;/Box&gt;
-      );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+        &lt;/Box&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+      );<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >    } else {</span>
-<span class="cstat-no" title="statement not covered" >      return `${quantity} ${getUnitName(unit)}`;</span>
+<span class="cstat-no" title="statement not covered" >      return `${formattedQuantity} ${getUnitName(unit)}`;</span>
     }
   };<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
   const getAbsoluteQuantity = () =&gt; {
     if (accession &amp;&amp; accession<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >.r</span>emainingQuantity) {</span>
-<span class="cstat-no" title="statement not covered" >      if (accession.remainingQuantity.units === 'Seeds') {</span>
-<span class="cstat-no" title="statement not covered" >        return `${accession.remainingQuantity.quantity} ${strings.CT}`;</span>
-      } <span class="cstat-no" title="statement not covered" >else {</span>
-        return showValueAndConversion(accession.remainingQuantity.quantity, accession.remainingQuantity.units);
-      }<span class="cstat-no" title="statement not covered" ></span>
-    }
+      if (accession.remainingQuantity.units === 'Seeds') {
+<span class="cstat-no" title="statement not covered" >        return `${numberFormatter.format(accession.remainingQuantity.quantity ?? 0)} ${strings.CT}`;</span>
+<span class="cstat-no" title="statement not covered" >      } else {</span>
+<span class="cstat-no" title="statement not covered" >        return showValueAndConversion(accession.remainingQuantity.quantity ?? 0, accession.remainingQuantity.units);</span>
+      }
+    }<span class="cstat-no" title="statement not covered" ></span>
   };
 &nbsp;
-  const getStylesForState = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    switch (accession?.state) {</span>
-      case 'Awaiting Check-In':
-<span class="cstat-no" title="statement not covered" >        return {</span>
-          background: themeObj.palette.TwClrBasePink050,
+  const getStylesForState = () =&gt; {
+    switch (accession?.state<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >) </span>{</span>
+<span class="cstat-no" title="statement not covered" >      case 'Awaiting Check-In':</span>
+        return {
+<span class="cstat-no" title="statement not covered" >          background: themeObj.palette.TwClrBasePink050,</span>
           border: `1px solid ${themeObj.palette.TwClrBasePink200}`,
           color: themeObj.palette.TwClrBasePink500,
         };
 &nbsp;
-      ca<span class="cstat-no" title="statement not covered" >se 'Awaiting Processing':</span>
-        return {
+      case 'Awaiting Processing':
+<span class="cstat-no" title="statement not covered" >        return {</span>
           background: themeObj.palette.TwClrBaseRed050,
           border: `1px solid ${themeObj.palette.TwClrBaseRed200}`,
           color: themeObj.palette.TwClrTxtDanger,
         };
-      ca<span class="cstat-no" title="statement not covered" >se 'Processing':</span>
-        return {
+      case 'Processing':
+<span class="cstat-no" title="statement not covered" >        return {</span>
           background: themeObj.palette.TwClrBaseOrange050,
           border: `1px solid ${themeObj.palette.TwClrBaseOrange200}`,
           color: themeObj.palette.TwClrBaseOrange500,
         };
-      ca<span class="cstat-no" title="statement not covered" >se 'Drying':</span>
-        return {
+      case 'Drying':
+<span class="cstat-no" title="statement not covered" >        return {</span>
           background: themeObj.palette.TwClrBaseYellow050,
           border: `1px solid ${themeObj.palette.TwClrBaseOrange200}`,
           color: themeObj.palette.TwClrBaseYellow500,
         };
-      ca<span class="cstat-no" title="statement not covered" >se 'In Storage': {</span>
-        return {
+      case 'In Storage': {
+<span class="cstat-no" title="statement not covered" >        return {</span>
           background: themeObj.palette.TwClrBaseGreen050,
           border: `1px solid ${themeObj.palette.TwClrBaseGreen200}`,
           color: themeObj.palette.TwClrTxtSuccess,
         };
       }
-      de<span class="cstat-no" title="statement not covered" >fault: {</span>
-        return {
+      default: {
+<span class="cstat-no" title="statement not covered" >        return {</span>
           background: themeObj.palette.TwClrBgSecondary,
           border: `1px solid ${themeObj.palette.TwClrBaseGray200}`,
           color: themeObj.palette.TwClrTxtSecondary,
         };
       }
     }
-  };<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-&nbsp;
-  co<span class="cstat-no" title="statement not covered" >nst getEstimatedQuantity = () =&gt; {</span>
-    if<span class="cstat-no" title="statement not covered" > (accession?.remainingQuantity?.units === 'Seeds') {</span>
-      if<span class="cstat-no" title="statement not covered" > (accession.estimatedWeight?.grams) {</span>
-        return showValueAndConversion(accession.estimatedWeight.quantity, accession.estimatedWeight.units, true);
+  };
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  const getEstimatedQuantity = () =&gt; {
+<span class="cstat-no" title="statement not covered" >    if (accession?.remainingQuantity?.units === 'Seeds') {</span>
+<span class="cstat-no" title="statement not covered" >      if (accession.estimatedWeight?.grams) {</span>
+<span class="cstat-no" title="statement not covered" >        return showValueAndConversion(accession.estimatedWeight.quantity ?? 0, accession.estimatedWeight.units, true);</span>
       }
-    } <span class="cstat-no" title="statement not covered" >else {</span>
-      if<span class="cstat-no" title="statement not covered" > (accession?.estimatedCount) {</span>
-        return `~${accession?.estimatedCount} ${strings.CT}`;
+    } else {
+<span class="cstat-no" title="statement not covered" >      if (accession?.estimatedCount) {</span>
+<span class="cstat-no" title="statement not covered" >        return `~${numberFormatter.format(accession?.estimatedCount ?? 0)} ${strings.CT}`;</span>
       }
-<span class="cstat-no" title="statement not covered" >    }</span>
-    return '';
-  };<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-&nbsp;
-  co<span class="cstat-no" title="statement not covered" >nst renderWithdrawalButton = (fullSize?: boolean) =&gt; {</span>
-    if<span class="cstat-no" title="statement not covered" > (accession?.remainingQuantity?.quantity) {</span>
-      return (
+    }
+<span class="cstat-no" title="statement not covered" >    return '';</span>
+  };
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  const renderWithdrawalButton = (fullSize?: boolean) =&gt; {
+<span class="cstat-no" title="statement not covered" >    if (accession?.remainingQuantity?.quantity) {</span>
+<span class="cstat-no" title="statement not covered" >      return (</span>
         &lt;Button
-          onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setOpenWithdrawModal(true)}</span>
-          label={strings.WITHDRAW}
+          onClick={() =&gt; setOpenWithdrawModal(true)}
+          label={st<span class="fstat-no" title="function not covered" >ri</span>ngs.<span class="cstat-no" title="statement not covered" >WITHDRAW}</span>
           size='small'
           style={fullSize ? fullSizeButtonStyles : {}}
         /&gt;
       );
     }
-<span class="cstat-no" title="statement not covered" >    return null;</span>
-  };
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  const renderActionMenuButton = () =&gt; (
+    return null;
+  };<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
+  const renderActionMenuButton = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; (<span class="cstat-no" title="statement not covered" ></span></span>
     &lt;OptionsMenu
       size='small'
-      onOptionItemClick={<span class="fstat-no" title="function not covered" >(i</span>tem: DropdownItem) =&gt; {
-<span class="cstat-no" title="statement not covered" >        if (item.value === 'delete-accession') {</span>
+      onOptionItemClick={(item: DropdownItem) =&gt; {
+        if (item.value ==<span class="fstat-no" title="function not covered" >= </span>'delete-accession') {
 <span class="cstat-no" title="statement not covered" >          setOpenDeleteAccession(true);</span>
-        }
+        }<span class="cstat-no" title="statement not covered" ></span>
       }}
       optionItems={[{ label: strings.DELETE, value: 'delete-accession', type: 'destructive' }]}
     /&gt;
   );
-<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
   const overviewItemCount =<span class="cstat-no" title="statement not covered" ></span>
     (accession?.state ? 1 :<span class="cstat-no" title="statement not covered" > 0) +</span>
-    (accession?.state === 'A<span class="cstat-no" title="statement not covered" >waiting Check-In' &amp;&amp; accession?.bagNumbers !== undefined ? 1 : 0) +</span>
+    (accession?.state === '<span class="cstat-no" title="statement not covered" >Awaiting Check-In' &amp;&amp; accession?.bagNumbers !== undefined ? 1 : 0) +</span>
     (accession?.facilityId !<span class="cstat-no" title="statement not covered" >== undefined ? 1 : 0) +</span>
-    (accession?<span class="cstat-no" title="statement not covered" >.state === 'Drying' ? 1 : <span class="fstat-no" title="function not covered" >0)</span> +</span>
-<span class="cstat-no" title="statement not covered" >    4;</span>
+    (accession?.state === 'D<span class="cstat-no" title="statement not covered" >rying' ? 1 : 0) +</span>
+    4;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const overviewGridSize = isMobile ? '100%' : isTablet ? '50%' : overviewItemCount &lt;= 6 ? '33%' : '25%';
-<span class="cstat-no" title="statement not covered" ></span>
-  const quantityEditable = userCanEdit &amp;&amp; accession?.state !== 'Used Up';
+  cons<span class="cstat-no" title="statement not covered" >t overviewG</span>ridSize = isMobile ? '100%' : isTablet ? '50%' : overviewItemCount &lt;= 6 ? '33%' : '25%';
+&nbsp;
+  co<span class="cstat-no" title="statement not covered" >nst quantityEditable = userCanEdit &amp;&amp; accession?.state !== 'Used Up';</span>
   const viabilityEditable = userCanEdit &amp;&amp; accession?.estimatedCount !== undefined &amp;&amp; accession?.state !== 'Used Up';
   const isAwaitingCheckin = accession?.state === 'Awaiting Check-In';
 &nbsp;
@@ -1868,24 +1877,24 @@ export default function Accessi<span class="cstat-no" title="statement not cover
               &lt;ViabilityTestingPanel
                 accession={accession}
                 reload={reloadData}
-                canAddTest={viabilityEditable}<span class="cstat-no" title="statement not covered" ></span>
-                setNewViabilityTestOpened={setOpenNewViabilityTest}
+                canAddTest={viabilityEditable}
+                setNewViabilityTestOpened={setOpenN<span class="cstat-no" title="statement not covered" >ewViabilityTest}</span>
                 setViewViabilityTestModalOpened={setOpenViewViabilityTestModal}
                 setSelectedTest={setSelectedTest}
               /&gt;
-<span class="cstat-no" title="statement not covered" >            )}</span>
-          &lt;/Box&gt;
+            )}
+<span class="cstat-no" title="statement not covered" >          &lt;/Box&gt;</span>
         ),
       },
     ];
   }, [accession, reloadData, activeLocale, themeObj, viabilityEditable, isMobile, hasPendingTests]);
 &nbsp;
-  const { activ<span class="fstat-no" title="function not covered" >eT</span>ab, onChangeTab, setActiveTab } = useStickyTabs({
-    defa<span class="cstat-no" title="statement not covered" >ultTab: 'detail',</span>
+  const { activeTab, onChangeTab, setActiveTab } = useStickyTabs({
+    defaultTab:<span class="fstat-no" title="function not covered" > '</span>detail',
     tabs<span class="cstat-no" title="statement not covered" >,</span>
-    viewIdentifier: 'accession',
-  });<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-&nbsp;
+    view<span class="cstat-no" title="statement not covered" >Identifier: 'accession',</span>
+  });
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
   return (
     &lt;TfMain&gt;
       {accession &amp;&amp; (
@@ -1893,10 +1902,10 @@ export default function Accessi<span class="cstat-no" title="statement not cover
           {selectedTest &amp;&amp; (
             &lt;ViewViabilityTestModal
               open={openViewViabilityTestModal}
-              a<span class="fstat-no" title="function not covered" >cc</span>ession={accession}
-<span class="cstat-no" title="statement not covered" >              isEditable={userCanEdit}</span>
-<span class="cstat-no" title="statement not covered" >              viabilityTest={sele</span>ctedTest}
-              onClose={() =&gt; {
+              accession={accession}
+              i<span class="fstat-no" title="function not covered" >sE</span>ditable={userCanEdit}
+<span class="cstat-no" title="statement not covered" >              viabilityTest={selectedTes</span>t}
+<span class="cstat-no" title="statement not covered" >              onClose={() =&gt; {</span>
                 setOpenViewViabilityTestModal(false);
                 setSelectedTest(undefined);
               }}
@@ -1904,39 +1913,39 @@ export default function Accessi<span class="cstat-no" title="statement not cover
               reload={reloadData}
             /&gt;
           )}
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-          {user &amp;&amp; (
+&nbsp;
+          {user<span class="fstat-no" title="function not covered" > &amp;</span>&amp; (<span class="cstat-no" title="statement not covered" ></span>
             &lt;NewViabilityTestModal
               open={openNewViabilityTest}
               reload={reloadData}
               accession={accession}
               onClose={() =&gt; {
                 setOpenNewViabilityTest(false);
-<span class="fstat-no" title="function not covered" >                s</span>etSe<span class="cstat-no" title="statement not covered" >lectedTest(undefined);</span>
-              }}
+                setSelectedTest(undefined);
+              }<span class="fstat-no" title="function not covered" >}<span class="cstat-no" title="statement not covered" ></span></span>
               user={user}
               viabilityTest={selectedTest}
             /&gt;
           )}
 &nbsp;
           {openEditLocationModal &amp;&amp; (
-            &lt;Ed<span class="fstat-no" title="function not covered" >it</span>Loca<span class="cstat-no" title="statement not covered" >tionModal</span>
-              open={openEditLocationModal}
+            &lt;EditLocationModal
+              o<span class="fstat-no" title="function not covered" >pe</span>n={o<span class="cstat-no" title="statement not covered" >penEditLocationModal}</span>
               onClose={() =&gt; setOpenEditLocationModal(false)}
               accession={accession}
               reload={reloadData}
             /&gt;
           )}
           {openEditStateModal &amp;&amp; (
-            &lt;Ed<span class="fstat-no" title="function not covered" >it</span>Stat<span class="cstat-no" title="statement not covered" >eModal</span>
-              open={openEditStateModal}
+            &lt;EditStateModal
+              o<span class="fstat-no" title="function not covered" >pe</span>n={o<span class="cstat-no" title="statement not covered" >penEditStateModal}</span>
               onClose={() =&gt; setOpenEditStateModal(false)}
               accession={accession}
               reload={reloadData}
             /&gt;
           )}
-          {open<span class="fstat-no" title="function not covered" >En</span>dDry<span class="cstat-no" title="statement not covered" >ingReminderModal &amp;&amp; (</span>
-            &lt;EndDryingReminderModal
+          {openEndDryingReminderModal &amp;&amp; (
+            &lt;En<span class="fstat-no" title="function not covered" >dD</span>ryin<span class="cstat-no" title="statement not covered" >gReminderModal</span>
               open={openEndDryingReminderModal}
               onClose={() =&gt; setOpenEndDryingReminderModal(false)}
               accession={accession}
@@ -1944,8 +1953,8 @@ export default function Accessi<span class="cstat-no" title="statement not cover
             /&gt;
           )}
           {openDeleteAccession &amp;&amp; (
-            &lt;De<span class="fstat-no" title="function not covered" >le</span>teAc<span class="cstat-no" title="statement not covered" >cessionModal</span>
-              open={openDeleteAccession}
+            &lt;DeleteAccessionModal
+              o<span class="fstat-no" title="function not covered" >pe</span>n={o<span class="cstat-no" title="statement not covered" >penDeleteAccession}</span>
               onClose={() =&gt; setOpenDeleteAccession(false)}
               accession={accession}
             /&gt;
@@ -1953,8 +1962,8 @@ export default function Accessi<span class="cstat-no" title="statement not cover
           {user &amp;&amp; openWithdrawModal &amp;&amp; (
             &lt;WithdrawModal
               open={openWithdrawModal}
-              o<span class="fstat-no" title="function not covered" >nC</span>lose<span class="cstat-no" title="statement not covered" >={() =&gt; setOpenWithdrawModal(</span>false)}
-              accession={accession}
+              onClose={() =&gt; setOpenWithdrawModal(false)}
+              a<span class="fstat-no" title="function not covered" >cc</span>essi<span class="cstat-no" title="statement not covered" >on={accession}</span>
               reload={reloadData}
               user={user}
             /&gt;
@@ -1971,11 +1980,11 @@ export default function Accessi<span class="cstat-no" title="statement not cover
               open={openViabilityModal}
               onClose={() =&gt; setOpenViabilityModal(false)}
               accession={accession}
-              reload={reloadData}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-              setNewViabilityTestOpened={setOpenNewViabilityTest}
+              reload={reloadData}
+              setNewViabilityTestOpened={setOpenNewViabilityTest}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
               changeTab={setActiveTab}
-              t<span class="fstat-no" title="function not covered" >it</span>le={<span class="cstat-no" title="statement not covered" >accession?.viabilityPerc</span>ent?.toString() ? strings.EDIT_VIABILITY : strings.ADD_VIABILITY}
-            /&gt;
+              title={accession?.viabilityPercent?.toString() ? strings.EDIT_VIABILITY : strings.ADD_VIABILITY}
+            /&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
           )}
         &lt;/&gt;
       )}
@@ -1992,8 +2001,8 @@ export default function Accessi<span class="cstat-no" title="statement not cover
               }}
             /&gt;
           &lt;/Box&gt;
-          &lt;Box paddi<span class="fstat-no" title="function not covered" >ng</span>={is<span class="cstat-no" title="statement not covered" >Mobile ? themeObj.spacing(3,</span> 0, 4, 0) : themeObj.spacing(3, 3, 4, 3)}&gt;
-            &lt;Typography color={themeObj.palette.TwClrTxt} fontSize='14px'&gt;
+          &lt;Box padding={isMobile ? themeObj.spacing(3, 0, 4, 0) : themeObj.spacing(3, 3, 4, 3)}&gt;
+            &lt;Typogra<span class="fstat-no" title="function not covered" >ph</span>y co<span class="cstat-no" title="statement not covered" >lor={themeObj.palette.TwClrT</span>xt} fontSize='14px'&gt;
               {accession?.accessionNumber}
             &lt;/Typography&gt;
             &lt;Box display='flex' justifyContent='space-between' alignItems='center'&gt;
@@ -2014,8 +2023,8 @@ export default function Accessi<span class="cstat-no" title="statement not cover
             &lt;Typography color={themeObj.palette.TwClrTxt} fontSize='14px'&gt;
               {accession?.speciesCommonName}
             &lt;/Typography&gt;
-            {isMobil<span class="fstat-no" title="function not covered" >e </span>&amp;&amp; u<span class="cstat-no" title="statement not covered" >serCanEdit &amp;&amp; (</span>
-              &lt;Box display='flex' alignItems='center' paddingRight={2} marginTop={2}&gt;
+            {isMobile &amp;&amp; userCanEdit &amp;&amp; (
+              &lt;Box d<span class="fstat-no" title="function not covered" >is</span>play<span class="cstat-no" title="statement not covered" >='flex' alignItems='center' pad</span>dingRight={2} marginTop={2}&gt;
                 &lt;Box paddingLeft={2} width='100%'&gt;
                   {accession &amp;&amp; isAwaitingCheckin ? (
                     &lt;Button
@@ -2023,8 +2032,8 @@ export default function Accessi<span class="cstat-no" title="statement not cover
                       label={strings.CHECK_IN}
                       size='medium'
                       style={fullSizeButtonStyles}
-<span class="fstat-no" title="function not covered" >                    /&gt;<span class="cstat-no" title="statement not covered" ></span></span>
-                  ) : (
+                    /&gt;
+                  ) <span class="fstat-no" title="function not covered" >: </span>(<span class="cstat-no" title="statement not covered" ></span>
                     renderWithdrawalButton(true)
                   )}
                 &lt;/Box&gt;
@@ -2033,32 +2042,32 @@ export default function Accessi<span class="cstat-no" title="statement not cover
             )}
             &lt;PageSnackbar /&gt;
           &lt;/Box&gt;
-        &lt;/&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-      &lt;/PageHeaderWr<span class="fstat-no" title="function not covered" >ap</span>per&gt;<span class="cstat-no" title="statement not covered" ></span>
-&nbsp;
+        &lt;/&gt;
+      &lt;/PageHeaderWrapper&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
       &lt;Grid
         container
         ref={contentRef}
         spacing={themeObj.spacing(3)}
         marginBottom={themeObj.spacing(3)}
         alignItems={'stretch'}
-      &gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-        {accession?.state &amp;&amp; (
+      &gt;
+        {accession?.<span class="fstat-no" title="function not covered" >st</span>ate <span class="cstat-no" title="statement not covered" >&amp;&amp; (</span>
           &lt;Grid item flexBasis={overviewGridSize} flexGrow={1}&gt;
             &lt;OverviewItemCard
-              isEditable={!(isAwaitingCheckin || !userCanEdit)}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-              handleEdit={() =&gt; setOpenEditStateModal(true)}
+              isEditable={!(isAwaitingCheckin || !userCanEdit)}
+              handleEdit={() =&gt; setOpenEditStateModal(true)}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
               title={strings.STATUS}
               contents={
                 &lt;Typography
                   paddingLeft={1}
                   sx={{
                     ...getStylesForState(),
-<span class="fstat-no" title="function not covered" >                    pa</span>ddin<span class="cstat-no" title="statement not covered" >g: themeObj.spacing(0.5, 1),</span>
-                    borderRadius: '8px',
+                    padding: themeObj.spacing(0.5, 1),
+<span class="fstat-no" title="function not covered" >                    bo</span>rder<span class="cstat-no" title="statement not covered" >Radius: '8px',</span>
                     fontSize: '14px',
-                    marginTop: isMobile ? -0.5 : 0,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-                  }}
+                    marginTop: isMobile ? -0.5 : 0,
+                  }}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
                 &gt;
                   {stateName(accession.state)}
                 &lt;/Typography&gt;
@@ -2209,7 +2218,7 @@ export default function Accessi<span class="cstat-no" title="statement not cover
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-26T20:25:53.928Z
+                at 2026-01-26T22:35:33.911Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
