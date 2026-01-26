@@ -25,6 +25,7 @@ import { stateName } from 'src/types/Accession';
 import { getUnitName, isUnitInPreferredSystem } from 'src/units';
 import { getSeedBank, isContributor } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import useSnackbar from 'src/utils/useSnackbar';
 import useStickyTabs from 'src/utils/useStickyTabs';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
@@ -69,6 +70,7 @@ export default function Accession2View(): JSX.Element {
   const contentRef = useRef(null);
   const { activeLocale } = useLocalization();
   const locationTimeZone = useLocationTimeZone();
+  const numberFormatter = useNumberFormatter(activeLocale);
 
   const fullSizeButtonStyles = {
     width: '100%',
@@ -196,24 +198,25 @@ export default function Accession2View(): JSX.Element {
   };
 
   const showValueAndConversion = (quantity: number, unit: string, isEstimated?: boolean) => {
+    const formattedQuantity = numberFormatter.format(quantity ?? 0);
     if (!isUnitInPreferredSystem(unit, userPreferences.preferredWeightSystem as string)) {
       return (
         <Box marginBottom={1}>
-          {isEstimated && '~'} {quantity} {getUnitName(unit)}
+          {isEstimated && '~'} {formattedQuantity} {getUnitName(unit)}
           <ConvertedValue quantity={quantity} unit={unit} isEstimated={isEstimated} />
         </Box>
       );
     } else {
-      return `${quantity} ${getUnitName(unit)}`;
+      return `${formattedQuantity} ${getUnitName(unit)}`;
     }
   };
 
   const getAbsoluteQuantity = () => {
     if (accession && accession.remainingQuantity) {
       if (accession.remainingQuantity.units === 'Seeds') {
-        return `${accession.remainingQuantity.quantity} ${strings.CT}`;
+        return `${numberFormatter.format(accession.remainingQuantity.quantity ?? 0)} ${strings.CT}`;
       } else {
-        return showValueAndConversion(accession.remainingQuantity.quantity, accession.remainingQuantity.units);
+        return showValueAndConversion(accession.remainingQuantity.quantity ?? 0, accession.remainingQuantity.units);
       }
     }
   };
@@ -265,11 +268,11 @@ export default function Accession2View(): JSX.Element {
   const getEstimatedQuantity = () => {
     if (accession?.remainingQuantity?.units === 'Seeds') {
       if (accession.estimatedWeight?.grams) {
-        return showValueAndConversion(accession.estimatedWeight.quantity, accession.estimatedWeight.units, true);
+        return showValueAndConversion(accession.estimatedWeight.quantity ?? 0, accession.estimatedWeight.units, true);
       }
     } else {
       if (accession?.estimatedCount) {
-        return `~${accession?.estimatedCount} ${strings.CT}`;
+        return `~${numberFormatter.format(accession?.estimatedCount ?? 0)} ${strings.CT}`;
       }
     }
     return '';
