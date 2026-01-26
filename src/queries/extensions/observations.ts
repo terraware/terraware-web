@@ -131,5 +131,14 @@ api.enhanceEndpoints({
           ? [{ type: QueryTagTypes.Observation, id: observationResults.observation.observationId }]
           : [],
     },
+    listObservationSplats: {
+      providesTags: (_results, _error, payload) => [{ type: QueryTagTypes.Observation, id: payload.observationId }],
+    },
+    generateObservationSplatFile: {
+      invalidatesTags: (_results, _error, payload) => [{ type: QueryTagTypes.Observation, id: payload.observationId }],
+    },
+    getObservationSplatFile: {
+      providesTags: (_results, _error, payload) => [{ type: QueryTagTypes.ObservationMedia, id: payload.fileId }],
+    },
   },
 });
