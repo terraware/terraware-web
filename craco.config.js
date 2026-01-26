@@ -1,5 +1,6 @@
 const chokidar = require('chokidar');
 const fs = require('fs');
+const webpack = require('webpack');
 const { whenDev } = require('@craco/craco');
 const { convertAllLocales } = require('./src/strings/export');
 const CracoEsbuildPlugin = require('craco-esbuild');
@@ -28,6 +29,15 @@ module.exports = {
     },
   }),
   webpack: {
+    configure: (webpackConfig) => {
+      webpackConfig.plugins.push(
+        new webpack.IgnorePlugin({
+          // sync-ammo is only needed for playcancas when usePhysics is enabled, but we don't need this and it causes a compilation error, so ignore it
+          resourceRegExp: /^sync-ammo$/,
+        })
+      );
+      return webpackConfig;
+    },
     snapshot: {
       ...whenDev(() => ({
         // Watch web-components, but not other modules, for changes.

@@ -190,6 +190,7 @@ APPROVE,Approuver,913a9927
 APPROVE_DELIVERABLE,Approuver le livrable,7efd4b07
 APPROVED,Approuvé,b279ed0b
 APPROX_SYMBOL,~,acb59e95
+AR,RA,25a8e55a
 ARE_YOU_SURE,Êtes-vous sûr ?,d4536b91
 AREA_HA,Superficie (ha),8ab5d500
 AS_OF_X,à partir de {0},6d77dc0f
@@ -2368,6 +2369,7 @@ VIRTUAL_PLOTS,Parcelles virtuelles,74b74d96
 VISIT_VIRTUAL_PLOT,Visiter la parcelle virtuelle,22d34c8b
 VOTER,Électeur : {0},46578e94
 VOTING_DECISION,Décision de vote,9bb0be97
+VR,RV,98fd7fc5
 WATER_BODIES,Plans d'eau,c13f37d6
 WATER_DEPTH_CM,Profondeur de l'eau (cm),de1ca335
 WEIGHT,Poids,8d79d02a

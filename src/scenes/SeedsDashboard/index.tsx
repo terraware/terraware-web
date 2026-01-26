@@ -12,12 +12,13 @@ import Icon from 'src/components/common/icon/Icon';
 import { APP_PATHS } from 'src/constants';
 import { useSeedBankSummary } from 'src/hooks/useSeedBankSummary';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { useOrganization } from 'src/providers/hooks';
+import { useLocalization, useOrganization } from 'src/providers/hooks';
 import AccessionByStatus from 'src/scenes/SeedsDashboard/AccessionByStatus';
 import SummaryPaper from 'src/scenes/SeedsDashboard/SummaryPaper';
 import strings from 'src/strings';
 import { AccessionState, stateName } from 'src/types/Accession';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 Cookies.defaults = {
   path: '/',
@@ -25,6 +26,8 @@ Cookies.defaults = {
 };
 
 export default function SeedSummary(): JSX.Element {
+  const { activeLocale } = useLocalization();
+  const numberFormatter = useNumberFormatter(activeLocale);
   const { selectedOrganization } = useOrganization();
   const navigate = useSyncNavigate();
   const { isMobile } = useDeviceInfo();
@@ -119,7 +122,7 @@ export default function SeedSummary(): JSX.Element {
                       id='seedCount'
                       title={strings.TOTAL_SEED_COUNT}
                       icon='seedbankNav'
-                      statistic={`${seedBankSummary?.value?.seedsRemaining.total}${
+                      statistic={`${numberFormatter.format(seedBankSummary?.value?.seedsRemaining.total ?? 0)}${
                         seedBankSummary?.value?.seedsRemaining &&
                         seedBankSummary?.value?.seedsRemaining.unknownQuantityAccessions > 0
                           ? '+'
@@ -136,7 +139,7 @@ export default function SeedSummary(): JSX.Element {
                       id='sessions'
                       title={strings.TOTAL_ACTIVE_ACCESSIONS}
                       icon='seeds'
-                      statistic={seedBankSummary?.value?.activeAccessions}
+                      statistic={numberFormatter.format(seedBankSummary?.value?.activeAccessions ?? 0)}
                       loading={seedBankSummary === undefined}
                       error={errorOccurred}
                       tooltipTitle={strings.TOOLTIP_DASHBOARD_TOTAL_ACTIVE_ACCESSIONS}
@@ -149,7 +152,7 @@ export default function SeedSummary(): JSX.Element {
                       id='species'
                       title={strings.NUMBER_OF_SPECIES}
                       icon='species'
-                      statistic={seedBankSummary?.value?.species}
+                      statistic={numberFormatter.format(seedBankSummary?.value?.species ?? 0)}
                       loading={seedBankSummary === undefined}
                       error={errorOccurred}
                     />

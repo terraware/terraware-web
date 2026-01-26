@@ -191,6 +191,7 @@ APPROVE,Approve,
 APPROVE_DELIVERABLE,Approve Deliverable,
 APPROVED,Approved,
 APPROX_SYMBOL,~,
+AR,AR,Augmented Reality
 ARE_YOU_SURE,Are you sure?,
 AREA_HA,Area (ha),
 AS_OF_X,as of {0},
@@ -2368,6 +2369,7 @@ VIRTUAL_PLOTS,Virtual Plots,
 VISIT_VIRTUAL_PLOT,Visit Virtual Plot,
 VOTER,Voter: {0},Displays the name of a person voter.
 VOTING_DECISION,Voting Decision,
+VR,VR,Virtual Reality
 WATER_BODIES,Water Bodies,
 WATER_DEPTH_CM,Water Depth (cm),
 WEIGHT,Weight,

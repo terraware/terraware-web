@@ -5,7 +5,9 @@ import { Box, Typography, useTheme } from '@mui/material';
 
 import TwLink from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
+import { useLocalization } from 'src/providers/hooks';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 interface Props {
   label: string;
@@ -16,6 +18,9 @@ interface Props {
 export default function AccessionByStatus({ label, status, quantity }: Props): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
+  const { activeLocale } = useLocalization();
+  const numberFormatter = useNumberFormatter(activeLocale);
+
   return (
     <Link
       id={`update-${status}`}
@@ -34,7 +39,7 @@ export default function AccessionByStatus({ label, status, quantity }: Props): J
           }}
         >
           <Typography color={theme.palette.TwClrTxtBrand} fontSize='36px' fontWeight={600}>
-            {quantity}
+            {numberFormatter.format(quantity ?? 0)}
           </Typography>
         </TwLink>
         <Typography color={theme.palette.TwClrTxt} fontSize='16px' fontWeight={500}>
