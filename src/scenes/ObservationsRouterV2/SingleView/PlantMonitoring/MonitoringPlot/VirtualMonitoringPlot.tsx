@@ -1,47 +1,63 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
-import { Box } from '@mui/material';
-import { Application, Entity } from '@playcanvas/react';
+import { Entity } from '@playcanvas/react';
 import { Camera, Script } from '@playcanvas/react/components';
+import { Color } from 'playcanvas';
 import { CameraControls } from 'playcanvas/scripts/esm/camera-controls.mjs';
+import { Grid } from 'playcanvas/scripts/esm/grid.mjs';
 
-import SplatAutoRotate from 'src/components/GaussianSplat/SplatAutoRotate';
+import Annotation from 'src/components/GaussianSplat/Annotation';
+import GradientSky from 'src/components/GaussianSplat/GradientSky';
+import SplatControls from 'src/components/GaussianSplat/SplatControls';
 import SplatModel from 'src/components/GaussianSplat/SplatModel';
+import { TfAnnotationManager } from 'src/components/GaussianSplat/TfAnnotationManager';
+import { useCameraPosition } from 'src/hooks/useCameraPosition';
 
-const VirtualMonitoringPlot = () => {
-  // http://localhost:3000/observations/358/stratum/2/plot/40321018/virtual?organizationId=243
+interface VirtualMonitoringPlotProps {
+  observationId: string;
+  monitoringPlotId: string;
+}
 
+const VirtualMonitoringPlot = ({ observationId, monitoringPlotId }: VirtualMonitoringPlotProps) => {
+  // TODO: Use observationId and monitoringPlotId to fetch and render actual plot data
+  console.log('VirtualMonitoringPlot', observationId, monitoringPlotId);
+
+  const { setCamera } = useCameraPosition();
+
+  useEffect(() => {
+    setCamera([0, 0.1, 0], [0, 0.1, 0]);
+  }, [setCamera]);
   return (
-    <Box
-      sx={{
-        width: '100%',
-        height: 'calc(100vh - 96px)',
-        position: 'relative',
-      }}
-    >
-      <Application
-        style={{
-          width: '80%',
-          height: '80%',
-          display: 'block',
-          margin: '0 auto',
-        }}
-        graphicsDeviceOptions={{ antialias: false }}
-      >
-        <Entity name='camera'>
-          <Camera clearColor='#1a1a1a' fov={60} />
-          <Script script={CameraControls} />
-        </Entity>
+    <>
+      <GradientSky topColor='#FFFFFF' horizonColor='#EAF8FF' groundColor='#C3BDB7' />
 
-        <SplatModel
-          // splatSrc={'/assets/models/test/PlyExamples/trees3.sog'}
-          splatSrc={'/assets/models/test/PlyExamples/outside.ply'}
-          position={[0, -0.1, 0]}
-          rotation={[-90, 0, 0]}
-        />
-        <SplatAutoRotate />
-      </Application>
-    </Box>
+      <Entity name='camera'>
+        <Camera clearColor='#EAF8FF' fov={60} />
+        <Script script={CameraControls} moveSpeed={0.3} moveFastSpeed={0.5} moveSlowSpeed={0.15} rotateSpeed={0.1} />
+      </Entity>
+
+      <Entity name={'grid'} scale={[100, 100, 100]}>
+        <Script script={Grid} />
+      </Entity>
+
+      <SplatModel splatSrc={'/assets/models/test/PlyExamples/outside.ply'} rotation={[-90, 0, 0]} />
+
+      <Script
+        script={TfAnnotationManager}
+        hotspotSize={75}
+        maxWorldSize={0.05}
+        opacity={1}
+        hotspotColor={new Color(1, 0, 0, 1)}
+        hoverColor={new Color(0, 1, 0, 1)}
+      />
+      <Annotation
+        label={1}
+        position={[0, 0.1, 0.4]}
+        title={'An annotation'}
+        text={'This annotation is for testing stuff.'}
+      />
+      <SplatControls />
+    </>
   );
 };
 

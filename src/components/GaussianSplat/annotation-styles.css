@@ -1,0 +1,5 @@
+/* This is necessary to ensure annotations are in front of other elements in the page, such as overlay backdrops. */
+.pc-annotation,
+.pc-annotation-hotspot {
+  z-index: 5000;
+}
