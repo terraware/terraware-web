@@ -109,7 +109,7 @@
     "react-router": "^7.5.3",
     "sanitize-filename": "^1.6.3",
     "slate": "^0.123.0",
-    "slate-dom": "^0.119.0",
+    "slate-dom": "^0.123.0",
     "slate-react": "^0.120.0",
     "styled-components": "^6.0.0",
     "swiper": "^12.0.3",
