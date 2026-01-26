@@ -1,3 +1,5 @@
+df2ffb61f8e Bump lodash-es from 4.17.21 to 4.17.23 (#5105)
+e587d694933 SW-7975 Add cameraPosition to annotations to move camera (#5122)
 0aea723a22b Bump diff from 4.0.2 to 4.0.4 (#5097)
 6e062030e46 Update dependency eslint-plugin-jsdoc to v62 (#5091)
 dc0ba6964a1 Update dependency slate-react to ^0.123.0 (#5088)
