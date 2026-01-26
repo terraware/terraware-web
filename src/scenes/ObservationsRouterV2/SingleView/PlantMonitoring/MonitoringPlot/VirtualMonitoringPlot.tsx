@@ -5,7 +5,6 @@ import { Entity } from '@playcanvas/react';
 import { Camera, Script } from '@playcanvas/react/components';
 import { Color } from 'playcanvas';
 import { CameraControls } from 'playcanvas/scripts/esm/camera-controls.mjs';
-import { Grid } from 'playcanvas/scripts/esm/grid.mjs';
 
 import Annotation from 'src/components/GaussianSplat/Annotation';
 import GradientSky from 'src/components/GaussianSplat/GradientSky';
@@ -40,11 +39,7 @@ const VirtualMonitoringPlot = ({ observationId, fileId }: VirtualMonitoringPlotP
         <Script script={CameraControls} moveSpeed={0.3} moveFastSpeed={0.5} moveSlowSpeed={0.15} rotateSpeed={0.1} />
       </Entity>
 
-      <Entity name={'grid'} scale={[100, 100, 100]}>
-        <Script script={Grid} />
-      </Entity>
-
-      <SplatModel splatSrc={splatSrc} rotation={[-90, 0, 0]} />
+      <SplatModel splatSrc={splatSrc} rotation={[-180, 0, 0]} />
 
       <Script
         script={TfAnnotationManager}
