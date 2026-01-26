@@ -1,3 +1,4 @@
+b968698ae8d Update dependency @babel/traverse to v7.28.6 (#5085)
 9a1b9cad85e Update Node.js to v24.13.0 (#5090)
 a94d4b3f35c Update JamesIves/github-pages-deploy-action action to v4.8.0 (#5089)
 30613aae027 SW-7975 Fix annotation hotspots and clamp annotation sizes (#5118)
