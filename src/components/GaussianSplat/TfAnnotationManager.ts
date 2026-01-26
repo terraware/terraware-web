@@ -9,6 +9,7 @@ export class TfAnnotationManager extends PcAnnotationManager {
 
   private _maxWorldSize = 1.0;
   private _customParentDom: HTMLElement | null = null;
+  private _clickHandlersAttached = new Set<any>();
 
   /**
    * Maximum world-space size for annotations.
@@ -42,6 +43,31 @@ export class TfAnnotationManager extends PcAnnotationManager {
 
     // Call parent initialize
     super.initialize();
+  }
+
+  /**
+   * Update loop to attach click handlers to annotations.
+   */
+  update() {
+    const annotationResources = (this as any)._annotationResources;
+    if (!annotationResources) {
+      return;
+    }
+
+    // Attach click handlers to any annotations that have callbacks
+    annotationResources.forEach((resources: any, annotation: any) => {
+      if (resources && resources.hotspotDom && !this._clickHandlersAttached.has(annotation)) {
+        const callback = annotation.onClickCallback;
+
+        if (callback) {
+          this._clickHandlersAttached.add(annotation);
+
+          resources.hotspotDom.addEventListener('pointerdown', () => {
+            callback();
+          });
+        }
+      }
+    });
   }
 
   /**

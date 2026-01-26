@@ -27,6 +27,7 @@ const VirtualMonitoringPlot = ({ observationId, monitoringPlotId }: VirtualMonit
   useEffect(() => {
     setCamera([0, 0.1, 0], [0, 0.1, 0]);
   }, [setCamera]);
+
   return (
     <>
       <GradientSky topColor='#FFFFFF' horizonColor='#EAF8FF' groundColor='#C3BDB7' />
@@ -52,9 +53,16 @@ const VirtualMonitoringPlot = ({ observationId, monitoringPlotId }: VirtualMonit
       />
       <Annotation
         label={1}
-        position={[0, 0.1, 0.4]}
+        position={[-0.2, 0.1, 0.4]}
         title={'An annotation'}
-        text={'This annotation is for testing stuff.'}
+        text={'This annotation moves the camera.'}
+        cameraPosition={[0.5, 0.3, 0.8]}
+      />
+      <Annotation
+        label={2}
+        position={[0.2, 0.1, 0.4]}
+        title={'Another annotation'}
+        text={"This annotation leaves the camera where it's at."}
       />
       <SplatControls />
     </>
