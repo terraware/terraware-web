@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 
+import { Box, Typography } from '@mui/material';
 import { Entity } from '@playcanvas/react';
 import { Camera, Script } from '@playcanvas/react/components';
 import { Color } from 'playcanvas';
@@ -63,6 +64,25 @@ const VirtualMonitoringPlot = ({ observationId, monitoringPlotId }: VirtualMonit
         position={[0.2, 0.1, 0.4]}
         title={'Another annotation'}
         text={"This annotation leaves the camera where it's at."}
+      />
+      <Annotation
+        label={3}
+        position={[0, 0.1, 0.2]}
+        title={'React Component'}
+        text={
+          <Box sx={{ padding: 2, backgroundColor: 'darkcyan', borderRadius: 1 }}>
+            <Typography variant='h6' gutterBottom>
+              Custom React Content
+            </Typography>
+            <Typography variant='body2'>
+              This annotation contains a full React component with Material-UI styling.
+            </Typography>
+            <Typography variant='caption' display='block' sx={{ mt: 1 }}>
+              You can put any React component here.
+            </Typography>
+          </Box>
+        }
+        cameraPosition={[-0.2, 0.3, 0.5]}
       />
       <SplatControls />
     </>
