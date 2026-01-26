@@ -91,7 +91,7 @@ export default function PlantingProgressMapDialog({
         <Typography fontSize='16px' fontWeight={400}>
           {strings.AREA_HA}
           {': '}
-          {substratumAreaHa}
+          <FormattedNumber value={substratumAreaHa} />
         </Typography>
         <Typography fontSize='16px' fontWeight={400}>
           <FormattedNumber value={totalPlants} />
