@@ -1,3 +1,4 @@
+a94d4b3f35c Update JamesIves/github-pages-deploy-action action to v4.8.0 (#5089)
 30613aae027 SW-7975 Fix annotation hotspots and clamp annotation sizes (#5118)
 1ddd9c628c5 SW-7972 Add a ground plane and sky (#5112)
 b8ae284660f SW-6638: Use localized number formatting in Planting Progress Table (#5120)
