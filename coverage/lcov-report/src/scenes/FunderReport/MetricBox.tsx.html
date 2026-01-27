@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/49</span>
+                <span class='fraction'>0/47</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/58</span>
+                <span class='fraction'>0/56</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/46</span>
+                <span class='fraction'>0/44</span>
             </div>
         
             
@@ -174,9 +174,7 @@
 <a name='L109'></a><a href='#L109'>109</a>
 <a name='L110'></a><a href='#L110'>110</a>
 <a name='L111'></a><a href='#L111'>111</a>
-<a name='L112'></a><a href='#L112'>112</a>
-<a name='L113'></a><a href='#L113'>113</a>
-<a name='L114'></a><a href='#L114'>114</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L112'></a><a href='#L112'>112</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -207,8 +205,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -297,41 +293,39 @@ import { useDeviceI<span class="cstat-no" title="statement not covered" >nfo } f
 <span class="cstat-no" title="statement not covered" ></span>
 import { isRepo<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >rt</span>SystemMetric } from 'src/components/AcceleratorReports/MetricBox';</span>
 im<span class="cstat-no" title="statement not covered" >port MetricStatusBadge from 'src/components/AcceleratorReports/MetricStatusBadge';</span>
-impo<span class="cstat-no" title="statement not covered" >rt { useUser } from 'src/providers';</span>
-import strings from 'src/strings';
-import { Published<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Re</span>portMetric } from 'src/types/AcceleratorReport';</span>
-im<span class="cstat-no" title="statement not covered" >port { useNumberFormatter } from 'src/utils/useNumberFormatter';</span>
+impo<span class="cstat-no" title="statement not covered" >rt strings from 'src/strings';</span>
+import { PublishedReportMetric } from 'src/types/AcceleratorReport';
+import { useNumber<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Fo</span>rmatter } from 'src/utils/useNumberFormatter';</span>
 <span class="cstat-no" title="statement not covered" ></span>
-type M<span class="cstat-no" title="statement not covered" >etricBoxProps = {</span>
-  metric<span class="cstat-no" title="statement not covered" >: PublishedReportMetric;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  index: number;
-<span class="cstat-no" title="statement not covered" >  year: strin</span>g;
-  quarter?: string;
-  length: numb<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >er</span>;<span class="cstat-no" title="statement not covered" ></span></span>
-};
+type<span class="cstat-no" title="statement not covered" > MetricBoxProps = {</span>
+  metr<span class="cstat-no" title="statement not covered" >ic: PublishedReportMetric;</span>
+  index:<span class="cstat-no" title="statement not covered" > number;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  year: string;
+<span class="cstat-no" title="statement not covered" >  quarter?: s</span>tring;
+  length: number;
+};<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 &nbsp;
 const MetricBox = ({ metric, index, year, quarter, length }: MetricBoxProps) =&gt; {
   const { isDesktop, isMobile } = useDeviceInfo();
   const theme = useTheme();
-  const { user } = useUser();
-  const numberFormatter = useNumberFormatter(user?.locale);
-  const addPercentS<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ig</span>n = use<span class="cstat-no" title="statement not covered" >Memo(() =&gt; {</span></span>
-    return metric.na<span class="cstat-no" title="statement not covered" >me </span>=== 'Survival Rate' ? '%' : '';
-<span class="cstat-no" title="statement not covered" >  }, [metric]);</span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  const showRow = useMemo(() =&gt; {
-<span class="cstat-no" title="statement not covered" >    if (!isDesktop) {</span>
-      return index <span class="cstat-no" title="statement not covered" >!== length - 1;</span>
-    }<span class="cstat-no" title="statement not covered" ></span>
+  const numberFormatter = useNumberFormatter();
+  const addPercentSign = useMemo(() =&gt; {
+    return metric.name === 'Survival Rate' ? '%' : '';
+  }, [metric]);<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 <span class="cstat-no" title="statement not covered" ></span>
-    const isEven = <span class="cstat-no" title="statement not covered" >length % 2 === 0;</span>
+<span class="cstat-no" title="statement not covered" >  const showRow = useMemo(() =&gt; {</span>
+    if (!is<span class="fstat-no" title="function not covered" >De</span>skto<span class="cstat-no" title="statement not covered" >p) {</span>
+      return index !== length - 1;
+<span class="cstat-no" title="statement not covered" >    }</span>
+<span class="cstat-no" title="statement not covered" ></span>
+    const isEven = len<span class="cstat-no" title="statement not covered" >gth % 2 === 0;</span>
     if (isEven) {<span class="cstat-no" title="statement not covered" ></span>
-      return index &lt; length - 2<span class="cstat-no" title="statement not covered" >;</span>
+      return index <span class="cstat-no" title="statement not covered" >&lt; length - 2;</span>
     }<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-    return index &lt; length - 1;<span class="cstat-no" title="statement not covered" ></span>
-  }, [isDesktop, i<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >nd</span>ex, length]);</span>
-<span class="cstat-no" title="statement not covered" ></span>
+    return index &lt; le<span class="cstat-no" title="statement not covered" >ngth - 1;</span>
+  }, [isDesktop, index, length])<span class="cstat-no" title="statement not covered" >;</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
   return (<span class="cstat-no" title="statement not covered" ></span>
     &lt;Box<span class="cstat-no" title="statement not covered" ></span>
       flexBasis={'calc(50%<span class="cstat-no" title="statement not covered" > - 24px)'}</span>
@@ -409,7 +403,7 @@ export default MetricBox;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-26T23:28:05.375Z
+                at 2026-01-27T01:06:41.588Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

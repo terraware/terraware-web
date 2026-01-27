@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/337</span>
+                <span class='fraction'>0/335</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/310</span>
+                <span class='fraction'>0/308</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/327</span>
+                <span class='fraction'>0/325</span>
             </div>
         
             
@@ -983,9 +983,7 @@
 <a name='L918'></a><a href='#L918'>918</a>
 <a name='L919'></a><a href='#L919'>919</a>
 <a name='L920'></a><a href='#L920'>920</a>
-<a name='L921'></a><a href='#L921'>921</a>
-<a name='L922'></a><a href='#L922'>922</a>
-<a name='L923'></a><a href='#L923'>923</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L921'></a><a href='#L921'>921</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1040,10 +1038,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1929,26 +1925,25 @@ import DatePic<span class="cstat-no" title="statement not covered" ><span class=
 import Divisor from 'src/components/common/Divisor';
 import PageForm from 'src/components/common/PageForm';
 import { APP_PATHS } from 'src/constants';
-import { useUser } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { useOrganization } from 'src/providers/hooks';
-import { selectProj<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ec</span>ts } fr<span class="cstat-no" title="statement not covered" >om 'src/redux/features/projects/projectsSelectors';</span></span>
-import { useAppSelec<span class="cstat-no" title="statement not covered" >tor</span> } from 'src/redux/store';
-<span class="cstat-no" title="statement not covered" >import strings from 'src/strings';</span>
-import { Ba<span class="fstat-no" title="function not covered" >tc</span>hWit<span class="cstat-no" title="statement not covered" >hdrawalPayload, Nu</span>rseryWithdrawalPurposes, NurseryWithdrawalRequest } from 'src/types/Batch';
-import { Facility } from 'src/types/Facility';
-<span class="cstat-no" title="statement not covered" >import { Project } from 'src/types/Project';</span>
-import { SearchResp<span class="cstat-no" title="statement not covered" >onseElement } from 'src/ty</span>pes/Search';
-import { getAllNurseri<span class="cstat-no" title="statement not covered" >es, getNurseryById, isCon</span>tributor } from 'src/utils/organization';
-import useDeviceInfo from 's<span class="cstat-no" title="statement not covered" >rc/utils/useDeviceInfo';</span>
-import { useNumber<span class="cstat-no" title="statement not covered" >Formatter } from 'src/utils/useNumberFormatter';</span>
-import useSnackbar from 'src/u<span class="cstat-no" title="statement not covered" >tils/useSnackbar';</span>
-import { useLocationTimeZone } f<span class="cstat-no" title="statement not covered" >rom 'src/utils/useTimeZoneUtils';</span>
+import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
+import { useAppSele<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ct</span>or } fr<span class="cstat-no" title="statement not covered" >om 'src/redux/store';</span></span>
+import strings from <span class="cstat-no" title="statement not covered" >'sr</span>c/strings';
+<span class="cstat-no" title="statement not covered" >import { BatchWithdrawalPayload, NurseryWithdrawalPurposes, NurseryWithdrawalRequest } from 'src/types/Batch';</span>
+import { Fa<span class="fstat-no" title="function not covered" >ci</span>lity<span class="cstat-no" title="statement not covered" > } from 'src/types</span>/Facility';
+import { Project } from 'src/types/Project';
+<span class="cstat-no" title="statement not covered" >import { SearchResponseElement } from 'src/typ</span>es/Search';
+import { getAllNurs<span class="cstat-no" title="statement not covered" >eries, getNurseryById, isC</span>ontributor } from 'src/utils/organization';
+import useDeviceInfo f<span class="cstat-no" title="statement not covered" >rom 'src/utils/useDeviceI</span>nfo';
+import { useNumberFormatter <span class="cstat-no" title="statement not covered" >} from 'src/utils/useNumberFormatter'</span>;
+import useSnackbar<span class="cstat-no" title="statement not covered" > from 'src/utils/useSnackbar';</span>
+import { useLocationTimeZone }<span class="cstat-no" title="statement not covered" > from 'src/utils/useTimeZoneUtils';</span>
 <span class="cstat-no" title="statement not covered" ></span>
-type SelectPurposeFor<span class="cstat-no" title="statement not covered" >mProps = {</span>
-  onNext: (withdrawal:<span class="cstat-no" title="statement not covered" > NurseryWithdrawalRequest) =&gt; void;</span>
-  batches: SearchRespon<span class="cstat-no" title="statement not covered" >seElement[];</span>
+type SelectPurposeFormPr<span class="cstat-no" title="statement not covered" >ops = {</span>
+  onNext: (withdrawal<span class="cstat-no" title="statement not covered" >: NurseryWithdrawalRequest) =&gt; void;</span>
+  batches: SearchRespo<span class="cstat-no" title="statement not covered" >nseElement[];</span>
   nurseryWithdrawal: Nu<span class="cstat-no" title="statement not covered" >rseryWithdrawalRequest;</span>
   onCancel: () =&gt; void;<span class="cstat-no" title="statement not covered" ></span>
   saveText: string;<span class="cstat-no" title="statement not covered" ></span>
@@ -1961,11 +1956,10 @@ export default function Se<span class="cstat-no" title="statement not covered" >
   const { nurseryWithdrawal<span class="cstat-no" title="statement not covered" >, onNext, batches, onCancel, saveText, setFi</span>lterProjectId } = props;
 <span class="cstat-no" title="statement not covered" ></span>
   const { selectedOrganiz<span class="cstat-no" title="statement not covered" >ation } = useOrganization();</span>
-  const { user } = useUser();<span class="cstat-no" title="statement not covered" ></span>
-  const numberFormatter = useNumberFormatter(user?.l<span class="cstat-no" title="statement not covered" >ocale);</span>
-  const c<span class="fstat-no" title="function not covered" >ontributor = isCon</span>tributor(selectedOrganization);
-  const snackbar = useSnackbar();
-  const { isMobile } = useDeviceInfo();<span class="cstat-no" title="statement not covered" ></span>
+  const numberFormatter = useN<span class="cstat-no" title="statement not covered" >umberFormatter();</span>
+  const contributor = isContributor(selectedOrganiza<span class="cstat-no" title="statement not covered" >tion);</span>
+  const s<span class="fstat-no" title="function not covered" >nackbar = useSnack</span>bar();
+  const { isMobile } = useDeviceInfo();
   const theme = useTheme();<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
   const { allPlantingSites<span class="cstat-no" title="statement not covered" > } = usePlantingSiteData();</span>
@@ -2836,7 +2830,7 @@ export default function Se<span class="cstat-no" title="statement not covered" >
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-26T23:28:05.375Z
+                at 2026-01-27T01:06:41.588Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

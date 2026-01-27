@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/137</span>
+                <span class='fraction'>0/135</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/107</span>
+                <span class='fraction'>0/105</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/134</span>
+                <span class='fraction'>0/132</span>
             </div>
         
             
@@ -399,9 +399,7 @@
 <a name='L334'></a><a href='#L334'>334</a>
 <a name='L335'></a><a href='#L335'>335</a>
 <a name='L336'></a><a href='#L336'>336</a>
-<a name='L337'></a><a href='#L337'>337</a>
-<a name='L338'></a><a href='#L338'>338</a>
-<a name='L339'></a><a href='#L339'>339</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L337'></a><a href='#L337'>337</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -443,14 +441,12 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -746,50 +742,48 @@ import { BusySpinner, Dr<span class="cstat-no" title="statement not covered" >op
 <span class="cstat-no" title="statement not covered" ></span>
 import DialogBox fr<span class="cstat-no" title="statement not covered" >om 'src/components/common/Dialog</span>Box/DialogBox';
 import Button f<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ro</span>m 'src/components/common/button/Button';</span>
-im<span class="cstat-no" title="statement not covered" >port { useUser } from 'src/providers';</span>
-impo<span class="cstat-no" title="statement not covered" >rt { NurseryBatchService } from 'src/services';</span>
-import { ChangeBatchStatusesRequestPayload } from 'src/services/NurseryBatchService';
-import strings fro<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >m </span>'src/strings';</span>
-im<span class="cstat-no" title="statement not covered" >port useForm from 'src/utils/useForm';</span>
-impo<span class="cstat-no" title="statement not covered" >rt { useNumberFormatter } from 'src/utils/useNumberFormatter';</span>
-import<span class="cstat-no" title="statement not covered" > useSnackbar from 'src/utils/useSnackbar';</span>
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-import { ModalValuesType } from './BatchesCellRenderer';
+im<span class="cstat-no" title="statement not covered" >port { NurseryBatchService } from 'src/services';</span>
+impo<span class="cstat-no" title="statement not covered" >rt { ChangeBatchStatusesRequestPayload } from 'src/services/Nur</span>seryBatchService';
+import strings from 'src/strings';
+import useForm fro<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >m </span>'src/utils/useForm';</span>
+im<span class="cstat-no" title="statement not covered" >port { useNumberFormatter } from 'src/utils/useNumberFormatter';</span>
+impo<span class="cstat-no" title="statement not covered" >rt useSnackbar from 'src/utils/useSnackbar';</span>
 <span class="cstat-no" title="statement not covered" ></span>
-export interface ChangeQuantityModalProps {
-  modalValues:<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > M</span>odalValuesType;<span class="cstat-no" title="statement not covered" ></span></span>
-  onClose: () =&gt; void;
+import {<span class="cstat-no" title="statement not covered" > ModalValuesType } from '.<span class="fstat-no" title="function not covered" >/B</span>atch<span class="cstat-no" title="statement not covered" >esCellRend</span>erer';</span>
+&nbsp;
+ex<span class="cstat-no" title="statement not covered" >port interf</span>ace ChangeQuantityModalProps {
+  modalValues: ModalValuesType;
+  onClose: () <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >=&gt;</span> void;<span class="cstat-no" title="statement not covered" ></span></span>
   reload?: () =&gt; void;
   row: any;
 }
 &nbsp;
 export default function ChangeQuantityModal({
   modalValues,
-  onClose,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  reload,<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  row,</span>
-}: ChangeQu<span class="fstat-no" title="function not covered" >an</span>tity<span class="cstat-no" title="statement not covered" >ModalProps): JSX.Ele</span>ment {
-  const { type } = modalValues;
-<span class="cstat-no" title="statement not covered" >  const snackbar = useSnackbar();</span>
-  const { user } = <span class="cstat-no" title="statement not covered" >useUser();</span>
-  const numberFormatte<span class="cstat-no" title="statement not covered" >r = useNumberFormatter(us</span>er?.locale);
+  onClose,
+  reload,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  row,<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >}: ChangeQuantityModalProps): JSX.Element {</span>
+  const { t<span class="fstat-no" title="function not covered" >yp</span>e } <span class="cstat-no" title="statement not covered" >= modalValues;</span>
+  const snackbar = useSnackbar();
+<span class="cstat-no" title="statement not covered" >  const numberFormatter = useNumberFormatter()</span>;
 <span class="cstat-no" title="statement not covered" ></span>
-  const [nextPhase, set<span class="cstat-no" title="statement not covered" >NextPhase] = useState&lt;ChangeBatchStatusesRequestPayload['newPh</span>ase']&gt;();
-  const [saving, set<span class="cstat-no" title="statement not covered" >Saving] = useState&lt;boolean&gt;(false);</span>
-  const [movedValue, se<span class="cstat-no" title="statement not covered" >tMovedValue] = useState&lt;n</span>umber | undefined&gt;();
-  const [errorText, se<span class="cstat-no" title="statement not covered" >tErrorText] = useState&lt;s</span>tring&gt;('');
-  const [record, setR<span class="cstat-no" title="statement not covered" >ecord] = useForm({</span>
+  const [nextPhase, se<span class="cstat-no" title="statement not covered" >tNextPhase] = useState&lt;Ch</span>angeBatchStatusesRequestPayload['newPhase']&gt;();
+  const [saving, setSaving] <span class="cstat-no" title="statement not covered" >= useState&lt;boolean&gt;(false);</span>
+  const [movedValue, se<span class="cstat-no" title="statement not covered" >tMovedValue] = useState&lt;number | undefined&gt;();</span>
+  const [errorText, <span class="cstat-no" title="statement not covered" >setErrorText] = useState&lt;string&gt;('');</span>
+  const [record, setRe<span class="cstat-no" title="statement not covered" >cord] = useForm({</span>
     ...row,<span class="cstat-no" title="statement not covered" ></span>
-    germinatingQuantity: +row['g<span class="cstat-no" title="statement not covered" >erminatingQuantity(raw)'],</span>
-    hardeningOffQuantity:<span class="cstat-no" title="statement not covered" > +row['hardeningOffQuantity(raw)'],</span>
-    activ<span class="fstat-no" title="function not covered" >eGrowthQuantity: +ro</span>w['activeGrowthQuantity(raw)'],
-    readyQuantity: +row['readyQuantity(raw)'],
+    germinatingQuanti<span class="cstat-no" title="statement not covered" >ty: +row['germinatingQuantity(raw)'],</span>
+    hardeningOffQuantity: +row['<span class="cstat-no" title="statement not covered" >hardeningOffQuantity(raw)'],</span>
+    activeGrowthQuantity:<span class="cstat-no" title="statement not covered" > +row['activeGrowthQuantity(raw)'],</span>
+    ready<span class="fstat-no" title="function not covered" >Quantity: +row['read</span>yQuantity(raw)'],
   });
 &nbsp;
   const title = useMemo(() =&gt; {
     switch (type) {
-      case 'germina<span class="cstat-no" title="statement not covered" >ting':</span>
-        return stri<span class="cstat-no" title="statement not covered" >ngs.CHANGE_GERMINATION_ESTABLISHME</span>NT_STATUS;
+      case 'germinating':
+        return stri<span class="cstat-no" title="statement not covered" >ngs.CHANGE_G</span>ERMINATION_ESTABLISHMENT_STATUS;
       case 'hardeni<span class="cstat-no" title="statement not covered" >ng-off':</span>
         return strings.CHA<span class="cstat-no" title="statement not covered" >NGE_HARDENING_OFF_STATUS;</span>
       case 'active-growth':<span class="cstat-no" title="statement not covered" ></span>
@@ -1084,7 +1078,7 @@ export default function ChangeQuantityModal({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-26T23:28:05.375Z
+                at 2026-01-27T01:06:41.588Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

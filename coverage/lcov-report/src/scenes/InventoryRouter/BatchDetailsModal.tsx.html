@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/151</span>
+                <span class='fraction'>0/149</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/120</span>
+                <span class='fraction'>0/118</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/145</span>
+                <span class='fraction'>0/143</span>
             </div>
         
             
@@ -540,9 +540,7 @@
 <a name='L475'></a><a href='#L475'>475</a>
 <a name='L476'></a><a href='#L476'>476</a>
 <a name='L477'></a><a href='#L477'>477</a>
-<a name='L478'></a><a href='#L478'>478</a>
-<a name='L479'></a><a href='#L479'>479</a>
-<a name='L480'></a><a href='#L480'>480</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L478'></a><a href='#L478'>478</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -591,9 +589,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1030,51 +1026,49 @@ import getDateDispl<span class="cstat-no" title="statement not covered" >ayValue
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 im<span class="cstat-no" title="statement not covered" >port DatePicker from 'src/components/common/DatePicker';</span>
 impo<span class="cstat-no" title="statement not covered" >rt SelectPhotos from 'src/components/common/Photos/SelectPhotos</span>';
-import { useUser } from 'src/providers';
-import { useLocali<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >za</span>tion, useOrganization } from 'src/providers/hooks';</span>
-im<span class="cstat-no" title="statement not covered" >port { NurseryBatchService } from 'src/services';</span>
-impo<span class="cstat-no" title="statement not covered" >rt { BATCH_PHOTO_ENDPOINT } from 'src/services/NurseryBatchService';</span>
-import<span class="cstat-no" title="statement not covered" > {</span>
-  batchS<span class="cstat-no" title="statement not covered" >ubstrateEnumToLocalized,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  batchSubstrateLocalizedToEnum,
-<span class="cstat-no" title="statement not covered" >  nurserySubs</span>tratesLocalized,
-  treatments,
-} from 'src/ty<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >pe</span>s/Accession';<span class="cstat-no" title="statement not covered" ></span></span>
-import { Batch, BatchPhoto } from 'src/types/Batch';
+import { useLocalization, useOrganization } from 'src/providers/hooks';
+import { NurseryBa<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >tc</span>hService } from 'src/services';</span>
+im<span class="cstat-no" title="statement not covered" >port { BATCH_PHOTO_ENDPOINT } from 'src/services/NurseryBatchService';</span>
+impo<span class="cstat-no" title="statement not covered" >rt {</span>
+  batc<span class="cstat-no" title="statement not covered" >hSubstrateEnumToLocalized,</span>
+  batchS<span class="cstat-no" title="statement not covered" >ubstrateLocalizedToEnum,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  nurserySubstratesLocalized,
+<span class="cstat-no" title="statement not covered" >  treatments,</span>
+} from 'src/types/Accession';
+import { Batch<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >, </span>BatchPhoto } from 'src/types<span class="cstat-no" title="statement not covered" >/Batch';</span></span>
 import { Facility } from 'src/types/Facility';
 import { isNumber } from 'src/types/utils';
 import { getNurseryById } from 'src/utils/organization';
 import useForm from 'src/utils/useForm';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import useSnackbar from 'src/utils/useSnackbar';
-import { useLocatio<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >nT</span>imeZone<span class="cstat-no" title="statement not covered" > } from 'src/utils/useTimeZoneUtils';</span></span>
+import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+export interface Bat<span class="cstat-no" title="statement not covered" >chD</span>etailsModalProps {
+<span class="cstat-no" title="statement not covered" >  batch: Batch;</span>
+  onClose: <span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >void;</span>
+  reload: () =&gt; void;
+<span class="cstat-no" title="statement not covered" >}</span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >export interface BatchDetailsModalProps {</span>
-  batch: Ba<span class="fstat-no" title="function not covered" >tc</span>h;<span class="cstat-no" title="statement not covered" ></span>
-  onClose: () =&gt; void;
-<span class="cstat-no" title="statement not covered" >  reload: () =&gt; void;</span>
-}<span class="cstat-no" title="statement not covered" ></span>
+type BatchPhotoWithUrl<span class="cstat-no" title="statement not covered" > = BatchPhoto &amp; { url: st</span>ring };
 <span class="cstat-no" title="statement not covered" ></span>
-type BatchPhotoWithUrl = Bat<span class="cstat-no" title="statement not covered" >chPhoto &amp; { url: string };</span>
+export default func<span class="cstat-no" title="statement not covered" >tion BatchDetailsModal({ batch, onClose, re</span>load }: BatchDetailsModalProps): JSX.Element | null {
+  const { strings <span class="cstat-no" title="statement not covered" >} = useLocalization();</span>
+  const { selectedOrgani<span class="cstat-no" title="statement not covered" >zation } = useOrganization();</span>
+  const numberFormatter = <span class="cstat-no" title="statement not covered" >useNumberFormatter();</span>
+  const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
+  const theme = useThe<span class="cstat-no" title="statement not covered" >me();</span>
+  const { isMobile } = useDeviceI<span class="cstat-no" title="statement not covered" >nfo();</span>
 <span class="cstat-no" title="statement not covered" ></span>
-export default fun<span class="cstat-no" title="statement not covered" >ction BatchDetailsModal({ batch, onClose, reload }: Batch</span>DetailsModalProps): JSX.Element | null {
-  const { strings } = us<span class="cstat-no" title="statement not covered" >eLocalization();</span>
-  const { selectedOrganiza<span class="cstat-no" title="statement not covered" >tion } = useOrganization();</span>
-  const { user } = useU<span class="cstat-no" title="statement not covered" >ser();</span>
-  const numberForma<span class="cstat-no" title="statement not covered" >tter = useNumberFormatter(user?</span>.locale);
-  const snackbar = use<span class="cstat-no" title="statement not covered" >Snackbar();</span>
-  const theme = useTheme();<span class="cstat-no" title="statement not covered" ></span>
-  const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
-<span class="cstat-no" title="statement not covered" ></span>
-  const [record, setRecord<span class="cstat-no" title="statement not covered" >, onChange, onChangeCallback] = us</span>eForm(batch);
-  const [validateFiel<span class="cstat-no" title="statement not covered" >ds, setValidateFields] = useState&lt;bool</span>ean&gt;(false);
-  const [totalQuantity, setTotal<span class="cstat-no" title="statement not covered" >Quantity] = useState(0);</span>
-  const [photos, setPhoto<span class="cstat-no" title="statement not covered" >s] = useState&lt;BatchPhotoWithUrl[]&gt;([]);</span>
-  const [newPhotos, setNewPhot<span class="cstat-no" title="statement not covered" >os] = useState&lt;File[]&gt;([]);</span>
-  const [<span class="fstat-no" title="function not covered" >photoIdsToRemove, </span>setPhotoIdsToRemove] = useState&lt;number[]&gt;([]);
-  const [facility, set<span class="cstat-no" title="statement not covered" >Facility] = useState&lt;Facility&gt;();</span>
-  const tz = useLocationTimeZone().<span class="cstat-no" title="statement not covered" >get(facility);</span>
-  const [timeZone, <span class="cstat-no" title="statement not covered" >setTimeZone] = useState(tz.id);</span>
+  const [record, set<span class="cstat-no" title="statement not covered" >Record, onChange, onChangeC</span>allback] = useForm(batch);
+  const [validateFields, s<span class="cstat-no" title="statement not covered" >etValidateFields] = useState&lt;boole</span>an&gt;(false);
+  const [totalQuantit<span class="cstat-no" title="statement not covered" >y, setTotalQuantity] = useState(0);</span>
+  const [photos, setPhotos] = us<span class="cstat-no" title="statement not covered" >eState&lt;BatchPhotoWithUrl[]&gt;([]);</span>
+  const [newPhotos, setNe<span class="cstat-no" title="statement not covered" >wPhotos] = useState&lt;File[]&gt;([]);</span>
+  const [photoIdsToRemove, set<span class="cstat-no" title="statement not covered" >PhotoIdsToRemove] = useState&lt;number[]&gt;</span>([]);
+  const [<span class="fstat-no" title="function not covered" >facility, setFacil</span>ity] = useState&lt;Facility&gt;();
+  const tz = useLocati<span class="cstat-no" title="statement not covered" >onTimeZone().get(facility);</span>
+  const [timeZone, setTimeZone] = u<span class="cstat-no" title="statement not covered" >seState(tz.id);</span>
 <span class="cstat-no" title="statement not covered" ></span>
   const onPhotosCha<span class="cstat-no" title="statement not covered" >nged = useCallback(</span>
     (photosList:<span class="cstat-no" title="statement not covered" > File[]) =&gt; {</span>
@@ -1507,7 +1501,7 @@ export default fun<span class="cstat-no" title="statement not covered" >ction Ba
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-26T23:28:05.375Z
+                at 2026-01-27T01:06:41.588Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

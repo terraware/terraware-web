@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/173</span>
+                <span class='fraction'>0/171</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/198</span>
+                <span class='fraction'>0/196</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/164</span>
+                <span class='fraction'>0/162</span>
             </div>
         
             
@@ -625,9 +625,7 @@
 <a name='L560'></a><a href='#L560'>560</a>
 <a name='L561'></a><a href='#L561'>561</a>
 <a name='L562'></a><a href='#L562'>562</a>
-<a name='L563'></a><a href='#L563'>563</a>
-<a name='L564'></a><a href='#L564'>564</a>
-<a name='L565'></a><a href='#L565'>565</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L563'></a><a href='#L563'>563</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -683,7 +681,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -698,7 +695,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1201,37 +1197,36 @@ import getDateDispl<span class="cstat-no" title="statement not covered" >ayValue
 im<span class="cstat-no" title="statement not covered" >port ProjectsDropdown from 'src/components/ProjectsDropdown';</span>
 impo<span class="cstat-no" title="statement not covered" >rt DatePicker from 'src/components/common/DatePicker';</span>
 import { useProjects } from 'src/hooks/useProjects';
-import { useUser }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > f</span>rom 'src/providers';</span>
-im<span class="cstat-no" title="statement not covered" >port { useLocalization, useOrganization } from 'src/providers/hooks';</span>
-impo<span class="cstat-no" title="statement not covered" >rt { SavableBatch } from 'src/redux/features/batches/batchesAsyncThunks';</span>
-import<span class="cstat-no" title="statement not covered" > { OriginPage } from 'src/scenes/InventoryRouter/InventoryBatchView';</span>
-import A<span class="cstat-no" title="statement not covered" >ccessionsDropdown from 'sr<span class="fstat-no" title="function not covered" >c/</span>scen<span class="cstat-no" title="statement not covered" >es/Invento</span>ryRouter/form/AccessionsDropdown';</span>
-import NurseryDropdownV2 from 'src/scenes/InventoryRouter/form/NurseryDropdownV2';
-im<span class="cstat-no" title="statement not covered" >port Specie</span>sDropdown from 'src/scenes/InventoryRouter/form/SpeciesDropdown';
-import SubLocationsDropdown from 'src/scenes/InventoryRouter/form/SubLocationsDropdown';
-import { useAc<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ce</span>ssions } from 'src/scenes/In<span class="cstat-no" title="statement not covered" >ventoryRouter/form/useAccessions';</span></span>
-import { useNurseries } from 'src/scenes/InventoryRouter/form/useNurseries';
+import { useLocali<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >za</span>tion, useOrganization } from 'src/providers/hooks';</span>
+im<span class="cstat-no" title="statement not covered" >port { SavableBatch } from 'src/redux/features/batches/batchesAsyncThunks';</span>
+impo<span class="cstat-no" title="statement not covered" >rt { OriginPage } from 'src/scenes/InventoryRouter/InventoryBatchView';</span>
+import<span class="cstat-no" title="statement not covered" > AccessionsDropdown from 'src/scenes/InventoryRouter/form/AccessionsDropdown';</span>
+import N<span class="cstat-no" title="statement not covered" >urseryDropdownV2 from 'src<span class="fstat-no" title="function not covered" >/s</span>cene<span class="cstat-no" title="statement not covered" >s/Inventor</span>yRouter/form/NurseryDropdownV2';</span>
+import SpeciesDropdown from 'src/scenes/InventoryRouter/form/SpeciesDropdown';
+im<span class="cstat-no" title="statement not covered" >port SubLoc</span>ationsDropdown from 'src/scenes/InventoryRouter/form/SubLocationsDropdown';
+import { useAccessions } from 'src/scenes/InventoryRouter/form/useAccessions';
+import { useNu<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >rs</span>eries } from 'src/scenes/Inv<span class="cstat-no" title="statement not covered" >entoryRouter/form/useNurseries';</span></span>
 import { useSpeciesForm } from 'src/scenes/InventoryRouter/form/useSpeciesForm';
 import { useSubLocations } from 'src/scenes/InventoryRouter/form/useSubLocations';
 import FacilityService from 'src/services/FacilityService';
 import { stateName } from 'src/types/Accession';
 import { CreateBatchRequestPayload } from 'src/types/Batch';
 import useForm from 'src/utils/useForm';
-import { useNumberF<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >or</span>matter <span class="cstat-no" title="statement not covered" >} from 'src/utils/useNumberFormatter';</span></span>
-import useSnackbar f<span class="cstat-no" title="statement not covered" >rom</span> 'src/utils/useSnackbar';
-<span class="cstat-no" title="statement not covered" >import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';</span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-export interface BatchDetailsFormProps {
-<span class="cstat-no" title="statement not covered" >  doValidateBatch: boolean;</span>
-  onBatchValidated:<span class="cstat-no" title="statement not covered" > (batchDetails: { batch: S</span>avableBatch; organizationId: number; timezone: string } | false) =&gt; void;
-  origin: OriginPage;<span class="cstat-no" title="statement not covered" ></span>
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
+import useSnackbar <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >fr</span>om 'src<span class="cstat-no" title="statement not covered" >/utils/useSnackbar';</span></span>
+import { useLocation<span class="cstat-no" title="statement not covered" >Tim</span>eZone } from 'src/utils/useTimeZoneUtils';
+<span class="cstat-no" title="statement not covered" ></span>
+export inte<span class="fstat-no" title="function not covered" >rf</span>ace <span class="cstat-no" title="statement not covered" >BatchDetailsFormP</span>rops {
+  doValidateBatch: boolean;
+<span class="cstat-no" title="statement not covered" >  onBatchValidated: (batchDetails: { batch: Sa</span>vableBatch; organizationId: number; timezone: string } | false) =&gt; void;
+  origin: OriginPag<span class="cstat-no" title="statement not covered" >e;</span>
   originId?: number;<span class="cstat-no" title="statement not covered" ></span>
 }<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-type FormRecord = Partial&lt;Sava<span class="cstat-no" title="statement not covered" >bleBatch&gt; | undefined;</span>
-type SavableFormRecord =<span class="cstat-no" title="statement not covered" > Partial&lt;SavableBatch&gt;;</span>
+type FormRecord = <span class="cstat-no" title="statement not covered" >Partial&lt;SavableBatch&gt; | undefined;</span>
+type SavableFormRecord = Parti<span class="cstat-no" title="statement not covered" >al&lt;SavableBatch&gt;;</span>
 <span class="cstat-no" title="statement not covered" ></span>
-const QUANTITY_FIELDS =<span class="cstat-no" title="statement not covered" > [</span>
+const QUANTITY_FIELDS = [<span class="cstat-no" title="statement not covered" ></span>
   'germinatingQuant<span class="cstat-no" title="statement not covered" >ity',</span>
   'activeGrowthQuantity',<span class="cstat-no" title="statement not covered" ></span>
   'hardeningOffQuantity',<span class="cstat-no" title="statement not covered" ></span>
@@ -1253,17 +1248,16 @@ export default function BatchD<span class="cstat-no" title="statement not covere
   origin,
 }: BatchDetailsFormProps): JSX.Element {
   const { strings } = useLocalization();
-  const { user } = useUse<span class="cstat-no" title="statement not covered" >r();</span>
-  const numberFormatt<span class="cstat-no" title="statement not covered" >er = useNumberFormatter(user?.locale);</span>
-  const {<span class="fstat-no" title="function not covered" > selectedOrganiza</span>tion } = useOrganization();
-  const theme = useTheme();
+  const numberFormatter =<span class="cstat-no" title="statement not covered" > useNumberFormatter();</span>
+  const { selectedOrg<span class="cstat-no" title="statement not covered" >anization } = useOrganization();</span>
+  const t<span class="fstat-no" title="function not covered" >heme = useTheme()</span>;
   const snackBar = useSnackbar();
   const { isMobile } = useDeviceInfo();
   const locationTimezone = useLocationTimeZone();
   const [record, setRecord, onChange, onChangeCallback] = useForm&lt;FormRecord&gt;(undefined);
 &nbsp;
-  const facilityId = o<span class="cstat-no" title="statement not covered" >rigin === 'Nursery' ? originId : rec</span>ord?.facilityId;
-  const speciesId =<span class="cstat-no" title="statement not covered" > origin === 'Species' ? originId</span> : record?.speciesId;
+  const facilityId = origin === 'Nursery' ? originId : record?.facilityId;
+  const speciesId = or<span class="cstat-no" title="statement not covered" >igin === 'Species' ? originId : reco</span>rd?.speciesId;
 <span class="cstat-no" title="statement not covered" ></span>
   const { availableSubLocations } =<span class="cstat-no" title="statement not covered" > useSubLocations(facilityId, record)</span>;
   const { select<span class="cstat-no" title="statement not covered" >edSpecies } = useSpeciesForm(rec</span>ord);
@@ -1762,7 +1756,7 @@ export default function BatchD<span class="cstat-no" title="statement not covere
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-26T23:28:05.375Z
+                at 2026-01-27T01:06:41.588Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/62</span>
+                <span class='fraction'>0/61</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/59</span>
+                <span class='fraction'>0/58</span>
             </div>
         
             
@@ -276,8 +276,7 @@
 <a name='L211'></a><a href='#L211'>211</a>
 <a name='L212'></a><a href='#L212'>212</a>
 <a name='L213'></a><a href='#L213'>213</a>
-<a name='L214'></a><a href='#L214'>214</a>
-<a name='L215'></a><a href='#L215'>215</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L214'></a><a href='#L214'>214</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -334,7 +333,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -505,7 +503,7 @@ import Icon from '<span class="cstat-no" title="statement not covered" ><span cl
 im<span class="cstat-no" title="statement not covered" >port { APP_PATHS } from 'src/constants';</span>
 impo<span class="cstat-no" title="statement not covered" >rt { useSeedBankSummary } from 'src/hooks/useSeedBankSummary';</span>
 import<span class="cstat-no" title="statement not covered" > { useSyncNavigate } from 'src/hooks/useSyncNavigate';</span>
-import {<span class="cstat-no" title="statement not covered" > useLocalization, useOrgan<span class="fstat-no" title="function not covered" >iz</span>atio<span class="cstat-no" title="statement not covered" >n } from '</span>src/providers/hooks';</span>
+import {<span class="cstat-no" title="statement not covered" > useOrganization } from 's<span class="fstat-no" title="function not covered" >rc</span>/pro<span class="cstat-no" title="statement not covered" >viders/hoo</span>ks';</span>
 import AccessionByStatus from 'src/scenes/SeedsDashboard/AccessionByStatus';
 im<span class="cstat-no" title="statement not covered" >port Summar</span>yPaper from 'src/scenes/SeedsDashboard/SummaryPaper';
 import strings from 'src/strings';
@@ -519,36 +517,35 @@ Cookies.defaults = {
 };
 <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 export default funct<span class="cstat-no" title="statement not covered" >ion</span> SeedSummary(): JSX.Element {
-<span class="cstat-no" title="statement not covered" >  const { activeLocale } = useLocalization();</span>
-  const num<span class="fstat-no" title="function not covered" >be</span>rFor<span class="cstat-no" title="statement not covered" >matter = use</span>NumberFormatter(activeLocale);
-  const { selectedOrganization } = useOrganization();
-<span class="cstat-no" title="statement not covered" >  const navigate = useSyncNavigate();</span>
-  const { isMobile <span class="cstat-no" title="statement not covered" >} = useDeviceInfo();</span>
-  const theme = useThe<span class="cstat-no" title="statement not covered" >me();</span>
+<span class="cstat-no" title="statement not covered" >  const numberFormatter = useNumberFormatter();</span>
+  const { s<span class="fstat-no" title="function not covered" >el</span>ecte<span class="cstat-no" title="statement not covered" >dOrganizatio</span>n } = useOrganization();
+  const navigate = useSyncNavigate();
+<span class="cstat-no" title="statement not covered" >  const { isMobile } = useDeviceInfo();</span>
+  const theme = use<span class="cstat-no" title="statement not covered" >Theme();</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const seedBankSummary<span class="cstat-no" title="statement not covered" > = useSeedBankSummary();</span>
-  const isEmptyState = s<span class="cstat-no" title="statement not covered" >eedBankSummary ? !seedBankSummary.value?.activ</span>eAccessions : false;
-  const errorOccur<span class="cstat-no" title="statement not covered" >red = seedBankSummary ? !seedBankSummary.reques</span>tSucceeded : false;
+  const seedBankSummary <span class="cstat-no" title="statement not covered" >= useSeedBankSummary();</span>
+  const isEmptyState = <span class="cstat-no" title="statement not covered" >seedBankSummary ? !seedBankSummary.value?.act</span>iveAccessions : false;
+  const errorOccurred = <span class="cstat-no" title="statement not covered" >seedBankSummary ? !seedBankSummary.requestSucc</span>eeded : false;
 <span class="cstat-no" title="statement not covered" ></span>
   const paperStyles:<span class="cstat-no" title="statement not covered" > SxProps = {</span>
-    display: 'flex<span class="cstat-no" title="statement not covered" >',</span>
-    overflow: 'auto',<span class="cstat-no" title="statement not covered" ></span>
-    flexDirection: 'column',<span class="cstat-no" title="statement not covered" ></span>
+    display: 'flex',<span class="cstat-no" title="statement not covered" ></span>
+    overflow: 'aut<span class="cstat-no" title="statement not covered" >o',</span>
+    flexDirection: 'col<span class="cstat-no" title="statement not covered" >umn',</span>
     alignItems: 'start',<span class="cstat-no" title="statement not covered" ></span>
-    borderRadius: '<span class="cstat-no" title="statement not covered" >24px',</span>
+    borderRadius: '24px',<span class="cstat-no" title="statement not covered" ></span>
     border: 'none',<span class="cstat-no" title="statement not covered" ></span>
-    backgroundColor: theme<span class="cstat-no" title="statement not covered" >.palette.TwClrBg,</span>
-    padding: theme.sp<span class="cstat-no" title="statement not covered" >acing(3),</span>
+    backgroundColor: theme.pale<span class="cstat-no" title="statement not covered" >tte.TwClrBg,</span>
+    padding: theme.spacing<span class="cstat-no" title="statement not covered" >(3),</span>
   };<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const cardGridSize = () =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >    if (isMobile) {</span>
-      return 12;
+  const cardGridSize = () =<span class="cstat-no" title="statement not covered" >&gt; {</span>
+    if (isMobile) {<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >      return 12;</span>
     }
     return 4;
-  };<span class="fstat-no" title="function not covered" ></span>
-&nbsp;
-  const cardStates: Accessi<span class="cstat-no" title="statement not covered" >onState[] = [</span>
+  };
+<span class="fstat-no" title="function not covered" ></span>
+  const cardStates: AccessionState[] = [
     'Awaiting Check-In',<span class="cstat-no" title="statement not covered" ></span>
     'Awaiting Processing',<span class="cstat-no" title="statement not covered" ></span>
     'Processing',<span class="cstat-no" title="statement not covered" ></span>
@@ -712,7 +709,7 @@ export default funct<span class="cstat-no" title="statement not covered" >ion</s
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-26T23:28:05.375Z
+                at 2026-01-27T01:06:41.588Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

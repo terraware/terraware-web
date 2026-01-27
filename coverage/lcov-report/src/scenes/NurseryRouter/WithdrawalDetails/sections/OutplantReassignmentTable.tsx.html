@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/53</span>
+                <span class='fraction'>0/51</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/61</span>
+                <span class='fraction'>0/59</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/44</span>
+                <span class='fraction'>0/42</span>
             </div>
         
             
@@ -140,9 +140,7 @@
 <a name='L75'></a><a href='#L75'>75</a>
 <a name='L76'></a><a href='#L76'>76</a>
 <a name='L77'></a><a href='#L77'>77</a>
-<a name='L78'></a><a href='#L78'>78</a>
-<a name='L79'></a><a href='#L79'>79</a>
-<a name='L80'></a><a href='#L80'>80</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L78'></a><a href='#L78'>78</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -179,7 +177,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -193,7 +190,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -226,54 +222,52 @@
 import { TableColumnTyp<span class="cstat-no" title="statement not covered" >e } from '@terraware/web-compone</span>nts';
 <span class="cstat-no" title="statement not covered" ></span>
 import Table from '<span class="cstat-no" title="statement not covered" >src/components/common/</span>table';
-import { useUser } <span class="cstat-no" title="statement not covered" >from 'src/providers';</span>
-import strings <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >fr</span>om 'src/strings';</span>
-im<span class="cstat-no" title="statement not covered" >port { Species } from 'src/types/Species';</span>
-impo<span class="cstat-no" title="statement not covered" >rt { Delivery } from 'src/types/Tracking';</span>
-import { useNumberFormatter } from 'src/utils/useNumberFormatter';
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-ty<span class="cstat-no" title="statement not covered" >pe OutplantReassignmentTableProps = {</span>
-  sp<span class="cstat-no" title="statement not covered" >ecies: Species[];</span>
-  subs<span class="cstat-no" title="statement not covered" >tratumNames: Record&lt;number, string&gt;;</span>
-  delive<span class="cstat-no" title="statement not covered" >ry?: Delivery;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  withdrawalNotes?: string;
-};<span class="cstat-no" title="statement not covered" ></span>
+import strings from<span class="cstat-no" title="statement not covered" > 'src/strings';</span>
+import { Specie<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >s </span>} from 'src/types/Species';</span>
+im<span class="cstat-no" title="statement not covered" >port { Delivery } from 'src/types/Tracking';</span>
+impo<span class="cstat-no" title="statement not covered" >rt { useNumberFormatter } from 'src/utils/useNumberFormatter';</span>
 &nbsp;
-const columns <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >= </span>(): TableColumnType[] =&gt; [<span class="cstat-no" title="statement not covered" ></span></span>
-  { key: 'species', name: strings.SPECIES, type: 'string' },
+type OutplantReass<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ig</span>nmentTableProps = {</span>
+<span class="cstat-no" title="statement not covered" >  species: Species[];</span>
+  su<span class="cstat-no" title="statement not covered" >bstratumNames: Record&lt;number, string&gt;;</span>
+  deli<span class="cstat-no" title="statement not covered" >very?: Delivery;</span>
+  withdr<span class="cstat-no" title="statement not covered" >awalNotes?: string;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+};
+<span class="cstat-no" title="statement not covered" ></span>
+const columns = (): TableColumnType[] =&gt; [
+  { key: 'spec<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ie</span>s', name: strings.SPECIES, t<span class="cstat-no" title="statement not covered" >ype: 'string' },</span></span>
   { key: 'from_substratum', name: strings.FROM_SUBSTRATUM, type: 'string' },
   { key: 'to_substratum', name: strings.TO_SUBSTRATUM, type: 'string' },
   { key: 'original_qty', name: strings.ORIGINAL_QTY, type: 'string' },
   { key: 'final_qty', name: strings.FINAL_QTY, type: 'string' },
   { key: 'notes', name: strings.NOTES, type: 'string' },
 ];
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-export default funct<span class="cstat-no" title="statement not covered" >ion</span> OutplantReassignmentTable({
-<span class="cstat-no" title="statement not covered" >  delivery,</span>
-  species,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  substratumNames,
-<span class="cstat-no" title="statement not covered" >  withdrawalNotes,</span>
-}: OutplantReassign<span class="cstat-no" title="statement not covered" >mentTableProps): JSX.Eleme</span>nt {
-  const { user } = <span class="cstat-no" title="statement not covered" >useUser();</span>
-  const numberFormatter<span class="cstat-no" title="statement not covered" > = useNumberFormatter(use</span>r?.locale);
+&nbsp;
+export default func<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ti</span>on Outp<span class="cstat-no" title="statement not covered" >lantReassignmentTable({</span></span>
+  delivery,<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >  species,</span>
+  substratu<span class="fstat-no" title="function not covered" >mN</span>ames<span class="cstat-no" title="statement not covered" >,</span>
+  withdrawalNotes,
+<span class="cstat-no" title="statement not covered" >}: OutplantReassignmentTableProps): JSX.Elemen</span>t {
+  const numberForma<span class="cstat-no" title="statement not covered" >tter = useNumberFormatter(</span>);
 <span class="cstat-no" title="statement not covered" ></span>
-  const rowData = useMemo(() =&gt; <span class="cstat-no" title="statement not covered" >{</span>
-    // get list <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >of</span> dis<span class="cstat-no" title="statement not covered" >tinct species</span></span>
-    const speciesList =
+  const rowData = use<span class="cstat-no" title="statement not covered" >Memo(() =&gt; {</span>
+    // get list of distinct spec<span class="cstat-no" title="statement not covered" >ies</span>
+    const specie<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >sL</span>ist <span class="cstat-no" title="statement not covered" >=</span></span>
       delivery?.plantings?.reduce&lt;number[]&gt;(
         (acc, pl) =&gt; (acc.includes(pl.speciesId) ? acc : [...acc, pl.speciesId]),
         []
       ) ?? [];
     const rows: { [p: string]: unknown }[] = [];
     for (const sp of speciesList) {
-      con<span class="fstat-no" title="function not covered" >st speciesName = species?.</span>find((x) =&gt; x?.id === sp)?.scientificName ?? '';
-      const plantings = delivery?.plantings?.filter((pl) =&gt; pl.speciesId === sp);
+      const speciesName = species?.find((x) =&gt; x?.id === sp)?.scientificName ?? '';
+      con<span class="fstat-no" title="function not covered" >st plantings = delivery?.p</span>lantings?.filter((pl) =&gt; pl.speciesId === sp);
       const deliveryPlanting = plantings?.find((pl) =&gt; pl.type === 'Delivery');
       const reassignmentFromPlanting = plantings?.find((pl) =&gt; pl.type === 'Reassignment From');
       const reassignmentToPlanting = plantings?.find((pl) =&gt; pl.type === 'Reassignment To');
 &nbsp;
-      // if reassig<span class="cstat-no" title="statement not covered" >nment plantings are found, creat</span>e table rows
-      if (deliveryPlanting<span class="cstat-no" title="statement not covered" > &amp;&amp; reassignmentFromPlanting &amp;&amp; reassignmentToPlanting) {</span>
+      // if reassignment plantings are found, create table rows
+      if (deliveryPlanting<span class="cstat-no" title="statement not covered" > &amp;&amp; reassignmentFromPlanting &amp;&amp; reassignmentToPlanti</span>ng) {
         rows.push(<span class="cstat-no" title="statement not covered" >{<span class="fstat-no" title="function not covered" ></span></span>
           species: speciesName,
           from_substratu<span class="cstat-no" title="statement not covered" >m: '',</span>
@@ -307,7 +301,7 @@ export default funct<span class="cstat-no" title="statement not covered" >ion</s
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-26T23:28:05.375Z
+                at 2026-01-27T01:06:41.588Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/137</span>
+                <span class='fraction'>0/135</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/77</span>
+                <span class='fraction'>0/75</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/130</span>
+                <span class='fraction'>0/128</span>
             </div>
         
             
@@ -322,9 +322,7 @@
 <a name='L257'></a><a href='#L257'>257</a>
 <a name='L258'></a><a href='#L258'>258</a>
 <a name='L259'></a><a href='#L259'>259</a>
-<a name='L260'></a><a href='#L260'>260</a>
-<a name='L261'></a><a href='#L261'>261</a>
-<a name='L262'></a><a href='#L262'>262</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L260'></a><a href='#L260'>260</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -379,7 +377,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -390,7 +387,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -601,47 +597,45 @@ impo<span class="cstat-no" title="statement not covered" >rt TitleDescription fr
 import<span class="cstat-no" title="statement not covered" > Table from 'src/components/common/table';</span>
 import {<span class="cstat-no" title="statement not covered" > APP_PATHS } from 'src/con<span class="fstat-no" title="function not covered" >st</span>ants<span class="cstat-no" title="statement not covered" >';</span></span>
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-im<span class="cstat-no" title="statement not covered" >port { useU</span>ser } from 'src/providers';
-import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
-import { Track<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >in</span>gService } from 'src/service<span class="cstat-no" title="statement not covered" >s';</span></span>
-import strings from 'src/strings';
+im<span class="cstat-no" title="statement not covered" >port { useS</span>peciesData } from 'src/providers/Species/SpeciesContext';
+import { TrackingService } from 'src/services';
+import strings<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > f</span>rom 'src/strings';<span class="cstat-no" title="statement not covered" ></span></span>
 import { Delivery } from 'src/types/Tracking';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
 &nbsp;
-import Reassignment<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Re</span>nderer,<span class="cstat-no" title="statement not covered" > { Reassignment, ReassignmentRowType, StratumInfo } from './Rea</span></span>ssignmentRenderer';
-<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >const columns = (): TableColumnType[] =&gt; [</span>
-  { key: 's<span class="fstat-no" title="function not covered" >pe</span>cies<span class="cstat-no" title="statement not covered" >', name: strings.SPECIES</span>, type: 'string' },
-  { key: 'siteName', name: strings.PLANTING_SITE, type: 'string' },
-<span class="cstat-no" title="statement not covered" >  { key: 'originalStratum', name: strings.ORIG</span>INAL_STRATUM, type: 'string' },
-  { key: 'originalS<span class="cstat-no" title="statement not covered" >ubstratum', name: strings.</span>ORIGINAL_SUBSTRATUM, type: 'string' },
-  { key: 'newStratum', nam<span class="cstat-no" title="statement not covered" >e: strings.NEW_STRATUM, </span>type: 'string' },
-  { key: 'newSubstratu<span class="cstat-no" title="statement not covered" >m', name: strings.NEW_SUB</span>STRATUM, type: 'string' },
-  { key: 'reassign', name: s<span class="cstat-no" title="statement not covered" >trings.REASSIGN, type: 'number' },</span>
-  { key: 'notes', name: st<span class="cstat-no" title="statement not covered" >rings.NOTES, type: 'string' },</span>
+import ReassignmentRenderer, { Reassignment, ReassignmentRowType, StratumInfo } from './ReassignmentRenderer';
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+const columns = (): <span class="cstat-no" title="statement not covered" >Tab</span>leColumnType[] =&gt; [
+<span class="cstat-no" title="statement not covered" >  { key: 'species', name: strings.SPECIES, type: 'string' },</span>
+  { key: 's<span class="fstat-no" title="function not covered" >it</span>eNam<span class="cstat-no" title="statement not covered" >e', name: strings.PLANTI</span>NG_SITE, type: 'string' },
+  { key: 'originalStratum', name: strings.ORIGINAL_STRATUM, type: 'string' },
+<span class="cstat-no" title="statement not covered" >  { key: 'originalSubstratum', name: strings.O</span>RIGINAL_SUBSTRATUM, type: 'string' },
+  { key: 'newStratu<span class="cstat-no" title="statement not covered" >m', name: strings.NEW_STRA</span>TUM, type: 'string' },
+  { key: 'newSubstratum', <span class="cstat-no" title="statement not covered" >name: strings.NEW_SUBSTR</span>ATUM, type: 'string' },
+  { key: 'reassign', n<span class="cstat-no" title="statement not covered" >ame: strings.REASSIGN, ty</span>pe: 'number' },
+  { key: 'notes', name: stri<span class="cstat-no" title="statement not covered" >ngs.NOTES, type: 'string' },</span>
 ];<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-export default functio<span class="cstat-no" title="statement not covered" >n NurseryReassignmentView(): JSX.Element {</span>
-  const query = useQuery();<span class="cstat-no" title="statement not covered" ></span>
-  const { user } = u<span class="cstat-no" title="statement not covered" >seUser();</span>
-  const numberFormatter = useN<span class="cstat-no" title="statement not covered" >umberFormatter(user?.locale);</span>
-  const theme = use<span class="cstat-no" title="statement not covered" >Theme();</span>
-  const navigate = useS<span class="cstat-no" title="statement not covered" >yncNavigate();</span>
-  const { isMobile } = useDev<span class="cstat-no" title="statement not covered" >iceInfo();</span>
+export default fun<span class="cstat-no" title="statement not covered" >ction NurseryReassignmentView(): JSX.Element {</span>
+  const query = useQue<span class="cstat-no" title="statement not covered" >ry();</span>
+  const numberFormatter = useNu<span class="cstat-no" title="statement not covered" >mberFormatter();</span>
+  const theme = useT<span class="cstat-no" title="statement not covered" >heme();</span>
+  const navigate = useSyncNavi<span class="cstat-no" title="statement not covered" >gate();</span>
+  const { isMobile <span class="cstat-no" title="statement not covered" >} = useDeviceInfo();</span>
   const { deliveryId } <span class="cstat-no" title="statement not covered" >= useParams&lt;{ deliveryId:</span> string }&gt;();
-  const snackbar = useSnackb<span class="cstat-no" title="statement not covered" >ar();</span>
-  const [delivery, set<span class="cstat-no" title="statement not covered" >Delivery] = useState&lt;Del</span>ivery&gt;();
-  const [strata, setS<span class="cstat-no" title="statement not covered" >trata] = useState&lt;StratumInfo[]&gt;</span>();
-  const [siteName, setSiteN<span class="cstat-no" title="statement not covered" >ame] = useState&lt;string&gt;();</span>
-  const [reassignments, setReass<span class="cstat-no" title="statement not covered" >ignments] = useState&lt;{ [substratumId: st</span>ring]: Reassignment }&gt;({});
-  const [noReassignmen<span class="cstat-no" title="statement not covered" >ts, setNoReassignments] = useState&lt;bool</span>ean&gt;(false);
-  const contentRef = useR<span class="cstat-no" title="statement not covered" >ef(null);</span>
+  const snackbar = useSnackba<span class="cstat-no" title="statement not covered" >r();</span>
+  const [delivery, setDelive<span class="cstat-no" title="statement not covered" >ry] = useState&lt;Delivery&gt;();</span>
+  const [strata, setSt<span class="cstat-no" title="statement not covered" >rata] = useState&lt;Stratum</span>Info[]&gt;();
+  const [siteName, se<span class="cstat-no" title="statement not covered" >tSiteName] = useState&lt;string&gt;();</span>
+  const [reassignments, set<span class="cstat-no" title="statement not covered" >Reassignments] = useState&lt;{ [substratumId: s</span>tring]: Reassignment }&gt;({});
+  const [noReassignments, setNoR<span class="cstat-no" title="statement not covered" >eassignments] = useState&lt;boolean&gt;(false)</span>;
+  const contentRef = u<span class="cstat-no" title="statement not covered" >seRef(null);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const { specie<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >s </span>} = <span class="cstat-no" title="statement not covered" >useSpeciesData();</span></span>
-&nbsp;
+  const { species } = useSpeciesDa<span class="cstat-no" title="statement not covered" >ta();</span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
   // populate delivery
   useEffect(() =&gt; {
     if (!deliveryId) {
@@ -650,9 +644,9 @@ export default functio<span class="cstat-no" title="statement not covered" >n Nu
     const populateDelivery = async () =&gt; {
       const response = await TrackingService.getDelivery(Number(deliveryId));
       if (response.requestSucceeded) {
-        s<span class="fstat-no" title="function not covered" >etDelivery(response.deli</span>very);
-      } else {<span class="cstat-no" title="statement not covered" ></span>
-        snackbar.to<span class="cstat-no" title="statement not covered" >astError();</span>
+        setDelivery(response.delivery);
+      } e<span class="fstat-no" title="function not covered" >lse {</span>
+        snackbar<span class="cstat-no" title="statement not covered" >.toastError();</span>
       }<span class="cstat-no" title="statement not covered" ></span>
     };<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
@@ -853,7 +847,7 @@ export default functio<span class="cstat-no" title="statement not covered" >n Nu
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-26T23:28:05.375Z
+                at 2026-01-27T01:06:41.588Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

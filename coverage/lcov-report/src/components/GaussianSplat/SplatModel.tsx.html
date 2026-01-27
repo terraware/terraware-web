@@ -118,7 +118,8 @@
 <a name='L53'></a><a href='#L53'>53</a>
 <a name='L54'></a><a href='#L54'>54</a>
 <a name='L55'></a><a href='#L55'>55</a>
-<a name='L56'></a><a href='#L56'>56</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -173,7 +174,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React fr<span class="cstat-no" title="statement not covered" >om 'react';</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React fr<span class="cstat-no" title="statement not covered" >om 'react';</span>
 <span class="cstat-no" title="statement not covered" ></span>
 import { Entity } from <span class="cstat-no" title="statement not covered" >'@playcanvas/react';</span>
 import { GSplat } from '<span class="cstat-no" title="statement not covered" >@playcanvas/react/component</span>s';
@@ -202,40 +204,41 @@ const SplatModel = ({
   cropFade = false,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
   cropFadeDistance =<span class="cstat-no" title="statement not covered" > 0.</span>5,
 <span class="cstat-no" title="statement not covered" >}: SplatModelProps) =&gt; {</span>
-  const { a<span class="fstat-no" title="function not covered" >ss</span>et, <span class="cstat-no" title="statement not covered" >loading } = us</span>eSplat(splatSrc);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  if (loading) {</span>
-    return &lt;Blockin<span class="cstat-no" title="statement not covered" >gSpinner /&gt;;</span>
+  // A file<span class="fstat-no" title="function not covered" >na</span>me i<span class="cstat-no" title="statement not covered" >s required for</span> the file props to assist with the asset loading. Otherwise it assumes that the splatSrc is a ply file.
+  const { asset, loading } = useSplat(splatSrc, { file: { filename: 'model.sog' } });
+<span class="cstat-no" title="statement not covered" ></span>
+  if (loading) {<span class="cstat-no" title="statement not covered" ></span>
+    return &lt;Blocking<span class="cstat-no" title="statement not covered" >Spinner /&gt;;</span>
   }<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  // todo add error<span class="cstat-no" title="statement not covered" > handling</span>
+  // todo add error handling<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
   if (!asset) {<span class="cstat-no" title="statement not covered" ></span>
-    return null;<span class="cstat-no" title="statement not covered" ></span>
-  }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+    return null;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  }
 &nbsp;
   return (
     &lt;Entity name='splat' rotation={rotation}&gt;
       &lt;GSplat asset={asset} /&gt;
-      {(cropAabbMin || cropAabbMax) &amp;&amp;
-        (crop<span class="branch-0 cbranch-no" title="branch not covered" >Fade ?</span> (
-          &lt;SplatFadeC<span class="branch-0 cbranch-no" title="branch not covered" >rop </span>aabbMin={cropAabbMin} aabbMax={cropAabbMax} fadeDistance={cropFadeDistance} /&gt;
-        ) : (
-          &lt;SplatCrop aabbMin=<span class="cstat-no" title="statement not covered" >{cropAabbMin} aabbMax={cropAabbMax} e</span>dgeScaleFactor={cropEdgeScaleFactor} /&gt;
+      {(cropA<span class="branch-0 cbranch-no" title="branch not covered" >abbMin</span> || cropAabbMax) &amp;&amp;
+        (cropFade ? (<span class="branch-0 cbranch-no" title="branch not covered" ></span>
+          &lt;SplatFadeCrop aabbMin={cropAabbMin} aabbMax={cropAabbMax} fadeDistance={cropFadeDistance} /&gt;
+        ) : (<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >          &lt;SplatCrop aabbMin={cropAabbMin} aabbMax={cropAabbMax} edgeScaleFactor={cropEdgeScaleFactor} /&gt;</span>
 <span class="cstat-no" title="statement not covered" >        ))}</span>
-<span class="cstat-no" title="statement not covered" >    &lt;/Entity&gt;</span>
-  );
+    &lt;/Entity&gt;
+<span class="cstat-no" title="statement not covered" >  );</span>
 };<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span>
-export default SplatModel;
-<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
+&nbsp;
+ex<span class="cstat-no" title="statement not covered" >port default SplatModel;</span>
+&nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-26T23:28:05.375Z
+                at 2026-01-27T01:06:41.588Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

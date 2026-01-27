@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/42</span>
+                <span class='fraction'>0/40</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/36</span>
+                <span class='fraction'>0/34</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/36</span>
+                <span class='fraction'>0/34</span>
             </div>
         
             
@@ -137,9 +137,7 @@
 <a name='L72'></a><a href='#L72'>72</a>
 <a name='L73'></a><a href='#L73'>73</a>
 <a name='L74'></a><a href='#L74'>74</a>
-<a name='L75'></a><a href='#L75'>75</a>
-<a name='L76'></a><a href='#L76'>76</a>
-<a name='L77'></a><a href='#L77'>77</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L75'></a><a href='#L75'>75</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -178,7 +176,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -186,7 +183,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -220,49 +216,47 @@
 import { Box, Grid, Typ<span class="cstat-no" title="statement not covered" >ography, useTheme } from '@mui/m</span>aterial';
 <span class="cstat-no" title="statement not covered" ></span>
 import OverviewItem<span class="cstat-no" title="statement not covered" >Card from 'src/compone</span>nts/common/OverviewItemCard';
-import { useUser } <span class="cstat-no" title="statement not covered" >from 'src/providers';</span>
-import strings <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >fr</span>om 'src/strings';</span>
-im<span class="cstat-no" title="statement not covered" >port { Batch, NurseryWithdrawal } from 'src/types/Batch';</span>
-impo<span class="cstat-no" title="statement not covered" >rt { Species } from 'src/types/Species';</span>
-import { Delivery } from 'src/types/Tracking';
-import useDeviceIn<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >fo</span> from 'src/utils/useDeviceInfo';</span>
-im<span class="cstat-no" title="statement not covered" >port { useNumberFormatter } from 'src/utils/useNumberFormatter';</span>
+import strings from<span class="cstat-no" title="statement not covered" > 'src/strings';</span>
+import { Batch,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > N</span>urseryWithdrawal } from 'src/types/Batch';</span>
+im<span class="cstat-no" title="statement not covered" >port { Species } from 'src/types/Species';</span>
+impo<span class="cstat-no" title="statement not covered" >rt { Delivery } from 'src/types/Tracking';</span>
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+import { useNumber<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Fo</span>rmatter } from 'src/utils/useNumberFormatter';</span>
 <span class="cstat-no" title="statement not covered" ></span>
-import<span class="cstat-no" title="statement not covered" > OutplantReassignmentTable from './sections/OutplantReassignmentTable';</span>
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-type ReassignmentTabPanelContentProps = {
-<span class="cstat-no" title="statement not covered" >  species: Sp</span>ecies[];
-  substratumNames: Record&lt;number, string&gt;;
-  withdrawal?:<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > N</span>urseryWithdrawal;<span class="cstat-no" title="statement not covered" ></span></span>
-  delivery?: Delivery;
+impo<span class="cstat-no" title="statement not covered" >rt OutplantReassignmentTable from './sections/OutplantReassignmentTable';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+type Rea<span class="cstat-no" title="statement not covered" >ssignmentTabPanelContentPr<span class="fstat-no" title="function not covered" >op</span>s = <span class="cstat-no" title="statement not covered" >{</span></span>
+  species: Species[];
+<span class="cstat-no" title="statement not covered" >  substratumN</span>ames: Record&lt;number, string&gt;;
+  withdrawal?: NurseryWithdrawal;
+  delivery?: D<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >el</span>ivery;<span class="cstat-no" title="statement not covered" ></span></span>
   batches?: Batch[];
 };
 &nbsp;
 export default function ReassignmentTabPanelContent({
   species,
   substratumNames,
-  withdrawal,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  delivery,<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >}: ReassignmentTabPanelContentProps): JSX.Element {</span>
-  const { u<span class="fstat-no" title="function not covered" >se</span>r } <span class="cstat-no" title="statement not covered" >= useUser();</span>
-  const numberFormatter = useNumberFormatter(user?.locale);
-<span class="cstat-no" title="statement not covered" >  const { isMobile } = useDeviceInfo();</span>
-  const theme = use<span class="cstat-no" title="statement not covered" >Theme();</span>
+  withdrawal,
+  delivery,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+}: ReassignmentTabPa<span class="cstat-no" title="statement not covered" >nel</span>ContentProps): JSX.Element {
+<span class="cstat-no" title="statement not covered" >  const numberFormatter = useNumberFormatter();</span>
+  const { i<span class="fstat-no" title="function not covered" >sM</span>obil<span class="cstat-no" title="statement not covered" >e } = useDeviceInfo();</span>
+  const theme = useTheme();
 <span class="cstat-no" title="statement not covered" ></span>
-  const quantity = delivery?.p<span class="cstat-no" title="statement not covered" >lantings</span>
-    ?.filter((planting)<span class="cstat-no" title="statement not covered" > =&gt; planting.type === 'Re</span>assignment To')
-    ?.reduce((acc, pl<span class="cstat-no" title="statement not covered" >anting) =&gt; acc + planting.numPla</span>nts, 0);
+  const quantity = <span class="cstat-no" title="statement not covered" >delivery?.plantings</span>
+    ?.filter((planting<span class="cstat-no" title="statement not covered" >) =&gt; planting.type === 'R</span>eassignment To')
+    ?.reduce((acc, planting) =<span class="cstat-no" title="statement not covered" >&gt; acc + planting.numPlants, 0);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const overviewCardData = [<span class="cstat-no" title="statement not covered" ></span>
+  const overviewCardData = <span class="cstat-no" title="statement not covered" >[</span>
     {<span class="cstat-no" title="statement not covered" ></span>
-      tit<span class="fstat-no" title="function not covered" >le: strings.DATE,</span>
-      data: withdrawal?.withdrawnDate ?? '',
+      title: strings.DATE,<span class="cstat-no" title="statement not covered" ></span>
+      dat<span class="fstat-no" title="function not covered" >a: withdrawal?.withdrawnDate</span> ?? '',
     },
     {
       title: strings.PURPOSE,
       data: strings.REASSIGNMENT,
     },
-    {<span class="cstat-no" title="statement not covered" ></span>
+    {
       title: strings.QUANT<span class="cstat-no" title="statement not covered" >ITY,</span>
       data: typeof quan<span class="cstat-no" title="statement not covered" >tity === 'number' ? numberFormatter.</span>format(quantity) : quantity,
     },<span class="cstat-no" title="statement not covered" ></span>
@@ -298,7 +292,7 @@ export default function ReassignmentTabPanelContent({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-26T23:28:05.375Z
+                at 2026-01-27T01:06:41.588Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

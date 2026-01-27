@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/88</span>
+                <span class='fraction'>0/87</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/58</span>
+                <span class='fraction'>0/56</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/82</span>
+                <span class='fraction'>0/81</span>
             </div>
         
             
@@ -308,8 +308,7 @@
 <a name='L243'></a><a href='#L243'>243</a>
 <a name='L244'></a><a href='#L244'>244</a>
 <a name='L245'></a><a href='#L245'>245</a>
-<a name='L246'></a><a href='#L246'>246</a>
-<a name='L247'></a><a href='#L247'>247</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L246'></a><a href='#L246'>246</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -356,7 +355,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -563,7 +561,7 @@ import { TableColumnType<span class="cstat-no" title="statement not covered" > }
 import Card from 's<span class="cstat-no" title="statement not covered" >rc/components/common/Card';</span>
 import EmptySta<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >te</span>Page from 'src/components/emptyStatePages/EmptyStatePage';</span>
 im<span class="cstat-no" title="statement not covered" >port { DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';</span>
-impo<span class="cstat-no" title="statement not covered" >rt { useLocalization, useOrganization, useUser } from 'src/prov</span>iders';
+impo<span class="cstat-no" title="statement not covered" >rt { useLocalization, useOrganization } from 'src/providers';</span>
 import { InventoryFiltersType } from 'src/scenes/InventoryRouter/InventoryFilter';
 import InventoryTa<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >bl</span>e from 'src/scenes/InventoryRouter/InventoryTable';</span>
 im<span class="cstat-no" title="statement not covered" >port {</span>
@@ -586,25 +584,24 @@ type InventoryListBySpeciesProps = {
 <span class="cstat-no" title="statement not covered" >export default function InventoryListBySpecies({ setReportData }: InventoryListBySpeciesProps) {</span>
   const { s<span class="fstat-no" title="function not covered" >tr</span>ings<span class="cstat-no" title="statement not covered" > } = useLocalization();</span>
   const { selectedOrganization } = useOrganization();
-<span class="cstat-no" title="statement not covered" >  const { user } = useUser();</span>
-  const numberForma<span class="cstat-no" title="statement not covered" >tter = useNumberFormatter(</span>user?.locale);
-  const theme = useThe<span class="cstat-no" title="statement not covered" >me();</span>
+<span class="cstat-no" title="statement not covered" >  const numberFormatter = useNumberFormatter()</span>;
+  const theme = use<span class="cstat-no" title="statement not covered" >Theme();</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const [filters, setFilters<span class="cstat-no" title="statement not covered" >] = useForm&lt;InventoryFiltersType&gt;({});</span>
-  const [searchResults,<span class="cstat-no" title="statement not covered" > setSearchResults] = useS</span>tate&lt;SearchResponseElement[] | null&gt;(null);
+  const [filters, <span class="cstat-no" title="statement not covered" >setFilters] = useForm&lt;InventoryFiltersType&gt;({})</span>;
+  const [searchResults, setS<span class="cstat-no" title="statement not covered" >earchResults] = useState&lt;SearchResponseElement[] | null&gt;(null);</span>
   const [showResults, s<span class="cstat-no" title="statement not covered" >etShowResults] = useState</span>(false);
-  const [temporalSearchValue<span class="cstat-no" title="statement not covered" >, setTemporalSearchValue] = useState('');</span>
-  const debouncedSearc<span class="cstat-no" title="statement not covered" >hTerm = useDebounce(temp</span>oralSearchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
-  const [searchSortOrder, setSearchSo<span class="cstat-no" title="statement not covered" >rtOrder] = useState&lt;SearchSortOrder | undefined&gt;({</span>
-    field: 'species_scie<span class="cstat-no" title="statement not covered" >ntificName',</span>
-    direction: 'Ascending<span class="cstat-no" title="statement not covered" >',</span>
+  const [temporalSearch<span class="cstat-no" title="statement not covered" >Value, setTemporalSearchV</span>alue] = useState('');
+  const debouncedSearchTerm <span class="cstat-no" title="statement not covered" >= useDebounce(temporalSearchValue, DEFAULT_SEARCH_DEBOUNCE_MS)</span>;
+  const [searchSortOrd<span class="cstat-no" title="statement not covered" >er, setSearchSortOrder] </span>= useState&lt;SearchSortOrder | undefined&gt;({
+    field: 'species_scientificName',<span class="cstat-no" title="statement not covered" ></span>
+    direction: 'Ascendin<span class="cstat-no" title="statement not covered" >g',</span>
   });<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const c<span class="fstat-no" title="function not covered" >olumns = useMemo(</span>
-    (): TableColumnType[] =&gt; [
-      {<span class="cstat-no" title="statement not covered" ></span>
-        key: 'species_scientificNam<span class="cstat-no" title="statement not covered" >e',</span>
-        name: strin<span class="cstat-no" title="statement not covered" >gs.SPECIES,</span>
+  const columns = useMemo(<span class="cstat-no" title="statement not covered" ></span>
+    (): T<span class="fstat-no" title="function not covered" >ableColumnType[] =&gt; [</span>
+      {
+        key: 'species_<span class="cstat-no" title="statement not covered" >scientificName',</span>
+        name: strings.SPECIES,<span class="cstat-no" title="statement not covered" ></span>
         type: 'string',<span class="cstat-no" title="statement not covered" ></span>
         tooltipT<span class="cstat-no" title="statement not covered" >itle: strings.TOOLTIP_SCIENTIFIC</span>_NAME,
       },<span class="cstat-no" title="statement not covered" ></span>
@@ -808,7 +805,7 @@ type InventoryListBySpeciesProps = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-26T23:28:05.375Z
+                at 2026-01-27T01:06:41.588Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
