@@ -191,12 +191,16 @@ const ObservationStatsDrawer = ({
     );
   }
 
+  // Hardcoded values for testing
+  const HARDCODED_OBSERVATION_ID = 501;
+  const HARDCODED_FILE_ID = 6736;
+
   return (
     <>
       {virtualPlotOpen && monitoringPlotId && (
         <VirtualPlotModal
-          observationId={observationId}
-          monitoringPlotId={monitoringPlotId}
+          observationId={HARDCODED_OBSERVATION_ID}
+          fileId={HARDCODED_FILE_ID}
           onClose={setVirtualPlotOpenFalse}
         />
       )}

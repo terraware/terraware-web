@@ -4,7 +4,6 @@ import { Box, Typography, useTheme } from '@mui/material';
 
 import Card from 'src/components/common/Card';
 import ListMapSelector, { View } from 'src/components/common/ListMapSelector';
-import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import { Stratum } from 'src/types/Tracking';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -36,8 +35,7 @@ export default function ListMapView({
 }: ListMapViewProps): JSX.Element {
   const [view, setView] = useState<View>(initialView);
   const theme = useTheme();
-  const { activeLocale } = useLocalization();
-  const numberFormatter = useNumberFormatter(activeLocale);
+  const numberFormatter = useNumberFormatter();
   const { isMobile } = useDeviceInfo();
 
   const updateView = useCallback(

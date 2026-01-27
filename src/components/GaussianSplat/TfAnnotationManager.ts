@@ -71,6 +71,73 @@ export class TfAnnotationManager extends PcAnnotationManager {
   }
 
   /**
+   * Override to handle React components in annotation text.
+   * Creates a portal container for React content instead of using textContent.
+   * @private
+   */
+  _showTooltip(annotation: any) {
+    (this as any)._activeAnnotation = annotation;
+    (this as any)._tooltipDom.style.visibility = 'visible';
+    (this as any)._tooltipDom.style.opacity = '1';
+    (this as any)._titleDom.textContent = annotation.title;
+
+    // Handle React content vs string text
+    if (annotation.textContentRef?.current) {
+      // Clear and set up React portal container for React components
+      const textDom = (this as any)._textDom;
+      textDom.innerHTML = '';
+
+      const reactContainer = document.createElement('div');
+      reactContainer.setAttribute('data-react-portal-container', 'true');
+      reactContainer.style.width = '100%';
+      reactContainer.style.height = '100%';
+      textDom.appendChild(reactContainer);
+
+      // Notify the annotation component about the container
+      if (annotation.setTextContainer) {
+        annotation.setTextContainer(reactContainer);
+      }
+    } else {
+      // Standard string text
+      (this as any)._textDom.textContent = annotation.text;
+    }
+
+    annotation.fire('show', annotation);
+  }
+
+  /**
+   * Override to handle React components in annotation text.
+   * Ensures portal container exists for React content.
+   * @private
+   */
+  _onTextChange(annotation: any, text: string) {
+    if ((this as any)._activeAnnotation === annotation) {
+      // Handle React content vs string text
+      if (annotation.textContentRef?.current) {
+        // For React content, the portal will handle updates
+        // Just make sure container exists
+        const textDom = (this as any)._textDom;
+        if (!textDom.querySelector('[data-react-portal-container]')) {
+          textDom.innerHTML = '';
+
+          const reactContainer = document.createElement('div');
+          reactContainer.setAttribute('data-react-portal-container', 'true');
+          reactContainer.style.width = '100%';
+          reactContainer.style.height = '100%';
+          textDom.appendChild(reactContainer);
+
+          if (annotation.setTextContainer) {
+            annotation.setTextContainer(reactContainer);
+          }
+        }
+      } else {
+        // Standard string text
+        (this as any)._textDom.textContent = text;
+      }
+    }
+  }
+
+  /**
    * Override position update to adjust for canvas offset when using document.body.
    * @private
    */

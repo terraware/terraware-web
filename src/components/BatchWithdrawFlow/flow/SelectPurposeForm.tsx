@@ -20,7 +20,6 @@ import DatePicker from 'src/components/common/DatePicker';
 import Divisor from 'src/components/common/Divisor';
 import PageForm from 'src/components/common/PageForm';
 import { APP_PATHS } from 'src/constants';
-import { useUser } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { useOrganization } from 'src/providers/hooks';
@@ -52,8 +51,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const { nurseryWithdrawal, onNext, batches, onCancel, saveText, setFilterProjectId } = props;
 
   const { selectedOrganization } = useOrganization();
-  const { user } = useUser();
-  const numberFormatter = useNumberFormatter(user?.locale);
+  const numberFormatter = useNumberFormatter();
   const contributor = isContributor(selectedOrganization);
   const snackbar = useSnackbar();
   const { isMobile } = useDeviceInfo();

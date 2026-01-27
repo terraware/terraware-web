@@ -2,6 +2,7 @@ import React, { type JSX } from 'react';
 
 import { Theme } from '@mui/material';
 
+import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import TextTruncated from 'src/components/common/TextTruncated';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
@@ -72,6 +73,17 @@ const OrgObservationsRenderer =
 
     if (column.key === 'state') {
       return <CellRenderer {...props} value={getStatus(value as ObservationState)} />;
+    }
+
+    if (
+      column.key === 'totalLive' ||
+      column.key === 'totalPlants' ||
+      column.key === 'totalSpecies' ||
+      column.key === 'plantingDensity'
+    ) {
+      return (
+        <CellRenderer {...props} value={typeof value === 'number' ? <FormattedNumber value={value} /> : undefined} />
+      );
     }
 
     if (column.key === 'survivalRate') {

@@ -27,7 +27,8 @@ const SplatModel = ({
   cropFade = false,
   cropFadeDistance = 0.5,
 }: SplatModelProps) => {
-  const { asset, loading } = useSplat(splatSrc);
+  // A filename is required for the file props to assist with the asset loading. Otherwise it assumes that the splatSrc is a ply file.
+  const { asset, loading } = useSplat(splatSrc, { file: { filename: 'model.sog' } });
 
   if (loading) {
     return <BlockingSpinner />;

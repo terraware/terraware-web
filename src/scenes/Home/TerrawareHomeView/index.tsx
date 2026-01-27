@@ -30,7 +30,7 @@ import OrganizationStatsCard, { OrganizationStatsCardRow } from './OrganizationS
 
 const TerrawareHomeView = () => {
   const { activeLocale } = useLocalization();
-  const numberFormatter = useNumberFormatter(activeLocale);
+  const numberFormatter = useNumberFormatter();
   const { user } = useUser();
   const { selectedOrganization, orgPreferences, reloadOrgPreferences } = useOrganization();
   const { isTablet, isMobile, isDesktop } = useDeviceInfo();

@@ -3,7 +3,6 @@ import React, { type JSX, useMemo } from 'react';
 import { TableColumnType } from '@terraware/web-components';
 
 import Table from 'src/components/common/table';
-import { useUser } from 'src/providers';
 import strings from 'src/strings';
 import { Species } from 'src/types/Species';
 import { Delivery } from 'src/types/Tracking';
@@ -31,8 +30,7 @@ export default function OutplantReassignmentTable({
   substratumNames,
   withdrawalNotes,
 }: OutplantReassignmentTableProps): JSX.Element {
-  const { user } = useUser();
-  const numberFormatter = useNumberFormatter(user?.locale);
+  const numberFormatter = useNumberFormatter();
 
   const rowData = useMemo(() => {
     // get list of distinct species

@@ -7,7 +7,6 @@ import getDateDisplayValue from '@terraware/web-components/utils/date';
 
 import DatePicker from 'src/components/common/DatePicker';
 import SelectPhotos from 'src/components/common/Photos/SelectPhotos';
-import { useUser } from 'src/providers';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { NurseryBatchService } from 'src/services';
 import { BATCH_PHOTO_ENDPOINT } from 'src/services/NurseryBatchService';
@@ -37,8 +36,7 @@ type BatchPhotoWithUrl = BatchPhoto & { url: string };
 export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetailsModalProps): JSX.Element | null {
   const { strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
-  const { user } = useUser();
-  const numberFormatter = useNumberFormatter(user?.locale);
+  const numberFormatter = useNumberFormatter();
   const snackbar = useSnackbar();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();

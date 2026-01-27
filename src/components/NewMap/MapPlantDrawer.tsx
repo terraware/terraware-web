@@ -20,7 +20,7 @@ type MapPlantDrawerProps = {
 const MapPlantDrawer = ({ monitoringPlotId, observationId, plant }: MapPlantDrawerProps): JSX.Element | undefined => {
   const { activeLocale, strings } = useLocalization();
 
-  const { format } = useNumberFormatter(activeLocale);
+  const { format } = useNumberFormatter();
   const { data } = useGetObservationResultsQuery({ observationId, includePlants: true });
 
   const { species } = useSpeciesData();

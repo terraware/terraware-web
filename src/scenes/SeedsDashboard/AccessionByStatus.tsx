@@ -5,7 +5,6 @@ import { Box, Typography, useTheme } from '@mui/material';
 
 import TwLink from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
-import { useLocalization } from 'src/providers/hooks';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
@@ -18,8 +17,7 @@ interface Props {
 export default function AccessionByStatus({ label, status, quantity }: Props): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
-  const { activeLocale } = useLocalization();
-  const numberFormatter = useNumberFormatter(activeLocale);
+  const numberFormatter = useNumberFormatter();
 
   return (
     <Link

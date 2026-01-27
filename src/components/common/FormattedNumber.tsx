@@ -1,4 +1,3 @@
-import { useUser } from 'src/providers';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 interface FormattedNumberProps {
@@ -6,8 +5,7 @@ interface FormattedNumberProps {
 }
 
 export default function FormattedNumber({ value }: FormattedNumberProps) {
-  const user = useUser().user;
-  const numberFormatter = useNumberFormatter(user?.locale);
+  const numberFormatter = useNumberFormatter();
 
   return numberFormatter.format(value);
 }

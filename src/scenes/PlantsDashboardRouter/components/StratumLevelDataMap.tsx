@@ -12,6 +12,7 @@ import { MapService } from 'src/services';
 import strings from 'src/strings';
 import { MapData, MapSourceProperties } from 'src/types/Map';
 import { getRgbaFromHex } from 'src/utils/color';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 type StratumLevelDataMapProps = {
@@ -19,6 +20,7 @@ type StratumLevelDataMapProps = {
 };
 
 export default function StratumLevelDataMap({ plantingSiteId }: StratumLevelDataMapProps): JSX.Element {
+  const numberFormatter = useNumberFormatter();
   const theme = useTheme();
   const { isDesktop } = useDeviceInfo();
   const { plantingSite, plantingSiteHistories, plantingSiteReportedPlants, observationSummaries, latestResult } =
@@ -195,7 +197,7 @@ export default function StratumLevelDataMap({ plantingSiteId }: StratumLevelData
           properties = [
             {
               key: strings.AREA_HA,
-              value: stratumArea ?? strings.UNKNOWN,
+              value: stratumArea ? numberFormatter.format(stratumArea) : strings.UNKNOWN,
             },
             { key: strings.NO_PLANTS, value: '' },
           ];
@@ -204,7 +206,7 @@ export default function StratumLevelDataMap({ plantingSiteId }: StratumLevelData
             properties = [
               {
                 key: strings.AREA_HA,
-                value: lastStratumSummary.areaHa,
+                value: lastStratumSummary.areaHa ? numberFormatter.format(lastStratumSummary.areaHa) : strings.UNKNOWN,
               },
               {
                 key: strings.SURVIVAL_RATE,
@@ -215,38 +217,38 @@ export default function StratumLevelDataMap({ plantingSiteId }: StratumLevelData
               },
               {
                 key: strings.PLANT_DENSITY,
-                value: `${lastStratumSummary.plantingDensity} ${strings.PLANTS_PER_HECTARE}`,
+                value: `${numberFormatter.format(lastStratumSummary.plantingDensity)} ${strings.PLANTS_PER_HECTARE}`,
               },
               {
                 key: strings.PLANTED_PLANTS,
-                value: `${stratumStat.reportedPlants}`,
+                value: numberFormatter.format(stratumStat.reportedPlants ?? 0),
               },
               {
                 key: strings.OBSERVED_PLANTS,
-                value: `${lastStratumSummary?.totalPlants}`,
+                value: numberFormatter.format(lastStratumSummary?.totalPlants ?? 0),
               },
               {
                 key: strings.PLANTED_SPECIES,
-                value: `${stratumStat.reportedSpecies}`,
+                value: numberFormatter.format(stratumStat.reportedSpecies ?? 0),
               },
               {
                 key: strings.OBSERVED_SPECIES,
-                value: `${lastStratumSummary?.totalSpecies}`,
+                value: numberFormatter.format(lastStratumSummary?.totalSpecies ?? 0),
               },
             ];
           } else {
             properties = [
               {
                 key: strings.AREA_HA,
-                value: stratumArea || strings.UNKNOWN,
+                value: stratumArea ? numberFormatter.format(stratumArea) : strings.UNKNOWN,
               },
               {
                 key: strings.PLANTED_PLANTS,
-                value: `${stratumStat.reportedPlants}`,
+                value: numberFormatter.format(stratumStat.reportedPlants ?? 0),
               },
               {
                 key: strings.PLANTED_SPECIES,
-                value: `${stratumStat.reportedSpecies}`,
+                value: numberFormatter.format(stratumStat.reportedSpecies ?? 0),
               },
               { key: strings.NOT_OBSERVED, value: '' },
             ];
@@ -289,7 +291,8 @@ export default function StratumLevelDataMap({ plantingSiteId }: StratumLevelData
       latestSummary?.strata,
       plantingSite?.strata,
       timeZone,
-      theme,
+      theme.palette.TwClrTxt,
+      numberFormatter,
     ]
   );
 

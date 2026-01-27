@@ -12,7 +12,6 @@ import MapDateSelect from 'src/components/common/MapDateSelect';
 import MapLayerSelect, { MapLayer } from 'src/components/common/MapLayerSelect';
 import PlantingSiteMapLegend from 'src/components/common/PlantingSiteMapLegend';
 import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
-import { useLocalization } from 'src/providers';
 import { useGetPlantingSiteQuery, useLazyGetPlantingSiteHistoryQuery } from 'src/queries/generated/plantingSites';
 import { useListPlantingSiteHistoryIdsQuery } from 'src/queries/search/plantingSiteHistories';
 import { MapService } from 'src/services';
@@ -40,8 +39,7 @@ export default function BoundariesAndStrata({
 }: BoundariesAndStrataProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
-  const { activeLocale } = useLocalization();
-  const numberFormatter = useNumberFormatter(activeLocale);
+  const numberFormatter = useNumberFormatter();
 
   const params = useParams<{ plantingSiteId: string }>();
   const plantingSiteId = Number(params.plantingSiteId);
@@ -123,6 +121,7 @@ type PlantingSiteMapViewProps = {
 };
 
 function PlantingSiteMapView({ search }: PlantingSiteMapViewProps): JSX.Element | null {
+  const numberFormatter = useNumberFormatter();
   const { isDesktop } = useDeviceInfo();
   const [searchStratumEntities, setSearchStratumEntities] = useState<MapEntityId[]>([]);
   const [includedLayers, setIncludedLayers] = useState<MapLayer[]>(['Planting Site', 'Strata', 'Monitoring Plots']);
@@ -239,9 +238,15 @@ function PlantingSiteMapView({ search }: PlantingSiteMapViewProps): JSX.Element 
           properties = [
             {
               key: strings.AREA_HA,
-              value: stratumHistory?.areaHa && stratumHistory?.areaHa > 0 ? stratumHistory?.areaHa : '',
+              value:
+                stratumHistory?.areaHa && stratumHistory?.areaHa > 0
+                  ? numberFormatter.format(stratumHistory?.areaHa)
+                  : '',
             },
-            { key: strings.TARGET_PLANTING_DENSITY, value: stratum?.targetPlantingDensity ?? 0 },
+            {
+              key: strings.TARGET_PLANTING_DENSITY,
+              value: numberFormatter.format(stratum?.targetPlantingDensity ?? 0),
+            },
             {
               key: strings.PLANTING_COMPLETE,
               value: stratum?.substrata?.every((substratum) => substratum.plantingCompleted) ? strings.YES : strings.NO,
@@ -265,7 +270,10 @@ function PlantingSiteMapView({ search }: PlantingSiteMapViewProps): JSX.Element 
           properties = [
             {
               key: strings.AREA_HA,
-              value: substratumHistory?.areaHa && substratumHistory?.areaHa > 0 ? substratumHistory?.areaHa : '',
+              value:
+                substratumHistory?.areaHa && substratumHistory?.areaHa > 0
+                  ? numberFormatter.format(substratumHistory?.areaHa)
+                  : '',
             },
             { key: strings.PLANTING_COMPLETE, value: substratum?.plantingCompleted ? strings.YES : strings.NO },
           ];
@@ -278,7 +286,7 @@ function PlantingSiteMapView({ search }: PlantingSiteMapViewProps): JSX.Element 
         return null;
       }
     },
-    [plantingSite, selectedHistory, timeZone]
+    [numberFormatter, plantingSite, selectedHistory, timeZone]
   );
 
   if (!plantingSite?.boundary) {

@@ -1,18 +1,15 @@
 import React, { type JSX } from 'react';
 
 import { Box, Typography } from '@mui/material';
-import { RendererProps, TableRowType } from '@terraware/web-components';
-import { Textfield } from '@terraware/web-components';
+import { RendererProps, TableRowType, Textfield } from '@terraware/web-components';
 
 import Link from 'src/components/common/Link';
 import CellRenderer from 'src/components/common/table/TableCellRenderer';
 import { APP_PATHS } from 'src/constants';
-import { useUser } from 'src/providers';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 export default function WithdrawalBatchesCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
-  const { user } = useUser();
-  const numberFormatter = useNumberFormatter(user?.locale);
+  const numberFormatter = useNumberFormatter();
   const { column, row, value, index, onRowClick } = props;
 
   const inputStyles = {

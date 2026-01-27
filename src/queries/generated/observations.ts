@@ -392,9 +392,9 @@ export type GenerateObservationSplatFileApiArg = {
   observationId: number;
   generateSplatRequestPayload: GenerateSplatRequestPayload;
 };
-export type GetObservationSplatFileApiResponse =
-  /** status 200 The requested operation succeeded. */
-  object | /** status 202 The video is still being processed and the model is not ready yet. */ object;
+export type GetObservationSplatFileApiResponse = /** status 200 The requested operation succeeded. */
+  | object
+  | /** status 202 The video is still being processed and the model is not ready yet. */ object;
 export type GetObservationSplatFileApiArg = {
   observationId: number;
   fileId: number;
@@ -948,6 +948,12 @@ export type MergeOtherSpeciesRequestPayload = {
   /** ID of the existing species that the Other species' recorded plants should be merged into. */
   speciesId: number;
 };
+export type GeometryCollection = {
+  type: 'GeometryCollection';
+} & GeometryBase & {
+    geometries: object[];
+    type: 'GeometryCollection';
+  };
 export type LineString = {
   type: 'LineString';
 } & GeometryBase & {
@@ -971,12 +977,6 @@ export type MultiPolygon = {
 } & GeometryBase & {
     coordinates: number[][][][];
     type: 'MultiPolygon';
-  };
-export type GeometryCollection = {
-  type: 'GeometryCollection';
-} & GeometryBase & {
-    geometries: (GeometryCollection | LineString | MultiLineString | MultiPoint | MultiPolygon | Point | Polygon)[];
-    type: 'GeometryCollection';
   };
 export type Geometry = GeometryCollection | LineString | MultiLineString | MultiPoint | MultiPolygon | Point | Polygon;
 export type AssignedPlotPayload = {

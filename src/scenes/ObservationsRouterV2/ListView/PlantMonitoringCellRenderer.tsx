@@ -1,5 +1,6 @@
 import React, { type JSX } from 'react';
 
+import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import TableRowPopupMenu from 'src/components/common/table/TableRowPopupMenu';
@@ -32,6 +33,21 @@ export default function PlantMonitoringCellRenderer(props: RendererProps<TableRo
             {value as string}
           </Link>
         }
+      />
+    );
+  }
+
+  if (
+    column.key === 'totalLive' ||
+    column.key === 'totalPlants' ||
+    column.key === 'totalSpecies' ||
+    column.key === 'plantingDensity'
+  ) {
+    return (
+      <CellRenderer
+        {...props}
+        sx={textStyles}
+        value={typeof value === 'number' ? <FormattedNumber value={value} /> : undefined}
       />
     );
   }

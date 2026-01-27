@@ -28,6 +28,9 @@ module.exports = {
       return middlewares;
     },
   }),
+  eslint: {
+    enable: false,
+  },
   webpack: {
     configure: (webpackConfig) => {
       webpackConfig.plugins.push(

@@ -21,6 +21,7 @@ import { MapService } from 'src/services';
 import strings from 'src/strings';
 import { MapData, MapEntity, MapSourceProperties } from 'src/types/Map';
 import { MultiPolygon } from 'src/types/Tracking';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 import { useParticipantProjectData } from './ParticipantProjectContext';
 
@@ -36,6 +37,7 @@ const ProjectProfileGisMaps = () => {
   const [plantingSitesData, setPlantingSitesData] = useState<FeatureCollection<MultiPolygon>>();
   const [boundariesData, setBoundariesData] = useState<FeatureCollection<MultiPolygon>>();
   const { activeLocale } = useLocalization();
+  const numberFormatter = useNumberFormatter();
   const [stratumOrSite, setStratumOrSite] = useState<StratumOrSiteOption>();
   const [selectedArea, setSelectedArea] = useState<string>();
   const [showSiteMap, setShowSiteMap] = useState(false);
@@ -381,7 +383,10 @@ const ProjectProfileGisMaps = () => {
         });
         tooltipProperties.push({
           key: strings.AREA_HA,
-          value: selectedSubstratum && 'totalArea' in selectedSubstratum ? String(selectedSubstratum.totalArea) : '',
+          value:
+            selectedSubstratum && 'totalArea' in selectedSubstratum
+              ? numberFormatter.format(selectedSubstratum.totalArea)
+              : '',
         });
       }
 
@@ -389,7 +394,8 @@ const ProjectProfileGisMaps = () => {
         const selectedStratum = filteredSiteData?.stratum?.entities?.find((ent: MapEntity) => ent.id === properties.id);
         tooltipProperties.push({
           key: strings.AREA_HA,
-          value: selectedStratum && 'totalArea' in selectedStratum ? String(selectedStratum.totalArea) : '',
+          value:
+            selectedStratum && 'totalArea' in selectedStratum ? numberFormatter.format(selectedStratum.totalArea) : '',
         });
       }
 
@@ -397,7 +403,7 @@ const ProjectProfileGisMaps = () => {
         const siteEntity = filteredSiteData?.site?.entities?.[0];
         tooltipProperties.push({
           key: strings.AREA_HA,
-          value: siteEntity && 'totalArea' in siteEntity ? String(siteEntity.totalArea) : '',
+          value: siteEntity && 'totalArea' in siteEntity ? numberFormatter.format(siteEntity.totalArea) : '',
         });
       }
 
@@ -405,7 +411,7 @@ const ProjectProfileGisMaps = () => {
         <MapTooltip title={properties.name} subtitleColor={theme.palette.TwClrTxt} properties={tooltipProperties} />
       );
     },
-    [filteredSiteData, theme.palette]
+    [filteredSiteData, numberFormatter, theme.palette]
   );
 
   return (
