@@ -53,12 +53,13 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
   } = props;
 
   const { strings } = useLocalization();
-  const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const navigate = useSyncNavigate();
+  const snackbar = useSnackbar();
+
   const { sessionFilters, setSessionFilters } = useSessionFilters(origin.toLowerCase());
+  const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const [withdrawTooltip, setWithdrawTooltip] = useState<string>();
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
-  const snackbar = useSnackbar();
 
   // Sync query filters into view
   useEffect(() => {
