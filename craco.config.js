@@ -31,18 +31,6 @@ module.exports = {
   eslint: {
     enable: false,
   },
-  babel: {
-    loaderOptions: {
-      presets: [
-        [
-          '@babel/preset-env',
-          {
-            exclude: ['@babel/plugin-transform-exponentiation-operator'],
-          },
-        ],
-      ],
-    },
-  },
   webpack: {
     configure: (webpackConfig) => {
       webpackConfig.plugins.push(
@@ -51,27 +39,6 @@ module.exports = {
           resourceRegExp: /^sync-ammo$/,
         })
       );
-
-      // Find the oneOf rule and modify it to handle playcanvas specially
-      webpackConfig.module.rules.forEach((rule) => {
-        if (rule.oneOf) {
-          // Add a rule at the beginning of oneOf to handle playcanvas with esbuild
-          rule.oneOf.unshift({
-            test: /\.js$/,
-            include: /[\\/]node_modules[\\/]playcanvas[\\/]/,
-            use: [
-              {
-                loader: require.resolve('esbuild-loader'),
-                options: {
-                  loader: 'js',
-                  target: 'es2017',
-                },
-              },
-            ],
-          });
-        }
-      });
-
       return webpackConfig;
     },
     snapshot: {
@@ -85,9 +52,6 @@ module.exports = {
     {
       plugin: CracoEsbuildPlugin,
       options: {
-        esbuildLoaderOptions: {
-          target: 'es2017',
-        },
         esbuildJestOptions: { loaders: { '.tsx': 'tsx' } },
         esbuildMinimizerOptions: {
           target: 'es2017',
