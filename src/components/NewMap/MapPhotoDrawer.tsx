@@ -5,14 +5,15 @@ import { Box } from '@mui/material';
 import MapDrawerTable, { MapDrawerTableRow } from 'src/components/MapDrawerTable';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
+import useBoolean from 'src/hooks/useBoolean';
 import { useLocalization } from 'src/providers';
 import { ObservationSplatPayload, useGetObservationResultsQuery } from 'src/queries/generated/observations';
+import VirtualPlotModal from 'src/scenes/ObservationsRouterV2/SingleView/PlantMonitoring/MonitoringPlot/VirtualPlotModal';
 import { ObservationMonitoringPlotPhotoWithGps } from 'src/types/Observations';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 const PHOTO_URL = '/api/v1/tracking/observations/:observationId/plots/:monitoringPlotId/photos/:fileId';
-const SPLAT_URL = '/api/v1/tracking/observations/:observationId/splats/:fileId';
 
 type MapPhotoDrawerProps = {
   monitoringPlotId: number;
@@ -31,6 +32,7 @@ const MapPhotoDrawer = ({
 
   const { format } = useNumberFormatter();
   const { data } = useGetObservationResultsQuery({ observationId });
+  const [virtualPlotOpen, , setVirtualPlotOpenTrue, setVirtualPlotOpenFalse] = useBoolean(false);
 
   const photoUrl = useMemo(() => {
     if (!photo) {
@@ -40,13 +42,6 @@ const MapPhotoDrawer = ({
       .replace(':monitoringPlotId', `${monitoringPlotId}`)
       .replace(':fileId', `${photo.fileId}`);
   }, [observationId, monitoringPlotId, photo]);
-
-  const splatUrl = useMemo(() => {
-    if (!splat) {
-      return undefined;
-    }
-    return SPLAT_URL.replace(':observationId', `${observationId}`).replace(':fileId', `${splat.fileId}`);
-  }, [observationId, splat]);
 
   const result = useMemo(() => {
     return data?.observation;
@@ -170,19 +165,24 @@ const MapPhotoDrawer = ({
         <MapDrawerTable rows={rows} />
       </Box>
     );
-  } else if (splat && splatUrl) {
+  } else if (splat) {
     return (
-      <Box display={'flex'} flexDirection={'column'} width={'100%'} gap={2}>
-        <MapDrawerTable rows={rows} />
-        {/* TODO: render a preview image  */}
-        <Button
-          id='visit-virtual-plot'
-          label={strings.VISIT_VIRTUAL_PLOT}
-          onClick={() => window.open(splatUrl, '_blank')}
-          priority='primary'
-          size='medium'
-        />
-      </Box>
+      <>
+        {virtualPlotOpen && monitoringPlotId && (
+          <VirtualPlotModal observationId={observationId} fileId={splat.fileId} onClose={setVirtualPlotOpenFalse} />
+        )}
+        <Box display={'flex'} flexDirection={'column'} width={'100%'} gap={2}>
+          <MapDrawerTable rows={rows} />
+          {/* TODO: render a preview image  */}
+          <Button
+            id='visit-virtual-plot'
+            label={strings.VISIT_VIRTUAL_PLOT}
+            onClick={setVirtualPlotOpenTrue}
+            priority='primary'
+            size='medium'
+          />
+        </Box>
+      </>
     );
   }
 

@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 
+import isEnabled from 'src/features';
 import { useLocalization } from 'src/providers';
 
 import { MapMultiSelectLegendGroup } from './MapLegend';
@@ -9,6 +10,7 @@ const usePlotPhotosMapLegend = (disabled?: boolean) => {
   const { strings } = useLocalization();
   const [plotPhotosVisible, setPlotPhotosVisible] = useState<boolean>(false);
   const [virtualPlotVisible, setVirtualPlotVisible] = useState<boolean>(false);
+  const isVirtualPlotsEnabled = isEnabled('Virtual Monitoring Plots');
 
   const { plotPhotoStyle, virtualPlotStyle } = useMapFeatureStyles();
   const plotPhotosLegendGroup = useMemo((): MapMultiSelectLegendGroup => {
@@ -22,19 +24,24 @@ const usePlotPhotosMapLegend = (disabled?: boolean) => {
           style: plotPhotoStyle,
           visible: plotPhotosVisible,
         },
-        {
-          id: 'virtual-plot',
-          label: strings.VIRTUAL_PLOTS,
-          setVisible: setVirtualPlotVisible,
-          style: virtualPlotStyle,
-          visible: virtualPlotVisible,
-        },
+        ...(isVirtualPlotsEnabled
+          ? [
+              {
+                id: 'virtual-plot',
+                label: strings.VIRTUAL_PLOTS,
+                setVisible: setVirtualPlotVisible,
+                style: virtualPlotStyle,
+                visible: virtualPlotVisible,
+              },
+            ]
+          : []),
       ],
       title: strings.PHOTOS,
       type: 'multi-select',
     };
   }, [
     disabled,
+    isVirtualPlotsEnabled,
     plotPhotoStyle,
     plotPhotosVisible,
     virtualPlotStyle,
