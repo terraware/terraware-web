@@ -1,4 +1,13 @@
 {
   "plugins": ["istanbul"],
-  "presets": ["@babel/preset-typescript", ["@babel/preset-env", { "targets": { "node": "current" } }]]
+  "presets": [
+    "@babel/preset-typescript",
+    [
+      "@babel/preset-env",
+      {
+        "targets": { "node": "current" },
+        "exclude": ["@babel/plugin-transform-exponentiation-operator"]
+      }
+    ]
+  ]
 }
