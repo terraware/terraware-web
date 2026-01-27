@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/86</span>
+                <span class='fraction'>0/83</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/75</span>
+                <span class='fraction'>0/74</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/22</span>
+                <span class='fraction'>0/20</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/79</span>
+                <span class='fraction'>0/76</span>
             </div>
         
             
@@ -299,6 +299,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -308,11 +309,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -431,15 +427,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -454,105 +454,100 @@ import { Box } from '@m<span class="cstat-no" title="statement not covered" >ui/
 import MapDrawerTab<span class="cstat-no" title="statement not covered" >le, { MapDrawerTableRo</span>w } from 'src/components/MapDrawerTable';
 import Button from <span class="cstat-no" title="statement not covered" >'src/components/common/button/Bu</span>tton';
 import { APP_PA<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >TH</span>S } from 'src/constants';</span>
-im<span class="cstat-no" title="statement not covered" >port { useLocalization } from 'src/providers';</span>
-impo<span class="cstat-no" title="statement not covered" >rt { ObservationSplatPayload, useGetObservationResultsQuery } f</span>rom 'src/queries/generated/observations';
-import { ObservationMonitoringPlotPhotoWithGps } from 'src/types/Observations';
-import { getShortD<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >at</span>e } from 'src/utils/dateFormatter';</span>
-im<span class="cstat-no" title="statement not covered" >port { useNumberFormatter } from 'src/utils/useNumberFormatter';</span>
+im<span class="cstat-no" title="statement not covered" >port useBoolean from 'src/hooks/useBoolean';</span>
+impo<span class="cstat-no" title="statement not covered" >rt { useLocalization } from 'src/providers';</span>
+import { ObservationSplatPayload, useGetObservationResultsQuery } from 'src/queries/generated/observations';
+import VirtualPlot<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Mo</span>dal from 'src/scenes/ObservationsRouterV2/SingleView/PlantMonitoring/MonitoringPlot/VirtualPlotModal';</span>
+im<span class="cstat-no" title="statement not covered" >port { ObservationMonitoringPlotPhotoWithGps } from 'src/types/Observations';</span>
+impo<span class="cstat-no" title="statement not covered" >rt { getShortDate } from 'src/utils/dateFormatter';</span>
+import<span class="cstat-no" title="statement not covered" > { useNumberFormatter } from 'src/utils/useNumberFormatter';</span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+const PHOTO_URL = '/api/v1/tracking/observations/:observationId/plots/:monitoringPlotId/photos/:fileId';
 <span class="cstat-no" title="statement not covered" ></span>
-const <span class="cstat-no" title="statement not covered" >PHOTO_URL = '/api/v1/tracking/observations/:observationId/plots/:monitoringPlotId/photos/:fileId';</span>
-const SP<span class="cstat-no" title="statement not covered" >LAT_URL = '/api/v1/trackin<span class="fstat-no" title="function not covered" >g/</span>obse<span class="cstat-no" title="statement not covered" >rvations/:</span>observationId/splats/:fileId';</span>
-&nbsp;
-ty<span class="cstat-no" title="statement not covered" >pe MapPhoto</span>DrawerProps = {
-  monitoringPlotId: number;
-  observationI<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >d:</span> number;<span class="cstat-no" title="statement not covered" ></span></span>
+type MapPhotoDrawerProps = {
+  monitoringPl<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ot</span>Id: number;<span class="cstat-no" title="statement not covered" ></span></span>
+  observationId: number;
   photo?: ObservationMonitoringPlotPhotoWithGps;
   splat?: ObservationSplatPayload;
 };
 &nbsp;
 const MapPhotoDrawer = ({
   monitoringPlotId,
-  observationId,
-  photo,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  splat,<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >}: MapPhotoDrawerProps): JSX.Element | undefined =&gt; {</span>
-  const { a<span class="fstat-no" title="function not covered" >ct</span>iveL<span class="cstat-no" title="statement not covered" >ocale, strings</span> } = useLocalization();
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  const { format } = useNumberFormatter();</span>
-  const { data } = <span class="cstat-no" title="statement not covered" >useGetObservationResultsQu</span>ery({ observationId });
+  observationId,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  photo,<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >  splat,</span>
+}: MapPhoto<span class="fstat-no" title="function not covered" >Dr</span>awer<span class="cstat-no" title="statement not covered" >Props): JSX.El</span>ement | undefined =&gt; {
+  const { activeLocale, strings } = useLocalization();
 <span class="cstat-no" title="statement not covered" ></span>
-  const photoUrl = useMemo((<span class="cstat-no" title="statement not covered" >) =&gt; {</span>
+  const { format } <span class="cstat-no" title="statement not covered" >= useNumberFormatter();</span>
+  const { data } = use<span class="cstat-no" title="statement not covered" >GetObservationResultsQuer</span>y({ observationId });
+  const [virtualPlotOpen, , <span class="cstat-no" title="statement not covered" >setVirtualPlotOpenTrue, setVirtualPlotOpenFalse] =</span> useBoolean(false);
+<span class="cstat-no" title="statement not covered" ></span>
+  const photoUrl = useM<span class="cstat-no" title="statement not covered" >emo(() =&gt; {</span>
     if (!photo) {<span class="cstat-no" title="statement not covered" ></span>
       return undefined;<span class="cstat-no" title="statement not covered" ></span>
     }<span class="cstat-no" title="statement not covered" ></span>
-    return PHOTO_URL.repla<span class="cstat-no" title="statement not covered" >ce(':observationId', `${observationId}`)</span>
+    return PHOTO_URL.replace('<span class="cstat-no" title="statement not covered" >:observationId', `${observationId}`)</span>
       .replace(':monitoring<span class="cstat-no" title="statement not covered" >PlotId', `${monitoringPlotId}`)</span>
       .replace(':fileId', `${pho<span class="cstat-no" title="statement not covered" >to.fileId}`);</span>
   }, [observationI<span class="cstat-no" title="statement not covered" >d, monitoringPlotId, photo]);</span>
-<span class="cstat-no" title="statement not covered" ></span>
-  const splatUrl = useM<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >em</span>o(() =&gt; {</span>
-    if (!splat) {
-      return undefined;
-    }
-    return SPLAT_URL.replace(':observationId', `${observationId}`).replace(':fileId', `${splat.fileId}`);
-  }, [observationId, splat]);
-<span class="cstat-no" title="statement not covered" ></span>
-  const result = useM<span class="cstat-no" title="statement not covered" >emo(() =&gt; {</span>
-    return data?.ob<span class="cstat-no" title="statement not covered" >servation;</span>
-  }, [data?.observa<span class="cstat-no" title="statement not covered" >tion]);<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" ></span>
-  cons<span class="cstat-no" title="statement not covered" >t observationUr</span>l = useMemo(() =&gt; {
-    if (result) {
-<span class="cstat-no" title="statement not covered" >      return APP_PATHS.OBSERVATION_DETAILS.replace(':plantingSiteId', `${result.plantingSiteId}`).replace(</span>
-        ':observationId',
-        `${result.o<span class="cstat-no" title="statement not covered" >bservationId}`<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >      );</span>
-    }<span class="cstat-no" title="statement not covered" ></span>
-  }, [result]);
-<span class="cstat-no" title="statement not covered" ></span>
-  const monitoringPlot = useMemo(() =&gt; {
-    const monitor<span class="cstat-no" title="statement not covered" >ingPlots =<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >      result?.strata.flatMap((stratum) =&gt; stratum.sub</span>strata).flatMap((substratum) =&gt; substratum.monitoringPlots) ?? [];
-    const adHocPlots = result?.adHocPlot ? [result.adHocPlot] : [];
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >    return [...monitoringPlots, ...adHocPlots].find((plot) =&gt; plot.monitoringPlotId === monitoringPlotId);</span>
-  }, [<span class="cstat-no" title="statement not covered" >monitoringPlotId, result?.adHocPlot, result?.strata]);</span>
+  const result = useMemo(() =&gt; {
+    return data?.observation;
+  }, [data?.observation]);
 &nbsp;
+  const observationUrl = useMemo(() =&gt; {
+    if (result) {<span class="cstat-no" title="statement not covered" ></span>
+      return APP_PATH<span class="cstat-no" title="statement not covered" >S.OBSERVATION_DETAILS.replace(':plantingSiteId', `${</span>result.plantingSiteId}`).replace(
+        ':observati<span class="cstat-no" title="statement not covered" >onId',</span>
+        `${result.observationId}`<span class="cstat-no" title="statement not covered" ></span>
+      );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    }</span>
+  }, [<span class="cstat-no" title="statement not covered" >result]);</span>
+&nbsp;
+  co<span class="cstat-no" title="statement not covered" >nst monitoringPlot = useMemo(() =&gt; {</span>
+    const monitoringPlots =
+      result?.str<span class="cstat-no" title="statement not covered" >ata.flatMap((stratum) =&gt; s<span class="fstat-no" title="function not covered" >tr</span>atum.substrata).flatMap((substratum) =&gt; substratum.monitoringPlots) ?? [];</span>
+<span class="cstat-no" title="statement not covered" >    const adHocPlots = result?.adHocPlot ? [result.ad</span>HocPlot] : [];
+&nbsp;
+    return [...monitoring<span class="cstat-no" title="statement not covered" >Plots, ...adHocPlots].find<span class="fstat-no" title="function not covered" >((</span>plot) =&gt; plot.monitoringPlotId === monitoringPlotId);</span>
+  },<span class="cstat-no" title="statement not covered" > [monitoringPlotId, result?.adHocPlot, result?.strata]);</span>
+<span class="cstat-no" title="statement not covered" ></span>
   const observer = useMemo(() =&gt; {
     return monitoringPlot?.claimedByName;
   }, [monitoringPlot?.claimedByName]);
 &nbsp;
-  const formatGPS = useCa<span class="cstat-no" title="statement not covered" >llback(<span class="fstat-no" title="function not covered" ></span></span>
-    (lon: number, lat: number): string =&gt; {
-      const latHemisphere = <span class="cstat-no" title="statement not covered" >lat &gt;= 0 ? 'N' : 'S';<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
-      const lonHemisphe<span class="cstat-no" title="statement not covered" >re = lon &gt;= 0 ? 'E' : 'W';</span>
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-      const latAbs = Math.abs(lat).toFixed(4);
-      const lonAbs <span class="cstat-no" title="statement not covered" >= Math.abs(lon).toFixed(4)<span class="fstat-no" title="function not covered" >;</span></span>
+  const formatGPS = useCallback(
+    (lon: number, lat: nu<span class="cstat-no" title="statement not covered" >mber): string =&gt; {<span class="fstat-no" title="function not covered" ></span></span>
+      const latHemisphere = lat &gt;= 0 ? 'N' : 'S';
+      const lonHemisphere = <span class="cstat-no" title="statement not covered" >lon &gt;= 0 ? 'E' : 'W';<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
 <span class="cstat-no" title="statement not covered" ></span>
-      const latFormatted = format(Number(latAbs));
-      const lonForma<span class="cstat-no" title="statement not covered" >tted = format(Number(lonAbs));</span>
-<span class="fstat-no" title="function not covered" ></span>
-      return `${latFormatted<span class="cstat-no" title="statement not covered" >}° ${latHemisphere}, </span>${lonFormatted}° ${lonHemisphere}`;
+<span class="cstat-no" title="statement not covered" >      const latAbs = Math.abs(lat).toFixed(4);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+      const lonAbs = Math.abs(lon).toFixed(4);
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >      const latFormatted = format(Number(latAbs));</span>
+      const lonFormatted = format(Number(lonAbs));
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" ></span>      return `${latFormatted}° ${latHemisphere}, ${lonFormatted}° ${lonHemisphere}`;
     },<span class="cstat-no" title="statement not covered" ></span>
     [format]<span class="cstat-no" title="statement not covered" ></span>
   );<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
   const rows = useMemo((): <span class="cstat-no" title="statement not covered" >MapDrawerTableRow[] =&gt; </span>{
-    if<span class="cstat-no" title="statement not covered" > (result &amp;&amp; photo) {</span>
-      const stratum = result.strata.find((_stratum) =&gt;
+    if (result &amp;&amp; photo) {<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >      const stratum = result.strata.find((_stratum) =&gt;</span>
         _stratum.substrata.some((substratum) =&gt;
           substratum.monitoringPlots.some((plot) =&gt; plot.monitoringPlotId === monitoringPlotId)
-        )<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-      );
-<span class="cstat-no" title="statement not covered" >      return [</span>
-        {<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" ></span>          key: strings<span class="cstat-no" title="statement not covered" >.OBSERVATION_DATE,</span>
-<span class="fstat-no" title="function not covered" >          va</span>lue: result.co<span class="cstat-no" title="statement not covered" >mpletedTime ? getShortDate(resul<span class="fstat-no" title="function not covered" >t.</span>complete<span class="cstat-no" title="statement not covered" >dTime, activeLocale) : strings.UNKNOWN,</span></span>
-          url: observationUrl,
-        },
+        )
+      );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+      return [
 <span class="cstat-no" title="statement not covered" >        {</span>
-          key: strings.OBSERVER_NAME,
+          key: strings<span class="cstat-no" title="statement not covered" >.OBSERVATION_DATE,</span>
+<span class="fstat-no" title="function not covered" ></span>          value: resul<span class="cstat-no" title="statement not covered" >t.completedTime ? getShortDate(result.completedTime, activeLocale) : strings.UNKNOWN,</span>
+<span class="fstat-no" title="function not covered" >          ur</span>l: observation<span class="cstat-no" title="statement not covered" >Url,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+        },
+        {
+<span class="cstat-no" title="statement not covered" >          key: strings.OBSERVER_NAME,</span>
           value: observer ?? strings.UNKNOWN,
         },
         {
@@ -570,9 +565,9 @@ const MapPhotoDrawer = ({
           key: strings.PLOT_TYPE,
           value: strings.VIRTUAL,
         },
-        {<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >          key: strings.STATUS,</span>
-          value: monitoringPlot.status,
+        {
+          k<span class="cstat-no" title="statement not covered" >ey: strings.STATUS,</span>
+<span class="cstat-no" title="statement not covered" >          value: monitoringPlot.status,</span>
         },
         {
           key: strings.PLANTS,
@@ -600,8 +595,8 @@ const MapPhotoDrawer = ({
     }
   }, [
     activeLocale,
-    fo<span class="cstat-no" title="statement not covered" >rmat,</span>
-    formatGPS,
+    format,
+    fo<span class="cstat-no" title="statement not covered" >rmatGPS,</span>
     monitoringPlot,
     monitoringPlotId,
     observationUrl,
@@ -615,23 +610,28 @@ const MapPhotoDrawer = ({
   if (photo &amp;&amp; photoUrl) {
     return (
       &lt;Box display={'flex'} flexDirection={'column'} width={'100%'}&gt;
-<span class="cstat-no" title="statement not covered" >        &lt;img src={`${photoUrl}?maxWidth=377`} /&gt;</span>
+        &lt;img src={`${photoUrl}?maxWidth=377`} /&gt;
 <span class="cstat-no" title="statement not covered" >        &lt;MapDrawerTable rows={rows} /&gt;</span>
-      &lt;/B<span class="cstat-no" title="statement not covered" >ox&gt;</span>
-<span class="cstat-no" title="statement not covered" >    );</span>
-  } else if (splat &amp;&amp; splatUrl) {
+<span class="cstat-no" title="statement not covered" >      &lt;/Box&gt;</span>
+    );<span class="cstat-no" title="statement not covered" ></span>
+  } <span class="cstat-no" title="statement not covered" >else if (splat) {</span>
     return (
-      &lt;Box display={'flex'} flexDirection={'column'} width={'100%'} gap={2}&gt;
-        &lt;MapDrawerTable rows={rows} /&gt;
-        {/* TODO:<span class="fstat-no" title="function not covered" > r</span>ende<span class="cstat-no" title="statement not covered" >r a preview image  */}</span>
-        &lt;Button
-          id='visit-virtual-plot'
-          label={strings.VISIT_VIRTUAL_PLOT}
-          onClick={() =&gt; window.open(splatUrl, '_blank')}
-          priority='primary'
-<span class="cstat-no" title="statement not covered" >          size='m</span>edium'
-        /&gt;
-      &lt;/Box&gt;<span class="cstat-no" title="statement not covered" ></span>
+      &lt;&gt;
+        {virtualPlotOpen &amp;&amp; monitoringPlotId &amp;&amp; (
+          &lt;VirtualPlotModal observationId={observationId} fileId={splat.fileId} onClose={setVirtualPlotOpenFalse} /&gt;
+        )}
+        &lt;Box display={'flex'} flexDirection={'column'} width={'100%'} gap={2}&gt;
+          &lt;MapDrawerTable rows={rows} /&gt;
+          {/* TODO: render a preview image  */}
+          &lt;Button
+            id='visit-virtual-plot'
+<span class="cstat-no" title="statement not covered" >            label</span>={strings.VISIT_VIRTUAL_PLOT}
+            onClick={setVirtualPlotOpenTrue}
+            priority<span class="cstat-no" title="statement not covered" >='primary'</span>
+            size='medium'
+          /&gt;
+        &lt;/Box&gt;
+      &lt;/&gt;
     );
   }
 &nbsp;
@@ -646,7 +646,7 @@ export default MapPhotoDrawer;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-27T19:20:17.932Z
+                at 2026-01-27T20:36:07.018Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
