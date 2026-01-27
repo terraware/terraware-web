@@ -1,3 +1,4 @@
+499de12295f Fix transpilation issue with exponents in playcanvas (#5133)
 41b53e77e67 Use virtual plot modal (#5132)
 8df7c6666c2 SW-4915: Inventory: Delete item at batch view level (#5131)
 c5013388ad8 Initial work to display virtual plots on observations map (#5116)
