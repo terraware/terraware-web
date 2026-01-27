@@ -13,10 +13,13 @@ import { useLocalization } from 'src/providers';
 import { OriginPage } from 'src/scenes/InventoryRouter/InventoryBatchView';
 import { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';
 import Search from 'src/scenes/InventoryRouter/Search';
+import { NurseryBatchService } from 'src/services';
 import { SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import { useSessionFilters } from 'src/utils/filterHooks/useSessionFilters';
+import useSnackbar from 'src/utils/useSnackbar';
 
 import InventoryCellRenderer from './InventoryCellRenderer';
+import DeleteBatchesModal from './view/DeleteBatchesModal';
 
 interface InventoryTableProps {
   allowSelectionProjectAssign?: boolean;
@@ -54,6 +57,8 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
   const navigate = useSyncNavigate();
   const { sessionFilters, setSessionFilters } = useSessionFilters(origin.toLowerCase());
   const [withdrawTooltip, setWithdrawTooltip] = useState<string>();
+  const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
+  const snackbar = useSnackbar();
 
   // Sync query filters into view
   useEffect(() => {
@@ -105,6 +110,21 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
       search: `?${searchParams}&source=${window.location.pathname}`,
     });
   };
+
+  const onCloseDeleteBatchesModal = useCallback(() => {
+    setOpenDeleteModal(false);
+  }, []);
+
+  const deleteSelectedBatches = useCallback(() => {
+    const promises = selectedRows.map((r) => NurseryBatchService.deleteBatch(r.id as number));
+    void Promise.allSettled(promises).then((deleteResults) => {
+      if (deleteResults.some((result) => result.status === 'rejected' || result?.value?.requestSucceeded === false)) {
+        snackbar.toastError();
+      }
+      reloadData?.();
+      setOpenDeleteModal(false);
+    });
+  }, [reloadData, selectedRows, snackbar]);
 
   const isSelectionWithdrawable = () => {
     // we are woring with 'any' type rows in this table
@@ -182,6 +202,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
 
   return (
     <>
+      <DeleteBatchesModal open={openDeleteModal} onClose={onCloseDeleteBatchesModal} onSubmit={deleteSelectedBatches} />
       <Box>
         <Search
           filters={filters}
@@ -210,6 +231,11 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                 showCheckbox={true}
                 showTopBar={true}
                 topBarButtons={[
+                  {
+                    buttonType: 'destructive',
+                    buttonText: strings.DELETE,
+                    onButtonClick: () => setOpenDeleteModal(true),
+                  },
                   ...(allowSelectionProjectAssign
                     ? [
                         <ProjectAssignTopBarButton
