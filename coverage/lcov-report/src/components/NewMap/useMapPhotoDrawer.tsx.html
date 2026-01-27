@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/22</span>
+                <span class='fraction'>0/26</span>
             </div>
         
             
@@ -125,7 +125,14 @@
 <a name='L60'></a><a href='#L60'>60</a>
 <a name='L61'></a><a href='#L61'>61</a>
 <a name='L62'></a><a href='#L62'>62</a>
-<a name='L63'></a><a href='#L63'>63</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L63'></a><a href='#L63'>63</a>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a>
+<a name='L66'></a><a href='#L66'>66</a>
+<a name='L67'></a><a href='#L67'>67</a>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -187,76 +194,90 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > useCallback, </span>useMemo, useState } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > useCallback, </span>useMemo, useState } from 'react';
 <span class="cstat-no" title="statement not covered" ></span>
-import { ObservationMon<span class="cstat-no" title="statement not covered" >itoringPlotPhotoWithGps } from '</span>src/types/Observations';
+import { ObservationSpl<span class="cstat-no" title="statement not covered" >atPayload } from 'src/queries/ge</span>nerated/observations';
+import { ObservationMoni<span class="cstat-no" title="statement not covered" >toringPlotPhotoWithGps } fr</span>om 'src/types/Observations';
 <span class="cstat-no" title="statement not covered" ></span>
-import { MapDrawerS<span class="cstat-no" title="statement not covered" >ize } from './MapDrawe</span>r';
-import MapDrawerPag<span class="cstat-no" title="statement not covered" >ination from './MapDrawerPaginat</span>ion';
-import MapPhoto<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Dr</span>awer from './MapPhotoDrawer';</span>
+import { MapDrawerS<span class="cstat-no" title="statement not covered" >ize } from './MapDrawer';</span>
+import MapDrawe<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >rP</span>agination from './MapDrawerPagination';</span>
+im<span class="cstat-no" title="statement not covered" >port MapPhotoDrawer from './MapPhotoDrawer';</span>
 <span class="cstat-no" title="statement not covered" ></span>
-expo<span class="cstat-no" title="statement not covered" >rt type PlotPhoto = {</span>
-  observationId: number;
-  monitoringPlotId<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >: </span>number;</span>
-<span class="cstat-no" title="statement not covered" >  photo: ObservationMonitoringPlotPhotoWithGps;</span>
+export type PlotPhoto = {
+  observationId: n<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >um</span>ber;</span>
+<span class="cstat-no" title="statement not covered" >  monitoringPlotId: number;</span>
+  ph<span class="cstat-no" title="statement not covered" >oto: ObservationMonitoringPlotPhotoWithGps;</span>
 };<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span>
-const us<span class="cstat-no" title="statement not covered" >eMapPhotoDrawer = () =&gt; {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  const [selectedPhotos, setSelectedPhotos] = useState&lt;PlotPhoto[]&gt;([]);
-<span class="cstat-no" title="statement not covered" >  const [phot</span>oDrawerPage, setPhotoDrawerPage] = useState&lt;number&gt;(1);
+export t<span class="cstat-no" title="statement not covered" >ype PlotSplat = {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  observationId: number;
+<span class="cstat-no" title="statement not covered" >  monitoringP</span>lotId: number;
+  splat: ObservationSplatPayload;
+};<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 &nbsp;
-  const photoD<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ra</span>werSize: MapDrawerSize = 'me<span class="cstat-no" title="statement not covered" >dium';</span></span>
+const useMapPhotoDrawer = () =&gt; {
+  const [selectedPhotos, setSelectedPhotos] = useState&lt;(PlotPhoto | PlotSplat)[]&gt;([]);
+  const [photoDrawerPage, setPhotoDrawerPage] = useState&lt;number&gt;(1);
+&nbsp;
+  const photoDrawerSize: MapDrawerSize = 'medium';
   const photoDrawerHeader = useMemo(() =&gt; {
-    if (selectedPhotos.length &gt; 1) {
-      return (
-        &lt;MapDrawerPagination
-          drawerSize={photoDrawerSize}
-          page={photoDrawerPage}
-          setPage={setPhotoDrawerPage}
-          totalPage<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >s=</span>{select<span class="cstat-no" title="statement not covered" >edPhotos.length}</span></span>
-        /&gt;<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >      );</span>
-    } else <span class="fstat-no" title="function not covered" >{<span class="cstat-no" title="statement not covered" ></span></span>
-      return undefined;
-<span class="cstat-no" title="statement not covered" >    }</span>
-  }, [photoDrawerPa<span class="cstat-no" title="statement not covered" >ge, photoDrawerSize, selec</span>tedPhotos.length]);
-<span class="cstat-no" title="statement not covered" ></span>
-  const photoDrawerContent =<span class="cstat-no" title="statement not covered" > useMemo(() =&gt; {</span>
-    if (selectedPhotos.len<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >gt</span>h &gt; 0) {</span>
-      const selectedPhoto = selectedPhotos[pho<span class="cstat-no" title="statement not covered" >toDrawerPage - 1];</span>
+    if (selectedPho<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >to</span>s.lengt<span class="cstat-no" title="statement not covered" >h &gt; 1) {</span></span>
       return (<span class="cstat-no" title="statement not covered" ></span>
-        &lt;MapPhotoDrawer<span class="cstat-no" title="statement not covered" ></span>
-          monitoringPlotId={<span class="cstat-no" title="statement not covered" >selectedPhoto.monitoringPl<span class="fstat-no" title="function not covered" >ot</span>Id}</span>
-<span class="cstat-no" title="statement not covered" >          observationId={selectedPhoto.observationId}</span>
-<span class="cstat-no" title="statement not covered" >          photo={selectedPhoto.photo}</span>
+<span class="cstat-no" title="statement not covered" >        &lt;MapDrawerPagination</span>
+          d<span class="fstat-no" title="function not covered" >ra</span>werS<span class="cstat-no" title="statement not covered" >ize={photoDraw</span>erSize}
+          page={photoDrawerPage}
+<span class="cstat-no" title="statement not covered" >          setPage={setPhotoDrawerPage}</span>
+          totalPage<span class="cstat-no" title="statement not covered" >s={selectedPhotos.length}</span>
+        /&gt;<span class="cstat-no" title="statement not covered" ></span>
+      );<span class="cstat-no" title="statement not covered" ></span>
+    } else {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+      return undefined;<span class="cstat-no" title="statement not covered" ></span>
+    }<span class="cstat-no" title="statement not covered" ></span>
+  }, [photoDrawerPage, pho<span class="cstat-no" title="statement not covered" >toDrawerS</span>ize, selectedPhotos.length]);
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  co<span class="cstat-no" title="statement not covered" >nst photoDrawerContent = useMemo(() =&gt; {</span>
+    if<span class="cstat-no" title="statement not covered" > (selectedPhotos.length &gt; 0) {</span>
+      const selectedPhoto = selectedPhotos[photoDrawerPage - 1];
+      return (
+        &lt;MapPhotoDrawer
+          monitoringPlotId={selectedPhoto.monitoringPlotId}
+          observationId={selectedPhoto.observationId}
+          photo={'photo' in selectedPhoto ? selectedPhoto.photo : undefined}
+          splat={'splat' in selectedPhoto ? selectedPhoto.splat : undefined}
         /&gt;
       );
-    }
+    }<span class="cstat-no" title="statement not covered" ></span>
   }, [photoDrawerPage, selectedPhotos]);
 &nbsp;
-  const selectPhotos = useCallback((photos: PlotPhoto[]) =&gt; {
-    setSelectedPhotos(photos);
-    setPhotoDrawerPage(1);
-  }, []);
-<span class="cstat-no" title="statement not covered" ></span>
+  const selectPhotos = useCal<span class="cstat-no" title="statement not covered" >lback((photos: (PlotPhoto <span class="fstat-no" title="function not covered" >| </span>PlotSplat)[]) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    setSelectedPhotos(photos);</span>
+    setPhotoDrawerPage(1);<span class="cstat-no" title="statement not covered" ></span>
+  }, [<span class="cstat-no" title="statement not covered" >]);</span>
+&nbsp;
   return {
     photoDrawerContent,
-    photoDrawerHeader,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >    photoDrawerSize,</span>
-    selectedPhotos,<span class="cstat-no" title="statement not covered" ></span>
-    se<span class="cstat-no" title="statement not covered" >lectPhotos,</span>
+    photoDrawerHeader,
+    photoDrawerSize,
+    selectedPhotos,
+    selectPhotos,
   };
 };
 &nbsp;
-export default useMapPhotoDrawer;
-&nbsp;</pre></td></tr></table></pre>
+export default useMapPh<span class="cstat-no" title="statement not covered" >otoDrawer;<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-27T08:54:39.366Z
+                at 2026-01-27T19:11:44.617Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
