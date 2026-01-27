@@ -8,7 +8,8 @@ However, sometimes it's useful to run a local frontend dev environment but send 
 a remote backend, e.g., if you want to test how a UI change works with a real-world data set.
 Here's how to set that up using Docker Desktop on MacOS.
 
-1. From the directory of this readme, generate a self-signed certificate. The following command should work. You'll only need
+1. From the directory of this readme, generate a self-signed certificate. The following command should work. You'll only
+   need
    to do this once.
    1. You might need to change `--` to `-` for all params in this request if it fails
 
@@ -64,8 +65,10 @@ docker build --no-cache -t terraware-web-local-1 .
 docker run --env SERVER_URL=https://staging.yourdomain.com -p 80:80 -v "$(pwd)/build:/usr/share/nginx/html" terraware-web-local-1
 ```
 
-A container with a production build of the React app is now running. The next step is to turn on the remote backend proxy, but we
-need to modify the SERVER_URL so that it points to our running FE app container. Add (or uncomment) these lines to the `local-https`
+A container with a production build of the React app is now running. The next step is to turn on the remote backend
+proxy, but we
+need to modify the SERVER_URL so that it points to our running FE app container. Add (or uncomment) these lines to the
+`local-https`
 service in the `docker-compose.yml` in this directory:
 
 ```
@@ -73,8 +76,12 @@ service in the `docker-compose.yml` in this directory:
    - 'SERVER_URL=http://host.docker.internal'
 ```
 
-Now, when you visit https://localhost, we will load the FE through the production-build container. This application will attempt to
-resolve any API requests to the `SERVER_URL` provided to the running `terraware-web-local-1`. The request flow should look like this:
+And then run `docker compose up -d`.
+
+Now, when you visit https://localhost, we will load the FE through the production-build container. This application will
+attempt to
+resolve any API requests to the `SERVER_URL` provided to the running `terraware-web-local-1`. The request flow should
+look like this:
 
 ```
 browser ----> localhost
@@ -88,4 +95,5 @@ browser ----> localhost
 staging terraware <----- remote-backend_local-https_1
 ```
 
-If you need to make changes to the production build, simply run `yarn build` again and your changes will be synced into the running `terraware-web-local-1` container
+If you need to make changes to the production build, simply run `yarn build` again and your changes will be synced into
+the running `terraware-web-local-1` container
