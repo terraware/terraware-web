@@ -192,8 +192,8 @@ const ObservationStatsDrawer = ({
   }
 
   // Hardcoded values for testing
-  const HARDCODED_OBSERVATION_ID = 233;
-  const HARDCODED_FILE_ID = 6731;
+  const HARDCODED_OBSERVATION_ID = 501;
+  const HARDCODED_FILE_ID = 6736;
 
   return (
     <>
