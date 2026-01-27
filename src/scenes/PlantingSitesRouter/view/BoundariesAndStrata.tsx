@@ -12,7 +12,6 @@ import MapDateSelect from 'src/components/common/MapDateSelect';
 import MapLayerSelect, { MapLayer } from 'src/components/common/MapLayerSelect';
 import PlantingSiteMapLegend from 'src/components/common/PlantingSiteMapLegend';
 import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
-import { useLocalization } from 'src/providers';
 import { useGetPlantingSiteQuery, useLazyGetPlantingSiteHistoryQuery } from 'src/queries/generated/plantingSites';
 import { useListPlantingSiteHistoryIdsQuery } from 'src/queries/search/plantingSiteHistories';
 import { MapService } from 'src/services';
@@ -40,8 +39,7 @@ export default function BoundariesAndStrata({
 }: BoundariesAndStrataProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
-  const { activeLocale } = useLocalization();
-  const numberFormatter = useNumberFormatter(activeLocale);
+  const numberFormatter = useNumberFormatter();
 
   const params = useParams<{ plantingSiteId: string }>();
   const plantingSiteId = Number(params.plantingSiteId);
@@ -123,8 +121,7 @@ type PlantingSiteMapViewProps = {
 };
 
 function PlantingSiteMapView({ search }: PlantingSiteMapViewProps): JSX.Element | null {
-  const { activeLocale } = useLocalization();
-  const numberFormatter = useNumberFormatter(activeLocale);
+  const numberFormatter = useNumberFormatter();
   const { isDesktop } = useDeviceInfo();
   const [searchStratumEntities, setSearchStratumEntities] = useState<MapEntityId[]>([]);
   const [includedLayers, setIncludedLayers] = useState<MapLayer[]>(['Planting Site', 'Strata', 'Monitoring Plots']);

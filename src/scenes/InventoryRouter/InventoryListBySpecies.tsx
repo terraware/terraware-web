@@ -6,7 +6,7 @@ import { TableColumnType } from '@terraware/web-components';
 import Card from 'src/components/common/Card';
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import { DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
-import { useLocalization, useOrganization, useUser } from 'src/providers';
+import { useLocalization, useOrganization } from 'src/providers';
 import { InventoryFiltersType } from 'src/scenes/InventoryRouter/InventoryFilter';
 import InventoryTable from 'src/scenes/InventoryRouter/InventoryTable';
 import {
@@ -29,8 +29,7 @@ type InventoryListBySpeciesProps = {
 export default function InventoryListBySpecies({ setReportData }: InventoryListBySpeciesProps) {
   const { strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
-  const { user } = useUser();
-  const numberFormatter = useNumberFormatter(user?.locale);
+  const numberFormatter = useNumberFormatter();
   const theme = useTheme();
 
   const [filters, setFilters] = useForm<InventoryFiltersType>({});

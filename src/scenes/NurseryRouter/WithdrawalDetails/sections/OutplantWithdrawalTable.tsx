@@ -3,7 +3,6 @@ import React, { type JSX, useMemo } from 'react';
 import { TableColumnType } from '@terraware/web-components';
 
 import Table from 'src/components/common/table';
-import { useUser } from 'src/providers';
 import strings from 'src/strings';
 import { Batch, NurseryWithdrawal } from 'src/types/Batch';
 import { Species } from 'src/types/Species';
@@ -35,8 +34,7 @@ export default function OutplantWithdrawalTable({
   batches,
   withdrawal,
 }: OutplantWithdrawalTableProps): JSX.Element {
-  const { user } = useUser();
-  const numberFormatter = useNumberFormatter(user?.locale);
+  const numberFormatter = useNumberFormatter();
 
   type BatchesRow = {
     name?: string;

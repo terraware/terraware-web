@@ -20,8 +20,7 @@ import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import StatsCardItem from './StatsCardItem';
 
 export const PlantingSiteStats = () => {
-  const { activeLocale } = useLocalization();
-  const numberFormatter = useNumberFormatter(activeLocale);
+  const numberFormatter = useNumberFormatter();
   const { isDesktop } = useDeviceInfo();
   const theme = useTheme();
   const navigate = useSyncNavigate();

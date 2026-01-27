@@ -29,8 +29,8 @@ type MapStatsDrawerProps = {
 };
 
 const MapStatsDrawer = ({ layerFeatureId, plantingSiteId }: MapStatsDrawerProps): JSX.Element | undefined => {
-  const { activeLocale, strings } = useLocalization();
-  const numberFormatter = useNumberFormatter(activeLocale);
+  const { strings } = useLocalization();
+  const numberFormatter = useNumberFormatter();
   const { isLoading, plantingSite, plantingSiteReportedPlants } = usePlantingSite(plantingSiteId);
   const { observationSummaries } = usePlantingSiteData();
   const [delayedLoading, setDelayedLoading] = useState(isLoading);

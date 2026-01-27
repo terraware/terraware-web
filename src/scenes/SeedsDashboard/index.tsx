@@ -12,7 +12,7 @@ import Icon from 'src/components/common/icon/Icon';
 import { APP_PATHS } from 'src/constants';
 import { useSeedBankSummary } from 'src/hooks/useSeedBankSummary';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { useLocalization, useOrganization } from 'src/providers/hooks';
+import { useOrganization } from 'src/providers/hooks';
 import AccessionByStatus from 'src/scenes/SeedsDashboard/AccessionByStatus';
 import SummaryPaper from 'src/scenes/SeedsDashboard/SummaryPaper';
 import strings from 'src/strings';
@@ -26,8 +26,7 @@ Cookies.defaults = {
 };
 
 export default function SeedSummary(): JSX.Element {
-  const { activeLocale } = useLocalization();
-  const numberFormatter = useNumberFormatter(activeLocale);
+  const numberFormatter = useNumberFormatter();
   const { selectedOrganization } = useOrganization();
   const navigate = useSyncNavigate();
   const { isMobile } = useDeviceInfo();

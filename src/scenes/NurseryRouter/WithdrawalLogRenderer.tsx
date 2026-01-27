@@ -5,10 +5,8 @@ import { useTheme } from '@mui/material';
 
 import TextTruncated from 'src/components/common/TextTruncated';
 import { APP_PATHS } from 'src/constants';
-import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
-import { NurseryWithdrawalPurposes } from 'src/types/Batch';
-import { NurseryWithdrawalPurpose, purposeLabel } from 'src/types/Batch';
+import { NurseryWithdrawalPurpose, NurseryWithdrawalPurposes, purposeLabel } from 'src/types/Batch';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 import CellRenderer, { TableRowType } from '../../components/common/table/TableCellRenderer';
@@ -18,8 +16,7 @@ import WithdrawalHistoryMenu from './WithdrawalHistoryMenu';
 
 export default function WithdrawalLogRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const theme = useTheme();
-  const { activeLocale } = useLocalization();
-  const numberFormatter = useNumberFormatter(activeLocale);
+  const numberFormatter = useNumberFormatter();
 
   const { column, row, value, index, onRowClick, reloadData } = props;
   const { NURSERY_TRANSFER } = NurseryWithdrawalPurposes;

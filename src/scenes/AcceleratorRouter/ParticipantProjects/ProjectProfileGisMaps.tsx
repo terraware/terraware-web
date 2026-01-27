@@ -37,7 +37,7 @@ const ProjectProfileGisMaps = () => {
   const [plantingSitesData, setPlantingSitesData] = useState<FeatureCollection<MultiPolygon>>();
   const [boundariesData, setBoundariesData] = useState<FeatureCollection<MultiPolygon>>();
   const { activeLocale } = useLocalization();
-  const numberFormatter = useNumberFormatter(activeLocale);
+  const numberFormatter = useNumberFormatter();
   const [stratumOrSite, setStratumOrSite] = useState<StratumOrSiteOption>();
   const [selectedArea, setSelectedArea] = useState<string>();
   const [showSiteMap, setShowSiteMap] = useState(false);

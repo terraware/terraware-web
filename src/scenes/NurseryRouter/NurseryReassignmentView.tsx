@@ -14,7 +14,6 @@ import TitleDescription from 'src/components/common/TitleDescription';
 import Table from 'src/components/common/table';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { useUser } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { TrackingService } from 'src/services';
 import strings from 'src/strings';
@@ -39,8 +38,7 @@ const columns = (): TableColumnType[] => [
 
 export default function NurseryReassignmentView(): JSX.Element {
   const query = useQuery();
-  const { user } = useUser();
-  const numberFormatter = useNumberFormatter(user?.locale);
+  const numberFormatter = useNumberFormatter();
   const theme = useTheme();
   const navigate = useSyncNavigate();
   const { isMobile } = useDeviceInfo();

@@ -7,7 +7,6 @@ import { PlantingSiteMap } from 'src/components/Map';
 import { MapTooltip, TooltipProperty } from 'src/components/Map/MapRenderUtils';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import MapLegend, { MapLegendGroup } from 'src/components/common/MapLegend';
-import { useLocalization } from 'src/providers';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { MapService } from 'src/services';
 import strings from 'src/strings';
@@ -21,8 +20,7 @@ type StratumLevelDataMapProps = {
 };
 
 export default function StratumLevelDataMap({ plantingSiteId }: StratumLevelDataMapProps): JSX.Element {
-  const { activeLocale } = useLocalization();
-  const numberFormatter = useNumberFormatter(activeLocale);
+  const numberFormatter = useNumberFormatter();
   const theme = useTheme();
   const { isDesktop } = useDeviceInfo();
   const { plantingSite, plantingSiteHistories, plantingSiteReportedPlants, observationSummaries, latestResult } =
