@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { Box } from '@mui/material';
 import { useApp } from '@playcanvas/react/hooks';
@@ -11,6 +11,8 @@ import Button from '../common/button/Button';
 const SplatControls = () => {
   const { strings } = useLocalization();
   const app = useApp();
+  const [isArAvailable, setIsArAvailable] = useState(false);
+  const [isVrAvailable, setIsVrAvailable] = useState(false);
 
   const handleAr = useCallback(
     () => app.xr?.start(app.root.findComponent('camera') as CameraComponent, XRTYPE_AR, XRSPACE_LOCALFLOOR),
@@ -22,6 +24,18 @@ const SplatControls = () => {
     [app]
   );
 
+  useEffect(() => {
+    // this can't be changed to useMemo(() => app.xr?.isAvailable(XRTYPE_AR), [app]) etc because app doesn't update when
+    // XR's availability is updated
+    app.xr?.on('available', (type, available) => {
+      if (type === XRTYPE_VR) {
+        setIsVrAvailable(available);
+      } else if (type === XRTYPE_AR) {
+        setIsArAvailable(available);
+      }
+    });
+  }, [app]);
+
   return (
     <Box
       sx={{
@@ -31,8 +45,8 @@ const SplatControls = () => {
         transform: 'translateX(-50%)',
       }}
     >
-      {app.xr?.isAvailable(XRTYPE_AR) && <Button label={strings.AR} onClick={handleAr} />}
-      {app.xr?.isAvailable(XRTYPE_VR) && <Button label={strings.VR} onClick={handleVr} />}
+      {isArAvailable && <Button label={strings.AR} onClick={handleAr} />}
+      {isVrAvailable && <Button label={strings.VR} onClick={handleVr} />}
     </Box>
   );
 };
