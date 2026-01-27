@@ -70,7 +70,7 @@ export default function Accession2View(): JSX.Element {
   const contentRef = useRef(null);
   const { activeLocale } = useLocalization();
   const locationTimeZone = useLocationTimeZone();
-  const numberFormatter = useNumberFormatter(activeLocale);
+  const numberFormatter = useNumberFormatter();
 
   const fullSizeButtonStyles = {
     width: '100%',

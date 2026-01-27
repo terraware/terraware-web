@@ -8,7 +8,6 @@ import getDateDisplayValue, { getTodaysDateFormatted } from '@terraware/web-comp
 import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import DatePicker from 'src/components/common/DatePicker';
 import { useProjects } from 'src/hooks/useProjects';
-import { useUser } from 'src/providers';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { SavableBatch } from 'src/redux/features/batches/batchesAsyncThunks';
 import { OriginPage } from 'src/scenes/InventoryRouter/InventoryBatchView';
@@ -60,8 +59,7 @@ export default function BatchDetailsForm({
   origin,
 }: BatchDetailsFormProps): JSX.Element {
   const { strings } = useLocalization();
-  const { user } = useUser();
-  const numberFormatter = useNumberFormatter(user?.locale);
+  const numberFormatter = useNumberFormatter();
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const snackBar = useSnackbar();

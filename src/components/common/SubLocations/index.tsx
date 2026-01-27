@@ -57,7 +57,7 @@ export default function SubLocations({
   const isSeedbank = facilityType === 'seedbank';
   const { activeLocale } = useLocalization();
   const { isMobile } = useDeviceInfo();
-  const numberFormatter = useNumberFormatter(activeLocale);
+  const numberFormatter = useNumberFormatter();
   const [selectedRows, setSelectedRows] = useState<PartialSubLocation[]>([]);
   const [selectedSubLocation, setSelectedSubLocation] = useState<PartialSubLocation | undefined>();
   const [subLocations, setSubLocations] = useState<PartialSubLocation[]>([]);

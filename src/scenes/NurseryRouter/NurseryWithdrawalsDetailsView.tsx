@@ -67,7 +67,7 @@ export default function NurseryWithdrawalsDetailsView({
   const [batches, setBatches] = useState<Batch[] | undefined>(undefined);
   const [undoWithdrawalModalOpened, setUndoWithdrawalModalOpened] = useState(false);
   const [reload, setReload] = useState(false);
-  const numberFormatter = useNumberFormatter(activeLocale);
+  const numberFormatter = useNumberFormatter();
 
   const reloadWithdrawal = () => {
     setReload(true);

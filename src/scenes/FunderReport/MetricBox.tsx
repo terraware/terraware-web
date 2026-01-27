@@ -6,7 +6,6 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import { isReportSystemMetric } from 'src/components/AcceleratorReports/MetricBox';
 import MetricStatusBadge from 'src/components/AcceleratorReports/MetricStatusBadge';
-import { useUser } from 'src/providers';
 import strings from 'src/strings';
 import { PublishedReportMetric } from 'src/types/AcceleratorReport';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
@@ -22,8 +21,7 @@ type MetricBoxProps = {
 const MetricBox = ({ metric, index, year, quarter, length }: MetricBoxProps) => {
   const { isDesktop, isMobile } = useDeviceInfo();
   const theme = useTheme();
-  const { user } = useUser();
-  const numberFormatter = useNumberFormatter(user?.locale);
+  const numberFormatter = useNumberFormatter();
   const addPercentSign = useMemo(() => {
     return metric.name === 'Survival Rate' ? '%' : '';
   }, [metric]);

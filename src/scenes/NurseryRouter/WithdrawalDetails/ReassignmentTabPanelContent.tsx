@@ -3,7 +3,6 @@ import React, { type JSX } from 'react';
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
-import { useUser } from 'src/providers';
 import strings from 'src/strings';
 import { Batch, NurseryWithdrawal } from 'src/types/Batch';
 import { Species } from 'src/types/Species';
@@ -27,8 +26,7 @@ export default function ReassignmentTabPanelContent({
   withdrawal,
   delivery,
 }: ReassignmentTabPanelContentProps): JSX.Element {
-  const { user } = useUser();
-  const numberFormatter = useNumberFormatter(user?.locale);
+  const numberFormatter = useNumberFormatter();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
 

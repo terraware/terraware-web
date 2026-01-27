@@ -21,7 +21,7 @@ type MapPhotoDrawerProps = {
 const MapPhotoDrawer = ({ monitoringPlotId, observationId, photo }: MapPhotoDrawerProps): JSX.Element | undefined => {
   const { activeLocale, strings } = useLocalization();
 
-  const { format } = useNumberFormatter(activeLocale);
+  const { format } = useNumberFormatter();
   const { data } = useGetObservationResultsQuery({ observationId });
 
   const photoUrl = useMemo(() => {

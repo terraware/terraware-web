@@ -5,7 +5,6 @@ import { BusySpinner, Dropdown, Icon, Textfield } from '@terraware/web-component
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
-import { useUser } from 'src/providers';
 import { NurseryBatchService } from 'src/services';
 import { ChangeBatchStatusesRequestPayload } from 'src/services/NurseryBatchService';
 import strings from 'src/strings';
@@ -30,8 +29,7 @@ export default function ChangeQuantityModal({
 }: ChangeQuantityModalProps): JSX.Element {
   const { type } = modalValues;
   const snackbar = useSnackbar();
-  const { user } = useUser();
-  const numberFormatter = useNumberFormatter(user?.locale);
+  const numberFormatter = useNumberFormatter();
 
   const [nextPhase, setNextPhase] = useState<ChangeBatchStatusesRequestPayload['newPhase']>();
   const [saving, setSaving] = useState<boolean>(false);
