@@ -241,7 +241,7 @@ const DetailsRenderer = (props: RendererProps<TableRowType>): JSX.Element => {
 
   const createLinkToWithdrawals = () => {
     const filterParam = row.substratumName
-      ? `substratumName=${encodeURIComponent(row.substratumName)}&siteName=${encodeURIComponent(row.siteName)}`
+      ? `substratumName=${encodeURIComponent(row.stratumName)}-${encodeURIComponent(row.substratumName)}&siteName=${encodeURIComponent(row.siteName)}`
       : `siteName=${encodeURIComponent(row.siteName)}`;
     const url = `${APP_PATHS.NURSERY_WITHDRAWALS}?tab=withdrawal_history&${filterParam}`;
     return (

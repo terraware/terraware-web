@@ -147,6 +147,7 @@ export default function PlantingProgressMap({ plantingSiteId, reloadTracking }: 
         contextRenderer={{
           render: (properties: MapSourceProperties) => (
             <PlantingProgressMapDialog
+              stratumName={properties.stratumName}
               substratumId={properties.id}
               substratumName={properties.name}
               substratumAreaHa={substrataAreaHa[properties.id]}
