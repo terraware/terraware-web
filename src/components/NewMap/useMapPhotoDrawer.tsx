@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 
+import { ObservationSplatPayload } from 'src/queries/generated/observations';
 import { ObservationMonitoringPlotPhotoWithGps } from 'src/types/Observations';
 
 import { MapDrawerSize } from './MapDrawer';
@@ -11,9 +12,14 @@ export type PlotPhoto = {
   monitoringPlotId: number;
   photo: ObservationMonitoringPlotPhotoWithGps;
 };
+export type PlotSplat = {
+  observationId: number;
+  monitoringPlotId: number;
+  splat: ObservationSplatPayload;
+};
 
 const useMapPhotoDrawer = () => {
-  const [selectedPhotos, setSelectedPhotos] = useState<PlotPhoto[]>([]);
+  const [selectedPhotos, setSelectedPhotos] = useState<(PlotPhoto | PlotSplat)[]>([]);
   const [photoDrawerPage, setPhotoDrawerPage] = useState<number>(1);
 
   const photoDrawerSize: MapDrawerSize = 'medium';
@@ -39,13 +45,14 @@ const useMapPhotoDrawer = () => {
         <MapPhotoDrawer
           monitoringPlotId={selectedPhoto.monitoringPlotId}
           observationId={selectedPhoto.observationId}
-          photo={selectedPhoto.photo}
+          photo={'photo' in selectedPhoto ? selectedPhoto.photo : undefined}
+          splat={'splat' in selectedPhoto ? selectedPhoto.splat : undefined}
         />
       );
     }
   }, [photoDrawerPage, selectedPhotos]);
 
-  const selectPhotos = useCallback((photos: PlotPhoto[]) => {
+  const selectPhotos = useCallback((photos: (PlotPhoto | PlotSplat)[]) => {
     setSelectedPhotos(photos);
     setPhotoDrawerPage(1);
   }, []);

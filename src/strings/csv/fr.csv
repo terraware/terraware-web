@@ -2364,6 +2364,8 @@ VIEW_SITES_STRATA_SUBSTRATA,"Afficher les sites, strata et substrats sur une car
 VIEW_SPECIES_LIST,Afficher la liste des espèces,ff94b19b
 VIEWING,Visualisation,fb67a07d
 VINE,Vigne,c39d21fb
+VIRTUAL,Virtuel,51d865ab
+VIRTUAL_PLOTS,Parcelles virtuelles,74b74d96
 VISIT_VIRTUAL_PLOT,Visiter la parcelle virtuelle,22d34c8b
 VOTER,Électeur : {0},46578e94
 VOTING_DECISION,Décision de vote,9bb0be97

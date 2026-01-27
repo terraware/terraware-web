@@ -84,6 +84,15 @@ const useMapFeatureStyles = () => {
     []
   );
 
+  const virtualPlotStyle = useMemo(
+    (): MapIconComponentStyle => ({
+      iconColor: '#CC79A7',
+      iconName: 'iconVideo',
+      type: 'icon',
+    }),
+    []
+  );
+
   const livePlantStyle = useMemo(
     (): MapIconComponentStyle => ({
       iconColor: '#40B0A6',
@@ -136,6 +145,7 @@ const useMapFeatureStyles = () => {
     observationEventStyle,
     permanentPlotsLayerStyle,
     plotPhotoStyle,
+    virtualPlotStyle,
     sitesLayerStyle,
     substrataLayerStyle,
     survivalRateLessThan50,

@@ -2364,7 +2364,9 @@ VIEW_SITES_STRATA_SUBSTRATA,"Ver Sitios, Estratos y Subestratos en un mapa.",f4d
 VIEW_SPECIES_LIST,Ver lista de especies,ff94b19b
 VIEWING,Visualización,fb67a07d
 VINE,Enredadera,c39d21fb
-VISIT_VIRTUAL_PLOT,Visitar Parcela Virtual,22d34c8b
+VIRTUAL,Virtual,51d865ab
+VIRTUAL_PLOTS,Parcelas virtuales,74b74d96
+VISIT_VIRTUAL_PLOT,Visitar parcela virtual,22d34c8b
 VOTER,Votante: {0},46578e94
 VOTING_DECISION,Decisión de votación,9bb0be97
 VR,RV,98fd7fc5
