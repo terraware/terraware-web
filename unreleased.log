@@ -1,3 +1,4 @@
+8df7c6666c2 SW-4915: Inventory: Delete item at batch view level (#5131)
 c5013388ad8 Initial work to display virtual plots on observations map (#5116)
 5502ca81898 Generated splats queries (#5125)
 7ebbe2a3597 Update useNumberFormatter to not require the activeLocale prop (#5130)
