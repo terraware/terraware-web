@@ -184,6 +184,30 @@ const injectedRtkApi = api.injectEndpoints({
         },
       }),
     }),
+    listObservationSplats: build.query<ListObservationSplatsApiResponse, ListObservationSplatsApiArg>({
+      query: (queryArg) => ({
+        url: `/api/v1/tracking/observations/${queryArg.observationId}/splats`,
+        params: {
+          monitoringPlotId: queryArg.monitoringPlotId,
+          fileId: queryArg.fileId,
+        },
+      }),
+    }),
+    generateObservationSplatFile: build.mutation<
+      GenerateObservationSplatFileApiResponse,
+      GenerateObservationSplatFileApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/api/v1/tracking/observations/${queryArg.observationId}/splats`,
+        method: 'POST',
+        body: queryArg.generateSplatRequestPayload,
+      }),
+    }),
+    getObservationSplatFile: build.query<GetObservationSplatFileApiResponse, GetObservationSplatFileApiArg>({
+      query: (queryArg) => ({
+        url: `/api/v1/tracking/observations/${queryArg.observationId}/splats/${queryArg.fileId}`,
+      }),
+    }),
   }),
   overrideExisting: false,
 });
@@ -352,6 +376,28 @@ export type GetObservationResultsApiArg = {
   observationId: number;
   /** Whether to include plants in the results. Default to false */
   includePlants?: boolean;
+};
+export type ListObservationSplatsApiResponse =
+  /** status 200 The requested operation succeeded. */ ListObservationSplatsResponsePayload;
+export type ListObservationSplatsApiArg = {
+  observationId: number;
+  /** If present, only list splats for this monitoring plot. */
+  monitoringPlotId?: number;
+  /** If present, only return information about the splat for this video file. */
+  fileId?: number;
+};
+export type GenerateObservationSplatFileApiResponse =
+  /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
+export type GenerateObservationSplatFileApiArg = {
+  observationId: number;
+  generateSplatRequestPayload: GenerateSplatRequestPayload;
+};
+export type GetObservationSplatFileApiResponse = /** status 200 The requested operation succeeded. */
+  | object
+  | /** status 202 The video is still being processed and the model is not ready yet. */ object;
+export type GetObservationSplatFileApiArg = {
+  observationId: number;
+  fileId: number;
 };
 export type ObservationPayload = {
   /** Date this observation is scheduled to end. */
@@ -1145,6 +1191,18 @@ export type GetObservationResultsResponsePayload = {
   observation: ObservationResultsPayload;
   status: SuccessOrError;
 };
+export type ObservationSplatPayload = {
+  fileId: number;
+  monitoringPlotId: number;
+  status: 'Preparing' | 'Ready' | 'Errored';
+};
+export type ListObservationSplatsResponsePayload = {
+  splats: ObservationSplatPayload[];
+  status: SuccessOrError;
+};
+export type GenerateSplatRequestPayload = {
+  fileId: number;
+};
 export const {
   useListObservationsQuery,
   useLazyListObservationsQuery,
@@ -1185,4 +1243,9 @@ export const {
   useReplaceObservationPlotMutation,
   useGetObservationResultsQuery,
   useLazyGetObservationResultsQuery,
+  useListObservationSplatsQuery,
+  useLazyListObservationSplatsQuery,
+  useGenerateObservationSplatFileMutation,
+  useGetObservationSplatFileQuery,
+  useLazyGetObservationSplatFileQuery,
 } = injectedRtkApi;
