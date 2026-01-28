@@ -21,3 +21,9 @@ Install new dependencies with `yarn` instead of `npm`.
 
 Format the code, run the typescript checker, and run the linter when you're done working. There's no need to rerun tests
 after code formatting.
+
+## Internationalization
+
+New strings should be added to `src/strings/csv/en.csv` at the bottom of the file.
+After adding new strings, run `yarn alphabetize-strings` to sort them alphabetically, then run `yarn translate` to
+translate them into the other languages.

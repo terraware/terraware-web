@@ -14,6 +14,7 @@
     "eject": "craco eject",
     "generate-collateral": "yarn build-version-file && yarn generate-strings",
     "generate-strings": "node scripts/generate-strings.js && node scripts/unused-strings.js",
+    "alphabetize-strings": "node scripts/alphabetize-strings.js",
     "generate-queries": "npx @rtk-query/codegen-openapi rtk-codegen.config.ts",
     "generate-types": "node scripts/openapi-typescript-formatter.mjs",
     "license-report": "license-report --only=prod --department.value=terraware --relatedTo.value=terraware-web --output=html > docs/license-report.html",
