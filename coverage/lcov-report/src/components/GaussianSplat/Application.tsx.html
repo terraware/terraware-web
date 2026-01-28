@@ -101,7 +101,10 @@
 <a name='L36'></a><a href='#L36'>36</a>
 <a name='L37'></a><a href='#L37'>37</a>
 <a name='L38'></a><a href='#L38'>38</a>
-<a name='L39'></a><a href='#L39'>39</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L39'></a><a href='#L39'>39</a>
+<a name='L40'></a><a href='#L40'>40</a>
+<a name='L41'></a><a href='#L41'>41</a>
+<a name='L42'></a><a href='#L42'>42</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -138,6 +141,9 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React fr<span class="cstat-no" title="statement not covered" >om 'react';</span>
 <span class="cstat-no" title="statement not covered" ></span>
@@ -153,29 +159,32 @@ interface Appli<span class="cstat-no" title="statement not covered" ><span class
 co<span class="cstat-no" title="statement not covered" >nst Application = ({ children, style }: ApplicationProps) =&gt; {</span>
   re<span class="cstat-no" title="statement not covered" >turn (</span>
     &lt;&gt;<span class="cstat-no" title="statement not covered" ></span>
-      &lt;P<span class="cstat-no" title="statement not covered" >cApplication style={style <span class="fstat-no" title="function not covered" >as</span> Rec<span class="cstat-no" title="statement not covered" >ord&lt;string</span>, unknown&gt;} graphicsDeviceOptions={{ antialias: false }}&gt;</span>
-        {children}
-<span class="cstat-no" title="statement not covered" >      &lt;/PcApp</span>lication&gt;
+      &lt;P<span class="cstat-no" title="statement not covered" >cApplication<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+        style={style as Record&lt;string, unknown&gt;}
+<span class="cstat-no" title="statement not covered" >        graph</span>icsDeviceOptions={{ antialias: false, xrCompatible: true }}
+      &gt;
+        {child<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >re</span>n}<span class="cstat-no" title="statement not covered" ></span></span>
+      &lt;/PcApplication&gt;
       {/* Container for annotation hotspots - positioned to match canvas */}
-      &lt;div<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+      &lt;div
         data-annotation-container
         className='annotation-container'
         style={{
           position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >10</span>0%',<span class="cstat-no" title="statement not covered" ></span></span>
-          pointerEve<span class="cstat-no" title="statement not covered" >nts</span>: 'none',
+          top: 0,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+          left: 0,<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >          width: '100%',</span>
+          h<span class="fstat-no" title="function not covered" >ei</span>ght:<span class="cstat-no" title="statement not covered" > '100%',</span>
+          pointerEvents: 'none',
 <span class="cstat-no" title="statement not covered" >          zIndex: 1000,</span>
-        }}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-      &gt;
-<span class="cstat-no" title="statement not covered" >        {/* Hotspot elements will be appended </span>here by TfAnnotationManager */}
-      &lt;/div&gt;<span class="cstat-no" title="statement not covered" ></span>
-    &lt;/&gt;<span class="cstat-no" title="statement not covered" ></span>
-  );<span class="cstat-no" title="statement not covered" ></span>
-};<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" ></span>
+        }}<span class="cstat-no" title="statement not covered" ></span>
+      &gt;<span class="cstat-no" title="statement not covered" ></span>
+        {/* Hotspot elements wil<span class="cstat-no" title="statement not covered" >l be appended here by TfAnnotationMa</span>nager */}
+      &lt;/div&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    &lt;/&gt;</span>
+  );
+};
+&nbsp;
 export default Application;
 &nbsp;</pre></td></tr></table></pre>
 
@@ -184,7 +193,7 @@ export default Application;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-28T06:08:35.493Z
+                at 2026-01-28T06:22:30.233Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
