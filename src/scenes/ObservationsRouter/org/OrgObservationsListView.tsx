@@ -121,7 +121,7 @@ export default function OrgObservationsListView({
           type: 'number',
         },
         {
-          key: 'completedDate',
+          key: 'completedTime',
           name: strings.DATE_OBSERVED,
           type: 'date',
           tooltipTitle: strings.DATE_OBSERVED_TOOLTIP,
@@ -264,7 +264,7 @@ export default function OrgObservationsListView({
           ...observation,
           strata: observation.strata.map((stratum: ObservationStratumResults) => stratum.stratumName).join('\r'),
           endDate: endDates[observation.observationId] ?? '',
-          observationDate: observation.completedDate || observation.startDate,
+          observationDate: observation.completedTime || observation.startDate,
         };
       })
     );
