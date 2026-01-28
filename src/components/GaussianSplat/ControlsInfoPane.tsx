@@ -25,15 +25,6 @@ const ControlsInfoPane = ({ visible, onClose }: ControlsInfoPaneProps) => {
     backgroundColor: theme.palette.grey[700],
   };
 
-  const handleBackdropClick = useCallback(
-    (event: React.MouseEvent) => {
-      if (paneRef.current && !paneRef.current.contains(event.target as Node)) {
-        onClose();
-      }
-    },
-    [onClose]
-  );
-
   useEffect(() => {
     const handleScroll = (event: Event) => {
       if (visible && paneRef.current && !paneRef.current.contains(event.target as Node)) {
@@ -41,29 +32,35 @@ const ControlsInfoPane = ({ visible, onClose }: ControlsInfoPaneProps) => {
       }
     };
 
+    const handleMouseDown = (event: MouseEvent) => {
+      if (visible && paneRef.current && !paneRef.current.contains(event.target as Node)) {
+        onClose();
+      }
+    };
+
     if (visible) {
       window.addEventListener('wheel', handleScroll, true);
+      window.addEventListener('mousedown', handleMouseDown, true);
     }
 
     return () => {
       window.removeEventListener('wheel', handleScroll, true);
+      window.removeEventListener('mousedown', handleMouseDown, true);
     };
   }, [visible, onClose]);
 
   return (
     <Box
-      onClick={handleBackdropClick}
       sx={{
         position: 'absolute',
         top: 0,
         left: 0,
         right: 0,
         bottom: 0,
-        pointerEvents: visible ? 'auto' : 'none',
+        pointerEvents: 'none',
         display: 'flex',
         justifyContent: 'flex-end',
         alignItems: 'flex-start',
-        padding: 2,
         zIndex: 1001,
       }}
     >
@@ -77,6 +74,7 @@ const ControlsInfoPane = ({ visible, onClose }: ControlsInfoPaneProps) => {
             padding: 3,
             minWidth: 320,
             maxWidth: 400,
+            pointerEvents: 'auto',
           }}
         >
           <Typography variant='h5' sx={{ marginBottom: 2 }}>
