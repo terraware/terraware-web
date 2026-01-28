@@ -87,7 +87,7 @@ const VirtualMonitoringPlot = ({ observationId, fileId }: VirtualMonitoringPlotP
         }
         cameraPosition={[-0.2, 0.3, 0.5]}
       />
-      <SplatControls />
+      <SplatControls defaultCameraFocus={[0, 0.1, 0]} defaultCameraPosition={[0, 0.1, 0]} />
     </>
   );
 };

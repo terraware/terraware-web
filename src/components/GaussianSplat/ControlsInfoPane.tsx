@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import { Box, Checkbox, Divider, Fade, Typography, useTheme } from '@mui/material';
 
@@ -61,6 +61,7 @@ const ControlsInfoPane = ({ visible, onClose }: ControlsInfoPaneProps) => {
         display: 'flex',
         justifyContent: 'flex-end',
         alignItems: 'flex-start',
+        padding: 2,
         zIndex: 1001,
       }}
     >
