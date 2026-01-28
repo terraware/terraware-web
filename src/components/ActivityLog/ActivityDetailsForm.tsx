@@ -60,7 +60,11 @@ import { useUserTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import useMapDrawer from '../NewMap/useMapDrawer';
 import useMapUtils from '../NewMap/useMapUtils';
-import ActivityMediaForm, { ActivityMediaItem, ExistingActivityMediaItem } from './ActivityMediaForm';
+import ActivityMediaForm, {
+  ActivityMediaItem,
+  ExistingActivityMediaItem,
+  NewActivityMediaItem,
+} from './ActivityMediaForm';
 import ActivityStatusBadges from './ActivityStatusBadges';
 import DeleteActivityModal from './DeleteActivityModal';
 import MapSplitView from './MapSplitView';
@@ -194,7 +198,26 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
     source,
   ]);
 
-  const validateForm = useCallback((): boolean => !!record?.date && !!record?.description && !!record?.type, [record]);
+  const validateForm = useCallback((): boolean => {
+    if (!record?.date || !record?.description || !record?.type) {
+      return false;
+    }
+
+    const newMediaFiles = mediaItems.filter((item): item is NewActivityMediaItem => item.type === 'new');
+    const MAX_FILE_SIZE_MB = 200;
+    const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
+
+    for (const mediaItem of newMediaFiles) {
+      const file = mediaItem.data.file;
+
+      if (file.size > MAX_FILE_SIZE_BYTES) {
+        snackbar.toastError(strings.formatString(strings.FILE_TOO_LARGE, file.name, `${MAX_FILE_SIZE_MB}`));
+        return false;
+      }
+    }
+
+    return true;
+  }, [record, mediaItems, snackbar, strings]);
 
   const saveActivity = useCallback(() => {
     if (!validateForm()) {
