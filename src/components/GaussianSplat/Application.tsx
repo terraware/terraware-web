@@ -12,7 +12,10 @@ interface ApplicationProps {
 const Application = ({ children, style }: ApplicationProps) => {
   return (
     <>
-      <PcApplication style={style as Record<string, unknown>} graphicsDeviceOptions={{ antialias: false }}>
+      <PcApplication
+        style={style as Record<string, unknown>}
+        graphicsDeviceOptions={{ antialias: false, xrCompatible: true }}
+      >
         {children}
       </PcApplication>
       {/* Container for annotation hotspots - positioned to match canvas */}
