@@ -6,6 +6,7 @@ import { Icon } from '@terraware/web-components';
 import { CameraComponent, XRSPACE_LOCAL, XRTYPE_AR, XRTYPE_VR } from 'playcanvas';
 
 import useBoolean from 'src/hooks/useBoolean';
+import { useCameraPosition } from 'src/hooks/useCameraPosition';
 import { useLocalization } from 'src/providers';
 import { getRgbaFromHex } from 'src/utils/color';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -13,10 +14,16 @@ import useSnackbar from 'src/utils/useSnackbar';
 import Button from '../common/button/Button';
 import ControlsInfoPane from './ControlsInfoPane';
 
-const SplatControls = () => {
+export interface SplatControlsProps {
+  defaultCameraPosition?: [number, number, number];
+  defaultCameraFocus?: [number, number, number];
+}
+
+const SplatControls = ({ defaultCameraPosition, defaultCameraFocus }: SplatControlsProps) => {
   const theme = useTheme();
   const { strings } = useLocalization();
   const app = useApp();
+  const { setCamera } = useCameraPosition();
   const [isArAvailable, setIsArAvailable] = useState(false);
   const [isVrAvailable, setIsVrAvailable] = useState(false);
   const [isInfoVisible, setIsInfoVisible] = useBoolean(true);
@@ -66,6 +73,21 @@ const SplatControls = () => {
       app.xr?.off('available', handleAvailable);
     };
   }, [app]);
+
+  useEffect(() => {
+    const handleKeyPress = (event: KeyboardEvent) => {
+      if (event.key === 'r' || event.key === 'R') {
+        if (defaultCameraFocus) {
+          setCamera(defaultCameraFocus, defaultCameraPosition);
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+    };
+  }, [defaultCameraFocus, defaultCameraPosition, setCamera]);
 
   const handleInfo = useCallback(() => {
     setIsInfoVisible((prev) => !prev);
