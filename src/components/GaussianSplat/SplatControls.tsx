@@ -5,6 +5,7 @@ import { useApp } from '@playcanvas/react/hooks';
 import { CameraComponent, XRSPACE_LOCALFLOOR, XRTYPE_AR, XRTYPE_VR } from 'playcanvas';
 
 import { useLocalization } from 'src/providers';
+import useSnackbar from 'src/utils/useSnackbar';
 
 import Button from '../common/button/Button';
 
@@ -13,15 +14,34 @@ const SplatControls = () => {
   const app = useApp();
   const [isArAvailable, setIsArAvailable] = useState(false);
   const [isVrAvailable, setIsVrAvailable] = useState(false);
+  const snackbar = useSnackbar();
+
+  const errorCallback = useCallback(
+    (err: Error | null) => {
+      if (err) {
+        // eslint-disable-next-line no-console
+        console.error('error in xr', err);
+        snackbar.toastError(strings.XR_ERROR);
+        app.xr?.end();
+      }
+    },
+    [app, snackbar, strings]
+  );
 
   const handleAr = useCallback(
-    () => app.xr?.start(app.root.findComponent('camera') as CameraComponent, XRTYPE_AR, XRSPACE_LOCALFLOOR),
-    [app]
+    () =>
+      app.xr?.start(app.root.findComponent('camera') as CameraComponent, XRTYPE_AR, XRSPACE_LOCALFLOOR, {
+        callback: errorCallback,
+      }),
+    [app, errorCallback]
   );
 
   const handleVr = useCallback(
-    () => app.xr?.start(app.root.findComponent('camera') as CameraComponent, XRTYPE_VR, XRSPACE_LOCALFLOOR),
-    [app]
+    () =>
+      app.xr?.start(app.root.findComponent('camera') as CameraComponent, XRTYPE_VR, XRSPACE_LOCALFLOOR, {
+        callback: errorCallback,
+      }),
+    [app, errorCallback]
   );
 
   useEffect(() => {

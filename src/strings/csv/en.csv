@@ -2420,6 +2420,7 @@ X_HA,{0} ha,
 X_HA_IN_TOTAL_PLANTING_AREA, {0} ha in Total Planting Area,
 X_HECTARES,{0} hectares,
 X_HECTARES_HA,{0} Hectares (ha),
+XR_ERROR,An error occurred while enabling XR mode. Please refresh and try again, or try again another time.
 YEAR,Year,
 YES,Yes,
 YOU_ACCEPTED_THE_TERMS_ON,You accepted the terms on {0}.,
