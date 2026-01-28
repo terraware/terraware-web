@@ -390,6 +390,7 @@ CREATE_ORGANIZATION,Crear organización,589326d1
 CREATE_ORGANIZATION_QUESTION_LOCATION_TYPES,¿Gestiona su organización alguno de los siguientes aspectos? Marque todo lo que corresponda.,d76409a4
 CREATE_ORGANIZATION_QUESTION_ORGANIZATION_TYPE,¿Cuál de las siguientes opciones describe mejor su organización?,ac93bf9a
 CREATE_SPECIES_LIST,Crear lista de especies,e2fa4ff0
+CREATE_VIRTUAL_PLOT,Crear Parcela Virtual,aea239a2
 CREATED,Creado,cc1462ae
 CREATED_BY,Creado por,19d0c8de
 CREATED_ON,Creado el,f66518dc

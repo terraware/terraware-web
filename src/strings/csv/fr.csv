@@ -389,6 +389,7 @@ CREATE_ORGANIZATION,Créer une organisation,589326d1
 CREATE_ORGANIZATION_QUESTION_LOCATION_TYPES,Votre organisation gère-t-elle l'un des éléments suivants ? Cochez toutes les cases correspondantes.,d76409a4
 CREATE_ORGANIZATION_QUESTION_ORGANIZATION_TYPE,Lequel des éléments suivants décrit le mieux votre organisation ?,ac93bf9a
 CREATE_SPECIES_LIST,Créer une liste d'espèces,e2fa4ff0
+CREATE_VIRTUAL_PLOT,Créer une parcelle virtuelle,aea239a2
 CREATED,Créée,cc1462ae
 CREATED_BY,Créé par,19d0c8de
 CREATED_ON,Créé le,f66518dc
