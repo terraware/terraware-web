@@ -98,15 +98,17 @@ export default function MonitoringPlotPhotosWithActions({
   );
 
   const createVirtualPlot = useCallback(
-    (fileId: number) => async () => {
-      const response = await generateObservationSplatFile({
-        observationId,
-        generateSplatRequestPayload: { fileId },
-      });
+    (fileId: number) => () => {
+      void (async () => {
+        const response = await generateObservationSplatFile({
+          observationId,
+          generateSplatRequestPayload: { fileId },
+        });
 
-      if ('error' in response) {
-        snackbar.toastError();
-      }
+        if ('error' in response) {
+          snackbar.toastError();
+        }
+      })();
     },
     [observationId, generateObservationSplatFile, snackbar]
   );
