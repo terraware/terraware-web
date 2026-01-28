@@ -1,3 +1,4 @@
+31f6421fcc0 SW-8001 Add button for creating a virtual plot from an uploaded video (#5140)
 9e84a248393 SW-7824 Observation list should be sorted by completed time (#5137)
 f6f9a6651d6 SW-7996 Enable XR, and add error handling (#5136)
 52a4aee2d0d SW-7996 Fix XR controls not updating correctly (#5135)
