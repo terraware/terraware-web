@@ -2,6 +2,8 @@ import React, { useEffect, useRef } from 'react';
 
 import { Box, Checkbox, Divider, Fade, Typography, useTheme } from '@mui/material';
 
+import { useLocalization } from 'src/providers';
+
 interface ControlsInfoPaneProps {
   visible: boolean;
   onClose: () => void;
@@ -9,6 +11,7 @@ interface ControlsInfoPaneProps {
 
 const ControlsInfoPane = ({ visible, onClose }: ControlsInfoPaneProps) => {
   const theme = useTheme();
+  const { strings } = useLocalization();
   const paneRef = useRef<HTMLDivElement>(null);
 
   const controlRowSx = {
@@ -79,78 +82,78 @@ const ControlsInfoPane = ({ visible, onClose }: ControlsInfoPaneProps) => {
           }}
         >
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-            <Typography sx={{ fontWeight: 600 }}>Controls</Typography>
+            <Typography sx={{ fontWeight: 600 }}>{strings.CONTROLS}</Typography>
 
             <Box sx={controlRowSx}>
-              <Typography>Annotations</Typography>
+              <Typography>{strings.ANNOTATIONS}</Typography>
               <Checkbox defaultChecked sx={{ color: theme.palette.primary.main }} />
             </Box>
 
             <Divider sx={dividerSx} />
 
             <Box sx={controlRowSx}>
-              <Typography>Orbit</Typography>
+              <Typography>{strings.ORBIT}</Typography>
               <Box sx={rightAlignedTextSx}>
-                <Typography>Left Mouse</Typography>
-                <Typography>Touch + Drag</Typography>
+                <Typography>{strings.LEFT_MOUSE}</Typography>
+                <Typography>{strings.TOUCH_DRAG}</Typography>
               </Box>
             </Box>
 
             <Divider sx={dividerSx} />
 
             <Box sx={controlRowSx}>
-              <Typography>Pan</Typography>
+              <Typography>{strings.PAN}</Typography>
               <Box sx={rightAlignedTextSx}>
-                <Typography>Middle Mouse</Typography>
-                <Typography>Swipe</Typography>
+                <Typography>{strings.MIDDLE_MOUSE}</Typography>
+                <Typography>{strings.SWIPE}</Typography>
               </Box>
             </Box>
 
             <Divider sx={dividerSx} />
 
             <Box sx={controlRowSx}>
-              <Typography>Look</Typography>
-              <Typography>Right Mouse</Typography>
+              <Typography>{strings.LOOK}</Typography>
+              <Typography>{strings.RIGHT_MOUSE}</Typography>
             </Box>
 
             <Divider sx={dividerSx} />
 
             <Box sx={controlRowSx}>
-              <Typography>Zoom</Typography>
+              <Typography>{strings.ZOOM}</Typography>
               <Box sx={rightAlignedTextSx}>
-                <Typography>Mouse Wheel</Typography>
-                <Typography>Pinch</Typography>
+                <Typography>{strings.MOUSE_WHEEL}</Typography>
+                <Typography>{strings.PINCH}</Typography>
               </Box>
             </Box>
 
             <Divider sx={dividerSx} />
 
             <Box sx={controlRowSx}>
-              <Typography>Fly</Typography>
+              <Typography>{strings.FLY}</Typography>
               <Box sx={rightAlignedTextSx}>
                 <Typography>WASD</Typography>
-                <Typography>Arrow Keys</Typography>
+                <Typography>{strings.ARROW_KEYS}</Typography>
               </Box>
             </Box>
 
             <Divider sx={dividerSx} />
 
             <Box sx={controlRowSx}>
-              <Typography>Fly faster</Typography>
-              <Typography>Shift</Typography>
+              <Typography>{strings.FLY_FASTER}</Typography>
+              <Typography>{strings.SHIFT}</Typography>
             </Box>
 
             <Divider sx={dividerSx} />
 
             <Box sx={controlRowSx}>
-              <Typography>Fly slower</Typography>
-              <Typography>Ctrl</Typography>
+              <Typography>{strings.FLY_SLOWER}</Typography>
+              <Typography>{strings.CTRL}</Typography>
             </Box>
 
             <Divider sx={dividerSx} />
 
             <Box sx={controlRowSx}>
-              <Typography>Reset Camera</Typography>
+              <Typography>{strings.RESET_CAMERA}</Typography>
               <Typography>R</Typography>
             </Box>
 
