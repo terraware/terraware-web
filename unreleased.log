@@ -1,3 +1,4 @@
+52a4aee2d0d SW-7996 Fix XR controls not updating correctly (#5135)
 6c16db19cc5 Update readmes for running prod-like builds locally (#5134)
 499de12295f Fix transpilation issue with exponents in playcanvas (#5133)
 41b53e77e67 Use virtual plot modal (#5132)
