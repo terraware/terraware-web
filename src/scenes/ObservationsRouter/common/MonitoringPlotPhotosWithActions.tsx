@@ -1,10 +1,15 @@
 import React, { type JSX, useCallback, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
+import { Button } from '@terraware/web-components';
 
 import ImageLightbox from 'src/components/common/ImageLightbox';
 import MediaItem, { MediaFile } from 'src/components/common/MediaItem';
+import isEnabled from 'src/features';
+import { useGenerateObservationSplatFileMutation } from 'src/queries/generated/observations';
+import strings from 'src/strings';
 import { ObservationMonitoringPlotPhoto, getPositionLabel, getQuadratLabel } from 'src/types/Observations';
+import useSnackbar from 'src/utils/useSnackbar';
 
 const PHOTO_URL = '/api/v1/tracking/observations/{observationId}/plots/{monitoringPlotId}/photos/{fileId}';
 const MEDIA_URL = '/api/v1/tracking/observations/{observationId}/plots/{plotId}/media/{fileId}';
@@ -26,6 +31,9 @@ export default function MonitoringPlotPhotosWithActions({
 }: MonitoringPlotPhotosWithActionsProps): JSX.Element {
   const theme = useTheme();
   const [lightboxFileId, setLightboxFileId] = useState<number | undefined>(undefined);
+  const [generateObservationSplatFile] = useGenerateObservationSplatFileMutation();
+  const virtualPlotEnabled = isEnabled('Virtual Monitoring Plots');
+  const snackbar = useSnackbar();
 
   const rootMediaUrl = useMemo(
     () =>
@@ -89,6 +97,22 @@ export default function MonitoringPlotPhotosWithActions({
     [lightboxFileId, getMediaUrl]
   );
 
+  const createVirtualPlot = useCallback(
+    (fileId: number) => () => {
+      void (async () => {
+        const response = await generateObservationSplatFile({
+          observationId,
+          generateSplatRequestPayload: { fileId },
+        });
+
+        if ('error' in response) {
+          snackbar.toastError();
+        }
+      })();
+    },
+    [observationId, generateObservationSplatFile, snackbar]
+  );
+
   return (
     <>
       <Box display='grid' gridTemplateColumns='repeat(auto-fill, minmax(213px, 1fr))' gap={2}>
@@ -111,6 +135,15 @@ export default function MonitoringPlotPhotosWithActions({
               plotId={monitoringPlotId}
               plantingSiteName={plantingSiteName}
             />
+            {virtualPlotEnabled && mediaFile.type === 'Video' && (
+              <Button
+                label={strings.CREATE_VIRTUAL_PLOT}
+                priority='secondary'
+                type='passive'
+                onClick={createVirtualPlot(mediaFile.fileId)}
+                sx={{ width: '100%' }}
+              />
+            )}
           </Box>
         ))}
       </Box>
