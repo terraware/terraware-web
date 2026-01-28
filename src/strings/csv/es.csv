@@ -2420,6 +2420,7 @@ X_HA,{0} hectáreas,8f68781b
 X_HA_IN_TOTAL_PLANTING_AREA,{0} ha en la Superficie total de plantación,586af003
 X_HECTARES,{0} hectáreas,6f24cf52
 X_HECTARES_HA,{0} hectáreas (ha),e2af9d30
+XR_ERROR,"Se produjo un error al habilitar el modo XR. Por favor, actualice la página e intente nuevamente.",935ea96d
 YEAR,Año,484bf433
 YES,Sí,d8b0d802
 YOU_ACCEPTED_THE_TERMS_ON,Aceptaste los términos el {0}.,b2a20246

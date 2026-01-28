@@ -20,11 +20,12 @@ const SplatControls = () => {
     (err: Error | null) => {
       if (err) {
         // eslint-disable-next-line no-console
-        console.error(err);
-        snackbar.toastError(err.message);
+        console.error('error in xr', err);
+        snackbar.toastError(strings.XR_ERROR);
+        app.xr?.end();
       }
     },
-    [snackbar]
+    [app, snackbar, strings]
   );
 
   const handleAr = useCallback(
