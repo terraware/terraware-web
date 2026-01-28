@@ -22,7 +22,7 @@ const ControlsInfoPane = ({ visible, onClose }: ControlsInfoPaneProps) => {
   };
 
   const dividerSx = {
-    backgroundColor: theme.palette.grey[700],
+    backgroundColor: theme.palette.TwClrBrdrTertiary,
   };
 
   useEffect(() => {
@@ -78,18 +78,16 @@ const ControlsInfoPane = ({ visible, onClose }: ControlsInfoPaneProps) => {
             pointerEvents: 'auto',
           }}
         >
-          <Typography variant='h5' sx={{ marginBottom: 2 }}>
-            Controls
-          </Typography>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+            <Typography sx={{ fontWeight: 600 }}>Controls</Typography>
 
-          <Box sx={{ ...controlRowSx, marginBottom: 1 }}>
-            <Typography>Annotations</Typography>
-            <Checkbox defaultChecked sx={{ color: theme.palette.primary.main }} />
-          </Box>
+            <Box sx={controlRowSx}>
+              <Typography>Annotations</Typography>
+              <Checkbox defaultChecked sx={{ color: theme.palette.primary.main }} />
+            </Box>
 
-          <Divider sx={{ ...dividerSx, marginY: 2 }} />
+            <Divider sx={dividerSx} />
 
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <Box sx={controlRowSx}>
               <Typography>Orbit</Typography>
               <Box sx={rightAlignedTextSx}>
@@ -128,6 +126,16 @@ const ControlsInfoPane = ({ visible, onClose }: ControlsInfoPaneProps) => {
             <Divider sx={dividerSx} />
 
             <Box sx={controlRowSx}>
+              <Typography>Fly</Typography>
+              <Box sx={rightAlignedTextSx}>
+                <Typography>WASD</Typography>
+                <Typography>Arrow Keys</Typography>
+              </Box>
+            </Box>
+
+            <Divider sx={dividerSx} />
+
+            <Box sx={controlRowSx}>
               <Typography>Fly faster</Typography>
               <Typography>Shift</Typography>
             </Box>
@@ -145,6 +153,8 @@ const ControlsInfoPane = ({ visible, onClose }: ControlsInfoPaneProps) => {
               <Typography>Reset Camera</Typography>
               <Typography>R</Typography>
             </Box>
+
+            <Divider sx={dividerSx} />
           </Box>
         </Box>
       </Fade>
