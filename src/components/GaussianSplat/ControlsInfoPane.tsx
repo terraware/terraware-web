@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 
 import { Box, Checkbox, Divider, Fade, Typography, useTheme } from '@mui/material';
 
@@ -11,6 +11,20 @@ const ControlsInfoPane = ({ visible, onClose }: ControlsInfoPaneProps) => {
   const theme = useTheme();
   const paneRef = useRef<HTMLDivElement>(null);
 
+  const controlRowSx = {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  };
+
+  const rightAlignedTextSx = {
+    textAlign: 'right',
+  };
+
+  const dividerSx = {
+    backgroundColor: theme.palette.grey[700],
+  };
+
   const handleBackdropClick = useCallback(
     (event: React.MouseEvent) => {
       if (paneRef.current && !paneRef.current.contains(event.target as Node)) {
@@ -19,6 +33,22 @@ const ControlsInfoPane = ({ visible, onClose }: ControlsInfoPaneProps) => {
     },
     [onClose]
   );
+
+  useEffect(() => {
+    const handleScroll = (event: Event) => {
+      if (visible && paneRef.current && !paneRef.current.contains(event.target as Node)) {
+        onClose();
+      }
+    };
+
+    if (visible) {
+      window.addEventListener('wheel', handleScroll, true);
+    }
+
+    return () => {
+      window.removeEventListener('wheel', handleScroll, true);
+    };
+  }, [visible, onClose]);
 
   return (
     <Box
@@ -49,74 +79,70 @@ const ControlsInfoPane = ({ visible, onClose }: ControlsInfoPaneProps) => {
             maxWidth: 400,
           }}
         >
-          <Typography variant='h6' sx={{ color: theme.palette.grey[400], marginBottom: 2 }}>
-            Info
-          </Typography>
-
           <Typography variant='h5' sx={{ marginBottom: 2 }}>
             Controls
           </Typography>
 
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 1 }}>
+          <Box sx={{ ...controlRowSx, marginBottom: 1 }}>
             <Typography>Annotations</Typography>
             <Checkbox defaultChecked sx={{ color: theme.palette.primary.main }} />
           </Box>
 
-          <Divider sx={{ backgroundColor: theme.palette.grey[700], marginY: 2 }} />
+          <Divider sx={{ ...dividerSx, marginY: 2 }} />
 
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Box sx={controlRowSx}>
               <Typography>Orbit</Typography>
-              <Box sx={{ textAlign: 'right' }}>
+              <Box sx={rightAlignedTextSx}>
                 <Typography>Left Mouse</Typography>
                 <Typography>Touch + Drag</Typography>
               </Box>
             </Box>
 
-            <Divider sx={{ backgroundColor: theme.palette.grey[700] }} />
+            <Divider sx={dividerSx} />
 
-            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Box sx={controlRowSx}>
               <Typography>Pan</Typography>
-              <Box sx={{ textAlign: 'right' }}>
+              <Box sx={rightAlignedTextSx}>
                 <Typography>Middle Mouse</Typography>
                 <Typography>Swipe</Typography>
               </Box>
             </Box>
 
-            <Divider sx={{ backgroundColor: theme.palette.grey[700] }} />
+            <Divider sx={dividerSx} />
 
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Box sx={controlRowSx}>
               <Typography>Look</Typography>
               <Typography>Right Mouse</Typography>
             </Box>
 
-            <Divider sx={{ backgroundColor: theme.palette.grey[700] }} />
+            <Divider sx={dividerSx} />
 
-            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Box sx={controlRowSx}>
               <Typography>Zoom</Typography>
-              <Box sx={{ textAlign: 'right' }}>
+              <Box sx={rightAlignedTextSx}>
                 <Typography>Mouse Wheel</Typography>
                 <Typography>Pinch</Typography>
               </Box>
             </Box>
 
-            <Divider sx={{ backgroundColor: theme.palette.grey[700] }} />
+            <Divider sx={dividerSx} />
 
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Box sx={controlRowSx}>
               <Typography>Fly faster</Typography>
               <Typography>Shift</Typography>
             </Box>
 
-            <Divider sx={{ backgroundColor: theme.palette.grey[700] }} />
+            <Divider sx={dividerSx} />
 
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Box sx={controlRowSx}>
               <Typography>Fly slower</Typography>
               <Typography>Ctrl</Typography>
             </Box>
 
-            <Divider sx={{ backgroundColor: theme.palette.grey[700] }} />
+            <Divider sx={dividerSx} />
 
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Box sx={controlRowSx}>
               <Typography>Reset Camera</Typography>
               <Typography>R</Typography>
             </Box>
