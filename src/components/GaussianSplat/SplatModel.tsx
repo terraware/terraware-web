@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { Entity } from '@playcanvas/react';
 import { GSplat } from '@playcanvas/react/components';
 import { useSplat } from '@playcanvas/react/hooks';
+
+import useSnackbar from 'src/utils/useSnackbar';
 
 import BlockingSpinner from '../common/BlockingSpinner';
 import SplatCrop from './SplatCrop';
@@ -28,13 +30,18 @@ const SplatModel = ({
   cropFadeDistance = 0.5,
 }: SplatModelProps) => {
   // A filename is required for the file props to assist with the asset loading. Otherwise it assumes that the splatSrc is a ply file.
-  const { asset, loading } = useSplat(splatSrc, { file: { filename: 'model.sog' } });
+  const { asset, loading, error } = useSplat(splatSrc, { file: { filename: 'model.sog' } });
+  const snackbar = useSnackbar();
+
+  useEffect(() => {
+    if (error) {
+      snackbar.toastError();
+    }
+  }, [error, snackbar]);
 
   if (loading) {
     return <BlockingSpinner />;
   }
-
-  // todo add error handling
 
   if (!asset) {
     return null;

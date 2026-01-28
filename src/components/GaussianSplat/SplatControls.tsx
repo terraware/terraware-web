@@ -47,13 +47,18 @@ const SplatControls = () => {
   useEffect(() => {
     // this can't be changed to `useMemo(() => app.xr?.isAvailable(XRTYPE_AR), [app])` because `app` doesn't update when
     // XR's availability is updated
-    app.xr?.on('available', (type, available) => {
+    const handleAvailable = (type: string, available: boolean) => {
       if (type === XRTYPE_VR) {
         setIsVrAvailable(available);
       } else if (type === XRTYPE_AR) {
         setIsArAvailable(available);
       }
-    });
+    };
+
+    app.xr?.on('available', handleAvailable);
+    return () => {
+      app.xr?.off('available', handleAvailable);
+    };
   }, [app]);
 
   return (
