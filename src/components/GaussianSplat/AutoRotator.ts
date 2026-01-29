@@ -1,0 +1,228 @@
+import { Quat, Script, Vec3 } from 'playcanvas';
+
+/**
+ * Auto-rotator script that works with CameraControls.
+ * Automatically rotates the camera after a period of inactivity by modifying
+ * the CameraControls' internal pose angles.
+ *
+ * This follows the same pattern as the deprecated @playcanvas/react auto-rotator,
+ * but works with CameraControls instead of OrbitControls.
+ */
+export class AutoRotator extends Script {
+  static scriptName = 'autoRotator';
+
+  /**
+   * Rotation speed in degrees per second when auto-rotating.
+   *
+   * @attribute
+   * @title Speed
+   */
+  speed = 4;
+
+  /**
+   * Vertical oscillation speed. Set to 0 to disable pitch animation.
+   *
+   * @attribute
+   * @title Pitch Speed
+   */
+  pitchSpeed = 0;
+
+  /**
+   * Amount of pitch oscillation in degrees.
+   *
+   * @attribute
+   * @title Pitch Amount
+   */
+  pitchAmount = 1;
+
+  /**
+   * Delay in seconds before auto-rotation starts after the camera stops moving.
+   *
+   * @attribute
+   * @title Start Delay
+   */
+  startDelay = 4;
+
+  /**
+   * Duration in seconds to fade in the rotation speed.
+   *
+   * @attribute
+   * @title Start Fade In Time
+   */
+  startFadeInTime = 5;
+
+  /**
+   * Internal timer tracking how long the camera has been idle.
+   * @private
+   */
+  private timer = 0;
+
+  /**
+   * Last known pitch angle for movement detection.
+   * @private
+   */
+  private pitch = 0;
+
+  /**
+   * Last known yaw angle for movement detection.
+   * @private
+   */
+  private yaw = 0;
+
+  /**
+   * Reference to the camera entity.
+   * @private
+   */
+  private cameraEntity: any = null;
+
+  /**
+   * Reference to the CameraControls script.
+   * @private
+   */
+  private cameraControls: any = null;
+
+  /**
+   * Initialize the script by finding the camera and its controls.
+   */
+  initialize() {
+    console.log('[AutoRotator] Initializing');
+    // Find the camera child entity
+    this.cameraEntity = this.entity.findByName('camera');
+    if (this.cameraEntity) {
+      console.log('[AutoRotator] Camera entity found');
+      // Find the CameraControls script on the camera entity
+      this.cameraControls = this.cameraEntity.script?.cameraControls;
+      if (this.cameraControls) {
+        console.log('[AutoRotator] CameraControls found');
+        if (this.cameraControls._pose) {
+          console.log('[AutoRotator] _pose found');
+          // Store initial angles
+          this.pitch = this.cameraControls._pose.angles.x;
+          this.yaw = this.cameraControls._pose.angles.y;
+          console.log('[AutoRotator] Initial pitch:', this.pitch, 'yaw:', this.yaw);
+        } else {
+          console.error('[AutoRotator] _pose NOT found!');
+        }
+      } else {
+        console.error('[AutoRotator] CameraControls NOT found!');
+      }
+    } else {
+      console.error('[AutoRotator] Camera entity NOT found!');
+    }
+  }
+
+  /**
+   * Frame counter for periodic logging.
+   * @private
+   */
+  private frameCount = 0;
+
+  /**
+   * Update loop that handles auto-rotation logic.
+   * Uses postUpdate to run AFTER CameraControls has updated.
+   */
+  postUpdate(dt: number) {
+    this.frameCount++;
+    const shouldLog = this.frameCount % 60 === 0; // Log every 60 frames
+
+    if (!this.cameraControls || !this.cameraControls._pose) {
+      if (shouldLog) {
+        console.error('[AutoRotator] No cameraControls or _pose in update');
+      }
+      return;
+    }
+
+    const pose = this.cameraControls._pose;
+    const currentPitch = pose.angles.x;
+    const currentYaw = pose.angles.y;
+
+    // Check if the camera was moved by the user
+    if (this.pitch !== currentPitch || this.yaw !== currentYaw) {
+      // Camera was moved, reset timer and store new angles
+      if (this.timer > 0 || shouldLog) {
+        console.log('[AutoRotator] Angles changed - pitch:', this.pitch.toFixed(2), '->', currentPitch.toFixed(2), 'yaw:', this.yaw.toFixed(2), '->', currentYaw.toFixed(2));
+      }
+      this.pitch = currentPitch;
+      this.yaw = currentYaw;
+      this.timer = 0;
+    } else {
+      // Camera is still, increment timer
+      this.timer += dt;
+      if (shouldLog) {
+        console.log('[AutoRotator] Timer:', this.timer.toFixed(2), 'pitch:', this.pitch.toFixed(2), 'yaw:', this.yaw.toFixed(2));
+      }
+    }
+
+    // Start auto-rotation after delay
+    if (this.timer > this.startDelay) {
+      // Animate the camera
+      const time = this.timer - this.startDelay;
+      const fadeIn = this.smoothStep(time / this.startFadeInTime);
+
+      // Calculate rotation delta
+      const yawDelta = dt * fadeIn * this.speed;
+
+      if (shouldLog || time < 2) {
+        console.log('[AutoRotator] Auto-rotating - fadeIn:', fadeIn.toFixed(3), 'yawDelta:', yawDelta.toFixed(3));
+      }
+
+      // Get the current focus point (what the camera is looking at)
+      const focusPoint = pose.getFocus(new Vec3());
+
+      // Get current camera position
+      const currentPos = pose.position.clone();
+
+      // Calculate offset from focus to camera
+      const offset = new Vec3();
+      offset.sub2(currentPos, focusPoint);
+
+      // Rotate the offset around the Y-axis
+      const rotationQuat = new Quat();
+      rotationQuat.setFromAxisAngle(Vec3.UP, yawDelta);
+      const rotatedOffset = new Vec3();
+      rotationQuat.transformVector(offset, rotatedOffset);
+
+      // Calculate new camera position
+      const newPos = new Vec3();
+      newPos.add2(focusPoint, rotatedOffset);
+
+      // Update pose to look from new position to focus point
+      pose.look(newPos, focusPoint);
+
+      // Update our stored angles to match
+      this.pitch = pose.angles.x;
+      this.yaw = pose.angles.y;
+
+      if (shouldLog || time < 2) {
+        console.log('[AutoRotator] Focus:', focusPoint.toString(), 'NewPos:', newPos.toString());
+      }
+
+      // Update the controller's internal state by calling attach()
+      // This ensures the controller maintains our rotation
+      if (this.cameraControls._controller && this.cameraControls._controller.attach) {
+        this.cameraControls._controller.attach(pose, false);
+      }
+
+      // Update the camera entity to match the modified pose
+      this.cameraEntity.setPosition(pose.position);
+      this.cameraEntity.setEulerAngles(pose.angles);
+    }
+  }
+
+  /**
+   * Smooth step interpolation function.
+   *
+   * @param {number} x - Input value.
+   * @returns {number} - Smoothly interpolated value.
+   * @private
+   */
+  private smoothStep(x: number): number {
+    if (x <= 0) {
+      return 0;
+    }
+    if (x >= 1) {
+      return 1;
+    }
+    return Math.sin((x - 0.5) * Math.PI) * 0.5 + 0.5;
+  }
+}
