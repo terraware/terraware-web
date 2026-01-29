@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 
 import { Box, Checkbox, Divider, Fade, Typography, useTheme } from '@mui/material';
 
@@ -7,11 +7,20 @@ import { useLocalization } from 'src/providers';
 interface ControlsInfoPaneProps {
   visible: boolean;
   paneRef: React.RefObject<HTMLDivElement | null>;
+  showAnnotations?: boolean;
+  onToggleAnnotations?: (show: boolean) => void;
 }
 
-const ControlsInfoPane = ({ visible, paneRef }: ControlsInfoPaneProps) => {
+const ControlsInfoPane = ({ visible, paneRef, showAnnotations, onToggleAnnotations }: ControlsInfoPaneProps) => {
   const theme = useTheme();
   const { strings } = useLocalization();
+
+  const handleAnnotationsChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      onToggleAnnotations?.(e.target.checked);
+    },
+    [onToggleAnnotations]
+  );
 
   const controlRowSx = {
     display: 'flex',
@@ -61,7 +70,11 @@ const ControlsInfoPane = ({ visible, paneRef }: ControlsInfoPaneProps) => {
 
             <Box sx={controlRowSx}>
               <Typography>{strings.ANNOTATIONS}</Typography>
-              <Checkbox defaultChecked sx={{ color: theme.palette.primary.main }} />
+              <Checkbox
+                checked={showAnnotations ?? true}
+                onChange={handleAnnotationsChange}
+                sx={{ color: theme.palette.primary.main }}
+              />
             </Box>
 
             <Divider sx={dividerSx} />
