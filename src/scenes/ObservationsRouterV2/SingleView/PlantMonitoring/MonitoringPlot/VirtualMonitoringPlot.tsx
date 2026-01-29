@@ -12,6 +12,7 @@ import GradientSky from 'src/components/GaussianSplat/GradientSky';
 import SplatControls from 'src/components/GaussianSplat/SplatControls';
 import SplatModel from 'src/components/GaussianSplat/SplatModel';
 import { TfAnnotationManager } from 'src/components/GaussianSplat/TfAnnotationManager';
+import { TfXrNavigation } from 'src/components/GaussianSplat/TfXrNavigation';
 import { useCameraPosition } from 'src/hooks/useCameraPosition';
 
 interface VirtualMonitoringPlotProps {
@@ -42,6 +43,7 @@ const VirtualMonitoringPlot = ({ observationId, fileId }: VirtualMonitoringPlotP
           <Script script={CameraControls} moveSpeed={0.3} moveFastSpeed={0.5} moveSlowSpeed={0.15} rotateSpeed={0.1} />
         </Entity>
         <Script script={XrControllers} />
+        <Script script={TfXrNavigation} enableTeleport={false} />
       </Entity>
 
       {/* When a rerender occurs (such as changing showAnnotations), the splat model disappears (https://github.com/playcanvas/react/pull/298 and https://github.com/playcanvas/react/issues/302) */}
