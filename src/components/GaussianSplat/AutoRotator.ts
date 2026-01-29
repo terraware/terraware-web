@@ -77,11 +77,6 @@ export class AutoRotator extends Script {
    */
   private isCurrentlyRotating = false;
 
-  /**
-   * Frame counter for debugging.
-   * @private
-   */
-  private frameCount = 0;
 
   /**
    * Last known pitch angle for movement detection.
@@ -151,9 +146,6 @@ export class AutoRotator extends Script {
    * Uses postUpdate to run AFTER CameraControls has updated.
    */
   postUpdate(dt: number) {
-    this.frameCount++;
-    const shouldLog = this.frameCount % 60 === 0 || this.frameCount < 120;
-
     if (!this.cameraControls || !this.cameraControls._pose) {
       return;
     }
@@ -166,9 +158,6 @@ export class AutoRotator extends Script {
     if (this.pitch === null || this.yaw === null) {
       this.pitch = currentPitch;
       this.yaw = currentYaw;
-      if (shouldLog) {
-        console.log('[AutoRotator] Initialized angles - pitch:', currentPitch.toFixed(4), 'yaw:', currentYaw.toFixed(4));
-      }
     }
 
     // Only check for angle changes after the first rotation has started AND we're not currently rotating
@@ -182,10 +171,6 @@ export class AutoRotator extends Script {
 
       if (pitchDiff > angleThreshold || yawDiff > angleThreshold) {
         // Camera was moved by the user, reset timer and store new angles
-        if (shouldLog || this.timer > 1) {
-          console.log('[AutoRotator] Angles changed! pitch:', this.pitch.toFixed(4), '->', currentPitch.toFixed(4),
-                      'yaw:', this.yaw.toFixed(4), '->', currentYaw.toFixed(4), 'timer was:', this.timer.toFixed(2));
-        }
         this.pitch = currentPitch;
         this.yaw = currentYaw;
         this.timer = 0;
@@ -197,10 +182,6 @@ export class AutoRotator extends Script {
 
     // Camera is still (or we're in the initial grace period), increment timer
     this.timer += dt;
-    if (shouldLog) {
-      console.log('[AutoRotator] Timer:', this.timer.toFixed(2), 'hasStarted:', this.hasStartedRotating,
-                  'startDelay:', this.startDelay, 'restartDelay:', this.restartDelay);
-    }
 
     // Determine which delay to use
     const currentDelay = this.hasStartedRotating ? this.restartDelay : this.startDelay;
