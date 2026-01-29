@@ -48,7 +48,7 @@ const VirtualMonitoringPlot = ({ observationId, fileId }: VirtualMonitoringPlotP
         </Entity>
         <Script script={XrControllers} />
         <Script script={TfXrNavigation} enableTeleport={false} />
-        <Script script={AutoRotator} startDelay={1} startFadeInTime={1.5} />
+        <Script script={AutoRotator} startDelay={3} startFadeInTime={0.5} />
       </Entity>
 
       {/* When a rerender occurs (such as changing showAnnotations), the splat model disappears (https://github.com/playcanvas/react/pull/298 and https://github.com/playcanvas/react/issues/302) */}

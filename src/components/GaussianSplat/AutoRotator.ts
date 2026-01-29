@@ -82,53 +82,53 @@ export class AutoRotator extends Script {
   private cameraControls: any = null;
 
   /**
-   * Initialize the script by finding the camera and its controls.
+   * Bound event handlers for cleanup.
+   * @private
    */
-  initialize() {
-    console.log('[AutoRotator] Initializing');
-    // Find the camera child entity
-    this.cameraEntity = this.entity.findByName('camera');
-    if (this.cameraEntity) {
-      console.log('[AutoRotator] Camera entity found');
-      // Find the CameraControls script on the camera entity
-      this.cameraControls = this.cameraEntity.script?.cameraControls;
-      if (this.cameraControls) {
-        console.log('[AutoRotator] CameraControls found');
-        if (this.cameraControls._pose) {
-          console.log('[AutoRotator] _pose found');
-          // Store initial angles
-          this.pitch = this.cameraControls._pose.angles.x;
-          this.yaw = this.cameraControls._pose.angles.y;
-          console.log('[AutoRotator] Initial pitch:', this.pitch, 'yaw:', this.yaw);
-        } else {
-          console.error('[AutoRotator] _pose NOT found!');
-        }
-      } else {
-        console.error('[AutoRotator] CameraControls NOT found!');
-      }
-    } else {
-      console.error('[AutoRotator] Camera entity NOT found!');
-    }
+  private onPointerDown?: () => void;
+  private onKeyDown?: () => void;
+
+  /**
+   * Handle user input events to reset the auto-rotation timer.
+   * @private
+   */
+  private handleUserInput() {
+    this.timer = 0;
   }
 
   /**
-   * Frame counter for periodic logging.
-   * @private
+   * Initialize the script by finding the camera and its controls.
    */
-  private frameCount = 0;
+  initialize() {
+    // Bind event handlers
+    this.onPointerDown = this.handleUserInput.bind(this);
+    this.onKeyDown = this.handleUserInput.bind(this);
+
+    // Add event listeners to detect user input
+    if (this.app.graphicsDevice.canvas) {
+      this.app.graphicsDevice.canvas.addEventListener('pointerdown', this.onPointerDown);
+    }
+    window.addEventListener('keydown', this.onKeyDown);
+
+    // Find the camera child entity
+    this.cameraEntity = this.entity.findByName('camera');
+    if (this.cameraEntity) {
+      // Find the CameraControls script on the camera entity
+      this.cameraControls = this.cameraEntity.script?.cameraControls;
+      if (this.cameraControls && this.cameraControls._pose) {
+        // Store initial angles
+        this.pitch = this.cameraControls._pose.angles.x;
+        this.yaw = this.cameraControls._pose.angles.y;
+      }
+    }
+  }
 
   /**
    * Update loop that handles auto-rotation logic.
    * Uses postUpdate to run AFTER CameraControls has updated.
    */
   postUpdate(dt: number) {
-    this.frameCount++;
-    const shouldLog = this.frameCount % 60 === 0; // Log every 60 frames
-
     if (!this.cameraControls || !this.cameraControls._pose) {
-      if (shouldLog) {
-        console.error('[AutoRotator] No cameraControls or _pose in update');
-      }
       return;
     }
 
@@ -139,18 +139,12 @@ export class AutoRotator extends Script {
     // Check if the camera was moved by the user
     if (this.pitch !== currentPitch || this.yaw !== currentYaw) {
       // Camera was moved, reset timer and store new angles
-      if (this.timer > 0 || shouldLog) {
-        console.log('[AutoRotator] Angles changed - pitch:', this.pitch.toFixed(2), '->', currentPitch.toFixed(2), 'yaw:', this.yaw.toFixed(2), '->', currentYaw.toFixed(2));
-      }
       this.pitch = currentPitch;
       this.yaw = currentYaw;
       this.timer = 0;
     } else {
       // Camera is still, increment timer
       this.timer += dt;
-      if (shouldLog) {
-        console.log('[AutoRotator] Timer:', this.timer.toFixed(2), 'pitch:', this.pitch.toFixed(2), 'yaw:', this.yaw.toFixed(2));
-      }
     }
 
     // Start auto-rotation after delay
@@ -161,10 +155,6 @@ export class AutoRotator extends Script {
 
       // Calculate rotation delta
       const yawDelta = dt * fadeIn * this.speed;
-
-      if (shouldLog || time < 2) {
-        console.log('[AutoRotator] Auto-rotating - fadeIn:', fadeIn.toFixed(3), 'yawDelta:', yawDelta.toFixed(3));
-      }
 
       // Get the current focus point (what the camera is looking at)
       const focusPoint = pose.getFocus(new Vec3());
@@ -193,10 +183,6 @@ export class AutoRotator extends Script {
       this.pitch = pose.angles.x;
       this.yaw = pose.angles.y;
 
-      if (shouldLog || time < 2) {
-        console.log('[AutoRotator] Focus:', focusPoint.toString(), 'NewPos:', newPos.toString());
-      }
-
       // Update the controller's internal state by calling attach()
       // This ensures the controller maintains our rotation
       if (this.cameraControls._controller && this.cameraControls._controller.attach) {
@@ -224,5 +210,17 @@ export class AutoRotator extends Script {
       return 1;
     }
     return Math.sin((x - 0.5) * Math.PI) * 0.5 + 0.5;
+  }
+
+  /**
+   * Clean up event listeners when the script is destroyed.
+   */
+  destroy() {
+    if (this.app.graphicsDevice.canvas && this.onPointerDown) {
+      this.app.graphicsDevice.canvas.removeEventListener('pointerdown', this.onPointerDown);
+    }
+    if (this.onKeyDown) {
+      window.removeEventListener('keydown', this.onKeyDown);
+    }
   }
 }
