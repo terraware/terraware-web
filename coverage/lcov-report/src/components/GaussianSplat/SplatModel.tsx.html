@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/39</span>
+                <span class='fraction'>0/44</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/29</span>
+                <span class='fraction'>0/31</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/36</span>
+                <span class='fraction'>0/41</span>
             </div>
         
             
@@ -119,7 +119,14 @@
 <a name='L54'></a><a href='#L54'>54</a>
 <a name='L55'></a><a href='#L55'>55</a>
 <a name='L56'></a><a href='#L56'>56</a>
-<a name='L57'></a><a href='#L57'>57</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a>
+<a name='L63'></a><a href='#L63'>63</a>
+<a name='L64'></a><a href='#L64'>64</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -159,6 +166,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -170,60 +178,73 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React fr<span class="cstat-no" title="statement not covered" >om 'react';</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > useEffect } f</span>rom 'react';
 <span class="cstat-no" title="statement not covered" ></span>
 import { Entity } from <span class="cstat-no" title="statement not covered" >'@playcanvas/react';</span>
 import { GSplat } from '<span class="cstat-no" title="statement not covered" >@playcanvas/react/component</span>s';
 import { useSplat }<span class="cstat-no" title="statement not covered" > from '@playcanvas/rea</span>ct/hooks';
 <span class="cstat-no" title="statement not covered" ></span>
-import Blocking<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Sp</span>inner from '../common/BlockingSpinner';</span>
-im<span class="cstat-no" title="statement not covered" >port SplatCrop from './SplatCrop';</span>
-impo<span class="cstat-no" title="statement not covered" >rt SplatFadeCrop from './SplatFadeCrop';</span>
-&nbsp;
-interface SplatMod<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >el</span>Props {</span>
-<span class="cstat-no" title="statement not covered" >  splatSrc: string;</span>
-  ro<span class="cstat-no" title="statement not covered" >tation?: [number, number, number];</span>
-  crop<span class="cstat-no" title="statement not covered" >AabbMin?: [number, number, number];</span>
-  cropAa<span class="cstat-no" title="statement not covered" >bbMax?: [number, number, n<span class="fstat-no" title="function not covered" >um</span>ber]<span class="cstat-no" title="statement not covered" >;</span></span>
+import useSnack<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ba</span>r from 'src/utils/useSnackbar';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+impo<span class="cstat-no" title="statement not covered" >rt BlockingSpinner from '../common/BlockingSpinner';</span>
+import SplatCrop from './SplatCrop';
+import SplatFadeCr<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >op</span> from './SplatFadeCrop';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+inte<span class="cstat-no" title="statement not covered" >rface SplatModelProps {</span>
+  spla<span class="cstat-no" title="statement not covered" >tSrc: string;</span>
+  rotati<span class="cstat-no" title="statement not covered" >on?: [number, number, numb<span class="fstat-no" title="function not covered" >er</span>];<span class="cstat-no" title="statement not covered" ></span></span>
+  cropAabbMin?: [number, number, number];
+<span class="cstat-no" title="statement not covered" >  cropAabbMax</span>?: [number, number, number];
   cropEdgeScaleFactor?: number;
-<span class="cstat-no" title="statement not covered" >  cropFade?: </span>boolean;
+  cropFade?: b<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >oo</span>lean;<span class="cstat-no" title="statement not covered" ></span></span>
   cropFadeDistance?: number;
-}<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+}
 &nbsp;
 const SplatModel = ({
   splatSrc,
   rotation,
   cropAabbMin,
-  cropAabbMax,
-  cropEdgeScaleFactor,
-  cropFade = false,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  cropFadeDistance =<span class="cstat-no" title="statement not covered" > 0.</span>5,
-<span class="cstat-no" title="statement not covered" >}: SplatModelProps) =&gt; {</span>
-  // A file<span class="fstat-no" title="function not covered" >na</span>me i<span class="cstat-no" title="statement not covered" >s required for</span> the file props to assist with the asset loading. Otherwise it assumes that the splatSrc is a ply file.
-  const { asset, loading } = useSplat(splatSrc, { file: { filename: 'model.sog' } });
+  cropAabbMax,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  cropEdgeScaleFacto<span class="cstat-no" title="statement not covered" >r,</span>
+<span class="cstat-no" title="statement not covered" >  cropFade = false,</span>
+  cropFadeD<span class="fstat-no" title="function not covered" >is</span>tanc<span class="cstat-no" title="statement not covered" >e = 0.5,</span>
+}: SplatModelProps) =&gt; {
+<span class="cstat-no" title="statement not covered" >  // A filename is required for the file props</span> to assist with the asset loading. Otherwise it assumes that the splatSrc is a ply file.
+  const { asset, lo<span class="cstat-no" title="statement not covered" >ading, error } = useSplat(</span>splatSrc, { file: { filename: 'model.sog' } });
+  const snackbar = u<span class="cstat-no" title="statement not covered" >seSnackbar();</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  if (loading) {<span class="cstat-no" title="statement not covered" ></span>
-    return &lt;Blocking<span class="cstat-no" title="statement not covered" >Spinner /&gt;;</span>
-  }<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span>
-  // todo add error handling<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span>
-  if (!asset) {<span class="cstat-no" title="statement not covered" ></span>
-    return null;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
+    if (error) {<span class="cstat-no" title="statement not covered" ></span>
+      snackbar.toastError();<span class="cstat-no" title="statement not covered" ></span>
+    }<span class="cstat-no" title="statement not covered" ></span>
+  }, [error, snackbar]);<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  if (loading) {
+    return &lt;BlockingSpinner /&gt;;
   }
 &nbsp;
-  return (
-    &lt;Entity name='splat' rotation={rotation}&gt;
-      &lt;GSplat asset={asset} /&gt;
-      {(cropA<span class="branch-0 cbranch-no" title="branch not covered" >abbMin</span> || cropAabbMax) &amp;&amp;
-        (cropFade ? (<span class="branch-0 cbranch-no" title="branch not covered" ></span>
+  if (!asset) {
+    return nu<span class="branch-0 cbranch-no" title="branch not covered" >ll;</span>
+  }<span class="branch-0 cbranch-no" title="branch not covered" ></span>
+&nbsp;
+  return (<span class="cstat-no" title="statement not covered" ></span>
+    &lt;Entity name='s<span class="cstat-no" title="statement not covered" >plat' rotation={rotation}&gt;</span>
+<span class="cstat-no" title="statement not covered" >      &lt;GSplat asset={asset} /&gt;<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >      {(cropAabbMin || cropAabbMax) &amp;&amp;</span>
+<span class="cstat-no" title="statement not covered" >        (cropFade ? (</span>
           &lt;SplatFadeCrop aabbMin={cropAabbMin} aabbMax={cropAabbMax} fadeDistance={cropFadeDistance} /&gt;
-        ) : (<span class="cstat-no" title="statement not covered" ></span>
+        ) : (
 <span class="cstat-no" title="statement not covered" >          &lt;SplatCrop aabbMin={cropAabbMin} aabbMax={cropAabbMax} edgeScaleFactor={cropEdgeScaleFactor} /&gt;</span>
 <span class="cstat-no" title="statement not covered" >        ))}</span>
     &lt;/Entity&gt;
@@ -238,7 +259,7 @@ ex<span class="cstat-no" title="statement not covered" >port default SplatModel;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-29T14:45:34.514Z
+                at 2026-01-29T16:34:46.498Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

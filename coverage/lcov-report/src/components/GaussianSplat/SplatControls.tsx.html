@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/54</span>
+                <span class='fraction'>0/57</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/36</span>
+                <span class='fraction'>0/38</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/51</span>
+                <span class='fraction'>0/54</span>
             </div>
         
             
@@ -137,7 +137,12 @@
 <a name='L72'></a><a href='#L72'>72</a>
 <a name='L73'></a><a href='#L73'>73</a>
 <a name='L74'></a><a href='#L74'>74</a>
-<a name='L75'></a><a href='#L75'>75</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a>
+<a name='L77'></a><a href='#L77'>77</a>
+<a name='L78'></a><a href='#L78'>78</a>
+<a name='L79'></a><a href='#L79'>79</a>
+<a name='L80'></a><a href='#L80'>80</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -211,6 +216,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > useCallback, </span>useEffect, useState } from 'react';
 <span class="cstat-no" title="statement not covered" ></span>
 import { Box } from '@m<span class="cstat-no" title="statement not covered" >ui/material';</span>
@@ -260,39 +270,44 @@ co<span class="cstat-no" title="statement not covered" >nst SplatControls = () =
   us<span class="fstat-no" title="function not covered" >eE</span>ffect(() =&gt; {
     // this can't be changed to `useMemo(() =&gt; app.xr?.isAvailable(XRTYPE_AR), [app])` because `app` doesn't update when
     //<span class="cstat-no" title="statement not covered" > XR's availability is updated</span>
-    app.<span class="cstat-no" title="statement not covered" >xr?.on('available', (type, availabl</span>e) =&gt; {
+    cons<span class="cstat-no" title="statement not covered" >t handleAvailable = (type: string, </span>available: boolean) =&gt; {
       if<span class="cstat-no" title="statement not covered" > (type === XRTYPE_VR) {</span>
 <span class="cstat-no" title="statement not covered" >        setIsVrAvailable(available);</span>
       } else if (type === XRTYPE_AR) {
         setIsArAvailable(available);
       }
-    });
-  }, [app]);<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" ></span>
-  return (
-    &lt;B<span class="cstat-no" title="statement not covered" >ox</span>
-      sx={{
-        position: 'absolute',
-        bottom: 16,
-        left: '50%',
-        transform: 'translateX(-50%)',
-      }}<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" >    &gt;</span>
-      {isArAvailable &amp;&amp; &lt;Button label={strings.AR} onClick={handleAr} /&gt;}
-<span class="cstat-no" title="statement not covered" >      {isVrAvailable &amp;&amp; &lt;Button label={strings.VR} onClick={handleVr} /&gt;}</span>
-    &lt;/Box&gt;
-  );
-};
+    };
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" >    ap</span>p.xr?.on('available', handleAvailable);
+    return () =&gt; {
+<span class="cstat-no" title="statement not covered" >      app.xr?.off('available', handleAvailable);</span>
+    };
+  }, [app]);
 &nbsp;
-export default SplatControls;
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></pre></td></tr></table></pre>
+  return (
+    &lt;Box
+      sx={{<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" ></span>        position: 'absolute',
+        bottom: 16,
+<span class="cstat-no" title="statement not covered" >        left: '50%',</span>
+        transform: 'translateX(-50%)',
+      }}
+    &gt;
+      {isArAvailable &amp;&amp; &lt;Button label={strings.AR} onClick={handleAr} /&gt;}
+      {isVrAvailable &amp;&amp; &lt;Button label={strings.VR} onClick={handleVr} /&gt;}
+<span class="cstat-no" title="statement not covered" >    &lt;/Box&gt;<span class="fstat-no" title="function not covered" ></span></span>
+  );
+};<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ></span>
+export d<span class="cstat-no" title="statement not covered" >efault SplatControls;</span>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-29T14:45:34.514Z
+                at 2026-01-29T16:34:46.498Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
