@@ -15,6 +15,7 @@ interface AnnotationProps {
   text?: string | React.ReactNode;
   label?: string | number;
   cameraPosition?: [number, number, number];
+  visible?: boolean;
 }
 
 /**
@@ -26,9 +27,10 @@ interface AnnotationProps {
  * @param props.text - Optional description (string or React component) displayed in the annotation
  * @param props.label - Optional label displayed on the hotspot
  * @param props.cameraPosition - Optional camera position to move to when clicked. If undefined, camera stays at current position
+ * @param props.visible - Optional flag to show/hide the annotation. Defaults to true
  */
 const Annotation = (props: AnnotationProps) => {
-  const { position, cameraPosition, text, ...annotationProps } = props;
+  const { position, cameraPosition, text, visible = true, ...annotationProps } = props;
   const { setCamera } = useCameraPosition();
   const [textContainer, setTextContainer] = useState<HTMLElement | null>(null);
   const textContentRef = useRef<HTMLDivElement>(null);
@@ -51,6 +53,7 @@ const Annotation = (props: AnnotationProps) => {
           script={PcAnnotation}
           {...annotationProps}
           text={textProp}
+          visible={visible}
           onClickCallback={handleClick}
           textContentRef={isReactContent ? textContentRef : undefined}
           setTextContainer={isReactContent ? handleSetTextContainer : undefined}
