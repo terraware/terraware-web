@@ -1,3 +1,4 @@
+9c7aa3cfb80 SW-8002 Fix model disappearing when rerendering (#5144)
 06c37c8c604 SW-8002 Toggle Annotations (#5143)
 d430410921d SW-8002 Add info pane for controls (#5141)
 15a4ac7d643 SW-7996 Error Handling for models and memory cleanup (#5139)
