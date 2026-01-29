@@ -122,6 +122,7 @@ export enum APP_PATHS {
   OBSERVATION_MONITORING_PLOT_DETAILS = '/observations/:plantingSiteId/results/:observationId/stratum/:stratumName/plot/:monitoringPlotId',
   OBSERVATION_MONITORING_PLOT_DETAILS_V2 = '/observations/:observationId/stratum/:stratumName/plot/:monitoringPlotId',
   OBSERVATION_MONITORING_PLOT_EDIT_PHOTOS = '/observations/:plantingSiteId/results/:observationId/plot/:monitoringPlotId/photos',
+  OBSERVATION_MONITORING_PLOT_EDIT_PHOTOS_V2 = '/observations/:observationId/stratum/:stratumName/plot/:monitoringPlotId/photos',
   OBSERVATION_STRATUM_DETAILS = '/observations/:plantingSiteId/results/:observationId/stratum/:stratumName',
   OBSERVATION_STRATUM_DETAILS_V2 = '/observations/:observationId/stratum/:stratumName',
   OBSERVATIONS = '/observations',

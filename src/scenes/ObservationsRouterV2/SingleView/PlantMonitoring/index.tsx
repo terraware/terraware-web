@@ -6,6 +6,7 @@ import { BusySpinner } from '@terraware/web-components';
 import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
 
 import MonitoringPlotDetails from './MonitoringPlot';
+import MonitoringPlotEditPhotos from './MonitoringPlot/MonitoringPlotEditPhotos';
 import SiteDetails from './Site';
 import StratumDetails from './Stratum';
 
@@ -30,6 +31,7 @@ const PlantMonitoringView = (): JSX.Element => {
   return (
     <Routes>
       <Route path={'/stratum/:stratumName/plot/:monitoringPlotId'} element={<MonitoringPlotDetails />} />
+      <Route path={'/stratum/:stratumName/plot/:monitoringPlotId/photos'} element={<MonitoringPlotEditPhotos />} />
       <Route path={'/stratum/:stratumName'} element={<StratumDetails />} />
       <Route path={'/*'} element={<SiteDetails />} />
     </Routes>
