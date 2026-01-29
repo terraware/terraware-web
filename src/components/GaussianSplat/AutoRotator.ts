@@ -36,12 +36,20 @@ export class AutoRotator extends Script {
   pitchAmount = 1;
 
   /**
-   * Delay in seconds before auto-rotation starts after the camera stops moving.
+   * Delay in seconds before auto-rotation starts after initialization.
    *
    * @attribute
    * @title Start Delay
    */
-  startDelay = 4;
+  startDelay = 5;
+
+  /**
+   * Delay in seconds before auto-rotation restarts after the camera stops moving.
+   *
+   * @attribute
+   * @title Restart Delay
+   */
+  restartDelay = 2;
 
   /**
    * Duration in seconds to fade in the rotation speed.
@@ -58,16 +66,34 @@ export class AutoRotator extends Script {
   private timer = 0;
 
   /**
+   * Flag to track if rotation has started at least once.
+   * @private
+   */
+  private hasStartedRotating = false;
+
+  /**
+   * Flag to track if we're currently rotating.
+   * @private
+   */
+  private isCurrentlyRotating = false;
+
+  /**
+   * Frame counter for debugging.
+   * @private
+   */
+  private frameCount = 0;
+
+  /**
    * Last known pitch angle for movement detection.
    * @private
    */
-  private pitch = 0;
+  private pitch: number | null = null;
 
   /**
    * Last known yaw angle for movement detection.
    * @private
    */
-  private yaw = 0;
+  private yaw: number | null = null;
 
   /**
    * Reference to the camera entity.
@@ -94,6 +120,8 @@ export class AutoRotator extends Script {
    */
   private handleUserInput() {
     this.timer = 0;
+    this.isCurrentlyRotating = false;
+    this.hasStartedRotating = true;
   }
 
   /**
@@ -115,11 +143,6 @@ export class AutoRotator extends Script {
     if (this.cameraEntity) {
       // Find the CameraControls script on the camera entity
       this.cameraControls = this.cameraEntity.script?.cameraControls;
-      if (this.cameraControls && this.cameraControls._pose) {
-        // Store initial angles
-        this.pitch = this.cameraControls._pose.angles.x;
-        this.yaw = this.cameraControls._pose.angles.y;
-      }
     }
   }
 
@@ -128,6 +151,9 @@ export class AutoRotator extends Script {
    * Uses postUpdate to run AFTER CameraControls has updated.
    */
   postUpdate(dt: number) {
+    this.frameCount++;
+    const shouldLog = this.frameCount % 60 === 0 || this.frameCount < 120;
+
     if (!this.cameraControls || !this.cameraControls._pose) {
       return;
     }
@@ -136,21 +162,56 @@ export class AutoRotator extends Script {
     const currentPitch = pose.angles.x;
     const currentYaw = pose.angles.y;
 
-    // Check if the camera was moved by the user
-    if (this.pitch !== currentPitch || this.yaw !== currentYaw) {
-      // Camera was moved, reset timer and store new angles
+    // Initialize angles on first frame
+    if (this.pitch === null || this.yaw === null) {
       this.pitch = currentPitch;
       this.yaw = currentYaw;
-      this.timer = 0;
-    } else {
-      // Camera is still, increment timer
-      this.timer += dt;
+      if (shouldLog) {
+        console.log('[AutoRotator] Initialized angles - pitch:', currentPitch.toFixed(4), 'yaw:', currentYaw.toFixed(4));
+      }
     }
 
+    // Only check for angle changes after the first rotation has started AND we're not currently rotating
+    // During the initial startDelay period, let CameraControls settle without resetting the timer
+    // While actively rotating, don't check for angle changes (to avoid detecting our own rotation)
+    if (this.hasStartedRotating && !this.isCurrentlyRotating && this.pitch !== null && this.yaw !== null) {
+      // Check if angles changed significantly (user moved camera)
+      const pitchDiff = Math.abs(this.pitch - currentPitch);
+      const yawDiff = Math.abs(this.yaw - currentYaw);
+      const angleThreshold = 0.1; // Ignore changes smaller than 0.1 degrees
+
+      if (pitchDiff > angleThreshold || yawDiff > angleThreshold) {
+        // Camera was moved by the user, reset timer and store new angles
+        if (shouldLog || this.timer > 1) {
+          console.log('[AutoRotator] Angles changed! pitch:', this.pitch.toFixed(4), '->', currentPitch.toFixed(4),
+                      'yaw:', this.yaw.toFixed(4), '->', currentYaw.toFixed(4), 'timer was:', this.timer.toFixed(2));
+        }
+        this.pitch = currentPitch;
+        this.yaw = currentYaw;
+        this.timer = 0;
+        this.isCurrentlyRotating = false;
+        this.hasStartedRotating = true;
+        return;
+      }
+    }
+
+    // Camera is still (or we're in the initial grace period), increment timer
+    this.timer += dt;
+    if (shouldLog) {
+      console.log('[AutoRotator] Timer:', this.timer.toFixed(2), 'hasStarted:', this.hasStartedRotating,
+                  'startDelay:', this.startDelay, 'restartDelay:', this.restartDelay);
+    }
+
+    // Determine which delay to use
+    const currentDelay = this.hasStartedRotating ? this.restartDelay : this.startDelay;
+
     // Start auto-rotation after delay
-    if (this.timer > this.startDelay) {
+    if (this.timer >= currentDelay) {
+      // Mark that we're currently rotating
+      this.isCurrentlyRotating = true;
+
       // Animate the camera
-      const time = this.timer - this.startDelay;
+      const time = this.timer - currentDelay;
       const fadeIn = this.smoothStep(time / this.startFadeInTime);
 
       // Calculate rotation delta
@@ -179,10 +240,6 @@ export class AutoRotator extends Script {
       // Update pose to look from new position to focus point
       pose.look(newPos, focusPoint);
 
-      // Update our stored angles to match
-      this.pitch = pose.angles.x;
-      this.yaw = pose.angles.y;
-
       // Update the controller's internal state by calling attach()
       // This ensures the controller maintains our rotation
       if (this.cameraControls._controller && this.cameraControls._controller.attach) {
@@ -192,6 +249,11 @@ export class AutoRotator extends Script {
       // Update the camera entity to match the modified pose
       this.cameraEntity.setPosition(pose.position);
       this.cameraEntity.setEulerAngles(pose.angles);
+
+      // Update our stored angles AFTER everything is applied
+      // This prevents detecting our own rotation as user input on the next frame
+      this.pitch = pose.angles.x;
+      this.yaw = pose.angles.y;
     }
   }
 
