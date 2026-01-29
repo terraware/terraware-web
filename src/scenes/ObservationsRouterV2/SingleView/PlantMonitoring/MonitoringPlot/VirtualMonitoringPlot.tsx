@@ -46,7 +46,9 @@ const VirtualMonitoringPlot = ({ observationId, fileId }: VirtualMonitoringPlotP
         <Script script={XrNavigation} />
       </Entity>
 
-      <SplatModel splatSrc={splatSrc} rotation={[-180, 0, 0]} />
+      {/* When a rerender occurs (such as changing showAnnotations), the splat model disappears (https://github.com/playcanvas/react/pull/298 and https://github.com/playcanvas/react/issues/302) */}
+      {/* The key includes showAnnotations the PR is merged and we're on a version that includes it */}
+      <SplatModel key={`splat-${showAnnotations}`} splatSrc={splatSrc} rotation={[-180, 0, 0]} />
 
       <Script
         script={TfAnnotationManager}
