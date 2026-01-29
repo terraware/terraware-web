@@ -139,11 +139,15 @@ const MonitoringPlotEditPhotos = () => {
   }, [observationResults, monitoringPlotId]);
 
   const goToPhotosTab = useCallback(() => {
-    navigate(
-      APP_PATHS.OBSERVATION_MONITORING_PLOT_DETAILS_V2.replace(':stratumName', `${stratumName}`)
-        .replace(':observationId', `${observationId}`)
-        .replace(':monitoringPlotId', `${monitoringPlotId}`)
-    );
+    if (stratumName) {
+      navigate(
+        APP_PATHS.OBSERVATION_MONITORING_PLOT_DETAILS_V2.replace(':stratumName', `${stratumName}`)
+          .replace(':observationId', `${observationId}`)
+          .replace(':monitoringPlotId', `${monitoringPlotId}`)
+      );
+    } else {
+      navigate(APP_PATHS.OBSERVATION_DETAILS_V2.replace(':observationId', `${observationId}`));
+    }
   }, [monitoringPlotId, navigate, observationId, stratumName]);
 
   const savePhotos = useCallback(() => {

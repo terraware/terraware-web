@@ -116,6 +116,7 @@ export enum APP_PATHS {
   NURSERY_WITHDRAWALS = '/nursery/withdrawals',
   NURSERY_WITHDRAWALS_DETAILS = '/nursery/withdrawals/:withdrawalId',
   OBSERVATION_AD_HOC_PLOT_DETAILS = '/observations/:plantingSiteId/results/:observationId/adHocPlot/:monitoringPlotId',
+  OBSERVATION_AD_HOC_PLOT_EDIT_PHOTOS_V2 = '/observations/:observationId/plot/:monitoringPlotId/photos',
   OBSERVATION_BIOMASS_MEASUREMENTS_DETAILS = '/observations/:plantingSiteId/results/:observationId/biomassMeasurements/:monitoringPlotId',
   OBSERVATION_DETAILS = '/observations/:plantingSiteId/results/:observationId',
   OBSERVATION_DETAILS_V2 = '/observations/:observationId',

@@ -25,7 +25,12 @@ const PlantMonitoringView = (): JSX.Element => {
   }
 
   if (results.isAdHoc) {
-    return <MonitoringPlotDetails />;
+    return (
+      <Routes>
+        <Route path={'plot/:monitoringPlotId/photos'} element={<MonitoringPlotEditPhotos />} />
+        <Route path={'/*'} element={<MonitoringPlotDetails />} />
+      </Routes>
+    );
   }
 
   return (

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
@@ -54,8 +54,15 @@ const MonitoringPlotPhotosTab = () => {
           .replace(':observationId', observationId.toString())
           .replace(':monitoringPlotId', monitoringPlotId.toString())
       );
+    } else if (observationId && monitoringPlot?.monitoringPlotId) {
+      navigate(
+        APP_PATHS.OBSERVATION_AD_HOC_PLOT_EDIT_PHOTOS_V2.replace(':observationId', observationId.toString()).replace(
+          ':monitoringPlotId',
+          monitoringPlot?.monitoringPlotId.toString()
+        )
+      );
     }
-  }, [navigate, observationId, stratumName, monitoringPlotId]);
+  }, [observationId, stratumName, monitoringPlotId, monitoringPlot?.monitoringPlotId, navigate]);
 
   const plotCornerPhotos = useMemo(() => {
     return monitoringPlot?.photos?.filter((photo) => photo.position !== undefined && photo.type === 'Plot');

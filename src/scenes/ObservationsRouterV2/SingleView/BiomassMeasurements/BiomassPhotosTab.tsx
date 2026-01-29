@@ -5,6 +5,8 @@ import { Box, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
+import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
@@ -24,6 +26,7 @@ const BiomassPhotosTab = () => {
   const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);
   const adHocPlot = useMemo(() => results?.adHocPlot, [results?.adHocPlot]);
   const isCompleted = useMemo(() => results?.completedTime !== undefined, [results?.completedTime]);
+  const navigate = useSyncNavigate();
 
   useEffect(() => {
     if (results) {
@@ -34,8 +37,15 @@ const BiomassPhotosTab = () => {
   const plantingSite = useMemo(() => plantingSiteResponse.data?.site, [plantingSiteResponse.data?.site]);
 
   const goToEdit = useCallback(() => {
-    // TODO: Implement after monitoring plot photos editting page is added.
-  }, []);
+    if (adHocPlot) {
+      navigate(
+        APP_PATHS.OBSERVATION_AD_HOC_PLOT_EDIT_PHOTOS_V2.replace(':observationId', observationId.toString()).replace(
+          ':monitoringPlotId',
+          adHocPlot.monitoringPlotId.toString()
+        )
+      );
+    }
+  }, [adHocPlot, navigate, observationId]);
 
   const plotCornerPhotos = useMemo(() => {
     return adHocPlot?.photos?.filter((photo) => photo.position !== undefined && photo.type === 'Plot');
