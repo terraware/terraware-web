@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import { Box, IconButton, useTheme } from '@mui/material';
 import { useApp } from '@playcanvas/react/hooks';
@@ -28,6 +28,8 @@ const SplatControls = ({ defaultCameraPosition, defaultCameraFocus }: SplatContr
   const [isVrAvailable, setIsVrAvailable] = useState(false);
   const [isInfoVisible, setIsInfoVisible] = useBoolean(true);
   const snackbar = useSnackbar();
+  const paneRef = useRef<HTMLDivElement>(null);
+  const infoButtonRef = useRef<HTMLButtonElement>(null);
 
   const errorCallback = useCallback(
     (err: Error | null) => {
@@ -93,6 +95,32 @@ const SplatControls = ({ defaultCameraPosition, defaultCameraFocus }: SplatContr
     setIsInfoVisible((prev) => !prev);
   }, [setIsInfoVisible]);
 
+  useEffect(() => {
+    const handleScroll = (event: Event) => {
+      if (isInfoVisible && paneRef.current && !paneRef.current.contains(event.target as Node)) {
+        setIsInfoVisible(false);
+      }
+    };
+
+    const handleMouseDown = (event: MouseEvent) => {
+      const target = event.target as Node;
+      const isClickOnInfoButton = infoButtonRef.current?.contains(target);
+      if (isInfoVisible && paneRef.current && !paneRef.current.contains(target) && !isClickOnInfoButton) {
+        setIsInfoVisible(false);
+      }
+    };
+
+    if (isInfoVisible) {
+      window.addEventListener('wheel', handleScroll, true);
+      window.addEventListener('mousedown', handleMouseDown, true);
+    }
+
+    return () => {
+      window.removeEventListener('wheel', handleScroll, true);
+      window.removeEventListener('mousedown', handleMouseDown, true);
+    };
+  }, [isInfoVisible, setIsInfoVisible, infoButtonRef]);
+
   return (
     <Box
       sx={{
@@ -119,6 +147,7 @@ const SplatControls = ({ defaultCameraPosition, defaultCameraFocus }: SplatContr
         {isVrAvailable && <Button label={strings.VR} onClick={handleVr} />}
       </Box>
       <IconButton
+        ref={infoButtonRef}
         sx={{
           position: 'absolute',
           bottom: 16,
@@ -131,7 +160,7 @@ const SplatControls = ({ defaultCameraPosition, defaultCameraFocus }: SplatContr
       >
         <Icon name='info' size={'medium'} fillColor={theme.palette.TwClrIcnInfo} />
       </IconButton>
-      <ControlsInfoPane visible={isInfoVisible} onClose={handleInfo} />
+      <ControlsInfoPane visible={isInfoVisible} paneRef={paneRef} />
     </Box>
   );
 };

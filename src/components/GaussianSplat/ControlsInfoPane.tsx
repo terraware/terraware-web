@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 
 import { Box, Checkbox, Divider, Fade, Typography, useTheme } from '@mui/material';
 
@@ -6,13 +6,12 @@ import { useLocalization } from 'src/providers';
 
 interface ControlsInfoPaneProps {
   visible: boolean;
-  onClose: () => void;
+  paneRef: React.RefObject<HTMLDivElement | null>;
 }
 
-const ControlsInfoPane = ({ visible, onClose }: ControlsInfoPaneProps) => {
+const ControlsInfoPane = ({ visible, paneRef }: ControlsInfoPaneProps) => {
   const theme = useTheme();
   const { strings } = useLocalization();
-  const paneRef = useRef<HTMLDivElement>(null);
 
   const controlRowSx = {
     display: 'flex',
@@ -27,30 +26,6 @@ const ControlsInfoPane = ({ visible, onClose }: ControlsInfoPaneProps) => {
   const dividerSx = {
     backgroundColor: theme.palette.TwClrBrdrTertiary,
   };
-
-  useEffect(() => {
-    const handleScroll = (event: Event) => {
-      if (visible && paneRef.current && !paneRef.current.contains(event.target as Node)) {
-        onClose();
-      }
-    };
-
-    const handleMouseDown = (event: MouseEvent) => {
-      if (visible && paneRef.current && !paneRef.current.contains(event.target as Node)) {
-        onClose();
-      }
-    };
-
-    if (visible) {
-      window.addEventListener('wheel', handleScroll, true);
-      window.addEventListener('mousedown', handleMouseDown, true);
-    }
-
-    return () => {
-      window.removeEventListener('wheel', handleScroll, true);
-      window.removeEventListener('mousedown', handleMouseDown, true);
-    };
-  }, [visible, onClose]);
 
   return (
     <Box
