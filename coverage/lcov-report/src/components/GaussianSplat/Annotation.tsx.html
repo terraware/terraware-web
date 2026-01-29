@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/31</span>
+                <span class='fraction'>0/32</span>
             </div>
         
             
@@ -134,7 +134,10 @@
 <a name='L69'></a><a href='#L69'>69</a>
 <a name='L70'></a><a href='#L70'>70</a>
 <a name='L71'></a><a href='#L71'>71</a>
-<a name='L72'></a><a href='#L72'>72</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L72'></a><a href='#L72'>72</a>
+<a name='L73'></a><a href='#L73'>73</a>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -198,7 +201,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -222,42 +228,45 @@ in<span class="cstat-no" title="statement not covered" >terface AnnotationProps 
   text?:<span class="cstat-no" title="statement not covered" > string | React.ReactNode;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
   label?: string | number;
 <span class="cstat-no" title="statement not covered" >  cameraPosit</span>ion?: [number, number, number];
-}
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  visible?: boolean;
+}<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+&nbsp;
 /**
  * A 3D annotation component that displays a hotspot in the scene.
  * When clicked, displays annotation text and moves the camera.
  *
  * @param props.position - The world position of the annotation
  * @param props.title - The title displayed in the annotation
- * @param props.text - Optional description (string or React component) displayed in the annotation
- * @param props.lab<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >el</span> - Opti<span class="cstat-no" title="statement not covered" >onal label displayed on the hotspot</span></span>
- * @param props.came<span class="cstat-no" title="statement not covered" >raP</span>osition - Optional camera position to move to when clicked. If undefined, camera stays at current position
-<span class="cstat-no" title="statement not covered" > */</span>
-const Annot<span class="fstat-no" title="function not covered" >at</span>ion <span class="cstat-no" title="statement not covered" >= (props: Anno</span>tationProps) =&gt; {
-  const { position, cameraPosition, text, ...annotationProps } = props;
-<span class="cstat-no" title="statement not covered" >  const { setCamera } = useCameraPosition();</span>
-  const [textContai<span class="cstat-no" title="statement not covered" >ner, setTextContainer] = u</span>seState&lt;HTMLElement | null&gt;(null);
-  const textContentRef <span class="cstat-no" title="statement not covered" >= useRef&lt;HTMLDivEleme</span>nt&gt;(null);
+ * @param props.tex<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >t </span>- Optio<span class="cstat-no" title="statement not covered" >nal description (string or React component) displayed in the an</span></span>notation
+ * @param props.labe<span class="cstat-no" title="statement not covered" >l -</span> Optional label displayed on the hotspot
+<span class="cstat-no" title="statement not covered" > * @param props.cameraPosition - Optional camera position to move to when clicked. If undefined, camera stays at current position</span>
+ * @param p<span class="fstat-no" title="function not covered" >ro</span>ps.v<span class="cstat-no" title="statement not covered" >isible - Optio</span>nal flag to show/hide the annotation. Defaults to true
+ */
+<span class="cstat-no" title="statement not covered" >const Annotation = (props: AnnotationProps) =&gt;</span> {
+  const { position,<span class="cstat-no" title="statement not covered" > cameraPosition, text, vis</span>ible = true, ...annotationProps } = props;
+  const { setCamera } =<span class="cstat-no" title="statement not covered" > useCameraPosition();</span>
+  const [textContain<span class="cstat-no" title="statement not covered" >er, setTextContainer] = useSt</span>ate&lt;HTMLElement | null&gt;(null);
+  const textContentRef =<span class="cstat-no" title="statement not covered" > useRef&lt;HTMLDivElement&gt;(null);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const handleClick = us<span class="cstat-no" title="statement not covered" >eCallback(() =&gt; {</span>
-    setCamera(position, c<span class="cstat-no" title="statement not covered" >ameraPosition);</span>
-  }, [position, cameraPosition,<span class="cstat-no" title="statement not covered" > setCamera]);</span>
-<span class="cstat-no" title="statement not covered" ></span>
-  const handleSetTe<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >xt</span>Container = useCallback((container: HTMLElement) =&gt; {</span>
+  const handleClick = useCallba<span class="cstat-no" title="statement not covered" >ck(() =&gt; {</span>
+    setCamera(position, cameraP<span class="cstat-no" title="statement not covered" >osition);</span>
+  }, [position, cam<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >er</span>aPosition, setCamera]);</span>
+<span class="cstat-no" title="statement not covered" ><span class="branch-0 cbranch-no" title="branch not covered" ></span></span>
+  const handleSetTextCon<span class="cstat-no" title="statement not covered" >tainer = useCallback((container: HTMLElement) =&gt; {</span>
     setTextContainer(container);<span class="cstat-no" title="statement not covered" ></span>
   }, []);<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span>
-  const isReactContent = <span class="cstat-no" title="statement not covered" >useMemo(() =&gt; text !== undefine</span>d &amp;&amp; typeof text !== 'string', [text]);
-  const textProp = use<span class="cstat-no" title="statement not covered" >Memo(() =&gt; (isReactContent ? u<span class="fstat-no" title="function not covered" >nd</span>efined : text), [isReactContent, text]);</span>
-<span class="cstat-no" title="statement not covered" ></span>
-  return (
-    &lt;&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >      &lt;Entity name={`annotation${</span>props.label}`} position={position}&gt;
-        &lt;Script
-          script={PcAnnot<span class="cstat-no" title="statement not covered" >ation}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-          {...annot<span class="cstat-no" title="statement not covered" >ationProps}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-<span class="cstat-no" title="statement not covered" >          text={textProp}</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  co<span class="cstat-no" title="statement not covered" >nst isReactContent = useMemo(() =&gt; te</span>xt !== undefined &amp;&amp; typeof text !== 'string', [text]);
+  const textProp = useMemo(() =&gt; (isReactContent ? undefined : text), [isReactContent, text]);
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  re<span class="cstat-no" title="statement not covered" >turn (</span>
+    &lt;&gt;
+      &lt;Entity name={`anno<span class="cstat-no" title="statement not covered" >tation${props.label}`} pos<span class="fstat-no" title="function not covered" >it</span>ion=<span class="cstat-no" title="statement not covered" >{position}&gt;</span></span>
+        &lt;Script<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+<span class="cstat-no" title="statement not covered" >          script={PcAnnotation}</span>
+          {...annotationProps}
+          text={textProp}
+          visible={visible}
           onClickCallback={handleClick}
           textContentRef={isReactContent ? textContentRef : undefined}
           setTextContainer={isReactContent ? handleSetTextContainer : undefined}
@@ -267,9 +276,9 @@ const Annot<span class="fstat-no" title="function not covered" >at</span>ion <sp
       {isReactContent &amp;&amp; (
         &lt;div ref={textContentRef} style={{ display: 'none' }} data-react-text-content='true'&gt;
           {text}
-        &lt;/div&gt;
+        &lt;/div&gt;<span class="cstat-no" title="statement not covered" ></span>
       )}
-      {/* Portal the<span class="cstat-no" title="statement not covered" > React cont</span>ent into the annotation text DOM when available */}
+      {/* Portal the React content into the annotation text DOM when available */}
       {isReactContent &amp;&amp; textContainer &amp;&amp; createPortal(text, textContainer)}
     &lt;/&gt;
   );
@@ -283,7 +292,7 @@ export default Annotation;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-29T16:50:23.469Z
+                at 2026-01-29T17:06:18.080Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
