@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography } from '@mui/material';
 import { Entity } from '@playcanvas/react';
@@ -22,6 +22,7 @@ interface VirtualMonitoringPlotProps {
 
 const VirtualMonitoringPlot = ({ observationId, fileId }: VirtualMonitoringPlotProps) => {
   const { setCamera } = useCameraPosition();
+  const [showAnnotations, setShowAnnotations] = useState(true);
 
   const splatSrc = useMemo(
     () => `/api/v1/tracking/observations/${observationId}/splats/${fileId}`,
@@ -61,12 +62,14 @@ const VirtualMonitoringPlot = ({ observationId, fileId }: VirtualMonitoringPlotP
         title={'An annotation'}
         text={'This annotation moves the camera.'}
         cameraPosition={[0.5, 0.3, 0.8]}
+        visible={showAnnotations}
       />
       <Annotation
         label={2}
         position={[0.2, 0.1, 0.4]}
         title={'Another annotation'}
         text={"This annotation leaves the camera where it's at."}
+        visible={showAnnotations}
       />
       <Annotation
         label={3}
@@ -86,8 +89,14 @@ const VirtualMonitoringPlot = ({ observationId, fileId }: VirtualMonitoringPlotP
           </Box>
         }
         cameraPosition={[-0.2, 0.3, 0.5]}
+        visible={showAnnotations}
       />
-      <SplatControls defaultCameraFocus={[0, 0.1, 0]} defaultCameraPosition={[0, 0.1, 0]} />
+      <SplatControls
+        defaultCameraFocus={[0, 0.1, 0]}
+        defaultCameraPosition={[0, 0.1, 0]}
+        showAnnotations={showAnnotations}
+        onToggleAnnotations={setShowAnnotations}
+      />
     </>
   );
 };

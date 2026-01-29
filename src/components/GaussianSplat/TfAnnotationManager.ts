@@ -46,7 +46,7 @@ export class TfAnnotationManager extends PcAnnotationManager {
   }
 
   /**
-   * Update loop to attach click handlers to annotations.
+   * Update loop to attach click handlers to annotations and manage visibility.
    */
   update() {
     const annotationResources = (this as any)._annotationResources;
@@ -54,28 +54,50 @@ export class TfAnnotationManager extends PcAnnotationManager {
       return;
     }
 
-    // Attach click handlers to any annotations that have callbacks
+    // Attach click handlers and manage visibility for all annotations
     annotationResources.forEach((resources: any, annotation: any) => {
-      if (resources && resources.hotspotDom && !this._clickHandlersAttached.has(annotation)) {
-        const callback = annotation.onClickCallback;
+      if (resources && resources.hotspotDom) {
+        // Attach click handler if not already attached
+        if (!this._clickHandlersAttached.has(annotation)) {
+          const callback = annotation.onClickCallback;
 
-        if (callback) {
-          this._clickHandlersAttached.add(annotation);
+          if (callback) {
+            this._clickHandlersAttached.add(annotation);
 
-          resources.hotspotDom.addEventListener('pointerdown', () => {
-            callback();
-          });
+            resources.hotspotDom.addEventListener('pointerdown', () => {
+              callback();
+            });
+          }
+        }
+
+        // Disable/enable the entity itself based on visibility
+        const isVisible = annotation.visible !== undefined ? annotation.visible : true;
+        if (annotation.entity) {
+          annotation.entity.enabled = isVisible;
+        }
+
+        // Hide tooltip if the active annotation is hidden
+        if ((this as any)._activeAnnotation === annotation && !isVisible) {
+          (this as any)._tooltipDom.style.visibility = 'hidden';
+          (this as any)._tooltipDom.style.opacity = '0';
+          (this as any)._activeAnnotation = null;
         }
       }
     });
   }
 
   /**
-   * Override to handle React components in annotation text.
+   * Override to handle React components in annotation text and respect visibility.
    * Creates a portal container for React content instead of using textContent.
    * @private
    */
   _showTooltip(annotation: any) {
+    // Don't show tooltip if annotation is not visible
+    const isVisible = annotation.visible !== undefined ? annotation.visible : true;
+    if (!isVisible) {
+      return;
+    }
+
     (this as any)._activeAnnotation = annotation;
     (this as any)._tooltipDom.style.visibility = 'visible';
     (this as any)._tooltipDom.style.opacity = '1';
@@ -138,7 +160,7 @@ export class TfAnnotationManager extends PcAnnotationManager {
   }
 
   /**
-   * Override position update to adjust for canvas offset when using document.body.
+   * Override position update to adjust for canvas offset and respect visibility.
    * @private
    */
   _updateAnnotationPositions(annotation: any, resources: any, screenPos: any) {
@@ -150,11 +172,14 @@ export class TfAnnotationManager extends PcAnnotationManager {
     const offsetX = this._customParentDom ? 0 : rect.left + window.scrollX;
     const offsetY = this._customParentDom ? 0 : rect.top + window.scrollY;
 
-    resources.hotspotDom.style.display = 'block';
+    // Check if annotation is visible (defaults to true if not specified)
+    const isVisible = annotation.visible !== undefined ? annotation.visible : true;
+    resources.hotspotDom.style.display = isVisible ? 'block' : 'none';
     resources.hotspotDom.style.left = `${screenPos.x + offsetX}px`;
     resources.hotspotDom.style.top = `${screenPos.y + offsetY}px`;
 
     if ((this as any)._activeAnnotation === annotation) {
+      (this as any)._tooltipDom.style.display = isVisible ? 'block' : 'none';
       (this as any)._tooltipDom.style.left = `${screenPos.x + offsetX}px`;
       (this as any)._tooltipDom.style.top = `${screenPos.y + offsetY}px`;
     }

@@ -17,9 +17,16 @@ import ControlsInfoPane from './ControlsInfoPane';
 export interface SplatControlsProps {
   defaultCameraPosition?: [number, number, number];
   defaultCameraFocus?: [number, number, number];
+  showAnnotations?: boolean;
+  onToggleAnnotations?: (show: boolean) => void;
 }
 
-const SplatControls = ({ defaultCameraPosition, defaultCameraFocus }: SplatControlsProps) => {
+const SplatControls = ({
+  defaultCameraPosition,
+  defaultCameraFocus,
+  showAnnotations,
+  onToggleAnnotations,
+}: SplatControlsProps) => {
   const theme = useTheme();
   const { strings } = useLocalization();
   const app = useApp();
@@ -160,7 +167,12 @@ const SplatControls = ({ defaultCameraPosition, defaultCameraFocus }: SplatContr
       >
         <Icon name='info' size={'medium'} fillColor={theme.palette.TwClrIcnInfo} />
       </IconButton>
-      <ControlsInfoPane visible={isInfoVisible} paneRef={paneRef} />
+      <ControlsInfoPane
+        visible={isInfoVisible}
+        paneRef={paneRef}
+        showAnnotations={showAnnotations}
+        onToggleAnnotations={onToggleAnnotations}
+      />
     </Box>
   );
 };
