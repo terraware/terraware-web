@@ -68,8 +68,9 @@ const VirtualMonitoringPlot = ({ observationId, fileId, annotations = [] }: Virt
           hotspotSize={30}
           maxWorldSize={0.05}
           opacity={1}
-          hotspotColor={new Color(1, 1, 1, 1)}
-          // hoverColor={new Color(0, 0, 0, 1)}
+          hotspotColor={new Color().fromString('#ffffff')}
+          hoverColor={new Color().fromString('#ffffff')}
+        hotspotBackgroundColor='#2C8658'
         />
       )}
       {annotations.map((annotation, index) => (

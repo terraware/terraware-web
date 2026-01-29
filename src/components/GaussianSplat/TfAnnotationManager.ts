@@ -11,6 +11,7 @@ export class TfAnnotationManager extends PcAnnotationManager {
   private _maxWorldSize = 1.0;
   private _customParentDom: HTMLElement | null = null;
   private _clickHandlersAttached = new Set<any>();
+  private _hotspotBackgroundColor = '#2C8658';
 
   /**
    * Maximum world-space size for annotations.
@@ -27,6 +28,25 @@ export class TfAnnotationManager extends PcAnnotationManager {
 
   get maxWorldSize() {
     return this._maxWorldSize;
+  }
+
+  /**
+   * Background color for the hotspot texture canvas (the circle fill color).
+   * This is a hex color string (e.g., '#2C8658') that's drawn on the texture canvas.
+   * Note: This is different from hotspotColor and hoverColor, which are PlayCanvas Color objects
+   * used for the material's emissive property.
+   *
+   * @attribute
+   * @title Hotspot Background Color
+   * @type {string}
+   * @default '#2C8658'
+   */
+  set hotspotBackgroundColor(value: string) {
+    this._hotspotBackgroundColor = value;
+  }
+
+  get hotspotBackgroundColor() {
+    return this._hotspotBackgroundColor;
   }
 
   /**
@@ -249,7 +269,7 @@ export class TfAnnotationManager extends PcAnnotationManager {
     // Draw main circle
     ctx.beginPath();
     ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
-    ctx.fillStyle = '#2C8658'; // this is the only line different from playcanvas
+    ctx.fillStyle = this._hotspotBackgroundColor; // this is the only line different from playcanvas in this method
     ctx.fill();
 
     // Draw border
