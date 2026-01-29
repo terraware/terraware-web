@@ -5,6 +5,8 @@ import { Box, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
+import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
@@ -15,9 +17,11 @@ const MonitoringPlotPhotosTab = () => {
   const theme = useTheme();
   const { strings } = useLocalization();
 
-  const params = useParams<{ observationId: string; monitoringPlotId: string }>();
+  const params = useParams<{ observationId: string; stratumName: string; monitoringPlotId: string }>();
+  const stratumName = params.stratumName;
   const observationId = Number(params.observationId);
   const monitoringPlotId = Number(params.monitoringPlotId);
+  const navigate = useSyncNavigate();
 
   const { data: observationResultsResponse } = useGetObservationResultsQuery({ observationId });
   const [getPlantingSite, plantingSiteResponse] = useLazyGetPlantingSiteQuery();
@@ -44,8 +48,21 @@ const MonitoringPlotPhotosTab = () => {
   const plantingSite = useMemo(() => plantingSiteResponse.data?.site, [plantingSiteResponse.data?.site]);
 
   const goToEdit = useCallback(() => {
-    // TODO: Implement after monitoring plot photos editting page is added.
-  }, []);
+    if (observationId && stratumName && monitoringPlotId) {
+      navigate(
+        APP_PATHS.OBSERVATION_MONITORING_PLOT_EDIT_PHOTOS_V2.replace(':stratumName', stratumName)
+          .replace(':observationId', observationId.toString())
+          .replace(':monitoringPlotId', monitoringPlotId.toString())
+      );
+    } else if (observationId && monitoringPlot?.monitoringPlotId) {
+      navigate(
+        APP_PATHS.OBSERVATION_AD_HOC_PLOT_EDIT_PHOTOS_V2.replace(':observationId', observationId.toString()).replace(
+          ':monitoringPlotId',
+          monitoringPlot?.monitoringPlotId.toString()
+        )
+      );
+    }
+  }, [observationId, stratumName, monitoringPlotId, monitoringPlot?.monitoringPlotId, navigate]);
 
   const plotCornerPhotos = useMemo(() => {
     return monitoringPlot?.photos?.filter((photo) => photo.position !== undefined && photo.type === 'Plot');
