@@ -54,7 +54,7 @@ export class TfAnnotationManager extends PcAnnotationManager {
       return;
     }
 
-    // Attach click handlers and update visibility for all annotations
+    // Attach click handlers and manage visibility for all annotations
     annotationResources.forEach((resources: any, annotation: any) => {
       if (resources && resources.hotspotDom) {
         // Attach click handler if not already attached
@@ -70,15 +70,8 @@ export class TfAnnotationManager extends PcAnnotationManager {
           }
         }
 
-        // Update visibility based on visible property
+        // Disable/enable the entity itself based on visibility
         const isVisible = annotation.visible !== undefined ? annotation.visible : true;
-
-        // Set display on hotspot DOM
-        if (resources.hotspotDom) {
-          resources.hotspotDom.style.display = isVisible ? 'block' : 'none';
-        }
-
-        // Disable/enable the entity itself to prevent raycasting and rendering
         if (annotation.entity) {
           annotation.entity.enabled = isVisible;
         }
@@ -94,9 +87,8 @@ export class TfAnnotationManager extends PcAnnotationManager {
   }
 
   /**
-   * Override to handle React components in annotation text.
+   * Override to handle React components in annotation text and respect visibility.
    * Creates a portal container for React content instead of using textContent.
-   * Also respects the visible property.
    * @private
    */
   _showTooltip(annotation: any) {
@@ -168,8 +160,7 @@ export class TfAnnotationManager extends PcAnnotationManager {
   }
 
   /**
-   * Override position update to adjust for canvas offset when using document.body.
-   * Also respects the visible property to hide/show annotations.
+   * Override position update to adjust for canvas offset and respect visibility.
    * @private
    */
   _updateAnnotationPositions(annotation: any, resources: any, screenPos: any) {
@@ -196,7 +187,7 @@ export class TfAnnotationManager extends PcAnnotationManager {
 
   /**
    * Override the scale update to clamp the world size to a maximum value.
-   * Also scales the hotspot DOM element to match and respects visibility.
+   * Also scales the hotspot DOM element to match.
    * @private
    */
   _updateAnnotationRotationAndScale(annotation: any) {
@@ -226,10 +217,6 @@ export class TfAnnotationManager extends PcAnnotationManager {
       const scaledSize = baseSize * scaleFactor;
       resources.hotspotDom.style.width = `${scaledSize}px`;
       resources.hotspotDom.style.height = `${scaledSize}px`;
-
-      // Ensure visibility is respected
-      const isVisible = annotation.visible !== undefined ? annotation.visible : true;
-      resources.hotspotDom.style.display = isVisible ? 'block' : 'none';
     }
   }
 }
