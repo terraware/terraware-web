@@ -20,6 +20,9 @@ interface VirtualMonitoringPlotProps {
   fileId: string;
 }
 
+const DEFAULT_FOCUS_POINT: [number, number, number] = [0, 0.1, 0];
+const DEFAULT_POSITION: [number, number, number] = [1, 0.1, 0];
+
 const VirtualMonitoringPlot = ({ observationId, fileId }: VirtualMonitoringPlotProps) => {
   const { setCamera } = useCameraPosition();
   const [showAnnotations, setShowAnnotations] = useState(true);
@@ -30,7 +33,7 @@ const VirtualMonitoringPlot = ({ observationId, fileId }: VirtualMonitoringPlotP
   );
 
   useEffect(() => {
-    setCamera([0, 0.1, 0], [0, 0.1, 0]);
+    setCamera(DEFAULT_FOCUS_POINT, DEFAULT_POSITION);
   }, [setCamera]);
 
   return (
@@ -94,8 +97,8 @@ const VirtualMonitoringPlot = ({ observationId, fileId }: VirtualMonitoringPlotP
         visible={showAnnotations}
       />
       <SplatControls
-        defaultCameraFocus={[0, 0.1, 0]}
-        defaultCameraPosition={[0, 0.1, 0]}
+        defaultCameraFocus={DEFAULT_FOCUS_POINT}
+        defaultCameraPosition={DEFAULT_POSITION}
         showAnnotations={showAnnotations}
         onToggleAnnotations={setShowAnnotations}
       />
