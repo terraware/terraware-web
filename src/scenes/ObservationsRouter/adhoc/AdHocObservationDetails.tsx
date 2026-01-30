@@ -161,13 +161,7 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
       {
         id: 'photosAndVideos',
         label: strings.PHOTOS_AND_VIDEOS,
-        children: (
-          <PhotosAndVideosTab
-            monitoringPlot={observation?.adHocPlot}
-            isCompleted={!!observation?.adHocPlot?.completedTime}
-            plantingSiteName={plantingSite?.name}
-          />
-        ),
+        children: <PhotosAndVideosTab monitoringPlot={observation?.adHocPlot} plantingSiteName={plantingSite?.name} />,
       },
     ];
   }, [

@@ -160,12 +160,7 @@ export default function BiomassMeasurementsDetails(props: BiomassMeasurementDeta
         id: 'photosAndVideos',
         label: strings.PHOTOS_AND_VIDEOS,
         children: (
-          <PhotosAndVideosTab
-            monitoringPlot={monitoringPlot}
-            type='biomass'
-            isCompleted={!!observation?.completedTime}
-            plantingSiteName={plantingSite?.name}
-          />
+          <PhotosAndVideosTab monitoringPlot={monitoringPlot} type='biomass' plantingSiteName={plantingSite?.name} />
         ),
       },
     ];
