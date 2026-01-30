@@ -16,7 +16,6 @@ export const useDevicePerformance = (): DevicePerformance => {
 
   const deviceMemory = useMemo(() => (navigator as any).deviceMemory, []);
 
-  // Criteria: Desktop with 4+ cores OR 8+ GB RAM, or non-mobile with 6+ cores
   const isHighPerformance = useMemo(
     () => (!isMobile && cpuCores >= 4) || (deviceMemory && deviceMemory >= 8) || cpuCores >= 6,
     [cpuCores, deviceMemory, isMobile]
