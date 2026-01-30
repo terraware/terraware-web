@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/136</span>
+                <span class='fraction'>0/140</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/64</span>
+                <span class='fraction'>0/66</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/128</span>
+                <span class='fraction'>0/132</span>
             </div>
         
             
@@ -361,7 +361,15 @@
 <a name='L296'></a><a href='#L296'>296</a>
 <a name='L297'></a><a href='#L297'>297</a>
 <a name='L298'></a><a href='#L298'>298</a>
-<a name='L299'></a><a href='#L299'>299</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L299'></a><a href='#L299'>299</a>
+<a name='L300'></a><a href='#L300'>300</a>
+<a name='L301'></a><a href='#L301'>301</a>
+<a name='L302'></a><a href='#L302'>302</a>
+<a name='L303'></a><a href='#L303'>303</a>
+<a name='L304'></a><a href='#L304'>304</a>
+<a name='L305'></a><a href='#L305'>305</a>
+<a name='L306'></a><a href='#L306'>306</a>
+<a name='L307'></a><a href='#L307'>307</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -423,6 +431,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -512,6 +521,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -551,7 +561,9 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -619,6 +631,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -640,6 +653,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -663,7 +679,7 @@
 import { usePara<span class="cstat-no" title="statement not covered" >ms } from 'react-route</span>r';
 <span class="cstat-no" title="statement not covered" ></span>
 import { Box, Typography<span class="cstat-no" title="statement not covered" >, useTheme } from '@mui/mat</span>erial';
-import { Button, Di<span class="cstat-no" title="statement not covered" >alogBox, FileChooser, </span>PageForm } from '@terraware/web-components';
+import { BusySpinne<span class="cstat-no" title="statement not covered" >r, Button, DialogBox, </span>FileChooser, PageForm } from '@terraware/web-components';
 <span class="cstat-no" title="statement not covered" ></span>
 import { isVide<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >oF</span>ile } from 'src/components/ActivityLog/ActivityMediaForm';</span>
 im<span class="cstat-no" title="statement not covered" >port Page from 'src/components/Page';</span>
@@ -701,20 +717,21 @@ const MonitoringPlotEditPhotos = () =&gt; {
   const theme = useThem<span class="cstat-no" title="statement not covered" >e();</span>
   const navigate = useSyncNav<span class="cstat-no" title="statement not covered" >igate();</span>
   const [showWarning, setS<span class="cstat-no" title="statement not covered" >howWarning] = useState(false);</span>
+  const [loading, setLoading] = useState<span class="cstat-no" title="statement not covered" >(false);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const [monitoringPl<span class="cstat-no" title="statement not covered" >otResult, setMonitoringPlotResul</span>t] = useState&lt;ObservationMonitoringPlotResultsPayload&gt;();
+  const [monitoringPlotRe<span class="cstat-no" title="statement not covered" >sult, setMonitoringPlotResult] = useState&lt;</span>ObservationMonitoringPlotResultsPayload&gt;();
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  const snackbar <span class="cstat-no" title="statement not covered" >= useSnackbar();</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const snackbar = useSnackbar();<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  const { data: getObservat<span class="cstat-no" title="statement not covered" >ionResultsApiResponse } = useGet</span>ObservationResultsQuery({ observationId });
 <span class="cstat-no" title="statement not covered" ></span>
-  const { data: getObser<span class="cstat-no" title="statement not covered" >vationResultsApiResponse } = </span>useGetObservationResultsQuery({ observationId });
-<span class="cstat-no" title="statement not covered" ></span>
-  const observationRes<span class="cstat-no" title="statement not covered" >ults = useMemo(</span>
+  const observation<span class="cstat-no" title="statement not covered" >Results = useMemo(</span>
     () =&gt; getObserv<span class="cstat-no" title="statement not covered" >ationResultsApiResponse?.observation,</span>
-    [getObservation<span class="cstat-no" title="statement not covered" >ResultsApiResponse]</span>
+    [getObservationResul<span class="cstat-no" title="statement not covered" >tsApiResponse]</span>
   );<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const visibleM<span class="cstat-no" title="statement not covered" >ediaItems = useMemo(</span>
-    () =&gt; mediaItem<span class="cstat-no" title="statement not covered" >s.filter((item) =&gt; item.type === 'new' || !ite</span>m.isDeleted),
+  const visibleMedi<span class="cstat-no" title="statement not covered" >aItems = useMemo(</span>
+    () =&gt; mediaItems.filter((item) =&gt; it<span class="cstat-no" title="statement not covered" >em.type === 'new' || !item.isDelet</span>ed),
     [mediaItems]<span class="cstat-no" title="statement not covered" ></span>
   );<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
@@ -813,7 +830,8 @@ const MonitoringPlotEditPhotos = () =&gt; {
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
   co<span class="cstat-no" title="statement not covered" >nst sa<span class="fstat-no" title="function not covered" >ve</span>Photos = useCallback(() =&gt; {</span>
     vo<span class="cstat-no" title="statement not covered" >id (async () =&gt; {</span>
-      try {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+      tr<span class="cstat-no" title="statement not covered" >y {</span>
+        setLoading(true);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
         co<span class="cstat-no" title="statement not covered" >nst promises = mediaItems.map((mediaItem) =&gt; {</span>
           if (mediaItem.type <span class="cstat-no" title="statement not covered" >=== 'new') {</span>
 <span class="cstat-no" title="statement not covered" >            const formData = new FormData();</span>
@@ -847,13 +865,15 @@ const MonitoringPlotEditPhotos = () =&gt; {
 <span class="cstat-no" title="statement not covered" >            };</span>
             return update(payload).unwrap();
 <span class="cstat-no" title="statement not covered" >          }</span>
-<span class="cstat-no" title="statement not covered" >          return Promise.resolve();</span>
+<span class="cstat-no" title="statement not covered" >          return Promise.re</span>solve();
 <span class="cstat-no" title="statement not covered" >        });</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >        await Promise.all(promi</span>ses);
-        snackbar.toastSuccess(strings.CHANGES_SAVED);
+<span class="cstat-no" title="statement not covered" ></span>
+        await Promise.all(promises);
+<span class="cstat-no" title="statement not covered" >        setLoading(false);</span>
+<span class="cstat-no" title="statement not covered" >        snackbar.toastSuccess(s</span>trings.CHANGES_SAVED);
         goToPhotosTab();
       } catch (error) {
+        setLoading(false);
         snackbar.toa<span class="cstat-no" title="statement not covered" >stError();<span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >      }</span>
     })();
@@ -874,30 +894,34 @@ const MonitoringPlotEditPhotos = () =&gt; {
   return (
     &lt;Page title={monitoringPlotResult?.monitoringPlotName}&gt;
       {showWarning &amp;&amp; (
-        &lt;DialogBox
-          onClose={onCloseModal}
-          open={true}
-          title={strings.SAVE_PHOTOS_AND_VIDEOS}
-          size='medium'
-          middleButtons={[
-            &lt;Button
-              id='cancelSave'
-              label={strings.CANCEL}
-              priority='secondary'
-              type='passive'
-              onClick={onCloseModal}
-              key='button-1'
-            /&gt;,
-            &lt;Button
-              id='confirmSave'
-              label={strings.CONTINUE}
-              onClick={onConfirmSave}
-              key='button-2'
-              type='destructive'
-            /&gt;,
-          ]}
-          message={strings.SAVE_PHOTOS_AND_VIDEOS_DESCRIPTION}
-        /&gt;
+        &lt;&gt;
+          {loading &amp;&amp; &lt;BusySpinner withSkrim={true} /&gt;}
+          &lt;DialogBox
+            onClose={onCloseModal}
+            open={true}
+            title={strings.SAVE_PHOTOS_AND_VIDEOS}
+            size='medium'
+            middleButtons={[
+              &lt;Button
+                id='cancelSave'
+                label={strings.CANCEL}
+                priority='secondary'
+                type='passive'
+                onClick={onCloseModal}
+                key='button-1'
+              /&gt;,
+              &lt;Button
+                id='confirmSave'
+                label={strings.CONTINUE}
+                onClick={onConfirmSave}
+                key='button-2'
+                type='destructive'
+                disabled={loading}
+              /&gt;,
+            ]}
+            message={strings.SAVE_PHOTOS_AND_VIDEOS_DESCRIPTION}
+          /&gt;
+        &lt;/&gt;
       )}
       &lt;PageForm
         cancelID='cancelUploadPhotos'
@@ -913,15 +937,15 @@ const MonitoringPlotEditPhotos = () =&gt; {
             {strings.EDIT_PHOTOS_AND_VIDEOS}
           &lt;/Typography&gt;
           &lt;Box display='flex' gap={3} paddingTop={theme.spacing(3)}&gt;
-            &lt;Box width='40%'&gt;
-              &lt;FileChooser
-                acceptFileType={'image/heic, image/jpeg, image/png, video/*'}
-                chooseFileText={strings.CHOOSE_FILES}<span class="fstat-no" title="function not covered" ></span>
-<span class="cstat-no" title="statement not covered" >                multipleSelection</span>
-<span class="cstat-no" title="statement not covered" >                setFi</span>les={onSetFiles}
+            &lt;Box width='40%'&gt;<span class="fstat-no" title="function not covered" ></span>
+<span class="cstat-no" title="statement not covered" >              &lt;FileChooser</span>
+<span class="cstat-no" title="statement not covered" >                accep</span>tFileType={'image/heic, image/jpeg, image/png, video/*'}
+                chooseFileText={strings.CHOOSE_FILES}
+                multipleSel<span class="cstat-no" title="statement not covered" >ection<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+<span class="cstat-no" title="statement not covered" >                setFiles={onSetFiles}</span>
                 uploadDescription={strings.UPLOAD_FILES_DESCRIPTION_FORMATS}
-                uploadText=<span class="cstat-no" title="statement not covered" >{strings.UPLOAD_FILES}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-<span class="cstat-no" title="statement not covered" >              /&gt;</span>
+                uploadText={strings.UPLOAD_FILES}
+              /&gt;
             &lt;/Box&gt;
             &lt;Box width='60%'&gt;
               {mediaItems.map((mediaItem, index) =&gt; {
@@ -934,10 +958,10 @@ const MonitoringPlotEditPhotos = () =&gt; {
                 const visibleIndex = mediaItems
                   .slice(0, index)
                   .filter((item) =&gt; !(item.type === 'existing' &amp;&amp; item.isDeleted)).length;
-&nbsp;
+<span class="cstat-no" title="statement not covered" ></span>
                 return (
                   &lt;MonitoringPlotPhotoPreview
-<span class="cstat-no" title="statement not covered" >                    isLast={visibleIndex === </span>visibleMediaItems.length - 1}
+                    isLast={visibleIndex === visibleMediaItems.length - 1}
                     key={`photo-${index}`}
                     mediaItem={mediaItem}
                     monitoringPlotId={monitoringPlotId}
@@ -964,7 +988,7 @@ export default MonitoringPlotEditPhotos;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-29T22:16:43.426Z
+                at 2026-01-30T18:07:56.271Z
             </div>
         <script src="../../../../../../prettify.js"></script>
         <script>

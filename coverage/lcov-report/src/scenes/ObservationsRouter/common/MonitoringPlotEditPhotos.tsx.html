@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/142</span>
+                <span class='fraction'>0/146</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/72</span>
+                <span class='fraction'>0/74</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/134</span>
+                <span class='fraction'>0/138</span>
             </div>
         
             
@@ -385,7 +385,14 @@
 <a name='L320'></a><a href='#L320'>320</a>
 <a name='L321'></a><a href='#L321'>321</a>
 <a name='L322'></a><a href='#L322'>322</a>
-<a name='L323'></a><a href='#L323'>323</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L323'></a><a href='#L323'>323</a>
+<a name='L324'></a><a href='#L324'>324</a>
+<a name='L325'></a><a href='#L325'>325</a>
+<a name='L326'></a><a href='#L326'>326</a>
+<a name='L327'></a><a href='#L327'>327</a>
+<a name='L328'></a><a href='#L328'>328</a>
+<a name='L329'></a><a href='#L329'>329</a>
+<a name='L330'></a><a href='#L330'>330</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -448,6 +455,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -562,6 +570,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -590,12 +599,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -683,6 +694,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -711,7 +725,7 @@
 import { usePara<span class="cstat-no" title="statement not covered" >ms } from 'react-route</span>r';
 <span class="cstat-no" title="statement not covered" ></span>
 import { Box, Typography<span class="cstat-no" title="statement not covered" >, useTheme } from '@mui/mat</span>erial';
-import { Button, Di<span class="cstat-no" title="statement not covered" >alogBox, FileChooser, </span>PageForm } from '@terraware/web-components';
+import { BusySpinne<span class="cstat-no" title="statement not covered" >r, Button, DialogBox, </span>FileChooser, PageForm } from '@terraware/web-components';
 <span class="cstat-no" title="statement not covered" ></span>
 import { isVide<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >oF</span>ile } from 'src/components/ActivityLog/ActivityMediaForm';</span>
 im<span class="cstat-no" title="statement not covered" >port Page from 'src/components/Page';</span>
@@ -750,20 +764,21 @@ const MonitoringPlotEditPhotos = ({ reload }: { reload: () =&gt; void }) =&gt; {
   const navigate = useSyncNav<span class="cstat-no" title="statement not covered" >igate();</span>
   const [stratumName, setS<span class="cstat-no" title="statement not covered" >tratumName] = useState&lt;string&gt;();</span>
   const [showWarning, setShowWarning] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
+  const [loading, set<span class="cstat-no" title="statement not covered" >Loading] = useState(false);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const [monitoringPlotRe<span class="cstat-no" title="statement not covered" >sult, setMonitoringPlotResult] = useState&lt;</span>ObservationMonitoringPlotResultsPayload&gt;();
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  const snackbar <span class="cstat-no" title="statement not covered" >= useSnackbar();</span>
+  const [monitoringPlotResult, se<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >tM</span>onitoringPlotResult] = useState&lt;ObservationMonitoringPlotResultsPayload&gt;();</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const { data: getObservat<span class="cstat-no" title="statement not covered" >ionResultsApiResponse } = useGet</span>ObservationResultsQuery({ observationId });
+  const snackbar = useSn<span class="cstat-no" title="statement not covered" >ackbar();</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  const { data: getObserv<span class="cstat-no" title="statement not covered" >ationResultsApiRespons</span>e } = useGetObservationResultsQuery({ observationId });
 <span class="cstat-no" title="statement not covered" ></span>
   const observation<span class="cstat-no" title="statement not covered" >Results = useMemo(</span>
-    () =&gt; getObserv<span class="cstat-no" title="statement not covered" >ationResultsApiResponse?.observation,</span>
-    [getObservationResul<span class="cstat-no" title="statement not covered" >tsApiResponse]</span>
+    () =&gt; getObservation<span class="cstat-no" title="statement not covered" >ResultsApiResponse?.observation,</span>
+    [getObservationResultsApiResponse]<span class="cstat-no" title="statement not covered" ></span>
   );<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const visibleMedi<span class="cstat-no" title="statement not covered" >aItems = useMemo(</span>
-    () =&gt; mediaItems.filter((item) =&gt; it<span class="cstat-no" title="statement not covered" >em.type === 'new' || !item.is</span>Deleted),
+  const visibleMediaItems = useMemo(<span class="cstat-no" title="statement not covered" ></span>
+    () =&gt; mediaItems.filter((item) =&gt; it<span class="cstat-no" title="statement not covered" >em.type === 'new' || !item.isDelet</span>ed),
     [mediaItems]<span class="cstat-no" title="statement not covered" ></span>
   );<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
@@ -879,12 +894,13 @@ const MonitoringPlotEditPhotos = ({ reload }: { reload: () =&gt; void }) =&gt; {
     observationId,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >    observ<span class="fstat-no" title="function not covered" >at</span>ionResults,</span>
     pl<span class="cstat-no" title="statement not covered" >antingSiteId,</span>
-    stratumName,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  ]);<span class="cstat-no" title="statement not covered" ></span>
+    stra<span class="cstat-no" title="statement not covered" >tumName,</span>
+  ]);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const save<span class="cstat-no" title="statement not covered" >Photos = useCallback(() =&gt; {</span>
-    void (async () =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-      try {
+  const savePhotos = useCallb<span class="cstat-no" title="statement not covered" >ack(() =&gt; {</span>
+    void (as<span class="cstat-no" title="statement not covered" >ync () =&gt; {</span>
+      try {<span class="cstat-no" title="statement not covered" ></span>
+        setLoading(true);
         const promises = mediaItems.map((mediaItem) =&gt; {
           if (mediaItem.type === 'new') {
 <span class="cstat-no" title="statement not covered" >            const formData = new FormData();</span>
@@ -913,19 +929,21 @@ const MonitoringPlotEditPhotos = ({ reload }: { reload: () =&gt; void }) =&gt; {
 <span class="cstat-no" title="statement not covered" >            const payload: UpdatePlo</span>tPhotoApiArg = {
               observationId,
 <span class="cstat-no" title="statement not covered" >              plotId: monitoringPlotI</span>d,
-<span class="cstat-no" title="statement not covered" >              file</span>Id: mediaItem.data.fileId,
-<span class="cstat-no" title="statement not covered" >              updatePlotPhotoRequestPayload: { caption: mediaItem.dat</span>a.caption },
+<span class="cstat-no" title="statement not covered" >              fileId: media</span>Item.data.fileId,
+<span class="cstat-no" title="statement not covered" >              upda</span>tePlotPhotoRequestPayload: { caption: mediaItem.data.caption },
 <span class="cstat-no" title="statement not covered" >            };</span>
-            return update(payload).unwrap();
-<span class="cstat-no" title="statement not covered" >          }</span>
-          return Promise.resolve();
-        });
+<span class="cstat-no" title="statement not covered" >            return update</span>(payload).unwrap();
+          }
+<span class="cstat-no" title="statement not covered" >          return Promise.re</span>solve();
+<span class="cstat-no" title="statement not covered" >        });</span>
 &nbsp;
-        await Promis<span class="cstat-no" title="statement not covered" >e.all(promises);<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >        reload();</span>
-        snackbar.toastSuccess(strings.CHANGES_SAVED);
-        goToPhotosTab()<span class="cstat-no" title="statement not covered" >;<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >      } catch (error) {</span>
+        await Promise.all(promises);
+        setLoading(false);
+        reload();<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >        snackbar.toastSucc</span>ess(strings.CHANGES_SAVED);
+        goToPhotosTab();
+      } catch (error) {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >        setLoading(false);</span>
         snackbar.toastError();
       }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >    })();</span>
@@ -946,30 +964,33 @@ const MonitoringPlotEditPhotos = ({ reload }: { reload: () =&gt; void }) =&gt; {
   return (
     &lt;Page title={monitoringPlotResult?.monitoringPlotName}&gt;
       {showWarning &amp;&amp; (
-        &lt;DialogBox
-          onClose={onCloseModal}
-          open={true}
-          title={strings.SAVE_PHOTOS_AND_VIDEOS}
-          size='medium'
-          middleButtons={[
-            &lt;Button
-              id='cancelSave'
-              label={strings.CANCEL}
-              priority='secondary'
-              type='passive'
-              onClick={onCloseModal}
-              key='button-1'
-            /&gt;,
-            &lt;Button
-              id='confirmSave'
-              label={strings.CONTINUE}
-              onClick={onConfirmSave}
-              key='button-2'
-              type='destructive'
-            /&gt;,
-          ]}
-          message={strings.SAVE_PHOTOS_AND_VIDEOS_DESCRIPTION}
-        /&gt;
+        &lt;&gt;
+          {loading &amp;&amp; &lt;BusySpinner withSkrim={true} /&gt;}
+          &lt;DialogBox
+            onClose={onCloseModal}
+            open={true}
+            title={strings.SAVE_PHOTOS_AND_VIDEOS}
+            size='medium'
+            middleButtons={[
+              &lt;Button
+                id='cancelSave'
+                label={strings.CANCEL}
+                priority='secondary'
+                type='passive'
+                onClick={onCloseModal}
+                key='button-1'
+              /&gt;,
+              &lt;Button
+                id='confirmSave'
+                label={strings.CONTINUE}
+                onClick={onConfirmSave}
+                key='button-2'
+                type='destructive'
+              /&gt;,
+            ]}
+            message={strings.SAVE_PHOTOS_AND_VIDEOS_DESCRIPTION}
+          /&gt;
+        &lt;/&gt;
       )}
       &lt;PageForm
         cancelID='cancelUploadPhotos'
@@ -980,15 +1001,15 @@ const MonitoringPlotEditPhotos = ({ reload }: { reload: () =&gt; void }) =&gt; {
         cancelButtonText={strings.CANCEL}
         style={{ width: '100%' }}
       &gt;
-        &lt;Card radius={'24px'} style={{ padding: '24px', width: '100%' }}&gt;
-          &lt;Typography fontSize={'20px'} fontWeight={600}&gt;
-            {strings.EDIT_PHOTOS_AND_VIDEOS}
-          &lt;/Typography&gt;<span class="fstat-no" title="function not covered" ></span>
-<span class="cstat-no" title="statement not covered" >          &lt;Box display='flex' gap={3} paddingTop={theme.spacing(3)}&gt;</span>
-<span class="cstat-no" title="statement not covered" >            &lt;Box widt</span>h='40%'&gt;
+        &lt;Card radius={'24px'} style={{ padding: '24px', width: '100%' }}&gt;<span class="fstat-no" title="function not covered" ></span>
+<span class="cstat-no" title="statement not covered" >          &lt;Typography fontSize={'20px'} fontWeight={600}&gt;</span>
+<span class="cstat-no" title="statement not covered" >            {strings.</span>EDIT_PHOTOS_AND_VIDEOS}
+          &lt;/Typography&gt;
+          &lt;Box display='fle<span class="cstat-no" title="statement not covered" >x' gap={3} paddingTop={theme.spaci<span class="fstat-no" title="function not covered" >ng</span>(3)}&gt;<span class="cstat-no" title="statement not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >            &lt;Box width='40%'&gt;</span>
               &lt;FileChooser
-                acceptFileT<span class="cstat-no" title="statement not covered" >ype={'image/heic, image/jpeg, imag<span class="fstat-no" title="function not covered" >e/</span>png, vid<span class="cstat-no" title="statement not covered" >eo/*'}</span></span>
-<span class="cstat-no" title="statement not covered" >                chooseFileText={strings.CHOOSE_FILES}</span>
+                acceptFileType={'image/heic, image/jpeg, image/png, video/*'}
+                chooseFileText={strings.CHOOSE_FILES}
                 multipleSelection
                 setFiles={onSetFiles}
                 uploadDescription={strings.UPLOAD_FILES_DESCRIPTION_FORMATS}
@@ -1001,10 +1022,10 @@ const MonitoringPlotEditPhotos = ({ reload }: { reload: () =&gt; void }) =&gt; {
                 if (mediaItem.type === 'existing' &amp;&amp; mediaItem.isDeleted) {
                   return null;
                 }
-&nbsp;
+<span class="cstat-no" title="statement not covered" ></span>
                 // Calculate position excluding deleted items (this is the index in visibleMediaItems)
                 const visibleIndex = mediaItems
-                  .s<span class="cstat-no" title="statement not covered" >lice(0, index)</span>
+                  .slice(0, index)
                   .filter((item) =&gt; !(item.type === 'existing' &amp;&amp; item.isDeleted)).length;
 &nbsp;
                 return (
@@ -1036,7 +1057,7 @@ export default MonitoringPlotEditPhotos;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-29T22:16:43.426Z
+                at 2026-01-30T18:07:56.271Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
