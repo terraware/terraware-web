@@ -168,14 +168,11 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
     setMetricsToUse(Array.from(metrics.values()));
   }, [reports]);
 
-  const onRowClick = useCallback(
-    (metric: RowMetric) => {
-      if (isAllowedUpdateReportsTargets) {
-        return true;
-      }
-    },
-    [isAllowedUpdateReportsTargets]
-  );
+  const onRowClick = useCallback(() => {
+    if (isAllowedUpdateReportsTargets) {
+      return true;
+    }
+  }, [isAllowedUpdateReportsTargets]);
 
   const tableColumns = useMemo(
     () => columns(activeLocale, isAllowedUpdateReportsTargets, getReportsYears, onRowClick),
