@@ -2,74 +2,88 @@ import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'reac
 import { useParams } from 'react-router';
 
 import { Box } from '@mui/material';
-import { Select, TableColumnType, TableRowType } from '@terraware/web-components';
+import { EditableTable, EditableTableColumn, Select } from '@terraware/web-components';
 import { DateTime } from 'luxon';
+import { MRT_Cell, MRT_Row } from 'material-react-table';
 
-import ClientSideFilterTable from 'src/components/Tables/ClientSideFilterTable';
+import Link from 'src/components/common/Link';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useBoolean from 'src/hooks/useBoolean';
 import useProjectReports from 'src/hooks/useProjectReports';
-import { useLocalization } from 'src/providers';
+import { useLocalization, useOrganization, useUser } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import strings from 'src/strings';
 import { AcceleratorReport, MetricType } from 'src/types/AcceleratorReport';
-import { SearchSortOrder } from 'src/types/Search';
 
-import AcceleratorReportTargetsCellRenderer from './AcceleratorReportTargetsCellRenderer';
 import EditAcceleratorReportTargetsModal from './EditAcceleratorReportTargetsModal';
 
-const columns = (activeLocale: string | null): TableColumnType[] =>
+const columns = (
+  activeLocale: string | null,
+  isAllowedUpdateReportsTargets: boolean,
+  onRowClick?: (row: RowMetric) => void
+): EditableTableColumn<RowMetric>[] =>
   activeLocale
     ? [
         {
-          key: 'name',
-          name: strings.METRIC,
-          type: 'string',
+          id: 'name',
+          header: strings.METRIC,
+          accessorKey: 'name',
+          size: 500,
+          Cell: ({ cell, row }: { cell: MRT_Cell<RowMetric>; row: MRT_Row<RowMetric> }) => {
+            const value = cell.getValue() as string;
+            return isAllowedUpdateReportsTargets && onRowClick ? (
+              <Link fontSize='16px' onClick={() => onRowClick(row.original)}>
+                {value}
+              </Link>
+            ) : (
+              <>{value}</>
+            );
+          },
         },
         {
-          key: 'year',
-          name: strings.YEAR,
-          type: 'string',
+          id: 'year',
+          header: strings.YEAR,
+          accessorKey: 'year',
         },
         {
-          key: 'type',
-          name: strings.TYPE,
-          type: 'string',
+          id: 'type',
+          header: strings.TYPE,
+          accessorKey: 'type',
         },
         {
-          key: 'reference',
-          name: strings.REFERENCE,
-          type: 'string',
+          id: 'reference',
+          header: strings.REFERENCE,
+          accessorKey: 'reference',
         },
         {
-          key: 'component',
-          name: strings.COMPONENT,
-          type: 'string',
+          id: 'component',
+          header: strings.COMPONENT,
+          accessorKey: 'component',
         },
         {
-          key: 'annualTarget',
-          name: strings.ANNUAL_TARGET,
-          type: 'string',
+          id: 'annualTarget',
+          header: strings.ANNUAL_TARGET,
+          accessorKey: 'annualTarget',
         },
         {
-          key: 'q1Target',
-          name: strings.Q1_TARGET,
-          type: 'string',
+          id: 'q1Target',
+          header: strings.Q1_TARGET,
+          accessorKey: 'q1Target',
         },
         {
-          key: 'q2Target',
-          name: strings.Q2_TARGET,
-          type: 'string',
+          id: 'q2Target',
+          header: strings.Q2_TARGET,
+          accessorKey: 'q2Target',
         },
         {
-          key: 'q3Target',
-          name: strings.Q3_TARGET,
-          type: 'string',
+          id: 'q3Target',
+          header: strings.Q3_TARGET,
+          accessorKey: 'q3Target',
         },
         {
-          key: 'q4Target',
-          name: strings.Q4_TARGET,
-          type: 'string',
+          id: 'q4Target',
+          header: strings.Q4_TARGET,
+          accessorKey: 'q4Target',
         },
       ]
     : [];
@@ -99,17 +113,23 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const { currentParticipantProject } = useParticipantData();
   const { activeLocale } = useLocalization();
+  const { isAllowed } = useUser();
+  const { selectedOrganization } = useOrganization();
   const pathParams = useParams<{ projectId: string }>();
   const projectId = isAcceleratorRoute ? String(pathParams.projectId) : currentParticipantProject?.id?.toString();
   const [metricsToUse, setMetricsToUse] = useState<RowMetric[]>();
   const [editOpenModal, setEditOpenModal, , setEditOpenModalFalse] = useBoolean(false);
-  const [selectedRows, setSelectedRows] = useState<TableRowType[]>([]);
   const [selectedMetric, setSelectedMetric] = useState<RowMetric>();
   const currentYear = DateTime.now().year;
   const [yearFilter, setYearFilter] = useState<string>();
 
-  const { busy, reload, acceleratorReports: reports } = useProjectReports(projectId, true, true, yearFilter);
+  const { reload, acceleratorReports: reports } = useProjectReports(projectId, true, true, yearFilter);
   const { acceleratorReports: allReports } = useProjectReports(projectId, true, true);
+
+  const isAllowedUpdateReportsTargets = useMemo(
+    () => isAllowed('UPDATE_REPORTS_TARGETS', { organization: selectedOrganization }),
+    [isAllowed, selectedOrganization]
+  );
 
   const getReportsYears = useMemo(() => {
     const availableYears: Set<number> = new Set();
@@ -225,16 +245,9 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
     setMetricsToUse(Array.from(metrics.values()));
   }, [reports]);
 
-  const defaultSearchOrder: SearchSortOrder = {
-    field: 'metric',
-    direction: 'Ascending',
-  };
-
   const getReportsYearsString = useMemo(() => {
     return getReportsYears.map((year) => year.toString());
   }, [getReportsYears]);
-
-  const fuzzySearchColumns = useMemo(() => ['name'], []);
 
   useEffect(() => {
     if ((allReports?.length || 0) > 0 && getReportsYears.length > 0) {
@@ -252,34 +265,20 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
     }
   }, [allReports, currentYear, getReportsYears]);
 
-  const extraFilter = useMemo(
-    () =>
-      activeLocale ? (
-        <>
-          <Box paddingLeft={1} marginTop={0.5}>
-            <Select
-              id='yearFilter'
-              label={''}
-              selectedValue={yearFilter}
-              options={getReportsYearsString}
-              onChange={setYearFilter}
-              fullWidth
-            />
-          </Box>
-        </>
-      ) : null,
-    [activeLocale, getReportsYearsString, yearFilter]
-  );
-
   const onRowClick = useCallback(
-    (metric: TableRowType) => {
-      setSelectedMetric(metric as RowMetric);
-      setEditOpenModal(true);
+    (metric: RowMetric) => {
+      if (isAllowedUpdateReportsTargets) {
+        setSelectedMetric(metric);
+        setEditOpenModal(true);
+      }
     },
-    [setEditOpenModal]
+    [isAllowedUpdateReportsTargets, setEditOpenModal]
   );
 
-  const clickable = useCallback(() => false, []);
+  const tableColumns = useMemo(
+    () => columns(activeLocale, isAllowedUpdateReportsTargets, onRowClick),
+    [activeLocale, isAllowedUpdateReportsTargets, onRowClick]
+  );
 
   return (
     <>
@@ -291,23 +290,30 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
           row={selectedMetric}
         />
       )}
-      <ClientSideFilterTable
-        busy={busy}
-        columns={columns}
-        defaultSortOrder={defaultSearchOrder}
-        id='reports-targets-table'
-        Renderer={AcceleratorReportTargetsCellRenderer}
-        rows={metricsToUse || []}
-        title={strings.TARGETS}
-        fuzzySearchColumns={fuzzySearchColumns}
-        stickyFilters
-        extraComponent={extraFilter}
-        onSelect={onRowClick}
-        controlledOnSelect={true}
-        selectedRows={selectedRows}
-        setSelectedRows={setSelectedRows}
-        isClickable={clickable}
-      />
+      <Box>
+        <Box display='flex' justifyContent='flex-end' paddingRight={2} paddingBottom={1}>
+          <Box minWidth='150px'>
+            <Select
+              id='yearFilter'
+              label={strings.YEAR}
+              selectedValue={yearFilter}
+              options={getReportsYearsString}
+              onChange={setYearFilter}
+              fullWidth
+            />
+          </Box>
+        </Box>
+        <EditableTable
+          columns={tableColumns}
+          data={metricsToUse || []}
+          enableEditing={false}
+          enableSorting={true}
+          enableGlobalFilter={true}
+          enableColumnFilters={true}
+          enablePagination={true}
+          initialSorting={[{ id: 'name', desc: false }]}
+        />
+      </Box>
     </>
   );
 }
