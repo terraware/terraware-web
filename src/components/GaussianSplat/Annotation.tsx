@@ -9,7 +9,7 @@ import { useCameraPosition } from 'src/hooks/useCameraPosition';
 
 import './annotation-styles.css';
 
-interface AnnotationProps {
+export interface AnnotationProps {
   position: [number, number, number];
   title: string;
   text?: string | React.ReactNode;
