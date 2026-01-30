@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/93</span>
+                <span class='fraction'>0/89</span>
             </div>
         
             
@@ -261,13 +261,7 @@
 <a name='L196'></a><a href='#L196'>196</a>
 <a name='L197'></a><a href='#L197'>197</a>
 <a name='L198'></a><a href='#L198'>198</a>
-<a name='L199'></a><a href='#L199'>199</a>
-<a name='L200'></a><a href='#L200'>200</a>
-<a name='L201'></a><a href='#L201'>201</a>
-<a name='L202'></a><a href='#L202'>202</a>
-<a name='L203'></a><a href='#L203'>203</a>
-<a name='L204'></a><a href='#L204'>204</a>
-<a name='L205'></a><a href='#L205'>205</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L199'></a><a href='#L199'>199</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -393,15 +387,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -444,9 +433,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -456,6 +442,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -597,11 +585,11 @@ export defa<span class="fstat-no" title="function not covered" >ul</span>t fu<sp
     ).map((sp) =&gt; sp.speciesName || '');
 <span class="cstat-no" title="statement not covered" ></span>
     setUnrecogn<span class="cstat-no" title="statement not covered" >izedSpecies(speciesWithNoI<span class="fstat-no" title="function not covered" >dM</span>ap);</span>
-  }, [monitoringPlot]);
+  },<span class="cstat-no" title="statement not covered" > [monitoringPlot]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  cons<span class="cstat-no" title="statement not covered" >t onSaveMer</span>gedSpecies = useOnSaveMergedSpecies({ observationId, reload, setShowMatchSpeciesModal });
-&nbsp;
-  co<span class="cstat-no" title="statement not covered" >nst tabs = useMemo(() =&gt; {</span>
+  const onSaveMergedSpecies = useOnSaveMergedSpecies({ observationId, reload, setShowMatchSpeciesModal });
+<span class="cstat-no" title="statement not covered" ></span>
+  const tabs = useMemo(() =&gt; {
     if (!activeLocale) {
       return [];
     }
@@ -634,13 +622,7 @@ export defa<span class="fstat-no" title="function not covered" >ul</span>t fu<sp
       {
         id: 'photosAndVideos',
         label: strings.PHOTOS_AND_VIDEOS,
-        children: (
-          &lt;PhotosAndVideosTab
-            monitoringPlot={observation?.adHocPlot}
-            isCompleted={!!observation?.adHocPlot?.completedTime}
-            plantingSiteName={plantingSite?.name}
-          /&gt;
-        ),
+        children: &lt;PhotosAndVideosTab monitoringPlot={observation?.adHocPlot} plantingSiteName={plantingSite?.name} /&gt;,
       },
     ];
   }, [
@@ -649,17 +631,17 @@ export defa<span class="fstat-no" title="function not covered" >ul</span>t fu<sp
     observation,
     onCloseMatchSpeciesModal,
     onExportData,
-    onMatchSpecies,
+    onMatchSpecies,<span class="cstat-no" title="statement not covered" ></span>
     onSaveMergedSpecies,
-    showMatchSpeciesModal,<span class="cstat-no" title="statement not covered" ></span>
+    showMatchSpeciesModal,
     unrecognizedSpecies,
     observationId,
-    plantingSite,
-  ]);
-<span class="cstat-no" title="statement not covered" ></span>
-  co<span class="cstat-no" title="statement not covered" >nst { activeTab</span>, onChangeTab } = useStickyTabs({
+<span class="cstat-no" title="statement not covered" >    plantingSite,</span>
+  ])<span class="cstat-no" title="statement not covered" >;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  const { activeTab, onChangeTab } = useStickyTabs({</span>
     defaultTab: 'observationData',
-<span class="cstat-no" title="statement not covered" >    tabs,</span>
+    tabs,
     viewIdentifier: 'assignedObservations',
   });
 &nbsp;
@@ -682,7 +664,7 @@ export defa<span class="fstat-no" title="function not covered" >ul</span>t fu<sp
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-30T19:54:53.744Z
+                at 2026-01-30T20:21:58.403Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

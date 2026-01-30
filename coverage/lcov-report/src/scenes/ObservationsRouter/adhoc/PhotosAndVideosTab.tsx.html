@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/77</span>
+                <span class='fraction'>0/79</span>
             </div>
         
             
@@ -196,8 +196,7 @@
 <a name='L131'></a><a href='#L131'>131</a>
 <a name='L132'></a><a href='#L132'>132</a>
 <a name='L133'></a><a href='#L133'>133</a>
-<a name='L134'></a><a href='#L134'>134</a>
-<a name='L135'></a><a href='#L135'>135</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L134'></a><a href='#L134'>134</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -305,7 +304,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -349,55 +347,54 @@ import<span class="cstat-no" title="statement not covered" > MonitoringPlotPhoto
 type PhotosAndVideosTabProps = {
 <span class="cstat-no" title="statement not covered" >  monitoringP</span>lot?: ObservationMonitoringPlotResultsPayload;
   type?: string;
-  isCompleted:<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > b</span>oolean;<span class="cstat-no" title="statement not covered" ></span></span>
-  plantingSiteName?: string;
+  plantingSite<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Na</span>me?: string;<span class="cstat-no" title="statement not covered" ></span></span>
 };
 &nbsp;
-const PhotosAndVideosTab = ({ monitoringPlot, type, isCompleted, plantingSiteName }: PhotosAndVideosTabProps) =&gt; {
+const PhotosAndVideosTab = ({ monitoringPlot, type, plantingSiteName }: PhotosAndVideosTabProps) =&gt; {
   const navigate = useSyncNavigate();
 &nbsp;
   const params = useParams&lt;{
-    plantingSiteId:<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > s</span>tring;<span class="cstat-no" title="statement not covered" ></span></span>
-    observationId: s<span class="cstat-no" title="statement not covered" >tri</span>ng;
-<span class="cstat-no" title="statement not covered" >    monitoringPlotId: string;</span>
-  }&gt;();<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  const plantingSiteId = params.plantingSiteId</span>;
-  const observation<span class="cstat-no" title="statement not covered" >Id = params.observationId;</span>
-  const monitoringPlotId =<span class="cstat-no" title="statement not covered" > params.monitoringPlotId</span>;
-  const theme = useThe<span class="cstat-no" title="statement not covered" >me();</span>
+    plantingSiteId: string;
+    observationId: <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >st</span>ring;<span class="cstat-no" title="statement not covered" ></span></span>
+    monitoringPlotId<span class="cstat-no" title="statement not covered" >: s</span>tring;
+<span class="cstat-no" title="statement not covered" >  }&gt;();</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  const plantingSiteId = params.plantingSiteId;
+<span class="cstat-no" title="statement not covered" >  const observationId = params.observationId;</span>
+  const monitoringP<span class="cstat-no" title="statement not covered" >lotId = params.monitoringP</span>lotId;
+  const theme = useTheme()<span class="cstat-no" title="statement not covered" >;</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const onEdit = u<span class="cstat-no" title="statement not covered" >seCallback(() =&gt; {</span>
-    if (plantingSiteId <span class="cstat-no" title="statement not covered" >&amp;&amp; observationId &amp;&amp; monit</span>oringPlotId) {
+  const onEdit = useCallback<span class="cstat-no" title="statement not covered" >(() =&gt; {</span>
+    if (plantingSi<span class="cstat-no" title="statement not covered" >teId &amp;&amp; observationId &amp;&amp; monitoringPlotId) {</span>
       navigate(<span class="cstat-no" title="statement not covered" ></span>
-        APP_PATHS.OBS<span class="cstat-no" title="statement not covered" >ERVATION_MONITORING_PLOT_EDIT_PH</span>OTOS.replace(':plantingSiteId', plantingSiteId)
-          .replace(':o<span class="cstat-no" title="statement not covered" >bservationId', observationId)</span>
-          .replace(':monitoringPlotId', monit<span class="cstat-no" title="statement not covered" >oringPlotId)</span>
-      );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-    }
-  }, [monitoringPlo<span class="cstat-no" title="statement not covered" >tId, navigate, observationId, plantingSiteId])</span>;
+        APP_PATHS.OBSERVATION<span class="cstat-no" title="statement not covered" >_MONITORING_PLOT_EDIT_PHOTOS.replace(</span>':plantingSiteId', plantingSiteId)
+          .replace(':<span class="cstat-no" title="statement not covered" >observationId', observationId)</span>
+          .replace(':m<span class="cstat-no" title="statement not covered" >onitoringPlotId', monitoringPlotId)</span>
+      );<span class="cstat-no" title="statement not covered" ></span>
+    }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  }, [monitoringPlotId, navigate, observationId, plantingSiteId]);
 <span class="cstat-no" title="statement not covered" ></span>
-  const plotCornerPhotos <span class="cstat-no" title="statement not covered" >= useMemo(() =&gt; {</span>
-    return monitoringPlo<span class="cstat-no" title="statement not covered" >t?.photos?.filter((ph</span>oto) =&gt; photo.position !== undefined &amp;&amp; photo.type === 'Plot');
-  }, [monitoringPlot?.photo<span class="cstat-no" title="statement not covered" >s]);</span>
+  const plotCorne<span class="cstat-no" title="statement not covered" >rPhotos = useMemo(() =&gt; {</span>
+    return monitoringPlot<span class="cstat-no" title="statement not covered" >?.photos?.filter((phot</span>o) =&gt; photo.position !== undefined &amp;&amp; photo.type === 'Plot');
+  }, [monitoringPlot?.ph<span class="cstat-no" title="statement not covered" >otos]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const otherPhot<span class="cstat-no" title="statement not covered" >os = useMemo(() =&gt; {<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >    return monitoringPlot?.photos?.filter((photo) =&gt; photo.position === undefined &amp;&amp; photo.type === 'Plot');</span>
-  }, [<span class="cstat-no" title="statement not covered" >monitoringPlot?.photos]);</span>
-&nbsp;
+  const otherPho<span class="cstat-no" title="statement not covered" >tos = useMemo(() =&gt; {</span>
+    return monito<span class="cstat-no" title="statement not covered" >ringPlot?.photos?.filter((phot<span class="fstat-no" title="function not covered" >o)</span> =&gt; photo.position === undefined &amp;&amp; photo.type === 'Plot');</span>
+  },<span class="cstat-no" title="statement not covered" > [monitoringPlot?.photos]);</span>
+<span class="cstat-no" title="statement not covered" ></span>
   return (
     &lt;Card radius='24px'&gt;
       &lt;Box display={'flex'} justifyContent='space-between' alignItems='center' marginBottom={2}&gt;
-        &lt;Typography fontSiz<span class="cstat-no" title="statement not covered" >e={'20px'} fontWeight={600<span class="fstat-no" title="function not covered" >}&gt;</span></span>
-          {strings.PLOT_CORNER_PHOTOS}
-<span class="cstat-no" title="statement not covered" >        &lt;/Typography&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-        {isCompleted &amp;&amp; (
-          &lt;Button id='<span class="cstat-no" title="statement not covered" >edit' label={strings.EDIT}<span class="fstat-no" title="function not covered" > o</span>nClick={onEdit} icon='iconEdit' priority='secondary' size='small' /&gt;</span>
-        )}
-<span class="cstat-no" title="statement not covered" >      &lt;/Box&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-      &lt;Box marginBottom={4}&gt;
-<span class="cstat-no" title="statement not covered" >        {(plotCornerPhotos?.length || 0) &gt; 0 ? (</span>
-          &lt;MonitoringPlotPhotosWithActions
+        &lt;Typography fontSize={'20px'} fontWeight={600}&gt;
+          {strings.PLOT_COR<span class="cstat-no" title="statement not covered" >NER_PHOTOS}<span class="fstat-no" title="function not covered" ></span></span>
+        &lt;/Typography&gt;
+<span class="cstat-no" title="statement not covered" >        {monitoringPlot?.completedTime &amp;&amp; (<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+          &lt;Button id='edit' label={strings.EDIT} onClick={onEdit} icon='iconEdit' priority='secondary' size='small' /&gt;
+        )}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+      &lt;/Box&gt;
+<span class="cstat-no" title="statement not covered" >      &lt;Box marginBottom={4}&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+        {(plotCornerPhotos?.length || 0) &gt; 0 ? (
+<span class="cstat-no" title="statement not covered" >          &lt;MonitoringPlotPhotosWithActions</span>
             observationId={Number(observationId)}
             monitoringPlotId={Number(monitoringPlot?.monitoringPlotId)}
             photos={plotCornerPhotos}
@@ -410,16 +407,16 @@ const PhotosAndVideosTab = ({ monitoringPlot, type, isCompleted, plantingSiteNam
           &lt;/Typography&gt;
         )}
       &lt;/Box&gt;
-      {type === 'biomass' &amp;&amp; (<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-        &lt;&gt;
+      {type === 'biomass' &amp;&amp; (
+        &lt;&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
           &lt;Box&gt;
             &lt;Typography fontSize={'20px'} fontWeight={600} marginBottom={2}&gt;
               {strings.QUADRAT_PHOTOS}
             &lt;/Typography&gt;
             &lt;MonitoringPlotPhotosWithActions
               observationId={Number(observationId)}
-              monitoringPlotId={Number(monitoringPlot?.monitoringPlotId)}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-              photos={monitoringPlot?.photos?.filter((photo) =&gt; photo.type === 'Quadrat')}
+              monitoringPlotId={Number(monitoringPlot?.monitoringPlotId)}
+              photos={monitoringPlot?.photos?.filter((photo) =&gt; photo.type === 'Quadrat')}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
               plantingSiteName={plantingSiteName}
             /&gt;
           &lt;/Box&gt;
@@ -438,8 +435,8 @@ const PhotosAndVideosTab = ({ monitoringPlot, type, isCompleted, plantingSiteNam
       )}
       &lt;Typography fontSize={'20px'} fontWeight={600} marginBottom={2}&gt;
         {strings.PHOTOS_AND_VIDEOS}
-      &lt;/Typography&gt;<span class="cstat-no" title="statement not covered" ></span>
-      &lt;Box marginBottom={4}&gt;
+      &lt;/Typography&gt;
+      &lt;Box marginBot<span class="cstat-no" title="statement not covered" >tom={4}&gt;</span>
         {(otherPhotos?.length || 0) &gt; 0 ? (
           &lt;MonitoringPlotPhotosWithActions
             observationId={Number(observationId)}
@@ -472,7 +469,7 @@ export default PhotosAndVideosTab;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-30T19:54:53.744Z
+                at 2026-01-30T20:21:58.403Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
