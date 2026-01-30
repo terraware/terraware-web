@@ -15,6 +15,7 @@ import SplatModel from 'src/components/GaussianSplat/SplatModel';
 import { TfAnnotationManager } from 'src/components/GaussianSplat/TfAnnotationManager';
 import { TfXrNavigation } from 'src/components/GaussianSplat/TfXrNavigation';
 import { useCameraPosition } from 'src/hooks/useCameraPosition';
+import { useDevicePerformance } from 'src/hooks/useDevicePerformance';
 
 interface VirtualMonitoringPlotProps {
   observationId: string;
@@ -26,6 +27,7 @@ const DEFAULT_POSITION: [number, number, number] = [1, 0.1, 0];
 
 const VirtualMonitoringPlot = ({ observationId, fileId }: VirtualMonitoringPlotProps) => {
   const { setCamera } = useCameraPosition();
+  const { isHighPerformance } = useDevicePerformance();
   const [showAnnotations, setShowAnnotations] = useState(true);
 
   const splatSrc = useMemo(
@@ -53,7 +55,12 @@ const VirtualMonitoringPlot = ({ observationId, fileId }: VirtualMonitoringPlotP
 
       {/* When a rerender occurs (such as changing showAnnotations), the splat model disappears (https://github.com/playcanvas/react/pull/298 and https://github.com/playcanvas/react/issues/302) */}
       {/* The key includes showAnnotations the PR is merged and we're on a version that includes it */}
-      <SplatModel key={`splat-${showAnnotations}`} splatSrc={splatSrc} rotation={[-180, 0, 0]} />
+      <SplatModel
+        key={`splat-${showAnnotations}`}
+        splatSrc={splatSrc}
+        rotation={[-180, 0, 0]}
+        revealRain={isHighPerformance}
+      />
 
       <Script
         script={TfAnnotationManager}

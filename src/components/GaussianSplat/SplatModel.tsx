@@ -9,6 +9,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import BlockingSpinner from '../common/BlockingSpinner';
 import SplatCrop from './SplatCrop';
 import SplatFadeCrop from './SplatFadeCrop';
+import SplatRevealRain from './SplatRevealRain';
 
 interface SplatModelProps {
   splatSrc: string;
@@ -18,6 +19,7 @@ interface SplatModelProps {
   cropEdgeScaleFactor?: number;
   cropFade?: boolean;
   cropFadeDistance?: number;
+  revealRain?: boolean;
 }
 
 const SplatModel = ({
@@ -28,6 +30,7 @@ const SplatModel = ({
   cropEdgeScaleFactor,
   cropFade = false,
   cropFadeDistance = 0.5,
+  revealRain = false,
 }: SplatModelProps) => {
   // A filename is required for the file props to assist with the asset loading. Otherwise it assumes that the splatSrc is a ply file.
   const { asset, loading, error } = useSplat(splatSrc, { file: { filename: 'model.sog' } });
@@ -56,6 +59,7 @@ const SplatModel = ({
         ) : (
           <SplatCrop aabbMin={cropAabbMin} aabbMax={cropAabbMax} edgeScaleFactor={cropEdgeScaleFactor} />
         ))}
+      {revealRain && <SplatRevealRain />}
     </Entity>
   );
 };
