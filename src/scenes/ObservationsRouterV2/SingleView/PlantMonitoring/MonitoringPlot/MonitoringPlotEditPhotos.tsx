@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import { Button, DialogBox, FileChooser, PageForm } from '@terraware/web-components';
+import { BusySpinner, Button, DialogBox, FileChooser, PageForm } from '@terraware/web-components';
 
 import { isVideoFile } from 'src/components/ActivityLog/ActivityMediaForm';
 import Page from 'src/components/Page';
@@ -40,6 +40,7 @@ const MonitoringPlotEditPhotos = () => {
   const theme = useTheme();
   const navigate = useSyncNavigate();
   const [showWarning, setShowWarning] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [monitoringPlotResult, setMonitoringPlotResult] = useState<ObservationMonitoringPlotResultsPayload>();
 
@@ -153,6 +154,7 @@ const MonitoringPlotEditPhotos = () => {
   const savePhotos = useCallback(() => {
     void (async () => {
       try {
+        setLoading(true);
         const promises = mediaItems.map((mediaItem) => {
           if (mediaItem.type === 'new') {
             const formData = new FormData();
@@ -190,9 +192,11 @@ const MonitoringPlotEditPhotos = () => {
         });
 
         await Promise.all(promises);
+        setLoading(false);
         snackbar.toastSuccess(strings.CHANGES_SAVED);
         goToPhotosTab();
       } catch (error) {
+        setLoading(false);
         snackbar.toastError();
       }
     })();
@@ -213,30 +217,34 @@ const MonitoringPlotEditPhotos = () => {
   return (
     <Page title={monitoringPlotResult?.monitoringPlotName}>
       {showWarning && (
-        <DialogBox
-          onClose={onCloseModal}
-          open={true}
-          title={strings.SAVE_PHOTOS_AND_VIDEOS}
-          size='medium'
-          middleButtons={[
-            <Button
-              id='cancelSave'
-              label={strings.CANCEL}
-              priority='secondary'
-              type='passive'
-              onClick={onCloseModal}
-              key='button-1'
-            />,
-            <Button
-              id='confirmSave'
-              label={strings.CONTINUE}
-              onClick={onConfirmSave}
-              key='button-2'
-              type='destructive'
-            />,
-          ]}
-          message={strings.SAVE_PHOTOS_AND_VIDEOS_DESCRIPTION}
-        />
+        <>
+          {loading && <BusySpinner withSkrim={true} />}
+          <DialogBox
+            onClose={onCloseModal}
+            open={true}
+            title={strings.SAVE_PHOTOS_AND_VIDEOS}
+            size='medium'
+            middleButtons={[
+              <Button
+                id='cancelSave'
+                label={strings.CANCEL}
+                priority='secondary'
+                type='passive'
+                onClick={onCloseModal}
+                key='button-1'
+              />,
+              <Button
+                id='confirmSave'
+                label={strings.CONTINUE}
+                onClick={onConfirmSave}
+                key='button-2'
+                type='destructive'
+                disabled={loading}
+              />,
+            ]}
+            message={strings.SAVE_PHOTOS_AND_VIDEOS_DESCRIPTION}
+          />
+        </>
       )}
       <PageForm
         cancelID='cancelUploadPhotos'
