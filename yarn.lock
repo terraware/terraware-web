@@ -5299,8 +5299,10 @@
   resolved "https://registry.yarnpkg.com/@tanstack/virtual-core/-/virtual-core-3.11.2.tgz#00409e743ac4eea9afe5b7708594d5fcebb00212"
   integrity sha512-vTtpNt7mKCiZ1pwU9hfKPhpdVO2sVzFQsxoVBGtOSHxlrRRzYr8iQ2TlwbAcRYCcEiZ9ECAM8kBzH0v2+VzfKw==
 
-"@terraware/web-components@file:../web-components/dist":
-  version "4.0.4"
+"@terraware/web-components@^4.0.5":
+  version "4.0.5"
+  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-4.0.5.tgz#e3382ee48398555dead09f6ece9da5d7abebe85f"
+  integrity sha512-DUAD32wYhdpbmyFmU5HEkzUeRQIEciAcT+0Yhj/64A2xo1POxoKBSO/jpcaxqXyfl1zu/mwrkMQd89aPlUS+pg==
   dependencies:
     "@dnd-kit/core" "^6.0.7"
     "@dnd-kit/sortable" "^7.0.2"
