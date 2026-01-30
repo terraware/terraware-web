@@ -70,7 +70,7 @@ const VirtualMonitoringPlot = ({ observationId, fileId, annotations = [] }: Virt
           opacity={1}
           hotspotColor={new Color().fromString('#ffffff')}
           hoverColor={new Color().fromString('#ffffff')}
-        hotspotBackgroundColor='#2C8658'
+          hotspotBackgroundColor='#2C8658'
         />
       )}
       {annotations.map((annotation, index) => (
