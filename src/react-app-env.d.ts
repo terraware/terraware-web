@@ -6,3 +6,4 @@ declare module 'playcanvas/scripts/esm/gsplat/shader-effect-crop.mjs';
 declare module 'playcanvas/scripts/esm/gsplat/gsplat-shader-effect.mjs';
 declare module 'playcanvas/scripts/esm/xr-controllers.mjs';
 declare module 'playcanvas/scripts/esm/xr-navigation.mjs';
+declare module 'playcanvas/scripts/esm/gsplat/reveal-rain.mjs';
