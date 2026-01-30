@@ -1,13 +1,12 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
-import { Box, Typography } from '@mui/material';
 import { Entity } from '@playcanvas/react';
 import { Camera, Script } from '@playcanvas/react/components';
 import { Color } from 'playcanvas';
 import { CameraControls } from 'playcanvas/scripts/esm/camera-controls.mjs';
 import { XrControllers } from 'playcanvas/scripts/esm/xr-controllers.mjs';
 
-import Annotation from 'src/components/GaussianSplat/Annotation';
+import Annotation, { AnnotationProps } from 'src/components/GaussianSplat/Annotation';
 import { AutoRotator } from 'src/components/GaussianSplat/AutoRotator';
 import GradientSky from 'src/components/GaussianSplat/GradientSky';
 import SplatControls from 'src/components/GaussianSplat/SplatControls';
@@ -20,12 +19,13 @@ import { useDevicePerformance } from 'src/hooks/useDevicePerformance';
 interface VirtualMonitoringPlotProps {
   observationId: string;
   fileId: string;
+  annotations?: AnnotationProps[];
 }
 
 const DEFAULT_FOCUS_POINT: [number, number, number] = [0, 0.1, 0];
 const DEFAULT_POSITION: [number, number, number] = [1, 0.1, 0];
 
-const VirtualMonitoringPlot = ({ observationId, fileId }: VirtualMonitoringPlotProps) => {
+const VirtualMonitoringPlot = ({ observationId, fileId, annotations = [] }: VirtualMonitoringPlotProps) => {
   const { setCamera } = useCameraPosition();
   const { isHighPerformance } = useDevicePerformance();
   const [showAnnotations, setShowAnnotations] = useState(true);
@@ -62,49 +62,19 @@ const VirtualMonitoringPlot = ({ observationId, fileId }: VirtualMonitoringPlotP
         revealRain={isHighPerformance}
       />
 
-      <Script
-        script={TfAnnotationManager}
-        hotspotSize={75}
-        maxWorldSize={0.05}
-        opacity={1}
-        hotspotColor={new Color(1, 0, 0, 1)}
-        hoverColor={new Color(0, 1, 0, 1)}
-      />
-      <Annotation
-        label={1}
-        position={[-0.2, 0.1, 0.4]}
-        title={'An annotation'}
-        text={'This annotation moves the camera.'}
-        cameraPosition={[0.5, 0.3, 0.8]}
-        visible={showAnnotations}
-      />
-      <Annotation
-        label={2}
-        position={[0.2, 0.1, 0.4]}
-        title={'Another annotation'}
-        text={"This annotation leaves the camera where it's at."}
-        visible={showAnnotations}
-      />
-      <Annotation
-        label={3}
-        position={[0, 0.1, 0.2]}
-        title={'React Component'}
-        text={
-          <Box sx={{ padding: 2, backgroundColor: 'darkcyan', borderRadius: 1 }}>
-            <Typography variant='h6' gutterBottom>
-              Custom React Content
-            </Typography>
-            <Typography variant='body2'>
-              This annotation contains a full React component with Material-UI styling.
-            </Typography>
-            <Typography variant='caption' display='block' sx={{ mt: 1 }}>
-              You can put any React component here.
-            </Typography>
-          </Box>
-        }
-        cameraPosition={[-0.2, 0.3, 0.5]}
-        visible={showAnnotations}
-      />
+      {annotations.length > 0 && (
+        <Script
+          script={TfAnnotationManager}
+          hotspotSize={75}
+          maxWorldSize={0.05}
+          opacity={1}
+          hotspotColor={new Color(1, 0, 0, 1)}
+          hoverColor={new Color(0, 1, 0, 1)}
+        />
+      )}
+      {annotations.map((annotation, index) => (
+        <Annotation key={index} {...annotation} visible={showAnnotations} />
+      ))}
       <SplatControls
         defaultCameraFocus={DEFAULT_FOCUS_POINT}
         defaultCameraPosition={DEFAULT_POSITION}
