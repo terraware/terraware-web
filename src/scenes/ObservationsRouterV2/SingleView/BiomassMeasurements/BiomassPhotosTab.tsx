@@ -25,7 +25,7 @@ const BiomassPhotosTab = () => {
 
   const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);
   const adHocPlot = useMemo(() => results?.adHocPlot, [results?.adHocPlot]);
-  const isCompleted = useMemo(() => results?.completedTime !== undefined, [results?.completedTime]);
+  const isCompleted = useMemo(() => adHocPlot?.completedTime !== undefined, [adHocPlot?.completedTime]);
   const navigate = useSyncNavigate();
 
   useEffect(() => {

@@ -182,13 +182,7 @@ export default function ObservationMonitoringPlotDetails(): JSX.Element | undefi
       {
         id: 'photosAndVideos',
         label: strings.PHOTOS_AND_VIDEOS,
-        children: (
-          <PhotosAndVideosTab
-            monitoringPlot={monitoringPlotResult}
-            isCompleted={!!monitoringPlotResult?.completedTime}
-            plantingSiteName={plantingSite?.name}
-          />
-        ),
+        children: <PhotosAndVideosTab monitoringPlot={monitoringPlotResult} plantingSiteName={plantingSite?.name} />,
       },
     ];
   }, [activeLocale, monitoringPlotResult, monitoringPlotSpecies, observationId, plantingSite]);

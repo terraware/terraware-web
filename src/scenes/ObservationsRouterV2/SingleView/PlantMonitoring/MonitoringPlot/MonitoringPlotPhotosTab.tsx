@@ -37,7 +37,7 @@ const MonitoringPlotPhotosTab = () => {
             .find((plot) => plot.monitoringPlotId === monitoringPlotId),
     [monitoringPlotId, results?.adHocPlot, results?.isAdHoc, results?.strata]
   );
-  const isCompleted = useMemo(() => results?.completedTime !== undefined, [results?.completedTime]);
+  const isCompleted = useMemo(() => monitoringPlot?.completedTime !== undefined, [monitoringPlot?.completedTime]);
 
   useEffect(() => {
     if (results) {
