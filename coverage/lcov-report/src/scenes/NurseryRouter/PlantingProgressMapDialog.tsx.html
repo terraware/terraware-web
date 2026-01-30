@@ -196,7 +196,9 @@
 <a name='L131'></a><a href='#L131'>131</a>
 <a name='L132'></a><a href='#L132'>132</a>
 <a name='L133'></a><a href='#L133'>133</a>
-<a name='L134'></a><a href='#L134'>134</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L134'></a><a href='#L134'>134</a>
+<a name='L135'></a><a href='#L135'>135</a>
+<a name='L136'></a><a href='#L136'>136</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -247,6 +249,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -260,9 +263,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -270,24 +270,13 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -316,10 +305,25 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -342,35 +346,37 @@ import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext'
 import strings fro<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >m </span>'src/strings';</span>
 <span class="cstat-no" title="statement not covered" ></span>
 type<span class="cstat-no" title="statement not covered" > PlantingProgressMapDialogProps = {</span>
-  subs<span class="cstat-no" title="statement not covered" >tratumId: number;</span>
-  substr<span class="cstat-no" title="statement not covered" >atumName: string;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  substratumAreaHa: number;
-<span class="cstat-no" title="statement not covered" >  siteName: s</span>tring;
-  plantingComplete: boolean;
-  onUpdatePlan<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ti</span>ngComplete: (id: number, val<span class="cstat-no" title="statement not covered" >: boolean) =&gt; void;</span></span>
+  stra<span class="cstat-no" title="statement not covered" >tumName: string;</span>
+  substr<span class="cstat-no" title="statement not covered" >atumId: number;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  substratumName: string;
+<span class="cstat-no" title="statement not covered" >  substratumA</span>reaHa: number;
+  siteName: string;
+  plantingComp<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >le</span>te: boolean;<span class="cstat-no" title="statement not covered" ></span></span>
+  onUpdatePlantingComplete: (id: number, val: boolean) =&gt; void;
   busy: boolean;
 };
 &nbsp;
 export default function PlantingProgressMapDialog({
+  stratumName,
   substratumId,
-  substratumName,
-  substratumAreaHa,
-  siteName,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  plantingComplete,<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  onUpdatePlantingComplete,</span>
-  busy,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-}: PlantingProgressMapDialogProps): JSX.Element {
-<span class="cstat-no" title="statement not covered" >  const theme = useTheme();</span>
-  const { plantingS<span class="cstat-no" title="statement not covered" >iteReportedPlants } = useP</span>lantingSiteData();
-  const { species } = <span class="cstat-no" title="statement not covered" >useSpeciesData();</span>
+  substratumName,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  substratumAreaHa,<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >  siteName,</span>
+  plantingC<span class="fstat-no" title="function not covered" >om</span>plet<span class="cstat-no" title="statement not covered" >e,</span>
+  onUpdatePlantingComplete,
+<span class="cstat-no" title="statement not covered" >  busy,</span>
+}: PlantingProgress<span class="cstat-no" title="statement not covered" >MapDialogProps): JSX.Eleme</span>nt {
+  const theme = useThe<span class="cstat-no" title="statement not covered" >me();</span>
+  const { plantingSiteReport<span class="cstat-no" title="statement not covered" >edPlants } = usePlantingSiteData();</span>
+  const { species } = useSpec<span class="cstat-no" title="statement not covered" >iesData();</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const substratumReportedPla<span class="cstat-no" title="statement not covered" >nts = useMemo(() =&gt; {</span>
-    if (!plantingS<span class="cstat-no" title="statement not covered" >iteReportedPlants) {</span>
+  const substratumRepor<span class="cstat-no" title="statement not covered" >tedPlants = useMemo(() =&gt;</span> {
+    if (!plantingSiteReporte<span class="cstat-no" title="statement not covered" >dPlants) {</span>
       return undefined;<span class="cstat-no" title="statement not covered" ></span>
     }<span class="cstat-no" title="statement not covered" ></span>
-    const substrata = plantingSit<span class="cstat-no" title="statement not covered" >eReportedPlants.strata.flatMap((stratum) =&gt; stratum.su</span>bstrata);
-    return substrata.<span class="cstat-no" title="statement not covered" >find((substratum) =&gt; substratum.</span>id === substratumId);
-  }, [pla<span class="fstat-no" title="function not covered" >ntingSiteReportedPlants, s</span>ubstratumId]);
+    const<span class="fstat-no" title="function not covered" > substrata = plantingSiteR</span>eportedPlants.strata.flatMap((stratum) =&gt; stratum.substrata);
+    return substrata.find((substratum) =&gt; substratum.id === substratumId);
+  }, [plantingSiteReportedPlants, substratumId]);
 &nbsp;
   const totalPlants = useMemo(() =&gt; {
     if (substratumReportedPlants) {
@@ -379,35 +385,35 @@ export default function PlantingProgressMapDialog({
       return 0;
     }
   }, [substratumReportedPlants]);
-&nbsp;
-  const getSpeci<span class="cstat-no" title="statement not covered" >esName = useCallback(</span>
-    (speciesId: number) =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-      return species.f<span class="cstat-no" title="statement not covered" >ind((s) =&gt; s.id === speciesId)?.scientificNa</span>me ?? '';
-    },<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >    [species]</span>
-  );<span class="cstat-no" title="statement not covered" ></span>
-&nbsp;
-  const getWithdrawalH<span class="cstat-no" title="statement not covered" >istoryLink = () =&gt; {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-<span class="cstat-no" title="statement not covered" >    const filterParam = `s<span class="fstat-no" title="function not covered" >ub</span>stratumName=${<span class="cstat-no" title="statement not covered" >encodeURIComponent(substratumNa</span>me</span>)}&amp;siteName=${encodeURIComponent(siteName)}`;
-    const url = `${APP_PATHS.NURSERY_WITHDRAWALS}?tab=withdrawal_history&amp;${filterParam}`;
-    return (<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >      &lt;Link</span>
-<span class="cstat-no" title="statement not covered" >        to={url}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-        style={{
-<span class="cstat-no" title="statement not covered" >          textAl</span>ign: 'left',
+<span class="cstat-no" title="statement not covered" ></span>
+  const getSpeciesName = useCallback(<span class="cstat-no" title="statement not covered" ></span>
+    (speciesId: number<span class="cstat-no" title="statement not covered" >) =&gt; {</span>
+      return species.find((s) =&gt; s.<span class="cstat-no" title="statement not covered" >id === speciesId)?.scienti<span class="fstat-no" title="function not covered" >fi</span>cName ?? '';</span>
+<span class="cstat-no" title="statement not covered" >    },</span>
+    [s<span class="cstat-no" title="statement not covered" >pecies]</span>
+  );
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  co<span class="cstat-no" title="statement not covered" >nst getWithdrawalHisto<span class="fstat-no" title="function not covered" >ry</span>Link = () =&gt; {<span class="cstat-no" title="statement not covered" ></span></span>
+    const filterParam = `substratumName=${encodeURIComponent(stratumName)}-${encodeURIComponent(substratumName)}&amp;siteName=${encodeURIComponent(siteName)}`;
+    const url = `${APP<span class="cstat-no" title="statement not covered" >_PATHS.NURSERY_WITHDRAWALS<span class="fstat-no" title="function not covered" >}?</span>tab=withdrawal_history&amp;${filterParam}`;</span>
+<span class="cstat-no" title="statement not covered" >    return (</span>
+<span class="cstat-no" title="statement not covered" >      &lt;Link<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+        to={url}
+<span class="cstat-no" title="statement not covered" >        style={{</span>
+          textAlign: 'left',
           fontSize: '16px',
-          fontWeight: 400,
-          marginTop: them<span class="cstat-no" title="statement not covered" >e.spacing(3),</span>
-<span class="fstat-no" title="function not covered" ></span>        }}
-      &gt;
-<span class="cstat-no" title="statement not covered" >        {strings.SEE_WITHDRAWAL_HISTORY<span class="fstat-no" title="function not covered" >}<span class="cstat-no" title="statement not covered" ></span></span></span>
+          fontWeight: 400<span class="cstat-no" title="statement not covered" >,</span>
+<span class="fstat-no" title="function not covered" ></span>          marginTop: theme.spacing(3),
+        }}
+<span class="cstat-no" title="statement not covered" >      &gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+        {strings.SEE_WITHDRAWAL_HISTORY}
       &lt;/Link&gt;
     );
-  };
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  };<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ></span>
   return (<span class="cstat-no" title="statement not covered" ></span>
-    &lt;Box borderR<span class="cstat-no" title="statement not covered" >adius='8px' display='flex' flexDirection='column'&gt;</span>
-<span class="cstat-no" title="statement not covered" >      &lt;Box</span>
+<span class="cstat-no" title="statement not covered" >    &lt;Box borderRadius='8px' display='flex' flexDirection='column'&gt;</span>
+      &lt;Box
         sx={{
           backgroundColor: theme.palette.TwClrBg,
           borderRadius: '8px 8px 0 0',
@@ -420,8 +426,8 @@ export default function PlantingProgressMapDialog({
           {substratumName}
         &lt;/Typography&gt;
         &lt;Typography fontSize='16px' fontWeight={400}&gt;
-          {strings.AREA_HA}
-<span class="cstat-no" title="statement not covered" >          {': '}</span>
+<span class="cstat-no" title="statement not covered" >          {strings.AREA_HA}</span>
+          {': '}
           &lt;FormattedNumber value={substratumAreaHa} /&gt;
         &lt;/Typography&gt;
         &lt;Typography fontSize='16px' fontWeight={400}&gt;
@@ -434,8 +440,8 @@ export default function PlantingProgressMapDialog({
             substratumReportedPlants.species?.map((reportedSpecies) =&gt; (
               &lt;li key={reportedSpecies.id}&gt;
                 &lt;Typography fontSize='16px' fontWeight={400}&gt;
-                  &lt;FormattedNumber value={reportedSpecies.totalPlants} /&gt;
-                  &amp;nbsp;{getSpeciesName(reportedSpecies.id)}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+                  &lt;FormattedNumber value={reportedSpecies.totalPlants} /&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+                  &amp;nbsp;{getSpeciesName(reportedSpecies.id)}
                 &lt;/Typography&gt;
               &lt;/li&gt;
             ))}
@@ -451,8 +457,8 @@ export default function PlantingProgressMapDialog({
           justifyContent: 'flex-end',
           padding: theme.spacing(2, 3),
         }}
-      &gt;
-        &lt;Button<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+      &gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+        &lt;Button
           onClick={() =&gt; onUpdatePlantingComplete(substratumId, !plantingComplete)}
           label={plantingComplete ? strings.UNDO_PLANTING_COMPLETE : strings.SET_PLANTING_COMPLETE}
           type={plantingComplete ? 'passive' : 'productive'}
@@ -469,7 +475,7 @@ export default function PlantingProgressMapDialog({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-30T20:21:58.403Z
+                at 2026-01-30T21:31:48.200Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
