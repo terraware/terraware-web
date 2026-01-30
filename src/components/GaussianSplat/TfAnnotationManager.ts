@@ -1,3 +1,4 @@
+import { FILTER_LINEAR, PIXELFORMAT_RGBA8, Texture } from 'playcanvas';
 import { AnnotationManager as PcAnnotationManager } from 'playcanvas/scripts/esm/annotations.mjs';
 
 /**
@@ -10,6 +11,7 @@ export class TfAnnotationManager extends PcAnnotationManager {
   private _maxWorldSize = 1.0;
   private _customParentDom: HTMLElement | null = null;
   private _clickHandlersAttached = new Set<any>();
+  private _hotspotBackgroundColor = '#2C8658';
 
   /**
    * Maximum world-space size for annotations.
@@ -26,6 +28,25 @@ export class TfAnnotationManager extends PcAnnotationManager {
 
   get maxWorldSize() {
     return this._maxWorldSize;
+  }
+
+  /**
+   * Background color for the hotspot texture canvas (the circle fill color).
+   * This is a hex color string (e.g., '#2C8658') that's drawn on the texture canvas.
+   * Note: This is different from hotspotColor and hoverColor, which are PlayCanvas Color objects
+   * used for the material's emissive property.
+   *
+   * @attribute
+   * @title Hotspot Background Color
+   * @type {string}
+   * @default '#2C8658'
+   */
+  set hotspotBackgroundColor(value: string) {
+    this._hotspotBackgroundColor = value;
+  }
+
+  get hotspotBackgroundColor() {
+    return this._hotspotBackgroundColor;
   }
 
   /**
@@ -218,5 +239,77 @@ export class TfAnnotationManager extends PcAnnotationManager {
       resources.hotspotDom.style.width = `${scaledSize}px`;
       resources.hotspotDom.style.height = `${scaledSize}px`;
     }
+  }
+
+  /**
+   * Override to create hotspot texture with custom background color.
+   * @private
+   */
+  _createHotspotTexture(label: string, size = 64, borderWidth = 6) {
+    const canvas = document.createElement('canvas');
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext('2d');
+
+    if (!ctx) {
+      throw new Error('Failed to get canvas 2d context');
+    }
+
+    // First clear with stroke color at zero alpha
+    ctx.fillStyle = 'white';
+    ctx.globalAlpha = 0;
+    ctx.fillRect(0, 0, size, size);
+    ctx.globalAlpha = 1.0;
+
+    // Draw circle with custom background color
+    const centerX = size / 2;
+    const centerY = size / 2;
+    const radius = size / 2 - 4;
+
+    // Draw main circle
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+    ctx.fillStyle = this._hotspotBackgroundColor; // this is the only line different from playcanvas in this method
+    ctx.fill();
+
+    // Draw border
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+    ctx.lineWidth = borderWidth;
+    ctx.strokeStyle = 'white';
+    ctx.stroke();
+
+    // Draw text
+    ctx.font = 'bold 32px Arial';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = 'white';
+    ctx.fillText(label, Math.floor(canvas.width / 2), Math.floor(canvas.height / 2) + 1);
+
+    // Get pixel data
+    const imageData = ctx.getImageData(0, 0, size, size);
+    const data = imageData.data;
+
+    // Set the color channel of semitransparent pixels to white so the blending at
+    // the edges is correct
+    for (let i = 0; i < data.length; i += 4) {
+      const a = data[i + 3];
+      if (a < 255) {
+        data[i] = 255;
+        data[i + 1] = 255;
+        data[i + 2] = 255;
+      }
+    }
+
+    // Create and return the texture
+    return new Texture(this.app.graphicsDevice, {
+      width: size,
+      height: size,
+      format: PIXELFORMAT_RGBA8,
+      magFilter: FILTER_LINEAR,
+      minFilter: FILTER_LINEAR,
+      mipmaps: false,
+      levels: [new Uint8Array(data.buffer)],
+    });
   }
 }
