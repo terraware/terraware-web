@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/50</span>
+                <span class='fraction'>0/52</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/47</span>
+                <span class='fraction'>0/49</span>
             </div>
         
             
@@ -174,7 +174,14 @@
 <a name='L109'></a><a href='#L109'>109</a>
 <a name='L110'></a><a href='#L110'>110</a>
 <a name='L111'></a><a href='#L111'>111</a>
-<a name='L112'></a><a href='#L112'>112</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L112'></a><a href='#L112'>112</a>
+<a name='L113'></a><a href='#L113'>113</a>
+<a name='L114'></a><a href='#L114'>114</a>
+<a name='L115'></a><a href='#L115'>115</a>
+<a name='L116'></a><a href='#L116'>116</a>
+<a name='L117'></a><a href='#L117'>117</a>
+<a name='L118'></a><a href='#L118'>118</a>
+<a name='L119'></a><a href='#L119'>119</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -228,6 +235,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -282,10 +291,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > useEffect, us</span>eMemo, useState } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > useEffect, us</span>eMemo, useState } from 'react';
 <span class="cstat-no" title="statement not covered" ></span>
 import { Box, Typograph<span class="cstat-no" title="statement not covered" >y } from '@mui/material';</span>
 import { Entity } from '<span class="cstat-no" title="statement not covered" >@playcanvas/react';</span>
@@ -302,49 +316,56 @@ import<span class="cstat-no" title="statement not covered" > SplatModel from 'sr
 import {<span class="cstat-no" title="statement not covered" > TfAnnotationManager } fro<span class="fstat-no" title="function not covered" >m </span>'src<span class="cstat-no" title="statement not covered" >/component</span>s/GaussianSplat/TfAnnotationManager';</span>
 import { TfXrNavigation } from 'src/components/GaussianSplat/TfXrNavigation';
 im<span class="cstat-no" title="statement not covered" >port { useC</span>ameraPosition } from 'src/hooks/useCameraPosition';
-&nbsp;
-interface Virt<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ua</span>lMonitoringPlotProps {<span class="cstat-no" title="statement not covered" ></span></span>
+import { useDevicePerformance } from 'src/hooks/useDevicePerformance';
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+interface VirtualMonitoringPlotProps {
   observationId: string;
   fileId: string;
 }
 &nbsp;
 const DEFAULT_FOCUS_POINT: [number, number, number] = [0, 0.1, 0];
 const DEFAULT_POSITION: [number, number, number] = [1, 0.1, 0];
-&nbsp;
-const VirtualMonito<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ri</span>ngPlot <span class="cstat-no" title="statement not covered" >= ({ observationId, fileId }: VirtualMonitoringPlotProps) =&gt; {</span></span>
-  const { setCamera <span class="cstat-no" title="statement not covered" >} =</span> useCameraPosition();
-<span class="cstat-no" title="statement not covered" >  const [showAnnotations, setShowAnnotations] = useState(true);</span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  const splatSrc = useMemo(
-<span class="cstat-no" title="statement not covered" >    () =&gt; `/api/v1/tracking/observations/${obs</span>ervationId}/splats/${fileId}`,
-    [observationId,<span class="cstat-no" title="statement not covered" > fileId]</span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+const VirtualMonitor<span class="cstat-no" title="statement not covered" >ing</span>Plot = ({ observationId, fileId }: VirtualMonitoringPlotProps) =&gt; {
+<span class="cstat-no" title="statement not covered" >  const { setCamera } = useCameraPosition();</span>
+  const { i<span class="fstat-no" title="function not covered" >sH</span>ighP<span class="cstat-no" title="statement not covered" >erformance } =</span> useDevicePerformance();
+  const [showAnnotations, setShowAnnotations] = useState(true);
+<span class="cstat-no" title="statement not covered" ></span>
+  const splatSrc = <span class="cstat-no" title="statement not covered" >useMemo(</span>
+    () =&gt; `/api/v1/tra<span class="cstat-no" title="statement not covered" >cking/observations/${obse</span>rvationId}/splats/${fileId}`,
+    [observationId, <span class="cstat-no" title="statement not covered" >fileId]</span>
   );<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
   useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-    setCamera(DEFAULT_FO<span class="cstat-no" title="statement not covered" >CUS_POINT, DEFAULT_POS</span>ITION);
+    setCamera(DEFAULT_FOCUS_<span class="cstat-no" title="statement not covered" >POINT, DEFAULT_POSITION);</span>
   }, [setCamera]);<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
   return (<span class="cstat-no" title="statement not covered" ></span>
     &lt;&gt;<span class="cstat-no" title="statement not covered" ></span>
-      &lt;GradientSky topCol<span class="cstat-no" title="statement not covered" >or='#FFFFFF' horizonColor='#EAF8FF' groundColor='#C3BDB7' /&gt;</span>
+      &lt;GradientSky topCo<span class="cstat-no" title="statement not covered" >lor='#FFFFFF' horizonColor='#EAF8FF' groundColor='#C3BDB7' /</span>&gt;
 <span class="cstat-no" title="statement not covered" ></span>
-      &lt;Entity name='came<span class="cstat-no" title="statement not covered" >ra-root'&gt;</span>
+      &lt;Entity name='camera-r<span class="cstat-no" title="statement not covered" >oot'&gt;</span>
         &lt;Entity name='camera'&gt;<span class="cstat-no" title="statement not covered" ></span>
-          &lt;Camera clearColor<span class="cstat-no" title="statement not covered" >='#EAF8FF' fov={60} /&gt;</span>
-          &lt;Script script={Camer<span class="cstat-no" title="statement not covered" >aControls} moveSpeed={0.3} moveFastSpee</span>d={0.5} moveSlowSpeed={0.15} rotateSpeed={0.1} /&gt;
+          &lt;Camera clearColor='#EAF<span class="cstat-no" title="statement not covered" >8FF' fov={60} /&gt;</span>
+          &lt;Script script={Ca<span class="cstat-no" title="statement not covered" >meraControls</span>} moveSpeed={0.3} moveFastSpeed={0.5} moveSlowSpeed={0.15} rotateSpeed={0.1} /&gt;
         &lt;/Entity&gt;<span class="cstat-no" title="statement not covered" ></span>
-        &lt;Script script={X<span class="cstat-no" title="statement not covered" >rControllers</span>} /&gt;
-        &lt;Script script={TfXrNa<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >vi</span>gation} enableTeleport={false} /&gt;</span>
-        &lt;Script script={<span class="cstat-no" title="statement not covered" >AutoRotator} startDelay={0.5} restartDelay={3} sta</span>rtFadeInTime={0.5} /&gt;
+        &lt;Script script={XrCont<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ro</span>llers} /&gt;</span>
+        &lt;Script script={<span class="cstat-no" title="statement not covered" >TfXrNavigation} enableTeleport={false} /&gt;</span>
+        &lt;Script script={AutoRota<span class="cstat-no" title="statement not covered" >tor} startDelay={0.5} restartDelay={3} startFadeInTime={</span>0.5} /&gt;
       &lt;/Entity&gt;<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="fstat-no" title="function not covered" ></span>      {/* <span class="cstat-no" title="statement not covered" >When a rerender occurs (such as changing showAnnotations), the spl</span>at model disappears (https://github.com/playcanvas/react/pull/298 and https://github.com/playcanvas/react/issues/302) */}
       {/* The key includes showAnnotations the PR is merged and we're on a version that includes it */}
-      &lt;SplatModel key={`splat-${showAnnotations}`} splatSrc={splatSrc} rotation={[-180, 0, 0]} /&gt;
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >      &lt;Script</span>
+      &lt;SplatModel
+<span class="cstat-no" title="statement not covered" >        key={`splat-${showAnno<span class="fstat-no" title="function not covered" >ta</span>tions}`}</span>
+<span class="cstat-no" title="statement not covered" >        splatSrc={splatSrc}</span>
+        rotation={[-180, 0, 0]}
+<span class="cstat-no" title="statement not covered" >        revealRain={isHighPerformance}</span>
+      /&gt;
+&nbsp;
+      &lt;Script
         script={TfAnnotationManager}
-<span class="cstat-no" title="statement not covered" >        hotspotSize={75}</span>
+        hotspotSize={75}
         maxWorldSize={0.05}
         opacity={1}
         hotspotColor={new Color(1, 0, 0, 1)}
@@ -393,17 +414,17 @@ const VirtualMonito<span class="cstat-no" title="statement not covered" ><span c
       /&gt;
     &lt;/&gt;
   );
-};<span class="cstat-no" title="statement not covered" ></span>
+};
 &nbsp;
 export default VirtualMonitoringPlot;
-&nbsp;</pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-30T19:17:05.432Z
+                at 2026-01-30T19:40:59.114Z
             </div>
         <script src="../../../../../../prettify.js"></script>
         <script>
