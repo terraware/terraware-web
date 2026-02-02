@@ -23,6 +23,8 @@ export interface SplatControlsProps {
   onToggleAutoRotate?: (enabled: boolean) => void;
   isEdit?: boolean;
   onToggleEdit?: (isEdit: boolean) => void;
+  onSave?: () => void;
+  onCancel?: () => void;
 }
 
 const SplatControls = ({
@@ -34,6 +36,8 @@ const SplatControls = ({
   onToggleAutoRotate,
   isEdit,
   onToggleEdit,
+  onSave,
+  onCancel,
 }: SplatControlsProps) => {
   const theme = useTheme();
   const { strings } = useLocalization();
@@ -144,7 +148,7 @@ const SplatControls = ({
     };
   }, [isInfoVisible, setIsInfoVisible, infoButtonRef]);
 
-  const toggleEdit = useCallback(() => onToggleEdit?.(!isEdit), [isEdit, onToggleEdit]);
+  const handleEdit = useCallback(() => onToggleEdit?.(true), [onToggleEdit]);
 
   return (
     <Box
@@ -170,7 +174,9 @@ const SplatControls = ({
       >
         {isArAvailable && !isEdit && <Button label={strings.AR} onClick={handleAr} />}
         {isVrAvailable && !isEdit && <Button label={strings.VR} onClick={handleVr} />}
-        {onToggleEdit && <Button label={isEdit ? strings.SAVE : strings.EDIT} onClick={toggleEdit} />}
+        {!isEdit && onToggleEdit && <Button label={strings.EDIT} onClick={handleEdit} />}
+        {isEdit && onCancel && <Button label={strings.CANCEL} onClick={onCancel} />}
+        {isEdit && onSave && <Button label={strings.SAVE} onClick={onSave} />}
       </Box>
       <IconButton
         ref={infoButtonRef}

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Entity } from '@playcanvas/react';
 import { Camera, Script } from '@playcanvas/react/components';
@@ -31,6 +31,8 @@ const VirtualMonitoringPlot = ({ observationId, fileId, annotations = [] }: Virt
   const [showAnnotations, setShowAnnotations] = useState(true);
   const [autoRotate, setAutoRotate] = useState(true);
   const [isEdit, setIsEdit] = useState(false);
+  const [selectedAnnotationIndex, setSelectedAnnotationIndex] = useState<number | null>(null);
+  const [localAnnotations, setLocalAnnotations] = useState(annotations);
 
   const splatSrc = useMemo(
     () => `/api/v1/tracking/observations/${observationId}/splats/${fileId}`,
@@ -40,6 +42,44 @@ const VirtualMonitoringPlot = ({ observationId, fileId, annotations = [] }: Virt
   useEffect(() => {
     setCamera(DEFAULT_FOCUS_POINT, DEFAULT_POSITION);
   }, [setCamera]);
+
+  useEffect(() => {
+    if (!isEdit) {
+      setSelectedAnnotationIndex(null);
+    }
+  }, [isEdit]);
+
+  useEffect(() => {
+    setLocalAnnotations(annotations);
+  }, [annotations]);
+
+  const handleAnnotationPositionChange = useCallback((label: string | number, position: [number, number, number]) => {
+    setLocalAnnotations((prev) => {
+      const index = prev.findIndex((ann) => ann.label === label);
+      if (index === -1) {
+        return prev;
+      }
+
+      const updated = [...prev];
+      updated[index] = { ...updated[index], position };
+      return updated;
+    });
+  }, []);
+
+  const handleSave = useCallback(() => {
+    // eslint-disable-next-line no-console
+    console.log('Saving annotations:', localAnnotations);
+    // TODO: Make API call to save annotations
+    alert('Annotations saved!\n\n' + JSON.stringify(localAnnotations, null, 2));
+    setIsEdit(false);
+    setSelectedAnnotationIndex(null);
+  }, [localAnnotations]);
+
+  const handleCancel = useCallback(() => {
+    setLocalAnnotations(annotations);
+    setIsEdit(false);
+    setSelectedAnnotationIndex(null);
+  }, [annotations]);
 
   /* When a rerender occurs, the splat model disappears (https://github.com/playcanvas/react/pull/298 and https://github.com/playcanvas/react/issues/302)
   The key should include items that cause the SplatModel to rerender. Remove them (and the useMemo) once the PR is merged and we're on a version that includes it */
@@ -68,7 +108,7 @@ const VirtualMonitoringPlot = ({ observationId, fileId, annotations = [] }: Virt
 
       {splatModel}
 
-      {annotations.length > 0 && (
+      {localAnnotations.length > 0 && (
         <Script
           script={TfAnnotationManager}
           hotspotSize={30}
@@ -79,8 +119,16 @@ const VirtualMonitoringPlot = ({ observationId, fileId, annotations = [] }: Virt
           hotspotBackgroundColor='#2C8658'
         />
       )}
-      {annotations.map((annotation, index) => (
-        <Annotation key={index} {...annotation} visible={showAnnotations} />
+      {localAnnotations.map((annotation, index) => (
+        <Annotation
+          key={index}
+          {...annotation}
+          visible={showAnnotations}
+          isEdit={isEdit}
+          isSelected={selectedAnnotationIndex === index}
+          onSelect={() => setSelectedAnnotationIndex(index)}
+          onPositionChange={handleAnnotationPositionChange}
+        />
       ))}
       <SplatControls
         defaultCameraFocus={DEFAULT_FOCUS_POINT}
@@ -91,6 +139,8 @@ const VirtualMonitoringPlot = ({ observationId, fileId, annotations = [] }: Virt
         onToggleAutoRotate={setAutoRotate}
         isEdit={isEdit}
         onToggleEdit={setIsEdit}
+        onSave={handleSave}
+        onCancel={handleCancel}
       />
     </>
   );
