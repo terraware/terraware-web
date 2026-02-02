@@ -30,6 +30,7 @@ const VirtualMonitoringPlot = ({ observationId, fileId, annotations = [] }: Virt
   const { isHighPerformance } = useDevicePerformance();
   const [showAnnotations, setShowAnnotations] = useState(true);
   const [autoRotate, setAutoRotate] = useState(true);
+  const [isEdit, setIsEdit] = useState(false);
 
   const splatSrc = useMemo(
     () => `/api/v1/tracking/observations/${observationId}/splats/${fileId}`,
@@ -56,9 +57,13 @@ const VirtualMonitoringPlot = ({ observationId, fileId, annotations = [] }: Virt
           <Camera clearColor='#EAF8FF' fov={60} />
           <Script script={CameraControls} moveSpeed={0.3} moveFastSpeed={0.5} moveSlowSpeed={0.15} rotateSpeed={0.1} />
         </Entity>
-        <Script script={XrControllers} />
-        <Script script={TfXrNavigation} enableTeleport={false} />
-        {autoRotate && <Script script={AutoRotator} startDelay={0.5} restartDelay={3} startFadeInTime={0.5} />}
+        {!isEdit && (
+          <>
+            <Script script={XrControllers} />
+            <Script script={TfXrNavigation} enableTeleport={false} />
+            {autoRotate && <Script script={AutoRotator} startDelay={0.5} restartDelay={3} startFadeInTime={0.5} />}
+          </>
+        )}
       </Entity>
 
       {splatModel}
@@ -84,6 +89,8 @@ const VirtualMonitoringPlot = ({ observationId, fileId, annotations = [] }: Virt
         onToggleAnnotations={setShowAnnotations}
         autoRotate={autoRotate}
         onToggleAutoRotate={setAutoRotate}
+        isEdit={isEdit}
+        onToggleEdit={setIsEdit}
       />
     </>
   );
