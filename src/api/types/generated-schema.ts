@@ -738,10 +738,13 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** List participants and their assigned projects. */
-        get: operations["listParticipants"];
+        get?: never;
         put?: never;
-        /** Creates a new participant. */
+        /**
+         * OBSOLETE
+         * @deprecated
+         * @description This used to create a new participant; now it just sets the cohort on a project.
+         */
         post: operations["createParticipant"];
         delete?: never;
         options?: never;
@@ -756,13 +759,20 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Gets information about a participant and its assigned projects. */
+        /**
+         * OBSOLETE
+         * @deprecated
+         * @description Gets a project's cohort.
+         */
         get: operations["getParticipant"];
-        /** Updates a participant's information. */
+        /**
+         * OBSOLETE
+         * @deprecated
+         * @description Updates a project's cohort.
+         */
         put: operations["updateParticipant"];
         post?: never;
-        /** Deletes a participant that has no projects. */
-        delete: operations["deleteParticipant"];
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -4027,6 +4037,65 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/tracking/observations/{observationId}/splats": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Gets information about the 3D Gaussian splat models from an observation. */
+        get: operations["listObservationSplats"];
+        put?: never;
+        /**
+         * Initiates the generation of a 3D model of a Gaussian splat from an observation video.
+         * @description If the video was already being processed, returns a success response.
+         */
+        post: operations["generateObservationSplatFile"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tracking/observations/{observationId}/splats/{fileId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Downloads a 3D model of a Gaussian splat from an observation video. */
+        get: operations["getObservationSplatFile"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tracking/observations/{observationId}/splats/{fileId}/annotations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Gets the list of annotations for a splat model. */
+        get: operations["listObservationSplatAnnotations"];
+        put?: never;
+        /**
+         * Sets the list of annotations for a splat model.
+         * @description Updates existing annotations that have IDs, deletes annotations not in the list, and creates new annotations without IDs.
+         */
+        post: operations["setObservationSplatAnnotations"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/tracking/sites": {
         parameters: {
             query?: never;
@@ -4767,10 +4836,10 @@ export interface components {
         };
         AcceleratorProjectPayload: {
             /** Format: int64 */
+            cohortId?: number;
+            /** Format: int64 */
             id: number;
             name: string;
-            /** Format: int64 */
-            participantId?: number;
         };
         AcceleratorReportPayload: {
             achievements: string[];
@@ -5720,9 +5789,14 @@ export interface components {
             /** Format: date-time */
             modifiedTime: string;
             name: string;
+            /**
+             * @deprecated
+             * @description Use projectIds instead
+             */
             participantIds?: number[];
             /** @enum {string} */
             phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor" | "Pre-Screen" | "Application";
+            projectIds?: number[];
         };
         CohortResponsePayload: {
             cohort: components["schemas"]["CohortPayload"];
@@ -5769,6 +5843,11 @@ export interface components {
              */
             observedTime: string;
             plants: components["schemas"]["RecordedPlantPayload"][];
+        };
+        CoordinatePayload: {
+            x: number;
+            y: number;
+            z: number;
         };
         CreateAcceleratorReportConfigRequestPayload: {
             config: components["schemas"]["NewAcceleratorReportConfigPayload"];
@@ -7097,6 +7176,10 @@ export interface components {
             /** Format: int64 */
             projectId: number;
         };
+        GenerateSplatRequestPayload: {
+            /** Format: int64 */
+            fileId: number;
+        };
         Geolocation: {
             accuracy?: number;
             latitude: number;
@@ -7873,6 +7956,14 @@ export interface components {
             observations: components["schemas"]["ObservationResultsPayload"][];
             status: components["schemas"]["SuccessOrError"];
         };
+        ListObservationSplatAnnotationsResponsePayload: {
+            annotations: components["schemas"]["SplatAnnotationPayload"][];
+            status: components["schemas"]["SuccessOrError"];
+        };
+        ListObservationSplatsResponsePayload: {
+            splats: components["schemas"]["ObservationSplatPayload"][];
+            status: components["schemas"]["SuccessOrError"];
+        };
         ListObservationSummariesResponsePayload: {
             status: components["schemas"]["SuccessOrError"];
             /** @description History of rollup summaries of planting site observations in order of observation time, latest first.  */
@@ -7914,10 +8005,6 @@ export interface components {
         };
         ListOrganizationsResponsePayload: {
             organizations: components["schemas"]["OrganizationPayload"][];
-            status: components["schemas"]["SuccessOrError"];
-        };
-        ListParticipantsResponsePayload: {
-            participants: components["schemas"]["ParticipantPayload"][];
             status: components["schemas"]["SuccessOrError"];
         };
         ListPhotosResponseElement: {
@@ -8951,6 +9038,14 @@ export interface components {
              */
             totalPlants: number;
         };
+        ObservationSplatPayload: {
+            /** Format: int64 */
+            fileId: number;
+            /** Format: int64 */
+            monitoringPlotId: number;
+            /** @enum {string} */
+            status: "Preparing" | "Ready" | "Errored";
+        };
         ObservationStratumResultsPayload: {
             /** @description Area of this stratum in hectares. */
             areaHa: number;
@@ -9582,7 +9677,7 @@ export interface components {
         };
         Point: Omit<WithRequired<components["schemas"]["Geometry"], "type">, "type"> & {
             /**
-             * @description A single position consisting of X and Y values in the coordinate system specified by the crs field.
+             * @description A single position consisting of X, Y, and optional Z values in the coordinate system specified by the crs field.
              * @example [
              *       120,
              *       -9.53
@@ -9771,7 +9866,11 @@ export interface components {
             name: string;
             /** Format: int64 */
             organizationId: number;
-            /** Format: int64 */
+            /**
+             * Format: int64
+             * @deprecated
+             * @description If using this to check whether project is in cohort, use cohortPhase instead.
+             */
             participantId?: number;
         };
         ProjectReportSettingsPayload: {
@@ -10388,6 +10487,18 @@ export interface components {
             body: string;
             subject: string;
         };
+        SetSplatAnnotationRequestPayload: {
+            bodyText?: string;
+            cameraPosition?: components["schemas"]["CoordinatePayload"];
+            /** Format: int64 */
+            id?: number;
+            label?: string;
+            position: components["schemas"]["CoordinatePayload"];
+            title: string;
+        };
+        SetSplatAnnotationsRequestPayload: {
+            annotations: components["schemas"]["SetSplatAnnotationRequestPayload"][];
+        };
         SimpleErrorResponsePayload: {
             error: components["schemas"]["ErrorDetails"];
             status: components["schemas"]["SuccessOrError"];
@@ -10568,6 +10679,17 @@ export interface components {
              * @description Total number of germinated plants that have been withdrawn in the past.
              */
             totalWithdrawn: number;
+        };
+        SplatAnnotationPayload: {
+            bodyText?: string;
+            cameraPosition?: components["schemas"]["CoordinatePayload"];
+            /** Format: int64 */
+            fileId: number;
+            /** Format: int64 */
+            id: number;
+            label?: string;
+            position: components["schemas"]["CoordinatePayload"];
+            title: string;
         };
         StratumHistoryResponsePayload: {
             areaHa: number;
@@ -11276,12 +11398,9 @@ export interface components {
         UpdateParticipantRequestPayload: {
             /**
              * Format: int64
-             * @description Assign the participant to this cohort. If null, remove the participant from its current cohort, if any.
+             * @description Assign the project to this cohort. If null, remove the project from its current cohort, if any.
              */
             cohortId?: number;
-            name: string;
-            /** @description Set the participant's list of assigned projects to this. If projects are currently assigned to the participant but aren't included in this list, they will be removed from the participant. */
-            projectIds: number[];
         };
         UpdatePlantingSiteRequestPayload: {
             /** @description Site boundary. Ignored if this is a detailed planting site. */
@@ -12544,7 +12663,7 @@ export interface operations {
         parameters: {
             query?: {
                 /** @description If specified, retrieve associated entities to the supplied depth. For example, 'participant' depth will return the participants associated to the cohort. */
-                cohortDepth?: "Cohort" | "Participant";
+                cohortDepth?: "Cohort" | "Project";
             };
             header?: never;
             path?: never;
@@ -12591,7 +12710,7 @@ export interface operations {
         parameters: {
             query?: {
                 /** @description If specified, retrieve associated entities to the supplied depth. For example, 'participant' depth will return the participants associated to the cohort. */
-                cohortDepth?: "Cohort" | "Participant";
+                cohortDepth?: "Cohort" | "Project";
             };
             header?: never;
             path: {
@@ -12825,8 +12944,6 @@ export interface operations {
                 moduleId?: number;
                 /** @description List deliverables for projects belonging to this organization. Ignored if participantId or projectId is specified. */
                 organizationId?: number;
-                /** @description List deliverables for all projects in this participant. Ignored if projectId is specified. */
-                participantId?: number;
                 /** @description List deliverables for this project only. */
                 projectId?: number;
             };
@@ -13411,35 +13528,6 @@ export interface operations {
             };
         };
     };
-    listParticipants: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description The requested operation succeeded. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ListParticipantsResponsePayload"];
-                };
-            };
-            /** @description The requested resource was not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-                };
-            };
-        };
-    };
     createParticipant: {
         parameters: {
             query?: never;
@@ -13521,46 +13609,6 @@ export interface operations {
             };
             /** @description The requested resource was not found. */
             404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-                };
-            };
-        };
-    };
-    deleteParticipant: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                participantId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description The requested operation succeeded. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-                };
-            };
-            /** @description The requested resource was not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-                };
-            };
-            /** @description There are projects associated with the participant. */
-            409: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -20899,6 +20947,195 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["GetObservationResultsResponsePayload"];
+                };
+            };
+        };
+    };
+    listObservationSplats: {
+        parameters: {
+            query?: {
+                /** @description If present, only list splats for this monitoring plot. */
+                monitoringPlotId?: number;
+                /** @description If present, only return information about the splat for this video file. */
+                fileId?: number;
+            };
+            header?: never;
+            path: {
+                observationId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListObservationSplatsResponsePayload"];
+                };
+            };
+            /** @description The observation does not exist. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    generateObservationSplatFile: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                observationId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GenerateSplatRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+            /** @description The plot observation does not exist, or does not have a video with the requested ID. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    getObservationSplatFile: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                observationId: number;
+                fileId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": Record<string, never>;
+                };
+            };
+            /** @description The video is still being processed and the model is not ready yet. */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": Record<string, never>;
+                };
+            };
+            /** @description The plot observation does not exist, or does not have a video with the requested ID. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+            /** @description The system was unable to generate a splat from the requested file. */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    listObservationSplatAnnotations: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                observationId: number;
+                fileId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListObservationSplatAnnotationsResponsePayload"];
+                };
+            };
+            /** @description The plot observation does not exist, or does not have a splat for the requested file ID. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    setObservationSplatAnnotations: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                observationId: number;
+                fileId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SetSplatAnnotationsRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+            /** @description The plot observation does not exist, or does not have a splat for the requested file ID. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
                 };
             };
         };

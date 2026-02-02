@@ -6,6 +6,7 @@ export enum QueryTagTypes {
   Notifications = 'Notifications',
   Observation = 'Observation',
   ObservationMedia = 'ObservationMedia',
+  ObservationSplats = 'ObservationSplats',
   PlantingSites = 'PlantingSites',
   ProjectModules = 'ProjectModules',
   Projects = 'Projects',

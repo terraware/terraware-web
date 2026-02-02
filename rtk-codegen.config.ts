@@ -25,7 +25,13 @@ const config: ConfigFile = {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/notifications'),
     },
     './src/queries/generated/observations.ts': {
-      filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/tracking/observations'),
+      filterEndpoints: (_, operation) =>
+        operation.path.startsWith('/api/v1/tracking/observations') &&
+        !operation.path.includes('{observationId}/splats'),
+    },
+    './src/queries/generated/observationSplats.ts': {
+      filterEndpoints: (_, operation) =>
+        operation.path.startsWith('/api/v1/tracking/observations/{observationId}/splats'),
     },
     './src/queries/generated/plantingSites.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/tracking/sites'),

@@ -6,7 +6,7 @@ import { Button } from '@terraware/web-components';
 import ImageLightbox from 'src/components/common/ImageLightbox';
 import MediaItem, { MediaFile } from 'src/components/common/MediaItem';
 import isEnabled from 'src/features';
-import { useGenerateObservationSplatFileMutation } from 'src/queries/generated/observations';
+import { useGenerateObservationSplatFileMutation } from 'src/queries/generated/observationSplats';
 import strings from 'src/strings';
 import { ObservationMonitoringPlotPhoto, getPositionLabel, getQuadratLabel } from 'src/types/Observations';
 import useSnackbar from 'src/utils/useSnackbar';
