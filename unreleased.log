@@ -1,3 +1,4 @@
+0a8cb7938bd SW-8010 Inline editing for year targets values (#5160)
 3fa8ce1d441 SW-8010 Initial work on targets table updates (#5155)
 ef7d3cc8ff0 Update dependency string-width to v8.1.1 (#5159)
 597d1f62167 SW-7940 Withdrawal History table - Substrata filter showing incorrect values (#5100)
