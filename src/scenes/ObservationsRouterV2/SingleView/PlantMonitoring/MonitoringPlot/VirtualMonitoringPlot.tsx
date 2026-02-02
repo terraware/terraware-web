@@ -15,6 +15,7 @@ import { TfAnnotationManager } from 'src/components/GaussianSplat/TfAnnotationMa
 import { TfXrNavigation } from 'src/components/GaussianSplat/TfXrNavigation';
 import { useCameraPosition } from 'src/hooks/useCameraPosition';
 import { useDevicePerformance } from 'src/hooks/useDevicePerformance';
+import { useSetObservationSplatAnnotationsMutation } from 'src/queries/generated/observationSplats';
 
 interface VirtualMonitoringPlotProps {
   observationId: string;
@@ -33,6 +34,7 @@ const VirtualMonitoringPlot = ({ observationId, fileId, annotations = [] }: Virt
   const [isEdit, setIsEdit] = useState(false);
   const [selectedAnnotationIndex, setSelectedAnnotationIndex] = useState<number | null>(null);
   const [localAnnotations, setLocalAnnotations] = useState(annotations);
+  const [saveAnnotations] = useSetObservationSplatAnnotationsMutation();
 
   const splatSrc = useMemo(
     () => `/api/v1/tracking/observations/${observationId}/splats/${fileId}`,
@@ -55,6 +57,7 @@ const VirtualMonitoringPlot = ({ observationId, fileId, annotations = [] }: Virt
 
   const handleAnnotationPositionChange = useCallback((label: string | number, position: [number, number, number]) => {
     setLocalAnnotations((prev) => {
+      // TODO find something more robust than the label
       const index = prev.findIndex((ann) => ann.label === label);
       if (index === -1) {
         return prev;
@@ -67,13 +70,29 @@ const VirtualMonitoringPlot = ({ observationId, fileId, annotations = [] }: Virt
   }, []);
 
   const handleSave = useCallback(() => {
-    // eslint-disable-next-line no-console
-    console.log('Saving annotations:', localAnnotations);
-    // TODO: Make API call to save annotations
-    alert('Annotations saved!\n\n' + JSON.stringify(localAnnotations, null, 2));
-    setIsEdit(false);
-    setSelectedAnnotationIndex(null);
-  }, [localAnnotations]);
+    const saveAndClose = async () => {
+      await saveAnnotations({
+        observationId: Number(observationId),
+        fileId: Number(fileId),
+        setSplatAnnotationsRequestPayload: {
+          annotations: localAnnotations.map((annotation) => ({
+            ...annotation,
+            position: {
+              x: annotation.position[0],
+              y: annotation.position[1],
+              z: annotation.position[2],
+            },
+            cameraPosition: annotation.cameraPosition
+              ? { x: annotation.cameraPosition[0], y: annotation.cameraPosition[1], z: annotation.cameraPosition[2] }
+              : undefined,
+          })),
+        },
+      });
+      setIsEdit(false);
+      setSelectedAnnotationIndex(null);
+    };
+    void saveAndClose();
+  }, [observationId, fileId, saveAnnotations, localAnnotations]);
 
   const handleCancel = useCallback(() => {
     setLocalAnnotations(annotations);

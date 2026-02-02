@@ -8,6 +8,11 @@ api.enhanceEndpoints({
         { type: QueryTagTypes.ObservationSplats, id: payload.observationId },
       ],
     },
+    setObservationSplatAnnotations: {
+      invalidatesTags: (_results, _error, payload) => [
+        { type: QueryTagTypes.ObservationSplats, observationId: payload.observationId },
+      ],
+    },
     generateObservationSplatFile: {
       invalidatesTags: (_results, _error, payload) => [
         { type: QueryTagTypes.ObservationSplats, id: payload.observationId },

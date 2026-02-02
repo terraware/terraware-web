@@ -15,8 +15,8 @@ import './annotation-styles.css';
 export interface AnnotationProps {
   position: [number, number, number];
   title: string;
-  bodyText?: string | React.ReactNode;
-  label?: string | number;
+  bodyText?: string;
+  label?: string;
   cameraPosition?: [number, number, number];
   visible?: boolean;
   isEdit?: boolean;
@@ -32,7 +32,7 @@ export interface AnnotationProps {
  *
  * @param props.position - The world position of the annotation
  * @param props.title - The title displayed in the annotation
- * @param props.bodyText - Optional description (string or React component) displayed in the annotation
+ * @param props.bodyText - Optional description displayed in the annotation
  * @param props.label - Optional label displayed on the hotspot
  * @param props.cameraPosition - Optional camera position to move to when clicked. If undefined, camera stays at current position
  * @param props.visible - Optional flag to show/hide the annotation. Defaults to true
@@ -75,15 +75,12 @@ const Annotation = (props: AnnotationProps) => {
 
   // Create a stable callback that reads from refs
   const handleClick = useCallback(() => {
-    console.log(`handleClick called! label=${props.label}, isEdit=${isEditRef.current}, isSelected=${isSelected}`);
     if (isEditRef.current) {
-      console.log(`Annotation ${props.label} clicked in edit mode - calling onSelect`);
       onSelectRef.current?.();
     } else {
-      console.log(`Annotation ${props.label} clicked in normal mode - moving camera`);
       setCamera(positionRef.current, cameraPositionRef.current);
     }
-  }, [props.label, isSelected, setCamera]);
+  }, [setCamera]);
 
   const handleSetTextContainer = useCallback((container: HTMLElement) => {
     setTextContainer(container);
@@ -95,9 +92,6 @@ const Annotation = (props: AnnotationProps) => {
   // Manage gizmo lifecycle
   useEffect(() => {
     const shouldShowGizmo = isEdit && isSelected && visible;
-    console.log(
-      `Annotation ${props.label}: shouldShowGizmo=${shouldShowGizmo}, isEdit=${isEdit}, isSelected=${isSelected}, visible=${visible}`
-    );
 
     const cleanupGizmo = () => {
       if (gizmoRef.current) {
@@ -134,16 +128,11 @@ const Annotation = (props: AnnotationProps) => {
       const cameraComponent = cameraEntity?.camera;
       const cameraControls = cameraEntity?.script?.get(CameraControls.scriptName) as any;
 
-      console.log(
-        `setupGizmo for annotation${props.label}: annotationEntity=${!!annotationEntity}, cameraComponent=${!!cameraComponent}`
-      );
-
       if (!annotationEntity || !cameraComponent) {
         return false;
       }
 
       if (!gizmoRef.current) {
-        console.log(`Creating gizmo for annotation${props.label}`);
         if (!layerRef.current) {
           layerRef.current = Gizmo.createLayer(app);
         }
@@ -172,7 +161,6 @@ const Annotation = (props: AnnotationProps) => {
 
         gizmo.attach([annotationEntity]);
         gizmoRef.current = gizmo;
-        console.log(`Gizmo created and attached for annotation${props.label}`);
       }
 
       return true;
