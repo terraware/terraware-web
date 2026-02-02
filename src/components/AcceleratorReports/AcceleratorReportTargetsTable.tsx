@@ -3,62 +3,17 @@ import { useParams } from 'react-router';
 
 import { EditableTable, EditableTableColumn } from '@terraware/web-components';
 import { DateTime } from 'luxon';
-import { MRT_Cell, MRT_Row, MRT_TableInstance, MRT_ToggleDensePaddingButton } from 'material-react-table';
+import { MRT_TableInstance, MRT_ToggleDensePaddingButton } from 'material-react-table';
 
-import Link from 'src/components/common/Link';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useProjectReports from 'src/hooks/useProjectReports';
-import { useLocalization, useOrganization, useUser } from 'src/providers';
+import { useOrganization, useUser } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
+import { useUpdateProjectMetricTargetsMutation } from 'src/queries/generated/reports';
 import strings from 'src/strings';
-import { MetricType } from 'src/types/AcceleratorReport';
-
-const columns = (
-  activeLocale: string | null,
-  isAllowedUpdateReportsTargets: boolean,
-  availableYears: number[],
-  onRowClick?: (row: RowMetric) => void
-): EditableTableColumn<RowMetric>[] => {
-  const baseColumns: EditableTableColumn<RowMetric>[] = [
-    {
-      id: 'name',
-      header: strings.METRIC,
-      accessorKey: 'name',
-      size: 500,
-      Cell: ({ cell, row }: { cell: MRT_Cell<RowMetric>; row: MRT_Row<RowMetric> }) => {
-        const value = cell.getValue() as string;
-        return isAllowedUpdateReportsTargets && onRowClick ? (
-          <Link fontSize='16px' onClick={() => onRowClick(row.original)}>
-            {value}
-          </Link>
-        ) : (
-          <>{value}</>
-        );
-      },
-    },
-  ];
-
-  const yearColumns: EditableTableColumn<RowMetric>[] = availableYears.map((year) => ({
-    id: `year${year}`,
-    header: year.toString(),
-    accessorKey: `year${year}` as keyof RowMetric,
-  }));
-
-  const lastColumns = [
-    {
-      id: 'type',
-      header: strings.TYPE,
-      accessorKey: 'type',
-    },
-    {
-      id: 'component',
-      header: strings.COMPONENT,
-      accessorKey: 'component',
-    },
-  ];
-
-  return [...baseColumns, ...yearColumns, ...lastColumns];
-};
+import { MetricType, SystemMetricName } from 'src/types/AcceleratorReport';
+import { UpdateProjectMetricTargets, UpdateStandardMetricTargets, UpdateSystemMetricTargets } from 'src/types/Report';
+import useSnackbar from 'src/utils/useSnackbar';
 
 export type RowMetric = {
   name: string;
@@ -73,19 +28,21 @@ export type RowMetric = {
 export default function AcceleratorReportTargetsTable(): JSX.Element {
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const { currentParticipantProject } = useParticipantData();
-  const { activeLocale } = useLocalization();
   const { isAllowed } = useUser();
   const { selectedOrganization } = useOrganization();
   const pathParams = useParams<{ projectId: string }>();
   const projectId = isAcceleratorRoute ? String(pathParams.projectId) : currentParticipantProject?.id?.toString();
   const [metricsToUse, setMetricsToUse] = useState<RowMetric[]>();
+  const snackbar = useSnackbar();
 
-  const { acceleratorReports: reports } = useProjectReports(projectId, true, true);
+  const { reload, acceleratorReports: reports } = useProjectReports(projectId, true, true);
+  const [updateMetricTargets] = useUpdateProjectMetricTargetsMutation();
 
   const isAllowedUpdateReportsTargets = useMemo(
     () => isAllowed('UPDATE_REPORTS_TARGETS', { organization: selectedOrganization }),
     [isAllowed, selectedOrganization]
   );
+  const isAllowedReviewReportTargets = useMemo(() => isAllowed('REVIEW_REPORTS_TARGETS'), [isAllowed]);
 
   const getReportsYears = useMemo(() => {
     const availableYears: Set<number> = new Set();
@@ -168,16 +125,107 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
     setMetricsToUse(Array.from(metrics.values()));
   }, [reports]);
 
-  const onRowClick = useCallback(() => {
-    if (isAllowedUpdateReportsTargets) {
-      return true;
-    }
-  }, [isAllowedUpdateReportsTargets]);
+  const onSaveYearTarget = useCallback(
+    async (row: RowMetric, value: any, year: number) => {
+      if (!projectId) {
+        return;
+      }
 
-  const tableColumns = useMemo(
-    () => columns(activeLocale, isAllowedUpdateReportsTargets, getReportsYears, onRowClick),
-    [activeLocale, isAllowedUpdateReportsTargets, getReportsYears, onRowClick]
+      const reportIdKey = `reportId${year}`;
+      const reportId = row[reportIdKey] as number | undefined;
+
+      if (!reportId) {
+        snackbar.toastError();
+        return;
+      }
+
+      const newTarget = Number(value);
+      if (isNaN(newTarget)) {
+        snackbar.toastError();
+        return;
+      }
+
+      let metric: UpdateProjectMetricTargets | UpdateStandardMetricTargets | UpdateSystemMetricTargets;
+
+      switch (row.metricType) {
+        case 'project':
+          metric = {
+            type: 'project',
+            metricId: row.id,
+            targets: [{ reportId, target: newTarget }],
+          };
+          break;
+        case 'standard':
+          metric = {
+            type: 'standard',
+            metricId: row.id,
+            targets: [{ reportId, target: newTarget }],
+          };
+          break;
+        case 'system':
+          metric = {
+            type: 'system',
+            metric: row.name as SystemMetricName,
+            targets: [{ reportId, target: newTarget }],
+          };
+          break;
+      }
+
+      try {
+        await updateMetricTargets({
+          projectId: Number(projectId),
+          updateSubmitted: isAllowedReviewReportTargets,
+          updateMetricTargetsRequestPayload: { metric },
+        }).unwrap();
+
+        snackbar.toastSuccess(strings.CHANGES_SAVED);
+        reload();
+      } catch (error) {
+        snackbar.toastError();
+      }
+    },
+    [projectId, updateMetricTargets, isAllowedReviewReportTargets, snackbar, reload]
   );
+
+  const tableColumns = useMemo(() => {
+    const baseColumns: EditableTableColumn<RowMetric>[] = [
+      {
+        id: 'name',
+        header: strings.METRIC,
+        accessorKey: 'name',
+        size: 500,
+        enableEditing: false,
+      },
+    ];
+
+    const yearColumns: EditableTableColumn<RowMetric>[] = getReportsYears.map((year) => ({
+      id: `year${year}`,
+      header: year.toString(),
+      accessorKey: `year${year}` as keyof RowMetric,
+      enableEditing: isAllowedUpdateReportsTargets,
+      editConfig: {
+        editVariant: 'text',
+        onSave: (row: RowMetric, value: any) => onSaveYearTarget(row, value, year),
+      },
+    }));
+
+    const lastColumns: EditableTableColumn<RowMetric>[] = [
+      {
+        id: 'type',
+        header: strings.TYPE,
+        accessorKey: 'type',
+        enableEditing: false,
+      },
+      {
+        id: 'component',
+        header: strings.COMPONENT,
+        accessorKey: 'component',
+        enableEditing: false,
+      },
+    ];
+
+    return [...baseColumns, ...yearColumns, ...lastColumns];
+  }, [isAllowedUpdateReportsTargets, getReportsYears, onSaveYearTarget]);
 
   const columnOrder = useMemo(() => {
     const yearIds = getReportsYears.map((year) => `year${year}`);
@@ -189,7 +237,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
       <EditableTable
         columns={tableColumns}
         data={metricsToUse || []}
-        enableEditing={false}
+        enableEditing={true}
         enableSorting={true}
         enableGlobalFilter={true}
         enableColumnFilters={true}

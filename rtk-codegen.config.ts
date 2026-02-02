@@ -36,6 +36,9 @@ const config: ConfigFile = {
     './src/queries/generated/projectModules.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/accelerator/projects/{projectId}/modules'),
     },
+    './src/queries/generated/reports.ts': {
+      filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/accelerator/projects/{projectId}/reports'),
+    },
     './src/queries/generated/t0.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/tracking/t0'),
     },
