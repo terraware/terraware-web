@@ -29,6 +29,7 @@ const VirtualMonitoringPlot = ({ observationId, fileId, annotations = [] }: Virt
   const { setCamera } = useCameraPosition();
   const { isHighPerformance } = useDevicePerformance();
   const [showAnnotations, setShowAnnotations] = useState(true);
+  const [autoRotate, setAutoRotate] = useState(true);
 
   const splatSrc = useMemo(
     () => `/api/v1/tracking/observations/${observationId}/splats/${fileId}`,
@@ -38,6 +39,13 @@ const VirtualMonitoringPlot = ({ observationId, fileId, annotations = [] }: Virt
   useEffect(() => {
     setCamera(DEFAULT_FOCUS_POINT, DEFAULT_POSITION);
   }, [setCamera]);
+
+  /* When a rerender occurs, the splat model disappears (https://github.com/playcanvas/react/pull/298 and https://github.com/playcanvas/react/issues/302)
+  The key should include items that cause the SplatModel to rerender. Remove them (and the useMemo) once the PR is merged and we're on a version that includes it */
+  const splatModel = useMemo(
+    () => <SplatModel key={'splat'} splatSrc={splatSrc} rotation={[-180, 0, 0]} revealRain={isHighPerformance} />,
+    [isHighPerformance, splatSrc]
+  );
 
   return (
     <>
@@ -50,17 +58,10 @@ const VirtualMonitoringPlot = ({ observationId, fileId, annotations = [] }: Virt
         </Entity>
         <Script script={XrControllers} />
         <Script script={TfXrNavigation} enableTeleport={false} />
-        <Script script={AutoRotator} startDelay={0.5} restartDelay={3} startFadeInTime={0.5} />
+        {autoRotate && <Script script={AutoRotator} startDelay={0.5} restartDelay={3} startFadeInTime={0.5} />}
       </Entity>
 
-      {/* When a rerender occurs (such as changing showAnnotations), the splat model disappears (https://github.com/playcanvas/react/pull/298 and https://github.com/playcanvas/react/issues/302) */}
-      {/* The key includes showAnnotations the PR is merged and we're on a version that includes it */}
-      <SplatModel
-        key={`splat-${showAnnotations}`}
-        splatSrc={splatSrc}
-        rotation={[-180, 0, 0]}
-        revealRain={isHighPerformance}
-      />
+      {splatModel}
 
       {annotations.length > 0 && (
         <Script
@@ -81,6 +82,8 @@ const VirtualMonitoringPlot = ({ observationId, fileId, annotations = [] }: Virt
         defaultCameraPosition={DEFAULT_POSITION}
         showAnnotations={showAnnotations}
         onToggleAnnotations={setShowAnnotations}
+        autoRotate={autoRotate}
+        onToggleAutoRotate={setAutoRotate}
       />
     </>
   );

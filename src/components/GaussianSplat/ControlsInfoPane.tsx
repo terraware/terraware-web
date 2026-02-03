@@ -9,9 +9,18 @@ interface ControlsInfoPaneProps {
   paneRef: React.RefObject<HTMLDivElement | null>;
   showAnnotations?: boolean;
   onToggleAnnotations?: (show: boolean) => void;
+  autoRotate?: boolean;
+  onToggleAutoRotate?: (enabled: boolean) => void;
 }
 
-const ControlsInfoPane = ({ visible, paneRef, showAnnotations, onToggleAnnotations }: ControlsInfoPaneProps) => {
+const ControlsInfoPane = ({
+  visible,
+  paneRef,
+  showAnnotations,
+  onToggleAnnotations,
+  autoRotate,
+  onToggleAutoRotate,
+}: ControlsInfoPaneProps) => {
   const theme = useTheme();
   const { strings } = useLocalization();
 
@@ -20,6 +29,13 @@ const ControlsInfoPane = ({ visible, paneRef, showAnnotations, onToggleAnnotatio
       onToggleAnnotations?.(e.target.checked);
     },
     [onToggleAnnotations]
+  );
+
+  const handleAutoRotateChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      onToggleAutoRotate?.(e.target.checked);
+    },
+    [onToggleAutoRotate]
   );
 
   const controlRowSx = {
@@ -73,6 +89,17 @@ const ControlsInfoPane = ({ visible, paneRef, showAnnotations, onToggleAnnotatio
               <Checkbox
                 checked={showAnnotations ?? true}
                 onChange={handleAnnotationsChange}
+                sx={{ color: theme.palette.primary.main }}
+              />
+            </Box>
+
+            <Divider sx={dividerSx} />
+
+            <Box sx={controlRowSx}>
+              <Typography>{strings.AUTO_ROTATE}</Typography>
+              <Checkbox
+                checked={autoRotate ?? true}
+                onChange={handleAutoRotateChange}
                 sx={{ color: theme.palette.primary.main }}
               />
             </Box>
