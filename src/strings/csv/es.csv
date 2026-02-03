@@ -456,6 +456,7 @@ DELETE_ACCOUNT_CONFIRMATION,¿Seguro que desea eliminar su cuenta? Esta acción 
 DELETE_ACCOUNT_ERROR,Ocurrió un error al eliminar su cuenta.,6105987b
 DELETE_ACTIVITY,Eliminar actividad,18958b95
 DELETE_ACTIVITY_CONFIRM,¿Está seguro de que desea eliminar esta actividad? Todos los datos de la actividad serán eliminados.,e64e17b5
+DELETE_ANNOTATION,Eliminar anotación,10fcdc4e
 DELETE_CONFIRMATION_MODAL_MAIN_TEXT,¿Está seguro de que desea eliminar la especie?,43a238c7
 DELETE_FUNDING_ENTITY,Eliminar entidad financiadora,7d8a1f95
 DELETE_FUNDING_ENTITY_FUNDERS_MESSAGE,Se eliminarán todos los financiadores asociados a esta entidad financiadora.,cedce711

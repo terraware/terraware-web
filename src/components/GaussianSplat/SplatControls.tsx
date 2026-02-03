@@ -26,6 +26,8 @@ export interface SplatControlsProps {
   onSave?: () => void;
   onCancel?: () => void;
   onAddAnnotation?: () => void;
+  onDeleteAnnotation?: () => void;
+  hasSelectedAnnotation?: boolean;
 }
 
 const SplatControls = ({
@@ -40,6 +42,8 @@ const SplatControls = ({
   onSave,
   onCancel,
   onAddAnnotation,
+  onDeleteAnnotation,
+  hasSelectedAnnotation,
 }: SplatControlsProps) => {
   const theme = useTheme();
   const { strings } = useLocalization();
@@ -176,6 +180,9 @@ const SplatControls = ({
           }}
         >
           <Button label={strings.ADD_ANNOTATION} onClick={onAddAnnotation} />
+          {hasSelectedAnnotation && onDeleteAnnotation && (
+            <Button label={strings.DELETE_ANNOTATION} onClick={onDeleteAnnotation} />
+          )}
         </Box>
       )}
       <Box

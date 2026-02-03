@@ -455,6 +455,7 @@ DELETE_ACCOUNT_CONFIRMATION,Êtes-vous sûr de vouloir supprimer votre compte ? 
 DELETE_ACCOUNT_ERROR,Une erreur s'est produite lors de la suppression de votre compte.,6105987b
 DELETE_ACTIVITY,Supprimer l'activité,18958b95
 DELETE_ACTIVITY_CONFIRM,Êtes-vous sûr de vouloir supprimer cette activité ? Toutes les données associées à cette activité seront supprimées.,e64e17b5
+DELETE_ANNOTATION,Supprimer l’annotation,10fcdc4e
 DELETE_CONFIRMATION_MODAL_MAIN_TEXT,Êtes-vous sûr de vouloir supprimer l'espèce ?,43a238c7
 DELETE_FUNDING_ENTITY,Supprimer l’entité de financement,7d8a1f95
 DELETE_FUNDING_ENTITY_FUNDERS_MESSAGE,Tous les financeurs associés à cette entité de financement seront supprimés.,cedce711
