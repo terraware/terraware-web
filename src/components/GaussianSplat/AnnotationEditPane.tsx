@@ -8,12 +8,11 @@ import { AnnotationProps } from './Annotation';
 
 interface AnnotationEditPaneProps {
   visible: boolean;
-  paneRef: React.RefObject<HTMLDivElement | null>;
   annotation: AnnotationProps | null;
   onUpdate: (updates: Partial<AnnotationProps>) => void;
 }
 
-const AnnotationEditPane = ({ visible, paneRef, annotation, onUpdate }: AnnotationEditPaneProps) => {
+const AnnotationEditPane = ({ visible, annotation, onUpdate }: AnnotationEditPaneProps) => {
   const theme = useTheme();
   const { strings } = useLocalization();
 
@@ -60,7 +59,6 @@ const AnnotationEditPane = ({ visible, paneRef, annotation, onUpdate }: Annotati
     >
       <Fade in={visible} timeout={500}>
         <Box
-          ref={paneRef}
           sx={{
             backgroundColor: theme.palette.grey[900],
             color: theme.palette.common.white,

@@ -12,6 +12,8 @@ import { getRgbaFromHex } from 'src/utils/color';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import Button from '../common/button/Button';
+import { AnnotationProps } from './Annotation';
+import AnnotationEditPane from './AnnotationEditPane';
 import ControlsInfoPane from './ControlsInfoPane';
 
 export interface SplatControlsProps {
@@ -28,6 +30,8 @@ export interface SplatControlsProps {
   onAddAnnotation?: () => void;
   onDeleteAnnotation?: () => void;
   hasSelectedAnnotation?: boolean;
+  selectedAnnotation?: AnnotationProps | null;
+  onAnnotationUpdate: (updates: Partial<AnnotationProps>) => void;
 }
 
 const SplatControls = ({
@@ -44,6 +48,8 @@ const SplatControls = ({
   onAddAnnotation,
   onDeleteAnnotation,
   hasSelectedAnnotation,
+  selectedAnnotation,
+  onAnnotationUpdate,
 }: SplatControlsProps) => {
   const theme = useTheme();
   const { strings } = useLocalization();
@@ -223,6 +229,11 @@ const SplatControls = ({
         onToggleAnnotations={onToggleAnnotations}
         autoRotate={autoRotate}
         onToggleAutoRotate={onToggleAutoRotate}
+      />
+      <AnnotationEditPane
+        visible={isEdit === true && hasSelectedAnnotation === true}
+        annotation={selectedAnnotation ?? null}
+        onUpdate={onAnnotationUpdate}
       />
     </Box>
   );
