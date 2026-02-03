@@ -1,3 +1,5 @@
+f3138bae989 Add checkbox to disable autorotate (#5164)
+a2536f3bdeb Add virtual plot to search params so that a link can be shared (#5166)
 e75be8b6970 Use live data in info box below virtual plot (#5165)
 1b88ae59d30 SW-6640: Use localized number formatting in Accessions Quantity (#5162)
 0a8cb7938bd SW-8010 Inline editing for year targets values (#5160)
