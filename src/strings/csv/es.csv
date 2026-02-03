@@ -65,6 +65,7 @@ ADD_ACTIVITY,Agregar actividad,0ed95a7d
 ADD_ACTIVITY_FOR_PROJECT,Agregar actividad para {0},86739f8b
 ADD_ADDRESS,Añadir dirección,8262aa95
 ADD_AN_ACCESSION,Añadir una accesión,e4b619b4
+ADD_ANNOTATION,Agregar anotación,91742a0f
 ADD_BATCH,Añadir lote,0d9f7a4a
 ADD_COHORT,Agregar cohorte,094d5510
 ADD_DOCUMENT,Añadir documento,af87beed

@@ -25,6 +25,7 @@ export interface SplatControlsProps {
   onToggleEdit?: (isEdit: boolean) => void;
   onSave?: () => void;
   onCancel?: () => void;
+  onAddAnnotation?: () => void;
 }
 
 const SplatControls = ({
@@ -38,6 +39,7 @@ const SplatControls = ({
   onToggleEdit,
   onSave,
   onCancel,
+  onAddAnnotation,
 }: SplatControlsProps) => {
   const theme = useTheme();
   const { strings } = useLocalization();
@@ -161,6 +163,21 @@ const SplatControls = ({
         pointerEvents: 'none',
       }}
     >
+      {isEdit && onAddAnnotation && (
+        <Box
+          sx={{
+            position: 'absolute',
+            top: 16,
+            left: '50%',
+            transform: 'translateX(-50%)',
+            display: 'flex',
+            gap: 1,
+            pointerEvents: 'auto',
+          }}
+        >
+          <Button label={strings.ADD_ANNOTATION} onClick={onAddAnnotation} />
+        </Box>
+      )}
       <Box
         sx={{
           position: 'absolute',
