@@ -1,3 +1,4 @@
+e75be8b6970 Use live data in info box below virtual plot (#5165)
 1b88ae59d30 SW-6640: Use localized number formatting in Accessions Quantity (#5162)
 0a8cb7938bd SW-8010 Inline editing for year targets values (#5160)
 3fa8ce1d441 SW-8010 Initial work on targets table updates (#5155)
