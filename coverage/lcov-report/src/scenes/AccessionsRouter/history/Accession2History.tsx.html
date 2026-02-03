@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/51</span>
+                <span class='fraction'>0/53</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/46</span>
+                <span class='fraction'>0/48</span>
             </div>
         
             
@@ -151,7 +151,9 @@
 <a name='L86'></a><a href='#L86'>86</a>
 <a name='L87'></a><a href='#L87'>87</a>
 <a name='L88'></a><a href='#L88'>88</a>
-<a name='L89'></a><a href='#L89'>89</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L89'></a><a href='#L89'>89</a>
+<a name='L90'></a><a href='#L90'>90</a>
+<a name='L91'></a><a href='#L91'>91</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -191,7 +193,9 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -246,40 +250,42 @@ import _ from 'lodash';<span class="cstat-no" title="statement not covered" ></s
 <span class="cstat-no" title="statement not covered" ></span>
 import Link from 's<span class="cstat-no" title="statement not covered" >rc/components/common/Link';</span>
 import { APP_PA<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >TH</span>S } from 'src/constants';</span>
-im<span class="cstat-no" title="statement not covered" >port AccessionService, { AccessionHistoryEntry } from 'src/services/AccessionService';</span>
-impo<span class="cstat-no" title="statement not covered" >rt strings from 'src/strings';</span>
-import { Accession } from 'src/types/Accession';
-import useSnackbar<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > f</span>rom 'src/utils/useSnackbar';</span>
+im<span class="cstat-no" title="statement not covered" >port { useLocalization } from 'src/providers/hooks';</span>
+impo<span class="cstat-no" title="statement not covered" >rt AccessionService, { AccessionHistoryEntry } from 'src/servic</span>es/AccessionService';
+import strings from 'src/strings';
+import { Accession<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > }</span> from 'src/types/Accession';</span>
+im<span class="cstat-no" title="statement not covered" >port useSnackbar from 'src/utils/useSnackbar';</span>
 <span class="cstat-no" title="statement not covered" ></span>
-inte<span class="cstat-no" title="statement not covered" >rface Accession2HistoryProps {</span>
-  acce<span class="cstat-no" title="statement not covered" >ssion: Accession;</span>
-}<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-&nbsp;
-ex<span class="cstat-no" title="statement not covered" >port defaul</span>t function Accession2History(props: Accession2HistoryProps): JSX.Element {
+interf<span class="cstat-no" title="statement not covered" >ace Accession2HistoryProps {</span>
+  access<span class="cstat-no" title="statement not covered" >ion: Accession;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+}
+<span class="cstat-no" title="statement not covered" ></span>
+export default function Accession2History(props: Accession2HistoryProps): JSX.Element {
+  const { acti<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ve</span>Locale } = useLocalization()<span class="cstat-no" title="statement not covered" >;</span></span>
   const { accession } = props;
-  const [histo<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ry</span>, setHistory] = useState&lt;Acc<span class="cstat-no" title="statement not covered" >essionHistoryEntry[]&gt;();</span></span>
+  const [history, setHistory] = useState&lt;AccessionHistoryEntry[]&gt;();
   const theme = useTheme();
   const snackbar = useSnackbar();
 &nbsp;
   useEffect(() =&gt; {
     const loadHistory = async () =&gt; {
-      const response = await AccessionService.getAccessionHistory(accession.id);
-      if (response.requestSucceeded) {
-        if (!_.isEq<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ua</span>l(histo<span class="cstat-no" title="statement not covered" >ry, response.history)) {</span></span>
-          setHistory<span class="cstat-no" title="statement not covered" >(re</span>sponse.history);
-<span class="cstat-no" title="statement not covered" >        }</span>
-      } els<span class="fstat-no" title="function not covered" >e </span>{<span class="cstat-no" title="statement not covered" ></span>
-        setHistory([]);
-<span class="cstat-no" title="statement not covered" >        snackbar.toastError();</span>
+      const respons<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >e </span>= await<span class="cstat-no" title="statement not covered" > AccessionService.getAccessionHistory(accession.id);</span></span>
+      if (response.r<span class="cstat-no" title="statement not covered" >equ</span>estSucceeded) {
+<span class="cstat-no" title="statement not covered" >        if (!_.isEqual(history, response.history)) {</span>
+          s<span class="fstat-no" title="function not covered" >et</span>Hist<span class="cstat-no" title="statement not covered" >ory(response.histo</span>ry);
+        }
+<span class="cstat-no" title="statement not covered" >      } else {</span>
+        setHistory(<span class="cstat-no" title="statement not covered" >[]);</span>
+        snackbar.toast<span class="cstat-no" title="statement not covered" >Error();</span>
       }<span class="cstat-no" title="statement not covered" ></span>
     };<span class="cstat-no" title="statement not covered" ></span>
-    void loadHistory<span class="cstat-no" title="statement not covered" >();</span>
-  }, [accession, s<span class="cstat-no" title="statement not covered" >nackbar, history]);</span>
+    void loadHistory();<span class="cstat-no" title="statement not covered" ></span>
+  }, [accession, ac<span class="cstat-no" title="statement not covered" >tiveLocale, snackbar, history])</span>;
 <span class="cstat-no" title="statement not covered" ></span>
-  const HistoryText = (item: A<span class="cstat-no" title="statement not covered" >ccessionHistoryEntry) =&gt; (</span>
-    &lt;Typography fontW<span class="cstat-no" title="statement not covered" >eight={500}&gt;</span>
-      {item.fullName || s<span class="cstat-no" title="statement not covered" >trings.NAME_UNKNOWN}&amp;nbsp;{item.descriptio</span>n}
-      {it<span class="fstat-no" title="function not covered" >em.notes &amp;&amp; (</span>
+  const HistoryText =<span class="cstat-no" title="statement not covered" > (item: AccessionHistoryEntry) =</span>&gt; (
+    &lt;Typography fontWeigh<span class="cstat-no" title="statement not covered" >t={500}&gt;</span>
+      {it<span class="fstat-no" title="function not covered" >em.fullName || str</span>ings.NAME_UNKNOWN}&amp;nbsp;{item.description}
+      {item.notes &amp;&amp; (<span class="cstat-no" title="statement not covered" ></span>
         &lt;Typography font<span class="cstat-no" title="statement not covered" >Size={</span>'14px'} fontWeight={300}&gt;
           {item.notes}<span class="cstat-no" title="statement not covered" ></span>
         &lt;/Typogr<span class="cstat-no" title="statement not covered" >aphy&gt;</span>
@@ -334,7 +340,7 @@ ex<span class="cstat-no" title="statement not covered" >port defaul</span>t func
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-02T18:58:17.868Z
+                at 2026-02-03T17:55:12.213Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
