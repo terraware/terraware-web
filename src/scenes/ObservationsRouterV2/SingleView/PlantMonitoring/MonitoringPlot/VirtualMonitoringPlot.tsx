@@ -40,18 +40,11 @@ const VirtualMonitoringPlot = ({ observationId, fileId, annotations = [] }: Virt
     setCamera(DEFAULT_FOCUS_POINT, DEFAULT_POSITION);
   }, [setCamera]);
 
-  /* When a rerender occurs (such as changing autoRotate), the splat model disappears (https://github.com/playcanvas/react/pull/298 and https://github.com/playcanvas/react/issues/302)
-  The key includes items that cause the SplatModel to rerender. Remove them (and the useMemo) once the PR is merged and we're on a version that includes it */
+  /* When a rerender occurs, the splat model disappears (https://github.com/playcanvas/react/pull/298 and https://github.com/playcanvas/react/issues/302)
+  The key should include items that cause the SplatModel to rerender. Remove them (and the useMemo) once the PR is merged and we're on a version that includes it */
   const splatModel = useMemo(
-    () => (
-      <SplatModel
-        key={`splat-${autoRotate}`}
-        splatSrc={splatSrc}
-        rotation={[-180, 0, 0]}
-        revealRain={isHighPerformance}
-      />
-    ),
-    [autoRotate, isHighPerformance, splatSrc]
+    () => <SplatModel key={'splat'} splatSrc={splatSrc} rotation={[-180, 0, 0]} revealRain={isHighPerformance} />,
+    [isHighPerformance, splatSrc]
   );
 
   return (
