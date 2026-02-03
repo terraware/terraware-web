@@ -168,8 +168,14 @@ const MapPhotoDrawer = ({
   } else if (splat) {
     return (
       <>
-        {virtualPlotOpen && monitoringPlotId && (
-          <VirtualPlotModal observationId={observationId} fileId={splat.fileId} onClose={setVirtualPlotOpenFalse} />
+        {virtualPlotOpen && result && monitoringPlot && (
+          <VirtualPlotModal
+            monitoringPlot={monitoringPlot}
+            plantingSiteId={result.plantingSiteId}
+            observationId={observationId}
+            fileId={splat.fileId}
+            onClose={setVirtualPlotOpenFalse}
+          />
         )}
         <Box display={'flex'} flexDirection={'column'} width={'100%'} gap={2}>
           <MapDrawerTable rows={rows} />

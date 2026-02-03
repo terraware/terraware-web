@@ -1457,6 +1457,7 @@ PLOT_ADHOC_LIVE_PLANTS_TOOLTIP,Plantas vivas es el número de plantas observadas
 PLOT_ADHOC_PLANT_DENSITY_TOOLTIP,La densidad de plantas (plantas por hectárea) se calcula en función del número de plantas observadas.,142e44c5
 PLOT_ADHOC_SPECIES_TOOLTIP,Especies es el número de especies representadas por todas las plantas observadas.,ed7c35b1
 PLOT_ADHOC_TOTAL_PLANTS_TOOLTIP,"Plantas totales es el número de todas las plantas observadas, incluyendo las registradas como vivas y muertas.",b2fd163f
+PLOT_CAPTURED,Parcela capturada,4ad5f259
 PLOT_CONDITIONS,Condiciones de la parcela,2b615357
 PLOT_CORNER_PHOTOS,Fotos de las esquinas de la parcela,330ffad8
 PLOT_CORNER_PHOTOS_CANNOT_BE_DELETED,No se pueden eliminar las fotos de las esquinas de la parcela,f2f48bb3

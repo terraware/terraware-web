@@ -1456,6 +1456,7 @@ PLOT_ADHOC_LIVE_PLANTS_TOOLTIP,Plantes vivantes correspond au nombre de plantes 
 PLOT_ADHOC_PLANT_DENSITY_TOOLTIP,La densité de plantes (plantes par hectare) est calculée en fonction du nombre de plantes observées.,142e44c5
 PLOT_ADHOC_SPECIES_TOOLTIP,Espèces correspond au nombre d'espèces représentées par l'ensemble des plantes observées.,ed7c35b1
 PLOT_ADHOC_TOTAL_PLANTS_TOOLTIP,"Plantes totales correspond au nombre total de plantes observées, y compris les plantes enregistrées comme vivantes et mortes.",b2fd163f
+PLOT_CAPTURED,Parcelle capturée,4ad5f259
 PLOT_CONDITIONS,Conditions de la parcelle,2b615357
 PLOT_CORNER_PHOTOS,Photos des coins de la parcelle,330ffad8
 PLOT_CORNER_PHOTOS_CANNOT_BE_DELETED,Les photos des coins de la parcelle ne peuvent pas être supprimées,f2f48bb3

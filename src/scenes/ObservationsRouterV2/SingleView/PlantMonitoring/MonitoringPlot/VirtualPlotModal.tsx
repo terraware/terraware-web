@@ -1,44 +1,22 @@
 import React from 'react';
 
-import { Box, Grid, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { OverlayModal } from '@terraware/web-components';
 
 import { AnnotationProps } from 'src/components/GaussianSplat/Annotation';
 import Application from 'src/components/GaussianSplat/Application';
+import { ObservationMonitoringPlotResultsPayload } from 'src/types/Observations';
 
 import VirtualMonitoringPlot from './VirtualMonitoringPlot';
+import VirtualPlotData from './VirtualPlotData';
 
 interface VirtualPlotModalProps {
+  monitoringPlot: ObservationMonitoringPlotResultsPayload;
+  plantingSiteId: number;
   observationId: number;
   fileId: number;
   onClose?: () => void;
 }
-
-const BelowComponent = () => {
-  return (
-    <Grid
-      container
-      spacing={2}
-      sx={{
-        backgroundColor: 'black',
-        color: 'white',
-        padding: '1rem',
-        textAlign: 'center',
-        borderRadius: '1rem',
-      }}
-    >
-      <Grid item style={{ paddingTop: 0 }}>
-        Plot Captured: 2026-01-14
-      </Grid>
-      <Grid item style={{ paddingTop: 0 }}>
-        Live Plants: 247
-      </Grid>
-      <Grid item style={{ paddingTop: 0 }}>
-        Species: 47
-      </Grid>
-    </Grid>
-  );
-};
 
 const annotations: AnnotationProps[] = [
   {
@@ -75,9 +53,19 @@ const annotations: AnnotationProps[] = [
   },
 ];
 
-const VirtualPlotModal = ({ observationId, fileId, onClose }: VirtualPlotModalProps) => {
+const VirtualPlotModal = ({
+  monitoringPlot,
+  plantingSiteId,
+  observationId,
+  fileId,
+  onClose,
+}: VirtualPlotModalProps) => {
   return (
-    <OverlayModal open={true} onClose={onClose} belowComponent={<BelowComponent />}>
+    <OverlayModal
+      open={true}
+      onClose={onClose}
+      belowComponent={<VirtualPlotData monitoringPlot={monitoringPlot} plantingSiteId={plantingSiteId} />}
+    >
       <Application
         style={{
           width: '100%',
