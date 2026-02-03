@@ -209,6 +209,7 @@ ATTACHMENT_DESCRIPTION,Attach up to {0} files. Each file has a maximum size of {
 ATTACHMENT_LIMIT_REACHED,Attachment Limit Reached,
 ATTACHMENT_LIMIT_REACHED_MESSAGE,You may only upload {0} attachments.,
 ATTACHMENTS,Attachments,
+AUTO_ROTATE,Auto Rotate,
 AVAILABLE,available,
 AVERAGE_WOOD_DENSITY,Average Wood Density (kb/m3),
 AWAITING_CHECK_IN,Awaiting Check-In,

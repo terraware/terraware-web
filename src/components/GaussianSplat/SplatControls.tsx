@@ -19,6 +19,8 @@ export interface SplatControlsProps {
   defaultCameraFocus?: [number, number, number];
   showAnnotations?: boolean;
   onToggleAnnotations?: (show: boolean) => void;
+  autoRotate?: boolean;
+  onToggleAutoRotate?: (enabled: boolean) => void;
 }
 
 const SplatControls = ({
@@ -26,6 +28,8 @@ const SplatControls = ({
   defaultCameraFocus,
   showAnnotations,
   onToggleAnnotations,
+  autoRotate,
+  onToggleAutoRotate,
 }: SplatControlsProps) => {
   const theme = useTheme();
   const { strings } = useLocalization();
@@ -172,6 +176,8 @@ const SplatControls = ({
         paneRef={paneRef}
         showAnnotations={showAnnotations}
         onToggleAnnotations={onToggleAnnotations}
+        autoRotate={autoRotate}
+        onToggleAutoRotate={onToggleAutoRotate}
       />
     </Box>
   );

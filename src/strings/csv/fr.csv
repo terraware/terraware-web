@@ -208,6 +208,7 @@ ATTACHMENT_DESCRIPTION,Joindre jusqu'à {0} fichiers. Chaque fichier a une taill
 ATTACHMENT_LIMIT_REACHED,Limite de pièces jointes atteinte,9f9323bc
 ATTACHMENT_LIMIT_REACHED_MESSAGE,Vous ne pouvez télécharger que {0} pièces jointes.,cc438d34
 ATTACHMENTS,Annexes,e7695404
+AUTO_ROTATE,Rotation automatique,15ce1a40
 AVAILABLE,disponible,716e496f
 AVERAGE_WOOD_DENSITY,Densité moyenne du bois (kb/m3),b413c9a9
 AWAITING_CHECK_IN,En attente d'enregistrement,11dee61b

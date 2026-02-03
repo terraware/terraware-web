@@ -209,6 +209,7 @@ ATTACHMENT_DESCRIPTION,Adjunte hasta {0} archivos. Cada archivo tiene un tamaño
 ATTACHMENT_LIMIT_REACHED,Se alcanzó el límite de archivos adjuntos,9f9323bc
 ATTACHMENT_LIMIT_REACHED_MESSAGE,Solo puede subir {0} archivos adjuntos.,cc438d34
 ATTACHMENTS,Archivos adjuntos,e7695404
+AUTO_ROTATE,Rotación automática,15ce1a40
 AVAILABLE,disponible,716e496f
 AVERAGE_WOOD_DENSITY,Densidad promedio de la madera (kb/m3),b413c9a9
 AWAITING_CHECK_IN,Pendiente de facturación,11dee61b
