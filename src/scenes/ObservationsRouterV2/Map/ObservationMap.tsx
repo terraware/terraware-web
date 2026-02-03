@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { MapRef } from 'react-map-gl/mapbox';
+import { useSearchParams } from 'react-router';
 
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 
@@ -25,6 +26,7 @@ import usePlantingSiteMapLegend from 'src/components/NewMap/usePlantingSiteMapLe
 import usePlotPhotosMapLegend from 'src/components/NewMap/usePlotPhotosMapLegend';
 import useSurvivalRateMapLegend from 'src/components/NewMap/useSurvivalRateMapLegend';
 import { getBoundingBoxFromPoints } from 'src/components/NewMap/utils';
+import isEnabled from 'src/features';
 import { useLocalization, useOrganization } from 'src/providers';
 import {
   ObservationMonitoringPlotResultsPayload,
@@ -79,6 +81,9 @@ const ObservationMap = ({
   const mapRef = useRef<MapRef | null>(null);
   const { fitBounds } = useMapUtils(mapRef);
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
+  const [searchParams] = useSearchParams();
+
+  const isVirtualPlotsEnabled = isEnabled('Virtual Monitoring Plots');
 
   const { selectedLayer, plantingSiteLegendGroup } = usePlantingSiteMapLegend('sites', plantingSiteId === undefined);
   const {
@@ -86,9 +91,8 @@ const ObservationMap = ({
     deadPlantsVisible,
     plantMarkersLegendGroup: plantMakersLegendGroup,
   } = usePlantMarkersMapLegend(plantingSiteId === undefined);
-  const { plotPhotosVisible, plotPhotosLegendGroup, virtualPlotVisible } = usePlotPhotosMapLegend(
-    plantingSiteId === undefined
-  );
+  const { plotPhotosVisible, plotPhotosLegendGroup, virtualPlotVisible, setVirtualPlotVisible } =
+    usePlotPhotosMapLegend(plantingSiteId === undefined);
   const { survivalRateVisible, survivalRateLegendGroup } = useSurvivalRateMapLegend(plantingSiteId === undefined);
   const { adHocPlotsVisible, permanentPlotsVisible, temporaryPlotsVisible, monitoringPlotsLegendGroup } =
     useMonitoringPlotsMapLegend(plantingSiteId === undefined, isBiomass, isBiomass);
@@ -755,6 +759,44 @@ const ObservationMap = ({
       })
       .filter((marker): marker is MapMarker => marker !== undefined);
   }, [adHocPlots, listObservationSplatsResult.data, selectSplat, selectedPhotos, selectedResults]);
+
+  useEffect(() => {
+    const virtualPlotParam = searchParams.get('virtualPlot');
+    if (
+      virtualPlotParam &&
+      selectedResults &&
+      listObservationSplatsResult.data &&
+      selectedPhotos.length === 0 &&
+      isVirtualPlotsEnabled
+    ) {
+      const targetMonitoringPlotId = Number(virtualPlotParam);
+      const splats = listObservationSplatsResult.data.splats.filter((splat) => splat.status === 'Ready');
+      const matchingSplat = splats.find((splat) => splat.monitoringPlotId === targetMonitoringPlotId);
+
+      if (matchingSplat) {
+        setVirtualPlotVisible(true);
+        selectPhotos([
+          {
+            monitoringPlotId: targetMonitoringPlotId,
+            observationId: selectedResults.observationId,
+            splat: matchingSplat,
+          },
+        ]);
+        selectPlants([]);
+        setSelectedFeature(undefined);
+        setDrawerOpen(true);
+      }
+    }
+  }, [
+    searchParams,
+    selectedResults,
+    listObservationSplatsResult.data,
+    selectedPhotos.length,
+    selectPhotos,
+    selectPlants,
+    setVirtualPlotVisible,
+    isVirtualPlotsEnabled,
+  ]);
 
   const treesMarkers = useCallback(
     (isDead: boolean): MapMarker[] => {

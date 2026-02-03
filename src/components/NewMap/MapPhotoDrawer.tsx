@@ -1,10 +1,12 @@
-import React, { type JSX, useCallback, useMemo } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo } from 'react';
+import { useSearchParams } from 'react-router';
 
 import { Box } from '@mui/material';
 
 import MapDrawerTable, { MapDrawerTableRow } from 'src/components/MapDrawerTable';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import useBoolean from 'src/hooks/useBoolean';
 import { useLocalization } from 'src/providers';
 import { ObservationSplatPayload, useGetObservationResultsQuery } from 'src/queries/generated/observations';
@@ -32,7 +34,9 @@ const MapPhotoDrawer = ({
 
   const { format } = useNumberFormatter();
   const { data } = useGetObservationResultsQuery({ observationId });
-  const [virtualPlotOpen, , setVirtualPlotOpenTrue, setVirtualPlotOpenFalse] = useBoolean(false);
+  const [virtualPlotOpen, setVirtualPlotOpen] = useBoolean(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const isVirtualPlotsEnabled = isEnabled('Virtual Monitoring Plots');
 
   const photoUrl = useMemo(() => {
     if (!photo) {
@@ -158,6 +162,43 @@ const MapPhotoDrawer = ({
     strings,
   ]);
 
+  const virtualPlotParamValue = searchParams.get('virtualPlot');
+
+  useEffect(() => {
+    const shouldBeOpen =
+      virtualPlotParamValue &&
+      isVirtualPlotsEnabled &&
+      Number(virtualPlotParamValue) === monitoringPlotId &&
+      Boolean(splat && result && monitoringPlot);
+
+    if (shouldBeOpen && !virtualPlotOpen) {
+      setVirtualPlotOpen(true);
+    } else if (!shouldBeOpen && virtualPlotOpen) {
+      setVirtualPlotOpen(false);
+    }
+  }, [
+    virtualPlotParamValue,
+    monitoringPlotId,
+    splat,
+    result,
+    monitoringPlot,
+    virtualPlotOpen,
+    setVirtualPlotOpen,
+    isVirtualPlotsEnabled,
+  ]);
+
+  const handleOpenVirtualPlot = useCallback(() => {
+    const params = new URLSearchParams(searchParams);
+    params.set('virtualPlot', monitoringPlotId.toString());
+    setSearchParams(params, { replace: true });
+  }, [monitoringPlotId, searchParams, setSearchParams]);
+
+  const handleCloseVirtualPlot = useCallback(() => {
+    const params = new URLSearchParams(searchParams);
+    params.delete('virtualPlot');
+    setSearchParams(params, { replace: true });
+  }, [searchParams, setSearchParams]);
+
   if (photo && photoUrl) {
     return (
       <Box display={'flex'} flexDirection={'column'} width={'100%'}>
@@ -174,7 +215,7 @@ const MapPhotoDrawer = ({
             plantingSiteId={result.plantingSiteId}
             observationId={observationId}
             fileId={splat.fileId}
-            onClose={setVirtualPlotOpenFalse}
+            onClose={handleCloseVirtualPlot}
           />
         )}
         <Box display={'flex'} flexDirection={'column'} width={'100%'} gap={2}>
@@ -183,7 +224,7 @@ const MapPhotoDrawer = ({
           <Button
             id='visit-virtual-plot'
             label={strings.VISIT_VIRTUAL_PLOT}
-            onClick={setVirtualPlotOpenTrue}
+            onClick={handleOpenVirtualPlot}
             priority='primary'
             size='medium'
           />
