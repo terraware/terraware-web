@@ -81,6 +81,14 @@ const SplatControls = ({
       }
     };
 
+    // Check current availability state on mount
+    if (app.xr?.isAvailable(XRTYPE_VR)) {
+      setIsVrAvailable(true);
+    }
+    if (app.xr?.isAvailable(XRTYPE_AR)) {
+      setIsArAvailable(true);
+    }
+
     app.xr?.on('available', handleAvailable);
     return () => {
       app.xr?.off('available', handleAvailable);
@@ -95,14 +103,6 @@ const SplatControls = ({
         }
       }
     };
-
-    // Check current availability state on mount
-    if (app.xr?.isAvailable(XRTYPE_VR)) {
-      setIsVrAvailable(true);
-    }
-    if (app.xr?.isAvailable(XRTYPE_AR)) {
-      setIsArAvailable(true);
-    }
 
     window.addEventListener('keydown', handleKeyPress);
     return () => {
