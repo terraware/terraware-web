@@ -200,5 +200,13 @@ api.enhanceEndpoints({
         },
       ],
     },
+    getAcceleratorReportYears: {
+      providesTags: (_results, _error, projectId) => [
+        {
+          type: QueryTagTypes.ProjectReportConfigs,
+          id: projectId,
+        },
+      ],
+    },
   },
 });
