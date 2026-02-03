@@ -22,7 +22,10 @@ export const useNumberFormatter = (): NumberFormatter => {
     return new Intl.NumberFormat(localeToUse);
   }, [activeLocale]);
 
-  const format = useCallback((num: number) => intlFormat.format(num), [intlFormat]);
+  const format = useCallback(
+    (num?: number) => (typeof num === 'undefined' ? '' : intlFormat.format(num)),
+    [intlFormat]
+  );
 
   return useMemo(() => {
     return {
