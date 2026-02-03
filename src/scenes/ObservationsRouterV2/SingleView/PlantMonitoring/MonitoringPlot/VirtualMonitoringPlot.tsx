@@ -32,7 +32,7 @@ const VirtualMonitoringPlot = ({ observationId, fileId, annotations = [] }: Virt
   const [showAnnotations, setShowAnnotations] = useState(true);
   const [autoRotate, setAutoRotate] = useState(true);
   const [isEdit, setIsEdit] = useState(false);
-  const [selectedAnnotationIndex, setSelectedAnnotationIndex] = useState<number | null>(null);
+  const [selectedAnnotationIndex, setSelectedAnnotationIndex] = useState<number>(-1);
   const [localAnnotations, setLocalAnnotations] = useState(annotations);
   const [saveAnnotations] = useSetObservationSplatAnnotationsMutation();
 
@@ -47,7 +47,7 @@ const VirtualMonitoringPlot = ({ observationId, fileId, annotations = [] }: Virt
 
   useEffect(() => {
     if (!isEdit) {
-      setSelectedAnnotationIndex(null);
+      setSelectedAnnotationIndex(-1);
     }
   }, [isEdit]);
 
@@ -55,19 +55,20 @@ const VirtualMonitoringPlot = ({ observationId, fileId, annotations = [] }: Virt
     setLocalAnnotations(annotations);
   }, [annotations]);
 
-  const handleAnnotationPositionChange = useCallback((label: string | number, position: [number, number, number]) => {
-    setLocalAnnotations((prev) => {
-      // TODO find something more robust than the label
-      const index = prev.findIndex((ann) => ann.label === label);
-      if (index === -1) {
-        return prev;
-      }
+  const handleAnnotationPositionChange = useCallback(
+    (position: [number, number, number]) => {
+      setLocalAnnotations((prev) => {
+        if (selectedAnnotationIndex === -1) {
+          return prev;
+        }
 
-      const updated = [...prev];
-      updated[index] = { ...updated[index], position };
-      return updated;
-    });
-  }, []);
+        const updated = [...prev];
+        updated[selectedAnnotationIndex] = { ...updated[selectedAnnotationIndex], position };
+        return updated;
+      });
+    },
+    [selectedAnnotationIndex]
+  );
 
   const handleSave = useCallback(() => {
     const saveAndClose = async () => {
@@ -89,7 +90,7 @@ const VirtualMonitoringPlot = ({ observationId, fileId, annotations = [] }: Virt
         },
       });
       setIsEdit(false);
-      setSelectedAnnotationIndex(null);
+      setSelectedAnnotationIndex(-1);
     };
     void saveAndClose();
   }, [observationId, fileId, saveAnnotations, localAnnotations]);
@@ -97,7 +98,7 @@ const VirtualMonitoringPlot = ({ observationId, fileId, annotations = [] }: Virt
   const handleCancel = useCallback(() => {
     setLocalAnnotations(annotations);
     setIsEdit(false);
-    setSelectedAnnotationIndex(null);
+    setSelectedAnnotationIndex(-1);
   }, [annotations]);
 
   /* When a rerender occurs, the splat model disappears (https://github.com/playcanvas/react/pull/298 and https://github.com/playcanvas/react/issues/302)

@@ -1,5 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { createPortal } from 'react-dom';
+import React, { useCallback, useEffect, useRef } from 'react';
 
 import { Entity } from '@playcanvas/react';
 import { Script } from '@playcanvas/react/components';
@@ -22,7 +21,7 @@ export interface AnnotationProps {
   isEdit?: boolean;
   isSelected?: boolean;
   onSelect?: () => void;
-  onPositionChange?: (label: string | number, position: [number, number, number]) => void;
+  onPositionChange?: (position: [number, number, number]) => void;
 }
 
 /**
@@ -55,8 +54,6 @@ const Annotation = (props: AnnotationProps) => {
   } = props;
   const app = useApp();
   const { setCamera } = useCameraPosition();
-  const [textContainer, setTextContainer] = useState<HTMLElement | null>(null);
-  const textContentRef = useRef<HTMLDivElement>(null);
   const gizmoRef = useRef<TranslateGizmo | null>(null);
   const layerRef = useRef<any>(null);
 
@@ -73,7 +70,7 @@ const Annotation = (props: AnnotationProps) => {
     cameraPositionRef.current = cameraPosition;
   }, [isEdit, onSelect, position, cameraPosition]);
 
-  // Create a stable callback that reads from refs
+  // Create a stable callback that reads from refs, because this is read from TfAnnotationManager when the annotation is added to the scene
   const handleClick = useCallback(() => {
     if (isEditRef.current) {
       onSelectRef.current?.();
@@ -82,14 +79,6 @@ const Annotation = (props: AnnotationProps) => {
     }
   }, [setCamera]);
 
-  const handleSetTextContainer = useCallback((container: HTMLElement) => {
-    setTextContainer(container);
-  }, []);
-
-  const isReactContent = useMemo(() => bodyText !== undefined && typeof bodyText !== 'string', [bodyText]);
-  const textProp = useMemo(() => (isReactContent ? undefined : bodyText), [isReactContent, bodyText]);
-
-  // Manage gizmo lifecycle
   useEffect(() => {
     const shouldShowGizmo = isEdit && isSelected && visible;
 
@@ -153,9 +142,9 @@ const Annotation = (props: AnnotationProps) => {
             cameraControls.enabled = true;
           }
 
-          if (onPositionChange && props.label !== undefined) {
+          if (onPositionChange) {
             const pos = annotationEntity.getPosition();
-            onPositionChange(props.label, [pos.x, pos.y, pos.z]);
+            onPositionChange([pos.x, pos.y, pos.z]);
           }
         });
 
@@ -176,7 +165,7 @@ const Annotation = (props: AnnotationProps) => {
       clearInterval(intervalId);
       cleanupGizmo();
     };
-  }, [app, isEdit, isSelected, visible, props.label, onPositionChange]);
+  }, [app, isEdit, isSelected, visible, onPositionChange, props.label]);
 
   return (
     <>
@@ -184,21 +173,11 @@ const Annotation = (props: AnnotationProps) => {
         <Script
           script={PcAnnotation}
           {...annotationProps}
-          text={textProp}
+          text={bodyText}
           visible={visible}
           onClickCallback={handleClick}
-          textContentRef={isReactContent ? textContentRef : undefined}
-          setTextContainer={isReactContent ? handleSetTextContainer : undefined}
         />
       </Entity>
-      {/* Hidden container for React text content */}
-      {isReactContent && (
-        <div ref={textContentRef} style={{ display: 'none' }} data-react-text-content='true'>
-          {bodyText}
-        </div>
-      )}
-      {/* Portal the React content into the annotation text DOM when available */}
-      {isReactContent && textContainer && createPortal(bodyText, textContainer)}
     </>
   );
 };
