@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 
 import { Entity } from '@playcanvas/react';
 import { Script } from '@playcanvas/react/components';
@@ -30,6 +30,7 @@ export interface AnnotationProps {
  * In edit mode, shows a translate gizmo when selected.
  *
  * @param props.position - The world position of the annotation
+ * @param props.index - The index of the annotation, used as a unique identifier
  * @param props.title - The title displayed in the annotation
  * @param props.bodyText - Optional description displayed in the annotation
  * @param props.label - Optional label displayed on the hotspot
@@ -40,7 +41,7 @@ export interface AnnotationProps {
  * @param props.onSelect - Optional callback when annotation is clicked in edit mode
  * @param props.onPositionChange - Optional callback when annotation position changes
  */
-const Annotation = (props: AnnotationProps) => {
+const Annotation = (props: AnnotationProps & { index: number }) => {
   const {
     position,
     cameraPosition,
@@ -50,6 +51,7 @@ const Annotation = (props: AnnotationProps) => {
     isSelected = false,
     onSelect,
     onPositionChange,
+    index,
     ...annotationProps
   } = props;
   const app = useApp();
@@ -78,6 +80,8 @@ const Annotation = (props: AnnotationProps) => {
       setCamera(positionRef.current, cameraPositionRef.current);
     }
   }, [setCamera]);
+
+  const entityName = useMemo(() => `annotation-${index}`, [index]);
 
   useEffect(() => {
     const shouldShowGizmo = isEdit && isSelected && visible;
@@ -112,7 +116,7 @@ const Annotation = (props: AnnotationProps) => {
     }
 
     const setupGizmo = () => {
-      const annotationEntity = app.root.findByName(`annotation${props.label}`) as PcEntity | null;
+      const annotationEntity = app.root.findByName(entityName) as PcEntity | null;
       const cameraEntity = app.root.findByName('camera') as PcEntity | null;
       const cameraComponent = cameraEntity?.camera;
       const cameraControls = cameraEntity?.script?.get(CameraControls.scriptName) as any;
@@ -165,11 +169,11 @@ const Annotation = (props: AnnotationProps) => {
       clearInterval(intervalId);
       cleanupGizmo();
     };
-  }, [app, isEdit, isSelected, visible, onPositionChange, props.label]);
+  }, [app, isEdit, isSelected, visible, onPositionChange, entityName]);
 
   return (
     <>
-      <Entity name={`annotation${props.label}`} position={position}>
+      <Entity name={entityName} position={position}>
         <Script
           script={PcAnnotation}
           {...annotationProps}

@@ -143,6 +143,7 @@ const VirtualMonitoringPlot = ({ observationId, fileId, annotations = [] }: Virt
         <Annotation
           key={index}
           {...annotation}
+          index={index}
           visible={showAnnotations}
           isEdit={isEdit}
           isSelected={selectedAnnotationIndex === index}
