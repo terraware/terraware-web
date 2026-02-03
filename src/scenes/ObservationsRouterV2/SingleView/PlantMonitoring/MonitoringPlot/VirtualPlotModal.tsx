@@ -1,17 +1,14 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 
-import { Box, Grid, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { OverlayModal } from '@terraware/web-components';
-import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import { AnnotationProps } from 'src/components/GaussianSplat/Annotation';
 import Application from 'src/components/GaussianSplat/Application';
-import { useLocalization } from 'src/providers';
-import { useGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import { ObservationMonitoringPlotResultsPayload } from 'src/types/Observations';
-import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import VirtualMonitoringPlot from './VirtualMonitoringPlot';
+import VirtualPlotData from './VirtualPlotData';
 
 interface VirtualPlotModalProps {
   monitoringPlot: ObservationMonitoringPlotResultsPayload;
@@ -63,46 +60,12 @@ const VirtualPlotModal = ({
   fileId,
   onClose,
 }: VirtualPlotModalProps) => {
-  const { strings } = useLocalization();
-  const defaultTimeZone = useDefaultTimeZone().get().id;
-  const { data } = useGetPlantingSiteQuery(plantingSiteId);
-  const plantingSite = useMemo(() => data?.site, [data?.site]);
-  const timeZone = useMemo(() => plantingSite?.timeZone ?? defaultTimeZone, [defaultTimeZone, plantingSite?.timeZone]);
-
-  const belowComponent = useMemo(() => {
-    if (monitoringPlot === undefined) {
-      return null;
-    }
-
-    return (
-      <Grid
-        container
-        spacing={2}
-        sx={{
-          backgroundColor: 'black',
-          color: 'white',
-          padding: '1rem',
-          textAlign: 'center',
-          borderRadius: '1rem',
-        }}
-      >
-        <Grid item style={{ paddingTop: 0 }}>
-          {strings.PLOT_CAPTURED}:{' '}
-          {monitoringPlot.completedTime ? getDateDisplayValue(monitoringPlot.completedTime, timeZone) : undefined}
-        </Grid>
-        <Grid item style={{ paddingTop: 0 }}>
-          {strings.LIVE_PLANTS}:{' '}
-          {monitoringPlot.species.reduce((total, plotSpecies) => total + plotSpecies.totalLive, 0)}
-        </Grid>
-        <Grid item style={{ paddingTop: 0 }}>
-          {strings.SPECIES}: {monitoringPlot.totalSpecies}
-        </Grid>
-      </Grid>
-    );
-  }, [monitoringPlot, timeZone, strings]);
-
   return (
-    <OverlayModal open={true} onClose={onClose} belowComponent={<>{belowComponent}</>}>
+    <OverlayModal
+      open={true}
+      onClose={onClose}
+      belowComponent={<VirtualPlotData monitoringPlot={monitoringPlot} plantingSiteId={plantingSiteId} />}
+    >
       <Application
         style={{
           width: '100%',
