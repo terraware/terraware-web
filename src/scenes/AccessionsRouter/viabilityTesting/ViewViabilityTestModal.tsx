@@ -15,6 +15,7 @@ import TooltipLearnMoreModal, {
 import strings from 'src/strings';
 import { Accession } from 'src/types/Accession';
 import { ViabilityTest } from 'src/types/Accession';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import { getFullTestType } from 'src/utils/viabilityTest';
 
 import DeleteViabilityTestModal from './DeleteViabilityTestModal';
@@ -35,6 +36,7 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
   const { onClose, open, accession, isEditable, viabilityTest, onEdit, reload } = props;
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const { isMobile } = useDeviceInfo();
+  const numberFormatter = useNumberFormatter();
 
   const [tooltipLearnMoreModalOpen, setTooltipLearnMoreModalOpen] = useState(false);
   const [tooltipLearnMoreModalData, setTooltipLearnMoreModalData] = useState<TooltipLearnMoreModalData | undefined>(
@@ -265,7 +267,9 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
                 {viabilityTest.testType === 'Cut' ? strings.NUMBER_OF_SEEDS_FILLED_V2 : strings.NUMBER_OF_SEEDS_TESTED}
               </Grid>
               <Grid xs={12}>
-                {viabilityTest.testType === 'Cut' ? viabilityTest.seedsFilled : viabilityTest.seedsTested}
+                {numberFormatter.format(
+                  viabilityTest.testType === 'Cut' ? viabilityTest.seedsFilled : viabilityTest.seedsTested
+                )}
               </Grid>
             </Grid>
           </Grid>
@@ -276,20 +280,20 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
                   <Grid xs={12} sx={titleStyle}>
                     {strings.NUMBER_OF_SEEDS_COMPROMISED_V2}
                   </Grid>
-                  <Grid xs={12}>{viabilityTest.seedsCompromised}</Grid>
+                  <Grid xs={12}>{numberFormatter.format(viabilityTest.seedsCompromised)}</Grid>
                 </Grid>
                 <Grid xs={smallColumn}>
                   <Grid xs={12} sx={titleStyle}>
                     {strings.NUMBER_OF_SEEDS_EMPTY_V2}
                   </Grid>
-                  <Grid xs={12}>{viabilityTest.seedsEmpty}</Grid>
+                  <Grid xs={12}>{numberFormatter.format(viabilityTest.seedsEmpty)}</Grid>
                 </Grid>
               </Grid>
               <Grid xs={12} paddingTop={2}>
                 <Grid xs={12} sx={titleStyle}>
                   #{strings.TOTAL_SEEDS_TESTED}
                 </Grid>
-                <Grid xs={12}>{viabilityTest.seedsTested}</Grid>
+                <Grid xs={12}>{numberFormatter.format(viabilityTest.seedsTested)}</Grid>
               </Grid>
             </>
           )}
@@ -306,7 +310,7 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
                   <Grid xs={12} sx={titleStyle}>
                     {strings.NUMBER_OF_SEEDS_GERMINATED}
                   </Grid>
-                  <Grid xs={12}>{testResult.seedsGerminated}</Grid>
+                  <Grid xs={12}>{numberFormatter.format(testResult.seedsGerminated)}</Grid>
                 </Grid>
               </Grid>
             );
