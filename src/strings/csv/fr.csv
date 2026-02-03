@@ -571,6 +571,7 @@ EDIT_ACCESSION,Modifier l'accession,3df43588
 EDIT_ACCESSION_DETAIL,Modifier les détails de l'accession,9b3e32a8
 EDIT_ACCOUNT,Modifier le compte,b77ad44d
 EDIT_ACTIVITY,Modifier l’activité,5b6476f3
+EDIT_ANNOTATION,Modifier l’annotation,82bcb054
 EDIT_BATCH_DETAILS,Modifier les détails du lot,d2f2112a
 EDIT_COHORT,Modifier la cohorte,4c88b04a
 EDIT_COHORT_TO_ADD_MODULES,Modifier cette cohorte pour ajouter des modules.,376bbb6d
@@ -922,6 +923,7 @@ KILOGRAMS,Kilogramme,a2ba1914
 KNOWLEDGE_BASE,Base de connaissances,81690eb8
 LAB,Laboratoire,251d5706
 LAB_GERMINATION,Germination en laboratoire,ebeb9362
+LABEL,Étiquette,85def946
 LAND_DATA,Données foncières,fd5158aa
 LAND_USE_MODEL_TYPE,Type de modèle d'utilisation du sol,1b29eac7
 LANDOWNER,Propriétaire foncier,85b55541

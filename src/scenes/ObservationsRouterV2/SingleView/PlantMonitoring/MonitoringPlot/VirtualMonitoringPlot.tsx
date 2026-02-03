@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Entity } from '@playcanvas/react';
 import { Camera, Script } from '@playcanvas/react/components';
@@ -7,6 +7,7 @@ import { CameraControls } from 'playcanvas/scripts/esm/camera-controls.mjs';
 import { XrControllers } from 'playcanvas/scripts/esm/xr-controllers.mjs';
 
 import Annotation, { AnnotationProps } from 'src/components/GaussianSplat/Annotation';
+import AnnotationEditPane from 'src/components/GaussianSplat/AnnotationEditPane';
 import { AutoRotator } from 'src/components/GaussianSplat/AutoRotator';
 import GradientSky from 'src/components/GaussianSplat/GradientSky';
 import SplatControls from 'src/components/GaussianSplat/SplatControls';
@@ -35,6 +36,7 @@ const VirtualMonitoringPlot = ({ observationId, fileId, annotations = [] }: Virt
   const [selectedAnnotationIndex, setSelectedAnnotationIndex] = useState<number>(-1);
   const [localAnnotations, setLocalAnnotations] = useState(annotations);
   const [saveAnnotations] = useSetObservationSplatAnnotationsMutation();
+  const editPaneRef = useRef<HTMLDivElement>(null);
 
   const splatSrc = useMemo(
     () => `/api/v1/tracking/observations/${observationId}/splats/${fileId}`,
@@ -120,6 +122,20 @@ const VirtualMonitoringPlot = ({ observationId, fileId, annotations = [] }: Virt
     setSelectedAnnotationIndex(-1);
   }, [selectedAnnotationIndex]);
 
+  const handleAnnotationUpdate = useCallback(
+    (updates: Partial<AnnotationProps>) => {
+      if (selectedAnnotationIndex === -1) {
+        return;
+      }
+      setLocalAnnotations((prev) => {
+        const updated = [...prev];
+        updated[selectedAnnotationIndex] = { ...updated[selectedAnnotationIndex], ...updates };
+        return updated;
+      });
+    },
+    [selectedAnnotationIndex]
+  );
+
   /* When a rerender occurs, the splat model disappears (https://github.com/playcanvas/react/pull/298 and https://github.com/playcanvas/react/issues/302)
   The key should include items that cause the SplatModel to rerender. Remove them (and the useMemo) once the PR is merged and we're on a version that includes it */
   const splatModel = useMemo(
@@ -184,6 +200,12 @@ const VirtualMonitoringPlot = ({ observationId, fileId, annotations = [] }: Virt
         onAddAnnotation={handleAddAnnotation}
         onDeleteAnnotation={handleDeleteAnnotation}
         hasSelectedAnnotation={selectedAnnotationIndex >= 0}
+      />
+      <AnnotationEditPane
+        visible={isEdit && selectedAnnotationIndex >= 0}
+        paneRef={editPaneRef}
+        annotation={selectedAnnotationIndex >= 0 ? localAnnotations[selectedAnnotationIndex] : null}
+        onUpdate={handleAnnotationUpdate}
       />
     </>
   );
