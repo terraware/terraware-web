@@ -6,6 +6,7 @@ import { Box } from '@mui/material';
 import MapDrawerTable, { MapDrawerTableRow } from 'src/components/MapDrawerTable';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import useBoolean from 'src/hooks/useBoolean';
 import { useLocalization } from 'src/providers';
 import { ObservationSplatPayload, useGetObservationResultsQuery } from 'src/queries/generated/observations';
@@ -35,6 +36,7 @@ const MapPhotoDrawer = ({
   const { data } = useGetObservationResultsQuery({ observationId });
   const [virtualPlotOpen, setVirtualPlotOpen] = useBoolean(false);
   const [searchParams, setSearchParams] = useSearchParams();
+  const isVirtualPlotsEnabled = isEnabled('Virtual Monitoring Plots');
 
   const photoUrl = useMemo(() => {
     if (!photo) {
@@ -165,6 +167,7 @@ const MapPhotoDrawer = ({
   useEffect(() => {
     const shouldBeOpen =
       virtualPlotParamValue &&
+      isVirtualPlotsEnabled &&
       Number(virtualPlotParamValue) === monitoringPlotId &&
       Boolean(splat && result && monitoringPlot);
 
@@ -173,7 +176,16 @@ const MapPhotoDrawer = ({
     } else if (!shouldBeOpen && virtualPlotOpen) {
       setVirtualPlotOpen(false);
     }
-  }, [virtualPlotParamValue, monitoringPlotId, splat, result, monitoringPlot, virtualPlotOpen, setVirtualPlotOpen]);
+  }, [
+    virtualPlotParamValue,
+    monitoringPlotId,
+    splat,
+    result,
+    monitoringPlot,
+    virtualPlotOpen,
+    setVirtualPlotOpen,
+    isVirtualPlotsEnabled,
+  ]);
 
   const handleOpenVirtualPlot = useCallback(() => {
     const params = new URLSearchParams(searchParams);
