@@ -5,6 +5,7 @@ import _ from 'lodash';
 
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
+import { useLocalization } from 'src/providers/hooks';
 import AccessionService, { AccessionHistoryEntry } from 'src/services/AccessionService';
 import strings from 'src/strings';
 import { Accession } from 'src/types/Accession';
@@ -15,6 +16,7 @@ interface Accession2HistoryProps {
 }
 
 export default function Accession2History(props: Accession2HistoryProps): JSX.Element {
+  const { activeLocale } = useLocalization();
   const { accession } = props;
   const [history, setHistory] = useState<AccessionHistoryEntry[]>();
   const theme = useTheme();
@@ -33,7 +35,7 @@ export default function Accession2History(props: Accession2HistoryProps): JSX.El
       }
     };
     void loadHistory();
-  }, [accession, snackbar, history]);
+  }, [accession, activeLocale, snackbar, history]);
 
   const HistoryText = (item: AccessionHistoryEntry) => (
     <Typography fontWeight={500}>
