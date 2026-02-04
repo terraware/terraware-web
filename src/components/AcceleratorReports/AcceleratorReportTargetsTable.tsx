@@ -193,7 +193,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
         id: 'name',
         header: strings.METRIC,
         accessorKey: 'name',
-        size: 500,
+        size: 300,
         enableEditing: false,
       },
     ];
@@ -233,37 +233,52 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
   }, [getReportsYears]);
 
   return (
-    <>
-      <EditableTable
-        columns={tableColumns}
-        data={metricsToUse || []}
-        enableEditing={true}
-        enableSorting={true}
-        enableGlobalFilter={true}
-        enableColumnFilters={true}
-        enablePagination={true}
-        enableColumnPinning={true}
-        initialSorting={[{ id: 'name', desc: false }]}
-        tableOptions={{
-          enableColumnActions: false,
-          enableHiding: false,
-          enableColumnDragging: false,
-          enableColumnOrdering: false,
-          renderToolbarInternalActions: ({ table }: { table: MRT_TableInstance<RowMetric> }) => (
-            <>
-              <MRT_ToggleDensePaddingButton table={table} />
-            </>
-          ),
-          state: {
-            columnOrder,
+    <EditableTable
+      columns={tableColumns}
+      data={metricsToUse || []}
+      enableEditing={true}
+      enableSorting={true}
+      enableGlobalFilter={true}
+      enableColumnFilters={true}
+      enablePagination={true}
+      enableColumnPinning={true}
+      initialSorting={[{ id: 'name', desc: false }]}
+      tableOptions={{
+        enableColumnActions: false,
+        enableHiding: false,
+        enableColumnDragging: false,
+        enableColumnOrdering: false,
+        renderToolbarInternalActions: ({ table }: { table: MRT_TableInstance<RowMetric> }) => (
+          <>
+            <MRT_ToggleDensePaddingButton table={table} />
+          </>
+        ),
+        state: {
+          columnOrder,
+        },
+        initialState: {
+          columnPinning: {
+            left: ['name'],
           },
-          initialState: {
-            columnPinning: {
-              left: ['name'],
-            },
-          },
-        }}
-      />
-    </>
+        },
+        muiTableContainerProps: {
+          sx: { maxHeight: 'none', overflowX: 'auto' },
+        },
+      }}
+      sx={{
+        padding: 0,
+        width: '100%',
+        maxWidth: '100%',
+        '& .MuiPaper-root': {
+          width: '100%',
+          maxWidth: '100%',
+          borderRadius: '24px',
+        },
+        '& .MuiTableContainer-root': {
+          maxWidth: '100%',
+          overflowX: 'auto',
+        },
+      }}
+    />
   );
 }
