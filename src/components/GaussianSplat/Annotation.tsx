@@ -12,7 +12,7 @@ import './annotation-styles.css';
 export interface AnnotationProps {
   position: [number, number, number];
   title: string;
-  text?: string | React.ReactNode;
+  bodyText?: string | React.ReactNode;
   label?: string | number;
   cameraPosition?: [number, number, number];
   visible?: boolean;
@@ -24,13 +24,13 @@ export interface AnnotationProps {
  *
  * @param props.position - The world position of the annotation
  * @param props.title - The title displayed in the annotation
- * @param props.text - Optional description (string or React component) displayed in the annotation
+ * @param props.bodyText - Optional description (string or React component) displayed in the annotation
  * @param props.label - Optional label displayed on the hotspot
  * @param props.cameraPosition - Optional camera position to move to when clicked. If undefined, camera stays at current position
  * @param props.visible - Optional flag to show/hide the annotation. Defaults to true
  */
 const Annotation = (props: AnnotationProps) => {
-  const { position, cameraPosition, text, visible = true, ...annotationProps } = props;
+  const { position, cameraPosition, bodyText, visible = true, ...annotationProps } = props;
   const { setCamera } = useCameraPosition();
   const [textContainer, setTextContainer] = useState<HTMLElement | null>(null);
   const textContentRef = useRef<HTMLDivElement>(null);
@@ -43,8 +43,8 @@ const Annotation = (props: AnnotationProps) => {
     setTextContainer(container);
   }, []);
 
-  const isReactContent = useMemo(() => text !== undefined && typeof text !== 'string', [text]);
-  const textProp = useMemo(() => (isReactContent ? undefined : text), [isReactContent, text]);
+  const isReactContent = useMemo(() => bodyText !== undefined && typeof bodyText !== 'string', [bodyText]);
+  const textProp = useMemo(() => (isReactContent ? undefined : bodyText), [isReactContent, bodyText]);
 
   return (
     <>
@@ -62,11 +62,11 @@ const Annotation = (props: AnnotationProps) => {
       {/* Hidden container for React text content */}
       {isReactContent && (
         <div ref={textContentRef} style={{ display: 'none' }} data-react-text-content='true'>
-          {text}
+          {bodyText}
         </div>
       )}
       {/* Portal the React content into the annotation text DOM when available */}
-      {isReactContent && textContainer && createPortal(text, textContainer)}
+      {isReactContent && textContainer && createPortal(bodyText, textContainer)}
     </>
   );
 };

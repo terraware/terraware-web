@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 
-import { ObservationSplatPayload } from 'src/queries/generated/observations';
+import { ObservationSplatPayload } from 'src/queries/generated/observationSplats';
 import { ObservationMonitoringPlotPhotoWithGps } from 'src/types/Observations';
 
 import { MapDrawerSize } from './MapDrawer';

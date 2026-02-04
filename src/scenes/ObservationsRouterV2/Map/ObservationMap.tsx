@@ -28,12 +28,8 @@ import useSurvivalRateMapLegend from 'src/components/NewMap/useSurvivalRateMapLe
 import { getBoundingBoxFromPoints } from 'src/components/NewMap/utils';
 import isEnabled from 'src/features';
 import { useLocalization, useOrganization } from 'src/providers';
-import {
-  ObservationMonitoringPlotResultsPayload,
-  ObservationResultsPayload,
-  ObservationSplatPayload,
-} from 'src/queries/generated/observations';
-import { useLazyListObservationSplatsQuery } from 'src/queries/generated/observations';
+import { ObservationSplatPayload, useLazyListObservationSplatsQuery } from 'src/queries/generated/observationSplats';
+import { ObservationMonitoringPlotResultsPayload, ObservationResultsPayload } from 'src/queries/generated/observations';
 import {
   useLazyGetPlantingSiteHistoryQuery,
   useLazyGetPlantingSiteQuery,

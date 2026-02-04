@@ -1,6 +1,7 @@
 import './fundingEntities';
 import './modules';
 import './notifications';
+import './observationSplats';
 import './observations';
 import './plantingSites';
 import './projectModules';
