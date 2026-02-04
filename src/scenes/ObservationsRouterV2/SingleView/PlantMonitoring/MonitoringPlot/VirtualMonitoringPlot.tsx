@@ -161,7 +161,7 @@ const VirtualMonitoringPlot = ({ observationId, fileId, annotations = [] }: Virt
           <>
             <Script script={XrControllers} />
             <Script script={TfXrNavigation} enableTeleport={false} />
-            {autoRotate && <Script script={AutoRotator} startDelay={0.5} restartDelay={3} startFadeInTime={0.5} />}
+            <Script script={AutoRotator} enabled={autoRotate} startDelay={0.5} restartDelay={3} startFadeInTime={0.5} />
           </>
         )}
       </Entity>
