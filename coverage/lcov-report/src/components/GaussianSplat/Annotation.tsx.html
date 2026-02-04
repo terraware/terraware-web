@@ -225,7 +225,7 @@ import './annotation-styles.css';
 ex<span class="cstat-no" title="statement not covered" >port interface AnnotationProps {</span>
   po<span class="cstat-no" title="statement not covered" >sition: [number, number, number];</span>
   titl<span class="cstat-no" title="statement not covered" >e: string;</span>
-  text?:<span class="cstat-no" title="statement not covered" > string | React.ReactNode;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  bodyTe<span class="cstat-no" title="statement not covered" >xt?: string | React.ReactN<span class="fstat-no" title="function not covered" >od</span>e;<span class="cstat-no" title="statement not covered" ></span></span>
   label?: string | number;
 <span class="cstat-no" title="statement not covered" >  cameraPosit</span>ion?: [number, number, number];
   visible?: boolean;
@@ -237,13 +237,13 @@ ex<span class="cstat-no" title="statement not covered" >port interface Annotatio
  *
  * @param props.position - The world position of the annotation
  * @param props.title - The title displayed in the annotation
- * @param props.tex<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >t </span>- Optio<span class="cstat-no" title="statement not covered" >nal description (string or React component) displayed in the an</span></span>notation
+ * @param props.bod<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >yT</span>ext - O<span class="cstat-no" title="statement not covered" >ptional description (string or React component) displayed in th</span></span>e annotation
  * @param props.labe<span class="cstat-no" title="statement not covered" >l -</span> Optional label displayed on the hotspot
 <span class="cstat-no" title="statement not covered" > * @param props.cameraPosition - Optional camera position to move to when clicked. If undefined, camera stays at current position</span>
  * @param p<span class="fstat-no" title="function not covered" >ro</span>ps.v<span class="cstat-no" title="statement not covered" >isible - Optio</span>nal flag to show/hide the annotation. Defaults to true
  */
 <span class="cstat-no" title="statement not covered" >const Annotation = (props: AnnotationProps) =&gt;</span> {
-  const { position,<span class="cstat-no" title="statement not covered" > cameraPosition, text, vis</span>ible = true, ...annotationProps } = props;
+  const { position,<span class="cstat-no" title="statement not covered" > cameraPosition, bodyText,</span> visible = true, ...annotationProps } = props;
   const { setCamera } =<span class="cstat-no" title="statement not covered" > useCameraPosition();</span>
   const [textContain<span class="cstat-no" title="statement not covered" >er, setTextContainer] = useSt</span>ate&lt;HTMLElement | null&gt;(null);
   const textContentRef =<span class="cstat-no" title="statement not covered" > useRef&lt;HTMLDivElement&gt;(null);</span>
@@ -256,8 +256,8 @@ ex<span class="cstat-no" title="statement not covered" >port interface Annotatio
     setTextContainer(container);<span class="cstat-no" title="statement not covered" ></span>
   }, []);<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  co<span class="cstat-no" title="statement not covered" >nst isReactContent = useMemo(() =&gt; te</span>xt !== undefined &amp;&amp; typeof text !== 'string', [text]);
-  const textProp = useMemo(() =&gt; (isReactContent ? undefined : text), [isReactContent, text]);
+  co<span class="cstat-no" title="statement not covered" >nst isReactContent = useMemo(() =&gt; bo</span>dyText !== undefined &amp;&amp; typeof bodyText !== 'string', [bodyText]);
+  const textProp = useMemo(() =&gt; (isReactContent ? undefined : bodyText), [isReactContent, bodyText]);
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
   re<span class="cstat-no" title="statement not covered" >turn (</span>
     &lt;&gt;
@@ -275,11 +275,11 @@ ex<span class="cstat-no" title="statement not covered" >port interface Annotatio
       {/* Hidden container for React text content */}
       {isReactContent &amp;&amp; (
         &lt;div ref={textContentRef} style={{ display: 'none' }} data-react-text-content='true'&gt;
-          {text}
+          {bodyText}
         &lt;/div&gt;<span class="cstat-no" title="statement not covered" ></span>
       )}
       {/* Portal the React content into the annotation text DOM when available */}
-      {isReactContent &amp;&amp; textContainer &amp;&amp; createPortal(text, textContainer)}
+      {isReactContent &amp;&amp; textContainer &amp;&amp; createPortal(bodyText, textContainer)}
     &lt;/&gt;
   );
 };
@@ -292,7 +292,7 @@ export default Annotation;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-03T19:57:16.553Z
+                at 2026-02-04T17:35:11.801Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

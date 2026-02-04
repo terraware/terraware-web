@@ -1,3 +1,4 @@
+d410199abcf SW-8013 Fetch annotations per model instead of hardcoded (#5161)
 f3138bae989 Add checkbox to disable autorotate (#5164)
 a2536f3bdeb Add virtual plot to search params so that a link can be shared (#5166)
 e75be8b6970 Use live data in info box below virtual plot (#5165)

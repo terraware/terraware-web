@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/93</span>
+                <span class='fraction'>0/97</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/59</span>
+                <span class='fraction'>0/67</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/89</span>
+                <span class='fraction'>0/93</span>
             </div>
         
             
@@ -249,7 +249,15 @@
 <a name='L184'></a><a href='#L184'>184</a>
 <a name='L185'></a><a href='#L185'>185</a>
 <a name='L186'></a><a href='#L186'>186</a>
-<a name='L187'></a><a href='#L187'>187</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L187'></a><a href='#L187'>187</a>
+<a name='L188'></a><a href='#L188'>188</a>
+<a name='L189'></a><a href='#L189'>189</a>
+<a name='L190'></a><a href='#L190'>190</a>
+<a name='L191'></a><a href='#L191'>191</a>
+<a name='L192'></a><a href='#L192'>192</a>
+<a name='L193'></a><a href='#L193'>193</a>
+<a name='L194'></a><a href='#L194'>194</a>
+<a name='L195'></a><a href='#L195'>195</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -353,6 +361,12 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -369,14 +383,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -386,15 +392,25 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -518,69 +534,77 @@ const SplatControls = ({
       }
     };
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" >    ap</span>p.xr?.on('available', handleAvailable);
-    return () =&gt; {
-<span class="cstat-no" title="statement not covered" >      app.xr?.off('available', handleAvailable);</span>
-    };
-  }, [app]);
-&nbsp;
-  useEffect(() =&gt; {
-    const handleKeyPress = (event: KeyboardEvent) =&gt; {
-<span class="cstat-no" title="statement not covered" >      if (event.key === 'r' ||<span class="fstat-no" title="function not covered" > e</span>vent.key === 'R') {</span>
-        if (defaultCameraFocus) {
-          setCamera(defaultC<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >am</span>eraFocus, defaultCameraPosition);</span>
-<span class="cstat-no" title="statement not covered" >        }</span>
-      }<span class="cstat-no" title="statement not covered" ></span>
-    };<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span>
-    window.addEventListener('keydown', handleKeyPress);
-    return () =&gt; {
-<span class="cstat-no" title="statement not covered" >      window.removeEventListener('keydown', handleKeyPress);</span>
-<span class="cstat-no" title="statement not covered" >    };<span class="fstat-no" title="function not covered" ></span></span>
-  }, [defaultCameraFocus, defaultCameraPosition, setCamera]);
-<span class="cstat-no" title="statement not covered" ></span>
-  const handleInfo = useCallback(() =&gt; {
-    setIsInfoVisible((prev) =&gt; !prev);
-<span class="cstat-no" title="statement not covered" >  }, [setIsInfoVisible]);<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  useE<span class="cstat-no" title="statement not covered" >ffect(() =&gt; {</span>
-    cons<span class="cstat-no" title="statement not covered" >t handleScroll = (event: Event) =&gt; {</span>
-      if (<span class="cstat-no" title="statement not covered" >isInfoVisible &amp;&amp; paneRef.current &amp;&amp; !paneRef.current.c</span>ontains(event.target as Node)) {
-        setIsInfoVisible(false);
-      }
-    };
-<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >    const h<span class="fstat-no" title="function not covered" >an</span>dleMouseDown = (event: MouseEvent) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >      const target = event.target as Node;</span>
-      const isClickOnInfoButton = infoButtonRef.current?.contains(target);
-      if (isInfoVisible &amp;&amp; paneRef.current &amp;&amp; !paneRef.current.contains(target) &amp;&amp; !isClickOnInfoButton) {
-        setIsInfoVisi<span class="cstat-no" title="statement not covered" >ble(false);<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >      }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-    };
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-    if (isInfoVisible) {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >      window.addEventListener('wheel', handleScroll, true);</span>
-      wi<span class="cstat-no" title="statement not covered" >ndow.addEventListener('mo</span>usedown', handleMouseDown, true);
+<span class="fstat-no" title="function not covered" >    //</span> Check current availability state on mount
+    if (app.xr?.isAvailable(XRTYPE_VR)) {
+<span class="cstat-no" title="statement not covered" >      setIsVrAvailable(true);</span>
+    }
+    if (app.xr?.isAvailable(XRTYPE_AR)) {
+      setIsArAvailable(true);
     }
 &nbsp;
-    return () =&gt; {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-      window.removeEventListener('wheel', handleScroll, true);
-      window.removeEv<span class="cstat-no" title="statement not covered" >entListener('</span>mousedown', handleMouseDown, true);
+<span class="cstat-no" title="statement not covered" >    app.xr?.on('available', ha<span class="fstat-no" title="function not covered" >nd</span>leAvailable);</span>
+    return () =&gt; {
+      app.xr?.off('available<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >',</span> handleAvailable);</span>
     };<span class="cstat-no" title="statement not covered" ></span>
-  }, [<span class="cstat-no" title="statement not covered" >isInfoVisible, setIsInfoVisible, infoButtonRef]);</span>
+  }, [ap<span class="cstat-no" title="statement not covered" >p]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  return (
-    &lt;Box
+  useEff<span class="cstat-no" title="statement not covered" >ect(() =&gt; {</span>
+    const handleKeyPress = (event: KeyboardEvent) =&gt; {
+      if (event.key === 'r' || event.key === 'R') {
+<span class="cstat-no" title="statement not covered" >        if (defaultCameraFocus) {</span>
+<span class="cstat-no" title="statement not covered" >          setCamera(defaultCam</span>eraFocus, defaultCameraPosition);
+        }
+<span class="cstat-no" title="statement not covered" >      }</span>
+    };<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    window.addEventListener('keydown', handleKeyPress);</span>
+<span class="cstat-no" title="statement not covered" >    return <span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+      window.removeEventListener('keydown', handleKeyPress);
+    };<span class="cstat-no" title="statement not covered" ></span>
+  }, [defaultCameraFocus, defaultCameraPosition, setCamera]);
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  const handleInfo = useCallba<span class="fstat-no" title="function not covered" >ck</span>(() =&gt; {</span>
+    setIsInfoVisible((prev)<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > =</span>&gt; !prev);</span>
+  }, [<span class="cstat-no" title="statement not covered" >setIsInfoVisible]);</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  useEffec<span class="cstat-no" title="statement not covered" >t(() =&gt; {</span>
+    const handleScroll = (event: Event) =&gt; {
+      if (isInfoVisible &amp;&amp; paneRef.current &amp;&amp; !paneRef.current.contains(event.target as Node)) {
+        setIsInfoVisible(false);
+<span class="cstat-no" title="statement not covered" >      }</span>
+<span class="cstat-no" title="statement not covered" >    };<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ></span>
+    const handleMouseDown = (event: MouseEvent) =&gt; {
+      const target = event.target as Node;
+      const isClickOn<span class="cstat-no" title="statement not covered" >InfoButton = infoButtonRef.cur<span class="fstat-no" title="function not covered" >re</span>nt?.contains(target);</span>
+<span class="cstat-no" title="statement not covered" >      if (isInfoVisib<span class="fstat-no" title="function not covered" >le</span> &amp;&amp; pane<span class="cstat-no" title="statement not covered" >Ref.cu</span>rr</span>ent &amp;&amp; !paneRef.current.contains(target) &amp;&amp; !isClickOnInfoButton) {
+        setIsInfoVisible(false);
+<span class="cstat-no" title="statement not covered" >      }<span class="fstat-no" title="function not covered" ></span></span>
+    };<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ></span>
+    if (<span class="cstat-no" title="statement not covered" >isInfoVisible) {</span>
+      window.addEventListener('wheel', handleScroll, true);
+      window.addEventListener('mousedown', handleMouseDown, true);
+    }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+&nbsp;
+    return () =&gt; {<span class="cstat-no" title="statement not covered" ></span>
+      window.removeEventListener('<span class="cstat-no" title="statement not covered" >wheel', handleScroll, true);</span>
+<span class="cstat-no" title="statement not covered" >      window.removeEventListener('mousedown', handleMouseDown, true);</span>
+    };<span class="cstat-no" title="statement not covered" ></span>
+  }, [isInfoVisible, setIsInfoVisible, infoButtonRef]);
+&nbsp;
+  re<span class="cstat-no" title="statement not covered" >turn (</span>
+    &lt;B<span class="cstat-no" title="statement not covered" >ox</span>
 <span class="cstat-no" title="statement not covered" >      sx={{</span>
-<span class="cstat-no" title="statement not covered" >        position: 'absolute',</span>
-<span class="cstat-no" title="statement not covered" >        top: 0,</span>
-        left: 0,
-<span class="cstat-no" title="statement not covered" >        rig<span class="fstat-no" title="function not covered" >ht</span>: 0,</span>
-<span class="cstat-no" title="statement not covered" >        height: '100%',</span>
-<span class="cstat-no" title="statement not covered" >        pointerEvents: 'none',</span>
-      }}
+        position: 'absolute',
+<span class="cstat-no" title="statement not covered" >        top<span class="fstat-no" title="function not covered" >: </span>0,</span>
+<span class="cstat-no" title="statement not covered" >        left: 0,</span>
+<span class="cstat-no" title="statement not covered" >        right: 0,</span>
+        height: '100%',
+        pointerEvents: 'none',
+<span class="cstat-no" title="statement not covered" >      }}</span>
     &gt;
-<span class="cstat-no" title="statement not covered" >      &lt;Box</span>
+      &lt;Box
         sx={{
           position: 'absolute',
           bottom: 16,
@@ -628,7 +652,7 @@ export default SplatControls;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-03T19:57:16.553Z
+                at 2026-02-04T17:35:11.801Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
