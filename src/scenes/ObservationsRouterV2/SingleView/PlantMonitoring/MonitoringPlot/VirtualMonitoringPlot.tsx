@@ -170,17 +170,16 @@ const VirtualMonitoringPlot = ({ observationId, fileId, annotations = [] }: Virt
 
       {splatModel}
 
-      {localAnnotations.length > 0 && (
-        <Script
-          script={TfAnnotationManager}
-          hotspotSize={30}
-          maxWorldSize={0.05}
-          opacity={1}
-          hotspotColor={new Color().fromString('#ffffff')}
-          hoverColor={new Color().fromString('#ffffff')}
-          hotspotBackgroundColor='#2C8658'
-        />
-      )}
+      <Script
+        script={TfAnnotationManager}
+        enabled={localAnnotations.length > 0}
+        hotspotSize={30}
+        maxWorldSize={0.05}
+        opacity={1}
+        hotspotColor={new Color().fromString('#ffffff')}
+        hoverColor={new Color().fromString('#ffffff')}
+        hotspotBackgroundColor='#2C8658'
+      />
       {localAnnotations.map((annotation, index) => (
         <Annotation
           key={`${index}-${annotation.title}-${annotation.label ?? ''}`}

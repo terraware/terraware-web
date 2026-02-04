@@ -172,17 +172,15 @@ const Annotation = (props: AnnotationProps & { index: number }) => {
   }, [app, isEdit, isSelected, visible, onPositionChange, entityName]);
 
   return (
-    <>
-      <Entity name={entityName} position={position}>
-        <Script
-          script={PcAnnotation}
-          {...annotationProps}
-          text={bodyText}
-          visible={visible}
-          onClickCallback={handleClick}
-        />
-      </Entity>
-    </>
+    <Entity name={entityName} position={position}>
+      <Script
+        script={PcAnnotation}
+        {...annotationProps}
+        text={bodyText}
+        enabled={visible}
+        onClickCallback={handleClick}
+      />
+    </Entity>
   );
 };
 
