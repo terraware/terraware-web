@@ -120,6 +120,20 @@ const VirtualMonitoringPlot = ({ observationId, fileId, annotations = [] }: Virt
     setSelectedAnnotationIndex(-1);
   }, [selectedAnnotationIndex]);
 
+  const handleAnnotationUpdate = useCallback(
+    (updates: Partial<AnnotationProps>) => {
+      if (selectedAnnotationIndex === -1) {
+        return;
+      }
+      setLocalAnnotations((prev) => {
+        const updated = [...prev];
+        updated[selectedAnnotationIndex] = { ...updated[selectedAnnotationIndex], ...updates };
+        return updated;
+      });
+    },
+    [selectedAnnotationIndex]
+  );
+
   /* When a rerender occurs, the splat model disappears (https://github.com/playcanvas/react/pull/298 and https://github.com/playcanvas/react/issues/302)
   The key should include items that cause the SplatModel to rerender. Remove them (and the useMemo) once the PR is merged and we're on a version that includes it */
   const splatModel = useMemo(
@@ -134,7 +148,14 @@ const VirtualMonitoringPlot = ({ observationId, fileId, annotations = [] }: Virt
       <Entity name='camera-root'>
         <Entity name='camera'>
           <Camera clearColor='#EAF8FF' fov={60} />
-          <Script script={CameraControls} moveSpeed={0.3} moveFastSpeed={0.5} moveSlowSpeed={0.15} rotateSpeed={0.1} />
+          <Script
+            script={CameraControls}
+            moveSpeed={0.3}
+            moveFastSpeed={0.5}
+            moveSlowSpeed={0.15}
+            rotateSpeed={0.1}
+            enableFly={!(isEdit && selectedAnnotationIndex >= 0)}
+          />
         </Entity>
         {!isEdit && (
           <>
@@ -160,7 +181,7 @@ const VirtualMonitoringPlot = ({ observationId, fileId, annotations = [] }: Virt
       )}
       {localAnnotations.map((annotation, index) => (
         <Annotation
-          key={index}
+          key={`${index}-${annotation.title}-${annotation.label ?? ''}`}
           {...annotation}
           index={index}
           visible={showAnnotations}
@@ -184,6 +205,8 @@ const VirtualMonitoringPlot = ({ observationId, fileId, annotations = [] }: Virt
         onAddAnnotation={handleAddAnnotation}
         onDeleteAnnotation={handleDeleteAnnotation}
         hasSelectedAnnotation={selectedAnnotationIndex >= 0}
+        selectedAnnotation={selectedAnnotationIndex >= 0 ? localAnnotations[selectedAnnotationIndex] : null}
+        onAnnotationUpdate={handleAnnotationUpdate}
       />
     </>
   );
