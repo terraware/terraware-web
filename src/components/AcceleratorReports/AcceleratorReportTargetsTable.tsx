@@ -1,7 +1,6 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { Box } from '@mui/material';
 import { EditableTable, EditableTableColumn } from '@terraware/web-components';
 import { DateTime } from 'luxon';
 import { MRT_TableInstance, MRT_ToggleDensePaddingButton } from 'material-react-table';
