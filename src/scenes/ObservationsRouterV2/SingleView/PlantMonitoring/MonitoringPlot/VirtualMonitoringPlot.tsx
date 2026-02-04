@@ -154,7 +154,7 @@ const VirtualMonitoringPlot = ({ observationId, fileId, annotations = [] }: Virt
             moveFastSpeed={0.5}
             moveSlowSpeed={0.15}
             rotateSpeed={0.1}
-            enableFly={!isEdit}
+            enableFly={!(isEdit && selectedAnnotationIndex >= 0)}
           />
         </Entity>
         {!isEdit && (

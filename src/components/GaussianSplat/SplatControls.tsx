@@ -118,7 +118,7 @@ const SplatControls = ({
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
       if (event.key === 'r' || event.key === 'R') {
-        if (defaultCameraFocus && !isEdit) {
+        if (defaultCameraFocus && !(isEdit && selectedAnnotation !== null)) {
           setCamera(defaultCameraFocus, defaultCameraPosition);
         }
       }
@@ -128,7 +128,7 @@ const SplatControls = ({
     return () => {
       window.removeEventListener('keydown', handleKeyPress);
     };
-  }, [isEdit, defaultCameraFocus, defaultCameraPosition, setCamera]);
+  }, [isEdit, defaultCameraFocus, defaultCameraPosition, setCamera, selectedAnnotation]);
 
   const handleInfo = useCallback(() => {
     setIsInfoVisible((prev) => !prev);
