@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Box, IconButton, useTheme } from '@mui/material';
 import { useApp } from '@playcanvas/react/hooks';
 import { Icon } from '@terraware/web-components';
-import { CameraComponent, XRSPACE_LOCAL, XRSPACE_LOCALFLOOR, XRTYPE_AR, XRTYPE_VR } from 'playcanvas';
+import { CameraComponent, XRSPACE_VIEWER, XRTYPE_AR, XRTYPE_VR } from 'playcanvas';
 
 import useBoolean from 'src/hooks/useBoolean';
 import { useCameraPosition } from 'src/hooks/useCameraPosition';
@@ -33,9 +33,6 @@ export interface SplatControlsProps {
   selectedAnnotation?: AnnotationProps | null;
   onAnnotationUpdate: (updates: Partial<AnnotationProps>) => void;
 }
-
-const DEFAULT_XR_POSITION: [number, number, number] = [0, 0.2, 0];
-const DEFAULT_XR_FOCUS: [number, number, number] = [1, 0.2, 0];
 
 const SplatControls = ({
   defaultCameraPosition,
@@ -77,19 +74,21 @@ const SplatControls = ({
     [app, snackbar, strings]
   );
 
-  const handleAr = useCallback(() => {
-    setCamera(DEFAULT_XR_FOCUS, DEFAULT_XR_POSITION);
-    app.xr?.start(app.root.findComponent('camera') as CameraComponent, XRTYPE_AR, XRSPACE_LOCAL, {
-      callback: errorCallback,
-    });
-  }, [app, errorCallback, setCamera]);
+  const handleAr = useCallback(
+    () =>
+      app.xr?.start(app.root.findComponent('camera') as CameraComponent, XRTYPE_AR, XRSPACE_VIEWER, {
+        callback: errorCallback,
+      }),
+    [app, errorCallback]
+  );
 
-  const handleVr = useCallback(() => {
-    setCamera(DEFAULT_XR_FOCUS, DEFAULT_XR_POSITION);
-    app.xr?.start(app.root.findComponent('camera') as CameraComponent, XRTYPE_VR, XRSPACE_LOCAL, {
-      callback: errorCallback,
-    });
-  }, [app, errorCallback, setCamera]);
+  const handleVr = useCallback(
+    () =>
+      app.xr?.start(app.root.findComponent('camera') as CameraComponent, XRTYPE_VR, XRSPACE_VIEWER, {
+        callback: errorCallback,
+      }),
+    [app, errorCallback]
+  );
 
   useEffect(() => {
     // this can't be changed to `useMemo(() => app.xr?.isAvailable(XRTYPE_AR), [app])` because `app` doesn't update when
