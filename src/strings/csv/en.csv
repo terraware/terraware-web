@@ -502,6 +502,7 @@ DESCRIPTION_KNOWLEDGE_BASE,Learn how to use Terraware and find answers to your q
 DESCRIPTION_KNOWLEDGE_BASE_WITH_LINK,Learn how to use Terraware and find answers to your questions about Terraware features in the {0}.,
 DESCRIPTION_NOTES,Description/Notes,
 DESCRIPTION_REQUIRED,Description *,
+DESELECT_ANNOTATION,Deselect Annotation,
 DESTINATION,Destination,
 DESTINATION_REQUIRED,Destination *,
 DETAILED_SITE,Detailed Site,

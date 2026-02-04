@@ -118,6 +118,10 @@ const VirtualMonitoringPlot = ({ observationId, fileId, annotations = [] }: Virt
     setSelectedAnnotationIndex(-1);
   }, [selectedAnnotationIndex]);
 
+  const handleDeselectAnnotation = useCallback(() => {
+    setSelectedAnnotationIndex(-1);
+  }, []);
+
   const handleAnnotationUpdate = useCallback(
     (updates: Partial<AnnotationProps>) => {
       if (selectedAnnotationIndex === -1) {
@@ -205,6 +209,7 @@ const VirtualMonitoringPlot = ({ observationId, fileId, annotations = [] }: Virt
         onCancel={handleCancel}
         onAddAnnotation={handleAddAnnotation}
         onDeleteAnnotation={handleDeleteAnnotation}
+        onDeselectAnnotation={handleDeselectAnnotation}
         hasSelectedAnnotation={selectedAnnotationIndex >= 0}
         selectedAnnotation={selectedAnnotationIndex >= 0 ? localAnnotations[selectedAnnotationIndex] : null}
         onAnnotationUpdate={handleAnnotationUpdate}

@@ -29,6 +29,7 @@ export interface SplatControlsProps {
   onCancel?: () => void;
   onAddAnnotation?: () => void;
   onDeleteAnnotation?: () => void;
+  onDeselectAnnotation?: () => void;
   hasSelectedAnnotation?: boolean;
   selectedAnnotation?: AnnotationProps | null;
   onAnnotationUpdate: (updates: Partial<AnnotationProps>) => void;
@@ -48,6 +49,7 @@ const SplatControls = ({
   onCancel,
   onAddAnnotation,
   onDeleteAnnotation,
+  onDeselectAnnotation,
   hasSelectedAnnotation,
   selectedAnnotation,
   onAnnotationUpdate,
@@ -175,7 +177,7 @@ const SplatControls = ({
         pointerEvents: 'none',
       }}
     >
-      {isEdit && onAddAnnotation && (
+      {isEdit && (
         <Box
           sx={{
             position: 'absolute',
@@ -187,7 +189,12 @@ const SplatControls = ({
             pointerEvents: 'auto',
           }}
         >
-          <Button label={strings.ADD_ANNOTATION} onClick={onAddAnnotation} />
+          {!hasSelectedAnnotation && onAddAnnotation && (
+            <Button label={strings.ADD_ANNOTATION} onClick={onAddAnnotation} />
+          )}
+          {hasSelectedAnnotation && onDeselectAnnotation && (
+            <Button label={strings.DESELECT_ANNOTATION} onClick={onDeselectAnnotation} />
+          )}
           {hasSelectedAnnotation && onDeleteAnnotation && (
             <Button label={strings.DELETE_ANNOTATION} onClick={onDeleteAnnotation} />
           )}
