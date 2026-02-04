@@ -9,9 +9,7 @@ api.enhanceEndpoints({
       ],
     },
     setObservationSplatAnnotations: {
-      invalidatesTags: (_results, _error, payload) => [
-        { type: QueryTagTypes.ObservationSplats, id: payload.observationId },
-      ],
+      invalidatesTags: (_results, _error, payload) => [{ type: QueryTagTypes.ObservationSplats, id: payload.fileId }],
     },
     generateObservationSplatFile: {
       invalidatesTags: (_results, _error, payload) => [
@@ -25,15 +23,7 @@ api.enhanceEndpoints({
       ],
     },
     listObservationSplatAnnotations: {
-      providesTags: (results) => [
-        ...(results
-          ? results.annotations.map((annotation) => ({
-              type: QueryTagTypes.ObservationSplats,
-              id: annotation.fileId,
-            }))
-          : []),
-        { type: QueryTagTypes.ObservationSplats, id: 'LIST' },
-      ],
+      providesTags: (_results, _error, payload) => [{ type: QueryTagTypes.ObservationSplats, id: payload.fileId }],
     },
   },
 });

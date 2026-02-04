@@ -104,9 +104,7 @@ const VirtualMonitoringPlot = ({ observationId, fileId, annotations = [] }: Virt
   const handleAddAnnotation = useCallback(() => {
     const newAnnotation: AnnotationProps = {
       position: DEFAULT_FOCUS_POINT,
-      title: `Annotation ${localAnnotations.length + 1}`,
-      bodyText: '',
-      label: `${localAnnotations.length + 1}`,
+      title: '',
     };
     setLocalAnnotations((prev) => [...prev, newAnnotation]);
     setSelectedAnnotationIndex(localAnnotations.length);
@@ -133,6 +131,10 @@ const VirtualMonitoringPlot = ({ observationId, fileId, annotations = [] }: Virt
     },
     [selectedAnnotationIndex]
   );
+
+  const canSave = useMemo(() => {
+    return localAnnotations.every((annotation) => annotation.title && annotation.title.trim() !== '');
+  }, [localAnnotations]);
 
   /* When a rerender occurs, the splat model disappears (https://github.com/playcanvas/react/pull/298 and https://github.com/playcanvas/react/issues/302)
   The key should include items that cause the SplatModel to rerender. Remove them (and the useMemo) once the PR is merged and we're on a version that includes it */
@@ -207,6 +209,7 @@ const VirtualMonitoringPlot = ({ observationId, fileId, annotations = [] }: Virt
         hasSelectedAnnotation={selectedAnnotationIndex >= 0}
         selectedAnnotation={selectedAnnotationIndex >= 0 ? localAnnotations[selectedAnnotationIndex] : null}
         onAnnotationUpdate={handleAnnotationUpdate}
+        canSave={canSave}
       />
     </>
   );

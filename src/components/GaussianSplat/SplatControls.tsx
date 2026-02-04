@@ -32,6 +32,7 @@ export interface SplatControlsProps {
   hasSelectedAnnotation?: boolean;
   selectedAnnotation?: AnnotationProps | null;
   onAnnotationUpdate: (updates: Partial<AnnotationProps>) => void;
+  canSave?: boolean;
 }
 
 const SplatControls = ({
@@ -50,6 +51,7 @@ const SplatControls = ({
   hasSelectedAnnotation,
   selectedAnnotation,
   onAnnotationUpdate,
+  canSave = true,
 }: SplatControlsProps) => {
   const theme = useTheme();
   const { strings } = useLocalization();
@@ -206,7 +208,7 @@ const SplatControls = ({
         {isVrAvailable && !isEdit && <Button label={strings.VR} onClick={handleVr} />}
         {!isEdit && onToggleEdit && <Button label={strings.EDIT} onClick={handleEdit} />}
         {isEdit && onCancel && <Button label={strings.CANCEL} onClick={onCancel} />}
-        {isEdit && onSave && <Button label={strings.SAVE} onClick={onSave} />}
+        {isEdit && onSave && <Button label={strings.SAVE} onClick={onSave} disabled={!canSave} />}
       </Box>
       <IconButton
         ref={infoButtonRef}

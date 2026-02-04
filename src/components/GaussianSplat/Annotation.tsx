@@ -131,7 +131,7 @@ const Annotation = (props: AnnotationProps & { index: number }) => {
         }
 
         const gizmo = new TranslateGizmo(cameraComponent, layerRef.current);
-        gizmo.size = 0.5;
+        gizmo.size = 0.75;
         gizmo.snapIncrement = 0.01;
         gizmo.coordSpace = 'world';
 
