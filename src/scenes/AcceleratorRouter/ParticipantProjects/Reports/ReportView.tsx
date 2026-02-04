@@ -22,6 +22,7 @@ import Link from 'src/components/common/Link';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import TitleBar from 'src/components/common/TitleBar';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useBoolean from 'src/hooks/useBoolean';
 import useProjectReports from 'src/hooks/useProjectReports';
@@ -45,6 +46,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import { useParticipantProjectData } from '../ParticipantProjectContext';
 import ApproveReportDialog from './ApproveReportDialog';
 import Metadata from './Metadata';
+import MetricRow from './MetricRow';
 import PublishModal from './PublishModal';
 import RejectDialog from './RejectDialog';
 
@@ -308,6 +310,8 @@ const ReportView = () => {
     setPublishedFunderView(false);
   }, []);
 
+  const improvedReportsEnabled = isEnabled('Improved Reports');
+
   return (
     <>
       {showPublishModal && <PublishModal onClose={closePublishModal} onSubmit={publishReport} />}
@@ -368,7 +372,7 @@ const ReportView = () => {
               }}
             >
               {selectedReport && <Metadata report={selectedReport} projectId={projectId} reload={reload} />}
-              {selectedReport?.startDate && selectedReport?.endDate && (
+              {selectedReport?.startDate && selectedReport?.endDate && !improvedReportsEnabled && (
                 <Box
                   borderBottom={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
                   padding={theme.spacing(3, 0)}
@@ -387,6 +391,11 @@ const ReportView = () => {
                 onEditChange={onEditChange}
                 canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
               />
+              {improvedReportsEnabled && (
+                <Typography fontSize={'20px'} fontWeight={600}>
+                  {strings.PROGRESS}
+                </Typography>
+              )}
               {['system', 'project', 'standard'].map((type) => {
                 const metrics =
                   type === 'system'
@@ -395,60 +404,74 @@ const ReportView = () => {
                       ? selectedReport?.projectMetrics
                       : selectedReport?.standardMetrics;
 
-                return metrics?.map((metric, index) => (
-                  <MetricBox
-                    isConsoleView
-                    key={`${type}-${index}`}
-                    metric={metric}
+                return metrics?.map((metric, index) =>
+                  improvedReportsEnabled ? (
+                    <MetricRow
+                      key={`${type}-${index}`}
+                      metric={metric}
+                      type={type as MetricType}
+                      reportLabel={selectedReport?.quarter}
+                      year={year}
+                    />
+                  ) : (
+                    <MetricBox
+                      isConsoleView
+                      key={`${type}-${index}`}
+                      metric={metric}
+                      projectId={projectId}
+                      reload={reload}
+                      reportId={Number(reportId)}
+                      type={type as MetricType}
+                      onEditChange={onEditChange}
+                      canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
+                    />
+                  )
+                );
+              })}
+              {!improvedReportsEnabled && (
+                <>
+                  <AchievementsBox
+                    report={selectedReport}
                     projectId={projectId}
                     reload={reload}
-                    reportId={Number(reportId)}
-                    type={type as MetricType}
+                    isConsoleView={true}
                     onEditChange={onEditChange}
                     canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
                   />
-                ));
-              })}
-              <AchievementsBox
-                report={selectedReport}
-                projectId={projectId}
-                reload={reload}
-                isConsoleView={true}
-                onEditChange={onEditChange}
-                canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
-              />
-              <ChallengesMitigationBox
-                report={selectedReport}
-                projectId={projectId}
-                reload={reload}
-                isConsoleView={true}
-                onEditChange={onEditChange}
-                canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
-              />
-              <FinancialSummariesBox
-                report={selectedReport}
-                projectId={projectId}
-                reload={reload}
-                isConsoleView={true}
-                onEditChange={onEditChange}
-                canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
-              />
-              <AdditionalCommentsBox
-                report={selectedReport}
-                projectId={projectId}
-                reload={reload}
-                isConsoleView={true}
-                onEditChange={onEditChange}
-                canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
-              />
-              <PhotosBox
-                report={selectedReport}
-                projectId={projectId}
-                reload={reload}
-                isConsoleView={true}
-                onEditChange={onEditChange}
-                canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
-              />
+                  <ChallengesMitigationBox
+                    report={selectedReport}
+                    projectId={projectId}
+                    reload={reload}
+                    isConsoleView={true}
+                    onEditChange={onEditChange}
+                    canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
+                  />
+                  <FinancialSummariesBox
+                    report={selectedReport}
+                    projectId={projectId}
+                    reload={reload}
+                    isConsoleView={true}
+                    onEditChange={onEditChange}
+                    canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
+                  />
+                  <AdditionalCommentsBox
+                    report={selectedReport}
+                    projectId={projectId}
+                    reload={reload}
+                    isConsoleView={true}
+                    onEditChange={onEditChange}
+                    canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
+                  />
+                  <PhotosBox
+                    report={selectedReport}
+                    projectId={projectId}
+                    reload={reload}
+                    isConsoleView={true}
+                    onEditChange={onEditChange}
+                    canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
+                  />
+                </>
+              )}
             </Card>
           </Box>
         )}

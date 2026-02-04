@@ -1,7 +1,11 @@
 import { CachedUserService } from 'src/services';
 import env from 'src/utils/useEnvironment';
 
-export type FeatureName = 'Show Production View' | 'New Observation View' | 'Virtual Monitoring Plots';
+export type FeatureName =
+  | 'Show Production View'
+  | 'New Observation View'
+  | 'Virtual Monitoring Plots'
+  | 'Improved Reports';
 
 export type Feature = {
   name: FeatureName;
@@ -51,6 +55,15 @@ export const OPT_IN_FEATURES: Feature[] = [
     enabled: false,
     allowInternalProduction: false,
     description: ['Support for virtual monitoring plots'],
+    disclosure: ['This is a WIP'],
+  },
+  {
+    name: 'Improved Reports',
+    preferenceName: 'improvedReports',
+    active: true,
+    enabled: false,
+    allowInternalProduction: false,
+    description: ['Improved Visualization of Progress in Reports'],
     disclosure: ['This is a WIP'],
   },
 ];
