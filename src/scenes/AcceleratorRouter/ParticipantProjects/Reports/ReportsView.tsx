@@ -61,7 +61,7 @@ const ReportsView = () => {
       title={strings.REPORTS}
       titleStyle={{ paddingTop: '16px' }}
     >
-      <Box display='flex' flexDirection='column' flexGrow={1}>
+      <Box display='flex' flexDirection='column' flexGrow={1} width={'100%'}>
         <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />
       </Box>
     </Page>
