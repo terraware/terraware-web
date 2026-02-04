@@ -220,7 +220,7 @@ const MapPhotoDrawer = ({
           />
         )}
         <Box display={'flex'} flexDirection={'column'} width={'100%'} gap={2}>
-          <MapDrawerTable rows={rows} />
+          <MapDrawerTable header={monitoringPlot?.monitoringPlotNumber?.toString()} rows={rows} />
           {/* TODO: render a preview image  */}
           <Button
             id='visit-virtual-plot'
