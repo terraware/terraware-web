@@ -175,7 +175,20 @@
 <a name='L110'></a><a href='#L110'>110</a>
 <a name='L111'></a><a href='#L111'>111</a>
 <a name='L112'></a><a href='#L112'>112</a>
-<a name='L113'></a><a href='#L113'>113</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L113'></a><a href='#L113'>113</a>
+<a name='L114'></a><a href='#L114'>114</a>
+<a name='L115'></a><a href='#L115'>115</a>
+<a name='L116'></a><a href='#L116'>116</a>
+<a name='L117'></a><a href='#L117'>117</a>
+<a name='L118'></a><a href='#L118'>118</a>
+<a name='L119'></a><a href='#L119'>119</a>
+<a name='L120'></a><a href='#L120'>120</a>
+<a name='L121'></a><a href='#L121'>121</a>
+<a name='L122'></a><a href='#L122'>122</a>
+<a name='L123'></a><a href='#L123'>123</a>
+<a name='L124'></a><a href='#L124'>124</a>
+<a name='L125'></a><a href='#L125'>125</a>
+<a name='L126'></a><a href='#L126'>126</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -245,6 +258,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -278,6 +300,10 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -290,40 +316,44 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Cached<span class="cstat-no" title="statement not covered" >UserService } </span>from 'src/services';
 import env from <span class="cstat-no" title="statement not covered" >'src/utils/useEnvironm</span>ent';
 <span class="cstat-no" title="statement not covered" ></span>
-export type FeatureName <span class="cstat-no" title="statement not covered" >= 'Show Production View' | </span>'New Observation View' | 'Virtual Monitoring Plots';
+export type FeatureName <span class="cstat-no" title="statement not covered" >=</span>
+  | 'Show Productio<span class="cstat-no" title="statement not covered" >n View'</span>
+  | 'New Observatio<span class="cstat-no" title="statement not covered" >n View'</span>
+  | 'Virtual Mo<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ni</span>toring Plots'</span>
+<span class="cstat-no" title="statement not covered" >  | 'Improved Reports';</span>
 <span class="cstat-no" title="statement not covered" ></span>
-export type Feature<span class="cstat-no" title="statement not covered" > = {</span>
-  name: Feature<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Na</span>me;</span>
+export type Feature = {
+  name: FeatureNam<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >e;</span></span>
 <span class="cstat-no" title="statement not covered" >  preferenceName: string;</span>
   //<span class="cstat-no" title="statement not covered" > whether this feature check is active</span>
-  active: boolean;
-  // whether this <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >fe</span>ature is enabled for all, if not, check user preference</span>
-<span class="cstat-no" title="statement not covered" >  // feature is usually enabled prior to release - gives devs time to clean up code</span>
-  en<span class="cstat-no" title="statement not covered" >abled: boolean;</span>
-  // w<span class="cstat-no" title="statement not covered" >hether this feature is open to Terraformation employees on production (matches user email)</span>
-  allowI<span class="cstat-no" title="statement not covered" >nternalProduction: boolean<span class="fstat-no" title="function not covered" >;<span class="cstat-no" title="statement not covered" ></span></span></span>
+  acti<span class="cstat-no" title="statement not covered" >ve: boolean;</span>
+  // whe<span class="cstat-no" title="statement not covered" >ther this feature is enabl<span class="fstat-no" title="function not covered" >ed</span> for<span class="cstat-no" title="statement not covered" > all, if n</span>ot, check user preference</span>
+  // feature is usually enabled prior to release - gives devs time to clean up code
+<span class="cstat-no" title="statement not covered" >  enabled: bo</span>olean;
+  // whether this feature is open to Terraformation employees on production (matches user email)
+  allowInterna<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >lP</span>roduction: boolean;<span class="cstat-no" title="statement not covered" ></span></span>
   description: string[];
-<span class="cstat-no" title="statement not covered" >  disclosure:</span> string[];
+  disclosure: string[];
   get?: () =&gt; boolean;
-  set?: (val: <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >bo</span>olean) =&gt; void;<span class="cstat-no" title="statement not covered" ></span></span>
+  set?: (val: boolean) =&gt; void;
 };
 &nbsp;
 // list of feature names and associated properties
-export const OPT_IN_FEATURES: Feature[] = [
-  {
-    name: 'Show Production View',
-    preferenceName: 'showProductionUIView',
-    active: true,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-    enabled: false,<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >    allowInternalProduction: false,</span>
-    description: ['<span class="fstat-no" title="function not covered" >Al</span>low <span class="cstat-no" title="statement not covered" >testing producti</span>on view without any WIP UI features.'],
-    disclos<span class="fstat-no" title="function not covered" >ur</span>e: [<span class="cstat-no" title="statement not covered" ></span>
-      'Does not te<span class="fstat-no" title="function not covered" >st</span> aga<span class="cstat-no" title="statement not covered" >inst production</span> servers.',
-      'Clear "productionView" from session storage to clear this preference.',
-<span class="cstat-no" title="statement not covered" >    ],</span>
-    get: env().isForce<span class="cstat-no" title="statement not covered" >dProductionView,</span>
-    set: env().forceProducti<span class="cstat-no" title="statement not covered" >onView,</span>
-  },<span class="cstat-no" title="statement not covered" ></span>
+export const OPT_IN<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >_F</span>EATURES<span class="cstat-no" title="statement not covered" >: Feature[] = [</span></span>
+  {<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >    name: 'Show Production View',</span>
+    preferenceName:<span class="fstat-no" title="function not covered" > '</span>show<span class="cstat-no" title="statement not covered" >ProductionUIView</span>',
+    active:<span class="fstat-no" title="function not covered" > t</span>rue,<span class="cstat-no" title="statement not covered" ></span>
+    enabled: false<span class="fstat-no" title="function not covered" >,<span class="cstat-no" title="statement not covered" ></span></span>
+    allowInternalProduction: false,
+<span class="cstat-no" title="statement not covered" >    description: ['Allow testing production vi</span>ew without any WIP UI features.'],
+    disclosure: [<span class="cstat-no" title="statement not covered" ></span>
+      'Does not test against<span class="cstat-no" title="statement not covered" > production servers.',</span>
+      'Clear "production<span class="cstat-no" title="statement not covered" >View" from session storage to clear this preference.',</span>
+    ],
+    get: env().isForcedProductionView,
+    set: env().forceProductionView,
+  },
   {
     name: 'New Observation View',
     preferenceName: 'newObservationView',
@@ -342,6 +372,15 @@ export const OPT_IN_FEATURES: Feature[] = [
     description: ['Support for virtual monitoring plots'],
     disclosure: ['This is a WIP'],
   },
+  {
+    name: 'Improved Reports',
+    preferenceName: 'improvedReports',
+    active: true,
+    enabled: false,
+    allowInternalProduction: false,
+    description: ['Improved Visualization of Progress in Reports'],
+    disclosure: ['This is a WIP'],
+  },
 ];
 &nbsp;
 type FeatureMap = { [key: string]: Feature };
@@ -353,43 +392,43 @@ OPT_IN_FEATURES.forEach((feature) =&gt; {
   FEATURE_MAP[feature.name] = feature;
 });
 &nbsp;
-/**
- * Utility function to check if a feature is enabled
- */
+/**<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" > * Utility function to c<span class="fstat-no" title="function not covered" >he</span>ck if a feature is enabled</span>
+ *<span class="cstat-no" title="statement not covered" >/</span>
 export default function isEnabled(name: FeatureName, organizationId?: number) {
-  const { isProducti<span class="cstat-no" title="statement not covered" >on </span>} = env();
-<span class="cstat-no" title="statement not covered" >  const feature = FEATUR<span class="fstat-no" title="function not covered" >E_</span>MAP[name];</span>
+  const {<span class="fstat-no" title="function not covered" > isProduct</span>ion } = env();
+  const feature = FEATURE_M<span class="cstat-no" title="statement not covered" >AP[name];</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  if (!feature) {
-    retur<span class="fstat-no" title="function not covered" >n false;</span>
-  }<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  if (feature.get) {</span>
-<span class="cstat-no" title="statement not covered" >    return feature</span>.get();
+<span class="cstat-no" title="statement not covered" >  if (!feature) {</span>
+<span class="cstat-no" title="statement not covered" >    return false;</span>
   }
 <span class="cstat-no" title="statement not covered" ></span>
-  if<span class="cstat-no" title="statement not covered" > (!feature.active || f</span>eature.enabled) {
-    return feature.enabled;
+  if<span class="cstat-no" title="statement not covered" > (feature.get) {</span>
+    return feature.get();
 <span class="cstat-no" title="statement not covered" >  }</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  if (!isProduction) {
-<span class="cstat-no" title="statement not covered" >    const preferences =</span>
-      organizationId !==<span class="cstat-no" title="statement not covered" > undefined</span>
-        ? CachedUserService<span class="cstat-no" title="statement not covered" >.getUserOrgPreferences(</span>organizationId)
-<span class="cstat-no" title="statement not covered" >        : CachedUserService.getUserPreferences();</span>
-    const preferenceName = feature.preferenceName;
+  if (!feature.active || feature.enabled) {
+<span class="cstat-no" title="statement not covered" >    return feature.enabled;</span>
+  }<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-    return preferences &amp;&amp; preferences[preferenceName] === true;
-  }<span class="fstat-no" title="function not covered" ></span>
+  if<span class="cstat-no" title="statement not covered" > (!isProduction) {</span>
+    const preferences =
+<span class="cstat-no" title="statement not covered" >      organizationId !== undefined</span>
+        ? CachedUserService.getUserOrgPreferences(organizationId)
+        :<span class="fstat-no" title="function not covered" > CachedUserServ</span>ice.getUserPreferences();
+    const preferenceName = <span class="cstat-no" title="statement not covered" >feature.preferenceName;</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  return feature.a<span class="cstat-no" title="statement not covered" >llowInternalProduc</span>tion &amp;&amp; CachedUserService.getUser().isTerraformation;
-}<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span>
-export function isRouteEnabled(name: FeatureName) {
-<span class="cstat-no" title="statement not covered" >  const { isProduction } = env();</span>
-  co<span class="cstat-no" title="statement not covered" >nst feature = FEATURE_MA</span>P[name];
+<span class="cstat-no" title="statement not covered" >    return preferences &amp;&amp; preferences[preferenceName] === true;</span>
+  }<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  if (!feature) {</span>
+<span class="cstat-no" title="statement not covered" >  return feature.allowInternalProduction &amp;&amp; CachedUserService.getUser().isTerraformation;</span>
+}<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
+ex<span class="cstat-no" title="statement not covered" >port function isRouteEnabled(name: FeatureName) {</span>
+  const { isProduction } = env();
+  const feature = FEATURE_MAP[name];
+&nbsp;
+  if (!feature) {
     return false;
   }
 &nbsp;
@@ -406,7 +445,7 @@ export function isRouteEnabled(name: FeatureName) {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-04T19:55:24.817Z
+                at 2026-02-04T20:49:53.991Z
             </div>
         <script src="../prettify.js"></script>
         <script>
