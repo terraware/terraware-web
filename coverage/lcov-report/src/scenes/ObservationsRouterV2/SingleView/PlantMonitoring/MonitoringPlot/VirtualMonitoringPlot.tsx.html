@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/89</span>
+                <span class='fraction'>0/96</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/31</span>
+                <span class='fraction'>0/33</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/22</span>
+                <span class='fraction'>0/25</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/85</span>
+                <span class='fraction'>0/90</span>
             </div>
         
             
@@ -245,7 +245,17 @@
 <a name='L180'></a><a href='#L180'>180</a>
 <a name='L181'></a><a href='#L181'>181</a>
 <a name='L182'></a><a href='#L182'>182</a>
-<a name='L183'></a><a href='#L183'>183</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L183'></a><a href='#L183'>183</a>
+<a name='L184'></a><a href='#L184'>184</a>
+<a name='L185'></a><a href='#L185'>185</a>
+<a name='L186'></a><a href='#L186'>186</a>
+<a name='L187'></a><a href='#L187'>187</a>
+<a name='L188'></a><a href='#L188'>188</a>
+<a name='L189'></a><a href='#L189'>189</a>
+<a name='L190'></a><a href='#L190'>190</a>
+<a name='L191'></a><a href='#L191'>191</a>
+<a name='L192'></a><a href='#L192'>192</a>
+<a name='L193'></a><a href='#L193'>193</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -371,6 +381,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -413,7 +430,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -541,21 +561,29 @@ const DEFAULT_POSIT<span class="cstat-no" title="statement not covered" ><span c
 <span class="cstat-no" title="statement not covered" >    setSelectedAnnotat</span>ionIndex(localAnnotations.length);
   },<span class="cstat-no" title="statement not covered" > [localAnnotations]);</span>
 &nbsp;
-  /* When a rerender occurs, t<span class="cstat-no" title="statement not covered" >he splat model disappears (htt<span class="fstat-no" title="function not covered" >ps</span>://github.com/playcanvas/react/pull/298 and https://github.com/playcanvas/react/issues/302)</span>
-  The key should include i<span class="cstat-no" title="statement not covered" >tems that cause the SplatModel to rerender. Remove them (and the useMemo) once the PR is merged and we're on a version that includes it */</span>
-  const splatModel = useMemo(
-    () =&gt; &lt;SplatModel key={'splat'} splatSrc={splatSrc} rotation={[-180, 0, 0]} revealRain={isHighPerformance} /&gt;,
-    [isHighPerformance, splatSrc]
+  const handleDeleteAnnotation<span class="cstat-no" title="statement not covered" > = useCallback(() =&gt; {<span class="fstat-no" title="function not covered" ></span></span>
+    if (selectedAnnotation<span class="cstat-no" title="statement not covered" >Index === -1) {</span>
+      return;
+    }
+    setLocalAnnotations((prev) =&gt; prev.filter((_, index) =&gt; index !== selectedAnnotationIndex));
+    setSelectedAnnotationIndex(-1);
+  }, [selectedAnnotationIndex]);
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  /*<span class="cstat-no" title="statement not covered" > When a rerender occurs, the splat model disappears (</span>https://github.com/playcanvas/react/pull/298 and https://github.com/playcanvas/react/issues/302)
+  The key should include items that cause the SplatModel to rerender. Remove them (and the useMemo) once the PR is merged and we're on a version that includes it */
+  const splatModel = useMemo(<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    () =&gt; &lt;SplatModel key={'splat'} splatSrc={splatSrc} rotation={[-180, 0, 0]} revealRain={isHighPerformance} /&gt;,</span>
+    [i<span class="cstat-no" title="statement not covered" >sHighPer</span>formance, splatSrc]
   );
-&nbsp;
-  re<span class="cstat-no" title="statement not covered" >turn (<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-<span class="cstat-no" title="statement not covered" >    &lt;&gt;</span>
-      &lt;GradientSky topColor='#FFFFFF' horizonColor='#EAF8FF' groundColor='#C3BDB7' /&gt;
-<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" ></span>      &lt;Entity name='camera<span class="cstat-no" title="statement not covered" >-root'&gt;</span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
+  re<span class="cstat-no" title="statement not covered" >turn (</span>
+    &lt;&gt;
+      &lt;GradientSky to<span class="cstat-no" title="statement not covered" >pColor='#FFFFFF' horizonColor='#EAF8FF' groundColor='#C3BDB7' /&gt;</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+      &lt;Entity name='camera-root'&gt;
         &lt;Entity name='camera'&gt;
-          &lt;Camera clearColor='#EAF8FF' fov={60} /&gt;
-<span class="cstat-no" title="statement not covered" >          &lt;Script script={CameraControls} moveSpeed={0.3} moveFastSpeed={0.5} moveSlowSpeed={0.15} rotateSpeed={0.1} /&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;Camera clearColor='#EAF8FF' fov={60} /&gt;</span>
+          &lt;Script script={CameraControls} moveSpeed={0.3} moveFastSpeed={0.5} moveSlowSpeed={0.15} rotateSpeed={0.1} /&gt;
         &lt;/Entity&gt;
         {!isEdit &amp;&amp; (
           &lt;&gt;
@@ -565,8 +593,8 @@ const DEFAULT_POSIT<span class="cstat-no" title="statement not covered" ><span c
           &lt;/&gt;
         )}
       &lt;/Entity&gt;
-&nbsp;
-      {splatModel}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+      {splatModel}
 &nbsp;
       {localAnnotations.length &gt; 0 &amp;&amp; (
         &lt;Script
@@ -574,8 +602,8 @@ const DEFAULT_POSIT<span class="cstat-no" title="statement not covered" ><span c
           hotspotSize={30}
           maxWorldSize={0.05}
           opacity={1}
-          hotspotColor={new Color().fromString('#ffffff')}
-          hoverC<span class="fstat-no" title="function not covered" >ol</span>or={<span class="cstat-no" title="statement not covered" >new Color().fromString('#ffffff')}</span>
+          hotspo<span class="fstat-no" title="function not covered" >tC</span>olor<span class="cstat-no" title="statement not covered" >={new Color().fromString('#ffffff'</span>)}
+          hoverColor={new Color().fromString('#ffffff')}
           hotspotBackgroundColor='#2C8658'
         /&gt;
       )}
@@ -595,14 +623,16 @@ const DEFAULT_POSIT<span class="cstat-no" title="statement not covered" ><span c
         defaultCameraFocus={DEFAULT_FOCUS_POINT}
         defaultCameraPosition={DEFAULT_POSITION}
         showAnnotations={showAnnotations}
-        onToggleAnno<span class="cstat-no" title="statement not covered" >tations={setShowAnnota</span>tions}
-        autoRotate={autoRotate}
+        onToggleAnnotations={setShowAnnotations}
+        autoRotate={<span class="cstat-no" title="statement not covered" >autoRotate}</span>
         onToggleAutoRotate={setAutoRotate}
         isEdit={isEdit}
         onToggleEdit={setIsEdit}
         onSave={handleSave}
         onCancel={handleCancel}
         onAddAnnotation={handleAddAnnotation}
+        onDeleteAnnotation={handleDeleteAnnotation}
+        hasSelectedAnnotation={selectedAnnotationIndex &gt;= 0}
       /&gt;
     &lt;/&gt;
   );
@@ -616,7 +646,7 @@ export default VirtualMonitoringPlot;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-04T18:29:01.573Z
+                at 2026-02-04T19:01:30.202Z
             </div>
         <script src="../../../../../../prettify.js"></script>
         <script>
