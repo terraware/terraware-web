@@ -1,3 +1,4 @@
+f15170db1df SW-8013 Add ability to create new annotations (#5167)
 9395faa287b SW-8013 Add ability to edit annotation positions (#5163)
 d410199abcf SW-8013 Fetch annotations per model instead of hardcoded (#5161)
 f3138bae989 Add checkbox to disable autorotate (#5164)

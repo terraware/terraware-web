@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/84</span>
+                <span class='fraction'>0/89</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/20</span>
+                <span class='fraction'>0/22</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/81</span>
+                <span class='fraction'>0/85</span>
             </div>
         
             
@@ -233,7 +233,19 @@
 <a name='L168'></a><a href='#L168'>168</a>
 <a name='L169'></a><a href='#L169'>169</a>
 <a name='L170'></a><a href='#L170'>170</a>
-<a name='L171'></a><a href='#L171'>171</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L171'></a><a href='#L171'>171</a>
+<a name='L172'></a><a href='#L172'>172</a>
+<a name='L173'></a><a href='#L173'>173</a>
+<a name='L174'></a><a href='#L174'>174</a>
+<a name='L175'></a><a href='#L175'>175</a>
+<a name='L176'></a><a href='#L176'>176</a>
+<a name='L177'></a><a href='#L177'>177</a>
+<a name='L178'></a><a href='#L178'>178</a>
+<a name='L179'></a><a href='#L179'>179</a>
+<a name='L180'></a><a href='#L180'>180</a>
+<a name='L181'></a><a href='#L181'>181</a>
+<a name='L182'></a><a href='#L182'>182</a>
+<a name='L183'></a><a href='#L183'>183</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -351,7 +363,17 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -390,7 +412,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -506,22 +530,33 @@ const DEFAULT_POSIT<span class="cstat-no" title="statement not covered" ><span c
     setSelectedAnnotationIndex(-1);
   }, [annotations]);
 &nbsp;
-  /* When a rerender occurs, the splat model disappears (https://github.com/playcanvas/react/pull/298 and https://github.com/playcanvas/react/issues/302)
-  The <span class="cstat-no" title="statement not covered" >key should include</span> items that cause the SplatModel to rerender. Remove them (and the useMemo) once the PR is merged and we're on a version that includes it */
-  cons<span class="cstat-no" title="statement not covered" >t splatModel = useMemo(</span>
-    () =&gt; &lt;SplatModel key={'splat'} splatSrc={splatSrc} rotation={[-180, 0, 0]} revealRain={isHighPerformance} /&gt;,
-<span class="cstat-no" title="statement not covered" >    [isHighPerformance, s</span>platSrc]
-  );
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  re<span class="cstat-no" title="statement not covered" >turn (</span>
-<span class="cstat-no" title="statement not covered" >    &lt;&gt;</span>
-<span class="cstat-no" title="statement not covered" >      &lt;GradientSky topColor='#FFFFFF</span>' horizonColor='#EAF8FF' groundColor='#C3BDB7' /&gt;
+  const handleAddAnnotation = useCallback(() =&gt; {
+    co<span class="cstat-no" title="statement not covered" >nst newAnnotation:</span> AnnotationProps = {
+<span class="cstat-no" title="statement not covered" >      position: DEFAULT_FOCUS_POINT,</span>
+      title: `Annotation ${localAnnotations.length + 1}`,
+<span class="cstat-no" title="statement not covered" >      bodyText: '',</span>
+      label: `${localAnnotations.length + 1}`,
+    };<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    setLocalAnnotations((prev) =&gt; [...</span>prev, newAnnotation]);
+<span class="cstat-no" title="statement not covered" >    setSelectedAnnotat</span>ionIndex(localAnnotations.length);
+  },<span class="cstat-no" title="statement not covered" > [localAnnotations]);</span>
 &nbsp;
-      &lt;Entity name='c<span class="cstat-no" title="statement not covered" >amera-root'&gt;</span>
-<span class="fstat-no" title="function not covered" ></span>        &lt;Entity name='came<span class="cstat-no" title="statement not covered" >ra'&gt;</span>
+  /* When a rerender occurs, t<span class="cstat-no" title="statement not covered" >he splat model disappears (htt<span class="fstat-no" title="function not covered" >ps</span>://github.com/playcanvas/react/pull/298 and https://github.com/playcanvas/react/issues/302)</span>
+  The key should include i<span class="cstat-no" title="statement not covered" >tems that cause the SplatModel to rerender. Remove them (and the useMemo) once the PR is merged and we're on a version that includes it */</span>
+  const splatModel = useMemo(
+    () =&gt; &lt;SplatModel key={'splat'} splatSrc={splatSrc} rotation={[-180, 0, 0]} revealRain={isHighPerformance} /&gt;,
+    [isHighPerformance, splatSrc]
+  );
+&nbsp;
+  re<span class="cstat-no" title="statement not covered" >turn (<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+<span class="cstat-no" title="statement not covered" >    &lt;&gt;</span>
+      &lt;GradientSky topColor='#FFFFFF' horizonColor='#EAF8FF' groundColor='#C3BDB7' /&gt;
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" ></span>      &lt;Entity name='camera<span class="cstat-no" title="statement not covered" >-root'&gt;</span>
+        &lt;Entity name='camera'&gt;
           &lt;Camera clearColor='#EAF8FF' fov={60} /&gt;
-          &lt;Script script={CameraControls} moveSpeed={0.3} moveFastSpeed={0.5} moveSlowSpeed={0.15} rotateSpeed={0.1} /&gt;
-<span class="cstat-no" title="statement not covered" >        &lt;/Entity&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;Script script={CameraControls} moveSpeed={0.3} moveFastSpeed={0.5} moveSlowSpeed={0.15} rotateSpeed={0.1} /&gt;</span>
+        &lt;/Entity&gt;
         {!isEdit &amp;&amp; (
           &lt;&gt;
             &lt;Script script={XrControllers} /&gt;
@@ -531,8 +566,8 @@ const DEFAULT_POSIT<span class="cstat-no" title="statement not covered" ><span c
         )}
       &lt;/Entity&gt;
 &nbsp;
-      {splatModel}
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+      {splatModel}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+&nbsp;
       {localAnnotations.length &gt; 0 &amp;&amp; (
         &lt;Script
           script={TfAnnotationManager}
@@ -540,8 +575,8 @@ const DEFAULT_POSIT<span class="cstat-no" title="statement not covered" ><span c
           maxWorldSize={0.05}
           opacity={1}
           hotspotColor={new Color().fromString('#ffffff')}
-          hoverColor={new Color().fromString('#ffffff')}
-          hotspo<span class="fstat-no" title="function not covered" >tB</span>ackg<span class="cstat-no" title="statement not covered" >roundColor='#2C8658'</span>
+          hoverC<span class="fstat-no" title="function not covered" >ol</span>or={<span class="cstat-no" title="statement not covered" >new Color().fromString('#ffffff')}</span>
+          hotspotBackgroundColor='#2C8658'
         /&gt;
       )}
       {localAnnotations.map((annotation, index) =&gt; (
@@ -567,6 +602,7 @@ const DEFAULT_POSIT<span class="cstat-no" title="statement not covered" ><span c
         onToggleEdit={setIsEdit}
         onSave={handleSave}
         onCancel={handleCancel}
+        onAddAnnotation={handleAddAnnotation}
       /&gt;
     &lt;/&gt;
   );
@@ -580,7 +616,7 @@ export default VirtualMonitoringPlot;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-04T17:47:04.679Z
+                at 2026-02-04T18:29:01.573Z
             </div>
         <script src="../../../../../../prettify.js"></script>
         <script>
