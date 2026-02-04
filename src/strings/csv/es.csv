@@ -157,6 +157,9 @@ ALREADY_INVITED_PERSON_ERROR,Parece que ya añadió o invitó a esta persona. Po
 AMOUNT_EST_COUNT,Cantidad (recuento estimado),e203609b
 AMOUNT_REMAINING,Cantidad ({0} restantes),349aa6d6
 ANIMAL_DAMAGE,Daño animal,754d26fb
+ANNOTATION_DESCRIPTION_TOOLTIP,Detalles o contexto adicional sobre esta anotación,8cb997d2
+ANNOTATION_LABEL_TOOLTIP,Identificador breve que se muestra en el punto destacado de la anotación,adbb02a1
+ANNOTATION_TITLE_TOOLTIP,Título principal de la anotación,b3f5b753
 ANNOTATIONS,Anotaciones,c15a3aa4
 ANNUAL_TARGET,Objetivo anual,ea52c210
 ANSWER_APPROVED,Respuesta aprobada,8a11d452

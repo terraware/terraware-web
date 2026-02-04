@@ -157,6 +157,9 @@ ALREADY_INVITED_PERSON_ERROR,Il semble que vous ayez déjà ajouté ou invité c
 AMOUNT_EST_COUNT,Quantité (nombre estimé),e203609b
 AMOUNT_REMAINING,Montant ({0} restant),349aa6d6
 ANIMAL_DAMAGE,Dommages causés par les animaux,754d26fb
+ANNOTATION_DESCRIPTION_TOOLTIP,Détails ou contexte supplémentaires concernant cette annotation,8cb997d2
+ANNOTATION_LABEL_TOOLTIP,Identifiant court affiché sur le point d’annotation,adbb02a1
+ANNOTATION_TITLE_TOOLTIP,Titre principal de l’annotation,b3f5b753
 ANNOTATIONS,Annotations,c15a3aa4
 ANNUAL_TARGET,Objectif annuel,ea52c210
 ANSWER_APPROVED,Réponse approuvée,8a11d452

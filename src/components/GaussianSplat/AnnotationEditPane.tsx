@@ -1,6 +1,7 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
-import { Box, Fade, TextField, Typography, useTheme } from '@mui/material';
+import { Box, Fade, Tooltip, Typography, useTheme } from '@mui/material';
+import { Textfield } from '@terraware/web-components';
 
 import { useLocalization } from 'src/providers';
 
@@ -16,23 +17,39 @@ const AnnotationEditPane = ({ visible, annotation, onUpdate }: AnnotationEditPan
   const theme = useTheme();
   const { strings } = useLocalization();
 
-  const handleLabelChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      onUpdate({ label: event.target.value });
-    },
-    [onUpdate]
+  const textFieldSx = useMemo(
+    () => ({
+      '& .textfield-label': {
+        color: `${theme.palette.grey[400]} !important`,
+      },
+      '& .textfield-value': {
+        backgroundColor: `${theme.palette.grey[800]} !important`,
+        borderColor: `${theme.palette.grey[700]} !important`,
+      },
+      '& input': {
+        color: `${theme.palette.common.white} !important`,
+      },
+    }),
+    [theme]
   );
 
   const handleTitleChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      onUpdate({ title: event.target.value });
+    (value: unknown) => {
+      onUpdate({ title: value as string });
     },
     [onUpdate]
   );
 
   const handleBodyTextChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      onUpdate({ bodyText: event.target.value });
+    (value: unknown) => {
+      onUpdate({ bodyText: value as string });
+    },
+    [onUpdate]
+  );
+
+  const handleLabelChange = useCallback(
+    (value: unknown) => {
+      onUpdate({ label: value as string });
     },
     [onUpdate]
   );
@@ -72,73 +89,39 @@ const AnnotationEditPane = ({ visible, annotation, onUpdate }: AnnotationEditPan
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <Typography sx={{ fontWeight: 600 }}>{strings.EDIT_ANNOTATION}</Typography>
 
-            <TextField
-              id='annotation-label'
-              label={strings.LABEL}
-              type='text'
-              value={annotation.label ?? ''}
-              onChange={handleLabelChange}
-              variant='outlined'
-              size='small'
-              fullWidth
-              sx={{
-                '& .MuiInputBase-root': {
-                  color: theme.palette.common.white,
-                },
-                '& .MuiInputLabel-root': {
-                  color: theme.palette.grey[400],
-                },
-                '& .MuiOutlinedInput-notchedOutline': {
-                  borderColor: theme.palette.grey[700],
-                },
-              }}
-            />
+            <Tooltip title={strings.ANNOTATION_TITLE_TOOLTIP} placement='top'>
+              <Textfield
+                id='annotation-title'
+                label={strings.TITLE}
+                type='text'
+                value={annotation.title}
+                onChange={handleTitleChange}
+                sx={textFieldSx}
+              />
+            </Tooltip>
 
-            <TextField
-              id='annotation-title'
-              label={strings.TITLE}
-              type='text'
-              value={annotation.title}
-              onChange={handleTitleChange}
-              variant='outlined'
-              size='small'
-              fullWidth
-              sx={{
-                '& .MuiInputBase-root': {
-                  color: theme.palette.common.white,
-                },
-                '& .MuiInputLabel-root': {
-                  color: theme.palette.grey[400],
-                },
-                '& .MuiOutlinedInput-notchedOutline': {
-                  borderColor: theme.palette.grey[700],
-                },
-              }}
-            />
+            <Tooltip title={strings.ANNOTATION_DESCRIPTION_TOOLTIP} placement='top'>
+              <Textfield
+                id='annotation-body'
+                label={strings.DESCRIPTION}
+                type='text'
+                value={annotation.bodyText ?? ''}
+                onChange={handleBodyTextChange}
+                sx={textFieldSx}
+              />
+            </Tooltip>
 
-            <TextField
-              id='annotation-body'
-              label={strings.DESCRIPTION}
-              type='text'
-              value={annotation.bodyText ?? ''}
-              onChange={handleBodyTextChange}
-              variant='outlined'
-              size='small'
-              fullWidth
-              multiline
-              rows={4}
-              sx={{
-                '& .MuiInputBase-root': {
-                  color: theme.palette.common.white,
-                },
-                '& .MuiInputLabel-root': {
-                  color: theme.palette.grey[400],
-                },
-                '& .MuiOutlinedInput-notchedOutline': {
-                  borderColor: theme.palette.grey[700],
-                },
-              }}
-            />
+            <Tooltip title={strings.ANNOTATION_LABEL_TOOLTIP} placement='top'>
+              <Textfield
+                id='annotation-label'
+                label={strings.LABEL}
+                type='text'
+                value={annotation.label ?? ''}
+                onChange={handleLabelChange}
+                maxLength={3}
+                sx={textFieldSx}
+              />
+            </Tooltip>
           </Box>
         </Box>
       </Fade>

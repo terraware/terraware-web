@@ -174,7 +174,7 @@ const VirtualMonitoringPlot = ({ observationId, fileId, annotations = [] }: Virt
       )}
       {localAnnotations.map((annotation, index) => (
         <Annotation
-          key={index}
+          key={`${index}-${annotation.title}-${annotation.label ?? ''}`}
           {...annotation}
           index={index}
           visible={showAnnotations}
