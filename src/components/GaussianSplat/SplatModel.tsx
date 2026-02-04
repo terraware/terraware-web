@@ -59,7 +59,7 @@ const SplatModel = ({
         ) : (
           <SplatCrop aabbMin={cropAabbMin} aabbMax={cropAabbMax} edgeScaleFactor={cropEdgeScaleFactor} />
         ))}
-      {revealRain && <SplatRevealRain />}
+      <SplatRevealRain enabled={revealRain} />
     </Entity>
   );
 };
