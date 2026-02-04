@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Entity } from '@playcanvas/react';
 import { Camera, Script } from '@playcanvas/react/components';
@@ -15,6 +15,7 @@ import { TfAnnotationManager } from 'src/components/GaussianSplat/TfAnnotationMa
 import { TfXrNavigation } from 'src/components/GaussianSplat/TfXrNavigation';
 import { useCameraPosition } from 'src/hooks/useCameraPosition';
 import { useDevicePerformance } from 'src/hooks/useDevicePerformance';
+import { useSetObservationSplatAnnotationsMutation } from 'src/queries/generated/observationSplats';
 
 interface VirtualMonitoringPlotProps {
   observationId: string;
@@ -30,6 +31,10 @@ const VirtualMonitoringPlot = ({ observationId, fileId, annotations = [] }: Virt
   const { isHighPerformance } = useDevicePerformance();
   const [showAnnotations, setShowAnnotations] = useState(true);
   const [autoRotate, setAutoRotate] = useState(true);
+  const [isEdit, setIsEdit] = useState(false);
+  const [selectedAnnotationIndex, setSelectedAnnotationIndex] = useState<number>(-1);
+  const [localAnnotations, setLocalAnnotations] = useState(annotations);
+  const [saveAnnotations] = useSetObservationSplatAnnotationsMutation();
 
   const splatSrc = useMemo(
     () => `/api/v1/tracking/observations/${observationId}/splats/${fileId}`,
@@ -39,6 +44,62 @@ const VirtualMonitoringPlot = ({ observationId, fileId, annotations = [] }: Virt
   useEffect(() => {
     setCamera(DEFAULT_FOCUS_POINT, DEFAULT_POSITION);
   }, [setCamera]);
+
+  useEffect(() => {
+    if (!isEdit) {
+      setSelectedAnnotationIndex(-1);
+    }
+  }, [isEdit]);
+
+  useEffect(() => {
+    setLocalAnnotations(annotations);
+  }, [annotations]);
+
+  const handleAnnotationPositionChange = useCallback(
+    (position: [number, number, number]) => {
+      setLocalAnnotations((prev) => {
+        if (selectedAnnotationIndex === -1) {
+          return prev;
+        }
+
+        const updated = [...prev];
+        updated[selectedAnnotationIndex] = { ...updated[selectedAnnotationIndex], position };
+        return updated;
+      });
+    },
+    [selectedAnnotationIndex]
+  );
+
+  const handleSave = useCallback(() => {
+    const saveAndClose = async () => {
+      await saveAnnotations({
+        observationId: Number(observationId),
+        fileId: Number(fileId),
+        setSplatAnnotationsRequestPayload: {
+          annotations: localAnnotations.map((annotation) => ({
+            ...annotation,
+            position: {
+              x: annotation.position[0],
+              y: annotation.position[1],
+              z: annotation.position[2],
+            },
+            cameraPosition: annotation.cameraPosition
+              ? { x: annotation.cameraPosition[0], y: annotation.cameraPosition[1], z: annotation.cameraPosition[2] }
+              : undefined,
+          })),
+        },
+      });
+      setIsEdit(false);
+      setSelectedAnnotationIndex(-1);
+    };
+    void saveAndClose();
+  }, [observationId, fileId, saveAnnotations, localAnnotations]);
+
+  const handleCancel = useCallback(() => {
+    setLocalAnnotations(annotations);
+    setIsEdit(false);
+    setSelectedAnnotationIndex(-1);
+  }, [annotations]);
 
   /* When a rerender occurs, the splat model disappears (https://github.com/playcanvas/react/pull/298 and https://github.com/playcanvas/react/issues/302)
   The key should include items that cause the SplatModel to rerender. Remove them (and the useMemo) once the PR is merged and we're on a version that includes it */
@@ -56,14 +117,18 @@ const VirtualMonitoringPlot = ({ observationId, fileId, annotations = [] }: Virt
           <Camera clearColor='#EAF8FF' fov={60} />
           <Script script={CameraControls} moveSpeed={0.3} moveFastSpeed={0.5} moveSlowSpeed={0.15} rotateSpeed={0.1} />
         </Entity>
-        <Script script={XrControllers} />
-        <Script script={TfXrNavigation} enableTeleport={false} />
-        {autoRotate && <Script script={AutoRotator} startDelay={0.5} restartDelay={3} startFadeInTime={0.5} />}
+        {!isEdit && (
+          <>
+            <Script script={XrControllers} />
+            <Script script={TfXrNavigation} enableTeleport={false} />
+            {autoRotate && <Script script={AutoRotator} startDelay={0.5} restartDelay={3} startFadeInTime={0.5} />}
+          </>
+        )}
       </Entity>
 
       {splatModel}
 
-      {annotations.length > 0 && (
+      {localAnnotations.length > 0 && (
         <Script
           script={TfAnnotationManager}
           hotspotSize={30}
@@ -74,8 +139,17 @@ const VirtualMonitoringPlot = ({ observationId, fileId, annotations = [] }: Virt
           hotspotBackgroundColor='#2C8658'
         />
       )}
-      {annotations.map((annotation, index) => (
-        <Annotation key={index} {...annotation} visible={showAnnotations} />
+      {localAnnotations.map((annotation, index) => (
+        <Annotation
+          key={index}
+          {...annotation}
+          index={index}
+          visible={showAnnotations}
+          isEdit={isEdit}
+          isSelected={selectedAnnotationIndex === index}
+          onSelect={() => setSelectedAnnotationIndex(index)}
+          onPositionChange={handleAnnotationPositionChange}
+        />
       ))}
       <SplatControls
         defaultCameraFocus={DEFAULT_FOCUS_POINT}
@@ -84,6 +158,10 @@ const VirtualMonitoringPlot = ({ observationId, fileId, annotations = [] }: Virt
         onToggleAnnotations={setShowAnnotations}
         autoRotate={autoRotate}
         onToggleAutoRotate={setAutoRotate}
+        isEdit={isEdit}
+        onToggleEdit={setIsEdit}
+        onSave={handleSave}
+        onCancel={handleCancel}
       />
     </>
   );

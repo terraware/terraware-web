@@ -34,6 +34,16 @@ const injectedRtkApi = api.injectEndpoints({
         url: `/api/v1/tracking/observations/${queryArg.observationId}/splats/${queryArg.fileId}/annotations`,
       }),
     }),
+    setObservationSplatAnnotations: build.mutation<
+      SetObservationSplatAnnotationsApiResponse,
+      SetObservationSplatAnnotationsApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/api/v1/tracking/observations/${queryArg.observationId}/splats/${queryArg.fileId}/annotations`,
+        method: 'POST',
+        body: queryArg.setSplatAnnotationsRequestPayload,
+      }),
+    }),
   }),
   overrideExisting: false,
 });
@@ -65,6 +75,13 @@ export type ListObservationSplatAnnotationsApiResponse =
 export type ListObservationSplatAnnotationsApiArg = {
   observationId: number;
   fileId: number;
+};
+export type SetObservationSplatAnnotationsApiResponse =
+  /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
+export type SetObservationSplatAnnotationsApiArg = {
+  observationId: number;
+  fileId: number;
+  setSplatAnnotationsRequestPayload: SetSplatAnnotationsRequestPayload;
 };
 export type ObservationSplatPayload = {
   fileId: number;
@@ -98,6 +115,7 @@ export type SplatAnnotationPayload = {
   bodyText?: string;
   cameraPosition?: CoordinatePayload;
   fileId: number;
+  id: number;
   label?: string;
   position: CoordinatePayload;
   title: string;
@@ -105,6 +123,17 @@ export type SplatAnnotationPayload = {
 export type ListObservationSplatAnnotationsResponsePayload = {
   annotations: SplatAnnotationPayload[];
   status: SuccessOrError;
+};
+export type SetSplatAnnotationRequestPayload = {
+  bodyText?: string;
+  cameraPosition?: CoordinatePayload;
+  id?: number;
+  label?: string;
+  position: CoordinatePayload;
+  title: string;
+};
+export type SetSplatAnnotationsRequestPayload = {
+  annotations: SetSplatAnnotationRequestPayload[];
 };
 export const {
   useListObservationSplatsQuery,
@@ -114,4 +143,5 @@ export const {
   useLazyGetObservationSplatFileQuery,
   useListObservationSplatAnnotationsQuery,
   useLazyListObservationSplatAnnotationsQuery,
+  useSetObservationSplatAnnotationsMutation,
 } = injectedRtkApi;
