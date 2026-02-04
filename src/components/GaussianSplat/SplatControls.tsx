@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Box, IconButton, useTheme } from '@mui/material';
 import { useApp } from '@playcanvas/react/hooks';
 import { Icon } from '@terraware/web-components';
-import { CameraComponent, XRSPACE_LOCAL, XRTYPE_AR, XRTYPE_VR } from 'playcanvas';
+import { CameraComponent, XRSPACE_LOCAL, XRSPACE_LOCALFLOOR, XRTYPE_AR, XRTYPE_VR } from 'playcanvas';
 
 import useBoolean from 'src/hooks/useBoolean';
 import { useCameraPosition } from 'src/hooks/useCameraPosition';
@@ -84,7 +84,7 @@ const SplatControls = ({
 
   const handleVr = useCallback(
     () =>
-      app.xr?.start(app.root.findComponent('camera') as CameraComponent, XRTYPE_VR, XRSPACE_LOCAL, {
+      app.xr?.start(app.root.findComponent('camera') as CameraComponent, XRTYPE_VR, XRSPACE_LOCALFLOOR, {
         callback: errorCallback,
       }),
     [app, errorCallback]
