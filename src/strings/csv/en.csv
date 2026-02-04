@@ -456,6 +456,7 @@ DELETE_ACCOUNT_CONFIRMATION,Are you sure you want to delete your account? This c
 DELETE_ACCOUNT_ERROR,There was an error deleting your account.,
 DELETE_ACTIVITY,Delete Activity,
 DELETE_ACTIVITY_CONFIRM,Are you sure you want to delete this activity? All activity data will be removed.,
+DELETE_ANNOTATION,Delete Annotation,
 DELETE_CONFIRMATION_MODAL_MAIN_TEXT,Are you sure you want to delete the species?,
 DELETE_FUNDING_ENTITY,Delete Funding Entity,
 DELETE_FUNDING_ENTITY_FUNDERS_MESSAGE,All Funders associated with this Funding Entity will be deleted.,
