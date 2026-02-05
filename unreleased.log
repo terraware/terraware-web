@@ -1,3 +1,4 @@
+e6e3cf87ac3a SW-7771 Validate that file meets size requirements before initiating upload (#5138)
 4c48cb59e74d Bump jsonpath from 1.1.1 to 1.2.0 (#5181)
 b45d2f7b9151 Various fixes for annotations (#5176)
 b40bf62cc2ad SW-8027 Conditionally disable create virtual plot button (#5178)
