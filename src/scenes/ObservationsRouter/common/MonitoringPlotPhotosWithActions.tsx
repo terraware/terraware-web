@@ -144,7 +144,7 @@ export default function MonitoringPlotPhotosWithActions({
                 plotId={monitoringPlotId}
                 plantingSiteName={plantingSiteName}
               />
-              {isVirtualPlotsEnabled && mediaFile.type === 'Video' && (!splat || splat.status === 'Preparing') && (
+              {isVirtualPlotsEnabled && mediaFile.type === 'Video' && (
                 <Button
                   label={strings.CREATE_VIRTUAL_PLOT}
                   priority='secondary'
