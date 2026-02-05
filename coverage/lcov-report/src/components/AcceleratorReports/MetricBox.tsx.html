@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/121</span>
+                <span class='fraction'>0/125</span>
             </div>
         
             
@@ -463,7 +463,11 @@
 <a name='L398'></a><a href='#L398'>398</a>
 <a name='L399'></a><a href='#L399'>399</a>
 <a name='L400'></a><a href='#L400'>400</a>
-<a name='L401'></a><a href='#L401'>401</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L401'></a><a href='#L401'>401</a>
+<a name='L402'></a><a href='#L402'>402</a>
+<a name='L403'></a><a href='#L403'>403</a>
+<a name='L404'></a><a href='#L404'>404</a>
+<a name='L405'></a><a href='#L405'>405</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -537,6 +541,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -792,6 +798,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -923,69 +931,73 @@ const MetricBox = ({<span class="cstat-no" title="statement not covered" ></span
   onChangeMetric,
   onEditChange,
   canEdit,
-}: {
-  hideStatusBadge?: boo<span class="cstat-no" title="statement not covered" >lean;</span>
-  metric: ReportPr<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >oj</span>ectMetric | ReportSystemMetric | ReportStandardMetric;</span>
+  year,
+  yearTarget,<span class="cstat-no" title="statement not covered" ></span>
+}: {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  hideStatusBadge?: boolean;
+  metric: ReportProjectMetric | ReportSystemMetric | ReportStandardMetric;
   type: MetricType;
   reportId: number;
   onChangeMetric?: (metric: ReportProjectMetric | ReportSystemMetric | ReportStandardMetric, type: MetricType) =&gt; void;
+  year?: string;
+  yearTarget?: num<span class="branch-0 cbranch-no" title="branch not covered" >ber;</span>
 } &amp; ReportBoxProps): JSX.Element =&gt; {
   const theme = useTheme();
   const [record, setRecord, onChange, onChangeCallback] = useForm&lt;
-    ReportProjectM<span class="branch-0 cbranch-no" title="branch not covered" >etric </span>| ReportSystemMetric | ReportStandardMetric
+    ReportProjectMetric | ReportSystemMetric | ReportStandardMetric
   &gt;(metric);
 &nbsp;
-  const { isAcceleratorRoute } = useAcceleratorConsole();
-  const { isFunderRoute } = useFunderPortal();
-  const [progres<span class="cstat-no" title="statement not covered" >sModalOpened, , openProgressModa</span>l, closeProgresModal] = useBoolean(false);
-  const [resetMetricModalOpened, , openResetMetricModal, c<span class="cstat-no" title="statement not covered" >loseResetMetricModal] = useBoolean(f</span>alse);
-  const dispatch = useAppDispatch<span class="cstat-no" title="statement not covered" >();</span>
-  const [requestId, setReque<span class="cstat-no" title="statement not covered" >stId] = useState&lt;string&gt;('');</span>
-  const [internalEditing, setInternalEditing, setInternalEditingTrue, se<span class="cstat-no" title="statement not covered" >tInternalEditingFalse] = useBoolean(fa</span>lse);
-  const [refreshRequestId, setRefreshRequestId] = useState&lt;string&gt;('');<span class="cstat-no" title="statement not covered" ></span>
-  const updateRepor<span class="cstat-no" title="statement not covered" >tMetricResponse = useAppSelector(se</span>lectReviewAcceleratorReportMetric(requestId));
-  const refreshReportMetricResponse <span class="cstat-no" title="statement not covered" >= useAppSelector(selectRefreshA</span>cceleratorReportSystemMetrics(refreshRequestId));
+  const { isAcce<span class="cstat-no" title="statement not covered" >leratorRoute } = useAcceleratorC</span>onsole();
+  const { isFunderRoute } = useFunderPortal();<span class="cstat-no" title="statement not covered" ></span>
+  const [progressModalOpened, , o<span class="cstat-no" title="statement not covered" >penProgressModal, closeProgresModal] = useBo</span>olean(false);
+  const [resetMetricModalOpe<span class="cstat-no" title="statement not covered" >ned, , openResetMetricModal, closeRese</span>tMetricModal] = useBoolean(false);
+  const dispatch = useAppDispatch();<span class="cstat-no" title="statement not covered" ></span>
+  const [requestId, setRequestId] = useState&lt;string&gt;('');<span class="cstat-no" title="statement not covered" ></span>
+  const [internalEd<span class="cstat-no" title="statement not covered" >iting, setInternalEditing, setInter</span>nalEditingTrue, setInternalEditingFalse] = useBoolean(false);
+  const [refreshRequestId, setRefres<span class="cstat-no" title="statement not covered" >hRequestId] = useState&lt;string&gt;(</span>'');
+  const updateReportMetricResponse = useAppSelector(selectReviewAcceleratorReportMetric(requestId<span class="cstat-no" title="statement not covered" >));</span>
+  const refreshReportMetricResponse = useAppSelect<span class="cstat-no" title="statement not covered" >or(selectRefreshAcceleratorRepo</span>rtSystemMetrics(refreshRequestId));
   const snackbar = useSnackbar();<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
   useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-    if (JSON.stringify(record) !== JSO<span class="cstat-no" title="statement not covered" >N.stringify(metric)) {</span>
-      onChangeMetri<span class="cstat-no" title="statement not covered" >c?.(record, type);</span>
-<span class="cstat-no" title="statement not covered" >    }<span class="fstat-no" title="function not covered" ></span></span>
-  },<span class="cstat-no" title="statement not covered" > [metric, onChangeMetric, record, type]);</span>
-<span class="cstat-no" title="statement not covered" ></span>
-  useEffect(() =&gt; onEditChange?.(internalEditing), [internalEditing, onEditChange]);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-<span class="cstat-no" title="statement not covered" >    if (updateReportMetricResp<span class="fstat-no" title="function not covered" >on</span>se?.status === 'error') {</span>
-<span class="cstat-no" title="statement not covered" >      snackbar.toastError();</span>
-    } <span class="cstat-no" title="statement not covered" >else if (updateReportMe</span>tricResponse?.status === 'success') {
-      setIn<span class="cstat-no" title="statement not covered" >ternalEditing(false);</span>
-<span class="cstat-no" title="statement not covered" >      snackbar.toastSuccess(strin</span>gs.CHANGES_SAVED);
-<span class="cstat-no" title="statement not covered" >      reload?.();</span>
+<span class="cstat-no" title="statement not covered" >    if (JSON.stringify(record)<span class="fstat-no" title="function not covered" > !</span>== JSON.stringify(metric)) {</span>
+<span class="cstat-no" title="statement not covered" >      onChangeMetric?.(record, type);</span>
     }<span class="cstat-no" title="statement not covered" ></span>
-  }, [updateReportMetricResponse, snackbar, reload, setInternalEditing]);
+  }, [metric, onChangeMetric, record, type]);
 &nbsp;
-  const onChangeProgress = <span class="cstat-no" title="statement not covered" >useCallback(</span>
-<span class="fstat-no" title="function not covered" >    (n</span>ewValue: string) =&gt; {
-<span class="cstat-no" title="statement not covered" >      if (isStandardOrProjectMetric(record)) {</span>
-<span class="cstat-no" title="statement not covered" >        onChange('value', newValue);</span>
-      } else {
-<span class="cstat-no" title="statement not covered" >        onChange('overrideValue', newValue);</span>
-      }
-    },
-    [onChange, record]
-  );
+<span class="cstat-no" title="statement not covered" >  useEffect(() =&gt; onEditChange<span class="fstat-no" title="function not covered" >?.</span>(int<span class="cstat-no" title="statement not covered" >ernalEditing), [internalEditing, onEditChange]);</span></span>
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
   us<span class="cstat-no" title="statement not covered" >eEffect(() =&gt; {</span>
-    if<span class="cstat-no" title="statement not covered" > (refreshReportMetricRe</span>sponse?.status === 'error') {
+    if<span class="cstat-no" title="statement not covered" > (updateReportMetricRes</span>ponse?.status === 'error') {
       snack<span class="cstat-no" title="statement not covered" >bar.toastError();</span>
-    } <span class="cstat-no" title="statement not covered" >else if (refreshReportMet</span>ricResponse?.status === 'success') {
-<span class="cstat-no" title="statement not covered" >      closeResetMetricModal();</span>
+    } <span class="cstat-no" title="statement not covered" >else if (updateReportMetric</span>Response?.status === 'success') {
 <span class="cstat-no" title="statement not covered" >      setInternalEditing(false);</span>
-      if<span class="cstat-no" title="statement not covered" > (isReportSystemMetric(metric)) {</span>
-        onChangeProgress(metric.systemValue.toString());
-<span class="cstat-no" title="statement not covered" >      }</span>
 <span class="cstat-no" title="statement not covered" >      snackbar.toastSuccess(strings.CHANGE</span>S_SAVED);
+      reload?.();
+    }
+  }, [updateReportMetricRes<span class="cstat-no" title="statement not covered" >ponse, snackbar, reload, setInternalEditing]);</span>
+<span class="fstat-no" title="function not covered" ></span>
+  cons<span class="cstat-no" title="statement not covered" >t onChangeProgress = useCallback(</span>
+    (new<span class="cstat-no" title="statement not covered" >Value: string) =&gt; {</span>
+      if (isStandardOrProjectMetric(record)) {
+<span class="cstat-no" title="statement not covered" >        onChange('value', newValue);</span>
+      } else {
+        onChange('overrideValue', newValue);
+      }
+    },
+<span class="cstat-no" title="statement not covered" >    [onChange, record]<span class="fstat-no" title="function not covered" ></span></span>
+  );<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+  useEffect<span class="cstat-no" title="statement not covered" >(() =&gt; {</span>
+    if<span class="cstat-no" title="statement not covered" > (refreshReportMetricResp</span>onse?.status === 'error') {
+<span class="cstat-no" title="statement not covered" >      snackbar.toastError();</span>
+    } <span class="cstat-no" title="statement not covered" >else if (refreshReportMetricResponse?.status === 'success') {</span>
+      cl<span class="cstat-no" title="statement not covered" >oseResetMetricModal();</span>
+      setInternalEditing(false);
+<span class="cstat-no" title="statement not covered" >      if (isReportSystemMetric(metric)) {</span>
+<span class="cstat-no" title="statement not covered" >        onChangeProgress(metric.systemValu</span>e.toString());
+      }
+      snackbar.toastSuccess(strings.CHANGES_SAVED);
       reload?.();
     }
   }, [
@@ -994,16 +1006,16 @@ const MetricBox = ({<span class="cstat-no" title="statement not covered" ></span
     onChangeProgress,
     refreshReportMetricResponse,
     reload,
-    setInternalEditing,
-    snackbar,
-  ]);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" ></span>
+    setInternalEditing,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+    snackbar,<span class="cstat-no" title="statement not covered" ></span>
+  ]);
+&nbsp;
   const getUpdateBody = useCallback(() =&gt; {
     const baseMetric = {
-      projectsComments: record.projectsComments,
-      progressNotes: record.progressNotes,
-<span class="cstat-no" title="statement not covered" >      status: record.status,</span>
-    };<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >      projectsComments: record.projectsComments,</span>
+<span class="cstat-no" title="statement not covered" >      progressNotes: record.progressNotes,</span>
+      status: record.status,
+    };
     if (type === 'system' &amp;&amp; isReportSystemMetric(record)) {
       return {
         systemMetrics: [
@@ -1013,10 +1025,10 @@ const MetricBox = ({<span class="cstat-no" title="statement not covered" ></span
             overrideValue: record.overrideValue,
             ...baseMetric,
           },
-        ],
-        projectMetrics: [],
-        sta<span class="cstat-no" title="statement not covered" >ndardMetrics: [],</span>
-<span class="cstat-no" title="statement not covered" >      };</span>
+        ],<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >        projectMetrics: [],</span>
+        standardMetrics: [],
+      };
     } else if (type === 'standard' &amp;&amp; isStandardOrProjectMetric(record)) {
       return {
         standardMetrics: [
@@ -1026,10 +1038,10 @@ const MetricBox = ({<span class="cstat-no" title="statement not covered" ></span
             value: record.value,
             ...baseMetric,
           },
-        ],
-        systemMetrics: [],
-        pro<span class="cstat-no" title="statement not covered" >jectMetrics: [],</span>
-<span class="cstat-no" title="statement not covered" >      };</span>
+        ],<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >        systemMetrics: [],</span>
+        projectMetrics: [],
+      };
     } else if (type === 'project' &amp;&amp; isStandardOrProjectMetric(record)) {
       return {
         projectMetrics: [
@@ -1040,56 +1052,56 @@ const MetricBox = ({<span class="cstat-no" title="statement not covered" ></span
             ...baseMetric,
           },
         ],
-        standardMetrics: [],
+<span class="cstat-no" title="statement not covered" >        standardMetrics: [],</span>
         systemMetrics: [],
-<span class="cstat-no" title="statement not covered" >      };</span>
+      };
     }
     return {
       systemMetrics: [],
-      projectMetrics: [],
-      standardMetrics: [],
-    };<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  }, [record, type])<span class="cstat-no" title="statement not covered" >;</span>
+      projectMetr<span class="cstat-no" title="statement not covered" >ics: [],<span class="fstat-no" title="function not covered" ></span></span>
+      standardMetric<span class="cstat-no" title="statement not covered" >s: [],</span>
+    };
+  }, [record, type]);
 &nbsp;
   const onSave = useCallback(() =&gt; {
     const request = dispatch(
       requestReviewAcceleratorReportMetric({
-        metric: getUpdateBody(),
+<span class="cstat-no" title="statement not covered" >        metric: getUpdateBody(),</span>
         projectId: Number(projectId),
-<span class="cstat-no" title="statement not covered" >        reportId,</span>
-      })
-    );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >    setRequestId(request.requestId);</span>
-  }, [<span class="cstat-no" title="statement not covered" >dispatch, getUpdateBo</span>dy, projectId, reportId]);
+        reportId,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >      })</span>
+    );<span class="cstat-no" title="statement not covered" ></span>
+    setRequestId(request.requestId);
+  }, [<span class="cstat-no" title="statement not covered" >dispatch, getUpdateBody, projectId, reportId]);</span>
 &nbsp;
-  cons<span class="cstat-no" title="statement not covered" >t getProgressValue = () =&gt; {</span>
-    if (isStandardOrProjectMetric(record)) {
-      return record.value;
-    } else {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >      return record.overrideValue || record.systemValue;</span>
+  const getProgressValue = () =&gt; {
+    if (isStandardOrProj<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ec</span>tMetric(record)) {</span>
+<span class="cstat-no" title="statement not covered" >      return record.value;</span>
+    } <span class="cstat-no" title="statement not covered" >else {</span>
+      return record.overrideValue || record.systemValue;
     }<span class="cstat-no" title="statement not covered" ></span>
   };
-<span class="cstat-no" title="statement not covered" ></span>
-  const getMetricName = () =&gt; {
-    if (isStandardOrProjectMetric(metric)) {
-      return metric.name;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >    } else {</span>
-      return metric.me<span class="cstat-no" title="statement not covered" >tric;</span>
+&nbsp;
+  const getMetricName = () =&gt; {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    if (isStandardOrProjectMetric(metric)) {</span>
+      return metric.na<span class="cstat-no" title="statement not covered" >me;</span>
+    } else {
+      return metric.metric;
     }
   };
 &nbsp;
   const onResetMetricHandler = useCallback(() =&gt; {
-    if (isReportSystemMetric(metric)) {
+    if<span class="cstat-no" title="statement not covered" > (isReportSystemMetric(metric)) {</span>
       const request = dispatch(
-<span class="cstat-no" title="statement not covered" >        requestRefreshAcceleratorReportSystemM</span>etrics({
-          reportId,
-          projectId: Number(projectId),
-          metricName<span class="cstat-no" title="statement not covered" >: metric.metric,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-        })<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >      );</span>
-<span class="cstat-no" title="statement not covered" >      setRefreshRequestId(reque</span>st.requestId);
+        requestRefreshAcceleratorReportSystemMetrics({
+          reportId,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+          projectId: Nu<span class="cstat-no" title="statement not covered" >mber(projectId),<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >          metricName: m</span>etric.metric,
+<span class="cstat-no" title="statement not covered" >        })</span>
+      );
+<span class="cstat-no" title="statement not covered" >      setRefreshRequestId(request.requestId);</span>
     }
-<span class="cstat-no" title="statement not covered" >  }, [dispatch, metric, projectId, reportId]);</span>
+  }, [dispatch, metric, projectId, reportId]);
 &nbsp;
   const isEditing = useMemo(() =&gt; editing || internalEditing, [editing, internalEditing]);
 &nbsp;
@@ -1129,7 +1141,7 @@ const MetricBox = ({<span class="cstat-no" title="statement not covered" ></span
               &lt;/Typography&gt;
               &lt;Box display={'flex'} alignItems={'center'} paddingTop={1.5} paddingBottom={theme.spacing(2)}&gt;
                 &lt;Typography&gt;
-                  {getProgressValue() || 0} / {record.target} ({strings.TARGET})
+                  {getProgressValue() || 0} / {yearTarget || 0} ({year} {strings.TARGET})
                 &lt;/Typography&gt;
                 {!metric.overrideValue &amp;&amp; (
                   &lt;Box paddingTop={1} paddingLeft={1.5}&gt;
@@ -1186,12 +1198,12 @@ const MetricBox = ({<span class="cstat-no" title="statement not covered" ></span
                   min={0}
                 /&gt;
                 &lt;Typography paddingTop={3} paddingLeft={0.5}&gt;
-                  / {record.target} ({strings.TARGET})
+                  / {yearTarget || 0} ({year} {strings.TARGET})
                 &lt;/Typography&gt;
                 {'unit' in record &amp;&amp; record.unit &amp;&amp; (
-                  &lt;Box paddingLeft={theme.spacing(3)}&gt;
+                  &lt;B<span class="cstat-no" title="statement not covered" >ox padding</span>Left={theme.spacing(3)}&gt;
                     &lt;Textfield type='text' label={strings.UNIT} value={record.unit} id={'unit'} display={true} /&gt;
-                  &lt;/<span class="cstat-no" title="statement not covered" >Box&gt;</span>
+                  &lt;/Box&gt;
                 )}
               &lt;/Box&gt;
             )
@@ -1270,7 +1282,7 @@ export default MetricBox;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-04T21:04:23.598Z
+                at 2026-02-05T18:38:56.019Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/109</span>
+                <span class='fraction'>0/111</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/105</span>
+                <span class='fraction'>0/107</span>
             </div>
         
             
@@ -300,7 +300,11 @@
 <a name='L235'></a><a href='#L235'>235</a>
 <a name='L236'></a><a href='#L236'>236</a>
 <a name='L237'></a><a href='#L237'>237</a>
-<a name='L238'></a><a href='#L238'>238</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L238'></a><a href='#L238'>238</a>
+<a name='L239'></a><a href='#L239'>239</a>
+<a name='L240'></a><a href='#L240'>240</a>
+<a name='L241'></a><a href='#L241'>241</a>
+<a name='L242'></a><a href='#L242'>242</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -380,6 +384,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -500,6 +506,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -560,59 +568,61 @@ import TitleBar from 'src/components/common/TitleBar';
 import { APP_PATHS } from 'src/constants';
 import useBoolean from 'src/hooks/useBoolean';
 import useNavigateTo from 'src/hooks/useNavigateTo';
+import useProjectReports from 'src/hooks/useProjectReports';
 import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
-import { selectAcceleratorReport, selectSubmitAcceleratorReport } from 'src/redux/features/reports/reportsSelectors';
-import { requestAcc<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >el</span>eratorR<span class="cstat-no" title="statement not covered" >eport, requestSubmitAcceleratorReport } from 'src/redux/feature</span></span>s/reports/reportsThunks';
-import { useAppDispa<span class="cstat-no" title="statement not covered" >tch</span>, useAppSelector } from 'src/redux/store';
-<span class="cstat-no" title="statement not covered" >import strings from 'src/strings';</span>
-import { Ac<span class="fstat-no" title="function not covered" >ce</span>lera<span class="cstat-no" title="statement not covered" >torReport, Met</span>ricType } from 'src/types/AcceleratorReport';
-import useSnackbar from 'src/utils/useSnackbar';
+import { selectAcce<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >le</span>ratorRe<span class="cstat-no" title="statement not covered" >port, selectSubmitAcceleratorReport } from 'src/redux/features/</span></span>reports/reportsSelectors';
+import { requestAcce<span class="cstat-no" title="statement not covered" >ler</span>atorReport, requestSubmitAcceleratorReport } from 'src/redux/features/reports/reportsThunks';
+<span class="cstat-no" title="statement not covered" >import { useAppDispatch, useAppSelector } from 'src/redux/store';</span>
+import stri<span class="fstat-no" title="function not covered" >ng</span>s fr<span class="cstat-no" title="statement not covered" >om 'src/string</span>s';
+import { AcceleratorReport, MetricType } from 'src/types/AcceleratorReport';
+<span class="cstat-no" title="statement not covered" >import useSnackbar from 'src/utils/useSnackbar</span>';
 <span class="cstat-no" title="statement not covered" ></span>
-import SubmitReport<span class="cstat-no" title="statement not covered" >Dialog from './SubmitRepor</span>tDialog';
+import SubmitReportDialog <span class="cstat-no" title="statement not covered" >from './SubmitReportDial</span>og';
 <span class="cstat-no" title="statement not covered" ></span>
-const AcceleratorRepor<span class="cstat-no" title="statement not covered" >tView = () =&gt; {</span>
-  const { activeLocale } = u<span class="cstat-no" title="statement not covered" >seLocalization();</span>
-  const { currentParticipantProject, setCu<span class="cstat-no" title="statement not covered" >rrentParticipantProject } = useParticipantData();</span>
+const AcceleratorReportView <span class="cstat-no" title="statement not covered" >= () =&gt; {</span>
+  const { activeLocale } = useLocalization<span class="cstat-no" title="statement not covered" >();</span>
+  const { currentParticipantP<span class="cstat-no" title="statement not covered" >roject, setCurrentParticipantProject } = useParticipantData();</span>
   const theme = useTheme();<span class="cstat-no" title="statement not covered" ></span>
   const dispatch = useAppDispatch()<span class="cstat-no" title="statement not covered" >;</span>
   const snackbar = useSnackbar();<span class="cstat-no" title="statement not covered" ></span>
-  const { goToAcceleratorReportEdit }<span class="cstat-no" title="statement not covered" > = useNavigateTo();</span>
+  const { goToAcceleratorReportEd<span class="cstat-no" title="statement not covered" >it } = useNavigateTo();</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const pathParams = usePar<span class="cstat-no" title="statement not covered" >ams&lt;{ projectId: string; reportId: string }&gt;();</span>
+  const pathParams = us<span class="cstat-no" title="statement not covered" >eParams&lt;{ projectId: string; reportId: string }&gt;();</span>
   const reportId = Stri<span class="cstat-no" title="statement not covered" >ng(pathParams.reportId);</span>
-  const projectId = Str<span class="cstat-no" title="statement not covered" >ing(pathParams.projectId);</span>
+  const projectId = String(pathPara<span class="cstat-no" title="statement not covered" >ms.projectId);</span>
 <span class="cstat-no" title="statement not covered" ></span>
   const [requestId<span class="cstat-no" title="statement not covered" >, setRequestId] = useState&lt;string&gt;('');</span>
-  const [submitRep<span class="cstat-no" title="statement not covered" >ortRequestId, setSubmitReportRequestId] = useSt</span>ate&lt;string&gt;('');
-  const [report, setRe<span class="cstat-no" title="statement not covered" >port] = useState&lt;AcceleratorReport&gt;();</span>
-  const [showApproveDia<span class="cstat-no" title="statement not covered" >log, , openApprovalDialog</span>, closeApproveDialog] = useBoolean(false);
+  const [submitReportR<span class="cstat-no" title="statement not covered" >equestId, setSubmitReportRequestId] = useState&lt;stri</span>ng&gt;('');
+  const [report, setRep<span class="cstat-no" title="statement not covered" >ort] = useState&lt;Accelerat</span>orReport&gt;();
+  const [showApproveDial<span class="cstat-no" title="statement not covered" >og, , openApprovalDialog, closeApproveDia</span>log] = useBoolean(false);
 <span class="cstat-no" title="statement not covered" ></span>
-  const getReportResults = <span class="cstat-no" title="statement not covered" >useAppSelector(selectAcceleratorReport(reque</span>stId));
+  const getReportResults = useA<span class="cstat-no" title="statement not covered" >ppSelector(selectAcceleratorReport(requestId));</span>
   const submitReportRes<span class="cstat-no" title="statement not covered" >ults = useAppSelector(sel</span>ectSubmitAcceleratorReport(submitReportRequestId));
+  const { getYearTarget } = useP<span class="cstat-no" title="statement not covered" >rojectReports(projectId, true, true);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const reload = useCallback((<span class="cstat-no" title="statement not covered" >) =&gt; {</span>
-    if (projectId) {<span class="cstat-no" title="statement not covered" ></span>
-      const request<span class="cstat-no" title="statement not covered" > = dispatch(requestAccelera</span>torReport({ projectId, reportId, includeMetrics: true }));
-      setRequestId(re<span class="cstat-no" title="statement not covered" >quest.requestId);</span>
+  const reload = useCallbac<span class="cstat-no" title="statement not covered" >k(() =&gt; {</span>
+    if (projectId) <span class="cstat-no" title="statement not covered" >{</span>
+      const request =<span class="cstat-no" title="statement not covered" > dispatch(requestAcceleratorRepo</span>rt({ projectId, reportId, includeMetrics: true }));
+      setRequestId(reques<span class="cstat-no" title="statement not covered" >t.requestId);</span>
     }<span class="cstat-no" title="statement not covered" ></span>
-  }, [projectId, dispatch, repor<span class="cstat-no" title="statement not covered" >tId]);</span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  }, [projectId, dispatch, rep<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >or</span>tId]);</span>
+<span class="cstat-no" title="statement not covered" ></span>
   useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-    if (projectId !== currentParticipantProject?.id?.toString()) {<span class="cstat-no" title="statement not covered" ></span>
-      setCurrent<span class="cstat-no" title="statement not covered" >ParticipantProject(projectId);</span>
+    if (projectI<span class="cstat-no" title="statement not covered" >d !== currentParticipantProject?</span>.id?.toString()) {
+      setCurrentPar<span class="cstat-no" title="statement not covered" >ticipantProject(projectId);</span>
     }<span class="cstat-no" title="statement not covered" ></span>
-  }, [currentPartic<span class="cstat-no" title="statement not covered" >ipantProject?.id, projectId, setCu</span>rrentParticipantProject]);
+  }, [currentParticipantProject?.id, pro<span class="cstat-no" title="statement not covered" >jectId, setCurrentParticipantProject</span>]);
 <span class="cstat-no" title="statement not covered" ></span>
   useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
     reload();<span class="cstat-no" title="statement not covered" ></span>
   }, [reload]);<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
   useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-    if (getReportResults?.stat<span class="cstat-no" title="statement not covered" >us === 'error') {</span>
+    if (getReportResults?.status === 'error') {<span class="cstat-no" title="statement not covered" ></span>
       return;<span class="cstat-no" title="statement not covered" ></span>
     }<span class="cstat-no" title="statement not covered" ></span>
-    if (getReportResults?.data<span class="cstat-no" title="statement not covered" >) {</span>
+    if (getReportResults?.da<span class="cstat-no" title="statement not covered" >ta) {</span>
       setReport(g<span class="cstat-no" title="statement not covered" >etReportResults.data);<span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >    }</span>
   }, [getReportResults<span class="cstat-no" title="statement not covered" >]);</span>
@@ -756,8 +766,10 @@ const AcceleratorRepor<span class="cstat-no" title="statement not covered" >tVie
                   metric={metric}
                   projectId={projectId}
                   reload={reload}
-                  re<span class="cstat-no" title="statement not covered" >portId={Number(reportI</span>d)}
+                  reportId={Number(reportId)}
                   type={type as MetricType}
+                  ye<span class="cstat-no" title="statement not covered" >ar={year}</span>
+                  yearTarget={getYearTarget(metric, type as MetricType, year)}
                 /&gt;
               ));
             })}
@@ -781,7 +793,7 @@ export default AcceleratorReportView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-04T21:04:23.598Z
+                at 2026-02-05T18:38:56.019Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

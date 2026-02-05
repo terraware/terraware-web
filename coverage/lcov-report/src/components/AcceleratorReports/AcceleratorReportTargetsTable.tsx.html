@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/124</span>
+                <span class='fraction'>0/122</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/28</span>
+                <span class='fraction'>0/27</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/116</span>
+                <span class='fraction'>0/114</span>
             </div>
         
             
@@ -343,11 +343,7 @@
 <a name='L278'></a><a href='#L278'>278</a>
 <a name='L279'></a><a href='#L279'>279</a>
 <a name='L280'></a><a href='#L280'>280</a>
-<a name='L281'></a><a href='#L281'>281</a>
-<a name='L282'></a><a href='#L282'>282</a>
-<a name='L283'></a><a href='#L283'>283</a>
-<a name='L284'></a><a href='#L284'>284</a>
-<a name='L285'></a><a href='#L285'>285</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L281'></a><a href='#L281'>281</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -390,7 +386,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -575,7 +570,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -590,8 +584,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -636,37 +628,36 @@ import { usePara<span class="cstat-no" title="statement not covered" >ms } from 
 <span class="cstat-no" title="statement not covered" ></span>
 import { EditableTable, <span class="cstat-no" title="statement not covered" >EditableTableColumn } from </span>'@terraware/web-components';
 import { DateTime }<span class="cstat-no" title="statement not covered" > from 'luxon';</span>
-import { MRT_TableI<span class="cstat-no" title="statement not covered" >nstance, MRT_ToggleDensePaddingB</span>utton } from 'material-react-table';
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-im<span class="cstat-no" title="statement not covered" >port useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';</span>
-impo<span class="cstat-no" title="statement not covered" >rt useProjectReports from 'src/hooks/useProjectReports';</span>
-import { useOrganization, useUser } from 'src/providers';
-import { usePartic<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ip</span>antData } from 'src/providers/Participant/ParticipantContext';</span>
-im<span class="cstat-no" title="statement not covered" >port { useUpdateProjectMetricTargetsMutation } from 'src/queries/generated/reports';</span>
-impo<span class="cstat-no" title="statement not covered" >rt strings from 'src/strings';</span>
-import<span class="cstat-no" title="statement not covered" > { MetricType, SystemMetricName } from 'src/types/AcceleratorReport';</span>
-import {<span class="cstat-no" title="statement not covered" > UpdateProjectMetricTarget<span class="fstat-no" title="function not covered" >s,</span> Upd<span class="cstat-no" title="statement not covered" >ateStandar</span>dMetricTargets, UpdateSystemMetricTargets } from 'src/types/Report';</span>
-import useSnackbar from 'src/utils/useSnackbar';
 <span class="cstat-no" title="statement not covered" ></span>
-export type RowMetric = {
-  name: string<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >;<span class="cstat-no" title="statement not covered" ></span></span></span>
-  description?: string;
+import useAccel<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >er</span>atorConsole from 'src/hooks/useAcceleratorConsole';</span>
+im<span class="cstat-no" title="statement not covered" >port useProjectReports from 'src/hooks/useProjectReports';</span>
+impo<span class="cstat-no" title="statement not covered" >rt { useOrganization, useUser } from 'src/providers';</span>
+import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
+import { useUpdate<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Pr</span>ojectMetricTargetsMutation } from 'src/queries/generated/reports';</span>
+im<span class="cstat-no" title="statement not covered" >port strings from 'src/strings';</span>
+impo<span class="cstat-no" title="statement not covered" >rt { MetricType, SystemMetricName } from 'src/types/AcceleratorReport';</span>
+import<span class="cstat-no" title="statement not covered" > { UpdateProjectMetricTargets, UpdateStandardMetricTargets, UpdateSystemMetricTargets } from 'src/types/Report';</span>
+import u<span class="cstat-no" title="statement not covered" >seSnackbar from 'src/utils<span class="fstat-no" title="function not covered" >/u</span>seSn<span class="cstat-no" title="statement not covered" >ackbar';</span></span>
+&nbsp;
+ex<span class="cstat-no" title="statement not covered" >port type R</span>owMetric = {
+  name: string;
+  description?<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >: </span>string;<span class="cstat-no" title="statement not covered" ></span></span>
   type: string;
   component: string;
   id: number;
   metricType: MetricType;
   [key: string]: string | number | undefined;
 };
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-export default funct<span class="cstat-no" title="statement not covered" >ion</span> AcceleratorReportTargetsTable(): JSX.Element {
-<span class="cstat-no" title="statement not covered" >  const { isAcceleratorRoute } = useAcceleratorConsole();</span>
-  const { c<span class="fstat-no" title="function not covered" >ur</span>rent<span class="cstat-no" title="statement not covered" >ParticipantProject } = usePart</span>icipantData();
-  const { isAllowed } = useUser();
-<span class="cstat-no" title="statement not covered" >  const { selectedOrganization } = useOrganiza</span>tion();
-  const pathParams <span class="cstat-no" title="statement not covered" >= useParams&lt;{ projectId: s</span>tring }&gt;();
-  const projectId = isAcce<span class="cstat-no" title="statement not covered" >leratorRoute ? String(pa</span>thParams.projectId) : currentParticipantProject?.id?.toString();
-  const [metricsToUse, setMe<span class="cstat-no" title="statement not covered" >tricsToUse] = useState&lt;RowMetric[]&gt;()</span>;
-  const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
+&nbsp;
+export default func<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ti</span>on Acce<span class="cstat-no" title="statement not covered" >leratorReportTargetsTable(): JSX.Element {</span></span>
+  const { isAccelera<span class="cstat-no" title="statement not covered" >tor</span>Route } = useAcceleratorConsole();
+<span class="cstat-no" title="statement not covered" >  const { currentParticipantProject } = useParticipantData();</span>
+  const { i<span class="fstat-no" title="function not covered" >sA</span>llow<span class="cstat-no" title="statement not covered" >ed } = useUser();</span>
+  const { selectedOrganization } = useOrganization();
+<span class="cstat-no" title="statement not covered" >  const pathParams = useParams&lt;{ projectId: st</span>ring }&gt;();
+  const projectId =<span class="cstat-no" title="statement not covered" > isAcceleratorRoute ? Stri</span>ng(pathParams.projectId) : currentParticipantProject?.id?.toString();
+  const [metricsToUse, set<span class="cstat-no" title="statement not covered" >MetricsToUse] = useState</span>&lt;RowMetric[]&gt;();
+  const snackbar = useSnackb<span class="cstat-no" title="statement not covered" >ar();</span>
 <span class="cstat-no" title="statement not covered" ></span>
   const { reload, acceleratorReport<span class="cstat-no" title="statement not covered" >s: reports } = useProjectReports(projectId, true, tr</span>ue);
   const [updateMetricTargets] =<span class="cstat-no" title="statement not covered" > useUpdateProjectMetricTargetsMutation();</span>
@@ -875,17 +866,13 @@ export default funct<span class="cstat-no" title="statement not covered" >ion</s
       enableColumnFilters={true}
       enablePagination={true}
       enableColumnPinning={true}
-      initialSorting={[{ id: 'name', d<span class="fstat-no" title="function not covered" >es</span>c: false }]}<span class="cstat-no" title="statement not covered" ></span>
+      enableTopToolbar={false}
+      initialSorting={[{ id: 'name', desc: false }]}
       tableOptions={{
         enableColumnActions: false,
         enableHiding: false,
         enableColumnDragging: false,
         enableColumnOrdering: false,
-        renderToolbarInternalActions: ({ table }: { table: MRT_TableInstance&lt;RowMetric&gt; }) =&gt; (
-          &lt;&gt;
-            &lt;MRT_ToggleDensePaddingButton table={table} /&gt;
-          &lt;/&gt;
-        ),
         state: {
           columnOrder,
         },
@@ -906,6 +893,7 @@ export default funct<span class="cstat-no" title="statement not covered" >ion</s
           width: '100%',
           maxWidth: '100%',
           borderRadius: '24px',
+          paddingTop: '12px',
         },
         '&amp; .MuiTableContainer-root': {
           maxWidth: '100%',
@@ -922,7 +910,7 @@ export default funct<span class="cstat-no" title="statement not covered" >ion</s
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-04T21:04:23.598Z
+                at 2026-02-05T18:38:56.019Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

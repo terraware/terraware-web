@@ -174,7 +174,8 @@
 <a name='L109'></a><a href='#L109'>109</a>
 <a name='L110'></a><a href='#L110'>110</a>
 <a name='L111'></a><a href='#L111'>111</a>
-<a name='L112'></a><a href='#L112'>112</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L112'></a><a href='#L112'>112</a>
+<a name='L113'></a><a href='#L113'>113</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -263,6 +264,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -303,46 +305,47 @@ type<span class="cstat-no" title="statement not covered" > MetricBoxProps = {</s
   year: string;
 <span class="cstat-no" title="statement not covered" >  quarter?: s</span>tring;
   length: number;
-};<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  yearTarget?:<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > n</span>umber;<span class="cstat-no" title="statement not covered" ></span></span>
+};
 &nbsp;
-const MetricBox = ({ metric, index, year, quarter, length }: MetricBoxProps) =&gt; {
+const MetricBox = ({ metric, index, year, quarter, length, yearTarget }: MetricBoxProps) =&gt; {
   const { isDesktop, isMobile } = useDeviceInfo();
   const theme = useTheme();
   const numberFormatter = useNumberFormatter();
   const addPercentSign = useMemo(() =&gt; {
-    return metric.name === 'Survival Rate' ? '%' : '';
-  }, [metric]);<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+    return metric.n<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >am</span>e === '<span class="cstat-no" title="statement not covered" >Survival Rate' ? '%' : '';</span></span>
+  }, [metric]);<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  const showRow = useMemo(() =&gt; {</span>
-    if (!is<span class="fstat-no" title="function not covered" >De</span>skto<span class="cstat-no" title="statement not covered" >p) {</span>
-      return index !== length - 1;
-<span class="cstat-no" title="statement not covered" >    }</span>
-<span class="cstat-no" title="statement not covered" ></span>
-    const isEven = len<span class="cstat-no" title="statement not covered" >gth % 2 === 0;</span>
-    if (isEven) {<span class="cstat-no" title="statement not covered" ></span>
-      return index <span class="cstat-no" title="statement not covered" >&lt; length - 2;</span>
+  const sho<span class="fstat-no" title="function not covered" >wR</span>ow =<span class="cstat-no" title="statement not covered" > useMemo(() =&gt;</span> {
+    if (!isDesktop) {
+<span class="cstat-no" title="statement not covered" >      return index !== length - 1;</span>
     }<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-    return index &lt; le<span class="cstat-no" title="statement not covered" >ngth - 1;</span>
-  }, [isDesktop, index, length])<span class="cstat-no" title="statement not covered" >;</span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+    const isEven = length % <span class="cstat-no" title="statement not covered" >2 === 0;</span>
+    if (isEven) {<span class="cstat-no" title="statement not covered" ></span>
+      return index &lt; le<span class="cstat-no" title="statement not covered" >ngth - 2;</span>
+    }<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+    return index &lt; length - 1;<span class="cstat-no" title="statement not covered" ></span>
+  }, [isDesktop, i<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >nd</span>ex, length]);</span>
+<span class="cstat-no" title="statement not covered" ></span>
   return (<span class="cstat-no" title="statement not covered" ></span>
     &lt;Box<span class="cstat-no" title="statement not covered" ></span>
-      flexBasis={'calc(50%<span class="cstat-no" title="statement not covered" > - 24px)'}</span>
-      flexShrink={0}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >      marginTop={3}</span>
-      borderBottom={showRow ? `1px solid ${theme.palette.TwClrBrdrTertiary}` : 'none'}
-      paddingBotto<span class="cstat-no" title="statement not covered" >m={3}<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >    &gt;</span>
-<span class="cstat-no" title="statement not covered" >      &lt;Box display={isMobile ? 'blo</span>ck' : 'flex'} alignItems={'center'} paddingRight={isDesktop ? 3 : 0} marginRight={3}&gt;
-        &lt;Box display={'flex'} alignItems={'center'} marginBottom={isMobile ? 1 : 0}&gt;
-          &lt;Typograp<span class="cstat-no" title="statement not covered" >hy fontSize='20px</span>' fontWeight={600} paddingRight={'10px'}&gt;
-<span class="cstat-no" title="statement not covered" >            {isReportSystemMetric(metric) ? metric.metric : metric.name}</span>
-<span class="cstat-no" title="statement not covered" >          &lt;/Typography&gt;</span>
-          {metric.description &amp;&amp; (
-<span class="cstat-no" title="statement not covered" >            &lt;Tooltip title={met</span>ric.description}&gt;
-              &lt;Box display='flex'&gt;
-<span class="cstat-no" title="statement not covered" >                &lt;Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' style={{ marginRight: '10px' }} /&gt;</span>
+      flexBasis={'calc(50<span class="cstat-no" title="statement not covered" >% - 24px)'}<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >      flexShrink={0}</span>
+      marginTop={3}
+      borderBottom<span class="cstat-no" title="statement not covered" >={showRow ? `1px solid ${t<span class="fstat-no" title="function not covered" >he</span>me.palette.TwClrBrdrTertiary}` : 'none'}</span>
+<span class="cstat-no" title="statement not covered" >      paddingBottom={3}</span>
+    &gt;<span class="cstat-no" title="statement not covered" ></span>
+      &lt;Box display={isMobile ? 'block' : 'flex'} alignItems={'center'} paddingRight={isDesktop ? 3 : 0} marginRight={3}&gt;
+        &lt;Box displa<span class="cstat-no" title="statement not covered" >y={'flex'} alignI</span>tems={'center'} marginBottom={isMobile ? 1 : 0}&gt;
+<span class="cstat-no" title="statement not covered" >          &lt;Typography fontSize='20px' fontWeight={600} paddingRight={'10px'}&gt;</span>
+<span class="cstat-no" title="statement not covered" >            {isReportSystemMetric</span>(metric) ? metric.metric : metric.name}
+          &lt;/Typography&gt;
+<span class="cstat-no" title="statement not covered" >          {metric.description &amp;</span>&amp; (
+            &lt;Tooltip title={metric.description}&gt;
+<span class="cstat-no" title="statement not covered" >              &lt;Box display='flex'&gt;</span>
+                &lt;Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' style={{ marginRight: '10px' }} /&gt;
               &lt;/Box&gt;
             &lt;/Tooltip&gt;
           )}
@@ -352,11 +355,11 @@ const MetricBox = ({ metric, index, year, quarter, length }: MetricBoxProps) =&g
       &lt;Box display='flex' marginTop={1} paddingRight={isDesktop ? 3 : 0} marginRight={3}&gt;
         &lt;Box flex='0 0 50%'&gt;
           &lt;Typography fontWeight={600}&gt;
-            {quarter} {year} {strings.TARGET}
+            {year} {strings.TARGET}
           &lt;/Typography&gt;
           &lt;Typography fontSize={'24px'} fontWeight={600}&gt;
-            {metric.target !== undefined &amp;&amp; numberFormatter.format(metric.target)} {metric.target ? addPercentSign : ''}
-            {metric.target !== undefined ? metric.unit : ''}
+            {yearTarget !== undefined &amp;&amp; numberFormatter.format(yearTarget)} {yearTarget ? addPercentSign : ''}
+            {yearTarget !== undefined ? metric.unit : ''}
           &lt;/Typography&gt;
         &lt;/Box&gt;
         &lt;Box flex='0 0 50%'&gt;
@@ -372,8 +375,8 @@ const MetricBox = ({ metric, index, year, quarter, length }: MetricBoxProps) =&g
       {'progressNotes' in metric &amp;&amp; (
         &lt;Box paddingRight={isDesktop ? 3 : 0} marginRight={3}&gt;
           &lt;Typography fontWeight={600} fontSize='16px' marginTop={1}&gt;
-            {strings.PROGRESS_NOTES}
-          &lt;/Typograp<span class="cstat-no" title="statement not covered" >hy&gt;</span>
+            {strings<span class="cstat-no" title="statement not covered" >.PROGRESS_</span>NOTES}
+          &lt;/Typography&gt;
           &lt;Textfield
             display
             preserveNewlines
@@ -403,7 +406,7 @@ export default MetricBox;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-04T21:04:23.598Z
+                at 2026-02-05T18:38:56.019Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
