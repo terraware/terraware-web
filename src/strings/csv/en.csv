@@ -721,6 +721,7 @@ FIFTY_TO_SEVENTY_FIVE_PERCENT,50% to 75%,
 FILE_NAME,File Name,
 FILE_NAMING,File Naming,Describes a piece of text that is used when naming new files; this isn't just the name of a particular file.
 FILE_SELECTED,File Selected,
+FILE_TOO_LARGE,File {0} too large. Maximum size is {1}MB.,
 FILTER,Filter,
 FILTER_BY_PROJECT,Filter by Project,
 FILTER_SHOW_EMPTY_BATCHES,Show Empty Batches,
