@@ -1,7 +1,8 @@
-import React, { type JSX, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Icon, Tooltip } from '@terraware/web-components';
+import { ChartTypeRegistry, TooltipItem } from 'chart.js';
 
 import BarChart from 'src/components/common/Chart/BarChart';
 import PieChart from 'src/components/common/Chart/PieChart';
@@ -13,6 +14,7 @@ import { selectPlantingsForSite } from 'src/redux/features/plantings/plantingsSe
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { truncate } from 'src/utils/text';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 const MAX_SPECIES_NAME_LENGTH = 20;
 
@@ -215,6 +217,16 @@ const ChartData = ({
   newVersion,
 }: ChartDataProps): JSX.Element | undefined => {
   const theme = useTheme();
+  const numberFormatter = useNumberFormatter();
+
+  const tooltipRenderer = useCallback(
+    (tooltipItem: TooltipItem<keyof ChartTypeRegistry>) => {
+      const rawValue = tooltipItem.dataset.data[tooltipItem.dataIndex];
+      const numValue = typeof rawValue === 'number' ? rawValue : parseFloat(rawValue?.toString() || '0');
+      return numberFormatter.format(numValue);
+    },
+    [numberFormatter]
+  );
 
   const chartData = useMemo(() => {
     return {
@@ -248,6 +260,7 @@ const ChartData = ({
           key={`${plantingSiteId}_${values?.length}`}
           chartId='plantsBySpecies'
           chartData={chartData}
+          customTooltipLabel={tooltipRenderer}
           maxWidth='100%'
           pluginsOptions={{
             emptyDoughnut: {
@@ -273,6 +286,7 @@ const ChartData = ({
               elementColor={theme.palette.TwClrBasePurple300}
               chartId='plantsBySpecies'
               chartData={chartData}
+              customTooltipLabel={tooltipRenderer}
               customTooltipTitles={tooltipTitles}
               maxWidth='100%'
               minHeight='127px'
