@@ -157,13 +157,15 @@ const VirtualMonitoringPlot = ({ observationId, fileId, annotations = [] }: Virt
             enableFly={!(isEdit && selectedAnnotationIndex >= 0)}
           />
         </Entity>
-        {!isEdit && (
-          <>
-            <Script script={XrControllers} />
-            <Script script={TfXrNavigation} enableTeleport={false} />
-            <Script script={AutoRotator} enabled={autoRotate} startDelay={0.5} restartDelay={3} startFadeInTime={0.5} />
-          </>
-        )}
+        <Script script={XrControllers} enabled={!isEdit} />
+        <Script script={TfXrNavigation} enabled={!isEdit} enableTeleport={false} />
+        <Script
+          script={AutoRotator}
+          enabled={!isEdit && autoRotate}
+          startDelay={0.5}
+          restartDelay={3}
+          startFadeInTime={0.5}
+        />
       </Entity>
 
       {splatModel}
