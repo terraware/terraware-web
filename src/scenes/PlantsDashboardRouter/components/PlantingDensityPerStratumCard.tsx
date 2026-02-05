@@ -1,22 +1,40 @@
-import React, { type JSX, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, useTheme } from '@mui/material';
+import { ChartTypeRegistry, TooltipItem } from 'chart.js';
 
 import BarChart from 'src/components/common/Chart/BarChart';
 import { ChartDataset } from 'src/components/common/Chart/Chart';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import strings from 'src/strings';
 import { truncate } from 'src/utils/text';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 const MAX_STRATUM_NAME_LENGTH = 20;
 
 export default function PlantingDensityPerStratumCard(): JSX.Element {
   const theme = useTheme();
+  const numberFormatter = useNumberFormatter();
   const { plantingSite, observationSummaries } = usePlantingSiteData();
   const [labels, setLabels] = useState<string[]>();
   const [targets, setTargets] = useState<(number | null)[]>();
   const [actuals, setActuals] = useState<(number | null)[]>();
   const [tooltipTitles, setTooltipTitles] = useState<string[]>();
+
+  const tooltipRenderer = useCallback(
+    (tooltipItem: TooltipItem<keyof ChartTypeRegistry>) => {
+      const v = tooltipItem.dataset.data[tooltipItem.dataIndex];
+      if (Array.isArray(v)) {
+        const numValue = typeof v[0] === 'number' ? v[0] : parseFloat(String(v[0]) || '0');
+        return numberFormatter.format(numValue);
+      } else if (v !== null && v !== undefined) {
+        const numValue = typeof v === 'number' ? v : parseFloat(String(v) || '0');
+        return numberFormatter.format(numValue);
+      }
+      return '';
+    },
+    [numberFormatter]
+  );
 
   useEffect(() => {
     if (plantingSite) {
@@ -98,13 +116,9 @@ export default function PlantingDensityPerStratumCard(): JSX.Element {
             },
             y: { grace: '20%' },
           }}
-          customTooltipLabel={(tooltipItem) => {
-            const v = tooltipItem.dataset.data[tooltipItem.dataIndex];
-            // eslint-disable-next-line @typescript-eslint/no-base-to-string
-            return Array.isArray(v) ? v[0].toString() : v ? v.toString() : '';
-          }}
           customLegend
           customLegendContainerId='legend-container-density'
+          customTooltipLabel={tooltipRenderer}
         />
       </Box>
     </Box>
