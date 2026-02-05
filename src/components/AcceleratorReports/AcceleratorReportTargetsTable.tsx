@@ -34,6 +34,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
   const [metricsToUse, setMetricsToUse] = useState<RowMetric[]>();
   const snackbar = useSnackbar();
 
+  // TODO, replace with RTK Query once targets are moved to new table in the BE
   const { reload, acceleratorReports: reports } = useProjectReports(projectId, true, true);
   const [updateMetricTargets] = useUpdateProjectMetricTargetsMutation();
 

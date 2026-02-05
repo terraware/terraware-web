@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { useDeviceInfo } from '@terraware/web-components/utils';
@@ -11,10 +11,8 @@ import HighlightsBox from 'src/components/AcceleratorReports/HighlightsBox';
 import MetricStatusBadge from 'src/components/AcceleratorReports/MetricStatusBadge';
 import PhotosBox from 'src/components/AcceleratorReports/PhotosBox';
 import Card from 'src/components/common/Card';
-import { requestListFunderReports } from 'src/redux/features/funder/entities/fundingEntitiesAsyncThunks';
-import { selectListFunderReports } from 'src/redux/features/funder/entities/fundingEntitiesSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import strings from 'src/strings';
+import { useLocalization } from 'src/providers';
+import { useListPublishedReportsQuery } from 'src/queries/generated/publishedReports';
 import { PublishedReport, PublishedReportMetric } from 'src/types/AcceleratorReport';
 
 import MetricBox from './MetricBox';
@@ -27,21 +25,13 @@ type FunderReportViewProps = {
 const FunderReportView = ({ selectedProjectId, selectedReport }: FunderReportViewProps) => {
   const theme = useTheme();
   const { isDesktop } = useDeviceInfo();
-  const dispatch = useAppDispatch();
-  const [publishedReports, setPublishedReports] = useState<PublishedReport[]>();
-  const reportsResponse = useAppSelector(selectListFunderReports(selectedProjectId?.toString() ?? ''));
+  const { strings } = useLocalization();
 
-  useEffect(() => {
-    if (selectedProjectId) {
-      void dispatch(requestListFunderReports(Number(selectedProjectId)));
-    }
-  }, [dispatch, selectedProjectId]);
-
-  useEffect(() => {
-    if (reportsResponse?.status === 'success') {
-      setPublishedReports(reportsResponse.data);
-    }
-  }, [reportsResponse]);
+  const listPublishedReportsResponse = useListPublishedReportsQuery(selectedProjectId);
+  const publishedReports = useMemo(
+    () => listPublishedReportsResponse.data?.reports ?? [],
+    [listPublishedReportsResponse.data?.reports]
+  );
 
   const year = useMemo(() => {
     return selectedReport?.startDate?.split('-')[0];
@@ -227,12 +217,7 @@ const FunderReportView = ({ selectedProjectId, selectedReport }: FunderReportVie
               borderRadius: '8px',
             }}
           >
-            <AchievementsBox
-              report={selectedReport}
-              projectId={selectedProjectId}
-              funderReportView
-              canEdit={false}
-            />
+            <AchievementsBox report={selectedReport} projectId={selectedProjectId} funderReportView canEdit={false} />
           </Card>
         </Box>
       )}
@@ -246,11 +231,7 @@ const FunderReportView = ({ selectedProjectId, selectedReport }: FunderReportVie
               borderRadius: '8px',
             }}
           >
-            <ChallengesMitigationBox
-              report={selectedReport}
-              projectId={selectedProjectId}
-              funderReportView
-            />
+            <ChallengesMitigationBox report={selectedReport} projectId={selectedProjectId} funderReportView />
           </Card>
         </Box>
       )}

@@ -53,11 +53,14 @@ export default function AcceleratorReportsTable(): JSX.Element {
 
   useEffect(() => {
     if (projectId) {
-      void getReportYears(projectId);
-      void listReports({
-        projectId,
-        year: yearFilter,
-      });
+      void getReportYears(projectId, true);
+      void listReports(
+        {
+          projectId,
+          year: yearFilter,
+        },
+        true
+      );
     }
   }, [getReportYears, listReports, projectId, yearFilter]);
 

@@ -7,9 +7,7 @@ import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
 import useBoolean from 'src/hooks/useBoolean';
-import { selectUpdateStandardMetric } from 'src/redux/features/reports/reportsSelectors';
-import { requestUpdateStandardMetric } from 'src/redux/features/reports/reportsThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useUpdateStandardMetricMutation } from 'src/queries/generated/reportMetrics';
 import strings from 'src/strings';
 import { StandardMetric } from 'src/types/AcceleratorReport';
 import useForm from 'src/utils/useForm';
@@ -19,34 +17,29 @@ import { metricComponentOptions, metricTypeOptions } from './NewProjectSpecificM
 
 export interface EditStandardMetricModalProps {
   onClose: () => void;
-  reload: () => void;
   standardMetric: StandardMetric;
 }
 
 export default function EditStandardMetricModal({
   onClose,
-  reload,
   standardMetric,
 }: EditStandardMetricModalProps): JSX.Element {
-  const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
 
   const [record, , , onChangeCallback] = useForm<StandardMetric>(standardMetric);
   const [validate, setValidate] = useState(false);
-  const [requestId, setRequestId] = useState<string>('');
   const [confirmDialogOpen, , openConfirmDialog, closeConfirmDialog] = useBoolean(false);
 
-  const updateStandardMetricResponse = useAppSelector(selectUpdateStandardMetric(requestId));
+  const [updateStandardMetric, updateStandardMetricResponse] = useUpdateStandardMetricMutation();
 
   useEffect(() => {
-    if (updateStandardMetricResponse?.status === 'error') {
+    if (updateStandardMetricResponse.isError) {
       snackbar.toastError();
-    } else if (updateStandardMetricResponse?.status === 'success') {
+    } else if (updateStandardMetricResponse.isSuccess) {
       onClose();
       snackbar.toastSuccess(strings.STANDARD_METRIC_SAVED);
-      reload();
     }
-  }, [updateStandardMetricResponse, snackbar, onClose, reload]);
+  }, [updateStandardMetricResponse, snackbar, onClose]);
 
   const save = useCallback(() => {
     if (!record.name || !record.reference) {
@@ -58,9 +51,13 @@ export default function EditStandardMetricModal({
 
   const confirmSave = useCallback(() => {
     closeConfirmDialog();
-    const request = dispatch(requestUpdateStandardMetric({ metric: record }));
-    setRequestId(request.requestId);
-  }, [dispatch, record, closeConfirmDialog]);
+    void updateStandardMetric({
+      metricId: standardMetric.id,
+      updateStandardMetricRequestPayload: {
+        metric: record,
+      },
+    });
+  }, [closeConfirmDialog, updateStandardMetric, standardMetric.id, record]);
 
   return (
     <DialogBox
@@ -82,7 +79,7 @@ export default function EditStandardMetricModal({
     >
       <Confirm
         closeButtonText={strings.CANCEL}
-        confirmButtonDisabled={requestId !== '' && updateStandardMetricResponse?.status === 'pending'}
+        confirmButtonDisabled={updateStandardMetricResponse.isLoading}
         confirmButtonText={strings.CONFIRM}
         message={strings.EDIT_STANDARD_METRIC_CONFIRMATION}
         onClose={closeConfirmDialog}

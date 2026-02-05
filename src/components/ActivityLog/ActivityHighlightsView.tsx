@@ -10,12 +10,10 @@ import { Mousewheel, Navigation, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import useFunderPortal from 'src/hooks/useFunderPortal';
-import useProjectReports from 'src/hooks/useProjectReports';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
-import { requestListFunderReports } from 'src/redux/features/funder/entities/fundingEntitiesAsyncThunks';
-import { selectListFunderReports } from 'src/redux/features/funder/entities/fundingEntitiesSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { PublishedReportPayload, useListPublishedReportsQuery } from 'src/queries/generated/publishedReports';
+import { AcceleratorReportPayload, useListAcceleratorReportsQuery } from 'src/queries/generated/reports';
 import { ACCELERATOR_REPORT_PHOTO_ENDPOINT, FUNDER_REPORT_PHOTO_ENDPOINT } from 'src/services/AcceleratorReportService';
 import { ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/ActivityService';
 import { FUNDER_ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/funder/FunderActivityService';
@@ -115,7 +113,7 @@ type ActivityHighlightSlide = {
   coverPhoto?: ActivityMediaFile;
   coverPhotoURL?: string;
   description?: string;
-  report?: AcceleratorReport | PublishedReport;
+  report?: AcceleratorReportPayload | PublishedReportPayload;
   title: string;
 };
 
@@ -129,23 +127,19 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
   const navigate = useSyncNavigate();
   const { scrollToTop } = useMapDrawer(mapDrawerRef);
   const { fitBounds, getCurrentViewState, jumpTo } = useMapUtils(mapRef);
-  const { acceleratorReports } = useProjectReports(projectId);
-  const [publishedReports, setPublishedReports] = useState<PublishedReport[]>();
-  const reportsResponse = useAppSelector(selectListFunderReports(projectId.toString() ?? ''));
+
   const { isFunderRoute } = useFunderPortal();
-  const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    if (isFunderRoute && publishedReports === undefined) {
-      void dispatch(requestListFunderReports(projectId));
-    }
-  }, [dispatch, isFunderRoute, projectId, publishedReports]);
-
-  useEffect(() => {
-    if (reportsResponse?.status === 'success') {
-      setPublishedReports(reportsResponse.data || []);
-    }
-  }, [reportsResponse]);
+  const listReportsResponse = useListAcceleratorReportsQuery({ projectId }, { skip: isFunderRoute });
+  const listPublishedReportsResponse = useListPublishedReportsQuery(projectId, { skip: !isFunderRoute });
+  const acceleratorReports = useMemo(
+    () => listReportsResponse.data?.reports ?? [],
+    [listReportsResponse.data?.reports]
+  );
+  const publishedReports = useMemo(
+    () => listPublishedReportsResponse.data?.reports ?? [],
+    [listPublishedReportsResponse.data?.reports]
+  );
 
   const selectedQuarterReport = useMemo(() => {
     const reports = isFunderRoute ? publishedReports : acceleratorReports;

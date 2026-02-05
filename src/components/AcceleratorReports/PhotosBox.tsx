@@ -5,19 +5,14 @@ import { Textfield } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import useBoolean from 'src/hooks/useBoolean';
-import {
-  selectDeleteManyAcceleratorReportPhotos,
-  selectUpdateManyAcceleratorReportPhotos,
-  selectUploadManyAcceleratorReportPhotos,
-} from 'src/redux/features/reports/reportsSelectors';
-import {
-  requestDeleteManyAcceleratorReportPhotos,
-  requestUpdateManyAcceleratorReportPhotos,
-  requestUploadManyAcceleratorReportPhotos,
-} from 'src/redux/features/reports/reportsThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { PublishedReportPayload } from 'src/queries/generated/publishedReports';
 import strings from 'src/strings';
-import { AcceleratorReportPhoto, NewAcceleratorReportPhoto, isAcceleratorReport } from 'src/types/AcceleratorReport';
+import {
+  AcceleratorReportPhoto,
+  NewAcceleratorReportPhoto,
+  PublishedReport,
+  isAcceleratorReport,
+} from 'src/types/AcceleratorReport';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import PhotoDragDrop from '../Photo/PhotoDragDrop';
@@ -135,17 +130,7 @@ const PhotosBox = (props: ReportBoxProps) => {
       });
     });
   }, []);
-
-  const dispatch = useAppDispatch();
-  const [dispatched, setDispatched] = useState(false);
-  const [deletePhotosRequestId, setDeletePhotosRequestId] = useState<string>('');
-  const [updatePhotosRequestId, setUpdatePhotosRequestId] = useState<string>('');
-  const [uploadPhotosRequestId, setUploadPhotosRequestId] = useState<string>('');
-
   const snackbar = useSnackbar();
-  const deletePhotosResult = useAppSelector(selectDeleteManyAcceleratorReportPhotos(deletePhotosRequestId));
-  const updatePhotosResult = useAppSelector(selectUpdateManyAcceleratorReportPhotos(updatePhotosRequestId));
-  const uploadPhotosResult = useAppSelector(selectUploadManyAcceleratorReportPhotos(uploadPhotosRequestId));
 
   useEffect(() => {
     if (!editing) {
@@ -290,7 +275,7 @@ const PhotosBox = (props: ReportBoxProps) => {
       if (report) {
         let path = isAcceleratorReport(report)
           ? `/api/v1/accelerator/projects/${projectId}/reports/${report.id}/photos/${fileId}`
-          : `/api/v1/funder/reports/${report.reportId}/photos/${fileId}`;
+          : `/api/v1/funder/reports/${(report as PublishedReportPayload).reportId}/photos/${fileId}`;
 
         if (maxHeight !== undefined || maxWidth !== undefined) {
           path += '?';

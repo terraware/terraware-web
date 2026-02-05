@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
@@ -11,10 +11,16 @@ import Table from 'src/components/common/table';
 import useBoolean from 'src/hooks/useBoolean';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization, useUser } from 'src/providers';
-import { useListAcceleratorReportConfigQuery, useListProjectMetricsQuery } from 'src/queries/generated/reports';
-import { selectListStandardMetrics, selectListSystemMetrics } from 'src/redux/features/reports/reportsSelectors';
-import { requestListStandardMetrics, requestListSystemMetrics } from 'src/redux/features/reports/reportsThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import {
+  ExistingStandardMetricPayload,
+  useListStandardMetricQuery,
+  useListSystemMetricsQuery,
+} from 'src/queries/generated/reportMetrics';
+import {
+  ExistingProjectMetricPayload,
+  useListAcceleratorReportConfigQuery,
+  useListProjectMetricsQuery,
+} from 'src/queries/generated/reports';
 import { ProjectMetric, StandardMetric, SystemMetric } from 'src/types/AcceleratorReport';
 
 import DefaultMetricsRenderer from './DefaultMetricsRenderer';
@@ -29,16 +35,9 @@ export default function ReportsSettings(): JSX.Element {
   const pathParams = useParams<{ projectId: string }>();
   const projectId = Number(pathParams.projectId);
 
-  const dispatch = useAppDispatch();
   const { goToAcceleratorEditReportSettings, goToNewProjectMetric, goToNewStandardMetric } = useNavigateTo();
-  const [standardRequestId, setStandardRequestId] = useState<string>('');
-  const [systemRequestId, setSystemRequestId] = useState<string>('');
-  const standardMetricsResponse = useAppSelector(selectListStandardMetrics(standardRequestId));
-  const systemMetricsResponse = useAppSelector(selectListSystemMetrics(systemRequestId));
-  const [standardMetrics, setStandardMetrics] = useState<StandardMetric[]>();
-  const [systemMetrics, setSystemMetrics] = useState<SystemMetric[]>();
-  const [selectedProjectMetric, setSelectedProjectMetric] = useState<ProjectMetric>();
-  const [selectedStandardMetric, setSelectedStandardMetric] = useState<StandardMetric>();
+  const [selectedProjectMetric, setSelectedProjectMetric] = useState<ExistingProjectMetricPayload>();
+  const [selectedStandardMetric, setSelectedStandardMetric] = useState<ExistingStandardMetricPayload>();
   const [editProjectMetricModalOpened, , openEditProjectMetricModal, closeEditProjectMetricModal] = useBoolean(false);
   const [editStandardMetricModalOpened, , openEditStandardMetricModal, closeEditStandardMetricModal] =
     useBoolean(false);
@@ -56,32 +55,11 @@ export default function ReportsSettings(): JSX.Element {
     [listProjectMetricsResponse.data?.metrics]
   );
 
-  useEffect(() => {
-    const dispatched = dispatch(requestListStandardMetrics());
-    setStandardRequestId(dispatched.requestId);
-  }, [dispatch]);
+  const { data: standardMetricsResponse } = useListStandardMetricQuery();
+  const standardMetrics = useMemo(() => standardMetricsResponse?.metrics, [standardMetricsResponse?.metrics]);
 
-  useEffect(() => {
-    const dispatched = dispatch(requestListSystemMetrics());
-    setSystemRequestId(dispatched.requestId);
-  }, [dispatch]);
-
-  const reloadStandardMetrics = useCallback(() => {
-    const dispatched = dispatch(requestListStandardMetrics());
-    setStandardRequestId(dispatched.requestId);
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (standardMetricsResponse && standardMetricsResponse.status === 'success') {
-      setStandardMetrics(standardMetricsResponse.data);
-    }
-  }, [standardMetricsResponse]);
-
-  useEffect(() => {
-    if (systemMetricsResponse && systemMetricsResponse.status === 'success') {
-      setSystemMetrics(systemMetricsResponse.data);
-    }
-  }, [systemMetricsResponse]);
+  const { data: systemMetricsResponse } = useListSystemMetricsQuery();
+  const systemMetrics = useMemo(() => systemMetricsResponse?.metrics, [systemMetricsResponse?.metrics]);
 
   const gridSize = isMobile ? 12 : 4;
 
@@ -190,11 +168,7 @@ export default function ReportsSettings(): JSX.Element {
         <EditMetricModal onClose={closeEditProjectMetricModal} projectMetric={selectedProjectMetric} />
       )}
       {editStandardMetricModalOpened && selectedStandardMetric && (
-        <EditStandardMetricModal
-          onClose={closeEditStandardMetricModal}
-          reload={reloadStandardMetrics}
-          standardMetric={selectedStandardMetric}
-        />
+        <EditStandardMetricModal onClose={closeEditStandardMetricModal} standardMetric={selectedStandardMetric} />
       )}
       <Card
         style={{ display: 'flex', flexDirection: 'column' }}

@@ -113,18 +113,6 @@ export const requestDeleteFunders = createAsyncThunk(
   }
 );
 
-export const requestListFunderReports = createAsyncThunk(
-  'published-reports/list',
-  async (projectId: number, { rejectWithValue }) => {
-    const response = await FundingEntityService.listFunderReports(projectId);
-    if (response && response.requestSucceeded) {
-      return response.data?.reports ?? [];
-    }
-
-    return rejectWithValue(strings.GENERIC_ERROR);
-  }
-);
-
 export const requestProjectFundingEntities = createAsyncThunk(
   'funding-entities/list-for-project',
   async ({ projectId }: { projectId: number }, { rejectWithValue }) => {

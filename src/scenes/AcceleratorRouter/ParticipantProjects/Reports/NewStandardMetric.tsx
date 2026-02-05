@@ -13,9 +13,7 @@ import TextField from 'src/components/common/Textfield/Textfield';
 import { APP_PATHS } from 'src/constants';
 import useBoolean from 'src/hooks/useBoolean';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { selectCreateStandardMetric } from 'src/redux/features/reports/reportsSelectors';
-import { requestCreateStandardMetric } from 'src/redux/features/reports/reportsThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useCreateStandardMetricMutation } from 'src/queries/generated/reportMetrics';
 import strings from 'src/strings';
 import { CreateStandardMetricRequestPayload } from 'src/types/AcceleratorReport';
 import useForm from 'src/utils/useForm';
@@ -26,7 +24,6 @@ import { metricComponentOptions, metricTypeOptions } from './NewProjectSpecificM
 export default function NewStandardMetric(): JSX.Element {
   const theme = useTheme();
   const navigate = useSyncNavigate();
-  const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
   const { isMobile } = useDeviceInfo();
   const pathParams = useParams<{ projectId: string }>();
@@ -34,18 +31,17 @@ export default function NewStandardMetric(): JSX.Element {
 
   const [confirmDialogOpen, , openConfirmDialog, closeConfirmDialog] = useBoolean(false);
   const [validate, setValidate] = useState(false);
-  const [requestId, setRequestId] = useState<string>('');
 
-  const createStandardMetricResponse = useAppSelector(selectCreateStandardMetric(requestId));
+  const [createStandardMetric, createStandardMetricResponse] = useCreateStandardMetricMutation();
 
   const goToProjectReports = useCallback(() => {
     navigate(`${APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', projectId)}?tab=settings`);
   }, [navigate, projectId]);
 
   useEffect(() => {
-    if (createStandardMetricResponse?.status === 'error') {
+    if (createStandardMetricResponse.isError) {
       snackbar.toastError();
-    } else if (createStandardMetricResponse?.status === 'success') {
+    } else if (createStandardMetricResponse.isSuccess) {
       snackbar.toastSuccess(strings.STANDARD_METRIC_SAVED);
       goToProjectReports();
     }
@@ -69,15 +65,16 @@ export default function NewStandardMetric(): JSX.Element {
 
   const confirmSave = useCallback(() => {
     closeConfirmDialog();
-    const request = dispatch(requestCreateStandardMetric({ metric: newMetric }));
-    setRequestId(request.requestId);
-  }, [dispatch, newMetric, closeConfirmDialog]);
+    void createStandardMetric({
+      metric: newMetric,
+    });
+  }, [closeConfirmDialog, createStandardMetric, newMetric]);
 
   return (
     <>
       <Confirm
         closeButtonText={strings.CANCEL}
-        confirmButtonDisabled={requestId !== '' && createStandardMetricResponse?.status === 'pending'}
+        confirmButtonDisabled={createStandardMetricResponse.isLoading}
         confirmButtonText={strings.CONFIRM}
         message={strings.ADD_STANDARD_METRIC_CONFIRMATION}
         onClose={closeConfirmDialog}
