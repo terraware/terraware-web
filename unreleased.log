@@ -1,3 +1,7 @@
+b45d2f7b9151 Various fixes for annotations (#5176)
+b40bf62cc2ad SW-8027 Conditionally disable create virtual plot button (#5178)
+14078a181e22 Change RevealRain script to correctly use enabled flag (#5177)
+3569c906ae65 SW-8025 Fix autorotate not disabling... again (#5174)
 1d881313e3f2 SW-8010 Replace quarter targets with annual targets in funder view, console and participant side (#5180)
 5a32891beca8 SW-8010 Targets table style fixes (#5173)
 b2761ae49549 Initial improved reports changes (#5172)

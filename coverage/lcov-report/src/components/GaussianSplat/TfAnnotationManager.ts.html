@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/160</span>
+                <span class='fraction'>0/158</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/79</span>
+                <span class='fraction'>0/77</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/156</span>
+                <span class='fraction'>0/154</span>
             </div>
         
             
@@ -375,10 +375,7 @@
 <a name='L310'></a><a href='#L310'>310</a>
 <a name='L311'></a><a href='#L311'>311</a>
 <a name='L312'></a><a href='#L312'>312</a>
-<a name='L313'></a><a href='#L313'>313</a>
-<a name='L314'></a><a href='#L314'>314</a>
-<a name='L315'></a><a href='#L315'>315</a>
-<a name='L316'></a><a href='#L316'>316</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L313'></a><a href='#L313'>313</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -480,9 +477,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -787,17 +781,14 @@ expo<span class="cstat-no" title="statement not covered" >rt class TfAnnotationM
 <span class="cstat-no" title="statement not covered" >        }</span>
 <span class="cstat-no" title="statement not covered" ></span>
         // Disable/enable t<span class="cstat-no" title="statement not covered" >he entity itself based on v</span>isibility
-        co<span class="cstat-no" title="statement not covered" >nst isVisible = annotation.visible !== undefined ? annotation.visible : true;</span>
-        if (<span class="cstat-no" title="statement not covered" >annotation.entity) {</span>
-          an<span class="cstat-no" title="statement not covered" >notation.entity.enabled = isVisible;<span class="fstat-no" title="function not covered" ></span></span>
+        co<span class="cstat-no" title="statement not covered" >nst isVisible = annotation.enabled !== undefined ? annotation.enabled : true;</span>
+<span class="cstat-no" title="statement not covered" ></span>
+        // H<span class="cstat-no" title="statement not covered" >ide tooltip if the active annotation is hidden<span class="fstat-no" title="function not covered" ></span></span>
+        if ((t<span class="cstat-no" title="statement not covered" >his as any).</span>_activeAnnotation === annotation &amp;&amp; !isVisible) {
+          (this as any)._tooltipDom.style.visibility = 'hidden';
+          (this as any)._tooltipDom.style.opacity = '0';
+          (this as any)._activeAnnotation = null;
         }<span class="cstat-no" title="statement not covered" ></span>
-&nbsp;
-        // Hide tooltip if the active annotation is hidden
-        if ((this as any)._activeAnnotation === annotation &amp;&amp; !isVisible) {
-          (this as any)._t<span class="cstat-no" title="statement not covered" >ooltipDom.style.visibility = 'hidden';</span>
-<span class="cstat-no" title="statement not covered" >          (this as any)._tooltipDom.style.opacity = '0';</span>
-<span class="cstat-no" title="statement not covered" >          (this as any)._activeAnnotation = null;</span>
-        }
       }<span class="cstat-no" title="statement not covered" ></span>
     });<span class="cstat-no" title="statement not covered" ></span>
   }<span class="cstat-no" title="statement not covered" ></span>
@@ -809,7 +800,7 @@ expo<span class="cstat-no" title="statement not covered" >rt class TfAnnotationM
    */
   _showTooltip(annotation: any) {
     // Don't show tooltip if annotation is not visible
-    const isVisible = annotation.visible !== undefined ? annotation.visible : true;
+    const isVisible = annotation.enabled !== undefined ? annotation.enabled : true;
     if (!isVisible) {
 <span class="fstat-no" title="function not covered" ></span>      return;
     }
@@ -889,7 +880,7 @@ expo<span class="cstat-no" title="statement not covered" >rt class TfAnnotationM
     const offsetY = this._customParentDom ? 0 : rect.top + window.scrollY;
 <span class="fstat-no" title="function not covered" ></span>
     // Check if annotation <span class="cstat-no" title="statement not covered" >is visible (defaults to tru</span>e if not specified)
-<span class="cstat-no" title="statement not covered" >    const isVisible = annotation.visible !== undefi</span>ned ? annotation.visible : true;
+<span class="cstat-no" title="statement not covered" >    const isVisible = annotation.enabled !== undefi</span>ned ? annotation.enabled : true;
 <span class="cstat-no" title="statement not covered" >    resources.hotspotDom.style.display = isVi</span>sible ? 'block' : 'none';
     resources.hotspotD<span class="cstat-no" title="statement not covered" >om.style.left = `${screenPo</span>s.x + offsetX}px`;
     resources.hotspot<span class="cstat-no" title="statement not covered" >Dom.style.top = `${screenPos.y + offsetY}px`;</span>
@@ -1015,7 +1006,7 @@ expo<span class="cstat-no" title="statement not covered" >rt class TfAnnotationM
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-05T18:38:56.019Z
+                at 2026-02-05T19:20:31.926Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

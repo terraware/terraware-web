@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/30</span>
+                <span class='fraction'>0/31</span>
             </div>
         
             
@@ -118,7 +118,10 @@
 <a name='L53'></a><a href='#L53'>53</a>
 <a name='L54'></a><a href='#L54'>54</a>
 <a name='L55'></a><a href='#L55'>55</a>
-<a name='L56'></a><a href='#L56'>56</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -168,7 +171,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -180,50 +186,53 @@ import { Color, Vec3 } f<span class="cstat-no" title="statement not covered" >ro
 import { GsplatReve<span class="cstat-no" title="statement not covered" >alRain } from 'playcan</span>vas/scripts/esm/gsplat/reveal-rain.mjs';
 <span class="cstat-no" title="statement not covered" ></span>
 interface Splat<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Re</span>vealRainProps {</span>
-<span class="cstat-no" title="statement not covered" >  center?: [number, number, number];</span>
-  di<span class="cstat-no" title="statement not covered" >stance?: number;</span>
-  speed?: number;
-  acceleration?: n<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >um</span>ber;</span>
-<span class="cstat-no" title="statement not covered" >  flightTime?: number;</span>
-  ra<span class="cstat-no" title="statement not covered" >inSize?: number;</span>
-  rota<span class="cstat-no" title="statement not covered" >tion?: number;</span>
-  fallTi<span class="cstat-no" title="statement not covered" >nt?: [number, number, numb<span class="fstat-no" title="function not covered" >er</span>];<span class="cstat-no" title="statement not covered" ></span></span>
-  fallTintIntensity?: number;
-<span class="cstat-no" title="statement not covered" >  hitTint?: [</span>number, number, number];
-  hitDuration?: number;
-  endRadius?: <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >nu</span>mber;<span class="cstat-no" title="statement not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >  enabled?: boolean;</span>
+  ce<span class="cstat-no" title="statement not covered" >nter?: [number, number, number];</span>
+  distance?: number;
+  speed?: number;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >  acceleration?: number;</span>
+  fl<span class="cstat-no" title="statement not covered" >ightTime?: number;</span>
+  rain<span class="cstat-no" title="statement not covered" >Size?: number;</span>
+  rotati<span class="cstat-no" title="statement not covered" >on?: number;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  fallTint?: [number, number, number];
+<span class="cstat-no" title="statement not covered" >  fallTintInt</span>ensity?: number;
+  hitTint?: [number, number, number];
+  hitDuration?<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >: </span>number;<span class="cstat-no" title="statement not covered" ></span></span>
+  endRadius?: number;
 }
 &nbsp;
 const SplatRevealRain = ({
+  enabled = true,
   center = [0, 0, 0],
   distance = 3,
-  speed = 10,
-  acceleration = 5,
-  flightTime = 0.25<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >,<span class="cstat-no" title="statement not covered" ></span></span></span>
-  rainSize = 0.0,<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  rotation = 0,</span>
-  fallTint <span class="fstat-no" title="function not covered" >= </span>[0, <span class="cstat-no" title="statement not covered" >0, 0],</span>
-  fallTintIntensity = 0,
-<span class="cstat-no" title="statement not covered" >  hitTint = [0, 0, 0],</span>
+  speed = 10,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  acceleration = 5,<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >  flightTime = 0.25,</span>
+  rainSize <span class="fstat-no" title="function not covered" >= </span>0.0,<span class="cstat-no" title="statement not covered" ></span>
+  rotation = 0,
+<span class="cstat-no" title="statement not covered" >  fallTint = [0, 0, 0],</span>
+  fallTintIntensity<span class="cstat-no" title="statement not covered" > = 0,</span>
+  hitTint = [0, 0, 0],<span class="cstat-no" title="statement not covered" ></span>
   hitDuration = 0,<span class="cstat-no" title="statement not covered" ></span>
   endRadius = 5,<span class="cstat-no" title="statement not covered" ></span>
-}: SplatRevealRainProps)<span class="cstat-no" title="statement not covered" > =&gt; {</span>
-  return (<span class="cstat-no" title="statement not covered" ></span>
-    &lt;Script<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-      scrip<span class="branch-0 cbranch-no" title="branch not covered" >t={GsplatR</span>evealRain}
-      center=<span class="branch-0 cbranch-no" title="branch not covered" >{n</span>ew Vec3(...center)}
-      dist<span class="branch-0 cbranch-no" title="branch not covered" >anc</span>e={distance}
-      speed={spee<span class="branch-0 cbranch-no" title="branch not covered" >d}</span>
-      accelerat<span class="branch-0 cbranch-no" title="branch not covered" >ion={</span>acceleration}
-      flightT<span class="branch-0 cbranch-no" title="branch not covered" >im</span>e={flightTime}
-      rainSiz<span class="branch-0 cbranch-no" title="branch not covered" >e=</span>{rainSize}
-      rotatio<span class="branch-0 cbranch-no" title="branch not covered" >n={rotatio</span>n}
-      fallTint={new Co<span class="branch-0 cbranch-no" title="branch not covered" >lo</span>r(...fallTint)}
-      fallTi<span class="branch-0 cbranch-no" title="branch not covered" >ntIntensit</span>y={fallTintIntensity}
-      hitTint={n<span class="branch-0 cbranch-no" title="branch not covered" >ew</span> Color(...hitTint)}
-      hitDurat<span class="branch-0 cbranch-no" title="branch not covered" >io</span>n={hitDuration}
+}: SplatRevealRainProps)<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > =</span>&gt; {</span>
+  return (<span class="branch-0 cbranch-no" title="branch not covered" ></span>
+    &lt;Script<span class="branch-0 cbranch-no" title="branch not covered" ></span>
+      script=<span class="branch-0 cbranch-no" title="branch not covered" >{G</span>splatRevealRain}
+      enab<span class="branch-0 cbranch-no" title="branch not covered" >led</span>={enabled}
+      center={new<span class="branch-0 cbranch-no" title="branch not covered" > V</span>ec3(...center)}
+      distance=<span class="branch-0 cbranch-no" title="branch not covered" >{dist</span>ance}
+      speed={<span class="branch-0 cbranch-no" title="branch not covered" >sp</span>eed}
+      acceler<span class="branch-0 cbranch-no" title="branch not covered" >at</span>ion={acceleration}
+      flightT<span class="branch-0 cbranch-no" title="branch not covered" >ime={fligh</span>tTime}
+      rainSize={rainSi<span class="branch-0 cbranch-no" title="branch not covered" >ze</span>}
+      rotati<span class="branch-0 cbranch-no" title="branch not covered" >on={rotati</span>on}
+      fallTint={<span class="branch-0 cbranch-no" title="branch not covered" >ne</span>w Color(...fallTint)}
+      fallTint<span class="branch-0 cbranch-no" title="branch not covered" >In</span>tensity={fallTintIntensity}
+      hitTint={new Color(...hitTint)}
+<span class="cstat-no" title="statement not covered" >      hitDuration={hitDuration}</span>
       endRadius={endRadius}
-<span class="cstat-no" title="statement not covered" >    /&gt;</span>
+    /&gt;
   );
 };
 &nbsp;
@@ -235,7 +244,7 @@ export default SplatRevealRain;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-05T18:38:56.019Z
+                at 2026-02-05T19:20:31.926Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
