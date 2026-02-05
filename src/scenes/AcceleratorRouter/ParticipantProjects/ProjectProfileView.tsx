@@ -90,7 +90,7 @@ const ProjectProfileView = ({
     if (!project?.id) {
       return;
     }
-    void listReports({ projectId: project.id });
+    void listReports({ projectId: project.id }, true);
     const request = dispatch(requestProjectInternalUsersList({ projectId: project.id }));
     setListInternalUsersRequestId(request.requestId);
   }, [dispatch, listReports, project.id]);

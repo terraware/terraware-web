@@ -41,7 +41,7 @@ export default function EditSettings(): JSX.Element {
 
   useEffect(() => {
     if (projectId) {
-      void listReportConfigs(projectId);
+      void listReportConfigs(projectId, true);
     }
   }, [projectId, listReportConfigs]);
 
