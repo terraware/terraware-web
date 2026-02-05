@@ -12,9 +12,12 @@ export enum QueryTagTypes {
   ProjectModules = 'ProjectModules',
   ProjectReportConfigs = 'ProjectReportConfigs',
   Projects = 'Projects',
+  PublishedReportMedia = 'PublishedReportMedia',
   PublishedReports = 'PublishedReports',
   ReportMedia = 'ReportMedia',
   Reports = 'Reports',
+  StandardMetrics = 'StandadMetrics',
+  SystemMetrics = 'SystemMetrics',
   T0 = 'T0',
 }
 
