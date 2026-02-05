@@ -104,9 +104,7 @@ const VirtualMonitoringPlot = ({ observationId, fileId, annotations = [] }: Virt
   const handleAddAnnotation = useCallback(() => {
     const newAnnotation: AnnotationProps = {
       position: DEFAULT_FOCUS_POINT,
-      title: `Annotation ${localAnnotations.length + 1}`,
-      bodyText: '',
-      label: `${localAnnotations.length + 1}`,
+      title: '',
     };
     setLocalAnnotations((prev) => [...prev, newAnnotation]);
     setSelectedAnnotationIndex(localAnnotations.length);
@@ -119,6 +117,10 @@ const VirtualMonitoringPlot = ({ observationId, fileId, annotations = [] }: Virt
     setLocalAnnotations((prev) => prev.filter((_, index) => index !== selectedAnnotationIndex));
     setSelectedAnnotationIndex(-1);
   }, [selectedAnnotationIndex]);
+
+  const handleDeselectAnnotation = useCallback(() => {
+    setSelectedAnnotationIndex(-1);
+  }, []);
 
   const handleAnnotationUpdate = useCallback(
     (updates: Partial<AnnotationProps>) => {
@@ -133,6 +135,10 @@ const VirtualMonitoringPlot = ({ observationId, fileId, annotations = [] }: Virt
     },
     [selectedAnnotationIndex]
   );
+
+  const canSave = useMemo(() => {
+    return localAnnotations.every((annotation) => annotation.title && annotation.title.trim() !== '');
+  }, [localAnnotations]);
 
   /* When a rerender occurs, the splat model disappears (https://github.com/playcanvas/react/pull/298 and https://github.com/playcanvas/react/issues/302)
   The key should include items that cause the SplatModel to rerender. Remove them (and the useMemo) once the PR is merged and we're on a version that includes it */
@@ -170,17 +176,16 @@ const VirtualMonitoringPlot = ({ observationId, fileId, annotations = [] }: Virt
 
       {splatModel}
 
-      {localAnnotations.length > 0 && (
-        <Script
-          script={TfAnnotationManager}
-          hotspotSize={30}
-          maxWorldSize={0.05}
-          opacity={1}
-          hotspotColor={new Color().fromString('#ffffff')}
-          hoverColor={new Color().fromString('#ffffff')}
-          hotspotBackgroundColor='#2C8658'
-        />
-      )}
+      <Script
+        script={TfAnnotationManager}
+        enabled={localAnnotations.length > 0}
+        hotspotSize={30}
+        maxWorldSize={0.05}
+        opacity={1}
+        hotspotColor={new Color().fromString('#ffffff')}
+        hoverColor={new Color().fromString('#ffffff')}
+        hotspotBackgroundColor='#2C8658'
+      />
       {localAnnotations.map((annotation, index) => (
         <Annotation
           key={`${index}-${annotation.title}-${annotation.label ?? ''}`}
@@ -206,9 +211,11 @@ const VirtualMonitoringPlot = ({ observationId, fileId, annotations = [] }: Virt
         onCancel={handleCancel}
         onAddAnnotation={handleAddAnnotation}
         onDeleteAnnotation={handleDeleteAnnotation}
+        onDeselectAnnotation={handleDeselectAnnotation}
         hasSelectedAnnotation={selectedAnnotationIndex >= 0}
         selectedAnnotation={selectedAnnotationIndex >= 0 ? localAnnotations[selectedAnnotationIndex] : null}
         onAnnotationUpdate={handleAnnotationUpdate}
+        canSave={canSave}
       />
     </>
   );

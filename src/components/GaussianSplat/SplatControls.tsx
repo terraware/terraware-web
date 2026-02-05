@@ -29,9 +29,11 @@ export interface SplatControlsProps {
   onCancel?: () => void;
   onAddAnnotation?: () => void;
   onDeleteAnnotation?: () => void;
+  onDeselectAnnotation?: () => void;
   hasSelectedAnnotation?: boolean;
   selectedAnnotation?: AnnotationProps | null;
   onAnnotationUpdate: (updates: Partial<AnnotationProps>) => void;
+  canSave?: boolean;
 }
 
 const SplatControls = ({
@@ -47,9 +49,11 @@ const SplatControls = ({
   onCancel,
   onAddAnnotation,
   onDeleteAnnotation,
+  onDeselectAnnotation,
   hasSelectedAnnotation,
   selectedAnnotation,
   onAnnotationUpdate,
+  canSave = true,
 }: SplatControlsProps) => {
   const theme = useTheme();
   const { strings } = useLocalization();
@@ -173,7 +177,7 @@ const SplatControls = ({
         pointerEvents: 'none',
       }}
     >
-      {isEdit && onAddAnnotation && (
+      {isEdit && (
         <Box
           sx={{
             position: 'absolute',
@@ -185,7 +189,12 @@ const SplatControls = ({
             pointerEvents: 'auto',
           }}
         >
-          <Button label={strings.ADD_ANNOTATION} onClick={onAddAnnotation} />
+          {!hasSelectedAnnotation && onAddAnnotation && (
+            <Button label={strings.ADD_ANNOTATION} onClick={onAddAnnotation} />
+          )}
+          {hasSelectedAnnotation && onDeselectAnnotation && (
+            <Button label={strings.DESELECT_ANNOTATION} onClick={onDeselectAnnotation} />
+          )}
           {hasSelectedAnnotation && onDeleteAnnotation && (
             <Button label={strings.DELETE_ANNOTATION} onClick={onDeleteAnnotation} />
           )}
@@ -206,7 +215,7 @@ const SplatControls = ({
         {isVrAvailable && !isEdit && <Button label={strings.VR} onClick={handleVr} />}
         {!isEdit && onToggleEdit && <Button label={strings.EDIT} onClick={handleEdit} />}
         {isEdit && onCancel && <Button label={strings.CANCEL} onClick={onCancel} />}
-        {isEdit && onSave && <Button label={strings.SAVE} onClick={onSave} />}
+        {isEdit && onSave && <Button label={strings.SAVE} onClick={onSave} disabled={!canSave} />}
       </Box>
       <IconButton
         ref={infoButtonRef}

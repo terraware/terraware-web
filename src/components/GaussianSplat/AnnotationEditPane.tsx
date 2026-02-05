@@ -97,6 +97,7 @@ const AnnotationEditPane = ({ visible, annotation, onUpdate }: AnnotationEditPan
                 value={annotation.title}
                 onChange={handleTitleChange}
                 sx={textFieldSx}
+                required
               />
             </Tooltip>
 

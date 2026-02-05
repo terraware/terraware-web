@@ -92,10 +92,7 @@ export class TfAnnotationManager extends PcAnnotationManager {
         }
 
         // Disable/enable the entity itself based on visibility
-        const isVisible = annotation.visible !== undefined ? annotation.visible : true;
-        if (annotation.entity) {
-          annotation.entity.enabled = isVisible;
-        }
+        const isVisible = annotation.enabled !== undefined ? annotation.enabled : true;
 
         // Hide tooltip if the active annotation is hidden
         if ((this as any)._activeAnnotation === annotation && !isVisible) {
@@ -114,7 +111,7 @@ export class TfAnnotationManager extends PcAnnotationManager {
    */
   _showTooltip(annotation: any) {
     // Don't show tooltip if annotation is not visible
-    const isVisible = annotation.visible !== undefined ? annotation.visible : true;
+    const isVisible = annotation.enabled !== undefined ? annotation.enabled : true;
     if (!isVisible) {
       return;
     }
@@ -194,7 +191,7 @@ export class TfAnnotationManager extends PcAnnotationManager {
     const offsetY = this._customParentDom ? 0 : rect.top + window.scrollY;
 
     // Check if annotation is visible (defaults to true if not specified)
-    const isVisible = annotation.visible !== undefined ? annotation.visible : true;
+    const isVisible = annotation.enabled !== undefined ? annotation.enabled : true;
     resources.hotspotDom.style.display = isVisible ? 'block' : 'none';
     resources.hotspotDom.style.left = `${screenPos.x + offsetX}px`;
     resources.hotspotDom.style.top = `${screenPos.y + offsetY}px`;

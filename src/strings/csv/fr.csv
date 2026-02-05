@@ -501,6 +501,7 @@ DESCRIPTION_KNOWLEDGE_BASE,Apprenez à utiliser Terraware et trouvez des répons
 DESCRIPTION_KNOWLEDGE_BASE_WITH_LINK,Apprenez à utiliser Terraware et trouvez les réponses à vos questions sur les fonctionnalités de Terraware dans le {0}.,a7644709
 DESCRIPTION_NOTES,Description/Remarques,ce46605b
 DESCRIPTION_REQUIRED,Description *,e14d49bc
+DESELECT_ANNOTATION,Désélectionner l’annotation,32c46edd
 DESTINATION,Destination,d3525c91
 DESTINATION_REQUIRED,Destination *,46e3fd94
 DETAILED_SITE,Site détaillé,24e93f92

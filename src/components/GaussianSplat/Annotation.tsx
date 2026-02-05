@@ -131,7 +131,7 @@ const Annotation = (props: AnnotationProps & { index: number }) => {
         }
 
         const gizmo = new TranslateGizmo(cameraComponent, layerRef.current);
-        gizmo.size = 0.5;
+        gizmo.size = 0.75;
         gizmo.snapIncrement = 0.01;
         gizmo.coordSpace = 'world';
 
@@ -172,17 +172,15 @@ const Annotation = (props: AnnotationProps & { index: number }) => {
   }, [app, isEdit, isSelected, visible, onPositionChange, entityName]);
 
   return (
-    <>
-      <Entity name={entityName} position={position}>
-        <Script
-          script={PcAnnotation}
-          {...annotationProps}
-          text={bodyText}
-          visible={visible}
-          onClickCallback={handleClick}
-        />
-      </Entity>
-    </>
+    <Entity name={entityName} position={position}>
+      <Script
+        script={PcAnnotation}
+        {...annotationProps}
+        text={bodyText}
+        enabled={visible}
+        onClickCallback={handleClick}
+      />
+    </Entity>
   );
 };
 
