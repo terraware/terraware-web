@@ -28,6 +28,7 @@ import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useAnnualReportMetrics from 'src/hooks/useAnnualReportMetrics';
 import useBoolean from 'src/hooks/useBoolean';
 import { useLocalization, useUser } from 'src/providers';
+import { useListPublishedReportsQuery } from 'src/queries/generated/publishedReports';
 import {
   ReportSystemMetricPayload,
   useGetAcceleratorReportQuery,
@@ -65,10 +66,16 @@ const ReportView = () => {
   const [publishedFunderView, setPublishedFunderView] = useState(false);
 
   const getReportResponse = useGetAcceleratorReportQuery({ reportId, projectId, includeMetrics: true });
+  const listPublishedReportResponse = useListPublishedReportsQuery(projectId);
+
   const [reviewReport, reviewReportResponse] = useReviewAcceleratorReportMutation();
   const [publishReport, publishReportResponse] = usePublishAcceleratorReportMutation();
 
   const report = useMemo(() => getReportResponse.data?.report, [getReportResponse.data?.report]);
+  const publishedReport = useMemo(
+    () => listPublishedReportResponse.data?.reports.find((thisReport) => thisReport.reportId === reportId),
+    [listPublishedReportResponse.data?.reports, reportId]
+  );
 
   const publishReportCallback = useCallback(() => {
     void publishReport({
@@ -271,17 +278,17 @@ const ReportView = () => {
             title={`${strings.REPORT} (${reportName})`}
             header={participantProject ? `${strings.PROJECT}: ${participantProject?.dealName}` : ''}
             subtitle={
-              selectedPublishedReport
+              publishedReport
                 ? strings
                     .formatString(
                       strings.FUNDER_REPORT_LAST_PUBLISHED,
-                      getDateDisplayValue(selectedPublishedReport.publishedTime)
+                      getDateDisplayValue(publishedReport.publishedTime)
                     )
                     .toString()
                 : ''
             }
             titleExtraComponent={
-              selectedPublishedReport &&
+              publishedReport &&
               (publishedFunderView ? (
                 <Link fontSize={'16px'} fontWeight={400} onClick={changeToInternalView}>
                   {strings.VIEW_INTERNAL_REPORT_FORM}
@@ -304,7 +311,7 @@ const ReportView = () => {
               <Message type='page' priority='info' body={strings.PUBLISHED_REPORT_CONSOLE_WARNING} />
             </Box>
             <Box marginBottom={4} width={'100%'}>
-              <FunderReportView selectedProjectId={Number(projectId)} report={selectedPublishedReport} />
+              <FunderReportView selectedProjectId={projectId} selectedReport={publishedReport} />
             </Box>
           </>
         ) : (

@@ -12,14 +12,14 @@ import MetricStatusBadge from 'src/components/AcceleratorReports/MetricStatusBad
 import PhotosBox from 'src/components/AcceleratorReports/PhotosBox';
 import Card from 'src/components/common/Card';
 import { useLocalization } from 'src/providers';
-import { useListPublishedReportsQuery } from 'src/queries/generated/publishedReports';
-import { PublishedReport, PublishedReportMetric } from 'src/types/AcceleratorReport';
+import { PublishedReportPayload, useListPublishedReportsQuery } from 'src/queries/generated/publishedReports';
+import { PublishedReportMetric } from 'src/types/AcceleratorReport';
 
 import MetricBox from './MetricBox';
 
 type FunderReportViewProps = {
   selectedProjectId: number;
-  selectedReport?: PublishedReport;
+  selectedReport?: PublishedReportPayload;
 };
 
 const FunderReportView = ({ selectedProjectId, selectedReport }: FunderReportViewProps) => {

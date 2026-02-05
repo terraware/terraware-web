@@ -14,7 +14,6 @@ import {
   requestCreateProjectMetric,
   requestCreateReportConfig,
   requestCreateStandardMetric,
-  requestDeleteManyAcceleratorReportPhotos,
   requestListAcceleratorReports,
   requestListProjectMetrics,
   requestListStandardMetrics,
@@ -26,11 +25,9 @@ import {
   requestSubmitAcceleratorReport,
   requestUpdateAcceleratorReport,
   requestUpdateAcceleratorReportTargets,
-  requestUpdateManyAcceleratorReportPhotos,
   requestUpdateProjectMetric,
   requestUpdateReportConfig,
   requestUpdateStandardMetric,
-  requestUploadManyAcceleratorReportPhotos,
 } from './reportsThunks';
 
 type Data = {

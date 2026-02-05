@@ -93,7 +93,7 @@ const ProjectProfileView = ({
     void listReports({ projectId: project.id }, true);
     const request = dispatch(requestProjectInternalUsersList({ projectId: project.id }));
     setListInternalUsersRequestId(request.requestId);
-  }, [dispatch, listReports, project.id]);
+  }, [dispatch, listReports, project?.id]);
 
   const firstProjectLead = useMemo(() => {
     if (listInternalUsersRequest?.status !== 'success') {
