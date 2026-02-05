@@ -24,6 +24,7 @@ import {
   ReportSystemMetricPayload,
   useUpdateAcceleratorReportValuesMutation,
 } from 'src/queries/generated/reports';
+import { useBatchPhotosMutation } from 'src/queries/reports/photos';
 import { AcceleratorReportPhoto, MetricType, NewAcceleratorReportPhoto } from 'src/types/AcceleratorReport';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -57,6 +58,7 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
   const [record, , onChange, onChangeCallback] = useForm<AcceleratorReportPayload>(report);
   const [validate, setValidate] = useState(false);
   const [updateReport, updateReportResponse] = useUpdateAcceleratorReportValuesMutation();
+  const [batchPhotos] = useBatchPhotosMutation();
   const [photos, setPhotos] = useState<AcceleratorReportPhotoActions>({ toAdd: [], toDelete: [], toUpdate: [] });
   const snackbar = useSnackbar();
 
@@ -83,57 +85,40 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
     });
   }, [projectId, record, reportId, updateReport]);
 
-  const saveReportPhotos = useCallback(() => {
-    let nextDispatched = false;
-    if (photos.toDelete.length) {
-      const deleteDispatch = dispatch(
-        requestDeleteManyAcceleratorReportPhotos({
-          projectId,
-          reportId: report.id.toString(),
-          fileIds: photos.toDelete.map((photo) => photo.fileId.toString()),
-        })
-      );
-      setDeletePhotosRequestId(deleteDispatch.requestId);
-      nextDispatched = true;
+  const saveReportPhotos = useCallback(async () => {
+    if (photos.toDelete.length === 0 && photos.toUpdate.length === 0 && photos.toAdd.length === 0) {
+      return false;
     }
 
-    if (photos.toUpdate.length) {
-      const updateDispatch = dispatch(
-        requestUpdateManyAcceleratorReportPhotos({
-          projectId,
-          reportId: report.id.toString(),
-          photos: photos.toUpdate,
-        })
-      );
-      setUpdatePhotosRequestId(updateDispatch.requestId);
-      nextDispatched = true;
+    try {
+      await batchPhotos({
+        projectId,
+        reportId: report.id,
+        photosToUpdate: photos.toUpdate,
+        photosToUpload: photos.toAdd,
+        fileIdsToDelete: photos.toDelete.map((photo) => photo.fileId),
+      }).unwrap();
+      return true;
+    } catch (error) {
+      snackbar.toastError();
+      return false;
     }
-
-    if (photos.toAdd.length) {
-      const uploadDispatch = dispatch(
-        requestUploadManyAcceleratorReportPhotos({
-          projectId,
-          reportId: report.id.toString(),
-          photos: photos.toAdd,
-        })
-      );
-      setUploadPhotosRequestId(uploadDispatch.requestId);
-      nextDispatched = true;
-    }
-
-    setPhotosDispatched(nextDispatched);
-    return nextDispatched;
-  }, [report, photos, dispatch, projectId]);
+  }, [report, photos, batchPhotos, projectId, snackbar]);
 
   useEffect(() => {
     if (updateReportResponse.isError) {
       snackbar.toastError();
     }
     if (updateReportResponse.isSuccess) {
-      if (!saveReportPhotos()) {
-        // If no photos update has occured
-        goToReport();
-      } // else, wait for second effect to navigate back
+      void saveReportPhotos().then((hasPhotos) => {
+        if (!hasPhotos) {
+          // If no photos update has occurred
+          goToReport();
+        } else {
+          // Photos were saved successfully
+          goToReport();
+        }
+      });
     }
   }, [
     goToReport,

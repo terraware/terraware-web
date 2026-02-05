@@ -53,12 +53,3 @@ export const selectUpdateStandardMetric = (requestId: string) => (state: RootSta
 
 export const selectUpdateReportConfig = (requestId: string) => (state: RootState) =>
   state.projectReportConfigUpdate[requestId];
-
-export const selectDeleteManyAcceleratorReportPhotos = (requestId: string) => (state: RootState) =>
-  state.deleteManyAcceleratorReportPhotos[requestId];
-
-export const selectUpdateManyAcceleratorReportPhotos = (requestId: string) => (state: RootState) =>
-  state.updateManyAcceleratorReportPhotos[requestId];
-
-export const selectUploadManyAcceleratorReportPhotos = (requestId: string) => (state: RootState) =>
-  state.uploadManyAcceleratorReportPhotos[requestId];
