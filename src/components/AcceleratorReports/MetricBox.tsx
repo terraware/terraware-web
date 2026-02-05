@@ -66,7 +66,7 @@ const MetricBox = ({
     metric: ReportProjectMetricPayload | ReportSystemMetricPayload | ReportStandardMetricPayload,
     type: MetricType
   ) => void;
-  year?: string;
+  year?: number;
   yearTarget?: number;
 } & ReportBoxProps): JSX.Element => {
   const theme = useTheme();

@@ -13,6 +13,7 @@ import MetricBox from 'src/components/AcceleratorReports/MetricBox';
 import PhotosBox from 'src/components/AcceleratorReports/PhotosBox';
 import Card from 'src/components/common/Card';
 import WrappedPageForm from 'src/components/common/PageForm';
+import useAnnualReportMetrics from 'src/hooks/useAnnualReportMetrics';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
@@ -46,6 +47,12 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
   const pathParams = useParams<{ projectId: string; reportId: string }>();
   const reportId = Number(pathParams.reportId);
   const projectId = Number(pathParams.projectId);
+
+  const year = useMemo(() => {
+    return Number(report.startDate.split('-')[0]);
+  }, [report]);
+
+  const annualMetrics = useAnnualReportMetrics(projectId, year);
 
   const [record, , onChange, onChangeCallback] = useForm<AcceleratorReportPayload>(report);
   const [validate, setValidate] = useState(false);
@@ -226,27 +233,53 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
             editing={true}
             onChange={onChangeCallback('highlights')}
           />
-          {['system', 'project', 'standard'].map((type) => {
-            const metrics =
-              type === 'system'
-                ? record.systemMetrics
-                : type === 'project'
-                  ? record.projectMetrics
-                  : record.standardMetrics;
-
-            return metrics?.map((metric, index) => (
+          {record.systemMetrics.map((metric, index) => {
+            const annualMetric = annualMetrics.systemMetrics.find((annual) => annual.metric === metric.metric);
+            return (
               <MetricBox
                 editing={true}
-                key={`${type}-${index}`}
+                key={`system-${index}`}
                 metric={metric}
                 onChangeMetric={onChangeMetric}
                 projectId={projectId}
-                reportId={Number(reportId)}
-                type={type as MetricType}
+                reportId={reportId}
+                type={'system'}
                 year={year}
-                yearTarget={getYearTarget(metric, type as MetricType, year)}
+                yearTarget={annualMetric?.target}
               />
-            ));
+            );
+          })}
+          {record.projectMetrics.map((metric, index) => {
+            const annualMetric = annualMetrics.projectMetrics.find((annual) => annual.id === metric.id);
+            return (
+              <MetricBox
+                editing={true}
+                key={`project-${index}`}
+                metric={metric}
+                onChangeMetric={onChangeMetric}
+                projectId={projectId}
+                reportId={reportId}
+                type={'project'}
+                year={year}
+                yearTarget={annualMetric?.target}
+              />
+            );
+          })}
+          {record.standardMetrics.map((metric, index) => {
+            const annualMetric = annualMetrics.standardMetrics.find((annual) => annual.id === metric.id);
+            return (
+              <MetricBox
+                editing={true}
+                key={`standard-${index}`}
+                metric={metric}
+                onChangeMetric={onChangeMetric}
+                projectId={projectId}
+                reportId={reportId}
+                type={'standard'}
+                year={year}
+                yearTarget={annualMetric?.target}
+              />
+            );
           })}
           <AchievementsBox
             report={record}

@@ -3,6 +3,7 @@ import { useParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
+import { DateTime } from 'luxon';
 
 import AcceleratorReportStatusBadge from 'src/components/AcceleratorReports/AcceleratorReportStatusBadge';
 import AchievementsBox from 'src/components/AcceleratorReports/AchievementsBox';
@@ -19,12 +20,17 @@ import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import TitleBar from 'src/components/common/TitleBar';
 import { APP_PATHS } from 'src/constants';
+import useAnnualReportMetrics from 'src/hooks/useAnnualReportMetrics';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
-import { useGetAcceleratorReportQuery, useSubmitAcceleratorReportMutation } from 'src/queries/generated/reports';
+import {
+  ReportSystemMetricPayload,
+  useGetAcceleratorReportQuery,
+  useSubmitAcceleratorReportMutation,
+} from 'src/queries/generated/reports';
 import strings from 'src/strings';
-import { MetricType } from 'src/types/AcceleratorReport';
+import { MetricType, ReportProjectMetric, ReportStandardMetric } from 'src/types/AcceleratorReport';
 
 import SubmitReportDialog from './SubmitReportDialog';
 
@@ -120,6 +126,12 @@ const AcceleratorReportView = () => {
 
   const reportName = report?.frequency === 'Annual' ? year : report?.quarter ? `${year}-${report?.quarter}` : '';
 
+  const yearToUse = useMemo(
+    () => (year ? Number(report?.startDate.split('-')[0]) : DateTime.now().year),
+    [report?.startDate, year]
+  );
+  const annualMetrics = useAnnualReportMetrics(projectId, yearToUse);
+
   return (
     <>
       {showSubmitDialog && <SubmitReportDialog onClose={() => setShowSubmitDialog(false)} onSubmit={submitReport} />}
@@ -168,17 +180,33 @@ const AcceleratorReportView = () => {
                     ? report?.projectMetrics
                     : report?.standardMetrics;
 
-              return metrics?.map((metric, index) => (
-                <MetricBox
-                  key={`${type}-${index}`}
-                  metric={metric}
-                  projectId={projectId}
-                  reportId={Number(reportId)}
-                  type={type as MetricType}
-                  year={year}
-                  yearTarget={getYearTarget(metric, type as MetricType, year)}
-                />
-              ));
+              return metrics?.map((metric, index) => {
+                const yearTarget = (
+                  type === 'system'
+                    ? annualMetrics.systemMetrics.find(
+                        (annualMetric) => annualMetric.metric === (metric as ReportSystemMetricPayload).metric
+                      )
+                    : type === 'project'
+                      ? annualMetrics.projectMetrics.find(
+                          (annualMetric) => annualMetric.id === (metric as ReportProjectMetric).id
+                        )
+                      : annualMetrics.standardMetrics.find(
+                          (annualMetric) => annualMetric.id === (metric as ReportStandardMetric).id
+                        )
+                )?.target;
+
+                return (
+                  <MetricBox
+                    key={`${type}-${index}`}
+                    metric={metric}
+                    projectId={projectId}
+                    reportId={Number(reportId)}
+                    type={type as MetricType}
+                    year={yearToUse}
+                    yearTarget={yearTarget}
+                  />
+                );
+              });
             })}
             <AchievementsBox report={report} projectId={projectId} />
             <ChallengesMitigationBox report={report} projectId={projectId} />

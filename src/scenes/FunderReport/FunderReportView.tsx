@@ -111,7 +111,7 @@ const FunderReportView = ({ selectedProjectId, selectedReport }: FunderReportVie
           <Typography fontSize={20} fontWeight={600}>
             {strings.HIGHLIGHTS}
           </Typography>
-          <HighlightsBox report={selectedReport} projectId={selectedProjectId?.toString()} funderReportView />
+          <HighlightsBox report={selectedReport} projectId={selectedProjectId} funderReportView />
         </Card>
         <Card
           style={{
@@ -229,7 +229,7 @@ const FunderReportView = ({ selectedProjectId, selectedReport }: FunderReportVie
           >
             <AchievementsBox
               report={selectedReport}
-              projectId={selectedProjectId.toString()}
+              projectId={selectedProjectId}
               funderReportView
               canEdit={false}
             />
@@ -248,7 +248,7 @@ const FunderReportView = ({ selectedProjectId, selectedReport }: FunderReportVie
           >
             <ChallengesMitigationBox
               report={selectedReport}
-              projectId={selectedProjectId.toString()}
+              projectId={selectedProjectId}
               funderReportView
             />
           </Card>
@@ -264,7 +264,7 @@ const FunderReportView = ({ selectedProjectId, selectedReport }: FunderReportVie
               borderRadius: '8px',
             }}
           >
-            <FinancialSummariesBox report={selectedReport} projectId={selectedProjectId.toString()} funderReportView />
+            <FinancialSummariesBox report={selectedReport} projectId={selectedProjectId} funderReportView />
           </Card>
         </Box>
       )}
@@ -278,7 +278,7 @@ const FunderReportView = ({ selectedProjectId, selectedReport }: FunderReportVie
               borderRadius: '8px',
             }}
           >
-            <AdditionalCommentsBox report={selectedReport} projectId={selectedProjectId.toString()} funderReportView />
+            <AdditionalCommentsBox report={selectedReport} projectId={selectedProjectId} funderReportView />
           </Card>
         </Box>
       )}
@@ -292,7 +292,7 @@ const FunderReportView = ({ selectedProjectId, selectedReport }: FunderReportVie
               borderRadius: '8px',
             }}
           >
-            <PhotosBox report={selectedReport} projectId={selectedProjectId.toString()} funderReportView />
+            <PhotosBox report={selectedReport} projectId={selectedProjectId} funderReportView />
           </Card>
         </Box>
       )}

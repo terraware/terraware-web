@@ -5,25 +5,30 @@ import { Icon } from '@terraware/web-components';
 
 import MetricStatusBadge from 'src/components/AcceleratorReports/MetricStatusBadge';
 import ProgressChart from 'src/components/common/Chart/ProgressChart';
+import {
+  ReportProjectMetricPayload,
+  ReportStandardMetricPayload,
+  ReportSystemMetricPayload,
+} from 'src/queries/generated/reports';
 import strings from 'src/strings';
-import { MetricType, ReportProjectMetric, ReportStandardMetric, ReportSystemMetric } from 'src/types/AcceleratorReport';
+import { MetricType } from 'src/types/AcceleratorReport';
 
-export const isReportSystemMetric = (metric: any): metric is ReportSystemMetric => {
+export const isReportSystemMetric = (metric: any): metric is ReportSystemMetricPayload => {
   return metric && typeof metric.metric === 'string';
 };
 
-const isStandardOrProjectMetric = (metric: any): metric is ReportStandardMetric | ReportProjectMetric => {
+const isStandardOrProjectMetric = (metric: any): metric is ReportStandardMetricPayload | ReportProjectMetricPayload => {
   return metric && typeof metric.id === 'number';
 };
 
 type MetricRowProps = {
-  metric: ReportProjectMetric | ReportSystemMetric | ReportStandardMetric;
+  metric: ReportProjectMetricPayload | ReportSystemMetricPayload | ReportStandardMetricPayload;
   type: MetricType;
   reportLabel?: string;
-  year?: string;
+  year?: number;
 };
 
-const MetricRow = ({ metric, reportLabel = '', year = '' }: MetricRowProps): JSX.Element => {
+const MetricRow = ({ metric, reportLabel = '', year }: MetricRowProps): JSX.Element => {
   const theme = useTheme();
   const [expanded, setExpanded] = useState(false);
 

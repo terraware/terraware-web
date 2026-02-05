@@ -4,6 +4,7 @@ import { useParams } from 'react-router';
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button, DropdownItem, Message } from '@terraware/web-components';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
+import { DateTime } from 'luxon';
 
 import AchievementsBox from 'src/components/AcceleratorReports/AchievementsBox';
 import AdditionalCommentsBox from 'src/components/AcceleratorReports/AdditionalCommentsBox';
@@ -24,16 +25,18 @@ import TitleBar from 'src/components/common/TitleBar';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import useAnnualReportMetrics from 'src/hooks/useAnnualReportMetrics';
 import useBoolean from 'src/hooks/useBoolean';
 import { useLocalization, useUser } from 'src/providers';
 import {
+  ReportSystemMetricPayload,
   useGetAcceleratorReportQuery,
   usePublishAcceleratorReportMutation,
   useReviewAcceleratorReportMutation,
 } from 'src/queries/generated/reports';
 import FunderReportView from 'src/scenes/FunderReport/FunderReportView';
 import strings from 'src/strings';
-import { MetricType } from 'src/types/AcceleratorReport';
+import { MetricType, ReportProjectMetric, ReportStandardMetric } from 'src/types/AcceleratorReport';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import { useParticipantProjectData } from '../ParticipantProjectContext';
@@ -249,6 +252,11 @@ const ReportView = () => {
     setPublishedFunderView(false);
   }, []);
 
+  const yearToUse = useMemo(
+    () => (year ? Number(report?.startDate.split('-')[0]) : DateTime.now().year),
+    [report?.startDate, year]
+  );
+  const annualMetrics = useAnnualReportMetrics(projectId, yearToUse);
   const improvedReportsEnabled = isEnabled('Improved Reports');
 
   return (
@@ -342,13 +350,27 @@ const ReportView = () => {
                       ? report?.projectMetrics
                       : report?.standardMetrics;
 
-                return metrics?.map((metric, index) =>
-                  improvedReportsEnabled ? (
+                return metrics?.map((metric, index) => {
+                  const yearTarget = (
+                    type === 'system'
+                      ? annualMetrics.systemMetrics.find(
+                          (annualMetric) => annualMetric.metric === (metric as ReportSystemMetricPayload).metric
+                        )
+                      : type === 'project'
+                        ? annualMetrics.projectMetrics.find(
+                            (annualMetric) => annualMetric.id === (metric as ReportProjectMetric).id
+                          )
+                        : annualMetrics.standardMetrics.find(
+                            (annualMetric) => annualMetric.id === (metric as ReportStandardMetric).id
+                          )
+                  )?.target;
+                  return improvedReportsEnabled ? (
                     <MetricRow
                       key={`${type}-${index}`}
                       type={type as MetricType}
+                      metric={metric}
                       reportLabel={report?.quarter}
-                      year={year}
+                      year={yearToUse}
                     />
                   ) : (
                     <MetricBox
@@ -360,11 +382,11 @@ const ReportView = () => {
                       type={type as MetricType}
                       onEditChange={onEditChange}
                       canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
-                      year={year}
-                      yearTarget={getYearTarget(metric, type as MetricType, year)}
+                      year={yearToUse}
+                      yearTarget={yearTarget}
                     />
-                  )
-                );
+                  );
+                });
               })}
               {!improvedReportsEnabled && (
                 <>
