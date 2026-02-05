@@ -3,7 +3,6 @@ import { useParams } from 'react-router';
 
 import { EditableTable, EditableTableColumn } from '@terraware/web-components';
 import { DateTime } from 'luxon';
-import { MRT_TableInstance, MRT_ToggleDensePaddingButton } from 'material-react-table';
 
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useProjectReports from 'src/hooks/useProjectReports';
@@ -242,17 +241,13 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
       enableColumnFilters={true}
       enablePagination={true}
       enableColumnPinning={true}
+      enableTopToolbar={false}
       initialSorting={[{ id: 'name', desc: false }]}
       tableOptions={{
         enableColumnActions: false,
         enableHiding: false,
         enableColumnDragging: false,
         enableColumnOrdering: false,
-        renderToolbarInternalActions: ({ table }: { table: MRT_TableInstance<RowMetric> }) => (
-          <>
-            <MRT_ToggleDensePaddingButton table={table} />
-          </>
-        ),
         state: {
           columnOrder,
         },
@@ -273,6 +268,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
           width: '100%',
           maxWidth: '100%',
           borderRadius: '24px',
+          paddingTop: '12px',
         },
         '& .MuiTableContainer-root': {
           maxWidth: '100%',

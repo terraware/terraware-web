@@ -72,7 +72,7 @@ const ReportView = () => {
   const [showPublishModal, , openPublishModal, closePublishModal] = useBoolean(false);
   const publishReportResponse = useAppSelector(selectPublishAcceleratorReport(publishRequestId));
   const snackbar = useSnackbar();
-  const { reload, acceleratorReports: reports } = useProjectReports(projectId, true, true);
+  const { reload, acceleratorReports: reports, getYearTarget } = useProjectReports(projectId, true, true);
   const { reload: reloadProject } = useParticipantProjectData();
   const [publishedFunderView, setPublishedFunderView] = useState(false);
   const reportsResponse = useAppSelector(selectListFunderReports(projectId ?? ''));
@@ -424,6 +424,8 @@ const ReportView = () => {
                       type={type as MetricType}
                       onEditChange={onEditChange}
                       canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
+                      year={year}
+                      yearTarget={getYearTarget(metric, type as MetricType, year)}
                     />
                   )
                 );

@@ -21,6 +21,7 @@ import TitleBar from 'src/components/common/TitleBar';
 import { APP_PATHS } from 'src/constants';
 import useBoolean from 'src/hooks/useBoolean';
 import useNavigateTo from 'src/hooks/useNavigateTo';
+import useProjectReports from 'src/hooks/useProjectReports';
 import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { selectAcceleratorReport, selectSubmitAcceleratorReport } from 'src/redux/features/reports/reportsSelectors';
@@ -51,6 +52,7 @@ const AcceleratorReportView = () => {
 
   const getReportResults = useAppSelector(selectAcceleratorReport(requestId));
   const submitReportResults = useAppSelector(selectSubmitAcceleratorReport(submitReportRequestId));
+  const { getYearTarget } = useProjectReports(projectId, true, true);
 
   const reload = useCallback(() => {
     if (projectId) {
@@ -219,6 +221,8 @@ const AcceleratorReportView = () => {
                   reload={reload}
                   reportId={Number(reportId)}
                   type={type as MetricType}
+                  year={year}
+                  yearTarget={getYearTarget(metric, type as MetricType, year)}
                 />
               ));
             })}

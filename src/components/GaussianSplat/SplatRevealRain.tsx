@@ -5,6 +5,7 @@ import { Color, Vec3 } from 'playcanvas';
 import { GsplatRevealRain } from 'playcanvas/scripts/esm/gsplat/reveal-rain.mjs';
 
 interface SplatRevealRainProps {
+  enabled?: boolean;
   center?: [number, number, number];
   distance?: number;
   speed?: number;
@@ -20,6 +21,7 @@ interface SplatRevealRainProps {
 }
 
 const SplatRevealRain = ({
+  enabled = true,
   center = [0, 0, 0],
   distance = 3,
   speed = 10,
@@ -36,6 +38,7 @@ const SplatRevealRain = ({
   return (
     <Script
       script={GsplatRevealRain}
+      enabled={enabled}
       center={new Vec3(...center)}
       distance={distance}
       speed={speed}

@@ -14,6 +14,7 @@ import PhotosBox from 'src/components/AcceleratorReports/PhotosBox';
 import Card from 'src/components/common/Card';
 import WrappedPageForm from 'src/components/common/PageForm';
 import useNavigateTo from 'src/hooks/useNavigateTo';
+import useProjectReports from 'src/hooks/useProjectReports';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import {
   selectDeleteManyAcceleratorReportPhotos,
@@ -60,6 +61,11 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
   const pathParams = useParams<{ projectId: string; reportId: string }>();
   const reportId = String(pathParams.reportId);
   const projectId = String(pathParams.projectId);
+
+  const { getYearTarget } = useProjectReports(projectId, true, true);
+  const year = useMemo(() => {
+    return report?.startDate.split('-')[0];
+  }, [report]);
 
   const [record, , onChange, onChangeCallback] = useForm<AcceleratorReport>(report);
   const [validate, setValidate] = useState(false);
@@ -272,6 +278,8 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
                 projectId={projectId}
                 reportId={Number(reportId)}
                 type={type as MetricType}
+                year={year}
+                yearTarget={getYearTarget(metric, type as MetricType, year)}
               />
             ));
           })}
