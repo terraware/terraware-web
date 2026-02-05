@@ -7,7 +7,7 @@ test.describe('FunderProjectProfileTests', () => {
   test('Publish Project and then View Published Project', async ({ page, context, baseURL }, testInfo) => {
     // publish project
     await changeToSuperAdmin(context, baseURL);
-    await publishProjectProfile('Phase 1 Project Deal', page);
+    await publishProjectProfile('Phase 1 Project', page);
 
     // view published project
     await changeToFunderUser(context, baseURL);

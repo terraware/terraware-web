@@ -43,7 +43,7 @@ test.describe('ProjectProfileTests', () => {
   });
 
   test('View Project Profile for project in Phase 0', async ({ page }, testInfo) => {
-    await navigateToProjectProfile('Phase 0 Project Deal', page);
+    await navigateToProjectProfile('Phase 0 Project', page);
 
     const projectDetails: ProjectDetails = {
       dealName: 'Phase 0 Project Deal',
@@ -83,7 +83,7 @@ test.describe('ProjectProfileTests', () => {
   });
 
   test('View Project Profile for project in Phase 1', async ({ page }, testInfo) => {
-    await navigateToProjectProfile('Phase 1 Project Deal', page);
+    await navigateToProjectProfile('Phase 1 Project', page);
 
     const projectDetails: ProjectDetails = {
       dealName: 'Phase 1 Project Deal',
@@ -130,7 +130,7 @@ test.describe('ProjectProfileTests', () => {
   });
 
   test('View and Edit Project Profile for project in Phase 2', async ({ page }, testInfo) => {
-    await navigateToProjectProfile('Phase 2 Project Deal', page);
+    await navigateToProjectProfile('Phase 2 Project', page);
 
     const projectDetails: ProjectDetails = {
       dealName: 'Phase 2 Project Deal',
