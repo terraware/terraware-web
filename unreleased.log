@@ -1,3 +1,4 @@
+4c48cb59e74d Bump jsonpath from 1.1.1 to 1.2.0 (#5181)
 b45d2f7b9151 Various fixes for annotations (#5176)
 b40bf62cc2ad SW-8027 Conditionally disable create virtual plot button (#5178)
 14078a181e22 Change RevealRain script to correctly use enabled flag (#5177)
