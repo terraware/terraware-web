@@ -3,7 +3,6 @@ import { useParams } from 'react-router';
 
 import { EditableTable, EditableTableColumn } from '@terraware/web-components';
 import { DateTime } from 'luxon';
-import { MRT_TableInstance, MRT_ToggleDensePaddingButton } from 'material-react-table';
 
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useProjectReports from 'src/hooks/useProjectReports';
