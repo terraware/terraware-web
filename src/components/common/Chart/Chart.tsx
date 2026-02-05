@@ -136,6 +136,8 @@ function ChartContent(props: ChartContentProps): JSX.Element {
   const [chart, setChart] = useState<ChartJS | null>(null);
   const theme = useTheme();
   const initialized = useRef(false);
+  const isRecreating = useRef(false);
+  const currentLocale = useRef(locale);
 
   const barThickness: number | 'flex' | undefined = barWidth === undefined ? 50 : barWidth === 0 ? 'flex' : barWidth;
 
@@ -149,6 +151,19 @@ function ChartContent(props: ChartContentProps): JSX.Element {
     }
     return plugins;
   }, [customLegend, type]);
+
+  // destroy and recreate chart when locale changes to apply new number formatting
+  useEffect(() => {
+    if (initialized.current && currentLocale.current !== locale) {
+      isRecreating.current = true;
+      initialized.current = false;
+      currentLocale.current = locale;
+      if (chart) {
+        chart.destroy();
+        setChart(null);
+      }
+    }
+  }, [locale, chart]);
 
   useEffect(() => {
     // used to prevent double render on dev scope (react 18)
@@ -182,51 +197,54 @@ function ChartContent(props: ChartContentProps): JSX.Element {
 
         const ctx = canvasRef?.current?.getContext('2d');
         if (ctx) {
-          setChart(
-            await newChart(locale, ctx, {
-              type,
-              data: {
-                labels: [],
-                datasets: [],
+          const newChartInstance = await newChart(locale, ctx, {
+            type,
+            data: {
+              labels: [],
+              datasets: [],
+            },
+            options: {
+              elements: {
+                point: {
+                  radius: pointRadius || 0,
+                },
+                line: {
+                  borderColor: lineColor,
+                },
               },
-              options: {
-                elements: {
-                  point: {
-                    radius: pointRadius || 0,
-                  },
-                  line: {
-                    borderColor: lineColor,
-                  },
+              maintainAspectRatio: false,
+              layout: {
+                padding: {
+                  left: 0,
+                  right: 0,
+                  top: 10,
                 },
-                maintainAspectRatio: false,
-                layout: {
-                  padding: {
-                    left: 0,
-                    right: 0,
-                    top: 10,
-                  },
-                },
-                scales: customScales ?? {
-                  x: {
-                    display: type === 'pie' ? false : undefined,
-                    ...getAxisType(),
-                  },
-                  y: {
-                    grace: '5%',
-                    ticks: {
-                      precision: 0,
-                      stepSize: yStepSize,
-                    },
-                    min: yLimits?.min,
-                    max: yLimits?.max,
-                    display: type === 'pie' ? false : undefined,
-                  },
-                },
-                plugins: pluginsOptions,
               },
-              plugins: getPlugins() ?? undefined,
-            })
-          );
+              scales: customScales ?? {
+                x: {
+                  display: type === 'pie' ? false : undefined,
+                  ...getAxisType(),
+                },
+                y: {
+                  grace: '5%',
+                  ticks: {
+                    precision: 0,
+                    stepSize: yStepSize,
+                  },
+                  min: yLimits?.min,
+                  max: yLimits?.max,
+                  display: type === 'pie' ? false : undefined,
+                },
+              },
+              plugins: pluginsOptions,
+            },
+            plugins: getPlugins() ?? undefined,
+          });
+          setChart(newChartInstance);
+
+          // reset recreating flag after chart is created
+          isRecreating.current = false;
+
           // when component unmounts
           return () => {
             chart?.destroy();
@@ -287,7 +305,7 @@ function ChartContent(props: ChartContentProps): JSX.Element {
         },
       },
     };
-    if (chart) {
+    if (chart && !isRecreating.current) {
       chart.data.labels = newLabels;
       chart.data.datasets = newDatasets;
       chart.options.plugins = newPlugins;
