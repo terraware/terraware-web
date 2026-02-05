@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown, DropdownItem, Icon, Textfield, Tooltip } from '@terraware/web-components';
@@ -8,14 +8,12 @@ import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useBoolean from 'src/hooks/useBoolean';
 import useFunderPortal from 'src/hooks/useFunderPortal';
 import {
-  selectRefreshAcceleratorReportSystemMetrics,
-  selectReviewAcceleratorReportMetric,
-} from 'src/redux/features/reports/reportsSelectors';
-import {
-  requestRefreshAcceleratorReportSystemMetrics,
-  requestReviewAcceleratorReportMetric,
-} from 'src/redux/features/reports/reportsThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+  ReportProjectMetricPayload,
+  ReportStandardMetricPayload,
+  ReportSystemMetricPayload,
+  useRefreshAcceleratorReportSystemMetricsMutation,
+  useReviewAcceleratorReportMetricsMutation,
+} from 'src/queries/generated/reports';
 import strings from 'src/strings';
 import {
   AcceleratorMetricStatuses,
@@ -53,7 +51,6 @@ const MetricBox = ({
   type,
   projectId,
   reportId,
-  reload,
   isConsoleView = false,
   onChangeMetric,
   onEditChange,
@@ -62,28 +59,30 @@ const MetricBox = ({
   yearTarget,
 }: {
   hideStatusBadge?: boolean;
-  metric: ReportProjectMetric | ReportSystemMetric | ReportStandardMetric;
+  metric: ReportProjectMetricPayload | ReportSystemMetricPayload | ReportStandardMetricPayload;
   type: MetricType;
   reportId: number;
-  onChangeMetric?: (metric: ReportProjectMetric | ReportSystemMetric | ReportStandardMetric, type: MetricType) => void;
+  onChangeMetric?: (
+    metric: ReportProjectMetricPayload | ReportSystemMetricPayload | ReportStandardMetricPayload,
+    type: MetricType
+  ) => void;
   year?: string;
   yearTarget?: number;
 } & ReportBoxProps): JSX.Element => {
   const theme = useTheme();
   const [record, setRecord, onChange, onChangeCallback] = useForm<
-    ReportProjectMetric | ReportSystemMetric | ReportStandardMetric
+    ReportProjectMetricPayload | ReportSystemMetricPayload | ReportStandardMetricPayload
   >(metric);
 
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const { isFunderRoute } = useFunderPortal();
   const [progressModalOpened, , openProgressModal, closeProgresModal] = useBoolean(false);
   const [resetMetricModalOpened, , openResetMetricModal, closeResetMetricModal] = useBoolean(false);
-  const dispatch = useAppDispatch();
-  const [requestId, setRequestId] = useState<string>('');
   const [internalEditing, setInternalEditing, setInternalEditingTrue, setInternalEditingFalse] = useBoolean(false);
-  const [refreshRequestId, setRefreshRequestId] = useState<string>('');
-  const updateReportMetricResponse = useAppSelector(selectReviewAcceleratorReportMetric(requestId));
-  const refreshReportMetricResponse = useAppSelector(selectRefreshAcceleratorReportSystemMetrics(refreshRequestId));
+
+  const [reviewReportMetrics, reviewReportMetricResponse] = useReviewAcceleratorReportMetricsMutation();
+  const [refreshReportMetrics, refreshReportMetricResponse] = useRefreshAcceleratorReportSystemMetricsMutation();
+
   const snackbar = useSnackbar();
 
   useEffect(() => {
@@ -95,14 +94,13 @@ const MetricBox = ({
   useEffect(() => onEditChange?.(internalEditing), [internalEditing, onEditChange]);
 
   useEffect(() => {
-    if (updateReportMetricResponse?.status === 'error') {
+    if (reviewReportMetricResponse.isError) {
       snackbar.toastError();
-    } else if (updateReportMetricResponse?.status === 'success') {
+    } else if (reviewReportMetricResponse.isSuccess) {
       setInternalEditing(false);
       snackbar.toastSuccess(strings.CHANGES_SAVED);
-      reload?.();
     }
-  }, [updateReportMetricResponse, snackbar, reload, setInternalEditing]);
+  }, [snackbar, setInternalEditing, reviewReportMetricResponse.isError, reviewReportMetricResponse.isSuccess]);
 
   const onChangeProgress = useCallback(
     (newValue: string) => {
@@ -116,26 +114,17 @@ const MetricBox = ({
   );
 
   useEffect(() => {
-    if (refreshReportMetricResponse?.status === 'error') {
+    if (refreshReportMetricResponse.isError) {
       snackbar.toastError();
-    } else if (refreshReportMetricResponse?.status === 'success') {
+    } else if (refreshReportMetricResponse.isSuccess) {
       closeResetMetricModal();
       setInternalEditing(false);
       if (isReportSystemMetric(metric)) {
         onChangeProgress(metric.systemValue.toString());
       }
       snackbar.toastSuccess(strings.CHANGES_SAVED);
-      reload?.();
     }
-  }, [
-    closeResetMetricModal,
-    metric,
-    onChangeProgress,
-    refreshReportMetricResponse,
-    reload,
-    setInternalEditing,
-    snackbar,
-  ]);
+  }, [closeResetMetricModal, metric, onChangeProgress, refreshReportMetricResponse, setInternalEditing, snackbar]);
 
   const getUpdateBody = useCallback(() => {
     const baseMetric = {
@@ -191,15 +180,12 @@ const MetricBox = ({
   }, [record, type]);
 
   const onSave = useCallback(() => {
-    const request = dispatch(
-      requestReviewAcceleratorReportMetric({
-        metric: getUpdateBody(),
-        projectId: Number(projectId),
-        reportId,
-      })
-    );
-    setRequestId(request.requestId);
-  }, [dispatch, getUpdateBody, projectId, reportId]);
+    void reviewReportMetrics({
+      projectId,
+      reportId,
+      reviewAcceleratorReportMetricsRequestPayload: getUpdateBody(),
+    });
+  }, [getUpdateBody, projectId, reportId, reviewReportMetrics]);
 
   const getProgressValue = () => {
     if (isStandardOrProjectMetric(record)) {
@@ -219,16 +205,13 @@ const MetricBox = ({
 
   const onResetMetricHandler = useCallback(() => {
     if (isReportSystemMetric(metric)) {
-      const request = dispatch(
-        requestRefreshAcceleratorReportSystemMetrics({
-          reportId,
-          projectId: Number(projectId),
-          metricName: metric.metric,
-        })
-      );
-      setRefreshRequestId(request.requestId);
+      void refreshReportMetrics({
+        projectId,
+        reportId,
+        metrics: [metric.metric],
+      });
     }
-  }, [dispatch, metric, projectId, reportId]);
+  }, [metric, projectId, refreshReportMetrics, reportId]);
 
   const isEditing = useMemo(() => editing || internalEditing, [editing, internalEditing]);
 

@@ -115,8 +115,7 @@ const NewPhoto = ({ photo, setCaption, onDelete }: NewPhotoProp) => {
 };
 
 const PhotosBox = (props: ReportBoxProps) => {
-  const { report, projectId, reload, isConsoleView, editing, onChange, onEditChange, canEdit, funderReportView } =
-    props;
+  const { report, projectId, isConsoleView, editing, onChange, onEditChange, canEdit, funderReportView } = props;
 
   const [internalEditing, setInternalEditing, setInternalEditingTrue] = useBoolean(false);
   const [photos, setPhotos] = useState<AcceleratorReportPhoto[]>(report?.photos || []);

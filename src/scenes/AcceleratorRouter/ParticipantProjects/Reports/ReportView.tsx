@@ -25,22 +25,15 @@ import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useBoolean from 'src/hooks/useBoolean';
-import useProjectReports from 'src/hooks/useProjectReports';
 import { useLocalization, useUser } from 'src/providers';
-import { requestListFunderReports } from 'src/redux/features/funder/entities/fundingEntitiesAsyncThunks';
-import { selectListFunderReports } from 'src/redux/features/funder/entities/fundingEntitiesSelectors';
 import {
-  selectPublishAcceleratorReport,
-  selectReviewAcceleratorReport,
-} from 'src/redux/features/reports/reportsSelectors';
-import {
-  requestPublishAcceleratorReport,
-  requestReviewAcceleratorReport,
-} from 'src/redux/features/reports/reportsThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+  useGetAcceleratorReportQuery,
+  usePublishAcceleratorReportMutation,
+  useReviewAcceleratorReportMutation,
+} from 'src/queries/generated/reports';
 import FunderReportView from 'src/scenes/FunderReport/FunderReportView';
 import strings from 'src/strings';
-import { AcceleratorReport, MetricType, PublishedReport } from 'src/types/AcceleratorReport';
+import { MetricType } from 'src/types/AcceleratorReport';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import { useParticipantProjectData } from '../ParticipantProjectContext';
@@ -53,157 +46,103 @@ import RejectDialog from './RejectDialog';
 const ReportView = () => {
   const { activeLocale } = useLocalization();
   const pathParams = useParams<{ projectId: string; reportId: string }>();
-  const projectId = String(pathParams.projectId);
-  const reportId = String(pathParams.reportId);
+  const projectId = Number(pathParams.projectId);
+  const reportId = Number(pathParams.reportId);
   const { isAcceleratorRoute } = useAcceleratorConsole();
-  const dispatch = useAppDispatch();
-  const [selectedReport, setSelectedReport] = useState<AcceleratorReport>();
   const { isAllowed } = useUser();
   const [showApproveDialog, , openApprovalDialog, closeApproveDialog] = useBoolean(false);
   const [showRejectDialog, , openRejectDialog, closeRejectDialog] = useBoolean(false);
   const { crumbs: participantProjectCrumbs, participantProject, project } = useParticipantProjectData();
   const theme = useTheme();
   const [boxInEdit, setBoxInEdit] = useState<boolean>(false);
-  const [approveRequestId, setApproveRequestId] = useState('');
-  const [rejectRequestId, setRejectRequestId] = useState('');
-  const [publishRequestId, setPublishRequestId] = useState('');
-  const approveReportResponse = useAppSelector(selectReviewAcceleratorReport(approveRequestId));
-  const rejectReportResponse = useAppSelector(selectReviewAcceleratorReport(rejectRequestId));
+
   const [showPublishModal, , openPublishModal, closePublishModal] = useBoolean(false);
-  const publishReportResponse = useAppSelector(selectPublishAcceleratorReport(publishRequestId));
   const snackbar = useSnackbar();
-  const { reload, acceleratorReports: reports, getYearTarget } = useProjectReports(projectId, true, true);
   const { reload: reloadProject } = useParticipantProjectData();
   const [publishedFunderView, setPublishedFunderView] = useState(false);
-  const reportsResponse = useAppSelector(selectListFunderReports(projectId ?? ''));
-  const [publishedReports, setPublishedReports] = useState<PublishedReport[]>();
-  const [selectedPublishedReport, setSelectedPublishedReport] = useState<PublishedReport>();
 
-  const publishReport = useCallback(() => {
-    const request = dispatch(
-      requestPublishAcceleratorReport({
-        projectId: Number(projectId),
-        reportId: Number(reportId),
-      })
-    );
-    setPublishRequestId(request.requestId);
+  const getReportResponse = useGetAcceleratorReportQuery({ reportId, projectId, includeMetrics: true });
+  const [reviewReport, reviewReportResponse] = useReviewAcceleratorReportMutation();
+  const [publishReport, publishReportResponse] = usePublishAcceleratorReportMutation();
+
+  const report = useMemo(() => getReportResponse.data?.report, [getReportResponse.data?.report]);
+
+  const publishReportCallback = useCallback(() => {
+    void publishReport({
+      reportId,
+      projectId,
+    });
     closePublishModal();
-  }, [closePublishModal, dispatch, projectId, reportId]);
+  }, [closePublishModal, projectId, publishReport, reportId]);
 
-  const approveReport = useCallback(() => {
-    if (selectedReport) {
-      const request = dispatch(
-        requestReviewAcceleratorReport({
-          projectId: Number(projectId),
-          reportId: Number(reportId),
+  const approveReportCallback = useCallback(() => {
+    if (report) {
+      void reviewReport({
+        projectId,
+        reportId,
+        reviewAcceleratorReportRequestPayload: {
           review: {
-            ...selectedReport,
+            ...report,
             feedback: undefined,
             status: 'Approved',
           },
-        })
-      );
-      setApproveRequestId(request.requestId);
+        },
+      });
     }
-  }, [dispatch, projectId, reportId, selectedReport]);
+  }, [projectId, report, reportId, reviewReport]);
 
   const rejectReport = useCallback(
     (feedback?: string) => {
-      if (selectedReport) {
-        const request = dispatch(
-          requestReviewAcceleratorReport({
-            projectId: Number(projectId),
-            reportId: Number(reportId),
+      if (report) {
+        void reviewReport({
+          projectId,
+          reportId,
+          reviewAcceleratorReportRequestPayload: {
             review: {
-              ...selectedReport,
-              status: 'Needs Update',
+              ...report,
               feedback,
+              status: 'Needs Update',
             },
-          })
-        );
-        setRejectRequestId(request.requestId);
+          },
+        });
       }
     },
-    [dispatch, projectId, reportId, selectedReport]
+    [projectId, report, reportId, reviewReport]
   );
 
-  const reloadPublishedReport = useCallback(async () => {
-    if (projectId) {
-      await dispatch(requestListFunderReports(Number(projectId)));
-    }
-  }, [dispatch, projectId]);
-
   useEffect(() => {
-    if (projectId) {
-      void reloadPublishedReport();
-    }
-  }, [dispatch, projectId, reloadPublishedReport]);
-
-  useEffect(() => {
-    if (approveReportResponse?.status === 'error') {
+    if (reviewReportResponse.isError) {
       return;
     }
-    if (approveReportResponse?.status === 'success') {
-      reload();
+    if (reviewReportResponse.isSuccess) {
       closeApproveDialog();
-    }
-  }, [approveReportResponse, closeApproveDialog, reload]);
-
-  useEffect(() => {
-    if (rejectReportResponse?.status === 'error') {
-      return;
-    }
-    if (rejectReportResponse?.status === 'success') {
-      reload();
       closeRejectDialog();
     }
-  }, [closeRejectDialog, rejectReportResponse, reload]);
+  }, [closeApproveDialog, closeRejectDialog, reviewReportResponse.isError, reviewReportResponse.isSuccess]);
 
   useEffect(() => {
-    if (publishReportResponse?.status === 'error') {
+    if (publishReportResponse.isError) {
       snackbar.toastError();
       return;
     }
-    if (publishReportResponse?.status === 'success') {
+    if (publishReportResponse.isSuccess) {
       snackbar.toastSuccess(strings.REPORT_PUBLISHED);
-      void reloadPublishedReport();
-      reload();
       reloadProject();
       closePublishModal();
     }
-  }, [closePublishModal, publishReportResponse, reload, reloadProject, reloadPublishedReport, snackbar]);
-
-  useEffect(() => {
-    if (reports) {
-      const reportSelected = reports.find((report) => report.id.toString() === reportId);
-      setSelectedReport(reportSelected);
-    }
-  }, [reportId, reports]);
-
-  useEffect(() => {
-    if (reportsResponse?.status === 'success') {
-      setPublishedReports(reportsResponse.data);
-    }
-  }, [reportsResponse]);
-
-  useEffect(() => {
-    if (reportId) {
-      const found = publishedReports?.find((r) => r.reportId.toString() === reportId);
-      setSelectedPublishedReport(found);
-    }
-  }, [publishedReports, reportId]);
+  }, [closePublishModal, publishReportResponse, reloadProject, snackbar]);
 
   const year = useMemo(() => {
-    return selectedReport?.startDate.split('-')[0];
-  }, [selectedReport]);
+    return report?.startDate.split('-')[0];
+  }, [report]);
 
   const crumbs: Crumb[] = useMemo(() => {
     let crumbsList: Crumb[] = [
       {
         name: activeLocale ? strings.REPORTS : '',
         to: year
-          ? `${APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', projectId)}?year=${year}`
-          : APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', projectId),
+          ? `${APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', projectId.toString())}?year=${year}`
+          : APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', projectId.toString()),
       },
     ];
     if (isAcceleratorRoute) {
@@ -247,11 +186,11 @@ const ReportView = () => {
             {
               label: strings.PUBLISH,
               value: 'publish',
-              disabled: selectedReport?.status !== 'Approved',
+              disabled: report?.status !== 'Approved',
             },
           ]
         : [],
-    [activeLocale, selectedReport?.status]
+    [activeLocale, report?.status]
   );
 
   const callToAction = useMemo(() => {
@@ -259,7 +198,7 @@ const ReportView = () => {
       isAllowed('UPDATE_SUBMISSION_STATUS') && (
         <>
           <Button
-            disabled={selectedReport?.status === 'Needs Update'}
+            disabled={report?.status === 'Needs Update'}
             id='rejectDeliverable'
             label={strings.REQUEST_UPDATE_ACTION}
             priority='secondary'
@@ -268,7 +207,7 @@ const ReportView = () => {
             type='destructive'
           />
           <Button
-            disabled={selectedReport?.status === 'Approved'}
+            disabled={report?.status === 'Approved'}
             id='approveDeliverable'
             label={strings.APPROVE}
             onClick={openApprovalDialog}
@@ -285,7 +224,7 @@ const ReportView = () => {
         </>
       )
     );
-  }, [isAllowed, selectedReport?.status, openRejectDialog, openApprovalDialog, onOptionItemClick, optionItems]);
+  }, [isAllowed, report?.status, openRejectDialog, openApprovalDialog, onOptionItemClick, optionItems]);
 
   const rightComponent = useMemo(
     () => (
@@ -296,7 +235,7 @@ const ReportView = () => {
     [callToAction, theme]
   );
 
-  const reportName = selectedReport ? getReportName(selectedReport) : '';
+  const reportName = report ? getReportName(report) : '';
 
   const onEditChange = useCallback((isInEdit: boolean) => {
     setBoxInEdit(isInEdit);
@@ -314,8 +253,8 @@ const ReportView = () => {
 
   return (
     <>
-      {showPublishModal && <PublishModal onClose={closePublishModal} onSubmit={publishReport} />}
-      {showApproveDialog && <ApproveReportDialog onClose={closeApproveDialog} onSubmit={approveReport} />}
+      {showPublishModal && <PublishModal onClose={closePublishModal} onSubmit={publishReportCallback} />}
+      {showApproveDialog && <ApproveReportDialog onClose={closeApproveDialog} onSubmit={approveReportCallback} />}
       {showRejectDialog && <RejectDialog onClose={closeRejectDialog} onSubmit={rejectReport} />}
 
       <Page
@@ -347,7 +286,7 @@ const ReportView = () => {
             }
           />
         }
-        rightComponent={!publishedFunderView && selectedReport?.status !== 'Not Submitted' ? rightComponent : undefined}
+        rightComponent={!publishedFunderView && report?.status !== 'Not Submitted' ? rightComponent : undefined}
         crumbs={crumbs}
         hierarchicalCrumbs={false}
       >
@@ -357,13 +296,13 @@ const ReportView = () => {
               <Message type='page' priority='info' body={strings.PUBLISHED_REPORT_CONSOLE_WARNING} />
             </Box>
             <Box marginBottom={4} width={'100%'}>
-              <FunderReportView selectedProjectId={Number(projectId)} selectedReport={selectedPublishedReport} />
+              <FunderReportView selectedProjectId={Number(projectId)} report={selectedPublishedReport} />
             </Box>
           </>
         ) : (
           <Box display='flex' flexDirection='column' flexGrow={1} overflow={'auto'}>
-            {selectedReport && <ApprovedReportMessage report={selectedReport} />}
-            {selectedReport && <RejectedReportMessage report={selectedReport} showRejectDialog={openRejectDialog} />}
+            {report && <ApprovedReportMessage report={report} />}
+            {report && <RejectedReportMessage report={report} showRejectDialog={openRejectDialog} />}
             <Card
               style={{
                 display: 'flex',
@@ -371,22 +310,21 @@ const ReportView = () => {
                 flexGrow: 1,
               }}
             >
-              {selectedReport && <Metadata report={selectedReport} projectId={projectId} reload={reload} />}
-              {selectedReport?.startDate && selectedReport?.endDate && !improvedReportsEnabled && (
+              {report && <Metadata report={report} projectId={projectId} />}
+              {report?.startDate && report?.endDate && !improvedReportsEnabled && (
                 <Box
                   borderBottom={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
                   padding={theme.spacing(3, 0)}
                   marginBottom={3}
                 >
                   <Typography fontSize={14} fontStyle={'italic'}>
-                    {strings.formatString(strings.REPORT_PERIOD, selectedReport?.startDate, selectedReport?.endDate)}
+                    {strings.formatString(strings.REPORT_PERIOD, report?.startDate, report?.endDate)}
                   </Typography>
                 </Box>
               )}
               <HighlightsBox
-                report={selectedReport}
+                report={report}
                 projectId={projectId}
-                reload={reload}
                 isConsoleView={true}
                 onEditChange={onEditChange}
                 canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
@@ -399,18 +337,17 @@ const ReportView = () => {
               {['system', 'project', 'standard'].map((type) => {
                 const metrics =
                   type === 'system'
-                    ? selectedReport?.systemMetrics
+                    ? report?.systemMetrics
                     : type === 'project'
-                      ? selectedReport?.projectMetrics
-                      : selectedReport?.standardMetrics;
+                      ? report?.projectMetrics
+                      : report?.standardMetrics;
 
                 return metrics?.map((metric, index) =>
                   improvedReportsEnabled ? (
                     <MetricRow
                       key={`${type}-${index}`}
-                      metric={metric}
                       type={type as MetricType}
-                      reportLabel={selectedReport?.quarter}
+                      reportLabel={report?.quarter}
                       year={year}
                     />
                   ) : (
@@ -419,7 +356,6 @@ const ReportView = () => {
                       key={`${type}-${index}`}
                       metric={metric}
                       projectId={projectId}
-                      reload={reload}
                       reportId={Number(reportId)}
                       type={type as MetricType}
                       onEditChange={onEditChange}
@@ -433,41 +369,36 @@ const ReportView = () => {
               {!improvedReportsEnabled && (
                 <>
                   <AchievementsBox
-                    report={selectedReport}
+                    report={report}
                     projectId={projectId}
-                    reload={reload}
                     isConsoleView={true}
                     onEditChange={onEditChange}
                     canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
                   />
                   <ChallengesMitigationBox
-                    report={selectedReport}
+                    report={report}
                     projectId={projectId}
-                    reload={reload}
                     isConsoleView={true}
                     onEditChange={onEditChange}
                     canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
                   />
                   <FinancialSummariesBox
-                    report={selectedReport}
+                    report={report}
                     projectId={projectId}
-                    reload={reload}
                     isConsoleView={true}
                     onEditChange={onEditChange}
                     canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
                   />
                   <AdditionalCommentsBox
-                    report={selectedReport}
+                    report={report}
                     projectId={projectId}
-                    reload={reload}
                     isConsoleView={true}
                     onEditChange={onEditChange}
                     canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
                   />
                   <PhotosBox
-                    report={selectedReport}
+                    report={report}
                     projectId={projectId}
-                    reload={reload}
                     isConsoleView={true}
                     onEditChange={onEditChange}
                     canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}

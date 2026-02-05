@@ -1,4 +1,10 @@
 {
+  "eslint.rules.customizations": [
+    {
+      "rule": "react/jsx-no-bind",
+      "severity": "warn"
+    }
+  ],
   "typescript.tsdk": "node_modules/typescript/lib",
   "typescript.enablePromptUseWorkspaceTsdk": true
 }
