@@ -5,8 +5,6 @@ export enum MIXPANEL_EVENTS {
   PART_EX_LEFT_NAV_DELIVERABLES = 'Participant Deliverables Nav Click',
   PART_EX_LEFT_NAV_MODULES = 'Participant Modules Nav Click',
   CONSOLE_LEFT_NAV_DELIVERABLES = 'Console Deliverables Nav Click',
-  CONSOLE_OVERVIEW_TAB = 'Console Overview Tab Clik',
-  CONSOLE_PROJECTS_EXPORT = 'Console Projects Export Click',
   ACCELERATOR_MDDULE_SESSION_EVENT_LINK = 'Accelerator Module Session Event Click',
   ACCELERATOR_MDDULE_ADDITIONAL_LINK = 'Accelerator Modules Additional Link Click',
   HOME_ACCELERATOR_APPLY_BUTTON = 'Apply to Accelerator Click',
