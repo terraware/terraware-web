@@ -6,7 +6,10 @@ import { Button } from '@terraware/web-components';
 import ImageLightbox from 'src/components/common/ImageLightbox';
 import MediaItem, { MediaFile } from 'src/components/common/MediaItem';
 import isEnabled from 'src/features';
-import { useGenerateObservationSplatFileMutation } from 'src/queries/generated/observationSplats';
+import {
+  useGenerateObservationSplatFileMutation,
+  useListObservationSplatsQuery,
+} from 'src/queries/generated/observationSplats';
 import strings from 'src/strings';
 import { ObservationMonitoringPlotPhoto, getPositionLabel, getQuadratLabel } from 'src/types/Observations';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -32,8 +35,11 @@ export default function MonitoringPlotPhotosWithActions({
   const theme = useTheme();
   const [lightboxFileId, setLightboxFileId] = useState<number | undefined>(undefined);
   const [generateObservationSplatFile] = useGenerateObservationSplatFileMutation();
-  const virtualPlotEnabled = isEnabled('Virtual Monitoring Plots');
   const snackbar = useSnackbar();
+  const { data } = useListObservationSplatsQuery({ observationId });
+  const observationSplats = useMemo(() => data?.splats || [], [data]);
+
+  const isVirtualPlotsEnabled = isEnabled('Virtual Monitoring Plots');
 
   const rootMediaUrl = useMemo(
     () =>
@@ -116,36 +122,41 @@ export default function MonitoringPlotPhotosWithActions({
   return (
     <>
       <Box display='grid' gridTemplateColumns='repeat(auto-fill, minmax(213px, 1fr))' gap={2}>
-        {mediaFiles.map((mediaFile) => (
-          <Box key={mediaFile.fileId} position='relative'>
-            {!!monitoringPlotName && mediaFile.position && (
-              <Typography color={theme.palette.TwClrBaseBlack}>
-                {monitoringPlotName} {getPositionLabel(mediaFile.position)}
-              </Typography>
-            )}
-            {mediaFile.isQuadrat && (
-              <Typography color={theme.palette.TwClrBaseBlack}>{getQuadratLabel(mediaFile.position)}</Typography>
-            )}
-            <MediaItem
-              mediaFile={mediaFile}
-              imageSrc={getStaticPhotoUrl(mediaFile.fileId)}
-              downloadUrl={getMediaUrl(mediaFile.fileId)}
-              onExpand={handleExpand}
-              observationId={observationId}
-              plotId={monitoringPlotId}
-              plantingSiteName={plantingSiteName}
-            />
-            {virtualPlotEnabled && mediaFile.type === 'Video' && (
-              <Button
-                label={strings.CREATE_VIRTUAL_PLOT}
-                priority='secondary'
-                type='passive'
-                onClick={createVirtualPlot(mediaFile.fileId)}
-                sx={{ width: '100%' }}
+        {mediaFiles.map((mediaFile) => {
+          const splat = observationSplats.find((_splat) => _splat.fileId === mediaFile.fileId);
+
+          return (
+            <Box key={mediaFile.fileId} position='relative'>
+              {!!monitoringPlotName && mediaFile.position && (
+                <Typography color={theme.palette.TwClrBaseBlack}>
+                  {monitoringPlotName} {getPositionLabel(mediaFile.position)}
+                </Typography>
+              )}
+              {mediaFile.isQuadrat && (
+                <Typography color={theme.palette.TwClrBaseBlack}>{getQuadratLabel(mediaFile.position)}</Typography>
+              )}
+              <MediaItem
+                mediaFile={mediaFile}
+                imageSrc={getStaticPhotoUrl(mediaFile.fileId)}
+                downloadUrl={getMediaUrl(mediaFile.fileId)}
+                onExpand={handleExpand}
+                observationId={observationId}
+                plotId={monitoringPlotId}
+                plantingSiteName={plantingSiteName}
               />
-            )}
-          </Box>
-        ))}
+              {isVirtualPlotsEnabled && mediaFile.type === 'Video' && (
+                <Button
+                  label={strings.CREATE_VIRTUAL_PLOT}
+                  priority='secondary'
+                  type='passive'
+                  onClick={createVirtualPlot(mediaFile.fileId)}
+                  sx={{ width: '100%' }}
+                  disabled={splat?.status === 'Preparing'}
+                />
+              )}
+            </Box>
+          );
+        })}
       </Box>
 
       <ImageLightbox
