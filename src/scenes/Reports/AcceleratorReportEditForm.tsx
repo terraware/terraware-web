@@ -128,7 +128,15 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
         goToReport();
       } // else, wait for second effect to navigate back
     }
-  }, [goToReport, projectId, reportId, snackbar, updateReportResponse.isError, updateReportResponse.isSuccess]);
+  }, [
+    goToReport,
+    projectId,
+    reportId,
+    saveReportPhotos,
+    snackbar,
+    updateReportResponse.isError,
+    updateReportResponse.isSuccess,
+  ]);
 
   useEffect(() => {
     if (projectId !== currentParticipantProject?.id) {

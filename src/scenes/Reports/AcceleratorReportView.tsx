@@ -20,7 +20,6 @@ import Card from 'src/components/common/Card';
 import TitleBar from 'src/components/common/TitleBar';
 import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import useProjectReports from 'src/hooks/useProjectReports';
 import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { useGetAcceleratorReportQuery, useSubmitAcceleratorReportMutation } from 'src/queries/generated/reports';
@@ -46,13 +45,7 @@ const AcceleratorReportView = () => {
     includeMetrics: true,
   });
 
-<<<<<<< HEAD
-  const getReportResults = useAppSelector(selectAcceleratorReport(requestId));
-  const submitReportResults = useAppSelector(selectSubmitAcceleratorReport(submitReportRequestId));
-  const { getYearTarget } = useProjectReports(projectId, true, true);
-=======
   const report = useMemo(() => reportResponse?.data?.report, [reportResponse?.data]);
->>>>>>> 0f9c378668 (Moved most reports endpoints to RTK query)
 
   const [submit, submitResponse] = useSubmitAcceleratorReportMutation();
 
