@@ -7,9 +7,7 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import Link from 'src/components/common/Link';
 import Icon from 'src/components/common/icon/Icon';
 import useBoolean from 'src/hooks/useBoolean';
-import { selectReviewAcceleratorReport } from 'src/redux/features/reports/reportsSelectors';
-import { requestReviewAcceleratorReport } from 'src/redux/features/reports/reportsThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useReviewAcceleratorReportMutation } from 'src/queries/generated/reports';
 import strings from 'src/strings';
 import { ChallengeMitigation, isAcceleratorReport } from 'src/types/AcceleratorReport';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -150,24 +148,12 @@ const ChallengeMitigationPlan = ({
 };
 
 const ChallengesMitigationBox = (props: ReportBoxProps) => {
-  const {
-    report,
-    projectId,
-    reload,
-    isConsoleView,
-    onChange,
-    editing,
-    onEditChange,
-    canEdit,
-    funderReportView,
-    validate,
-  } = props;
+  const { report, projectId, isConsoleView, onChange, editing, onEditChange, canEdit, funderReportView, validate } =
+    props;
   const [internalEditing, setInternalEditing, setInternalEditingTrue] = useBoolean(false);
   const [challengeMitigations, setChallengeMitigations] = useState<ChallengeMitigation[]>(report?.challenges || []);
   const [validateFields, setValidateFields] = useState<boolean>(false);
-  const dispatch = useAppDispatch();
-  const [requestId, setRequestId] = useState<string>('');
-  const updateReportResponse = useAppSelector(selectReviewAcceleratorReport(requestId));
+  const [reviewReport, reviewReportResponse] = useReviewAcceleratorReportMutation();
   const snackbar = useSnackbar();
 
   const { isMobile } = useDeviceInfo();
@@ -207,14 +193,13 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
   }, [addRow, areFilteredChallengesDifferent, challengeMitigations, onChange]);
 
   useEffect(() => {
-    if (updateReportResponse?.status === 'error') {
+    if (reviewReportResponse.isError) {
       snackbar.toastError();
-    } else if (updateReportResponse?.status === 'success') {
+    } else if (reviewReportResponse.isSuccess) {
       snackbar.toastSuccess(strings.CHANGES_SAVED);
       setInternalEditing(false);
-      reload?.();
     }
-  }, [updateReportResponse, snackbar, reload, setInternalEditing]);
+  }, [snackbar, setInternalEditing, reviewReportResponse.isError, reviewReportResponse.isSuccess]);
 
   const onSave = useCallback(() => {
     if (isAcceleratorReport(report)) {
@@ -224,21 +209,20 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
         return;
       }
 
-      const request = dispatch(
-        requestReviewAcceleratorReport({
+      void reviewReport({
+        projectId,
+        reportId: report.id,
+        reviewAcceleratorReportRequestPayload: {
           review: {
             ...report,
             achievements: report?.achievements || [],
             challenges: nonEmptyChallenges,
             status: report?.status || 'Not Submitted',
           },
-          projectId: Number(projectId),
-          reportId: report?.id || -1,
-        })
-      );
-      setRequestId(request.requestId);
+        },
+      });
     }
-  }, [report, nonEmptyChallenges, dispatch, projectId]);
+  }, [report, nonEmptyChallenges, reviewReport, projectId]);
 
   const onCancel = useCallback(() => {
     setInternalEditing(false);

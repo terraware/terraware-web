@@ -1,12 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { useUserFundingEntity } from 'src/providers';
-import { requestListFunderReports } from 'src/redux/features/funder/entities/fundingEntitiesAsyncThunks';
-import { selectListFunderReports } from 'src/redux/features/funder/entities/fundingEntitiesSelectors';
+import { useLazyListPublishedReportsQuery } from 'src/queries/generated/publishedReports';
 import { requestGetFunderProjects } from 'src/redux/features/funder/projects/funderProjectsAsyncThunks';
 import { selectFunderProjects } from 'src/redux/features/funder/projects/funderProjectsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { PublishedReport } from 'src/types/AcceleratorReport';
 import { FunderProjectDetails } from 'src/types/FunderProject';
 
 import MultiProjectView from './MultiProjectView';
@@ -21,8 +19,12 @@ export default function FunderHome() {
   const funderProjects: Record<number, FunderProjectDetails> = useAppSelector(
     selectFunderProjects(fundingEntityProjectIds)
   );
-  const reportsResponse = useAppSelector(selectListFunderReports(selectedProjectId?.toString() ?? ''));
-  const [publishedReports, setPublishedReports] = useState<PublishedReport[]>();
+
+  const [listPublishedReports, listPublihsedReportsResponse] = useLazyListPublishedReportsQuery();
+  const publishedReports = useMemo(
+    () => listPublihsedReportsResponse.data?.reports ?? [],
+    [listPublihsedReportsResponse.data?.reports]
+  );
 
   useEffect(() => {
     if (userFundingEntity?.projects) {
@@ -37,22 +39,16 @@ export default function FunderHome() {
   }, [funderProjects, selectedProjectId]);
 
   useEffect(() => {
+    if (selectedProjectId) {
+      void listPublishedReports(selectedProjectId, true);
+    }
+  }, [listPublishedReports, selectedProjectId]);
+
+  useEffect(() => {
     if (fundingEntityProjectIds.length) {
       void dispatch(requestGetFunderProjects(fundingEntityProjectIds));
     }
   }, [fundingEntityProjectIds, dispatch]);
-
-  useEffect(() => {
-    if (selectedProjectId && selectedProjectId !== -1 && publishedReports === undefined) {
-      void dispatch(requestListFunderReports(selectedProjectId));
-    }
-  }, [dispatch, selectedProjectId, publishedReports]);
-
-  useEffect(() => {
-    if (reportsResponse?.status === 'success') {
-      setPublishedReports(reportsResponse.data || []);
-    }
-  }, [reportsResponse]);
 
   const projectDetails = useMemo(() => {
     if (selectedProjectId) {

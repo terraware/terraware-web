@@ -4,13 +4,10 @@ import { Box, IconButton, Typography } from '@mui/material';
 import { Dropdown, Icon } from '@terraware/web-components';
 
 import useFunderPortal from 'src/hooks/useFunderPortal';
-import useProjectReports from 'src/hooks/useProjectReports';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
-import { requestListFunderReports } from 'src/redux/features/funder/entities/fundingEntitiesAsyncThunks';
-import { selectListFunderReports } from 'src/redux/features/funder/entities/fundingEntitiesSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { AcceleratorReport, PublishedReport } from 'src/types/AcceleratorReport';
+import { PublishedReportPayload, useListPublishedReportsQuery } from 'src/queries/generated/publishedReports';
+import { AcceleratorReportPayload, useListAcceleratorReportsQuery } from 'src/queries/generated/reports';
 import { groupActivitiesByQuarter } from 'src/utils/activityUtils';
 import useQuery from 'src/utils/useQuery';
 import { getLocation } from 'src/utils/useStateLocation';
@@ -50,20 +47,25 @@ const ActivityHighlightsContent = ({
   const query = useQuery();
   const location = useStateLocation();
   const navigate = useSyncNavigate();
-  const { acceleratorReports, busy: isLoadingReports } = useProjectReports(projectId);
-  const [publishedReports, setPublishedReports] = useState<PublishedReport[]>();
-  const reportsResponse = useAppSelector(selectListFunderReports(projectId.toString() ?? ''));
+
   const { isFunderRoute } = useFunderPortal();
-  const dispatch = useAppDispatch();
+  const listReportsResponse = useListAcceleratorReportsQuery({ projectId }, { skip: isFunderRoute });
+  const listPublishedReportsResponse = useListPublishedReportsQuery(projectId, { skip: !isFunderRoute });
+  const isLoadingReports = useMemo(
+    () => listReportsResponse.isLoading || listPublishedReportsResponse.isLoading,
+    [listPublishedReportsResponse.isLoading, listReportsResponse.isLoading]
+  );
+
+  const acceleratorReports = useMemo(
+    () => listReportsResponse.data?.reports ?? [],
+    [listReportsResponse.data?.reports]
+  );
+  const publishedReports = useMemo(
+    () => listPublishedReportsResponse.data?.reports ?? [],
+    [listPublishedReportsResponse.data?.reports]
+  );
 
   const [selectedQuarter, setSelectedQuarter] = useState<string | undefined>(undefined);
-
-  useEffect(() => {
-    if (isFunderRoute && publishedReports === undefined) {
-      void dispatch(requestListFunderReports(projectId));
-    }
-  }, [dispatch, isFunderRoute, projectId, publishedReports]);
-
   const highlightedActivities = useMemo(
     () => activities.filter((activity) => activity.payload.isHighlight),
     [activities]
@@ -97,14 +99,8 @@ const ActivityHighlightsContent = ({
     setSelectedQuarter(value);
   }, []);
 
-  useEffect(() => {
-    if (reportsResponse?.status === 'success') {
-      setPublishedReports(reportsResponse.data || []);
-    }
-  }, [reportsResponse]);
-
   const getLatestReportQuarter = useCallback(
-    (reports: AcceleratorReport[] | PublishedReport[]) => {
+    (reports: AcceleratorReportPayload[] | PublishedReportPayload[]) => {
       if (reports.length === 0) {
         return undefined;
       }

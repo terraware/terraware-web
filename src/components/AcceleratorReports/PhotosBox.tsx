@@ -5,17 +5,8 @@ import { Textfield } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import useBoolean from 'src/hooks/useBoolean';
-import {
-  selectDeleteManyAcceleratorReportPhotos,
-  selectUpdateManyAcceleratorReportPhotos,
-  selectUploadManyAcceleratorReportPhotos,
-} from 'src/redux/features/reports/reportsSelectors';
-import {
-  requestDeleteManyAcceleratorReportPhotos,
-  requestUpdateManyAcceleratorReportPhotos,
-  requestUploadManyAcceleratorReportPhotos,
-} from 'src/redux/features/reports/reportsThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { PublishedReportPayload } from 'src/queries/generated/publishedReports';
+import { useBatchReportPhotosMutation } from 'src/queries/reports/photos';
 import strings from 'src/strings';
 import { AcceleratorReportPhoto, NewAcceleratorReportPhoto, isAcceleratorReport } from 'src/types/AcceleratorReport';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -115,12 +106,14 @@ const NewPhoto = ({ photo, setCaption, onDelete }: NewPhotoProp) => {
 };
 
 const PhotosBox = (props: ReportBoxProps) => {
-  const { report, projectId, reload, isConsoleView, editing, onChange, onEditChange, canEdit, funderReportView } =
-    props;
+  const { report, projectId, isConsoleView, editing, onChange, onEditChange, canEdit, funderReportView } = props;
 
   const [internalEditing, setInternalEditing, setInternalEditingTrue] = useBoolean(false);
   const [photos, setPhotos] = useState<AcceleratorReportPhoto[]>(report?.photos || []);
   const [newPhotos, setNewPhotos] = useState<NewAcceleratorReportPhoto[]>([]);
+
+  const [batchReportPhotos, { isLoading }] = useBatchReportPhotosMutation();
+  const snackbar = useSnackbar();
 
   const files = useMemo(() => {
     return newPhotos.map((photo) => photo.file);
@@ -137,17 +130,6 @@ const PhotosBox = (props: ReportBoxProps) => {
     });
   }, []);
 
-  const dispatch = useAppDispatch();
-  const [dispatched, setDispatched] = useState(false);
-  const [deletePhotosRequestId, setDeletePhotosRequestId] = useState<string>('');
-  const [updatePhotosRequestId, setUpdatePhotosRequestId] = useState<string>('');
-  const [uploadPhotosRequestId, setUploadPhotosRequestId] = useState<string>('');
-
-  const snackbar = useSnackbar();
-  const deletePhotosResult = useAppSelector(selectDeleteManyAcceleratorReportPhotos(deletePhotosRequestId));
-  const updatePhotosResult = useAppSelector(selectUpdateManyAcceleratorReportPhotos(updatePhotosRequestId));
-  const uploadPhotosResult = useAppSelector(selectUploadManyAcceleratorReportPhotos(uploadPhotosRequestId));
-
   useEffect(() => {
     if (!editing) {
       setPhotos(report?.photos || []);
@@ -155,32 +137,6 @@ const PhotosBox = (props: ReportBoxProps) => {
   }, [editing, report?.photos]);
 
   useEffect(() => onEditChange?.(internalEditing), [internalEditing, onEditChange]);
-
-  useEffect(() => {
-    if (dispatched) {
-      const deletePhotosPending = deletePhotosResult ? deletePhotosResult.status === 'pending' : false;
-      const updatePhotosPending = updatePhotosResult ? updatePhotosResult.status === 'pending' : false;
-      const uploadPhotosPending = uploadPhotosResult ? uploadPhotosResult.status === 'pending' : false;
-
-      if (deletePhotosPending || updatePhotosPending || uploadPhotosPending) {
-        return;
-      }
-
-      const deletePhotosError = deletePhotosResult ? deletePhotosResult.status !== 'success' : false;
-      const updatePhotosError = updatePhotosResult ? updatePhotosResult.status !== 'success' : false;
-      const uploadPhotosError = uploadPhotosResult ? uploadPhotosResult.status !== 'success' : false;
-
-      if (deletePhotosError || updatePhotosError || uploadPhotosError) {
-        snackbar.toastError();
-      } else {
-        snackbar.toastSuccess(strings.CHANGES_SAVED);
-      }
-
-      setInternalEditing(false);
-      setNewPhotos([]);
-      reload?.();
-    }
-  }, [deletePhotosResult, dispatched, reload, setInternalEditing, snackbar, updatePhotosResult, uploadPhotosResult]);
 
   const toDelete = useMemo(() => {
     return (
@@ -209,48 +165,30 @@ const PhotosBox = (props: ReportBoxProps) => {
     }
   }, [onChange, toDelete, toUpdate, newPhotos]);
 
-  const onSave = useCallback(() => {
+  const onSave = useCallback(async () => {
     if (isAcceleratorReport(report)) {
-      let nextDispatched = false;
-      if (toDelete.length) {
-        const deleteDispatch = dispatch(
-          requestDeleteManyAcceleratorReportPhotos({
-            projectId,
-            reportId: report.id.toString(),
-            fileIds: toDelete.map((photo) => photo.fileId.toString()),
-          })
-        );
-        setDeletePhotosRequestId(deleteDispatch.requestId);
-        nextDispatched = true;
+      if (toDelete.length === 0 && toUpdate.length === 0 && newPhotos.length === 0) {
+        setInternalEditing(false);
+        return;
       }
 
-      if (toUpdate.length) {
-        const updateDispatch = dispatch(
-          requestUpdateManyAcceleratorReportPhotos({
-            projectId,
-            reportId: report.id.toString(),
-            photos: toUpdate,
-          })
-        );
-        setUpdatePhotosRequestId(updateDispatch.requestId);
-        nextDispatched = true;
-      }
+      try {
+        await batchReportPhotos({
+          projectId,
+          reportId: report.id,
+          photosToUpdate: toUpdate,
+          photosToUpload: newPhotos,
+          fileIdsToDelete: toDelete.map((photo) => photo.fileId),
+        }).unwrap();
 
-      if (newPhotos.length) {
-        const uploadDispatch = dispatch(
-          requestUploadManyAcceleratorReportPhotos({
-            projectId,
-            reportId: report.id.toString(),
-            photos: newPhotos,
-          })
-        );
-        setUploadPhotosRequestId(uploadDispatch.requestId);
-        nextDispatched = true;
+        snackbar.toastSuccess(strings.CHANGES_SAVED);
+        setInternalEditing(false);
+        setNewPhotos([]);
+      } catch (error) {
+        snackbar.toastError();
       }
-
-      setDispatched(nextDispatched);
     }
-  }, [report, toDelete, toUpdate, newPhotos, dispatch, projectId]);
+  }, [report, toDelete, toUpdate, newPhotos, batchReportPhotos, projectId, setInternalEditing, snackbar]);
 
   const onCancel = useCallback(() => {
     setInternalEditing(false);
@@ -291,7 +229,7 @@ const PhotosBox = (props: ReportBoxProps) => {
       if (report) {
         let path = isAcceleratorReport(report)
           ? `/api/v1/accelerator/projects/${projectId}/reports/${report.id}/photos/${fileId}`
-          : `/api/v1/funder/reports/${report.reportId}/photos/${fileId}`;
+          : `/api/v1/funder/reports/${(report as PublishedReportPayload).reportId}/photos/${fileId}`;
 
         if (maxHeight !== undefined || maxWidth !== undefined) {
           path += '?';
@@ -316,11 +254,12 @@ const PhotosBox = (props: ReportBoxProps) => {
   return (
     <EditableReportBox
       name={funderReportView ? '' : strings.PHOTOS}
+      busy={isLoading}
       canEdit={!!canEdit}
       editing={isEditing}
       onEdit={setInternalEditingTrue}
       onCancel={onCancel}
-      onSave={onSave}
+      onSave={() => void onSave()}
       isConsoleView={isConsoleView}
       includeBorder={false}
     >

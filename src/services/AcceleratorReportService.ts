@@ -59,7 +59,6 @@ const SUBMIT_ACCELERATOR_REPORT_ENDPOINT = '/api/v1/accelerator/projects/{projec
 const ACCELERATOR_REPORT_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/reports/{reportId}';
 const PUBLISH_ACCELERATOR_REPORT_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/reports/{reportId}/publish';
 const UPDATE_REPORT_TARGET_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/reports/targets';
-const PHOTOS_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/reports/{reportId}/photos';
 export const ACCELERATOR_REPORT_PHOTO_ENDPOINT =
   '/api/v1/accelerator/projects/{projectId}/reports/{reportId}/photos/{fileId}';
 export const FUNDER_REPORT_PHOTO_ENDPOINT = '/api/v1/funder/reports/{reportId}/photos/{fileId}';
@@ -349,50 +348,6 @@ const publishAcceleratorReport = async (
   ).post2<PublishAcceleratorReportResponse>();
 };
 
-const deleteAcceleratorReportPhoto = async (projectId: string, reportId: string, fileId: string) => {
-  return HttpService.root(
-    ACCELERATOR_REPORT_PHOTO_ENDPOINT.replace('{projectId}', projectId)
-      .replace('{reportId}', reportId)
-      .replace('{fileId}', fileId)
-  ).delete2();
-};
-
-const uploadAcceleratorReportPhoto = async (
-  projectId: string,
-  reportId: string,
-  caption: string | undefined,
-  file: File
-) => {
-  const headers = { 'content-type': 'multipart/form-data' };
-
-  const response: Response = await HttpService.root(
-    PHOTOS_ENDPOINT.replace('{projectId}', projectId.toString()).replace('{reportId}', reportId.toString())
-  ).post({
-    entity: { file, caption },
-    headers,
-  });
-
-  return {
-    ...response,
-    fileId: response?.data?.fileId ?? null,
-  };
-};
-
-const updateAcceleratorReportPhoto = async (
-  projectId: string,
-  reportId: string,
-  fileId: string,
-  caption: string | undefined
-) => {
-  return HttpService.root(
-    ACCELERATOR_REPORT_PHOTO_ENDPOINT.replace('{projectId}', projectId)
-      .replace('{reportId}', reportId)
-      .replace('{fileId}', fileId)
-  ).put2({
-    entity: { caption },
-  });
-};
-
 /**
  * Exported functions
  */
@@ -416,9 +371,6 @@ const ReportService = {
   refreshAcceleratorReportSystemMetrics,
   submitAcceleratorReport,
   publishAcceleratorReport,
-  deleteAcceleratorReportPhoto,
-  updateAcceleratorReportPhoto,
-  uploadAcceleratorReportPhoto,
 };
 
 export default ReportService;

@@ -13,6 +13,7 @@ import {
 
 import useFunderPortal from './useFunderPortal';
 
+// Deprecated: inefficient report fetching
 const useProjectReports = (
   projectId?: number | string,
   includeFuture: boolean = false,
