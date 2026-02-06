@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/64</span>
+                <span class='fraction'>0/61</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/52</span>
+                <span class='fraction'>0/45</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/59</span>
+                <span class='fraction'>0/56</span>
             </div>
         
             
@@ -136,11 +136,7 @@
 <a name='L71'></a><a href='#L71'>71</a>
 <a name='L72'></a><a href='#L72'>72</a>
 <a name='L73'></a><a href='#L73'>73</a>
-<a name='L74'></a><a href='#L74'>74</a>
-<a name='L75'></a><a href='#L75'>75</a>
-<a name='L76'></a><a href='#L76'>76</a>
-<a name='L77'></a><a href='#L77'>77</a>
-<a name='L78'></a><a href='#L78'>78</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L74'></a><a href='#L74'>74</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -180,7 +176,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -192,14 +187,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -217,91 +208,88 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > useCallback, </span>useEffect, useMemo, useState } from 'react';
 <span class="cstat-no" title="statement not covered" ></span>
 import { useUserFunding<span class="cstat-no" title="statement not covered" >Entity } from 'src/providers';</span>
-import { requestListFund<span class="cstat-no" title="statement not covered" >erReports } from 'src/redux</span>/features/funder/entities/fundingEntitiesAsyncThunks';
-import { selectList<span class="cstat-no" title="statement not covered" >FunderReports } from '</span>src/redux/features/funder/entities/fundingEntitiesSelectors';
-import { requestGet<span class="cstat-no" title="statement not covered" >FunderProjects } from 'src/redux</span>/features/funder/projects/funderProjectsAsyncThunks';
-import { select<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Fu</span>nderProjects } from 'src/redux/features/funder/projects/funderProjectsSelectors';</span>
-im<span class="cstat-no" title="statement not covered" >port { useAppDispatch, useAppSelector } from 'src/redux/store';</span>
-impo<span class="cstat-no" title="statement not covered" >rt { PublishedReport } from 'src/types/AcceleratorReport';</span>
-import { FunderProjectDetails } from 'src/types/FunderProject';
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-im<span class="cstat-no" title="statement not covered" >port MultiProjectView from './MultiProjectView';</span>
-impo<span class="cstat-no" title="statement not covered" >rt ProjectView from './ProjectView';</span>
+import { useLazyListPubl<span class="cstat-no" title="statement not covered" >ishedReportsQuery } from 's</span>rc/queries/generated/publishedReports';
+import { requestGet<span class="cstat-no" title="statement not covered" >FunderProjects } from </span>'src/redux/features/funder/projects/funderProjectsAsyncThunks';
+import { selectFund<span class="cstat-no" title="statement not covered" >erProjects } from 'src/redux/fea</span>tures/funder/projects/funderProjectsSelectors';
+import { useApp<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Di</span>spatch, useAppSelector } from 'src/redux/store';</span>
+im<span class="cstat-no" title="statement not covered" >port { FunderProjectDetails } from 'src/types/FunderProject';</span>
 <span class="cstat-no" title="statement not covered" ></span>
-export d<span class="cstat-no" title="statement not covered" >efault function FunderHome<span class="fstat-no" title="function not covered" >()</span> {<span class="cstat-no" title="statement not covered" ></span></span>
-  const dispatch = useAppDispatch();
-<span class="cstat-no" title="statement not covered" >  const { use</span>rFundingEntity } = useUserFundingEntity();
+import MultiProjectView from './MultiProjectView';
+import ProjectView<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > f</span>rom './ProjectView';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+expo<span class="cstat-no" title="statement not covered" >rt default function FunderHome() {</span>
+  cons<span class="cstat-no" title="statement not covered" >t dispatch = useAppDispatch();</span>
+  const <span class="cstat-no" title="statement not covered" >{ userFundingEntity } = us<span class="fstat-no" title="function not covered" >eU</span>serF<span class="cstat-no" title="statement not covered" >undingEnti</span>ty();</span>
 &nbsp;
-  const [fundi<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ng</span>EntityProjectIds, setFunding<span class="cstat-no" title="statement not covered" >EntityProjectIds] = useState&lt;number[]&gt;([]);</span></span>
+<span class="cstat-no" title="statement not covered" >  const [fund</span>ingEntityProjectIds, setFundingEntityProjectIds] = useState&lt;number[]&gt;([]);
   const [selectedProjectId, setSelectedProjectId] = useState&lt;number&gt;();
-  const funderProjects: Record&lt;number, FunderProjectDetails&gt; = useAppSelector(
+  const funder<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Pr</span>ojects: Record&lt;number, Funde<span class="cstat-no" title="statement not covered" >rProjectDetails&gt; = useAppSelector(</span></span>
     selectFunderProjects(fundingEntityProjectIds)
   );
-  const reportsResponse = useAppSelector(selectListFunderReports(selectedProjectId?.toString() ?? ''));
-  const [publishedReports, setPublishedReports] = useState&lt;PublishedReport[]&gt;();
 &nbsp;
-  useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-    if (userFundingE<span class="cstat-no" title="statement not covered" >nti</span>ty?.projects) {
-<span class="cstat-no" title="statement not covered" >      setFundingEntityProjectIds(userFundingEntity.projects.map((p) =&gt; p.projectId));</span>
-    }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  }, [userFundingEntity?.projects]);
+  const [listPublishedReports, listPublihsedReportsResponse] = useLazyListPublishedReportsQuery();
+  const publishedReports = useMemo(
+    () =&gt; listPublihsedReportsResponse.data?.reports ?? [],
+    [listPublihsedReportsResponse.data?.reports]
+  );<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-    if (!selectedProjec<span class="cstat-no" title="statement not covered" >tId &amp;&amp; Object.keys(funder</span>Projects).length === 1) {
-      setSelectedProjectId(Number(Object<span class="cstat-no" title="statement not covered" >.keys(funderProjects)[0]));</span>
-    }<span class="cstat-no" title="statement not covered" ></span>
-  }, [funderProjects, selectedProjectId<span class="cstat-no" title="statement not covered" >]);</span>
-<span class="cstat-no" title="statement not covered" ></span>
-  useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-    if (fundingEntityProjectId<span class="cstat-no" title="statement not covered" >s.length) {</span>
-      void dispatch(reque<span class="cstat-no" title="statement not covered" >stGetFunderProjects(fundingEntityP</span>rojectIds));
-    }<span class="fstat-no" title="function not covered" ></span>
-  }, [fundingEntityProjectIds, dispatch]);
-<span class="cstat-no" title="statement not covered" ></span>
-  useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-    if (selectedProjectId &amp;&amp; selectedProjectId !== -1 &amp;&amp; publish<span class="cstat-no" title="statement not covered" >edReports === undefined) {</span>
-      void dispatch(requestListFunderReports(selecte<span class="cstat-no" title="statement not covered" >dProjectId));</span>
-    }<span class="cstat-no" title="statement not covered" ></span>
-  }, [dispatch, selectedProjectId, publishedReports]);
-&nbsp;
-  useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-    if (reportsResponse?.status === 'success') {<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >      setPublishedReports(repo<span class="fstat-no" title="function not covered" >rt</span>sResponse.data || []);</span>
+<span class="cstat-no" title="statement not covered" >  useEffect(() =&gt; {</span>
+    if (use<span class="fstat-no" title="function not covered" >rF</span>undi<span class="cstat-no" title="statement not covered" >ngEntity?.p</span>rojects) {
+      setFundingEntityProjectIds(userFundingEntity.projects.map((p) =&gt; p.projectId));
 <span class="cstat-no" title="statement not covered" >    }</span>
-  }, [<span class="cstat-no" title="statement not covered" >reportsResponse]);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-&nbsp;
-  const projectDetails = useMemo(() =&gt; {
-<span class="cstat-no" title="statement not covered" >    if (selectedProjectId) {<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >      return funderProjects[selectedProjectId];</span>
-    }<span class="cstat-no" title="statement not covered" ></span>
-  }, [selectedProjectId, funderProjects]);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  const goToAllProjects = useC<span class="fstat-no" title="function not covered" >al</span>lback(() =&gt; setSelectedProjectId(undefined), []);</span>
+  }, [userFundingEn<span class="cstat-no" title="statement not covered" >tity?.projects]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  if (<span class="cstat-no" title="statement not covered" >selectedProjectId &amp;&amp; projectDetails &amp;&amp; publishedReports !== undefined) {</span>
+  useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
+    if (!selectedProjectId &amp;&amp; Object.ke<span class="cstat-no" title="statement not covered" >ys(funderProjects).length === 1) {</span>
+      setSelectedProjectId(Number(Obj<span class="cstat-no" title="statement not covered" >ect.keys(funderProjects)[0]));</span>
+    }<span class="cstat-no" title="statement not covered" ></span>
+  }, [funderProjects, selected<span class="cstat-no" title="statement not covered" >ProjectId]);</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  useEffe<span class="fstat-no" title="function not covered" >ct(() =&gt; {</span>
+    if (selectedProjectId) {
+      void listPubl<span class="cstat-no" title="statement not covered" >ishedReports(selectedProjectId, tru</span>e);
+    }<span class="cstat-no" title="statement not covered" ></span>
+  }, [listPublishedReports, selectedProjectId]);<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+  useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
+    if (fundingEntityProjectIds.length) {
+      void dispatch(requestGetFunderProjects(fundingEntityProjectIds));
+    }<span class="cstat-no" title="statement not covered" ></span>
+  }, [fundingEntityProjectI<span class="cstat-no" title="statement not covered" >ds, dispatch]);</span>
+<span class="fstat-no" title="function not covered" ></span>
+  const projectDetails = useMemo(() =&gt; {
+    if<span class="cstat-no" title="statement not covered" > (selectedProjectId) {</span>
+      return funderProjects[selectedProjectId];
+    }
+  }, [selectedProjectId, funderProjects]);
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  co<span class="cstat-no" title="statement not covered" >nst goToAllProjects = useCallback(() =&gt; setSelectedProjectId(undefined), []);</span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  if (selectedProjectId &amp;&amp; projectDetails &amp;&amp; publishedReports !== undefined) {
     return (
-      &lt;ProjectView
-<span class="cstat-no" title="statement not covered" >        projectDetails={projec<span class="fstat-no" title="function not covered" >tD</span>etails}</span>
+<span class="cstat-no" title="statement not covered" >      &lt;ProjectView<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >        projectDetails={projectDetails}</span>
 <span class="cstat-no" title="statement not covered" >        includeCrumbs={Object.keys(funderProjects).length &gt; 1}</span>
-<span class="cstat-no" title="statement not covered" >        goToAllProjects={goToAllProjects}</span>
+        goToAllProjects={goToAllProjects}
         publishedReports={publishedReports}
-      /&gt;
-<span class="cstat-no" title="statement not covered" >    );<span class="fstat-no" title="function not covered" ></span></span>
-  } <span class="cstat-no" title="statement not covered" >else {</span>
-    re<span class="cstat-no" title="statement not covered" >turn &lt;MultiProjectView projects={Object.values(fu</span>nderProjects)} selectProject={setSelectedProjectId} /&gt;;
+<span class="cstat-no" title="statement not covered" >      /&gt;<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    );</span>
+  } el<span class="cstat-no" title="statement not covered" >se {</span>
+    return &lt;MultiProjectView projects={Object.values(funderProjects)} selectProject={setSelectedProjectId} /&gt;;
   }
-}
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></pre></td></tr></table></pre>
+}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-06T12:42:14.507Z
+                at 2026-02-06T20:12:15.689Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

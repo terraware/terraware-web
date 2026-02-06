@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/59</span>
+                <span class='fraction'>0/58</span>
             </div>
         
             
@@ -242,7 +242,12 @@
 <a name='L177'></a><a href='#L177'>177</a>
 <a name='L178'></a><a href='#L178'>178</a>
 <a name='L179'></a><a href='#L179'>179</a>
-<a name='L180'></a><a href='#L180'>180</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L180'></a><a href='#L180'>180</a>
+<a name='L181'></a><a href='#L181'>181</a>
+<a name='L182'></a><a href='#L182'>182</a>
+<a name='L183'></a><a href='#L183'>183</a>
+<a name='L184'></a><a href='#L184'>184</a>
+<a name='L185'></a><a href='#L185'>185</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -351,6 +356,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -428,77 +438,82 @@ import { Icon } from '@t<span class="cstat-no" title="statement not covered" >er
 <span class="cstat-no" title="statement not covered" ></span>
 import MetricStatus<span class="cstat-no" title="statement not covered" >Badge from 'src/components/Accel</span>eratorReports/MetricStatusBadge';
 import Progress<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Ch</span>art from 'src/components/common/Chart/ProgressChart';</span>
-im<span class="cstat-no" title="statement not covered" >port strings from 'src/strings';</span>
-impo<span class="cstat-no" title="statement not covered" >rt { MetricType, ReportProjectMetric, ReportStandardMetric, Rep</span>ortSystemMetric } from 'src/types/AcceleratorReport';
-&nbsp;
-export const isRep<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >or</span>tSystemMetric = (metric: any): metric is ReportSystemMetric =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >  return metric &amp;&amp; typeof metric.metric === 'string';</span>
-};<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span>
-const is<span class="cstat-no" title="statement not covered" >StandardOrProjectMetric = <span class="fstat-no" title="function not covered" >(m</span>etri<span class="cstat-no" title="statement not covered" >c: any): m</span>etric is ReportStandardMetric | ReportProjectMetric =&gt; {</span>
+im<span class="cstat-no" title="statement not covered" >port {</span>
+  Re<span class="cstat-no" title="statement not covered" >portProjectMetricPayload,</span>
+  ReportStandardMetricPayload,
+  ReportSystemMetr<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ic</span>Payload,</span>
+} <span class="cstat-no" title="statement not covered" >from 'src/queries/generated/reports';</span>
+impo<span class="cstat-no" title="statement not covered" >rt strings from 'src/strings';</span>
+import<span class="cstat-no" title="statement not covered" > { MetricType } from 'src/types/AcceleratorReport';</span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+export const isReportSystemMetric = (metric: any): metric is ReportSystemMetricPayload =&gt; {
+<span class="cstat-no" title="statement not covered" >  return metr</span>ic &amp;&amp; typeof metric.metric === 'string';
+};
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+const isStandardOrProjectMetric = (metric: any): metric is ReportStandardMetricPayload | ReportProjectMetricPayload =&gt; {
   return metric &amp;&amp; typeof metric.id === 'number';
-};<span class="cstat-no" title="statement not covered" ></span>
-&nbsp;
-type MetricRow<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Pr</span>ops = {<span class="cstat-no" title="statement not covered" ></span></span>
-  metric: ReportProjectMetric | ReportSystemMetric | ReportStandardMetric;
-  type: MetricType;
-  reportLabel?: string;
-  year?: string;
 };
 &nbsp;
-const MetricRow = ({ metric, reportLabel = '', year = '' }: MetricRowProps): JSX.Element =&gt; {
-  const theme = use<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Th</span>eme();<span class="cstat-no" title="statement not covered" ></span></span>
-  const [expanded, s<span class="cstat-no" title="statement not covered" >etE</span>xpanded] = useState(false);
+type MetricRowProps = {
+  metric: ReportProjectMetricPayload | ReportSystemMetricPayload | ReportStandardMetricPayload;
+  type: MetricType;
+  reportLabel?: str<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >in</span>g;<span class="cstat-no" title="statement not covered" ></span></span>
+  year?: number;<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >};</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+const MetricRow = ({ met<span class="fstat-no" title="function not covered" >ri</span>c, r<span class="cstat-no" title="statement not covered" >eportLabel = '', year</span> }: MetricRowProps): JSX.Element =&gt; {
+  const theme = useTheme();
+<span class="cstat-no" title="statement not covered" >  const [expanded, setExpanded] = useState(fal</span>se);
 <span class="cstat-no" title="statement not covered" ></span>
-  const get<span class="fstat-no" title="function not covered" >Me</span>tric<span class="cstat-no" title="statement not covered" >Name = () =&gt; {</span>
-    if (isStandardOrProj<span class="fstat-no" title="function not covered" >ec</span>tMet<span class="cstat-no" title="statement not covered" >ric(metric)) {</span>
-      return metric.name;
-<span class="cstat-no" title="statement not covered" >    } else {</span>
-      return metric<span class="cstat-no" title="statement not covered" >.metric;</span>
-    }<span class="cstat-no" title="statement not covered" ></span>
-  };<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span>
-  const getActualValue = ()<span class="cstat-no" title="statement not covered" > =&gt; {</span>
-    if (isStandardOrP<span class="cstat-no" title="statement not covered" >rojectMetric(metric)) {</span>
-      return metric.value || <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >0;</span></span>
-<span class="cstat-no" title="statement not covered" >    } else {</span>
-      return metric.overrideValue || metric.systemValue || 0;
+  const getMetricName <span class="cstat-no" title="statement not covered" >= () =&gt; {</span>
+    if (isStandardOrProjectM<span class="cstat-no" title="statement not covered" >etric(metric)) {</span>
+      return metric.name;<span class="cstat-no" title="statement not covered" ></span>
+    } else {<span class="cstat-no" title="statement not covered" ></span>
+      return metric.m<span class="cstat-no" title="statement not covered" >etric;</span>
     }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >  };</span>
 &nbsp;
-  const getUnit = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {<span class="branch-0 cbranch-no" title="branch not covered" ><span class="branch-0 cbranch-no" title="branch not covered" ></span></span></span>
-    if (isStanda<span class="cstat-no" title="statement not covered" >rdOrProjectMetric(metric) &amp;&amp; 'un</span>it' in metric) {
-      return metric.unit;<span class="cstat-no" title="statement not covered" ></span>
-    }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >    return '';</span>
-  };<span class="cstat-no" title="statement not covered" ></span>
-&nbsp;
-  cons<span class="cstat-no" title="statement not covered" >t targetValue = metric</span>.target || 0;
-  const actualValue = getActualValue();
-  const percentComplete = targetValue &gt; 0 ? Math.round((actualValue / targetValue) * 100) : 0;
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  co<span class="cstat-no" title="statement not covered" >nst hasComments = !!metric.projectsComments || !!metric.progressNotes;</span>
+  const getActualValue = () =&gt; {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    if (isStandardOrProjectMetric(metric)) {</span>
+      return metric.value || 0;
+    } else {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="branch-0 cbranch-no" title="branch not covered" ></span></span></span>
+      return met<span class="cstat-no" title="statement not covered" >ric.overrideValue || metric.syst</span>emValue || 0;
+    }<span class="cstat-no" title="statement not covered" ></span>
+  };<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const onToggle = useCallback(() =&gt; {
+  cons<span class="cstat-no" title="statement not covered" >t getUnit = () =&gt; {</span>
+    if (isStandardOrProjectMetric(metric) &amp;&amp; 'unit' in metric) {
+<span class="cstat-no" title="statement not covered" >      return metric.unit;</span>
+    }
+    return '';
+  };<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ></span>
+  cons<span class="cstat-no" title="statement not covered" >t targetValue = metric.tar</span>get || 0;
+  const actualValue = getActualValue();
+  cons<span class="cstat-no" title="statement not covered" >t percentComplete = targetValue &gt; 0 ? Math.round((actual</span>Value / targetValue) * 100) : 0;
+&nbsp;
+  const hasComments = !!metric.projectsComments || !!metric.progressNotes;
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  co<span class="cstat-no" title="statement not covered" >nst onToggle = useCallback(() =&gt; {</span>
     if<span class="cstat-no" title="statement not covered" > (hasComments) {</span>
       setExpanded(!expanded);
-    }
-  }, [expanded, ha<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >sC</span>omments]);</span>
+<span class="cstat-no" title="statement not covered" >    }</span>
+  }, [expanded, hasComments]);
 <span class="cstat-no" title="statement not covered" ></span>
-  retu<span class="cstat-no" title="statement not covered" >rn (</span>
-    &lt;Box&gt;
-<span class="cstat-no" title="statement not covered" >      &lt;Box</span>
-        sx={{
-          display: 'fl<span class="cstat-no" title="statement not covered" >ex',</span>
-          alignItems: <span class="cstat-no" title="statement not covered" >'center',</span>
-          padding: theme.s<span class="cstat-no" title="statement not covered" >pacing(2, 3),</span>
-          cursor: hasC<span class="cstat-no" title="statement not covered" >omments ? 'pointer' : 'default',</span>
-          '&amp;:hover'<span class="cstat-no" title="statement not covered" >: hasComments ? { backgroundCo<span class="fstat-no" title="function not covered" >lo</span>r: theme.palette.TwClrBaseGray025 } : {},</span>
-<span class="cstat-no" title="statement not covered" >        }}</span>
-<span class="cstat-no" title="statement not covered" >        onClick={onToggle}</span>
+  return (<span class="cstat-no" title="statement not covered" ></span>
+    &lt;Box&gt;<span class="cstat-no" title="statement not covered" ></span>
+      &lt;Box<span class="cstat-no" title="statement not covered" ></span>
+        sx={{<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >          display: 'flex',</span>
+<span class="cstat-no" title="statement not covered" >          alignItems: 'center'</span>,
+          padding: theme.spacing(2, 3),
+          cursor: hasComments ? 'pointer' : 'default',
+<span class="cstat-no" title="statement not covered" >          '&amp;:hover': hasComments ? { backgroundColor: theme.palette.TwClrBaseGray025 } : {},</span>
+        }}
+        onClick={onToggle}
       &gt;
         {/* Metric Name and Progress Chart */}
-<span class="cstat-no" title="statement not covered" >        &lt;Box flex={3} paddingRight={2}&gt;</span>
+        &lt;Box flex={3} paddingRight={2}&gt;
           &lt;Typography fontSize='16px' fontWeight={600} marginBottom={1}&gt;
             {getMetricName()}
           &lt;/Typography&gt;
@@ -524,12 +539,12 @@ const MetricRow = ({ metric, reportLabel = '', year = '' }: MetricRowProps): JSX
           &lt;/Typography&gt;
         &lt;/Box&gt;
 &nbsp;
-        &lt;Divider orientation='vertical' flexItem sx={{ marginX: 2 }} /&gt;
+        &lt;Divider ori<span class="cstat-no" title="statement not covered" >entation='</span>vertical' flexItem sx={{ marginX: 2 }} /&gt;
 &nbsp;
         &lt;Box flex={1} paddingX={2}&gt;
           &lt;Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxtSecondary} marginBottom={0.5}&gt;
             {year} {strings.TARGET}
-          &lt;/Typograp<span class="cstat-no" title="statement not covered" >hy&gt;</span>
+          &lt;/Typography&gt;
           &lt;Typography fontSize='20px' fontWeight={600}&gt;
             {targetValue} {getUnit()}
           &lt;/Typography&gt;
@@ -607,7 +622,7 @@ export default MetricRow;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-06T12:42:14.507Z
+                at 2026-02-06T20:12:15.689Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

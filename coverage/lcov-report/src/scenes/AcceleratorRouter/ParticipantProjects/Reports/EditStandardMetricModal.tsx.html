@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/62</span>
+                <span class='fraction'>0/56</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/42</span>
+                <span class='fraction'>0/34</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/59</span>
+                <span class='fraction'>0/53</span>
             </div>
         
             
@@ -229,10 +229,7 @@
 <a name='L164'></a><a href='#L164'>164</a>
 <a name='L165'></a><a href='#L165'>165</a>
 <a name='L166'></a><a href='#L166'>166</a>
-<a name='L167'></a><a href='#L167'>167</a>
-<a name='L168'></a><a href='#L168'>168</a>
-<a name='L169'></a><a href='#L169'>169</a>
-<a name='L170'></a><a href='#L170'>170</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L167'></a><a href='#L167'>167</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -276,16 +273,10 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -309,10 +300,13 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -410,82 +404,79 @@ import DialogBox fr<span class="cstat-no" title="statement not covered" >om 'src
 import TextFiel<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >d </span>from 'src/components/common/Textfield/Textfield';</span>
 im<span class="cstat-no" title="statement not covered" >port Button from 'src/components/common/button/Button';</span>
 impo<span class="cstat-no" title="statement not covered" >rt useBoolean from 'src/hooks/useBoolean';</span>
-import { selectUpdateStandardMetric } from 'src/redux/features/reports/reportsSelectors';
-import { requestUp<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >da</span>teStandardMetric } from 'src/redux/features/reports/reportsThunks';</span>
-im<span class="cstat-no" title="statement not covered" >port { useAppDispatch, useAppSelector } from 'src/redux/store';</span>
-impo<span class="cstat-no" title="statement not covered" >rt strings from 'src/strings';</span>
-import<span class="cstat-no" title="statement not covered" > { StandardMetric } from 'src/types/AcceleratorReport';</span>
-import u<span class="cstat-no" title="statement not covered" >seForm from 'src/utils/use<span class="fstat-no" title="function not covered" >Fo</span>rm';<span class="cstat-no" title="statement not covered" ></span></span>
-import useSnackbar from 'src/utils/useSnackbar';
-<span class="cstat-no" title="statement not covered" ></span>
-import { metricComponentOptions, metricTypeOptions } from './NewProjectSpecificMetric';
+import { useUpdateStandardMetricMutation } from 'src/queries/generated/reportMetrics';
+import strings fro<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >m </span>'src/strings';</span>
+im<span class="cstat-no" title="statement not covered" >port { StandardMetric } from 'src/types/AcceleratorReport';</span>
+impo<span class="cstat-no" title="statement not covered" >rt useForm from 'src/utils/useForm';</span>
+import<span class="cstat-no" title="statement not covered" > useSnackbar from 'src/utils/useSnackbar';</span>
 <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+import { metricComponentOptions, metricTypeOptions } from './NewProjectSpecificMetric';
+<span class="cstat-no" title="statement not covered" ></span>
 export interface EditStandardMetricModalProps {
-  onClose: () =&gt; void;
-  reload: () =&gt; void;
+  onClose: () <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >=&gt;</span> void;<span class="cstat-no" title="statement not covered" ></span></span>
   standardMetric: StandardMetric;
 }
 &nbsp;
 export default function EditStandardMetricModal({
-  onClose,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  reload,<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  standardMetric,</span>
-}: EditStan<span class="fstat-no" title="function not covered" >da</span>rdMe<span class="cstat-no" title="statement not covered" >tricModalProps): JSX.Ele</span>ment {
-  const dispatch = useAppDispatch();
-<span class="cstat-no" title="statement not covered" >  const snackbar = useSnackbar();</span>
+  onClose,
+  standardMetric,
+}: EditStandardMetricModalProps): JSX.Element {
+  const snackbar = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >us</span>eSnackb<span class="cstat-no" title="statement not covered" >ar();</span></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const [record, , , o<span class="cstat-no" title="statement not covered" >nChangeCallback] = useFor</span>m&lt;StandardMetric&gt;(standardMetric);
-  const [validate, setValida<span class="cstat-no" title="statement not covered" >te] = useState(false);</span>
-  const [requestId, set<span class="cstat-no" title="statement not covered" >RequestId] = useState&lt;string&gt;('');</span>
-  const [confirmDialogO<span class="cstat-no" title="statement not covered" >pen, , openConfirmDialog, closeConfirmDialog] = useBoolean(fal</span>se);
+<span class="cstat-no" title="statement not covered" >  const [record, , , onChangeCallback] = useForm&lt;StandardMetric&gt;(standardMetric);</span>
+  const [va<span class="fstat-no" title="function not covered" >li</span>date<span class="cstat-no" title="statement not covered" >, setValidate] = useStat</span>e(false);
+  const [confirmDialogOpen, , openConfirmDialog, closeConfirmDialog] = useBoolean(false);
 <span class="cstat-no" title="statement not covered" ></span>
-  const updateStandardMe<span class="cstat-no" title="statement not covered" >tricResponse = useAppSelector(selectUpdat</span>eStandardMetric(requestId));
+  const [updateStan<span class="cstat-no" title="statement not covered" >dardMetric, updateStandard</span>MetricResponse] = useUpdateStandardMetricMutation();
 <span class="cstat-no" title="statement not covered" ></span>
   useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-    if (updateStand<span class="cstat-no" title="statement not covered" >ardMetricResponse?.status =</span>== 'error') {
-      snackbar.toastE<span class="cstat-no" title="statement not covered" >rror();</span>
-    } else if (update<span class="cstat-no" title="statement not covered" >StandardMetricResponse?.status === 'su</span>ccess') {
+    if (updateStandardM<span class="cstat-no" title="statement not covered" >etricResponse.isError) {</span>
+      snackbar.toastErr<span class="cstat-no" title="statement not covered" >or();</span>
+    } else if (updat<span class="cstat-no" title="statement not covered" >eStandardMetricResponse.isSuccess) {</span>
       onClose();<span class="cstat-no" title="statement not covered" ></span>
-      snackbar.toastSuccess(strings.ST<span class="cstat-no" title="statement not covered" >ANDARD_METRIC_SAVED);</span>
-      rel<span class="fstat-no" title="function not covered" >oad();</span>
-    }
-  }, [updateStandardMetricResponse, snackbar, onClose, reload]);
-&nbsp;
-  const save = useCallback(() =&gt; {
-    if (!record.nam<span class="cstat-no" title="statement not covered" >e || !record.reference) {</span>
-      setValidate(t<span class="cstat-no" title="statement not covered" >rue);</span>
-      return;<span class="cstat-no" title="statement not covered" ></span>
+      snackbar.toastSuccess<span class="cstat-no" title="statement not covered" >(strings.STANDARD_METRIC_SAVED);</span>
     }<span class="cstat-no" title="statement not covered" ></span>
-    openConfirmDialog();<span class="cstat-no" title="statement not covered" ></span>
+  }, [updateStandardM<span class="cstat-no" title="statement not covered" >etricResponse, snackbar, onClose]);</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  const save = useCallback(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
+    if (!<span class="fstat-no" title="function not covered" >record.name || !record.r</span>eference) {
+      setValidate(true);
+      return;
+    }
+    openConfirmDial<span class="cstat-no" title="statement not covered" >og();</span>
   }, [record, openConfirmDialog]);<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  const confirmSave = useCallb<span class="fstat-no" title="function not covered" >ac</span>k(() =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    closeConfirmDialog();</span>
-    co<span class="cstat-no" title="statement not covered" >nst request = dispatch(</span>requestUpdateStandardMetric({ metric: record }));
-    setRequ<span class="cstat-no" title="statement not covered" >estId(request.requestId);</span>
-  }, [<span class="cstat-no" title="statement not covered" >dispatch, r</span>ecord, closeConfirmDialog]);
-<span class="cstat-no" title="statement not covered" ></span>
-  retu<span class="cstat-no" title="statement not covered" >rn (</span>
-    &lt;DialogBox
-      middleButtons={[
-        &lt;Button<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >          id='cancel'</span>
+  const confirmSave = useCallback(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
+    closeConfirmDialog();<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >    void updateStandardMetric(<span class="fstat-no" title="function not covered" >{</span></span>
+<span class="cstat-no" title="statement not covered" >      metricId: standardMetric.id,</span>
+<span class="cstat-no" title="statement not covered" >      updateStandardMetricReq</span>uestPayload: {
+        met<span class="cstat-no" title="statement not covered" >ric: record,</span>
+<span class="cstat-no" title="statement not covered" >      },</span>
+    })<span class="cstat-no" title="statement not covered" >;</span>
+  }, [closeConfirmDialog, updateStandardMetric, standardMetric.id, record]);
+&nbsp;
+  return (<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    &lt;DialogBox</span>
+<span class="cstat-no" title="statement not covered" >      middleButtons={[</span>
+<span class="cstat-no" title="statement not covered" >        &lt;Butto</span>n
+          id='cancel'
 <span class="cstat-no" title="statement not covered" >          key='button-1'</span>
-<span class="cstat-no" title="statement not covered" >          labe</span>l={strings.CANCEL}
-          onClick={onClose}
-<span class="cstat-no" title="statement not covered" >          priority='secon</span>dary'
-          type='passive'
-        /&gt;,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >        &lt;Button id='save' </span>key='button-2' label={strings.SAVE} onClick={save} /&gt;,
-      ]}<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >      onClose={onClose}</span>
+          label={strings.CANCEL}
+          onClick={onC<span class="cstat-no" title="statement not covered" >lose}<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >          priority='second</span>ary'
+<span class="cstat-no" title="statement not covered" >          type='passive'</span>
+        /&gt;,
+        &lt;Button id='save' key='button-2' label={strings.SAVE} onClick={save} /&gt;,
+      ]}
+      onClose={onClose}
       open={true}
-<span class="cstat-no" title="statement not covered" >      size='medium'</span>
-      title={strings.STANDARD_METRIC}
+      size='medium'
+<span class="cstat-no" title="statement not covered" >      title={strings.STANDARD_METRIC}</span>
     &gt;
       &lt;Confirm
         closeButtonText={strings.CANCEL}
-        confirmButtonDisabled={requestId !== '' &amp;&amp; updateStandardMetricResponse?.status === 'pending'}
+        confirmButtonDisabled={updateStandardMetricResponse.isLoading}
         confirmButtonText={strings.CONFIRM}
         message={strings.EDIT_STANDARD_METRIC_CONFIRMATION}
         onClose={closeConfirmDialog}
@@ -577,7 +568,7 @@ export default function EditStandardMetricModal({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-06T12:42:14.507Z
+                at 2026-02-06T20:12:15.689Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/95</span>
+                <span class='fraction'>0/89</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/88</span>
+                <span class='fraction'>0/78</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/84</span>
+                <span class='fraction'>0/78</span>
             </div>
         
             
@@ -251,13 +251,7 @@
 <a name='L186'></a><a href='#L186'>186</a>
 <a name='L187'></a><a href='#L187'>187</a>
 <a name='L188'></a><a href='#L188'>188</a>
-<a name='L189'></a><a href='#L189'>189</a>
-<a name='L190'></a><a href='#L190'>190</a>
-<a name='L191'></a><a href='#L191'>191</a>
-<a name='L192'></a><a href='#L192'>192</a>
-<a name='L193'></a><a href='#L193'>193</a>
-<a name='L194'></a><a href='#L194'>194</a>
-<a name='L195'></a><a href='#L195'>195</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L189'></a><a href='#L189'>189</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -288,8 +282,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -350,8 +342,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -367,7 +357,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -390,7 +379,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -459,38 +447,36 @@ import { Button, Textfie<span class="cstat-no" title="statement not covered" >ld
 import Link from 's<span class="cstat-no" title="statement not covered" >rc/components/common/Link';</span>
 import Icon fro<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >m </span>'src/components/common/icon/Icon';</span>
 im<span class="cstat-no" title="statement not covered" >port useBoolean from 'src/hooks/useBoolean';</span>
-impo<span class="cstat-no" title="statement not covered" >rt { selectReviewAcceleratorReport } from 'src/redux/features/r</span>eports/reportsSelectors';
-import { requestReviewAcceleratorReport } from 'src/redux/features/reports/reportsThunks';
-import { useAppDis<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >pa</span>tch, useAppSelector } from 'src/redux/store';</span>
-im<span class="cstat-no" title="statement not covered" >port strings from 'src/strings';</span>
-impo<span class="cstat-no" title="statement not covered" >rt { isAcceleratorReport } from 'src/types/AcceleratorReport';</span>
-import<span class="cstat-no" title="statement not covered" > useSnackbar from 'src/utils/useSnackbar';</span>
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-import EditableReportBox from './EditableReportBox';
-im<span class="cstat-no" title="statement not covered" >port { Repo</span>rtBoxProps } from './ReportBox';
+impo<span class="cstat-no" title="statement not covered" >rt { useReviewAcceleratorReportMutation } from 'src/queries/gen</span>erated/reports';
+import strings from 'src/strings';
+import { isAcceler<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >at</span>orReport } from 'src/types/AcceleratorReport';</span>
+im<span class="cstat-no" title="statement not covered" >port useSnackbar from 'src/utils/useSnackbar';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+import<span class="cstat-no" title="statement not covered" > EditableReportBox from './EditableReportBox';</span>
+import {<span class="cstat-no" title="statement not covered" > ReportBoxProps } from './<span class="fstat-no" title="function not covered" >Re</span>port<span class="cstat-no" title="statement not covered" >Box';</span></span>
 &nbsp;
-const textArea<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >St</span>yles = { textarea: { height:<span class="cstat-no" title="statement not covered" > '120px' } };</span></span>
+co<span class="cstat-no" title="statement not covered" >nst textAre</span>aStyles = { textarea: { height: '120px' } };
 &nbsp;
-const Achievement = ({
+const Achievem<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >en</span>t = ({<span class="cstat-no" title="statement not covered" ></span></span>
   achievement,
   setAchievement,
   index,
   includeBorder,
   editing,
-  onRemove,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-}: {<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  achievement: string;</span>
-  setAchiev<span class="fstat-no" title="function not covered" >em</span>ent:<span class="cstat-no" title="statement not covered" > (achievement:</span> string) =&gt; void;
-  index: number;
-<span class="cstat-no" title="statement not covered" >  includeBorder: boolean;</span>
-  editing: boolean;<span class="cstat-no" title="statement not covered" ></span>
-  onRemove: () =&gt; void<span class="cstat-no" title="statement not covered" >;</span>
+  onRemove,
+}: {
+  achievement: stri<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ng</span>;<span class="cstat-no" title="statement not covered" ></span></span>
+  setAchievement: (a<span class="cstat-no" title="statement not covered" >chi</span>evement: string) =&gt; void;
+<span class="cstat-no" title="statement not covered" >  index: number;</span>
+  includeBo<span class="fstat-no" title="function not covered" >rd</span>er: <span class="cstat-no" title="statement not covered" >boolean;</span>
+  editing: boolean;
+<span class="cstat-no" title="statement not covered" >  onRemove: () =&gt; void;</span>
 }) =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-  const theme = us<span class="cstat-no" title="statement not covered" >eTheme();</span>
+  const theme = useThe<span class="cstat-no" title="statement not covered" >me();</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const setAchievementCa<span class="cstat-no" title="statement not covered" >llback = useCallback(</span>
-    (value: any) =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-      setAchievement(value <span class="cstat-no" title="statement not covered" >as string);</span>
+  const setAchieve<span class="cstat-no" title="statement not covered" >mentCallback = useCallback(</span>
+    (value: any) =<span class="cstat-no" title="statement not covered" >&gt; {</span>
+      setAchievement(val<span class="cstat-no" title="statement not covered" >ue as string);</span>
     },<span class="cstat-no" title="statement not covered" ></span>
     [setAchievement]<span class="cstat-no" title="statement not covered" ></span>
   );<span class="cstat-no" title="statement not covered" ></span>
@@ -529,21 +515,19 @@ const Achievement = ({
 };
 &nbsp;
 const AchievementsBox = (props: ReportBoxProps) =&gt; {
-  const { report, projectId, reload, isConsoleView, onChange, editing, onEditChange, canEdit, funderReportView } =
-    props;
+  const { report, projectId, isConsoleView, onChange, editing, onEditChange, canEdit, funderReportView } = props;
   const [internalEditing, setInternalEditing, setInternalEditingTrue] = useBoolean(false);
   const [achievements, setAchievements] = useState&lt;string[]&gt;(report?.achievements || []);
-  const dispatch = useAppDispatch();
-  const [requestId, setRequestId] = useState&lt;string&gt;('');
-  const updateReportResponse = useAppSelector(selectReviewAcceleratorReport(requestId));
-  const snackbar = useSn<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ac</span>kbar();</span>
+  const snackbar = useSnackbar();
+&nbsp;
+  const [reviewReport, reviewReportResponse] = useReviewAcceleratorReportMutation();
+&nbsp;
+  const getNonEmptyAchie<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ve</span>ments = useCallback(() =&gt; {</span>
+    return achievements.filter((s) =&gt; !!s);<span class="cstat-no" title="statement not covered" ></span>
+  }, [achievements]);<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const getNonEmptyAchievements = useCallback(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-    return achievements.filter((s) =&gt; !!s)<span class="cstat-no" title="statement not covered" >;</span>
-  }, [achievements]<span class="cstat-no" title="statement not covered" >);</span>
-<span class="cstat-no" title="statement not covered" ></span>
-  useEffect(() =&gt; setAchievemen<span class="cstat-no" title="statement not covered" >ts(report?.achievements || []), [report?.achievements]);</span>
-  useEffect(() =&gt; o<span class="cstat-no" title="statement not covered" >nEditChange?.(internalEditing), [i</span>nternalEditing, onEditChange]);
+  useEffect(() =&gt; s<span class="cstat-no" title="statement not covered" >etAchievements(report?.achievement</span>s || []), [report?.achievements]);
+  useEffect(() =&gt; onEditChange?.(internalEditin<span class="cstat-no" title="statement not covered" >g), [internalEditing, onEditChange]);</span>
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
   co<span class="cstat-no" title="statement not covered" >nst addRow = useCallback(()<span class="fstat-no" title="function not covered" > =</span>&gt; {<span class="cstat-no" title="statement not covered" ></span></span>
     setAchievements(achievements.concat(''));
@@ -560,32 +544,30 @@ const AchievementsBox = (props: ReportBoxProps) =&gt; {
   },<span class="cstat-no" title="statement not covered" > [achievements, addRow, getNonEmptyAchievements, onChange, report?.achievements]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
   useEffect(() =&gt; {
-    if (updateReportResponse?.status === 'error') {
+    if (reviewReportResponse.isError) {
 <span class="cstat-no" title="statement not covered" >      snackbar.toastError();<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >    } else if (updateReportResponse?.status === 'success') {</span>
+<span class="cstat-no" title="statement not covered" >    } else if (reviewReportResponse.isSuccess) {</span>
 <span class="cstat-no" title="statement not covered" >      snackbar.toastSuccess(s</span>trings.CHANGES_SAVED);
       setIn<span class="cstat-no" title="statement not covered" >ternalEditing(false);</span>
-<span class="cstat-no" title="statement not covered" >      reload?.();</span>
     }<span class="cstat-no" title="statement not covered" ></span>
-  }, [<span class="cstat-no" title="statement not covered" >updateReportResponse, snackbar, relo</span>ad, setInternalEditing]);
+  }, [<span class="cstat-no" title="statement not covered" >snackbar, setInternalEditin</span>g, reviewReportResponse.isError, reviewReportResponse.isSuccess]);
 &nbsp;
   const onSave = useCallback(() =&gt; {
     if (isAcceler<span class="cstat-no" title="statement not covered" >atorReport(report)) {<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >      const request = dispatch(</span>
-        requestReviewA<span class="cstat-no" title="statement not covered" >cceleratorReport({</span>
+<span class="cstat-no" title="statement not covered" >      void reviewReport({</span>
+<span class="cstat-no" title="statement not covered" >        projectId,</span>
+        reportId: report.id,
+        reviewAcceleratorReportRequestPayload: {
           review: {
             ...report,
             achievements: getNonEmptyAchievements(),
             challenges: report?.challenges || [],
             status: report?.status || 'Not Submitted',
           },
-          projectId: Number(projectId),
-          reportId: report?.id || -1,
-        })
-      );
-      setRequestId(request.requestId);
-    }<span class="cstat-no" title="statement not covered" ></span>
-  }, [report, dispatch, getNonEmptyAchievements, projectId]);
+        },
+      });
+    }
+  }, [report, reviewReport, projectId, getNonEmptyAchievements]);
 &nbsp;
   const onCancel = <span class="cstat-no" title="statement not covered" >useCallback(() =&gt; {<span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >    setInternalEditing(false);</span>
@@ -652,7 +634,7 @@ export default AchievementsBox;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-06T12:42:14.507Z
+                at 2026-02-06T20:12:15.689Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

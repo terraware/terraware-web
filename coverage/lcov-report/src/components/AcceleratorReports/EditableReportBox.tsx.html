@@ -227,7 +227,16 @@
 <a name='L162'></a><a href='#L162'>162</a>
 <a name='L163'></a><a href='#L163'>163</a>
 <a name='L164'></a><a href='#L164'>164</a>
-<a name='L165'></a><a href='#L165'>165</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L165'></a><a href='#L165'>165</a>
+<a name='L166'></a><a href='#L166'>166</a>
+<a name='L167'></a><a href='#L167'>167</a>
+<a name='L168'></a><a href='#L168'>168</a>
+<a name='L169'></a><a href='#L169'>169</a>
+<a name='L170'></a><a href='#L170'>170</a>
+<a name='L171'></a><a href='#L171'>171</a>
+<a name='L172'></a><a href='#L172'>172</a>
+<a name='L173'></a><a href='#L173'>173</a>
+<a name='L174'></a><a href='#L174'>174</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -276,8 +285,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -405,29 +423,31 @@ ex<span class="cstat-no" title="statement not covered" >port type EditableReport
 <span class="cstat-no" title="statement not covered" >  visibleToFunder?: boolean; // undefined to hide text, true/false to determine state to show</span>
   is<span class="cstat-no" title="statement not covered" >ConsoleView?: boolean;</span>
   edit<span class="cstat-no" title="statement not covered" >ing?: boolean;</span>
-  childr<span class="cstat-no" title="statement not covered" >en: ReactNode;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  onEdit: () =&gt; void;
-<span class="cstat-no" title="statement not covered" >  onCancel: (</span>) =&gt; void;
-  onSave: () =&gt; void;
-  includeBorde<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >r?</span>: boolean;<span class="cstat-no" title="statement not covered" ></span></span>
+  busy?:<span class="cstat-no" title="statement not covered" > boolean;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  children: ReactNode;
+<span class="cstat-no" title="statement not covered" >  onEdit: () </span>=&gt; void;
+  onCancel: () =&gt; void;
+  onSave: () =<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >&gt; </span>void;<span class="cstat-no" title="statement not covered" ></span></span>
+  includeBorder?: boolean;
 };
 &nbsp;
 const EditableReportBox = ({
   editing,
   name,
   description,
-  canEdit,
-  visibleToFunder,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  children,<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  isConsoleView,</span>
-  onEdit,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  onCancel,
-<span class="cstat-no" title="statement not covered" >  onSave,</span>
-  includeBorder = t<span class="cstat-no" title="statement not covered" >rue,</span>
-}: EditableReportBoxPr<span class="cstat-no" title="statement not covered" >ops): JSX.Element =&gt; {</span>
-  const theme = useT<span class="cstat-no" title="statement not covered" >heme();</span>
-<span class="cstat-no" title="statement not covered" ></span>
-  return (<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  canEdit,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  visibleToFunder,<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >  busy,</span>
+  children,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  isConsoleView,
+<span class="cstat-no" title="statement not covered" >  onEdit,</span>
+  onCancel,<span class="cstat-no" title="statement not covered" ></span>
+  onSave,<span class="cstat-no" title="statement not covered" ></span>
+  includeBorder = tr<span class="cstat-no" title="statement not covered" >ue,</span>
+}: EditableReportBoxP<span class="cstat-no" title="statement not covered" >rops): JSX.Element =&gt; {</span>
+  const theme = useTheme()<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >;</span></span>
+&nbsp;
+  return (
     &lt;&gt;
       &lt;Box
         sx={{ scrollMarginTop: '50vh' }}
@@ -437,11 +457,11 @@ const EditableReportBox = ({
           sx={{
             borderRadius: 2,
             '&amp;:hover': {
-              background:
-                !i<span class="branch-0 cbranch-no" title="branch not covered" >sCons</span>oleView || (!canEdit &amp;&amp; !editing)
-                  ? 'none'
+              back<span class="branch-0 cbranch-no" title="branch not covered" >groun</span>d:
+                !isConsoleView || (!canEdit &amp;&amp; !editing)
+<span class="cstat-no" title="statement not covered" >                  ? 'none'</span>
 <span class="cstat-no" title="statement not covered" >                  : editing</span>
-<span class="cstat-no" title="statement not covered" >                    ? theme.palette.TwClrBgActive</span>
+                    ? theme.palette.TwClrBgActive
                     : theme.palette.TwClrBgHover,
               '.actions': {
                 display: isConsoleView &amp;&amp; (canEdit || editing) ? 'block' : 'none',
@@ -545,7 +565,14 @@ const EditableReportBox = ({
                 priority='secondary'
                 key='button-1'
               /&gt;
-              &lt;Button id={'save'} onClick={onSave} label={strings.SAVE} key='button-2' priority='secondary' /&gt;
+              &lt;Button
+                id={'save'}
+                disabled={busy}
+                onClick={onSave}
+                label={strings.SAVE}
+                key='button-2'
+                priority='secondary'
+              /&gt;
             &lt;/Box&gt;
           )}
         &lt;/Box&gt;
@@ -562,7 +589,7 @@ export default EditableReportBox;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-06T12:42:14.507Z
+                at 2026-02-06T20:12:15.689Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

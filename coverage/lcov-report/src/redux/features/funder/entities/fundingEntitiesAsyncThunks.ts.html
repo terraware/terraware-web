@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/95</span>
+                <span class='fraction'>0/89</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/66</span>
+                <span class='fraction'>0/58</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/25</span>
+                <span class='fraction'>0/23</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/92</span>
+                <span class='fraction'>0/86</span>
             </div>
         
             
@@ -190,19 +190,7 @@
 <a name='L125'></a><a href='#L125'>125</a>
 <a name='L126'></a><a href='#L126'>126</a>
 <a name='L127'></a><a href='#L127'>127</a>
-<a name='L128'></a><a href='#L128'>128</a>
-<a name='L129'></a><a href='#L129'>129</a>
-<a name='L130'></a><a href='#L130'>130</a>
-<a name='L131'></a><a href='#L131'>131</a>
-<a name='L132'></a><a href='#L132'>132</a>
-<a name='L133'></a><a href='#L133'>133</a>
-<a name='L134'></a><a href='#L134'>134</a>
-<a name='L135'></a><a href='#L135'>135</a>
-<a name='L136'></a><a href='#L136'>136</a>
-<a name='L137'></a><a href='#L137'>137</a>
-<a name='L138'></a><a href='#L138'>138</a>
-<a name='L139'></a><a href='#L139'>139</a>
-<a name='L140'></a><a href='#L140'>140</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L128'></a><a href='#L128'>128</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -228,7 +216,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -327,17 +314,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -376,107 +352,95 @@ export const requestFundingEntity = createAsyncThunk(
 export const requestFund<span class="fstat-no" title="function not covered" >in</span>gEnt<span class="cstat-no" title="statement not covered" >ities = createAsyncTh</span>unk('funding-entities/list', async (_, { rejectWithValue }) =&gt; {
   const response = await Fundin<span class="fstat-no" title="function not covered" >gE</span>ntit<span class="cstat-no" title="statement not covered" >yService.listFundingEntities</span>();
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  if (response &amp;&amp; response.r<span class="fstat-no" title="function not covered" >eq</span>uest<span class="cstat-no" title="statement not covered" >Succeeded) {</span>
+  if (response &amp;&amp; resp<span class="fstat-no" title="function not covered" >on</span>se.r<span class="cstat-no" title="statement not covered" >equestSucceeded) {</span>
     return response;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
   }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  return rejectWithValue(strings.GENERIC_ERROR);
-<span class="cstat-no" title="statement not covered" >});</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  return rejectWithValue(strings.GENERIC_ERROR</span>);
+});<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-export const requestUpdateFundingE<span class="cstat-no" title="statement not covered" >ntity = createAsyncThunk(</span>
-  'funding-entities/u<span class="cstat-no" title="statement not covered" >pdate',</span>
-  async (request: { fundingEntity: F<span class="cstat-no" title="statement not covered" >undingEntity }, { rejectWithValue }) =&gt; {</span>
-    const { fundingEntity } = request;
-<span class="fstat-no" title="function not covered" ></span>
-    const response = <span class="cstat-no" title="statement not covered" >await FundingEntityService.update(fundingEntity);</span>
-<span class="cstat-no" title="statement not covered" >    if (response &amp;&amp; response.requestSucceeded) {</span>
-<span class="cstat-no" title="statement not covered" >      return response;</span>
-    }
+export const requestU<span class="cstat-no" title="statement not covered" >pdateFundingEntity = createAsync</span>Thunk(
+  'funding-entities/update',<span class="cstat-no" title="statement not covered" ></span>
+  async (request: { fundingEntity: FundingEntity }, { rejectWithValue }) =&gt; {
+<span class="fstat-no" title="function not covered" ></span>    const { fundingEntity } = request;
 <span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >    const response = await FundingEntityService.update(fundingEntity);</span>
+    if<span class="cstat-no" title="statement not covered" > (response &amp;&amp; res</span>ponse.requestSucceeded) {
+      return response;
+<span class="cstat-no" title="statement not covered" >    }</span>
+&nbsp;
     return rejectWithValue(strings.GENERIC_ERROR);
+  }<span class="cstat-no" title="statement not covered" ></span>
+);
+<span class="fstat-no" title="function not covered" ></span>
+export const requestC<span class="cstat-no" title="statement not covered" >reateFundingEntity = createAsyncThunk(</span>
+  'f<span class="cstat-no" title="statement not covered" >unding-entities/create',</span>
+  asyn<span class="cstat-no" title="statement not covered" >c (request: { fun</span>dingEntity: FundingEntity }, { rejectWithValue }) =&gt; {
+    const { fundingEntity } = request;
+<span class="cstat-no" title="statement not covered" ></span>
+    const response = await FundingEntityService.create(fundingEntity);
+    if (response &amp;&amp; response.requestSucceeded) {
+      return response.data;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+    }<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >    return rejectWith</span>Value(strings.GENERIC_ERROR);
   }
 );<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
-ex<span class="fstat-no" title="function not covered" >po</span>rt const requestCreateFundingEntity = createAsyncThunk(
-  'funding-entities/c<span class="cstat-no" title="statement not covered" >reate',</span>
-  as<span class="cstat-no" title="statement not covered" >ync (request: { fundingEntity: FundingEntity }, { rejectWithValue }) =&gt; {</span>
-    co<span class="cstat-no" title="statement not covered" >nst { fundingEnti</span>ty } = request;
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    const response = await FundingEntityService.create(fundingEnti</span>ty);
-    if (response &amp;&amp; response.requestSucceeded) {
-      return response.data;
-    }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+export const requestFundingEntityIn<span class="cstat-no" title="statement not covered" >viteFunder = createAsyncThunk(</span>
+  'funding-entities/invite',
+<span class="fstat-no" title="function not covered" >  as</span>ync (request: { fundingEntityId: number; email: string }, { rejectWithValue }) =&gt; {
+    const { fundingEntityId, e<span class="cstat-no" title="statement not covered" >mail } =</span> request;
+    const response = <span class="cstat-no" title="statement not covered" >await FundingEntityService.inviteFunder(fundingEntityId, email);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >    return rejectWithValue(strings.GENERIC_ERROR);</span>
-  }<span class="cstat-no" title="statement not covered" ></span>
-);
-<span class="cstat-no" title="statement not covered" ></span>
-export const requestFundingEntityInviteFunder = createAsyncThunk(
-  'funding-entities/invite',<span class="cstat-no" title="statement not covered" ></span>
-  async (request: { fundingEntityId: number; email: string }, { rejectWithValue }) =&gt; {
-<span class="fstat-no" title="function not covered" ></span>    const { fundingEntityId, email } = request;
-    const response = await Fun<span class="cstat-no" title="statement not covered" >dingEnti</span>tyService.inviteFunder(fundingEntityId, email);
-<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >    if (response) {</span>
-<span class="cstat-no" title="statement not covered" >      if (response.requ</span>estSucceeded) {
-        return response.data;
-<span class="cstat-no" title="statement not covered" >      } else if (response.errorDetails === 'PRE_EXISTING_USER') {</span>
+    if<span class="cstat-no" title="statement not covered" > (response) {</span>
+      if (response.requestSucceeded) {
+<span class="cstat-no" title="statement not covered" >        return response.data;</span>
+      } else if (response.errorDetails === 'PRE_EXISTING_USER') {
         return rejectWithValue(strings.EMAIL_ALREADY_EXISTS);
-      } else if (response.errorDetails === 'INVALID_EMAIL') {
-        return rejectWithValue(stri<span class="cstat-no" title="statement not covered" >ngs.INCORRECT_EMAIL_FORMAT);</span>
-      }
-<span class="fstat-no" title="function not covered" ></span>    }
-<span class="cstat-no" title="statement not covered" ></span>
-    return rejectWith<span class="cstat-no" title="statement not covered" >Value(strings.GENERIC_ERROR);</span>
-  }<span class="cstat-no" title="statement not covered" ></span>
-);<span class="cstat-no" title="statement not covered" ></span>
-&nbsp;
-expo<span class="cstat-no" title="statement not covered" >rt const requestListFunders = createAsyncThunk(</span>
-  'funding-entities/list',
-  async (fundingEntityId: number, { rejectWithValue }) =&gt; {
-    const response = await FundingEntityS<span class="cstat-no" title="statement not covered" >ervice.listFunders(fundingEntityId);</span>
-    if (response &amp;&amp; response.requestSucceeded) {
-<span class="fstat-no" title="function not covered" ></span>      return response.data?.funders ?? [];
+      } else if (response.errorDeta<span class="cstat-no" title="statement not covered" >ils === 'INVALID_EMAIL') {</span>
+        return rejectWithValue(strings.INCORRECT_EMAIL_FORMAT);
+<span class="fstat-no" title="function not covered" ></span>      }
     }<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >    return rejectWithValue(strings.GENERIC_ERROR);</span>
   }<span class="cstat-no" title="statement not covered" ></span>
-);<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span>
-export c<span class="cstat-no" title="statement not covered" >onst requestDeleteFunders = createAsyncThunk(</span>
-  'funder/del<span class="cstat-no" title="statement not covered" >ete',</span>
-  async <span class="cstat-no" title="statement not covered" >(request: { fundingEntityId: number; userIds: number[] }, { rejectWithV</span>alue }) =&gt; {
-    const { fundingEntityId, userIds } = request;
-    const response = await FundingEntityService.deleteFunders(fundingEntityId, userIds);
-<span class="cstat-no" title="statement not covered" >    if (response &amp;&amp; response.requestSucceeded) {</span>
-      return response.data;
-    }
-<span class="cstat-no" title="statement not covered" ></span>
-    return rejectWithValue(strings.GENERIC_ERROR);
-<span class="fstat-no" title="function not covered" >  }</span>
 );
 <span class="cstat-no" title="statement not covered" ></span>
-expo<span class="cstat-no" title="statement not covered" >rt const requestListFunderReports = createAsyncThunk(</span>
-  'pub<span class="cstat-no" title="statement not covered" >lished-reports/list',</span>
-  async (projectId: number, { rejectWithValue }) =&gt; {
-<span class="cstat-no" title="statement not covered" >    const response = await FundingEntityService.listFunderReports(</span>projectId);
+export const requestListFunders = createAsyncThunk(
+  'funding-entities/list',
+  async (fundingEntityId: number, { rejec<span class="cstat-no" title="statement not covered" >tWithValue }) =&gt; {</span>
+    const response = await FundingEntityService.listFunders(fundingEntityId);
+<span class="fstat-no" title="function not covered" ></span>    if (response &amp;&amp; response.requestSucceeded) {
+      return response.data?.funders ?? <span class="cstat-no" title="statement not covered" >[];</span>
+    }<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+    re<span class="cstat-no" title="statement not covered" >turn rejectWithValue(strings.GENERIC_ERROR);</span>
+  }<span class="cstat-no" title="statement not covered" ></span>
+);<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+export const <span class="cstat-no" title="statement not covered" >requestDeleteFunders = createAsyncThunk(</span>
+  'funde<span class="cstat-no" title="statement not covered" >r/delete',</span>
+  async (request: { fundingEntityId: number; userIds: number[] }, { rejectWithValue }) =&gt; {
+    const { fundingEntityId, userIds } = request;
+<span class="cstat-no" title="statement not covered" >    const response = await FundingEntityService.deleteFunders(fund</span>ingEntityId, userIds);
     if (response &amp;&amp; response.requestSucceeded) {
-      return response.data?.reports ?? [];
+      return response.data;
     }<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
 <span class="fstat-no" title="function not covered" ></span>    return rejectWithValue(strings.GENERIC_ERROR);
-  }<span class="cstat-no" title="statement not covered" ></span>
+  }
 );<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-export<span class="cstat-no" title="statement not covered" > const requestProjectF</span>undingEntities = createAsyncThunk(
+export<span class="cstat-no" title="statement not covered" > const requestProjectFundingEntities = createAsyncThunk(</span>
   'funding-entities/list-for-project',
   as<span class="cstat-no" title="statement not covered" >ync ({ projectId }: { projectId: number }, { rejectWithValue }</span>) =&gt; {
     const response = await FundingEntityService.listForProject(projectId);
 &nbsp;
-    if (response.requestSucceeded<span class="cstat-no" title="statement not covered" >) {</span>
+    if (response.requestSucce<span class="cstat-no" title="statement not covered" >eded) {</span>
       return response.fundingEntities || [];
 <span class="fstat-no" title="function not covered" ></span>    }
-&nbsp;
+<span class="cstat-no" title="statement not covered" ></span>
     return rejectWith<span class="cstat-no" title="statement not covered" >Value(strings.GENERIC_ERROR);</span>
   }<span class="cstat-no" title="statement not covered" ></span>
 );<span class="cstat-no" title="statement not covered" ></span>
@@ -487,7 +451,7 @@ export<span class="cstat-no" title="statement not covered" > const requestProjec
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-06T12:42:14.507Z
+                at 2026-02-06T20:12:15.689Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

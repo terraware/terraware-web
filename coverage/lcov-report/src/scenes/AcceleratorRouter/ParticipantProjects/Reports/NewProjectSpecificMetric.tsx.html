@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/72</span>
+                <span class='fraction'>0/64</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/42</span>
+                <span class='fraction'>0/38</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>0/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/69</span>
+                <span class='fraction'>0/61</span>
             </div>
         
             
@@ -243,11 +243,7 @@
 <a name='L178'></a><a href='#L178'>178</a>
 <a name='L179'></a><a href='#L179'>179</a>
 <a name='L180'></a><a href='#L180'>180</a>
-<a name='L181'></a><a href='#L181'>181</a>
-<a name='L182'></a><a href='#L182'>182</a>
-<a name='L183'></a><a href='#L183'>183</a>
-<a name='L184'></a><a href='#L184'>184</a>
-<a name='L185'></a><a href='#L185'>185</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L181'></a><a href='#L181'>181</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -298,8 +294,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -322,15 +316,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -350,9 +337,14 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -445,98 +437,94 @@ import PageForm fr<span class="cstat-no" title="statement not covered" ><span cl
 im<span class="cstat-no" title="statement not covered" >port TextField from 'src/components/common/Textfield/Textfield';</span>
 impo<span class="cstat-no" title="statement not covered" >rt { APP_PATHS } from 'src/constants';</span>
 import<span class="cstat-no" title="statement not covered" > { useSyncNavigate } from 'src/hooks/useSyncNavigate';</span>
-import {<span class="cstat-no" title="statement not covered" > selectCreateProjectMetric<span class="fstat-no" title="function not covered" > }</span> fro<span class="cstat-no" title="statement not covered" >m 'src/red</span>ux/features/reports/reportsSelectors';</span>
-import { requestCreateProjectMetric, requestProjectReportConfig } from 'src/redux/features/reports/reportsThunks';
-im<span class="cstat-no" title="statement not covered" >port { useA</span>ppDispatch, useAppSelector } from 'src/redux/store';
+import {<span class="cstat-no" title="statement not covered" > useCreateProjectMetricMut<span class="fstat-no" title="function not covered" >at</span>ion <span class="cstat-no" title="statement not covered" >} from 'sr</span>c/queries/generated/reports';</span>
 import strings from 'src/strings';
-import { NewMe<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >tr</span>ic } from 'src/types/Acceler<span class="cstat-no" title="statement not covered" >atorReport';</span></span>
+im<span class="cstat-no" title="statement not covered" >port { NewM</span>etric } from 'src/types/AcceleratorReport';
 import useForm from 'src/utils/useForm';
-&nbsp;
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 export const metricTypeOptions = () =&gt; {
   return [
     { label: strings.METRIC_TYPE_ACTIVITY, value: 'Activity' },
     { label: strings.METRIC_TYPE_OUTPUT, value: 'Output' },
     { label: strings.METRIC_TYPE_OUTCOME, value: 'Outcome' },
-    { label: string<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >s.</span>METRIC_<span class="cstat-no" title="statement not covered" >TYPE_IMPACT, value: 'Impact' },</span></span>
-  ];<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >};</span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-export const metricCompone<span class="fstat-no" title="function not covered" >nt</span>Opti<span class="cstat-no" title="statement not covered" >ons = () =&gt; {</span>
+    { label: strings.METRIC_TYPE_IMPACT, value: 'Impact' },
+  ];
+};<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >export const metricComponentOptions = () =&gt; {</span>
   return [<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-    { label: strings.COMMUNITY, value: 'Community' },
-<span class="cstat-no" title="statement not covered" >    { label: strings.PROJECT_OBJECTIVES, value</span>: 'Project Objectives' },
-    { label: string<span class="cstat-no" title="statement not covered" >s.CLIMATE, value: 'Climate</span>' },
-    { label: strings.BIODI<span class="cstat-no" title="statement not covered" >VERSITY, value: 'Biodive</span>rsity' },
+    { label: strings.COMMU<span class="fstat-no" title="function not covered" >NI</span>TY, <span class="cstat-no" title="statement not covered" >value: 'Community' },</span>
+    { label: strings.<span class="fstat-no" title="function not covered" >PR</span>OJEC<span class="cstat-no" title="statement not covered" >T_OBJECTIVES, valu</span>e: 'Project Objectives' },
+    { label: strings.CLIMATE, value: 'Climate' },
+<span class="cstat-no" title="statement not covered" >    { label: strings.BIODIVERSITY, value: 'Bio</span>diversity' },
   ];<span class="cstat-no" title="statement not covered" ></span>
 };<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-export default fun<span class="cstat-no" title="statement not covered" >ction NewProjectSpecificMetric(): JSX.El</span>ement {
-  const theme = us<span class="cstat-no" title="statement not covered" >eTheme();</span>
-  const navigate = use<span class="cstat-no" title="statement not covered" >SyncNavigate();</span>
-  const pathParams = u<span class="cstat-no" title="statement not covered" >seParams&lt;{ projectId: string }&gt;();</span>
-  const projectId = Str<span class="cstat-no" title="statement not covered" >ing(pathParams.projectId);</span>
-  const dispatch = useA<span class="cstat-no" title="statement not covered" >ppDispatch();</span>
-  const [requestId, setReques<span class="cstat-no" title="statement not covered" >tId] = useState&lt;string&gt;('');</span>
-  const createProjectMetricRes<span class="cstat-no" title="statement not covered" >ponse = useAppSelector(selectCreateProjectMetric(reques</span>tId));
-  const [validate, setValid<span class="cstat-no" title="statement not covered" >ate] = useState(false);</span>
+export default function NewP<span class="cstat-no" title="statement not covered" >rojectSpecificMetric(): JSX.Element {</span>
+  const theme = use<span class="cstat-no" title="statement not covered" >Theme();</span>
+  const navigate =<span class="cstat-no" title="statement not covered" > useSyncNavigate();</span>
+  const pathParams<span class="cstat-no" title="statement not covered" > = useParams&lt;{ projectId: string }&gt;();</span>
+  const projectId = Nu<span class="cstat-no" title="statement not covered" >mber(pathParams.projectId);</span>
+  const [validate, set<span class="cstat-no" title="statement not covered" >Validate] = useState(false);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const goToProjectRe<span class="cstat-no" title="statement not covered" >ports = useCallback(() =&gt; {</span>
-    navigate(`${APP_P<span class="cstat-no" title="statement not covered" >ATHS.ACCELERATOR_PROJECT_REPORTS.repla</span>ce(':projectId', projectId)}?tab=settings`);
-  }, [navigate, projectId]<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >);</span></span>
+  const goToProjectRepo<span class="cstat-no" title="statement not covered" >rts = useCallback(() =&gt; {</span>
+    navigate(`${APP_PATHS.ACC<span class="cstat-no" title="statement not covered" >ELERATOR_PROJECT_REPORTS.replace(':pr</span>ojectId', projectId.toString())}?tab=settings`);
+  }, [navigate, proje<span class="cstat-no" title="statement not covered" >ctId]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  useEffect(() =&gt; {
-    if (projectId) {
-      void dispatch(requestProjectReportConfig(projectId));
-    }
-  }, [projectId, dispatch]);
+  const { isMobile } <span class="cstat-no" title="statement not covered" >= useDeviceInfo();</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >  const [createProjectMetric, createProjectMetricResponse] = useCreateProjectMetricMutation();</span>
 &nbsp;
-  const { isMobile } = useDevic<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >eI</span>nfo();</span>
-<span class="cstat-no" title="statement not covered" ></span>
   useEffect(() =&gt; {
-    if (createProjectMetricResponse?.status === 'success') {
+    if (createProjectMetricResponse.isSuccess) {
       goToProjectReports();
     }
   }, [createProjectMetricResponse, goToProjectReports]);
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >  const [newMetric, , , onChangeCallback] = useForm&lt;NewMetric&gt;({</span>
+    component: 'Biodiversity',
+    name: '',
+    reference: '',
+    type: 'Activity',
+    isPublishable: true,
+  });
+<span class="fstat-no" title="function not covered" ></span>
+  const saveNewM<span class="cstat-no" title="statement not covered" >etric = useCallback(() =&gt; {</span>
+    if (!newMetric.<span class="cstat-no" title="statement not covered" >name || !newMetric.reference) {</span>
+      setValidate(tru<span class="cstat-no" title="statement not covered" >e);</span>
+      return;<span class="cstat-no" title="statement not covered" ></span>
+    }<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    void createProjectMetric({</span>
+      projectId,
+      createProjectMetr<span class="cstat-no" title="statement not covered" >icRequestPayload: {</span>
+        metric: newMetric,<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >      },<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    });</span>
+  }, [<span class="cstat-no" title="statement not covered" >createProjectMetric, n</span>ewMetric, projectId]);
 &nbsp;
-  const [<span class="fstat-no" title="function not covered" >newMetric, , , onChangeCa</span>llback] = useForm&lt;NewMetric&gt;({
-    component: '<span class="cstat-no" title="statement not covered" >Biodiversity',</span>
-    name: '',<span class="cstat-no" title="statement not covered" ></span>
-    reference: '',<span class="cstat-no" title="statement not covered" ></span>
-    type: 'Activity'<span class="cstat-no" title="statement not covered" >,</span>
-    isPublishable: <span class="cstat-no" title="statement not covered" >true,</span>
-  });<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span>
-  const saveNewMetric = useCallbac<span class="cstat-no" title="statement not covered" >k(() =&gt; {</span>
-    if (!newMetric.name || !n<span class="cstat-no" title="statement not covered" >ewMetric.reference) {<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >      setValidate(true);</span>
-      return;
-<span class="cstat-no" title="statement not covered" >    }<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >    const request = dispatch(requestCreateProjectMetric({ metric: newMetric, projectId }));</span>
-    se<span class="cstat-no" title="statement not covered" >tRequestId(request.requestId);</span>
-  }, [dispatch, newMetric, projectId]);
-&nbsp;
-  return (<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >    &lt;Page title={strings.REPOR<span class="fstat-no" title="function not covered" >TS</span>} contentStyle={{ display: 'flex', flexDirection: 'column' }}&gt;</span>
-<span class="cstat-no" title="statement not covered" >      &lt;PageForm cancelID='cancelNewMetric' saveID='saveNewMetric' onCancel={goToProjectReports} onSave={saveNewMetric}&gt;</span>
-<span class="cstat-no" title="statement not covered" >        &lt;Container</span>
+  return (
+    &lt;Page title={strings.REPORTS} contentSty<span class="cstat-no" title="statement not covered" >le={{ display: 'flex', flexDirection: 'column' }}&gt;</span>
+      &lt;PageForm cancelID='cancelNewMetric' saveID='saveNewMetric' onCancel={goToProjectReports} onSave={saveNewMetric}&gt;
+        &lt;Container
           maxWidth={false}
           sx={{
-            display: 'flex',<span class="cstat-no" title="statement not covered" ></span>
+            display: 'flex',
             margin: '0 auto',
-            paddingLeft: theme.spacing(isMobile ? 0 : 4),
-            paddingRight: theme.spacing(isMobile ? 0 : 4),
-            paddingTop: theme.spacing(5),
-            width: isMobile ? '100%' : '700px',
+            paddingLeft:<span class="cstat-no" title="statement not covered" > theme.spacing(isMobile ? 0 : <span class="fstat-no" title="function not covered" >4)</span>,</span>
+<span class="cstat-no" title="statement not covered" >            paddingRight: theme.spacing(isMobile ? 0 : 4),</span>
+<span class="cstat-no" title="statement not covered" >            paddingTop: t</span>heme.spacing(5),
+<span class="cstat-no" title="statement not covered" >            wi</span>dth: isMobile ? '100%' : '700px',
           }}
-        &gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >          &lt;Card style={{ width: '568px', margin: 'auto' }}&gt;</span>
-<span class="cstat-no" title="statement not covered" >            &lt;Grid contain</span>er spacing={3}&gt;
-<span class="cstat-no" title="statement not covered" ></span>              &lt;Grid item xs={12}&gt;
+<span class="cstat-no" title="statement not covered" >        &gt;</span>
+          &lt;Card style={{ width: '568px', margin: 'auto' }}&gt;
+            &lt;Grid container spacing={3}&gt;
+              &lt;Grid item xs={12}&gt;
                 &lt;Typography fontSize={'20px'} fontWeight={600}&gt;
-                  {s<span class="cstat-no" title="statement not covered" >trings.PROJECT_SPECIFIC_METRICS}</span>
-<span class="cstat-no" title="statement not covered" >                &lt;/Typography&gt;</span>
-              &lt;/Grid&gt;
-<span class="cstat-no" title="statement not covered" >              &lt;Grid item xs={12}&gt;</span>
+                  {strings.PROJECT_SPECIFIC_METRICS}
+                &lt;/Typography&gt;
+<span class="cstat-no" title="statement not covered" >              &lt;/Grid&gt;</span>
+              &lt;Grid item xs={12}&gt;
                 &lt;TextField
                   id='name'
                   label={strings.NAME}
@@ -622,7 +610,7 @@ export default fun<span class="cstat-no" title="statement not covered" >ction Ne
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-06T12:42:14.507Z
+                at 2026-02-06T20:12:15.689Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

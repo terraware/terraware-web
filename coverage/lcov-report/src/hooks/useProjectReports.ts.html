@@ -157,7 +157,8 @@
 <a name='L92'></a><a href='#L92'>92</a>
 <a name='L93'></a><a href='#L93'>93</a>
 <a name='L94'></a><a href='#L94'>94</a>
-<a name='L95'></a><a href='#L95'>95</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L95'></a><a href='#L95'>95</a>
+<a name='L96'></a><a href='#L96'>96</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -251,7 +252,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useCal<span class="cstat-no" title="statement not covered" >lback, useEffe</span>ct, useState } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useCal<span class="cstat-no" title="statement not covered" >lback, useEffe</span>ct, useState } from 'react';
 <span class="cstat-no" title="statement not covered" ></span>
 import { selectListAcce<span class="cstat-no" title="statement not covered" >leratorReports } from 'src/redux</span>/features/reports/reportsSelectors';
 import { requestListAcce<span class="cstat-no" title="statement not covered" >leratorReports } from 'src/</span>redux/features/reports/reportsThunks';
@@ -266,93 +268,94 @@ import {<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
 import<span class="cstat-no" title="statement not covered" > useFunderPortal from './useFunderPortal';</span>
 <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-const useProjectReports = (
-<span class="cstat-no" title="statement not covered" >  projectId?:</span> number | string,
-  includeFuture: boolean = false,
-  includeMetri<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >cs</span>: boolean = true,<span class="cstat-no" title="statement not covered" ></span></span>
+// Deprecated: inefficient report fetching
+co<span class="cstat-no" title="statement not covered" >nst useProj</span>ectReports = (
+  projectId?: number | string,
+  includeFutur<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >e:</span> boolean = false,<span class="cstat-no" title="statement not covered" ></span></span>
+  includeMetrics: boolean = true,
   year?: string
 ) =&gt; {
   const dispatch = useAppDispatch();
   const [busy, setBusy] = useState(true);
   const [requestId, setRequestId] = useState('');
   const [acceleratorReports, setAcceleratorReports] = useState&lt;AcceleratorReport[]&gt;([]);
-  const listAcceleratorReportsRequest = useAppSelector(selectListAcceleratorReports(requestId));
-  const { isFunderR<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ou</span>te } = <span class="cstat-no" title="statement not covered" >useFunderPortal();</span></span>
+  const listAcceler<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >at</span>orRepor<span class="cstat-no" title="statement not covered" >tsRequest = useAppSelector(selectListAcceleratorReports(request</span></span>Id));
+  const { isFunderRo<span class="cstat-no" title="statement not covered" >ute</span> } = useFunderPortal();
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  const reload = useCallback(() =&gt; {</span>
-    if (pro<span class="fstat-no" title="function not covered" >je</span>ctId<span class="cstat-no" title="statement not covered" > &amp;&amp; !isFunderR</span>oute) {
-      setBusy(true);
-<span class="cstat-no" title="statement not covered" >      const request = dispatch(</span>
-        requestList<span class="cstat-no" title="statement not covered" >AcceleratorReport</span>s({
-          projectId: projectId<span class="cstat-no" title="statement not covered" >.toString(),</span>
-          includeFuture,<span class="cstat-no" title="statement not covered" ></span>
-          includeMe<span class="cstat-no" title="statement not covered" >trics,</span>
-          year,<span class="cstat-no" title="statement not covered" ></span>
-        })<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="branch-0 cbranch-no" title="branch not covered" ><span class="branch-0 cbranch-no" title="branch not covered" ></span></span></span></span>
+  const rel<span class="fstat-no" title="function not covered" >oa</span>d = <span class="cstat-no" title="statement not covered" >useCallback(()</span> =&gt; {
+    if (projectId &amp;&amp; !isFunderRoute) {
+<span class="cstat-no" title="statement not covered" >      setBusy(true);</span>
+      const request<span class="cstat-no" title="statement not covered" > = dispatch(</span>
+        requestListAccelerator<span class="cstat-no" title="statement not covered" >Reports({</span>
+          projectId: projec<span class="cstat-no" title="statement not covered" >tId.toString(),</span>
+          includeFu<span class="cstat-no" title="statement not covered" >ture,</span>
+          includeMetrics,<span class="cstat-no" title="statement not covered" ></span>
+          year,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="branch-0 cbranch-no" title="branch not covered" ><span class="branch-0 cbranch-no" title="branch not covered" ></span></span></span></span>
+        })<span class="cstat-no" title="statement not covered" ></span>
       );<span class="cstat-no" title="statement not covered" ></span>
-      setRequestId(request<span class="cstat-no" title="statement not covered" >.requestId);</span>
+      setRequestId(request.requestId<span class="cstat-no" title="statement not covered" >);</span>
     } else {<span class="cstat-no" title="statement not covered" ></span>
       setBusy(false);<span class="cstat-no" title="statement not covered" ></span>
     }<span class="cstat-no" title="statement not covered" ></span>
-  }, [projectId, isFunderRou<span class="cstat-no" title="statement not covered" >te, dispatch, includeFuture, includeMe</span>trics, year]);
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  us<span class="cstat-no" title="statement not covered" >eEffect(() =&gt; {</span>
-    re<span class="cstat-no" title="statement not covered" >load();</span>
-  }, [reload]);<span class="cstat-no" title="statement not covered" ></span>
+  }, [projectId, <span class="cstat-no" title="statement not covered" >isFunderRoute, dispatch, inclu<span class="fstat-no" title="function not covered" >de</span>Future, includeMetrics, year]);</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  useE<span class="cstat-no" title="statement not covered" >ffect(() =&gt; {</span>
+    reload();<span class="cstat-no" title="statement not covered" ></span>
+  }, [reload]);
 &nbsp;
   useEffect(() =&gt; {
     if (listAcceleratorReportsRequest?.status === 'success') {
       setAcceleratorReports(listAcceleratorReportsRequest?.data || []);
       setBusy(false);
     }
-  }, [listAcceleratorReportsRequest]);
-<span class="cstat-no" title="statement not covered" ></span>
-  const getYearTarget = useCallback(
-    (<span class="cstat-no" title="statement not covered" ></span>
+  }, [<span class="cstat-no" title="statement not covered" >listAcceleratorReportsRequest]);</span>
+&nbsp;
+  cons<span class="cstat-no" title="statement not covered" >t getYearTarget </span>= useCallback(
+    (
       metric: ReportProjectMetric | ReportSystemMetric | ReportStandardMetric,
-      type: MetricType,
-<span class="cstat-no" title="statement not covered" >      reportYear: string | und<span class="fstat-no" title="function not covered" >ef</span>ined</span>
-<span class="cstat-no" title="statement not covered" >    ): number </span>| undefined =&gt; {
-      if (!reportYear || !acceleratorReports) {
-<span class="cstat-no" title="statement not covered" >        return undefined;<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >      type: MetricType,<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >      reportYe</span>ar: string | undefined
+    ): number | undefined =&gt; {
+<span class="cstat-no" title="statement not covered" >      if (!reportYear || !acce<span class="fstat-no" title="function not covered" >le</span>ratorReports) {</span>
+<span class="cstat-no" title="statement not covered" >        return undefined;</span>
 <span class="cstat-no" title="statement not covered" >      }</span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >      // Find the annu</span>al report for this year from AcceleratorReports
+      // Find the annual report for this year from AcceleratorReports
       const annualReport = acceleratorReports.find(
-        (report) =&gt; report.frequency === 'Annual' &amp;&amp; report.startDate.split('-')[0] === reportYear
-      );<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" ></span>
-      if (!annualReport) {
-<span class="cstat-no" title="statement not covered" >        return undefined;</span>
-      }<span class="cstat-no" title="statement not covered" ></span>
+        (report) =&gt; repo<span class="cstat-no" title="statement not covered" >rt.frequency === 'Annual' &amp;&amp; report.startDate.split('-')[0] === reportYear</span>
+<span class="fstat-no" title="function not covered" ></span>      );
 &nbsp;
-      // Find the matching <span class="cstat-no" title="statement not covered" >metric in the annual report</span>
-      if<span class="fstat-no" title="function not covered" > (</span>type === '<span class="cstat-no" title="statement not covered" >system' &amp;&amp; 'metric' in metric) {</span>
-        const foundMetric = annualReport.systemMetrics?.find((m) =&gt; m.metric === metric.metric);
+<span class="cstat-no" title="statement not covered" >      if (!annualReport) {</span>
+<span class="cstat-no" title="statement not covered" >        return undefine</span>d;
+      }
+<span class="cstat-no" title="statement not covered" ></span>
+      //<span class="fstat-no" title="function not covered" > F</span>ind the ma<span class="cstat-no" title="statement not covered" >tching metric in the annual report</span>
+      if (type === 'system' &amp;&amp; 'metric' in metric) {
+<span class="cstat-no" title="statement not covered" >        const foundMetric = annualReport.systemMetrics?.find((m) =&gt; m.metric === metric.metric);</span>
+<span class="cstat-no" title="statement not covered" >        return foundMet</span>ric?.target;
+      } else if ((type === 'project' || type === 'standard') &amp;&amp; 'id' in metric) {
+<span class="cstat-no" title="statement not covered" >        const metricsArray = type === 'project' ? annualReport.projectMetrics : annualReport.standardMetrics;</span>
+        const foundMetric = <span class="cstat-no" title="statement not covered" >metricsArray?.find((m) =&gt; m.id === metric.id);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 <span class="cstat-no" title="statement not covered" >        return foundMetric?.target;</span>
-      } <span class="cstat-no" title="statement not covered" >else if ((type </span>=== 'project' || type === 'standard') &amp;&amp; 'id' in metric) {
-        const metricsArray = type === 'project' ? annualReport.projectMetrics : annualReport.standardMetrics;
-<span class="cstat-no" title="statement not covered" >        const foundMetric = metricsArray?.find((m) =&gt; m.id === metric.id);</span>
-        return foundMetric?.<span class="cstat-no" title="statement not covered" >target;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
       }<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-      return undefined;<span class="cstat-no" title="statement not covered" ></span>
-    },<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-    [acc<span class="cstat-no" title="statement not covered" >eleratorReports]</span>
-  );
-<span class="cstat-no" title="statement not covered" ></span>
+      return undefined;<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+    },<span class="cstat-no" title="statement not covered" ></span>
+    [acceleratorReports]
+  );<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
   return { busy, reload, acceleratorReports, getYearTarget };
 };
-&nbsp;
-ex<span class="cstat-no" title="statement not covered" >port default useProjectReports;</span>
-&nbsp;</pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" ></span>
+export default useProjectReports;
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-06T12:42:14.507Z
+                at 2026-02-06T20:12:15.689Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

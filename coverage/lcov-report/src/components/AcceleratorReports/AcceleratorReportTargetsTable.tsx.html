@@ -343,7 +343,8 @@
 <a name='L278'></a><a href='#L278'>278</a>
 <a name='L279'></a><a href='#L279'>279</a>
 <a name='L280'></a><a href='#L280'>280</a>
-<a name='L281'></a><a href='#L281'>281</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L281'></a><a href='#L281'>281</a>
+<a name='L282'></a><a href='#L282'>282</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -570,6 +571,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -659,45 +661,46 @@ export default func<span class="cstat-no" title="statement not covered" ><span c
   const [metricsToUse, set<span class="cstat-no" title="statement not covered" >MetricsToUse] = useState</span>&lt;RowMetric[]&gt;();
   const snackbar = useSnackb<span class="cstat-no" title="statement not covered" >ar();</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const { reload, acceleratorReport<span class="cstat-no" title="statement not covered" >s: reports } = useProjectReports(projectId, true, tr</span>ue);
-  const [updateMetricTargets] =<span class="cstat-no" title="statement not covered" > useUpdateProjectMetricTargetsMutation();</span>
+  // TODO, replace with RTK Query o<span class="cstat-no" title="statement not covered" >nce targets are moved to new table in the BE</span>
+  const { reload, acceleratorRe<span class="cstat-no" title="statement not covered" >ports: reports } = useProjectReports(projectId, </span>true, true);
+  const [updateMetricTa<span class="cstat-no" title="statement not covered" >rgets] = useUpdateProject</span>MetricTargetsMutation();
 <span class="cstat-no" title="statement not covered" ></span>
-  const isAllowedUpdateReportsTa<span class="cstat-no" title="statement not covered" >rgets = useMemo(</span>
-    () =&gt; isAllowed('<span class="cstat-no" title="statement not covered" >UPDATE_REPORTS_TARGETS', { organization: </span>selectedOrganization }),
-    [isAllowed, selec<span class="cstat-no" title="statement not covered" >tedOrganization]</span>
-  );<span class="cstat-no" title="statement not covered" ></span>
-  const i<span class="fstat-no" title="function not covered" >sAllowedReviewReportTargets = </span>useMemo(() =&gt; isAllowed('REVIEW_REPORTS_TARGETS'), [isAllowed]);
-&nbsp;
-  const getReportsYears = useMemo<span class="cstat-no" title="statement not covered" >(() =&gt; {</span>
-    const availableYears: Set&lt;number&gt; = <span class="cstat-no" title="statement not covered" >new Set();</span>
+  const isAllowedUpda<span class="cstat-no" title="statement not covered" >teReportsTargets = useMemo(</span>
+    () =&gt; isAllowed('<span class="cstat-no" title="statement not covered" >UPDATE_REPORTS_TARGETS', { organ</span>ization: selectedOrganization }),
+    [isAllowed, selectedO<span class="cstat-no" title="statement not covered" >rganization]</span>
+  );<span class="fstat-no" title="function not covered" ></span>
+  const isAllowedReviewReportTargets = useMemo(() =&gt; isAllowed('REVIEW_REPORTS_TARGETS'), [isAllowed]);
 <span class="cstat-no" title="statement not covered" ></span>
-    reports?.forEach((report) =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-      const reportYea<span class="cstat-no" title="statement not covered" >r = DateTime.fromFormat(report.startD</span>ate, 'yyyy-MM-dd').year;
-      availableYears<span class="cstat-no" title="statement not covered" >.add(reportYear);</span>
+  const getReportsYears = useMemo(() =&gt; <span class="cstat-no" title="statement not covered" >{</span>
+    const availableYears<span class="cstat-no" title="statement not covered" >: Set&lt;number&gt; = new Set();</span>
+<span class="cstat-no" title="statement not covered" ></span>
+    reports?.forEach(<span class="cstat-no" title="statement not covered" >(report) =&gt; {</span>
+      const reportYe<span class="cstat-no" title="statement not covered" >ar = DateTime.fromFormat(report.startDate, 'yyyy-MM-dd').year;</span>
+      availableYears.add(reportYear);<span class="cstat-no" title="statement not covered" ></span>
     });<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-    return Array.from(availableYears).sort((a, b) <span class="cstat-no" title="statement not covered" >=&gt; a - b);</span>
+    return Array.from(availableY<span class="cstat-no" title="statement not covered" >ears).sort((a, b) =&gt; a - b);</span>
   }, [reports]);<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span>
-  us<span class="fstat-no" title="function not covered" >eE</span>ffec<span class="cstat-no" title="statement not covered" >t(() =&gt; {</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  useEffect(() =&gt; {
     const metrics: Map&lt;string, RowMetric&gt; = new Map();
-&nbsp;
-    reports?.forEach((report) =&gt; {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-      report.systemMetrics<span class="cstat-no" title="statement not covered" >.forEach((sm) =&gt; {<span class="fstat-no" title="function not covered" ></span></span>
-        const key = sm.metric;<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >        if (!metrics.has(key)) {<span class="fstat-no" title="function not covered" ></span></span>
-          metrics.set(key<span class="cstat-no" title="statement not covered" >, {</span>
-<span class="cstat-no" title="statement not covered" >            name: sm.metric,</span>
-            type: sm.type,
-<span class="cstat-no" title="statement not covered" >            component: sm.component,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-            id: -1,
-<span class="cstat-no" title="statement not covered" >            description: sm.de<span class="fstat-no" title="function not covered" >sc</span>ription,</span>
-            metricType: 'system',<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+    reports?.forEach((repo<span class="cstat-no" title="statement not covered" >rt) =&gt; {<span class="fstat-no" title="function not covered" ></span></span>
+      report.systemMetrics.forEach((sm) =&gt; <span class="cstat-no" title="statement not covered" >{</span>
+<span class="cstat-no" title="statement not covered" >        const key = sm.metric;<span class="fstat-no" title="function not covered" ></span></span>
+        if (!metrics.has(<span class="cstat-no" title="statement not covered" >key)) {</span>
+<span class="cstat-no" title="statement not covered" >          metrics.set(key, {</span>
+            name: sm.metric,
+<span class="cstat-no" title="statement not covered" >            type: sm.type,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+            component: sm.component,
+<span class="cstat-no" title="statement not covered" >            id: -1,<span class="fstat-no" title="function not covered" ></span></span>
+            description: sm.descript<span class="cstat-no" title="statement not covered" >ion,</span>
+<span class="cstat-no" title="statement not covered" >            metricType: 'system',<span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >          });<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >        }<span class="fstat-no" title="function not covered" ></span></span>
-      });<span class="cstat-no" title="statement not covered" ></span>
-      re<span class="cstat-no" title="statement not covered" >port.standardMetrics.forEach((sm) =&gt; {</span>
-        co<span class="cstat-no" title="statement not covered" >nst key = `standardMetric-${sm.id.toString()}`;</span>
+        }<span class="cstat-no" title="statement not covered" ></span>
+      })<span class="cstat-no" title="statement not covered" >;</span>
+      repo<span class="cstat-no" title="statement not covered" >rt.standardMetrics.forEach((sm) =&gt; {</span>
+        const key = `standardMetric-${sm.id.toString()}`;
         if (!metrics.has(key)) {
           metrics.set(key, {
             name: sm.name,
@@ -706,11 +709,11 @@ export default func<span class="cstat-no" title="statement not covered" ><span c
             id: sm.id,
             description: sm.description,
             metricType: 'standard',
-          });
-<span class="cstat-no" title="statement not covered" >        }<span class="fstat-no" title="function not covered" ></span></span>
-      });<span class="cstat-no" title="statement not covered" ></span>
-      re<span class="cstat-no" title="statement not covered" >port.projectMetrics.forEach((pm) =&gt; {</span>
-        co<span class="cstat-no" title="statement not covered" >nst key = `projectMetric-${pm.id.toString()}`;</span>
+<span class="cstat-no" title="statement not covered" >          });<span class="fstat-no" title="function not covered" ></span></span>
+        }<span class="cstat-no" title="statement not covered" ></span>
+      })<span class="cstat-no" title="statement not covered" >;</span>
+      repo<span class="cstat-no" title="statement not covered" >rt.projectMetrics.forEach((pm) =&gt; {</span>
+        const key = `projectMetric-${pm.id.toString()}`;
         if (!metrics.has(key)) {
           metrics.set(key, {
             name: pm.name,
@@ -719,11 +722,11 @@ export default func<span class="cstat-no" title="statement not covered" ><span c
             id: pm.id,
             description: pm.description,
             metricType: 'project',
-          });
-<span class="cstat-no" title="statement not covered" >        }<span class="fstat-no" title="function not covered" ></span></span>
-      });<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >          });<span class="fstat-no" title="function not covered" ></span></span>
+        }<span class="cstat-no" title="statement not covered" ></span>
+      })<span class="cstat-no" title="statement not covered" >;</span>
     });<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
     reports?.forEach((report) =&gt; {
       if (report.frequency === 'Annual') {
         const year = DateTime.fromFormat(report.startDate, 'yyyy-MM-dd').year;
@@ -733,84 +736,84 @@ export default func<span class="cstat-no" title="statement not covered" ><span c
         metrics.forEach((metric) =&gt; {
           metric[reportIdKey] = report.id;
 &nbsp;
-          if (metric.id !== -1) {
-<span class="cstat-no" title="statement not covered" >            const foundMetric = [...report.stan<span class="fstat-no" title="function not covered" >da</span>rdMetrics, ...report.projectMetrics].find(</span>
-<span class="cstat-no" title="statement not covered" >              (met) =&gt; met.id === metric.id</span>
+<span class="cstat-no" title="statement not covered" >          if (metric.id !== -1) {<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >            const foundMetric = [...report.standardMetrics, ...report.projectMetrics].find(</span>
+              (met) =<span class="cstat-no" title="statement not covered" >&gt; met.id === metric.id</span>
             );<span class="cstat-no" title="statement not covered" ></span>
-            metric[yearK<span class="cstat-no" title="statement not covered" >ey] = foundMet</span>ric?.target;
-          } else {<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >            const foundM<span class="fstat-no" title="function not covered" >et</span>ric = report.systemMetrics.find((met) =&gt; met.metric === metric.name);</span>
-<span class="cstat-no" title="statement not covered" >            metric[yearKey] = foundMetric?.</span>target;
-<span class="cstat-no" title="statement not covered" >          }</span>
-        });<span class="cstat-no" title="statement not covered" ></span>
-      }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-    });
-<span class="cstat-no" title="statement not covered" ></span>
-    setMetricsToUse(Array.from(metrics.values()));
-  }, [reports]);<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-<span class="cstat-no" title="statement not covered" ></span>
+            metric[yearKey] <span class="cstat-no" title="statement not covered" >= foundMetric?.tar</span>get;
+<span class="cstat-no" title="statement not covered" >          } else {<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >            const foundMetric = report.syst</span>emMetrics.find((met) =&gt; met.metric === metric.name);
+<span class="cstat-no" title="statement not covered" >            metric[yearKey] = foundMetric?.target;</span>
+          }<span class="cstat-no" title="statement not covered" ></span>
+        });<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+      }
+    });<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
+    setMetricsToUse(Array.from(m<span class="cstat-no" title="statement not covered" >etrics.values()));<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  }, [report<span class="cstat-no" title="statement not covered" >s]);</span>
+&nbsp;
   const onSaveYearTarget = useCallback(
     async (row: RowMetric, value: any, year: number) =&gt; {
       if (!projectId) {
-        return;
-<span class="cstat-no" title="statement not covered" >      }</span>
-&nbsp;
-      const reportIdKey = `<span class="cstat-no" title="statement not covered" >reportId${year}`;</span>
-<span class="fstat-no" title="function not covered" ></span>      const reportId = row[reportIdKey] as number | undefined;
+<span class="cstat-no" title="statement not covered" >        return;</span>
+      }
 <span class="cstat-no" title="statement not covered" ></span>
-      if<span class="cstat-no" title="statement not covered" > (!repor</span>tId) {
-        snackbar.toastError();
+<span class="fstat-no" title="function not covered" ></span>      const reportIdKey = `reportId${year}`;
+<span class="cstat-no" title="statement not covered" >      const reportId = row[reportIdKey] as number | undefined;</span>
+<span class="cstat-no" title="statement not covered" ></span>
+      if (!reportId) {
+        snackbar.toastErro<span class="cstat-no" title="statement not covered" >r();</span>
         return;<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >      }</span>
+<span class="cstat-no" title="statement not covered" ></span>
+      co<span class="cstat-no" title="statement not covered" >nst newT</span>arget = Number(value);
+      if (isNaN(newTarget)) {
+        snackbar.toastEr<span class="cstat-no" title="statement not covered" >ror();</span>
+<span class="cstat-no" title="statement not covered" >        return;</span>
       }<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-      co<span class="cstat-no" title="statement not covered" >nst newTarget = Number(</span>value);
-      if<span class="cstat-no" title="statement not covered" > (isNaN(</span>newTarget)) {
-        snackbar.toastError();
-        return;<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >      }</span>
-<span class="cstat-no" title="statement not covered" ></span>
-      le<span class="cstat-no" title="statement not covered" >t metric</span>: UpdateProjectMetricTargets | UpdateStandardMetricTargets | UpdateSystemMetricTargets;
+      let metric: UpdateProjectMetricTargets | UpdateStandardMetricTargets | UpdateSystemMetricTargets;
 &nbsp;
-      switch (row.metricType) {
-<span class="cstat-no" title="statement not covered" >        case 'project':</span>
-          metric = {
-<span class="cstat-no" title="statement not covered" >            type: 'project',</span>
+<span class="cstat-no" title="statement not covered" >      switch (row.metricType) {</span>
+        case 'project':
+<span class="cstat-no" title="statement not covered" >          metric = {</span>
+            type: 'project',
             metricId: row.id,
             targets: [{ reportId, target: newTarget }],
           };
-          break;
-        ca<span class="cstat-no" title="statement not covered" >se 'sta</span>ndard':
-          metric = {
-<span class="cstat-no" title="statement not covered" >            type: 'standard',</span>
+<span class="cstat-no" title="statement not covered" >          break;</span>
+        case 'standard':
+<span class="cstat-no" title="statement not covered" >          metric = {</span>
+            type: 'standard',
             metricId: row.id,
             targets: [{ reportId, target: newTarget }],
           };
-          break;
-        ca<span class="cstat-no" title="statement not covered" >se 'sys</span>tem':
-          metric = {
-<span class="cstat-no" title="statement not covered" >            type: 'system',</span>
+<span class="cstat-no" title="statement not covered" >          break;</span>
+        case 'system':
+<span class="cstat-no" title="statement not covered" >          metric = {</span>
+            type: 'system',
             metric: row.name as SystemMetricName,
             targets: [{ reportId, target: newTarget }],
           };
-          break;
-      }<span class="cstat-no" title="statement not covered" ></span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >      try {</span>
-<span class="cstat-no" title="statement not covered" >        await updateMetricTargets({</span>
+<span class="cstat-no" title="statement not covered" >          break;</span>
+      }
+<span class="cstat-no" title="statement not covered" ></span>
+      tr<span class="cstat-no" title="statement not covered" >y {</span>
+        await updateMetricTargets({
           projectId: Number(projectId),
           updateSubmitted: isAllowedReviewReportTargets,
           updateMetricTargetsRequestPayload: { metric },
-        }).unwrap();
+<span class="cstat-no" title="statement not covered" >        }).unwrap();</span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >        snackbar.t</span>oastSuccess(strings.CHANGES_SAVED);
-        reload();
-      } <span class="cstat-no" title="statement not covered" >catch (error) {</span>
+        snackbar.toastSuccess(strings.CHANGES_SAVED);
+<span class="cstat-no" title="statement not covered" >        reload();</span>
+      } catch (error) {
         snackbar.toastError();
       }
     },
-    [projectId, updateMetricTargets, isAllowedReviewReportTargets, snackbar, reload]
-  );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" ></span>
+    [projectId, updateM<span class="cstat-no" title="statement not covered" >etricTargets, isAllowedRev<span class="fstat-no" title="function not covered" >ie</span>wReportTargets, snackbar, reload]</span>
+  );<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
   const tableColumns = useMemo(() =&gt; {
     const baseColumns: EditableTableColumn&lt;RowMetric&gt;[] = [
       {
@@ -818,18 +821,18 @@ export default func<span class="cstat-no" title="statement not covered" ><span c
         header: strings.METRIC,
         accessorKey: 'name',
         size: 300,
-        enableEditing: false,
-      },<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+        enableEditing: f<span class="cstat-no" title="statement not covered" >alse,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+      },
     ];
 &nbsp;
     const yearColumns: EditableTableColumn&lt;RowMetric&gt;[] = getReportsYears.map((year) =&gt; ({
       id: `year${year}`,
       header: year.toString(),
-      accessorKey: `year${year}` as keyof RowMetric,
-      enableEdit<span class="fstat-no" title="function not covered" >in</span>g: isAllowedUp<span class="cstat-no" title="statement not covered" >dateReportsTargets,</span>
+      accessorKe<span class="fstat-no" title="function not covered" >y:</span> `year${year}`<span class="cstat-no" title="statement not covered" > as keyof RowMetric,</span>
+      enableEditing: isAllowedUpdateReportsTargets,
       editConfig: {
-        editVariant: 'text',
-        onSave: (row: Ro<span class="cstat-no" title="statement not covered" >wMetric, value: any) =&gt; onSaveYearTarget(row, value, year),</span>
+        editVariant: 'te<span class="cstat-no" title="statement not covered" >xt',</span>
+        onSave: (row: RowMetric, value: any) =&gt; onSaveYearTarget(row, value, year),
       },
     }));
 &nbsp;
@@ -842,14 +845,14 @@ export default func<span class="cstat-no" title="statement not covered" ><span c
       },
       {
         id: 'component',
-        header: strings.COMPONENT,
-<span class="cstat-no" title="statement not covered" >        accessorKey: 'component',</span>
-        enableEditing: false,
-      },<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-    ];<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-<span class="cstat-no" title="statement not covered" ></span>
-    return [...baseColumns, ...yearColumns, ...lastColumns];
-<span class="cstat-no" title="statement not covered" >  }, [isAllowedUpdateReportsTargets, getReportsYears, onSaveYearTarget]);</span>
+<span class="cstat-no" title="statement not covered" >        header: strings.COMPONENT,</span>
+        accessorKey: 'component',
+        enableEditing:<span class="cstat-no" title="statement not covered" > false,<span class="fstat-no" title="function not covered" ></span></span>
+      },<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+<span class="cstat-no" title="statement not covered" >    ];</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    return [...baseColumns, ...yearColumns, ...lastColumns];</span>
+  }, [isAllowedUpdateReportsTargets, getReportsYears, onSaveYearTarget]);
 &nbsp;
   const columnOrder = useMemo(() =&gt; {
     const yearIds = getReportsYears.map((year) =&gt; `year${year}`);
@@ -910,7 +913,7 @@ export default func<span class="cstat-no" title="statement not covered" ><span c
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-06T12:42:14.507Z
+                at 2026-02-06T20:12:15.689Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

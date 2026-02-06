@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/65</span>
+                <span class='fraction'>0/61</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/25</span>
+                <span class='fraction'>0/23</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/63</span>
+                <span class='fraction'>0/59</span>
             </div>
         
             
@@ -193,21 +193,7 @@
 <a name='L128'></a><a href='#L128'>128</a>
 <a name='L129'></a><a href='#L129'>129</a>
 <a name='L130'></a><a href='#L130'>130</a>
-<a name='L131'></a><a href='#L131'>131</a>
-<a name='L132'></a><a href='#L132'>132</a>
-<a name='L133'></a><a href='#L133'>133</a>
-<a name='L134'></a><a href='#L134'>134</a>
-<a name='L135'></a><a href='#L135'>135</a>
-<a name='L136'></a><a href='#L136'>136</a>
-<a name='L137'></a><a href='#L137'>137</a>
-<a name='L138'></a><a href='#L138'>138</a>
-<a name='L139'></a><a href='#L139'>139</a>
-<a name='L140'></a><a href='#L140'>140</a>
-<a name='L141'></a><a href='#L141'>141</a>
-<a name='L142'></a><a href='#L142'>142</a>
-<a name='L143'></a><a href='#L143'>143</a>
-<a name='L144'></a><a href='#L144'>144</a>
-<a name='L145'></a><a href='#L145'>145</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L131'></a><a href='#L131'>131</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -223,7 +209,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -324,16 +309,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -345,9 +320,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -355,131 +327,118 @@
 <span class="cstat-no" title="statement not covered" ></span>
 import { StatusT, buildR<span class="cstat-no" title="statement not covered" >educers } from 'src/redux/f</span>eatures/asyncUtils';
 import { InviteFund<span class="cstat-no" title="statement not covered" >erResponse } from 'src/services/</span>funder/FundingEntityService';
-import { Publis<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >he</span>dReport } from 'src/types/AcceleratorReport';</span>
-im<span class="cstat-no" title="statement not covered" >port { Funder, FundingEntity } from 'src/types/FundingEntity';</span>
+import { Funder<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >, </span>FundingEntity } from 'src/types/FundingEntity';</span>
 <span class="cstat-no" title="statement not covered" ></span>
-import {
-  requestCreateFun<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >di</span>ngEntity,</span>
-<span class="cstat-no" title="statement not covered" >  requestDeleteFunders,</span>
-  re<span class="cstat-no" title="statement not covered" >questFundingEntities,</span>
-  requ<span class="cstat-no" title="statement not covered" >estFundingEntity,</span>
-  reques<span class="cstat-no" title="statement not covered" >tFundingEntityForUser,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  requestFundingEntityInviteFunder,
-<span class="cstat-no" title="statement not covered" >  requestList</span>FunderReports,
+impo<span class="cstat-no" title="statement not covered" >rt {</span>
+  requestCreateFundingEntity,
+  requestDeleteFun<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >de</span>rs,</span>
+<span class="cstat-no" title="statement not covered" >  requestFundingEntities,</span>
+  re<span class="cstat-no" title="statement not covered" >questFundingEntity,</span>
+  requ<span class="cstat-no" title="statement not covered" >estFundingEntityForUser,</span>
+  reques<span class="cstat-no" title="statement not covered" >tFundingEntityInviteFunder<span class="fstat-no" title="function not covered" >,<span class="cstat-no" title="statement not covered" ></span></span></span>
   requestListFunders,
-  requestProjectFun<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >di</span>ngEntit<span class="cstat-no" title="statement not covered" >ies,</span></span>
-  requestUpdateFundi<span class="cstat-no" title="statement not covered" >ngE</span>ntity,
-<span class="cstat-no" title="statement not covered" >} from './fundingEntitiesAsyncThunks';</span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-const initialStateUser<span class="fstat-no" title="function not covered" >Fu</span>ndin<span class="cstat-no" title="statement not covered" >gEntity: { [key: st</span>ring]: StatusT&lt;{ userFundingEntity: FundingEntity }&gt; } = {};
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-const initialStateFundingE<span class="fstat-no" title="function not covered" >nt</span>ity:<span class="cstat-no" title="statement not covered" > { [key: string]: Statu</span>sT&lt;{ fundingEntity: FundingEntity }&gt; } = {};
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-const initialStateFundingEnt<span class="fstat-no" title="function not covered" >it</span>ies:<span class="cstat-no" title="statement not covered" > { [key: string]: StatusT</span>&lt;{ fundingEntities: FundingEntity[] }&gt; } = {};
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-const initialStateFund<span class="fstat-no" title="function not covered" >in</span>gEnt<span class="cstat-no" title="statement not covered" >ityUpdate: { [reque</span>stId: string]: StatusT&lt;{ fundingEntity: FundingEntity }&gt; } = {};
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-const initialStateFundingEntity<span class="fstat-no" title="function not covered" >Cr</span>eate<span class="cstat-no" title="statement not covered" >: { [requestId: string]: Sta</span>tusT&lt;{ fundingEntity: FundingEntity }&gt; } = {};
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-const initialStateFundingEntityInvite: { [requestId: string]: StatusT&lt;string | InviteFunderResponse&gt; } = {};
+<span class="cstat-no" title="statement not covered" >  requestProj</span>ectFundingEntities,
+  requestUpdateFundingEntity,
+} from './fundingEn<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ti</span>tiesAsy<span class="cstat-no" title="statement not covered" >ncThunks';</span></span>
 <span class="cstat-no" title="statement not covered" ></span>
-export const fundingE<span class="cstat-no" title="statement not covered" >ntitySlice = createSlice({</span>
-  name: 'fundingEntitySl<span class="cstat-no" title="statement not covered" >ice',</span>
-  initialState: initialStateFundingEntit<span class="cstat-no" title="statement not covered" >y,</span>
+<span class="cstat-no" title="statement not covered" >const initialStateUserFundingEntity: { [key: string]: StatusT&lt;{ userFundingEntity: FundingEntity }&gt; } = {};</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+const initialStateFund<span class="fstat-no" title="function not covered" >in</span>gEnt<span class="cstat-no" title="statement not covered" >ity: { [key: string</span>]: StatusT&lt;{ fundingEntity: FundingEntity }&gt; } = {};
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+const initialStateFundin<span class="fstat-no" title="function not covered" >gE</span>ntit<span class="cstat-no" title="statement not covered" >ies: { [key: string]:</span> StatusT&lt;{ fundingEntities: FundingEntity[] }&gt; } = {};
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+const initialStateFundingEnt<span class="fstat-no" title="function not covered" >it</span>yUpd<span class="cstat-no" title="statement not covered" >ate: { [requestId: string</span>]: StatusT&lt;{ fundingEntity: FundingEntity }&gt; } = {};
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+const initialStateFundingEnt<span class="fstat-no" title="function not covered" >it</span>yCre<span class="cstat-no" title="statement not covered" >ate: { [requestId: string</span>]: StatusT&lt;{ fundingEntity: FundingEntity }&gt; } = {};
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+const initialStateFundingE<span class="fstat-no" title="function not covered" >nt</span>ityI<span class="cstat-no" title="statement not covered" >nvite: { [requestId: st</span>ring]: StatusT&lt;string | InviteFunderResponse&gt; } = {};
+&nbsp;
+<span class="cstat-no" title="statement not covered" >export const fundingEntitySlice = createSlice(</span>{
+  name: 'fundingEntit<span class="cstat-no" title="statement not covered" >ySlice',</span>
+  initialState: initialS<span class="cstat-no" title="statement not covered" >tateFundingEntity,</span>
   reducers: {},<span class="cstat-no" title="statement not covered" ></span>
   extraReducers: (builder) =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-    buildReducers(requestFundingEnti<span class="cstat-no" title="statement not covered" >ty,</span> true)(builder);
+    buildReducers(requestFundingEn<span class="cstat-no" title="statement not covered" >tit</span>y, true)(builder);
   },<span class="cstat-no" title="statement not covered" ></span>
 });<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-export const fundingEntitie<span class="cstat-no" title="statement not covered" >sSlice = createSlice({</span>
-  name: 'fundingEntitiesSlice',
+export const fundingEntitiesSlice = crea<span class="cstat-no" title="statement not covered" >teS</span>lice({
+  name: 'fundingEntitiesSli<span class="cstat-no" title="statement not covered" >ce',</span>
   initialState: initialStateFundingEntities,
   reducers: {},
-  extraReducers: <span class="fstat-no" title="function not covered" >(b</span>uilder) =&gt; {
-<span class="cstat-no" title="statement not covered" >    buildReducers(requestFundingEntities, true)(builder);</span>
-  },
+  extraReducers: (builder) =&gt; {
+    buildReducers<span class="fstat-no" title="function not covered" >(r</span>equestFundingEntities, true)(builder);
+  },<span class="cstat-no" title="statement not covered" ></span>
 });
-<span class="cstat-no" title="statement not covered" ></span>
-export const userFundingEntitySlice = createSlice({
+&nbsp;
+export const userFundingEntit<span class="cstat-no" title="statement not covered" >ySlice = createSlice({</span>
   name: 'userFundingEntitySlice',
   initialState: initialStateUserFundingEntity,
-  reducers: {},<span class="fstat-no" title="function not covered" ></span>
-  ex<span class="cstat-no" title="statement not covered" >traReducers: (builder) =&gt; {</span>
-    buildReducers(requestFundingEntityForUser, true)(builder);
-  },
-});<span class="cstat-no" title="statement not covered" ></span>
-&nbsp;
-export const fundingEntityUpdateSlice = createSlice({
-  name: 'fundingEntityUpdateSlice',
-  initialState: i<span class="fstat-no" title="function not covered" >ni</span>tialStateFundingEntityUpdate,
-  re<span class="cstat-no" title="statement not covered" >ducers: {},</span>
-  extraReducers: (builder) =&gt; {
-    buildReducers(requestUpdateFundingEntity, true)(builder);
-  },<span class="cstat-no" title="statement not covered" ></span>
-});
-&nbsp;
-export const fundingEntityCreateSlice = createSlice({
-  name: 'fundingE<span class="fstat-no" title="function not covered" >nt</span>ityCreateSlice',
-  in<span class="cstat-no" title="statement not covered" >itialState: initialStateFundingEntityCreate,</span>
-  reducers: {},
-  extraReducers: (builder) =&gt; {
-    buildReducers(requestCreateFu<span class="cstat-no" title="statement not covered" >ndingEntity, true)(builder);</span>
-  },
-});
-&nbsp;
-export const fund<span class="fstat-no" title="function not covered" >in</span>gEntityInviteSlice = createSlice({
-  na<span class="cstat-no" title="statement not covered" >me: 'fundingEntityInviteSlice',</span>
-  initialState: initialStateFundingEntityInvite,
-  reducers: {},
-  extraReducers: (builder) =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-    buildReducers(requestFundingEntityInviteFunder, true)(builder);
-  },
-});
-<span class="fstat-no" title="function not covered" ></span>
-cons<span class="cstat-no" title="statement not covered" >t initialStateFunderList: { [requestId: string]: StatusT&lt;Funder[]&gt; } = {};</span>
-&nbsp;
-export const funderListSlice = createSlice({
-  name: 'funderListSlice',<span class="cstat-no" title="statement not covered" ></span>
-  initialState: initialS<span class="cstat-no" title="statement not covered" >tateFunderList,</span>
-  reducers: {},
-  extraReducers: (builder) =&gt; {
-    buildReducers(requestListFunders, true)(builder);
-  },<span class="fstat-no" title="function not covered" ></span>
-});<span class="cstat-no" title="statement not covered" ></span>
-&nbsp;
-const initialStateDeleteFunder: { [requestId: string]: StatusT&lt;Response&gt; } = {};
-<span class="cstat-no" title="statement not covered" ></span>
-export const deleteFundersS<span class="cstat-no" title="statement not covered" >lice = createSlice({</span>
-  name: 'deleteFundersSlice',
-  initialState: initialStateDeleteFunder,
   reducers: {},
   extraReducers: <span class="fstat-no" title="function not covered" >(b</span>uilder) =&gt; {
-<span class="cstat-no" title="statement not covered" >    buildReducers(requestDeleteFunders, true)(builder);</span>
+<span class="cstat-no" title="statement not covered" >    buildReducers(requestFundingEntityForUser, true)(builder);</span>
   },
 });
 <span class="cstat-no" title="statement not covered" ></span>
-const initialStateFunderReports<span class="cstat-no" title="statement not covered" >List: { [requestId: string]: StatusT&lt;PublishedReport[]&gt; } = {};</span>
-&nbsp;
-export const funderReportsListSlice = createSlice({
-  name: 'funderReportsListSlice',
-  initialState: i<span class="fstat-no" title="function not covered" >ni</span>tialStateFunderReportsList,
-  re<span class="cstat-no" title="statement not covered" >ducers: {},</span>
-  extraReducers: (builder) =&gt; {
-    buildReducers(requestListFunderReports, true)(builder);
-  },<span class="cstat-no" title="statement not covered" ></span>
+export const fundingEntityUpdateSlice = createSlice({
+  name: 'fundingEntityUpdateSlice',
+  initialState: initialStateFundingEntityUpdate,
+  reducers: {},<span class="fstat-no" title="function not covered" ></span>
+  ex<span class="cstat-no" title="statement not covered" >traReducers: (builder) =&gt; {</span>
+    buildReducers(requestUpdateFundingEntity, true)(builder);
+  },
 });<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
-const initialStateProjectFundingEntities: { [requestId: string]: StatusT&lt;FundingEntity[]&gt; } = {};
+export const fundingEntityCreateSlice = createSlice({
+  name: 'fundingEntityCreateSlice',
+  initialState: i<span class="fstat-no" title="function not covered" >ni</span>tialStateFundingEntityCreate,
+  re<span class="cstat-no" title="statement not covered" >ducers: {},</span>
+  extraReducers: (builder) =&gt; {
+    buildReducers(requestCreateFundingEntity, true)(builder);
+  },<span class="cstat-no" title="statement not covered" ></span>
+});
 &nbsp;
-export const proj<span class="fstat-no" title="function not covered" >ec</span>tFundingEntitiesSlice = createSlice({
-  na<span class="cstat-no" title="statement not covered" >me: 'projectFundingEntitiesSlice',</span>
-  initialState: initialStateProjectFundingEntities,
+export const fundingEntityInviteSlice = createSlice({
+  name: 'fundingE<span class="fstat-no" title="function not covered" >nt</span>ityInviteSlice',
+  in<span class="cstat-no" title="statement not covered" >itialState: initialStateFundingEntityInvite,</span>
   reducers: {},
-  extraReducers: (builder) =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-    buildReducers(requestProjectFundingEntities, true)(builder);
+  extraReducers: (builder) =&gt; {
+    buildReducers(requestFundingE<span class="cstat-no" title="statement not covered" >ntityInviteFunder, true)(builder);</span>
   },
 });
+&nbsp;
+const initialStat<span class="fstat-no" title="function not covered" >eF</span>underList: { [requestId: string]: StatusT&lt;Funder[]&gt; } = {};
+<span class="cstat-no" title="statement not covered" ></span>
+export const funderListSlice = createSlice({
+  name: 'funderListSlice',
+  initialState: initialStateFun<span class="cstat-no" title="statement not covered" >der</span>List,
+  reducers: {},<span class="cstat-no" title="statement not covered" ></span>
+  extraReducers: (builder) =&gt; {
+    buildReducers(requestListFunders, true)(builder);
+  },
+});<span class="fstat-no" title="function not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+const initialStateDeleteFunder: { [requestId: string]: StatusT&lt;Response&gt; } = {};
+&nbsp;
+export const deleteFundersSlice =<span class="cstat-no" title="statement not covered" > cr</span>eateSlice({
+  name: 'deleteFundersSlice<span class="cstat-no" title="statement not covered" >',</span>
+  initialState: initialStateDeleteFunder,
+  reducers: {},
+  extraReducers: (builder) =&gt; {
+    buildReducers<span class="fstat-no" title="function not covered" >(r</span>equestDeleteFunders, true)(builder);
+  },<span class="cstat-no" title="statement not covered" ></span>
+});
+&nbsp;
+const initialStateProjectFundingEntities: {<span class="cstat-no" title="statement not covered" > [r</span>equestId: string]: StatusT&lt;FundingEntity[]&gt; } = {};
+<span class="cstat-no" title="statement not covered" ></span>
+export const projectFundingEntitiesSlice = createSlice({
+  name: 'projectFundingEntitiesSlice',
+  initialState: initialStateProjectFundingEntities,
+  reducers: {},<span class="fstat-no" title="function not covered" ></span>
+  ex<span class="cstat-no" title="statement not covered" >traReducers: (builder) =&gt; {</span>
+    buildReducers(requestProjectFundingEntities, true)(builder);
+  },
+});<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
 const fundingEntitiesReducers = {
   fundingEntitiesList: fundingEntitiesSlice.reducer,
@@ -488,10 +447,9 @@ const fundingEntitiesReducers = {
   fundingEntityUpdate: fundingEntityUpdateSlice.reducer,
   fundingEntityCreate: fundingEntityCreateSlice.reducer,
   fundingEntityInvite: fundingEntityInviteSlice.reducer,
-  fundingEntityDelet<span class="cstat-no" title="statement not covered" >eFunders: deleteFundersS</span>lice.reducer,
+  fundingEntityDeleteFunders: deleteFundersSlice.reducer,
   fundingEntityGetFunders: funderListSlice.reducer,
-  funderReportsList: funderReportsListSlice.reducer,
-  projectFundingEntities: projectFundingEntitiesSlice.reducer,
+  projectFundingEnti<span class="cstat-no" title="statement not covered" >ties: projectFundingEnti</span>tiesSlice.reducer,
 };
 &nbsp;
 export default fundingEntitiesReducers;
@@ -502,7 +460,7 @@ export default fundingEntitiesReducers;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-06T12:42:14.507Z
+                at 2026-02-06T20:12:15.689Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>
