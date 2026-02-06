@@ -23,12 +23,12 @@ export default function PlantingDensityPerStratumCard(): JSX.Element {
 
   const tooltipRenderer = useCallback(
     (tooltipItem: TooltipItem<keyof ChartTypeRegistry>) => {
-      const v = tooltipItem.dataset.data[tooltipItem.dataIndex];
-      if (Array.isArray(v)) {
-        const numValue = typeof v[0] === 'number' ? v[0] : parseFloat(String(v[0]) || '0');
+      const value = tooltipItem.dataset.data[tooltipItem.dataIndex];
+      if (Array.isArray(value)) {
+        const numValue = typeof value[0] === 'number' ? value[0] : parseFloat(String(value[0]) || '0');
         return numberFormatter.format(numValue);
-      } else if (v !== null && v !== undefined) {
-        const numValue = typeof v === 'number' ? v : parseFloat(String(v) || '0');
+      } else if (value !== null && value !== undefined) {
+        const numValue = typeof value === 'number' ? value : parseFloat(String(value) || '0');
         return numberFormatter.format(numValue);
       }
       return '';
