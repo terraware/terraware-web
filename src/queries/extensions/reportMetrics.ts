@@ -11,7 +11,7 @@ api.enhanceEndpoints({
     },
     updateStandardMetric: {
       invalidatesTags: (_results, _error, payload) => [
-        { type: QueryTagTypes.PublishedReportMedia, id: payload.metricId },
+        { type: QueryTagTypes.StandardMetrics, id: payload.metricId },
         { type: QueryTagTypes.Reports }, // invalidate all reports
       ],
     },
