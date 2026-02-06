@@ -992,9 +992,12 @@ const ObservationMap = ({
   );
 
   useEffect(() => {
-    // Close drawer on data changes
-    setDrawerOpenCallback(false);
-  }, [plantingSiteId, observationResults, adHocObservationResults, setDrawerOpenCallback]);
+    // Close drawer on data changes, unless virtualPlot param is present
+    const virtualPlotParam = searchParams.get('virtualPlot');
+    if (!virtualPlotParam) {
+      setDrawerOpenCallback(false);
+    }
+  }, [plantingSiteId, observationResults, adHocObservationResults, setDrawerOpenCallback, searchParams]);
 
   const drawerContent = useMemo(() => {
     if (selectedFeature && selectedResults) {
