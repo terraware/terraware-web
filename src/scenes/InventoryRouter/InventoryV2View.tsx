@@ -62,7 +62,7 @@ export type FacilitySpeciesInventoryResult = {
   activeGrowthQuantity: string;
   totalQuantity: string;
   'totalQuantity(raw)': string;
-  facilityInventories: {
+  facilityInventories?: {
     species_id: string;
     species_scientificName: string;
     batches: {
