@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/163</span>
+                <span class='fraction'>0/166</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/86</span>
+                <span class='fraction'>0/90</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/153</span>
+                <span class='fraction'>0/156</span>
             </div>
         
             
@@ -367,7 +367,13 @@
 <a name='L302'></a><a href='#L302'>302</a>
 <a name='L303'></a><a href='#L303'>303</a>
 <a name='L304'></a><a href='#L304'>304</a>
-<a name='L305'></a><a href='#L305'>305</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L305'></a><a href='#L305'>305</a>
+<a name='L306'></a><a href='#L306'>306</a>
+<a name='L307'></a><a href='#L307'>307</a>
+<a name='L308'></a><a href='#L308'>308</a>
+<a name='L309'></a><a href='#L309'>309</a>
+<a name='L310'></a><a href='#L310'>310</a>
+<a name='L311'></a><a href='#L311'>311</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -418,6 +424,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -593,10 +600,14 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -611,6 +622,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -685,35 +697,36 @@ import { selectPla<span class="cstat-no" title="statement not covered" ><span cl
 im<span class="cstat-no" title="statement not covered" >port { useAppSelector } from 'src/redux/store';</span>
 impo<span class="cstat-no" title="statement not covered" >rt strings from 'src/strings';</span>
 import<span class="cstat-no" title="statement not covered" > { conservationCategories } from 'src/types/Species';</span>
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-type CategoryData = {
-<span class="cstat-no" title="statement not covered" >  labels: str</span>ing[];
-  values: number[];
-  rareSpeciesP<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >er</span>centage: number;<span class="cstat-no" title="statement not covered" ></span></span>
+import {<span class="cstat-no" title="statement not covered" > useNumberFormatter } from<span class="fstat-no" title="function not covered" > '</span>src/<span class="cstat-no" title="statement not covered" >utils/useN</span>umberFormatter';</span>
+&nbsp;
+ty<span class="cstat-no" title="statement not covered" >pe Category</span>Data = {
+  labels: string[];
+  values: numb<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >er</span>[];<span class="cstat-no" title="statement not covered" ></span></span>
+  rareSpeciesPercentage: number;
 };
 &nbsp;
 const processConservationCategories = (
   categoryTotals: Record&lt;string, number&gt;,
   totalRare: number,
   totalSpecies: number
-): CategoryData =&gt; {
-  const sortedTopFo<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ur</span>Categor<span class="cstat-no" title="statement not covered" >ies = Object.entries(categoryTotals)</span></span>
-    .sort(([, a], [,<span class="cstat-no" title="statement not covered" > b]</span>) =&gt; b - a)
-<span class="cstat-no" title="statement not covered" >    .slice(0, 4);</span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  const topCategoriesTotal = sortedTopFourCategories.reduce((sum, [, quantity]) =&gt; sum + quantity, 0);
-<span class="cstat-no" title="statement not covered" >  const totalQuantity = Object.values(category</span>Totals).reduce((sum, quantity) =&gt; sum + quantity, 0);
-  const otherTotal <span class="cstat-no" title="statement not covered" >= totalQuantity - topCateg</span>oriesTotal;
-  const finalCategoryT<span class="cstat-no" title="statement not covered" >otals: Record&lt;string, num</span>ber&gt; = {};
-  sortedTopFourCategories.fo<span class="cstat-no" title="statement not covered" >rEach(([category, quantity]) =&gt; {</span>
-    finalCategoryTotal<span class="cstat-no" title="statement not covered" >s[category] = quantity;</span>
+): CategoryData =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >{<span class="cstat-no" title="statement not covered" ></span></span></span>
+  const sortedTopFou<span class="cstat-no" title="statement not covered" >rCa</span>tegories = Object.entries(categoryTotals)
+<span class="cstat-no" title="statement not covered" >    .sort(([, a], [, b]) =&gt; b - a)</span>
+    .slice(<span class="fstat-no" title="function not covered" >0,</span> 4);<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  const topCategoriesTotal = sortedTopFourCate</span>gories.reduce((sum, [, quantity]) =&gt; sum + quantity, 0);
+  const totalQuanti<span class="cstat-no" title="statement not covered" >ty = Object.values(categor</span>yTotals).reduce((sum, quantity) =&gt; sum + quantity, 0);
+  const otherTotal = t<span class="cstat-no" title="statement not covered" >otalQuantity - topCategor</span>iesTotal;
+  const finalCategoryTotals:<span class="cstat-no" title="statement not covered" > Record&lt;string, number&gt; = {};</span>
+  sortedTopFourCategor<span class="cstat-no" title="statement not covered" >ies.forEach(([category, quantity]) =&gt; {</span>
+    finalCategoryTotals[category]<span class="cstat-no" title="statement not covered" > = quantity;</span>
   });<span class="cstat-no" title="statement not covered" ></span>
   if (otherTotal &gt; 0) {<span class="cstat-no" title="statement not covered" ></span>
-    finalCategoryTotals.Other = o<span class="cstat-no" title="statement not covered" >therTotal;</span>
+    finalCategoryTotals.Other = <span class="cstat-no" title="statement not covered" >otherTotal;</span>
   }<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const rareSpeciesPe<span class="cstat-no" title="statement not covered" >rcentage = totalSpecies &gt; 0 ? Nu</span>mber(((totalRare * 100) / totalSpecies).toFixed(2)) : 0;
-  const labels = Obje<span class="cstat-no" title="statement not covered" >ct.keys(finalCategoryTotals).</span>map(
+  const rareSpeciesPe<span class="cstat-no" title="statement not covered" >rcentage = totalSpecies &gt; 0 ?</span> Number(((totalRare * 100) / totalSpecies).toFixed(2)) : 0;
+  const labels = Object.keys(fin<span class="cstat-no" title="statement not covered" >alCategoryTotals).map(</span>
     (ctId) =&gt; conservationCategories()<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >.f</span>ind((c) =&gt; c.value === ctId)?.label || strings.OTHER</span>
   );<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
   const values = Object.value<span class="cstat-no" title="statement not covered" >s(finalCategoryTotals).map((cat<span class="fstat-no" title="function not covered" >) </span>=&gt;<span class="cstat-no" title="statement not covered" ></span></span>
@@ -896,31 +909,36 @@ const SiteWithStrataCard = ():<span class="cstat-no" title="statement not covere
       const {
         labels: pr<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >oc</span>essedLabels,</span>
         values: <span class="cstat-no" title="statement not covered" >processedValues,</span>
-        rareSpeciesPercent<span class="cstat-no" title="statement not covered" >age,<span class="fstat-no" title="function not covered" ></span></span>
-      } = processConservationCategories(categoryTotals, totalRare, totalSpecies);
-<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >      setRareSpecies</span>(rareSpeciesPercentage);
-      setLabels(processedLabels);
-      setValues(proc<span class="cstat-no" title="statement not covered" >essedValues);<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >    }</span>
+        rareSpeciesPercent<span class="cstat-no" title="statement not covered" >age,</span>
+      } = processConservat<span class="cstat-no" title="statement not covered" >ionCategories(categoryTotals, totalRare, totalSpecies);</span>
+<span class="fstat-no" title="function not covered" ></span>
+      setRareSpecies(ra<span class="cstat-no" title="statement not covered" >reSpeciesPercentage);</span>
+      setLabels(process<span class="cstat-no" title="statement not covered" >edLabels);</span>
+<span class="cstat-no" title="statement not covered" >      setValues(processedValues);</span>
+    }
   }, [plantingSiteReportedPlants, orgSpecies, totalSpecies]);
 &nbsp;
-  return &lt;ChartData labels={labels} values={values} rareSpecies={rareSpecies} /&gt;;
-};
+  return &lt;ChartData <span class="cstat-no" title="statement not covered" >labels={labels} values={va<span class="fstat-no" title="function not covered" >lu</span>es} rareSpecies={rareSpecies} /&gt;;</span>
+};<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
 type ChartDataProps = {
   labels?: string[];
   values?: number[];
-<span class="cstat-no" title="statement not covered" >  rareSpecies?: number;</span>
-};<span class="cstat-no" title="statement not covered" ></span>
+  rareSpecies?: number;
+};
 &nbsp;
-co<span class="cstat-no" title="statement not covered" >nst ChartData = ({ labels, values, rareSpecies }: ChartDataProps): JSX.Element | undefined =&gt; {</span>
-  const theme = useTheme();
+const ChartData = ({ labels, values, rareSpecies }: ChartDataProps): JSX.Element | undefined =&gt; {
+<span class="cstat-no" title="statement not covered" >  const theme = useTheme();</span>
+  co<span class="cstat-no" title="statement not covered" >nst numberForma</span>tter = useNumberFormatter();
 &nbsp;
-  const tooltipRenderer = useCallback((tooltipItem: TooltipItem&lt;keyof ChartTypeRegistry&gt;) =&gt; {
-    const v = tooltipItem.dataset.data[tooltipItem.dataIndex]?.toString();
-    return `${v}%`;
-  }, []);
+<span class="cstat-no" title="statement not covered" >  const tooltipRenderer = useCallback(</span>
+    (tooltipItem: TooltipItem&lt;keyof ChartTypeRegistry&gt;) =&gt; {
+      const rawValue = tooltipItem.dataset.data[tooltipItem.dataIndex];
+      const numValue = typeof rawValue === 'number' ? rawValue : parseFloat(rawValue?.toString() || '0');
+      return `${numberFormatter.format(numValue)}%`;
+    },
+    [numberFormatter]
+  );
 &nbsp;
   const chartData = useMemo(() =&gt; {
     return {
@@ -970,7 +988,7 @@ co<span class="cstat-no" title="statement not covered" >nst ChartData = ({ label
       &lt;/Box&gt;
 &nbsp;
       &lt;Typography fontSize={'16px'} fontWeight={600} marginRight={1}&gt;
-        {strings.RARE}: {rareSpecies}%
+        {strings.RARE}: {numberFormatter.format(rareSpecies)}%
       &lt;/Typography&gt;
     &lt;/Box&gt;
   );
@@ -982,7 +1000,7 @@ co<span class="cstat-no" title="statement not covered" >nst ChartData = ({ label
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-06T20:12:15.689Z
+                at 2026-02-06T22:56:59.855Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

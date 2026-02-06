@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/77</span>
+                <span class='fraction'>0/80</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/66</span>
+                <span class='fraction'>0/68</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/72</span>
+                <span class='fraction'>0/75</span>
             </div>
         
             
@@ -205,7 +205,13 @@
 <a name='L140'></a><a href='#L140'>140</a>
 <a name='L141'></a><a href='#L141'>141</a>
 <a name='L142'></a><a href='#L142'>142</a>
-<a name='L143'></a><a href='#L143'>143</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L143'></a><a href='#L143'>143</a>
+<a name='L144'></a><a href='#L144'>144</a>
+<a name='L145'></a><a href='#L145'>145</a>
+<a name='L146'></a><a href='#L146'>146</a>
+<a name='L147'></a><a href='#L147'>147</a>
+<a name='L148'></a><a href='#L148'>148</a>
+<a name='L149'></a><a href='#L149'>149</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -244,6 +250,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -254,6 +261,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -299,9 +307,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -345,9 +356,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > type JSX, use</span>Callback, useEffect, useMemo, useState } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > type JSX, use</span>Callback, useEffect, useMemo, useState } from 'react';
 <span class="cstat-no" title="statement not covered" ></span>
 import { Box, useTheme <span class="cstat-no" title="statement not covered" >} from '@mui/material';</span>
 import { Dropdown } from<span class="cstat-no" title="statement not covered" > '@terraware/web-components</span>';
@@ -357,43 +369,45 @@ import PieChart<span class="cstat-no" title="statement not covered" ><span class
 im<span class="cstat-no" title="statement not covered" >port { useLocalization } from 'src/providers';</span>
 impo<span class="cstat-no" title="statement not covered" >rt { useSpeciesData } from 'src/providers/Species/SpeciesContex</span>t';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-ex<span class="cstat-no" title="statement not covered" >port default function LiveDeadPlantsPerSpeciesCard(): JSX.Element {</span>
-  co<span class="cstat-no" title="statement not covered" >nst [values, setValues] = useState&lt;number[]&gt;();</span>
-  cons<span class="cstat-no" title="statement not covered" >t [selectedSpecies, setSelectedSpecies] = useState&lt;string&gt;();</span>
-  const <span class="cstat-no" title="statement not covered" >{ species: availableSpecie<span class="fstat-no" title="function not covered" >s </span>} = <span class="cstat-no" title="statement not covered" >useSpecies</span>Data();</span>
-  const [allSpecies, setAllSpecies] = useState&lt;
-<span class="cstat-no" title="statement not covered" >    {</span>
-      label: string;
-      value: s<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >tr</span>ing;<span class="cstat-no" title="statement not covered" ></span></span>
+import { useNumber<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Fo</span>rmatter } from 'src/utils/useNumberFormatter';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+expo<span class="cstat-no" title="statement not covered" >rt default function LiveDeadPlantsPerSpeciesCard(): JSX.Element {</span>
+  cons<span class="cstat-no" title="statement not covered" >t [values, setValues] = useState&lt;number[]&gt;();</span>
+  const <span class="cstat-no" title="statement not covered" >[selectedSpecies, setSelec<span class="fstat-no" title="function not covered" >te</span>dSpe<span class="cstat-no" title="statement not covered" >cies] = us</span>eState&lt;string&gt;();</span>
+  const { species: availableSpecies } = useSpeciesData();
+<span class="cstat-no" title="statement not covered" >  const [allS</span>pecies, setAllSpecies] = useState&lt;
+    {
+      label: s<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >tr</span>ing;<span class="cstat-no" title="statement not covered" ></span></span>
+      value: string;
     }[]
   &gt;();
   const { observationSummaries } = usePlantingSiteData();
   const theme = useTheme();
   const { strings, activeLocale } = useLocalization();
+  const numberFormatter = useNumberFormatter();
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  const LIVE_DEAD_LA<span class="cstat-no" title="statement not covered" >BEL</span>S = useMemo(() =&gt; {
+<span class="cstat-no" title="statement not covered" >    return [strings.LIVE, strings.DEAD];</span>
+  }, [strin<span class="fstat-no" title="function not covered" >gs</span>]);<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
-  const LIVE_DEAD_LABELS = useMemo(() =&gt; {
-    return [strings<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >.L</span>IVE, st<span class="cstat-no" title="statement not covered" >rings.DEAD];</span></span>
-  }, [strings]);<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >  useEffect(() =&gt; {</span>
+    if (observation<span class="cstat-no" title="statement not covered" >Summaries?.[0]) {</span>
+      const filterFn =<span class="cstat-no" title="statement not covered" > (sp: any) =&gt; sp.survival</span>Rate !== undefined &amp;&amp; sp.survivalRate !== null;
 <span class="cstat-no" title="statement not covered" ></span>
-  useEffect<span class="fstat-no" title="function not covered" >((</span>) =&gt;<span class="cstat-no" title="statement not covered" > {</span>
-    if (observationSummaries?.[0]) {
-<span class="cstat-no" title="statement not covered" >      const filterFn = (sp: any) =&gt; sp.surviva</span>lRate !== undefined &amp;&amp; sp.survivalRate !== null;
-<span class="cstat-no" title="statement not covered" ></span>
-      const speciesNam<span class="cstat-no" title="statement not covered" >es = observationSummaries</span>[0].species
-        .filter(filterFn)<span class="cstat-no" title="statement not covered" ></span>
-        .map((sp) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
+      const speciesNam<span class="cstat-no" title="statement not covered" >es = observationSummaries[0].species</span>
+        .filter(filterF<span class="cstat-no" title="statement not covered" >n)</span>
+        .map((sp) =&gt; ({<span class="cstat-no" title="statement not covered" ></span>
           label:<span class="cstat-no" title="statement not covered" ></span>
-            availableSpecies<span class="cstat-no" title="statement not covered" >.find((availableS) =&gt; availableS.id === sp.speci</span>esId)?.scientificName ||
-            sp.speciesName ||<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" >            '',</span>
-          value: sp.speciesId?<span class="cstat-no" title="statement not covered" >.toString() || '',</span>
+            availableSpecies.fin<span class="cstat-no" title="statement not covered" >d((availableS) =&gt; availableS.id === sp.s</span>peciesId)?.scientificName ||
+<span class="fstat-no" title="function not covered" >            sp.speciesName ||</span>
+            '',<span class="cstat-no" title="statement not covered" ></span>
+          value: sp.speciesId?.toString() || '',<span class="cstat-no" title="statement not covered" ></span>
         }))<span class="cstat-no" title="statement not covered" ></span>
-        .sort((a, b) =&gt; a.label.localeCo<span class="cstat-no" title="statement not covered" >mpare(b.label, activeLocale || undefined));</span>
+        .sort((a, b) =&gt; a.label.locale<span class="cstat-no" title="statement not covered" >Compare(b.label, activeLocale</span> || undefined));
 <span class="cstat-no" title="statement not covered" ></span>
-      setAllSpecies(speciesNames);<span class="cstat-no" title="statement not covered" ></span>
-      if (specie<span class="cstat-no" title="statement not covered" >sNames.length &gt; 0) {</span>
-        setSelectedSpecies(speciesNa<span class="cstat-no" title="statement not covered" >mes[0].value);</span>
+      setAllSpec<span class="cstat-no" title="statement not covered" >ies(speciesNames);</span>
+      if (speciesNames.length &gt; 0) {<span class="cstat-no" title="statement not covered" ></span>
+        setSelectedSpecies<span class="cstat-no" title="statement not covered" >(speciesNames[0].value);</span>
       }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >    }</span>
   }, [observationSummaries, availableSpecies, activeLocale]);
@@ -422,37 +436,41 @@ ex<span class="cstat-no" title="statement not covered" >port default function Li
     }<span class="cstat-no" title="statement not covered" ></span>
   }, [selectedSpecies, observationSummaries, LIVE_DEAD_LABELS]);
 &nbsp;
-  cons<span class="cstat-no" title="statement not covered" >t tooltipRenderer = useCallback((tooltipItem: TooltipItem&lt;keyof ChartTypeRegistry&gt;) =&gt; {</span>
-    const v = toolt<span class="cstat-no" title="statement not covered" >ip</span>Item.dataset.data[tooltipItem.dataIndex]?.toString();
-    return `${v}%`;<span class="cstat-no" title="statement not covered" ></span>
-  }, [])<span class="cstat-no" title="statement not covered" >;</span>
+  cons<span class="cstat-no" title="statement not covered" >t tooltipRenderer = useCallback(</span>
+    (tooltipItem: T<span class="cstat-no" title="statement not covered" >oo</span>ltipItem&lt;keyof ChartTypeRegistry&gt;) =&gt; {
+      const rawValu<span class="cstat-no" title="statement not covered" >e </span>= tooltipItem.dataset.data[tooltipItem.dataIndex];
+      co<span class="cstat-no" title="statement not covered" >nst numValue = typeof rawValue === 'number' ? rawValue : parseFloat(String(rawValue) || '0');</span>
+      retu<span class="cstat-no" title="statement not covered" >rn `${numberFormatter.format(numValue)}%`;</span>
+    },<span class="cstat-no" title="statement not covered" ></span>
+    [numberF<span class="cstat-no" title="statement not covered" >ormatter]</span>
+  );
 <span class="cstat-no" title="statement not covered" ></span>
-  const al<span class="cstat-no" title="statement not covered" >lSpeciesNoValues = useMemo(() =&gt; {</span>
-    return o<span class="cstat-no" title="statement not covered" >bservationSummaries</span>?.[0].species.every((sp) =&gt; {
+  const allSpeciesNoValues = useMemo(() =&gt; {
+    return<span class="cstat-no" title="statement not covered" > observationSummaries?.[0</span>].species.every((sp) =&gt; {
       return !sp.survivalRate;
-    });<span class="cstat-no" title="statement not covered" ></span>
+    });
   }, [observationSummaries]);
 <span class="cstat-no" title="statement not covered" ></span>
   return (
     &lt;Box display='flex' flexDirection='column'&gt;
-      &lt;Dropdown
-<span class="cstat-no" title="statement not covered" >        onChange={(ne</span>wValue) =&gt; setSelectedSpecies(newValue)}
-        label=''
-        options={allSpecies}
-        selectedValue={sel<span class="cstat-no" title="statement not covered" >ectedSpecies}<span class="fstat-no" title="function not covered" ></span></span>
+      &lt;Dropdown<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" ></span>        onChange={(newValue) =&gt; setSelectedSpecies(newValue)}
+        label=''<span class="cstat-no" title="statement not covered" ></span>
+        options={allSpe<span class="cstat-no" title="statement not covered" >cies}</span>
+<span class="cstat-no" title="statement not covered" >        selectedValue={selectedSpecies}</span>
         fullWidth={true}
-        select<span class="cstat-no" title="statement not covered" >Styles={{</span>
-<span class="cstat-no" title="statement not covered" >          inputConta</span>iner: {
-            maxWidth: '228px',
-          },<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >        }}<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >        disabled={!allSpecies |</span>| allSpecies.length === 0 || allSpeciesNoValues}
+        selectStyles={{
+          inputContainer: {
+            maxWidth: '228px'<span class="cstat-no" title="statement not covered" >,<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >          },<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >        }}</span>
+        disabled={!allSpecies || allSpecies.length === 0 || allSpeciesNoValues}
         placeholder={strings.SELECT}
-      /&gt;
-<span class="cstat-no" title="statement not covered" >      &lt;Box&gt;</span>
+<span class="cstat-no" title="statement not covered" >      /&gt;</span>
+      &lt;Box&gt;
         &lt;PieChart
-          chartId='liveDeadplantsBySpecies'
-          chartD<span class="fstat-no" title="function not covered" >at</span>a={{<span class="cstat-no" title="statement not covered" ></span>
+          chartI<span class="fstat-no" title="function not covered" >d=</span>'liveDeadpla<span class="cstat-no" title="statement not covered" >ntsBySpecies'</span>
+          chartData={{
             labels: LIVE_DEAD_LABELS ?? [],
             datasets: [
               {
@@ -485,18 +503,18 @@ ex<span class="cstat-no" title="statement not covered" >port default function Li
             },
           }}
         /&gt;
-      &lt;/Box&gt;
-    &lt;/Box&gt;<span class="fstat-no" title="function not covered" ></span>
+      &lt;/Box&gt;<span class="fstat-no" title="function not covered" ></span>
+    &lt;/Box&gt;<span class="cstat-no" title="statement not covered" ></span>
   );<span class="cstat-no" title="statement not covered" ></span>
-}<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></pre></td></tr></table></pre>
+}<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+&nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-06T20:12:15.689Z
+                at 2026-02-06T22:56:59.855Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
