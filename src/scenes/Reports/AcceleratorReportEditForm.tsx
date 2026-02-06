@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
+import { BusySpinner } from '@terraware/web-components';
 
 import AcceleratorReportStatusBadge from 'src/components/AcceleratorReports/AcceleratorReportStatusBadge';
 import AchievementsBox from 'src/components/AcceleratorReports/AchievementsBox';
@@ -24,7 +25,7 @@ import {
   ReportSystemMetricPayload,
   useUpdateAcceleratorReportValuesMutation,
 } from 'src/queries/generated/reports';
-import { useBatchPhotosMutation } from 'src/queries/reports/photos';
+import { useBatchReportPhotosMutation } from 'src/queries/reports/photos';
 import { AcceleratorReportPhoto, MetricType, NewAcceleratorReportPhoto } from 'src/types/AcceleratorReport';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -58,7 +59,7 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
   const [record, , onChange, onChangeCallback] = useForm<AcceleratorReportPayload>(report);
   const [validate, setValidate] = useState(false);
   const [updateReport, updateReportResponse] = useUpdateAcceleratorReportValuesMutation();
-  const [batchPhotos] = useBatchPhotosMutation();
+  const [batchReportPhotos, { isLoading: isBatchReportPhotosLoading }] = useBatchReportPhotosMutation();
   const [photos, setPhotos] = useState<AcceleratorReportPhotoActions>({ toAdd: [], toDelete: [], toUpdate: [] });
   const snackbar = useSnackbar();
 
@@ -91,34 +92,27 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
     }
 
     try {
-      await batchPhotos({
+      await batchReportPhotos({
         projectId,
         reportId: report.id,
         photosToUpdate: photos.toUpdate,
         photosToUpload: photos.toAdd,
         fileIdsToDelete: photos.toDelete.map((photo) => photo.fileId),
       }).unwrap();
-      return true;
+
+      goToReport();
     } catch (error) {
       snackbar.toastError();
       return false;
     }
-  }, [report, photos, batchPhotos, projectId, snackbar]);
+  }, [photos.toDelete, photos.toUpdate, photos.toAdd, batchReportPhotos, projectId, report.id, goToReport, snackbar]);
 
   useEffect(() => {
     if (updateReportResponse.isError) {
       snackbar.toastError();
     }
     if (updateReportResponse.isSuccess) {
-      void saveReportPhotos().then((hasPhotos) => {
-        if (!hasPhotos) {
-          // If no photos update has occurred
-          goToReport();
-        } else {
-          // Photos were saved successfully
-          goToReport();
-        }
-      });
+      void saveReportPhotos();
     }
   }, [
     goToReport,
@@ -292,6 +286,7 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
             onChange={onChangeCallback('additionalComments')}
           />
           <PhotosBox report={report} projectId={projectId} editing={true} onChange={onChangePhotosCallback} />
+          {isBatchReportPhotosLoading && <BusySpinner />}
         </Card>
       </Box>
     </WrappedPageForm>

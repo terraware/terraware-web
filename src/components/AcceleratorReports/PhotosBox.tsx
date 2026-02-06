@@ -6,7 +6,7 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import useBoolean from 'src/hooks/useBoolean';
 import { PublishedReportPayload } from 'src/queries/generated/publishedReports';
-import { useBatchPhotosMutation } from 'src/queries/reports/photos';
+import { useBatchReportPhotosMutation } from 'src/queries/reports/photos';
 import strings from 'src/strings';
 import { AcceleratorReportPhoto, NewAcceleratorReportPhoto, isAcceleratorReport } from 'src/types/AcceleratorReport';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -112,7 +112,7 @@ const PhotosBox = (props: ReportBoxProps) => {
   const [photos, setPhotos] = useState<AcceleratorReportPhoto[]>(report?.photos || []);
   const [newPhotos, setNewPhotos] = useState<NewAcceleratorReportPhoto[]>([]);
 
-  const [batchPhotos, { isLoading }] = useBatchPhotosMutation();
+  const [batchReportPhotos, { isLoading }] = useBatchReportPhotosMutation();
   const snackbar = useSnackbar();
 
   const files = useMemo(() => {
@@ -173,7 +173,7 @@ const PhotosBox = (props: ReportBoxProps) => {
       }
 
       try {
-        await batchPhotos({
+        await batchReportPhotos({
           projectId,
           reportId: report.id,
           photosToUpdate: toUpdate,
@@ -188,7 +188,7 @@ const PhotosBox = (props: ReportBoxProps) => {
         snackbar.toastError();
       }
     }
-  }, [report, toDelete, toUpdate, newPhotos, batchPhotos, projectId, setInternalEditing, snackbar]);
+  }, [report, toDelete, toUpdate, newPhotos, batchReportPhotos, projectId, setInternalEditing, snackbar]);
 
   const onCancel = useCallback(() => {
     setInternalEditing(false);

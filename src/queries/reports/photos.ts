@@ -17,7 +17,7 @@ export type BatchPhotosResponse = {
 
 const injectedRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
-    batchPhotos: build.mutation<BatchPhotosResponse, BatchPhotosRequest>({
+    batchReportPhotos: build.mutation<BatchPhotosResponse, BatchPhotosRequest>({
       queryFn: async (args, _api, _extraOptions, baseQuery) => {
         const { projectId, reportId, photosToUpdate = [], photosToUpload = [], fileIdsToDelete = [] } = args;
 
@@ -151,4 +151,4 @@ const injectedRtkApi = api.injectEndpoints({
 
 export { injectedRtkApi as api };
 
-export const { useBatchPhotosMutation } = injectedRtkApi;
+export const { useBatchReportPhotosMutation } = injectedRtkApi;

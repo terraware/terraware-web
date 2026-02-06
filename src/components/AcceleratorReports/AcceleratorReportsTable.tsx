@@ -48,6 +48,7 @@ export default function AcceleratorReportsTable(): JSX.Element {
     [currentParticipantProject?.id, isAcceleratorRoute, pathParams.projectId]
   );
 
+  const [listCurrentYearReports, listCurrentYearReportsResults] = useLazyListAcceleratorReportsQuery();
   const [listReports, listReportsResults] = useLazyListAcceleratorReportsQuery();
   const [getReportYears, getReportYearsResults] = useLazyGetAcceleratorReportYearsQuery();
 
@@ -61,11 +62,22 @@ export default function AcceleratorReportsTable(): JSX.Element {
         },
         true
       );
+      void listCurrentYearReports(
+        {
+          projectId,
+          year: currentYear,
+        },
+        true
+      );
     }
-  }, [getReportYears, listReports, projectId, yearFilter]);
+  }, [currentYear, getReportYears, listCurrentYearReports, listReports, projectId, yearFilter]);
 
   const busy = useMemo(() => listReportsResults.isLoading, [listReportsResults.isLoading]);
   const projectReports = useMemo(() => listReportsResults.data?.reports ?? [], [listReportsResults.data?.reports]);
+  const currentYearReports = useMemo(
+    () => listCurrentYearReportsResults.data?.reports ?? [],
+    [listCurrentYearReportsResults.data?.reports]
+  );
 
   const acceleratorReports = useMemo((): AcceleratorReportRow[] => {
     return (
@@ -121,11 +133,15 @@ export default function AcceleratorReportsTable(): JSX.Element {
     if (getReportYearsResults.data?.years) {
       const endYear = getReportYearsResults.data.years.endYear;
       const startYear = getReportYearsResults.data.years.startYear;
-      return Array.from({ length: endYear - startYear + 1 }, (_, i) => startYear + i);
+
+      const lastCurrentYear = currentYearReports.length > 0 ? currentYear : currentYear - 1;
+      const lastYear = Math.min(endYear, lastCurrentYear);
+
+      return Array.from({ length: lastYear - startYear + 1 }, (_, i) => startYear + i);
     } else {
       return [];
     }
-  }, [getReportYearsResults.data?.years]);
+  }, [currentYear, currentYearReports.length, getReportYearsResults.data?.years]);
 
   const yearFilterOptions = useMemo(() => {
     return allReportYears.map((year) => year.toString());
