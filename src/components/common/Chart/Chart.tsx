@@ -227,6 +227,7 @@ function ChartContent(props: ChartContentProps): JSX.Element {
               plugins: getPlugins() ?? undefined,
             })
           );
+
           // when component unmounts
           return () => {
             chart?.destroy();
@@ -236,11 +237,11 @@ function ChartContent(props: ChartContentProps): JSX.Element {
       void createChart();
     }
   }, [
-    locale,
     chart,
     customScales,
     getPlugins,
     lineColor,
+    locale,
     pluginsOptions,
     pointRadius,
     type,
@@ -291,6 +292,20 @@ function ChartContent(props: ChartContentProps): JSX.Element {
       chart.data.labels = newLabels;
       chart.data.datasets = newDatasets;
       chart.options.plugins = newPlugins;
+      chart.options.locale = locale === 'gx' ? 'fr' : locale;
+
+      // update time scale adapters if present
+      if (chart.options.scales) {
+        Object.values(chart.options.scales).forEach((scale) => {
+          if (scale && 'type' in scale && scale.type === 'time' && 'adapters' in scale && scale.adapters) {
+            scale.adapters.date = {
+              ...(scale.adapters.date ?? {}),
+              locale: chart.options.locale,
+            };
+          }
+        });
+      }
+
       chart.update();
     }
   }, [
@@ -306,6 +321,7 @@ function ChartContent(props: ChartContentProps): JSX.Element {
     customLegendContainerId,
     customTooltipLabel,
     pluginsOptions,
+    locale,
   ]);
 
   return (

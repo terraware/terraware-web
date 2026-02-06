@@ -8,6 +8,7 @@ import PieChart from 'src/components/common/Chart/PieChart';
 import { useLocalization } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 export default function LiveDeadPlantsPerSpeciesCard(): JSX.Element {
   const [values, setValues] = useState<number[]>();
@@ -22,6 +23,7 @@ export default function LiveDeadPlantsPerSpeciesCard(): JSX.Element {
   const { observationSummaries } = usePlantingSiteData();
   const theme = useTheme();
   const { strings, activeLocale } = useLocalization();
+  const numberFormatter = useNumberFormatter();
 
   const LIVE_DEAD_LABELS = useMemo(() => {
     return [strings.LIVE, strings.DEAD];
@@ -73,10 +75,14 @@ export default function LiveDeadPlantsPerSpeciesCard(): JSX.Element {
     }
   }, [selectedSpecies, observationSummaries, LIVE_DEAD_LABELS]);
 
-  const tooltipRenderer = useCallback((tooltipItem: TooltipItem<keyof ChartTypeRegistry>) => {
-    const v = tooltipItem.dataset.data[tooltipItem.dataIndex]?.toString();
-    return `${v}%`;
-  }, []);
+  const tooltipRenderer = useCallback(
+    (tooltipItem: TooltipItem<keyof ChartTypeRegistry>) => {
+      const rawValue = tooltipItem.dataset.data[tooltipItem.dataIndex];
+      const numValue = typeof rawValue === 'number' ? rawValue : parseFloat(String(rawValue) || '0');
+      return `${numberFormatter.format(numValue)}%`;
+    },
+    [numberFormatter]
+  );
 
   const allSpeciesNoValues = useMemo(() => {
     return observationSummaries?.[0].species.every((sp) => {
