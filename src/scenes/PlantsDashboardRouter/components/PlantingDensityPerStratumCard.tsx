@@ -24,14 +24,16 @@ export default function PlantingDensityPerStratumCard(): JSX.Element {
   const tooltipRenderer = useCallback(
     (tooltipItem: TooltipItem<keyof ChartTypeRegistry>) => {
       const value = tooltipItem.dataset.data[tooltipItem.dataIndex];
-      if (Array.isArray(value)) {
-        const numValue = typeof value[0] === 'number' ? value[0] : parseFloat(String(value[0]) || '0');
-        return numberFormatter.format(numValue);
-      } else if (value !== null && value !== undefined) {
-        const numValue = typeof value === 'number' ? value : parseFloat(String(value) || '0');
-        return numberFormatter.format(numValue);
+
+      // if value is null, undefined, or an empty array, return an empty string
+      if (value === null || value === undefined || (Array.isArray(value) && !value.length)) {
+        return '';
       }
-      return '';
+
+      const rawValue = Array.isArray(value) ? value[0] : value;
+      const numValue = typeof rawValue === 'number' ? rawValue : parseFloat(String(rawValue) || '0');
+
+      return numberFormatter.format(numValue);
     },
     [numberFormatter]
   );
