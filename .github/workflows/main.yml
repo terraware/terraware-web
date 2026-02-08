@@ -158,7 +158,7 @@ jobs:
 
       - name: Configure AWS Credentials
         if: env.IS_CD == 'true'
-        uses: aws-actions/configure-aws-credentials@v5
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           aws-region: ${{ secrets[env.AWS_REGION_SECRET_NAME] }}
           role-to-assume: ${{ secrets[env.AWS_ROLE_SECRET_NAME] }}
