@@ -1,3 +1,5 @@
+c5153992e5d3 Update aws-actions/configure-aws-credentials action to v6 (#5191)
+b5d1199da90b Update dependency @babel/traverse to v7.29.0 (#5187)
 cd3311b2b110 Fix virtualPlot param not opening on page load (#5185)
 6552752f6a75 SW-7491 Update FacilitySpeciesInventoryResult to change field to optional (#5186)
 c229bd6cea1c SW-7999: Some charts in the Plants Dashboard are not using localized number formatting (#5179)
