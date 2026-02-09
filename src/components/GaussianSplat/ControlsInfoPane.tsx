@@ -11,6 +11,7 @@ interface ControlsInfoPaneProps {
   onToggleAnnotations?: (show: boolean) => void;
   autoRotate?: boolean;
   onToggleAutoRotate?: (enabled: boolean) => void;
+  isFullScreen?: boolean;
 }
 
 const ControlsInfoPane = ({
@@ -20,6 +21,7 @@ const ControlsInfoPane = ({
   onToggleAnnotations,
   autoRotate,
   onToggleAutoRotate,
+  isFullScreen = false,
 }: ControlsInfoPaneProps) => {
   const theme = useTheme();
   const { strings } = useLocalization();
@@ -64,7 +66,8 @@ const ControlsInfoPane = ({
         display: 'flex',
         justifyContent: 'flex-end',
         alignItems: 'flex-start',
-        padding: 2,
+        paddingX: 2,
+        paddingTop: isFullScreen ? 8 : 2,
         zIndex: 1001,
       }}
     >

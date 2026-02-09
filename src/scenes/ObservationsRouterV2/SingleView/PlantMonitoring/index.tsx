@@ -7,6 +7,7 @@ import { useGetObservationResultsQuery } from 'src/queries/generated/observation
 
 import MonitoringPlotDetails from './MonitoringPlot';
 import MonitoringPlotEditPhotos from './MonitoringPlot/MonitoringPlotEditPhotos';
+import VirtualMonitoringPlotPage from './MonitoringPlot/VirtualMonitoringPlotPage';
 import SiteDetails from './Site';
 import StratumDetails from './Stratum';
 
@@ -35,6 +36,7 @@ const PlantMonitoringView = (): JSX.Element => {
 
   return (
     <Routes>
+      <Route path={'/stratum/:stratumName/plot/:monitoringPlotId/virtual'} element={<VirtualMonitoringPlotPage />} />
       <Route path={'/stratum/:stratumName/plot/:monitoringPlotId'} element={<MonitoringPlotDetails />} />
       <Route path={'/stratum/:stratumName/plot/:monitoringPlotId/photos'} element={<MonitoringPlotEditPhotos />} />
       <Route path={'/stratum/:stratumName'} element={<StratumDetails />} />

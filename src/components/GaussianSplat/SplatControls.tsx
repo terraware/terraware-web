@@ -23,6 +23,7 @@ export interface SplatControlsProps {
   onToggleAnnotations?: (show: boolean) => void;
   autoRotate?: boolean;
   onToggleAutoRotate?: (enabled: boolean) => void;
+  editable?: boolean;
   isEdit?: boolean;
   onToggleEdit?: (isEdit: boolean) => void;
   onSave?: () => void;
@@ -34,6 +35,7 @@ export interface SplatControlsProps {
   selectedAnnotation?: AnnotationProps | null;
   onAnnotationUpdate: (updates: Partial<AnnotationProps>) => void;
   canSave?: boolean;
+  isFullScreen?: boolean;
 }
 
 const SplatControls = ({
@@ -43,6 +45,7 @@ const SplatControls = ({
   onToggleAnnotations,
   autoRotate,
   onToggleAutoRotate,
+  editable,
   isEdit,
   onToggleEdit,
   onSave,
@@ -54,6 +57,7 @@ const SplatControls = ({
   selectedAnnotation,
   onAnnotationUpdate,
   canSave = true,
+  isFullScreen = false,
 }: SplatControlsProps) => {
   const theme = useTheme();
   const { strings } = useLocalization();
@@ -213,7 +217,7 @@ const SplatControls = ({
       >
         {isArAvailable && !isEdit && <Button label={strings.AR} onClick={handleAr} />}
         {isVrAvailable && !isEdit && <Button label={strings.VR} onClick={handleVr} />}
-        {!isEdit && onToggleEdit && <Button label={strings.EDIT} onClick={handleEdit} />}
+        {editable && !isEdit && onToggleEdit && <Button label={strings.EDIT} onClick={handleEdit} />}
         {isEdit && onCancel && <Button label={strings.CANCEL} onClick={onCancel} />}
         {isEdit && onSave && <Button label={strings.SAVE} onClick={onSave} disabled={!canSave} />}
       </Box>
@@ -238,6 +242,7 @@ const SplatControls = ({
         onToggleAnnotations={onToggleAnnotations}
         autoRotate={autoRotate}
         onToggleAutoRotate={onToggleAutoRotate}
+        isFullScreen={isFullScreen}
       />
       <AnnotationEditPane
         visible={isEdit === true && hasSelectedAnnotation === true}
