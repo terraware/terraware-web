@@ -67,6 +67,13 @@ const VirtualMonitoringPlotPage = () => {
     void navigate(path);
   }, [navigate, observationId, stratumName, monitoringPlotId]);
 
+  const handleToggleFullScreen = useCallback(() => {
+    const path = APP_PATHS.OBSERVATION_MONITORING_PLOT_DETAILS_V2.replace(':observationId', observationId.toString())
+      .replace(':stratumName', stratumName!)
+      .replace(':monitoringPlotId', monitoringPlotId.toString());
+    void navigate(`${path}?virtualPlot=${monitoringPlotId.toString()}`);
+  }, [navigate, observationId, stratumName, monitoringPlotId]);
+
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -145,6 +152,7 @@ const VirtualMonitoringPlotPage = () => {
             fileId={fileId.toString()}
             annotations={annotations}
             isFullScreen={true}
+            onToggleFullScreen={handleToggleFullScreen}
           />
         </Application>
       </Box>

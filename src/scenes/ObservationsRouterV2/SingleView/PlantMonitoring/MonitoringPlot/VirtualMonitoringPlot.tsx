@@ -23,6 +23,7 @@ interface VirtualMonitoringPlotProps {
   annotations?: AnnotationProps[];
   editable?: boolean;
   isFullScreen?: boolean;
+  onToggleFullScreen?: () => void;
 }
 
 const DEFAULT_FOCUS_POINT: [number, number, number] = [0, 0.1, 0];
@@ -34,6 +35,7 @@ const VirtualMonitoringPlot = ({
   annotations = [],
   editable = false,
   isFullScreen = false,
+  onToggleFullScreen,
 }: VirtualMonitoringPlotProps) => {
   const { setCamera } = useCameraPosition();
   const { isHighPerformance } = useDevicePerformance();
@@ -226,6 +228,7 @@ const VirtualMonitoringPlot = ({
         canSave={canSave}
         editable={editable}
         isFullScreen={isFullScreen}
+        onToggleFullScreen={onToggleFullScreen}
       />
     </>
   );

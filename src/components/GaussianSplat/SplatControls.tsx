@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
+import { Fullscreen, FullscreenExit } from '@mui/icons-material';
 import { Box, IconButton, useTheme } from '@mui/material';
 import { useApp } from '@playcanvas/react/hooks';
 import { Icon } from '@terraware/web-components';
@@ -36,6 +37,7 @@ export interface SplatControlsProps {
   onAnnotationUpdate: (updates: Partial<AnnotationProps>) => void;
   canSave?: boolean;
   isFullScreen?: boolean;
+  onToggleFullScreen?: () => void;
 }
 
 const SplatControls = ({
@@ -58,6 +60,7 @@ const SplatControls = ({
   onAnnotationUpdate,
   canSave = true,
   isFullScreen = false,
+  onToggleFullScreen,
 }: SplatControlsProps) => {
   const theme = useTheme();
   const { strings } = useLocalization();
@@ -221,6 +224,26 @@ const SplatControls = ({
         {isEdit && onCancel && <Button label={strings.CANCEL} onClick={onCancel} />}
         {isEdit && onSave && <Button label={strings.SAVE} onClick={onSave} disabled={!canSave} />}
       </Box>
+      {onToggleFullScreen && (
+        <IconButton
+          sx={{
+            position: 'absolute',
+            bottom: 16,
+            right: 72,
+            backgroundColor: getRgbaFromHex(theme.palette.TwClrIcnOnBrand as string, 0.9),
+            '&:hover': { backgroundColor: getRgbaFromHex(theme.palette.TwClrIcnOnBrand as string, 1) },
+            pointerEvents: 'auto',
+          }}
+          onClick={onToggleFullScreen}
+          aria-label={isFullScreen ? 'Exit fullscreen' : 'Enter fullscreen'}
+        >
+          {isFullScreen ? (
+            <FullscreenExit sx={{ color: theme.palette.TwClrIcnInfo }} />
+          ) : (
+            <Fullscreen sx={{ color: theme.palette.TwClrIcnInfo }} />
+          )}
+        </IconButton>
+      )}
       <IconButton
         ref={infoButtonRef}
         sx={{
