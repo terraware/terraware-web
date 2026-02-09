@@ -21,12 +21,20 @@ interface VirtualMonitoringPlotProps {
   observationId: string;
   fileId: string;
   annotations?: AnnotationProps[];
+  editable?: boolean;
+  isFullScreen?: boolean;
 }
 
 const DEFAULT_FOCUS_POINT: [number, number, number] = [0, 0.1, 0];
 const DEFAULT_POSITION: [number, number, number] = [1, 0.1, 0];
 
-const VirtualMonitoringPlot = ({ observationId, fileId, annotations = [] }: VirtualMonitoringPlotProps) => {
+const VirtualMonitoringPlot = ({
+  observationId,
+  fileId,
+  annotations = [],
+  editable = false,
+  isFullScreen = false,
+}: VirtualMonitoringPlotProps) => {
   const { setCamera } = useCameraPosition();
   const { isHighPerformance } = useDevicePerformance();
   const [showAnnotations, setShowAnnotations] = useState(true);
@@ -216,6 +224,8 @@ const VirtualMonitoringPlot = ({ observationId, fileId, annotations = [] }: Virt
         selectedAnnotation={selectedAnnotationIndex >= 0 ? localAnnotations[selectedAnnotationIndex] : null}
         onAnnotationUpdate={handleAnnotationUpdate}
         canSave={canSave}
+        editable={editable}
+        isFullScreen={isFullScreen}
       />
     </>
   );

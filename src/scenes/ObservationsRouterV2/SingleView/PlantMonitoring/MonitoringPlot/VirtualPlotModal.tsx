@@ -59,6 +59,7 @@ const VirtualPlotModal = ({
           observationId={observationId.toString()}
           fileId={fileId.toString()}
           annotations={annotations}
+          editable={true}
         />
       </Application>
     </OverlayModal>
