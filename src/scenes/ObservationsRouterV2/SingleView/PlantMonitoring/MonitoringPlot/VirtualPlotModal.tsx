@@ -34,6 +34,9 @@ const VirtualPlotModal = ({
   const navigate = useNavigate();
   const { data } = useListObservationSplatAnnotationsQuery({ observationId, fileId });
 
+  // Eventually instead of changing to a fully different page, this could modify the Box that is used to render full screen.
+  // That way it's not a fully separate page loading, but just the modal and all of the data in memory is kept.
+  // Could still replace the url too, and have both urls load this page so that it still handles direct url navigation.
   const handleToggleFullScreen = useCallback(() => {
     const path = APP_PATHS.OBSERVATION_VIRTUAL_MONITORING_PLOT.replace(':observationId', observationId.toString())
       .replace(':stratumName', stratumName)
