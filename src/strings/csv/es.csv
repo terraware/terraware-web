@@ -725,6 +725,7 @@ FILE_TOO_LARGE,El archivo {0} es demasiado grande. El tamaño máximo es {1} MB.
 FILTER,Filtrar,51b390ee
 FILTER_BY_PROJECT,Filtrar por proyecto,cc5c10c0
 FILTER_SHOW_EMPTY_BATCHES,Mostrar lotes vacíos,f5c7fca1
+FILTER_SHOW_EMPTY_NURSERIES,Mostrar viveros sin inventario,6d351b84
 FILTER_SHOW_EMPTY_SPECIES,Mostrar especies sin inventario,0de9ee0c
 FILTERS,Filtros,c3d13364
 FINAL_QTY,Cantidad final,47530c05
@@ -1150,7 +1151,7 @@ NO,No,3c5beb81
 NO_ACTIVITIES_TO_SHOW,No hay actividades para mostrar.,1b075899
 NO_AVAILABLE_PROJECTS_FOR_SPECIES,No hay más proyectos disponibles para esta especie.,071c6205
 NO_BATCHES_TO_WITHDRAW_FROM,No hay lotes con cantidades disponibles.,dc94bdcc
-NO_BATCHES_WITH_INVENTORY,"No hay lotes con inventario. Para ver los lotes vacíos, vaya a “Por lote” y utilice el filtro “Mostrar lotes vacíos” para ver todos los lotes vacíos.",e4b254c5
+NO_BATCHES_WITH_INVENTORY,"Todos los lotes que tenían inventario ahora están vacíos. Para ver lotes vacíos y especies y viveros que anteriormente tenían inventario, utilice los filtros “Mostrar lotes vacíos” y “Mostrar especies/viveros sin inventario”.",0775eafb
 NO_BATCHES_WITH_INVENTORY_MESSAGE,Ningún lote tiene inventario. Utilice el filtro “Mostrar lotes vacíos” para ver todos sus lotes vacíos.,c326ecab
 NO_COLUMNS_SELECTED,Sin columnas seleccionadas,ac8b2bbe
 NO_COMMENTS_ADDED,Ningún comentario añadido,7fd30c97

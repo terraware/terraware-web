@@ -5,6 +5,7 @@ import {
   AndNodePayload,
   FieldNodePayload,
   OrNodePayload,
+  PrefixedSearch,
   SearchNodePayload,
   SearchRequestPayload,
   SearchResponseElement,
@@ -168,20 +169,33 @@ const searchSpeciesInventory = async ({
   facilityIds,
   query,
 }: SearchInventoryParams): Promise<SearchResponseElement[] | null> => {
+  const forSpecificFacilities = (facilityIds?.length || 0) > 0;
   const params: SearchRequestPayload = {
     prefix: 'species',
-    fields: [
-      'id',
-      'scientificName',
-      'commonName',
-      'inventory.facilityInventories.facility_id',
-      'inventory.facilityInventories.facility_name',
-      'inventory.germinatingQuantity(raw)',
-      'inventory.hardeningOffQuantity(raw)',
-      'inventory.activeGrowthQuantity(raw)',
-      'inventory.readyQuantity(raw)',
-      'inventory.totalQuantity(raw)',
-    ],
+    fields: forSpecificFacilities
+      ? [
+          'id',
+          'scientificName',
+          'commonName',
+          'facilityInventories.activeGrowthQuantity(raw)',
+          'facilityInventories.germinatingQuantity(raw)',
+          'facilityInventories.hardeningOffQuantity(raw)',
+          'facilityInventories.readyQuantity(raw)',
+          'facilityInventories.totalQuantity(raw)',
+          'facilityInventories.facility_name',
+        ]
+      : [
+          'id',
+          'scientificName',
+          'commonName',
+          'inventory.facilityInventories.facility_id',
+          'inventory.facilityInventories.facility_name',
+          'inventory.activeGrowthQuantity(raw)',
+          'inventory.germinatingQuantity(raw)',
+          'inventory.hardeningOffQuantity(raw)',
+          'inventory.readyQuantity(raw)',
+          'inventory.totalQuantity(raw)',
+        ],
     sortOrder: searchSortOrder ? [searchSortOrder] : undefined,
     search: {
       operation: 'and',
@@ -233,14 +247,16 @@ const searchSpeciesInventory = async ({
     searchValueChildren.push(facilityNameNode);
   }
 
-  let nurseryFilter: FieldNodePayload | undefined;
+  let nurseryFilter: PrefixedSearch | undefined;
 
   if (facilityIds?.length) {
     nurseryFilter = {
-      operation: 'field',
-      field: 'inventory.facilityInventories.facility_id',
-      type: 'Exact',
-      values: facilityIds.map((id) => id.toString()),
+      prefix: 'facilityInventories',
+      search: {
+        operation: 'field',
+        field: 'facility_id',
+        values: facilityIds.map((id) => id.toString()),
+      },
     };
   }
 
@@ -250,16 +266,11 @@ const searchSpeciesInventory = async ({
       children: searchValueChildren,
     };
 
-    if (nurseryFilter) {
-      params.search.children.push({
-        operation: 'and',
-        children: [nurseryFilter, searchValueNodes],
-      } as AndNodePayload);
-    } else {
-      params.search.children.push(searchValueNodes);
-    }
-  } else if (nurseryFilter) {
-    params.search.children.push(nurseryFilter);
+    params.search.children.push(searchValueNodes);
+  }
+
+  if (nurseryFilter) {
+    params.filters = [nurseryFilter];
   }
 
   return await SearchService.search(params);

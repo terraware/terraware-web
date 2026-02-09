@@ -10,7 +10,7 @@ import { useLocalization, useOrganization } from 'src/providers';
 import { isSpeciesEmpty } from 'src/scenes/InventoryRouter/FilterUtils';
 import { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';
 import InventoryTable from 'src/scenes/InventoryRouter/InventoryTable';
-import { SpeciesInventoryResult } from 'src/scenes/InventoryRouter/InventoryV2View';
+import { SpeciesFacilitiesInventoryResult, SpeciesInventoryResult } from 'src/scenes/InventoryRouter/InventoryV2View';
 import NurseryInventoryService, { BE_SORTED_FIELDS, SearchInventoryParams } from 'src/services/NurseryInventoryService';
 import { SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
@@ -116,36 +116,97 @@ export default function InventoryListBySpecies({ setReportData }: InventoryListB
         searchSortOrder,
       });
 
+      const specificFacilities = (filters.facilityIds?.length || 0) > 0;
+
       const updatedResult = apiSearchResults?.map((result) => {
-        const resultTyped = result as SpeciesInventoryResult;
-        const facilityInventoriesNames =
-          resultTyped.inventory?.facilityInventories?.map((nursery) => nursery.facility_name) || [];
+        const resultTyped = specificFacilities
+          ? (result as SpeciesFacilitiesInventoryResult)
+          : (result as SpeciesInventoryResult);
+        const facilityInventoriesNames = specificFacilities
+          ? (resultTyped as SpeciesFacilitiesInventoryResult).facilityInventories?.map((fi) => fi.facility_name) || []
+          : (resultTyped as SpeciesInventoryResult).inventory?.facilityInventories?.map(
+              (nursery) => nursery.facility_name
+            ) || [];
+
+        const getQuantities = () => {
+          if (specificFacilities) {
+            const typedResult = resultTyped as SpeciesFacilitiesInventoryResult;
+            if (!typedResult.facilityInventories) {
+              return {
+                germinatingQuantity: '0',
+                hardeningOffQuantity: '0',
+                activeGrowthQuantity: '0',
+                readyQuantity: '0',
+                totalQuantity: '0',
+              };
+            }
+            const aggregated = typedResult.facilityInventories.reduce(
+              (acc, fi) => ({
+                germinatingQuantity: acc.germinatingQuantity + Number(fi['germinatingQuantity(raw)']),
+                hardeningOffQuantity: acc.hardeningOffQuantity + Number(fi['hardeningOffQuantity(raw)']),
+                activeGrowthQuantity: acc.activeGrowthQuantity + Number(fi['activeGrowthQuantity(raw)']),
+                readyQuantity: acc.readyQuantity + Number(fi['readyQuantity(raw)']),
+                totalQuantity: acc.totalQuantity + Number(fi['totalQuantity(raw)']),
+              }),
+              {
+                germinatingQuantity: 0,
+                hardeningOffQuantity: 0,
+                activeGrowthQuantity: 0,
+                readyQuantity: 0,
+                totalQuantity: 0,
+              }
+            );
+            return {
+              germinatingQuantity: numberFormatter.format(aggregated.germinatingQuantity),
+              hardeningOffQuantity: numberFormatter.format(aggregated.hardeningOffQuantity),
+              activeGrowthQuantity: numberFormatter.format(aggregated.activeGrowthQuantity),
+              readyQuantity: numberFormatter.format(aggregated.readyQuantity),
+              totalQuantity: numberFormatter.format(aggregated.totalQuantity),
+            };
+          } else {
+            const typedResult = resultTyped as SpeciesInventoryResult;
+            return {
+              germinatingQuantity: typedResult.inventory
+                ? numberFormatter.format(Number(typedResult.inventory['germinatingQuantity(raw)']))
+                : '0',
+              hardeningOffQuantity: typedResult.inventory
+                ? numberFormatter.format(Number(typedResult.inventory['hardeningOffQuantity(raw)']))
+                : '0',
+              activeGrowthQuantity: typedResult.inventory
+                ? numberFormatter.format(Number(typedResult.inventory['activeGrowthQuantity(raw)']))
+                : '0',
+              readyQuantity: typedResult.inventory
+                ? numberFormatter.format(Number(typedResult.inventory['readyQuantity(raw)']))
+                : '0',
+              totalQuantity: typedResult.inventory
+                ? numberFormatter.format(Number(typedResult.inventory['totalQuantity(raw)']))
+                : '0',
+            };
+          }
+        };
+
+        const quantities = getQuantities();
 
         return {
           id: resultTyped.id,
           scientificName: resultTyped.scientificName,
           commonName: resultTyped.commonName,
-          germinatingQuantity: resultTyped.inventory
-            ? numberFormatter.format(Number(resultTyped.inventory['germinatingQuantity(raw)']))
-            : '0',
-          hardeningOffQuantity: resultTyped.inventory
-            ? numberFormatter.format(Number(resultTyped.inventory['hardeningOffQuantity(raw)']))
-            : '0',
-          activeGrowthQuantity: resultTyped.inventory
-            ? numberFormatter.format(Number(resultTyped.inventory['activeGrowthQuantity(raw)']))
-            : '0',
-          readyQuantity: resultTyped.inventory
-            ? numberFormatter.format(Number(resultTyped.inventory['readyQuantity(raw)']))
-            : '0',
-          totalQuantity: resultTyped.inventory
-            ? numberFormatter.format(Number(resultTyped.inventory['totalQuantity(raw)']))
-            : '0',
+          ...quantities,
           facilityInventories: facilityInventoriesNames.join('\r'),
-          inventory: resultTyped.inventory,
+          inventory: specificFacilities ? undefined : (resultTyped as SpeciesInventoryResult).inventory,
+          'totalQuantity(raw)': specificFacilities
+            ? (resultTyped as SpeciesFacilitiesInventoryResult).facilityInventories?.reduce(
+                (acc, fi) => acc + Number(fi['totalQuantity(raw)']),
+                0
+              ) || 0
+            : Number((resultTyped as SpeciesInventoryResult).inventory?.['totalQuantity(raw)'] || 0),
         };
       });
 
-      const filteredResult = updatedResult?.filter((result) => showEmptySpecies || !isSpeciesEmpty(result));
+      const filteredResult = updatedResult?.filter(
+        (result) =>
+          showEmptySpecies || (specificFacilities ? Number(result['totalQuantity(raw)']) > 0 : !isSpeciesEmpty(result))
+      );
 
       if (updatedResult && getRequestId('searchInventory') === requestId) {
         const hasInventory = apiSearchResults?.some((speciesInventory) => !!speciesInventory.inventory) || false;
