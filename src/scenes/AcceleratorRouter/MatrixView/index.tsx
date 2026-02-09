@@ -266,7 +266,7 @@ const MatrixView = () => {
   const columnsMRT = useMemo<MRT_ColumnDef<ProjectsWithVariablesSearchResult>[]>(() => {
     const baseNonVariableColumns: MRT_ColumnDef<ProjectsWithVariablesSearchResult>[] = [
       {
-        accessorKey: 'name',
+        accessorKey: 'acceleratorDetails_dealName',
         header: strings.DEAL_NAME,
         size: 200,
         id: 'projectName',
@@ -1078,7 +1078,7 @@ const MatrixView = () => {
       requestGetProjectsWithVariables({
         fields: [
           'id',
-          'name',
+          'acceleratorDetails_dealName',
           'phase',
           'application_id',
           'acceleratorDetails_confirmedReforestableLand(raw)',
@@ -1100,7 +1100,7 @@ const MatrixView = () => {
           'variables.values.options.position',
         ],
         sortOrder: {
-          field: 'name',
+          field: 'acceleratorDetails_dealName',
           direction: 'Ascending',
         },
         search,
