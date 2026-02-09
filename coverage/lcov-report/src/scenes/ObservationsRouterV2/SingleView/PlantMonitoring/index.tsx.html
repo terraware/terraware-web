@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/44</span>
+                <span class='fraction'>0/45</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/40</span>
+                <span class='fraction'>0/41</span>
             </div>
         
             
@@ -109,7 +109,9 @@
 <a name='L44'></a><a href='#L44'>44</a>
 <a name='L45'></a><a href='#L45'>45</a>
 <a name='L46'></a><a href='#L46'>46</a>
-<a name='L47'></a><a href='#L47'>47</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L47'></a><a href='#L47'>47</a>
+<a name='L48'></a><a href='#L48'>48</a>
+<a name='L49'></a><a href='#L49'>49</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -153,8 +155,10 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > type JSX, use</span>Memo } from 'react';
 import { Route, <span class="cstat-no" title="statement not covered" >Routes, useParams } fr</span>om 'react-router';
 <span class="cstat-no" title="statement not covered" ></span>
@@ -164,51 +168,53 @@ import { useGetObse<span class="cstat-no" title="statement not covered" >rvation
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 im<span class="cstat-no" title="statement not covered" >port MonitoringPlotDetails from './MonitoringPlot';</span>
 impo<span class="cstat-no" title="statement not covered" >rt MonitoringPlotEditPhotos from './MonitoringPlot/MonitoringPl</span>otEditPhotos';
-import SiteDetails from './Site';
-import StratumDeta<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >il</span>s from './Stratum';</span>
+import VirtualMonitoringPlotPage from './MonitoringPlot/VirtualMonitoringPlotPage';
+import SiteDetails<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > f</span>rom './Site';</span>
+im<span class="cstat-no" title="statement not covered" >port StratumDetails from './Stratum';</span>
 <span class="cstat-no" title="statement not covered" ></span>
-cons<span class="cstat-no" title="statement not covered" >t PlantMonitoringView = (): JSX.Element =&gt; {</span>
-  cons<span class="cstat-no" title="statement not covered" >t params = useParams&lt;{ observationId: string }&gt;();</span>
-  const <span class="cstat-no" title="statement not covered" >observationId = Number(par<span class="fstat-no" title="function not covered" >am</span>s.ob<span class="cstat-no" title="statement not covered" >servationI</span>d);</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  const { dat</span>a: observationResultsResponse, isLoading: observationResultsLoading } = useGetObservationResultsQuery({
-    observationId,
-  });<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+const <span class="cstat-no" title="statement not covered" >PlantMonitoringView = (): JSX.Element =&gt; {</span>
+  const <span class="cstat-no" title="statement not covered" >params = useParams&lt;{ obser<span class="fstat-no" title="function not covered" >va</span>tion<span class="cstat-no" title="statement not covered" >Id: string</span> }&gt;();</span>
+  const observationId = Number(params.observationId);
+<span class="cstat-no" title="statement not covered" ></span>
+  const { data: observationResultsResponse, isLoading: observationResultsLoading } = useGetObservationResultsQuery({
+    observatio<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >nI</span>d,<span class="cstat-no" title="statement not covered" ></span></span>
+  });
 &nbsp;
   const results = useMemo(() =&gt; observationResultsResponse?.observation, [observationResultsResponse?.observation]);
 &nbsp;
   if (observationResultsLoading || !results) {
     return &lt;BusySpinner /&gt;;
   }
-&nbsp;
-  if (results.isAdH<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >oc</span>) {<span class="cstat-no" title="statement not covered" ></span></span>
-    return (<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >      &lt;Routes&gt;</span>
-        &lt;Ro<span class="fstat-no" title="function not covered" >ut</span>e pa<span class="cstat-no" title="statement not covered" >th={'plot/:mon</span>itoringPlotId/photos'} element={&lt;MonitoringPlotEditPhotos /&gt;} /&gt;
-        &lt;Route path={'/*'} element={&lt;MonitoringPlotDetails /&gt;} /&gt;
-<span class="cstat-no" title="statement not covered" >      &lt;/Routes&gt;</span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  if (results.isAdHo<span class="cstat-no" title="statement not covered" >c) </span>{
+<span class="cstat-no" title="statement not covered" >    return (</span>
+      &lt;Rout<span class="fstat-no" title="function not covered" >es</span>&gt;<span class="cstat-no" title="statement not covered" ></span>
+        &lt;Route path={'plot/:monitoringPlotId/photos'} element={&lt;MonitoringPlotEditPhotos /&gt;} /&gt;
+<span class="cstat-no" title="statement not covered" >        &lt;Route path={'/*'} element={&lt;Monitorin</span>gPlotDetails /&gt;} /&gt;
+      &lt;/Routes&gt;<span class="cstat-no" title="statement not covered" ></span>
     );<span class="cstat-no" title="statement not covered" ></span>
   }<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
   return (<span class="cstat-no" title="statement not covered" ></span>
     &lt;Routes&gt;<span class="cstat-no" title="statement not covered" ></span>
-      &lt;Route path={'/stratum/:stratumN<span class="cstat-no" title="statement not covered" >ame/plot/:monitoringPlotId'} element={&lt;MonitoringPlotDetails /</span>&gt;} /&gt;
-      &lt;Route path=<span class="cstat-no" title="statement not covered" >{'/stratum/:stratumName/plo</span>t/:monitoringPlotId/photos'} element={&lt;MonitoringPlotEditPhotos /&gt;} /&gt;
-      &lt;Route path={'/<span class="cstat-no" title="statement not covered" >stratum/:stratumName'} element</span>={&lt;StratumDetails /&gt;} /&gt;
-      &lt;Route path={'/*'} ele<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >me</span>nt={&lt;SiteDetails /&gt;} /&gt;</span>
+      &lt;Route path={'/stratum/:stratumNa<span class="cstat-no" title="statement not covered" >me/plot/:monitoringPlotId/virtual'} element={&lt;VirtualMonitoring</span>PlotPage /&gt;} /&gt;
+      &lt;Route path=<span class="cstat-no" title="statement not covered" >{'/stratum/:stratumName/plo</span>t/:monitoringPlotId'} element={&lt;MonitoringPlotDetails /&gt;} /&gt;
+      &lt;Route path={'/<span class="cstat-no" title="statement not covered" >stratum/:stratumName/plot/:mon</span>itoringPlotId/photos'} element={&lt;MonitoringPlotEditPhotos /&gt;} /&gt;
+      &lt;Route path={'/stratum<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >/:</span>stratumName'} element={&lt;StratumDetails /&gt;} /&gt;</span>
+      &lt;Route path<span class="cstat-no" title="statement not covered" >={'/*'} element={&lt;SiteDetails /&gt;} /&gt;</span>
     &lt;/Routes&gt;<span class="cstat-no" title="statement not covered" ></span>
   );<span class="cstat-no" title="statement not covered" ></span>
-};<span class="cstat-no" title="statement not covered" ></span>
+};
 &nbsp;
-export default PlantMonitoringView;
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></pre></td></tr></table></pre>
+export default Pla<span class="cstat-no" title="statement not covered" >ntMonitoringView;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-09T15:59:51.546Z
+                at 2026-02-09T19:30:01.684Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

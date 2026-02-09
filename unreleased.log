@@ -1,3 +1,4 @@
+8c8d1ce151aa Create a full screen page for virtual monitoring plots (#5193)
 c5153992e5d3 Update aws-actions/configure-aws-credentials action to v6 (#5191)
 b5d1199da90b Update dependency @babel/traverse to v7.29.0 (#5187)
 cd3311b2b110 Fix virtualPlot param not opening on page load (#5185)

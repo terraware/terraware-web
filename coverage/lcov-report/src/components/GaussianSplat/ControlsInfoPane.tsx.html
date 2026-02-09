@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/26</span>
+                <span class='fraction'>0/29</span>
             </div>
         
             
@@ -246,7 +246,10 @@
 <a name='L181'></a><a href='#L181'>181</a>
 <a name='L182'></a><a href='#L182'>182</a>
 <a name='L183'></a><a href='#L183'>183</a>
-<a name='L184'></a><a href='#L184'>184</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L184'></a><a href='#L184'>184</a>
+<a name='L185'></a><a href='#L185'>185</a>
+<a name='L186'></a><a href='#L186'>186</a>
+<a name='L187'></a><a href='#L187'>187</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -289,14 +292,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -305,6 +303,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -363,7 +367,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -442,62 +448,65 @@ interface Contr<span class="cstat-no" title="statement not covered" ><span class
   onToggleAnnotati<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >on</span>s?: (show: boolean) =&gt; void;</span>
 <span class="cstat-no" title="statement not covered" >  autoRotate?: boolean;</span>
   on<span class="cstat-no" title="statement not covered" >ToggleAutoRotate?: (enabled: boolean) =&gt; void;</span>
-}<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-const ControlsInfoPane = ({
-<span class="cstat-no" title="statement not covered" >  visible,</span>
-  paneRef,
-  showAnnotati<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >on</span>s,<span class="cstat-no" title="statement not covered" ></span></span>
+  isFu<span class="cstat-no" title="statement not covered" >llScreen?: boolean;</span>
+}<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+&nbsp;
+co<span class="cstat-no" title="statement not covered" >nst Control</span>sInfoPane = ({
+  visible,
+  paneRef,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  showAnnotations,
   onToggleAnnotations,
   autoRotate,
   onToggleAutoRotate,
+  isFullScreen = false,
 }: ControlsInfoPaneProps) =&gt; {
   const theme = useTheme();
-  const { strings } = useLocalization();
-&nbsp;
-  const handleAnnot<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >at</span>ionsCha<span class="cstat-no" title="statement not covered" >nge = useCallback(</span></span>
-    (e: React.Change<span class="cstat-no" title="statement not covered" >Eve</span>nt&lt;HTMLInputElement&gt;) =&gt; {
-<span class="cstat-no" title="statement not covered" >      onToggleAnnotations?.(e.target.checked);</span>
-    },<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-    [onToggleAnnotations]
-<span class="cstat-no" title="statement not covered" >  );</span>
+  const { strings }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > =</span> useLoc<span class="cstat-no" title="statement not covered" >alization();</span></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const handleAutoRota<span class="cstat-no" title="statement not covered" >teChange = useCallback(</span>
-    (e: React.ChangeEve<span class="cstat-no" title="statement not covered" >nt&lt;HTMLInputElement&gt;) =&gt; </span>{
-      onToggleAutoRotate?<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >.(</span>e.target.checked);</span>
+<span class="cstat-no" title="statement not covered" >  const handleAnnotationsChange = useCallback(</span>
+    (e: Rea<span class="fstat-no" title="function not covered" >ct</span>.Cha<span class="cstat-no" title="statement not covered" >ngeEvent&lt;HTMLI</span>nputElement&gt;) =&gt; {
+      onToggleAnnotations?.(e.target.checked);
+<span class="cstat-no" title="statement not covered" >    },</span>
+    [onToggleAnnota<span class="cstat-no" title="statement not covered" >tions]</span>
+  );<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+  const handleAutoRotateC<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ha</span>nge = useCallback(</span>
+    (e: React.ChangeEvent&lt;HTMLInputElement&gt;) =&gt; {
+      onToggleAutoRotate?.(e.target.checked);
     },
     [onToggleAutoRotate]
   );
 &nbsp;
-  const controlRowSx = {
+  const controlRo<span class="branch-0 cbranch-no" title="branch not covered" >wSx = </span>{
     display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: <span class="cstat-no" title="statement not covered" >'center',</span>
+    justifyConte<span class="cstat-no" title="statement not covered" >nt: 'space-between',</span>
+    alignItems: 'cente<span class="cstat-no" title="statement not covered" >r',</span>
   };<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span>
-  co<span class="fstat-no" title="function not covered" >ns</span>t rightAlignedTextSx = {
-    te<span class="cstat-no" title="statement not covered" >xtAlign: 'right',</span>
+<span class="fstat-no" title="function not covered" ></span>
+  cons<span class="cstat-no" title="statement not covered" >t rightAlignedTextSx = {</span>
+    textAlign: 'right',
   };
 &nbsp;
-  const dividerSx = {
-    backgroundColor: theme.palett<span class="cstat-no" title="statement not covered" >e.TwClrBrdrTertiary,</span>
-  };<span class="fstat-no" title="function not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span>
+  const dividerSx = {<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" >    ba</span>ckgroundColor: theme.palette.TwClrBrdrTertiary,
+  };<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
   return (
     &lt;Box
-      sx={{
-        position: 'abso<span class="cstat-no" title="statement not covered" >lute',</span>
+      sx={{<span class="cstat-no" title="statement not covered" ></span>
+        position: 'absolute',
         top: 0,
         left: 0,
         right: 0,
-        bottom: 0,
-        pointerEvents: 'none'<span class="cstat-no" title="statement not covered" >,</span>
+        bottom: 0,<span class="cstat-no" title="statement not covered" ></span>
+        pointerEvents: 'none',
         display: 'flex',
-        justifyContent: 'flex-end',
-        alignItems: <span class="cstat-no" title="statement not covered" >'flex-start',</span>
-        padding: 2,
+        justifyConte<span class="cstat-no" title="statement not covered" >nt: 'flex-end',</span>
+        alignItems: 'flex-start',
+        paddingX: 2,
+<span class="cstat-no" title="statement not covered" >        paddingTop: isFullScreen ? 8 : 2,</span>
         zIndex: 1001,
-<span class="cstat-no" title="statement not covered" >      }}</span>
+      }}
     &gt;
       &lt;Fade in={visible} timeout={500}&gt;
         &lt;Box
@@ -545,8 +554,8 @@ const ControlsInfoPane = ({
               &lt;/Box&gt;
             &lt;/Box&gt;
 &nbsp;
-            &lt;Divider sx={dividerSx} /&gt;
-<span class="cstat-no" title="statement not covered" ></span>
+            &lt;Divider<span class="cstat-no" title="statement not covered" > sx={dividerSx} /</span>&gt;
+&nbsp;
             &lt;Box sx={controlRowSx}&gt;
               &lt;Typography&gt;{strings.PAN}&lt;/Typography&gt;
               &lt;Box sx={rightAlignedTextSx}&gt;
@@ -619,7 +628,7 @@ export default ControlsInfoPane;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-09T15:59:51.546Z
+                at 2026-02-09T19:30:01.684Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

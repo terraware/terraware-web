@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/39</span>
+                <span class='fraction'>0/41</span>
             </div>
         
             
@@ -287,7 +287,17 @@
 <a name='L222'></a><a href='#L222'>222</a>
 <a name='L223'></a><a href='#L223'>223</a>
 <a name='L224'></a><a href='#L224'>224</a>
-<a name='L225'></a><a href='#L225'>225</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L225'></a><a href='#L225'>225</a>
+<a name='L226'></a><a href='#L226'>226</a>
+<a name='L227'></a><a href='#L227'>227</a>
+<a name='L228'></a><a href='#L228'>228</a>
+<a name='L229'></a><a href='#L229'>229</a>
+<a name='L230'></a><a href='#L230'>230</a>
+<a name='L231'></a><a href='#L231'>231</a>
+<a name='L232'></a><a href='#L232'>232</a>
+<a name='L233'></a><a href='#L233'>233</a>
+<a name='L234'></a><a href='#L234'>234</a>
+<a name='L235'></a><a href='#L235'>235</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -338,6 +348,12 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -482,6 +498,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -508,7 +525,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > useCallback, </span>useEffect, useMemo, useState } from 'react';
@@ -534,77 +554,85 @@ interface VirtualMonitoringPlotProps {
   observationId: string;
   fileId: string;
   annotations?: AnnotationProps[];
+  editable?: boolean;
+  isFullScreen?: boolean;
 }
-&nbsp;
-const DEFAULT_FOCUS_POINT: [number, number, number] = [0, 0.1, 0];
-const DEFAULT_POSIT<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >IO</span>N: [num<span class="cstat-no" title="statement not covered" >ber, number, number] = [1, 0.1, 0];</span></span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+const DEFAULT_FOCUS_<span class="cstat-no" title="statement not covered" >POI</span>NT: [number, number, number] = [0, 0.1, 0];
+<span class="cstat-no" title="statement not covered" >const DEFAULT_POSITION: [number, number, number] = [1, 0.1, 0];</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+const VirtualMonitoringPlot = ({
+<span class="cstat-no" title="statement not covered" >  observationId,</span>
+  fileId,<span class="cstat-no" title="statement not covered" ></span>
+  annotations = [],<span class="cstat-no" title="statement not covered" ></span>
+  editable = false,<span class="cstat-no" title="statement not covered" ></span>
+  isFullScreen = false,<span class="cstat-no" title="statement not covered" ></span>
+}: VirtualMonitoringPlotProps<span class="cstat-no" title="statement not covered" >) =&gt; {</span>
+  const { setCamera } = useC<span class="cstat-no" title="statement not covered" >ameraPosition();</span>
+  const { isHighPerforma<span class="cstat-no" title="statement not covered" >nce } = useDevicePerformance();</span>
+  const [showAnnotations,<span class="cstat-no" title="statement not covered" > setShowAnnotations] = useState(true);</span>
+  const [autoRotate, setA<span class="cstat-no" title="statement not covered" >utoRotate] = useState(true);</span>
+  const [isEdit, setIsEdit]<span class="cstat-no" title="statement not covered" > = useState(false);</span>
+  const [selectedAnnotat<span class="cstat-no" title="statement not covered" >ionIndex, setSelectedAnnotationIndex] = useState&lt;number&gt;(-1)</span>;
+  const [localAnnotations, setLoc<span class="cstat-no" title="statement not covered" >alAnnotations] = useState(annotations);</span>
+  const [saveAnnotations] = <span class="cstat-no" title="statement not covered" >useSetObservationSplatAnnotationsMutation();</span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >const VirtualMonitoringPlot = ({ observationId, fileId, annotations = [] }: VirtualMonitoringPlotProps) =&gt; {</span>
-  const { s<span class="fstat-no" title="function not covered" >et</span>Came<span class="cstat-no" title="statement not covered" >ra } = useCame</span>raPosition();
-  const { isHighPerformance } = useDevicePerformance();
-<span class="cstat-no" title="statement not covered" >  const [showAnnotations, setShowAnnotations] </span>= useState(true);
-  const [autoRotate<span class="cstat-no" title="statement not covered" >, setAutoRotate] = useStat</span>e(true);
-  const [isEdit, set<span class="cstat-no" title="statement not covered" >IsEdit] = useState(false);</span>
-  const [selectedAnnotat<span class="cstat-no" title="statement not covered" >ionIndex, setSelectedAnnotationIndex] = </span>useState&lt;number&gt;(-1);
-  const [localAnnotation<span class="cstat-no" title="statement not covered" >s, setLocalAnnotations</span>] = useState(annotations);
-  const [saveAnnotations] = u<span class="cstat-no" title="statement not covered" >seSetObservationSplatAnnotationsMutation();</span>
-<span class="cstat-no" title="statement not covered" ></span>
-  const splatSrc = useMe<span class="cstat-no" title="statement not covered" >mo(</span>
-    () =&gt; `/api/v1/tracki<span class="cstat-no" title="statement not covered" >ng/observations/${observationId}/splats/${fileId}`,</span>
-    [observationId, fileI<span class="cstat-no" title="statement not covered" >d]</span>
+  const splatSrc = useMemo(<span class="cstat-no" title="statement not covered" ></span>
+    () =&gt; `/api/v1/tracking/obs<span class="cstat-no" title="statement not covered" >ervations/${observationId}/splats/${fileId}`,</span>
+    [observationId, fileId]<span class="cstat-no" title="statement not covered" ></span>
   );<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span>
-  useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-    setCamera(DEFAULT_FOCUS_<span class="cstat-no" title="statement not covered" >POINT, DEFAULT_POSITION);</span>
-  }, [setCamera]);<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span>
-  useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-    if (!isEdit) {<span class="cstat-no" title="statement not covered" ></span>
-      setSelectedAnnotati<span class="cstat-no" title="statement not covered" >onIndex(-1);</span>
-    }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="branch-0 cbranch-no" title="branch not covered" ></span></span></span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  useEffect(() =&gt; {
+    setCamera(DEFAULT_FOCUS_POINT, DEFAULT_POSITION);
+  }, [setCamera]<span class="branch-0 cbranch-no" title="branch not covered" >);</span>
+<span class="branch-0 cbranch-no" title="branch not covered" ></span>
+  useEffect(() =&gt;<span class="branch-0 cbranch-no" title="branch not covered" > {</span>
+    if (!isEdit) {
+      setSelectedAnnotat<span class="cstat-no" title="statement not covered" >ionIndex(-1);</span>
+    }<span class="cstat-no" title="statement not covered" ></span>
   }, [isEdit]);<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
   useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
     setLocalAnnotations(annotations);<span class="cstat-no" title="statement not covered" ></span>
   }, [annotations]);<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const handleAnnotationPositionChange = useCallba<span class="cstat-no" title="statement not covered" >ck(</span>
-    (position: [number, numb<span class="cstat-no" title="statement not covered" >er, number]) =&gt; {</span>
-      setLocalAnnot<span class="cstat-no" title="statement not covered" >ations((prev) =&gt; {</span>
-<span class="fstat-no" title="function not covered" ></span>        if<span class="cstat-no" title="statement not covered" > (selectedAnnotationIndex === -1) {</span>
-          return prev;
-        }
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >        const updated = [...prev];</span>
-        updated[selectedAnnotationIndex] = { ...updated[selectedAnnotationIndex], position };
-<span class="cstat-no" title="statement not covered" >        return updated;<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >      });</span>
-    },<span class="cstat-no" title="statement not covered" ></span>
-    [selectedAnnotationIndex]
-  );
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  co<span class="cstat-no" title="statement not covered" >nst handleSave = useCallback(() =&gt;</span> {
-    const saveAndClose = async () =&gt; {
-      await saveAnnotations({<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" ></span>        observationId: Number(observationId),
-<span class="cstat-no" title="statement not covered" >        fileId: Number(fil<span class="fstat-no" title="function not covered" >eI</span>d),</span>
-<span class="cstat-no" title="statement not covered" >        setSplatAnnotationsRequestPayload: {</span>
-<span class="cstat-no" title="statement not covered" >          annotations: </span>localAnnotations.map((annotation) =&gt; ({
-            ...annotation,
-            position: {<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >              x: annotation.position[0],</span>
-<span class="cstat-no" title="statement not covered" >              y: annotat</span>ion.position[1],
+  const handleAnnot<span class="cstat-no" title="statement not covered" >ationPositionChange = useCallback(</span>
+<span class="fstat-no" title="function not covered" >    (p</span>osit<span class="cstat-no" title="statement not covered" >ion: [number, number, number]) =&gt; {</span>
+      setLocalAnnotations((prev) =&gt; {
+        if (selectedAnnotationIndex === -1) {
+<span class="cstat-no" title="statement not covered" >          return prev;<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >        }</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        const updated = [...pr<span class="fstat-no" title="function not covered" >ev</span>];</span>
+<span class="cstat-no" title="statement not covered" >        updated[selectedAnnotationIndex] = { ...updated[selectedAnnotationIndex], position };</span>
+<span class="cstat-no" title="statement not covered" >        return updated;</span>
+      });
+    },
+<span class="cstat-no" title="statement not covered" >    [selectedAnnotationIndex]<span class="fstat-no" title="function not covered" ></span></span>
+  );<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
+  const handleSave = useCallback(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" >    co</span>nst saveAndClose = async () =&gt; {
+<span class="cstat-no" title="statement not covered" >      await saveAnnotation<span class="fstat-no" title="function not covered" >s(</span>{</span>
+<span class="cstat-no" title="statement not covered" >        observationId: Number(observationId),</span>
+        fi<span class="cstat-no" title="statement not covered" >leId: Number(</span>fileId),
+        setSplatAnnotationsRequestPayload: {
+          annotations: l<span class="cstat-no" title="statement not covered" >ocalAnnota</span>tions.map((annotation) =&gt; ({
+<span class="cstat-no" title="statement not covered" >            ...annotation,</span>
+<span class="cstat-no" title="statement not covered" >            position: {</span>
+              x: annotation.position[0],
+              y: annotation.position[1],
               z: annotation.position[2],
             },
-            cameraPosition: annotation.cameraPosition
-              ? { x: annotation.cameraPosition[0], y: annotation.cameraPosition[1], z: annotation.cameraPosition[2] }
-              : undef<span class="cstat-no" title="statement not covered" >ined,<span class="fstat-no" title="function not covered" ></span></span>
-          })),<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >        },</span>
+            cameraPos<span class="cstat-no" title="statement not covered" >ition: annotation.cameraPositi<span class="fstat-no" title="function not covered" >on</span></span>
+              ? { x: anno<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ta</span>tion.cameraPosition[0], y: annotation.cameraPosition[1], z: annotation.cameraPosition[2] }</span>
+<span class="cstat-no" title="statement not covered" >              : undefined,</span>
+          })),
+        },
       });
-      setIsEdit(false);
+      setIsEdit(false);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
       setSelectedAnnotationIndex(-1);
-    };<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+    };
     void saveAndClose();
   }, [observationId, fileId, saveAnnotations, localAnnotations]);
 &nbsp;
@@ -613,57 +641,57 @@ const DEFAULT_POSIT<span class="cstat-no" title="statement not covered" ><span c
     setIsEdit(false);
     setSelectedAnnotationIndex(-1);
   }, [annotations]);
-&nbsp;
-  const handleAddAnnotation = useCallback(() =&gt; {
-    co<span class="cstat-no" title="statement not covered" >nst newAnnotation:</span> AnnotationProps = {
-<span class="cstat-no" title="statement not covered" >      position: DEFAULT_FOCUS_POINT,</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  cons<span class="cstat-no" title="statement not covered" >t handleAddAnnotation = useCallb</span>ack(() =&gt; {
+    const newAnnotation: AnnotationProps = {
+<span class="cstat-no" title="statement not covered" >      position: DEFAULT_F</span>OCUS_POINT,
       title: '',
-<span class="cstat-no" title="statement not covered" >    };</span>
-    setLocalAnnotations((prev) =&gt; [...prev, newAnnotation]);
-    setSelectedAnnotati<span class="cstat-no" title="statement not covered" >onIndex(localAnnotations.lengt<span class="fstat-no" title="function not covered" >h)</span>;</span>
+    };<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    setLocalAnnotations((prev) =&gt; [...</span>prev, newAnnotation]);
+<span class="cstat-no" title="statement not covered" >    setSelectedAnnotat</span>ionIndex(localAnnotations.length);
   },<span class="cstat-no" title="statement not covered" > [localAnnotations]);</span>
-<span class="cstat-no" title="statement not covered" ></span>
-  co<span class="cstat-no" title="statement not covered" >nst handleDeleteAnnotation = use</span>Callback(() =&gt; {
-    if (selectedAnnotationIndex === -1) {
-      return;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-    }<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
+  const handleDeleteAnnotation<span class="cstat-no" title="statement not covered" > = useCallback(() =&gt; {<span class="fstat-no" title="function not covered" ></span></span>
+    if (selectedAnnotation<span class="cstat-no" title="statement not covered" >Index === -1) {</span>
+      return;
+    }
     setLocalAnnotations((prev) =&gt; prev.filter((_, index) =&gt; index !== selectedAnnotationIndex));
-    setSelectedAnnotationIndex(-1);
-  }, [selectedAnnotationIndex]);
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  co<span class="cstat-no" title="statement not covered" >nst handleDeselectAnnotation = useCallback(() =&gt; {</span>
-    setSelectedAnnotationIndex(-1);
-  }, []);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    setSelectedAnnotatio<span class="fstat-no" title="function not covered" >nI</span>ndex(-1)<span class="cstat-no" title="statement not covered" >;</span></span>
+  },<span class="cstat-no" title="statement not covered" > [selectedAnnotationIndex]);</span>
+&nbsp;
+  const handleDeselectAnnotation <span class="cstat-no" title="statement not covered" >= useCallback(() =&gt; {<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    setSelectedAnnotationIndex(-1);</span>
+  }, [<span class="cstat-no" title="statement not covered" >]);</span>
+&nbsp;
+  co<span class="cstat-no" title="statement not covered" >nst handleAnnotation<span class="fstat-no" title="function not covered" >Up</span>date = u<span class="cstat-no" title="statement not covered" >seCallback(<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span>
+<span class="cstat-no" title="statement not covered" >    (updates: Partial&lt;AnnotationProp</span>s&gt;) =&gt; {
+      if (selectedAnnotationIndex === -1) {
+        return;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >      }</span>
+      setLocalAnnotations((prev) =&gt; {
+        const updated = [...prev]<span class="cstat-no" title="statement not covered" >;</span>
+<span class="fstat-no" title="function not covered" ></span>        updated[selectedAnnotationIndex] = { ...updated[selectedAnnotationIndex], ...updates };
+<span class="cstat-no" title="statement not covered" >        return updated;</span>
+      })<span class="cstat-no" title="statement not covered" >;</span>
+    },
+    [s<span class="cstat-no" title="statement not covered" >electedAnnotationInd<span class="fstat-no" title="function not covered" >ex</span>]</span>
+  );<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  cons<span class="cstat-no" title="statement not covered" >t handle</span>AnnotationUpdate = useCallback(
-    (updates: Partial&lt;AnnotationProps&gt;) =&gt; {
-<span class="cstat-no" title="statement not covered" >      if (selectedAnnota<span class="fstat-no" title="function not covered" >ti</span>onIndex <span class="cstat-no" title="statement not covered" >=== -1) {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span>
-<span class="cstat-no" title="statement not covered" >        return;</span>
-      }
-      setLocalAnnotations((prev) =&gt;<span class="cstat-no" title="statement not covered" > {<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >        const updated = [...prev];</span>
-        updated[selectedAnnotationIndex] = { ...updated[selectedAnnotationIndex], ...updates };
-        return updated;<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" ></span>      });
-    },<span class="cstat-no" title="statement not covered" ></span>
-    [sel<span class="cstat-no" title="statement not covered" >ectedAnn</span>otationIndex]
-  );
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  const canSave = useMem<span class="cstat-no" title="statement not covered" >o(() =&gt; {</span>
-    retu<span class="cstat-no" title="statement not covered" >rn localAnnotations.every((annotation) =&gt; annotation.title &amp;&amp; annotation.title.trim() !=</span>= '');
-  }, [lo<span class="cstat-no" title="statement not covered" >calAnnotations])</span>;
+  const <span class="cstat-no" title="statement not covered" >canSave = useMem</span>o(() =&gt; {
+    return localAnnotations.every((annotation) =&gt; annotation.title &amp;&amp; annotation.title.trim() !== '');
+  }, [localAnnotations]);
 &nbsp;
   /* When a rerender occurs, the splat model disappears (https://github.com/playcanvas/react/pull/298 and https://github.com/playcanvas/react/issues/302)
-  The key should include items that cause the SplatModel to rerender. Remove them (and the useMemo) once the PR is merged and we're on a version that includes it */
-  const splatModel = useMemo(
-    () =&gt; &lt;SplatMo<span class="cstat-no" title="statement not covered" >del key={'splat'} splatSrc<span class="fstat-no" title="function not covered" >={</span>splatSrc} rotation={[-180, 0, 0]} revealRain={isHighPerformance} /&gt;,</span>
-<span class="cstat-no" title="statement not covered" >    [isHighPerformance, splatSrc]<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  );
-<span class="cstat-no" title="statement not covered" ></span>
-  re<span class="fstat-no" title="function not covered" >tu</span>rn (<span class="cstat-no" title="statement not covered" ></span>
-    &lt;&gt;
+  The key should i<span class="cstat-no" title="statement not covered" >nclude items that cause th<span class="fstat-no" title="function not covered" >e </span>SplatModel to rerender. Remove them (and the useMemo) once the PR is merged and we're on a version that includes it */</span>
+  co<span class="cstat-no" title="statement not covered" >nst splatModel = useMemo(<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+    () =&gt; &lt;SplatModel key={'splat'} splatSrc={splatSrc} rotation={[-180, 0, 0]} revealRain={isHighPerformance} /&gt;,
+    [isHighPerformanc<span class="cstat-no" title="statement not covered" >e, splatSrc]</span>
+  );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+&nbsp;
+  return (
+<span class="cstat-no" title="statement not covered" >    &lt;&gt;</span>
       &lt;GradientSky topColor='#FFFFFF' horizonColor='#EAF8FF' groundColor='#C3BDB7' /&gt;
-<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
       &lt;Entity name='camera-root'&gt;
         &lt;Entity name='camera'&gt;
           &lt;Camera clearColor='#EAF8FF' fov={60} /&gt;
@@ -692,20 +720,20 @@ const DEFAULT_POSIT<span class="cstat-no" title="statement not covered" ><span c
       &lt;Script
         script={TfAnnotationManager}
         enabled={localAnnotations.length &gt; 0}
-        hotspotSize={30}
+        hotspotSize={30}<span class="fstat-no" title="function not covered" ></span>
         maxWorldSize={0.05}
-        opacity={1}<span class="fstat-no" title="function not covered" ></span>
+<span class="cstat-no" title="statement not covered" >        opacity={1}</span>
         hotspotColor={new Color().fromString('#ffffff')}
-<span class="cstat-no" title="statement not covered" >        hoverColor={new Color().fromString('#ffffff')}</span>
+        hoverColor={new Color().fromString('#ffffff')}
         hotspotBackgroundColor='#2C8658'
       /&gt;
       {localAnnotations.map((annotation, index) =&gt; (
         &lt;Annotation
           key={`${index}-${annotation.title}-${annotation.label ?? ''}`}
           {...annotation}
-          index={index}
+          index={i<span class="fstat-no" title="function not covered" >nd</span>ex}<span class="cstat-no" title="statement not covered" ></span>
           visible={showAnnotations}
-          isEdit={<span class="fstat-no" title="function not covered" >is</span>Edit<span class="cstat-no" title="statement not covered" >}</span>
+          isEdit={isEdit}
           isSelected={selectedAnnotationIndex === index}
           onSelect={() =&gt; setSelectedAnnotationIndex(index)}
           onPositionChange={handleAnnotationPositionChange}
@@ -729,10 +757,12 @@ const DEFAULT_POSIT<span class="cstat-no" title="statement not covered" ><span c
         selectedAnnotation={selectedAnnotationIndex &gt;= 0 ? localAnnotations[selectedAnnotationIndex] : null}
         onAnnotationUpdate={handleAnnotationUpdate}
         canSave={canSave}
+        editable={editable}
+        isFullScreen={isFullScreen}
       /&gt;
-    &lt;/&gt;
+    &lt;/&gt;<span class="cstat-no" title="statement not covered" ></span>
   );
-};<span class="cstat-no" title="statement not covered" ></span>
+};
 &nbsp;
 export default VirtualMonitoringPlot;
 &nbsp;</pre></td></tr></table></pre>
@@ -742,7 +772,7 @@ export default VirtualMonitoringPlot;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-09T15:59:51.546Z
+                at 2026-02-09T19:30:01.684Z
             </div>
         <script src="../../../../../../prettify.js"></script>
         <script>
