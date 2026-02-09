@@ -225,7 +225,7 @@
     "webpack-dev-middleware": "^7.0.0"
   },
   "resolutions": {
-    "@babel/traverse": "7.28.6",
+    "@babel/traverse": "7.29.0",
     "fork-ts-checker-webpack-plugin": "^9.0.0",
     "wrap-ansi": "7.0.0",
     "string-width": "8.1.1",
