@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/64</span>
+                <span class='fraction'>0/67</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>0/16</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/60</span>
+                <span class='fraction'>0/63</span>
             </div>
         
             
@@ -218,7 +218,15 @@
 <a name='L153'></a><a href='#L153'>153</a>
 <a name='L154'></a><a href='#L154'>154</a>
 <a name='L155'></a><a href='#L155'>155</a>
-<a name='L156'></a><a href='#L156'>156</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L156'></a><a href='#L156'>156</a>
+<a name='L157'></a><a href='#L157'>157</a>
+<a name='L158'></a><a href='#L158'>158</a>
+<a name='L159'></a><a href='#L159'>159</a>
+<a name='L160'></a><a href='#L160'>160</a>
+<a name='L161'></a><a href='#L161'>161</a>
+<a name='L162'></a><a href='#L162'>162</a>
+<a name='L163'></a><a href='#L163'>163</a>
+<a name='L164'></a><a href='#L164'>164</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -299,6 +307,10 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -330,6 +342,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -442,28 +458,35 @@ const VirtualMonitoringPlotPage = () =&gt; {
     void navigate(path);
   }, [navigate, observationId, stratumName, monitoringPlotId]);
 &nbsp;
-  useEffect(() =&gt; {
+  const handleToggleFullScreen = useCallback(() =&gt; {
+    const path = APP_PATHS.OBSERVATION_MONITORING_PLOT_DETAILS_V2.replace(':observationId', observationId.toString())
+      .replace(':stratumName', stratumName!)
+      .replace(':monitoringPlotId', monitoringPlotId.toString());
+    void navigate(`${path}?virtualPlot=${monitoringPlotId.toString()}`);
+  }, [navigate, observ<span class="cstat-no" title="statement not covered" >ationId, stratumName, monitori<span class="fstat-no" title="function not covered" >ng</span>PlotId]);</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  us<span class="cstat-no" title="statement not covered" >eEffect(() =&gt; {</span>
     const handleKeyDown = (event: KeyboardEvent) =&gt; {
-      if (event.key === 'Escape') {
-        handleClose();
-      }
-    };<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+      if (event.key === 'Escape')<span class="cstat-no" title="statement not covered" > {<span class="fstat-no" title="function not covered" ></span></span>
+        handleClo<span class="cstat-no" title="statement not covered" >se();</span>
+<span class="cstat-no" title="statement not covered" >      }</span>
+    };
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+    window.addEventListene<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >r(</span>'keydown', handleKeyDown);</span>
+    re<span class="cstat-no" title="statement not covered" >turn () =&gt; {</span>
+      wi<span class="cstat-no" title="statement not covered" >ndow.removeEven</span>tListener('keydown', handleKeyDown);
+    };
+  }, [handleClose]);
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >    window.addEventListen</span>er('keydown', handleKeyDown);
-    return () =&gt; {
-<span class="cstat-no" title="statement not covered" >      window.removeEventListen<span class="fstat-no" title="function not covered" >er</span>('keydown', handleKeyDown);</span>
-    };<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  }, [<span class="cstat-no" title="statement not covered" >handleClose]);</span>
-<span class="cstat-no" title="statement not covered" ></span>
-  if (splatsLoading || !fileId) {
-    return (
-<span class="cstat-no" title="statement not covered" >      &lt;Box</span>
-<span class="cstat-no" title="statement not covered" >        sx=<span class="fstat-no" title="function not covered" >{{</span></span>
+  if<span class="cstat-no" title="statement not covered" > (splat<span class="fstat-no" title="function not covered" >sL</span>oading || !fileId) {</span>
+    re<span class="cstat-no" title="statement not covered" >turn (</span>
+      &lt;Box
+        sx={{
 <span class="cstat-no" title="statement not covered" >          position: 'fixed',</span>
-          top: 0,
+<span class="cstat-no" title="statement not covered" >          top: 0,</span>
           left: 0,
-<span class="cstat-no" title="statement not covered" >          right: 0,</span>
-<span class="cstat-no" title="statement not covered" >          bottom: 0,</span>
+          right: 0,
+          bottom: 0,
           width: '100vw',
           height: '100vh',
           display: 'flex',
@@ -481,10 +504,10 @@ const VirtualMonitoringPlotPage = () =&gt; {
   return (
     &lt;Box&gt;
       &lt;Box
-        sx={{
+<span class="cstat-no" title="statement not covered" >        sx={{</span>
           position: 'fixed',
           top: 0,
-<span class="cstat-no" title="statement not covered" >          left: 0,</span>
+          left: 0,
           right: 0,
           bottom: 0,
           width: '100vw',
@@ -520,6 +543,7 @@ const VirtualMonitoringPlotPage = () =&gt; {
             fileId={fileId.toString()}
             annotations={annotations}
             isFullScreen={true}
+            onToggleFullScreen={handleToggleFullScreen}
           /&gt;
         &lt;/Application&gt;
       &lt;/Box&gt;
@@ -535,7 +559,7 @@ export default VirtualMonitoringPlotPage;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-09T19:30:01.684Z
+                at 2026-02-09T19:46:56.461Z
             </div>
         <script src="../../../../../../prettify.js"></script>
         <script>

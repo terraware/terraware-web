@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/102</span>
+                <span class='fraction'>0/108</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/94</span>
+                <span class='fraction'>0/102</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/23</span>
+                <span class='fraction'>0/27</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/95</span>
+                <span class='fraction'>0/100</span>
             </div>
         
             
@@ -303,7 +303,18 @@
 <a name='L238'></a><a href='#L238'>238</a>
 <a name='L239'></a><a href='#L239'>239</a>
 <a name='L240'></a><a href='#L240'>240</a>
-<a name='L241'></a><a href='#L241'>241</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L241'></a><a href='#L241'>241</a>
+<a name='L242'></a><a href='#L242'>242</a>
+<a name='L243'></a><a href='#L243'>243</a>
+<a name='L244'></a><a href='#L244'>244</a>
+<a name='L245'></a><a href='#L245'>245</a>
+<a name='L246'></a><a href='#L246'>246</a>
+<a name='L247'></a><a href='#L247'>247</a>
+<a name='L248'></a><a href='#L248'>248</a>
+<a name='L249'></a><a href='#L249'>249</a>
+<a name='L250'></a><a href='#L250'>250</a>
+<a name='L251'></a><a href='#L251'>251</a>
+<a name='L252'></a><a href='#L252'>252</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -386,7 +397,16 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -504,6 +524,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -614,16 +636,25 @@ const MapPhotoDrawer<span class="cstat-no" title="statement not covered" > = </s
     return [...monitoring<span class="cstat-no" title="statement not covered" >Plots, ...adHocPlots].find<span class="fstat-no" title="function not covered" >((</span>plot) =&gt; plot.monitoringPlotId === monitoringPlotId);</span>
   },<span class="cstat-no" title="statement not covered" > [monitoringPlotId, result?.adHocPlot, result?.strata]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const observer = useMemo(() =&gt; {
-    return monitoringPlot?.claimedByName;
-  }, [monitoringPlot?.claimedByName]);
-&nbsp;
-  const formatGPS = useCallback(
-    (lon: number, lat: nu<span class="cstat-no" title="statement not covered" >mber): string =&gt; {<span class="fstat-no" title="function not covered" ></span></span>
-      const latHemisphere = lat &gt;= 0 ? 'N' : 'S';
-      const lonHemisphere = <span class="cstat-no" title="statement not covered" >lon &gt;= 0 ? 'E' : 'W';<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
+  const stratumName = useMemo(() =&gt; {
+    const stratum = result?.strata.find((_stratum) =&gt;
+      _stratum.substrata.some((substratum) =&gt;
+        substratum.monitoringPlots.some((plot) =&gt; plot.monitoringPlotId === monitoringPlotId)
+      )
+    );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+    return stratum?.name ?? '';
+  }, [monitoringPlotId, resu<span class="cstat-no" title="statement not covered" >lt?.strata]);<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >      const latAbs = Math.abs(lat).toFixed(4);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  co<span class="cstat-no" title="statement not covered" >nst observer = useMemo(() =&gt; {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+    return monitoringPlot?.claimedByName;
+  }, [monitoringPlot?.<span class="cstat-no" title="statement not covered" >claimedByName]);<span class="fstat-no" title="function not covered" ></span></span>
+&nbsp;
+  const formatGPS = <span class="cstat-no" title="statement not covered" >useCallback(</span>
+    (l<span class="fstat-no" title="function not covered" >on</span>: number, la<span class="cstat-no" title="statement not covered" >t: number): string =&gt; {</span>
+      co<span class="fstat-no" title="function not covered" >ns</span>t latHemispher<span class="cstat-no" title="statement not covered" >e = lat &gt;= 0 ? 'N' : 'S';<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+      const lonHemisphere = lon &gt;= 0 ? 'E' : 'W';
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      const latAbs = Math.abs(lat).toFixed(4);</span>
       const lonAbs = Math.abs(lon).toFixed(4);
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >      const latFormatted = format(Number(latAbs));</span>
@@ -761,6 +792,8 @@ const MapPhotoDrawer<span class="cstat-no" title="statement not covered" > = </s
             plantingSiteId={result.plantingSiteId}
             observationId={observationId}
             fileId={splat.fileId}
+            stratumName={stratumName}
+            monitoringPlotId={monitoringPlotId}
             onClose={handleCloseVirtualPlot}
           /&gt;
 <span class="cstat-no" title="statement not covered" >        )}</span>
@@ -790,7 +823,7 @@ export default MapPhotoDrawer;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-09T19:30:01.684Z
+                at 2026-02-09T19:46:56.461Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
