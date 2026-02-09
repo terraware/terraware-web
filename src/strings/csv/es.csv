@@ -725,6 +725,7 @@ FILE_TOO_LARGE,El archivo {0} es demasiado grande. El tamaño máximo es {1} MB.
 FILTER,Filtrar,51b390ee
 FILTER_BY_PROJECT,Filtrar por proyecto,cc5c10c0
 FILTER_SHOW_EMPTY_BATCHES,Mostrar lotes vacíos,f5c7fca1
+FILTER_SHOW_EMPTY_SPECIES,Mostrar especies sin inventario,0de9ee0c
 FILTERS,Filtros,c3d13364
 FINAL_QTY,Cantidad final,47530c05
 FINANCE,Finanzas,ae6619da

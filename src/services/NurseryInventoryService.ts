@@ -162,6 +162,108 @@ const uploadInventory = async (file: File, facilityId: string): Promise<UploadFi
   return response;
 };
 
+const searchSpeciesInventory = async ({
+  organizationId,
+  searchSortOrder,
+  facilityIds,
+  query,
+}: SearchInventoryParams): Promise<SearchResponseElement[] | null> => {
+  const params: SearchRequestPayload = {
+    prefix: 'species',
+    fields: [
+      'id',
+      'scientificName',
+      'commonName',
+      'inventory.facilityInventories.facility_id',
+      'inventory.facilityInventories.facility_name',
+      'inventory.germinatingQuantity(raw)',
+      'inventory.hardeningOffQuantity(raw)',
+      'inventory.activeGrowthQuantity(raw)',
+      'inventory.readyQuantity(raw)',
+      'inventory.totalQuantity(raw)',
+    ],
+    sortOrder: searchSortOrder ? [searchSortOrder] : undefined,
+    search: {
+      operation: 'and',
+      children: [
+        {
+          operation: 'field',
+          field: 'organization_id',
+          values: [organizationId],
+        },
+        {
+          operation: 'not',
+          child: {
+            operation: 'field',
+            field: 'batches.id', // this tells the search api to only return species that have had a non-null batch, which means that only species that have had inventory in the past will be returned
+            values: [null],
+          },
+        },
+      ],
+    },
+    count: 0,
+  };
+
+  const searchValueChildren: FieldNodePayload[] = [];
+
+  if (query) {
+    const { type, values } = parseSearchTerm(query);
+    const scientificNameNode: FieldNodePayload = {
+      operation: 'field',
+      field: 'scientificName',
+      type,
+      values,
+    };
+    searchValueChildren.push(scientificNameNode);
+
+    const commonNameNode: FieldNodePayload = {
+      operation: 'field',
+      field: 'commonName',
+      type,
+      values,
+    };
+    searchValueChildren.push(commonNameNode);
+
+    const facilityNameNode: FieldNodePayload = {
+      operation: 'field',
+      field: 'inventory.facilityInventories.facility_name',
+      type,
+      values,
+    };
+    searchValueChildren.push(facilityNameNode);
+  }
+
+  let nurseryFilter: FieldNodePayload | undefined;
+
+  if (facilityIds) {
+    nurseryFilter = {
+      operation: 'field',
+      field: 'inventory.facilityInventories.facility_id',
+      type: 'Exact',
+      values: facilityIds.map((id) => id.toString()),
+    };
+  }
+
+  if (searchValueChildren.length) {
+    const searchValueNodes: OrNodePayload = {
+      operation: 'or',
+      children: searchValueChildren,
+    };
+
+    if (nurseryFilter) {
+      params.search.children.push({
+        operation: 'and',
+        children: [nurseryFilter, searchValueNodes],
+      } as AndNodePayload);
+    } else {
+      params.search.children.push(searchValueNodes);
+    }
+  } else if (nurseryFilter) {
+    params.search.children.push(nurseryFilter);
+  }
+
+  return await SearchService.search(params);
+};
 /**
  * Search inventory
  */
@@ -443,6 +545,7 @@ const NurseryInventoryService = {
   downloadInventoryTemplate,
   getInventoryUploadStatus,
   uploadInventory,
+  searchSpeciesInventory,
   searchInventory,
   downloadInventory,
   searchInventoryByNursery,

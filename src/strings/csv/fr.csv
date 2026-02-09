@@ -724,6 +724,7 @@ FILE_TOO_LARGE,Le fichier {0} est trop volumineux. La taille maximale est de {1}
 FILTER,Filtre,51b390ee
 FILTER_BY_PROJECT,Filtrer par projet,cc5c10c0
 FILTER_SHOW_EMPTY_BATCHES,Afficher les lots vides,f5c7fca1
+FILTER_SHOW_EMPTY_SPECIES,Afficher les espèces sans inventaire,0de9ee0c
 FILTERS,Filtres,c3d13364
 FINAL_QTY,Qté finale,47530c05
 FINANCE,Finances,ae6619da

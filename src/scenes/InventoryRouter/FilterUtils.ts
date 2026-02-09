@@ -33,6 +33,10 @@ export const isBatchEmpty = (batch: SearchResponseElement): boolean => {
   );
 };
 
+export const isSpeciesEmpty = (species: SearchResponseElement): boolean => {
+  return !species.inventory;
+};
+
 export const convertFilterGroupToMap = (filterGroupFilters: Record<string, SearchNodePayload>): InventoryFiltersType =>
   Object.keys(filterGroupFilters).reduce(
     (acc, curr) => ({
