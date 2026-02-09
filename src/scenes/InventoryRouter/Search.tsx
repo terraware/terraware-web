@@ -37,6 +37,12 @@ const initialFilters: Record<string, SearchNodePayload> = {
     type: 'Exact',
     operation: 'field',
   },
+  showEmptyNurseries: {
+    field: 'showEmptyNurseries',
+    values: ['false'],
+    type: 'Exact',
+    operation: 'field',
+  },
 };
 
 interface SearchProps {
@@ -48,6 +54,7 @@ interface SearchProps {
   setFilters: (f: InventoryFiltersUnion) => void;
   showEmptyBatchesFilter?: boolean;
   showEmptySpeciesFilter?: boolean;
+  showEmptyNurseriesFilter?: boolean;
   showProjectsFilter?: boolean;
 }
 
@@ -65,6 +72,7 @@ export default function Search(props: SearchProps): JSX.Element | null {
     setFilters,
     showEmptyBatchesFilter,
     showEmptySpeciesFilter,
+    showEmptyNurseriesFilter,
     showProjectsFilter,
   } = props;
 
@@ -117,32 +125,37 @@ export default function Search(props: SearchProps): JSX.Element | null {
   const handleFilterClick = (event: React.MouseEvent<HTMLElement>) => setFilterAnchorEl(event.currentTarget);
   const handleFilterClose = () => setFilterAnchorEl(null);
   const [filterGroupFilters, setFilterGroupFilters] = useForm<Record<string, SearchNodePayload>>(initialFilters);
-  const filterGroupColumns = useMemo<FilterField[]>(
-    () => {
-      if (!activeLocale) {
-        return [];
-      }
-      const columns: FilterField[] = [];
-      if (showEmptyBatchesFilter) {
-        columns.push({
-          name: 'showEmptyBatches',
-          label: strings.FILTER_SHOW_EMPTY_BATCHES,
-          showLabel: false,
-          type: 'boolean',
-        });
-      }
-      if (showEmptySpeciesFilter) {
-        columns.push({
-          name: 'showEmptySpecies',
-          label: strings.FILTER_SHOW_EMPTY_SPECIES,
-          showLabel: false,
-          type: 'boolean',
-        });
-      }
-      return columns;
-    },
-    [activeLocale, showEmptyBatchesFilter, showEmptySpeciesFilter]
-  );
+  const filterGroupColumns = useMemo<FilterField[]>(() => {
+    if (!activeLocale) {
+      return [];
+    }
+    const columns: FilterField[] = [];
+    if (showEmptyBatchesFilter) {
+      columns.push({
+        name: 'showEmptyBatches',
+        label: strings.FILTER_SHOW_EMPTY_BATCHES,
+        showLabel: false,
+        type: 'boolean',
+      });
+    }
+    if (showEmptySpeciesFilter) {
+      columns.push({
+        name: 'showEmptySpecies',
+        label: strings.FILTER_SHOW_EMPTY_SPECIES,
+        showLabel: false,
+        type: 'boolean',
+      });
+    }
+    if (showEmptyNurseriesFilter) {
+      columns.push({
+        name: 'showEmptyNurseries',
+        label: strings.FILTER_SHOW_EMPTY_NURSERIES,
+        showLabel: false,
+        type: 'boolean',
+      });
+    }
+    return columns;
+  }, [activeLocale, showEmptyBatchesFilter, showEmptySpeciesFilter, showEmptyNurseriesFilter]);
 
   const getSpeciesName = useCallback(
     (speciesId: number) => (availableSpecies || []).find((s) => s.id === speciesId)?.scientificName,
@@ -219,6 +232,14 @@ export default function Search(props: SearchProps): JSX.Element | null {
       });
     }
 
+    if (showEmptyNurseriesFilter && filters.showEmptyNurseries && filters.showEmptyNurseries[0] === 'true') {
+      data.push({
+        id: 'showEmptyNurseries',
+        value: strings.FILTER_SHOW_EMPTY_NURSERIES,
+        emptyValue: ['false'],
+      });
+    }
+
     setFilterPillData(data);
   }, [
     selectedOrganization,
@@ -228,6 +249,7 @@ export default function Search(props: SearchProps): JSX.Element | null {
     filters.projectIds,
     filters.showEmptyBatches,
     filters.showEmptySpecies,
+    filters.showEmptyNurseries,
     getSpeciesName,
     getSubLocationName,
     getProjectName,
@@ -235,6 +257,7 @@ export default function Search(props: SearchProps): JSX.Element | null {
     showProjectsFilter,
     showEmptyBatchesFilter,
     showEmptySpeciesFilter,
+    showEmptyNurseriesFilter,
   ]);
 
   const onRemovePillList = useCallback(
@@ -252,6 +275,11 @@ export default function Search(props: SearchProps): JSX.Element | null {
           showEmptySpecies: { ...initialFilters.showEmptySpecies, values: ['false'] },
         });
         setFilters({ ...filters, showEmptySpecies: ['false'] });
+      } else if (filterId === 'showEmptyNurseries') {
+        setFilterGroupFilters({
+          showEmptyNurseries: { ...initialFilters.showEmptyNurseries, values: ['false'] },
+        });
+        setFilters({ ...filters, showEmptyNurseries: ['false'] });
       } else {
         setFilters({ ...filters, [filterId]: filter?.emptyValue || null });
       }
@@ -342,7 +370,7 @@ export default function Search(props: SearchProps): JSX.Element | null {
           />
         )}
 
-        {(showEmptyBatchesFilter || showEmptySpeciesFilter) && (
+        {(showEmptyBatchesFilter || showEmptySpeciesFilter || showEmptyNurseriesFilter) && (
           <Box sx={{ marginTop: theme.spacing(0.5) }}>
             <Tooltip title={strings.FILTER}>
               <Button

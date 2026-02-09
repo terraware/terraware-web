@@ -14,6 +14,7 @@ type InventoryFiltersBooleanType = {
   // Has to match up with SearchNodePayload['values']
   showEmptyBatches?: (string | null)[];
   showEmptySpecies?: (string | null)[];
+  showEmptyNurseries?: (string | null)[];
 };
 
 export type InventoryFiltersUnion = InventoryFiltersType & InventoryFiltersBooleanType;
