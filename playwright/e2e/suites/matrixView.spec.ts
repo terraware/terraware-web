@@ -13,6 +13,8 @@ test.describe('MatrixViewTests', () => {
   test('Matrix view render', async ({ page }, testInfo) => {
     await page.getByRole('link', { name: 'Accelerator Console' }).click({ delay: 50 });
     await page.waitForTimeout(1000); //Wait for table to load
+    await page.locator('#current-view').click();
+    await page.locator('#noFilter').click();
 
     await expect(page.getByLabel('Show/Hide search')).toBeVisible();
     await expect(page.getByLabel('Show/Hide filters')).toBeVisible();

@@ -6,6 +6,7 @@ ACCELERATOR_CONSOLE,Console d’accélération,4d54c8c9
 ACCELERATOR_ORGS_EMPTY_WARNING,Il n'y a pas d'organismes accélérateurs dont les projets ne sont pas assignés à un participant. Vous pouvez toujours créer un participant sans lui affecter de projet.,f58c59a4
 ACCELERATOR_ORGS_EXHAUSTED_WARNING,Il ne reste plus d'organismes accélérateurs dont les projets n'ont pas été attribués à un participant.,e88b983d
 ACCELERATOR_ORGS_TOOLTIP,Les organismes accélérateurs dont les projets ne sont pas attribués à un participant,476c5020
+ACCELERATOR_PROJECTS,Projets de l’Accélérateur,46486823
 ACCELERATOR_WELCOME_ALT,Deux personnes qui entretiennent des semis dans une pépinière,21283bc3
 ACCELERATOR_WELCOME_CONTENT,Terraware sera votre source d'information pour le programme accélérateur de Terraformation. Consultez votre liste de tâches ci-dessous pour voir les tâches que vous devez examiner et accomplir avant leurs dates d'échéance. Consultez toutes vos tâches pour la phase en cours en cliquant sur Livrables dans le menu de gauche.,f5fb9d32
 ACCELERATOR_WELCOME_HEADER,Bienvenue au programme accélérateur !,f8e75345
@@ -164,6 +165,7 @@ ANNOTATIONS,Annotations,c15a3aa4
 ANNUAL_TARGET,Objectif annuel,ea52c210
 ANSWER_APPROVED,Réponse approuvée,8a11d452
 ANSWERS_UPDATE_NEEDED,Mises à jour des réponses nécessaires,5faf2563
+APPLICANTS,Candidats,7cb94d31
 APPLICATION,Candidature,83d372a5
 APPLICATION_ERROR_NO_PROJECT_BOUNDARY,Erreur : aucune limite de projet n'a été dessinée,ebf37eb4
 APPLICATION_FOR_PROJECT,Demande pour {0},06b35f80
@@ -415,6 +417,7 @@ CULTIVATED_EX_SITU_DESCRIPTION,"Plantes qui ont été cultivées dans une pépin
 CURRENT_NEXT_OBSERVATION,Observation actuelle/prochaine,50735263
 CURRENT_PHASE,Phase actuelle,24194250
 CURRENT_TIMELINE,Étapes,2dcbaeeb
+CURRENT_VIEW,Vue actuelle,8b3a3d54
 CUSTOMIZE_COLUMNS,Personnaliser les colonnes...,b0c57f55
 CUSTOMIZE_TABLE_COLUMNS,Personnaliser les colonnes du tableau,e075dc8a
 CUSTOMIZE_TABLE_COLUMNS_DESCRIPTION,Cochez les colonnes que vous souhaitez ajouter. Décochez les colonnes que vous souhaitez supprimer.,b45076cc
@@ -731,6 +734,7 @@ FILTER_SHOW_EMPTY_BATCHES,Afficher les lots vides,f5c7fca1
 FILTER_SHOW_EMPTY_NURSERIES,Afficher les pépinières sans inventaire,6d351b84
 FILTER_SHOW_EMPTY_SPECIES,Afficher les espèces sans inventaire,0de9ee0c
 FILTERS,Filtres,c3d13364
+FILTERS_APPLIED,Filtres appliqués,75d4dd7e
 FINAL_QTY,Qté finale,47530c05
 FINANCE,Finances,ae6619da
 FINANCIAL_SUMMARIES,Synthèses financières,d26c4f56
