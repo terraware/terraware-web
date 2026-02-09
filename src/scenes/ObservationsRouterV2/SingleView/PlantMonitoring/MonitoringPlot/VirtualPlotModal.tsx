@@ -1,9 +1,11 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
+import { useNavigate } from 'react-router';
 
 import { OverlayModal } from '@terraware/web-components';
 
 import { AnnotationProps } from 'src/components/GaussianSplat/Annotation';
 import Application from 'src/components/GaussianSplat/Application';
+import { APP_PATHS } from 'src/constants';
 import { useListObservationSplatAnnotationsQuery } from 'src/queries/generated/observationSplats';
 import { ObservationMonitoringPlotResultsPayload } from 'src/types/Observations';
 
@@ -15,6 +17,8 @@ interface VirtualPlotModalProps {
   plantingSiteId: number;
   observationId: number;
   fileId: number;
+  stratumName: string;
+  monitoringPlotId: number;
   onClose?: () => void;
 }
 
@@ -23,9 +27,20 @@ const VirtualPlotModal = ({
   plantingSiteId,
   observationId,
   fileId,
+  stratumName,
+  monitoringPlotId,
   onClose,
 }: VirtualPlotModalProps) => {
+  const navigate = useNavigate();
   const { data } = useListObservationSplatAnnotationsQuery({ observationId, fileId });
+
+  const handleToggleFullScreen = useCallback(() => {
+    const path = APP_PATHS.OBSERVATION_VIRTUAL_MONITORING_PLOT.replace(':observationId', observationId.toString())
+      .replace(':stratumName', stratumName)
+      .replace(':monitoringPlotId', monitoringPlotId.toString());
+    void navigate(path);
+  }, [navigate, observationId, stratumName, monitoringPlotId]);
+
   const annotations = useMemo(
     () =>
       data?.annotations.map(
@@ -60,6 +75,7 @@ const VirtualPlotModal = ({
           fileId={fileId.toString()}
           annotations={annotations}
           editable={true}
+          onToggleFullScreen={handleToggleFullScreen}
         />
       </Application>
     </OverlayModal>

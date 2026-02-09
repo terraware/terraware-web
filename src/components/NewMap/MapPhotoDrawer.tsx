@@ -69,6 +69,15 @@ const MapPhotoDrawer = ({
     return [...monitoringPlots, ...adHocPlots].find((plot) => plot.monitoringPlotId === monitoringPlotId);
   }, [monitoringPlotId, result?.adHocPlot, result?.strata]);
 
+  const stratumName = useMemo(() => {
+    const stratum = result?.strata.find((_stratum) =>
+      _stratum.substrata.some((substratum) =>
+        substratum.monitoringPlots.some((plot) => plot.monitoringPlotId === monitoringPlotId)
+      )
+    );
+    return stratum?.name ?? '';
+  }, [monitoringPlotId, result?.strata]);
+
   const observer = useMemo(() => {
     return monitoringPlot?.claimedByName;
   }, [monitoringPlot?.claimedByName]);
@@ -216,6 +225,8 @@ const MapPhotoDrawer = ({
             plantingSiteId={result.plantingSiteId}
             observationId={observationId}
             fileId={splat.fileId}
+            stratumName={stratumName}
+            monitoringPlotId={monitoringPlotId}
             onClose={handleCloseVirtualPlot}
           />
         )}
