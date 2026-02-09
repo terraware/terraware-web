@@ -235,7 +235,7 @@ const searchSpeciesInventory = async ({
 
   let nurseryFilter: FieldNodePayload | undefined;
 
-  if (facilityIds) {
+  if (facilityIds?.length) {
     nurseryFilter = {
       operation: 'field',
       field: 'inventory.facilityInventories.facility_id',
