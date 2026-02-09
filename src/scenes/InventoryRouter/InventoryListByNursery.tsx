@@ -112,12 +112,13 @@ export default function InventoryListByNursery({ setReportData }: InventoryListB
 
       const updatedResult = apiSearchResults?.map((result) => {
         const resultTyped = result as FacilitySpeciesInventoryResult;
-        const speciesNames = resultTyped.facilityInventories
-          .filter((fi) => fi.species_id)
-          .map((inv) => inv.species_scientificName);
-        const batchIds = resultTyped.facilityInventories
-          .filter((fi) => fi.species_id)
-          .flatMap((inv) => inv.batches.map((batch) => batch.id));
+        const speciesNames =
+          resultTyped.facilityInventories?.filter((fi) => fi.species_id)?.map((inv) => inv.species_scientificName) ||
+          [];
+        const batchIds =
+          resultTyped.facilityInventories
+            ?.filter((fi) => fi.species_id)
+            ?.flatMap((inv) => inv.batches.map((batch) => batch.id)) || [];
         return { ...resultTyped, facilityInventories: speciesNames.join('\r'), batchIds };
       });
 

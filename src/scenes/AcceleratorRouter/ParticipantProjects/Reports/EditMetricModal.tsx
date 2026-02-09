@@ -7,10 +7,8 @@ import { Checkbox, Dropdown } from '@terraware/web-components';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
-import { selectUpdateProjectMetric } from 'src/redux/features/reports/reportsSelectors';
-import { requestUpdateProjectMetric } from 'src/redux/features/reports/reportsThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import strings from 'src/strings';
+import { useLocalization } from 'src/providers';
+import { useUpdateProjectMetricMutation } from 'src/queries/generated/reports';
 import { ProjectMetric } from 'src/types/AcceleratorReport';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -19,46 +17,44 @@ import { metricComponentOptions, metricTypeOptions } from './NewProjectSpecificM
 
 export interface EditMetricModalProps {
   onClose: () => void;
-  reload: () => void;
   projectMetric: ProjectMetric;
 }
 
 export default function EditMetricModal(props: EditMetricModalProps): JSX.Element {
-  const { onClose, projectMetric, reload } = props;
-  const [requestId, setRequestId] = useState<string>('');
-  const dispatch = useAppDispatch();
-  const updateProjectMetricResponse = useAppSelector(selectUpdateProjectMetric(requestId));
+  const { onClose, projectMetric } = props;
+  const { strings } = useLocalization();
+
   const snackbar = useSnackbar();
   const pathParams = useParams<{ projectId: string }>();
   const projectId = Number(pathParams.projectId);
   const [validate, setValidate] = useState(false);
 
+  const [updateProjectMetric, updateProjectMetricResponse] = useUpdateProjectMetricMutation();
   const [record, , , onChangeCallback] = useForm<ProjectMetric>(projectMetric);
 
   useEffect(() => {
-    if (updateProjectMetricResponse?.status === 'error') {
+    if (updateProjectMetricResponse.isError) {
       snackbar.toastError();
-    } else if (updateProjectMetricResponse?.status === 'success') {
+    } else if (updateProjectMetricResponse.isSuccess) {
       onClose();
       snackbar.toastSuccess(strings.PROJECT_SPECIFIC_METRIC_SAVED);
-      reload();
     }
-  }, [updateProjectMetricResponse, snackbar, onClose, reload]);
+  }, [updateProjectMetricResponse, snackbar, onClose, strings.PROJECT_SPECIFIC_METRIC_SAVED]);
 
   const save = useCallback(() => {
     if (!record.name || !record.reference) {
       setValidate(true);
       return;
     }
-    const request = dispatch(
-      requestUpdateProjectMetric({
+
+    void updateProjectMetric({
+      projectId,
+      metricId: projectMetric.id,
+      updateProjectMetricRequestPayload: {
         metric: record,
-        projectId,
-        metricId: projectMetric.id,
-      })
-    );
-    setRequestId(request.requestId);
-  }, [dispatch, projectId, projectMetric.id, record]);
+      },
+    });
+  }, [projectId, projectMetric.id, record, updateProjectMetric]);
 
   return (
     <DialogBox

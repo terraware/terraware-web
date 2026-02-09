@@ -1,58 +1,53 @@
-import React, { type JSX, useCallback, useEffect, useState } from 'react';
+import React, { type JSX, useCallback, useEffect } from 'react';
 
 import { Box, useTheme } from '@mui/material';
 
 import AcceleratorReportStatusBadge from 'src/components/AcceleratorReports/AcceleratorReportStatusBadge';
 import { useUser } from 'src/providers';
-import { selectReviewAcceleratorReport } from 'src/redux/features/reports/reportsSelectors';
-import { requestReviewAcceleratorReport } from 'src/redux/features/reports/reportsThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { AcceleratorReportPayload, useReviewAcceleratorReportMutation } from 'src/queries/generated/reports';
 import strings from 'src/strings';
-import { AcceleratorReport, AcceleratorReportStatus } from 'src/types/AcceleratorReport';
+import { AcceleratorReportStatus } from 'src/types/AcceleratorReport';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import InternalComment from './InternalComment';
 
 export type MetadataProps = {
-  report: AcceleratorReport;
-  projectId: string;
-  reload: () => void;
+  report: AcceleratorReportPayload;
+  projectId: number;
 };
 
 const Metadata = (props: MetadataProps): JSX.Element => {
-  const { report, projectId, reload } = props;
-  const [requestId, setRequestId] = useState('');
-  const reviewAcceleratorReportResponse = useAppSelector(selectReviewAcceleratorReport(requestId));
-  const dispatch = useAppDispatch();
+  const { report, projectId } = props;
+
+  const [reviewReport, reviewReportResponse] = useReviewAcceleratorReportMutation();
+
   const theme = useTheme();
   const { isAllowed } = useUser();
   const snackbar = useSnackbar();
 
   useEffect(() => {
-    if (reviewAcceleratorReportResponse?.status === 'error') {
+    if (reviewReportResponse.isError) {
       snackbar.toastError();
-    } else if (reviewAcceleratorReportResponse?.status === 'success') {
-      reload();
+    } else if (reviewReportResponse.isSuccess) {
       snackbar.toastSuccess(strings.CHANGES_SAVED);
     }
-  }, [reviewAcceleratorReportResponse, snackbar, reload]);
+  }, [snackbar, reviewReportResponse.isError, reviewReportResponse.isSuccess]);
 
   const onUpdateInternalComment = useCallback(
     (internalComment: string, status: AcceleratorReportStatus) => {
-      const request = dispatch(
-        requestReviewAcceleratorReport({
-          reportId: report.id,
-          projectId: Number(projectId),
+      void reviewReport({
+        reportId: report.id,
+        projectId,
+        reviewAcceleratorReportRequestPayload: {
           review: {
             ...report,
             internalComment,
             status,
           },
-        })
-      );
-      setRequestId(request.requestId);
+        },
+      });
     },
-    [report, dispatch, projectId]
+    [reviewReport, report, projectId]
   );
 
   return (

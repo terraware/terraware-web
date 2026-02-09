@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
@@ -12,18 +12,15 @@ import useBoolean from 'src/hooks/useBoolean';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization, useUser } from 'src/providers';
 import {
-  selectListReportMetrics,
-  selectListStandardMetrics,
-  selectListSystemMetrics,
-  selectProjectReportConfig,
-} from 'src/redux/features/reports/reportsSelectors';
+  ExistingStandardMetricPayload,
+  useListStandardMetricQuery,
+  useListSystemMetricsQuery,
+} from 'src/queries/generated/reportMetrics';
 import {
-  requestListProjectMetrics,
-  requestListStandardMetrics,
-  requestListSystemMetrics,
-  requestProjectReportConfig,
-} from 'src/redux/features/reports/reportsThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+  ExistingProjectMetricPayload,
+  useListAcceleratorReportConfigQuery,
+  useListProjectMetricsQuery,
+} from 'src/queries/generated/reports';
 import { ProjectMetric, StandardMetric, SystemMetric } from 'src/types/AcceleratorReport';
 
 import DefaultMetricsRenderer from './DefaultMetricsRenderer';
@@ -36,73 +33,33 @@ export default function ReportsSettings(): JSX.Element {
   const { strings } = useLocalization();
   const theme = useTheme();
   const pathParams = useParams<{ projectId: string }>();
-  const projectId = String(pathParams.projectId);
-  const projectReportConfig = useAppSelector((state) => selectProjectReportConfig(state));
-  const dispatch = useAppDispatch();
+  const projectId = Number(pathParams.projectId);
+
   const { goToAcceleratorEditReportSettings, goToNewProjectMetric, goToNewStandardMetric } = useNavigateTo();
-  const [requestId, setRequestId] = useState<string>('');
-  const [standardRequestId, setStandardRequestId] = useState<string>('');
-  const [systemRequestId, setSystemRequestId] = useState<string>('');
-  const specificMetricsResponse = useAppSelector(selectListReportMetrics(requestId));
-  const standardMetricsResponse = useAppSelector(selectListStandardMetrics(standardRequestId));
-  const systemMetricsResponse = useAppSelector(selectListSystemMetrics(systemRequestId));
-  const [projectMetrics, setProjectMetrics] = useState<ProjectMetric[]>();
-  const [standardMetrics, setStandardMetrics] = useState<StandardMetric[]>();
-  const [systemMetrics, setSystemMetrics] = useState<SystemMetric[]>();
-  const [selectedProjectMetric, setSelectedProjectMetric] = useState<ProjectMetric>();
-  const [selectedStandardMetric, setSelectedStandardMetric] = useState<StandardMetric>();
+  const [selectedProjectMetric, setSelectedProjectMetric] = useState<ExistingProjectMetricPayload>();
+  const [selectedStandardMetric, setSelectedStandardMetric] = useState<ExistingStandardMetricPayload>();
   const [editProjectMetricModalOpened, , openEditProjectMetricModal, closeEditProjectMetricModal] = useBoolean(false);
   const [editStandardMetricModalOpened, , openEditStandardMetricModal, closeEditStandardMetricModal] =
     useBoolean(false);
   const { isAllowed } = useUser();
 
-  useEffect(() => {
-    const dispatched = dispatch(requestListStandardMetrics());
-    setStandardRequestId(dispatched.requestId);
-  }, [dispatch]);
+  const listProjectReportConfigResponse = useListAcceleratorReportConfigQuery(projectId);
+  const projectReportConfig = useMemo(
+    () => listProjectReportConfigResponse.data?.configs?.[0],
+    [listProjectReportConfigResponse.data?.configs]
+  );
 
-  useEffect(() => {
-    const dispatched = dispatch(requestListSystemMetrics());
-    setSystemRequestId(dispatched.requestId);
-  }, [dispatch]);
+  const listProjectMetricsResponse = useListProjectMetricsQuery(projectId);
+  const projectMetrics = useMemo(
+    () => listProjectMetricsResponse.data?.metrics,
+    [listProjectMetricsResponse.data?.metrics]
+  );
 
-  const reloadSpecificMetrics = useCallback(() => {
-    const dispatched = dispatch(requestListProjectMetrics({ projectId }));
-    setRequestId(dispatched.requestId);
-  }, [dispatch, projectId]);
+  const { data: standardMetricsResponse } = useListStandardMetricQuery();
+  const standardMetrics = useMemo(() => standardMetricsResponse?.metrics, [standardMetricsResponse?.metrics]);
 
-  const reloadStandardMetrics = useCallback(() => {
-    const dispatched = dispatch(requestListStandardMetrics());
-    setStandardRequestId(dispatched.requestId);
-  }, [dispatch]);
-
-  useEffect(() => {
-    reloadSpecificMetrics();
-  }, [projectId, reloadSpecificMetrics]);
-
-  useEffect(() => {
-    if (projectId) {
-      void dispatch(requestProjectReportConfig(projectId));
-    }
-  }, [projectId, dispatch]);
-
-  useEffect(() => {
-    if (specificMetricsResponse && specificMetricsResponse.status === 'success') {
-      setProjectMetrics(specificMetricsResponse.data);
-    }
-  }, [specificMetricsResponse]);
-
-  useEffect(() => {
-    if (standardMetricsResponse && standardMetricsResponse.status === 'success') {
-      setStandardMetrics(standardMetricsResponse.data);
-    }
-  }, [standardMetricsResponse]);
-
-  useEffect(() => {
-    if (systemMetricsResponse && systemMetricsResponse.status === 'success') {
-      setSystemMetrics(systemMetricsResponse.data);
-    }
-  }, [systemMetricsResponse]);
+  const { data: systemMetricsResponse } = useListSystemMetricsQuery();
+  const systemMetrics = useMemo(() => systemMetricsResponse?.metrics, [systemMetricsResponse?.metrics]);
 
   const gridSize = isMobile ? 12 : 4;
 
@@ -114,8 +71,8 @@ export default function ReportsSettings(): JSX.Element {
 
   const data: Record<string, any>[] = useMemo(() => {
     return [
-      { label: strings.START_DATE, value: projectReportConfig.config?.reportingStartDate },
-      { label: strings.END_DATE, value: projectReportConfig.config?.reportingEndDate },
+      { label: strings.START_DATE, value: projectReportConfig?.reportingStartDate },
+      { label: strings.END_DATE, value: projectReportConfig?.reportingEndDate },
     ];
   }, [projectReportConfig, strings]);
 
@@ -132,7 +89,7 @@ export default function ReportsSettings(): JSX.Element {
   );
 
   const goToEditSettings = useCallback(() => {
-    goToAcceleratorEditReportSettings(projectId);
+    goToAcceleratorEditReportSettings(projectId.toString());
   }, [goToAcceleratorEditReportSettings, projectId]);
 
   const columns = useCallback(
@@ -188,11 +145,11 @@ export default function ReportsSettings(): JSX.Element {
   );
 
   const goToAddProjectMetric = useCallback(() => {
-    goToNewProjectMetric(projectId);
+    goToNewProjectMetric(projectId.toString());
   }, [goToNewProjectMetric, projectId]);
 
   const goToAddStandardMetric = useCallback(() => {
-    goToNewStandardMetric(projectId);
+    goToNewStandardMetric(projectId.toString());
   }, [goToNewStandardMetric, projectId]);
 
   const clickable = useCallback(() => false, []);
@@ -208,18 +165,10 @@ export default function ReportsSettings(): JSX.Element {
   return (
     <>
       {editProjectMetricModalOpened && selectedProjectMetric && (
-        <EditMetricModal
-          onClose={closeEditProjectMetricModal}
-          projectMetric={selectedProjectMetric}
-          reload={reloadSpecificMetrics}
-        />
+        <EditMetricModal onClose={closeEditProjectMetricModal} projectMetric={selectedProjectMetric} />
       )}
       {editStandardMetricModalOpened && selectedStandardMetric && (
-        <EditStandardMetricModal
-          onClose={closeEditStandardMetricModal}
-          reload={reloadStandardMetrics}
-          standardMetric={selectedStandardMetric}
-        />
+        <EditStandardMetricModal onClose={closeEditStandardMetricModal} standardMetric={selectedStandardMetric} />
       )}
       <Card
         style={{ display: 'flex', flexDirection: 'column' }}
@@ -253,8 +202,8 @@ export default function ReportsSettings(): JSX.Element {
               >
                 {strings.LOG_FRAME_AND_ME_PLAN_URL}
               </Typography>
-              <Link to={projectReportConfig.config?.logframeUrl} target='_blank' fontSize={'16px'}>
-                {projectReportConfig.config?.logframeUrl}
+              <Link to={projectReportConfig?.logframeUrl} target='_blank' fontSize={'16px'}>
+                {projectReportConfig?.logframeUrl}
               </Link>
             </Box>
           </Grid>

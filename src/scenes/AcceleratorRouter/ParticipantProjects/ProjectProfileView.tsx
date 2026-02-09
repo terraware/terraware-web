@@ -24,8 +24,8 @@ import Co2HectareYear from 'src/components/Units/Co2HectareYear';
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import useProjectFundingEntities from 'src/hooks/useProjectFundingEntities';
-import useProjectReports from 'src/hooks/useProjectReports';
 import { useLocalization, useUser } from 'src/providers';
+import { useLazyListAcceleratorReportsQuery } from 'src/queries/generated/reports';
 import { requestProjectInternalUsersList } from 'src/redux/features/projects/projectsAsyncThunks';
 import { selectProjectInternalUsersListRequest } from 'src/redux/features/projects/projectsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -72,7 +72,6 @@ const ProjectProfileView = ({
   const { isAllowed } = useUser();
   const { activeLocale, countries } = useLocalization();
   const numberFormatter = useNumberFormatter();
-  const { acceleratorReports } = useProjectReports(projectDetails?.projectId);
   const { fundingEntities } = useProjectFundingEntities(funderView ? undefined : projectDetails?.projectId);
   const { isMobile, isTablet } = useDeviceInfo();
   const [listInternalUsersRequestId, setListInternalUsersRequestId] = useState('');
@@ -81,13 +80,20 @@ const ProjectProfileView = ({
   );
   const isAllowedViewScoreAndVoting = isAllowed('VIEW_PARTICIPANT_PROJECT_SCORING_VOTING');
 
+  const [listReports, listReportsResponse] = useLazyListAcceleratorReportsQuery();
+  const acceleratorReports = useMemo(
+    () => listReportsResponse.data?.reports ?? [],
+    [listReportsResponse.data?.reports]
+  );
+
   useEffect(() => {
     if (!project?.id) {
       return;
     }
+    void listReports({ projectId: project.id }, true);
     const request = dispatch(requestProjectInternalUsersList({ projectId: project.id }));
     setListInternalUsersRequestId(request.requestId);
-  }, [dispatch, project?.id]);
+  }, [dispatch, listReports, project?.id]);
 
   const firstProjectLead = useMemo(() => {
     if (listInternalUsersRequest?.status !== 'success') {

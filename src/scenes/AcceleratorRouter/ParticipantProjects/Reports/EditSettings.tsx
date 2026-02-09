@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router';
 
 import { Container, Grid, Typography, useTheme } from '@mui/material';
@@ -13,16 +13,10 @@ import TextField from 'src/components/common/Textfield/Textfield';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import {
-  selectCreateReportConfig,
-  selectProjectReportConfig,
-  selectUpdateReportConfig,
-} from 'src/redux/features/reports/reportsSelectors';
-import {
-  requestCreateReportConfig,
-  requestProjectReportConfig,
-  requestUpdateReportConfig,
-} from 'src/redux/features/reports/reportsThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+  useCreateAcceleratorReportConfigMutation,
+  useLazyListAcceleratorReportConfigQuery,
+  useUpdateProjectAcceleratorReportConfigMutation,
+} from 'src/queries/generated/reports';
 import strings from 'src/strings';
 import { NewAcceleratorReportConfig } from 'src/types/AcceleratorReport';
 import useForm from 'src/utils/useForm';
@@ -31,13 +25,14 @@ import useSnackbar from 'src/utils/useSnackbar';
 export default function EditSettings(): JSX.Element {
   const theme = useTheme();
   const navigate = useSyncNavigate();
+  const { isMobile } = useDeviceInfo();
   const pathParams = useParams<{ projectId: string }>();
-  const projectId = String(pathParams.projectId);
-  const dispatch = useAppDispatch();
-  const [requestId, setRequestId] = useState<string>('');
-  const createReportConfigResponse = useAppSelector(selectCreateReportConfig(requestId));
-  const updateReportConfigResponse = useAppSelector(selectUpdateReportConfig(requestId));
-  const projectReportConfig = useAppSelector((state) => selectProjectReportConfig(state));
+  const projectId = Number(pathParams.projectId);
+
+  const [listReportConfigs, listReportConfigResponse] = useLazyListAcceleratorReportConfigQuery();
+  const [createReportConfig, createReportConfigResponse] = useCreateAcceleratorReportConfigMutation();
+  const [updateReportConfig, updateReportConfigResponse] = useUpdateProjectAcceleratorReportConfigMutation();
+
   const snackbar = useSnackbar();
 
   const goToProjectReports = useCallback(() => {
@@ -46,45 +41,54 @@ export default function EditSettings(): JSX.Element {
 
   useEffect(() => {
     if (projectId) {
-      void dispatch(requestProjectReportConfig(projectId));
+      void listReportConfigs(projectId, true);
     }
-  }, [projectId, dispatch]);
+  }, [projectId, listReportConfigs]);
 
-  const { isMobile } = useDeviceInfo();
+  const projectReportConfig = useMemo(
+    () => listReportConfigResponse.data?.configs?.[0],
+    [listReportConfigResponse.data?.configs]
+  );
 
   useEffect(() => {
-    if (createReportConfigResponse?.status === 'error') {
+    if (createReportConfigResponse.isError) {
       snackbar.toastError();
-    } else if (createReportConfigResponse && createReportConfigResponse.status === 'success') {
+    } else if (createReportConfigResponse.isSuccess) {
       goToProjectReports();
     }
   }, [createReportConfigResponse, goToProjectReports, snackbar]);
 
   useEffect(() => {
-    if (updateReportConfigResponse?.status === 'error') {
+    if (updateReportConfigResponse.isError) {
       snackbar.toastError();
-    } else if (updateReportConfigResponse?.status === 'success') {
+    } else if (updateReportConfigResponse.isSuccess) {
       goToProjectReports();
     }
   }, [updateReportConfigResponse, goToProjectReports, snackbar]);
 
   const [newConfig, , onChange, onChangeCallback] = useForm<NewAcceleratorReportConfig>({
-    reportingStartDate: projectReportConfig.config?.reportingStartDate || '',
-    reportingEndDate: projectReportConfig.config?.reportingEndDate || '',
-    logframeUrl: projectReportConfig.config?.logframeUrl,
+    reportingStartDate: projectReportConfig?.reportingStartDate || '',
+    reportingEndDate: projectReportConfig?.reportingEndDate || '',
+    logframeUrl: projectReportConfig?.logframeUrl,
   });
 
   const saveReportConfig = useCallback(() => {
-    const request = projectReportConfig?.config
-      ? dispatch(
-          requestUpdateReportConfig({
-            config: newConfig,
-            projectId,
-          })
-        )
-      : dispatch(requestCreateReportConfig({ config: newConfig, projectId }));
-    setRequestId(request.requestId);
-  }, [dispatch, newConfig, projectId, projectReportConfig?.config]);
+    if (projectReportConfig) {
+      void updateReportConfig({
+        projectId,
+        updateProjectAcceleratorReportConfigRequestPayload: {
+          config: newConfig,
+        },
+      });
+    } else {
+      void createReportConfig({
+        projectId,
+        createAcceleratorReportConfigRequestPayload: {
+          config: newConfig,
+        },
+      });
+    }
+  }, [createReportConfig, newConfig, projectId, projectReportConfig, updateReportConfig]);
 
   const onDateChangeCallback = useCallback(
     (id: string) => (value?: DateTime) => {

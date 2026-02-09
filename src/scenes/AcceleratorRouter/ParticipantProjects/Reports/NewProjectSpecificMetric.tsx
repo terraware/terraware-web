@@ -12,9 +12,7 @@ import PageForm from 'src/components/common/PageForm';
 import TextField from 'src/components/common/Textfield/Textfield';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { selectCreateProjectMetric } from 'src/redux/features/reports/reportsSelectors';
-import { requestCreateProjectMetric, requestProjectReportConfig } from 'src/redux/features/reports/reportsThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useCreateProjectMetricMutation } from 'src/queries/generated/reports';
 import strings from 'src/strings';
 import { NewMetric } from 'src/types/AcceleratorReport';
 import useForm from 'src/utils/useForm';
@@ -41,26 +39,19 @@ export default function NewProjectSpecificMetric(): JSX.Element {
   const theme = useTheme();
   const navigate = useSyncNavigate();
   const pathParams = useParams<{ projectId: string }>();
-  const projectId = String(pathParams.projectId);
-  const dispatch = useAppDispatch();
-  const [requestId, setRequestId] = useState<string>('');
-  const createProjectMetricResponse = useAppSelector(selectCreateProjectMetric(requestId));
+  const projectId = Number(pathParams.projectId);
   const [validate, setValidate] = useState(false);
 
   const goToProjectReports = useCallback(() => {
-    navigate(`${APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', projectId)}?tab=settings`);
+    navigate(`${APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', projectId.toString())}?tab=settings`);
   }, [navigate, projectId]);
-
-  useEffect(() => {
-    if (projectId) {
-      void dispatch(requestProjectReportConfig(projectId));
-    }
-  }, [projectId, dispatch]);
 
   const { isMobile } = useDeviceInfo();
 
+  const [createProjectMetric, createProjectMetricResponse] = useCreateProjectMetricMutation();
+
   useEffect(() => {
-    if (createProjectMetricResponse?.status === 'success') {
+    if (createProjectMetricResponse.isSuccess) {
       goToProjectReports();
     }
   }, [createProjectMetricResponse, goToProjectReports]);
@@ -78,9 +69,14 @@ export default function NewProjectSpecificMetric(): JSX.Element {
       setValidate(true);
       return;
     }
-    const request = dispatch(requestCreateProjectMetric({ metric: newMetric, projectId }));
-    setRequestId(request.requestId);
-  }, [dispatch, newMetric, projectId]);
+
+    void createProjectMetric({
+      projectId,
+      createProjectMetricRequestPayload: {
+        metric: newMetric,
+      },
+    });
+  }, [createProjectMetric, newMetric, projectId]);
 
   return (
     <Page title={strings.REPORTS} contentStyle={{ display: 'flex', flexDirection: 'column' }}>

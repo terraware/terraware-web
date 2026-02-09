@@ -2,7 +2,6 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
 import { InviteFunderResponse } from 'src/services/funder/FundingEntityService';
-import { PublishedReport } from 'src/types/AcceleratorReport';
 import { Funder, FundingEntity } from 'src/types/FundingEntity';
 
 import {
@@ -12,7 +11,6 @@ import {
   requestFundingEntity,
   requestFundingEntityForUser,
   requestFundingEntityInviteFunder,
-  requestListFunderReports,
   requestListFunders,
   requestProjectFundingEntities,
   requestUpdateFundingEntity,
@@ -106,17 +104,6 @@ export const deleteFundersSlice = createSlice({
   },
 });
 
-const initialStateFunderReportsList: { [requestId: string]: StatusT<PublishedReport[]> } = {};
-
-export const funderReportsListSlice = createSlice({
-  name: 'funderReportsListSlice',
-  initialState: initialStateFunderReportsList,
-  reducers: {},
-  extraReducers: (builder) => {
-    buildReducers(requestListFunderReports, true)(builder);
-  },
-});
-
 const initialStateProjectFundingEntities: { [requestId: string]: StatusT<FundingEntity[]> } = {};
 
 export const projectFundingEntitiesSlice = createSlice({
@@ -137,7 +124,6 @@ const fundingEntitiesReducers = {
   fundingEntityInvite: fundingEntityInviteSlice.reducer,
   fundingEntityDeleteFunders: deleteFundersSlice.reducer,
   fundingEntityGetFunders: funderListSlice.reducer,
-  funderReportsList: funderReportsListSlice.reducer,
   projectFundingEntities: projectFundingEntitiesSlice.reducer,
 };
 

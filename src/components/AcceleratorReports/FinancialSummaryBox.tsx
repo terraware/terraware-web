@@ -4,9 +4,7 @@ import { Grid } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 
 import useBoolean from 'src/hooks/useBoolean';
-import { selectReviewAcceleratorReport } from 'src/redux/features/reports/reportsSelectors';
-import { requestReviewAcceleratorReport } from 'src/redux/features/reports/reportsThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useReviewAcceleratorReportMutation } from 'src/queries/generated/reports';
 import strings from 'src/strings';
 import { isAcceleratorReport } from 'src/types/AcceleratorReport';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -17,13 +15,11 @@ import { ReportBoxProps } from './ReportBox';
 const textAreaStyles = { textarea: { height: '120px' } };
 
 const FinancialSummariesBox = (props: ReportBoxProps) => {
-  const { report, projectId, reload, isConsoleView, onChange, editing, onEditChange, canEdit, funderReportView } =
-    props;
+  const { report, projectId, isConsoleView, onChange, editing, onEditChange, canEdit, funderReportView } = props;
   const [internalEditing, setInternalEditing, setInternalEditingTrue] = useBoolean(false);
   const [financialSummaries, setFinancialSummaries] = useState<string | undefined>(report?.financialSummaries);
-  const dispatch = useAppDispatch();
-  const [requestId, setRequestId] = useState<string>('');
-  const updateReportResponse = useAppSelector(selectReviewAcceleratorReport(requestId));
+  const [reviewReport, reviewReportResponse] = useReviewAcceleratorReportMutation();
+
   const snackbar = useSnackbar();
 
   useEffect(() => setFinancialSummaries(report?.financialSummaries), [report?.financialSummaries]);
@@ -36,30 +32,28 @@ const FinancialSummariesBox = (props: ReportBoxProps) => {
   }, [financialSummaries, report?.financialSummaries, onChange]);
 
   useEffect(() => {
-    if (updateReportResponse?.status === 'error') {
+    if (reviewReportResponse.isError) {
       snackbar.toastError();
-    } else if (updateReportResponse?.status === 'success') {
+    } else if (reviewReportResponse.isSuccess) {
       snackbar.toastSuccess(strings.CHANGES_SAVED);
       setInternalEditing(false);
-      reload?.();
     }
-  }, [updateReportResponse, snackbar, reload, setInternalEditing]);
+  }, [snackbar, setInternalEditing, reviewReportResponse.isError, reviewReportResponse.isSuccess]);
 
   const onSave = useCallback(() => {
     if (isAcceleratorReport(report)) {
-      const request = dispatch(
-        requestReviewAcceleratorReport({
+      void reviewReport({
+        projectId,
+        reportId: report.id,
+        reviewAcceleratorReportRequestPayload: {
           review: {
             ...report,
             financialSummaries,
           },
-          projectId: Number(projectId),
-          reportId: report?.id || -1,
-        })
-      );
-      setRequestId(request.requestId);
+        },
+      });
     }
-  }, [dispatch, projectId, financialSummaries, report]);
+  }, [report, reviewReport, projectId, financialSummaries]);
 
   const onCancel = useCallback(() => {
     setFinancialSummaries(report?.financialSummaries);

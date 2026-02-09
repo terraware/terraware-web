@@ -8,8 +8,16 @@ export enum QueryTagTypes {
   ObservationMedia = 'ObservationMedia',
   ObservationSplats = 'ObservationSplats',
   PlantingSites = 'PlantingSites',
+  ProjectMetrics = 'ProjectMetrics',
   ProjectModules = 'ProjectModules',
+  ProjectReportConfigs = 'ProjectReportConfigs',
   Projects = 'Projects',
+  PublishedReportMedia = 'PublishedReportMedia',
+  PublishedReports = 'PublishedReports',
+  ReportMedia = 'ReportMedia',
+  Reports = 'Reports',
+  StandardMetrics = 'StandadMetrics',
+  SystemMetrics = 'SystemMetrics',
   T0 = 'T0',
 }
 

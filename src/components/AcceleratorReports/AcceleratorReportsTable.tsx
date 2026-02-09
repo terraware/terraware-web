@@ -8,17 +8,21 @@ import { DateTime } from 'luxon';
 import ClientSideFilterTable from 'src/components/Tables/ClientSideFilterTable';
 import { FilterConfigWithValues } from 'src/components/common/SearchFiltersWrapperV2';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
-import useProjectReports from 'src/hooks/useProjectReports';
 import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
-import { AcceleratorReport, AcceleratorReportStatuses } from 'src/types/AcceleratorReport';
+import {
+  AcceleratorReportPayload,
+  useLazyGetAcceleratorReportYearsQuery,
+  useLazyListAcceleratorReportsQuery,
+} from 'src/queries/generated/reports';
+import { AcceleratorReportStatuses } from 'src/types/AcceleratorReport';
 import { SearchSortOrder } from 'src/types/Search';
 import useQuery from 'src/utils/useQuery';
 
 import AcceleratorReportCellRenderer from './AcceleratorReportCellRenderer';
 import { getReportName } from './utils';
 
-type AcceleratorReportRow = AcceleratorReport & {
+type AcceleratorReportRow = AcceleratorReportPayload & {
   reportName?: string;
   year?: string;
 };
@@ -32,60 +36,64 @@ export default function AcceleratorReportsTable(): JSX.Element {
   const { strings } = useLocalization();
   const { currentParticipantProject } = useParticipantData();
   const { isAcceleratorRoute } = useAcceleratorConsole();
-
-  const [yearFilter, setYearFilter] = useState<string>();
-  const [acceleratorReports, setAcceleratorReports] = useState<AcceleratorReportRow[]>([]);
-  const [allAcceleratorReports, setAllAcceleratorReports] = useState<AcceleratorReportRow[]>([]);
-
-  const pathParams = useParams<{ projectId: string }>();
-  const projectId = isAcceleratorRoute ? String(pathParams.projectId) : currentParticipantProject?.id?.toString();
   const query = useQuery();
-  const yearQuery = query.get('year');
-
-  const { busy, acceleratorReports: projectReports } = useProjectReports(projectId, false, true, yearFilter);
-  const { acceleratorReports: allProjectReports } = useProjectReports(projectId, false, true);
 
   const currentYear = DateTime.now().year;
+  const yearQuery = query.get('year');
+  const [yearFilter, setYearFilter] = useState<number>(yearQuery ? Number(yearQuery) : currentYear);
+
+  const pathParams = useParams<{ projectId: string }>();
+  const projectId = useMemo(
+    () => (isAcceleratorRoute ? Number(pathParams.projectId) : currentParticipantProject?.id),
+    [currentParticipantProject?.id, isAcceleratorRoute, pathParams.projectId]
+  );
+
+  const [listCurrentYearReports, listCurrentYearReportsResults] = useLazyListAcceleratorReportsQuery();
+  const [listReports, listReportsResults] = useLazyListAcceleratorReportsQuery();
+  const [getReportYears, getReportYearsResults] = useLazyGetAcceleratorReportYearsQuery();
 
   useEffect(() => {
-    if (allProjectReports?.length > 0) {
-      setAllAcceleratorReports(() => {
-        const reports = allProjectReports
-          ?.filter((report) => report.frequency !== 'Annual')
-          .map((report) => {
-            const year = report.startDate.split('-')[0];
-            const reportName = getReportName(report);
-            return {
-              ...report,
-              reportName,
-              year,
-            };
-          });
-        return reports || [];
-      });
+    if (projectId) {
+      void getReportYears(projectId, true);
+      void listReports(
+        {
+          projectId,
+          year: yearFilter,
+        },
+        true
+      );
+      void listCurrentYearReports(
+        {
+          projectId,
+          year: currentYear,
+        },
+        true
+      );
     }
-  }, [allProjectReports]);
+  }, [currentYear, getReportYears, listCurrentYearReports, listReports, projectId, yearFilter]);
 
-  useEffect(() => {
-    if (projectReports?.length > 0) {
-      setAcceleratorReports(() => {
-        const reports = projectReports
-          ?.filter((report) => report.frequency !== 'Annual')
-          .map((report) => {
-            const year = report.startDate.split('-')[0];
-            const reportName = getReportName(report);
+  const busy = useMemo(() => listReportsResults.isLoading, [listReportsResults.isLoading]);
+  const projectReports = useMemo(() => listReportsResults.data?.reports ?? [], [listReportsResults.data?.reports]);
+  const currentYearReports = useMemo(
+    () => listCurrentYearReportsResults.data?.reports ?? [],
+    [listCurrentYearReportsResults.data?.reports]
+  );
 
-            return {
-              ...report,
-              reportName,
-              year,
-            };
-          });
-        return reports || [];
-      });
-    } else {
-      setAcceleratorReports([]);
-    }
+  const acceleratorReports = useMemo((): AcceleratorReportRow[] => {
+    return (
+      projectReports
+        ?.filter((report) => report.frequency !== 'Annual')
+        .map((report) => {
+          const year = report.startDate.split('-')[0];
+          const reportName = getReportName(report);
+
+          return {
+            ...report,
+            reportName,
+            year,
+          };
+        }) ?? []
+    );
   }, [projectReports]);
 
   const columns = useMemo((): TableColumnType[] => {
@@ -119,43 +127,45 @@ export default function AcceleratorReportsTable(): JSX.Element {
   }, [strings]);
 
   const tableIsClickable = useCallback(() => false, []);
-
   const fuzzySearchColumns = useMemo(() => ['reportName'], []);
 
   const allReportYears = useMemo(() => {
-    const years: Set<number> = new Set();
+    if (getReportYearsResults.data?.years) {
+      const endYear = getReportYearsResults.data.years.endYear;
+      const startYear = getReportYearsResults.data.years.startYear;
 
-    allAcceleratorReports?.forEach((report) => {
-      const reportYear = DateTime.fromFormat(report.startDate, 'yyyy-MM-dd').year;
-      years.add(reportYear);
-    });
+      const lastCurrentYear = currentYearReports.length > 0 ? currentYear : currentYear - 1;
+      const lastYear = Math.min(endYear, lastCurrentYear);
 
-    return Array.from(years).sort((a, b) => b - a);
-  }, [allAcceleratorReports]);
+      return Array.from({ length: lastYear - startYear + 1 }, (_, i) => startYear + i);
+    } else {
+      return [];
+    }
+  }, [currentYear, currentYearReports.length, getReportYearsResults.data?.years]);
 
   const yearFilterOptions = useMemo(() => {
     return allReportYears.map((year) => year.toString());
   }, [allReportYears]);
 
   useEffect(() => {
-    if (!!allAcceleratorReports?.length && !!allReportYears.length) {
-      if (yearQuery) {
-        setYearFilter(yearQuery);
+    if (allReportYears.length) {
+      if (yearQuery && allReportYears.includes(Number(yearQuery))) {
+        setYearFilter(Number(yearQuery));
         return;
       }
       if (allReportYears.includes(currentYear)) {
-        setYearFilter(currentYear.toString());
+        setYearFilter(currentYear);
       } else {
         const futureYears = allReportYears.filter((year) => year > currentYear).sort((a, b) => a - b);
         if (futureYears.length) {
-          setYearFilter(futureYears[0].toString());
+          setYearFilter(futureYears[0]);
         } else {
           const pastYears = allReportYears.filter((year) => year < currentYear).sort((a, b) => b - a);
-          setYearFilter(pastYears[0].toString());
+          setYearFilter(pastYears[0]);
         }
       }
     }
-  }, [allAcceleratorReports, allReportYears, currentYear, yearQuery]);
+  }, [allReportYears, currentYear, yearQuery]);
 
   const featuredFilters: FilterConfigWithValues[] = useMemo(() => {
     const rejectedStatus = isAcceleratorRoute ? strings.UPDATE_REQUESTED : strings.UPDATE_NEEDED;
@@ -179,10 +189,10 @@ export default function AcceleratorReportsTable(): JSX.Element {
         <Select
           id='yearFilter'
           label=''
-          onChange={setYearFilter}
+          onChange={(value: string) => setYearFilter(Number(value))}
           options={yearFilterOptions}
           placeholder={strings.YEAR}
-          selectedValue={yearFilter}
+          selectedValue={yearFilter.toString()}
           sx={{ textAlign: 'left' }}
         />
       </Box>

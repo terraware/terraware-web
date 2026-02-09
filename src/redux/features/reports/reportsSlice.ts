@@ -14,7 +14,6 @@ import {
   requestCreateProjectMetric,
   requestCreateReportConfig,
   requestCreateStandardMetric,
-  requestDeleteManyAcceleratorReportPhotos,
   requestListAcceleratorReports,
   requestListProjectMetrics,
   requestListStandardMetrics,
@@ -26,11 +25,9 @@ import {
   requestSubmitAcceleratorReport,
   requestUpdateAcceleratorReport,
   requestUpdateAcceleratorReportTargets,
-  requestUpdateManyAcceleratorReportPhotos,
   requestUpdateProjectMetric,
   requestUpdateReportConfig,
   requestUpdateStandardMetric,
-  requestUploadManyAcceleratorReportPhotos,
 } from './reportsThunks';
 
 type Data = {
@@ -292,45 +289,6 @@ const publishAcceleratorReportSlice = createSlice({
   },
 });
 
-/**
- * Delete Accelerator Report Photos
- */
-const initialDeleteManyAcceleratorReportPhotos: { [key: string]: StatusT<number> } = {};
-const deleteManyAcceleratorReportPhotosSlice = createSlice({
-  name: 'deleteManyAcceleratorReportPhotosSlice',
-  initialState: initialDeleteManyAcceleratorReportPhotos,
-  reducers: {},
-  extraReducers: (builder) => {
-    buildReducers(requestDeleteManyAcceleratorReportPhotos)(builder);
-  },
-});
-
-/**
- * Update Accelerator Report Photos
- */
-const initialUpdateManyAcceleratorReportPhotos: { [key: string]: StatusT<number> } = {};
-const updateManyAcceleratorReportPhotosSlice = createSlice({
-  name: 'updateManyAcceleratorReportPhotosSlice',
-  initialState: initialUpdateManyAcceleratorReportPhotos,
-  reducers: {},
-  extraReducers: (builder) => {
-    buildReducers(requestUpdateManyAcceleratorReportPhotos)(builder);
-  },
-});
-
-/**
- * Upload Accelerator Report Photos
- */
-const initialUploadManyAcceleratorReportPhotos: { [key: string]: StatusT<number[]> } = {};
-const uploadManyAcceleratorReportPhotosSlice = createSlice({
-  name: 'uploadManyAcceleratorReportPhotosSlice',
-  initialState: initialUploadManyAcceleratorReportPhotos,
-  reducers: {},
-  extraReducers: (builder) => {
-    buildReducers(requestUploadManyAcceleratorReportPhotos)(builder);
-  },
-});
-
 const reportsReducers = {
   getAcceleratorReport: getAcceleratorReportSlice.reducer,
   listAcceleratorReports: listAcceleratorReportsSlice.reducer,
@@ -351,9 +309,6 @@ const reportsReducers = {
   submitAcceleratorReport: submitAcceleratorReportSlice.reducer,
   updateAcceleratorReport: updateAcceleratorReportSlice.reducer,
   updateAcceleratorReportTargets: updateAcceleratorReportTargetsSlice.reducer,
-  deleteManyAcceleratorReportPhotos: deleteManyAcceleratorReportPhotosSlice.reducer,
-  updateManyAcceleratorReportPhotos: updateManyAcceleratorReportPhotosSlice.reducer,
-  uploadManyAcceleratorReportPhotos: uploadManyAcceleratorReportPhotosSlice.reducer,
 };
 
 export default reportsReducers;

@@ -3,6 +3,7 @@ import { useParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
+import { DateTime } from 'luxon';
 
 import AcceleratorReportStatusBadge from 'src/components/AcceleratorReports/AcceleratorReportStatusBadge';
 import AchievementsBox from 'src/components/AcceleratorReports/AchievementsBox';
@@ -19,17 +20,17 @@ import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import TitleBar from 'src/components/common/TitleBar';
 import { APP_PATHS } from 'src/constants';
-import useBoolean from 'src/hooks/useBoolean';
+import useAnnualReportMetrics from 'src/hooks/useAnnualReportMetrics';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import useProjectReports from 'src/hooks/useProjectReports';
 import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
-import { selectAcceleratorReport, selectSubmitAcceleratorReport } from 'src/redux/features/reports/reportsSelectors';
-import { requestAcceleratorReport, requestSubmitAcceleratorReport } from 'src/redux/features/reports/reportsThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import {
+  ReportSystemMetricPayload,
+  useGetAcceleratorReportQuery,
+  useSubmitAcceleratorReportMutation,
+} from 'src/queries/generated/reports';
 import strings from 'src/strings';
-import { AcceleratorReport, MetricType } from 'src/types/AcceleratorReport';
-import useSnackbar from 'src/utils/useSnackbar';
+import { MetricType, ReportProjectMetric, ReportStandardMetric } from 'src/types/AcceleratorReport';
 
 import SubmitReportDialog from './SubmitReportDialog';
 
@@ -37,57 +38,29 @@ const AcceleratorReportView = () => {
   const { activeLocale } = useLocalization();
   const { currentParticipantProject, setCurrentParticipantProject } = useParticipantData();
   const theme = useTheme();
-  const dispatch = useAppDispatch();
-  const snackbar = useSnackbar();
+
   const { goToAcceleratorReportEdit } = useNavigateTo();
 
   const pathParams = useParams<{ projectId: string; reportId: string }>();
-  const reportId = String(pathParams.reportId);
-  const projectId = String(pathParams.projectId);
+  const reportId = Number(pathParams.reportId);
+  const projectId = Number(pathParams.projectId);
 
-  const [requestId, setRequestId] = useState<string>('');
-  const [submitReportRequestId, setSubmitReportRequestId] = useState<string>('');
-  const [report, setReport] = useState<AcceleratorReport>();
-  const [showApproveDialog, , openApprovalDialog, closeApproveDialog] = useBoolean(false);
+  const reportResponse = useGetAcceleratorReportQuery({
+    projectId,
+    reportId,
+    includeMetrics: true,
+  });
 
-  const getReportResults = useAppSelector(selectAcceleratorReport(requestId));
-  const submitReportResults = useAppSelector(selectSubmitAcceleratorReport(submitReportRequestId));
-  const { getYearTarget } = useProjectReports(projectId, true, true);
+  const report = useMemo(() => reportResponse?.data?.report, [reportResponse?.data]);
 
-  const reload = useCallback(() => {
-    if (projectId) {
-      const request = dispatch(requestAcceleratorReport({ projectId, reportId, includeMetrics: true }));
-      setRequestId(request.requestId);
-    }
-  }, [projectId, dispatch, reportId]);
+  const [submit, submitResponse] = useSubmitAcceleratorReportMutation();
 
+  const [showSubmitDialog, setShowSubmitDialog] = useState(false);
   useEffect(() => {
-    if (projectId !== currentParticipantProject?.id?.toString()) {
+    if (projectId !== currentParticipantProject?.id) {
       setCurrentParticipantProject(projectId);
     }
   }, [currentParticipantProject?.id, projectId, setCurrentParticipantProject]);
-
-  useEffect(() => {
-    reload();
-  }, [reload]);
-
-  useEffect(() => {
-    if (getReportResults?.status === 'error') {
-      return;
-    }
-    if (getReportResults?.data) {
-      setReport(getReportResults.data);
-    }
-  }, [getReportResults]);
-
-  useEffect(() => {
-    if (submitReportResults?.status === 'error') {
-      snackbar.toastError();
-    } else if (submitReportResults?.status === 'success') {
-      reload();
-      snackbar.toastSuccess(strings.REPORT_SUBMITTED_FOR_APPROVAL);
-    }
-  }, [reload, snackbar, submitReportResults?.status]);
 
   const year = useMemo(() => {
     return report?.startDate.split('-')[0];
@@ -104,15 +77,15 @@ const AcceleratorReportView = () => {
   );
 
   const goToReportEdit = useCallback(() => {
-    goToAcceleratorReportEdit(Number(reportId), Number(projectId));
+    goToAcceleratorReportEdit(reportId, projectId);
   }, [goToAcceleratorReportEdit, projectId, reportId]);
 
   const callToAction = useMemo(() => {
     const buttonsDisabled =
       !report?.id ||
       (report?.status !== 'Not Submitted' && report?.status !== 'Needs Update') ||
-      getReportResults?.status === 'pending' ||
-      submitReportResults?.status === 'pending';
+      reportResponse.isLoading ||
+      submitResponse.isLoading;
 
     return (
       <>
@@ -129,20 +102,13 @@ const AcceleratorReportView = () => {
           disabled={buttonsDisabled}
           id='submitReport'
           label={strings.SUBMIT_FOR_APPROVAL}
-          onClick={openApprovalDialog}
+          onClick={() => setShowSubmitDialog(true)}
           size='medium'
           sx={{ '&.button': { whiteSpace: 'nowrap', minWidth: 'auto' } }}
         />
       </>
     );
-  }, [
-    getReportResults?.status,
-    goToReportEdit,
-    openApprovalDialog,
-    report?.id,
-    report?.status,
-    submitReportResults?.status,
-  ]);
+  }, [goToReportEdit, report?.id, report?.status, reportResponse.isLoading, submitResponse.isLoading]);
 
   const rightComponent = useMemo(
     () => (
@@ -154,27 +120,28 @@ const AcceleratorReportView = () => {
   );
 
   const submitReport = useCallback(() => {
-    const request = dispatch(requestSubmitAcceleratorReport({ projectId, reportId }));
-    setSubmitReportRequestId(request.requestId);
-    closeApproveDialog();
-  }, [closeApproveDialog, dispatch, projectId, reportId]);
+    void submit({ reportId, projectId });
+    setShowSubmitDialog(false);
+  }, [projectId, reportId, submit]);
 
   const reportName = report?.frequency === 'Annual' ? year : report?.quarter ? `${year}-${report?.quarter}` : '';
 
+  const yearToUse = useMemo(
+    () => (year ? Number(report?.startDate.split('-')[0]) : DateTime.now().year),
+    [report?.startDate, year]
+  );
+  const annualMetrics = useAnnualReportMetrics(projectId, yearToUse);
+
   return (
     <>
-      {showApproveDialog && <SubmitReportDialog onClose={closeApproveDialog} onSubmit={submitReport} />}
+      {showSubmitDialog && <SubmitReportDialog onClose={() => setShowSubmitDialog(false)} onSubmit={submitReport} />}
 
       <Page
         crumbs={crumbs}
         rightComponent={rightComponent}
         title={
           <TitleBar
-            subtitle={
-              currentParticipantProject && getReportResults
-                ? `${strings.PROJECT}: ${currentParticipantProject?.name}`
-                : ''
-            }
+            subtitle={currentParticipantProject ? `${strings.PROJECT}: ${currentParticipantProject?.name}` : ''}
             title={`${strings.REPORT} (${reportName})`}
           />
         }
@@ -204,7 +171,7 @@ const AcceleratorReportView = () => {
                 </Typography>
               </Box>
             )}
-            <HighlightsBox report={report} projectId={projectId} reload={reload} />
+            <HighlightsBox report={report} projectId={projectId} />
             {['system', 'project', 'standard'].map((type) => {
               const metrics =
                 type === 'system'
@@ -213,24 +180,39 @@ const AcceleratorReportView = () => {
                     ? report?.projectMetrics
                     : report?.standardMetrics;
 
-              return metrics?.map((metric, index) => (
-                <MetricBox
-                  key={`${type}-${index}`}
-                  metric={metric}
-                  projectId={projectId}
-                  reload={reload}
-                  reportId={Number(reportId)}
-                  type={type as MetricType}
-                  year={year}
-                  yearTarget={getYearTarget(metric, type as MetricType, year)}
-                />
-              ));
+              return metrics?.map((metric, index) => {
+                const yearTarget = (
+                  type === 'system'
+                    ? annualMetrics.systemMetrics.find(
+                        (annualMetric) => annualMetric.metric === (metric as ReportSystemMetricPayload).metric
+                      )
+                    : type === 'project'
+                      ? annualMetrics.projectMetrics.find(
+                          (annualMetric) => annualMetric.id === (metric as ReportProjectMetric).id
+                        )
+                      : annualMetrics.standardMetrics.find(
+                          (annualMetric) => annualMetric.id === (metric as ReportStandardMetric).id
+                        )
+                )?.target;
+
+                return (
+                  <MetricBox
+                    key={`${type}-${index}`}
+                    metric={metric}
+                    projectId={projectId}
+                    reportId={Number(reportId)}
+                    type={type as MetricType}
+                    year={yearToUse}
+                    yearTarget={yearTarget}
+                  />
+                );
+              });
             })}
-            <AchievementsBox report={report} projectId={projectId} reload={reload} />
-            <ChallengesMitigationBox report={report} projectId={projectId} reload={reload} />
-            <FinancialSummariesBox report={report} projectId={projectId} reload={reload} />
-            <AdditionalCommentsBox report={report} projectId={projectId} reload={reload} />
-            <PhotosBox report={report} projectId={projectId} reload={reload} />
+            <AchievementsBox report={report} projectId={projectId} />
+            <ChallengesMitigationBox report={report} projectId={projectId} />
+            <FinancialSummariesBox report={report} projectId={projectId} />
+            <AdditionalCommentsBox report={report} projectId={projectId} />
+            <PhotosBox report={report} projectId={projectId} />
           </Card>
         </Box>
       </Page>

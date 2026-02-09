@@ -77,6 +77,9 @@ const injectedRtkApi = api.injectEndpoints({
         }),
       }
     ),
+    getAcceleratorReportYears: build.query<GetAcceleratorReportYearsApiResponse, GetAcceleratorReportYearsApiArg>({
+      query: (queryArg) => ({ url: `/api/v1/accelerator/projects/${queryArg}/reports/years` }),
+    }),
     getAcceleratorReport: build.query<GetAcceleratorReportApiResponse, GetAcceleratorReportApiArg>({
       query: (queryArg) => ({
         url: `/api/v1/accelerator/projects/${queryArg.projectId}/reports/${queryArg.reportId}`,
@@ -234,6 +237,9 @@ export type UpdateProjectMetricTargetsApiArg = {
   updateSubmitted?: boolean;
   updateMetricTargetsRequestPayload: UpdateMetricTargetsRequestPayload;
 };
+export type GetAcceleratorReportYearsApiResponse =
+  /** status 200 The requested operation succeeded. */ GetAcceleratorReportYearsResponsePayload;
+export type GetAcceleratorReportYearsApiArg = number;
 export type GetAcceleratorReportApiResponse =
   /** status 200 The requested operation succeeded. */ GetAcceleratorReportResponsePayload;
 export type GetAcceleratorReportApiArg = {
@@ -511,6 +517,14 @@ export type UpdateSystemMetricTargetsPayload = {
 export type UpdateMetricTargetsRequestPayload = {
   metric: UpdateProjectMetricTargetsPayload | UpdateStandardMetricTargetsPayload | UpdateSystemMetricTargetsPayload;
 };
+export type ReportYearsPayload = {
+  endYear: number;
+  startYear: number;
+};
+export type GetAcceleratorReportYearsResponsePayload = {
+  status: SuccessOrError;
+  years?: ReportYearsPayload;
+};
 export type GetAcceleratorReportResponsePayload = {
   report: AcceleratorReportPayload;
   status: SuccessOrError;
@@ -588,6 +602,8 @@ export const {
   useCreateProjectMetricMutation,
   useUpdateProjectMetricMutation,
   useUpdateProjectMetricTargetsMutation,
+  useGetAcceleratorReportYearsQuery,
+  useLazyGetAcceleratorReportYearsQuery,
   useGetAcceleratorReportQuery,
   useLazyGetAcceleratorReportQuery,
   useUpdateAcceleratorReportValuesMutation,

@@ -6,9 +6,7 @@ import { Button, Textfield } from '@terraware/web-components';
 import Link from 'src/components/common/Link';
 import Icon from 'src/components/common/icon/Icon';
 import useBoolean from 'src/hooks/useBoolean';
-import { selectReviewAcceleratorReport } from 'src/redux/features/reports/reportsSelectors';
-import { requestReviewAcceleratorReport } from 'src/redux/features/reports/reportsThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useReviewAcceleratorReportMutation } from 'src/queries/generated/reports';
 import strings from 'src/strings';
 import { isAcceleratorReport } from 'src/types/AcceleratorReport';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -76,14 +74,12 @@ const Achievement = ({
 };
 
 const AchievementsBox = (props: ReportBoxProps) => {
-  const { report, projectId, reload, isConsoleView, onChange, editing, onEditChange, canEdit, funderReportView } =
-    props;
+  const { report, projectId, isConsoleView, onChange, editing, onEditChange, canEdit, funderReportView } = props;
   const [internalEditing, setInternalEditing, setInternalEditingTrue] = useBoolean(false);
   const [achievements, setAchievements] = useState<string[]>(report?.achievements || []);
-  const dispatch = useAppDispatch();
-  const [requestId, setRequestId] = useState<string>('');
-  const updateReportResponse = useAppSelector(selectReviewAcceleratorReport(requestId));
   const snackbar = useSnackbar();
+
+  const [reviewReport, reviewReportResponse] = useReviewAcceleratorReportMutation();
 
   const getNonEmptyAchievements = useCallback(() => {
     return achievements.filter((s) => !!s);
@@ -107,32 +103,30 @@ const AchievementsBox = (props: ReportBoxProps) => {
   }, [achievements, addRow, getNonEmptyAchievements, onChange, report?.achievements]);
 
   useEffect(() => {
-    if (updateReportResponse?.status === 'error') {
+    if (reviewReportResponse.isError) {
       snackbar.toastError();
-    } else if (updateReportResponse?.status === 'success') {
+    } else if (reviewReportResponse.isSuccess) {
       snackbar.toastSuccess(strings.CHANGES_SAVED);
       setInternalEditing(false);
-      reload?.();
     }
-  }, [updateReportResponse, snackbar, reload, setInternalEditing]);
+  }, [snackbar, setInternalEditing, reviewReportResponse.isError, reviewReportResponse.isSuccess]);
 
   const onSave = useCallback(() => {
     if (isAcceleratorReport(report)) {
-      const request = dispatch(
-        requestReviewAcceleratorReport({
+      void reviewReport({
+        projectId,
+        reportId: report.id,
+        reviewAcceleratorReportRequestPayload: {
           review: {
             ...report,
             achievements: getNonEmptyAchievements(),
             challenges: report?.challenges || [],
             status: report?.status || 'Not Submitted',
           },
-          projectId: Number(projectId),
-          reportId: report?.id || -1,
-        })
-      );
-      setRequestId(request.requestId);
+        },
+      });
     }
-  }, [report, dispatch, getNonEmptyAchievements, projectId]);
+  }, [report, reviewReport, projectId, getNonEmptyAchievements]);
 
   const onCancel = useCallback(() => {
     setInternalEditing(false);

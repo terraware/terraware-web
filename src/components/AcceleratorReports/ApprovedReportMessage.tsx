@@ -4,11 +4,11 @@ import { Box, useTheme } from '@mui/material';
 import { Message } from '@terraware/web-components';
 
 import { useLocalization } from 'src/providers/hooks';
+import { AcceleratorReportPayload } from 'src/queries/generated/reports';
 import strings from 'src/strings';
-import { AcceleratorReport } from 'src/types/AcceleratorReport';
 
 type ApprovedReportMessageProps = {
-  report: AcceleratorReport;
+  report: AcceleratorReportPayload;
 };
 
 const ApprovedReportMessage = ({ report }: ApprovedReportMessageProps): JSX.Element | null => {

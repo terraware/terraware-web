@@ -1,3 +1,4 @@
+import './draftPlantingSites';
 import './fundingEntities';
 import './modules';
 import './notifications';
@@ -6,4 +7,6 @@ import './observations';
 import './plantingSites';
 import './projectModules';
 import './projects';
+import './publishedReports';
+import './reports';
 import './t0';

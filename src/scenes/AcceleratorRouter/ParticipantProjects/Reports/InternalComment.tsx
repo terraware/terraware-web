@@ -6,11 +6,12 @@ import TextField from '@terraware/web-components/components/Textfield/Textfield'
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
+import { AcceleratorReportPayload } from 'src/queries/generated/reports';
 import strings from 'src/strings';
-import { AcceleratorReport, AcceleratorReportStatus, AcceleratorReportStatuses } from 'src/types/AcceleratorReport';
+import { AcceleratorReportStatus, AcceleratorReportStatuses } from 'src/types/AcceleratorReport';
 
 interface InternalCommentProps {
-  entity: AcceleratorReport;
+  entity: AcceleratorReportPayload;
   update: (internalComment: string, status: AcceleratorReportStatus) => void;
   disabled?: boolean;
 }

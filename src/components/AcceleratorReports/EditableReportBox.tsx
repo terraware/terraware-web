@@ -12,6 +12,7 @@ export type EditableReportBoxProps = {
   visibleToFunder?: boolean; // undefined to hide text, true/false to determine state to show
   isConsoleView?: boolean;
   editing?: boolean;
+  busy?: boolean;
   children: ReactNode;
   onEdit: () => void;
   onCancel: () => void;
@@ -25,6 +26,7 @@ const EditableReportBox = ({
   description,
   canEdit,
   visibleToFunder,
+  busy,
   children,
   isConsoleView,
   onEdit,
@@ -152,7 +154,14 @@ const EditableReportBox = ({
                 priority='secondary'
                 key='button-1'
               />
-              <Button id={'save'} onClick={onSave} label={strings.SAVE} key='button-2' priority='secondary' />
+              <Button
+                id={'save'}
+                disabled={busy}
+                onClick={onSave}
+                label={strings.SAVE}
+                key='button-2'
+                priority='secondary'
+              />
             </Box>
           )}
         </Box>

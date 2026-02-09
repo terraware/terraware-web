@@ -12,6 +12,7 @@ import { selectPlantingsForSite } from 'src/redux/features/plantings/plantingsSe
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { conservationCategories } from 'src/types/Species';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 type CategoryData = {
   labels: string[];
@@ -243,11 +244,16 @@ type ChartDataProps = {
 
 const ChartData = ({ labels, values, rareSpecies }: ChartDataProps): JSX.Element | undefined => {
   const theme = useTheme();
+  const numberFormatter = useNumberFormatter();
 
-  const tooltipRenderer = useCallback((tooltipItem: TooltipItem<keyof ChartTypeRegistry>) => {
-    const v = tooltipItem.dataset.data[tooltipItem.dataIndex]?.toString();
-    return `${v}%`;
-  }, []);
+  const tooltipRenderer = useCallback(
+    (tooltipItem: TooltipItem<keyof ChartTypeRegistry>) => {
+      const rawValue = tooltipItem.dataset.data[tooltipItem.dataIndex];
+      const numValue = typeof rawValue === 'number' ? rawValue : parseFloat(rawValue?.toString() || '0');
+      return `${numberFormatter.format(numValue)}%`;
+    },
+    [numberFormatter]
+  );
 
   const chartData = useMemo(() => {
     return {
@@ -297,7 +303,7 @@ const ChartData = ({ labels, values, rareSpecies }: ChartDataProps): JSX.Element
       </Box>
 
       <Typography fontSize={'16px'} fontWeight={600} marginRight={1}>
-        {strings.RARE}: {rareSpecies}%
+        {strings.RARE}: {numberFormatter.format(rareSpecies)}%
       </Typography>
     </Box>
   );
