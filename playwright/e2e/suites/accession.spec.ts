@@ -171,8 +171,8 @@ test.describe('AccessionTests', () => {
           .getByText('Coconut', exactOptions)
           .locator('../..')
           .evaluate((el) => el.id)
-      ).replace('-species_scientificName', '');
-      await expect(page.locator(`#${coconutRowNum}-species_scientificName`)).toContainText('Coconut');
+      ).replace('-scientificName', '');
+      await expect(page.locator(`#${coconutRowNum}-scientificName`)).toContainText('Coconut');
       await expect(page.locator(`#${coconutRowNum}-facilityInventories`)).toContainText('Nursery');
       await expect(page.locator(`#${coconutRowNum}-germinatingQuantity`)).toContainText('300');
       await page.getByRole('tab', { name: 'By Nursery' }).click();
