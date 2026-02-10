@@ -612,6 +612,14 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
             <Typography>{strings.WITHDRAW_INSTRUCTIONS}</Typography>
             <Grid padding={theme.spacing(4, 0, 0)}>
               <Typography fontSize='14px' fontWeight={400} lineHeight='20px'>
+                {strings.BATCHES_SELECTED}
+              </Typography>
+              <Typography fontSize='16px' fontWeight={500} lineHeight='24px' marginTop='12px'>
+                {batches.map((batch) => batch.batchNumber).join(', ')}
+              </Typography>
+            </Grid>
+            <Grid padding={theme.spacing(4, 0, 0)}>
+              <Typography fontSize='14px' fontWeight={400} lineHeight='20px'>
                 {strings.SPECIES_SELECTED}
               </Typography>
               <Typography fontSize='16px' fontWeight={500} lineHeight='24px' marginTop='12px'>
