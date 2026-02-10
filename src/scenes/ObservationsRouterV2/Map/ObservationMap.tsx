@@ -765,15 +765,15 @@ const ObservationMap = ({
       selectedPhotos.length === 0 &&
       isVirtualPlotsEnabled
     ) {
-      const targetMonitoringPlotId = Number(virtualPlotParam);
+      const targetSplatFileId = Number(virtualPlotParam);
       const splats = listObservationSplatsResult.data.splats.filter((splat) => splat.status === 'Ready');
-      const matchingSplat = splats.find((splat) => splat.monitoringPlotId === targetMonitoringPlotId);
+      const matchingSplat = splats.find((splat) => splat.fileId === targetSplatFileId);
 
       if (matchingSplat) {
         setVirtualPlotVisible(true);
         selectPhotos([
           {
-            monitoringPlotId: targetMonitoringPlotId,
+            monitoringPlotId: matchingSplat.monitoringPlotId,
             observationId: selectedResults.observationId,
             splat: matchingSplat,
           },

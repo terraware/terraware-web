@@ -40,9 +40,10 @@ const VirtualPlotModal = ({
   const handleToggleFullScreen = useCallback(() => {
     const path = APP_PATHS.OBSERVATION_VIRTUAL_MONITORING_PLOT.replace(':observationId', observationId.toString())
       .replace(':stratumName', stratumName)
-      .replace(':monitoringPlotId', monitoringPlotId.toString());
+      .replace(':monitoringPlotId', monitoringPlotId.toString())
+      .replace(':fileId', fileId.toString());
     void navigate(path);
-  }, [navigate, observationId, stratumName, monitoringPlotId]);
+  }, [navigate, observationId, stratumName, monitoringPlotId, fileId]);
 
   const annotations = useMemo(
     () =>

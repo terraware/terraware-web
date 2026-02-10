@@ -178,8 +178,8 @@ const MapPhotoDrawer = ({
     const shouldBeOpen =
       virtualPlotParamValue &&
       isVirtualPlotsEnabled &&
-      Number(virtualPlotParamValue) === monitoringPlotId &&
-      Boolean(splat && result && monitoringPlot);
+      Boolean(splat && result && monitoringPlot) &&
+      Number(virtualPlotParamValue) === splat?.fileId;
 
     if (shouldBeOpen && !virtualPlotOpen) {
       setVirtualPlotOpen(true);
@@ -198,10 +198,12 @@ const MapPhotoDrawer = ({
   ]);
 
   const handleOpenVirtualPlot = useCallback(() => {
-    const params = new URLSearchParams(searchParams);
-    params.set('virtualPlot', monitoringPlotId.toString());
-    setSearchParams(params, { replace: true });
-  }, [monitoringPlotId, searchParams, setSearchParams]);
+    if (splat) {
+      const params = new URLSearchParams(searchParams);
+      params.set('virtualPlot', splat.fileId.toString());
+      setSearchParams(params, { replace: true });
+    }
+  }, [splat, searchParams, setSearchParams]);
 
   const handleCloseVirtualPlot = useCallback(() => {
     const params = new URLSearchParams(searchParams);
