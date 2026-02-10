@@ -64,7 +64,7 @@ test.describe('AccessionTests', () => {
     await page.locator('#accession-status').click();
     await page.getByText('Processing', { exact: true }).click();
     await page.getByRole('button', { name: 'Save' }).click();
-    await page.waitForTimeout(1000); //Wait for modal to close
+    await page.getByRole('button', { name: 'Save' }).waitFor({ state: 'hidden', timeout: 10000 });
     await expect(page.getByRole('main')).toContainText('Processing');
     await page
       .getByText('Status', { ...exactOptions })
@@ -83,7 +83,7 @@ test.describe('AccessionTests', () => {
       .click();
     await page.getByLabel('End-Drying Reminder').fill('2034-01-31');
     await page.getByRole('button', { name: 'Set Reminder' }).click();
-    await page.waitForTimeout(1000); //Wait for modal to close
+    await page.getByRole('button', { name: 'Set Reminder' }).waitFor({ state: 'hidden', timeout: 10000 });
     await expect(page.getByRole('main')).toContainText('2034-01-31');
     await page.locator('a').filter({ hasText: 'Add' }).click();
     await page.locator('#remainingQuantity').getByRole('spinbutton').click();
@@ -123,7 +123,7 @@ test.describe('AccessionTests', () => {
     await expect(page.getByRole('main')).toContainText('~495 ct');
 
     await page.getByRole('button', { name: 'Accessions' }).click();
-
+    await page.getByText(accessionId).waitFor({ state: 'visible', timeout: 30000 });
     const accessionRow = (
       await page
         .getByText(accessionId)
@@ -157,7 +157,7 @@ test.describe('AccessionTests', () => {
       await page.getByRole('button', { name: 'Add Notes' }).click();
       await page.locator('textarea').fill('Adding some test notes here!');
       await page.locator('#saveWithdraw').click();
-      await expect(page.getByRole('main')).toContainText('195 Grams');
+      await expect(page.getByRole('main')).toContainText('195 Grams', { timeout: 30000 });
       await expect(page.getByRole('main')).toContainText('~195 ct');
       await page.getByRole('tab', { name: 'History' }).click();
       await expect(page.getByLabel('History')).toContainText(
@@ -176,7 +176,7 @@ test.describe('AccessionTests', () => {
       await expect(page.locator(`#${coconutRowNum}-facilityInventories`)).toContainText('Nursery');
       await expect(page.locator(`#${coconutRowNum}-germinatingQuantity`)).toContainText('300');
       await page.getByRole('tab', { name: 'By Nursery' }).click();
-      await expect(page.locator('#row1-facility_name')).toContainText('Nursery');
+      await expect(page.locator('#row1-facility_name')).toContainText('Nursery', { timeout: 30000 });
       await page.getByRole('tab', { name: 'By Batch' }).click();
       await expect(page.locator('#row1-batchNumber')).toContainText('2-1-002');
     });

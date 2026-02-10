@@ -38,7 +38,7 @@ export const isSpeciesEmpty = (species: SearchResponseElement): boolean => {
 };
 
 export const isNurseryEmpty = (nursery: SearchResponseElement): boolean => {
-  return Number(nursery['totalQuantity(raw)']) === 0;
+  return Number(nursery['totalQuantity(raw)']) === 0 && Number(nursery['germinatingQuantity(raw)']) === 0;
 };
 
 export const convertFilterGroupToMap = (filterGroupFilters: Record<string, SearchNodePayload>): InventoryFiltersType =>

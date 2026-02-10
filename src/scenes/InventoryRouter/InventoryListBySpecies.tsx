@@ -203,12 +203,17 @@ export default function InventoryListBySpecies({ setReportData }: InventoryListB
 
       const filteredResult = updatedResult?.filter(
         (result) =>
-          showEmptySpecies || (specificFacilities ? Number(result['totalQuantity(raw)']) > 0 : !isSpeciesEmpty(result))
+          showEmptySpecies ||
+          (specificFacilities
+            ? Number(result['totalQuantity(raw)']) > 0 && Number(result.germinatingQuantity) > 0
+            : !isSpeciesEmpty(result))
       );
 
       if (updatedResult && getRequestId('searchInventory') === requestId) {
         const hasInventory = specificFacilities
-          ? updatedResult.some((species) => Number(species['totalQuantity(raw)']) > 0)
+          ? updatedResult.some(
+              (species) => Number(species['totalQuantity(raw)']) > 0 && Number(species.germinatingQuantity) > 0
+            )
           : apiSearchResults?.some((speciesInventory) => !!speciesInventory.inventory) || false;
         setShowResults(showEmptySpecies || hasInventory);
         setSearchResults(filteredResult || []);
