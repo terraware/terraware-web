@@ -236,6 +236,7 @@ BATCHES_AT,Lots à {0},b3caf9d1
 BATCHES_COLUMN_TOOLTIP,Les lots vides ne sont pas comptabilisés dans cette colonne.,2e59945a
 BATCHES_OF,Lots de {0},9de027f8
 BATCHES_PLURAL,lots,e5581f26
+BATCHES_SELECTED,Lots sélectionnées,43815be7
 BATCHES_SINGULAR,lot,a3a42fdb
 BEST_MONTHS_FOR_OBSERVATIONS,Les meilleurs mois pour les observations,99083629
 BEST_MONTHS_FOR_OBSERVATIONS_INSTRUCTIONS,Il s'agit des saisons où cela a le plus de sens du point de vue de la capacité de votre équipe et prend également en compte des facteurs environnementaux tels que l'absence de neige et la possibilité d'identifier facilement la survie des plantations. Veuillez sélectionner tous les mois qui s'appliquent.,efb1c93a

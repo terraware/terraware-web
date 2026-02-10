@@ -237,6 +237,7 @@ BATCHES_AT,Lotes en {0},b3caf9d1
 BATCHES_COLUMN_TOOLTIP,Los lotes vacíos no se contabilizan en esta columna.,2e59945a
 BATCHES_OF,Lotes de {0},9de027f8
 BATCHES_PLURAL,lotes,e5581f26
+BATCHES_SELECTED,Lotes seleccionados,43815be7
 BATCHES_SINGULAR,lote,a3a42fdb
 BEST_MONTHS_FOR_OBSERVATIONS,Mejores meses para las observaciones,99083629
 BEST_MONTHS_FOR_OBSERVATIONS_INSTRUCTIONS,Estás serían las estaciones en las que tiene más sentido desde el punto de vista de la capacidad del equipo y también toma en cuenta factores medioambientales como la ausencia de nieve y la habilidad para identificar con facilidad la supervivencia de los plantado. Seleccionar todos los meses que correspondan.,efb1c93a
