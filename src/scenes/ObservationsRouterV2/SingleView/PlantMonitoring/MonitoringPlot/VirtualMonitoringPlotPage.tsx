@@ -8,7 +8,7 @@ import { BusySpinner } from '@terraware/web-components';
 import { AnnotationProps } from 'src/components/GaussianSplat/Annotation';
 import Application from 'src/components/GaussianSplat/Application';
 import { APP_PATHS } from 'src/constants';
-import { useListObservationSplatAnnotationsQuery } from 'src/queries/generated/observationSplats';
+import { useListSplatDetailsQuery } from 'src/queries/generated/observationSplats';
 
 import VirtualMonitoringPlot from './VirtualMonitoringPlot';
 
@@ -26,15 +26,20 @@ const VirtualMonitoringPlotPage = () => {
   const fileId = Number(params.fileId);
   const stratumName = params.stratumName;
 
-  const { data: annotationsData } = useListObservationSplatAnnotationsQuery(
-    { observationId, fileId },
-    { skip: !fileId }
+  const { data: splatInfoData } = useListSplatDetailsQuery({ observationId, fileId }, { skip: !fileId });
+
+  const splatOrigin: [number, number, number] | undefined = useMemo(
+    () =>
+      splatInfoData?.originPosition
+        ? [splatInfoData.originPosition.x, splatInfoData.originPosition.y, splatInfoData.originPosition.z]
+        : undefined,
+    [splatInfoData]
   );
 
   // Transform annotation positions from object format to array format for PlayCanvas
   const annotations = useMemo(
     () =>
-      annotationsData?.annotations.map(
+      splatInfoData?.annotations.map(
         (annotation) =>
           ({
             ...annotation,
@@ -44,7 +49,7 @@ const VirtualMonitoringPlotPage = () => {
               : undefined,
           }) as AnnotationProps
       ) ?? [],
-    [annotationsData]
+    [splatInfoData]
   );
 
   const handleClose = useCallback(() => {
@@ -137,6 +142,7 @@ const VirtualMonitoringPlotPage = () => {
           <VirtualMonitoringPlot
             observationId={observationId.toString()}
             fileId={fileId.toString()}
+            splatOrigin={splatOrigin}
             annotations={annotations}
             isFullScreen={true}
             onToggleFullScreen={handleToggleFullScreen}

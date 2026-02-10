@@ -132,6 +132,11 @@ const injectedRtkApi = api.injectEndpoints({
         url: `/api/v1/tracking/observations/${queryArg.observationId}/plots/${queryArg.plotId}/otherMedia`,
         method: 'POST',
         body: queryArg.body,
+        params: {
+          caption: queryArg.caption,
+          position: queryArg.position,
+          type: queryArg['type'],
+        },
       }),
     }),
     uploadPlotPhoto: build.mutation<UploadPlotPhotoApiResponse, UploadPlotPhotoApiArg>({
@@ -291,16 +296,19 @@ export type GetObservationMediaStreamApiArg = {
   plotId: number;
   fileId: number;
 };
-export type UploadOtherPlotMediaApiResponse = /** status 200 OK */ UploadPlotPhotoResponsePayload;
+export type UploadOtherPlotMediaApiResponse = /** status 200 OK */ UploadPlotMediaResponsePayload;
 export type UploadOtherPlotMediaApiArg = {
   observationId: number;
   plotId: number;
+  caption?: string;
+  position?: 'SouthwestCorner' | 'SoutheastCorner' | 'NortheastCorner' | 'NorthwestCorner';
+  type?: 'Plot' | 'Quadrat' | 'Soil';
   body: {
     file: Blob;
     payload: UploadPlotMediaRequestPayload;
   };
 };
-export type UploadPlotPhotoApiResponse = /** status 200 OK */ UploadPlotPhotoResponsePayload;
+export type UploadPlotPhotoApiResponse = /** status 200 OK */ UploadPlotMediaResponsePayload;
 export type UploadPlotPhotoApiArg = {
   observationId: number;
   plotId: number;
@@ -1110,7 +1118,7 @@ export type GetMuxStreamResponsePayload = {
   playbackToken: string;
   status: SuccessOrError;
 };
-export type UploadPlotPhotoResponsePayload = {
+export type UploadPlotMediaResponsePayload = {
   fileId: number;
   status: SuccessOrError;
 };
