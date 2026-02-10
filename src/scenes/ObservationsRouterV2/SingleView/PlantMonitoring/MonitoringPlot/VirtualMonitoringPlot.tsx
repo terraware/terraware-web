@@ -126,7 +126,7 @@ const VirtualMonitoringPlot = ({
     };
     setLocalAnnotations((prev) => [...prev, newAnnotation]);
     setSelectedAnnotationIndex(localAnnotations.length);
-  }, [localAnnotations]);
+  }, [origin, localAnnotations]);
 
   const handleDeleteAnnotation = useCallback(() => {
     if (selectedAnnotationIndex === -1) {
