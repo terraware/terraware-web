@@ -148,6 +148,7 @@ export type SetSplatAnnotationsRequestPayload = {
 };
 export type GetObservationSplatInfoResponsePayload = {
   annotations: SplatAnnotationPayload[];
+  cameraPosition?: CoordinatePayload;
   originPosition?: CoordinatePayload;
   status: SuccessOrError;
 };

@@ -36,6 +36,14 @@ const VirtualMonitoringPlotPage = () => {
     [splatInfoData]
   );
 
+  const startingCameraPosition: [number, number, number] | undefined = useMemo(
+    () =>
+      splatInfoData?.cameraPosition
+        ? [splatInfoData.cameraPosition.x, splatInfoData.cameraPosition.y, splatInfoData.cameraPosition.z]
+        : undefined,
+    [splatInfoData]
+  );
+
   // Transform annotation positions from object format to array format for PlayCanvas
   const annotations = useMemo(
     () =>
@@ -142,6 +150,7 @@ const VirtualMonitoringPlotPage = () => {
           <VirtualMonitoringPlot
             observationId={observationId.toString()}
             fileId={fileId.toString()}
+            startingCameraPosition={startingCameraPosition}
             splatOrigin={splatOrigin}
             annotations={annotations}
             isFullScreen={true}

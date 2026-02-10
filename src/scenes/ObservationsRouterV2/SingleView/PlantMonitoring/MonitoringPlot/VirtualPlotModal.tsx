@@ -50,6 +50,11 @@ const VirtualPlotModal = ({
     [data]
   );
 
+  const startingCameraPosition: [number, number, number] | undefined = useMemo(
+    () => (data?.cameraPosition ? [data.cameraPosition.x, data.cameraPosition.y, data.cameraPosition.z] : undefined),
+    [data]
+  );
+
   const annotations = useMemo(
     () =>
       data?.annotations.map(
@@ -82,6 +87,7 @@ const VirtualPlotModal = ({
         <VirtualMonitoringPlot
           observationId={observationId.toString()}
           fileId={fileId.toString()}
+          startingCameraPosition={startingCameraPosition}
           splatOrigin={splatOrigin}
           annotations={annotations}
           editable={true}
