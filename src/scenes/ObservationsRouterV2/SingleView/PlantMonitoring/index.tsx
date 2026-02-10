@@ -36,7 +36,10 @@ const PlantMonitoringView = (): JSX.Element => {
 
   return (
     <Routes>
-      <Route path={'/stratum/:stratumName/plot/:monitoringPlotId/virtual'} element={<VirtualMonitoringPlotPage />} />
+      <Route
+        path={'/stratum/:stratumName/plot/:monitoringPlotId/virtual/:fileId'}
+        element={<VirtualMonitoringPlotPage />}
+      />
       <Route path={'/stratum/:stratumName/plot/:monitoringPlotId'} element={<MonitoringPlotDetails />} />
       <Route path={'/stratum/:stratumName/plot/:monitoringPlotId/photos'} element={<MonitoringPlotEditPhotos />} />
       <Route path={'/stratum/:stratumName'} element={<StratumDetails />} />

@@ -8,10 +8,7 @@ import { BusySpinner } from '@terraware/web-components';
 import { AnnotationProps } from 'src/components/GaussianSplat/Annotation';
 import Application from 'src/components/GaussianSplat/Application';
 import { APP_PATHS } from 'src/constants';
-import {
-  useListObservationSplatAnnotationsQuery,
-  useListObservationSplatsQuery,
-} from 'src/queries/generated/observationSplats';
+import { useListObservationSplatAnnotationsQuery } from 'src/queries/generated/observationSplats';
 
 import VirtualMonitoringPlot from './VirtualMonitoringPlot';
 
@@ -20,27 +17,17 @@ const VirtualMonitoringPlotPage = () => {
     observationId: string;
     stratumName: string;
     monitoringPlotId: string;
+    fileId: string;
   }>();
   const navigate = useNavigate();
 
   const observationId = Number(params.observationId);
   const monitoringPlotId = Number(params.monitoringPlotId);
+  const fileId = Number(params.fileId);
   const stratumName = params.stratumName;
 
-  const { data: splatsData, isLoading: splatsLoading } = useListObservationSplatsQuery({
-    observationId,
-  });
-
-  const fileId = useMemo(() => {
-    if (!splatsData?.splats) {
-      return undefined;
-    }
-    const splat = splatsData.splats.find((s) => s.monitoringPlotId === monitoringPlotId);
-    return splat?.fileId;
-  }, [splatsData, monitoringPlotId]);
-
   const { data: annotationsData } = useListObservationSplatAnnotationsQuery(
-    { observationId, fileId: fileId! },
+    { observationId, fileId },
     { skip: !fileId }
   );
 
@@ -71,8 +58,8 @@ const VirtualMonitoringPlotPage = () => {
     const path = APP_PATHS.OBSERVATION_MONITORING_PLOT_DETAILS_V2.replace(':observationId', observationId.toString())
       .replace(':stratumName', stratumName!)
       .replace(':monitoringPlotId', monitoringPlotId.toString());
-    void navigate(`${path}?virtualPlot=${monitoringPlotId.toString()}`);
-  }, [navigate, observationId, stratumName, monitoringPlotId]);
+    void navigate(`${path}?virtualPlot=${fileId.toString()}`);
+  }, [navigate, observationId, stratumName, monitoringPlotId, fileId]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -87,7 +74,7 @@ const VirtualMonitoringPlotPage = () => {
     };
   }, [handleClose]);
 
-  if (splatsLoading || !fileId) {
+  if (!fileId) {
     return (
       <Box
         sx={{
