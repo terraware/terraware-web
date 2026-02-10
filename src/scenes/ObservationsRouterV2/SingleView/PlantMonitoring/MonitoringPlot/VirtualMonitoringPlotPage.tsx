@@ -26,28 +26,22 @@ const VirtualMonitoringPlotPage = () => {
   const fileId = Number(params.fileId);
   const stratumName = params.stratumName;
 
-  const { data: splatInfoData } = useListSplatDetailsQuery({ observationId, fileId }, { skip: !fileId });
+  const { data } = useListSplatDetailsQuery({ observationId, fileId }, { skip: !fileId });
 
   const splatOrigin: [number, number, number] | undefined = useMemo(
-    () =>
-      splatInfoData?.originPosition
-        ? [splatInfoData.originPosition.x, splatInfoData.originPosition.y, splatInfoData.originPosition.z]
-        : undefined,
-    [splatInfoData]
+    () => (data?.originPosition ? [data.originPosition.x, data.originPosition.y, data.originPosition.z] : undefined),
+    [data]
   );
 
   const startingCameraPosition: [number, number, number] | undefined = useMemo(
-    () =>
-      splatInfoData?.cameraPosition
-        ? [splatInfoData.cameraPosition.x, splatInfoData.cameraPosition.y, splatInfoData.cameraPosition.z]
-        : undefined,
-    [splatInfoData]
+    () => (data?.cameraPosition ? [data.cameraPosition.x, data.cameraPosition.y, data.cameraPosition.z] : undefined),
+    [data]
   );
 
   // Transform annotation positions from object format to array format for PlayCanvas
   const annotations = useMemo(
     () =>
-      splatInfoData?.annotations.map(
+      data?.annotations.map(
         (annotation) =>
           ({
             ...annotation,
@@ -57,7 +51,7 @@ const VirtualMonitoringPlotPage = () => {
               : undefined,
           }) as AnnotationProps
       ) ?? [],
-    [splatInfoData]
+    [data]
   );
 
   const handleClose = useCallback(() => {
