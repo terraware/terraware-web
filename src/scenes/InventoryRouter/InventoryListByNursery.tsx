@@ -7,7 +7,8 @@ import Card from 'src/components/common/Card';
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import { DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
 import { useLocalization, useOrganization } from 'src/providers';
-import { InventoryFiltersType } from 'src/scenes/InventoryRouter/InventoryFilter';
+import { isNurseryEmpty } from 'src/scenes/InventoryRouter/FilterUtils';
+import { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';
 import InventoryTable from 'src/scenes/InventoryRouter/InventoryTable';
 import { FacilitySpeciesInventoryResult } from 'src/scenes/InventoryRouter/InventoryV2View';
 import { NurseryBatchService } from 'src/services';
@@ -26,7 +27,7 @@ export default function InventoryListByNursery({ setReportData }: InventoryListB
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
 
-  const [filters, setFilters] = useForm<InventoryFiltersType>({});
+  const [filters, setFilters] = useForm<InventoryFiltersUnion>({});
   const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>(null);
   const [showResults, setShowResults] = useState(false);
   const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder | undefined>({
@@ -92,6 +93,8 @@ export default function InventoryListByNursery({ setReportData }: InventoryListB
       const requestId = Math.random().toString();
       setRequestId('searchInventory', requestId);
 
+      const showEmptyNurseries = (filters.showEmptyNurseries || [])[0] === 'true';
+
       setReportData({
         organizationId: selectedOrganization.id,
         query: debouncedSearchTerm,
@@ -122,10 +125,12 @@ export default function InventoryListByNursery({ setReportData }: InventoryListB
         return { ...resultTyped, facilityInventories: speciesNames.join('\r'), batchIds };
       });
 
+      const filteredResult = updatedResult?.filter((result) => showEmptyNurseries || !isNurseryEmpty(result));
+
       if (updatedResult) {
         if (getRequestId('searchInventory') === requestId) {
           setShowResults((allBatchesResult?.length || 0) > 0);
-          setSearchResults(updatedResult);
+          setSearchResults(filteredResult || []);
         }
       }
     }

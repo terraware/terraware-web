@@ -724,6 +724,8 @@ FILE_TOO_LARGE,Le fichier {0} est trop volumineux. La taille maximale est de {1}
 FILTER,Filtre,51b390ee
 FILTER_BY_PROJECT,Filtrer par projet,cc5c10c0
 FILTER_SHOW_EMPTY_BATCHES,Afficher les lots vides,f5c7fca1
+FILTER_SHOW_EMPTY_NURSERIES,Afficher les pépinières sans inventaire,6d351b84
+FILTER_SHOW_EMPTY_SPECIES,Afficher les espèces sans inventaire,0de9ee0c
 FILTERS,Filtres,c3d13364
 FINAL_QTY,Qté finale,47530c05
 FINANCE,Finances,ae6619da
@@ -1148,7 +1150,7 @@ NO,Non,3c5beb81
 NO_ACTIVITIES_TO_SHOW,Aucune activité à afficher.,1b075899
 NO_AVAILABLE_PROJECTS_FOR_SPECIES,Il n'y a pas d'autres projets disponibles pour cette espèce.,071c6205
 NO_BATCHES_TO_WITHDRAW_FROM,Il n'y a pas de lots dont les quantités peuvent être retirés.,dc94bdcc
-NO_BATCHES_WITH_INVENTORY,"Aucun lot ne possède d’inventaire. Pour voir les lots vides, allez dans « Par lot » et utilisez le filtre « Afficher les lots vides » pour afficher tous les lots vides.",e4b254c5
+NO_BATCHES_WITH_INVENTORY,"Tous les lots ayant eu un inventaire sont maintenant vides. Pour afficher les lots, espèces et pépinières qui avaient auparavant un inventaire, utilisez les filtres « Afficher les lots vides » et « Afficher les espèces/pépinières sans inventaire ».",2c0612be
 NO_BATCHES_WITH_INVENTORY_MESSAGE,Aucun lot ne possède d’inventaire. Utilisez le filtre « Afficher les lots vides » pour voir tous vos lots vides.,c326ecab
 NO_COLUMNS_SELECTED,Aucune colonne sélectionnée,ac8b2bbe
 NO_COMMENTS_ADDED,Aucun commentaire ajouté,7fd30c97

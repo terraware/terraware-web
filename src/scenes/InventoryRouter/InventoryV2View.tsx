@@ -53,6 +53,34 @@ export type InventoryResult = {
   facilityInventories: FacilityName[];
 };
 
+export type SpeciesInventoryResult = {
+  id: string;
+  scientificName: string;
+  commonName?: string;
+  inventory?: {
+    'germinatingQuantity(raw)': string;
+    'hardeningOffQuantity(raw)': string;
+    'readyQuantity(raw)': string;
+    'activeGrowthQuantity(raw)': string;
+    'totalQuantity(raw)': string;
+    facilityInventories: FacilityName[];
+  };
+};
+
+export type SpeciesFacilitiesInventoryResult = {
+  id: string;
+  scientificName: string;
+  commonName?: string;
+  facilityInventories?: {
+    'germinatingQuantity(raw)': string;
+    'hardeningOffQuantity(raw)': string;
+    'readyQuantity(raw)': string;
+    'activeGrowthQuantity(raw)': string;
+    'totalQuantity(raw)': string;
+    facility_name: string;
+  }[];
+};
+
 export type FacilitySpeciesInventoryResult = {
   facility_id: string;
   facility_name: string;

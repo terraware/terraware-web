@@ -7,14 +7,10 @@ import Card from 'src/components/common/Card';
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import { DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
 import { useLocalization, useOrganization } from 'src/providers';
-import { InventoryFiltersType } from 'src/scenes/InventoryRouter/InventoryFilter';
+import { isSpeciesEmpty } from 'src/scenes/InventoryRouter/FilterUtils';
+import { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';
 import InventoryTable from 'src/scenes/InventoryRouter/InventoryTable';
-import {
-  FacilityInventoryResult,
-  InventoryResult,
-  InventoryResultWithFacilityNames,
-} from 'src/scenes/InventoryRouter/InventoryV2View';
-import { NurseryBatchService } from 'src/services';
+import { SpeciesFacilitiesInventoryResult, SpeciesInventoryResult } from 'src/scenes/InventoryRouter/InventoryV2View';
 import NurseryInventoryService, { BE_SORTED_FIELDS, SearchInventoryParams } from 'src/services/NurseryInventoryService';
 import { SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
@@ -32,26 +28,26 @@ export default function InventoryListBySpecies({ setReportData }: InventoryListB
   const numberFormatter = useNumberFormatter();
   const theme = useTheme();
 
-  const [filters, setFilters] = useForm<InventoryFiltersType>({});
+  const [filters, setFilters] = useForm<InventoryFiltersUnion>({});
   const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>(null);
   const [showResults, setShowResults] = useState(false);
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(temporalSearchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
   const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder | undefined>({
-    field: 'species_scientificName',
+    field: 'scientificName',
     direction: 'Ascending',
   });
 
   const columns = useMemo(
     (): TableColumnType[] => [
       {
-        key: 'species_scientificName',
+        key: 'scientificName',
         name: strings.SPECIES,
         type: 'string',
         tooltipTitle: strings.TOOLTIP_SCIENTIFIC_NAME,
       },
       {
-        key: 'species_commonName',
+        key: 'commonName',
         name: strings.COMMON_NAME,
         type: 'string',
         tooltipTitle: strings.TOOLTIP_COMMON_NAME,
@@ -103,6 +99,9 @@ export default function InventoryListBySpecies({ setReportData }: InventoryListB
     if (selectedOrganization) {
       const requestId = Math.random().toString();
       setRequestId('searchInventory', requestId);
+
+      const showEmptySpecies = (filters.showEmptySpecies || [])[0] === 'true';
+
       setReportData({
         organizationId: selectedOrganization.id,
         query: debouncedSearchTerm,
@@ -110,84 +109,120 @@ export default function InventoryListBySpecies({ setReportData }: InventoryListB
         searchSortOrder,
       });
 
-      const allBatchesResult = await NurseryBatchService.getAllBatches(selectedOrganization.id, searchSortOrder);
-
-      const apiSearchResults = await NurseryInventoryService.searchInventory({
+      const apiSearchResults = await NurseryInventoryService.searchSpeciesInventory({
         organizationId: selectedOrganization.id,
         query: debouncedSearchTerm,
         facilityIds: filters.facilityIds,
         searchSortOrder,
       });
 
-      let updatedResult: InventoryResultWithFacilityNames[] | undefined = [];
-      if (filters.facilityIds && filters.facilityIds.length) {
-        const nextResults = apiSearchResults?.reduce((acc, result) => {
-          const resultTyped = result as FacilityInventoryResult;
-          const indexFound = acc.findIndex((res) => res.species_id === resultTyped.species_id);
+      const specificFacilities = (filters.facilityIds?.length || 0) > 0;
 
-          if (indexFound !== undefined && indexFound !== -1) {
-            const existingSpecies = acc[indexFound];
-            acc[indexFound] = {
-              ...existingSpecies,
-              germinatingQuantity: (
-                Number(existingSpecies.germinatingQuantity) + Number(resultTyped['germinatingQuantity(raw)'])
-              ).toString(),
-              hardeningOffQuantity: (
-                Number(existingSpecies.hardeningOffQuantity) + Number(resultTyped['hardeningOffQuantity(raw)'])
-              ).toString(),
-              activeGrowthQuantity: (
-                Number(existingSpecies.activeGrowthQuantity) + Number(resultTyped['activeGrowthQuantity(raw)'])
-              ).toString(),
-              readyQuantity: (
-                Number(existingSpecies.readyQuantity) + Number(resultTyped['readyQuantity(raw)'])
-              ).toString(),
-              totalQuantity: (
-                Number(existingSpecies.totalQuantity) + Number(resultTyped['totalQuantity(raw)'])
-              ).toString(),
-              facilityInventories: `${existingSpecies.facilityInventories}\r${resultTyped.facility_name}`,
+      const updatedResult = apiSearchResults?.map((result) => {
+        const resultTyped = specificFacilities
+          ? (result as SpeciesFacilitiesInventoryResult)
+          : (result as SpeciesInventoryResult);
+        const facilityInventoriesNames = specificFacilities
+          ? (resultTyped as SpeciesFacilitiesInventoryResult).facilityInventories?.map((fi) => fi.facility_name) || []
+          : (resultTyped as SpeciesInventoryResult).inventory?.facilityInventories?.map(
+              (nursery) => nursery.facility_name
+            ) || [];
+
+        const getQuantities = () => {
+          if (specificFacilities) {
+            const typedResult = resultTyped as SpeciesFacilitiesInventoryResult;
+            if (!typedResult.facilityInventories) {
+              return {
+                germinatingQuantity: '0',
+                hardeningOffQuantity: '0',
+                activeGrowthQuantity: '0',
+                readyQuantity: '0',
+                totalQuantity: '0',
+              };
+            }
+            const aggregated = typedResult.facilityInventories.reduce(
+              (acc, fi) => ({
+                germinatingQuantity: acc.germinatingQuantity + Number(fi['germinatingQuantity(raw)']),
+                hardeningOffQuantity: acc.hardeningOffQuantity + Number(fi['hardeningOffQuantity(raw)']),
+                activeGrowthQuantity: acc.activeGrowthQuantity + Number(fi['activeGrowthQuantity(raw)']),
+                readyQuantity: acc.readyQuantity + Number(fi['readyQuantity(raw)']),
+                totalQuantity: acc.totalQuantity + Number(fi['totalQuantity(raw)']),
+              }),
+              {
+                germinatingQuantity: 0,
+                hardeningOffQuantity: 0,
+                activeGrowthQuantity: 0,
+                readyQuantity: 0,
+                totalQuantity: 0,
+              }
+            );
+            return {
+              germinatingQuantity: numberFormatter.format(aggregated.germinatingQuantity),
+              hardeningOffQuantity: numberFormatter.format(aggregated.hardeningOffQuantity),
+              activeGrowthQuantity: numberFormatter.format(aggregated.activeGrowthQuantity),
+              readyQuantity: numberFormatter.format(aggregated.readyQuantity),
+              totalQuantity: numberFormatter.format(aggregated.totalQuantity),
             };
           } else {
-            const transformedResult: InventoryResultWithFacilityNames = {
-              facility_id: resultTyped.facility_id,
-              species_id: resultTyped.species_id,
-              species_scientificName: resultTyped.species_scientificName,
-              species_commonName: resultTyped.species_commonName,
-              germinatingQuantity: resultTyped['germinatingQuantity(raw)'],
-              hardeningOffQuantity: resultTyped['hardeningOffQuantity(raw)'],
-              activeGrowthQuantity: resultTyped['activeGrowthQuantity(raw)'],
-              readyQuantity: resultTyped['readyQuantity(raw)'],
-              totalQuantity: resultTyped['totalQuantity(raw)'],
-              facilityInventories: resultTyped.facility_name,
+            const typedResult = resultTyped as SpeciesInventoryResult;
+            return {
+              germinatingQuantity: typedResult.inventory
+                ? numberFormatter.format(Number(typedResult.inventory['germinatingQuantity(raw)']))
+                : '0',
+              hardeningOffQuantity: typedResult.inventory
+                ? numberFormatter.format(Number(typedResult.inventory['hardeningOffQuantity(raw)']))
+                : '0',
+              activeGrowthQuantity: typedResult.inventory
+                ? numberFormatter.format(Number(typedResult.inventory['activeGrowthQuantity(raw)']))
+                : '0',
+              readyQuantity: typedResult.inventory
+                ? numberFormatter.format(Number(typedResult.inventory['readyQuantity(raw)']))
+                : '0',
+              totalQuantity: typedResult.inventory
+                ? numberFormatter.format(Number(typedResult.inventory['totalQuantity(raw)']))
+                : '0',
             };
-
-            acc.push(transformedResult);
           }
-          return acc;
-        }, [] as InventoryResultWithFacilityNames[]);
+        };
 
-        // format results
-        updatedResult = nextResults?.map((uR) => {
-          return {
-            ...uR,
-            germinatingQuantity: numberFormatter.format(Number(uR.germinatingQuantity)),
-            hardeningOffQuantity: numberFormatter.format(Number(uR.hardeningOffQuantity)),
-            activeGrowthQuantity: numberFormatter.format(Number(uR.activeGrowthQuantity)),
-            readyQuantity: numberFormatter.format(Number(uR.readyQuantity)),
-            totalQuantity: numberFormatter.format(Number(uR.totalQuantity)),
-          };
-        });
-      } else {
-        updatedResult = apiSearchResults?.map((result) => {
-          const resultTyped = result as InventoryResult;
-          const facilityInventoriesNames = resultTyped.facilityInventories.map((nursery) => nursery.facility_name);
-          return { ...resultTyped, facilityInventories: facilityInventoriesNames.join('\r') };
-        });
-      }
-      if (updatedResult) {
-        if (getRequestId('searchInventory') === requestId) {
-          setShowResults((allBatchesResult?.length || 0) > 0);
-          setSearchResults(updatedResult);
-        }
+        const quantities = getQuantities();
+
+        return {
+          ...resultTyped,
+          ...quantities,
+          facilityInventories: facilityInventoriesNames.join('\r'),
+          inventory: specificFacilities ? undefined : (resultTyped as SpeciesInventoryResult).inventory,
+          'totalQuantity(raw)': specificFacilities
+            ? (resultTyped as SpeciesFacilitiesInventoryResult).facilityInventories?.reduce(
+                (acc, fi) => acc + Number(fi['totalQuantity(raw)']),
+                0
+              ) || 0
+            : Number((resultTyped as SpeciesInventoryResult).inventory?.['totalQuantity(raw)'] || 0),
+          'germinatingQuantity(raw)': specificFacilities
+            ? (resultTyped as SpeciesFacilitiesInventoryResult).facilityInventories?.reduce(
+                (acc, fi) => acc + Number(fi['germinatingQuantity(raw)']),
+                0
+              ) || 0
+            : Number((resultTyped as SpeciesInventoryResult).inventory?.['germinatingQuantity(raw)'] || 0),
+        };
+      });
+
+      const filteredResult = updatedResult?.filter(
+        (result) =>
+          showEmptySpecies ||
+          (specificFacilities
+            ? Number(result['totalQuantity(raw)']) > 0 && Number(result['germinatingQuantity(raw)']) > 0
+            : !isSpeciesEmpty(result))
+      );
+
+      if (updatedResult && getRequestId('searchInventory') === requestId) {
+        const hasInventory = specificFacilities
+          ? updatedResult.some(
+              (species) => Number(species['totalQuantity(raw)']) > 0 && Number(species['germinatingQuantity(raw)']) > 0
+            )
+          : apiSearchResults?.some((speciesInventory) => !!speciesInventory.inventory) || false;
+        setShowResults(showEmptySpecies || hasInventory);
+        setSearchResults(filteredResult || []);
       }
     }
   }, [filters, debouncedSearchTerm, selectedOrganization, searchSortOrder, numberFormatter, setReportData]);

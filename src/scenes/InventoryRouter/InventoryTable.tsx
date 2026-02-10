@@ -213,6 +213,8 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
           searchValue={temporalSearchValue}
           setFilters={setSearchFilters}
           showEmptyBatchesFilter={origin === 'Batches'}
+          showEmptySpeciesFilter={origin === 'Species'}
+          showEmptyNurseriesFilter={origin === 'Nursery'}
           showProjectsFilter={origin === 'Batches'}
         />
       </Box>
