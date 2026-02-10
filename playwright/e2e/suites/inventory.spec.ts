@@ -317,7 +317,7 @@ const getBatchNumberBySpeciesAndNursery = async (page: Page, species: string, nu
       .locator('..')
       .evaluate((el) => el.id)
   )
-    .replace('-scientificName', '')
+    .replace('-species_scientificName', '')
     .replace('_noLink', '');
   return (await page.locator(`#${rowNumber}-batchNumber`).textContent()) as string;
 };
