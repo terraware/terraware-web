@@ -121,7 +121,9 @@
 <a name='L56'></a><a href='#L56'>56</a>
 <a name='L57'></a><a href='#L57'>57</a>
 <a name='L58'></a><a href='#L58'>58</a>
-<a name='L59'></a><a href='#L59'>59</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -168,6 +170,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -194,26 +198,28 @@ export type Invento<span class="cstat-no" title="statement not covered" >ryFilte
 type<span class="cstat-no" title="statement not covered" > InventoryFiltersBooleanType = {</span>
   // H<span class="cstat-no" title="statement not covered" >as to match up with SearchNodePayload['values']</span>
   showEm<span class="cstat-no" title="statement not covered" >ptyBatches?: (string | nul<span class="fstat-no" title="function not covered" >l)</span>[];<span class="cstat-no" title="statement not covered" ></span></span>
+  showEmptySpecies?: (string | null)[];
+<span class="cstat-no" title="statement not covered" >  showEmptyNu</span>rseries?: (string | null)[];
 };
-<span class="cstat-no" title="statement not covered" ></span>
-export type InventoryFiltersUnion = InventoryFiltersType &amp; InventoryFiltersBooleanType;
 <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+export type InventoryFiltersUnion = InventoryFiltersType &amp; InventoryFiltersBooleanType;
+&nbsp;
 type InventoryFilterProps = {
   disabled?: boolean;
   filterKey: keyof InventoryFiltersType;
   filters: InventoryFiltersType;
   label: string;
-  notPresentFilterLabel?: string;
-  notPresentFilterShown?: boolean;
-  options: number[]<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >;<span class="cstat-no" title="statement not covered" ></span></span></span>
-  renderOption: (id:<span class="cstat-no" title="statement not covered" > st</span>ring | number) =&gt; string;
-<span class="cstat-no" title="statement not covered" >  setFilters: (f: InventoryFiltersType) =&gt; void;</span>
-};<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >export default function InventoryFilter(props:</span> InventoryFilterProps): JSX.Element {
-  const {<span class="cstat-no" title="statement not covered" ></span>
-    disabled,<span class="cstat-no" title="statement not covered" ></span>
-    filte<span class="fstat-no" title="function not covered" >rKey,</span>
+  notPresentFilterL<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ab</span>el?: st<span class="cstat-no" title="statement not covered" >ring;</span></span>
+  notPresentFilterSh<span class="cstat-no" title="statement not covered" >own</span>?: boolean;
+<span class="cstat-no" title="statement not covered" >  options: number[];</span>
+  renderOpt<span class="fstat-no" title="function not covered" >io</span>n: (<span class="cstat-no" title="statement not covered" >id: string | num</span>ber) =&gt; string;
+  setFilters: (f: InventoryFiltersType) =&gt; void;
+<span class="cstat-no" title="statement not covered" >};</span>
+<span class="cstat-no" title="statement not covered" ></span>
+export default function InventoryFilter(<span class="cstat-no" title="statement not covered" >props: InventoryFilterProps): JSX.Element {</span>
+  const {<span class="fstat-no" title="function not covered" ></span>
+    disabled,
+    filterKey,
     filters,
     label,
     notPresentFilterLabel,
@@ -222,10 +228,10 @@ type InventoryFilterProps = {
     renderOption,
     setFilters,
   } = props;
-&nbsp;
-  return (
-    &lt;F<span class="cstat-no" title="statement not covered" >ilterM</span>ultiSelectContainer&lt;InventoryFiltersType&gt;
-<span class="cstat-no" title="statement not covered" >      disabled={disabled}</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >  return (</span>
+    &lt;FilterMultiSelectContainer&lt;InventoryFiltersType&gt;
+      disabled={disabled}
       filterKey={filterKey}
       filters={filters}
       label={label}
@@ -244,7 +250,7 @@ type InventoryFilterProps = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-09T19:46:56.461Z
+                at 2026-02-10T18:46:15.456Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

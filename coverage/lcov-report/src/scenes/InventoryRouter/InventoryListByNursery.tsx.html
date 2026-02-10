@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/76</span>
+                <span class='fraction'>0/80</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/59</span>
+                <span class='fraction'>0/67</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/18</span>
+                <span class='fraction'>0/19</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/67</span>
+                <span class='fraction'>0/70</span>
             </div>
         
             
@@ -249,7 +249,12 @@
 <a name='L184'></a><a href='#L184'>184</a>
 <a name='L185'></a><a href='#L185'>185</a>
 <a name='L186'></a><a href='#L186'>186</a>
-<a name='L187'></a><a href='#L187'>187</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L187'></a><a href='#L187'>187</a>
+<a name='L188'></a><a href='#L188'>188</a>
+<a name='L189'></a><a href='#L189'>189</a>
+<a name='L190'></a><a href='#L190'>190</a>
+<a name='L191'></a><a href='#L191'>191</a>
+<a name='L192'></a><a href='#L192'>192</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -293,6 +298,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -356,6 +362,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -386,6 +393,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -395,6 +403,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -444,33 +454,34 @@ import Card from 's<span class="cstat-no" title="statement not covered" >rc/comp
 import EmptySta<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >te</span>Page from 'src/components/emptyStatePages/EmptyStatePage';</span>
 im<span class="cstat-no" title="statement not covered" >port { DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';</span>
 impo<span class="cstat-no" title="statement not covered" >rt { useLocalization, useOrganization } from 'src/providers';</span>
-import { InventoryFiltersType } from 'src/scenes/InventoryRouter/InventoryFilter';
-import InventoryTa<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >bl</span>e from 'src/scenes/InventoryRouter/InventoryTable';</span>
-im<span class="cstat-no" title="statement not covered" >port { FacilitySpeciesInventoryResult } from 'src/scenes/InventoryRouter/InventoryV2View';</span>
-impo<span class="cstat-no" title="statement not covered" >rt { NurseryBatchService } from 'src/services';</span>
-import<span class="cstat-no" title="statement not covered" > NurseryInventoryService, { BE_SORTED_FIELDS, SearchInventoryParams } from 'src/services/NurseryInventoryService';</span>
-import {<span class="cstat-no" title="statement not covered" > SearchResponseElement, Se<span class="fstat-no" title="function not covered" >ar</span>chSo<span class="cstat-no" title="statement not covered" >rtOrder } </span>from 'src/types/Search';</span>
-import { getRequestId, setRequestId } from 'src/utils/requestsId';
-im<span class="cstat-no" title="statement not covered" >port useDeb</span>ounce from 'src/utils/useDebounce';
-import useForm from 'src/utils/useForm';
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+import { isNurseryEmpty } from 'src/scenes/InventoryRouter/FilterUtils';
+import { Inventory<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Fi</span>ltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';</span>
+im<span class="cstat-no" title="statement not covered" >port InventoryTable from 'src/scenes/InventoryRouter/InventoryTable';</span>
+impo<span class="cstat-no" title="statement not covered" >rt { FacilitySpeciesInventoryResult } from 'src/scenes/InventoryRouter/InventoryV2View';</span>
+import<span class="cstat-no" title="statement not covered" > { NurseryBatchService } from 'src/services';</span>
+import N<span class="cstat-no" title="statement not covered" >urseryInventoryService, { <span class="fstat-no" title="function not covered" >BE</span>_SOR<span class="cstat-no" title="statement not covered" >TED_FIELDS</span>, SearchInventoryParams } from 'src/services/NurseryInventoryService';</span>
+import { SearchResponseElement, SearchSortOrder } from 'src/types/Search';
+im<span class="cstat-no" title="statement not covered" >port { getR</span>equestId, setRequestId } from 'src/utils/requestsId';
+import useDebounce from 'src/utils/useDebounce';
+import useForm<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > f</span>rom 'src/utils/useForm';<span class="cstat-no" title="statement not covered" ></span></span>
+&nbsp;
 type InventoryListByNurseryProps = {
   setReportData: (data: SearchInventoryParams) =&gt; void;
 };
 &nbsp;
 export default function InventoryListByNursery({ setReportData }: InventoryListByNurseryProps) {
   const { strings } = useLocalization();
-  const { selectedOrganization } = useOrganization();
-  const theme = use<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Th</span>eme();<span class="cstat-no" title="statement not covered" ></span></span>
+  const { selectedO<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >rg</span>anizati<span class="cstat-no" title="statement not covered" >on } = useOrganization();</span></span>
+  const theme = useT<span class="cstat-no" title="statement not covered" >hem</span>e();
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  const [filters, setFilters] = useForm&lt;InventoryFiltersType&gt;({});</span>
-  const [se<span class="fstat-no" title="function not covered" >ar</span>chRe<span class="cstat-no" title="statement not covered" >sults, setSearchResults</span>] = useState&lt;SearchResponseElement[] | null&gt;(null);
-  const [showResults, setShowResults] = useState(false);
-<span class="cstat-no" title="statement not covered" >  const [searchSortOrder, setSearchSortOrder] </span>= useState&lt;SearchSortOrder | undefined&gt;({
-    field: 'facilit<span class="cstat-no" title="statement not covered" >y_name',</span>
-    direction: 'Ascend<span class="cstat-no" title="statement not covered" >ing',</span>
+  const [fi<span class="fstat-no" title="function not covered" >lt</span>ers,<span class="cstat-no" title="statement not covered" > setFilters] = useForm&lt;</span>InventoryFiltersUnion&gt;({});
+  const [searchResults, setSearchResults] = useState&lt;SearchResponseElement[] | null&gt;(null);
+<span class="cstat-no" title="statement not covered" >  const [showResults, setShowResults] = useSta</span>te(false);
+  const [searchSort<span class="cstat-no" title="statement not covered" >Order, setSearchSortOrder]</span> = useState&lt;SearchSortOrder | undefined&gt;({
+    field: 'facility_n<span class="cstat-no" title="statement not covered" >ame',</span>
+    direction: 'As<span class="cstat-no" title="statement not covered" >cending',</span>
   });<span class="cstat-no" title="statement not covered" ></span>
-  const [temporalSearchValue<span class="cstat-no" title="statement not covered" >, setTemporalSearchValue] = useState('');</span>
+  const [temporalSearch<span class="cstat-no" title="statement not covered" >Value, setTemporalSearchV</span>alue] = useState('');
   const debouncedSearch<span class="cstat-no" title="statement not covered" >Term = useDebounce(tempor</span>alSearchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
 <span class="cstat-no" title="statement not covered" ></span>
   const onSearchSortOrder = <span class="cstat-no" title="statement not covered" >useCallback(</span>
@@ -529,6 +540,8 @@ export default function InventoryListByNursery({ setReportData }: InventoryListB
       const requestId = Math.random().toString();
       setRequestId('searchInventory', requestId);
 &nbsp;
+      const showEmptyNurseries = (filters.showEmptyNurseries || [])[0] === 'true';
+&nbsp;
       setReportData({
         organizationId: selectedOrganization.id,
         query: debouncedSearchTerm,
@@ -540,47 +553,49 @@ export default function InventoryListByNursery({ setReportData }: InventoryListB
       const allBatchesResult = await NurseryBatchService.getAllBatches(selectedOrganization.id, searchSortOrder);
 &nbsp;
       const apiSearchResults = await NurseryInventoryService.searchInventoryByNursery({
-        organizationId: selectedOrganization.id,
-        query: debouncedSearchTerm,
-        facilityIds: filt<span class="cstat-no" title="statement not covered" >ers.facilityIds,<span class="fstat-no" title="function not covered" ></span></span>
+        organizationId: s<span class="cstat-no" title="statement not covered" >electedOrganization.id,<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >        query: debouncedSearchTerm,</span>
+        facilityIds: fil<span class="cstat-no" title="statement not covered" >ters.facilityIds,</span>
 <span class="cstat-no" title="statement not covered" >        speciesIds: filters.speciesIds,</span>
         searchSortOrder,<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >      });</span>
-<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
       const updatedResult = apiSearchResults?.map((result) =&gt; {
         const resultTyped = result as FacilitySpeciesInventoryResult;
         const speciesNames =
           resultTyped.facilityInventories?.filter((fi) =&gt; fi.species_id)?.map((inv) =&gt; inv.species_scientificName) ||
           [];
-        const batchIds =
+        const batchIds =<span class="cstat-no" title="statement not covered" ></span>
           resultTyped.facilityI<span class="cstat-no" title="statement not covered" >nventories</span>
-            ?.filter((fi) =&gt; fi<span class="cstat-no" title="statement not covered" >.species_id)</span>
+            ?.filter((fi) =&gt; fi.species_id)
             ?.flatMap((inv) =&gt; inv.batches.map((batch) =&gt; batch.id)) || [];
         return { ...resultTyped, facilityInventories: speciesNames.join('\r'), batchIds };
       });
 &nbsp;
+      const filteredResult = updatedResult?.filter((result) =&gt; showEmptyNurseries || !isNurseryEmpty(result));
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
       if (updatedResult) {
-        if (getRequestId('searchInventory') === requestId) {
-          setShowResults((al<span class="cstat-no" title="statement not covered" >lBatchesResult?.length || 0) &gt; 0);<span class="fstat-no" title="function not covered" ></span></span>
-          setSearchResults(updatedResult);
-        }<span class="cstat-no" title="statement not covered" ></span>
-      }<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
-    }<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span></span></span>
-  }, [fi<span class="cstat-no" title="statement not covered" >lters, debouncedSearchTerm, selectedOrganization, searchSortOrder, setReportData]);</span>
-&nbsp;
-  cons<span class="cstat-no" title="statement not covered" >t reloadData = useCallback(() =&gt; void onApplyFilters(), [onApplyFilters]);</span>
+        if (getRequestId('se<span class="cstat-no" title="statement not covered" >archInv</span>entory') === requestId) {
+          setShowResults((all<span class="cstat-no" title="statement not covered" >BatchesResult?.length || 0) &gt; 0);<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
+          setSearchResult<span class="cstat-no" title="statement not covered" >s(filteredResult || []);<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span></span></span>
+<span class="cstat-no" title="statement not covered" >        }</span>
+      }
+    }<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  }, [<span class="cstat-no" title="statement not covered" >filters, debouncedSearchTerm, selectedOrganization, searchSortOrder, setReportData]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  useEffec<span class="cstat-no" title="statement not covered" >t(() =&gt; {</span>
-    void o<span class="cstat-no" title="statement not covered" >nApplyFilters();</span>
+  const re<span class="cstat-no" title="statement not covered" >loadData = useCallback(() =&gt; void onApplyFilters(), [onApplyFilters]);</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  useEffect(() =&gt; {
+    void onApplyFilters();
   }, [filters, onApplyFilters]);
 &nbsp;
-  return (
-    &lt;Card flushMobile&gt;
-      &lt;Typography<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-<span class="cstat-no" title="statement not covered" >        sx={{<span class="fstat-no" title="function not covered" ></span></span>
+  return (<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+<span class="cstat-no" title="statement not covered" >    &lt;Card flushMobile&gt;<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >      &lt;Typography</span>
+        sx={{
 <span class="cstat-no" title="statement not covered" >          fontSize: '20px',</span>
           fontWeight: 600,
-<span class="cstat-no" title="statement not covered" >          color: theme.palette.TwClrTxt,</span>
+          color: theme.palette.TwClrTxt,
           marginBottom: theme.spacing(2),
         }}
       &gt;
@@ -628,7 +643,7 @@ export default function InventoryListByNursery({ setReportData }: InventoryListB
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-09T19:46:56.461Z
+                at 2026-02-10T18:46:15.456Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

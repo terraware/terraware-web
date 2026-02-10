@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/40</span>
+                <span class='fraction'>0/46</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/17</span>
+                <span class='fraction'>0/19</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>0/20</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/36</span>
+                <span class='fraction'>0/42</span>
             </div>
         
             
@@ -106,7 +106,15 @@
 <a name='L41'></a><a href='#L41'>41</a>
 <a name='L42'></a><a href='#L42'>42</a>
 <a name='L43'></a><a href='#L43'>43</a>
-<a name='L44'></a><a href='#L44'>44</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L44'></a><a href='#L44'>44</a>
+<a name='L45'></a><a href='#L45'>45</a>
+<a name='L46'></a><a href='#L46'>46</a>
+<a name='L47'></a><a href='#L47'>47</a>
+<a name='L48'></a><a href='#L48'>48</a>
+<a name='L49'></a><a href='#L49'>49</a>
+<a name='L50'></a><a href='#L50'>50</a>
+<a name='L51'></a><a href='#L51'>51</a>
+<a name='L52'></a><a href='#L52'>52</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -129,23 +137,31 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -172,25 +188,33 @@ export const removeFilter = (id: number, setFilters: React.Dispatch&lt;React.Set
     };<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
   });<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 };<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >// This is necessary because the Batch type is</span> not hydrated as expected when it comes back within a search response
-export const isBatchEmpty <span class="cstat-no" title="statement not covered" >= (batch: SearchResponseElement): </span>boolean =&gt; {
-  return (<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-    Number(batch<span class="cstat-no" title="statement not covered" >['readyQuantity(raw)']) +<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-<span class="cstat-no" title="statement not covered" >      Number(batch['activeGrowthQuantity(raw)']) +</span>
-<span class="cstat-no" title="statement not covered" >      Number(batch['har</span>deningOffQuantity(raw)']) +
-      Number(batch['germinatingQuantity(raw)']) ===
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+// This is neces<span class="fstat-no" title="function not covered" >sa</span>ry b<span class="cstat-no" title="statement not covered" >ecause the Ba</span>tch type is not hydrated as expected when it comes back within a search response
+export const isBatchEmpty = (batch: SearchResponseElement): boolean =&gt; {
+<span class="cstat-no" title="statement not covered" >  return (</span>
+    Number(batch['readyQua<span class="cstat-no" title="statement not covered" >ntity(raw)']) +</span>
+      Number(batch['act<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >iv</span>eGrowthQuantity(raw)']) +</span>
+      Number(bat<span class="cstat-no" title="statement not covered" >ch['hardeningOffQuantity(raw)']) +<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+<span class="cstat-no" title="statement not covered" >      Number(batch['germinatingQuantity(raw)']) ===</span>
 <span class="cstat-no" title="statement not covered" >    0</span>
   );
-};<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-export const convertFilterGr<span class="cstat-no" title="statement not covered" >oupTo</span>Map = (filterGroupFilters: Record&lt;string, SearchNodePayload&gt;): InventoryFiltersType =&gt;
-  Ob<span class="cstat-no" title="statement not covered" >ject.keys(filterGroupFilters).reduce(</span>
-    (acc, curr) =&gt; ({<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-      ...acc,
-      [curr]: filterGroupFilters[curr].values,
+};<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
+export const isSpecie<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >sE</span>mpty = (species: SearchResponseElement): boolean =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  return !spe<span class="fstat-no" title="function not covered" >ci</span>es.inventory;</span>
+};<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+export const isNurseryEmpty = (nursery: SearchResponseElement): boolea<span class="fstat-no" title="function not covered" >n </span>=&gt; {<span class="cstat-no" title="statement not covered" ></span>
+  return Number(nursery['totalQuantity(raw)']) === 0 &amp;&amp; Number(nursery['germinatingQuantity(raw)']) === 0;
+};
+&nbsp;
+export const convertF<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >il</span>terGroupToMap = (filterGroupFilters: Record&lt;string, SearchNodePayload&gt;): InventoryFiltersType =&gt;</span>
+<span class="cstat-no" title="statement not covered" >  Object.keys(filterGroupFilters).reduce(</span>
+    (acc, curr) =&gt; ({
+      ...acc,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >      [curr]: filterGroupFilt</span>ers[curr].values,
     }),
-    {} as InventoryFi<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >lt</span>ersType</span>
+    {} as InventoryFilt<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >er</span>sType</span>
 <span class="cstat-no" title="statement not covered" >  );</span>
 &nbsp;</pre></td></tr></table></pre>
 
@@ -199,7 +223,7 @@ export const convertFilterGr<span class="cstat-no" title="statement not covered"
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-09T19:46:56.461Z
+                at 2026-02-10T18:46:15.456Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
