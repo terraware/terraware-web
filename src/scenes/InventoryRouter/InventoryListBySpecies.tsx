@@ -198,6 +198,12 @@ export default function InventoryListBySpecies({ setReportData }: InventoryListB
                 0
               ) || 0
             : Number((resultTyped as SpeciesInventoryResult).inventory?.['totalQuantity(raw)'] || 0),
+          'germinatingQuantity(raw)': specificFacilities
+            ? (resultTyped as SpeciesFacilitiesInventoryResult).facilityInventories?.reduce(
+                (acc, fi) => acc + Number(fi['germinatingQuantity(raw)']),
+                0
+              ) || 0
+            : Number((resultTyped as SpeciesInventoryResult).inventory?.['germinatingQuantity(raw)'] || 0),
         };
       });
 
@@ -205,14 +211,14 @@ export default function InventoryListBySpecies({ setReportData }: InventoryListB
         (result) =>
           showEmptySpecies ||
           (specificFacilities
-            ? Number(result['totalQuantity(raw)']) > 0 && Number(result.germinatingQuantity) > 0
+            ? Number(result['totalQuantity(raw)']) > 0 && Number(result['germinatingQuantity(raw)']) > 0
             : !isSpeciesEmpty(result))
       );
 
       if (updatedResult && getRequestId('searchInventory') === requestId) {
         const hasInventory = specificFacilities
           ? updatedResult.some(
-              (species) => Number(species['totalQuantity(raw)']) > 0 && Number(species.germinatingQuantity) > 0
+              (species) => Number(species['totalQuantity(raw)']) > 0 && Number(species['germinatingQuantity(raw)']) > 0
             )
           : apiSearchResults?.some((speciesInventory) => !!speciesInventory.inventory) || false;
         setShowResults(showEmptySpecies || hasInventory);
