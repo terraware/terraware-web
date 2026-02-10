@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/92</span>
+                <span class='fraction'>0/89</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/116</span>
+                <span class='fraction'>0/110</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/22</span>
+                <span class='fraction'>0/20</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/87</span>
+                <span class='fraction'>0/84</span>
             </div>
         
             
@@ -338,12 +338,7 @@
 <a name='L273'></a><a href='#L273'>273</a>
 <a name='L274'></a><a href='#L274'>274</a>
 <a name='L275'></a><a href='#L275'>275</a>
-<a name='L276'></a><a href='#L276'>276</a>
-<a name='L277'></a><a href='#L277'>277</a>
-<a name='L278'></a><a href='#L278'>278</a>
-<a name='L279'></a><a href='#L279'>279</a>
-<a name='L280'></a><a href='#L280'>280</a>
-<a name='L281'></a><a href='#L281'>281</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L276'></a><a href='#L276'>276</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -551,9 +546,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -562,8 +554,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -829,24 +819,19 @@ export default function InventoryListBySpecies({ setReportData }: InventoryListB
 <span class="fstat-no" title="function not covered" ></span>                0<span class="cstat-no" title="statement not covered" ></span>
               ) || 0
 <span class="cstat-no" title="statement not covered" >            : Number((resultTyped as SpeciesInventoryResult).inventory?.['germinatingQuantity(raw)'] || 0),</span>
-        };<span class="cstat-no" title="statement not covered" ></span>
-      });<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-      co<span class="cstat-no" title="statement not covered" >nst filteredResult = updatedResult?.filter(</span>
-<span class="cstat-no" title="statement not covered" >        (result) =&gt;</span>
-          showEmptySpecies ||
-          (specificFacilities
-            ? Number(result['totalQuantity(raw)']) &gt; 0 &amp;&amp; Number(result['germinatingQuantity(raw)']) &gt; 0
-            : !isSpec<span class="cstat-no" title="statement not covered" >iesEmpty(result))<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-<span class="cstat-no" title="statement not covered" >      );<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >        };</span>
+      })<span class="cstat-no" title="statement not covered" >;</span>
+&nbsp;
+      const filteredResult = updatedResult?.filter(
+        (result) =&gt;
+          showEmptySp<span class="cstat-no" title="statement not covered" >ecies ||<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+<span class="cstat-no" title="statement not covered" >          (specificFacilities<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >            ? Number(result</span>['totalQuantity(raw)']) &gt; 0 &amp;&amp; Number(result['germinatingQuantity(raw)']) &gt; 0
+            : !isSpeciesEmpty(result))
+<span class="cstat-no" title="statement not covered" >      );</span>
+&nbsp;
       if (updatedResult &amp;&amp; getRequestId('searchInventory') === requestId) {
-<span class="cstat-no" title="statement not covered" >        const hasInventory = specificFacilities</span>
-          ? updatedResult.some(
-              (species) =&gt; Number(species['totalQuantity(raw)']) &gt; 0 &amp;&amp; Number(species['germinatingQuantity(raw)']) &gt; 0
-            )
-          : apiSearchResults?.some((speciesInventory) =&gt; !!speciesInventory.inventory) || false;
-        setShowResults(showEmptySpecies || hasInventory);
+        setShowResults((apiSearchResults?.length || 0) &gt; 0);
         setSearchResults(filteredResult || []);
       }
     }
@@ -910,7 +895,7 @@ export default function InventoryListBySpecies({ setReportData }: InventoryListB
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-10T18:46:15.456Z
+                at 2026-02-10T20:52:50.975Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

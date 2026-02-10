@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/335</span>
+                <span class='fraction'>0/336</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/75</span>
+                <span class='fraction'>0/76</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/325</span>
+                <span class='fraction'>0/326</span>
             </div>
         
             
@@ -983,7 +983,15 @@
 <a name='L918'></a><a href='#L918'>918</a>
 <a name='L919'></a><a href='#L919'>919</a>
 <a name='L920'></a><a href='#L920'>920</a>
-<a name='L921'></a><a href='#L921'>921</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L921'></a><a href='#L921'>921</a>
+<a name='L922'></a><a href='#L922'>922</a>
+<a name='L923'></a><a href='#L923'>923</a>
+<a name='L924'></a><a href='#L924'>924</a>
+<a name='L925'></a><a href='#L925'>925</a>
+<a name='L926'></a><a href='#L926'>926</a>
+<a name='L927'></a><a href='#L927'>927</a>
+<a name='L928'></a><a href='#L928'>928</a>
+<a name='L929'></a><a href='#L929'>929</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1490,7 +1498,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1720,6 +1728,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2410,7 +2426,7 @@ export default function Se<span class="cstat-no" title="statement not covered" >
         return Number(batch['readyQuantity(raw)']) &gt; 0;
       });
 &nbsp;
-      if (!hasReadyQuantities) {
+      if (!hasReadyQuantities) {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
         if (!noReadySeedlings) {
           setNoReadySeedlings(true);
           updatePurpose(NURSERY_TRANSFER);
@@ -2517,6 +2533,14 @@ export default function Se<span class="cstat-no" title="statement not covered" >
             &lt;Typography&gt;{strings.WITHDRAW_INSTRUCTIONS}&lt;/Typography&gt;
             &lt;Grid padding={theme.spacing(4, 0, 0)}&gt;
               &lt;Typography fontSize='14px' fontWeight={400} lineHeight='20px'&gt;
+                {strings.BATCHES_SELECTED}
+              &lt;/Typography&gt;
+              &lt;Typography fontSize='16px' fontWeight={500} lineHeight='24px' marginTop='12px'&gt;
+                {batches.map((batch) =&gt; batch.batchNumber).join(', ')}
+              &lt;/Typography&gt;
+            &lt;/Grid&gt;
+            &lt;Grid padding={theme.spacing(4, 0, 0)}&gt;
+              &lt;Typography fontSize='14px' fontWeight={400} lineHeight='20px'&gt;
                 {strings.SPECIES_SELECTED}
               &lt;/Typography&gt;
               &lt;Typography fontSize='16px' fontWeight={500} lineHeight='24px' marginTop='12px'&gt;
@@ -2525,7 +2549,7 @@ export default function Se<span class="cstat-no" title="statement not covered" >
             &lt;/Grid&gt;
             &lt;Grid padding={theme.spacing(4, 0, 0)}&gt;
               &lt;FormControl&gt;
-                &lt;FormLabel
+                &lt;FormL<span class="fstat-no" title="function not covered" >ab</span>el<span class="cstat-no" title="statement not covered" ></span>
                   sx={{
                     color: theme.palette.TwClrTxtSecondary,
                     fontSize: '14px',
@@ -2533,7 +2557,7 @@ export default function Se<span class="cstat-no" title="statement not covered" >
                       color: theme.palette.TwClrTxtSecondary,
                     },
                   }}
-                &gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+                &gt;
                   {strings.PURPOSE_REQUIRED}
                 &lt;/FormLabel&gt;
                 &lt;RadioGroup name='radio-buttons-purpose' value={localRecord.purpose} onChange={onChangePurpose}&gt;
@@ -2545,7 +2569,7 @@ export default function Se<span class="cstat-no" title="statement not covered" >
                       disabled={outplantDisabled}
                     /&gt;
                   )}
-                  &lt;FormControlLabel
+                  &lt;For<span class="fstat-no" title="function not covered" >mC</span>ontrolLab<span class="cstat-no" title="statement not covered" >el</span>
                     value={NURSERY_TRANSFER}
                     control={&lt;Radio /&gt;}
                     label={getNurseryTransferLabel()}
@@ -2553,7 +2577,7 @@ export default function Se<span class="cstat-no" title="statement not covered" >
                   /&gt;
                   &lt;FormControlLabel value={DEAD} control={&lt;Radio /&gt;} label={strings.DEAD} /&gt;
                   &lt;FormControlLabel value={OTHER} control={&lt;Radio /&gt;} label={strings.OTHER} /&gt;
-                &lt;/Radi<span class="fstat-no" title="function not covered" >oG</span>roup&gt;<span class="cstat-no" title="statement not covered" ></span>
+                &lt;/RadioGroup&gt;
               &lt;/FormControl&gt;
             &lt;/Grid&gt;
 &nbsp;
@@ -2564,7 +2588,7 @@ export default function Se<span class="cstat-no" title="statement not covered" >
                   placeholder={strings.SELECT}
                   label={strings.FROM_NURSERY_REQUIRED}
                   selectedValue={selectedNursery?.id.toString() || ''}
-                  options={nurseriesOptions}
+                  opti<span class="fstat-no" title="function not covered" >on</span>s={nurser<span class="cstat-no" title="statement not covered" >iesOptions}</span>
                   onChange={(newValue) =&gt; onChangeFromNursery(newValue)}
                   fullWidth={true}
                   errorText={fieldsErrors.fromFacilityId}
@@ -2572,10 +2596,10 @@ export default function Se<span class="cstat-no" title="statement not covered" >
               &lt;/Grid&gt;
             &lt;/Grid&gt;
 &nbsp;
-            {isNursery<span class="fstat-no" title="function not covered" >Tr</span>ansfer &amp;&amp;<span class="cstat-no" title="statement not covered" > (</span>
+            {isNurseryTransfer &amp;&amp; (
               &lt;Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}&gt;
                 &lt;Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}&gt;
-                  &lt;Dropdown
+                  &lt;Dro<span class="fstat-no" title="function not covered" >pd</span>own<span class="cstat-no" title="statement not covered" ></span>
                     id='destinationFacilityId'
                     placeholder={strings.SELECT}
                     label={strings.TO_NURSERY_REQUIRED}
@@ -2583,7 +2607,7 @@ export default function Se<span class="cstat-no" title="statement not covered" >
                     options={destinationNurseriesOptions}
                     onChange={(value) =&gt; updateField('destinationFacilityId', value)}
                     errorText={fieldsErrors.destinationFacilityId}
-                    fu<span class="fstat-no" title="function not covered" >ll</span>Width={tr<span class="cstat-no" title="statement not covered" >ue}</span>
+                    fullWidth={true}
                   /&gt;
                 &lt;/Grid&gt;
               &lt;/Grid&gt;
@@ -2592,7 +2616,7 @@ export default function Se<span class="cstat-no" title="statement not covered" >
             {!isSingleBatch &amp;&amp; (availableProjects || []).length &gt; 0 &amp;&amp; (
               &lt;Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}&gt;
                 &lt;Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}&gt;
-                  &lt;ProjectsDropdown&lt;{ projectId?: number }&gt;
+                  &lt;Pro<span class="fstat-no" title="function not covered" >je</span>ctsDropdo<span class="cstat-no" title="statement not covered" >wn&lt;{ projectId?: number }&gt;</span>
                     availableProjects={availableProjects}
                     label={strings.FILTER_BY_PROJECT}
                     record={projectRecord}
@@ -2600,7 +2624,7 @@ export default function Se<span class="cstat-no" title="statement not covered" >
                       const nextRecord = setFn(projectRecord);
                       setProjectRecord(nextRecord);
                       if (nextRecord.projectId) {
-<span class="fstat-no" title="function not covered" ></span>                        setFilter<span class="cstat-no" title="statement not covered" >ProjectId(nextRecord.projectId);</span>
+                        setFilterProjectId(nextRecord.projectId);
                       }
                     }}
                   /&gt;
@@ -2609,7 +2633,7 @@ export default function Se<span class="cstat-no" title="statement not covered" >
             )}
 &nbsp;
             {isOutplant &amp;&amp; (
-              &lt;&gt;
+              &lt;&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
                 &lt;Divisor mt={3} /&gt;
                 &lt;Grid&gt;
                   &lt;Dropdown
@@ -2617,12 +2641,12 @@ export default function Se<span class="cstat-no" title="statement not covered" >
                     placeholder={strings.SELECT}
                     label={strings.TO_PLANTING_SITE_REQUIRED}
                     selectedValue={localRecord.plantingSiteId?.toString()}
-                    op<span class="fstat-no" title="function not covered" >ti</span>ons={getP<span class="cstat-no" title="statement not covered" >lantingSitesOptions()}</span>
+                    options={getPlantingSitesOptions()}
                     onChange={(value) =&gt; onChangePlantingSite(value)}
                     fullWidth={true}
                     errorText={fieldsErrors.plantingSiteId}
                     tooltipTitle={
-                      &lt;a href={APP_PATHS.PLANTING_SITES} target='_blank' rel='noreferrer'&gt;
+<span class="fstat-no" title="function not covered" >                      &lt;a</span> href={AP<span class="cstat-no" title="statement not covered" >P_PATHS.PLANTING_SITES} target='_blan</span>k' rel='noreferrer'&gt;
                         {strings.VIEW_SITES_STRATA_SUBSTRATA}
                       &lt;/a&gt;
                     }
@@ -2630,8 +2654,8 @@ export default function Se<span class="cstat-no" title="statement not covered" >
                   /&gt;
                 &lt;/Grid&gt;
                 {!!strata.length &amp;&amp; (
-                  &lt;Sub<span class="fstat-no" title="function not covered" >st</span>ratumSele<span class="cstat-no" title="statement not covered" >ctor</span>
-                    strata={strata}
+                  &lt;SubstratumSelector
+                    st<span class="fstat-no" title="function not covered" >ra</span>ta={strat<span class="cstat-no" title="statement not covered" >a}</span>
                     onStratumSelected={onChangeStratum}
                     onSubstratumSelected={onChangeSubstratum}
                     stratumError={fieldsErrors.stratumId}
@@ -2639,7 +2663,7 @@ export default function Se<span class="cstat-no" title="statement not covered" >
                     selectedSubstratum={selectedSubstratum}
                     selectedStratum={selectedStratum}
                   /&gt;
-                )}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+                )}
               &lt;/&gt;
             )}
             &lt;Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}&gt;
@@ -2830,7 +2854,7 @@ export default function Se<span class="cstat-no" title="statement not covered" >
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-10T18:46:15.456Z
+                at 2026-02-10T20:52:50.975Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

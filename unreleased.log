@@ -1,3 +1,5 @@
+bbf7bbfc0571 SW-6695 Show "Batches Selected" on withdrawal flow (#5199)
+18b984df97c2 SW-7491 Fix wrong condition to show results in the inventory by species table (#5200)
 65620e8ead4b SW-7491 Inventory: Include "Show Empty Batches" filter in By Species (#5192)
 e53cd38a69b5 Add button to toggle between full screen and modal virtual monitoring plots (#5194)
 8c8d1ce151aa Create a full screen page for virtual monitoring plots (#5193)
