@@ -188,9 +188,7 @@ export default function InventoryListBySpecies({ setReportData }: InventoryListB
         const quantities = getQuantities();
 
         return {
-          id: resultTyped.id,
-          scientificName: resultTyped.scientificName,
-          commonName: resultTyped.commonName,
+          ...resultTyped,
           ...quantities,
           facilityInventories: facilityInventoriesNames.join('\r'),
           inventory: specificFacilities ? undefined : (resultTyped as SpeciesInventoryResult).inventory,

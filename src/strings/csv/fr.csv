@@ -1150,7 +1150,7 @@ NO,Non,3c5beb81
 NO_ACTIVITIES_TO_SHOW,Aucune activité à afficher.,1b075899
 NO_AVAILABLE_PROJECTS_FOR_SPECIES,Il n'y a pas d'autres projets disponibles pour cette espèce.,071c6205
 NO_BATCHES_TO_WITHDRAW_FROM,Il n'y a pas de lots dont les quantités peuvent être retirés.,dc94bdcc
-NO_BATCHES_WITH_INVENTORY,"Tous les lots ayant eu un inventaire sont maintenant vides. Pour voir les lots vides ainsi que les espèces et pépinières qui avaient auparavant un inventaire, utilisez les filtres « Afficher les lots vides » et « Afficher les espèces/pépinières sans inventaire ».",0775eafb
+NO_BATCHES_WITH_INVENTORY,"Tous les lots ayant eu un inventaire sont maintenant vides. Pour afficher les lots, espèces et pépinières qui avaient auparavant un inventaire, utilisez les filtres « Afficher les lots vides » et « Afficher les espèces/pépinières sans inventaire ».",2c0612be
 NO_BATCHES_WITH_INVENTORY_MESSAGE,Aucun lot ne possède d’inventaire. Utilisez le filtre « Afficher les lots vides » pour voir tous vos lots vides.,c326ecab
 NO_COLUMNS_SELECTED,Aucune colonne sélectionnée,ac8b2bbe
 NO_COMMENTS_ADDED,Aucun commentaire ajouté,7fd30c97

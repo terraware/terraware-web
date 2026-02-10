@@ -1151,7 +1151,7 @@ NO,No,3c5beb81
 NO_ACTIVITIES_TO_SHOW,No hay actividades para mostrar.,1b075899
 NO_AVAILABLE_PROJECTS_FOR_SPECIES,No hay más proyectos disponibles para esta especie.,071c6205
 NO_BATCHES_TO_WITHDRAW_FROM,No hay lotes con cantidades disponibles.,dc94bdcc
-NO_BATCHES_WITH_INVENTORY,"Todos los lotes que tenían inventario ahora están vacíos. Para ver lotes vacíos y especies y viveros que anteriormente tenían inventario, utilice los filtros “Mostrar lotes vacíos” y “Mostrar especies/viveros sin inventario”.",0775eafb
+NO_BATCHES_WITH_INVENTORY,"Todos los lotes que tenían inventario ahora están vacíos. Para ver los lotes, especies y viveros que anteriormente tenían inventario, utilice los filtros “Mostrar lotes vacíos” y “Mostrar especies/viveros sin inventario”.",2c0612be
 NO_BATCHES_WITH_INVENTORY_MESSAGE,Ningún lote tiene inventario. Utilice el filtro “Mostrar lotes vacíos” para ver todos sus lotes vacíos.,c326ecab
 NO_COLUMNS_SELECTED,Sin columnas seleccionadas,ac8b2bbe
 NO_COMMENTS_ADDED,Ningún comentario añadido,7fd30c97
