@@ -271,6 +271,9 @@ BY_NURSERY,Par pépinière,a0a2faa5
 BY_SPECIES,Par espèce,602624ab
 CALCULATED_PLANT_DENSITY_FROM_WITHDRAWALS,Densité de plants calculée à partir des retraits,d06a4b56
 CALCULATED_PLANT_DENSITY_FROM_WITHDRAWALS_TOOLTIP,"Pour utiliser la densité de plantation calculée à partir des retraits de plantation, cochez la case. Pour remplacer cette donnée, saisissez manuellement une valeur dans les champs de densité de plantation à gauche.",c674df96
+CAMERA_FOCUS_POINT,Point de mise au point,350a921b
+CAMERA_INFO,Informations sur la caméra,4283d43c
+CAMERA_POSITION,Position,3eb30313
 CANCEL,Annuler,e73dc4d4
 CANCEL_DATA_CHECK,Annuler la vérification des données,5f140f00
 CANNOT_BE_CALCULATED,Impossible à calculer,19dafba4
