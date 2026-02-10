@@ -48,6 +48,7 @@ const VirtualMonitoringPlot = ({
   const [isEdit, setIsEdit] = useState(false);
   const [selectedAnnotationIndex, setSelectedAnnotationIndex] = useState<number>(-1);
   const [localAnnotations, setLocalAnnotations] = useState(annotations);
+  const [isTextFieldFocused, setIsTextFieldFocused] = useState(false);
   const [saveAnnotations] = useSetObservationSplatAnnotationsMutation();
 
   const splatSrc = useMemo(
@@ -180,7 +181,7 @@ const VirtualMonitoringPlot = ({
             moveFastSpeed={0.5}
             moveSlowSpeed={0.15}
             rotateSpeed={0.1}
-            enableFly={!(isEdit && selectedAnnotationIndex >= 0)}
+            enableFly={!isTextFieldFocused}
           />
         </Entity>
         <Script script={XrControllers} enabled={!isEdit} />
@@ -235,6 +236,7 @@ const VirtualMonitoringPlot = ({
         hasSelectedAnnotation={selectedAnnotationIndex >= 0}
         selectedAnnotation={selectedAnnotationIndex >= 0 ? localAnnotations[selectedAnnotationIndex] : null}
         onAnnotationUpdate={handleAnnotationUpdate}
+        onTextFieldFocus={setIsTextFieldFocused}
         canSave={canSave}
         editable={editable}
         isFullScreen={isFullScreen}

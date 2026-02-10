@@ -11,9 +11,10 @@ interface AnnotationEditPaneProps {
   visible: boolean;
   annotation: AnnotationProps | null;
   onUpdate: (updates: Partial<AnnotationProps>) => void;
+  onTextFieldFocus?: (isFocused: boolean) => void;
 }
 
-const AnnotationEditPane = ({ visible, annotation, onUpdate }: AnnotationEditPaneProps) => {
+const AnnotationEditPane = ({ visible, annotation, onUpdate, onTextFieldFocus }: AnnotationEditPaneProps) => {
   const theme = useTheme();
   const { strings } = useLocalization();
 
@@ -53,6 +54,14 @@ const AnnotationEditPane = ({ visible, annotation, onUpdate }: AnnotationEditPan
     },
     [onUpdate]
   );
+
+  const handleFocus = useCallback(() => {
+    onTextFieldFocus?.(true);
+  }, [onTextFieldFocus]);
+
+  const handleBlur = useCallback(() => {
+    onTextFieldFocus?.(false);
+  }, [onTextFieldFocus]);
 
   if (!annotation) {
     return null;
@@ -96,6 +105,8 @@ const AnnotationEditPane = ({ visible, annotation, onUpdate }: AnnotationEditPan
                 type='text'
                 value={annotation.title}
                 onChange={handleTitleChange}
+                onFocus={handleFocus}
+                onBlur={handleBlur}
                 sx={textFieldSx}
                 required
               />
@@ -108,6 +119,8 @@ const AnnotationEditPane = ({ visible, annotation, onUpdate }: AnnotationEditPan
                 type='text'
                 value={annotation.bodyText ?? ''}
                 onChange={handleBodyTextChange}
+                onFocus={handleFocus}
+                onBlur={handleBlur}
                 sx={textFieldSx}
               />
             </Tooltip>
@@ -119,6 +132,8 @@ const AnnotationEditPane = ({ visible, annotation, onUpdate }: AnnotationEditPan
                 type='text'
                 value={annotation.label ?? ''}
                 onChange={handleLabelChange}
+                onFocus={handleFocus}
+                onBlur={handleBlur}
                 maxLength={3}
                 sx={textFieldSx}
               />

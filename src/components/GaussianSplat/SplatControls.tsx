@@ -36,6 +36,7 @@ export interface SplatControlsProps {
   hasSelectedAnnotation?: boolean;
   selectedAnnotation?: AnnotationProps | null;
   onAnnotationUpdate: (updates: Partial<AnnotationProps>) => void;
+  onTextFieldFocus?: (isFocused: boolean) => void;
   canSave?: boolean;
   isFullScreen?: boolean;
   onToggleFullScreen?: () => void;
@@ -59,6 +60,7 @@ const SplatControls = ({
   hasSelectedAnnotation,
   selectedAnnotation,
   onAnnotationUpdate,
+  onTextFieldFocus,
   canSave = true,
   isFullScreen = false,
   onToggleFullScreen,
@@ -272,6 +274,7 @@ const SplatControls = ({
         visible={isEdit === true && hasSelectedAnnotation === true}
         annotation={selectedAnnotation ?? null}
         onUpdate={onAnnotationUpdate}
+        onTextFieldFocus={onTextFieldFocus}
       />
       {isEdit && <CameraInfo />}
     </Box>
