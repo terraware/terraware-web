@@ -129,7 +129,7 @@ export default function CountWithdrawal(props: CountWithdrawalProps): JSX.Elemen
               .toString()}
             id='withdrawnQuantity'
             onChange={(value) => onChangeWithdrawnQuantity(Number(value))}
-            type='text'
+            type='number'
             value={withdrawnQuantity?.quantity.toString()}
             errorText={withdrawnQtyError}
             required={true}
