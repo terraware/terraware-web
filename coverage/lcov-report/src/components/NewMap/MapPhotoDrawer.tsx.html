@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/108</span>
+                <span class='fraction'>0/109</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/102</span>
+                <span class='fraction'>0/106</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/100</span>
+                <span class='fraction'>0/101</span>
             </div>
         
             
@@ -314,7 +314,9 @@
 <a name='L249'></a><a href='#L249'>249</a>
 <a name='L250'></a><a href='#L250'>250</a>
 <a name='L251'></a><a href='#L251'>251</a>
-<a name='L252'></a><a href='#L252'>252</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L252'></a><a href='#L252'>252</a>
+<a name='L253'></a><a href='#L253'>253</a>
+<a name='L254'></a><a href='#L254'>254</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -514,6 +516,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -745,8 +749,8 @@ const MapPhotoDrawer<span class="cstat-no" title="statement not covered" > = </s
     const shouldBeOpen =
       virtualPlotParamValue &amp;&amp;<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >      isVirtualPlotsEnabled &amp;&amp;<span class="fstat-no" title="function not covered" ></span></span>
-      Number(virtualPlotP<span class="cstat-no" title="statement not covered" >aramValue) === monitoringPlotId &amp;&amp;</span>
-<span class="cstat-no" title="statement not covered" >      Boolean(splat &amp;&amp; result &amp;&amp; monitoringPlot);</span>
+      Boolean(splat &amp;&amp; re<span class="cstat-no" title="statement not covered" >sult &amp;&amp; monitoringPlot) &amp;&amp;</span>
+<span class="cstat-no" title="statement not covered" >      Number(virtualPlotParamValue) === splat?.fileId;</span>
 <span class="cstat-no" title="statement not covered" ></span>
     if (sho<span class="cstat-no" title="statement not covered" >uldBeOpen &amp;&amp; !virtualPlotOpen) {</span>
 <span class="cstat-no" title="statement not covered" >      setVirtualPlotOpen(true);</span>
@@ -762,13 +766,15 @@ const MapPhotoDrawer<span class="cstat-no" title="statement not covered" > = </s
     virtualPlotOpen,
     setVirtualPlotOpen,
     isVirtualPlotsEnabled,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  ]);<span class="cstat-no" title="statement not covered" ></span>
+  ])<span class="cstat-no" title="statement not covered" >;</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  co<span class="cstat-no" title="statement not covered" >nst handleOpenVirtualPlot = useCallback(() =</span>&gt; {
-    const params = new URLSearchParams(searchParams);
-    params.set('virtualPlot', mon<span class="cstat-no" title="statement not covered" >itoringPlotId.toString());<span class="fstat-no" title="function not covered" ></span></span>
-    setSearchParams<span class="cstat-no" title="statement not covered" >(params, { replace: true });</span>
-  },<span class="cstat-no" title="statement not covered" > [monitoringPlotId, searchPara</span>ms, setSearchParams]);
+  cons<span class="cstat-no" title="statement not covered" >t handleOpenVirtualPlot = useCallback(() =&gt; {</span>
+    if<span class="cstat-no" title="statement not covered" > (splat) {</span>
+      const params = new URLSearchParams(searchParams);
+      params.set('virtualPlot', splat.fileId.toString());
+      setSearchParams(params, { r<span class="cstat-no" title="statement not covered" >eplace: true });<span class="fstat-no" title="function not covered" ></span></span>
+    }<span class="cstat-no" title="statement not covered" ></span>
+  },<span class="cstat-no" title="statement not covered" > [splat, searchParams, setSear</span>chParams]);
 <span class="cstat-no" title="statement not covered" ></span>
   const handleCloseVirtualPlot = useCallback(() =&gt; {
 <span class="cstat-no" title="statement not covered" >    const params = new URLSearchParams(searchParams);</span>
@@ -823,7 +829,7 @@ export default MapPhotoDrawer;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-10T20:52:50.975Z
+                at 2026-02-10T21:13:23.441Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

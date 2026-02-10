@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/67</span>
+                <span class='fraction'>0/61</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/36</span>
+                <span class='fraction'>0/28</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>0/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/63</span>
+                <span class='fraction'>0/58</span>
             </div>
         
             
@@ -213,20 +213,7 @@
 <a name='L148'></a><a href='#L148'>148</a>
 <a name='L149'></a><a href='#L149'>149</a>
 <a name='L150'></a><a href='#L150'>150</a>
-<a name='L151'></a><a href='#L151'>151</a>
-<a name='L152'></a><a href='#L152'>152</a>
-<a name='L153'></a><a href='#L153'>153</a>
-<a name='L154'></a><a href='#L154'>154</a>
-<a name='L155'></a><a href='#L155'>155</a>
-<a name='L156'></a><a href='#L156'>156</a>
-<a name='L157'></a><a href='#L157'>157</a>
-<a name='L158'></a><a href='#L158'>158</a>
-<a name='L159'></a><a href='#L159'>159</a>
-<a name='L160'></a><a href='#L160'>160</a>
-<a name='L161'></a><a href='#L161'>161</a>
-<a name='L162'></a><a href='#L162'>162</a>
-<a name='L163'></a><a href='#L163'>163</a>
-<a name='L164'></a><a href='#L164'>164</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L151'></a><a href='#L151'>151</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -274,15 +261,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -342,10 +320,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -399,95 +373,82 @@ import { BusySpinne<span class="cstat-no" title="statement not covered" >r } fro
 im<span class="cstat-no" title="statement not covered" >port { AnnotationProps } from 'src/components/GaussianSplat/Annotation';</span>
 impo<span class="cstat-no" title="statement not covered" >rt Application from 'src/components/GaussianSplat/Application';</span>
 import { APP_PATHS } from 'src/constants';
-import {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >  useListObservationSplatAnnotationsQuery,</span>
-  us<span class="cstat-no" title="statement not covered" >eListObservationSplatsQuery,</span>
-} from<span class="cstat-no" title="statement not covered" > 'src/queries/generated/observationSplats';</span>
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-import VirtualMonitoringPlot from './VirtualMonitoringPlot';
+import { useListOb<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >se</span>rvationSplatAnnotationsQuery } from 'src/queries/generated/observationSplats';</span>
 <span class="cstat-no" title="statement not covered" ></span>
-const VirtualMonitoringPlotPage = () =&gt; {
-  const params<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > =</span> useParams&lt;{<span class="cstat-no" title="statement not covered" ></span></span>
-    observationId: string;
+impo<span class="cstat-no" title="statement not covered" >rt VirtualMonitoringPlot from './VirtualMonitoringPlot';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+const Vi<span class="cstat-no" title="statement not covered" >rtualMonitoringPlotPage = <span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >{</span></span>
+  const params = useParams&lt;{
+<span class="cstat-no" title="statement not covered" >    observati</span>onId: string;
     stratumName: string;
-    monitoringPlotId: string;
+    monitoring<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Pl</span>otId: string;<span class="cstat-no" title="statement not covered" ></span></span>
+    fileId: string;
   }&gt;();
   const navigate = useNavigate();
 &nbsp;
   const observationId = Number(params.observationId);
-  const monitoringP<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >lo</span>tId = N<span class="cstat-no" title="statement not covered" >umber(params.monitoringPlotId);</span></span>
-  const stratumName <span class="cstat-no" title="statement not covered" >= p</span>arams.stratumName;
+  const monitoringPlotId = Number(params.monitoringPlotId);
+  const fileId = Number(params.fileId);
+  const stratumName<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > =</span> params<span class="cstat-no" title="statement not covered" >.stratumName;</span></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const { d<span class="fstat-no" title="function not covered" >at</span>a: s<span class="cstat-no" title="statement not covered" >platsData, isL</span>oading: splatsLoading } = useListObservationSplatsQuery({
-    observationId,
-<span class="cstat-no" title="statement not covered" >  });</span>
+<span class="cstat-no" title="statement not covered" >  const { data: annotationsData } = useListObservationSplatAnnotationsQuery(</span>
+    { obser<span class="fstat-no" title="function not covered" >va</span>tion<span class="cstat-no" title="statement not covered" >Id, fileId },</span>
+    { skip: !fileId }
+<span class="cstat-no" title="statement not covered" >  );</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const fileId = useMemo((<span class="cstat-no" title="statement not covered" >) =&gt; {</span>
-    if (!splatsData?.splats)<span class="cstat-no" title="statement not covered" > {</span>
-      return undefined<span class="cstat-no" title="statement not covered" >;</span>
-    }<span class="cstat-no" title="statement not covered" ></span>
-    const splat = splatsD<span class="cstat-no" title="statement not covered" >ata.splats.find((s) =&gt; s.monitoringPlotId === monitoringPlotI</span>d);
-    return splat?.fileI<span class="cstat-no" title="statement not covered" >d;</span>
-  }, [splatsData, monitoringPlo<span class="cstat-no" title="statement not covered" >tId]);</span>
-<span class="cstat-no" title="statement not covered" ></span>
-  const { data: annotationsData } <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >= </span>useListObservationSplatAnnotationsQuery(</span>
-    { observation<span class="cstat-no" title="statement not covered" >Id, fileId: fileId! },</span>
-    { skip: !fileId<span class="cstat-no" title="statement not covered" > }</span>
+  // Transform annotation <span class="cstat-no" title="statement not covered" >positions from object fo</span>rmat to array format for PlayCanvas
+  const annotations = useMem<span class="cstat-no" title="statement not covered" >o(</span>
+    () =&gt;<span class="cstat-no" title="statement not covered" ></span>
+      annotationsData?.annot<span class="cstat-no" title="statement not covered" >ations.map(</span>
+        (annotation) =&gt;<span class="cstat-no" title="statement not covered" ></span>
+          ({<span class="cstat-no" title="statement not covered" ></span>
+            ...annotation,<span class="cstat-no" title="statement not covered" ></span>
+            position: [annotation.p<span class="cstat-no" title="statement not covered" >osition.x, annotation.position.y, annotation</span>.position.z],
+            cameraPosition: annota<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ti</span>on.cameraPosition</span>
+              ? [<span class="cstat-no" title="statement not covered" >annotation.cameraPosition.x, annotati</span>on.cameraPosition.y, annotation.cameraPosition.z]
+              : und<span class="cstat-no" title="statement not covered" >efined,</span>
+          }) as Annotati<span class="cstat-no" title="statement not covered" >onProps</span>
+      ) ?? [],<span class="cstat-no" title="statement not covered" ></span>
+    [annotationsD<span class="cstat-no" title="statement not covered" >ata]</span>
   );<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  // Transform annotat<span class="cstat-no" title="statement not covered" >ion positions from </span>object format to array format for PlayCanvas
-  const annotations = useMemo(<span class="cstat-no" title="statement not covered" ></span>
-    () =&gt;
-      annotationsData?.annotations.map(
-        (annotati<span class="cstat-no" title="statement not covered" >on) =&gt;<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >          ({</span>
-<span class="cstat-no" title="statement not covered" >            ...annota</span>tion,
-            position: [annotation.position.x, annotation.position.y, annotation.position.z],
-            camera<span class="cstat-no" title="statement not covered" >Position: annotation.ca<span class="fstat-no" title="function not covered" >me</span>raPos<span class="cstat-no" title="statement not covered" >ition</span></span>
-<span class="cstat-no" title="statement not covered" >              ? [annotation.cameraPosition.x, anno</span>tation.cameraPosition.y, annotation.cameraPosition.z]
-              : undefined,
-          }) as AnnotationProps<span class="cstat-no" title="statement not covered" ></span>
-      ) ?? [],
-    [annotationsData]
-  );
-<span class="cstat-no" title="statement not covered" ></span>
-  co<span class="fstat-no" title="function not covered" >ns</span>t handleClose = useCallback(() =&gt; {
+  const handleClose = useCallback(() =&gt; {
     const path = APP_PATHS.OBSERVATION_MONITORING_PLOT_DETAILS_V2.replace(':observationId', observationId.toString())
-<span class="cstat-no" title="statement not covered" >      .replace(':stratumName', stratumName!)</span>
-      .r<span class="fstat-no" title="function not covered" >ep</span>lace(':monitori<span class="cstat-no" title="statement not covered" >ngPlotId', monitoringPlotId.toString());</span>
-    void navigate(path);
+      .replace(':stratumName', stratumName!)
+      .replace(':monit<span class="cstat-no" title="statement not covered" >oringPlotId', monitoringPlotId.toString());</span>
+<span class="fstat-no" title="function not covered" >    vo</span>id navigate(path);
   }, [navigate, observationId, stratumName, monitoringPlotId]);
-&nbsp;
-  const handleToggleFullScreen = useCallback(() =&gt; {
+<span class="cstat-no" title="statement not covered" ></span>
+  const <span class="fstat-no" title="function not covered" >ha</span>ndleToggleFullS<span class="cstat-no" title="statement not covered" >creen = useCallback(() =&gt; {</span>
     const path = APP_PATHS.OBSERVATION_MONITORING_PLOT_DETAILS_V2.replace(':observationId', observationId.toString())
       .replace(':stratumName', stratumName!)
       .replace(':monitoringPlotId', monitoringPlotId.toString());
-    void navigate(`${path}?virtualPlot=${monitoringPlotId.toString()}`);
-  }, [navigate, observ<span class="cstat-no" title="statement not covered" >ationId, stratumName, monitori<span class="fstat-no" title="function not covered" >ng</span>PlotId]);</span>
-<span class="cstat-no" title="statement not covered" ></span>
-  us<span class="cstat-no" title="statement not covered" >eEffect(() =&gt; {</span>
+    void navigate(`${path}?virtualPlot=${fileId.toString()}`);
+  }, [navigate, observationId, stratumName, monitoringPlotId, fileId]);
+&nbsp;
+  useEffect(() =&gt; {
     const handleKeyDown = (event: KeyboardEvent) =&gt; {
-      if (event.key === 'Escape')<span class="cstat-no" title="statement not covered" > {<span class="fstat-no" title="function not covered" ></span></span>
+      if (event.key ==<span class="cstat-no" title="statement not covered" >= 'Escape') {<span class="fstat-no" title="function not covered" ></span></span>
         handleClo<span class="cstat-no" title="statement not covered" >se();</span>
 <span class="cstat-no" title="statement not covered" >      }</span>
     };
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-    window.addEventListene<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >r(</span>'keydown', handleKeyDown);</span>
-    re<span class="cstat-no" title="statement not covered" >turn () =&gt; {</span>
-      wi<span class="cstat-no" title="statement not covered" >ndow.removeEven</span>tListener('keydown', handleKeyDown);
-    };
-  }, [handleClose]);
+    window.addEve<span class="cstat-no" title="statement not covered" >ntListener('keydown', handleKeyDown);</span>
+<span class="cstat-no" title="statement not covered" >    return () =&gt; {</span>
+      window.removeEventListener('keydown', handleKeyDown);
+<span class="cstat-no" title="statement not covered" >    };<span class="fstat-no" title="function not covered" ></span></span>
+  }, [handleClose]);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  if<span class="cstat-no" title="statement not covered" > (splat<span class="fstat-no" title="function not covered" >sL</span>oading || !fileId) {</span>
-    re<span class="cstat-no" title="statement not covered" >turn (</span>
+  if (!f<span class="cstat-no" title="statement not covered" >ileId) {</span>
+    return (
       &lt;Box
-        sx={{
-<span class="cstat-no" title="statement not covered" >          position: 'fixed',</span>
+<span class="cstat-no" title="statement not covered" >        sx={{</span>
+<span class="cstat-no" title="statement not covered" >          p<span class="fstat-no" title="function not covered" >os</span>ition: 'fixed',</span>
 <span class="cstat-no" title="statement not covered" >          top: 0,</span>
           left: 0,
           right: 0,
-          bottom: 0,
-          width: '100vw',
+<span class="cstat-no" title="statement not covered" >          bottom: 0,</span>
+<span class="cstat-no" title="statement not covered" >          width: '100vw',</span>
           height: '100vh',
           display: 'flex',
           alignItems: 'center',
@@ -504,11 +465,11 @@ const VirtualMonitoringPlotPage = () =&gt; {
   return (
     &lt;Box&gt;
       &lt;Box
-<span class="cstat-no" title="statement not covered" >        sx={{</span>
+        sx={{
           position: 'fixed',
           top: 0,
           left: 0,
-          right: 0,
+<span class="cstat-no" title="statement not covered" >          right: 0,</span>
           bottom: 0,
           width: '100vw',
           height: '100vh',
@@ -559,7 +520,7 @@ export default VirtualMonitoringPlotPage;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-10T20:52:50.975Z
+                at 2026-02-10T21:13:23.441Z
             </div>
         <script src="../../../../../../prettify.js"></script>
         <script>

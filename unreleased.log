@@ -1,3 +1,5 @@
+db01e31be816 SW-7854: Inventory Withdrawals: Change default in growth phase input fields from "0" value to blanks (#5197)
+952d09fe57be Allow for multiple virtual monitoring plots for a single plot (#5198)
 bbf7bbfc0571 SW-6695 Show "Batches Selected" on withdrawal flow (#5199)
 18b984df97c2 SW-7491 Fix wrong condition to show results in the inventory by species table (#5200)
 65620e8ead4b SW-7491 Inventory: Include "Show Empty Batches" filter in By Species (#5192)
