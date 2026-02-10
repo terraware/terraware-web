@@ -153,7 +153,7 @@ test.describe('AccessionTests', () => {
       await page.locator('#destinationFacilityId').getByRole('textbox').click();
       await page.getByText('Nursery', exactOptions).nth(0).click();
       await page.getByLabel('Seed Count', exactOptions).check();
-      await page.locator('#withdrawnQuantity').getByRole('textbox').fill('300');
+      await page.locator('#withdrawnQuantity').getByRole('spinbutton').fill('300');
       await page.getByRole('button', { name: 'Add Notes' }).click();
       await page.locator('textarea').fill('Adding some test notes here!');
       await page.locator('#saveWithdraw').click();
@@ -197,7 +197,7 @@ test.describe('AccessionTests', () => {
       await page.getByPlaceholder('Select...').first().click();
       await page.getByText('Out-planting').click();
       await page.getByLabel('Seed Count', { exact: true }).check();
-      await page.locator('#withdrawnQuantity').getByRole('textbox').fill('100');
+      await page.locator('#withdrawnQuantity').getByRole('spinbutton').fill('100');
       await page.locator('#saveWithdraw').click();
       await expect(page.getByRole('main')).toContainText('95 Grams');
       await expect(page.getByRole('main')).toContainText('~95 ct');
