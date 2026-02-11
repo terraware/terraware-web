@@ -94,7 +94,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
   const withdrawInventory = () => {
     const path = origin === 'Species' ? APP_PATHS.INVENTORY_WITHDRAW : APP_PATHS.BATCH_WITHDRAW;
 
-    const speciesIds = selectedRows.filter((row) => row.species_id).map((row) => `speciesId=${row.species_id}`);
+    const speciesIds = selectedRows.filter((row) => row.id).map((row) => `speciesId=${row.id}`);
     if (origin === 'Species' && !speciesIds.length) {
       // we can't handle deleted inventory today
       return;
@@ -103,7 +103,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
     const batchIds =
       origin === 'Nursery'
         ? selectedRows.flatMap((row) => row.batchIds).map((b) => `batchId=${b}`)
-        : selectedRows.filter((r) => r.species_id).map((row) => `batchId=${row.batchId}`);
+        : selectedRows.filter((r) => r.id).map((row) => `batchId=${row.batchId}`);
     const searchParams = origin === 'Species' ? speciesIds.join('&') : batchIds.join('&');
 
     navigate({
@@ -134,12 +134,12 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
 
     switch (origin) {
       case 'Species':
-        return selectedRows.some((row) => row.species_id && hasWithdrawableQuantity(row));
+        return selectedRows.some((row) => row.id && hasWithdrawableQuantity(row));
       case 'Nursery':
         return selectedRows.length === 1 && selectedRows.some((row) => hasWithdrawableQuantity(row));
       case 'Batches': {
         const nurseries = new Set(selectedRows.map((row) => row.facility_id));
-        return nurseries.size === 1 && selectedRows.some((row) => row.species_id && hasWithdrawableQuantity(row));
+        return nurseries.size === 1 && selectedRows.some((row) => row.id && hasWithdrawableQuantity(row));
       }
     }
   };
