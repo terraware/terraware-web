@@ -22,6 +22,9 @@ api.enhanceEndpoints({
         { type: QueryTagTypes.ObservationSplats, id: payload.fileId },
       ],
     },
+    listSplatDetails: {
+      providesTags: (_results, _error, payload) => [{ type: QueryTagTypes.ObservationSplats, id: payload.fileId }],
+    },
     listObservationSplatAnnotations: {
       providesTags: (_results, _error, payload) => [{ type: QueryTagTypes.ObservationSplats, id: payload.fileId }],
     },
