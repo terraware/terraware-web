@@ -17,13 +17,14 @@ api.enhanceEndpoints({
     },
     createStandardMetric: {
       invalidatesTags: () => [
+        { type: QueryTagTypes.StandardMetrics, id: 'LIST' },
+        { type: QueryTagTypes.StandadMetricTargets },
         { type: QueryTagTypes.Reports }, // invalidate all reports
       ],
     },
     listSystemMetrics: {
       providesTags: (results) => [
         ...(results?.metrics.map((metric) => ({ type: QueryTagTypes.SystemMetrics, id: metric.metric })) ?? []),
-        { type: QueryTagTypes.SystemMetrics, id: 'LIST' },
       ],
     },
   },

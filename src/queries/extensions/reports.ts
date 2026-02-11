@@ -83,14 +83,56 @@ api.enhanceEndpoints({
         },
       ],
     },
-    updateProjectMetricTargets: {
-      invalidatesTags: (_results, _error, args) => {
-        const updatedReportIds = args.updateMetricTargetsRequestPayload.metric.targets.map((target) => target.reportId);
-        return updatedReportIds.map((reportId) => ({
+    getProjectMetricTargets: {
+      providesTags: [
+        {
+          type: QueryTagTypes.ProjectMetricTargets,
+        },
+      ],
+    },
+    updateProjectMetricTarget: {
+      invalidatesTags: [
+        {
           type: QueryTagTypes.Reports,
-          id: reportId,
-        }));
-      },
+        },
+        {
+          type: QueryTagTypes.ProjectMetricTargets,
+        },
+      ],
+    },
+    getStandardMetricTargets: {
+      providesTags: [
+        {
+          type: QueryTagTypes.StandadMetricTargets,
+        },
+      ],
+    },
+    updateStandardMetricTarget: {
+      invalidatesTags: [
+        {
+          type: QueryTagTypes.Reports,
+        },
+        {
+          type: QueryTagTypes.StandadMetricTargets,
+        },
+      ],
+    },
+    getSystemMetricTargets: {
+      providesTags: [
+        {
+          type: QueryTagTypes.SystemMetricTargets,
+        },
+      ],
+    },
+    updateSystemMetricTarget: {
+      invalidatesTags: [
+        {
+          type: QueryTagTypes.Reports,
+        },
+        {
+          type: QueryTagTypes.SystemMetricTargets,
+        },
+      ],
     },
     getAcceleratorReport: {
       providesTags: (_results, _error, args) => [
