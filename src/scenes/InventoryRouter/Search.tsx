@@ -125,6 +125,41 @@ export default function Search(props: SearchProps): JSX.Element | null {
   const handleFilterClick = (event: React.MouseEvent<HTMLElement>) => setFilterAnchorEl(event.currentTarget);
   const handleFilterClose = () => setFilterAnchorEl(null);
   const [filterGroupFilters, setFilterGroupFilters] = useForm<Record<string, SearchNodePayload>>(initialFilters);
+
+  // Sync filterGroupFilters when filters prop changes from parent
+  useEffect(() => {
+    const updates: Record<string, SearchNodePayload> = { ...initialFilters };
+
+    if (filters.showEmptyBatches) {
+      updates.showEmptyBatches = {
+        field: 'showEmptyBatches',
+        values: filters.showEmptyBatches,
+        type: 'Exact',
+        operation: 'field',
+      };
+    }
+
+    if (filters.showEmptySpecies) {
+      updates.showEmptySpecies = {
+        field: 'showEmptySpecies',
+        values: filters.showEmptySpecies,
+        type: 'Exact',
+        operation: 'field',
+      };
+    }
+
+    if (filters.showEmptyNurseries) {
+      updates.showEmptyNurseries = {
+        field: 'showEmptyNurseries',
+        values: filters.showEmptyNurseries,
+        type: 'Exact',
+        operation: 'field',
+      };
+    }
+
+    setFilterGroupFilters(updates);
+  }, [filters.showEmptyBatches, filters.showEmptySpecies, filters.showEmptyNurseries, setFilterGroupFilters]);
+
   const filterGroupColumns = useMemo<FilterField[]>(() => {
     if (!activeLocale) {
       return [];
@@ -403,6 +438,7 @@ export default function Search(props: SearchProps): JSX.Element | null {
               }}
             >
               <FilterGroup
+                key={JSON.stringify(filterGroupFilters)}
                 initialFilters={filterGroupFilters}
                 fields={filterGroupColumns}
                 onConfirm={(_filterGroupFilters: Record<string, SearchNodePayload>) => {
