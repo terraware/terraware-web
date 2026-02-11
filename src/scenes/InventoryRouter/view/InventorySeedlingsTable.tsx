@@ -93,6 +93,16 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
 
   const debouncedSearchTerm = useDebounce(temporalSearchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
 
+  useEffect(() => {
+    if (
+      (origin === 'Species' || origin === 'Nursery') &&
+      batches.length > 0 &&
+      batches.filter((batch: SearchResponseElement) => !isBatchEmpty(batch)).length === 0
+    ) {
+      setFilters({ showEmptyBatches: ['true'] });
+    }
+  }, [batches, origin, setFilters]);
+
   const filterEmptyBatches = useCallback(
     (unfiltered: SearchResponseElement[]) => {
       // Because the field group filters have their values
