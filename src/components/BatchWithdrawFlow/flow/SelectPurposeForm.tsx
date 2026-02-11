@@ -630,7 +630,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
               <Textfield
                 display
                 preserveNewlines
-                id='batchesSelected'
+                id='speciesSelected'
                 type='textarea'
                 value={batchSpeciesNames.join(', ')}
                 truncateConfig={{
