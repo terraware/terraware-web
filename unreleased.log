@@ -1,3 +1,4 @@
+019875924b18 SW-7491 Check show empty batches by default  (#5207)
 a48b49bc9533 Update dependency axios to v1.13.5 [SECURITY] (#5202)
 6a65fb695b9d Enable camera pan controls except on annotation text field focus (#5205)
 1a4e483d356c Add CameraInfo component to display current camera position and focus point when in edit mode (#5204)

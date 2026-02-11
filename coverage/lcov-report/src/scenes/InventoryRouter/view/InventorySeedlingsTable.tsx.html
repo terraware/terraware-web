@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/188</span>
+                <span class='fraction'>0/192</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/111</span>
+                <span class='fraction'>0/117</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/49</span>
+                <span class='fraction'>0/51</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/178</span>
+                <span class='fraction'>0/181</span>
             </div>
         
             
@@ -536,7 +536,17 @@
 <a name='L471'></a><a href='#L471'>471</a>
 <a name='L472'></a><a href='#L472'>472</a>
 <a name='L473'></a><a href='#L473'>473</a>
-<a name='L474'></a><a href='#L474'>474</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L474'></a><a href='#L474'>474</a>
+<a name='L475'></a><a href='#L475'>475</a>
+<a name='L476'></a><a href='#L476'>476</a>
+<a name='L477'></a><a href='#L477'>477</a>
+<a name='L478'></a><a href='#L478'>478</a>
+<a name='L479'></a><a href='#L479'>479</a>
+<a name='L480'></a><a href='#L480'>480</a>
+<a name='L481'></a><a href='#L481'>481</a>
+<a name='L482'></a><a href='#L482'>482</a>
+<a name='L483'></a><a href='#L483'>483</a>
+<a name='L484'></a><a href='#L484'>484</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -622,6 +632,11 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -945,6 +960,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1094,238 +1114,248 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
   // search results without species filtering, neede<span class="cstat-no" title="statement not covered" >d to populate values for the speci</span>es filter dropdown
   const [speciesUnfilteredBatches, setSpeciesUnf<span class="cstat-no" title="statement not covered" >ilteredBatches] = useState&lt;Se</span>archResponseElement[]&gt;([]);
   // The main distinction here<span class="cstat-no" title="statement not covered" > is that the filtered batches are filtered in the view, whereas `batches` is</span>
-  // the filtered-by-search b<span class="cstat-no" title="statement not covered" >atches list that comes back from the API</span>
-  co<span class="fstat-no" title="function not covered" >ns</span>t [filteredBatches, setFilteredBatches] = useState&lt;any[]&gt;([]);
-  const [filters, setFilters] =<span class="cstat-no" title="statement not covered" > useForm&lt;InventoryFiltersUnion&gt;({});</span>
-  cons<span class="cstat-no" title="statement not covered" >t [selectedRows, setSelec<span class="fstat-no" title="function not covered" >te</span>dRows] = <span class="cstat-no" title="statement not covered" >useState&lt;any[]&gt;([]);</span></span>
+<span class="cstat-no" title="statement not covered" >  // the filtered-by-search ba<span class="fstat-no" title="function not covered" >tc</span>hes list that comes back from the API</span>
+  co<span class="cstat-no" title="statement not covered" >nst [filteredBatches, setFilteredBatches] = useState&lt;any[]&gt;([]);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  cons<span class="cstat-no" title="statement not covered" >t [filters, setFilters] = useForm&lt;InventoryF</span>iltersUnion&gt;({});
+  const [selectedRows, setSelectedRows] = useState&lt;any[]&gt;([]);
   const [openDeleteModal, setOpenDeleteModal] = useState&lt;boolean&gt;(false);
-  const [openNewBatchModal, setOpenNewBatchModal] = useState&lt;boolean&gt;(false);
-  const [searchSortOrder, setSearchSortOrder] = useState&lt;SearchSortOrder&gt;();
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  const debouncedSe<span class="cstat-no" title="statement not covered" >archTerm = useDebounce(temporalSearchValue, DEFAULT_SEARCH_DEBOUNCE_M</span>S);
+  const [openNewBatchModal, s<span class="cstat-no" title="statement not covered" >etOpenNewBatchModal] = useState&lt;boolean&gt;(false);</span>
+  co<span class="fstat-no" title="function not covered" >ns</span>t [searchSortOrder, setSearchSortOrder] = useState&lt;SearchSortOrder&gt;();
 <span class="cstat-no" title="statement not covered" ></span>
-  cons<span class="cstat-no" title="statement not covered" >t filterEmptyBatches = useCallback(</span>
+  cons<span class="cstat-no" title="statement not covered" >t debouncedSearchTerm = u<span class="fstat-no" title="function not covered" >se</span>Debounce(<span class="cstat-no" title="statement not covered" >temporalSearchValue, DEFAULT_SEARCH_DEBOUNCE_MS);</span></span>
+&nbsp;
+  useEffect(() =&gt; {
+    if (
+      (origin === 'Species' || origi<span class="cstat-no" title="statement not covered" >n === 'Nursery') &amp;&amp;<span class="fstat-no" title="function not covered" ></span></span>
+      batches.lengt<span class="cstat-no" title="statement not covered" >h &gt; 0 &amp;&amp;</span>
+<span class="cstat-no" title="statement not covered" >      batches.filter((batch: SearchResponseElement) =&gt; !isBatchEmpty(batch)).length === 0</span>
+    ) <span class="cstat-no" title="statement not covered" >{</span>
+      setFilters({ showEmptyBatches: ['true'] });
+    }
+  }, [batches, origin, setFilters]);
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  const filterEmptyBatches = useCallback(
     (unfiltered: SearchResponseElement[]) =&gt; {
-      // Because the field group filters have their values
-      // set as SearchNodePayload['values'] (which is (string | null[]), we gotta boolean-ify it
-      // If there is no value set (initi<span class="fstat-no" title="function not covered" >al</span> form <span class="cstat-no" title="statement not covered" >state), this d</span>efaults to false
+<span class="cstat-no" title="statement not covered" >      // Because the field group filters have their values</span>
+<span class="cstat-no" title="statement not covered" >      // set as SearchNodePayload['values'] (which is (string | null[]), we gotta boolean-ify it</span>
+      // If there is no value set (initial form state), this defaults to false
       const showEmptyBatches = (filters.showEmptyBatches || [])[0] === 'true';
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      return unfiltered.filter((batch: SearchResponseElement) =&gt; (showEmptyBatches ? true : !isBatchEmpty(batch)));</span>
-    },<span class="cstat-no" title="statement not covered" ></span>
+      return unfiltered.filter((batch: <span class="fstat-no" title="function not covered" >Se</span>archRe<span class="cstat-no" title="statement not covered" >sponseElement) =&gt; (showEmptyBatch</span>es ? true : !isBatchEmpty(batch)));
+    },
     [filters.showEmptyBatches]
-  );
+  );<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
-  const getNonSpeciesSearchFields = use<span class="fstat-no" title="function not covered" >Ca</span>llback<span class="cstat-no" title="statement not covered" >(() =&gt; {</span>
-    // Skip fuzzy search on empty strings since the query will be
-    // expensive and results will be the same as not adding the fuzzy search
-<span class="cstat-no" title="statement not covered" >    const fields: F</span>ieldNodePayload[] = debouncedSearchTerm ? getFuzzySearchFields(debouncedSearchTerm) : [];
+  const getNonSpeciesSearc<span class="cstat-no" title="statement not covered" >hFields = useCallback(() =&gt; {<span class="fstat-no" title="function not covered" ></span></span>
+    // Skip fuzzy s<span class="cstat-no" title="statement not covered" >earch on empty strings since</span> the query will be
+<span class="cstat-no" title="statement not covered" >    // expensive and results will be the same as not adding the fuzzy search</span>
+    co<span class="cstat-no" title="statement not covered" >nst fields: FieldNodePayload[] = debouncedSearchTerm ? getFuzzySearchFields(debouncedSearchTerm) : [];</span>
 &nbsp;
-    if (filters.facilityId<span class="cstat-no" title="statement not covered" >s &amp;&amp; filters.facilityIds.lengt<span class="fstat-no" title="function not covered" >h </span>&gt; 0) {</span>
-      fields.push({<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >        operation: 'field',</span>
-<span class="cstat-no" title="statement not covered" >        field: 'facility_id',</span>
+    if (filters.facilityIds &amp;&amp; filters.facilityIds.length &gt; 0) {
+      fields.push({
+        operation: 'field',<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+        field: 'facility_id',
         type: 'Exact',
-        values: filters.facilityIds.map((id) =&gt; id.toString()),
+<span class="cstat-no" title="statement not covered" >        values: fil</span>ters.facilityIds.map((id) =&gt; id.toString()),
       });
-    }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-&nbsp;
-    if (filters.projectIds &amp;&amp; filters.projectIds.length &gt; 0) {
+<span class="cstat-no" title="statement not covered" >    }<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ></span>
+    if (filters.projectIds &amp;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >&amp; </span>filters.projectIds.length &gt; 0) {</span>
 <span class="cstat-no" title="statement not covered" >      fields.push({</span>
-        operation: 'field',
-<span class="cstat-no" title="statement not covered" >        field: 'project_id',<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >        operatio</span>n: 'field',
+        field: 'project_id',
         type: 'Exact',<span class="cstat-no" title="statement not covered" ></span>
-        values: filters.proj<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ec</span>tIds.map((id) =&gt; (id === null ? id : id.toString())),</span>
+        values: filters.proje<span class="cstat-no" title="statement not covered" >ctIds.map((id) =&gt; (id === null ? id : id.toString())),</span>
 <span class="cstat-no" title="statement not covered" >      });</span>
     }<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
-    return fields;<span class="cstat-no" title="statement not covered" ></span>
-  }, [getFuzzySearchFields, d<span class="cstat-no" title="statement not covered" >ebouncedSearchTerm, filters.facilityIds, filters.projectIds]);</span>
+    return fields;
+  },<span class="cstat-no" title="statement not covered" > [getFuzzySearchFields, debouncedSearchTerm, filters.facilityIds, filters.projectIds]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const <span class="cstat-no" title="statement not covered" >getSearchFields = useCallback(() =</span>&gt; {
+  const getSearchFields = useCallback(() =&gt; {
     const fields: FieldNodePayload[] = getNonSpeciesSearchFields();
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    if (filters.speciesIds &amp;&amp; filters.speciesIds.length &gt; 0) {</span>
-<span class="cstat-no" title="statement not covered" >      fields.push({</span>
+    if (filters.speciesIds &amp;&amp; filters.speciesIds.length &gt; 0) {
+      fields.push({
         operation: 'field',
         field: 'species_id',
         type: 'Exact',
         values: filters.speciesIds.map((id) =&gt; id.toString()),
       });
-    }
-&nbsp;
-    return fields;
-  }, [getNonSpeciesSearchFields, filters.speciesIds]);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(() =&gt; {<span class="fstat-no" title="function not covered" ></span></span>
-    const requestId = <span class="cstat-no" title="statement not covered" >setRequestId('inventory-seedlings');</span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-    co<span class="cstat-no" title="statement not covered" >nst populateResults = async () =&gt; {</span>
-      if<span class="cstat-no" title="statement not covered" > (!origi</span>nId || !selectedOrganization) {
-        return;
-      }<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >    }<span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" ></span>
-      const searchFields = getSearchFields();
-      const batchesResults = await getBatchesSearch(selectedOrganization.id, originId, searchFields, searchSortOrder);
+    return fields;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  }, [<span class="cstat-no" title="statement not covered" >getNonSpeciesSearchFields, filters.speciesIds]);</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  useEffect(() =&gt; {
+    const requestId = setRe<span class="cstat-no" title="statement not covered" >questId('inventory-seedlings</span>');
+<span class="cstat-no" title="statement not covered" ></span>
+    const populateResults = async () =&gt; {
+      if (!originId || !selectedOrganization) {
+        return;
+      }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      const searchFields = getSearchFields();</span>
+      co<span class="cstat-no" title="statement not covered" >nst batchesResults = await getBatchesSearch(selectedOrganization.id, originId, searchFie</span>lds, searchSortOrder);
 &nbsp;
       if (requestId === getRequestId('inventory-seedlings')) {
-        setBatches(batchesResults || []);
+<span class="cstat-no" title="statement not covered" >        setBatches(batchesResults || []);</span>
 <span class="cstat-no" title="statement not covered" >      }</span>
-    };<span class="cstat-no" title="statement not covered" ></span>
+    };
 &nbsp;
     if (!originId || !isNaN(originId)) {
-<span class="cstat-no" title="statement not covered" >      void populateResults();</span>
-    }<span class="cstat-no" title="statement not covered" ></span>
+      void populateResults();
+    }
   }, [
     filters.facilityIds,
     getBatchesSearch,
     getSearchFields,
-    modified,
-    originId,
-    searchSortOrder,
-    selectedOrganization,
-  ]);
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  useEffect(() =&gt; <span class="cstat-no" title="statement not covered" >{<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-<span class="cstat-no" title="statement not covered" >    const requestId = setRequestId('inventory-seedlings-species-unfiltered');</span>
+<span class="cstat-no" title="statement not covered" >    modified,<span class="fstat-no" title="function not covered" ></span></span>
+    originId,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+<span class="cstat-no" title="statement not covered" >    searchSortOrder,</span>
+    selectedOrganizati<span class="cstat-no" title="statement not covered" >on,</span>
+  ]);<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-    co<span class="cstat-no" title="statement not covered" >nst populateSpeciesUnfilteredResults = async () =&gt; {</span>
-      if<span class="cstat-no" title="statement not covered" > (!originId || !selectedOrganization) {</span>
+  useEffect(() =&gt; {
+    const requestId = setRequestId('inventory-seedlings-species-unfiltered');
+&nbsp;
+    const populateSpeciesUnfilteredResults = async () =&gt; {
+      if (!originId || !selectedOrganization) {
         return;
-      }
+      }<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
       const searchFields = getNonSpeciesSearchFields();
       const speciesUnfilteredBatchesResults = await getBatchesSearch(
         selectedOrganization.id,
-<span class="cstat-no" title="statement not covered" >        originId,</span>
+        originId,
         searchFields,
         searchSortOrder
       );
-&nbsp;
-      if (requestId === getRequestId('inventory-seedlings-species-unfiltered')) {
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >      if (requestId === getRequestId('inventory-seedl</span>ings-species-unfiltered')) {
         // keep state of results without species filtering, to populate species_id filter values
-        setSpeciesUnfilteredBatches(filterEmptyBatches(speciesUnfilteredBatchesResults || []));
-      }
+        setSpeciesUnfilteredBatc<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >he</span>s(filterEmptyBatches(speciesUnfilteredBatchesResults || []));</span>
+      }<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 <span class="cstat-no" title="statement not covered" >    };<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
     if (!originId || !isNaN(originId)) {
-      void populateSpeciesUnfilt<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >er</span>edResults();</span>
-    }<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  },<span class="cstat-no" title="statement not covered" > [<span class="fstat-no" title="function not covered" ></span></span>
-    fi<span class="cstat-no" title="statement not covered" >lterEmptyBatches,<span class="fstat-no" title="function not covered" ></span></span>
-    getBatchesSearch,
-    getN<span class="cstat-no" title="statement not covered" >onSpeciesSearchFields,</span>
+      vo<span class="cstat-no" title="statement not covered" >id populateSpeciesUnfilteredResults();</span>
+    }
+  }, [<span class="cstat-no" title="statement not covered" ></span>
+    filterEmptyBatches,
+    ge<span class="cstat-no" title="statement not covered" >tBatchesSearch</span>,
+    ge<span class="cstat-no" title="statement not covered" >tNonSpeciesSearchFields,</span>
     originId,
-    sear<span class="cstat-no" title="statement not covered" >chSortOrder,</span>
-    selectedOrganization,
-  ]);<span class="cstat-no" title="statement not covered" ></span>
+    searchSortOrder,
+    selectedOrganiz<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >at</span>ion,</span>
+  ])<span class="cstat-no" title="statement not covered" >;</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  useEffect(() =&gt; {
+  us<span class="cstat-no" title="statement not covered" >eEffect(</span>() =&gt; {
     const batch = batches.find((b) =&gt; b.batchNumber === openBatchNumber);
     if (batch) {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >      const batchId = batch.id a</span>s number | string;
-<span class="cstat-no" title="statement not covered" >      if (origin =</span>== 'Nursery') {
-<span class="cstat-no" title="statement not covered" >        navi</span>gate({
-          pathname: APP_PATHS.INVENTORY_BATCH_FOR_NURSERY.replace(':nurseryId', `${originId}`).replace(
-            ':batchId<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >',</span></span>
-<span class="cstat-no" title="statement not covered" >            `${batchId}`</span>
-<span class="cstat-no" title="statement not covered" >          ),</span>
-        });
-      } else {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >        navigate({</span>
+<span class="cstat-no" title="statement not covered" >      const batchId = batch.i</span>d as number | string;
+<span class="cstat-no" title="statement not covered" >      if (or</span>igin === 'Nursery') {
+        navigate({
+          pathname: APP_<span class="cstat-no" title="statement not covered" >PATHS.INVENTORY_BATCH_FOR_NURS<span class="fstat-no" title="function not covered" >ER</span>Y.replace(':nurseryId', `${originId}`).replace(</span>
+<span class="cstat-no" title="statement not covered" >            ':batchId',</span>
+            `${batchId}`
+          ),<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >        });</span>
+<span class="cstat-no" title="statement not covered" >      } else {</span>
+        navigate({
           pathname: APP_PATHS.INVENTORY_BATCH_FOR_SPECIES.replace(':speciesId', `${originId}`).replace(
-            ':batchId',<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+            ':batchId',
 <span class="cstat-no" title="statement not covered" >            `${batchId}`</span>
 <span class="cstat-no" title="statement not covered" >          ),</span>
         });
-      }
-    }
-  }, [batch<span class="cstat-no" title="statement not covered" >es, navigate, openBatchNumber, origin, originId]);</span>
+      }<span class="cstat-no" title="statement not covered" ></span>
+    }<span class="cstat-no" title="statement not covered" ></span>
+  }, [ba<span class="cstat-no" title="statement not covered" >tches, navigate, openBatchNumber, origin, originId]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  useEffect(() =&gt; {
-    setFiltered<span class="cstat-no" title="statement not covered" >Batches(filterEmptyBatches(batches));</span>
+  useEff<span class="cstat-no" title="statement not covered" >ect(() =&gt; {</span>
+    setFilteredBatches(filterEmptyBatches(batches));
   }, [<span class="cstat-no" title="statement not covered" >batches, filterEmptyBatches]);</span>
-<span class="cstat-no" title="statement not covered" ></span>
-  const delet<span class="cstat-no" title="statement not covered" >eSelectedBatches = () =&gt; {</span>
-    cons<span class="cstat-no" title="statement not covered" >t promises = selectedRows.map((r) =&gt; NurseryBatchService.deleteBatch(r.id as number));</span>
-    void Promise.allSettled(promises).then((results) =&gt; {
-<span class="cstat-no" title="statement not covered" >      if (results.some((result) =&gt; result.status =</span>== 'rejected' || result?.value?.requestSucceeded === false)) {
+&nbsp;
+  const deleteSelectedBatches = () =&gt; {
+    const promises = selectedRows.map((<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >r)</span> =&gt; NurseryBatchService.deleteBatch(r.id as number));</span>
+    void Promise.allS<span class="cstat-no" title="statement not covered" >ettled(promises).<span class="fstat-no" title="function not covered" >th</span>en((res<span class="cstat-no" title="statement not covered" >ults) =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >      if (results.some((result) =&gt; result.status === 'rejected' || resul</span>t?.value?.requestSucceeded === false)) {
         snackbar.toastError();
-      }
-      reloadData();<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-      setOpenDeleteMo<span class="cstat-no" title="statement not covered" >dal(false);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-<span class="cstat-no" title="statement not covered" >    });</span>
+      }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >      reloadData();</span>
+      setOpenDeleteModal(false);
+    });
   };
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  co<span class="cstat-no" title="statement not covered" >nst addBatch = () =&gt; {</span>
-    setOpenNewBatchModal(true);
-    reloadData();
+&nbsp;
+  const addBatch = () =&gt; {<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" >    se</span>tOpe<span class="cstat-no" title="statement not covered" >nNewBatchModal(true);</span>
+    re<span class="fstat-no" title="function not covered" >lo</span>adData();<span class="cstat-no" title="statement not covered" ></span>
     return;
   };
-<span class="cstat-no" title="statement not covered" ></span>
-  co<span class="fstat-no" title="function not covered" >ns</span>t re<span class="cstat-no" title="statement not covered" >loadData = () =&gt; {</span>
-    se<span class="fstat-no" title="function not covered" >tM</span>odified(Date.n<span class="cstat-no" title="statement not covered" >ow());</span>
-    return;
-  };
+&nbsp;
+  const reloadData = () =&gt; {
+    setModified(Date.now())<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >;</span></span>
+    return;<span class="cstat-no" title="statement not covered" ></span>
+  };<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
   const selectAllRows = useCallback(() =&gt; {
-    setSelectedRows(batches<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >);</span></span>
-  }, [batches]);<span class="cstat-no" title="statement not covered" ></span>
+    setSelectedRows(b<span class="fstat-no" title="function not covered" >at</span>ches<span class="cstat-no" title="statement not covered" >);</span>
+  }, [batches]);
 <span class="cstat-no" title="statement not covered" ></span>
   const onBatchSelected = (batch: any, fromColumn?: string) =&gt; {
-    if (fromColumn === 'withdraw') {
-      navigate({<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-        pathname: APP_PATHS.BATCH_WITHDRAW,
-        search: `?batchId=${b<span class="cstat-no" title="statement not covered" >atch.id.toString()}&amp;source=${window.locati</span>on.pathname}`,
+<span class="cstat-no" title="statement not covered" >    if (fromColumn === 'withdraw') {</span>
+<span class="cstat-no" title="statement not covered" >      navigate({</span>
+        pat<span class="cstat-no" title="statement not covered" >hname: APP_PATHS.BATCH_WITHDRAW,</span>
+<span class="cstat-no" title="statement not covered" >        search: `?batchId=${batch.id.toString()}&amp;source=${window.location.pathnam</span>e}`,
       });
 <span class="cstat-no" title="statement not covered" >    } else if (fromColumn === 'quantitiesMenu') {</span>
-<span class="cstat-no" title="statement not covered" >      reloadData();</span>
-    } else <span class="cstat-no" title="statement not covered" >{</span>
-<span class="cstat-no" title="statement not covered" >      let to: string = APP_PATHS.INVENTORY_BATCH;</span>
+      reloadData();
+    } else {
+      let to: string = APP_PATHS.INVENTORY_BATCH;
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      if (origin === 'Nursery') {</span>
+      if (origin === 'Nursery') {
         to = APP_PATHS.INVENTORY_BATCH_FOR_NURSERY.replace(':nurseryId', `${originId}`);
       } else if (origin === 'Species') {
-        to = APP_PATHS.INVENTORY_BATCH_FOR_SPECIES.replace(':speciesId', `${originId}`);
+        to = APP_PATHS.INVENTORY_BATCH_<span class="fstat-no" title="function not covered" >FO</span>R_SPE<span class="cstat-no" title="statement not covered" >CIES.replace(':speciesId', `$<span class="fstat-no" title="function not covered" >{o</span>riginId<span class="cstat-no" title="statement not covered" >}`);</span></span>
       }
 &nbsp;
       navigate(to.replace(':batchId', batch.id));
-    }
-  };<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span>
+<span class="cstat-no" title="statement not covered" >    }</span>
+  };
 &nbsp;
-  const getSelectedRowsAsQueryParams = () =&gt; {
+  const getSelectedRo<span class="fstat-no" title="function not covered" >ws</span>AsQu<span class="cstat-no" title="statement not covered" >eryParams = () =&gt; {</span>
     const batchIds = selectedRows.map((row) =&gt; `batchId=${row.id}`);
-<span class="cstat-no" title="statement not covered" >    return `?${batchIds.join('&amp;')}&amp;source=${window.location.pathname}`;</span>
+    return `?${batchIds.join('&amp;')}&amp;source=${window.location.pathname}`;
+  };
+<span class="cstat-no" title="statement not covered" ></span>
+  const bulkWithdrawSelectedRows = () =&gt; {
+    navigate({<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >      pathname: APP_PATHS.BATCH_WITHDRAW,</span>
+      search: getSelectedRowsAsQueryParams(),
+    });
   };
 &nbsp;
-  const bulkWithdrawS<span class="fstat-no" title="function not covered" >el</span>ecte<span class="cstat-no" title="statement not covered" >dRows = () =&gt; {</span>
-    navigate({
-      pathname: APP_PATHS.BATCH_WITHDRAW,
-      search: getSelectedRowsAsQueryParams(),
-<span class="cstat-no" title="statement not covered" >    });</span>
-  };
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  co<span class="cstat-no" title="statement not covered" >nst totalSelectedQuantity = useMemo&lt;number&gt;(</span>
-    () =&gt;
-      selectedRows.reduce(
+  const totalSelectedQuantit<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >y </span>= useMemo&lt;number&gt;(</span>
+<span class="cstat-no" title="statement not covered" >    () =&gt;</span>
+<span class="cstat-no" title="statement not covered" >      selectedRows.reduce(</span>
         (total, row) =&gt; total + Number(row['totalQuantity(raw)']) + Number(row['germinatingQuantity(raw)']),
         0
       ),<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >    [selectedRows]</span>
   );<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
-  const getTopBarButtons = () =&gt; {
-    const topBarButtons:<span class="cstat-no" title="statement not covered" > (TopBarButton | JSX.Element)[<span class="fstat-no" title="function not covered" >] </span>= [];</span>
-<span class="cstat-no" title="statement not covered" >    topBarButtons.push({</span>
-<span class="cstat-no" title="statement not covered" >      buttonType: 'destructive',</span>
+  co<span class="cstat-no" title="statement not covered" >nst getTopBarButtons = () =&gt; {</span>
+    const topBarButtons: (TopBarButton | JSX.Element)[] = [];
+    topBarButtons.push({<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" ></span>      butt<span class="cstat-no" title="statement not covered" >onType: 'destructive',<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
       buttonText: strings.DELETE,
-<span class="cstat-no" title="statement not covered" >      onButtonClick: () =&gt; setOpenDeleteModal(true),</span>
-    });
-<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" >    co</span>nst <span class="cstat-no" title="statement not covered" >bulkWithdrawable = isSelectio<span class="fstat-no" title="function not covered" >nB</span>ulkWi<span class="cstat-no" title="statement not covered" >thdrawable(selectedRows);</span></span>
+      onButtonClick: () =&gt; setOpenDeleteModal(true),
+<span class="cstat-no" title="statement not covered" >    });<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+&nbsp;
+    const bulkWithdrawable = isSelectionBulkWithdrawable(selectedRows);
 &nbsp;
     let withdrawTooltip;
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+&nbsp;
     if (!bulkWithdrawable) {
       withdrawTooltip = strings.WITHDRAW_SINGLE_NURSERY;
     } else if (totalSelectedQuantity === 0) {
@@ -1333,24 +1363,24 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
     }
 &nbsp;
     topBarButtons.push(
-      &lt;ProjectAssignTopBarButton
-        key={1}
-        totalResultsCount={batches?.length}
+      &lt;ProjectAss<span class="fstat-no" title="function not covered" >ig</span>nTopBarButton
+        ke<span class="cstat-no" title="statement not covered" >y={1}</span>
+        to<span class="cstat-no" title="statement not covered" >talResultsCount={batches?.len</span>gth}
         selectAllRows={selectAllRows}
         reloadData={reloadData}
-        projectAs<span class="fstat-no" title="function not covered" >si</span>gnPayloadCreator={() =&gt; ({ batchIds: selectedRows.map((row) =&gt; Number(row.id)) })}
-      /&gt;<span class="cstat-no" title="statement not covered" ></span>
-    );<span class="cstat-no" title="statement not covered" ></span>
+        projectAssignPayloadCreator={() =&gt; ({ batchIds: selectedRows.map((row) =&gt; Number(row.id)) })}
+      /&gt;
+    );
 &nbsp;
     topBarButtons.push({
       buttonType: 'passive',
       buttonText: strings.WITHDRAW,
-      onButtonClick: () =&gt; bulkWithdrawSelectedRows(),
+      onButtonCli<span class="fstat-no" title="function not covered" >ck</span>: ()<span class="cstat-no" title="statement not covered" > =&gt; bulkWithdrawSelectedRo</span>ws(),
       disabled: !bulkWithdrawable || !totalSelectedQuantity,
       tooltipTitle: withdrawTooltip,
     });
 &nbsp;
-    return topBar<span class="fstat-no" title="function not covered" >Bu</span>tton<span class="cstat-no" title="statement not covered" >s;</span>
+    return topBarButtons;
   };
 &nbsp;
   const onSortChange = (order: SortOrder, orderBy: string) =&gt; {
@@ -1393,12 +1423,12 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
       &gt;
         {openNewBatchModal &amp;&amp; (
           &lt;BatchDetailsModal
-            reload={reloadData}
+            reload<span class="fstat-no" title="function not covered" >={</span>reloadD<span class="cstat-no" title="statement not covered" >ata}</span>
             onClose={() =&gt; {
               onUpdateOpenBatch(null);
               setOpenNewBatchModal(false);
             }}
-            origin<span class="fstat-no" title="function not covered" >Id</span>={origi<span class="cstat-no" title="statement not covered" >nId}</span>
+            originId={originId}
             origin={origin}
           /&gt;
         )}
@@ -1412,12 +1442,12 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
             sx={{
               display: 'flex',
               justifyContent: 'space-between',
-              alignItems: 'center',
+              alignIt<span class="fstat-no" title="function not covered" >em</span>s: '<span class="cstat-no" title="statement not covered" >center</span>',
               marginBottom: theme.spacing(4),
               width: isDesktop ? 'calc(100vw - 300px)' : 'calc(100vw - 76px)',
               maxWidth: '100%',
             }}
-          &gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+          &gt;
             &lt;Typography
               sx={{
                 fontSize: '20px',
@@ -1489,7 +1519,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-11T12:28:26.297Z
+                at 2026-02-11T15:56:32.857Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
