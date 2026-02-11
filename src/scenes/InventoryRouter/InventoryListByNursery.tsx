@@ -23,7 +23,7 @@ type InventoryListByNurseryProps = {
 };
 
 export default function InventoryListByNursery({ setReportData }: InventoryListByNurseryProps) {
-  const { strings } = useLocalization();
+  const { activeLocale, strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
 
@@ -89,7 +89,7 @@ export default function InventoryListByNursery({ setReportData }: InventoryListB
   );
 
   const onApplyFilters = useCallback(async () => {
-    if (selectedOrganization) {
+    if (selectedOrganization && activeLocale) {
       const requestId = Math.random().toString();
       setRequestId('searchInventory', requestId);
 
@@ -134,7 +134,16 @@ export default function InventoryListByNursery({ setReportData }: InventoryListB
         }
       }
     }
-  }, [filters, debouncedSearchTerm, selectedOrganization, searchSortOrder, setReportData]);
+  }, [
+    activeLocale,
+    debouncedSearchTerm,
+    filters.facilityIds,
+    filters.showEmptyNurseries,
+    filters.speciesIds,
+    searchSortOrder,
+    selectedOrganization,
+    setReportData,
+  ]);
 
   const reloadData = useCallback(() => void onApplyFilters(), [onApplyFilters]);
 

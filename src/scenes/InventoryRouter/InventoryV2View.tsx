@@ -85,9 +85,13 @@ export type FacilitySpeciesInventoryResult = {
   facility_id: string;
   facility_name: string;
   germinatingQuantity: string;
+  'germinatingQuantity(raw)': string;
   hardeningOffQuantity: string;
+  'hardeningOffQuantity(raw)': string;
   readyQuantity: string;
+  'readyQuantity(raw)': string;
   activeGrowthQuantity: string;
+  'activeGrowthQuantity(raw)': string;
   totalQuantity: string;
   'totalQuantity(raw)': string;
   facilityInventories?: {

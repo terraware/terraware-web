@@ -23,7 +23,7 @@ type InventoryListByBatchProps = {
 };
 
 export default function InventoryListByBatch({ setReportData }: InventoryListByBatchProps) {
-  const { strings } = useLocalization();
+  const { activeLocale, strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
 
@@ -107,7 +107,7 @@ export default function InventoryListByBatch({ setReportData }: InventoryListByB
   );
 
   const onApplyFilters = useCallback(async () => {
-    if (selectedOrganization) {
+    if (selectedOrganization && activeLocale) {
       const requestId = Math.random().toString();
       setRequestId('searchInventory', requestId);
 
@@ -182,7 +182,7 @@ export default function InventoryListByBatch({ setReportData }: InventoryListByB
         }
       }
     }
-  }, [filters, debouncedSearchTerm, selectedOrganization, searchSortOrder, setReportData]);
+  }, [activeLocale, filters, debouncedSearchTerm, selectedOrganization, searchSortOrder, setReportData]);
 
   const reloadData = useCallback(() => void onApplyFilters(), [onApplyFilters]);
 
