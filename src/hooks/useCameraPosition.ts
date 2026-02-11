@@ -18,5 +18,20 @@ export const useCameraPosition = () => {
     [app]
   );
 
-  return useMemo(() => ({ setCamera }), [setCamera]);
+  const getCameraState = useCallback(() => {
+    const camera = app.root.findByName('camera');
+    // @ts-expect-error - cameraControls and its script are added dynamically to the camera entity
+    const controls = camera?.script?.cameraControls;
+    if (camera && controls) {
+      const position = camera.getPosition();
+      const focusPoint = controls?.focusPoint;
+      return {
+        position: [position.x, position.y, position.z] as [number, number, number],
+        focus: [focusPoint.x, focusPoint.y, focusPoint.z] as [number, number, number],
+      };
+    }
+    return null;
+  }, [app]);
+
+  return useMemo(() => ({ setCamera, getCameraState }), [setCamera, getCameraState]);
 };

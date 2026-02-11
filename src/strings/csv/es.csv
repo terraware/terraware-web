@@ -272,6 +272,9 @@ BY_NURSERY,Por vivero,a0a2faa5
 BY_SPECIES,Por especies,602624ab
 CALCULATED_PLANT_DENSITY_FROM_WITHDRAWALS,Densidad de plantas calculada a partir de retiros,d06a4b56
 CALCULATED_PLANT_DENSITY_FROM_WITHDRAWALS_TOOLTIP,"Para usar la densidad de plantas calculada a partir de los Retiros de plantación, marque la casilla. Para sobrescribir estos datos, ingrese manualmente un valor en los campos de Densidad de Plantas a la izquierda.",c674df96
+CAMERA_FOCUS_POINT,Punto de enfoque,350a921b
+CAMERA_INFO,Información de la cámara,4283d43c
+CAMERA_POSITION,Posición,3eb30313
 CANCEL,Cancelar,e73dc4d4
 CANCEL_DATA_CHECK,Cancelar comprobación de datos,5f140f00
 CANNOT_BE_CALCULATED,No se puede calcular,19dafba4

@@ -15,6 +15,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import Button from '../common/button/Button';
 import { AnnotationProps } from './Annotation';
 import AnnotationEditPane from './AnnotationEditPane';
+import CameraInfo from './CameraInfo';
 import ControlsInfoPane from './ControlsInfoPane';
 
 export interface SplatControlsProps {
@@ -272,6 +273,7 @@ const SplatControls = ({
         annotation={selectedAnnotation ?? null}
         onUpdate={onAnnotationUpdate}
       />
+      {isEdit && <CameraInfo />}
     </Box>
   );
 };
