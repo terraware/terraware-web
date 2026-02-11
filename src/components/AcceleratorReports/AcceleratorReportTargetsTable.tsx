@@ -240,7 +240,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
       enableSorting={true}
       enableGlobalFilter={true}
       enableColumnFilters={true}
-      enablePagination={true}
+      enablePagination={false}
       enableColumnPinning={true}
       enableTopToolbar={false}
       initialSorting={[{ id: 'name', desc: false }]}
