@@ -610,21 +610,37 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
               {strings.WITHDRAWAL_DETAILS}
             </Typography>
             <Typography>{strings.WITHDRAW_INSTRUCTIONS}</Typography>
-            <Grid padding={theme.spacing(4, 0, 0)}>
-              <Typography fontSize='14px' fontWeight={400} lineHeight='20px'>
-                {strings.BATCHES_SELECTED}
-              </Typography>
-              <Typography fontSize='16px' fontWeight={500} lineHeight='24px' marginTop='12px'>
-                {batches.map((batch) => batch.batchNumber).join(', ')}
-              </Typography>
+            <Grid padding={theme.spacing(2, 0, 0)}>
+              <Textfield
+                display
+                preserveNewlines
+                id='batchesSelected'
+                type='textarea'
+                value={batches.map((batch) => batch.batchNumber).join(', ')}
+                truncateConfig={{
+                  maxHeight: 80,
+                  showMoreText: strings.SEE_MORE,
+                  showLessText: strings.SEE_LESS,
+                  alignment: 'right',
+                }}
+                label={strings.BATCHES_SELECTED}
+              />
             </Grid>
-            <Grid padding={theme.spacing(4, 0, 0)}>
-              <Typography fontSize='14px' fontWeight={400} lineHeight='20px'>
-                {strings.SPECIES_SELECTED}
-              </Typography>
-              <Typography fontSize='16px' fontWeight={500} lineHeight='24px' marginTop='12px'>
-                {batchSpeciesNames.join(', ')}
-              </Typography>
+            <Grid padding={theme.spacing(2, 0, 0)}>
+              <Textfield
+                display
+                preserveNewlines
+                id='speciesSelected'
+                type='textarea'
+                value={batchSpeciesNames.join(', ')}
+                truncateConfig={{
+                  maxHeight: 80,
+                  showMoreText: strings.SEE_MORE,
+                  showLessText: strings.SEE_LESS,
+                  alignment: 'right',
+                }}
+                label={strings.SPECIES_SELECTED}
+              />
             </Grid>
             <Grid padding={theme.spacing(4, 0, 0)}>
               <FormControl>
