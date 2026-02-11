@@ -20,12 +20,6 @@ export default function WithdrawalBatchesCellRenderer(props: RendererProps<Table
     },
   };
 
-  const quantityContainerStyles = {
-    '& .textfield .textfield-value input': {
-      textAlign: 'right',
-    },
-  };
-
   const textStyles = {
     fontSize: '16px',
     '& > p': {
@@ -55,12 +49,7 @@ export default function WithdrawalBatchesCellRenderer(props: RendererProps<Table
   const createQuantityInput = (id: string, valueProperty: string) => {
     if (onRowClick) {
       return (
-        <Box
-          display='flex'
-          alignItems={row.error[id] ? 'start' : 'center'}
-          justifyContent='end'
-          sx={quantityContainerStyles}
-        >
+        <Box display='flex' alignItems={row.error[id] ? 'start' : 'center'} justifyContent='end'>
           <Textfield
             id={id}
             type='number'
@@ -83,12 +72,7 @@ export default function WithdrawalBatchesCellRenderer(props: RendererProps<Table
   const createReadyOutplantInput = (iValue: React.ReactNode | unknown[]) => {
     if (onRowClick) {
       return (
-        <Box
-          display='flex'
-          alignItems={row.error.readyQuantityWithdrawn ? 'start' : 'center'}
-          justifyContent='end'
-          sx={quantityContainerStyles}
-        >
+        <Box display='flex' alignItems={row.error.readyQuantityWithdrawn ? 'start' : 'center'} justifyContent='end'>
           <Textfield
             id='readyQuantityWithdrawn'
             type='number'
