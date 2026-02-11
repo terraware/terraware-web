@@ -138,6 +138,7 @@ export default function InventoryListByNursery({ setReportData }: InventoryListB
     activeLocale,
     debouncedSearchTerm,
     filters.facilityIds,
+    filters.showEmptyNurseries,
     filters.speciesIds,
     searchSortOrder,
     selectedOrganization,
