@@ -20,6 +20,8 @@ import { useSetObservationSplatAnnotationsMutation } from 'src/queries/generated
 interface VirtualMonitoringPlotProps {
   observationId: string;
   fileId: string;
+  startingCameraPosition?: [number, number, number];
+  splatOrigin?: [number, number, number];
   annotations?: AnnotationProps[];
   editable?: boolean;
   isFullScreen?: boolean;
@@ -32,6 +34,8 @@ const DEFAULT_POSITION: [number, number, number] = [1, 0.1, 0];
 const VirtualMonitoringPlot = ({
   observationId,
   fileId,
+  startingCameraPosition = undefined,
+  splatOrigin = undefined,
   annotations = [],
   editable = false,
   isFullScreen = false,
@@ -51,9 +55,15 @@ const VirtualMonitoringPlot = ({
     [observationId, fileId]
   );
 
+  const origin: [number, number, number] = useMemo(() => splatOrigin || DEFAULT_FOCUS_POINT, [splatOrigin]);
+  const defaultCameraPosition: [number, number, number] = useMemo(
+    () => startingCameraPosition || DEFAULT_POSITION,
+    [startingCameraPosition]
+  );
+
   useEffect(() => {
-    setCamera(DEFAULT_FOCUS_POINT, DEFAULT_POSITION);
-  }, [setCamera]);
+    setCamera(origin, defaultCameraPosition);
+  }, [origin, defaultCameraPosition, setCamera]);
 
   useEffect(() => {
     if (!isEdit) {
@@ -113,12 +123,12 @@ const VirtualMonitoringPlot = ({
 
   const handleAddAnnotation = useCallback(() => {
     const newAnnotation: AnnotationProps = {
-      position: DEFAULT_FOCUS_POINT,
+      position: origin,
       title: '',
     };
     setLocalAnnotations((prev) => [...prev, newAnnotation]);
     setSelectedAnnotationIndex(localAnnotations.length);
-  }, [localAnnotations]);
+  }, [origin, localAnnotations]);
 
   const handleDeleteAnnotation = useCallback(() => {
     if (selectedAnnotationIndex === -1) {
@@ -209,8 +219,8 @@ const VirtualMonitoringPlot = ({
         />
       ))}
       <SplatControls
-        defaultCameraFocus={DEFAULT_FOCUS_POINT}
-        defaultCameraPosition={DEFAULT_POSITION}
+        defaultCameraFocus={origin}
+        defaultCameraPosition={defaultCameraPosition}
         showAnnotations={showAnnotations}
         onToggleAnnotations={setShowAnnotations}
         autoRotate={autoRotate}

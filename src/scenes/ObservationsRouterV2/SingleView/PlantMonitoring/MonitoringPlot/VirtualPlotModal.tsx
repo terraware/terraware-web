@@ -6,7 +6,7 @@ import { OverlayModal } from '@terraware/web-components';
 import { AnnotationProps } from 'src/components/GaussianSplat/Annotation';
 import Application from 'src/components/GaussianSplat/Application';
 import { APP_PATHS } from 'src/constants';
-import { useListObservationSplatAnnotationsQuery } from 'src/queries/generated/observationSplats';
+import { useListSplatDetailsQuery } from 'src/queries/generated/observationSplats';
 import { ObservationMonitoringPlotResultsPayload } from 'src/types/Observations';
 
 import VirtualMonitoringPlot from './VirtualMonitoringPlot';
@@ -32,7 +32,7 @@ const VirtualPlotModal = ({
   onClose,
 }: VirtualPlotModalProps) => {
   const navigate = useNavigate();
-  const { data } = useListObservationSplatAnnotationsQuery({ observationId, fileId });
+  const { data } = useListSplatDetailsQuery({ observationId, fileId });
 
   // Eventually instead of changing to a fully different page, this could modify the Box that is used to render full screen.
   // That way it's not a fully separate page loading, but just the modal and all of the data in memory is kept.
@@ -44,6 +44,16 @@ const VirtualPlotModal = ({
       .replace(':fileId', fileId.toString());
     void navigate(path);
   }, [navigate, observationId, stratumName, monitoringPlotId, fileId]);
+
+  const splatOrigin: [number, number, number] | undefined = useMemo(
+    () => (data?.originPosition ? [data.originPosition.x, data.originPosition.y, data.originPosition.z] : undefined),
+    [data]
+  );
+
+  const startingCameraPosition: [number, number, number] | undefined = useMemo(
+    () => (data?.cameraPosition ? [data.cameraPosition.x, data.cameraPosition.y, data.cameraPosition.z] : undefined),
+    [data]
+  );
 
   const annotations = useMemo(
     () =>
@@ -77,6 +87,8 @@ const VirtualPlotModal = ({
         <VirtualMonitoringPlot
           observationId={observationId.toString()}
           fileId={fileId.toString()}
+          startingCameraPosition={startingCameraPosition}
+          splatOrigin={splatOrigin}
           annotations={annotations}
           editable={true}
           onToggleFullScreen={handleToggleFullScreen}

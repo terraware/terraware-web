@@ -44,6 +44,11 @@ const injectedRtkApi = api.injectEndpoints({
         body: queryArg.setSplatAnnotationsRequestPayload,
       }),
     }),
+    listSplatDetails: build.query<ListSplatDetailsApiResponse, ListSplatDetailsApiArg>({
+      query: (queryArg) => ({
+        url: `/api/v1/tracking/observations/${queryArg.observationId}/splats/${queryArg.fileId}/info`,
+      }),
+    }),
   }),
   overrideExisting: false,
 });
@@ -82,6 +87,12 @@ export type SetObservationSplatAnnotationsApiArg = {
   observationId: number;
   fileId: number;
   setSplatAnnotationsRequestPayload: SetSplatAnnotationsRequestPayload;
+};
+export type ListSplatDetailsApiResponse =
+  /** status 200 The requested operation succeeded. */ GetObservationSplatInfoResponsePayload;
+export type ListSplatDetailsApiArg = {
+  observationId: number;
+  fileId: number;
 };
 export type ObservationSplatPayload = {
   fileId: number;
@@ -135,6 +146,12 @@ export type SetSplatAnnotationRequestPayload = {
 export type SetSplatAnnotationsRequestPayload = {
   annotations: SetSplatAnnotationRequestPayload[];
 };
+export type GetObservationSplatInfoResponsePayload = {
+  annotations: SplatAnnotationPayload[];
+  cameraPosition?: CoordinatePayload;
+  originPosition?: CoordinatePayload;
+  status: SuccessOrError;
+};
 export const {
   useListObservationSplatsQuery,
   useLazyListObservationSplatsQuery,
@@ -144,4 +161,6 @@ export const {
   useListObservationSplatAnnotationsQuery,
   useLazyListObservationSplatAnnotationsQuery,
   useSetObservationSplatAnnotationsMutation,
+  useListSplatDetailsQuery,
+  useLazyListSplatDetailsQuery,
 } = injectedRtkApi;
