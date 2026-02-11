@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/43</span>
+                <span class='fraction'>0/47</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/24</span>
+                <span class='fraction'>0/28</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/40</span>
+                <span class='fraction'>0/44</span>
             </div>
         
             
@@ -196,7 +196,22 @@
 <a name='L131'></a><a href='#L131'>131</a>
 <a name='L132'></a><a href='#L132'>132</a>
 <a name='L133'></a><a href='#L133'>133</a>
-<a name='L134'></a><a href='#L134'>134</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L134'></a><a href='#L134'>134</a>
+<a name='L135'></a><a href='#L135'>135</a>
+<a name='L136'></a><a href='#L136'>136</a>
+<a name='L137'></a><a href='#L137'>137</a>
+<a name='L138'></a><a href='#L138'>138</a>
+<a name='L139'></a><a href='#L139'>139</a>
+<a name='L140'></a><a href='#L140'>140</a>
+<a name='L141'></a><a href='#L141'>141</a>
+<a name='L142'></a><a href='#L142'>142</a>
+<a name='L143'></a><a href='#L143'>143</a>
+<a name='L144'></a><a href='#L144'>144</a>
+<a name='L145'></a><a href='#L145'>145</a>
+<a name='L146'></a><a href='#L146'>146</a>
+<a name='L147'></a><a href='#L147'>147</a>
+<a name='L148'></a><a href='#L148'>148</a>
+<a name='L149'></a><a href='#L149'>149</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -273,6 +288,21 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -342,35 +372,36 @@ interface AnnotationEditPaneProps {
   visible: boolean<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >;</span></span>
 <span class="cstat-no" title="statement not covered" >  annotation: AnnotationProps | null;</span>
   on<span class="cstat-no" title="statement not covered" >Update: (updates: Partial&lt;AnnotationProps&gt;) =&gt; void;</span>
-}<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-const AnnotationEditPane = ({ visible, annotation, onUpdate }: AnnotationEditPaneProps) =&gt; {
-<span class="cstat-no" title="statement not covered" >  const theme</span> = useTheme();
-  const { strings } = useLocalization();
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  onTe<span class="cstat-no" title="statement not covered" >xtFieldFocus?: (isFocused: boolean) =&gt; void;</span>
+}<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+&nbsp;
+co<span class="cstat-no" title="statement not covered" >nst Annotat</span>ionEditPane = ({ visible, annotation, onUpdate, onTextFieldFocus }: AnnotationEditPaneProps) =&gt; {
+  const theme = useTheme();
+  const { stri<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ng</span>s } = useLocalization();<span class="cstat-no" title="statement not covered" ></span></span>
+&nbsp;
   const textFieldSx = useMemo(
     () =&gt; ({
       '&amp; .textfield-label': {
         color: `${theme.palette.grey[400]} !important`,
       },
       '&amp; .textfield-value': {
-        backgroundColor: `${theme.palette.grey[800]} !important`,
-        borderColor<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >: </span>`${them<span class="cstat-no" title="statement not covered" >e.palette.grey[700]} !important`,</span></span>
-      },<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >      '&amp; input': {</span>
-        col<span class="fstat-no" title="function not covered" >or</span>: `$<span class="cstat-no" title="statement not covered" >{theme.palette</span>.common.white} !important`,
-      },
-<span class="cstat-no" title="statement not covered" >    }),</span>
+        backgroundC<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ol</span>or: `${<span class="cstat-no" title="statement not covered" >theme.palette.grey[800]} !important`,</span></span>
+        borderColor:<span class="cstat-no" title="statement not covered" > `$</span>{theme.palette.grey[700]} !important`,
+<span class="cstat-no" title="statement not covered" >      },</span>
+      '&amp; in<span class="fstat-no" title="function not covered" >pu</span>t': <span class="cstat-no" title="statement not covered" >{</span>
+        color: `${theme.palette.common.white} !important`,
+<span class="cstat-no" title="statement not covered" >      },</span>
+    }),<span class="cstat-no" title="statement not covered" ></span>
     [theme]<span class="cstat-no" title="statement not covered" ></span>
   );<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const handleTitleChan<span class="cstat-no" title="statement not covered" >ge = useCallback(</span>
-    (value: unknown) =&gt; {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-      onUpdate({ title: value as string });
+  const handleTitleChange =<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > u</span>seCallback(</span>
+    (value: unknown) =&gt; {
+      onUpdate({<span class="cstat-no" title="statement not covered" > title: value as string });</span>
     },<span class="cstat-no" title="statement not covered" ></span>
     [onUpdate]<span class="cstat-no" title="statement not covered" ></span>
-  );<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+&nbsp;
   const handleBodyTextChange = useCallback(
     (value: unknown) =&gt; {
       onUpdate({ bodyText: value as string });
@@ -383,29 +414,37 @@ const AnnotationEditPane = ({ visible, annotation, onUpdate }: AnnotationEditPan
       onUpdate({ label: value as string });
     },
     [onUpdate]
-  );
-<span class="cstat-no" title="statement not covered" ></span>
-  if<span class="fstat-no" title="function not covered" > (</span>!annotation) {
-    re<span class="cstat-no" title="statement not covered" >turn null;</span>
-  }
+  );<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" ></span>
+  cons<span class="cstat-no" title="statement not covered" >t handleFocus = useCallback(</span>() =&gt; {
+    onTextFieldFocus?.(true);
+  }, [onTextFieldFocus]);
 &nbsp;
-  return (
-    &lt;Box<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" ></span>      sx={{
-<span class="cstat-no" title="statement not covered" >        position: 'absolute',</span>
-        top: 0,
-        left: 0,
+  const handleBlur = useCallbac<span class="cstat-no" title="statement not covered" >k(() =&gt; {</span>
+<span class="fstat-no" title="function not covered" >    on</span>TextFieldFocus?.(false);
+  }, [<span class="cstat-no" title="statement not covered" >onTextFieldFocus]);</span>
+&nbsp;
+  if (!annotation) {
+    return null;
+  }<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" ></span>
+  retu<span class="cstat-no" title="statement not covered" >rn (</span>
+    &lt;Box
+      sx={{
+        position: 'absolute',
+        top: 0,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >        left: 0,</span>
         right: 0,
-        bottom: 0,<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" ></span>        pointerEvents: 'none',
-<span class="cstat-no" title="statement not covered" >        display: 'flex',</span>
-        justifyContent: 'flex-start',
-        alignItems: 'flex-start',
+        bottom: 0,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >        pointerEvents: 'none',</span>
+        display: 'flex',
+<span class="cstat-no" title="statement not covered" >        justifyContent: 'flex-start',</span>
+<span class="cstat-no" title="statement not covered" >        alignItem</span>s: 'flex-start',
         padding: 2,
 <span class="cstat-no" title="statement not covered" >        zIndex: 1001,</span>
-<span class="cstat-no" title="statement not covered" >      }}</span>
+      }}
     &gt;
-<span class="cstat-no" title="statement not covered" >      &lt;Fade in={visible} timeout={500}&gt;</span>
+      &lt;Fade in={visible} timeout={500}&gt;
         &lt;Box
           sx={{
             backgroundColor: theme.palette.grey[900],
@@ -427,6 +466,8 @@ const AnnotationEditPane = ({ visible, annotation, onUpdate }: AnnotationEditPan
                 type='text'
                 value={annotation.title}
                 onChange={handleTitleChange}
+                onFocus={handleFocus}
+                onBlur={handleBlur}
                 sx={textFieldSx}
                 required
               /&gt;
@@ -439,6 +480,8 @@ const AnnotationEditPane = ({ visible, annotation, onUpdate }: AnnotationEditPan
                 type='text'
                 value={annotation.bodyText ?? ''}
                 onChange={handleBodyTextChange}
+                onFocus={handleFocus}
+                onBlur={handleBlur}
                 sx={textFieldSx}
               /&gt;
             &lt;/Tooltip&gt;
@@ -450,6 +493,8 @@ const AnnotationEditPane = ({ visible, annotation, onUpdate }: AnnotationEditPan
                 type='text'
                 value={annotation.label ?? ''}
                 onChange={handleLabelChange}
+                onFocus={handleFocus}
+                onBlur={handleBlur}
                 maxLength={3}
                 sx={textFieldSx}
               /&gt;
@@ -469,7 +514,7 @@ export default AnnotationEditPane;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-11T00:48:10.887Z
+                at 2026-02-11T00:57:52.735Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

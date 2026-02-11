@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/112</span>
+                <span class='fraction'>0/113</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/47</span>
+                <span class='fraction'>0/45</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/104</span>
+                <span class='fraction'>0/105</span>
             </div>
         
             
@@ -310,7 +310,9 @@
 <a name='L245'></a><a href='#L245'>245</a>
 <a name='L246'></a><a href='#L246'>246</a>
 <a name='L247'></a><a href='#L247'>247</a>
-<a name='L248'></a><a href='#L248'>248</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L248'></a><a href='#L248'>248</a>
+<a name='L249'></a><a href='#L249'>249</a>
+<a name='L250'></a><a href='#L250'>250</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -380,6 +382,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -519,6 +522,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -607,21 +611,22 @@ const VirtualMonitor<span class="cstat-no" title="statement not covered" >ingPlo
   const [isEdit, setIsEdit] = u<span class="cstat-no" title="statement not covered" >seState(false);</span>
   const [selectedAnnotationI<span class="cstat-no" title="statement not covered" >ndex, setSel</span>ectedAnnotationIndex] = useState&lt;number&gt;(-1);
   const [localAnnotations<span class="cstat-no" title="statement not covered" >, setLocalAn</span>notations] = useState(annotations);
-  const [saveAnnotations] = us<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >eS</span>etObservationSplatAnnotationsMutation();</span>
+  const [isTextFieldFocused, s<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >et</span>IsTextFieldFocused] = useState(false);</span>
+  const [saveAnnotations] = useSetObservationSplatAnnotationsMutation();
 &nbsp;
-  const splatSrc = useMemo(
-    () =&gt; `/api/v1/tracking<span class="branch-0 cbranch-no" title="branch not covered" >/observ</span>ations/${observationId}/splats/${fileId}`,
-    [observation<span class="branch-0 cbranch-no" title="branch not covered" >Id, fil</span>eId]
+  const splatSrc = useMemo(<span class="branch-0 cbranch-no" title="branch not covered" ></span>
+    () =&gt; `/api/<span class="branch-0 cbranch-no" title="branch not covered" >v1/trac</span>king/observations/${observationId}/splats/${fileId}`,
+    [observation<span class="branch-0 cbranch-no" title="branch not covered" >Id,</span> fileId]
   );<span class="branch-0 cbranch-no" title="branch not covered" ></span>
 <span class="branch-0 cbranch-no" title="branch not covered" ></span>
-  const origin: [<span class="branch-0 cbranch-no" title="branch not covered" >number</span>, number, number] = useMemo(() =&gt; splatOrigin || DEFAULT_FOCUS_POINT, [splatOrigin]);
+  const origin: [number, number, number] = useMemo(() =&gt; splatOrigin || DEFAULT_FOCUS_POINT, [splatOrigin]);
   const defaultCameraPosition: [number, number, number] = useMemo(
-    () =&gt; startingCameraPosition || DEFAULT_POSITION,
-    [startingCameraPosit<span class="cstat-no" title="statement not covered" >ion]</span>
+    () =&gt; startingCamera<span class="cstat-no" title="statement not covered" >Position || DEFAULT_POSITION,</span>
+    [startingCameraPosition]<span class="cstat-no" title="statement not covered" ></span>
   );<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
   useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-    setCamera(origin, defaultC<span class="cstat-no" title="statement not covered" >ameraPosition);</span>
+    setCamera(origin, defaultCameraPosition);<span class="cstat-no" title="statement not covered" ></span>
   }, [origin, defaultCameraPosition, setCamera]);<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
   useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
@@ -739,7 +744,7 @@ const VirtualMonitor<span class="cstat-no" title="statement not covered" >ingPlo
             moveFastSpeed={0.5}
             moveSlowSpeed={0.15}
             rotateSpeed={0.1}
-            enableFly={!(isEdit &amp;&amp; selectedAnnotationIndex &gt;= 0)}
+            enableFly={!isTextFieldFocused}
           /&gt;
         &lt;/Entity&gt;
         &lt;Script script={XrControllers} enabled={!isEdit} /&gt;
@@ -794,6 +799,7 @@ const VirtualMonitor<span class="cstat-no" title="statement not covered" >ingPlo
         hasSelectedAnnotation={selectedAnnotationIndex &gt;= 0}
         selectedAnnotation={selectedAnnotationIndex &gt;= 0 ? localAnnotations[selectedAnnotationIndex] : null}
         onAnnotationUpdate={handleAnnotationUpdate}
+        onTextFieldFocus={setIsTextFieldFocused}
         canSave={canSave}
         editable={ed<span class="cstat-no" title="statement not covered" >itable}</span>
         isFullScreen={isFullScreen}
@@ -811,7 +817,7 @@ export default VirtualMonitoringPlot;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-11T00:48:10.887Z
+                at 2026-02-11T00:57:52.735Z
             </div>
         <script src="../../../../../../prettify.js"></script>
         <script>

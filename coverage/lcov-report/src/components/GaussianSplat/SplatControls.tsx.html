@@ -344,7 +344,10 @@
 <a name='L279'></a><a href='#L279'>279</a>
 <a name='L280'></a><a href='#L280'>280</a>
 <a name='L281'></a><a href='#L281'>281</a>
-<a name='L282'></a><a href='#L282'>282</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L282'></a><a href='#L282'>282</a>
+<a name='L283'></a><a href='#L283'>283</a>
+<a name='L284'></a><a href='#L284'>284</a>
+<a name='L285'></a><a href='#L285'>285</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -413,6 +416,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -616,7 +620,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -663,16 +669,17 @@ export interface SplatControlsProps {
   hasSelectedAnnota<span class="cstat-no" title="statement not covered" >tion?: boolean;</span>
   selectedAnnotation?: Annot<span class="cstat-no" title="statement not covered" >ationProps | null;</span>
   onAnnotationUpdate: (u<span class="cstat-no" title="statement not covered" >pdates: Partial&lt;Annota</span>tionProps&gt;) =&gt; void;
+  onTextFieldFocus?: (is<span class="cstat-no" title="statement not covered" >Focused: boolean) =&gt; void;</span>
   canSave?: boolean;<span class="cstat-no" title="statement not covered" ></span>
-  isFullScreen?: boolean;<span class="cstat-no" title="statement not covered" ></span>
-  onToggleFullScreen?: <span class="cstat-no" title="statement not covered" >() =&gt; void;</span>
+  isFullScreen?: boolea<span class="cstat-no" title="statement not covered" >n;</span>
+  onToggleFullScree<span class="cstat-no" title="statement not covered" >n?: () =&gt; void;</span>
 }<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-const SplatControls <span class="cstat-no" title="statement not covered" >= ({</span>
+const SplatControls = ({<span class="cstat-no" title="statement not covered" ></span>
   defaultCameraPosition,<span class="cstat-no" title="statement not covered" ></span>
   defaultCameraFocus,<span class="cstat-no" title="statement not covered" ></span>
-  showAnnotations,<span class="cstat-no" title="statement not covered" ></span>
-  onToggleAnnotations,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  showAnnotations,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  onToggleAnnotations,
   autoRotate,
   onToggleAutoRotate,
   editable,
@@ -686,115 +693,116 @@ const SplatControls <span class="cstat-no" title="statement not covered" >= ({</
   hasSelectedAnnotation,
   selectedAnnotation,
   onAnnotationUpdate,
+  onTextFieldFocus,
   canSave = true,
   isFullScreen = false,
   onToggleFullScreen,
-}: SplatControlsProps) =&gt; {
-  const them<span class="branch-0 cbranch-no" title="branch not covered" >e = u</span>seTheme();
-  const { strings<span class="branch-0 cbranch-no" title="branch not covered" > } = u</span>seLocalization();
+}: SplatCont<span class="branch-0 cbranch-no" title="branch not covered" >rolsP</span>rops) =&gt; {
+  const theme = u<span class="branch-0 cbranch-no" title="branch not covered" >seThem</span>e();
+  const { strings } = useLocalization();
   const app = useApp();
-  const { setCamera } = useCameraPosition();
-  const [isArAva<span class="cstat-no" title="statement not covered" >ilable, setIsArAvailable] = useS</span>tate(false);
-  const [isVrAvailable<span class="cstat-no" title="statement not covered" >, setIsVrAvailable] = useState(false);</span>
-  const [isInf<span class="cstat-no" title="statement not covered" >oVisible, setIsInfoVisible]</span> = useBoolean(true);
-  const snackbar = useSn<span class="cstat-no" title="statement not covered" >ackbar();</span>
+  const { setCam<span class="cstat-no" title="statement not covered" >era } = useCameraPosition();</span>
+  const [isArAvailable<span class="cstat-no" title="statement not covered" >, setIsArAvailable] = useState(false);</span>
+  const [isVrA<span class="cstat-no" title="statement not covered" >vailable, setIsVrAvailable]</span> = useState(false);
+  const [isInfoVisible, <span class="cstat-no" title="statement not covered" >setIsInfoVisible] = useBoolean(true);</span>
+  const snackbar = useSnackbar();<span class="cstat-no" title="statement not covered" ></span>
   const paneRef = useRef&lt;HTMLDivElement&gt;(nul<span class="cstat-no" title="statement not covered" >l);</span>
   const infoButtonRef = useRef&lt;HTMLButtonEle<span class="cstat-no" title="statement not covered" >ment&gt;(null);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const errorCallba<span class="cstat-no" title="statement not covered" >ck = useCallback(</span>
-    (err: Error | <span class="cstat-no" title="statement not covered" >null) =&gt; {</span>
+  const errorCallb<span class="cstat-no" title="statement not covered" >ack = useCallback(</span>
+    (err: Error | null) <span class="cstat-no" title="statement not covered" >=&gt; {</span>
       if (err) {<span class="cstat-no" title="statement not covered" ></span>
-        // eslint-disabl<span class="cstat-no" title="statement not covered" >e-next-line no-console</span>
-<span class="fstat-no" title="function not covered" ></span>        console.error('error in xr', err);
-        snackbar.toastError(strings.XR_ERROR);
+<span class="fstat-no" title="function not covered" ></span>        // eslint-disable-next-line no-console
+        console.error('error in xr', err);
+<span class="cstat-no" title="statement not covered" >        snackbar.toastError(strings.XR_ERROR);</span>
 <span class="cstat-no" title="statement not covered" >        app.xr?.end();</span>
       }<span class="cstat-no" title="statement not covered" ></span>
     },<span class="cstat-no" title="statement not covered" ></span>
-    [app<span class="cstat-no" title="statement not covered" >, snackbar, strings]</span>
+    [app, snackbar, strings]
   );
 &nbsp;
   const handleAr = useCallback(
+    () =&gt;<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" ></span>      app.xr?.start(app.root.findComponent('camera') as CameraComponent, XRTYPE_AR, XRSPACE_LOCAL, {
+        callback: errorCallback,
+<span class="cstat-no" title="statement not covered" >      }),</span>
+    [app, errorCallback]
+  );
+&nbsp;
+  const handleVr = useCallback(
     () =&gt;
-      app.xr?.start<span class="cstat-no" title="statement not covered" >(app.root.findComponent('camera') as CameraComponent, XRTYPE_AR, XRSPACE_LOCAL, {</span>
+      app.xr?.start<span class="cstat-no" title="statement not covered" >(app.root.findComponent('camera') as CameraComponent, XRTYPE_VR, XRSPACE_LOCAL, {</span>
 <span class="fstat-no" title="function not covered" ></span>        callback: errorCallback,
       }),
     [a<span class="cstat-no" title="statement not covered" >pp, errorCallback]</span>
   );
 &nbsp;
-  const handleVr = useCallback(
-    () =&gt;
-      app.xr?.start(app.root.findComponent('camera') as CameraComponent, XRTYPE_VR, XRSPACE_LOCAL, {
-        callback: e<span class="cstat-no" title="statement not covered" >rrorCallback,</span>
-<span class="fstat-no" title="function not covered" ></span>      }),
-    [app, errorCallback]
-  );<span class="cstat-no" title="statement not covered" ></span>
-&nbsp;
   useEffect(() =&gt; {
     // this can't be changed to `useMemo(() =&gt; app.xr?.isAvailable(XRTYPE_AR), [app])` because `app` doesn't update when
     // XR's availability is updated
-    const handleAvailable = (type: string, available: boolean) =&gt; {
-<span class="cstat-no" title="statement not covered" >      if (type === XRTYPE_VR) <span class="fstat-no" title="function not covered" >{</span></span>
-        setIsVrAvailable(available);
-      } else if (type === XR<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >TY</span>PE_AR) {</span>
+<span class="cstat-no" title="statement not covered" >    const handleAvailable = (t<span class="fstat-no" title="function not covered" >yp</span>e: string, available: boolean) =&gt; {</span>
+      if (type === XRTYPE_VR) {
+        setIsVrAvailable(ava<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >il</span>able);</span>
+<span class="cstat-no" title="statement not covered" >      } else if (type === XRTYPE_AR) {</span>
 <span class="cstat-no" title="statement not covered" >        setIsArAvailable(available);</span>
       }<span class="cstat-no" title="statement not covered" ></span>
     };<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
     // Check current availability state on mount
-    if (app.xr?.isAvailable(XRTYPE_VR)) {
+<span class="cstat-no" title="statement not covered" >    if (app.xr?.isAvailable(XRTYPE_VR)) {</span>
 <span class="cstat-no" title="statement not covered" >      setIsVrAvailable(true);</span>
-    }<span class="cstat-no" title="statement not covered" ></span>
-    if (app.xr?.isAvailable(XRTYPE_AR)) {
+    }
+<span class="cstat-no" title="statement not covered" >    if (app.xr?.isAvailable(XRTYPE_AR)) {</span>
 <span class="cstat-no" title="statement not covered" >      setIsArAvailable(true);</span>
-    }<span class="cstat-no" title="statement not covered" ></span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    app.xr?.on('available', handleAvailable);</span>
-<span class="cstat-no" title="statement not covered" >    return <span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-      app.xr?.off('available', handleAvailable);
-    };<span class="cstat-no" title="statement not covered" ></span>
+    }
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >    app.xr?<span class="fstat-no" title="function not covered" >.o</span>n('available', handleAvailable);</span>
+    return () =&gt; {
+<span class="cstat-no" title="statement not covered" >      app.xr?.off('available', handleAvailable);</span>
+    };
   }, [app]);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(() =&gt; {<span class="fstat-no" title="function not covered" ></span></span>
-    const handleKeyPress = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(e</span>vent: KeyboardEvent) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >      if (event.key === 'r' || event.key === 'R') {</span>
-<span class="cstat-no" title="statement not covered" >        if (defaultCameraFocus &amp;&amp; !(isEdit &amp;&amp; selectedAnnotation !== null)) {</span>
-<span class="cstat-no" title="statement not covered" >          setCamera(defaultCameraFocus, defaultCameraPosition);</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+    co<span class="cstat-no" title="statement not covered" >nst handleKeyPress = (event: KeyboardEvent) =&gt; {</span>
+      if<span class="cstat-no" title="statement not covered" > (event.key === 'r' || event.key === 'R') {</span>
+        if<span class="cstat-no" title="statement not covered" > (defaultCameraFocus &amp;&amp; !(isEdit &amp;&amp; selectedAnnotation</span> !== null)) {
+          setCamera(defaultCameraFocus, defaultCameraPosition);
         }
       }
-    };
-<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >    window.<span class="fstat-no" title="function not covered" >ad</span>dEventListener('keydown', handleKeyPress);</span>
-    re<span class="cstat-no" title="statement not covered" >turn () =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    };</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+    wi<span class="cstat-no" title="statement not covered" >ndow.addEventListener('keydown', handleKeyPress);</span>
+    return () =&gt; {
       window.removeEventListener('keydown', handleKeyPress);
-    };
-  }, [isEdit, default<span class="cstat-no" title="statement not covered" >CameraFocus, defaultCameraPosi<span class="fstat-no" title="function not covered" >ti</span>on, setCamera, selectedAnnotation]);</span>
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  const handleInfo = useCallback(() =&gt; {
-<span class="cstat-no" title="statement not covered" >    setIsInfoVisible((prev) =&gt;<span class="fstat-no" title="function not covered" > !</span>prev);</span>
-  }, [setIsInfoVisible]);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+    };<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  },<span class="cstat-no" title="statement not covered" > [isEdit, default<span class="fstat-no" title="function not covered" >Ca</span>meraFocu<span class="cstat-no" title="statement not covered" >s, def</span>au</span>ltCameraPosition, setCamera, selectedAnnotation]);
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  const handleInfo = useCallba<span class="fstat-no" title="function not covered" >ck</span>(() =&gt; {</span>
+    setIsInfoVisible((pre<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >v)</span> =&gt; !prev);</span>
+  }, [<span class="cstat-no" title="statement not covered" >setIsInfoVisible]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  useEff<span class="cstat-no" title="statement not covered" >ect(() =&gt; {</span>
+  useEffect(() =&gt; {
     const handleScroll = (event: Event) =&gt; {
-      if (isInfoVisible &amp;&amp; paneRef.current &amp;&amp; !paneRef.current.contains(event.target as Node)) {
-        setIsInfoVisible(fal<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >se</span>);</span>
-      }
+      if (isInfoVisible &amp;&amp; p<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >an</span>eRef.current &amp;&amp; !paneRef.current.contains(event.target as Node)) {</span>
+        setIsInfoVisible(false);
+      }<span class="cstat-no" title="statement not covered" ></span>
     };<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-    co<span class="cstat-no" title="statement not covered" >nst handleMouseDown = (event: MouseEvent) =&gt; {</span>
-      co<span class="cstat-no" title="statement not covered" >nst target = event.target</span> as Node;
+    cons<span class="cstat-no" title="statement not covered" >t handleMouseDown = (even</span>t: MouseEvent) =&gt; {
+      const target = event.target as Node;
       const isClickOnInfoButton = infoButtonRef.current?.contains(target);
-      if (isInfoVisible &amp;&amp; paneRef.current &amp;&amp; !paneRef.current.contains(target) &amp;&amp; !isClickOnInfoButton) {
+<span class="cstat-no" title="statement not covered" >      if (isInfoVisible &amp;&amp; paneRef.current &amp;&amp; !paneRef.current.contains(target) &amp;&amp; !isClickOnInfoButton) {</span>
 <span class="cstat-no" title="statement not covered" >        setIsInfoVisible(false);</span>
 <span class="cstat-no" title="statement not covered" >      }</span>
-    };<span class="cstat-no" title="statement not covered" ></span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    if (isI<span class="fstat-no" title="function not covered" >nf</span>oVisible) {</span>
+    };
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+    if<span class="cstat-no" title="statement not covered" > (isInfoVisible) {</span>
 <span class="cstat-no" title="statement not covered" >      window.addEventListener('wheel', handleScroll, true);</span>
-<span class="cstat-no" title="statement not covered" >      window.addEventListener('mousedown', handleMouseDown, true);</span>
+      window.addEventListener('mousedown', handleMouseDown, true);
     }
-&nbsp;
-    return () =&gt; {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-<span class="cstat-no" title="statement not covered" >      window.removeEventListener('wheel', handleScroll, true);</span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+<span class="cstat-no" title="statement not covered" >    return () =&gt; {</span>
+      window.removeEventListener('wheel', handleScroll, true);
       window.removeEventListener('mousedown', handleMouseDown, true);
     };
   }, [isInfoVisible, setIsInfoVisible, infoButtonRef]);
@@ -899,6 +907,7 @@ const SplatControls <span class="cstat-no" title="statement not covered" >= ({</
         visible={isEdit === true &amp;&amp; hasSelectedAnnotation === true}
         annotation={<span class="cstat-no" title="statement not covered" >selectedAnnota</span>tion ?? null}
         onUpdate={onAnnotationUpdate}
+        onTextFieldFocus={onTextFieldFocus}
       /&gt;
       {isEdit &amp;&amp; &lt;CameraInfo /&gt;}
     &lt;/Box&gt;
@@ -913,7 +922,7 @@ export default SplatControls;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-11T00:48:10.887Z
+                at 2026-02-11T00:57:52.735Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
