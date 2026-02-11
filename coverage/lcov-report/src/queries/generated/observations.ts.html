@@ -1251,7 +1251,15 @@
 <a name='L1186'></a><a href='#L1186'>1186</a>
 <a name='L1187'></a><a href='#L1187'>1187</a>
 <a name='L1188'></a><a href='#L1188'>1188</a>
-<a name='L1189'></a><a href='#L1189'>1189</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L1189'></a><a href='#L1189'>1189</a>
+<a name='L1190'></a><a href='#L1190'>1190</a>
+<a name='L1191'></a><a href='#L1191'>1191</a>
+<a name='L1192'></a><a href='#L1192'>1192</a>
+<a name='L1193'></a><a href='#L1193'>1193</a>
+<a name='L1194'></a><a href='#L1194'>1194</a>
+<a name='L1195'></a><a href='#L1195'>1195</a>
+<a name='L1196'></a><a href='#L1196'>1196</a>
+<a name='L1197'></a><a href='#L1197'>1197</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1445,6 +1453,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1538,6 +1551,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2573,15 +2589,20 @@ const injectedRtkApi = a<span class="cstat-no" title="statement not covered" >pi
         url: `/api/v1/tracking/observations/${queryArg.observationId}/plots/${queryArg.plotId}/otherMedia`,
         metho<span class="fstat-no" title="function not covered" >d:</span> 'POST',<span class="cstat-no" title="statement not covered" ></span>
         body: queryArg.body,
+        params: {
+          cap<span class="fstat-no" title="function not covered" >ti</span>on: queryArg.<span class="cstat-no" title="statement not covered" >caption,</span>
+          position: queryArg.position,
+          type: queryArg['type'],
+        },
       }),
-    }),<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+    }),
     uploadPlotPhoto: build.mutation&lt;UploadPlotPhotoApiResponse, UploadPlotPhotoApiArg&gt;({
-      query: (queryArg) =&gt; ({
+      query: <span class="fstat-no" title="function not covered" >(q</span>ueryArg) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
         url: `/api/v1/tracking/observations/${queryArg.observationId}/plots/${queryArg.plotId}/photos`,
         method: 'POST',
-        body: queryArg.body,
+        body:<span class="fstat-no" title="function not covered" > q</span>ueryArg.body,<span class="cstat-no" title="statement not covered" ></span>
       }),
-    }),<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+    }),
     deletePlotPhoto: build.mutation&lt;DeletePlotPhotoApiResponse, DeletePlotPhotoApiArg&gt;({
       query: (queryArg) =&gt; ({
         url: <span class="fstat-no" title="function not covered" >`/</span>api/v1/tracki<span class="cstat-no" title="statement not covered" >ng/observations/${queryArg.observationId}/plots/${queryArg.plotId}/photos/${queryArg.fileId}`,</span>
@@ -2589,29 +2610,29 @@ const injectedRtkApi = a<span class="cstat-no" title="statement not covered" >pi
       }),
     }),
     getPlotPhoto: build.query&lt;GetPlotPhotoApiResponse, GetPlotPhotoApiArg&gt;({
-      query: <span class="fstat-no" title="function not covered" >(q</span>ueryArg) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
+      query: (queryArg) =&gt; ({
         url: `/api/v1/tracking/observations/${queryArg.observationId}/plots/${queryArg.plotId}/photos/${queryArg.fileId}`,
-        params: {
+        param<span class="fstat-no" title="function not covered" >s:</span> {<span class="cstat-no" title="statement not covered" ></span>
           maxWidth: queryArg.maxWidth,
           maxHeight: queryArg.maxHeight,
         },
       }),
-    }),<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+    }),
     updatePlotPhoto: build.mutation&lt;UpdatePlotPhotoApiResponse, UpdatePlotPhotoApiArg&gt;({
-      query: (queryArg) =&gt; ({
+      query: <span class="fstat-no" title="function not covered" >(q</span>ueryArg) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
         url: `/api/v1/tracking/observations/${queryArg.observationId}/plots/${queryArg.plotId}/photos/${queryArg.fileId}`,
         method: 'PUT',
         body: queryArg.updatePlotPhotoRequestPayload,
       }),
-    }),<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+    }),
     releaseMonitoringPlot: build.mutation&lt;ReleaseMonitoringPlotApiResponse, ReleaseMonitoringPlotApiArg&gt;({
-      query: (queryArg) =&gt; ({
+      query: <span class="fstat-no" title="function not covered" >(q</span>ueryArg) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
         url: `/api/v1/tracking/observations/${queryArg.observationId}/plots/${queryArg.plotId}/release`,
         method: 'POST',
       }),
     }),
-    replaceOb<span class="fstat-no" title="function not covered" >se</span>rvationPlot: <span class="cstat-no" title="statement not covered" >build.mutation&lt;ReplaceObservationPlotApiResponse, ReplaceObservationPlotApiArg&gt;({</span>
-      query: (queryArg) =&gt; ({
+    replaceObservationPlot: build.mutation&lt;ReplaceObservationPlotApiResponse, ReplaceObservationPlotApiArg&gt;({
+      query: <span class="fstat-no" title="function not covered" >(q</span>ueryArg) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
         url: `/api/v1/tracking/observations/${queryArg.observationId}/plots/${queryArg.plotId}/replace`,
         method: 'POST',
         body: queryArg.replaceObservationPlotRequestPayload,
@@ -2626,7 +2647,7 @@ const injectedRtkApi = a<span class="cstat-no" title="statement not covered" >pi
       }),
     }),
   }),
-  overrideExi<span class="fstat-no" title="function not covered" >st</span>ing: false,<span class="cstat-no" title="statement not covered" ></span>
+  overrideExisting: false,
 });
 export { injectedRtkApi as api };
 export type ListObservationsApiResponse = /** status 200 OK */ ListObservationsResponsePayload;
@@ -2732,16 +2753,19 @@ export type GetObservationMediaStreamApiArg = {
   plotId: number;
   fileId: number;
 };
-export type UploadOtherPlotMediaApiResponse = /** status 200 OK */ UploadPlotPhotoResponsePayload;
+export type UploadOtherPlotMediaApiResponse = /** status 200 OK */ UploadPlotMediaResponsePayload;
 export type UploadOtherPlotMediaApiArg = {
   observationId: number;
   plotId: number;
+  caption?: string;
+  position?: 'SouthwestCorner' | 'SoutheastCorner' | 'NortheastCorner' | 'NorthwestCorner';
+  type?: 'Plot' | 'Quadrat' | 'Soil';
   body: {
     file: Blob;
     payload: UploadPlotMediaRequestPayload;
   };
 };
-export type UploadPlotPhotoApiResponse = /** status 200 OK */ UploadPlotPhotoResponsePayload;
+export type UploadPlotPhotoApiResponse = /** status 200 OK */ UploadPlotMediaResponsePayload;
 export type UploadPlotPhotoApiArg = {
   observationId: number;
   plotId: number;
@@ -3551,7 +3575,7 @@ export type GetMuxStreamResponsePayload = {
   playbackToken: string;
   status: SuccessOrError;
 };
-export type UploadPlotPhotoResponsePayload = {
+export type UploadPlotMediaResponsePayload = {
   fileId: number;
   status: SuccessOrError;
 };
@@ -3634,7 +3658,7 @@ export const {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-10T21:13:23.441Z
+                at 2026-02-11T00:39:45.876Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

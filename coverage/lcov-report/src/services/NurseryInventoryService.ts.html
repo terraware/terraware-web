@@ -628,7 +628,9 @@
 <a name='L563'></a><a href='#L563'>563</a>
 <a name='L564'></a><a href='#L564'>564</a>
 <a name='L565'></a><a href='#L565'>565</a>
-<a name='L566'></a><a href='#L566'>566</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L566'></a><a href='#L566'>566</a>
+<a name='L567'></a><a href='#L567'>567</a>
+<a name='L568'></a><a href='#L568'>568</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -943,6 +945,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1515,10 +1519,10 @@ const searchInventory = async<span class="cstat-no" title="statement not covered
       type,
       values,
     };
-    searchValueCh<span class="cstat-no" title="statement not covered" >ildren.push(commonNameNode);</span>
-<span class="cstat-no" title="statement not covered" ></span>
-    const facilityNameNode: FieldNodePayload = {
-      operation: 'field',
+    searchValueChildren.push(commonNameNode);
+&nbsp;
+    const facilit<span class="cstat-no" title="statement not covered" >yNameNode: FieldNodePayload = {</span>
+      operation: <span class="cstat-no" title="statement not covered" >'field',</span>
       field: forSpecificFacilities ? 'facility_name' : 'facilityInventories.facility_name',
       type,
       values,
@@ -1532,56 +1536,58 @@ const searchInventory = async<span class="cstat-no" title="statement not covered
     nurseryFilter = {
       operation: 'field',
       field: 'facility_id',
-      type: 'Exact',<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >      values: facilityIds.map((id) =&gt; id.toString()),</span>
+      type: 'Exact',
+      values: facilityIds.map((id) =&gt; id.toString()),
     };<span class="cstat-no" title="statement not covered" ></span>
-  }<span class="cstat-no" title="statement not covered" ></span>
-&nbsp;
-  if (searchValueChildren.length) {
+<span class="cstat-no" title="statement not covered" >  }</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  if (searchValueChildren.lengt<span class="cstat-no" title="statement not covered" >h) {</span>
     const searchValueNodes: OrNodePayload = {
       operation: 'or',
       children: searchValueChildren,
-<span class="cstat-no" title="statement not covered" >    };</span>
-<span class="cstat-no" title="statement not covered" ></span>
-    if (nurseryFilter) {
-      params.search.children.push({
+    };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (nurseryFilter) {</span>
+      params.search.children.<span class="cstat-no" title="statement not covered" >push({</span>
         operation: 'and',
         children: [nurseryFilter, searchValueNodes],
       } as AndNodePayload);
-<span class="cstat-no" title="statement not covered" >    } else {</span>
+    } else {
       params.search.children.push(searchValueNodes);
 <span class="cstat-no" title="statement not covered" >    }</span>
-  } else if (nurseryFilter) {<span class="cstat-no" title="statement not covered" ></span>
-    params.search.children.push(nurseryFilter);
-  }
+  } else if (nurseryFilter) {
+<span class="cstat-no" title="statement not covered" >    params.search.children.push(nurseryFilter);</span>
+  }<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
-  re<span class="cstat-no" title="statement not covered" >turn await SearchService.search(params);</span>
+  return await SearchService.search(params);
 };
 <span class="cstat-no" title="statement not covered" ></span>
-/**<span class="cstat-no" title="statement not covered" ></span>
- * Search inventory by nursery
- */
-const searchInventoryByNursery<span class="fstat-no" title="function not covered" > =</span> asyn<span class="cstat-no" title="statement not covered" >c ({</span>
+/**
+ *<span class="cstat-no" title="statement not covered" > Search inventory by nursery</span>
+ */<span class="cstat-no" title="statement not covered" ></span>
+const searchInventoryByNursery = async ({
   organizationId,
-  searchSortOrder,
-<span class="cstat-no" title="statement not covered" >  facilityIds,</span>
-  sp<span class="cstat-no" title="statement not covered" >eciesIds,</span>
-  query,
-  isCsvExport,
-}: SearchInventoryParams): Pr<span class="fstat-no" title="function not covered" >om</span>ise&lt;S<span class="cstat-no" title="statement not covered" >earchResponse</span>Element[] | null&gt; =&gt; {
+  searchSortOrder,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  facilityIds,
+  speciesIds,
+<span class="cstat-no" title="statement not covered" >  query,</span>
+  is<span class="cstat-no" title="statement not covered" >CsvExport,</span>
+}: SearchInventoryParams): Promise&lt;SearchResponseElement[] | null&gt; =&gt; {
   const exportedFields = [
-    'facility_name',
-<span class="cstat-no" title="statement not covered" >    'facilityInventories.species_scientificName',</span>
+    'facility_name',<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+    'facilityInventories.species_scientificName',
     'germinatingQuantity',
-    'hardeningOffQuantity'<span class="fstat-no" title="function not covered" >,</span>
+<span class="cstat-no" title="statement not covered" >    'hardeningOffQuantity',</span>
     'activeGrowthQuantity',
-    'readyQuantity',
+    'readyQuantity',<span class="fstat-no" title="function not covered" ></span>
     'totalQuantity',
   ];
   const nonExportedFields = [
-    'facility_id',<span class="cstat-no" title="statement not covered" ></span>
-    'facilityInve<span class="cstat-no" title="statement not covered" >ntories.species_id',</span>
-    'facilityInventories.batches.id',
+    'facility_id',
+    'facilityInventories.species_id',
+    'facilityInventories.batches<span class="cstat-no" title="statement not covered" >.id',</span>
+    'activeGrowth<span class="cstat-no" title="statement not covered" >Quantity(raw)',</span>
+    'readyQuantity(raw)',
     'germinatingQuantity(raw)',<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span>
     'hardeningOffQuantity(raw)',
     'totalQuantity(raw)',
@@ -1765,7 +1771,7 @@ export default NurseryInventoryService;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-10T21:13:23.441Z
+                at 2026-02-11T00:39:45.876Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

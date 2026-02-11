@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/67</span>
+                <span class='fraction'>0/69</span>
             </div>
         
             
@@ -254,7 +254,16 @@
 <a name='L189'></a><a href='#L189'>189</a>
 <a name='L190'></a><a href='#L190'>190</a>
 <a name='L191'></a><a href='#L191'>191</a>
-<a name='L192'></a><a href='#L192'>192</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L192'></a><a href='#L192'>192</a>
+<a name='L193'></a><a href='#L193'>193</a>
+<a name='L194'></a><a href='#L194'>194</a>
+<a name='L195'></a><a href='#L195'>195</a>
+<a name='L196'></a><a href='#L196'>196</a>
+<a name='L197'></a><a href='#L197'>197</a>
+<a name='L198'></a><a href='#L198'>198</a>
+<a name='L199'></a><a href='#L199'>199</a>
+<a name='L200'></a><a href='#L200'>200</a>
+<a name='L201'></a><a href='#L201'>201</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -394,6 +403,15 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -470,7 +488,7 @@ type InventoryListByNurseryProps = {
 };
 &nbsp;
 export default function InventoryListByNursery({ setReportData }: InventoryListByNurseryProps) {
-  const { strings } = useLocalization();
+  const { activeLocale, strings } = useLocalization();
   const { selectedO<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >rg</span>anizati<span class="cstat-no" title="statement not covered" >on } = useOrganization();</span></span>
   const theme = useT<span class="cstat-no" title="statement not covered" >hem</span>e();
 <span class="cstat-no" title="statement not covered" ></span>
@@ -492,7 +510,7 @@ export default function InventoryListByNursery({ setReportData }: InventoryListB
     [setSearchSortOrd<span class="cstat-no" title="statement not covered" >er]</span>
   );<span class="fstat-no" title="function not covered" ></span>
 &nbsp;
-  const columns = useM<span class="cstat-no" title="statement not covered" >emo(</span>
+  const columns = useMemo(<span class="cstat-no" title="statement not covered" ></span>
     (): TableColumnType[] =&gt; [<span class="cstat-no" title="statement not covered" ></span>
       { key: 'fa<span class="cstat-no" title="statement not covered" >cility_name', name: strings.NURS</span>ERY, type: 'string' },
       {<span class="cstat-no" title="statement not covered" ></span>
@@ -536,7 +554,7 @@ export default function InventoryListByNursery({ setReportData }: InventoryListB
   );
 &nbsp;
   const onApplyFilters = useCallback(async () =&gt; {
-    if (selectedOrganization) {
+    if (selectedOrganization &amp;&amp; activeLocale) {
       const requestId = Math.random().toString();
       setRequestId('searchInventory', requestId);
 &nbsp;
@@ -581,10 +599,19 @@ export default function InventoryListByNursery({ setReportData }: InventoryListB
 <span class="cstat-no" title="statement not covered" >        }</span>
       }
     }<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  }, [<span class="cstat-no" title="statement not covered" >filters, debouncedSearchTerm, selectedOrganization, searchSortOrder, setReportData]);</span>
-<span class="cstat-no" title="statement not covered" ></span>
-  const re<span class="cstat-no" title="statement not covered" >loadData = useCallback(() =&gt; void onApplyFilters(), [onApplyFilters]);</span>
-<span class="cstat-no" title="statement not covered" ></span>
+  }, [<span class="cstat-no" title="statement not covered" ></span>
+    acti<span class="cstat-no" title="statement not covered" >veLocale,</span>
+    deboun<span class="cstat-no" title="statement not covered" >cedSearchTerm,</span>
+    filter<span class="cstat-no" title="statement not covered" >s.facilityIds,</span>
+    filters.showEmptyNurseries,
+    filters.speciesIds,
+    searchSortOrder,
+    selectedOrganization,
+    setReportData,
+  ]);
+&nbsp;
+  const reloadData = useCallback(() =&gt; void onApplyFilters(), [onApplyFilters]);
+&nbsp;
   useEffect(() =&gt; {
     void onApplyFilters();
   }, [filters, onApplyFilters]);
@@ -643,7 +670,7 @@ export default function InventoryListByNursery({ setReportData }: InventoryListB
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-10T21:13:23.441Z
+                at 2026-02-11T00:39:45.876Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

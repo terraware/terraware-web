@@ -433,7 +433,11 @@
 <a name='L368'></a><a href='#L368'>368</a>
 <a name='L369'></a><a href='#L369'>369</a>
 <a name='L370'></a><a href='#L370'>370</a>
-<a name='L371'></a><a href='#L371'>371</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L371'></a><a href='#L371'>371</a>
+<a name='L372'></a><a href='#L372'>372</a>
+<a name='L373'></a><a href='#L373'>373</a>
+<a name='L374'></a><a href='#L374'>374</a>
+<a name='L375'></a><a href='#L375'>375</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -595,6 +599,10 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -890,56 +898,60 @@ expo<span class="cstat-no" title="statement not covered" >rt type FacilitySpecie
   facility_id: string;
   facility_name: string;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
   ge<span class="cstat-no" title="statement not covered" >rminatingQuantity: string;</span>
-  hardeningOffQuantity: string;
-  readyQuantity: strin<span class="cstat-no" title="statement not covered" >g;</span>
-  activeGrowthQuantity: stri<span class="cstat-no" title="statement not covered" >ng;</span>
-  to<span class="fstat-no" title="function not covered" >ta</span>lQuantity: string;
-  'tot<span class="cstat-no" title="statement not covered" >alQuantity(raw)': string;</span>
-  facili<span class="cstat-no" title="statement not covered" >tyInventories?: {</span>
+  'germinatingQuantity(raw)': string;
+  hardeningOffQuantity<span class="cstat-no" title="statement not covered" >: string;</span>
+  'hardeningOffQuantity(raw)<span class="cstat-no" title="statement not covered" >': string;</span>
+  re<span class="fstat-no" title="function not covered" >ad</span>yQuantity: string;
+  'rea<span class="cstat-no" title="statement not covered" >dyQuantity(raw)': string;</span>
+  active<span class="cstat-no" title="statement not covered" >GrowthQuantity: string;</span>
+  'activeGrowthQuantity(raw)': string;
+  tota<span class="cstat-no" title="statement not covered" >lQuantity: string;</span>
+  'total<span class="cstat-no" title="statement not covered" >Quantity(raw)': stri</span>ng;
+  facilityInventories?: {
     species_id: string;
-    sp<span class="cstat-no" title="statement not covered" >ecies_scientificName: string;</span>
-    batc<span class="cstat-no" title="statement not covered" >hes: {</span>
-      id: string;
-    }[];
+    species_scientificName: string;
+    batches: {
+      id: string;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    }[];</span>
   }[];
-};
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-expo<span class="cstat-no" title="statement not covered" >rt type InventoryResultWithFacility</span>Names = Omit&lt;InventoryResult, 'facilityInventories'&gt; &amp; {
-  facilityInventories: string;
 };<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" ></span>
-expo<span class="cstat-no" title="statement not covered" >rt type InventoryResultWithBatchNumber = Omit&lt;InventoryResult, 'facilityInventories'&gt; &amp; {</span>
-  batc<span class="cstat-no" title="statement not covered" >hId: string;</span>
+expo<span class="cstat-no" title="statement not covered" >rt type InventoryResultWithFacilityNames = Omit&lt;InventoryResult, 'facilityInventories'&gt; &amp; {</span>
+  faci<span class="cstat-no" title="statement not covered" >lityInventories: string;</span>
+};
+&nbsp;
+export type InventoryResultWithBatchNumber = Omit&lt;InventoryResult, 'facilityInventories'&gt; &amp; {
+  batchId: string<span class="fstat-no" title="function not covered" >;<span class="cstat-no" title="statement not covered" ></span></span>
   batchNumber: string;
   facility_name_noLink: string;
-  species_scientificName_noLink: string;
-};<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  sp<span class="cstat-no" title="statement not covered" >ecies_scientificName_noLink: string;</span>
+};<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
 export type FacilityInventoryResult = {
-  fa<span class="cstat-no" title="statement not covered" >cility_id: string;</span>
-  faci<span class="cstat-no" title="statement not covered" >lity_name: string;</span>
+  facility_id: string;
+  facility_name: <span class="fstat-no" title="function not covered" >st</span>ring<span class="cstat-no" title="statement not covered" >;</span>
   species_id: string;
   species_scientificName: string;
   species_commonName?: string;
-  'germinatingQua<span class="fstat-no" title="function not covered" >nt</span>ity(<span class="cstat-no" title="statement not covered" >raw)': string;</span>
+  'germinatingQuantity(raw)': string;
   'hardeningOffQuantity(raw)': string;
-  'readyQuantity(raw)': string;
+  'readyQuantity(raw)':<span class="fstat-no" title="function not covered" > s</span>trin<span class="cstat-no" title="statement not covered" >g;</span>
   'activeGrowthQuantity(raw)': string;
-  'totalQuantity(raw)': string;
+  'totalQuantity(ra<span class="fstat-no" title="function not covered" >w)</span>': s<span class="cstat-no" title="statement not covered" >tring;</span>
 };
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+&nbsp;
 export type BatchInventoryResult = {
-  id: string;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  id<span class="cstat-no" title="statement not covered" >: string;</span>
   batchNumber: string;
-  facility_id: string;
-  facility_name: string;
-  sp<span class="cstat-no" title="statement not covered" >ecies_id: string;</span>
+  facility_id: <span class="cstat-no" title="statement not covered" >string;<span class="fstat-no" title="function not covered" ></span></span>
+  fa<span class="cstat-no" title="statement not covered" >cility_name: string;</span>
+  spec<span class="cstat-no" title="statement not covered" >ies_id: str</span>ing;
   species_scientificName: string;
-  species_commo<span class="cstat-no" title="statement not covered" >nName?: string;<span class="fstat-no" title="function not covered" ></span></span>
-  ge<span class="cstat-no" title="statement not covered" >rminatingQuantity: string;</span>
-  hard<span class="cstat-no" title="statement not covered" >eningOffQua</span>ntity: string;
+  sp<span class="cstat-no" title="statement not covered" >ecies_commonName?: string;</span>
+  germinatingQuantity: string;
+  hardeningOffQuantity: string;
   activeGrowthQuantity: string;
-  re<span class="cstat-no" title="statement not covered" >adyQuantity: string;</span>
+  readyQuantity: string;
   subLocations: string;
   totalQuantity: string;
   'germinatingQuantity(raw)': string;
@@ -953,18 +965,18 @@ type InventoryProps = {
   hasNurseries: boolean;
   hasSpecies: boolean;
 };
-&nbsp;
+<span class="cstat-no" title="statement not covered" ></span>
 export default function InventoryV2View(props: InventoryProps): JSX.Element {
   const { activeLocale, strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
-  const { isMobile } = useDeviceInfo(<span class="cstat-no" title="statement not covered" >);</span>
-  const theme = useTheme();
-  const navigate = useSyncNavigate();
-  const { hasNurseries, hasSpecies } = props;
+  const { isMobile } = useDeviceInfo();
+  const theme = useTheme();<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  const navigate = useSyncNavigate();<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+<span class="cstat-no" title="statement not covered" >  const { hasNurseries, hasSpecies } = props;</span>
   const [importInventoryModalOpen, setImportInventoryModalOpen] = useState(false);
-  const contentRef = useRef(null);<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  const [reportModalOpen, setReportModal<span class="cstat-no" title="statement not covered" >Open] = useState(false);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-<span class="cstat-no" title="statement not covered" >  const [reportData, setReportData] = useState&lt;SearchInventoryParams&gt;();</span>
+  const contentRef = useRef(null);
+  const [reportModalOpen, setReportModalOpen] = useState(false);
+  const [reportData, setReportData] = useState&lt;SearchInventoryParams&gt;();
 &nbsp;
   const messageStyles = {
     margin: '0 auto',
@@ -1180,7 +1192,7 @@ export default function InventoryV2View(props: InventoryProps): JSX.Element {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-10T21:13:23.441Z
+                at 2026-02-11T00:39:45.876Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

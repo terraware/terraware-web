@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/43</span>
+                <span class='fraction'>0/47</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/24</span>
+                <span class='fraction'>0/32</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/40</span>
+                <span class='fraction'>0/44</span>
             </div>
         
             
@@ -152,7 +152,19 @@
 <a name='L87'></a><a href='#L87'>87</a>
 <a name='L88'></a><a href='#L88'>88</a>
 <a name='L89'></a><a href='#L89'>89</a>
-<a name='L90'></a><a href='#L90'>90</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L90'></a><a href='#L90'>90</a>
+<a name='L91'></a><a href='#L91'>91</a>
+<a name='L92'></a><a href='#L92'>92</a>
+<a name='L93'></a><a href='#L93'>93</a>
+<a name='L94'></a><a href='#L94'>94</a>
+<a name='L95'></a><a href='#L95'>95</a>
+<a name='L96'></a><a href='#L96'>96</a>
+<a name='L97'></a><a href='#L97'>97</a>
+<a name='L98'></a><a href='#L98'>98</a>
+<a name='L99'></a><a href='#L99'>99</a>
+<a name='L100'></a><a href='#L100'>100</a>
+<a name='L101'></a><a href='#L101'>101</a>
+<a name='L102'></a><a href='#L102'>102</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -208,6 +220,14 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -221,6 +241,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -249,7 +273,7 @@ import { OverlayModal } <span class="cstat-no" title="statement not covered" >fr
 import { Annotation<span class="cstat-no" title="statement not covered" >Props } from 'src/components/Gau</span>ssianSplat/Annotation';
 import Applicat<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >io</span>n from 'src/components/GaussianSplat/Application';</span>
 im<span class="cstat-no" title="statement not covered" >port { APP_PATHS } from 'src/constants';</span>
-impo<span class="cstat-no" title="statement not covered" >rt { useListObservationSplatAnnotationsQuery } from 'src/querie</span>s/generated/observationSplats';
+impo<span class="cstat-no" title="statement not covered" >rt { useListSplatDetailsQuery } from 'src/queries/generated/obs</span>ervationSplats';
 import { ObservationMonitoringPlotResultsPayload } from 'src/types/Observations';
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 im<span class="cstat-no" title="statement not covered" >port VirtualMonitoringPlot from './VirtualMonitoringPlot';</span>
@@ -275,7 +299,7 @@ const VirtualPlotModal = ({
 <span class="cstat-no" title="statement not covered" >  onClose,</span>
 }: VirtualPlotModal<span class="cstat-no" title="statement not covered" >Props) =&gt; {</span>
   const navigate = useNavi<span class="cstat-no" title="statement not covered" >gate();</span>
-  const { data } = useListOb<span class="cstat-no" title="statement not covered" >servationSplatAnnotationsQuery({ obse</span>rvationId, fileId });
+  const { data } = useListSp<span class="cstat-no" title="statement not covered" >latDetailsQuery({ observationId, file</span>Id });
 <span class="cstat-no" title="statement not covered" ></span>
   // Eventually instead<span class="cstat-no" title="statement not covered" > of changing to a fully d</span>ifferent page, this could modify the Box that is used to render full screen.
   // That way it's not a fully <span class="cstat-no" title="statement not covered" >separate page loading, but just the modal and all o</span>f the data in memory is kept.
@@ -288,28 +312,38 @@ const VirtualPlotModal = ({
     void navigate(path);
   }, [navigate, observationId, stratumName, monitoringPlotId, fileId]);
 &nbsp;
+  const splatOrigin: [number, number, number] | undefined = useMemo(
+    () =&gt; (data?.originPosition ? [data.originPosition.x, data.originPosition.y, data.originPosition.z] : undefined),
+    [data]<span class="cstat-no" title="statement not covered" ></span>
+  );<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  const startingC<span class="cstat-no" title="statement not covered" >ameraPosition: [number, number, number] | undefined = useMemo(</span>
+<span class="cstat-no" title="statement not covered" >    () =&gt; (data?.cameraPo</span>sition ? [data.cameraPosition.x, data.cameraPosition.y, data.cameraPosition.z] : undefined),
+    [data]
+  );<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
   const annotations = useMemo(
     () =&gt;
-      data?.annotat<span class="cstat-no" title="statement not covered" >ions.map(</span>
-        (annotation<span class="cstat-no" title="statement not covered" >) =&gt;</span>
-          ({<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-            ...an<span class="cstat-no" title="statement not covered" >notation,</span>
-<span class="cstat-no" title="statement not covered" >            position: [an</span>notation.position.x, annotation.position.y, annotation.position.z],
-            cameraPosition: annotation.cameraPosition
-              ? [annot<span class="cstat-no" title="statement not covered" >ation.cameraPosition.x, annotation.cameraPosition.y, annotation.cameraPosition.z]</span>
-<span class="fstat-no" title="function not covered" ></span>              : undefined,
-          }) as AnnotationProps
-<span class="cstat-no" title="statement not covered" >      ) ?? [],</span>
-    [dat<span class="fstat-no" title="function not covered" >a]<span class="cstat-no" title="statement not covered" ></span></span>
+      data?.annotations.map(<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" ></span>        (a<span class="cstat-no" title="statement not covered" >nnotation) =&gt;</span>
+          ({
+            ...annotation,
+            position: <span class="cstat-no" title="statement not covered" >[annotation.position.x, annotation.position.y, annotation.position.z],</span>
+<span class="fstat-no" title="function not covered" ></span>            cameraPosition: annotation.cameraPosition
+              ? [annotation.cameraPosition.x, annotation.cameraPosition.y, annotation.cameraPosition.z]
+<span class="cstat-no" title="statement not covered" >              : undefined,</span>
+<span class="fstat-no" title="function not covered" ></span>          }) as Annotatio<span class="cstat-no" title="statement not covered" >nProps</span>
+      ) ?? [],
+    [data]
   );
 &nbsp;
   return (
     &lt;OverlayModal
       open={true}
       onClose={onClose}
-      belowComponent={&lt;VirtualPlotData monitoringPlot={monitoringPlot} plantingSiteId={plantingSiteId} /&gt;}
+<span class="cstat-no" title="statement not covered" >      belowComponent={&lt;VirtualPlotData monitoringPlot={monitoringPlot} plantingSiteId={plantingSiteId} /&gt;}</span>
     &gt;
-<span class="cstat-no" title="statement not covered" >      &lt;Application</span>
+      &lt;Application
         style={{
           width: '100%',
           height: '100%',
@@ -320,6 +354,8 @@ const VirtualPlotModal = ({
         &lt;VirtualMonitoringPlot
           observationId={observationId.toString()}
           fileId={fileId.toString()}
+          startingCameraPosition={startingCameraPosition}
+          splatOrigin={splatOrigin}
           annotations={annotations}
           editable={true}
           onToggleFullScreen={handleToggleFullScreen}
@@ -337,7 +373,7 @@ export default VirtualPlotModal;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-10T21:13:23.441Z
+                at 2026-02-11T00:39:45.876Z
             </div>
         <script src="../../../../../../prettify.js"></script>
         <script>
