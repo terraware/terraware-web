@@ -1,3 +1,4 @@
+1a4e483d356c Add CameraInfo component to display current camera position and focus point when in edit mode (#5204)
 38d24b26c9a8 SW-6417: Localize thousands and decimal separators (Follow-up #1) (#5206)
 99bc0430024b Add retrieval of positions for a virtual monitoring plot (#5203)
 db01e31be816 SW-7854: Inventory Withdrawals: Change default in growth phase input fields from "0" value to blanks (#5197)
