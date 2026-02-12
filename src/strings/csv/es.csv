@@ -1385,6 +1385,7 @@ PH,pH,8e3a7381
 PHASE,Fase,f9d98417
 PHASE_1,Fase 1 - Estudio de factibilidad,94889837
 PHASE_1_SCORE,Puntuación de la Etapa 1,9f83e45f
+PHASE_PROJECT_REQUIRED_FIELDS_ERROR,"El nombre del archivo, el enlace de GDrive y la ruta de Dropbox son obligatorios cuando se selecciona una fase.",93c006c2
 PHOTO_DATE_TIME,Fecha y hora de la foto,22e81710
 PHOTO_NORTHEAST_QUADRAT,Cuadrícula noreste,05b4f331
 PHOTO_NORTHWEST_QUADRAT,Cuadrícula noroeste,9af609f8
