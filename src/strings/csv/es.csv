@@ -6,6 +6,7 @@ ACCELERATOR_CONSOLE,Consola del acelerador,4d54c8c9
 ACCELERATOR_ORGS_EMPTY_WARNING,"No hay organizaciones aceleradoras con proyectos no asignados a un participante. Aun así, puede crear un participante sin asignación de proyecto.",f58c59a4
 ACCELERATOR_ORGS_EXHAUSTED_WARNING,No quedan organizaciones aceleradoras con proyectos no asignados a un participante.,e88b983d
 ACCELERATOR_ORGS_TOOLTIP,Organizaciones aceleradoras con proyectos no asignados a un participante,476c5020
+ACCELERATOR_PROJECTS,Proyectos del Acelerador,46486823
 ACCELERATOR_WELCOME_ALT,Dos personas mantienen plántulas en un vivero,21283bc3
 ACCELERATOR_WELCOME_CONTENT,Terraware será su fuente de información para el programa acelerador de Terraformation. Repase su lista de cosas por hacer a continuación para ver las tareas que necesita revisar y completar antes de sus fechas de entrega. Vea todas sus tareas para la fase actual haciendo clic en Entregables en el menú izquierdo.,f5fb9d32
 ACCELERATOR_WELCOME_HEADER,¡Bienvenido al Programa Acelerador!,f8e75345
@@ -164,6 +165,7 @@ ANNOTATIONS,Anotaciones,c15a3aa4
 ANNUAL_TARGET,Objetivo anual,ea52c210
 ANSWER_APPROVED,Respuesta aprobada,8a11d452
 ANSWERS_UPDATE_NEEDED,Se necesita actualizar las respuestas,5faf2563
+APPLICANTS,Solicitantes,7cb94d31
 APPLICATION,Uso,83d372a5
 APPLICATION_ERROR_NO_PROJECT_BOUNDARY,Error: No se estableció un límite del proyecto,ebf37eb4
 APPLICATION_FOR_PROJECT,Solicitud para {0},06b35f80
@@ -416,6 +418,7 @@ CULTIVATED_EX_SITU_DESCRIPTION,"Plantas que se han cultivado en un vivero, área
 CURRENT_NEXT_OBSERVATION,Observación actual/siguiente,50735263
 CURRENT_PHASE,Fase actual,24194250
 CURRENT_TIMELINE,Cronología actual,2dcbaeeb
+CURRENT_VIEW,Vista actual,8b3a3d54
 CUSTOMIZE_COLUMNS,Personalizar columnas...,b0c57f55
 CUSTOMIZE_TABLE_COLUMNS,Personalizar las columnas de la tabla,e075dc8a
 CUSTOMIZE_TABLE_COLUMNS_DESCRIPTION,Seleccione las columnas que desee añadir. Deseleccione las columnas que desee eliminar.,b45076cc
@@ -732,6 +735,7 @@ FILTER_SHOW_EMPTY_BATCHES,Mostrar lotes vacíos,f5c7fca1
 FILTER_SHOW_EMPTY_NURSERIES,Mostrar viveros sin inventario,6d351b84
 FILTER_SHOW_EMPTY_SPECIES,Mostrar especies sin inventario,0de9ee0c
 FILTERS,Filtros,c3d13364
+FILTERS_APPLIED,Filtros aplicados,75d4dd7e
 FINAL_QTY,Cantidad final,47530c05
 FINANCE,Finanzas,ae6619da
 FINANCIAL_SUMMARIES,Resúmenes financieros,d26c4f56
