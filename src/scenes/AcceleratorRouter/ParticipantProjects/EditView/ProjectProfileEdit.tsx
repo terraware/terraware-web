@@ -558,9 +558,10 @@ const ProjectProfileEdit = () => {
 
   const phaseOptions: {
     label: string;
-    value: CohortPhaseType;
+    value: CohortPhaseType | undefined;
   }[] = useMemo(
     () => [
+      { label: '--', value: undefined },
       { label: strings.COHORT_PHASE_DUE_DILIGENCE, value: 'Phase 0 - Due Diligence' },
       { label: strings.COHORT_PHASE_FEASIBILITY_STUDY, value: 'Phase 1 - Feasibility Study' },
       { label: strings.COHORT_PHASE_PLAN_AND_SCALE, value: 'Phase 2 - Plan and Scale' },
