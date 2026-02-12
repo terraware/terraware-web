@@ -65,18 +65,38 @@ const injectedRtkApi = api.injectEndpoints({
         body: queryArg.updateProjectMetricRequestPayload,
       }),
     }),
-    updateProjectMetricTargets: build.mutation<UpdateProjectMetricTargetsApiResponse, UpdateProjectMetricTargetsApiArg>(
+    updateProjectMetricTarget: build.mutation<UpdateProjectMetricTargetApiResponse, UpdateProjectMetricTargetApiArg>({
+      query: (queryArg) => ({
+        url: `/api/v1/accelerator/projects/${queryArg.projectId}/reports/projectMetricTarget`,
+        method: 'POST',
+        body: queryArg.updateProjectMetricTargetRequestPayload,
+      }),
+    }),
+    getProjectMetricTargets: build.query<GetProjectMetricTargetsApiResponse, GetProjectMetricTargetsApiArg>({
+      query: (queryArg) => ({ url: `/api/v1/accelerator/projects/${queryArg}/reports/projectMetricTargets` }),
+    }),
+    updateStandardMetricTarget: build.mutation<UpdateStandardMetricTargetApiResponse, UpdateStandardMetricTargetApiArg>(
       {
         query: (queryArg) => ({
-          url: `/api/v1/accelerator/projects/${queryArg.projectId}/reports/targets`,
+          url: `/api/v1/accelerator/projects/${queryArg.projectId}/reports/standardMetricTarget`,
           method: 'POST',
-          body: queryArg.updateMetricTargetsRequestPayload,
-          params: {
-            updateSubmitted: queryArg.updateSubmitted,
-          },
+          body: queryArg.updateStandardMetricTargetRequestPayload,
         }),
       }
     ),
+    getStandardMetricTargets: build.query<GetStandardMetricTargetsApiResponse, GetStandardMetricTargetsApiArg>({
+      query: (queryArg) => ({ url: `/api/v1/accelerator/projects/${queryArg}/reports/standardMetricTargets` }),
+    }),
+    updateSystemMetricTarget: build.mutation<UpdateSystemMetricTargetApiResponse, UpdateSystemMetricTargetApiArg>({
+      query: (queryArg) => ({
+        url: `/api/v1/accelerator/projects/${queryArg.projectId}/reports/systemMetricTarget`,
+        method: 'POST',
+        body: queryArg.updateSystemMetricTargetRequestPayload,
+      }),
+    }),
+    getSystemMetricTargets: build.query<GetSystemMetricTargetsApiResponse, GetSystemMetricTargetsApiArg>({
+      query: (queryArg) => ({ url: `/api/v1/accelerator/projects/${queryArg}/reports/systemMetricTargets` }),
+    }),
     getAcceleratorReportYears: build.query<GetAcceleratorReportYearsApiResponse, GetAcceleratorReportYearsApiArg>({
       query: (queryArg) => ({ url: `/api/v1/accelerator/projects/${queryArg}/reports/years` }),
     }),
@@ -229,14 +249,33 @@ export type UpdateProjectMetricApiArg = {
   projectId: number;
   updateProjectMetricRequestPayload: UpdateProjectMetricRequestPayload;
 };
-export type UpdateProjectMetricTargetsApiResponse =
+export type UpdateProjectMetricTargetApiResponse =
   /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
-export type UpdateProjectMetricTargetsApiArg = {
+export type UpdateProjectMetricTargetApiArg = {
   projectId: number;
-  /** Update targets for submitted reports. Require TF Experts privileges. */
-  updateSubmitted?: boolean;
-  updateMetricTargetsRequestPayload: UpdateMetricTargetsRequestPayload;
+  updateProjectMetricTargetRequestPayload: UpdateProjectMetricTargetRequestPayload;
 };
+export type GetProjectMetricTargetsApiResponse =
+  /** status 200 The requested operation succeeded. */ GetProjectMetricTargetsResponsePayload;
+export type GetProjectMetricTargetsApiArg = number;
+export type UpdateStandardMetricTargetApiResponse =
+  /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
+export type UpdateStandardMetricTargetApiArg = {
+  projectId: number;
+  updateStandardMetricTargetRequestPayload: UpdateStandardMetricTargetRequestPayload;
+};
+export type GetStandardMetricTargetsApiResponse =
+  /** status 200 The requested operation succeeded. */ GetStandardMetricTargetsResponsePayload;
+export type GetStandardMetricTargetsApiArg = number;
+export type UpdateSystemMetricTargetApiResponse =
+  /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
+export type UpdateSystemMetricTargetApiArg = {
+  projectId: number;
+  updateSystemMetricTargetRequestPayload: UpdateSystemMetricTargetRequestPayload;
+};
+export type GetSystemMetricTargetsApiResponse =
+  /** status 200 The requested operation succeeded. */ GetSystemMetricTargetsResponsePayload;
+export type GetSystemMetricTargetsApiArg = number;
 export type GetAcceleratorReportYearsApiResponse =
   /** status 200 The requested operation succeeded. */ GetAcceleratorReportYearsResponsePayload;
 export type GetAcceleratorReportYearsApiArg = number;
@@ -485,37 +524,47 @@ export type CreateProjectMetricRequestPayload = {
 export type UpdateProjectMetricRequestPayload = {
   metric: ExistingProjectMetricPayload;
 };
-export type ReportMetricTargetPayload = {
-  reportId: number;
+export type UpdateProjectMetricTargetRequestPayload = {
+  metricId: number;
   target?: number;
+  year: number;
 };
-export type UpdateMetricTargetsPayloadBase = {
-  targets: ReportMetricTargetPayload[];
-  type: string;
+export type ReportProjectMetricTargetPayload = {
+  metricId: number;
+  target?: number;
+  year: number;
 };
-export type UpdateProjectMetricTargetsPayload = {
-  type: 'project';
-} & UpdateMetricTargetsPayloadBase & {
-    metricId: number;
-  };
-export type UpdateStandardMetricTargetsPayload = {
-  type: 'standard';
-} & UpdateMetricTargetsPayloadBase & {
-    metricId: number;
-  };
-export type UpdateSystemMetricTargetsPayload = {
-  type: 'system';
-} & UpdateMetricTargetsPayloadBase & {
-    metric:
-      | 'Seeds Collected'
-      | 'Seedlings'
-      | 'Trees Planted'
-      | 'Species Planted'
-      | 'Hectares Planted'
-      | 'Survival Rate';
-  };
-export type UpdateMetricTargetsRequestPayload = {
-  metric: UpdateProjectMetricTargetsPayload | UpdateStandardMetricTargetsPayload | UpdateSystemMetricTargetsPayload;
+export type GetProjectMetricTargetsResponsePayload = {
+  status: SuccessOrError;
+  targets: ReportProjectMetricTargetPayload[];
+};
+export type UpdateStandardMetricTargetRequestPayload = {
+  metricId: number;
+  target?: number;
+  year: number;
+};
+export type ReportStandardMetricTargetPayload = {
+  metricId: number;
+  target?: number;
+  year: number;
+};
+export type GetStandardMetricTargetsResponsePayload = {
+  status: SuccessOrError;
+  targets: ReportStandardMetricTargetPayload[];
+};
+export type UpdateSystemMetricTargetRequestPayload = {
+  metric: 'Seeds Collected' | 'Seedlings' | 'Trees Planted' | 'Species Planted' | 'Hectares Planted' | 'Survival Rate';
+  target?: number;
+  year: number;
+};
+export type ReportSystemMetricTargetPayload = {
+  metric: 'Seeds Collected' | 'Seedlings' | 'Trees Planted' | 'Species Planted' | 'Hectares Planted' | 'Survival Rate';
+  target?: number;
+  year: number;
+};
+export type GetSystemMetricTargetsResponsePayload = {
+  status: SuccessOrError;
+  targets: ReportSystemMetricTargetPayload[];
 };
 export type ReportYearsPayload = {
   endYear: number;
@@ -534,7 +583,6 @@ export type ReportProjectMetricEntriesPayload = {
   progressNotes?: string;
   projectsComments?: string;
   status?: 'Achieved' | 'On-Track' | 'Unlikely';
-  target?: number;
   value?: number;
 };
 export type ReportStandardMetricEntriesPayload = {
@@ -542,7 +590,6 @@ export type ReportStandardMetricEntriesPayload = {
   progressNotes?: string;
   projectsComments?: string;
   status?: 'Achieved' | 'On-Track' | 'Unlikely';
-  target?: number;
   value?: number;
 };
 export type ReportSystemMetricEntriesPayload = {
@@ -551,7 +598,6 @@ export type ReportSystemMetricEntriesPayload = {
   progressNotes?: string;
   projectsComments?: string;
   status?: 'Achieved' | 'On-Track' | 'Unlikely';
-  target?: number;
 };
 export type UpdateAcceleratorReportValuesRequestPayload = {
   achievements: string[];
@@ -601,7 +647,15 @@ export const {
   useLazyListProjectMetricsQuery,
   useCreateProjectMetricMutation,
   useUpdateProjectMetricMutation,
-  useUpdateProjectMetricTargetsMutation,
+  useUpdateProjectMetricTargetMutation,
+  useGetProjectMetricTargetsQuery,
+  useLazyGetProjectMetricTargetsQuery,
+  useUpdateStandardMetricTargetMutation,
+  useGetStandardMetricTargetsQuery,
+  useLazyGetStandardMetricTargetsQuery,
+  useUpdateSystemMetricTargetMutation,
+  useGetSystemMetricTargetsQuery,
+  useLazyGetSystemMetricTargetsQuery,
   useGetAcceleratorReportYearsQuery,
   useLazyGetAcceleratorReportYearsQuery,
   useGetAcceleratorReportQuery,

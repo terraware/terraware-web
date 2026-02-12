@@ -16,10 +16,9 @@ type MetricBoxProps = {
   year: string;
   quarter?: string;
   length: number;
-  yearTarget?: number;
 };
 
-const MetricBox = ({ metric, index, year, quarter, length, yearTarget }: MetricBoxProps) => {
+const MetricBox = ({ metric, index, year, quarter, length }: MetricBoxProps) => {
   const { isDesktop, isMobile } = useDeviceInfo();
   const theme = useTheme();
   const numberFormatter = useNumberFormatter();
@@ -69,8 +68,8 @@ const MetricBox = ({ metric, index, year, quarter, length, yearTarget }: MetricB
             {year} {strings.TARGET}
           </Typography>
           <Typography fontSize={'24px'} fontWeight={600}>
-            {yearTarget !== undefined && numberFormatter.format(yearTarget)} {yearTarget ? addPercentSign : ''}
-            {yearTarget !== undefined ? metric.unit : ''}
+            {metric.target !== undefined && numberFormatter.format(metric.target)} {metric.target ? addPercentSign : ''}
+            {metric.target !== undefined ? metric.unit : ''}
           </Typography>
         </Box>
         <Box flex='0 0 50%'>

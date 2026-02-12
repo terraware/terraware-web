@@ -25,19 +25,17 @@ import TitleBar from 'src/components/common/TitleBar';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
-import useAnnualReportMetrics from 'src/hooks/useAnnualReportMetrics';
 import useBoolean from 'src/hooks/useBoolean';
 import { useLocalization, useUser } from 'src/providers';
 import { useListPublishedReportsQuery } from 'src/queries/generated/publishedReports';
 import {
-  ReportSystemMetricPayload,
   useGetAcceleratorReportQuery,
   usePublishAcceleratorReportMutation,
   useReviewAcceleratorReportMutation,
 } from 'src/queries/generated/reports';
 import FunderReportView from 'src/scenes/FunderReport/FunderReportView';
 import strings from 'src/strings';
-import { MetricType, ReportProjectMetric, ReportStandardMetric } from 'src/types/AcceleratorReport';
+import { MetricType } from 'src/types/AcceleratorReport';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import { useParticipantProjectData } from '../ParticipantProjectContext';
@@ -263,7 +261,6 @@ const ReportView = () => {
     () => (year ? Number(report?.startDate.split('-')[0]) : DateTime.now().year),
     [report?.startDate, year]
   );
-  const annualMetrics = useAnnualReportMetrics(projectId, yearToUse);
   const improvedReportsEnabled = isEnabled('Improved Reports');
 
   return (
@@ -358,19 +355,6 @@ const ReportView = () => {
                       : report?.standardMetrics;
 
                 return metrics?.map((metric, index) => {
-                  const yearTarget = (
-                    type === 'system'
-                      ? annualMetrics.systemMetrics.find(
-                          (annualMetric) => annualMetric.metric === (metric as ReportSystemMetricPayload).metric
-                        )
-                      : type === 'project'
-                        ? annualMetrics.projectMetrics.find(
-                            (annualMetric) => annualMetric.id === (metric as ReportProjectMetric).id
-                          )
-                        : annualMetrics.standardMetrics.find(
-                            (annualMetric) => annualMetric.id === (metric as ReportStandardMetric).id
-                          )
-                  )?.target;
                   return improvedReportsEnabled ? (
                     <MetricRow
                       key={`${type}-${index}`}
@@ -390,7 +374,6 @@ const ReportView = () => {
                       onEditChange={onEditChange}
                       canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
                       year={yearToUse}
-                      yearTarget={yearTarget}
                     />
                   );
                 });

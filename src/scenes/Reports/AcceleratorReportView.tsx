@@ -20,17 +20,12 @@ import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import TitleBar from 'src/components/common/TitleBar';
 import { APP_PATHS } from 'src/constants';
-import useAnnualReportMetrics from 'src/hooks/useAnnualReportMetrics';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
-import {
-  ReportSystemMetricPayload,
-  useGetAcceleratorReportQuery,
-  useSubmitAcceleratorReportMutation,
-} from 'src/queries/generated/reports';
+import { useGetAcceleratorReportQuery, useSubmitAcceleratorReportMutation } from 'src/queries/generated/reports';
 import strings from 'src/strings';
-import { MetricType, ReportProjectMetric, ReportStandardMetric } from 'src/types/AcceleratorReport';
+import { MetricType } from 'src/types/AcceleratorReport';
 
 import SubmitReportDialog from './SubmitReportDialog';
 
@@ -130,7 +125,6 @@ const AcceleratorReportView = () => {
     () => (year ? Number(report?.startDate.split('-')[0]) : DateTime.now().year),
     [report?.startDate, year]
   );
-  const annualMetrics = useAnnualReportMetrics(projectId, yearToUse);
 
   return (
     <>
@@ -181,20 +175,6 @@ const AcceleratorReportView = () => {
                     : report?.standardMetrics;
 
               return metrics?.map((metric, index) => {
-                const yearTarget = (
-                  type === 'system'
-                    ? annualMetrics.systemMetrics.find(
-                        (annualMetric) => annualMetric.metric === (metric as ReportSystemMetricPayload).metric
-                      )
-                    : type === 'project'
-                      ? annualMetrics.projectMetrics.find(
-                          (annualMetric) => annualMetric.id === (metric as ReportProjectMetric).id
-                        )
-                      : annualMetrics.standardMetrics.find(
-                          (annualMetric) => annualMetric.id === (metric as ReportStandardMetric).id
-                        )
-                )?.target;
-
                 return (
                   <MetricBox
                     key={`${type}-${index}`}
@@ -203,7 +183,6 @@ const AcceleratorReportView = () => {
                     reportId={Number(reportId)}
                     type={type as MetricType}
                     year={yearToUse}
-                    yearTarget={yearTarget}
                   />
                 );
               });
