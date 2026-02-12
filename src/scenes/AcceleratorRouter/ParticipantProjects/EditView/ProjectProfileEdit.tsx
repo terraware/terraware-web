@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button, Dropdown, DropdownItem, IconTooltip } from '@terraware/web-components';
 
+import ConfirmModal from 'src/components/Application/ConfirmModal';
 import PhotoSelectorWithPreview, { FileWithUrl } from 'src/components/Photo/PhotoSelectorWithPreview';
 import CountrySelect from 'src/components/ProjectField/CountrySelect';
 import LandUseMultiSelect from 'src/components/ProjectField/LandUseMultiSelect';
@@ -17,6 +18,7 @@ import Card from 'src/components/common/Card';
 import Link from 'src/components/common/Link';
 import PageForm from 'src/components/common/PageForm';
 import Icon from 'src/components/common/icon/Icon';
+import useBoolean from 'src/hooks/useBoolean';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization, useUser } from 'src/providers';
 import { selectUploadImageValue } from 'src/redux/features/documentProducer/values/valuesSelector';
@@ -51,8 +53,6 @@ import { getImagePath } from 'src/utils/images';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
-import ConfirmModal from '../../../../components/Application/ConfirmModal';
-import useBoolean from '../../../../hooks/useBoolean';
 import { useParticipantProjectData } from '../ParticipantProjectContext';
 import AddInternalUserRoleModal from './AddInternalUserRoleModal';
 
