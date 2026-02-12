@@ -51,6 +51,8 @@ import { getImagePath } from 'src/utils/images';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
+import ConfirmModal from '../../../../components/Application/ConfirmModal';
+import useBoolean from '../../../../hooks/useBoolean';
 import { useParticipantProjectData } from '../ParticipantProjectContext';
 import AddInternalUserRoleModal from './AddInternalUserRoleModal';
 
@@ -131,6 +133,7 @@ const ProjectProfileEdit = () => {
   const [mainPhoto, setMainPhoto] = useState<FileWithUrl>();
   const [mapPhoto, setMapPhoto] = useState<FileWithUrl>();
   const [customUserRoles, setCustomUserRoles] = useState<string[]>([]);
+  const [confirmModalOpen, , openConfirmModal, closeConfirmModal] = useBoolean(false);
 
   const isAllowedEdit = isAllowed('UPDATE_PARTICIPANT_PROJECT');
 
@@ -306,16 +309,16 @@ const ProjectProfileEdit = () => {
     return false;
   }, [dispatch, internalUsers, listInternalUsersRequest?.data?.users, projectId]);
 
-  const handleSave = useCallback(() => {
+  const validateSave = useCallback(() => {
     setValidateFields(false);
     if (!stableToVariable || listInternalUsersRequest?.status !== 'success') {
       snackbar.toastError(strings.CANNOT_SAVE_UNTIL_PAGE_IS_FULLY_LOADED);
-      return;
+      return false;
     }
 
     if (!internalUsers.filter((user) => !!user.userId).every((user) => user.role || user.roleName)) {
       snackbar.toastError(strings.SELECT_A_CONTACT_TYPE_FOR_ALL_INTERNAL_LEADS);
-      return;
+      return false;
     }
 
     if (
@@ -326,9 +329,13 @@ const ProjectProfileEdit = () => {
     ) {
       setValidateFields(true);
       snackbar.toastError(strings.PHASE_PROJECT_REQUIRED_FIELDS_ERROR);
-      return;
+      return false;
     }
 
+    return true;
+  }, [stableToVariable, listInternalUsersRequest?.status, internalUsers, participantProjectRecord, strings, snackbar]);
+
+  const finishSave = useCallback(() => {
     setRequestsInProgress(true);
 
     const newInitiatedRequests = {
@@ -397,19 +404,28 @@ const ProjectProfileEdit = () => {
 
     setInitiatedRequests(newInitiatedRequests);
   }, [
-    stableToVariable,
-    listInternalUsersRequest?.status,
-    internalUsers,
-    participantProjectRecord,
-    saveInternalUsers,
+    dispatch,
     mainPhoto,
     mapPhoto,
-    snackbar,
-    dispatch,
+    participantProjectRecord,
     projectId,
     redirectToProjectView,
-    strings,
+    saveInternalUsers,
+    stableToVariable,
   ]);
+
+  const handleSave = useCallback(() => {
+    if (!validateSave()) {
+      return;
+    }
+
+    if (participantProjectRecord?.phase !== participantProject?.phase) {
+      openConfirmModal();
+      return;
+    }
+
+    finishSave();
+  }, [validateSave, participantProjectRecord?.phase, participantProject?.phase, openConfirmModal, finishSave]);
 
   const handleOnCancel = useCallback(() => goToParticipantProject(projectId), [goToParticipantProject, projectId]);
 
@@ -580,6 +596,13 @@ const ProjectProfileEdit = () => {
 
   return (
     <Grid container paddingRight={theme.spacing(3)}>
+      <ConfirmModal
+        open={confirmModalOpen}
+        title={strings.CONFIRM_UPDATE_ALL_COHORT_PHASE_TITLE}
+        body={strings.CONFIRM_UPDATE_ALL_COHORT_PHASE}
+        onClose={closeConfirmModal}
+        onConfirm={finishSave}
+      />
       {addInternalUserRoleModalOpen && (
         <AddInternalUserRoleModal
           addInternalUserRole={addInternalUserRole}
