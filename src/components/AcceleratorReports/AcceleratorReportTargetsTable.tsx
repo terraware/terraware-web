@@ -150,6 +150,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
         id: sm.id,
         description: sm.description,
         metricType: 'standard',
+        ...targetByYear,
       };
     });
 

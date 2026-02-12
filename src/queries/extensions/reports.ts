@@ -73,6 +73,10 @@ api.enhanceEndpoints({
           type: QueryTagTypes.ProjectMetrics,
           id: args.projectId,
         },
+        {
+          type: QueryTagTypes.ProjectMetricTargets,
+          id: args.projectId,
+        },
       ],
     },
     updateProjectMetric: {
@@ -84,53 +88,59 @@ api.enhanceEndpoints({
       ],
     },
     getProjectMetricTargets: {
-      providesTags: [
+      providesTags: (_result, _error, projectId) => [
         {
           type: QueryTagTypes.ProjectMetricTargets,
+          id: projectId,
         },
       ],
     },
     updateProjectMetricTarget: {
-      invalidatesTags: [
+      invalidatesTags: (_result, _error, args) => [
         {
           type: QueryTagTypes.Reports,
         },
         {
           type: QueryTagTypes.ProjectMetricTargets,
+          id: args.projectId,
         },
       ],
     },
     getStandardMetricTargets: {
-      providesTags: [
+      providesTags: (_result, _error, projectId) => [
         {
           type: QueryTagTypes.StandadMetricTargets,
+          id: projectId,
         },
       ],
     },
     updateStandardMetricTarget: {
-      invalidatesTags: [
+      invalidatesTags: (_result, _error, args) => [
         {
           type: QueryTagTypes.Reports,
         },
         {
           type: QueryTagTypes.StandadMetricTargets,
+          id: args.projectId,
         },
       ],
     },
     getSystemMetricTargets: {
-      providesTags: [
+      providesTags: (_result, _error, projectId) => [
         {
           type: QueryTagTypes.SystemMetricTargets,
+          id: projectId,
         },
       ],
     },
     updateSystemMetricTarget: {
-      invalidatesTags: [
+      invalidatesTags: (_result, _error, args) => [
         {
           type: QueryTagTypes.Reports,
         },
         {
           type: QueryTagTypes.SystemMetricTargets,
+          id: args.projectId,
         },
       ],
     },
