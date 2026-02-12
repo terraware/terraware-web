@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/44</span>
+                <span class='fraction'>0/47</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/42</span>
+                <span class='fraction'>0/45</span>
             </div>
         
             
@@ -87,7 +87,10 @@
 <a name='L22'></a><a href='#L22'>22</a>
 <a name='L23'></a><a href='#L23'>23</a>
 <a name='L24'></a><a href='#L24'>24</a>
-<a name='L25'></a><a href='#L25'>25</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L25'></a><a href='#L25'>25</a>
+<a name='L26'></a><a href='#L26'>26</a>
+<a name='L27'></a><a href='#L27'>27</a>
+<a name='L28'></a><a href='#L28'>28</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -109,6 +112,9 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">export enum Quer<span class="cstat-no" title="statement not covered" >yTagTypes {</span>
@@ -121,20 +127,23 @@
   ObservationMedia = 'ObservationMedia',
   ObservationSplat<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >s </span>= 'ObservationSplats',</span>
 <span class="cstat-no" title="statement not covered" >  PlantingSites = 'PlantingSites',</span>
-  Pr<span class="cstat-no" title="statement not covered" >ojectMetrics = 'ProjectMetrics',</span>
-  Proj<span class="cstat-no" title="statement not covered" >ectModules = 'ProjectModules',</span>
-  Projec<span class="cstat-no" title="statement not covered" >tReportConfigs = 'ProjectR<span class="fstat-no" title="function not covered" >ep</span>ortC<span class="cstat-no" title="statement not covered" >onfigs',</span></span>
-  Projects = 'Projects',
-<span class="cstat-no" title="statement not covered" >  PublishedRe</span>portMedia = 'PublishedReportMedia',
-  PublishedReports = 'PublishedReports',
-  ReportMedia = 'Re<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >po</span>rtMedia<span class="cstat-no" title="statement not covered" >',</span></span>
-  Reports = 'Reports<span class="cstat-no" title="statement not covered" >',</span>
-<span class="cstat-no" title="statement not covered" >  StandardMetrics = 'StandadMetrics',</span>
-  SystemMetric<span class="fstat-no" title="function not covered" >s </span>= 'S<span class="cstat-no" title="statement not covered" >ystemMetric</span>s',
+  Pr<span class="cstat-no" title="statement not covered" >ojectMetricTargets = 'ProjectMetricTargets',</span>
+  Proj<span class="cstat-no" title="statement not covered" >ectMetrics = 'ProjectMetrics',</span>
+  Projec<span class="cstat-no" title="statement not covered" >tModules = 'ProjectModules<span class="fstat-no" title="function not covered" >',<span class="cstat-no" title="statement not covered" ></span></span></span>
+  ProjectReportConfigs = 'ProjectReportConfigs',
+<span class="cstat-no" title="statement not covered" >  Projects = </span>'Projects',
+  PublishedReportMedia = 'PublishedReportMedia',
+  PublishedReports <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >= </span>'Publis<span class="cstat-no" title="statement not covered" >hedReports',</span></span>
+  ReportMedia = 'Rep<span class="cstat-no" title="statement not covered" >ort</span>Media',
+<span class="cstat-no" title="statement not covered" >  Reports = 'Reports',</span>
+  StandadMetri<span class="fstat-no" title="function not covered" >cT</span>arge<span class="cstat-no" title="statement not covered" >ts = 'Stand</span>adMetricTargets',
+  StandardMetrics<span class="fstat-no" title="function not covered" > =</span> 'St<span class="cstat-no" title="statement not covered" >andadMetrics',</span>
+  SystemMetricTargets = 'SystemMetricTargets',
+<span class="cstat-no" title="statement not covered" >  SystemMetrics = 'SystemMetrics',</span>
   T0 = 'T0',<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-}
+}<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-export const QUERY_TAGS = Object.val<span class="cstat-no" title="statement not covered" >u<span class="fstat-no" title="function not covered" >es</span>(QueryTagTypes);</span>
+ex<span class="cstat-no" title="statement not covered" >port const QUERY_TAGS = Object.values(QueryTagTypes);</span>
 <span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -142,7 +151,7 @@ export const QUERY_TAGS = Object.val<span class="cstat-no" title="statement not 
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-11T18:40:55.750Z
+                at 2026-02-12T17:31:24.851Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

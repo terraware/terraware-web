@@ -1,3 +1,5 @@
+c23c4e92d34a Updated targets table to use new endpoints (#5211)
+5308e52ce8c0 SW-7977 Planting Withdrawals missing from the Planting Progress table (#5213)
 e024bddc9bab SW-8040 Left-align value in numeric textfield in table for consistency (#5210)
 7e0282308b0c SW-8036 Targets table should list all metrics without pagination (#5209)
 4c3f2e674774 SW-6695 Add "See more" in Withdrawal details (#5208)
