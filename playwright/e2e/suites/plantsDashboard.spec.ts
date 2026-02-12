@@ -13,7 +13,7 @@ test.describe('PlantsDashboardTests', () => {
   });
 
   test('Console Dashboard Empty State for project', async ({ page }, testInfo) => {
-    await page.getByRole('link', { name: 'Phase 0 Project' }).click();
+    await page.getByRole('link', { name: 'Phase 0 Project Deal' }).click();
     await page.getByRole('tab', { name: 'Plants Dashboard' }).click();
     await expect(page.getByText('Phase 0 Project Deal', { exact: true })).toBeVisible();
     await expect(page.getByText('Total Planting Area', { exact: true })).toBeVisible();
@@ -58,7 +58,7 @@ test.describe('PlantsDashboardTests', () => {
   });
 
   test('Console rolled-up dashboard for project', async ({ page }, testInfo) => {
-    await page.getByRole('link', { name: 'Phase 1 Project' }).click();
+    await page.getByRole('link', { name: 'Phase 1 Project Deal' }).click();
     await page.getByRole('tab', { name: 'Plants Dashboard' }).click();
     await expect(page.getByText('Phase 1 Project Deal', { exact: true })).toBeVisible();
     await expect(page.getByText('Total Planting Area', { exact: true })).toBeVisible();
@@ -100,7 +100,7 @@ test.describe('PlantsDashboardTests', () => {
   });
 
   test('Console dashboard for project planting site with no observations', async ({ page }, testInfo) => {
-    await page.getByRole('link', { name: 'Phase 1 Project' }).click();
+    await page.getByRole('link', { name: 'Phase 1 Project Deal' }).click();
     await page.getByRole('tab', { name: 'Plants Dashboard' }).click();
     await expect(page.getByText('Phase 1 Project Deal', { exact: true })).toBeVisible();
     await page.getByPlaceholder('Select...').click();
@@ -144,7 +144,7 @@ test.describe('PlantsDashboardTests', () => {
   });
 
   test('Console dashboard for project planting site with observations', async ({ page }, testInfo) => {
-    await page.getByRole('link', { name: 'Phase 1 Project' }).click();
+    await page.getByRole('link', { name: 'Phase 1 Project Deal' }).click();
     await page.getByRole('tab', { name: 'Plants Dashboard' }).click();
     await expect(page.getByText('Phase 1 Project Deal', { exact: true })).toBeVisible();
     await page.getByPlaceholder('Select...').click();

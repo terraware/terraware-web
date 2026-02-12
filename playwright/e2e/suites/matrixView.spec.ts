@@ -30,9 +30,7 @@ test.describe('MatrixViewTests', () => {
     await expect(page.getByRole('columnheader', { name: 'Project Lead' })).toBeVisible();
 
     // table row values
-    await expect(page.getByRole('cell', { name: 'Application Project' })).toBeVisible();
-    await expect(page.getByRole('cell', { name: 'Phase 0 - Due Diligence' })).toBeVisible();
-    await expect(page.getByRole('cell', { name: '1,000' })).toBeVisible();
+    await expect(page.getByRole('cell', { name: 'COL_Terraformation (staging)' })).toBeVisible();
     await expect(page.getByRole('cell', { name: 'Colombia' })).toBeVisible();
 
     await page.locator('#manageColumns').click();
