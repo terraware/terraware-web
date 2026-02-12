@@ -187,14 +187,6 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
         return;
       }
 
-      const reportIdKey = `reportId${year}`;
-      const reportId = row[reportIdKey] as number | undefined;
-
-      if (!reportId) {
-        snackbar.toastError();
-        return;
-      }
-
       const newTarget = Number(value);
       if (isNaN(newTarget)) {
         snackbar.toastError();
