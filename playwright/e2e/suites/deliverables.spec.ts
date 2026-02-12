@@ -33,7 +33,7 @@ import {
   validateSpeciesStatus,
   verifyHomepageDeliverableStatus,
 } from '../utils/participantDeliverable';
-import { changeToContributor, changeToReadOnlyUser, changeToSuperAdmin } from '../utils/userUtils';
+import { changeToSuperAdmin } from '../utils/userUtils';
 import { exactOptions, selectOrg, waitFor } from '../utils/utils';
 
 test.describe('DeliverableTests', () => {
@@ -42,44 +42,6 @@ test.describe('DeliverableTests', () => {
     await page.goto('/');
     await waitFor(page, '#home');
     await selectOrg(page, 'Terraformation (staging)');
-  });
-
-  test('Deliverables tab shows up once cohort has module with deliverables', async ({ page, context, baseURL }) => {
-    const today = new Date();
-    const tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000);
-
-    await expect(page.getByText('Deliverables', exactOptions)).toBeHidden();
-    await page.getByRole('link', { name: 'Accelerator Console' }).click();
-    await page.getByRole('tab', { name: 'Cohorts' }).click();
-    await page.getByRole('link', { name: 'Test Cohort Phase 1' }).click();
-    await page.getByRole('button', { name: 'Edit Cohort' }).click();
-    await page.getByRole('button', { name: 'Add Module' }).click();
-    await page.locator('#title').locator('input').fill('Test Module 1');
-    await page.getByText('Module *').locator('..').locator('input').click();
-    await page
-      .locator('li')
-      .filter({ hasText: /^\(1000\) Test Phase 1 Module$/ })
-      .click();
-    await page.getByText('Start Date *').locator('..').locator('input').fill(today.toISOString().split('T')[0]);
-    await page.getByText('End Date *').locator('..').locator('input').fill(tomorrow.toISOString().split('T')[0]);
-    await page.locator('.dialog-box--footer').getByText('Save').click();
-    await page.getByRole('button', { name: 'Save' }).click();
-    await expect(page.getByText('Changes Saved!')).toBeVisible();
-
-    await page.getByRole('link', { name: 'Terraware' }).click();
-    await waitFor(page, '#home');
-    await expect(page.getByText('Deliverables', exactOptions)).toBeVisible();
-
-    await changeToContributor(context, baseURL);
-    await page.goto('/');
-    await expect(page.getByText('Deliverables', exactOptions)).toBeHidden();
-
-    // read only shouldn't be able to approve a whole deliverable
-    await changeToReadOnlyUser(context, baseURL);
-    await page.goto('/');
-    await navigateToConsoleDeliverables(page);
-    await page.getByRole('link', { name: 'Phase 1 Questions' }).click();
-    await expect(page.getByText('#approveDeliverable')).toBeHidden();
   });
 
   test('Questionnaire Deliverable', async ({ page }) => {

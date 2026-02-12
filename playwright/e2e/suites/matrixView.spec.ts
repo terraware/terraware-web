@@ -12,7 +12,6 @@ test.describe('MatrixViewTests', () => {
 
   test('Matrix view render', async ({ page }, testInfo) => {
     await page.getByRole('link', { name: 'Accelerator Console' }).click({ delay: 50 });
-    await page.getByRole('button', { name: 'Matrix View' }).click();
     await page.waitForTimeout(1000); //Wait for table to load
 
     await expect(page.getByLabel('Show/Hide search')).toBeVisible();
@@ -54,7 +53,6 @@ test.describe('MatrixViewTests', () => {
 
   test('Add column to matrix view', async ({ page }, testInfo) => {
     await page.getByRole('link', { name: 'Accelerator Console' }).click();
-    await page.getByRole('button', { name: 'Matrix View' }).click();
     await page.waitForTimeout(1000); //Wait for table to load
 
     await page.locator('#manageColumns').click();
@@ -68,7 +66,6 @@ test.describe('MatrixViewTests', () => {
 
   test('Column reordering and reset in matrix view', async ({ page }, testInfo) => {
     await page.getByRole('link', { name: 'Accelerator Console' }).click();
-    await page.getByRole('button', { name: 'Matrix View' }).click();
     await page.waitForTimeout(1000); //Wait for table to load
 
     // Get initial column order
@@ -101,7 +98,6 @@ test.describe('MatrixViewTests', () => {
 
   test('Add multiple columns and reset columns in matrix view', async ({ page }, testInfo) => {
     await page.getByRole('link', { name: 'Accelerator Console' }).click();
-    await page.getByRole('button', { name: 'Matrix View' }).click();
     await page.waitForTimeout(1000); //Wait for table to load
 
     await page.locator('#manageColumns').click();

@@ -32,11 +32,10 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
   const isFundingEntitiesRoute = useMatch({ path: APP_PATHS.ACCELERATOR_FUNDING_ENTITIES, end: false });
   const isModuleContentRoute = useMatch({ path: APP_PATHS.ACCELERATOR_MODULES, end: false });
   const isOrganizationRoute = useMatch({ path: APP_PATHS.ACCELERATOR_ORGANIZATIONS, end: false });
-  const isOverviewRoute = useMatch({ path: APP_PATHS.ACCELERATOR_OVERVIEW, end: false });
   const isPeopleRoute = useMatch({ path: APP_PATHS.ACCELERATOR_PEOPLE, end: false });
   const isScoringRoute = useMatch({ path: APP_PATHS.ACCELERATOR_PROJECT_SCORES, end: false });
   const isVotingRoute = useMatch({ path: APP_PATHS.ACCELERATOR_PROJECT_VOTES, end: false });
-  const isMatrixViewRoute = useMatch({ path: APP_PATHS.ACCELERATOR_MATRIX_VIEW, end: false });
+  const isProjectsRoute = useMatch({ path: APP_PATHS.ACCELERATOR_PROJECTS, end: false });
 
   const isAllowedViewPeople = isAllowed('READ_GLOBAL_ROLES');
   const isAllowedViewFundingEntities = isAllowed('READ_FUNDING_ENTITIES');
@@ -74,18 +73,10 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
 
       <NavItem
         icon='home'
-        id='overview'
-        label={strings.OVERVIEW}
-        onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_OVERVIEW)}
-        selected={!!isOverviewRoute || !!isScoringRoute || !!isVotingRoute}
-      />
-
-      <NavItem
-        icon='iconModule'
-        id='matrix'
-        label={strings.MATRIX_VIEW}
-        onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_MATRIX_VIEW)}
-        selected={!!isMatrixViewRoute}
+        id='projects'
+        label={strings.PROJECTS}
+        onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_PROJECTS)}
+        selected={!!isProjectsRoute || !!isScoringRoute || !!isVotingRoute}
       />
 
       <NavSection />

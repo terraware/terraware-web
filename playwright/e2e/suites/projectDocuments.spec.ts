@@ -7,7 +7,7 @@ import { changeToSuperAdmin } from '../utils/userUtils';
 test.describe('ProjectDocumentsTests', () => {
   test.beforeEach(async ({ page, context, baseURL }, testInfo) => {
     await changeToSuperAdmin(context, baseURL);
-    await navigateToProjectProfile('Phase 2 Project Deal', page);
+    await navigateToProjectProfile('Phase 2 Project', page);
     await page.getByRole('tab', { name: 'Documents' }).click();
   });
 

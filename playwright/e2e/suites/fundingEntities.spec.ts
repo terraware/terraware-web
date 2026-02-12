@@ -34,8 +34,8 @@ test.describe('FundingEntitiesTests', () => {
     await page.getByPlaceholder('Select...').click();
     await expect(page.locator('li').filter({ hasText: /^Phase 0 Project Deal$/ })).toBeHidden();
 
-    await publishProjectProfile('Phase 0 Project Deal', page);
-    await publishProjectProfile('Phase 1 Project Deal', page);
+    await publishProjectProfile('Phase 0 Project', page);
+    await publishProjectProfile('Phase 1 Project', page);
 
     await navigateToFundingEntities(page);
     await page.getByRole('button', { name: 'Add Funding Entity' }).click();

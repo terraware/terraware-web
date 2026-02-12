@@ -328,11 +328,7 @@ export default function useNavigateTo() {
       goToParticipantProjectEdit: (projectId: number) =>
         navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_EDIT.replace(':projectId', `${projectId}`) }),
 
-      goToParticipantProjectList: () =>
-        navigate({
-          pathname: APP_PATHS.ACCELERATOR_OVERVIEW,
-          search: 'tab=projects',
-        }),
+      goToParticipantProjectList: () => navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECTS }),
 
       goToParticipantProjectSpecies: (deliverableId: number, projectId: number, participantProjectSpeciesId: number) =>
         navigate({

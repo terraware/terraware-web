@@ -10,7 +10,7 @@ test.describe('ProjectVariablesTests', () => {
   });
 
   test('View Project Variables Table', async ({ page }, testInfo) => {
-    await navigateToProjectProfile('Phase 2 Project Deal', page);
+    await navigateToProjectProfile('Phase 2 Project', page);
     await page.getByRole('tab', { name: 'Variables' }).click();
 
     await expect(page.getByRole('heading', { name: 'Variables' })).toBeVisible();
@@ -28,7 +28,7 @@ test.describe('ProjectVariablesTests', () => {
   });
 
   test('Edit Project Variable', async ({ page }, testInfo) => {
-    await navigateToProjectProfile('Phase 2 Project Deal', page);
+    await navigateToProjectProfile('Phase 2 Project', page);
     await page.getByRole('tab', { name: 'Variables' }).click();
 
     // wait for table rows to load

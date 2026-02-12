@@ -1092,7 +1092,7 @@ const MatrixView = () => {
   );
 
   return (
-    <Page title={strings.MATRIX_VIEW}>
+    <Page title={strings.PROJECTS}>
       {loading === true && <BusySpinner />}
       {showColumnsModal && allVariables && (
         <ColumnsModal

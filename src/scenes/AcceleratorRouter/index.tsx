@@ -24,7 +24,6 @@ import EventEdit from './Modules/EventEdit';
 import ModuleView from './Modules/ModuleView';
 import NavBar from './NavBar';
 import Organizations from './Organizations';
-import Overview from './Overview';
 import ParticipantProjects from './ParticipantProjects';
 import People from './People';
 
@@ -39,7 +38,7 @@ const AcceleratorRouter = ({ showNavBar, setShowNavBar }: AcceleratorRouterProps
   const theme = useTheme();
 
   const viewHasBackgroundImage = useCallback((): boolean => {
-    return location.pathname.startsWith(APP_PATHS.ACCELERATOR_OVERVIEW);
+    return location.pathname.startsWith(APP_PATHS.ACCELERATOR_PROJECTS);
   }, [location]);
 
   const navBarOpened = {
@@ -86,8 +85,7 @@ const AcceleratorRouter = ({ showNavBar, setShowNavBar }: AcceleratorRouterProps
           >
             <ErrorBoundary setShowNavBar={setShowNavBar}>
               <Routes>
-                <Route path={APP_PATHS.ACCELERATOR_OVERVIEW} element={<Overview />} />
-                <Route path={`${APP_PATHS.ACCELERATOR_MATRIX_VIEW}/*`} element={<MatrixView />} />
+                <Route path={`${APP_PATHS.ACCELERATOR_PROJECTS}/*`} element={<MatrixView />} />
                 <Route path={`${APP_PATHS.ACCELERATOR_ACTIVITY_LOG}/*`} element={<ActivityLogRouter />} />
                 <Route path={`${APP_PATHS.ACCELERATOR_APPLICATIONS}/*`} element={<Applications />} />
                 <Route path={`${APP_PATHS.ACCELERATOR_COHORTS}/*`} element={<Cohorts />} />
@@ -100,7 +98,7 @@ const AcceleratorRouter = ({ showNavBar, setShowNavBar }: AcceleratorRouterProps
                 <Route path={`${APP_PATHS.ACCELERATOR_ORGANIZATIONS}/*`} element={<Organizations />} />
                 <Route path={`${APP_PATHS.ACCELERATOR_FUNDING_ENTITIES}/*`} element={<FundingEntities />} />
                 <Route path={`${APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENTS}/*`} element={<DocumentsRouter />} />
-                <Route path={'*'} element={<Navigate to={APP_PATHS.ACCELERATOR_OVERVIEW} />} />
+                <Route path={'*'} element={<Navigate to={APP_PATHS.ACCELERATOR_PROJECTS} />} />
               </Routes>
             </ErrorBoundary>
           </Box>

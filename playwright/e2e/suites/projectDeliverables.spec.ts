@@ -9,7 +9,7 @@ test.describe('ProjectDeliverablesTests', () => {
   });
 
   test('View Project Deliverables Table', async ({ page }, testInfo) => {
-    await navigateToProjectProfile('Phase 2 Project Deal', page);
+    await navigateToProjectProfile('Phase 2 Project', page);
     await page.getByRole('tab', { name: 'Deliverables' }).click();
 
     await expect(page.getByRole('heading', { name: 'Deliverables' })).toBeVisible();
