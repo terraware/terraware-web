@@ -434,11 +434,7 @@
 <a name='L369'></a><a href='#L369'>369</a>
 <a name='L370'></a><a href='#L370'>370</a>
 <a name='L371'></a><a href='#L371'>371</a>
-<a name='L372'></a><a href='#L372'>372</a>
-<a name='L373'></a><a href='#L373'>373</a>
-<a name='L374'></a><a href='#L374'>374</a>
-<a name='L375'></a><a href='#L375'>375</a>
-<a name='L376'></a><a href='#L376'>376</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L372'></a><a href='#L372'>372</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -716,9 +712,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -734,7 +727,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1091,24 +1083,24 @@ export default fun<span class="cstat-no" title="statement not covered" ><span cl
       },
       goToModuleContent: (projectI<span class="fstat-no" title="function not covered" >d:</span> number, modu<span class="cstat-no" title="statement not covered" >leId: number, type: ModuleContentType) =&gt; {</span>
         let pathname = '';<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-        switch (type) {
+        switch (type) {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
           case 'additionalResources':
             pathname = APP_PATHS.PROJECT_MODULE_ADDITIONAL_RESOURCES;
-            break;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+            break;
           case 'preparationMaterials':
             pathname = APP_PATHS.PROJECT_MODULE_PREPARATION_MATERIALS;
-            break;
+            break;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
           default:
             return;
         }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-&nbsp;
-        navigate({
-          pathname: pathname<span class="fstat-no" title="function not covered" >.r</span>eplace(':projectId<span class="cstat-no" title="statement not covered" >', `${projectId}`).replace(':moduleId', `${moduleId}`),</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+        navigate({<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+          pathname: pathname.replace(':pr<span class="fstat-no" title="function not covered" >oj</span>ectId', `${pr<span class="cstat-no" title="statement not covered" >ojectId}`).replace(':moduleId', `${moduleId}`),</span>
         });<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
       },<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-      goToModuleEventSession<span class="fstat-no" title="function not covered" >: </span>(projectId: n<span class="cstat-no" title="statement not covered" >umber, moduleId: number, sessionId: number) =&gt;</span>
-        navigate({<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+&nbsp;
+      goToModuleEventSession: (projectId: number, moduleId: number, sessionId: number) =&gt;
+        navigate({
           pathname: APP_PATHS.PROJECT_MODULE_SESSION.replace(':projectId', `${projectId}`)
             .replace(':moduleId', `${moduleId}`)
             .replace(':sessionId', `${sessionId}`),
@@ -1143,11 +1135,7 @@ export default fun<span class="cstat-no" title="statement not covered" ><span cl
       goToParticipantProjectEdit: (projectId: number) =&gt;
         navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_EDIT.replace(':projectId', `${projectId}`) }),
 &nbsp;
-      goToParticipantProjectList: () =&gt;
-        navigate({
-          pathname: APP_PATHS.ACCELERATOR_OVERVIEW,
-          search: 'tab=projects',
-        }),
+      goToParticipantProjectList: () =&gt; navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECTS }),
 &nbsp;
       goToParticipantProjectSpecies: (deliverableId: number, projectId: number, participantProjectSpeciesId: number) =&gt;
         navigate({
@@ -1195,7 +1183,7 @@ export default fun<span class="cstat-no" title="statement not covered" ><span cl
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-12T17:31:24.851Z
+                at 2026-02-12T17:40:27.752Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

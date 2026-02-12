@@ -155,12 +155,7 @@
 <a name='L90'></a><a href='#L90'>90</a>
 <a name='L91'></a><a href='#L91'>91</a>
 <a name='L92'></a><a href='#L92'>92</a>
-<a name='L93'></a><a href='#L93'>93</a>
-<a name='L94'></a><a href='#L94'>94</a>
-<a name='L95'></a><a href='#L95'>95</a>
-<a name='L96'></a><a href='#L96'>96</a>
-<a name='L97'></a><a href='#L97'>97</a>
-<a name='L98'></a><a href='#L98'>98</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L93'></a><a href='#L93'>93</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -241,11 +236,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -317,32 +307,27 @@ const CohortView = () =&gt; {
   );<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
   const crumbs: Cru<span class="cstat-no" title="statement not covered" >mb[] = useMemo(</span>
-    () =&gt; [<span class="cstat-no" title="statement not covered" ></span>
-      {<span class="cstat-no" title="statement not covered" ></span>
-        name: activeLocale ? string<span class="cstat-no" title="statement not covered" >s.OVERVIEW : '',</span>
-<span class="cstat-no" title="statement not covered" >        to: `${APP_PATHS.ACCEL<span class="fstat-no" title="function not covered" >ER</span>ATOR_OVERVIEW}?tab=cohorts`,</span>
-<span class="cstat-no" title="statement not covered" >      },</span>
-    ],<span class="cstat-no" title="statement not covered" ></span>
-    [a<span class="cstat-no" title="statement not covered" >ctiveLocale]</span>
+    () =&gt; [{ name<span class="cstat-no" title="statement not covered" >: activeLocale ? strings.PROJECTS : '', to: `${APP_PATHS.ACCELERATOR_PROJECTS}` }],</span>
+    [activeLocale]<span class="cstat-no" title="statement not covered" ></span>
   );<span class="cstat-no" title="statement not covered" ></span>
-&nbsp;
-  if (!cohort) {
-    return;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  if<span class="cstat-no" title="statement not covered" > (!cohort) {</span>
+    re<span class="cstat-no" title="statement not covered" >turn;</span>
   }<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
   return (
     &lt;Page crumbs={crumbs} title={cohort?.name || ''} rightComponent={rightComponent}&gt;
-      &lt;Card<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" ></span>        st<span class="cstat-no" title="statement not covered" >yle={{</span>
-          display: 'flex',
+      &lt;Card<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >        style={{</span>
+<span class="cstat-no" title="statement not covered" >          display: 'flex',</span>
           flexDirection: 'column',
-          flexGro<span class="cstat-no" title="statement not covered" >w: 1,</span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span>          marginBottom: theme.spacing(3),</span>
-          padding: `${theme.spacing(2)} ${theme.spacing(1)}`,
+          flexGrow: 1,
+          marginBottom: t<span class="cstat-no" title="statement not covered" >heme.spacing(3),</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span>          padding: `${theme.spacing(2)} ${theme.spacing(1)}`,</span>
         }}
       &gt;
-        &lt;Grid container&gt;
-          &lt;ProjectFieldDisplay label={strings.COHORT_NAME} value={cohort.name} rightBorder={true} /&gt;
+        &lt;Grid con<span class="cstat-no" title="statement not covered" >tainer&gt;</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span>          &lt;ProjectFieldDisplay label={strings.COHORT_NAME} value={cohort.name} rightBorder={true} /&gt;</span>
           &lt;ProjectFieldDisplay label={strings.PHASE} value={cohort.phase} rightBorder={true} /&gt;
         &lt;/Grid&gt;
 <span class="cstat-no" title="statement not covered" >        &lt;Box paddingLeft={2} paddingRight={2}&gt;</span>
@@ -361,7 +346,7 @@ export default CohortView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-12T17:31:24.851Z
+                at 2026-02-12T17:40:27.752Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/61</span>
+                <span class='fraction'>0/60</span>
             </div>
         
             
@@ -136,9 +136,7 @@
 <a name='L71'></a><a href='#L71'>71</a>
 <a name='L72'></a><a href='#L72'>72</a>
 <a name='L73'></a><a href='#L73'>73</a>
-<a name='L74'></a><a href='#L74'>74</a>
-<a name='L75'></a><a href='#L75'>75</a>
-<a name='L76'></a><a href='#L76'>76</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L74'></a><a href='#L74'>74</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -194,8 +192,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -249,28 +245,26 @@ const VotingProvider = ({ children }: Props): JSX.Element =&gt; {
   const [phaseVotes, setPh<span class="cstat-no" title="statement not covered" >aseVotes] = useState&lt;Pha</span>seVotes&gt;();
   const [votingData, se<span class="cstat-no" title="statement not covered" >tVotingData] = useState&lt;V</span>otingData&gt;({ project });
 <span class="cstat-no" title="statement not covered" ></span>
-  const goToProjects = useCallb<span class="cstat-no" title="statement not covered" >ack(() =&gt; {</span>
-    navigate({ pathname: APP_P<span class="cstat-no" title="statement not covered" >ATHS.ACCELERATOR_OVERVIEW }); // TODO switch to proje</span>ct management lists page
-  }, [navigate]);<span class="cstat-no" title="statement not covered" ></span>
+  const goToProjects = useCallb<span class="cstat-no" title="statement not covered" >ack(() =&gt; navigate({ pathname: APP_PATHS.ACCELERATOR_PROJ</span>ECTS }), [navigate]);
 <span class="cstat-no" title="statement not covered" ></span>
-  // Redirect to proje<span class="cstat-no" title="statement not covered" >ct management list page if projectId is</span> invalid.
-  // Otherwise fetch the <span class="cstat-no" title="statement not covered" >votes.</span>
+  // Redirect to project man<span class="cstat-no" title="statement not covered" >agement list page if projectId is invalid.</span>
+  // Otherwise fetc<span class="cstat-no" title="statement not covered" >h the votes.</span>
   useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-    if (isNaN(projectId<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >))</span> {</span>
-      goToProjects(<span class="cstat-no" title="statement not covered" >);</span>
-    } else {<span class="cstat-no" title="statement not covered" ></span>
-      void dispatch<span class="cstat-no" title="statement not covered" >(requestProjectVotesGet(projectId))</span>;
+    if (isNaN(projectId))<span class="cstat-no" title="statement not covered" > {</span>
+      goToProjects();<span class="cstat-no" title="statement not covered" ></span>
+    } else {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+      void dispatch<span class="cstat-no" title="statement not covered" >(requestProjectVotesGet(projectId));</span>
     }<span class="cstat-no" title="statement not covered" ></span>
-  }, [dispatch, goToP<span class="cstat-no" title="statement not covered" >rojects, projectId]);</span>
+  }, [dispatch, goT<span class="cstat-no" title="statement not covered" >oProjects, projectId]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  // find phase vo<span class="cstat-no" title="statement not covered" >tes</span>
-  useEffect(() =<span class="cstat-no" title="statement not covered" >&gt; {</span>
-    if (votes?.s<span class="cstat-no" title="statement not covered" >tatus === 'error') {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-      snackbar.toastError();<span class="cstat-no" title="statement not covered" ></span>
-    } else if (votes?.status === 'succ<span class="cstat-no" title="statement not covered" >ess') {</span>
-      const votesForPha<span class="cstat-no" title="statement not covered" >se = votes?.data?.phases.find(<span class="fstat-no" title="function not covered" >(d</span>ata) =&gt; data.phase === phase);</span>
-<span class="cstat-no" title="statement not covered" >      if (votesForPhase) {</span>
-        setPhaseVotes(votesForPhase);
+  // find phase votes<span class="cstat-no" title="statement not covered" ></span>
+  useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
+    if (votes?.sta<span class="cstat-no" title="statement not covered" >tus === 'error') {</span>
+      snackbar.t<span class="cstat-no" title="statement not covered" >oastError();</span>
+    } else if (v<span class="cstat-no" title="statement not covered" >otes?.status === 'success') {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+      const votesForPhase = votes?.dat<span class="cstat-no" title="statement not covered" >a?.phases.find((data) =&gt; data</span>.phase === phase);
+      if (votesForPhase) {<span class="cstat-no" title="statement not covered" ></span>
+        setPhaseVotes(v<span class="cstat-no" title="statement not covered" >otesForPhase);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 <span class="cstat-no" title="statement not covered" >      }<span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >    }</span>
   }, [<span class="cstat-no" title="statement not covered" >phase, snackbar,</span> votes]);
@@ -295,7 +289,7 @@ export default VotingProvider;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-12T17:31:24.851Z
+                at 2026-02-12T17:40:27.752Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>
