@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { useDeviceInfo } from '@terraware/web-components/utils';
@@ -12,7 +12,7 @@ import MetricStatusBadge from 'src/components/AcceleratorReports/MetricStatusBad
 import PhotosBox from 'src/components/AcceleratorReports/PhotosBox';
 import Card from 'src/components/common/Card';
 import { useLocalization } from 'src/providers';
-import { PublishedReportPayload, useListPublishedReportsQuery } from 'src/queries/generated/publishedReports';
+import { PublishedReportPayload } from 'src/queries/generated/publishedReports';
 import { PublishedReportMetric } from 'src/types/AcceleratorReport';
 
 import MetricBox from './MetricBox';
@@ -27,42 +27,9 @@ const FunderReportView = ({ selectedProjectId, selectedReport }: FunderReportVie
   const { isDesktop } = useDeviceInfo();
   const { strings } = useLocalization();
 
-  const listPublishedReportsResponse = useListPublishedReportsQuery(selectedProjectId);
-  const publishedReports = useMemo(
-    () => listPublishedReportsResponse.data?.reports ?? [],
-    [listPublishedReportsResponse.data?.reports]
-  );
-
   const year = useMemo(() => {
     return selectedReport?.startDate?.split('-')[0];
   }, [selectedReport]);
-
-  const getYearTarget = useCallback(
-    (metric: PublishedReportMetric): number | undefined => {
-      if (!year || !publishedReports) {
-        return undefined;
-      }
-
-      // Find the annual report for this year from published reports
-      const annualReport = publishedReports.find(
-        (report) => report.frequency === 'Annual' && report.startDate.split('-')[0] === year
-      );
-
-      if (!annualReport) {
-        return undefined;
-      }
-
-      // Find the matching metric in the annual report by reference
-      const allAnnualMetrics = [
-        ...annualReport.systemMetrics,
-        ...annualReport.projectMetrics,
-        ...annualReport.standardMetrics,
-      ];
-      const foundMetric = allAnnualMetrics.find((m) => m.reference === metric.reference);
-      return foundMetric?.target;
-    },
-    [year, publishedReports]
-  );
 
   const allMetrics: PublishedReportMetric[] = [];
 
@@ -152,7 +119,6 @@ const FunderReportView = ({ selectedProjectId, selectedReport }: FunderReportVie
                       quarter={selectedReport?.quarter}
                       key={index}
                       length={climateMetrics.length}
-                      yearTarget={getYearTarget(metric)}
                     />
                   ))}
                 </Box>
@@ -175,7 +141,6 @@ const FunderReportView = ({ selectedProjectId, selectedReport }: FunderReportVie
                       quarter={selectedReport?.quarter}
                       key={index}
                       length={biodiversityMetrics.length}
-                      yearTarget={getYearTarget(metric)}
                     />
                   ))}
                 </Box>
@@ -198,7 +163,6 @@ const FunderReportView = ({ selectedProjectId, selectedReport }: FunderReportVie
                       quarter={selectedReport?.quarter}
                       key={index}
                       length={communityMetrics.length}
-                      yearTarget={getYearTarget(metric)}
                     />
                   ))}
                 </Box>
