@@ -75,7 +75,7 @@ test.describe('ProjectProfileTests', () => {
         'Slack',
       ],
       projectLinksHidden: ['Application'],
-      additionalPageText: ['Test Cohort Phase 0', 'Phase 0 - Due Diligence', 'Viewing: Country Only'],
+      additionalPageText: ['Phase 0 - Due Diligence', 'Viewing: Country Only'],
       hiddenText: ['StandardVCS', 'Methodology NumberVM0033'],
     };
 
@@ -118,11 +118,7 @@ test.describe('ProjectProfileTests', () => {
       ],
       projectLinksHidden: ['Application'],
       sdgList: [4, 5, 6],
-      additionalPageText: [
-        'Test Cohort Phase 1',
-        'Phase 1 - Feasibility Study',
-        'Viewing: Project Zone Figure Variable',
-      ],
+      additionalPageText: ['Phase 1 - Feasibility Study', 'Viewing: Project Zone Figure Variable'],
       fundingEntities: ['Existing Funding Entity'],
     };
 
@@ -165,7 +161,7 @@ test.describe('ProjectProfileTests', () => {
       ],
       projectLinksHidden: ['Application'],
       sdgList: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
-      additionalPageText: ['Test Cohort Phase 2', 'Phase 2 - Plan and Scale', 'Viewing: Project Zone Figure Variable'],
+      additionalPageText: ['Phase 2 - Plan and Scale', 'Viewing: Project Zone Figure Variable'],
       carbonCertifications: [],
     };
 
