@@ -1,13 +1,16 @@
 import React, { type JSX, useMemo } from 'react';
 
+import { getDateDisplayValue } from '@terraware/web-components/utils';
+
 import Link from 'src/components/common/Link';
 import TextTruncated from 'src/components/common/TextTruncated';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
-import { useLocalization } from 'src/providers';
+import { useLocalization, useOrganization } from 'src/providers';
 import { AcceleratorReportStatus } from 'src/types/AcceleratorReport';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import AcceleratorReportStatusBadge from './AcceleratorReportStatusBadge';
 
@@ -24,6 +27,8 @@ const ReportCell = ({ renderProps, projectId }: ReportCellProps): JSX.Element =>
   const { column, row, index, value } = renderProps;
   const { activeLocale } = useLocalization();
   const { isAcceleratorRoute } = useAcceleratorConsole();
+  const { selectedOrganization } = useOrganization();
+  const defaultTimezone = useDefaultTimeZone().get().id;
 
   const linkToReport = useMemo(() => {
     const reportUrl = isAcceleratorRoute ? APP_PATHS.ACCELERATOR_PROJECT_REPORTS_VIEW : APP_PATHS.REPORTS_VIEW;
@@ -74,6 +79,12 @@ const ReportCell = ({ renderProps, projectId }: ReportCellProps): JSX.Element =>
 
   if (column.key === 'submittedBy') {
     return <CellRenderer {...renderProps} value={row.submittedByUser?.fullName} />;
+  }
+  if (column.key === 'submittedTime') {
+    const submittedDate = row.submittedTime
+      ? getDateDisplayValue(row.submittedTime, selectedOrganization?.timeZone ?? defaultTimezone)
+      : '';
+    return <CellRenderer {...renderProps} value={submittedDate} />;
   }
 
   return <CellRenderer {...renderProps} />;
