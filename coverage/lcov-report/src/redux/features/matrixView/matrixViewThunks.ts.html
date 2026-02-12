@@ -115,7 +115,10 @@
 <a name='L50'></a><a href='#L50'>50</a>
 <a name='L51'></a><a href='#L51'>51</a>
 <a name='L52'></a><a href='#L52'>52</a>
-<a name='L53'></a><a href='#L53'>53</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -159,10 +162,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -175,46 +181,49 @@ import strings from 'src<span class="cstat-no" title="statement not covered" >/s
 export type Project<span class="cstat-no" title="statement not covered" >sWithVariablesSearchResult = {</span>
   id: number;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >  name: string;</span>
-  co<span class="cstat-no" title="statement not covered" >untry_name: string;</span>
-  acceleratorDetails: {
-    'confirmedRefo<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >re</span>stableLand(raw)': number;</span>
-<span class="cstat-no" title="statement not covered" >  };</span>
-  in<span class="cstat-no" title="statement not covered" >ternalUsers: {</span>
-    us<span class="cstat-no" title="statement not covered" >er_firstName: string;</span>
-    user<span class="cstat-no" title="statement not covered" >_lastName: string;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  ph<span class="cstat-no" title="statement not covered" >ase?: string;</span>
+  application_id?: number;
+  country_name: st<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ri</span>ng;</span>
+<span class="cstat-no" title="statement not covered" >  acceleratorDetails: {</span>
+<span class="cstat-no" title="statement not covered" >    'confirmedReforestableLand(raw)': number;</span>
+  };<span class="cstat-no" title="statement not covered" ></span>
+  intern<span class="cstat-no" title="statement not covered" >alUsers: {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+    user_firstName: string;
+<span class="cstat-no" title="statement not covered" >    user_last</span>Name: string;
   }[];
-<span class="cstat-no" title="statement not covered" >  variables: </span>{
+  variables: {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
     stableId: string;
-    id: string<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >;<span class="cstat-no" title="statement not covered" ></span></span></span>
+    id: string;
     variableName: string;
     type: string;
     isList?: boolean;
     isMultiselect?: boolean;
     values?: {
-      variableValueId: string;
-      options?: { id: string; name: string; position: string }[];
-      'numberValue(<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ra</span>w)'?: n<span class="cstat-no" title="statement not covered" >umber;</span></span>
-      textValue?: st<span class="cstat-no" title="statement not covered" >rin</span>g;
-<span class="cstat-no" title="statement not covered" >      dateValue?: string;</span>
-      linkUrl?: string;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-    }[];
-<span class="cstat-no" title="statement not covered" >  }[];</span>
+      variableValue<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Id</span>: strin<span class="cstat-no" title="statement not covered" >g;</span></span>
+      options?: { id<span class="cstat-no" title="statement not covered" >: s</span>tring; name: string; position: string }[];
+<span class="cstat-no" title="statement not covered" >      'numberValue(raw)'?: number;</span>
+      textValue?: string;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+      dateValue?: string;
+<span class="cstat-no" title="statement not covered" >      linkUrl?: string;</span>
+    }[];<span class="cstat-no" title="statement not covered" ></span>
+  }[];<span class="cstat-no" title="statement not covered" ></span>
 };<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-export const requestG<span class="cstat-no" title="statement not covered" >etProjectsWithVariables = create</span>AsyncThunk(
-  'projectsWithVariables/get',<span class="cstat-no" title="statement not covered" ></span>
-  async (request: MatrixViewSearchParams, { rejectWithValue }) =&gt; {
-<span class="fstat-no" title="function not covered" ></span>    const { fields, filters, sortOrder } = request;
-<span class="cstat-no" title="statement not covered" ></span>
-    const response: P<span class="cstat-no" title="statement not covered" >rojectsWithVariablesSearchResult[] | null = await MatrixViewService.searchProjects({</span>
+export const requestGetProjectsWithVariables = createAsyncThunk(
+<span class="fstat-no" title="function not covered" >  'p</span>rojectsWithVariables/get',
+  async (request: MatrixViewSearchParams, { rejectW<span class="cstat-no" title="statement not covered" >ithValue</span> }) =&gt; {
+    const { fields, f<span class="cstat-no" title="statement not covered" >ilters, search, sortOrder } = request;</span>
+&nbsp;
+    const response: ProjectsWithVariablesSearchResult[] | null = await MatrixViewService.searchProjects({
       fields,
       filters,
-      sortOrder,
-    });
-<span class="cstat-no" title="statement not covered" ></span>
-    if<span class="cstat-no" title="statement not covered" > (response) {</span>
+      search,
+<span class="cstat-no" title="statement not covered" >      sortOrder,</span>
+    })<span class="cstat-no" title="statement not covered" >;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (response) {</span>
       return response;
-<span class="cstat-no" title="statement not covered" >    }</span>
+    }
 &nbsp;
     return rejectWithValue(strings.GENERIC_ERROR);
   }
@@ -226,7 +235,7 @@ export const requestG<span class="cstat-no" title="statement not covered" >etPro
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-12T17:40:27.752Z
+                at 2026-02-12T18:09:14.640Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

@@ -108,7 +108,11 @@
 <a name='L43'></a><a href='#L43'>43</a>
 <a name='L44'></a><a href='#L44'>44</a>
 <a name='L45'></a><a href='#L45'>45</a>
-<a name='L46'></a><a href='#L46'>46</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L46'></a><a href='#L46'>46</a>
+<a name='L47'></a><a href='#L47'>47</a>
+<a name='L48'></a><a href='#L48'>48</a>
+<a name='L49'></a><a href='#L49'>49</a>
+<a name='L50'></a><a href='#L50'>50</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -146,58 +150,66 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import {<span class="cstat-no" title="statement not covered" ></span>
   PrefixedSearch<span class="cstat-no" title="statement not covered" >,</span>
-  SearchRequestPayloadW<span class="cstat-no" title="statement not covered" >ithOptionalSearch,</span>
-  SearchResponseElement,<span class="cstat-no" title="statement not covered" ></span>
+  SearchNodePayload,<span class="cstat-no" title="statement not covered" ></span>
+  SearchRequestPayloadWi<span class="cstat-no" title="statement not covered" >thOptionalSearch,</span>
+  SearchResponseEle<span class="cstat-no" title="statement not covered" >ment,</span>
   SearchSortOrder,<span class="cstat-no" title="statement not covered" ></span>
-} from 'src/types/S<span class="cstat-no" title="statement not covered" >earch';</span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-im<span class="cstat-no" title="statement not covered" >port SearchService from './SearchService';</span>
+} from 'src/typ<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >es</span>/Search';</span>
 <span class="cstat-no" title="statement not covered" ></span>
-export type MatrixViewSearchParams = {
-  fields: string[]<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >;</span></span>
-<span class="cstat-no" title="statement not covered" >  filters?: PrefixedSearch[];</span>
-  so<span class="cstat-no" title="statement not covered" >rtOrder?: SearchSortOrder;</span>
-};<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+impo<span class="cstat-no" title="statement not covered" >rt SearchService from './SearchService';</span>
+&nbsp;
+export type Matrix<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Vi</span>ewSearchParams = {</span>
+<span class="cstat-no" title="statement not covered" >  fields: string[];</span>
+  se<span class="cstat-no" title="statement not covered" >arch?: SearchNodePayload;</span>
+  filt<span class="cstat-no" title="statement not covered" >ers?: PrefixedSearch[];</span>
+  sortOr<span class="cstat-no" title="statement not covered" >der?: SearchSortOrder;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+};
+<span class="cstat-no" title="statement not covered" ></span>
 /**
- *<span class="cstat-no" title="statement not covered" > Search pro</span>jects
+ * Search proj<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ec</span>ts<span class="cstat-no" title="statement not covered" ></span></span>
  */
-const searchPr<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >oj</span>ects = async &lt;T extends Sear<span class="cstat-no" title="statement not covered" >chResponseElement&gt;({</span></span>
+const searchProjects = async &lt;T extends SearchResponseElement&gt;({
   fields,
   filters,
+  search,
   sortOrder,
 }: MatrixViewSearchParams): Promise&lt;T[] | null&gt; =&gt; {
-  const params: SearchRequestPayloadWithOptionalSearch = {
-    prefix: 'projects',
-    fields,
-    filters,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-    count: 1000,<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  };</span>
+  const params: Sea<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >rc</span>hReques<span class="cstat-no" title="statement not covered" >tPayloadWithOptionalSearch = {</span></span>
+    prefix: 'project<span class="cstat-no" title="statement not covered" >s',</span>
+<span class="cstat-no" title="statement not covered" >    fields,</span>
+    filters<span class="fstat-no" title="function not covered" >,<span class="cstat-no" title="statement not covered" ></span></span>
+    search,
+<span class="cstat-no" title="statement not covered" >    count: 1000,</span>
+  };<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
   if (sortOrder) {
-<span class="cstat-no" title="statement not covered" >    params.sortOrder = [sortOrder];</span>
-  }<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+    params.sortOrder = [sortOrder];
+  }
+&nbsp;
   return SearchService.search&lt;T&gt;(params);
-};
+};<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
 /**
- * Exported funct<span class="cstat-no" title="statement not covered" >ions</span>
+ * Exported functions
  */
 const MatrixViewService = {
   searchProjects,
-};
-&nbsp;
-ex<span class="cstat-no" title="statement not covered" >port default MatrixViewService;</span>
+};<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+export default MatrixViewService;
 <span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -205,7 +217,7 @@ ex<span class="cstat-no" title="statement not covered" >port default MatrixViewS
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-12T17:40:27.752Z
+                at 2026-02-12T18:09:14.640Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
