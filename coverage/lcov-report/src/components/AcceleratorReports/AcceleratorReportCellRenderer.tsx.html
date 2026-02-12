@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/53</span>
+                <span class='fraction'>0/60</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/34</span>
+                <span class='fraction'>0/42</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/49</span>
+                <span class='fraction'>0/56</span>
             </div>
         
             
@@ -148,7 +148,18 @@
 <a name='L83'></a><a href='#L83'>83</a>
 <a name='L84'></a><a href='#L84'>84</a>
 <a name='L85'></a><a href='#L85'>85</a>
-<a name='L86'></a><a href='#L86'>86</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L86'></a><a href='#L86'>86</a>
+<a name='L87'></a><a href='#L87'>87</a>
+<a name='L88'></a><a href='#L88'>88</a>
+<a name='L89'></a><a href='#L89'>89</a>
+<a name='L90'></a><a href='#L90'>90</a>
+<a name='L91'></a><a href='#L91'>91</a>
+<a name='L92'></a><a href='#L92'>92</a>
+<a name='L93'></a><a href='#L93'>93</a>
+<a name='L94'></a><a href='#L94'>94</a>
+<a name='L95'></a><a href='#L95'>95</a>
+<a name='L96'></a><a href='#L96'>96</a>
+<a name='L97'></a><a href='#L97'>97</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -189,7 +200,11 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -233,60 +248,72 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > type JSX, use</span>Memo } from 'react';
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > type JSX, use</span>Memo } from 'react';
 <span class="cstat-no" title="statement not covered" ></span>
-import Link from 'src/c<span class="cstat-no" title="statement not covered" >omponents/common/Link';</span>
-import TextTruncated fro<span class="cstat-no" title="statement not covered" >m 'src/components/common/Te</span>xtTruncated';
-import CellRenderer<span class="cstat-no" title="statement not covered" >, { TableRowType } fro</span>m 'src/components/common/table/TableCellRenderer';
-import { RendererPr<span class="cstat-no" title="statement not covered" >ops } from 'src/components/commo</span>n/table/types';
-import { APP_PA<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >TH</span>S } from 'src/constants';</span>
-im<span class="cstat-no" title="statement not covered" >port useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';</span>
-impo<span class="cstat-no" title="statement not covered" >rt { useLocalization } from 'src/providers';</span>
-import { AcceleratorReportStatus } from 'src/types/AcceleratorReport';
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-im<span class="cstat-no" title="statement not covered" >port AcceleratorReportStatusBadge from './AcceleratorReportStatusBadge';</span>
+import { getDateDisplay<span class="cstat-no" title="statement not covered" >Value } from '@terraware/web-com</span>ponents/utils';
 <span class="cstat-no" title="statement not covered" ></span>
-type A<span class="cstat-no" title="statement not covered" >cceleratorReportCellRendererType = {</span>
-  projec<span class="cstat-no" title="statement not covered" >tId: number;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-};
+import Link from 's<span class="cstat-no" title="statement not covered" >rc/components/common/L</span>ink';
+import TextTruncate<span class="cstat-no" title="statement not covered" >d from 'src/components/common/Te</span>xtTruncated';
+import CellRend<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >er</span>er, { TableRowType } from 'src/components/common/table/TableCellRenderer';</span>
+im<span class="cstat-no" title="statement not covered" >port { RendererProps } from 'src/components/common/table/types';</span>
+impo<span class="cstat-no" title="statement not covered" >rt { APP_PATHS } from 'src/constants';</span>
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import { useLocali<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >za</span>tion, useOrganization } from 'src/providers';</span>
+im<span class="cstat-no" title="statement not covered" >port { AcceleratorReportStatus } from 'src/types/AcceleratorReport';</span>
+impo<span class="cstat-no" title="statement not covered" >rt { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';</span>
 <span class="cstat-no" title="statement not covered" ></span>
+import A<span class="cstat-no" title="statement not covered" >cceleratorReportStatusBadg<span class="fstat-no" title="function not covered" >e </span>from<span class="cstat-no" title="statement not covered" > './Accele</span>ratorReportStatusBadge';</span>
+&nbsp;
+ty<span class="cstat-no" title="statement not covered" >pe Accelera</span>torReportCellRendererType = {
+  projectId: number;
+};<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+&nbsp;
 type ReportCellProps = {
-  renderProps:<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > R</span>endererProps&lt;TableRowType&gt;;<span class="cstat-no" title="statement not covered" ></span></span>
+  renderProps: RendererProps&lt;TableRowType&gt;;
   projectId: number;
 };
 &nbsp;
 const ReportCell = ({ renderProps, projectId }: ReportCellProps): JSX.Element =&gt; {
-  const { column, row, index, value } = renderProps;
-  const { activeLocale } = useLocalization();
-  const { isAcceleratorRoute } = useAcceleratorConsole();
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  const linkToReport<span class="cstat-no" title="statement not covered" > = </span>useMemo(() =&gt; {
-<span class="cstat-no" title="statement not covered" >    const reportUrl = isAcceleratorRoute ? APP_PATHS.ACCELERATOR_PROJECT_REPORTS_VIEW : APP_PATHS.REPORTS_VIEW;</span>
-    const t<span class="fstat-no" title="function not covered" >o </span>= re<span class="cstat-no" title="statement not covered" >portUrl.replace(':reportId', `</span>${row.id}`).replace(':projectId', projectId.toString());
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    const year = row.startDate.split('-')[0];</span>
-    const reportNam<span class="cstat-no" title="statement not covered" >e = row.frequency === 'Ann</span>ual' ? `${year}` : `${year}-${row.quarter}`;
+  const { column, r<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ow</span>, index<span class="cstat-no" title="statement not covered" >, value } = renderProps;</span></span>
+  const { activeLoca<span class="cstat-no" title="statement not covered" >le </span>} = useLocalization();
+<span class="cstat-no" title="statement not covered" >  const { isAcceleratorRoute } = useAcceleratorConsole();</span>
+  const { s<span class="fstat-no" title="function not covered" >el</span>ecte<span class="cstat-no" title="statement not covered" >dOrganization } = useOrganizat</span>ion();
+  const defaultTimezone = useDefaultTimeZone().get().id;
+<span class="cstat-no" title="statement not covered" ></span>
+  const linkToRepor<span class="cstat-no" title="statement not covered" >t = useMemo(() =&gt; {</span>
+    const reportUrl<span class="cstat-no" title="statement not covered" > = isAcceleratorRoute ? APP_PATHS.ACCELERAT</span>OR_PROJECT_REPORTS_VIEW : APP_PATHS.REPORTS_VIEW;
+    const to = rep<span class="cstat-no" title="statement not covered" >ortUrl.replace(':reportId', `${row.id}`).replac</span>e(':projectId', projectId.toString());
+<span class="cstat-no" title="statement not covered" ></span>
+    const year = row.startDate.<span class="cstat-no" title="statement not covered" >split('-')[0];</span>
+    const reportName = <span class="cstat-no" title="statement not covered" >row.frequency === 'Annual</span>' ? `${year}` : `${year}-${row.quarter}`;
 <span class="cstat-no" title="statement not covered" ></span>
     return (<span class="cstat-no" title="statement not covered" ></span>
       &lt;Link to={to}&gt;<span class="cstat-no" title="statement not covered" ></span>
-        &lt;TextTruncated <span class="cstat-no" title="statement not covered" >fontSize={16} fontWeight=</span>{500} stringList={[reportName]} width={400} /&gt;
-      &lt;/Link&gt;<span class="cstat-no" title="statement not covered" ></span>
-    );<span class="cstat-no" title="statement not covered" ></span>
-  }, [isAcceleratorRoute, projectId, row.f<span class="cstat-no" title="statement not covered" >requency, row.id, row.quarter, row.startDate]);</span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  if (column.key === 'reportName') {
+        &lt;TextTruncated fontSize={16} fontW<span class="cstat-no" title="statement not covered" >eight={500} stringList={[reportName]} width={400} /</span>&gt;
+      &lt;/Link&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+    );
+  }, [isAcceleratorRoute, projectId, row<span class="cstat-no" title="statement not covered" >.frequency, </span>row.id, row.quarter, row.startDate]);
+<span class="cstat-no" title="statement not covered" ></span>
+  if (column.key === 'reportName'<span class="cstat-no" title="statement not covered" >) {</span>
     return (<span class="cstat-no" title="statement not covered" ></span>
       &lt;CellRenderer<span class="cstat-no" title="statement not covered" ></span>
-        column={column}<span class="cstat-no" title="statement not covered" ></span>
-        index={index}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-        row={row}<span class="cstat-no" title="statement not covered" ></span>
-        style={<span class="cstat-no" title="statement not covered" >{ maxWidth: '500px' }}</span>
+        column={column}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+        index={index}<span class="cstat-no" title="statement not covered" ></span>
+        row={ro<span class="cstat-no" title="statement not covered" >w}</span>
+        style={{ <span class="cstat-no" title="statement not covered" >maxWidth: '500px' }}</span>
         sx={{<span class="cstat-no" title="statement not covered" ></span>
-          fontSize: '16<span class="cstat-no" title="statement not covered" >px',</span>
-<span class="cstat-no" title="statement not covered" >          '&amp; &gt; p': {</span>
-            fontSize: '16px',
+<span class="cstat-no" title="statement not covered" >          fontSize: '16px',</span>
+          '&amp; &gt; p': {
+<span class="cstat-no" title="statement not covered" >            fontSize: '16px',</span>
 <span class="cstat-no" title="statement not covered" >          },</span>
-<span class="cstat-no" title="statement not covered" >        }}</span>
+        }}
         value={linkToReport}
       /&gt;
     );
@@ -302,30 +329,36 @@ const ReportCell = ({ renderProps, projectId }: ReportCellProps): JSX.Element =&
       /&gt;
     );
   }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  if (column.key === 'modifiedBy') {</span>
-<span class="cstat-no" title="statement not covered" >    return &lt;CellRenderer {...renderProps} value={row.modifiedByUser.fullName} /&gt;;</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  if<span class="cstat-no" title="statement not covered" > (column.key === 'modifiedBy') {</span>
+    return &lt;CellRenderer {...renderProps} value={row.modifiedByUser.fullName} /&gt;;
   }
 &nbsp;
   if (column.key === 'submittedBy') {
     return &lt;CellRenderer {...renderProps} value={row.submittedByUser?.fullName} /&gt;;
   }
-&nbsp;
-  return &lt;CellRenderer {...renderProps} /&gt;;
+  if (column.key === 'submittedTime') {
+    const submittedDate = row.submittedTime
+      ? getDateDisplayValue(row.submittedTime, selectedOrganization?.timeZone ?? defaultTimezone)
+<span class="cstat-no" title="statement not covered" >      : '';</span>
+<span class="cstat-no" title="statement not covered" >    return &lt;CellRenderer {...renderProps} value={submittedDate} /&gt;;</span>
+  }
+<span class="cstat-no" title="statement not covered" ></span>
+  re<span class="cstat-no" title="statement not covered" >turn &lt;CellRenderer {...renderProps} /&gt;;</span>
 };
-&nbsp;
-ex<span class="cstat-no" title="statement not covered" >port default function AcceleratorReportCellRenderer({ projectId }: AcceleratorReportCellRendererType) {</span>
+<span class="cstat-no" title="statement not covered" ></span>
+export default function Ac<span class="cstat-no" title="statement not covered" >celeratorReportCellRenderer({ projectId }: AcceleratorReportCellRendererType) {</span>
   //<span class="cstat-no" title="statement not covered" > eslint-disable-next-line react/display-name</span>
   return (props: RendererProps&lt;TableRowType&gt;): JSX.Element =&gt; &lt;ReportCell projectId={projectId} renderProps={props} /&gt;;
 }<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
+&nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-12T18:19:03.317Z
+                at 2026-02-12T22:48:32.536Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

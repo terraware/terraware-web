@@ -1,3 +1,4 @@
+8f6e5e831334 Added formatted date (#5215)
 b0434e753a42 Change Matrix View to correctly use deal name instead of project name (#5196)
 cdb51410290b SW-8035 Add View Selector to matrix view (#5195)
 8d233a1f1b0f SW-8029 Remove console Overview page, rename Matrix View (#5182)
