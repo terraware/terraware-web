@@ -286,6 +286,9 @@ const ProjectPage = () => {
 
   const projectViewTitle = (
     <Box paddingLeft={1}>
+      <Typography fontSize={'14px'} color={theme.palette.TwClrTxtSecondary}>
+        {projectData.organization?.name?.toUpperCase()}
+      </Typography>
       <Typography fontSize={'24px'} fontWeight={600}>
         {projectData.participantProject?.dealName}
       </Typography>

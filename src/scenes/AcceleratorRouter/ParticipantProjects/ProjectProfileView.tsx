@@ -4,12 +4,12 @@ import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import ApplicationStatusLink from 'src/components/ProjectField/ApplicationStatusLink';
-import CohortBadge from 'src/components/ProjectField/CohortBadge';
 import ProjectProfileFooter from 'src/components/ProjectField/Footer';
 import ProjectFieldInlineMeta from 'src/components/ProjectField/InlineMeta';
 import InvertedCard from 'src/components/ProjectField/InvertedCard';
 import LandUseModelTypeCard from 'src/components/ProjectField/LandUseModelTypeCard';
 import ProjectFieldLink from 'src/components/ProjectField/Link';
+import PhaseBadge from 'src/components/ProjectField/PhaseBadge';
 import ProjectCertificationDisplay from 'src/components/ProjectField/ProjectCertificationDisplay';
 import ProjectDataDisplay from 'src/components/ProjectField/ProjectDataDisplay';
 import ProjectFigureLabel from 'src/components/ProjectField/ProjectFigureLabel';
@@ -137,14 +137,11 @@ const ProjectProfileView = ({
       .join('\n');
   }, [activeLocale, firstProjectLead, listInternalUsersRequest]);
 
-  const isProjectInPhase = useMemo(
-    () => participantProject?.cohortPhase?.startsWith('Phase'),
-    [participantProject?.cohortPhase]
-  );
+  const isProjectInPhase = useMemo(() => participantProject?.phase?.startsWith('Phase'), [participantProject?.phase]);
 
   const isPhaseZeroOrApplication = useMemo(
-    () => [undefined, 'Phase 0 - Due Diligence', 'Application', 'Pre-Screen'].includes(participantProject?.cohortPhase),
-    [participantProject?.cohortPhase]
+    () => [undefined, 'Phase 0 - Due Diligence', 'Application', 'Pre-Screen'].includes(participantProject?.phase),
+    [participantProject?.phase]
   );
 
   const projectSize = useMemo(() => {
@@ -156,7 +153,7 @@ const ProjectProfileView = ({
         value={value && strings.formatString(strings.X_HA, numberFormatter.format(value))?.toString()}
       />
     );
-    switch (participantProject?.cohortPhase) {
+    switch (participantProject?.phase) {
       case 'Phase 1 - Feasibility Study':
         return getCard(strings.MIN_PROJECT_AREA, projectDetails?.minProjectArea);
       case 'Phase 2 - Plan and Scale':
@@ -169,7 +166,7 @@ const ProjectProfileView = ({
         return getCard(strings.ELIGIBLE_AREA, projectDetails?.confirmedReforestableLand);
     }
   }, [
-    participantProject?.cohortPhase,
+    participantProject?.phase,
     projectDetails?.projectArea,
     projectDetails?.minProjectArea,
     projectDetails?.confirmedReforestableLand,
@@ -213,8 +210,7 @@ const ProjectProfileView = ({
           <Box display={'flex'} alignItems={'center'}>
             {isProjectInPhase && (
               <>
-                <CohortBadge label={participantProject?.cohortName} />
-                <CohortBadge label={participantProject?.cohortPhase} />
+                <PhaseBadge label={participantProject?.phase} />
               </>
             )}
             {!isProjectInPhase && projectApplication && (
@@ -245,6 +241,7 @@ const ProjectProfileView = ({
         <ProjectOverviewCard
           md={isMobile || isTablet ? 12 : 9}
           dealDescription={projectDetails?.dealDescription}
+          fileNaming={projectDetails && 'fileNaming' in projectDetails ? projectDetails?.fileNaming : undefined}
           projectName={project?.name}
         />
         <Grid item md={isMobile || isTablet ? 12 : 3} xs={12}>
@@ -592,9 +589,15 @@ const ProjectProfileView = ({
               {!funderView && (
                 <>
                   <ProjectFieldLink value={participantProject?.riskTrackerLink} label={strings.RISK_TRACKER} />
-
                   <ProjectFieldLink value={participantProject?.clickUpLink} label={strings.CLICK_UP} />
                   <ProjectFieldLink value={participantProject?.slackLink} label={strings.SLACK} />
+                  <ProjectFieldLink
+                    value={
+                      participantProject?.dropboxFolderPath &&
+                      `https://dropbox.com/home/${encodeURI(participantProject.dropboxFolderPath)}`
+                    }
+                    label={strings.DROPBOX}
+                  />
                 </>
               )}
             </Box>

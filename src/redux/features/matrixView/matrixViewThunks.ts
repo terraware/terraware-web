@@ -6,6 +6,8 @@ import strings from 'src/strings';
 export type ProjectsWithVariablesSearchResult = {
   id: number;
   name: string;
+  phase?: string;
+  application_id?: number;
   country_name: string;
   acceleratorDetails: {
     'confirmedReforestableLand(raw)': number;
@@ -35,11 +37,12 @@ export type ProjectsWithVariablesSearchResult = {
 export const requestGetProjectsWithVariables = createAsyncThunk(
   'projectsWithVariables/get',
   async (request: MatrixViewSearchParams, { rejectWithValue }) => {
-    const { fields, filters, sortOrder } = request;
+    const { fields, filters, search, sortOrder } = request;
 
     const response: ProjectsWithVariablesSearchResult[] | null = await MatrixViewService.searchProjects({
       fields,
       filters,
+      search,
       sortOrder,
     });
 

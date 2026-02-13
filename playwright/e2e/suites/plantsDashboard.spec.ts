@@ -9,7 +9,7 @@ test.describe('PlantsDashboardTests', () => {
     await page.goto('/');
     await waitFor(page, '#acceleratorConsoleButton');
     await page.getByRole('link', { name: 'Accelerator Console' }).click();
-    await expect(page.getByRole('main').getByText('Overview')).toBeVisible();
+    await expect(page.getByRole('main').getByText('Projects', { exact: true })).toBeVisible();
   });
 
   test('Console Dashboard Empty State for project', async ({ page }, testInfo) => {

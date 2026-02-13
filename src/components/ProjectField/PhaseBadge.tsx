@@ -4,11 +4,11 @@ import { Badge } from '@terraware/web-components';
 
 import ProjectBadgeLink from './ProjectBadgeLink';
 
-type CohortBadgeProps = {
+type ProjectBadgeProps = {
   label?: string;
 };
 
-const CohortBadge = ({ label }: CohortBadgeProps) => {
+const PhaseBadge = ({ label }: ProjectBadgeProps) => {
   return (
     <ProjectBadgeLink>
       <Badge label={label || ''} />
@@ -16,4 +16,4 @@ const CohortBadge = ({ label }: CohortBadgeProps) => {
   );
 };
 
-export default CohortBadge;
+export default PhaseBadge;

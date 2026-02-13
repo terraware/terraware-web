@@ -1,5 +1,6 @@
 import {
   PrefixedSearch,
+  SearchNodePayload,
   SearchRequestPayloadWithOptionalSearch,
   SearchResponseElement,
   SearchSortOrder,
@@ -9,6 +10,7 @@ import SearchService from './SearchService';
 
 export type MatrixViewSearchParams = {
   fields: string[];
+  search?: SearchNodePayload;
   filters?: PrefixedSearch[];
   sortOrder?: SearchSortOrder;
 };
@@ -19,12 +21,14 @@ export type MatrixViewSearchParams = {
 const searchProjects = async <T extends SearchResponseElement>({
   fields,
   filters,
+  search,
   sortOrder,
 }: MatrixViewSearchParams): Promise<T[] | null> => {
   const params: SearchRequestPayloadWithOptionalSearch = {
     prefix: 'projects',
     fields,
     filters,
+    search,
     count: 1000,
   };
 

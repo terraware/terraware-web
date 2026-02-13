@@ -3,12 +3,14 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button, Dropdown, DropdownItem, IconTooltip } from '@terraware/web-components';
 
+import ConfirmModal from 'src/components/Application/ConfirmModal';
 import PhotoSelectorWithPreview, { FileWithUrl } from 'src/components/Photo/PhotoSelectorWithPreview';
 import CountrySelect from 'src/components/ProjectField/CountrySelect';
 import LandUseMultiSelect from 'src/components/ProjectField/LandUseMultiSelect';
 import MinMaxCarbonTextfield from 'src/components/ProjectField/MinMaxCarbonTextfield';
 import ProjectFieldMultiSelect from 'src/components/ProjectField/MultiSelect';
 import SdgMultiSelect from 'src/components/ProjectField/SdgMultiSelect';
+import ProjectFieldSelect from 'src/components/ProjectField/Select';
 import ProjectFieldTextAreaEdit from 'src/components/ProjectField/TextAreaEdit';
 import ProjectFieldTextfield from 'src/components/ProjectField/Textfield';
 import VariableSelect from 'src/components/ProjectField/VariableSelect';
@@ -16,6 +18,7 @@ import Card from 'src/components/common/Card';
 import Link from 'src/components/common/Link';
 import PageForm from 'src/components/common/PageForm';
 import Icon from 'src/components/common/icon/Icon';
+import useBoolean from 'src/hooks/useBoolean';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization, useUser } from 'src/providers';
 import { selectUploadImageValue } from 'src/redux/features/documentProducer/values/valuesSelector';
@@ -41,6 +44,7 @@ import {
 } from 'src/redux/features/projects/projectsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { UpdateProjectInternalUsersRequestPayload } from 'src/services/ProjectsService';
+import { CohortPhaseType } from 'src/types/Cohort';
 import { LAND_USE_MODEL_TYPES, ParticipantProject } from 'src/types/ParticipantProject';
 import { ProjectInternalUserRole, getProjectInternalUserRoleString, projectInternalUserRoles } from 'src/types/Project';
 import { OrganizationUser } from 'src/types/User';
@@ -86,6 +90,7 @@ const ProjectProfileEdit = () => {
   const { participantProject, projectId, organization, reload } = useParticipantProjectData();
   const { goToParticipantProject } = useNavigateTo();
   const { isAllowed } = useUser();
+  const [validateFields, setValidateFields] = useState<boolean>(false);
 
   // Participant project (accelerator data) form record and update request
   const [participantProjectRequestId, setParticipantProjectRequestId] = useState<string>('');
@@ -128,6 +133,7 @@ const ProjectProfileEdit = () => {
   const [mainPhoto, setMainPhoto] = useState<FileWithUrl>();
   const [mapPhoto, setMapPhoto] = useState<FileWithUrl>();
   const [customUserRoles, setCustomUserRoles] = useState<string[]>([]);
+  const [confirmModalOpen, , openConfirmModal, closeConfirmModal] = useBoolean(false);
 
   const isAllowedEdit = isAllowed('UPDATE_PARTICIPANT_PROJECT');
 
@@ -303,17 +309,33 @@ const ProjectProfileEdit = () => {
     return false;
   }, [dispatch, internalUsers, listInternalUsersRequest?.data?.users, projectId]);
 
-  const handleSave = useCallback(() => {
+  const validateSave = useCallback(() => {
+    setValidateFields(false);
     if (!stableToVariable || listInternalUsersRequest?.status !== 'success') {
       snackbar.toastError(strings.CANNOT_SAVE_UNTIL_PAGE_IS_FULLY_LOADED);
-      return;
+      return false;
     }
 
     if (!internalUsers.filter((user) => !!user.userId).every((user) => user.role || user.roleName)) {
       snackbar.toastError(strings.SELECT_A_CONTACT_TYPE_FOR_ALL_INTERNAL_LEADS);
-      return;
+      return false;
     }
 
+    if (
+      (participantProjectRecord?.phase || '') !== '' &&
+      ((participantProjectRecord?.fileNaming || '') === '' ||
+        (participantProjectRecord?.dropboxFolderPath || '') === '' ||
+        (participantProjectRecord?.googleFolderUrl || '') === '')
+    ) {
+      setValidateFields(true);
+      snackbar.toastError(strings.PHASE_PROJECT_REQUIRED_FIELDS_ERROR);
+      return false;
+    }
+
+    return true;
+  }, [stableToVariable, listInternalUsersRequest?.status, internalUsers, participantProjectRecord, strings, snackbar]);
+
+  const finishSave = useCallback(() => {
     setRequestsInProgress(true);
 
     const newInitiatedRequests = {
@@ -382,19 +404,28 @@ const ProjectProfileEdit = () => {
 
     setInitiatedRequests(newInitiatedRequests);
   }, [
-    stableToVariable,
-    listInternalUsersRequest?.status,
-    internalUsers,
-    participantProjectRecord,
-    saveInternalUsers,
+    dispatch,
     mainPhoto,
     mapPhoto,
-    snackbar,
-    dispatch,
+    participantProjectRecord,
     projectId,
     redirectToProjectView,
-    strings,
+    saveInternalUsers,
+    stableToVariable,
   ]);
+
+  const handleSave = useCallback(() => {
+    if (!validateSave()) {
+      return;
+    }
+
+    if (participantProjectRecord?.phase !== participantProject?.phase) {
+      openConfirmModal();
+      return;
+    }
+
+    finishSave();
+  }, [validateSave, participantProjectRecord?.phase, participantProject?.phase, openConfirmModal, finishSave]);
 
   const handleOnCancel = useCallback(() => goToParticipantProject(projectId), [goToParticipantProject, projectId]);
 
@@ -542,8 +573,36 @@ const ProjectProfileEdit = () => {
     return LAND_USE_MODEL_TYPES.filter((type) => participantProjectRecord?.landUseModelTypes?.includes(type));
   }, [participantProjectRecord?.landUseModelTypes]);
 
+  const phaseOptions: {
+    label: string;
+    value: CohortPhaseType | undefined;
+  }[] = useMemo(
+    () => [
+      { label: '--', value: undefined },
+      { label: strings.COHORT_PHASE_DUE_DILIGENCE, value: 'Phase 0 - Due Diligence' },
+      { label: strings.COHORT_PHASE_FEASIBILITY_STUDY, value: 'Phase 1 - Feasibility Study' },
+      { label: strings.COHORT_PHASE_PLAN_AND_SCALE, value: 'Phase 2 - Plan and Scale' },
+      { label: strings.COHORT_PHASE_IMPLEMENT_AND_MONITOR, value: 'Phase 3 - Implement and Monitor' },
+    ],
+    [strings]
+  );
+
+  const setPhase = useCallback(
+    (_: string, value: string) => {
+      onChangeParticipantProject('phase', value === 'undefined' ? undefined : (value as CohortPhaseType));
+    },
+    [onChangeParticipantProject]
+  );
+
   return (
     <Grid container paddingRight={theme.spacing(3)}>
+      <ConfirmModal
+        open={confirmModalOpen}
+        title={strings.CONFIRM_UPDATE_ALL_COHORT_PHASE_TITLE}
+        body={strings.CONFIRM_UPDATE_ALL_COHORT_PHASE}
+        onClose={closeConfirmModal}
+        onConfirm={finishSave}
+      />
       {addInternalUserRoleModalOpen && (
         <AddInternalUserRoleModal
           addInternalUserRole={addInternalUserRole}
@@ -597,6 +656,30 @@ const ProjectProfileEdit = () => {
                   onChange={onChangeCountry}
                   region={participantProjectRecord?.region}
                   value={participantProjectRecord?.countryCode}
+                />
+              </Box>
+            </Grid>
+            <Grid item xs={6}>
+              <ProjectFieldTextfield
+                height='auto'
+                id={'fileNaming'}
+                md={12}
+                label={strings.FILE_NAMING}
+                onChange={onChangeParticipantProject}
+                value={participantProjectRecord?.fileNaming}
+                required={!!participantProjectRecord?.phase}
+                validate={!!participantProjectRecord?.phase && validateFields}
+              />
+            </Grid>
+            <Grid item md={6} display={'flex'} flexDirection={'column'}>
+              <Box width={'100%'}>
+                <ProjectFieldSelect
+                  id={'phase'}
+                  md={12}
+                  label={strings.PHASE}
+                  onChange={setPhase}
+                  options={phaseOptions}
+                  value={participantProjectRecord?.phase}
                 />
               </Box>
             </Grid>
@@ -868,6 +951,8 @@ const ProjectProfileEdit = () => {
               label={strings.GDRIVE_LINK}
               onChange={onChangeParticipantProject}
               value={participantProjectRecord?.googleFolderUrl}
+              required={!!participantProjectRecord?.phase}
+              validate={!!participantProjectRecord?.phase && validateFields}
             />
             <ProjectFieldTextfield
               id={'verraLink'}
@@ -910,6 +995,15 @@ const ProjectProfileEdit = () => {
               label={strings.GIS_REPORT_LINK}
               onChange={onChangeParticipantProject}
               value={participantProjectRecord?.gisReportsLink}
+            />
+            <ProjectFieldTextfield
+              id={'dropboxFolderPath'}
+              md={4}
+              label={strings.DROPBOX_PATH}
+              onChange={onChangeParticipantProject}
+              value={participantProjectRecord?.dropboxFolderPath}
+              required={!!participantProjectRecord?.phase}
+              validate={!!participantProjectRecord?.phase && validateFields}
             />
 
             <Grid container>

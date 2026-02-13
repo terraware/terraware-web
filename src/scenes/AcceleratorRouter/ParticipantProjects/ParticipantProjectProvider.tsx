@@ -50,15 +50,7 @@ const ParticipantProjectProvider = ({ children }: Props) => {
   const [organization, setOrganization] = useState<AcceleratorOrg>();
 
   const crumbs: Crumb[] = useMemo(
-    () =>
-      activeLocale
-        ? [
-            {
-              name: strings.OVERVIEW,
-              to: `${APP_PATHS.ACCELERATOR_OVERVIEW}?tab=projects`,
-            },
-          ]
-        : [],
+    () => (activeLocale ? [{ name: strings.PROJECTS, to: `${APP_PATHS.ACCELERATOR_PROJECTS}` }] : []),
     [activeLocale]
   );
 

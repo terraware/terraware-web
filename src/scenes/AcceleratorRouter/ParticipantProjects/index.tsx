@@ -29,7 +29,7 @@ const ParticipantProjectsRouter = () => {
               <Route path={'votes/*'} element={<Voting />} />
               <Route path={'scores/*'} element={<Scoring />} />
               <Route path={'reports/*'} element={<Reports />} />
-              <Route path={'*'} element={<Navigate to={APP_PATHS.ACCELERATOR_OVERVIEW} />} />
+              <Route path={'*'} element={<Navigate to={APP_PATHS.ACCELERATOR_PROJECTS} />} />
             </Routes>
           </DocumentProducerProvider>
         </ParticipantProjectProvider>

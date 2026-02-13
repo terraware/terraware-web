@@ -1,7 +1,19 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
-import { Box, Card, Checkbox, Chip, IconButton, MenuItem, TextField, Tooltip, useTheme } from '@mui/material';
+import {
+  Box,
+  Card,
+  Checkbox,
+  Chip,
+  Grid,
+  IconButton,
+  MenuItem,
+  TextField,
+  Tooltip,
+  Typography,
+  useTheme,
+} from '@mui/material';
 import { BusySpinner, Icon } from '@terraware/web-components';
 import { isArray } from 'lodash';
 import {
@@ -20,6 +32,7 @@ import {
 
 import Page from 'src/components/Page';
 import DatePicker from 'src/components/common/DatePicker';
+import Dropdown from 'src/components/common/Dropdown';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
@@ -34,7 +47,7 @@ import {
   requestGetProjectsWithVariables,
 } from 'src/redux/features/matrixView/matrixViewThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import strings from 'src/strings';
+import { SearchNodePayload } from 'src/types/Search';
 import { VariableUnion } from 'src/types/documentProducer/Variable';
 import {
   NewNonSectionValuePayloadUnion,
@@ -58,6 +71,8 @@ const STORAGE_KEYS = {
   COLUMN_PINNING: 'matrixView_columnPinning',
 };
 
+type ViewOption = 'noFilter' | 'acceleratorProjects' | 'applicants';
+
 const MatrixView = () => {
   const [requestId, setRequestId] = useState<string>('');
   const [requestVarsId, setRequestVarsId] = useState<string>('');
@@ -74,7 +89,9 @@ const MatrixView = () => {
   const dispatch = useAppDispatch();
   const { isAllowed } = useUser();
   const isAllowedEditMatrixView = isAllowed('UPDATE_MATRIX_VIEW');
-  const { countries } = useLocalization();
+  const { strings, countries } = useLocalization();
+  const [currentView, setCurrentView] = useState<ViewOption>('acceleratorProjects');
+  const [globalFilter, setGlobalFilter] = useState('');
 
   const [columnFilters, setColumnFilters] = useState(() => {
     try {
@@ -249,7 +266,7 @@ const MatrixView = () => {
   const columnsMRT = useMemo<MRT_ColumnDef<ProjectsWithVariablesSearchResult>[]>(() => {
     const baseNonVariableColumns: MRT_ColumnDef<ProjectsWithVariablesSearchResult>[] = [
       {
-        accessorKey: 'name',
+        accessorKey: 'acceleratorDetails_dealName',
         header: strings.DEAL_NAME,
         size: 200,
         id: 'projectName',
@@ -297,10 +314,10 @@ const MatrixView = () => {
         },
       },
       {
-        accessorKey: 'cohort_phase',
+        accessorKey: 'phase',
         header: strings.PHASE,
         size: 200,
-        id: 'cohortPhase',
+        id: 'phase',
         enableEditing: false,
       },
       {
@@ -821,7 +838,16 @@ const MatrixView = () => {
     });
 
     return [...baseNonVariableColumns, ...variableColumns];
-  }, [allVariables, countries, isAllowedEditMatrixView, onSaveHandler, projects, uniqueVariableIds, variableNameMap]);
+  }, [
+    strings,
+    allVariables,
+    countries,
+    isAllowedEditMatrixView,
+    onSaveHandler,
+    projects,
+    uniqueVariableIds,
+    variableNameMap,
+  ]);
 
   useEffect(() => {
     if (result?.status === 'success' && result?.data) {
@@ -836,6 +862,20 @@ const MatrixView = () => {
   const onColumnsClickHandler = useCallback(() => {
     setShowColumnsModal(true);
   }, []);
+
+  const columnFiltersAreEmpty = useMemo(
+    () =>
+      columnFilters.length === 0 ||
+      columnFilters.every(
+        (filter: any) =>
+          filter.value === undefined ||
+          filter.value === '' ||
+          (Array.isArray(filter.value) && filter.value.every((val: any) => val === undefined || val === ''))
+      ),
+    [columnFilters]
+  );
+
+  const onCurrentViewChange = useCallback((value: string) => setCurrentView(value as ViewOption), []);
 
   const saveToLocalStorage = (key: string, value: any) => {
     localStorage.setItem(key, JSON.stringify(value));
@@ -867,12 +907,41 @@ const MatrixView = () => {
         <MRT_ToggleFullScreenButton table={table} />
       </Box>
     ),
+    renderTopToolbarCustomActions: () => {
+      return (
+        <Grid container style={{ maxWidth: '50%' }} spacing={1}>
+          <Grid item style={{ width: '250px' }}>
+            <Dropdown
+              id={'current-view'}
+              label={strings.CURRENT_VIEW}
+              onChange={onCurrentViewChange}
+              values={[
+                { label: '--', value: 'noFilter' },
+                { label: strings.ACCELERATOR_PROJECTS, value: 'acceleratorProjects' },
+                { label: strings.APPLICANTS, value: 'applicants' },
+              ]}
+              selected={currentView}
+            />
+          </Grid>
+
+          {(!columnFiltersAreEmpty || !!globalFilter) && (
+            <Grid item style={{ display: 'flex', alignItems: 'center' }}>
+              <Typography style={{ color: theme.palette.TwClrBgDanger, fontWeight: 'bold' }}>
+                {strings.FILTERS_APPLIED.toUpperCase()}
+              </Typography>
+            </Grid>
+          )}
+        </Grid>
+      );
+    },
     state: {
       columnFilters,
       sorting,
       columnPinning,
       columnOrder,
+      globalFilter,
     },
+    onGlobalFilterChange: setGlobalFilter,
     onColumnFiltersChange: setColumnFilters,
     onSortingChange: setSorting,
     onColumnPinningChange: setColumnPinning,
@@ -940,12 +1009,78 @@ const MatrixView = () => {
       .filter((col) => !isNaN(Number(col.id)))
       .map((col) => col.id);
 
+    let search: SearchNodePayload | undefined;
+    if (currentView === 'noFilter') {
+      search = {
+        operation: 'or',
+        children: [
+          {
+            operation: 'not',
+            child: {
+              operation: 'field',
+              field: 'application_id',
+              type: 'Exact',
+              values: [null],
+            },
+          },
+          {
+            operation: 'not',
+            child: {
+              operation: 'field',
+              field: 'phase',
+              type: 'Exact',
+              values: [null],
+            },
+          },
+        ],
+      };
+    } else if (currentView === 'acceleratorProjects') {
+      search = {
+        operation: 'not',
+        child: {
+          operation: 'field',
+          field: 'phase',
+          type: 'Exact',
+          values: [null],
+        },
+      };
+    } else if (currentView === 'applicants') {
+      search = {
+        operation: 'and',
+        children: [
+          {
+            operation: 'field',
+            field: 'application_status',
+            type: 'Exact',
+            values: [
+              'Submitted',
+              'Sourcing Team Review',
+              'GIS Assessment',
+              'Expert Review',
+              'Carbon Assessment',
+              'P0 Eligible',
+              'Accepted',
+              'Issue Active',
+              'Issue Reassessment',
+            ],
+          },
+          {
+            operation: 'field',
+            field: 'phase',
+            type: 'Exact',
+            values: [null],
+          },
+        ],
+      };
+    }
+
     const request = dispatch(
       requestGetProjectsWithVariables({
         fields: [
           'id',
-          'name',
-          'cohort_phase',
+          'acceleratorDetails_dealName',
+          'phase',
+          'application_id',
           'acceleratorDetails_confirmedReforestableLand(raw)',
           'country_name',
           'internalUsers.role',
@@ -965,9 +1100,10 @@ const MatrixView = () => {
           'variables.values.options.position',
         ],
         sortOrder: {
-          field: 'name',
+          field: 'acceleratorDetails_dealName',
           direction: 'Ascending',
         },
+        search,
         filters: [
           {
             prefix: 'variables',
@@ -990,8 +1126,9 @@ const MatrixView = () => {
       })
     );
     setRequestId(request.requestId);
-    // eslint-disable-next-line
-  }, [dispatch, dataForMaterialReactTable, dataForMaterialReactTable?.getState()?.columnVisibility]);
+    // disable exhaustive-deps because of the complex expression
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, dataForMaterialReactTable, dataForMaterialReactTable?.getState()?.columnVisibility, currentView]);
 
   useEffect(() => {
     if (updateVariableValuesRequest?.status === 'success') {
@@ -1092,7 +1229,7 @@ const MatrixView = () => {
   );
 
   return (
-    <Page title={strings.MATRIX_VIEW}>
+    <Page title={strings.PROJECTS}>
       {loading === true && <BusySpinner />}
       {showColumnsModal && allVariables && (
         <ColumnsModal

@@ -3,19 +3,22 @@ import React from 'react';
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 
-import strings from 'src/strings';
+import { useLocalization } from 'src/providers';
 
 import GridEntryWrapper from './GridEntryWrapper';
 import { ProjectFieldValue } from './index';
 
 type ProjectOverviewCardProps = {
   dealDescription: string | undefined;
-  projectName: string | undefined;
+  fileNaming: string | undefined;
   md: number;
+  projectName: string | undefined;
 };
 
-const ProjectOverviewCard = ({ dealDescription, projectName, md }: ProjectOverviewCardProps) => {
+const ProjectOverviewCard = ({ dealDescription, fileNaming, projectName, md }: ProjectOverviewCardProps) => {
   const theme = useTheme();
+  const { strings } = useLocalization();
+
   return (
     <GridEntryWrapper md={md}>
       <Box
@@ -45,9 +48,22 @@ const ProjectOverviewCard = ({ dealDescription, projectName, md }: ProjectOvervi
                   </Box>
                   {projectName && (
                     <Box>
-                      <div>
-                        <strong>{strings.NAME_USED_BY_PROJECT}:</strong>&nbsp;{projectName}
-                      </div>
+                      <Typography>
+                        <Typography component='span' fontWeight={600}>
+                          {strings.NAME_USED_BY_PROJECT}:&nbsp;
+                        </Typography>
+                        {projectName}
+                      </Typography>
+                    </Box>
+                  )}
+                  {fileNaming && (
+                    <Box>
+                      <Typography>
+                        <Typography component='span' fontWeight={600}>
+                          {strings.FILE_NAMING}:&nbsp;
+                        </Typography>
+                        {fileNaming}
+                      </Typography>
                     </Box>
                   )}
                 </>

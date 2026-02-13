@@ -11,6 +11,7 @@ import { NurseryBatchService } from 'src/services';
 import strings from 'src/strings';
 import { Batch } from 'src/types/Batch';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import useSnackbar from 'src/utils/useSnackbar';
 
 interface BatchSummaryProps {
@@ -23,6 +24,7 @@ export default function BatchSummary(props: BatchSummaryProps): JSX.Element {
   const { isMobile, isTablet } = useDeviceInfo();
   const snackbar = useSnackbar();
   const theme = useTheme();
+  const numberFormatter = useNumberFormatter();
 
   const onProjectUnAssign = useCallback(async () => {
     const response = await NurseryBatchService.updateBatch({ ...batch, projectId: undefined });
@@ -45,14 +47,22 @@ export default function BatchSummary(props: BatchSummaryProps): JSX.Element {
         <OverviewItemCard
           isEditable={false}
           title={strings.GERMINATION_ESTABLISHMENT_RATE}
-          contents={batch.germinationRate || '%'}
+          contents={batch.germinationRate ? numberFormatter.format(batch.germinationRate) : '%'}
         />
       </Grid>
       <Grid item flexBasis={overviewGridSize} flexGrow={1}>
-        <OverviewItemCard isEditable={false} title={strings.LOSS_RATE} contents={batch.lossRate || '%'} />
+        <OverviewItemCard
+          isEditable={false}
+          title={strings.LOSS_RATE}
+          contents={batch.lossRate ? numberFormatter.format(batch.lossRate) : '%'}
+        />
       </Grid>
       <Grid item flexBasis={overviewGridSize} flexGrow={1}>
-        <OverviewItemCard isEditable={false} title={strings.TOTAL_WITHDRAWN} contents={batch.totalWithdrawn} />
+        <OverviewItemCard
+          isEditable={false}
+          title={strings.TOTAL_WITHDRAWN}
+          contents={numberFormatter.format(batch.totalWithdrawn)}
+        />
       </Grid>
       <Grid item flexBasis={overviewGridSize} flexGrow={1}>
         <OverviewItemCard

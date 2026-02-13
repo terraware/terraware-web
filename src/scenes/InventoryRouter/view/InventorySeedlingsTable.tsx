@@ -11,7 +11,7 @@ import { SortOrder } from 'src/components/common/table/sort';
 import { APP_PATHS } from 'src/constants';
 import { DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { useOrganization } from 'src/providers';
+import { useLocalization, useOrganization } from 'src/providers';
 import { isBatchEmpty } from 'src/scenes/InventoryRouter/FilterUtils';
 import { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';
 import Search from 'src/scenes/InventoryRouter/Search';
@@ -71,6 +71,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
   } = props;
   const originId: number | undefined = props.facilityId || props.speciesId;
 
+  const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const { isMobile, isDesktop } = useDeviceInfo();
   const theme = useTheme();
@@ -160,7 +161,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
     const requestId = setRequestId('inventory-seedlings');
 
     const populateResults = async () => {
-      if (!originId || !selectedOrganization) {
+      if (!originId || !selectedOrganization || !activeLocale) {
         return;
       }
 
@@ -176,6 +177,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
       void populateResults();
     }
   }, [
+    activeLocale,
     filters.facilityIds,
     getBatchesSearch,
     getSearchFields,
@@ -366,12 +368,12 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
   };
 
   const batchesExport = useCallback(() => {
-    if (!originId || !getBatchesExport || !selectedOrganization) {
+    if (!originId || !getBatchesExport || !selectedOrganization || !activeLocale) {
       return Promise.resolve([] as SearchResponseElement[]);
     }
 
     return getBatchesExport(selectedOrganization.id, originId, getSearchFields(), searchSortOrder);
-  }, [getBatchesExport, selectedOrganization, originId, getSearchFields, searchSortOrder]);
+  }, [activeLocale, originId, getBatchesExport, selectedOrganization, getSearchFields, searchSortOrder]);
 
   const getResultsSpeciesNames = useCallback(
     (): string[] => speciesUnfilteredBatches.map((s) => s.species_scientificName as string),

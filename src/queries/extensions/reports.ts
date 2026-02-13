@@ -73,6 +73,10 @@ api.enhanceEndpoints({
           type: QueryTagTypes.ProjectMetrics,
           id: args.projectId,
         },
+        {
+          type: QueryTagTypes.ProjectMetricTargets,
+          id: args.projectId,
+        },
       ],
     },
     updateProjectMetric: {
@@ -83,14 +87,62 @@ api.enhanceEndpoints({
         },
       ],
     },
-    updateProjectMetricTargets: {
-      invalidatesTags: (_results, _error, args) => {
-        const updatedReportIds = args.updateMetricTargetsRequestPayload.metric.targets.map((target) => target.reportId);
-        return updatedReportIds.map((reportId) => ({
+    getProjectMetricTargets: {
+      providesTags: (_result, _error, projectId) => [
+        {
+          type: QueryTagTypes.ProjectMetricTargets,
+          id: projectId,
+        },
+      ],
+    },
+    updateProjectMetricTarget: {
+      invalidatesTags: (_result, _error, args) => [
+        {
           type: QueryTagTypes.Reports,
-          id: reportId,
-        }));
-      },
+        },
+        {
+          type: QueryTagTypes.ProjectMetricTargets,
+          id: args.projectId,
+        },
+      ],
+    },
+    getStandardMetricTargets: {
+      providesTags: (_result, _error, projectId) => [
+        {
+          type: QueryTagTypes.StandadMetricTargets,
+          id: projectId,
+        },
+      ],
+    },
+    updateStandardMetricTarget: {
+      invalidatesTags: (_result, _error, args) => [
+        {
+          type: QueryTagTypes.Reports,
+        },
+        {
+          type: QueryTagTypes.StandadMetricTargets,
+          id: args.projectId,
+        },
+      ],
+    },
+    getSystemMetricTargets: {
+      providesTags: (_result, _error, projectId) => [
+        {
+          type: QueryTagTypes.SystemMetricTargets,
+          id: projectId,
+        },
+      ],
+    },
+    updateSystemMetricTarget: {
+      invalidatesTags: (_result, _error, args) => [
+        {
+          type: QueryTagTypes.Reports,
+        },
+        {
+          type: QueryTagTypes.SystemMetricTargets,
+          id: args.projectId,
+        },
+      ],
     },
     getAcceleratorReport: {
       providesTags: (_results, _error, args) => [
