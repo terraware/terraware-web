@@ -42,7 +42,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 type ProjectProfileViewProps = {
-  participantProject?: AcceleratorProject;
+  acceleratorProject?: AcceleratorProject;
   projectDetails?: AcceleratorProject | FunderProjectDetails;
   project?: Project;
   projectMeta?: ProjectMeta;
@@ -55,7 +55,7 @@ type ProjectProfileViewProps = {
 };
 
 const ProjectProfileView = ({
-  participantProject,
+  acceleratorProject,
   projectDetails,
   project,
   projectMeta,
@@ -136,11 +136,11 @@ const ProjectProfileView = ({
       .join('\n');
   }, [activeLocale, firstProjectLead, internalUsers, isUsersRequestSuccess, strings]);
 
-  const isProjectInPhase = useMemo(() => participantProject?.phase?.startsWith('Phase'), [participantProject?.phase]);
+  const isProjectInPhase = useMemo(() => acceleratorProject?.phase?.startsWith('Phase'), [acceleratorProject?.phase]);
 
   const isPhaseZeroOrApplication = useMemo(
-    () => [undefined, 'Phase 0 - Due Diligence', 'Application', 'Pre-Screen'].includes(participantProject?.phase),
-    [participantProject?.phase]
+    () => [undefined, 'Phase 0 - Due Diligence', 'Application', 'Pre-Screen'].includes(acceleratorProject?.phase),
+    [acceleratorProject?.phase]
   );
 
   const projectSize = useMemo(() => {
@@ -152,7 +152,7 @@ const ProjectProfileView = ({
         value={value && strings.formatString(strings.X_HA, numberFormatter.format(value))?.toString()}
       />
     );
-    switch (participantProject?.phase) {
+    switch (acceleratorProject?.phase) {
       case 'Phase 1 - Feasibility Study':
         return getCard(strings.MIN_PROJECT_AREA, projectDetails?.minProjectArea);
       case 'Phase 2 - Plan and Scale':
@@ -165,7 +165,7 @@ const ProjectProfileView = ({
         return getCard(strings.ELIGIBLE_AREA, projectDetails?.confirmedReforestableLand);
     }
   }, [
-    participantProject?.phase,
+    acceleratorProject?.phase,
     projectDetails?.projectArea,
     projectDetails?.minProjectArea,
     projectDetails?.confirmedReforestableLand,
@@ -210,7 +210,7 @@ const ProjectProfileView = ({
           <Box display={'flex'} alignItems={'center'}>
             {isProjectInPhase && (
               <>
-                <PhaseBadge label={participantProject?.phase} />
+                <PhaseBadge label={acceleratorProject?.phase} />
               </>
             )}
             {!isProjectInPhase && projectApplication && (
@@ -302,9 +302,9 @@ const ProjectProfileView = ({
             md={4}
             label={strings.MIN_MAX_CARBON_ACCUMULATION}
             value={
-              participantProject?.minCarbonAccumulation &&
-              participantProject?.maxCarbonAccumulation &&
-              `${participantProject.minCarbonAccumulation}-${participantProject.maxCarbonAccumulation}`
+              acceleratorProject?.minCarbonAccumulation &&
+              acceleratorProject?.maxCarbonAccumulation &&
+              `${acceleratorProject.minCarbonAccumulation}-${acceleratorProject.maxCarbonAccumulation}`
             }
             backgroundColor={theme.palette.TwClrBaseGray050}
             units={<Co2HectareYear />}
@@ -492,9 +492,9 @@ const ProjectProfileView = ({
                 label={strings.MIN_MAX_CARBON_ACCUMULATION}
                 md={4}
                 value={
-                  participantProject?.minCarbonAccumulation &&
-                  participantProject?.maxCarbonAccumulation &&
-                  `${participantProject.minCarbonAccumulation}-${participantProject.maxCarbonAccumulation}`
+                  acceleratorProject?.minCarbonAccumulation &&
+                  acceleratorProject?.maxCarbonAccumulation &&
+                  `${acceleratorProject.minCarbonAccumulation}-${acceleratorProject.maxCarbonAccumulation}`
                 }
                 units={<Co2HectareYear />}
               />
@@ -535,9 +535,9 @@ const ProjectProfileView = ({
                     label={strings.APPLICATION}
                   />
                 )}
-                {participantProject?.dealName && (
+                {acceleratorProject?.dealName && (
                   <ProjectFieldLink
-                    value={`${APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENTS}?dealName=${participantProject.dealName}`}
+                    value={`${APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENTS}?dealName=${acceleratorProject.dealName}`}
                     label={strings.DOCUMENTS}
                   />
                 )}
@@ -580,21 +580,21 @@ const ProjectProfileView = ({
               </Typography>
               {!funderView && (
                 <>
-                  <ProjectFieldLink value={participantProject?.googleFolderUrl} label={strings.GDRIVE} />
-                  <ProjectFieldLink value={participantProject?.hubSpotUrl} label={strings.HUBSPOT} />
-                  <ProjectFieldLink value={participantProject?.gisReportsLink} label={strings.GIS_REPORT} />
+                  <ProjectFieldLink value={acceleratorProject?.googleFolderUrl} label={strings.GDRIVE} />
+                  <ProjectFieldLink value={acceleratorProject?.hubSpotUrl} label={strings.HUBSPOT} />
+                  <ProjectFieldLink value={acceleratorProject?.gisReportsLink} label={strings.GIS_REPORT} />
                 </>
               )}
               <ProjectFieldLink value={projectDetails?.verraLink} label={strings.VERRA} />
               {!funderView && (
                 <>
-                  <ProjectFieldLink value={participantProject?.riskTrackerLink} label={strings.RISK_TRACKER} />
-                  <ProjectFieldLink value={participantProject?.clickUpLink} label={strings.CLICK_UP} />
-                  <ProjectFieldLink value={participantProject?.slackLink} label={strings.SLACK} />
+                  <ProjectFieldLink value={acceleratorProject?.riskTrackerLink} label={strings.RISK_TRACKER} />
+                  <ProjectFieldLink value={acceleratorProject?.clickUpLink} label={strings.CLICK_UP} />
+                  <ProjectFieldLink value={acceleratorProject?.slackLink} label={strings.SLACK} />
                   <ProjectFieldLink
                     value={
-                      participantProject?.dropboxFolderPath &&
-                      `https://dropbox.com/home/${encodeURI(participantProject.dropboxFolderPath)}`
+                      acceleratorProject?.dropboxFolderPath &&
+                      `https://dropbox.com/home/${encodeURI(acceleratorProject.dropboxFolderPath)}`
                     }
                     label={strings.DROPBOX}
                   />
