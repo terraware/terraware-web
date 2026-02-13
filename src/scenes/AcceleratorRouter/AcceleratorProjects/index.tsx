@@ -15,7 +15,7 @@ import Scoring from './Scoring';
 import Voting from './Voting';
 import VotingProvider from './Voting/VotingProvider';
 
-const ParticipantProjectsRouter = () => {
+const AcceleratorProjectsRouter = () => {
   return (
     <ProjectProvider>
       <VotingProvider>
@@ -38,4 +38,4 @@ const ParticipantProjectsRouter = () => {
   );
 };
 
-export default ParticipantProjectsRouter;
+export default AcceleratorProjectsRouter;

@@ -54,7 +54,7 @@ const ReportView = () => {
   const { isAllowed } = useUser();
   const [showApproveDialog, , openApprovalDialog, closeApproveDialog] = useBoolean(false);
   const [showRejectDialog, , openRejectDialog, closeRejectDialog] = useBoolean(false);
-  const { crumbs: participantProjectCrumbs, acceleratorProject, project } = useAcceleratorProjectData();
+  const { crumbs: acceleratorProjectCrumbs, acceleratorProject, project } = useAcceleratorProjectData();
   const theme = useTheme();
   const [boxInEdit, setBoxInEdit] = useState<boolean>(false);
 
@@ -155,7 +155,7 @@ const ReportView = () => {
     ];
     if (isAcceleratorRoute) {
       crumbsList = [
-        ...participantProjectCrumbs,
+        ...acceleratorProjectCrumbs,
         {
           name: acceleratorProject?.dealName || project?.name || '',
           to: APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', acceleratorProject?.projectId.toString() || ''),
@@ -169,7 +169,7 @@ const ReportView = () => {
     isAcceleratorRoute,
     acceleratorProject?.dealName,
     acceleratorProject?.projectId,
-    participantProjectCrumbs,
+    acceleratorProjectCrumbs,
     project?.name,
     projectId,
     year,

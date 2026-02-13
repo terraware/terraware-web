@@ -88,13 +88,13 @@ const ProjectProfileEdit = () => {
   const { isAllowed } = useUser();
   const [validateFields, setValidateFields] = useState<boolean>(false);
 
-  const [updateParticipantProject, updateParticipantProjectResponse] = useUpdateProjectAcceleratorDetailsMutation();
-  const [participantProjectRecord, setParticipantProjectRecord, onChangeParticipantProject] =
+  const [updateAcceleratorProject, updateAcceleratorProjectResponse] = useUpdateProjectAcceleratorDetailsMutation();
+  const [acceleratorProjectRecord, setAcceleratorProjectRecord, onChangeAcceleratorProject] =
     useForm(acceleratorProject);
 
   const [requestsInProgress, setRequestsInProgress] = useState(false);
   const [initiatedRequests, setInitiatedRequests] = useState({
-    participantProject: false,
+    acceleratorProject: false,
     updateInternalUsers: false,
     uploadImages: false,
   });
@@ -182,14 +182,14 @@ const ProjectProfileEdit = () => {
 
     if (
       isComplete(uploadImagesResponse?.status, initiatedRequests.uploadImages) &&
-      isCompleteRtk(updateParticipantProjectResponse, initiatedRequests.participantProject) &&
+      isCompleteRtk(updateAcceleratorProjectResponse, initiatedRequests.acceleratorProject) &&
       isCompleteRtk(updateInternalUsersResponse, initiatedRequests.updateInternalUsers)
     ) {
       setRequestsInProgress(false);
 
       if (
         uploadImagesResponse?.status === 'error' ||
-        updateParticipantProjectResponse.isError ||
+        updateAcceleratorProjectResponse.isError ||
         updateInternalUsersResponse.isError
       ) {
         snackbar.toastError();
@@ -199,7 +199,7 @@ const ProjectProfileEdit = () => {
       }
     }
   }, [
-    updateParticipantProjectResponse,
+    updateAcceleratorProjectResponse,
     uploadImagesResponse,
     requestsInProgress,
     initiatedRequests,
@@ -264,10 +264,10 @@ const ProjectProfileEdit = () => {
 
   const onChangeCountry = useCallback(
     (countryCode?: string, region?: string) => {
-      onChangeParticipantProject('countryCode', countryCode);
-      onChangeParticipantProject('region', region);
+      onChangeAcceleratorProject('countryCode', countryCode);
+      onChangeAcceleratorProject('region', region);
     },
-    [onChangeParticipantProject]
+    [onChangeAcceleratorProject]
   );
 
   const saveInternalUsers = useCallback(() => {
@@ -300,10 +300,10 @@ const ProjectProfileEdit = () => {
     }
 
     if (
-      (participantProjectRecord?.phase || '') !== '' &&
-      ((participantProjectRecord?.fileNaming || '') === '' ||
-        (participantProjectRecord?.dropboxFolderPath || '') === '' ||
-        (participantProjectRecord?.googleFolderUrl || '') === '')
+      (acceleratorProjectRecord?.phase || '') !== '' &&
+      ((acceleratorProjectRecord?.fileNaming || '') === '' ||
+        (acceleratorProjectRecord?.dropboxFolderPath || '') === '' ||
+        (acceleratorProjectRecord?.googleFolderUrl || '') === '')
     ) {
       setValidateFields(true);
       snackbar.toastError(strings.PHASE_PROJECT_REQUIRED_FIELDS_ERROR);
@@ -311,18 +311,18 @@ const ProjectProfileEdit = () => {
     }
 
     return true;
-  }, [stableToVariable, isInternalUsersRequestSuccess, internalUsers, participantProjectRecord, strings, snackbar]);
+  }, [stableToVariable, isInternalUsersRequestSuccess, internalUsers, acceleratorProjectRecord, strings, snackbar]);
 
   const finishSave = useCallback(() => {
     setRequestsInProgress(true);
 
     const newInitiatedRequests = {
-      participantProject: false,
+      acceleratorProject: false,
       updateInternalUsers: false,
       uploadImages: false,
     };
 
-    const updatedRecord = { ...participantProjectRecord } as AcceleratorProject;
+    const updatedRecord = { ...acceleratorProjectRecord } as AcceleratorProject;
 
     EXTERNAL_LINK_KEYS.forEach((key) => {
       const value = updatedRecord[key];
@@ -331,21 +331,21 @@ const ProjectProfileEdit = () => {
       }
     });
 
-    const typesToRemove = Object.keys(participantProjectRecord?.landUseModelHectares || {}).filter(
+    const typesToRemove = Object.keys(acceleratorProjectRecord?.landUseModelHectares || {}).filter(
       (type) => !(updatedRecord.landUseModelTypes as string[]).includes(type)
     );
-    const updatedModelHectares = { ...(participantProjectRecord?.landUseModelHectares || {}) };
+    const updatedModelHectares = { ...(acceleratorProjectRecord?.landUseModelHectares || {}) };
     typesToRemove.forEach((type) => {
       delete updatedModelHectares[type];
     });
     updatedRecord.landUseModelHectares = updatedModelHectares;
 
-    if (participantProjectRecord) {
-      void updateParticipantProject({
+    if (acceleratorProjectRecord) {
+      void updateAcceleratorProject({
         projectId,
         updateProjectAcceleratorDetailsRequestPayload: updatedRecord,
       });
-      newInitiatedRequests.participantProject = true;
+      newInitiatedRequests.acceleratorProject = true;
     }
 
     saveInternalUsers();
@@ -387,12 +387,12 @@ const ProjectProfileEdit = () => {
     dispatch,
     mainPhoto,
     mapPhoto,
-    participantProjectRecord,
+    acceleratorProjectRecord,
     projectId,
     redirectToProjectView,
     saveInternalUsers,
     stableToVariable,
-    updateParticipantProject,
+    updateAcceleratorProject,
   ]);
 
   const handleSave = useCallback(() => {
@@ -400,13 +400,13 @@ const ProjectProfileEdit = () => {
       return;
     }
 
-    if (participantProjectRecord?.phase !== acceleratorProject?.phase) {
+    if (acceleratorProjectRecord?.phase !== acceleratorProject?.phase) {
       openConfirmModal();
       return;
     }
 
     finishSave();
-  }, [validateSave, participantProjectRecord?.phase, acceleratorProject?.phase, openConfirmModal, finishSave]);
+  }, [validateSave, acceleratorProjectRecord?.phase, acceleratorProject?.phase, openConfirmModal, finishSave]);
 
   const handleOnCancel = useCallback(() => goToParticipantProject(projectId), [goToParticipantProject, projectId]);
 
@@ -418,9 +418,9 @@ const ProjectProfileEdit = () => {
 
   useEffect(() => {
     if (acceleratorProject) {
-      setParticipantProjectRecord(acceleratorProject);
+      setAcceleratorProjectRecord(acceleratorProject);
     }
-  }, [acceleratorProject, setParticipantProjectRecord]);
+  }, [acceleratorProject, setAcceleratorProjectRecord]);
 
   useEffect(() => {
     if (!isAllowedEdit) {
@@ -437,23 +437,23 @@ const ProjectProfileEdit = () => {
 
   const onChangeLandUseHectares = useCallback(
     (type: string, hectares: string) => {
-      const updated = { ...participantProjectRecord?.landUseModelHectares, [type]: Number(hectares) };
+      const updated = { ...acceleratorProjectRecord?.landUseModelHectares, [type]: Number(hectares) };
       if (hectares === '') {
         delete updated[type];
       }
-      onChangeParticipantProject('landUseModelHectares', updated);
+      onChangeAcceleratorProject('landUseModelHectares', updated);
     },
-    [onChangeParticipantProject, participantProjectRecord]
+    [onChangeAcceleratorProject, acceleratorProjectRecord]
   );
 
   const onChangeSdgList = useCallback(
     (id: string, newList: string[]) => {
-      onChangeParticipantProject(
+      onChangeAcceleratorProject(
         id,
         newList.map((item) => Number(item))
       );
     },
-    [onChangeParticipantProject]
+    [onChangeAcceleratorProject]
   );
 
   const onClickAddRow = useCallback(() => {
@@ -551,8 +551,8 @@ const ProjectProfileEdit = () => {
   );
 
   const sortedSelectedModelTypes = useMemo(() => {
-    return LAND_USE_MODEL_TYPES.filter((type) => participantProjectRecord?.landUseModelTypes?.includes(type));
-  }, [participantProjectRecord?.landUseModelTypes]);
+    return LAND_USE_MODEL_TYPES.filter((type) => acceleratorProjectRecord?.landUseModelTypes?.includes(type));
+  }, [acceleratorProjectRecord?.landUseModelTypes]);
 
   const phaseOptions: {
     label: string;
@@ -570,9 +570,9 @@ const ProjectProfileEdit = () => {
 
   const setPhase = useCallback(
     (_: string, value: string) => {
-      onChangeParticipantProject('phase', value === 'undefined' ? undefined : (value as PhaseType));
+      onChangeAcceleratorProject('phase', value === 'undefined' ? undefined : (value as PhaseType));
     },
-    [onChangeParticipantProject]
+    [onChangeAcceleratorProject]
   );
 
   return (
@@ -594,13 +594,13 @@ const ProjectProfileEdit = () => {
       <PageForm
         busy={
           uploadImagesResponse?.status === 'pending' ||
-          updateParticipantProjectResponse.isLoading ||
+          updateAcceleratorProjectResponse.isLoading ||
           updateInternalUsersResponse.isLoading
         }
-        cancelID='cancelNewParticipantProject'
+        cancelID='cancelNewAcceleratorProject'
         onCancel={handleOnCancel}
         onSave={handleSave}
-        saveID='createNewParticipantProject'
+        saveID='createNewAcceleratorProject'
       >
         <Box margin={theme.spacing(2, 3)}>
           <Typography fontSize={'24px'} lineHeight={'32px'} fontWeight={600}>
@@ -624,8 +624,8 @@ const ProjectProfileEdit = () => {
                 id={'dealName'}
                 md={12}
                 label={strings.DEAL_NAME}
-                onChange={onChangeParticipantProject}
-                value={participantProjectRecord?.dealName}
+                onChange={onChangeAcceleratorProject}
+                value={acceleratorProjectRecord?.dealName}
               />
             </Grid>
             <Grid item md={6} display={'flex'} flexDirection={'column'}>
@@ -635,8 +635,8 @@ const ProjectProfileEdit = () => {
                   md={12}
                   label={strings.COUNTRY}
                   onChange={onChangeCountry}
-                  region={participantProjectRecord?.region}
-                  value={participantProjectRecord?.countryCode}
+                  region={acceleratorProjectRecord?.region}
+                  value={acceleratorProjectRecord?.countryCode}
                 />
               </Box>
             </Grid>
@@ -646,10 +646,10 @@ const ProjectProfileEdit = () => {
                 id={'fileNaming'}
                 md={12}
                 label={strings.FILE_NAMING}
-                onChange={onChangeParticipantProject}
-                value={participantProjectRecord?.fileNaming}
-                required={!!participantProjectRecord?.phase}
-                validate={!!participantProjectRecord?.phase && validateFields}
+                onChange={onChangeAcceleratorProject}
+                value={acceleratorProjectRecord?.fileNaming}
+                required={!!acceleratorProjectRecord?.phase}
+                validate={!!acceleratorProjectRecord?.phase && validateFields}
               />
             </Grid>
             <Grid item md={6} display={'flex'} flexDirection={'column'}>
@@ -660,7 +660,7 @@ const ProjectProfileEdit = () => {
                   label={strings.PHASE}
                   onChange={setPhase}
                   options={phaseOptions}
-                  value={participantProjectRecord?.phase}
+                  value={acceleratorProjectRecord?.phase}
                 />
               </Box>
             </Grid>
@@ -770,15 +770,15 @@ const ProjectProfileEdit = () => {
             <ProjectFieldTextAreaEdit
               id={'dealDescription'}
               label={strings.PROJECT_OVERVIEW}
-              onChange={onChangeParticipantProject}
-              value={participantProjectRecord?.dealDescription}
+              onChange={onChangeAcceleratorProject}
+              value={acceleratorProjectRecord?.dealDescription}
             />
             <Grid item md={12}>
               <LandUseMultiSelect
                 id={'landUseModelTypes'}
                 md={6}
                 label={strings.LAND_USE_MODEL_TYPE}
-                onChange={onChangeParticipantProject}
+                onChange={onChangeAcceleratorProject}
                 value={sortedSelectedModelTypes}
               />
             </Grid>
@@ -790,7 +790,7 @@ const ProjectProfileEdit = () => {
                 label={strings.formatString(strings.X_HECTARES_HA, landUseModelType) as string}
                 onChange={onChangeLandUseHectares}
                 type={'number'}
-                value={participantProjectRecord?.landUseModelHectares?.[landUseModelType]}
+                value={acceleratorProjectRecord?.landUseModelHectares?.[landUseModelType]}
               />
             ))}
 
@@ -806,44 +806,44 @@ const ProjectProfileEdit = () => {
               id={'confirmedReforestableLand'}
               md={4}
               label={strings.ELIGIBLE_AREA_HA}
-              onChange={onChangeParticipantProject}
+              onChange={onChangeAcceleratorProject}
               type={'number'}
-              value={participantProjectRecord?.confirmedReforestableLand}
+              value={acceleratorProjectRecord?.confirmedReforestableLand}
               tooltip={strings.ELIGIBLE_AREA_DESCRIPTION}
             />
             <ProjectFieldTextfield
               id={'projectArea'}
               md={4}
               label={strings.PROJECT_AREA_HA}
-              onChange={onChangeParticipantProject}
+              onChange={onChangeAcceleratorProject}
               type={'number'}
-              value={participantProjectRecord?.projectArea}
+              value={acceleratorProjectRecord?.projectArea}
               tooltip={strings.PROJECT_AREA_DESCRIPTION}
             />
             <ProjectFieldTextfield
               id={'numNativeSpecies'}
               md={4}
               label={strings.NUMBER_OF_NATIVE_SPECIES}
-              onChange={onChangeParticipantProject}
+              onChange={onChangeAcceleratorProject}
               type={'number'}
-              value={participantProjectRecord?.numNativeSpecies}
+              value={acceleratorProjectRecord?.numNativeSpecies}
             />
             <ProjectFieldTextfield
               id={'minProjectArea'}
               md={4}
               label={strings.MIN_PROJECT_AREA_HA}
-              onChange={onChangeParticipantProject}
+              onChange={onChangeAcceleratorProject}
               type={'number'}
-              value={participantProjectRecord?.minProjectArea}
+              value={acceleratorProjectRecord?.minProjectArea}
               tooltip={strings.MIN_PROJECT_AREA_DESCRIPTION}
             />
             <ProjectFieldTextfield
               id={'totalExpansionPotential'}
               md={4}
               label={strings.EXPANSION_POTENTIAL_HA}
-              onChange={onChangeParticipantProject}
+              onChange={onChangeAcceleratorProject}
               type={'number'}
-              value={participantProjectRecord?.totalExpansionPotential}
+              value={acceleratorProjectRecord?.totalExpansionPotential}
               tooltip={strings.EXPANSION_POTENTIAL_DESCRIPTION}
             />
 
@@ -857,48 +857,48 @@ const ProjectProfileEdit = () => {
             <MinMaxCarbonTextfield
               md={4}
               label={strings.MIN_MAX_CARBON_ACCUMULATION_UNITS}
-              onChange={onChangeParticipantProject}
-              valueMax={participantProjectRecord?.maxCarbonAccumulation}
-              valueMin={participantProjectRecord?.minCarbonAccumulation}
+              onChange={onChangeAcceleratorProject}
+              valueMax={acceleratorProjectRecord?.maxCarbonAccumulation}
+              valueMin={acceleratorProjectRecord?.minCarbonAccumulation}
             />
             <ProjectFieldTextfield
               id={'totalVCU'}
               md={4}
               label={strings.TOTAL_VCU_T_40YRS}
-              onChange={onChangeParticipantProject}
+              onChange={onChangeAcceleratorProject}
               type={'number'}
-              value={participantProjectRecord?.totalVCU}
+              value={acceleratorProjectRecord?.totalVCU}
             />
             <ProjectFieldTextfield
               id={'perHectareBudget'}
               md={4}
               label={strings.PER_HECTARE_ESTIMATED_BUDGET}
-              onChange={onChangeParticipantProject}
+              onChange={onChangeAcceleratorProject}
               type={'number'}
-              value={participantProjectRecord?.perHectareBudget}
+              value={acceleratorProjectRecord?.perHectareBudget}
             />
             <ProjectFieldTextfield
               id={'accumulationRate'}
               md={4}
               label={strings.ACCUMULATION_RATE_UNITS}
-              onChange={onChangeParticipantProject}
+              onChange={onChangeAcceleratorProject}
               type={'number'}
-              value={participantProjectRecord?.accumulationRate}
+              value={acceleratorProjectRecord?.accumulationRate}
             />
             <VariableSelect
               id={'standard'}
               md={4}
               label={strings.STANDARD}
-              onChange={onChangeParticipantProject}
-              value={participantProjectRecord?.standard}
+              onChange={onChangeAcceleratorProject}
+              value={acceleratorProjectRecord?.standard}
               options={(stableToVariable?.[standardStableId] as SelectVariable)?.options}
             />
             <VariableSelect
               id={'methodologyNumber'}
               md={4}
               label={strings.METHODOLOGY_NUMBER}
-              onChange={onChangeParticipantProject}
-              value={participantProjectRecord?.methodologyNumber}
+              onChange={onChangeAcceleratorProject}
+              value={acceleratorProjectRecord?.methodologyNumber}
               options={(stableToVariable?.[methodologyNumberStableId] as SelectVariable)?.options}
             />
             {stableToVariable && (
@@ -906,8 +906,8 @@ const ProjectProfileEdit = () => {
                 id={'carbonCertifications'}
                 md={4}
                 label={strings.CARBON_CERTIFICATIONS}
-                onChange={onChangeParticipantProject}
-                values={participantProjectRecord?.carbonCertifications}
+                onChange={onChangeAcceleratorProject}
+                values={acceleratorProjectRecord?.carbonCertifications}
                 options={(stableToVariable[carbonCertificationsStableId] as SelectVariable).options.reduce(
                   (map, option) => {
                     map.set(option.name, option.name);
@@ -930,61 +930,61 @@ const ProjectProfileEdit = () => {
               id={'googleFolderUrl'}
               md={4}
               label={strings.GDRIVE_LINK}
-              onChange={onChangeParticipantProject}
-              value={participantProjectRecord?.googleFolderUrl}
-              required={!!participantProjectRecord?.phase}
-              validate={!!participantProjectRecord?.phase && validateFields}
+              onChange={onChangeAcceleratorProject}
+              value={acceleratorProjectRecord?.googleFolderUrl}
+              required={!!acceleratorProjectRecord?.phase}
+              validate={!!acceleratorProjectRecord?.phase && validateFields}
             />
             <ProjectFieldTextfield
               id={'verraLink'}
               md={4}
               label={strings.VERRA_LINK}
-              onChange={onChangeParticipantProject}
-              value={participantProjectRecord?.verraLink}
+              onChange={onChangeAcceleratorProject}
+              value={acceleratorProjectRecord?.verraLink}
             />
             <ProjectFieldTextfield
               id={'clickUpLink'}
               md={4}
               label={strings.CLICK_UP_LINK}
-              onChange={onChangeParticipantProject}
-              value={participantProjectRecord?.clickUpLink}
+              onChange={onChangeAcceleratorProject}
+              value={acceleratorProjectRecord?.clickUpLink}
             />
             <ProjectFieldTextfield
               id={'hubSpotUrl'}
               md={4}
               label={strings.HUBSPOT_LINK}
-              onChange={onChangeParticipantProject}
-              value={participantProjectRecord?.hubSpotUrl}
+              onChange={onChangeAcceleratorProject}
+              value={acceleratorProjectRecord?.hubSpotUrl}
             />
             <ProjectFieldTextfield
               id={'riskTrackerLink'}
               md={4}
               label={strings.RISK_TRACKER_LINK}
-              onChange={onChangeParticipantProject}
-              value={participantProjectRecord?.riskTrackerLink}
+              onChange={onChangeAcceleratorProject}
+              value={acceleratorProjectRecord?.riskTrackerLink}
             />
             <ProjectFieldTextfield
               id={'slackLink'}
               md={4}
               label={strings.SLACK_LINK}
-              onChange={onChangeParticipantProject}
-              value={participantProjectRecord?.slackLink}
+              onChange={onChangeAcceleratorProject}
+              value={acceleratorProjectRecord?.slackLink}
             />
             <ProjectFieldTextfield
               id={'gisReportsLink'}
               md={4}
               label={strings.GIS_REPORT_LINK}
-              onChange={onChangeParticipantProject}
-              value={participantProjectRecord?.gisReportsLink}
+              onChange={onChangeAcceleratorProject}
+              value={acceleratorProjectRecord?.gisReportsLink}
             />
             <ProjectFieldTextfield
               id={'dropboxFolderPath'}
               md={4}
               label={strings.DROPBOX_PATH}
-              onChange={onChangeParticipantProject}
-              value={participantProjectRecord?.dropboxFolderPath}
-              required={!!participantProjectRecord?.phase}
-              validate={!!participantProjectRecord?.phase && validateFields}
+              onChange={onChangeAcceleratorProject}
+              value={acceleratorProjectRecord?.dropboxFolderPath}
+              required={!!acceleratorProjectRecord?.phase}
+              validate={!!acceleratorProjectRecord?.phase && validateFields}
             />
 
             <Grid container>
@@ -993,7 +993,7 @@ const ProjectProfileEdit = () => {
                 md={6}
                 label={strings.UN_SDG}
                 onChange={onChangeSdgList}
-                value={participantProjectRecord?.sdgList}
+                value={acceleratorProjectRecord?.sdgList}
               />
             </Grid>
           </Grid>

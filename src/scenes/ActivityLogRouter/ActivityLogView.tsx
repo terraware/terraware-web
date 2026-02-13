@@ -27,7 +27,7 @@ export default function ActivityLogView(): JSX.Element {
   const { goToAcceleratorActivityCreate, goToActivityCreate } = useNavigateTo();
   const { currentAcceleratorProject, allAcceleratorProjects, setCurrentAcceleratorProject } = useParticipantData();
   const { isAcceleratorRoute } = useAcceleratorConsole();
-  const { acceleratorProjects, isLoading: participantProjectsLoading } = useAcceleratorProjects();
+  const { acceleratorProjects, isLoading: acceleratorProjectsLoading } = useAcceleratorProjects();
 
   const [activityId, setActivityId] = useState<number>();
   const [projectFilter, setProjectFilter] = useState<{ projectId?: number | string }>({});
@@ -154,7 +154,7 @@ export default function ActivityLogView(): JSX.Element {
     <>
       <Page
         hierarchicalCrumbs={false}
-        isLoading={isAcceleratorRoute && participantProjectsLoading}
+        isLoading={isAcceleratorRoute && acceleratorProjectsLoading}
         leftComponent={PageHeaderLeftComponent}
         rightComponent={PageHeaderRightComponent}
         title={strings.ACTIVITY_LOG}
