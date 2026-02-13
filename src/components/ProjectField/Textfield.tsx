@@ -3,11 +3,25 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Box, useTheme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 
+import { useLocalization } from 'src/providers';
+
 import { ProjectFieldEditProps } from '.';
 import GridEntryWrapper from './GridEntryWrapper';
 
-const ProjectFieldTextfield = ({ height, id, label, onChange, type, value, md, tooltip }: ProjectFieldEditProps) => {
+const ProjectFieldTextfield = ({
+  height,
+  id,
+  label,
+  md,
+  onChange,
+  required,
+  tooltip,
+  type,
+  validate,
+  value,
+}: ProjectFieldEditProps) => {
   const theme = useTheme();
+  const { strings } = useLocalization();
 
   const [localValue, setLocalValue] = useState<string | undefined>();
 
@@ -35,6 +49,8 @@ const ProjectFieldTextfield = ({ height, id, label, onChange, type, value, md, t
           value={localValue}
           type={type || 'text'}
           tooltipTitle={tooltip}
+          required={required}
+          errorText={validate && !localValue ? strings.REQUIRED_FIELD : undefined}
         />
       </Box>
     </GridEntryWrapper>

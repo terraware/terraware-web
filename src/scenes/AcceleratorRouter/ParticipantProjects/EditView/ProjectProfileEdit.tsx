@@ -88,6 +88,7 @@ const ProjectProfileEdit = () => {
   const { participantProject, projectId, organization, reload } = useParticipantProjectData();
   const { goToParticipantProject } = useNavigateTo();
   const { isAllowed } = useUser();
+  const [validateFields, setValidateFields] = useState<boolean>(false);
 
   // Participant project (accelerator data) form record and update request
   const [participantProjectRequestId, setParticipantProjectRequestId] = useState<string>('');
@@ -306,6 +307,7 @@ const ProjectProfileEdit = () => {
   }, [dispatch, internalUsers, listInternalUsersRequest?.data?.users, projectId]);
 
   const handleSave = useCallback(() => {
+    setValidateFields(false);
     if (!stableToVariable || listInternalUsersRequest?.status !== 'success') {
       snackbar.toastError(strings.CANNOT_SAVE_UNTIL_PAGE_IS_FULLY_LOADED);
       return;
@@ -317,14 +319,13 @@ const ProjectProfileEdit = () => {
     }
 
     if (
-      participantProjectRecord?.phase !== null &&
-      participantProjectRecord?.phase !== undefined &&
-      ((participantProjectRecord.fileNaming || '') === '' ||
-        (participantProjectRecord.dropboxFolderPath || '') === '' ||
-        (participantProjectRecord.googleFolderUrl || '') === '')
+      (participantProjectRecord?.phase || '') !== '' &&
+      ((participantProjectRecord?.fileNaming || '') === '' ||
+        (participantProjectRecord?.dropboxFolderPath || '') === '' ||
+        (participantProjectRecord?.googleFolderUrl || '') === '')
     ) {
-      // will update this in the next PR
-      snackbar.toastError(strings.REQUIRED);
+      setValidateFields(true);
+      snackbar.toastError(strings.PHASE_PROJECT_REQUIRED_FIELDS_ERROR);
       return;
     }
 
@@ -570,6 +571,13 @@ const ProjectProfileEdit = () => {
     [strings]
   );
 
+  const setPhase = useCallback(
+    (_: string, value: string) => {
+      onChangeParticipantProject('phase', value === 'undefined' ? undefined : (value as CohortPhaseType));
+    },
+    [onChangeParticipantProject]
+  );
+
   return (
     <Grid container paddingRight={theme.spacing(3)}>
       {addInternalUserRoleModalOpen && (
@@ -636,6 +644,8 @@ const ProjectProfileEdit = () => {
                 label={strings.FILE_NAMING}
                 onChange={onChangeParticipantProject}
                 value={participantProjectRecord?.fileNaming}
+                required={!!participantProjectRecord?.phase}
+                validate={!!participantProjectRecord?.phase && validateFields}
               />
             </Grid>
             <Grid item md={6} display={'flex'} flexDirection={'column'}>
@@ -644,7 +654,7 @@ const ProjectProfileEdit = () => {
                   id={'phase'}
                   md={12}
                   label={strings.PHASE}
-                  onChange={onChangeParticipantProject}
+                  onChange={setPhase}
                   options={phaseOptions}
                   value={participantProjectRecord?.phase}
                 />
@@ -918,6 +928,8 @@ const ProjectProfileEdit = () => {
               label={strings.GDRIVE_LINK}
               onChange={onChangeParticipantProject}
               value={participantProjectRecord?.googleFolderUrl}
+              required={!!participantProjectRecord?.phase}
+              validate={!!participantProjectRecord?.phase && validateFields}
             />
             <ProjectFieldTextfield
               id={'verraLink'}
@@ -967,6 +979,8 @@ const ProjectProfileEdit = () => {
               label={strings.DROPBOX_PATH}
               onChange={onChangeParticipantProject}
               value={participantProjectRecord?.dropboxFolderPath}
+              required={!!participantProjectRecord?.phase}
+              validate={!!participantProjectRecord?.phase && validateFields}
             />
 
             <Grid container>

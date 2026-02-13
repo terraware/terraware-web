@@ -1384,6 +1384,7 @@ PH,pH,8e3a7381
 PHASE,Phase,f9d98417
 PHASE_1,Phase 1 : étude de faisabilité,94889837
 PHASE_1_SCORE,Score de la phase 1,9f83e45f
+PHASE_PROJECT_REQUIRED_FIELDS_ERROR,"Le nom du fichier, le lien GDrive et le chemin Dropbox sont obligatoires lorsqu'une phase est sélectionnée.",93c006c2
 PHOTO_DATE_TIME,Date/heure de la photo,22e81710
 PHOTO_NORTHEAST_QUADRAT,Quadrat nord-est,05b4f331
 PHOTO_NORTHWEST_QUADRAT,Quadrat nord-ouest,9af609f8
