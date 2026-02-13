@@ -26,11 +26,12 @@ import { APP_PATHS } from 'src/constants';
 import useProjectFundingEntities from 'src/hooks/useProjectFundingEntities';
 import { useLocalization, useUser } from 'src/providers';
 import { useGetInternalUsersQuery } from 'src/queries/generated/projectInternalUsers';
+import { PublishedReportPayload } from 'src/queries/generated/publishedReports';
 import { useLazyListAcceleratorReportsQuery } from 'src/queries/generated/reports';
 import { useAppDispatch } from 'src/redux/store';
 import { AcceleratorOrg } from 'src/types/Accelerator';
 import { AcceleratorProject } from 'src/types/AcceleratorProject';
-import { PublishedReport, getReportPrefix } from 'src/types/AcceleratorReport';
+import { getReportPrefix } from 'src/types/AcceleratorReport';
 import { Application } from 'src/types/Application';
 import { FunderProjectDetails } from 'src/types/FunderProject';
 import { Project, ProjectMeta, getProjectInternalUserRoleString } from 'src/types/Project';
@@ -51,7 +52,7 @@ type ProjectProfileViewProps = {
   projectScore?: Score | undefined;
   phaseVotes?: PhaseVotes | undefined;
   funderView?: boolean;
-  publishedReports: PublishedReport[];
+  publishedReports: PublishedReportPayload[];
 };
 
 const ProjectProfileView = ({
