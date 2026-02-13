@@ -229,7 +229,7 @@ const PhotosBox = (props: ReportBoxProps) => {
       if (report) {
         let path = isAcceleratorReport(report)
           ? `/api/v1/accelerator/projects/${projectId}/reports/${report.id}/photos/${fileId}`
-          : `/api/v1/funder/reports/${(report as PublishedReportPayload).reportId}/photos/${fileId}`;
+          : `/api/v1/funder/reports/${report.reportId}/photos/${fileId}`;
 
         if (maxHeight !== undefined || maxWidth !== undefined) {
           path += '?';
