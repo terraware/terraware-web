@@ -18,16 +18,19 @@ export const useParticipantProjects = (): UseParticipantProjectsResult => {
 
   const [listProjectAcceleratorDetails, listDetailsResponse] = useLazyListProjectAcceleratorDetailsQuery();
 
-  const fetchParticipantProjects = useCallback(() => {
-    if (!activeLocale) {
-      return;
-    }
+  const fetchParticipantProjects = useCallback(
+    (preferCached: boolean = false) => {
+      if (!activeLocale) {
+        return;
+      }
 
-    void listProjectAcceleratorDetails();
-  }, [activeLocale, listProjectAcceleratorDetails]);
+      void listProjectAcceleratorDetails(undefined, preferCached);
+    },
+    [activeLocale, listProjectAcceleratorDetails]
+  );
 
   useEffect(() => {
-    fetchParticipantProjects();
+    fetchParticipantProjects(true);
   }, [fetchParticipantProjects]);
 
   const participantProjects = useMemo(
