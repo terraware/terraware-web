@@ -28,7 +28,6 @@ import { useLocalization, useUser } from 'src/providers';
 import { useGetInternalUsersQuery } from 'src/queries/generated/projectInternalUsers';
 import { useLazyListAcceleratorReportsQuery } from 'src/queries/generated/reports';
 import { useAppDispatch } from 'src/redux/store';
-import strings from 'src/strings';
 import { AcceleratorOrg } from 'src/types/Accelerator';
 import { PublishedReport, getReportPrefix } from 'src/types/AcceleratorReport';
 import { Application } from 'src/types/Application';
@@ -69,7 +68,7 @@ const ProjectProfileView = ({
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const { isAllowed } = useUser();
-  const { activeLocale, countries } = useLocalization();
+  const { activeLocale, countries, strings } = useLocalization();
   const numberFormatter = useNumberFormatter();
   const { fundingEntities } = useProjectFundingEntities(funderView ? undefined : projectDetails?.projectId);
   const { isMobile, isTablet } = useDeviceInfo();
@@ -135,7 +134,7 @@ const ProjectProfileView = ({
       })
       .map((user) => `${user.userRole}: ${user.firstName} ${user.lastName}`)
       .join('\n');
-  }, [activeLocale, firstProjectLead, internalUsers, isUsersRequestSuccess]);
+  }, [activeLocale, firstProjectLead, internalUsers, isUsersRequestSuccess, strings]);
 
   const isProjectInPhase = useMemo(() => participantProject?.phase?.startsWith('Phase'), [participantProject?.phase]);
 
@@ -173,6 +172,7 @@ const ProjectProfileView = ({
     isTablet,
     theme,
     numberFormatter,
+    strings,
   ]);
 
   const lastPublishedReport = useMemo(() => {

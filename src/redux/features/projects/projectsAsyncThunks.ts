@@ -5,8 +5,6 @@ import ProjectsService, {
   AssignProjectRequestPayload,
   AssignProjectResponsePayload,
   DeleteProjectResponsePayload,
-  UpdateProjectInternalUsersRequestPayload,
-  UpdateProjectInternalUsersResponsePayload,
   UpdateProjectResponsePayload,
 } from 'src/services/ProjectsService';
 import strings from 'src/strings';
@@ -49,21 +47,6 @@ export const requestProjectAssign = createAsyncThunk(
       projectId,
       entities
     );
-
-    if (response !== null && response.requestSucceeded) {
-      return response.data;
-    }
-
-    return rejectWithValue(strings.GENERIC_ERROR);
-  }
-);
-
-export const requestProjectInternalUsersUpdate = createAsyncThunk(
-  'projects/updateInternalUsers',
-  async (request: { projectId: number; payload: UpdateProjectInternalUsersRequestPayload }, { rejectWithValue }) => {
-    const { projectId, payload } = request;
-    const response: Response2<UpdateProjectInternalUsersResponsePayload> =
-      await ProjectsService.updateProjectInternalUsers(projectId, payload);
 
     if (response !== null && response.requestSucceeded) {
       return response.data;
