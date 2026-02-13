@@ -1,5 +1,5 @@
 import { paths } from 'src/api/types/generated-schema';
-import HttpService, { Response, Response2, ServerData } from 'src/services/HttpService';
+import HttpService, { Response } from 'src/services/HttpService';
 import SearchService from 'src/services/SearchService';
 import strings from 'src/strings';
 import { AcceleratorOrg } from 'src/types/Accelerator';
@@ -13,14 +13,6 @@ import { SearchOrderConfig, searchAndSort } from 'src/utils/searchAndSort';
 /**
  * Accelerator "participant project" related services
  */
-
-export type ParticipantProjectsData = {
-  projects: ParticipantProject[];
-};
-
-export type ParticipantProjectData = ServerData & {
-  details: ParticipantProject | undefined;
-};
 
 const ENDPOINT_PARTICIPANT_PROJECTS = '/api/v1/accelerator/projects';
 const ENDPOINT_PARTICIPANT_PROJECT = '/api/v1/accelerator/projects/{projectId}';
@@ -121,13 +113,6 @@ const download = async ({
   return `${headersRow}\r${valuesRow}\r`;
 };
 
-const get = async (participantProjectId: number): Promise<Response2<ParticipantProjectData>> =>
-  httpParticipantProject.get2<ParticipantProjectData>({
-    urlReplacements: {
-      '{projectId}': `${participantProjectId}`,
-    },
-  });
-
 const downloadList = async (search?: SearchNodePayload, sortOrder?: SearchSortOrder): Promise<string | null> =>
   await SearchService.searchCsv(getSearchParams(search, sortOrder));
 
@@ -171,7 +156,6 @@ const update = async (participantProject: ParticipantProject): Promise<Response>
 const ParticipantProjectsService = {
   download,
   downloadList,
-  get,
   list,
   update,
 };

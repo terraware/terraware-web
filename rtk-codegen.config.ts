@@ -9,6 +9,11 @@ const config: ConfigFile = {
   exportName: 'api',
   hooks: { queries: true, lazyQueries: true, mutations: true },
   outputFiles: {
+    './src/queries/generated/acceleratorProjects.ts': {
+      filterEndpoints: (_, operation) =>
+        operation.path === '/api/v1/accelerator/projects' ||
+        operation.path === '/api/v1/accelerator/projects/{projectId}',
+    },
     './src/queries/generated/draftPlantingSites.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/tracking/draftSites'),
     },
