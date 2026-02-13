@@ -4,15 +4,10 @@ import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
 import {
   requestProjectAssign,
   requestProjectDelete,
-  requestProjectInternalUsersList,
   requestProjectInternalUsersUpdate,
   requestProjectUpdate,
 } from 'src/redux/features/projects/projectsAsyncThunks';
-import {
-  ProjectsInternalUsersData,
-  UpdateProjectInternalUsersResponsePayload,
-  UpdateProjectResponsePayload,
-} from 'src/services/ProjectsService';
+import { UpdateProjectInternalUsersResponsePayload, UpdateProjectResponsePayload } from 'src/services/ProjectsService';
 import { Project } from 'src/types/Project';
 
 // Define a type for the slice state
@@ -82,23 +77,10 @@ export const projectInternalUsersUpdateSlice = createSlice({
   },
 });
 
-type ProjectInternalUsersListState = Record<string, StatusT<ProjectsInternalUsersData>>;
-const initialStateProjectInternalUsersList: ProjectInternalUsersListState = {};
-
-export const projectInternalUsersListSlice = createSlice({
-  name: 'projectInternalUsersListSlice',
-  initialState: initialStateProjectInternalUsersList,
-  reducers: {},
-  extraReducers: (builder) => {
-    buildReducers(requestProjectInternalUsersList)(builder);
-  },
-});
-
 const projectsReducers = {
   projects: projectsSlice.reducer,
   projectsRequests: projectsRequestsSlice.reducer,
   projectInternalUsersUpdate: projectInternalUsersUpdateSlice.reducer,
-  projectInternalUsersList: projectInternalUsersListSlice.reducer,
 };
 
 export default projectsReducers;

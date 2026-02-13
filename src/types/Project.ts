@@ -16,6 +16,7 @@ export type ProjectInternalUser = ProjectInternalUsers[number];
 
 export type ProjectInternalUserRole = ProjectInternalUser['role'];
 
+// todo change this to rtk type
 export const projectInternalUserRoles: ProjectInternalUserRole[] = [
   'Carbon Lead',
   'Climate Impact Lead',

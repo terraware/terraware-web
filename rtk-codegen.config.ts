@@ -37,7 +37,11 @@ const config: ConfigFile = {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/tracking/sites'),
     },
     './src/queries/generated/projects.ts': {
-      filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/projects'),
+      filterEndpoints: (_, operation) =>
+        operation.path.startsWith('/api/v1/projects') && !operation.path.includes('{id}/internalUsers'),
+    },
+    './src/queries/generated/projectInternalUsers.ts': {
+      filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/projects/{id}/internalUsers'),
     },
     './src/queries/generated/projectModules.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/accelerator/projects/{projectId}/modules'),
