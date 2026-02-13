@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/68</span>
+                <span class='fraction'>0/70</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/64</span>
+                <span class='fraction'>0/66</span>
             </div>
         
             
@@ -214,7 +214,9 @@
 <a name='L149'></a><a href='#L149'>149</a>
 <a name='L150'></a><a href='#L150'>150</a>
 <a name='L151'></a><a href='#L151'>151</a>
-<a name='L152'></a><a href='#L152'>152</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L152'></a><a href='#L152'>152</a>
+<a name='L153'></a><a href='#L153'>153</a>
+<a name='L154'></a><a href='#L154'>154</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -258,7 +260,9 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -379,41 +383,43 @@ import { NurseryIn<span class="cstat-no" title="statement not covered" ><span cl
 im<span class="cstat-no" title="statement not covered" >port strings from 'src/strings';</span>
 impo<span class="cstat-no" title="statement not covered" >rt { SpeciesInventorySummary } from 'src/types/Inventory';</span>
 import<span class="cstat-no" title="statement not covered" > useDeviceInfo from 'src/utils/useDeviceInfo';</span>
-import u<span class="cstat-no" title="statement not covered" >seSnackbar from 'src/utils<span class="fstat-no" title="function not covered" >/u</span>seSn<span class="cstat-no" title="statement not covered" >ackbar';</span></span>
-&nbsp;
-in<span class="cstat-no" title="statement not covered" >terface Inv</span>entorySummaryProps {
-  speciesId: number;
-  modified: nu<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >mb</span>er;<span class="cstat-no" title="statement not covered" ></span></span>
+import {<span class="cstat-no" title="statement not covered" > useNumberFormatter } from<span class="fstat-no" title="function not covered" > '</span>src/<span class="cstat-no" title="statement not covered" >utils/useN</span>umberFormatter';</span>
+import useSnackbar from 'src/utils/useSnackbar';
+<span class="cstat-no" title="statement not covered" ></span>
+interface InventorySummaryProps {
+  speciesId: n<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >um</span>ber;<span class="cstat-no" title="statement not covered" ></span></span>
+  modified: number;
 }
 &nbsp;
 export default function InventorySummaryForSpecies(props: InventorySummaryProps): JSX.Element {
   const { speciesId, modified } = props;
 &nbsp;
   const dispatch = useAppDispatch();
-  const snackbar = useSnackbar();
-  const { isMobile <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >} </span>= useDe<span class="cstat-no" title="statement not covered" >viceInfo();</span></span>
-  const { selectedOr<span class="cstat-no" title="statement not covered" >gan</span>ization } = useOrganization();
+  const snackbar = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >us</span>eSnackb<span class="cstat-no" title="statement not covered" >ar();</span></span>
+  const { isMobile }<span class="cstat-no" title="statement not covered" > = </span>useDeviceInfo();
+<span class="cstat-no" title="statement not covered" >  const { selectedOrganization } = useOrganization();</span>
+  const num<span class="fstat-no" title="function not covered" >be</span>rFor<span class="cstat-no" title="statement not covered" >matter = useNumberFormatter</span>();
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  const speciesProjects = useAppSelector(selec</span>tSpeciesProjects(speciesId));
+  const [summary, s<span class="cstat-no" title="statement not covered" >etSummary] = useState&lt;Spec</span>iesInventorySummary&gt;();
 <span class="cstat-no" title="statement not covered" ></span>
-  const spe<span class="fstat-no" title="function not covered" >ci</span>esPr<span class="cstat-no" title="statement not covered" >ojects = useAppSelector(sel</span>ectSpeciesProjects(speciesId));
-  const [summary, setSummary] = useState&lt;SpeciesInventorySummary&gt;();
-<span class="cstat-no" title="statement not covered" ></span>
-  const reloadData <span class="cstat-no" title="statement not covered" >= useCallback(() =&gt; {</span>
-    const populateSumm<span class="cstat-no" title="statement not covered" >ary = async () =&gt; {</span>
-      const response<span class="cstat-no" title="statement not covered" > = await NurseryInventorySe</span>rvice.getSummary(speciesId);
-      if (response.requestSucc<span class="cstat-no" title="statement not covered" >eeded === false) {</span>
-        snackbar.toastE<span class="cstat-no" title="statement not covered" >rror();</span>
-      } else if (!_.isEqual(response.s<span class="cstat-no" title="statement not covered" >ummary, summary)) {</span>
-        setSummary(response.summary<span class="cstat-no" title="statement not covered" > || undefined);</span>
+  const reloadData =<span class="cstat-no" title="statement not covered" > useCallback(() =&gt; {</span>
+    const populateSummary = as<span class="cstat-no" title="statement not covered" >ync () =&gt; {</span>
+      const response = <span class="cstat-no" title="statement not covered" >await NurseryInventorySer</span>vice.getSummary(speciesId);
+      if (response.requestSucceeded ==<span class="cstat-no" title="statement not covered" >= false) {</span>
+        snackbar.toastError();<span class="cstat-no" title="statement not covered" ></span>
+      } else if (!_<span class="cstat-no" title="statement not covered" >.isEqual(response.summary, </span>summary)) {
+        setSummary(res<span class="cstat-no" title="statement not covered" >ponse.summary || undefin</span>ed);
       }<span class="cstat-no" title="statement not covered" ></span>
     };<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-    if (speciesId !== undef<span class="cstat-no" title="statement not covered" >ined &amp;&amp; selectedOrganization) {</span>
-      void populateSummar<span class="cstat-no" title="statement not covered" >y();</span>
-      voi<span class="fstat-no" title="function not covered" >d dispatch(requestSpeciesPr</span>ojects(selectedOrganization?.id, speciesId));
+    if (speciesId !== und<span class="cstat-no" title="statement not covered" >efined &amp;&amp; selectedOrganization) {</span>
+      voi<span class="fstat-no" title="function not covered" >d populateSummary();</span>
+      void dispatch(requestSpecies<span class="cstat-no" title="statement not covered" >Projec</span>ts(selectedOrganization?.id, speciesId));
     } else {<span class="cstat-no" title="statement not covered" ></span>
       setSummary(un<span class="cstat-no" title="statement not covered" >defined);</span>
     }<span class="cstat-no" title="statement not covered" ></span>
-  }, [speciesId, summar<span class="cstat-no" title="statement not covered" >y, snackbar, dispatch, selectedOrgan</span>ization]);
+  }, [speciesId, summary, snackbar,<span class="cstat-no" title="statement not covered" > dispatch, selectedOrganization]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
   useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
     reloadData();<span class="cstat-no" title="statement not covered" ></span>
@@ -443,43 +449,43 @@ export default function InventorySummaryForSpecies(props: InventorySummaryProps)
     return [
       {
         label: strings.GERMINATION_ESTABLISHMENT_QUANTITY,
-        value: germinatingQuantity.toString(),
+        value: numberFormatter.format(germinatingQuantity),
         tooltipTitle: strings.TOOLTIP_GERMINATION_ESTABLISHMENT_QUANTITY,
         gridColumns: topRowColumns,
       },
       {
         label: strings.ACTIVE_GROWTH_QUANTITY,
-<span class="cstat-no" title="statement not covered" >        value: a</span>ctiveGrowthQuantity.toString(),
+<span class="cstat-no" title="statement not covered" >        value: n</span>umberFormatter.format(activeGrowthQuantity),
         tooltipTitle: stri<span class="cstat-no" title="statement not covered" >ngs.TOOLTIP_ACTIVE</span>_GROWTH_QUANTITY,
         gridColumns: topRowColumns,<span class="cstat-no" title="statement not covered" ></span>
       },<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >      {</span>
         label: strings.HARDENING_OFF_QUANTITY,
-        value: hardeningOffQuantity.toString(),
+        value: numberFormatter.format(hardeningOffQuantity),
         tooltipTitle: strings.TOOLTIP_HARDENING_OFF_QUANTITY,
         gridColumns: topRowColumns,
       },
       {
         label: strings.READY_TO_PLANT_QUANTITY,
-        value: readyQuantity.toString(),
+        value: numberFormatter.format(readyQuantity),
         tooltipTitle: strings.TOOLTIP_READY_TO_PLANT_QUANTITY,
         gridColumns: topRowColumns,
       },
       {
         label: strings.TOTAL_QUANTITY,
-        value: totalQuantity.toString(),
+        value: numberFormatter.format(totalQuantity),
         tooltipTitle: strings.TOOLTIP_TOTAL_QUANTITY,
         gridColumns: topRowColumns,
       },
       {
         label: strings.TOTAL_WITHDRAWN,
-        value: totalWithdrawn.toString(),
+        value: numberFormatter.format(totalWithdrawn),
         tooltipTitle: strings.TOOLTIP_TOTAL_WITHDRAWN,
         gridColumns: bottomRowColumns,
       },
       {
         label: strings.LOSS_RATE,
-        value: `${lossRate || 0}%`,
+        value: `${numberFormatter.format(lossRate || 0)}%`,
         tooltipTitle: '',
         gridColumns: bottomRowColumns,
       },
@@ -523,7 +529,7 @@ export default function InventorySummaryForSpecies(props: InventorySummaryProps)
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-13T00:44:46.049Z
+                at 2026-02-13T02:13:35.233Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

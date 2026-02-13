@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/192</span>
+                <span class='fraction'>0/193</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/117</span>
+                <span class='fraction'>0/119</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/181</span>
+                <span class='fraction'>0/182</span>
             </div>
         
             
@@ -546,7 +546,9 @@
 <a name='L481'></a><a href='#L481'>481</a>
 <a name='L482'></a><a href='#L482'>482</a>
 <a name='L483'></a><a href='#L483'>483</a>
-<a name='L484'></a><a href='#L484'>484</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L484'></a><a href='#L484'>484</a>
+<a name='L485'></a><a href='#L485'>485</a>
+<a name='L486'></a><a href='#L486'>486</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -634,6 +636,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -645,14 +648,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -661,10 +656,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -679,6 +670,18 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -689,6 +692,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1042,7 +1046,7 @@ import { SortOrder } from 'src/components/common/table/sort';
 import { APP_PATHS<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > }</span> from 'src/constants';</span>
 im<span class="cstat-no" title="statement not covered" >port { DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';</span>
 impo<span class="cstat-no" title="statement not covered" >rt { useSyncNavigate } from 'src/hooks/useSyncNavigate';</span>
-import<span class="cstat-no" title="statement not covered" > { useOrganization } from 'src/providers';</span>
+import<span class="cstat-no" title="statement not covered" > { useLocalization, useOrganization } from 'src/providers';</span>
 import {<span class="cstat-no" title="statement not covered" > isBatchEmpty } from 'src/<span class="fstat-no" title="function not covered" >sc</span>enes<span class="cstat-no" title="statement not covered" >/Inventory</span>Router/FilterUtils';</span>
 import { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';
 im<span class="cstat-no" title="statement not covered" >port Search</span> from 'src/scenes/InventoryRouter/Search';
@@ -1100,8 +1104,9 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
     getBatchesSearc<span class="cstat-no" title="statement not covered" >h,</span>
     getBatchesExport,<span class="cstat-no" title="statement not covered" ></span>
   } = props;<span class="cstat-no" title="statement not covered" ></span>
-  const originId<span class="cstat-no" title="statement not covered" >: number | undefined = props.fac</span>ilityId || props.speciesId;
+  const originId: number | undefin<span class="cstat-no" title="statement not covered" >ed = props.facilityId || props.speci</span>esId;
 <span class="cstat-no" title="statement not covered" ></span>
+  const { activeLoc<span class="cstat-no" title="statement not covered" >ale } = useLocalization();</span>
   const { selectedO<span class="cstat-no" title="statement not covered" >rganization } = useOrganization();</span>
   const { isMobile, isDesktop } = useDeviceInfo(<span class="cstat-no" title="statement not covered" >);</span>
   const theme = useTheme();<span class="cstat-no" title="statement not covered" ></span>
@@ -1182,31 +1187,32 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
         type: 'Exact',
         values: filters.speciesIds.map((id) =&gt; id.toString()),
       });
-<span class="cstat-no" title="statement not covered" >    }<span class="fstat-no" title="function not covered" ></span></span>
+    }
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+    return fields;<span class="cstat-no" title="statement not covered" ></span>
+  }, [getNonSpeciesSearchFields, filters.spec<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ie</span>sIds]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-    return fields;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  }, [<span class="cstat-no" title="statement not covered" >getNonSpeciesSearchFields, filters.speciesIds]);</span>
+  useEff<span class="cstat-no" title="statement not covered" >ect(() =</span>&gt; {
+    const requestId = setRequestId('inventory-seedlings');
 <span class="cstat-no" title="statement not covered" ></span>
-  useEffect(() =&gt; {
-    const requestId = setRe<span class="cstat-no" title="statement not covered" >questId('inventory-seedlings</span>');
-<span class="cstat-no" title="statement not covered" ></span>
-    const populateResults = async () =&gt; {
-      if (!originId || !selectedOrganization) {
+    const populateResults = async () =&gt; {<span class="cstat-no" title="statement not covered" ></span>
+      if (!originId || !selectedOrganization || !activeLocale) {
         return;
       }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      const searchFields = getSearchFields();</span>
-      co<span class="cstat-no" title="statement not covered" >nst batchesResults = await getBatchesSearch(selectedOrganization.id, originId, searchFie</span>lds, searchSortOrder);
-&nbsp;
+      const searchFields = getSearchFields();
+<span class="cstat-no" title="statement not covered" >      const batchesResults = await getBatchesSearch(selectedOrganization.id, originId, searchFields, searchSortOrder);</span>
+<span class="cstat-no" title="statement not covered" ></span>
       if (requestId === getRequestId('inventory-seedlings')) {
-<span class="cstat-no" title="statement not covered" >        setBatches(batchesResults || []);</span>
+        setBatches(batchesResults || []);
 <span class="cstat-no" title="statement not covered" >      }</span>
-    };
+    };<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
     if (!originId || !isNaN(originId)) {
       void populateResults();
     }
   }, [
+    activeLocale,
     filters.facilityIds,
     getBatchesSearch,
     getSearchFields,
@@ -1397,12 +1403,12 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
   };
 &nbsp;
   const batchesExport = useCallback(() =&gt; {
-    if (!originId || !getBatchesExport || !selectedOrganization) {
+    if (!originId || !getBatchesExport || !selectedOrganization || !activeLocale) {
       return Promise.resolve([] as SearchResponseElement[]);
     }
 &nbsp;
     return getBatchesExport(selectedOrganization.id, originId, getSearchFields(), searchSortOrder);
-  }, [getBatchesExport, selectedOrganization, originId, getSearchFields, searchSortOrder]);
+  }, [activeLocale, originId, getBatchesExport, selectedOrganization, getSearchFields, searchSortOrder]);
 &nbsp;
   const getResultsSpeciesNames = useCallback(
     (): string[] =&gt; speciesUnfilteredBatches.map((s) =&gt; s.species_scientificName as string),
@@ -1519,7 +1525,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-13T00:44:46.049Z
+                at 2026-02-13T02:13:35.233Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
