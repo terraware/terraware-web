@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/58</span>
+                <span class='fraction'>0/52</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/38</span>
+                <span class='fraction'>0/34</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/55</span>
+                <span class='fraction'>0/49</span>
             </div>
         
             
@@ -137,20 +137,7 @@
 <a name='L72'></a><a href='#L72'>72</a>
 <a name='L73'></a><a href='#L73'>73</a>
 <a name='L74'></a><a href='#L74'>74</a>
-<a name='L75'></a><a href='#L75'>75</a>
-<a name='L76'></a><a href='#L76'>76</a>
-<a name='L77'></a><a href='#L77'>77</a>
-<a name='L78'></a><a href='#L78'>78</a>
-<a name='L79'></a><a href='#L79'>79</a>
-<a name='L80'></a><a href='#L80'>80</a>
-<a name='L81'></a><a href='#L81'>81</a>
-<a name='L82'></a><a href='#L82'>82</a>
-<a name='L83'></a><a href='#L83'>83</a>
-<a name='L84'></a><a href='#L84'>84</a>
-<a name='L85'></a><a href='#L85'>85</a>
-<a name='L86'></a><a href='#L86'>86</a>
-<a name='L87'></a><a href='#L87'>87</a>
-<a name='L88'></a><a href='#L88'>88</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L75'></a><a href='#L75'>75</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -176,7 +163,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -225,18 +211,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { create<span class="cstat-no" title="statement not covered" >AsyncThunk } f</span>rom '@reduxjs/toolkit';
 <span class="cstat-no" title="statement not covered" ></span>
 import { Response2 } fr<span class="cstat-no" title="statement not covered" >om 'src/services/HttpService';</span>
@@ -269,61 +243,48 @@ export c<span class="cstat-no" title="statement not covered" >onst requestProjec
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 export const requestProj<span class="fstat-no" title="function not covered" >ec</span>tDel<span class="cstat-no" title="statement not covered" >ete = createAsyncThun</span>k(
   'projects/delete',<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  async (request: { projectId: number<span class="fstat-no" title="function not covered" > }</span>, { <span class="cstat-no" title="statement not covered" >rejectWithValue }) =&gt; {</span>
-    const response: Resp<span class="fstat-no" title="function not covered" >on</span>se2&lt;<span class="cstat-no" title="statement not covered" >DeleteProjectResponse</span>Payload&gt; = await ProjectsService.deleteProject(request.projectId);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    if (response !== null &amp;&amp; response.requestS</span>ucceeded) {
-      return response<span class="cstat-no" title="statement not covered" >.data;</span>
+  async (request: { proj<span class="fstat-no" title="function not covered" >ec</span>tId:<span class="cstat-no" title="statement not covered" > number }, { rejectWi</span>thValue }) =&gt; {
+    const response: Response2&lt;DeleteProjectResponsePayload&gt; = await ProjectsService.deleteProject(request.projectId);
+<span class="cstat-no" title="statement not covered" ></span>
+    if (response !== <span class="cstat-no" title="statement not covered" >null &amp;&amp; response.requestSucc</span>eeded) {
+      return response.data;<span class="cstat-no" title="statement not covered" ></span>
     }<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-    return rejectWithValue(st<span class="cstat-no" title="statement not covered" >rings.GENERIC_ERROR);</span>
-  }
-);<span class="fstat-no" title="function not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span>
+    return rejectWithValue(strings.GENERIC_ERROR);
+<span class="fstat-no" title="function not covered" >  }</span>
+);<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
 export const requestProjectAssign = createAsyncThunk(
   'project/assign',
-  async (request: { projectId: number; entities: AssignProjectRequestPayload }, { rejectWithValue }) =&gt; {
-<span class="cstat-no" title="statement not covered" >    const { projectId, entities } = request;</span>
-    co<span class="cstat-no" title="statement not covered" >nst response: Response</span>2&lt;AssignProjectResponsePayload&gt; = await ProjectsService.assignProjectToEntities(
-      projectId,
-<span class="cstat-no" title="statement not covered" >      entities</span>
+  as<span class="cstat-no" title="statement not covered" >ync (request: { projectId: number; entities: AssignProjectRequestPayload }, { rejectWithValue }) =&gt; {</span>
+    co<span class="cstat-no" title="statement not covered" >nst { projectId, entit</span>ies } = request;
+    const response: Response2&lt;AssignProjectResponsePayload&gt; = await ProjectsService.assignProjectToEntities(
+<span class="cstat-no" title="statement not covered" >      projectId,</span>
+      entities
     );
-&nbsp;
-    if (response !== null &amp;&amp; <span class="cstat-no" title="statement not covered" >response.requestSucceeded) {</span>
-      return response.data;
-<span class="fstat-no" title="function not covered" ></span>    }
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >    return rejectWithValue(strings.GENERIC_ERROR);</span>
-  }<span class="cstat-no" title="statement not covered" ></span>
-);
+    if (response !== null &amp;&amp; response.requestSucceeded) {
+<span class="fstat-no" title="function not covered" ></span>      return response.data;
+    }<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-export const requestProjectInternalUsersList = createAsyncThunk(
-  'projects/listInternalUsers',
-  async (request: { projectId<span class="cstat-no" title="statement not covered" >: number }, { rejectWithValue }) =&gt; {</span>
-    const response = await ProjectsService.listProjectInternalUsers(request.projectId);
-<span class="fstat-no" title="function not covered" ></span>
-    if (response !== null &amp;&amp; respons<span class="cstat-no" title="statement not covered" >e.reques</span>tSucceeded) {
-      return response<span class="cstat-no" title="statement not covered" >;</span>
-    }
-&nbsp;
-    return rejectWithValue(strings.GENERIC_ERROR);
-  }<span class="cstat-no" title="statement not covered" ></span>
-);<span class="cstat-no" title="statement not covered" ></span>
-&nbsp;
-expo<span class="cstat-no" title="statement not covered" >rt const requestProjectInternalUsersUpdate = createAsyncThunk(</span>
-  'projects/updateInternalUsers',
-  async (request: { projectId: number; payload: UpdateProjectInternalUsersRequestPayload }, { rejectWithValue }) =&gt; {
-    const { projectId, payload } = reque<span class="cstat-no" title="statement not covered" >st;</span>
-    const response: Response2&lt;UpdateProjectInternalUsersResponsePayload&gt; =
-<span class="fstat-no" title="function not covered" ></span>      await ProjectsService.updateProjectInternalUsers(projectId, payload);
-<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >    if (response !== null &amp;&amp; response.requestSucceeded) {</span>
-<span class="cstat-no" title="statement not covered" >      return response.d</span>ata;
-    }
-<span class="cstat-no" title="statement not covered" ></span>
-    return rejectWithValue(strings.GENERIC_ERROR);
+    re<span class="cstat-no" title="statement not covered" >turn rejectWithValue(s</span>trings.GENERIC_ERROR);
   }
 );<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
+export const requestProjectInternalUsersUpdate = createAsyncThunk(
+  'projects/updateInternalUse<span class="cstat-no" title="statement not covered" >rs',</span>
+  async (request: { projectId: number; payload: UpdateProjectInternalUsersRequestPayload }, { rejectWithValue }) =&gt; {
+<span class="fstat-no" title="function not covered" ></span>    const { projectId, payload } = request;
+    const response: Response2&lt;Update<span class="cstat-no" title="statement not covered" >ProjectI</span>nternalUsersResponsePayload&gt; =
+      await ProjectsS<span class="cstat-no" title="statement not covered" >ervice.updateProjectInternalUsers(projectId, payload);</span>
+&nbsp;
+    if (response !== null &amp;&amp; response.requestSucceeded) {
+      return response.data;
+<span class="cstat-no" title="statement not covered" >    }</span>
+<span class="cstat-no" title="statement not covered" ></span>
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }<span class="cstat-no" title="statement not covered" ></span>
+);
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -331,7 +292,7 @@ expo<span class="cstat-no" title="statement not covered" >rt const requestProjec
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-13T20:17:21.679Z
+                at 2026-02-13T23:36:40.557Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

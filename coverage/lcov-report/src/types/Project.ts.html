@@ -126,7 +126,8 @@
 <a name='L61'></a><a href='#L61'>61</a>
 <a name='L62'></a><a href='#L62'>62</a>
 <a name='L63'></a><a href='#L63'>63</a>
-<a name='L64'></a><a href='#L64'>64</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -188,6 +189,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { compone<span class="cstat-no" title="statement not covered" >nts } from 'src/api/ty</span>pes/generated-schema';
 import { ListProjectInt<span class="cstat-no" title="statement not covered" >ernalUsersResponsePayload } from</span> 'src/services/ProjectsService';
@@ -207,12 +209,13 @@ ex<span class="cstat-no" title="statement not covered" >port type P</span>roject
 &nbsp;
 export type Project<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >In</span>ternalU<span class="cstat-no" title="statement not covered" >serRole = ProjectInternalUser['role'];</span></span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >export const projectInternalUserRoles: ProjectInternalUserRole[] = [</span>
+<span class="cstat-no" title="statement not covered" >// todo change this to rtk type</span>
+export const projectInternalUserRole<span class="fstat-no" title="function not covered" >s:</span> Pro<span class="cstat-no" title="statement not covered" >jectInternalUserRole[] = [</span>
   'Carbon Lead',<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  'Climate Impact Lead',<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  'Consultant',
-<span class="cstat-no" title="statement not covered" >  'GIS Lead',</span>
-  'Legal Lead',<span class="cstat-no" title="statement not covered" ></span>
+  'Climate Impact Lead',
+<span class="cstat-no" title="statement not covered" >  'Consultant',</span>
+  'GIS Lead',<span class="cstat-no" title="statement not covered" ></span>
+  'Legal Lead',
   'Phase Lead',
   'Project Lead',
   'Project Finance Lead',
@@ -224,33 +227,33 @@ export type Project<span class="cstat-no" title="statement not covered" ><span c
 export const getProjectInternalUserRoleString = (
   type: ProjectInternalUserRole,
   strings: typeof defaultStrings
-): string =&gt; {
-  switch (type) {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >    case 'Carbon Lead':</span>
-      return strings.PROJECT_INTERNAL_USER_ROLE_CARBON_LEAD;
-    ca<span class="cstat-no" title="statement not covered" >se 'Climate Impact Lead':</span>
-      return strings.PROJECT_INTERNAL_USER_ROLE_CLIMATE_IMPACT_LEAD;
-    ca<span class="cstat-no" title="statement not covered" >se 'Consultant':</span>
-      return strings.PROJECT_INTERNAL_USER_ROLE_CONSULTANT;
-    ca<span class="cstat-no" title="statement not covered" >se 'GIS Lead':</span>
-      return strings.PROJECT_INTERNAL_USER_ROLE_GIS_LEAD;
-    ca<span class="cstat-no" title="statement not covered" >se 'Legal Lead':</span>
-      return strings.PROJECT_INTERNAL_USER_ROLE_LEGAL_LEAD;
-    ca<span class="cstat-no" title="statement not covered" >se 'Phase Lead':</span>
-      return strings.PROJECT_INTERNAL_USER_ROLE_PHASE_LEAD;
-    ca<span class="cstat-no" title="statement not covered" >se 'Project Lead':</span>
-      return strings.PROJECT_INTERNAL_USER_ROLE_PROJECT_LEAD;
-    ca<span class="cstat-no" title="statement not covered" >se 'Project Finance Lead':</span>
-      return strings.PROJECT_INTERNAL_USER_ROLE_PROJECT_FINANCE_LEAD;
-    ca<span class="cstat-no" title="statement not covered" >se 'Regional Expert':</span>
-      return strings.PROJECT_INTERNAL_USER_ROLE_REGIONAL_EXPERT;
-    ca<span class="cstat-no" title="statement not covered" >se 'Restoration Lead':</span>
-      return strings.PROJECT_INTERNAL_USER_ROLE_RESTORATION_LEAD;
-    ca<span class="cstat-no" title="statement not covered" >se 'Social Lead':</span>
-      return strings.PROJECT_INTERNAL_USER_ROLE_SOCIAL_LEAD;
-    de<span class="cstat-no" title="statement not covered" >fault:</span>
-      return '';
-  }<span class="cstat-no" title="statement not covered" ></span>
+): string =&gt; {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >  switch (type) {</span>
+    case 'Carbon Lead':
+<span class="cstat-no" title="statement not covered" >      return strings.PROJECT_INTERNAL_USER_ROLE_CARBON_LEAD;</span>
+    case 'Climate Impact Lead':
+<span class="cstat-no" title="statement not covered" >      return strings.PROJECT_INTERNAL_USER_ROLE_CLIMATE_IMPACT_LEAD;</span>
+    case 'Consultant':
+<span class="cstat-no" title="statement not covered" >      return strings.PROJECT_INTERNAL_USER_ROLE_CONSULTANT;</span>
+    case 'GIS Lead':
+<span class="cstat-no" title="statement not covered" >      return strings.PROJECT_INTERNAL_USER_ROLE_GIS_LEAD;</span>
+    case 'Legal Lead':
+<span class="cstat-no" title="statement not covered" >      return strings.PROJECT_INTERNAL_USER_ROLE_LEGAL_LEAD;</span>
+    case 'Phase Lead':
+<span class="cstat-no" title="statement not covered" >      return strings.PROJECT_INTERNAL_USER_ROLE_PHASE_LEAD;</span>
+    case 'Project Lead':
+<span class="cstat-no" title="statement not covered" >      return strings.PROJECT_INTERNAL_USER_ROLE_PROJECT_LEAD;</span>
+    case 'Project Finance Lead':
+<span class="cstat-no" title="statement not covered" >      return strings.PROJECT_INTERNAL_USER_ROLE_PROJECT_FINANCE_LEAD;</span>
+    case 'Regional Expert':
+<span class="cstat-no" title="statement not covered" >      return strings.PROJECT_INTERNAL_USER_ROLE_REGIONAL_EXPERT;</span>
+    case 'Restoration Lead':
+<span class="cstat-no" title="statement not covered" >      return strings.PROJECT_INTERNAL_USER_ROLE_RESTORATION_LEAD;</span>
+    case 'Social Lead':
+<span class="cstat-no" title="statement not covered" >      return strings.PROJECT_INTERNAL_USER_ROLE_SOCIAL_LEAD;</span>
+    default:
+<span class="cstat-no" title="statement not covered" >      return '';</span>
+  }
 };
 &nbsp;</pre></td></tr></table></pre>
 
@@ -259,7 +262,7 @@ export const getProjectInternalUserRoleString = (
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-13T20:17:21.679Z
+                at 2026-02-13T23:36:40.557Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
