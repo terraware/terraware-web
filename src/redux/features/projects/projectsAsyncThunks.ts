@@ -58,19 +58,6 @@ export const requestProjectAssign = createAsyncThunk(
   }
 );
 
-export const requestProjectInternalUsersList = createAsyncThunk(
-  'projects/listInternalUsers',
-  async (request: { projectId: number }, { rejectWithValue }) => {
-    const response = await ProjectsService.listProjectInternalUsers(request.projectId);
-
-    if (response !== null && response.requestSucceeded) {
-      return response;
-    }
-
-    return rejectWithValue(strings.GENERIC_ERROR);
-  }
-);
-
 export const requestProjectInternalUsersUpdate = createAsyncThunk(
   'projects/updateInternalUsers',
   async (request: { projectId: number; payload: UpdateProjectInternalUsersRequestPayload }, { rejectWithValue }) => {

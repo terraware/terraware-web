@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
@@ -25,10 +25,9 @@ import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import useProjectFundingEntities from 'src/hooks/useProjectFundingEntities';
 import { useLocalization, useUser } from 'src/providers';
+import { useGetInternalUsersQuery } from 'src/queries/generated/projectInternalUsers';
 import { useLazyListAcceleratorReportsQuery } from 'src/queries/generated/reports';
-import { requestProjectInternalUsersList } from 'src/redux/features/projects/projectsAsyncThunks';
-import { selectProjectInternalUsersListRequest } from 'src/redux/features/projects/projectsSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useAppDispatch } from 'src/redux/store';
 import strings from 'src/strings';
 import { AcceleratorOrg } from 'src/types/Accelerator';
 import { PublishedReport, getReportPrefix } from 'src/types/AcceleratorReport';
@@ -74,10 +73,13 @@ const ProjectProfileView = ({
   const numberFormatter = useNumberFormatter();
   const { fundingEntities } = useProjectFundingEntities(funderView ? undefined : projectDetails?.projectId);
   const { isMobile, isTablet } = useDeviceInfo();
-  const [listInternalUsersRequestId, setListInternalUsersRequestId] = useState('');
-  const listInternalUsersRequest = useAppSelector((state) =>
-    selectProjectInternalUsersListRequest(state, listInternalUsersRequestId)
+
+  const { data: internalUsersData, isSuccess: isUsersRequestSuccess } = useGetInternalUsersQuery(
+    project ? project.id : -1,
+    { skip: !project }
   );
+  const internalUsers = useMemo(() => internalUsersData?.users ?? [], [internalUsersData]);
+
   const isAllowedViewScoreAndVoting = isAllowed('VIEW_PARTICIPANT_PROJECT_SCORING_VOTING');
 
   const [listReports, listReportsResponse] = useLazyListAcceleratorReportsQuery();
@@ -91,16 +93,14 @@ const ProjectProfileView = ({
       return;
     }
     void listReports({ projectId: project.id }, true);
-    const request = dispatch(requestProjectInternalUsersList({ projectId: project.id }));
-    setListInternalUsersRequestId(request.requestId);
   }, [dispatch, listReports, project?.id]);
 
   const firstProjectLead = useMemo(() => {
-    if (listInternalUsersRequest?.status !== 'success') {
+    if (!isUsersRequestSuccess) {
       return undefined;
     }
 
-    return listInternalUsersRequest.data?.users
+    return internalUsers
       ?.filter((user) => user.role === 'Project Lead')
       ?.sort((a, b) => {
         // sort by modifiedTime ascending
@@ -108,14 +108,14 @@ const ProjectProfileView = ({
         const timeB = b.modifiedTime ? new Date(b.modifiedTime).getTime() : 0;
         return timeA - timeB;
       })?.[0];
-  }, [listInternalUsersRequest]);
+  }, [internalUsers, isUsersRequestSuccess]);
 
   const moreUsersTooltip = useMemo(() => {
-    if (listInternalUsersRequest?.status !== 'success') {
+    if (!isUsersRequestSuccess) {
       return '';
     }
 
-    return (listInternalUsersRequest?.data?.users || [])
+    return (internalUsers || [])
       .filter((user) => (firstProjectLead ? user.userId !== firstProjectLead.userId : true))
       .map((user) => {
         const userRole = user.roleName ? user.roleName : getProjectInternalUserRoleString(user.role, strings);
@@ -135,7 +135,7 @@ const ProjectProfileView = ({
       })
       .map((user) => `${user.userRole}: ${user.firstName} ${user.lastName}`)
       .join('\n');
-  }, [activeLocale, firstProjectLead, listInternalUsersRequest]);
+  }, [activeLocale, firstProjectLead, internalUsers, isUsersRequestSuccess]);
 
   const isProjectInPhase = useMemo(() => participantProject?.phase?.startsWith('Phase'), [participantProject?.phase]);
 

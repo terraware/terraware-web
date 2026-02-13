@@ -21,6 +21,7 @@ import Icon from 'src/components/common/icon/Icon';
 import useBoolean from 'src/hooks/useBoolean';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization, useUser } from 'src/providers';
+import { useGetInternalUsersQuery } from 'src/queries/generated/projectInternalUsers';
 import { selectUploadImageValue } from 'src/redux/features/documentProducer/values/valuesSelector';
 import {
   requestListSpecificVariablesValues,
@@ -34,14 +35,8 @@ import { requestListOrganizationUsers } from 'src/redux/features/organizationUse
 import { selectOrganizationUsers } from 'src/redux/features/organizationUser/organizationUsersSelectors';
 import { requestUpdateParticipantProject } from 'src/redux/features/participantProjects/participantProjectsAsyncThunks';
 import { selectParticipantProjectUpdateRequest } from 'src/redux/features/participantProjects/participantProjectsSelectors';
-import {
-  requestProjectInternalUsersList,
-  requestProjectInternalUsersUpdate,
-} from 'src/redux/features/projects/projectsAsyncThunks';
-import {
-  selectProjectInternalUsersListRequest,
-  selectProjectInternalUsersUpdateRequest,
-} from 'src/redux/features/projects/projectsSelectors';
+import { requestProjectInternalUsersUpdate } from 'src/redux/features/projects/projectsAsyncThunks';
+import { selectProjectInternalUsersUpdateRequest } from 'src/redux/features/projects/projectsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { UpdateProjectInternalUsersRequestPayload } from 'src/services/ProjectsService';
 import { CohortPhaseType } from 'src/types/Cohort';
@@ -109,11 +104,13 @@ const ProjectProfileEdit = () => {
 
   const [organizationUsersRequestId, setOrganizationUsersRequestId] = useState<string>('');
   const [listUsersRequestId, setListUsersRequestId] = useState('');
-  const [listInternalUsersRequestId, setListInternalUsersRequestId] = useState('');
+
+  const { data: internalUsersData, isSuccess: isInternalUsersRequestSuccess } = useGetInternalUsersQuery(projectId, {
+    skip: !projectId || projectId === -1,
+  });
+  const initialInternalUsers = useMemo(() => internalUsersData?.users ?? [], [internalUsersData]);
+
   const listUsersRequest = useAppSelector(selectGlobalRolesUsersSearchRequest(listUsersRequestId));
-  const listInternalUsersRequest = useAppSelector((state) =>
-    selectProjectInternalUsersListRequest(state, listInternalUsersRequestId)
-  );
   const [internalUsers, setInternalUsers] = useState<InternalUserItem[]>([]);
   const [updateInternalUsersRequestId, setUpdateInternalUsersRequestId] = useState('');
   const [uploadImagesRequestId, setUploadImagesRequestId] = useState('');
@@ -236,11 +233,6 @@ const ProjectProfileEdit = () => {
   }, [uploadImagesResponse, redirectToProjectView, snackbar]);
 
   useEffect(() => {
-    const request = dispatch(requestProjectInternalUsersList({ projectId }));
-    setListInternalUsersRequestId(request.requestId);
-  }, [dispatch, projectId]);
-
-  useEffect(() => {
     const request = dispatch(requestListGlobalRolesUsers({ locale: activeLocale }));
     void dispatch(requestListSpecificVariables(variableStableIds));
     void dispatch(
@@ -265,17 +257,17 @@ const ProjectProfileEdit = () => {
   }, [listUsersRequest]);
 
   useEffect(() => {
-    if (listInternalUsersRequest?.status === 'success') {
-      setInternalUsers(listInternalUsersRequest.data?.users || []);
+    if (isInternalUsersRequestSuccess) {
+      setInternalUsers(initialInternalUsers);
 
-      const preExistingCustomInternalUserRoles = (listInternalUsersRequest?.data?.users || [])
+      const preExistingCustomInternalUserRoles = initialInternalUsers
         .filter((user) => user.roleName)
         .map((user) => user.roleName);
 
       const uniqueCustomRoles = Array.from(new Set(preExistingCustomInternalUserRoles as string[]));
       setCustomUserRoles(uniqueCustomRoles);
     }
-  }, [listInternalUsersRequest]);
+  }, [initialInternalUsers, isInternalUsersRequestSuccess]);
 
   const onChangeCountry = useCallback(
     (countryCode?: string, region?: string) => {
@@ -286,7 +278,7 @@ const ProjectProfileEdit = () => {
   );
 
   const saveInternalUsers = useCallback(() => {
-    if (listInternalUsersRequest?.data?.users) {
+    if (initialInternalUsers) {
       const updateRequest = dispatch(
         requestProjectInternalUsersUpdate({
           projectId,
@@ -307,11 +299,11 @@ const ProjectProfileEdit = () => {
     }
 
     return false;
-  }, [dispatch, internalUsers, listInternalUsersRequest?.data?.users, projectId]);
+  }, [dispatch, internalUsers, initialInternalUsers, projectId]);
 
   const validateSave = useCallback(() => {
     setValidateFields(false);
-    if (!stableToVariable || listInternalUsersRequest?.status !== 'success') {
+    if (!stableToVariable || !isInternalUsersRequestSuccess) {
       snackbar.toastError(strings.CANNOT_SAVE_UNTIL_PAGE_IS_FULLY_LOADED);
       return false;
     }
@@ -333,7 +325,7 @@ const ProjectProfileEdit = () => {
     }
 
     return true;
-  }, [stableToVariable, listInternalUsersRequest?.status, internalUsers, participantProjectRecord, strings, snackbar]);
+  }, [stableToVariable, isInternalUsersRequestSuccess, internalUsers, participantProjectRecord, strings, snackbar]);
 
   const finishSave = useCallback(() => {
     setRequestsInProgress(true);
@@ -530,10 +522,10 @@ const ProjectProfileEdit = () => {
 
   // add row, if API returns no internal users
   useEffect(() => {
-    if (listInternalUsersRequest?.status === 'success' && listInternalUsersRequest?.data?.users?.length === 0) {
+    if (isInternalUsersRequestSuccess && initialInternalUsers?.length === 0) {
       onClickAddRow();
     }
-  }, [listInternalUsersRequest, onClickAddRow]);
+  }, [initialInternalUsers, isInternalUsersRequestSuccess, onClickAddRow]);
 
   const [addInternalUserRoleModalOpen, setAddInternalUserRoleModalOpen] = useState(false);
 
@@ -684,7 +676,7 @@ const ProjectProfileEdit = () => {
               </Box>
             </Grid>
 
-            {listInternalUsersRequest?.status === 'success' && (
+            {isInternalUsersRequestSuccess && (
               <Grid item md={12}>
                 <Box border='1px solid gray' borderRadius='8px' marginX={theme.spacing(2)} padding={theme.spacing(2)}>
                   <Box borderBottom='1px solid gray' marginBottom='16px' paddingBottom='8px'>
