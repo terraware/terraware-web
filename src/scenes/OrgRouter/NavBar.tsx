@@ -53,7 +53,7 @@ export default function NavBar({
 
   const { isAllowedViewConsole } = useAcceleratorConsole();
   const { activeLocale } = useLocalization();
-  const { currentParticipantProject, setCurrentParticipantProject, projectsWithModules, allParticipantProjects } =
+  const { currentAcceleratorProject, setCurrentAcceleratorProject, projectsWithModules, allAcceleratorProjects } =
     useParticipantData();
 
   const isAccessionDashboardRoute = useMatch({ path: APP_PATHS.SEEDS_DASHBOARD + '/', end: false });
@@ -127,10 +127,10 @@ export default function NavBar({
   }, [dispatch, selectedOrganization]);
 
   useEffect(() => {
-    if (!currentParticipantProject && projectsWithModules && projectsWithModules.length > 0) {
-      setCurrentParticipantProject(projectsWithModules[0].id);
+    if (!currentAcceleratorProject && projectsWithModules && projectsWithModules.length > 0) {
+      setCurrentAcceleratorProject(projectsWithModules[0].id);
     }
-  }, [projectsWithModules, currentParticipantProject, setCurrentParticipantProject]);
+  }, [projectsWithModules, currentAcceleratorProject, setCurrentAcceleratorProject]);
 
   const getSeedlingsMenuItems = () => {
     const inventoryMenu = (
@@ -188,7 +188,7 @@ export default function NavBar({
     () =>
       isAllowed('READ_REPORTS', { organization: selectedOrganization }) &&
       !!orgFeatures?.data?.reports?.enabled &&
-      allParticipantProjects.length > 0 &&
+      allAcceleratorProjects.length > 0 &&
       activeLocale ? (
         <NavItem
           icon='iconGraphReport'
@@ -202,7 +202,7 @@ export default function NavBar({
       ) : null,
     [
       activeLocale,
-      allParticipantProjects.length,
+      allAcceleratorProjects.length,
       closeAndNavigateTo,
       isAllowed,
       isReportsRoute,
@@ -229,7 +229,7 @@ export default function NavBar({
 
   const modulesMenu = useMemo<JSX.Element | null>(
     () =>
-      currentParticipantProject &&
+      currentAcceleratorProject &&
       !!orgFeatures?.data?.modules?.enabled &&
       isManagerOrHigher(selectedOrganization) &&
       activeLocale ? (
@@ -240,7 +240,7 @@ export default function NavBar({
           onClick={() => {
             mixpanel?.track(MIXPANEL_EVENTS.PART_EX_LEFT_NAV_MODULES);
             closeAndNavigateTo(
-              APP_PATHS.PROJECT_MODULES.replace(':projectId', currentParticipantProject.id.toString())
+              APP_PATHS.PROJECT_MODULES.replace(':projectId', currentAcceleratorProject.id.toString())
             );
           }}
           id='modules-list'
@@ -249,7 +249,7 @@ export default function NavBar({
     [
       activeLocale,
       closeAndNavigateTo,
-      currentParticipantProject,
+      currentAcceleratorProject,
       isProjectModulesRoute,
       mixpanel,
       orgFeatures?.data?.modules?.enabled,
@@ -260,7 +260,7 @@ export default function NavBar({
   const activityLogMenu = useMemo<JSX.Element | null>(
     () =>
       isAllowed('READ_ACTIVITIES', { organization: selectedOrganization }) &&
-      currentParticipantProject &&
+      currentAcceleratorProject &&
       activeLocale ? (
         <NavItem
           icon='checklist'
@@ -272,7 +272,7 @@ export default function NavBar({
           selected={!!isActivityLogRoute}
         />
       ) : null,
-    [activeLocale, closeAndNavigateTo, currentParticipantProject, isActivityLogRoute, isAllowed, selectedOrganization]
+    [activeLocale, closeAndNavigateTo, currentAcceleratorProject, isActivityLogRoute, isAllowed, selectedOrganization]
   );
 
   const applicationMenu = useMemo<JSX.Element | null>(

@@ -20,7 +20,7 @@ import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
-import ProjectProfileView from '../AcceleratorRouter/ParticipantProjects/ProjectProfileView';
+import ProjectProfileView from '../AcceleratorRouter/AcceleratorProjects/ProjectProfileView';
 import FunderReportView from '../FunderReport/FunderReportView';
 
 const DEAL_NAME_COUNTRY_CODE_REGEX = /^[A-Z]{3}_/;

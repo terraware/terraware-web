@@ -5,7 +5,7 @@ import { RendererProps, TableRowType } from '@terraware/web-components';
 import Link from 'src/components/common/Link';
 import CellRenderer from 'src/components/common/table/TableCellRenderer';
 import { APP_PATHS } from 'src/constants';
-import { ParticipantProject } from 'src/types/ParticipantProject';
+import { AcceleratorProject } from 'src/types/AcceleratorProject';
 
 export default function FundingEntitiesCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const { column, value, row } = props;
@@ -13,7 +13,7 @@ export default function FundingEntitiesCellRenderer(props: RendererProps<TableRo
   if (column.key === 'projects') {
     const stringList: string[] =
       Array.isArray(value) && value.length
-        ? (value as ParticipantProject[]).map((project: ParticipantProject) => project.dealName || '')
+        ? (value as AcceleratorProject[]).map((project: AcceleratorProject) => project.dealName || '')
         : [];
     return <CellRenderer {...props} value={stringList.join(', ')} style={{ width: '50%' }} />;
   } else if (column.key === 'name') {

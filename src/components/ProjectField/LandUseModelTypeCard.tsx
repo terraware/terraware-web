@@ -3,8 +3,8 @@ import React, { useMemo } from 'react';
 import { useTheme } from '@mui/material';
 
 import strings from 'src/strings';
+import { LAND_USE_MODEL_TYPES, LandUseModelType } from 'src/types/AcceleratorProject';
 import { NumberFormatter } from 'src/types/Number';
-import { LAND_USE_MODEL_TYPES, LandUseModelType } from 'src/types/ParticipantProject';
 
 import InvertedCard from './InvertedCard';
 

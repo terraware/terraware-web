@@ -32,19 +32,19 @@ const DeliverablesList = ({ projectId, maxItemsPerPage }: DeliverablesListProps)
   const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const {
-    currentParticipantProject,
+    currentAcceleratorProject,
     projectsWithModules: moduleProjects,
-    setCurrentParticipantProject,
+    setCurrentAcceleratorProject,
   } = useParticipantData();
   const [projectFilter, setProjectFilter] = useState<{ projectId?: number | string }>({
-    projectId: projectId ? projectId : currentParticipantProject?.id,
+    projectId: projectId ? projectId : currentAcceleratorProject?.id,
   });
 
   useEffect(() => {
     if (projectFilter.projectId) {
-      setCurrentParticipantProject(projectFilter.projectId);
+      setCurrentAcceleratorProject(projectFilter.projectId);
     }
-  }, [projectFilter, setCurrentParticipantProject]);
+  }, [projectFilter, setCurrentAcceleratorProject]);
 
   const extraTableFilters: SearchNodePayload[] = useMemo(
     () =>

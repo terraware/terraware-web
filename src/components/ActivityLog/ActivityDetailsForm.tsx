@@ -12,8 +12,8 @@ import DatePicker from 'src/components/common/DatePicker';
 import PageForm from 'src/components/common/PageForm';
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import { useAcceleratorProjects } from 'src/hooks/useAcceleratorProjects';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { useParticipantProjects } from 'src/hooks/useParticipantProjects';
 import { useProjects } from 'src/hooks/useProjects';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
@@ -89,7 +89,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
   const { isMobile } = useDeviceInfo();
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
-  const { participantProjects } = useParticipantProjects();
+  const { acceleratorProjects } = useAcceleratorProjects();
   const { selectedProject } = useProjects({ projectId });
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const navigate = useSyncNavigate();
@@ -150,8 +150,8 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
   const isEditing = useMemo(() => activityId !== undefined, [activityId]);
 
   const selectedParticipantProject = useMemo(() => {
-    return participantProjects.find((p) => p.projectId === projectId);
-  }, [projectId, participantProjects]);
+    return acceleratorProjects.find((p) => p.projectId === projectId);
+  }, [projectId, acceleratorProjects]);
 
   const projectName = useMemo(
     () => (isAcceleratorRoute ? selectedParticipantProject?.dealName : selectedProject?.name) || '',

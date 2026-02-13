@@ -40,7 +40,7 @@ import { selectGlobalRolesUsersSearchRequest } from 'src/redux/features/globalRo
 import { requestListOrganizationUsers } from 'src/redux/features/organizationUser/organizationUsersAsyncThunks';
 import { selectOrganizationUsers } from 'src/redux/features/organizationUser/organizationUsersSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { LAND_USE_MODEL_TYPES, ParticipantProject } from 'src/types/ParticipantProject';
+import { AcceleratorProject, LAND_USE_MODEL_TYPES } from 'src/types/AcceleratorProject';
 import { PhaseType } from 'src/types/Phase';
 import { ProjectInternalUserRole, getProjectInternalUserRoleString, projectInternalUserRoles } from 'src/types/Project';
 import { OrganizationUser } from 'src/types/User';
@@ -49,7 +49,7 @@ import { getImagePath } from 'src/utils/images';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
-import { useParticipantProjectData } from '../ParticipantProjectContext';
+import { useAcceleratorProjectData } from '../AcceleratorProjectContext';
 import AddInternalUserRoleModal from './AddInternalUserRoleModal';
 
 type InternalUserItem = Omit<InternalUserPayload, 'userId'> & {
@@ -83,14 +83,14 @@ const ProjectProfileEdit = () => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const snackbar = useSnackbar();
-  const { participantProject, projectId, organization, reload } = useParticipantProjectData();
+  const { acceleratorProject, projectId, organization, reload } = useAcceleratorProjectData();
   const { goToParticipantProject } = useNavigateTo();
   const { isAllowed } = useUser();
   const [validateFields, setValidateFields] = useState<boolean>(false);
 
   const [updateParticipantProject, updateParticipantProjectResponse] = useUpdateProjectAcceleratorDetailsMutation();
   const [participantProjectRecord, setParticipantProjectRecord, onChangeParticipantProject] =
-    useForm(participantProject);
+    useForm(acceleratorProject);
 
   const [requestsInProgress, setRequestsInProgress] = useState(false);
   const [initiatedRequests, setInitiatedRequests] = useState({
@@ -126,7 +126,7 @@ const ProjectProfileEdit = () => {
   const [customUserRoles, setCustomUserRoles] = useState<string[]>([]);
   const [confirmModalOpen, , openConfirmModal, closeConfirmModal] = useBoolean(false);
 
-  const isAllowedEdit = isAllowed('UPDATE_PARTICIPANT_PROJECT');
+  const isAllowedEdit = isAllowed('UPDATE_ACCELERATOR_PROJECT');
 
   const redirectToProjectView = useCallback(() => {
     reload();
@@ -322,7 +322,7 @@ const ProjectProfileEdit = () => {
       uploadImages: false,
     };
 
-    const updatedRecord = { ...participantProjectRecord } as ParticipantProject;
+    const updatedRecord = { ...participantProjectRecord } as AcceleratorProject;
 
     EXTERNAL_LINK_KEYS.forEach((key) => {
       const value = updatedRecord[key];
@@ -400,13 +400,13 @@ const ProjectProfileEdit = () => {
       return;
     }
 
-    if (participantProjectRecord?.phase !== participantProject?.phase) {
+    if (participantProjectRecord?.phase !== acceleratorProject?.phase) {
       openConfirmModal();
       return;
     }
 
     finishSave();
-  }, [validateSave, participantProjectRecord?.phase, participantProject?.phase, openConfirmModal, finishSave]);
+  }, [validateSave, participantProjectRecord?.phase, acceleratorProject?.phase, openConfirmModal, finishSave]);
 
   const handleOnCancel = useCallback(() => goToParticipantProject(projectId), [goToParticipantProject, projectId]);
 
@@ -417,10 +417,10 @@ const ProjectProfileEdit = () => {
   }, [response]);
 
   useEffect(() => {
-    if (participantProject) {
-      setParticipantProjectRecord(participantProject);
+    if (acceleratorProject) {
+      setParticipantProjectRecord(acceleratorProject);
     }
-  }, [participantProject, setParticipantProjectRecord]);
+  }, [acceleratorProject, setParticipantProjectRecord]);
 
   useEffect(() => {
     if (!isAllowedEdit) {
@@ -604,7 +604,7 @@ const ProjectProfileEdit = () => {
       >
         <Box margin={theme.spacing(2, 3)}>
           <Typography fontSize={'24px'} lineHeight={'32px'} fontWeight={600}>
-            {participantProject?.dealName}
+            {acceleratorProject?.dealName}
           </Typography>
         </Box>
         <Card
@@ -1008,8 +1008,8 @@ const ProjectProfileEdit = () => {
                 chooseFileText={strings.CHOOSE_FILE}
                 replaceFileText={strings.REPLACE_FILE}
                 previewUrl={
-                  (participantProject?.projectHighlightPhotoValueId &&
-                    getImagePath(projectId, participantProject.projectHighlightPhotoValueId)) ||
+                  (acceleratorProject?.projectHighlightPhotoValueId &&
+                    getImagePath(projectId, acceleratorProject.projectHighlightPhotoValueId)) ||
                   undefined
                 }
                 previewPlacement={'right'}
@@ -1028,8 +1028,8 @@ const ProjectProfileEdit = () => {
                 chooseFileText={strings.CHOOSE_FILE}
                 replaceFileText={strings.REPLACE_FILE}
                 previewUrl={
-                  (participantProject?.projectZoneFigureValueId &&
-                    getImagePath(projectId, participantProject.projectZoneFigureValueId)) ||
+                  (acceleratorProject?.projectZoneFigureValueId &&
+                    getImagePath(projectId, acceleratorProject.projectZoneFigureValueId)) ||
                   undefined
                 }
                 previewPlacement={'right'}

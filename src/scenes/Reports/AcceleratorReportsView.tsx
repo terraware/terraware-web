@@ -13,7 +13,7 @@ import useStickyTabs from 'src/utils/useStickyTabs';
 
 const AcceleratorReportsView = () => {
   const { strings } = useLocalization();
-  const { currentParticipantProject, allParticipantProjects, setCurrentParticipantProject } = useParticipantData();
+  const { currentAcceleratorProject, allAcceleratorProjects, setCurrentAcceleratorProject } = useParticipantData();
 
   const [projectFilter, setProjectFilter] = useState<{ projectId?: number | string }>({});
 
@@ -41,14 +41,14 @@ const AcceleratorReportsView = () => {
   const PageHeaderLeftComponent = useMemo(
     () => (
       <PageHeaderProjectFilter
-        currentParticipantProject={currentParticipantProject}
+        currentAcceleratorProject={currentAcceleratorProject}
         projectFilter={projectFilter}
-        projects={allParticipantProjects}
-        setCurrentParticipantProject={setCurrentParticipantProject}
+        projects={allAcceleratorProjects}
+        setCurrentAcceleratorProject={setCurrentAcceleratorProject}
         setProjectFilter={setProjectFilter}
       />
     ),
-    [allParticipantProjects, currentParticipantProject, projectFilter, setCurrentParticipantProject, setProjectFilter]
+    [allAcceleratorProjects, currentAcceleratorProject, projectFilter, setCurrentAcceleratorProject, setProjectFilter]
   );
 
   return (

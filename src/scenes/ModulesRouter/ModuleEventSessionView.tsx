@@ -27,7 +27,7 @@ const openExternalURL = (url: string | undefined, target = '_blank', features = 
 const ModuleEventSessionView = () => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
-  const { currentParticipantProject, setCurrentParticipantProject } = useParticipantData();
+  const { currentAcceleratorProject, setCurrentAcceleratorProject } = useParticipantData();
   const pathParams = useParams<{ sessionId: string; moduleId: string; projectId: string }>();
   const projectId = Number(pathParams.projectId);
   const moduleId = Number(pathParams.moduleId);
@@ -35,9 +35,9 @@ const ModuleEventSessionView = () => {
 
   useEffect(() => {
     if (projectId) {
-      setCurrentParticipantProject(projectId);
+      setCurrentAcceleratorProject(projectId);
     }
-  }, [projectId, setCurrentParticipantProject]);
+  }, [projectId, setCurrentAcceleratorProject]);
 
   const { event, getEvent } = useGetEvent();
   const { cohortModule, getCohortModule } = useGetCohortModule();
@@ -49,10 +49,10 @@ const ModuleEventSessionView = () => {
   }, [getEvent, sessionId]);
 
   useEffect(() => {
-    if (currentParticipantProject && currentParticipantProject.cohortId) {
-      void getCohortModule({ moduleId, cohortId: currentParticipantProject.cohortId });
+    if (currentAcceleratorProject && currentAcceleratorProject.cohortId) {
+      void getCohortModule({ moduleId, cohortId: currentAcceleratorProject.cohortId });
     }
-  }, [currentParticipantProject, moduleId, getCohortModule]);
+  }, [currentAcceleratorProject, moduleId, getCohortModule]);
 
   const eventType = event?.type ? getEventType(event.type) : '';
   const isRecordedSession = eventType === 'Recorded Session';

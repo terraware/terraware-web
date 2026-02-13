@@ -29,10 +29,10 @@ import { useGetInternalUsersQuery } from 'src/queries/generated/projectInternalU
 import { useLazyListAcceleratorReportsQuery } from 'src/queries/generated/reports';
 import { useAppDispatch } from 'src/redux/store';
 import { AcceleratorOrg } from 'src/types/Accelerator';
+import { AcceleratorProject } from 'src/types/AcceleratorProject';
 import { PublishedReport, getReportPrefix } from 'src/types/AcceleratorReport';
 import { Application } from 'src/types/Application';
 import { FunderProjectDetails } from 'src/types/FunderProject';
-import { ParticipantProject } from 'src/types/ParticipantProject';
 import { Project, ProjectMeta, getProjectInternalUserRoleString } from 'src/types/Project';
 import { Score } from 'src/types/Score';
 import { PhaseVotes } from 'src/types/Votes';
@@ -42,8 +42,8 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 type ProjectProfileViewProps = {
-  participantProject?: ParticipantProject;
-  projectDetails?: ParticipantProject | FunderProjectDetails;
+  participantProject?: AcceleratorProject;
+  projectDetails?: AcceleratorProject | FunderProjectDetails;
   project?: Project;
   projectMeta?: ProjectMeta;
   organization?: AcceleratorOrg;
@@ -79,7 +79,7 @@ const ProjectProfileView = ({
   );
   const internalUsers = useMemo(() => internalUsersData?.users ?? [], [internalUsersData]);
 
-  const isAllowedViewScoreAndVoting = isAllowed('VIEW_PARTICIPANT_PROJECT_SCORING_VOTING');
+  const isAllowedViewScoreAndVoting = isAllowed('VIEW_ACCELERATOR_PROJECT_SCORING_VOTING');
 
   const [listReports, listReportsResponse] = useLazyListAcceleratorReportsQuery();
   const acceleratorReports = useMemo(

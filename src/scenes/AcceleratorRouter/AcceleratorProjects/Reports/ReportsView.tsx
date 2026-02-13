@@ -11,11 +11,11 @@ import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
-import { useParticipantProjectData } from '../ParticipantProjectContext';
+import { useAcceleratorProjectData } from '../AcceleratorProjectContext';
 import ReportsSettings from './ReportsSettings';
 
 const ReportsView = () => {
-  const { crumbs, participantProject, project } = useParticipantProjectData();
+  const { crumbs, acceleratorProject, project } = useAcceleratorProjectData();
   const { activeLocale } = useLocalization();
 
   const tabs = useMemo(() => {
@@ -54,8 +54,8 @@ const ReportsView = () => {
       crumbs={[
         ...crumbs,
         {
-          name: participantProject?.dealName || project?.name || '',
-          to: APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', participantProject?.projectId.toString() || ''),
+          name: acceleratorProject?.dealName || project?.name || '',
+          to: APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', acceleratorProject?.projectId.toString() || ''),
         },
       ]}
       title={strings.REPORTS}

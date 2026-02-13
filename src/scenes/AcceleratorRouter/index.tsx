@@ -13,6 +13,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useStateLocation from 'src/utils/useStateLocation';
 
 import ActivityLogRouter from '../ActivityLogRouter';
+import ParticipantProjects from './AcceleratorProjects';
 import Applications from './Applications';
 import Cohorts from './Cohorts';
 import Deliverables from './Deliverables';
@@ -23,7 +24,6 @@ import ModuleContent from './Modules';
 import EventEdit from './Modules/EventEdit';
 import ModuleView from './Modules/ModuleView';
 import NavBar from './NavBar';
-import ParticipantProjects from './ParticipantProjects';
 import People from './People';
 
 interface AcceleratorRouterProps {

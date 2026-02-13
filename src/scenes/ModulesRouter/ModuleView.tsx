@@ -22,7 +22,7 @@ import ModuleViewTitle from './ModuleViewTitle';
 const ModuleView = () => {
   const { activeLocale } = useLocalization();
   const { goToDeliverable, goToModuleEventSession } = useNavigateTo();
-  const { currentParticipantProject, setCurrentParticipantProject } = useParticipantData();
+  const { currentAcceleratorProject, setCurrentAcceleratorProject } = useParticipantData();
 
   const pathParams = useParams<{ sessionId: string; moduleId: string; projectId: string }>();
   const projectId = Number(pathParams.projectId);
@@ -31,21 +31,21 @@ const ModuleView = () => {
 
   useEffect(() => {
     if (projectId) {
-      setCurrentParticipantProject(projectId);
+      setCurrentAcceleratorProject(projectId);
     }
-  }, [projectId, setCurrentParticipantProject]);
+  }, [projectId, setCurrentAcceleratorProject]);
 
   const { cohortModule, getCohortModule } = useGetCohortModule();
   const { deliverables, listProjectModuleDeliverables } = useProjectModuleDeliverables();
   const { events, listProjectModuleEvents } = useProjectModuleEvents();
 
   useEffect(() => {
-    if (currentParticipantProject && currentParticipantProject.cohortId) {
-      void getCohortModule({ moduleId, cohortId: currentParticipantProject.cohortId });
-      void listProjectModuleDeliverables({ moduleId, projectId: currentParticipantProject.id });
-      void listProjectModuleEvents({ moduleId, projectId: currentParticipantProject.id });
+    if (currentAcceleratorProject && currentAcceleratorProject.cohortId) {
+      void getCohortModule({ moduleId, cohortId: currentAcceleratorProject.cohortId });
+      void listProjectModuleDeliverables({ moduleId, projectId: currentAcceleratorProject.id });
+      void listProjectModuleEvents({ moduleId, projectId: currentAcceleratorProject.id });
     }
-  }, [currentParticipantProject, moduleId, getCohortModule, listProjectModuleDeliverables, listProjectModuleEvents]);
+  }, [currentAcceleratorProject, moduleId, getCohortModule, listProjectModuleDeliverables, listProjectModuleEvents]);
 
   const deliverableDetails = useMemo(
     () =>
