@@ -1363,12 +1363,12 @@ import { Box, Grid, Typ<span class="cstat-no" title="statement not covered" >ogr
 import { getDateDisplayV<span class="cstat-no" title="statement not covered" >alue } from '@terraware/web</span>-components/utils';
 <span class="cstat-no" title="statement not covered" ></span>
 import ApplicationS<span class="cstat-no" title="statement not covered" >tatusLink from 'src/components/P</span>rojectField/ApplicationStatusLink';
-import CohortBa<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >dg</span>e from 'src/components/ProjectField/CohortBadge';</span>
-im<span class="cstat-no" title="statement not covered" >port ProjectProfileFooter from 'src/components/ProjectField/Footer';</span>
-impo<span class="cstat-no" title="statement not covered" >rt ProjectFieldInlineMeta from 'src/components/ProjectField/Inl</span>ineMeta';
-import InvertedCard from 'src/components/ProjectField/InvertedCard';
-import LandUseMode<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >lT</span>ypeCard from 'src/components/ProjectField/LandUseModelTypeCard';</span>
-im<span class="cstat-no" title="statement not covered" >port ProjectFieldLink from 'src/components/ProjectField/Link';</span>
+import ProjectP<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ro</span>fileFooter from 'src/components/ProjectField/Footer';</span>
+im<span class="cstat-no" title="statement not covered" >port ProjectFieldInlineMeta from 'src/components/ProjectField/InlineMeta';</span>
+impo<span class="cstat-no" title="statement not covered" >rt InvertedCard from 'src/components/ProjectField/InvertedCard'</span>;
+import LandUseModelTypeCard from 'src/components/ProjectField/LandUseModelTypeCard';
+import ProjectFiel<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >dL</span>ink from 'src/components/ProjectField/Link';</span>
+im<span class="cstat-no" title="statement not covered" >port PhaseBadge from 'src/components/ProjectField/PhaseBadge';</span>
 impo<span class="cstat-no" title="statement not covered" >rt ProjectCertificationDisplay from 'src/components/ProjectField/ProjectCertificationDisplay';</span>
 import<span class="cstat-no" title="statement not covered" > ProjectDataDisplay from 'src/components/ProjectField/ProjectDataDisplay';</span>
 import P<span class="cstat-no" title="statement not covered" >rojectFigureLabel from 'sr<span class="fstat-no" title="function not covered" >c/</span>comp<span class="cstat-no" title="statement not covered" >onents/Pro</span>jectField/ProjectFigureLabel';</span>
@@ -1393,12 +1393,12 @@ import { Accelerato<span class="cstat-no" title="statement not covered" >rOrg } 
 import { PublishedRepo<span class="cstat-no" title="statement not covered" >rt, getReportPrefix } fro</span>m 'src/types/AcceleratorReport';
 import { Applicatio<span class="cstat-no" title="statement not covered" >n } from 'src/types/Application';</span>
 import { FunderProjectDetails } fro<span class="cstat-no" title="statement not covered" >m 'src/types/FunderProject';</span>
-import { ParticipantProje<span class="cstat-no" title="statement not covered" >ct } from 'src/types/ParticipantProject';</span>
-import { Project, Pr<span class="cstat-no" title="statement not covered" >ojectMeta, getProjectInternalUserRoleString } from 'src</span>/types/Project';
-import { Score } from 's<span class="cstat-no" title="statement not covered" >rc/types/Score';</span>
-import { PhaseVotes } from<span class="cstat-no" title="statement not covered" > 'src/types/Votes';</span>
-import { getCountryByCode } from '<span class="cstat-no" title="statement not covered" >src/utils/country';</span>
-import { formatNum<span class="cstat-no" title="statement not covered" >berScale } from 'src/utils/numbers';</span>
+import { Participant<span class="cstat-no" title="statement not covered" >Project } from 'src/types/ParticipantProject';</span>
+import { Project, Projec<span class="cstat-no" title="statement not covered" >tMeta, getProjectInternalUserRoleString } from 'src/types/P</span>roject';
+import { Score } from 'src<span class="cstat-no" title="statement not covered" >/types/Score';</span>
+import { PhaseVotes } from 'src/ty<span class="cstat-no" title="statement not covered" >pes/Votes';</span>
+import { getCountr<span class="cstat-no" title="statement not covered" >yByCode } from 'src/utils/country';</span>
+import { formatNumberSca<span class="cstat-no" title="statement not covered" >le } from 'src/utils/numbers';</span>
 import useDeviceInfo from 'src/utils/useD<span class="cstat-no" title="statement not covered" >eviceInfo';</span>
 import { useNumberFormatter } fr<span class="cstat-no" title="statement not covered" >om 'src/utils/useNumberFormatter';</span>
 <span class="cstat-no" title="statement not covered" ></span>
@@ -1569,7 +1569,7 @@ const ProjectProfileView = ({<span class="cstat-no" title="statement not covered
           &lt;Box display={'flex'} alignItems={'center'}&gt;
             {isProjectInPhase &amp;&amp; (
               &lt;&gt;
-                &lt;CohortBadge label={participantProject?.phase} /&gt;
+                &lt;PhaseBadge label={participantProject?.phase} /&gt;
               &lt;/&gt;
             )}
             {!isProjectInPhase &amp;&amp; projectApplication &amp;&amp; (
@@ -2011,7 +2011,7 @@ export default ProjectProfileView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-13T02:34:59.146Z
+                at 2026-02-13T02:44:59.531Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
