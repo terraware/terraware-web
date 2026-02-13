@@ -1311,7 +1311,6 @@ OR_SHRUBS,Arbustes de verger,a86cd003
 ORBIT,Orbiter,8e3af3cb
 ORG_NOTIFICATION_ACTION,"Pour modifier les préférences, rendez-vous [Paramètres > Organisation]",5cbf22d7
 ORGANIZATION,Organisation,b1115ab0
-ORGANIZATION_ADDED,Organisation ajoutée,0601cc78
 ORGANIZATION_CREATE_FAILED,Impossible de créer une organisation.,969a54ff
 ORGANIZATION_CREATED_MSG,Vous pouvez accéder aux organisations auxquelles vous appartenez en cliquant sur le menu du profil d'utilisateur dans le coin supérieur droit.,60a57d86
 ORGANIZATION_CREATED_MSG_DESKTOP,"Vous pouvez accéder aux organisations auxquelles vous appartenez en cliquant sur la flèche située dans le coin supérieur gauche, à côté du logo.",b843e803
@@ -1667,8 +1666,6 @@ REMOVE_FUNDER_MODAL_TEXT,"Êtes-vous sûr de vouloir supprimer {0} ? Si vous les
 REMOVE_FUNDERS,Supprimer les bailleurs de fonds,79056524
 REMOVE_FUNDERS_MODAL_TEXT,"Êtes-vous sûr·e de vouloir supprimer ces bailleurs de fonds ? En les supprimant, ils n’auront plus accès aux données de cette entité de financement.",39e7bdae
 REMOVE_ONLY_ONE_ORG_AT_A_TIME,Vous ne pouvez vous retirer que d'une seule organisation à la fois.,26b664ad
-REMOVE_ORGANIZATION,Supprimer l'organisation ?,de4ffcda
-REMOVE_ORGANIZATION_MODAL_TEXT,Êtes-vous sûr de vouloir retirer ces organisations de la liste des participants à l’accélérateur ?,0572dfa5
 REMOVE_PARTICIPANT,Supprimer participant,54e10793
 REMOVE_PARTICIPANT_CONFIRMATION,Êtes-vous sûr(e) de vouloir supprimer le participant {0} ? Cette action est irréversible.,e04e1795
 REMOVE_PEOPLE,Supprimer des personnes,7fa1c6ab

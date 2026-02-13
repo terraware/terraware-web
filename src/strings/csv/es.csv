@@ -1312,7 +1312,6 @@ OR_SHRUBS,O arbustos,a86cd003
 ORBIT,Orbitar,8e3af3cb
 ORG_NOTIFICATION_ACTION,"Para cambiar la preferencia, ve a [Ajustes > Organización]",5cbf22d7
 ORGANIZATION,Organización,b1115ab0
-ORGANIZATION_ADDED,Se agregó organización,0601cc78
 ORGANIZATION_CREATE_FAILED,No se puede crear la organización.,969a54ff
 ORGANIZATION_CREATED_MSG,Puede acceder a las organizaciones en las que se encuentra dando clic en el menú de perfil de usuario en la esquina superior derecha.,60a57d86
 ORGANIZATION_CREATED_MSG_DESKTOP,"Puede acceder a las organizaciones en las que está dando clic en la flecha en la esquina superior izquierda, a un lado del logo.",b843e803
@@ -1668,8 +1667,6 @@ REMOVE_FUNDER_MODAL_TEXT,"¿Seguro que quiere eliminar a {0}? Si los elimina, ya
 REMOVE_FUNDERS,Eliminar financiadores,79056524
 REMOVE_FUNDERS_MODAL_TEXT,"¿Estás seguro de que quieres eliminar a estos financiadores? Al eliminarlos, ya no tendrán acceso a los datos de esta entidad financiadora.",39e7bdae
 REMOVE_ONLY_ONE_ORG_AT_A_TIME,Solo puede eliminarse a sí mismo de una organización a la vez.,26b664ad
-REMOVE_ORGANIZATION,¿Eliminar organización?,de4ffcda
-REMOVE_ORGANIZATION_MODAL_TEXT,¿Está seguro de que desea eliminar estas organizaciones de la lista de Participantes en el acelerador?,0572dfa5
 REMOVE_PARTICIPANT,Eliminar participante,54e10793
 REMOVE_PARTICIPANT_CONFIRMATION,¿Está seguro de que desea eliminar al participante {0}? Esta acción no se puede deshacer.,e04e1795
 REMOVE_PEOPLE,Eliminar personas,7fa1c6ab
