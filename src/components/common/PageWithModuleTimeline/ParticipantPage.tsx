@@ -9,7 +9,7 @@ const ParticipantPage = (props: PageProps) => {
   const { currentParticipantProject, modules } = useParticipantData();
 
   return (
-    <PageWithModuleTimeline {...props} cohortPhase={currentParticipantProject?.cohortPhase} modules={modules ?? []}>
+    <PageWithModuleTimeline {...props} projectPhase={currentParticipantProject?.phase} modules={modules ?? []}>
       {props.children}
     </PageWithModuleTimeline>
   );

@@ -58,7 +58,7 @@ const ScoringWrapper = ({ children, isForm, isLoading, rightComponent }: Props):
       hierarchicalCrumbs={false}
       rightComponent={rightComponent}
       title={`${project?.name ?? ''} ${strings.SCORES}`}
-      cohortPhase={project?.cohortPhase}
+      projectPhase={project?.phase}
       modules={cohortModules ?? []}
     >
       <Card

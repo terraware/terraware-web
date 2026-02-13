@@ -61,7 +61,7 @@ const VotingWrapper = ({ children, isForm, rightComponent }: Props): JSX.Element
       hierarchicalCrumbs={false}
       rightComponent={rightComponent}
       title={strings.INVESTMENT_COMMITTEE_VOTES}
-      cohortPhase={project?.cohortPhase}
+      projectPhase={project?.phase}
       modules={cohortModules ?? []}
     >
       {phaseVotes && phaseVotes.votes.length > 0 ? (
