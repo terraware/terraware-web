@@ -20,7 +20,10 @@ export type ModalValuesType = {
 
 export default function BatchesCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const { column, row, value, index, onRowClick } = props;
-  const [modalValues, setModalValues] = useState<ModalValuesType>({ type: 'germinating', openChangeQuantityModal: false });
+  const [modalValues, setModalValues] = useState<ModalValuesType>({
+    type: 'germinating',
+    openChangeQuantityModal: false,
+  });
 
   const textStyles = {
     fontSize: '14px',
