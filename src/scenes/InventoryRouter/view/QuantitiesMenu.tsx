@@ -32,6 +32,7 @@ export default function QuantitiesMenu(props: QuantitiesMenuProps): JSX.Element 
     setModalValues({
       openChangeQuantityModal: true,
       type,
+      batch,
     });
   };
 

@@ -4,6 +4,7 @@ import { Box, Grid, Popover, Tooltip, useTheme } from '@mui/material';
 import { Button, EditableTable, EditableTableColumn, TableColumnType } from '@terraware/web-components';
 import _, { isArray } from 'lodash';
 import {
+  MRT_Cell,
   MRT_RowSelectionState,
   MRT_ShowHideColumnsButton,
   MRT_SortingState,
@@ -76,7 +77,10 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
   const [withdrawTooltip, setWithdrawTooltip] = useState<string>();
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
-  const [modalValues, setModalValues] = useState({ type: 'germinating', openChangeQuantityModal: false });
+  const [modalValues, setModalValues] = useState<{ type: string; openChangeQuantityModal: boolean; batch?: any }>({
+    type: 'germinating',
+    openChangeQuantityModal: false,
+  });
 
   // Filter-related state
   const initialFilters: Record<string, SearchNodePayload> = useMemo(() => {
@@ -194,9 +198,9 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
   ]);
 
   const filterGroupColumns = useMemo<FilterField[]>(() => {
-    const columns: FilterField[] = [];
+    const columnsToReturn: FilterField[] = [];
     if (origin === 'Batches') {
-      columns.push({
+      columnsToReturn.push({
         name: 'showEmptyBatches',
         label: strings.FILTER_SHOW_EMPTY_BATCHES,
         showLabel: false,
@@ -204,7 +208,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
       });
     }
     if (origin === 'Species') {
-      columns.push({
+      columnsToReturn.push({
         name: 'showEmptySpecies',
         label: strings.FILTER_SHOW_EMPTY_SPECIES,
         showLabel: false,
@@ -212,14 +216,14 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
       });
     }
     if (origin === 'Nursery') {
-      columns.push({
+      columnsToReturn.push({
         name: 'showEmptyNurseries',
         label: strings.FILTER_SHOW_EMPTY_NURSERIES,
         showLabel: false,
         type: 'boolean',
       });
     }
-    return columns;
+    return columnsToReturn;
   }, [origin, strings]);
 
   const withdrawInventory = () => {
@@ -349,11 +353,80 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
     [query]
   );
 
+  // Cell renderer components
+  const ScientificNameCell = useCallback(
+    ({ cell }: { cell: MRT_Cell<SearchResponseElement> }) => {
+      const value = cell.row.original.scientificName as string;
+      const id = cell.row.original.id as number;
+      return (
+        <>
+          {id ? (
+            createLinkWithQuery(APP_PATHS.INVENTORY_ITEM_FOR_SPECIES.replace(':speciesId', id.toString()), value)
+          ) : (
+            <span>{strings.DELETED_SPECIES}</span>
+          )}
+        </>
+      );
+    },
+    [createLinkWithQuery, strings]
+  );
+
+  const FacilityNameCell = useCallback(
+    ({ cell }: { cell: MRT_Cell<SearchResponseElement> }) => {
+      const value = cell.row.original.facility_name as string;
+      const facilityId = cell.row.original.facility_id as number;
+      return (
+        <>
+          {facilityId ? (
+            createLinkWithQuery(
+              APP_PATHS.INVENTORY_ITEM_FOR_NURSERY.replace(':nurseryId', facilityId.toString()),
+              value
+            )
+          ) : (
+            <span>{value}</span>
+          )}
+        </>
+      );
+    },
+    [createLinkWithQuery]
+  );
+
+  const BatchNumberCell = useCallback(
+    ({ cell }: { cell: MRT_Cell<SearchResponseElement> }) => {
+      const value = cell.row.original.batchNumber as string;
+      const batchId = cell.row.original.batchId as number;
+      return (
+        <>
+          {batchId ? (
+            createLinkWithQuery(APP_PATHS.INVENTORY_BATCH.replace(':batchId', batchId.toString()), value)
+          ) : (
+            <span>{value}</span>
+          )}
+        </>
+      );
+    },
+    [createLinkWithQuery]
+  );
+
+  const FacilityInventoriesCell = useCallback(
+    ({ cell }: { cell: MRT_Cell<SearchResponseElement> }) => {
+      const value = cell.row.original.facilityInventories;
+      return <>{typeof value === 'string' ? getNamesList(value) : <span>{value as string}</span>}</>;
+    },
+    [getNamesList]
+  );
+
+  const QuantitiesMenuCell = useCallback(
+    ({ cell }: { cell: MRT_Cell<SearchResponseElement> }) => {
+      return <QuantitiesMenu setModalValues={setModalValues} batch={cell.row.original} />;
+    },
+    [setModalValues]
+  );
+
   // Convert columns to EditableTable format
   const editableColumns = useMemo<EditableTableColumn<SearchResponseElement>[]>(() => {
     const cols = typeof columns === 'function' ? columns() : columns;
     return cols.map((col: TableColumnType) => {
-      console.log(col.key);
       const columnDef: EditableTableColumn<SearchResponseElement> = {
         id: col.key,
         header: typeof col.name === 'string' ? col.name : '',
@@ -381,7 +454,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
         if (col.key === 'facilityInventories' || col.key === 'species_scientificName_noLink') {
           const allNames = results
             .map((row: any) => row[col.key])
-            .filter((val) => val != null && val !== '')
+            .filter((val) => val !== null && val !== '' && val !== undefined)
             .flatMap((val: string) => val.split('\r'))
             .filter((name) => name.trim() !== '');
           const uniqueValues = Array.from(new Set(allNames)).sort();
@@ -389,14 +462,18 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
           // Custom filter function to check if the filter value exists in the combined string
           columnDef.filterFn = (row: any, columnId, filterValue) => {
             const cellValue = row.original[col.key] as string;
-            if (!cellValue || typeof cellValue !== 'string') return false;
+            if (!cellValue || typeof cellValue !== 'string') {
+              return false;
+            }
             const names = cellValue.split('\r').map((name) => name.trim());
             return names.includes(filterValue as string);
           };
         } else {
           // Get unique values for this column from results
           const uniqueValues = Array.from(
-            new Set(results.map((row: any) => row[col.key]).filter((val) => val != null && val !== ''))
+            new Set(
+              results.map((row: any) => row[col.key]).filter((val) => val !== null && val !== '' && val !== undefined)
+            )
           ).sort();
           columnDef.filterSelectOptions = uniqueValues;
         }
@@ -406,59 +483,15 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
 
       // Add custom cell renderers
       if (col.key === 'scientificName') {
-        columnDef.Cell = ({ row }) => {
-          const value = row.original[col.key] as string;
-          const id = row.original.id as number;
-          return (
-            <>
-              {id ? (
-                createLinkWithQuery(APP_PATHS.INVENTORY_ITEM_FOR_SPECIES.replace(':speciesId', id.toString()), value)
-              ) : (
-                <span>{strings.DELETED_SPECIES}</span>
-              )}
-            </>
-          );
-        };
+        columnDef.Cell = ScientificNameCell;
       } else if (col.key === 'facility_name') {
-        columnDef.Cell = ({ row }) => {
-          const value = row.original[col.key] as string;
-          const facilityId = row.original.facility_id as number;
-          return (
-            <>
-              {facilityId ? (
-                createLinkWithQuery(
-                  APP_PATHS.INVENTORY_ITEM_FOR_NURSERY.replace(':nurseryId', facilityId.toString()),
-                  value
-                )
-              ) : (
-                <span>{value}</span>
-              )}
-            </>
-          );
-        };
+        columnDef.Cell = FacilityNameCell;
       } else if (col.key === 'batchNumber') {
-        columnDef.Cell = ({ row }) => {
-          const value = row.original[col.key] as string;
-          const batchId = row.original.batchId as number;
-          return (
-            <>
-              {batchId ? (
-                createLinkWithQuery(APP_PATHS.INVENTORY_BATCH.replace(':batchId', batchId.toString()), value)
-              ) : (
-                <span>{value}</span>
-              )}
-            </>
-          );
-        };
+        columnDef.Cell = BatchNumberCell;
       } else if (col.key === 'facilityInventories') {
-        columnDef.Cell = ({ row }) => {
-          const value = row.original[col.key];
-          return <>{typeof value === 'string' ? getNamesList(value) : <span>{value as string}</span>}</>;
-        };
+        columnDef.Cell = FacilityInventoriesCell;
       } else if (col.key === 'quantitiesMenu') {
-        columnDef.Cell = ({ row }) => {
-          return <QuantitiesMenu setModalValues={setModalValues} batch={row.original} />;
-        };
+        columnDef.Cell = QuantitiesMenuCell;
         columnDef.header = '';
         (columnDef as any).enableColumnFilter = false;
         (columnDef as any).enableSorting = false;
@@ -466,7 +499,15 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
 
       return columnDef;
     });
-  }, [columns, results, createLinkWithQuery, getNamesList, strings]);
+  }, [
+    columns,
+    results,
+    ScientificNameCell,
+    FacilityNameCell,
+    BatchNumberCell,
+    FacilityInventoriesCell,
+    QuantitiesMenuCell,
+  ]);
 
   // Handle sorting for EditableTable
   const [sorting, setSorting] = useState<MRT_SortingState>([
@@ -489,17 +530,11 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
   return (
     <>
       <DeleteBatchesModal open={openDeleteModal} onClose={onCloseDeleteBatchesModal} onSubmit={deleteSelectedBatches} />
-      {modalValues.openChangeQuantityModal && (
+      {modalValues.openChangeQuantityModal && modalValues.batch && (
         <ChangeQuantityModal
           onClose={() => setModalValues({ openChangeQuantityModal: false, type: 'germinating' })}
           modalValues={modalValues}
-          row={
-            results.find(
-              (r) =>
-                r.id ===
-                (rowSelection[Object.keys(rowSelection)[0]] ? results[Number(Object.keys(rowSelection)[0])].id : null)
-            ) as any
-          }
+          row={modalValues.batch}
           reload={reloadData}
         />
       )}
