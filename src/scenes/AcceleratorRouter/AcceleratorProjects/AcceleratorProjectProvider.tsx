@@ -25,10 +25,7 @@ const AcceleratorProjectProvider = ({ children }: Props) => {
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
   const { project, projectId } = useProjectData();
-  const { acceleratorOrgs, reload: reloadAll } = useAcceleratorOrgs({
-    hasProjectApplication: true,
-    includeParticipants: true,
-  });
+  const { acceleratorOrgs, reload: reloadAll } = useAcceleratorOrgs();
 
   const [getProjectAcceleratorDetails, projectAcceleratorDetailsResponse] = useLazyGetProjectAcceleratorDetailsQuery();
 

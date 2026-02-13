@@ -13,20 +13,8 @@ export type Response = {
   reload: () => void;
 };
 
-// The default behavior, if no options are passed in with the props,
-//   is to get all organizations that have an "accelerator internal tag"
-//
-// The `includeParticipants` option will additionally contain organizations that have no internal tags,
-//   but do have a project that is associated to a participant
-//
-// The `hasProjectApplication` option will only return organizations that have no internal tags,
-//   but have a project that has an application submitted
-export const useAcceleratorOrgs = (props?: {
-  includeParticipants?: boolean;
-  hasProjectApplication?: boolean;
-}): Response => {
-  const { includeParticipants, hasProjectApplication } = props || {};
-
+// Get all organizations that have a project with a phase or an application
+export const useAcceleratorOrgs = (): Response => {
   const { activeLocale } = useLocalization();
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
@@ -41,11 +29,9 @@ export const useAcceleratorOrgs = (props?: {
   }, [result?.status, snackbar]);
 
   const reload = useCallback(() => {
-    const request = dispatch(
-      requestAcceleratorOrgs({ locale: activeLocale, hasProjectApplication, includeParticipants })
-    );
+    const request = dispatch(requestAcceleratorOrgs({ locale: activeLocale }));
     setRequestId(request.requestId);
-  }, [activeLocale, dispatch, hasProjectApplication, includeParticipants]);
+  }, [activeLocale, dispatch]);
 
   useEffect(() => {
     reload();
