@@ -369,6 +369,8 @@ CONDITIONAL,Conditionnel,605c68a6
 CONFIRM,Confirmer,fe564422
 CONFIRM_UPDATE_ALL_COHORT_MODULES,Les modifications apportées aux modules de ce projet affecteront tous les projets du groupe de projets. Ceci est temporaire pendant la suppression des groupes de Terraware. Êtes-vous sûr de vouloir modifier les modules pour tous les projets du groupe ?,db947325
 CONFIRM_UPDATE_ALL_COHORT_MODULES_TITLE,Confirmer la mise à jour de tous les modules du groupe,1b173015
+CONFIRM_UPDATE_ALL_COHORT_PHASE,Les modifications apportées à la phase de ce projet affecteront tous les projets du cohort du projet. Ceci est temporaire pendant la suppression des cohorts de Terraware. Êtes-vous sûr de vouloir modifier la phase de tous les projets du cohort ?,26d2dc4e
+CONFIRM_UPDATE_ALL_COHORT_PHASE_TITLE,Confirmer la mise à jour de la phase pour tous les projets de cohorte,774d5ec0
 CONFIRMED_RESTORABLE_LAND,TF Terres restaurables (ha),efa25d21
 CONSERVATION_CATEGORY,Catégorie de la liste rouge de l'UICN,115916f3
 CONTACT_TYPE,Type de contact,413b6c0e

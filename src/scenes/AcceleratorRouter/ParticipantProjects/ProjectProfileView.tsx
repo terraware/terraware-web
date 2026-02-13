@@ -4,12 +4,12 @@ import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import ApplicationStatusLink from 'src/components/ProjectField/ApplicationStatusLink';
-import CohortBadge from 'src/components/ProjectField/CohortBadge';
 import ProjectProfileFooter from 'src/components/ProjectField/Footer';
 import ProjectFieldInlineMeta from 'src/components/ProjectField/InlineMeta';
 import InvertedCard from 'src/components/ProjectField/InvertedCard';
 import LandUseModelTypeCard from 'src/components/ProjectField/LandUseModelTypeCard';
 import ProjectFieldLink from 'src/components/ProjectField/Link';
+import PhaseBadge from 'src/components/ProjectField/PhaseBadge';
 import ProjectCertificationDisplay from 'src/components/ProjectField/ProjectCertificationDisplay';
 import ProjectDataDisplay from 'src/components/ProjectField/ProjectDataDisplay';
 import ProjectFigureLabel from 'src/components/ProjectField/ProjectFigureLabel';
@@ -210,7 +210,7 @@ const ProjectProfileView = ({
           <Box display={'flex'} alignItems={'center'}>
             {isProjectInPhase && (
               <>
-                <CohortBadge label={participantProject?.phase} />
+                <PhaseBadge label={participantProject?.phase} />
               </>
             )}
             {!isProjectInPhase && projectApplication && (
