@@ -11,6 +11,7 @@ import { NurseryBatchService } from 'src/services';
 import { BATCH_PHOTO_ENDPOINT } from 'src/services/NurseryBatchService';
 import { batchSubstrateEnumToLocalized } from 'src/types/Accession';
 import { Batch } from 'src/types/Batch';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import OverviewItemCard from '../../components/common/OverviewItemCard';
@@ -27,6 +28,7 @@ export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JS
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const snackbar = useSnackbar();
+  const numberFormatter = useNumberFormatter();
 
   const [photoUrls, setPhotoUrls] = useState<string[]>([]);
   const [openEditBatchModal, setOpenEditBatchModal] = useState(false);
@@ -124,7 +126,7 @@ export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JS
           <OverviewItemCard
             isEditable={true}
             title={strings.GERMINATION_ESTABLISHMENT_QUANTITY}
-            contents={batch.germinatingQuantity}
+            contents={numberFormatter.format(batch.germinatingQuantity)}
             grid={true}
             handleEdit={handleEditGerminatingQuantity}
           />
@@ -141,7 +143,7 @@ export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JS
           <OverviewItemCard
             isEditable={true}
             title={strings.ACTIVE_GROWTH_QUANTITY}
-            contents={batch.activeGrowthQuantity}
+            contents={numberFormatter.format(batch.activeGrowthQuantity)}
             grid={true}
             handleEdit={handleEditActiveGrowthQuantity}
           />
@@ -156,7 +158,7 @@ export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JS
         </Grid>
         <Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}>
           <OverviewItemCard
-            contents={batch.hardeningOffQuantity}
+            contents={numberFormatter.format(batch.hardeningOffQuantity)}
             grid
             handleEdit={handleEditHardeningOffQuantity}
             isEditable
@@ -168,7 +170,7 @@ export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JS
           <OverviewItemCard
             isEditable={false}
             title={strings.READY_TO_PLANT_QUANTITY}
-            contents={batch.readyQuantity}
+            contents={numberFormatter.format(batch.readyQuantity)}
             grid={true}
           />
         </Grid>
@@ -176,7 +178,9 @@ export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JS
           <OverviewItemCard
             isEditable={false}
             title={strings.TOTAL_QUANTITY}
-            contents={batch.readyQuantity + batch.activeGrowthQuantity + batch.hardeningOffQuantity}
+            contents={numberFormatter.format(
+              batch.readyQuantity + batch.activeGrowthQuantity + batch.hardeningOffQuantity
+            )}
             grid={true}
           />
         </Grid>
