@@ -34,7 +34,7 @@ const ParticipantProjectProvider = ({ children }: Props) => {
 
   useEffect(() => {
     if (projectId !== -1) {
-      void getProjectAcceleratorDetails(projectId);
+      void getProjectAcceleratorDetails(projectId, true);
     }
   }, [projectId, getProjectAcceleratorDetails]);
 
