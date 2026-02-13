@@ -552,7 +552,9 @@ DRAFT_PLANTING_SITES,Sites de plantation en brouillon,97403fcc
 DRAW_BOUNDARY_WITHIN_MAP,Tracer les limites sur une carte,d1ee6da4
 DRAW_PROPOSED_PROJECT_BOUNDARY,Tracer les limites du projet proposé,8b73e819
 DRONE_FLIGHT,Vol de drone,af8ec693
+DROPBOX,Dropbox,b2a4b1cb
 DROPBOX_FOLDER_URL,URL du dossier Dropbox,0ebe8363
+DROPBOX_PATH,Chemin Dropbox,8c95fa5f
 DRYING,Séchage en cours,97084385
 DUE,Échéance : {0},b72aaa1e
 DUE_DATE,Date d'échéance,705f0661

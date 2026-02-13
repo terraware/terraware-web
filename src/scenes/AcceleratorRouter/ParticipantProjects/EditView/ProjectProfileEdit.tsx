@@ -9,6 +9,7 @@ import LandUseMultiSelect from 'src/components/ProjectField/LandUseMultiSelect';
 import MinMaxCarbonTextfield from 'src/components/ProjectField/MinMaxCarbonTextfield';
 import ProjectFieldMultiSelect from 'src/components/ProjectField/MultiSelect';
 import SdgMultiSelect from 'src/components/ProjectField/SdgMultiSelect';
+import ProjectFieldSelect from 'src/components/ProjectField/Select';
 import ProjectFieldTextAreaEdit from 'src/components/ProjectField/TextAreaEdit';
 import ProjectFieldTextfield from 'src/components/ProjectField/Textfield';
 import VariableSelect from 'src/components/ProjectField/VariableSelect';
@@ -41,6 +42,7 @@ import {
 } from 'src/redux/features/projects/projectsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { UpdateProjectInternalUsersRequestPayload } from 'src/services/ProjectsService';
+import { CohortPhaseType } from 'src/types/Cohort';
 import { LAND_USE_MODEL_TYPES, ParticipantProject } from 'src/types/ParticipantProject';
 import { ProjectInternalUserRole, getProjectInternalUserRoleString, projectInternalUserRoles } from 'src/types/Project';
 import { OrganizationUser } from 'src/types/User';
@@ -314,6 +316,18 @@ const ProjectProfileEdit = () => {
       return;
     }
 
+    if (
+      participantProjectRecord?.phase !== null &&
+      participantProjectRecord?.phase !== undefined &&
+      ((participantProjectRecord.fileNaming || '') === '' ||
+        (participantProjectRecord.dropboxFolderPath || '') === '' ||
+        (participantProjectRecord.googleFolderUrl || '') === '')
+    ) {
+      // will update this in the next PR
+      snackbar.toastError(strings.REQUIRED);
+      return;
+    }
+
     setRequestsInProgress(true);
 
     const newInitiatedRequests = {
@@ -542,6 +556,20 @@ const ProjectProfileEdit = () => {
     return LAND_USE_MODEL_TYPES.filter((type) => participantProjectRecord?.landUseModelTypes?.includes(type));
   }, [participantProjectRecord?.landUseModelTypes]);
 
+  const phaseOptions: {
+    label: string;
+    value: CohortPhaseType | undefined;
+  }[] = useMemo(
+    () => [
+      { label: '--', value: undefined },
+      { label: strings.COHORT_PHASE_DUE_DILIGENCE, value: 'Phase 0 - Due Diligence' },
+      { label: strings.COHORT_PHASE_FEASIBILITY_STUDY, value: 'Phase 1 - Feasibility Study' },
+      { label: strings.COHORT_PHASE_PLAN_AND_SCALE, value: 'Phase 2 - Plan and Scale' },
+      { label: strings.COHORT_PHASE_IMPLEMENT_AND_MONITOR, value: 'Phase 3 - Implement and Monitor' },
+    ],
+    [strings]
+  );
+
   return (
     <Grid container paddingRight={theme.spacing(3)}>
       {addInternalUserRoleModalOpen && (
@@ -597,6 +625,28 @@ const ProjectProfileEdit = () => {
                   onChange={onChangeCountry}
                   region={participantProjectRecord?.region}
                   value={participantProjectRecord?.countryCode}
+                />
+              </Box>
+            </Grid>
+            <Grid item xs={6}>
+              <ProjectFieldTextfield
+                height='auto'
+                id={'fileNaming'}
+                md={12}
+                label={strings.FILE_NAMING}
+                onChange={onChangeParticipantProject}
+                value={participantProjectRecord?.fileNaming}
+              />
+            </Grid>
+            <Grid item md={6} display={'flex'} flexDirection={'column'}>
+              <Box width={'100%'}>
+                <ProjectFieldSelect
+                  id={'phase'}
+                  md={12}
+                  label={strings.PHASE}
+                  onChange={onChangeParticipantProject}
+                  options={phaseOptions}
+                  value={participantProjectRecord?.phase}
                 />
               </Box>
             </Grid>
@@ -910,6 +960,13 @@ const ProjectProfileEdit = () => {
               label={strings.GIS_REPORT_LINK}
               onChange={onChangeParticipantProject}
               value={participantProjectRecord?.gisReportsLink}
+            />
+            <ProjectFieldTextfield
+              id={'dropboxFolderPath'}
+              md={4}
+              label={strings.DROPBOX_PATH}
+              onChange={onChangeParticipantProject}
+              value={participantProjectRecord?.dropboxFolderPath}
             />
 
             <Grid container>

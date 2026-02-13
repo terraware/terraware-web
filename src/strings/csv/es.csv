@@ -553,7 +553,9 @@ DRAFT_PLANTING_SITES,Sitios de Plantación en Borrador,97403fcc
 DRAW_BOUNDARY_WITHIN_MAP,Trazar los límites dentro de un mapa,d1ee6da4
 DRAW_PROPOSED_PROJECT_BOUNDARY,Trazar el límite del proyecto propuesto,8b73e819
 DRONE_FLIGHT,Vuelo de dron,af8ec693
+DROPBOX,Dropbox,b2a4b1cb
 DROPBOX_FOLDER_URL,URL de la carpeta de Dropbox,0ebe8363
+DROPBOX_PATH,Ruta de Dropbox,8c95fa5f
 DRYING,Secando,97084385
 DUE,Vence: {0},b72aaa1e
 DUE_DATE,Fecha límite,705f0661
