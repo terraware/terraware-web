@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { RequestStatusFlags } from '@reduxjs/toolkit/dist/query/core/apiState';
 import { Button, Dropdown, DropdownItem, IconTooltip } from '@terraware/web-components';
 
 import ConfirmModal from 'src/components/Application/ConfirmModal';
@@ -21,7 +22,11 @@ import Icon from 'src/components/common/icon/Icon';
 import useBoolean from 'src/hooks/useBoolean';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization, useUser } from 'src/providers';
-import { useGetInternalUsersQuery } from 'src/queries/generated/projectInternalUsers';
+import {
+  InternalUserPayload,
+  useGetInternalUsersQuery,
+  useUpdateInternalUserMutation,
+} from 'src/queries/generated/projectInternalUsers';
 import { selectUploadImageValue } from 'src/redux/features/documentProducer/values/valuesSelector';
 import {
   requestListSpecificVariablesValues,
@@ -35,10 +40,7 @@ import { requestListOrganizationUsers } from 'src/redux/features/organizationUse
 import { selectOrganizationUsers } from 'src/redux/features/organizationUser/organizationUsersSelectors';
 import { requestUpdateParticipantProject } from 'src/redux/features/participantProjects/participantProjectsAsyncThunks';
 import { selectParticipantProjectUpdateRequest } from 'src/redux/features/participantProjects/participantProjectsSelectors';
-import { requestProjectInternalUsersUpdate } from 'src/redux/features/projects/projectsAsyncThunks';
-import { selectProjectInternalUsersUpdateRequest } from 'src/redux/features/projects/projectsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { UpdateProjectInternalUsersRequestPayload } from 'src/services/ProjectsService';
 import { CohortPhaseType } from 'src/types/Cohort';
 import { LAND_USE_MODEL_TYPES, ParticipantProject } from 'src/types/ParticipantProject';
 import { ProjectInternalUserRole, getProjectInternalUserRoleString, projectInternalUserRoles } from 'src/types/Project';
@@ -51,7 +53,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import { useParticipantProjectData } from '../ParticipantProjectContext';
 import AddInternalUserRoleModal from './AddInternalUserRoleModal';
 
-type InternalUserItem = Omit<UpdateProjectInternalUsersRequestPayload['internalUsers'][number], 'userId'> & {
+type InternalUserItem = Omit<InternalUserPayload, 'userId'> & {
   userId?: number;
 };
 
@@ -109,15 +111,12 @@ const ProjectProfileEdit = () => {
     skip: !projectId || projectId === -1,
   });
   const initialInternalUsers = useMemo(() => internalUsersData?.users ?? [], [internalUsersData]);
+  const [updateInternalUsers, updateInternalUsersResponse] = useUpdateInternalUserMutation();
 
   const listUsersRequest = useAppSelector(selectGlobalRolesUsersSearchRequest(listUsersRequestId));
   const [internalUsers, setInternalUsers] = useState<InternalUserItem[]>([]);
-  const [updateInternalUsersRequestId, setUpdateInternalUsersRequestId] = useState('');
   const [uploadImagesRequestId, setUploadImagesRequestId] = useState('');
   const uploadImagesResponse = useAppSelector(selectUploadImageValue(uploadImagesRequestId));
-  const updateInternalUsersResponse = useAppSelector((state) =>
-    selectProjectInternalUsersUpdateRequest(state, updateInternalUsersRequestId)
-  );
   const response = useAppSelector(selectOrganizationUsers(organizationUsersRequestId));
 
   const variableValues = useAppSelector((state) =>
@@ -183,21 +182,21 @@ const ProjectProfileEdit = () => {
 
     const isComplete = (status: string | undefined, wasInitiated: boolean) =>
       !wasInitiated || status === 'success' || status === 'error';
+    const isCompleteRtk = (_response: RequestStatusFlags, wasInitiated: boolean) =>
+      !wasInitiated || _response.isSuccess || _response.isError;
 
     if (
       isComplete(participantProjectUpdateResponse?.status, initiatedRequests.participantProject) &&
-      isComplete(updateInternalUsersResponse?.status, initiatedRequests.updateInternalUsers) &&
-      isComplete(uploadImagesResponse?.status, initiatedRequests.uploadImages)
+      isComplete(uploadImagesResponse?.status, initiatedRequests.uploadImages) &&
+      isCompleteRtk(updateInternalUsersResponse, initiatedRequests.updateInternalUsers)
     ) {
       setRequestsInProgress(false);
 
       if (
-        [participantProjectUpdateResponse, updateInternalUsersResponse, uploadImagesResponse].some(
-          (resp) => resp?.status === 'error'
-        )
+        [participantProjectUpdateResponse, uploadImagesResponse].some((resp) => resp?.status === 'error') ||
+        updateInternalUsersResponse.isError
       ) {
         snackbar.toastError();
-        setUpdateInternalUsersRequestId('');
         setUploadImagesRequestId('');
         setParticipantProjectRequestId('');
       } else {
@@ -215,11 +214,10 @@ const ProjectProfileEdit = () => {
   ]);
 
   useEffect(() => {
-    if (updateInternalUsersResponse?.status === 'success') {
+    if (updateInternalUsersResponse.isSuccess) {
       // redirect to project view occurs when image uploads are finished
-    } else if (updateInternalUsersResponse?.status === 'error') {
+    } else if (updateInternalUsersResponse.isError) {
       snackbar.toastError();
-      setUpdateInternalUsersRequestId('');
     }
   }, [updateInternalUsersResponse, snackbar]);
 
@@ -279,27 +277,20 @@ const ProjectProfileEdit = () => {
 
   const saveInternalUsers = useCallback(() => {
     if (initialInternalUsers) {
-      const updateRequest = dispatch(
-        requestProjectInternalUsersUpdate({
-          projectId,
-          payload: {
-            internalUsers: (internalUsers || [])
-              .filter((user) => !!user.userId && (user.role || user.roleName))
-              .map((user) => ({
-                role: user.role,
-                roleName: user.roleName,
-                userId: user.userId as number,
-              })),
-          },
-        })
-      );
-      setUpdateInternalUsersRequestId(updateRequest.requestId);
-
-      return true;
+      void updateInternalUsers({
+        id: projectId,
+        updateProjectInternalUserRequestPayload: {
+          internalUsers: (internalUsers || [])
+            .filter((user) => !!user.userId && (user.role || user.roleName))
+            .map((user) => ({
+              role: user.role,
+              roleName: user.roleName,
+              userId: user.userId as number,
+            })),
+        },
+      });
     }
-
-    return false;
-  }, [dispatch, internalUsers, initialInternalUsers, projectId]);
+  }, [initialInternalUsers, updateInternalUsers, projectId, internalUsers]);
 
   const validateSave = useCallback(() => {
     setValidateFields(false);
@@ -603,11 +594,10 @@ const ProjectProfileEdit = () => {
         />
       )}
       <PageForm
-        busy={[
-          participantProjectUpdateResponse?.status,
-          updateInternalUsersResponse?.status,
-          uploadImagesResponse?.status,
-        ].includes('pending')}
+        busy={
+          [participantProjectUpdateResponse?.status, uploadImagesResponse?.status].includes('pending') ||
+          updateInternalUsersResponse.isLoading
+        }
         cancelID='cancelNewParticipantProject'
         onCancel={handleOnCancel}
         onSave={handleSave}

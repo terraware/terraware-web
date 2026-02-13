@@ -9,6 +9,3 @@ export const selectProject =
     state.projects?.projects?.find((project) => project.id === projectId);
 
 export const selectProjectRequest = (state: RootState, requestId: string) => state.projectsRequests[requestId];
-
-export const selectProjectInternalUsersUpdateRequest = (state: RootState, requestId: string) =>
-  state.projectInternalUsersUpdate[requestId];
