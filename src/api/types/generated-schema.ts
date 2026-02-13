@@ -9746,7 +9746,11 @@ export interface components {
             /** Format: int64 */
             cohortId?: number;
             cohortName?: string;
-            /** @enum {string} */
+            /**
+             * @deprecated
+             * @description Use phase instead.
+             * @enum {string}
+             */
             cohortPhase?: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor" | "Pre-Screen" | "Application";
             confirmedReforestableLand?: number;
             countryAlpha3?: string;
@@ -9779,6 +9783,8 @@ export interface components {
             /** Format: int32 */
             numNativeSpecies?: number;
             perHectareBudget?: number;
+            /** @enum {string} */
+            phase?: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor" | "Pre-Screen" | "Application";
             /** @enum {string} */
             pipeline?: "Accelerator Projects" | "Carbon Supply" | "Carbon Waitlist";
             plantingSitesCql?: string;
@@ -11468,6 +11474,8 @@ export interface components {
             /** Format: int32 */
             numNativeSpecies?: number;
             perHectareBudget?: number;
+            /** @enum {string} */
+            phase?: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor" | "Pre-Screen" | "Application";
             /** @enum {string} */
             pipeline?: "Accelerator Projects" | "Carbon Supply" | "Carbon Waitlist";
             projectArea?: number;
@@ -14280,7 +14288,7 @@ export interface operations {
             query?: {
                 /** @description Update targets for submitted reports. Require TF Experts privileges. */
                 updateSubmitted?: boolean;
-            };
+        };
             header?: never;
             path: {
                 projectId: number;

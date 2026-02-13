@@ -40,7 +40,7 @@ const ScoringWrapper = ({ children, isForm, isLoading, rightComponent }: Props):
         ? [
             {
               name: strings.PROJECTS,
-              to: APP_PATHS.ACCELERATOR_OVERVIEW, // TODO switch to project management page holding the project id
+              to: APP_PATHS.ACCELERATOR_PROJECTS, // TODO switch to project management page holding the project id
             },
             {
               name: project?.name ?? '--',

@@ -14,7 +14,6 @@ import MetricBox from 'src/components/AcceleratorReports/MetricBox';
 import PhotosBox from 'src/components/AcceleratorReports/PhotosBox';
 import Card from 'src/components/common/Card';
 import WrappedPageForm from 'src/components/common/PageForm';
-import useAnnualReportMetrics from 'src/hooks/useAnnualReportMetrics';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
@@ -53,8 +52,6 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
   const year = useMemo(() => {
     return Number(report.startDate.split('-')[0]);
   }, [report]);
-
-  const annualMetrics = useAnnualReportMetrics(projectId, year);
 
   const [record, , onChange, onChangeCallback] = useForm<AcceleratorReportPayload>(report);
   const [validate, setValidate] = useState(false);
@@ -213,7 +210,6 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
             onChange={onChangeCallback('highlights')}
           />
           {record.systemMetrics.map((metric, index) => {
-            const annualMetric = annualMetrics.systemMetrics.find((annual) => annual.metric === metric.metric);
             return (
               <MetricBox
                 editing={true}
@@ -224,12 +220,10 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
                 reportId={reportId}
                 type={'system'}
                 year={year}
-                yearTarget={annualMetric?.target}
               />
             );
           })}
           {record.projectMetrics.map((metric, index) => {
-            const annualMetric = annualMetrics.projectMetrics.find((annual) => annual.id === metric.id);
             return (
               <MetricBox
                 editing={true}
@@ -240,12 +234,10 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
                 reportId={reportId}
                 type={'project'}
                 year={year}
-                yearTarget={annualMetric?.target}
               />
             );
           })}
           {record.standardMetrics.map((metric, index) => {
-            const annualMetric = annualMetrics.standardMetrics.find((annual) => annual.id === metric.id);
             return (
               <MetricBox
                 editing={true}
@@ -256,7 +248,6 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
                 reportId={reportId}
                 type={'standard'}
                 year={year}
-                yearTarget={annualMetric?.target}
               />
             );
           })}

@@ -1,12 +1,7 @@
-import './draftPlantingSites';
-import './fundingEntities';
-import './modules';
-import './notifications';
-import './observationSplats';
-import './observations';
-import './plantingSites';
-import './projectModules';
-import './projects';
-import './publishedReports';
-import './reports';
-import './t0';
+const importAll = (r: __WebpackModuleApi.RequireContext) => {
+  r.keys()
+    .filter((key) => key !== './index.ts')
+    .forEach(r);
+};
+
+importAll(require.context('./', true, /\.ts$/));

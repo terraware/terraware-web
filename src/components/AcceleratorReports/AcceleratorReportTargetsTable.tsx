@@ -1,17 +1,24 @@
-import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router';
 
 import { EditableTable, EditableTableColumn } from '@terraware/web-components';
-import { DateTime } from 'luxon';
 
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
-import useProjectReports from 'src/hooks/useProjectReports';
 import { useOrganization, useUser } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
-import { useUpdateProjectMetricTargetsMutation } from 'src/queries/generated/reports';
+import { useListStandardMetricQuery, useListSystemMetricsQuery } from 'src/queries/generated/reportMetrics';
+import {
+  useLazyGetAcceleratorReportYearsQuery,
+  useLazyGetProjectMetricTargetsQuery,
+  useLazyGetStandardMetricTargetsQuery,
+  useLazyGetSystemMetricTargetsQuery,
+  useLazyListProjectMetricsQuery,
+  useUpdateProjectMetricTargetMutation,
+  useUpdateStandardMetricTargetMutation,
+  useUpdateSystemMetricTargetMutation,
+} from 'src/queries/generated/reports';
 import strings from 'src/strings';
 import { MetricType, SystemMetricName } from 'src/types/AcceleratorReport';
-import { UpdateProjectMetricTargets, UpdateStandardMetricTargets, UpdateSystemMetricTargets } from 'src/types/Report';
 import useSnackbar from 'src/utils/useSnackbar';
 
 export type RowMetric = {
@@ -30,112 +37,153 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
   const { isAllowed } = useUser();
   const { selectedOrganization } = useOrganization();
   const pathParams = useParams<{ projectId: string }>();
-  const projectId = isAcceleratorRoute ? String(pathParams.projectId) : currentParticipantProject?.id?.toString();
-  const [metricsToUse, setMetricsToUse] = useState<RowMetric[]>();
+  const projectId = isAcceleratorRoute ? Number(pathParams.projectId) : currentParticipantProject?.id;
   const snackbar = useSnackbar();
 
-  // TODO, replace with RTK Query once targets are moved to new table in the BE
-  const { reload, acceleratorReports: reports } = useProjectReports(projectId, true, true);
-  const [updateMetricTargets] = useUpdateProjectMetricTargetsMutation();
+  const [getReportsYears, getReportsYearsResponse] = useLazyGetAcceleratorReportYearsQuery();
+  const [listProjectMetrics, listProjectMetricsResponse] = useLazyListProjectMetricsQuery();
+  const listStandardMetricsResponse = useListStandardMetricQuery();
+  const listSystemMetricsResponse = useListSystemMetricsQuery();
+  const [updateProjectMetricTarget] = useUpdateProjectMetricTargetMutation();
+  const [updateStandardMetricTarget] = useUpdateStandardMetricTargetMutation();
+  const [updateSystemMetricTarget] = useUpdateSystemMetricTargetMutation();
+
+  const [listProjectMetricTargets, listProjectMetricTargetsResponse] = useLazyGetProjectMetricTargetsQuery();
+  const [listStandardMetricTargets, listStandardMetricTargetsResponse] = useLazyGetStandardMetricTargetsQuery();
+  const [listSystemMetricTargets, listSystemMetricTargetsResponse] = useLazyGetSystemMetricTargetsQuery();
 
   const isAllowedUpdateReportsTargets = useMemo(
     () => isAllowed('UPDATE_REPORTS_TARGETS', { organization: selectedOrganization }),
     [isAllowed, selectedOrganization]
   );
-  const isAllowedReviewReportTargets = useMemo(() => isAllowed('REVIEW_REPORTS_TARGETS'), [isAllowed]);
 
-  const getReportsYears = useMemo(() => {
-    const availableYears: Set<number> = new Set();
+  const yearRange = useMemo(() => {
+    if (getReportsYearsResponse.data?.years) {
+      const endYear = getReportsYearsResponse.data.years.endYear;
+      const startYear = getReportsYearsResponse.data.years.startYear;
+      return Array.from({ length: endYear - startYear + 1 }, (_, i) => startYear + i);
+    } else {
+      return [];
+    }
+  }, [getReportsYearsResponse.data?.years]);
 
-    reports?.forEach((report) => {
-      const reportYear = DateTime.fromFormat(report.startDate, 'yyyy-MM-dd').year;
-      availableYears.add(reportYear);
+  const projectMetrics = useMemo(
+    () => listProjectMetricsResponse.data?.metrics ?? [],
+    [listProjectMetricsResponse.data?.metrics]
+  );
+  const standardMetrics = useMemo(
+    () => listStandardMetricsResponse.data?.metrics ?? [],
+    [listStandardMetricsResponse.data?.metrics]
+  );
+  const systemMetrics = useMemo(
+    () => listSystemMetricsResponse.data?.metrics ?? [],
+    [listSystemMetricsResponse.data?.metrics]
+  );
+
+  const projectMetricTargets = useMemo(
+    () => listProjectMetricTargetsResponse.data?.targets ?? [],
+    [listProjectMetricTargetsResponse.data?.targets]
+  );
+  const standardMetricTargets = useMemo(
+    () => listStandardMetricTargetsResponse.data?.targets ?? [],
+    [listStandardMetricTargetsResponse.data?.targets]
+  );
+  const systemMetricTargets = useMemo(
+    () => listSystemMetricTargetsResponse.data?.targets ?? [],
+    [listSystemMetricTargetsResponse.data?.targets]
+  );
+
+  const allMetricRows = useMemo((): RowMetric[] => {
+    const systemMetricRows = systemMetrics.map((sm): RowMetric => {
+      const metricTargets = systemMetricTargets.filter((metricTarget) => metricTarget.metric === sm.metric);
+      const targetByYear: { [yearKey: string]: number | undefined } = {};
+
+      metricTargets.forEach((metricTarget) => {
+        const yearKey = `year${metricTarget.year}`;
+        targetByYear[yearKey] = metricTarget.target;
+      });
+
+      return {
+        name: sm.metric,
+        type: sm.type,
+        component: sm.component,
+        id: -1,
+        description: sm.description,
+        metricType: 'system',
+        ...targetByYear,
+      };
     });
 
-    return Array.from(availableYears).sort((a, b) => a - b);
-  }, [reports]);
+    const projectMetricRows = projectMetrics.map((pm): RowMetric => {
+      const metricTargets = projectMetricTargets.filter((metricTarget) => metricTarget.metricId === pm.id);
+      const targetByYear: { [yearKey: string]: number | undefined } = {};
+
+      metricTargets.forEach((metricTarget) => {
+        const yearKey = `year${metricTarget.year}`;
+        targetByYear[yearKey] = metricTarget.target;
+      });
+
+      return {
+        name: pm.name,
+        type: pm.type,
+        component: pm.component,
+        id: pm.id,
+        description: pm.description,
+        metricType: 'project',
+        ...targetByYear,
+      };
+    });
+
+    const standardMetricRows = standardMetrics.map((sm): RowMetric => {
+      const metricTargets = standardMetricTargets.filter((metricTarget) => metricTarget.metricId === sm.id);
+      const targetByYear: { [yearKey: string]: number | undefined } = {};
+
+      metricTargets.forEach((metricTarget) => {
+        const yearKey = `year${metricTarget.year}`;
+        targetByYear[yearKey] = metricTarget.target;
+      });
+
+      return {
+        name: sm.name,
+        type: sm.type,
+        component: sm.component,
+        id: sm.id,
+        description: sm.description,
+        metricType: 'standard',
+        ...targetByYear,
+      };
+    });
+
+    return [...systemMetricRows, ...standardMetricRows, ...projectMetricRows];
+  }, [
+    projectMetricTargets,
+    projectMetrics,
+    standardMetricTargets,
+    standardMetrics,
+    systemMetricTargets,
+    systemMetrics,
+  ]);
 
   useEffect(() => {
-    const metrics: Map<string, RowMetric> = new Map();
-
-    reports?.forEach((report) => {
-      report.systemMetrics.forEach((sm) => {
-        const key = sm.metric;
-        if (!metrics.has(key)) {
-          metrics.set(key, {
-            name: sm.metric,
-            type: sm.type,
-            component: sm.component,
-            id: -1,
-            description: sm.description,
-            metricType: 'system',
-          });
-        }
-      });
-      report.standardMetrics.forEach((sm) => {
-        const key = `standardMetric-${sm.id.toString()}`;
-        if (!metrics.has(key)) {
-          metrics.set(key, {
-            name: sm.name,
-            type: sm.type,
-            component: sm.component,
-            id: sm.id,
-            description: sm.description,
-            metricType: 'standard',
-          });
-        }
-      });
-      report.projectMetrics.forEach((pm) => {
-        const key = `projectMetric-${pm.id.toString()}`;
-        if (!metrics.has(key)) {
-          metrics.set(key, {
-            name: pm.name,
-            type: pm.type,
-            component: pm.component,
-            id: pm.id,
-            description: pm.description,
-            metricType: 'project',
-          });
-        }
-      });
-    });
-
-    reports?.forEach((report) => {
-      if (report.frequency === 'Annual') {
-        const year = DateTime.fromFormat(report.startDate, 'yyyy-MM-dd').year;
-        const yearKey = `year${year}`;
-        const reportIdKey = `reportId${year}`;
-
-        metrics.forEach((metric) => {
-          metric[reportIdKey] = report.id;
-
-          if (metric.id !== -1) {
-            const foundMetric = [...report.standardMetrics, ...report.projectMetrics].find(
-              (met) => met.id === metric.id
-            );
-            metric[yearKey] = foundMetric?.target;
-          } else {
-            const foundMetric = report.systemMetrics.find((met) => met.metric === metric.name);
-            metric[yearKey] = foundMetric?.target;
-          }
-        });
-      }
-    });
-
-    setMetricsToUse(Array.from(metrics.values()));
-  }, [reports]);
+    if (projectId) {
+      void getReportsYears(projectId, true);
+      void listProjectMetrics(projectId, true);
+      void listProjectMetricTargets(projectId, true);
+      void listStandardMetricTargets(projectId, true);
+      void listSystemMetricTargets(projectId, true);
+    }
+  }, [
+    getReportsYears,
+    listProjectMetricTargets,
+    listProjectMetrics,
+    listStandardMetricTargets,
+    listSystemMetricTargets,
+    projectId,
+  ]);
 
   const onSaveYearTarget = useCallback(
     async (row: RowMetric, value: any, year: number) => {
       if (!projectId) {
-        return;
-      }
-
-      const reportIdKey = `reportId${year}`;
-      const reportId = row[reportIdKey] as number | undefined;
-
-      if (!reportId) {
-        snackbar.toastError();
         return;
       }
 
@@ -145,46 +193,44 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
         return;
       }
 
-      let metric: UpdateProjectMetricTargets | UpdateStandardMetricTargets | UpdateSystemMetricTargets;
-
-      switch (row.metricType) {
-        case 'project':
-          metric = {
-            type: 'project',
-            metricId: row.id,
-            targets: [{ reportId, target: newTarget }],
-          };
-          break;
-        case 'standard':
-          metric = {
-            type: 'standard',
-            metricId: row.id,
-            targets: [{ reportId, target: newTarget }],
-          };
-          break;
-        case 'system':
-          metric = {
-            type: 'system',
-            metric: row.name as SystemMetricName,
-            targets: [{ reportId, target: newTarget }],
-          };
-          break;
-      }
-
       try {
-        await updateMetricTargets({
-          projectId: Number(projectId),
-          updateSubmitted: isAllowedReviewReportTargets,
-          updateMetricTargetsRequestPayload: { metric },
-        }).unwrap();
-
+        switch (row.metricType) {
+          case 'project':
+            await updateProjectMetricTarget({
+              projectId,
+              updateProjectMetricTargetRequestPayload: {
+                metricId: row.id,
+                target: newTarget,
+                year,
+              },
+            }).unwrap();
+            break;
+          case 'standard':
+            await updateStandardMetricTarget({
+              projectId,
+              updateStandardMetricTargetRequestPayload: {
+                metricId: row.id,
+                target: newTarget,
+                year,
+              },
+            }).unwrap();
+            break;
+          case 'system':
+            await updateSystemMetricTarget({
+              projectId,
+              updateSystemMetricTargetRequestPayload: {
+                metric: row.name as SystemMetricName,
+                target: newTarget,
+                year,
+              },
+            }).unwrap();
+        }
         snackbar.toastSuccess(strings.CHANGES_SAVED);
-        reload();
       } catch (error) {
         snackbar.toastError();
       }
     },
-    [projectId, updateMetricTargets, isAllowedReviewReportTargets, snackbar, reload]
+    [projectId, snackbar, updateProjectMetricTarget, updateStandardMetricTarget, updateSystemMetricTarget]
   );
 
   const tableColumns = useMemo(() => {
@@ -198,7 +244,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
       },
     ];
 
-    const yearColumns: EditableTableColumn<RowMetric>[] = getReportsYears.map((year) => ({
+    const yearColumns: EditableTableColumn<RowMetric>[] = yearRange.map((year) => ({
       id: `year${year}`,
       header: year.toString(),
       accessorKey: `year${year}` as keyof RowMetric,
@@ -225,17 +271,17 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
     ];
 
     return [...baseColumns, ...yearColumns, ...lastColumns];
-  }, [isAllowedUpdateReportsTargets, getReportsYears, onSaveYearTarget]);
+  }, [yearRange, isAllowedUpdateReportsTargets, onSaveYearTarget]);
 
   const columnOrder = useMemo(() => {
-    const yearIds = getReportsYears.map((year) => `year${year}`);
+    const yearIds = yearRange.map((year) => `year${year}`);
     return ['name', ...yearIds, 'type', 'component'];
-  }, [getReportsYears]);
+  }, [yearRange]);
 
   return (
     <EditableTable
       columns={tableColumns}
-      data={metricsToUse || []}
+      data={allMetricRows}
       enableEditing={true}
       enableSorting={true}
       enableGlobalFilter={true}

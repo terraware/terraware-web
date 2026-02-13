@@ -6,6 +6,7 @@ ACCELERATOR_CONSOLE,Consola del acelerador,4d54c8c9
 ACCELERATOR_ORGS_EMPTY_WARNING,"No hay organizaciones aceleradoras con proyectos no asignados a un participante. Aun así, puede crear un participante sin asignación de proyecto.",f58c59a4
 ACCELERATOR_ORGS_EXHAUSTED_WARNING,No quedan organizaciones aceleradoras con proyectos no asignados a un participante.,e88b983d
 ACCELERATOR_ORGS_TOOLTIP,Organizaciones aceleradoras con proyectos no asignados a un participante,476c5020
+ACCELERATOR_PROJECTS,Proyectos del Acelerador,46486823
 ACCELERATOR_WELCOME_ALT,Dos personas mantienen plántulas en un vivero,21283bc3
 ACCELERATOR_WELCOME_CONTENT,Terraware será su fuente de información para el programa acelerador de Terraformation. Repase su lista de cosas por hacer a continuación para ver las tareas que necesita revisar y completar antes de sus fechas de entrega. Vea todas sus tareas para la fase actual haciendo clic en Entregables en el menú izquierdo.,f5fb9d32
 ACCELERATOR_WELCOME_HEADER,¡Bienvenido al Programa Acelerador!,f8e75345
@@ -164,6 +165,7 @@ ANNOTATIONS,Anotaciones,c15a3aa4
 ANNUAL_TARGET,Objetivo anual,ea52c210
 ANSWER_APPROVED,Respuesta aprobada,8a11d452
 ANSWERS_UPDATE_NEEDED,Se necesita actualizar las respuestas,5faf2563
+APPLICANTS,Solicitantes,7cb94d31
 APPLICATION,Uso,83d372a5
 APPLICATION_ERROR_NO_PROJECT_BOUNDARY,Error: No se estableció un límite del proyecto,ebf37eb4
 APPLICATION_FOR_PROJECT,Solicitud para {0},06b35f80
@@ -368,6 +370,8 @@ CONDITIONAL,Condicional,605c68a6
 CONFIRM,Confirmar,fe564422
 CONFIRM_UPDATE_ALL_COHORT_MODULES,Los cambios en los módulos de este proyecto afectarán a todos los proyectos en la cohorte del proyecto. Esto es temporal mientras se eliminan las cohortes de Terraware. ¿Está seguro de que desea modificar los módulos para todos los proyectos de la cohorte?,db947325
 CONFIRM_UPDATE_ALL_COHORT_MODULES_TITLE,Confirmar actualización de todos los módulos de la cohorte,1b173015
+CONFIRM_UPDATE_ALL_COHORT_PHASE,Los cambios en la fase de este proyecto afectarán a todos los proyectos en la cohorte del proyecto. Esto es temporal mientras se eliminan las cohortes de Terraware. ¿Está seguro de que desea modificar la fase de todos los proyectos en la cohorte?,26d2dc4e
+CONFIRM_UPDATE_ALL_COHORT_PHASE_TITLE,Confirmar actualización de fase para todos los proyectos del cohorte,774d5ec0
 CONFIRMED_RESTORABLE_LAND,Terreno recuperable TF (ha),efa25d21
 CONSERVATION_CATEGORY,Categoría de lista roja de la UICN,115916f3
 CONTACT_TYPE,Tipo de contacto,413b6c0e
@@ -416,6 +420,7 @@ CULTIVATED_EX_SITU_DESCRIPTION,"Plantas que se han cultivado en un vivero, área
 CURRENT_NEXT_OBSERVATION,Observación actual/siguiente,50735263
 CURRENT_PHASE,Fase actual,24194250
 CURRENT_TIMELINE,Cronología actual,2dcbaeeb
+CURRENT_VIEW,Vista actual,8b3a3d54
 CUSTOMIZE_COLUMNS,Personalizar columnas...,b0c57f55
 CUSTOMIZE_TABLE_COLUMNS,Personalizar las columnas de la tabla,e075dc8a
 CUSTOMIZE_TABLE_COLUMNS_DESCRIPTION,Seleccione las columnas que desee añadir. Deseleccione las columnas que desee eliminar.,b45076cc
@@ -550,7 +555,9 @@ DRAFT_PLANTING_SITES,Sitios de Plantación en Borrador,97403fcc
 DRAW_BOUNDARY_WITHIN_MAP,Trazar los límites dentro de un mapa,d1ee6da4
 DRAW_PROPOSED_PROJECT_BOUNDARY,Trazar el límite del proyecto propuesto,8b73e819
 DRONE_FLIGHT,Vuelo de dron,af8ec693
+DROPBOX,Dropbox,b2a4b1cb
 DROPBOX_FOLDER_URL,URL de la carpeta de Dropbox,0ebe8363
+DROPBOX_PATH,Ruta de Dropbox,8c95fa5f
 DRYING,Secando,97084385
 DUE,Vence: {0},b72aaa1e
 DUE_DATE,Fecha límite,705f0661
@@ -732,6 +739,7 @@ FILTER_SHOW_EMPTY_BATCHES,Mostrar lotes vacíos,f5c7fca1
 FILTER_SHOW_EMPTY_NURSERIES,Mostrar viveros sin inventario,6d351b84
 FILTER_SHOW_EMPTY_SPECIES,Mostrar especies sin inventario,0de9ee0c
 FILTERS,Filtros,c3d13364
+FILTERS_APPLIED,Filtros aplicados,75d4dd7e
 FINAL_QTY,Cantidad final,47530c05
 FINANCE,Finanzas,ae6619da
 FINANCIAL_SUMMARIES,Resúmenes financieros,d26c4f56
@@ -1308,7 +1316,6 @@ OR_SHRUBS,O arbustos,a86cd003
 ORBIT,Orbitar,8e3af3cb
 ORG_NOTIFICATION_ACTION,"Para cambiar la preferencia, ve a [Ajustes > Organización]",5cbf22d7
 ORGANIZATION,Organización,b1115ab0
-ORGANIZATION_ADDED,Se agregó organización,0601cc78
 ORGANIZATION_CREATE_FAILED,No se puede crear la organización.,969a54ff
 ORGANIZATION_CREATED_MSG,Puede acceder a las organizaciones en las que se encuentra dando clic en el menú de perfil de usuario en la esquina superior derecha.,60a57d86
 ORGANIZATION_CREATED_MSG_DESKTOP,"Puede acceder a las organizaciones en las que está dando clic en la flecha en la esquina superior izquierda, a un lado del logo.",b843e803
@@ -1380,6 +1387,7 @@ PH,pH,8e3a7381
 PHASE,Fase,f9d98417
 PHASE_1,Fase 1 - Estudio de factibilidad,94889837
 PHASE_1_SCORE,Puntuación de la Etapa 1,9f83e45f
+PHASE_PROJECT_REQUIRED_FIELDS_ERROR,"El nombre del archivo, el enlace de GDrive y la ruta de Dropbox son obligatorios cuando se selecciona una fase.",93c006c2
 PHOTO_DATE_TIME,Fecha y hora de la foto,22e81710
 PHOTO_NORTHEAST_QUADRAT,Cuadrícula noreste,05b4f331
 PHOTO_NORTHWEST_QUADRAT,Cuadrícula noroeste,9af609f8
@@ -1664,8 +1672,6 @@ REMOVE_FUNDER_MODAL_TEXT,"¿Seguro que quiere eliminar a {0}? Si los elimina, ya
 REMOVE_FUNDERS,Eliminar financiadores,79056524
 REMOVE_FUNDERS_MODAL_TEXT,"¿Estás seguro de que quieres eliminar a estos financiadores? Al eliminarlos, ya no tendrán acceso a los datos de esta entidad financiadora.",39e7bdae
 REMOVE_ONLY_ONE_ORG_AT_A_TIME,Solo puede eliminarse a sí mismo de una organización a la vez.,26b664ad
-REMOVE_ORGANIZATION,¿Eliminar organización?,de4ffcda
-REMOVE_ORGANIZATION_MODAL_TEXT,¿Está seguro de que desea eliminar estas organizaciones de la lista de Participantes en el acelerador?,0572dfa5
 REMOVE_PARTICIPANT,Eliminar participante,54e10793
 REMOVE_PARTICIPANT_CONFIRMATION,¿Está seguro de que desea eliminar al participante {0}? Esta acción no se puede deshacer.,e04e1795
 REMOVE_PEOPLE,Eliminar personas,7fa1c6ab

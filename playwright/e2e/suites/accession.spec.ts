@@ -104,7 +104,7 @@ test.describe('AccessionTests', () => {
     await page.getByRole('tab', { name: 'Viability Tests' }).click();
     await page.getByRole('button', { name: 'Add Test' }).click();
     await page.locator('#seed-type').click();
-    await page.getByText('Fresh').click();
+    await page.getByText('Fresh', exactOptions).click();
     await page.locator('#substrate').click();
     await page.getByText('Nursery Media').click();
     await page.locator('#seedsTested').getByRole('textbox').fill('5');
@@ -236,7 +236,7 @@ test.describe('AccessionTests', () => {
       await expect(page.getByRole('main')).toContainText('20');
       await page.getByRole('button', { name: 'Edit' }).click();
       await page.getByPlaceholder('Select...').nth(1).click();
-      await page.getByText('Fresh').click();
+      await page.getByText('Fresh', exactOptions).click();
       await page.getByRole('button', { name: 'Add Observation' }).click();
       await page.locator('#seedsGerminated').getByRole('textbox').fill('15');
       await page.getByRole('button', { name: 'Save' }).click();

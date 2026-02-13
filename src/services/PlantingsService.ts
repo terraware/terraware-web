@@ -34,7 +34,7 @@ const listPlantings = async (
     ],
     search: SearchService.convertToSearchNodePayload(searchCriteria, organizationId),
     sortOrder: sortOrder ? [sortOrder] : [{ field: 'delivery.plantings.id', direction: 'Ascending' }],
-    count: 1000,
+    count: 0,
   };
 
   return await SearchService.search(searchParams);

@@ -34,6 +34,8 @@ export interface ProjectFieldEditProps {
   // Defaults to 'text'
   type?: Props['type'];
   value?: EditFieldValue;
+  required?: boolean;
+  validate?: boolean;
 }
 
 export const ProjectFieldValue = ({ value, units }: { value: DisplayFieldValue; units?: DisplayFieldValue }) => {

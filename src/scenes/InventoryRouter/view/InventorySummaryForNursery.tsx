@@ -10,6 +10,7 @@ import NurserySummaryService, {
 } from 'src/services/NurserySummaryService';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import useSnackbar from 'src/utils/useSnackbar';
 
 type InventorySummaryForNurseryProps = {
@@ -23,6 +24,7 @@ export default function InventorySummaryForNursery({
 }: InventorySummaryForNurseryProps): JSX.Element {
   const snackbar = useSnackbar();
   const { isMobile } = useDeviceInfo();
+  const numberFormatter = useNumberFormatter();
 
   const [summary, setSummary] = useState<NurserySummaryPayload | undefined>();
 
@@ -62,49 +64,49 @@ export default function InventorySummaryForNursery({
     return [
       {
         label: strings.GERMINATION_ESTABLISHMENT_QUANTITY,
-        value: germinatingQuantity || 0,
+        value: numberFormatter.format(germinatingQuantity || 0),
         tooltipTitle: strings.TOOLTIP_GERMINATION_ESTABLISHMENT_QUANTITY,
         gridColumns,
       },
       {
         label: strings.ACTIVE_GROWTH_QUANTITY,
-        value: activeGrowthQuantity,
+        value: numberFormatter.format(activeGrowthQuantity),
         tooltipTitle: strings.TOOLTIP_ACTIVE_GROWTH_QUANTITY,
         gridColumns,
       },
       {
         label: strings.HARDENING_OFF_QUANTITY,
-        value: hardeningOffQuantity,
+        value: numberFormatter.format(hardeningOffQuantity),
         tooltipTitle: strings.TOOLTIP_HARDENING_OFF_QUANTITY,
         gridColumns,
       },
       {
         label: strings.READY_TO_PLANT_QUANTITY,
-        value: readyQuantity,
+        value: numberFormatter.format(readyQuantity),
         tooltipTitle: strings.TOOLTIP_READY_TO_PLANT_QUANTITY,
         gridColumns,
       },
       {
         label: strings.TOTAL_QUANTITY,
-        value: totalQuantity,
+        value: numberFormatter.format(totalQuantity),
         tooltipTitle: strings.TOOLTIP_TOTAL_QUANTITY,
         gridColumns,
       },
       {
         label: strings.GERMINATION_ESTABLISHMENT_RATE,
-        value: `${germinationRate || 0}%`,
+        value: `${numberFormatter.format(germinationRate || 0)}%`,
         tooltipTitle: '',
         gridColumns,
       },
       {
         label: strings.LOSS_RATE,
-        value: `${lossRate || 0}%`,
+        value: `${numberFormatter.format(lossRate || 0)}%`,
         tooltipTitle: '',
         gridColumns,
       },
       {
         label: strings.TOTAL_WITHDRAWN,
-        value: totalWithdrawn,
+        value: numberFormatter.format(totalWithdrawn),
         tooltipTitle: strings.TOOLTIP_TOTAL_WITHDRAWN,
         gridColumns,
       },
@@ -122,7 +124,7 @@ export default function InventorySummaryForNursery({
         gridColumns,
       },
     ];
-  }, [isMobile, summary]);
+  }, [isMobile, numberFormatter, summary]);
 
   return (
     <Grid container spacing={3}>

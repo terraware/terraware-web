@@ -328,7 +328,7 @@ export default function NavBar({
         <NavItem
           label={strings.ACCELERATOR_CONSOLE}
           icon='home'
-          onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_OVERVIEW)}
+          onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_PROJECTS)}
           id='console'
         />
       )}

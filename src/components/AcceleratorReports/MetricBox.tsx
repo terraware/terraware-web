@@ -56,7 +56,6 @@ const MetricBox = ({
   onEditChange,
   canEdit,
   year,
-  yearTarget,
 }: {
   hideStatusBadge?: boolean;
   metric: ReportProjectMetricPayload | ReportSystemMetricPayload | ReportStandardMetricPayload;
@@ -67,7 +66,6 @@ const MetricBox = ({
     type: MetricType
   ) => void;
   year?: number;
-  yearTarget?: number;
 } & ReportBoxProps): JSX.Element => {
   const theme = useTheme();
   const [record, setRecord, onChange, onChangeCallback] = useForm<
@@ -251,7 +249,7 @@ const MetricBox = ({
               </Typography>
               <Box display={'flex'} alignItems={'center'} paddingTop={1.5} paddingBottom={theme.spacing(2)}>
                 <Typography>
-                  {getProgressValue() || 0} / {yearTarget || 0} ({year} {strings.TARGET})
+                  {getProgressValue() || 0} / {metric.target || 0} ({year} {strings.TARGET})
                 </Typography>
                 {!metric.overrideValue && (
                   <Box paddingTop={1} paddingLeft={1.5}>
@@ -308,7 +306,7 @@ const MetricBox = ({
                   min={0}
                 />
                 <Typography paddingTop={3} paddingLeft={0.5}>
-                  / {yearTarget || 0} ({year} {strings.TARGET})
+                  / {metric.target || 0} ({year} {strings.TARGET})
                 </Typography>
                 {'unit' in record && record.unit && (
                   <Box paddingLeft={theme.spacing(3)}>

@@ -234,7 +234,7 @@ const ProjectProfileGisMaps = () => {
         ? [
             {
               name: strings.PROJECTS,
-              to: APP_PATHS.ACCELERATOR_OVERVIEW,
+              to: APP_PATHS.ACCELERATOR_PROJECTS,
             },
             {
               name: projectData?.project?.name ?? '--',

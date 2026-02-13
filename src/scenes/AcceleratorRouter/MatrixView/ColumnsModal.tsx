@@ -44,7 +44,7 @@ type ColumnsModalProps = {
 export function baseColumns() {
   return [
     { id: 'projectName', name: strings.DEAL_NAME },
-    { id: 'cohortPhase', name: strings.PHASE },
+    { id: 'phase', name: strings.PHASE },
     { id: 'eligibleLand', name: strings.ELIGIBLE_LAND },
     { id: 'countryName', name: strings.COUNTRY },
     { id: 'projectLead', name: strings.PROJECT_LEAD },
