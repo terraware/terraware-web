@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/39</span>
+                <span class='fraction'>0/41</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/24</span>
+                <span class='fraction'>0/28</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/36</span>
+                <span class='fraction'>0/38</span>
             </div>
         
             
@@ -107,7 +107,23 @@
 <a name='L42'></a><a href='#L42'>42</a>
 <a name='L43'></a><a href='#L43'>43</a>
 <a name='L44'></a><a href='#L44'>44</a>
-<a name='L45'></a><a href='#L45'>45</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L45'></a><a href='#L45'>45</a>
+<a name='L46'></a><a href='#L46'>46</a>
+<a name='L47'></a><a href='#L47'>47</a>
+<a name='L48'></a><a href='#L48'>48</a>
+<a name='L49'></a><a href='#L49'>49</a>
+<a name='L50'></a><a href='#L50'>50</a>
+<a name='L51'></a><a href='#L51'>51</a>
+<a name='L52'></a><a href='#L52'>52</a>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -145,64 +161,96 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > useCallback, </span>useEffect, useState } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > useCallback, </span>useEffect, useState } from 'react';
 <span class="cstat-no" title="statement not covered" ></span>
 import { Box, useTheme <span class="cstat-no" title="statement not covered" >} from '@mui/material';</span>
 import { Textfield } fro<span class="cstat-no" title="statement not covered" >m '@terraware/web-component</span>s';
 <span class="cstat-no" title="statement not covered" ></span>
-import { ProjectFie<span class="cstat-no" title="statement not covered" >ldEditProps } from '.';</span>
-import GridEntr<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >yW</span>rapper from './GridEntryWrapper';</span>
-<span class="cstat-no" title="statement not covered" ></span>
-cons<span class="cstat-no" title="statement not covered" >t ProjectFieldTextfield = ({ height, id, label, onChange, type,</span> value, md, tooltip }: ProjectFieldEditProps) =&gt; {
-  const theme = useTheme();
+import { useLocaliz<span class="cstat-no" title="statement not covered" >ation } from 'src/providers';</span>
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >  const [localValue, setLocalValue] = useState&lt;string | undefined&gt;();</span>
-<span class="cstat-no" title="statement not covered" ></span>
-  cons<span class="cstat-no" title="statement not covered" >t handleOnChange = useCallback(</span>
-    (_va<span class="cstat-no" title="statement not covered" >lue: unknown) =&gt; {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-      setLocalValue(`${_value as string}`);
-<span class="cstat-no" title="statement not covered" >      onChang</span>e(id, _value as string);
-    },
-    [id, onCha<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ng</span>e]<span class="cstat-no" title="statement not covered" ></span></span>
-  );
+im<span class="cstat-no" title="statement not covered" >port { ProjectFieldEditProps } from '.';</span>
+impo<span class="cstat-no" title="statement not covered" >rt GridEntryWrapper from './GridEntryWrapper';</span>
 &nbsp;
-  useEffect(() =&gt; {
-    if (value !== undefined) {
-      setLocalValue(`${value}`);
+const ProjectField<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Te</span>xtfield = ({</span>
+<span class="cstat-no" title="statement not covered" >  height,</span>
+  id<span class="cstat-no" title="statement not covered" >,</span>
+  labe<span class="cstat-no" title="statement not covered" >l,</span>
+  md,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  onChange,
+<span class="cstat-no" title="statement not covered" >  required,</span>
+  tooltip,
+  type,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  validate,
+  value,
+}: ProjectFieldEditProps) =&gt; {
+  const theme = useTheme();
+  const { strings } = useLocalization();
+&nbsp;
+  const [localValue, setLocalValue] = useState&lt;string | undefined&gt;();
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  const handleOnChan<span class="cstat-no" title="statement not covered" >ge </span>= useCallback(
+<span class="cstat-no" title="statement not covered" >    (_value: unknown) =&gt; {</span>
+      setLo<span class="fstat-no" title="function not covered" >ca</span>lVal<span class="cstat-no" title="statement not covered" >ue(`${_value a</span>s string}`);
+      onChange(id, _value as string);
+<span class="cstat-no" title="statement not covered" >    },</span>
+    [id, onChange]<span class="cstat-no" title="statement not covered" ></span>
+  );<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+  useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
+    if (value !== undefined) {<span class="cstat-no" title="statement not covered" ></span>
+      setLocalValue(`${value}`<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >);</span></span>
     }
   }, [value]);
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  return (<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >    &lt;GridEntryWrapper height={height} md={md || 3}&gt;</span>
-      &lt;Box <span class="fstat-no" title="function not covered" >pa</span>ddin<span class="cstat-no" title="statement not covered" >gX={theme.spac</span>ing(2)}&gt;
+&nbsp;
+  return (
+    &lt;GridEntryWrapper height={height} md={md || 3}&gt;
+      &lt;Box paddingX={theme.spacing(2)}&gt;
         &lt;Textfield
-<span class="cstat-no" title="statement not covered" >          id={id}</span>
-          label={la<span class="cstat-no" title="statement not covered" >bel}</span>
-          onChange={ha<span class="cstat-no" title="statement not covered" >ndleOnChange}</span>
-          value={localValue}<span class="cstat-no" title="statement not covered" ></span>
-          type={type || 'text'<span class="cstat-no" title="statement not covered" >}</span>
-          tooltipTitle={toolti<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >p}</span></span>
-        /&gt;<span class="cstat-no" title="statement not covered" ></span>
-      &lt;/Box&gt;<span class="cstat-no" title="statement not covered" ></span>
-    &lt;/GridEntryWrapper&gt;<span class="cstat-no" title="statement not covered" ></span>
-  );<span class="fstat-no" title="function not covered" ></span>
-};<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span>
-export default ProjectFieldTextfield;
-&nbsp;</pre></td></tr></table></pre>
+          id={id}
+          label={label}
+          onChange={handleOnChange}
+          value={localValue}
+          type={<span class="cstat-no" title="statement not covered" >type || 'text'}</span>
+          tooltipTitle<span class="cstat-no" title="statement not covered" >={tooltip}</span>
+          required={required}<span class="cstat-no" title="statement not covered" ></span>
+          errorText={vali<span class="cstat-no" title="statement not covered" >date &amp;&amp; !localValue ? strings.REQUIRED_FIELD : undefined}</span>
+<span class="fstat-no" title="function not covered" ></span>        /&gt;
+<span class="cstat-no" title="statement not covered" >      &lt;/Box&gt;</span>
+    &lt;/<span class="cstat-no" title="statement not covered" >GridEntryWrapper&gt;</span>
+  );
+};
+&nbsp;
+ex<span class="cstat-no" title="statement not covered" >port default ProjectFieldTex<span class="fstat-no" title="function not covered" >tf</span>ield;</span>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-13T02:24:27.278Z
+                at 2026-02-13T02:34:59.146Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

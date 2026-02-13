@@ -1,3 +1,4 @@
+d47e114e1944 SW-8034 Set fields as required when phase is selected (#5216)
 9e6c9fb11fb5 SW-8034 Add new fields to Project Profile View and Edit (#5212)
 494be143d7dc SW-8043: Use localized number formatting in Inventory By Nursery and By Batch tables and Details (#5221)
 9d26849ded0b SW-8054 Remove Organizations console page (#5219)
