@@ -12,8 +12,9 @@ import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import CohortModulesTable from 'src/scenes/AcceleratorRouter/Cohorts/CohortModulesTable';
 import strings from 'src/strings';
-import { CohortPhaseType, CreateCohortRequestPayload, UpdateCohortRequestPayload } from 'src/types/Cohort';
+import { CreateCohortRequestPayload, UpdateCohortRequestPayload } from 'src/types/Cohort';
 import { CohortModule } from 'src/types/Module';
+import { PhaseType } from 'src/types/Phase';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 type CohortFormProps<T extends CreateCohortRequestPayload | UpdateCohortRequestPayload> = {
@@ -55,7 +56,7 @@ export default function CohortForm<T extends CreateCohortRequestPayload | Update
 
   const currentPhaseDropdownOptions = useMemo((): {
     label: string;
-    value: CohortPhaseType;
+    value: PhaseType;
   }[] => {
     if (!activeLocale) {
       return [];

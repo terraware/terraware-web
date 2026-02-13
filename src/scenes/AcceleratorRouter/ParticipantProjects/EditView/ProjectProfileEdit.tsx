@@ -40,8 +40,8 @@ import { selectGlobalRolesUsersSearchRequest } from 'src/redux/features/globalRo
 import { requestListOrganizationUsers } from 'src/redux/features/organizationUser/organizationUsersAsyncThunks';
 import { selectOrganizationUsers } from 'src/redux/features/organizationUser/organizationUsersSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { CohortPhaseType } from 'src/types/Cohort';
 import { LAND_USE_MODEL_TYPES, ParticipantProject } from 'src/types/ParticipantProject';
+import { PhaseType } from 'src/types/Phase';
 import { ProjectInternalUserRole, getProjectInternalUserRoleString, projectInternalUserRoles } from 'src/types/Project';
 import { OrganizationUser } from 'src/types/User';
 import { SelectVariable, VariableWithValues } from 'src/types/documentProducer/Variable';
@@ -556,7 +556,7 @@ const ProjectProfileEdit = () => {
 
   const phaseOptions: {
     label: string;
-    value: CohortPhaseType | undefined;
+    value: PhaseType | undefined;
   }[] = useMemo(
     () => [
       { label: '--', value: undefined },
@@ -570,7 +570,7 @@ const ProjectProfileEdit = () => {
 
   const setPhase = useCallback(
     (_: string, value: string) => {
-      onChangeParticipantProject('phase', value === 'undefined' ? undefined : (value as CohortPhaseType));
+      onChangeParticipantProject('phase', value === 'undefined' ? undefined : (value as PhaseType));
     },
     [onChangeParticipantProject]
   );
