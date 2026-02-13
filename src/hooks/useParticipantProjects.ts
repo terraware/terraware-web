@@ -1,14 +1,12 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 
 import { useLocalization } from 'src/providers';
-import { requestListParticipantProjects } from 'src/redux/features/participantProjects/participantProjectsAsyncThunks';
-import { selectParticipantProjectsListRequest } from 'src/redux/features/participantProjects/participantProjectsSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { ParticipantProject } from 'src/types/ParticipantProject';
 import useSnackbar from 'src/utils/useSnackbar';
 
+import { useLazyListProjectAcceleratorDetailsQuery } from '../queries/generated/acceleratorProjects';
+
 export type UseParticipantProjectsResult = {
-  error: string | null;
   isLoading: boolean;
   participantProjects: ParticipantProject[];
   refetch: () => void;
@@ -16,47 +14,36 @@ export type UseParticipantProjectsResult = {
 
 export const useParticipantProjects = (): UseParticipantProjectsResult => {
   const { activeLocale, strings } = useLocalization();
-  const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
 
-  const [participantProjects, setParticipantProjects] = useState<ParticipantProject[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [listRequestId, setListRequestId] = useState('');
-
-  const participantProjectsListResult = useAppSelector(selectParticipantProjectsListRequest(listRequestId));
+  const [listProjectAcceleratorDetails, listDetailsResponse] = useLazyListProjectAcceleratorDetailsQuery();
 
   const fetchParticipantProjects = useCallback(() => {
     if (!activeLocale) {
       return;
     }
 
-    setIsLoading(true);
-    setError(null);
-    const request = dispatch(requestListParticipantProjects({ locale: activeLocale }));
-    setListRequestId(request.requestId);
-  }, [activeLocale, dispatch]);
+    void listProjectAcceleratorDetails();
+  }, [activeLocale, listProjectAcceleratorDetails]);
 
   useEffect(() => {
     fetchParticipantProjects();
   }, [fetchParticipantProjects]);
 
+  const participantProjects = useMemo(
+    () => (listDetailsResponse.isSuccess ? listDetailsResponse.data.details : []),
+    [listDetailsResponse]
+  );
+
   useEffect(() => {
-    if (participantProjectsListResult?.status === 'error') {
+    if (listDetailsResponse.isError) {
       const errorMessage = strings.GENERIC_ERROR;
-      setError(errorMessage);
       snackbar.toastError(errorMessage);
-      setIsLoading(false);
-    } else if (participantProjectsListResult?.status === 'success') {
-      setParticipantProjects(participantProjectsListResult?.data || []);
-      setError(null);
-      setIsLoading(false);
     }
-  }, [participantProjectsListResult, snackbar, strings]);
+  }, [listDetailsResponse.isError, snackbar, strings]);
 
   return {
-    error,
-    isLoading,
+    isLoading: listDetailsResponse.isLoading,
     participantProjects,
     refetch: fetchParticipantProjects,
   };
