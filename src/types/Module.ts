@@ -88,6 +88,6 @@ export type ModuleSearchResult = {
   id: number;
   name: string;
   phaseId: string;
-  cohortsQuantity: number;
+  projectsQuantity: number;
   deliverablesQuantity: number;
 };
