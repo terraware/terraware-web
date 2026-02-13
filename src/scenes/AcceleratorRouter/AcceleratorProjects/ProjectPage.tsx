@@ -34,7 +34,7 @@ const ProjectPage = () => {
   const theme = useTheme();
   const { isAllowed } = useUser();
   const projectData = useAcceleratorProjectData();
-  const { goToAcceleratorActivityCreate, goToDocumentNew, goToParticipantProjectEdit } = useNavigateTo();
+  const { goToAcceleratorActivityCreate, goToDocumentNew, goToAcceleratorProjectEdit } = useNavigateTo();
   const { getApplicationByProjectId } = useApplicationData();
   const { projectScore } = useProjectScore(projectData.projectId);
   const { phaseVotes } = useVotingData();
@@ -142,8 +142,8 @@ const ProjectPage = () => {
   }, [activeTab, publishedReports]);
 
   const goToProjectEdit = useCallback(
-    () => goToParticipantProjectEdit(projectData.projectId),
-    [goToParticipantProjectEdit, projectData.projectId]
+    () => goToAcceleratorProjectEdit(projectData.projectId),
+    [goToAcceleratorProjectEdit, projectData.projectId]
   );
 
   const goToProjectActivityCreate = useCallback(() => {
