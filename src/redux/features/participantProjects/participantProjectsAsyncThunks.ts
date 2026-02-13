@@ -1,23 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { Response2 } from 'src/services/HttpService';
-import ParticipantProjectService, { ParticipantProjectData } from 'src/services/ParticipantProjectService';
+import ParticipantProjectService from 'src/services/ParticipantProjectService';
 import strings from 'src/strings';
 import { ParticipantProject } from 'src/types/ParticipantProject';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
-
-export const requestGetParticipantProject = createAsyncThunk(
-  'participantProjects/get-one',
-  async (participantProjectId: number, { rejectWithValue }) => {
-    const response: Response2<ParticipantProjectData> = await ParticipantProjectService.get(participantProjectId);
-
-    if (response && response.requestSucceeded) {
-      return response.data?.details;
-    }
-
-    return rejectWithValue(strings.GENERIC_ERROR);
-  }
-);
 
 export type ListRequest = {
   locale?: string;

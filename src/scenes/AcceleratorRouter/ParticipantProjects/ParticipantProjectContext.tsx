@@ -1,7 +1,6 @@
 import { createContext, useContext } from 'react';
 
 import { Crumb } from 'src/components/BreadCrumbs';
-import { Statuses } from 'src/redux/features/asyncUtils';
 import { AcceleratorOrg } from 'src/types/Accelerator';
 import { ParticipantProject } from 'src/types/ParticipantProject';
 import { Project, ProjectMeta } from 'src/types/Project';
@@ -13,7 +12,7 @@ export type ParticipantProjectData = {
   projectId: number;
   project?: Project;
   projectMeta?: ProjectMeta;
-  status?: Statuses;
+  isLoading?: boolean;
   reload: () => void;
 };
 

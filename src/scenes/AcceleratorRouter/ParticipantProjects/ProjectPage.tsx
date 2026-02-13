@@ -304,7 +304,7 @@ const ProjectPage = () => {
         hierarchicalCrumbs={false}
         rightComponent={rightComponent}
       >
-        {projectData.status === 'pending' && <BusySpinner />}
+        {projectData.isLoading && <BusySpinner />}
 
         {!isDataReady && (
           <Box display='flex' justifyContent='center' padding={4}>

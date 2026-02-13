@@ -5,8 +5,7 @@ import { APP_PATHS } from 'src/constants';
 import { useAcceleratorOrgs } from 'src/hooks/useAcceleratorOrgs';
 import { useLocalization } from 'src/providers';
 import { useProjectData } from 'src/providers/Project/ProjectContext';
-import { requestGetParticipantProject } from 'src/redux/features/participantProjects/participantProjectsAsyncThunks';
-import { selectParticipantProjectRequest } from 'src/redux/features/participantProjects/participantProjectsSelectors';
+import { useLazyGetProjectAcceleratorDetailsQuery } from 'src/queries/generated/acceleratorProjects';
 import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
 import { selectUser } from 'src/redux/features/user/usersSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -14,7 +13,6 @@ import strings from 'src/strings';
 import { AcceleratorOrg } from 'src/types/Accelerator';
 import { ParticipantProject } from 'src/types/ParticipantProject';
 import { ProjectMeta } from 'src/types/Project';
-import useSnackbar from 'src/utils/useSnackbar';
 import { getUserDisplayName } from 'src/utils/user';
 
 import { ParticipantProjectContext, ParticipantProjectData } from './ParticipantProjectContext';
@@ -25,7 +23,6 @@ export type Props = {
 
 const ParticipantProjectProvider = ({ children }: Props) => {
   const dispatch = useAppDispatch();
-  const snackbar = useSnackbar();
   const { activeLocale } = useLocalization();
   const { project, projectId } = useProjectData();
   const { acceleratorOrgs, reload: reloadAll } = useAcceleratorOrgs({
@@ -33,15 +30,26 @@ const ParticipantProjectProvider = ({ children }: Props) => {
     includeParticipants: true,
   });
 
-  const [participantProject, setParticipantProject] = useState<ParticipantProject>();
+  const [getProjectAcceleratorDetails, projectAcceleratorDetailsResponse] = useLazyGetProjectAcceleratorDetailsQuery();
+
+  useEffect(() => {
+    if (projectId !== -1) {
+      void getProjectAcceleratorDetails(projectId);
+    }
+  }, [projectId, getProjectAcceleratorDetails]);
+
+  const participantProject: ParticipantProject | undefined = useMemo(() => {
+    if (projectAcceleratorDetailsResponse.isSuccess) {
+      return projectAcceleratorDetailsResponse.data.details;
+    }
+  }, [projectAcceleratorDetailsResponse]);
+
   const [participantProjectData, setParticipantProjectData] = useState<ParticipantProjectData>({
     crumbs: [],
     projectId,
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     reload: () => {},
   });
-
-  const getParticipantProjectResult = useAppSelector(selectParticipantProjectRequest(projectId));
 
   const createdByUser = useAppSelector(selectUser(project?.createdBy));
   const modifiedByUser = useAppSelector(selectUser(project?.modifiedBy));
@@ -57,15 +65,9 @@ const ParticipantProjectProvider = ({ children }: Props) => {
   const reload = useCallback(() => {
     reloadAll();
     if (projectId !== -1) {
-      void dispatch(requestGetParticipantProject(projectId));
+      void getProjectAcceleratorDetails(projectId);
     }
-  }, [dispatch, projectId, reloadAll]);
-
-  useEffect(() => {
-    if (projectId !== -1) {
-      void dispatch(requestGetParticipantProject(projectId));
-    }
-  }, [dispatch, projectId]);
+  }, [projectId, reloadAll, getProjectAcceleratorDetails]);
 
   useEffect(() => {
     const userIds = new Set([project?.createdBy, project?.modifiedBy]);
@@ -84,18 +86,6 @@ const ParticipantProjectProvider = ({ children }: Props) => {
   }, [createdByUser, modifiedByUser]);
 
   useEffect(() => {
-    if (!getParticipantProjectResult) {
-      return;
-    }
-
-    if (getParticipantProjectResult?.status === 'error') {
-      snackbar.toastError(strings.GENERIC_ERROR);
-    } else if (getParticipantProjectResult?.status === 'success' && getParticipantProjectResult?.data) {
-      setParticipantProject(getParticipantProjectResult.data);
-    }
-  }, [getParticipantProjectResult, snackbar]);
-
-  useEffect(() => {
     if (!acceleratorOrgs || !project?.organizationId) {
       return;
     }
@@ -111,17 +101,17 @@ const ParticipantProjectProvider = ({ children }: Props) => {
       project,
       projectId,
       projectMeta,
-      status: getParticipantProjectResult?.status ?? 'pending',
+      isLoading: projectAcceleratorDetailsResponse.isLoading,
       reload,
     }),
     [
       crumbs,
-      getParticipantProjectResult?.status,
       organization,
       participantProject,
       project,
       projectId,
       projectMeta,
+      projectAcceleratorDetailsResponse.isLoading,
       reload,
     ]
   );
