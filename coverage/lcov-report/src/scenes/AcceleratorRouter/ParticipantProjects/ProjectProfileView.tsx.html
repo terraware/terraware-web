@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/381</span>
+                <span class='fraction'>0/389</span>
             </div>
         
             
@@ -707,7 +707,10 @@
 <a name='L642'></a><a href='#L642'>642</a>
 <a name='L643'></a><a href='#L643'>643</a>
 <a name='L644'></a><a href='#L644'>644</a>
-<a name='L645'></a><a href='#L645'>645</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L645'></a><a href='#L645'>645</a>
+<a name='L646'></a><a href='#L646'>646</a>
+<a name='L647'></a><a href='#L647'>647</a>
+<a name='L648'></a><a href='#L648'>648</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -846,11 +849,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -906,6 +906,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1193,6 +1195,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1208,7 +1215,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1488,16 +1494,13 @@ const ProjectProfileView = ({<span class="cstat-no" title="statement not covered
 <span class="cstat-no" title="statement not covered" >      })</span>
       .map(<span class="fstat-no" title="function not covered" >(u</span>ser) =&gt; <span class="cstat-no" title="statement not covered" >`${user.userRole}: ${user.firstName} ${user.lastName}`)</span>
       .join('\n');
-  }, [activeLocale, firstPr<span class="cstat-no" title="statement not covered" >ojectLead, listInternalUsersRequest]);</span>
-<span class="fstat-no" title="function not covered" ></span>
-  const isProjectInPhase = useMemo(
-    ()<span class="cstat-no" title="statement not covered" > =&gt; participantProject?.cohortPhase?.startsWith('Phase'),</span>
-    [participantProject?.cohortPhase]
-  );
+  }, [activeLocale, firstPr<span class="cstat-no" title="statement not covered" >ojectLead, listInternalUse<span class="fstat-no" title="function not covered" >rs</span>Request]);</span>
+&nbsp;
+  co<span class="cstat-no" title="statement not covered" >nst isProjectInPhase = useMemo(() =&gt; participantProject?.phase?.startsWith('Phase'), [participantProject?.phase]);</span>
 &nbsp;
   const isPhaseZeroOrApplication = <span class="cstat-no" title="statement not covered" >useMemo(</span>
-<span class="fstat-no" title="function not covered" >    ()</span> =&gt; <span class="cstat-no" title="statement not covered" >[undefined, 'Phase 0 - Due Diligence', 'Application', 'Pre-Screen'].includes(participantProject?.cohortPhase),</span>
-    [participantProject?.cohortPhase]
+<span class="fstat-no" title="function not covered" >    ()</span> =&gt; <span class="cstat-no" title="statement not covered" >[undefined, 'Phase 0 - Due Diligence', 'Application', 'Pre-Screen'].includes(participantProject?.phase),</span>
+    [participantProject?.phase]
   );
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
   const projectSize <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >= </span>useMemo(() =&gt; {</span>
@@ -1509,7 +1512,7 @@ const ProjectProfileView = ({<span class="cstat-no" title="statement not covered
         value={value &amp;&amp; strings.formatString(strings.X_HA, numberFormatter.format(value))?.toString()}
       /&gt;
     );
-    switch (participantProject?.cohortPhase) {
+    switch (participantProject?.phase) {
       case 'Phase 1 - Feasibility Study':
         return getCard(strings.MIN_PROJECT_AREA, projectDetails?.minProjectArea);
 <span class="cstat-no" title="statement not covered" >      case 'Phase 2 - Plan and Scale':</span>
@@ -1522,7 +1525,7 @@ const ProjectProfileView = ({<span class="cstat-no" title="statement not covered
         return getCard(strings.ELIGIBLE_AREA, projectDetails?.confirmedReforestableLand);
     }
   }, [
-    part<span class="cstat-no" title="statement not covered" >icipantProject?.cohortPhase,</span>
+    part<span class="cstat-no" title="statement not covered" >icipantProject?.phase,</span>
     projectDetails?.projectArea,
     projectDetails?.minProjectArea,
     projectDetails?.confirmedReforestableLand,
@@ -1566,8 +1569,7 @@ const ProjectProfileView = ({<span class="cstat-no" title="statement not covered
           &lt;Box display={'flex'} alignItems={'center'}&gt;
             {isProjectInPhase &amp;&amp; (
               &lt;&gt;
-                &lt;CohortBadge label={participantProject?.cohortName} /&gt;
-                &lt;CohortBadge label={participantProject?.cohortPhase} /&gt;
+                &lt;CohortBadge label={participantProject?.phase} /&gt;
               &lt;/&gt;
             )}
             {!isProjectInPhase &amp;&amp; projectApplication &amp;&amp; (
@@ -1598,6 +1600,7 @@ const ProjectProfileView = ({<span class="cstat-no" title="statement not covered
         &lt;ProjectOverviewCard
           md={isMobile || isTablet ? 12 : 9}
           dealDescription={projectDetails?.dealDescription}
+          fileNaming={projectDetails &amp;&amp; 'fileNaming' in projectDetails ? projectDetails?.fileNaming : undefined}
           projectName={project?.name}
         /&gt;
         &lt;Grid item md={isMobile || isTablet ? 12 : 3} xs={12}&gt;
@@ -1837,28 +1840,28 @@ const ProjectProfileView = ({<span class="cstat-no" title="statement not covered
           &lt;ProjectDataDisplay
             label={strings.ACCUMULATION_RATE}
             md={4}
-            value={projectDetails?.accumulationRate}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+            value={projectDetails?.accumulationRate}
             units={&lt;Co2HectareYear /&gt;}
           /&gt;
         )}
         {(funderView || !isPhaseZeroOrApplication) &amp;&amp; (
           &lt;&gt;
             {!funderView &amp;&amp; (
-              &lt;ProjectDataDisplay
+              &lt;ProjectDataDisplay<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
                 label={strings.MIN_MAX_CARBON_ACCUMULATION}
                 md={4}
                 value={
                   participantProject?.minCarbonAccumulation &amp;&amp;
                   participantProject?.maxCarbonAccumulation &amp;&amp;
                   `${participantProject.minCarbonAccumulation}-${participantProject.maxCarbonAccumulation}`
-                }<span class="cstat-no" title="statement not covered" ></span>
+                }
                 units={&lt;Co2HectareYear /&gt;}
               /&gt;
             )}
             &lt;ProjectDataDisplay label={strings.STANDARD} md={4} value={projectDetails?.standard} /&gt;
             &lt;ProjectDataDisplay label={strings.METHODOLOGY_NUMBER} md={4} value={projectDetails?.methodologyNumber} /&gt;
           &lt;/&gt;
-        )}
+        )}<span class="cstat-no" title="statement not covered" ></span>
         &lt;ProjectCertificationDisplay certifications={projectDetails?.carbonCertifications} /&gt;
       &lt;/Grid&gt;
 &nbsp;
@@ -1945,9 +1948,15 @@ const ProjectProfileView = ({<span class="cstat-no" title="statement not covered
               {!funderView &amp;&amp; (
                 &lt;&gt;
                   &lt;ProjectFieldLink value={participantProject?.riskTrackerLink} label={strings.RISK_TRACKER} /&gt;
-&nbsp;
                   &lt;ProjectFieldLink value={participantProject?.clickUpLink} label={strings.CLICK_UP} /&gt;
                   &lt;ProjectFieldLink value={participantProject?.slackLink} label={strings.SLACK} /&gt;
+                  &lt;ProjectFieldLink
+                    value={
+                      participantProject?.dropboxFolderPath &amp;&amp;
+                      `https://dropbox.com/home/${encodeURI(participantProject.dropboxFolderPath)}`
+                    }
+                    label={strings.DROPBOX}
+                  /&gt;
                 &lt;/&gt;
               )}
             &lt;/Box&gt;
@@ -2002,7 +2011,7 @@ export default ProjectProfileView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-13T02:13:35.233Z
+                at 2026-02-13T02:24:27.278Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
