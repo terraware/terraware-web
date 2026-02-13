@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/123</span>
+                <span class='fraction'>0/122</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/118</span>
+                <span class='fraction'>0/117</span>
             </div>
         
             
@@ -777,7 +777,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -879,6 +878,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1387,34 +1387,33 @@ import { useLocaliz<span class="cstat-no" title="statement not covered" ><span c
 import { useGetInter<span class="cstat-no" title="statement not covered" >nal</span>UsersQuery } from 'src/queries/generated/projectInternalUsers';
 <span class="cstat-no" title="statement not covered" >import { useLazyListAcceleratorReportsQuery } from 'src/queries/generated/reports';</span>
 import { us<span class="fstat-no" title="function not covered" >eA</span>ppDi<span class="cstat-no" title="statement not covered" >spatch } from </span>'src/redux/store';
-import strings from 'src/strings';
-<span class="cstat-no" title="statement not covered" >import { AcceleratorOrg } from 'src/types/Acce</span>lerator';
-import { PublishedR<span class="cstat-no" title="statement not covered" >eport, getReportPrefix } f</span>rom 'src/types/AcceleratorReport';
-import { Application }<span class="cstat-no" title="statement not covered" > from 'src/types/Applicat</span>ion';
-import { FunderProj<span class="cstat-no" title="statement not covered" >ectDetails } from 'src/types/FunderProject'</span>;
-import { ParticipantProject } from <span class="cstat-no" title="statement not covered" >'src/types/ParticipantProject';</span>
-import { Project, Pr<span class="cstat-no" title="statement not covered" >ojectMeta, getProjectInternalUserRoleString } from 'src</span>/types/Project';
-import { Score } from 's<span class="cstat-no" title="statement not covered" >rc/types/Score';</span>
-import { PhaseVotes } from<span class="cstat-no" title="statement not covered" > 'src/types/Votes';</span>
-import { getCountryByCode } from '<span class="cstat-no" title="statement not covered" >src/utils/country';</span>
-import { formatNum<span class="cstat-no" title="statement not covered" >berScale } from 'src/utils/numbers';</span>
-import useDeviceInfo fro<span class="cstat-no" title="statement not covered" >m 'src/utils/useDeviceInfo';</span>
-import { useNumberFormatter } from 'src/u<span class="cstat-no" title="statement not covered" >tils/useNumberFormatter';</span>
+import { AcceleratorOrg } from 'src/types/Accelerator';
+<span class="cstat-no" title="statement not covered" >import { PublishedReport, getReportPrefix } fr</span>om 'src/types/AcceleratorReport';
+import { Applicatio<span class="cstat-no" title="statement not covered" >n } from 'src/types/Applic</span>ation';
+import { FunderProject<span class="cstat-no" title="statement not covered" >Details } from 'src/types</span>/FunderProject';
+import { Participan<span class="cstat-no" title="statement not covered" >tProject } from 'src/types/ParticipantProje</span>ct';
+import { Project, ProjectMeta, getP<span class="cstat-no" title="statement not covered" >rojectInternalUserRoleString } from 'src/types/Project';</span>
+import { Score } fro<span class="cstat-no" title="statement not covered" >m 'src/types/Score';</span>
+import { PhaseVotes } fr<span class="cstat-no" title="statement not covered" >om 'src/types/Votes';</span>
+import { getCountryByCode <span class="cstat-no" title="statement not covered" >} from 'src/utils/country';</span>
+import { formatNumberScale } from <span class="cstat-no" title="statement not covered" >'src/utils/numbers';</span>
+import useDeviceIn<span class="cstat-no" title="statement not covered" >fo from 'src/utils/useDeviceInfo';</span>
+import { useNumberFormat<span class="cstat-no" title="statement not covered" >ter } from 'src/utils/useNumberFormatter';</span>
 <span class="cstat-no" title="statement not covered" ></span>
 type ProjectProfileViewProps = {<span class="cstat-no" title="statement not covered" ></span>
-  participantProject?: P<span class="cstat-no" title="statement not covered" >articipantProject;</span>
-  projectDetails?: ParticipantPro<span class="cstat-no" title="statement not covered" >ject | FunderProjectDetails;</span>
+  participantProject?: Participa<span class="cstat-no" title="statement not covered" >ntProject;</span>
+  projectDetails?: Parti<span class="cstat-no" title="statement not covered" >cipantProject | FunderProjectDetails;</span>
   project?: Project;<span class="cstat-no" title="statement not covered" ></span>
   projectMeta?: ProjectMeta;<span class="cstat-no" title="statement not covered" ></span>
-  organization?: AcceleratorOrg<span class="cstat-no" title="statement not covered" >;</span>
-  projectApplication?: Applica<span class="cstat-no" title="statement not covered" >tion | undefined;</span>
-  projectScore?: Score | undefin<span class="cstat-no" title="statement not covered" >ed;</span>
-  phaseVotes?: PhaseVotes | <span class="cstat-no" title="statement not covered" >undefined;</span>
-  funderView?: boo<span class="cstat-no" title="statement not covered" >lean;</span>
-  publishedReports: Pub<span class="cstat-no" title="statement not covered" >lishedReport[];</span>
+  organization?: AcceleratorOr<span class="cstat-no" title="statement not covered" >g;</span>
+  projectApplication?: Applicat<span class="cstat-no" title="statement not covered" >ion | undefined;</span>
+  projectScore?: Score | undef<span class="cstat-no" title="statement not covered" >ined;</span>
+  phaseVotes?: PhaseVotes | unde<span class="cstat-no" title="statement not covered" >fined;</span>
+  funderView?: boolean;<span class="cstat-no" title="statement not covered" ></span>
+  publishedReports<span class="cstat-no" title="statement not covered" >: PublishedReport[];</span>
 };<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-const ProjectProfileView = ({<span class="cstat-no" title="statement not covered" ></span>
+const ProjectProfileVie<span class="cstat-no" title="statement not covered" >w = ({</span>
   participantProject,<span class="cstat-no" title="statement not covered" ></span>
   projectDetails,<span class="cstat-no" title="statement not covered" ></span>
   project,<span class="cstat-no" title="statement not covered" ></span>
@@ -1428,7 +1427,7 @@ const ProjectProfileView = ({<span class="cstat-no" title="statement not covered
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const { isAllowed } = useUser();
-  const { activeLocale, countries } = useLocalization();
+  const { activeLocale, countries, strings } = useLocalization();
   const numberFormatter = useNumberFormatter();
   const { fundingEntities } = useProjectFundingEntities(funderView ? undefined : projectDetails?.projectId);
   const { isMobile, isTablet } = useDeviceInfo();
@@ -1439,7 +1438,7 @@ const ProjectProfileView = ({<span class="cstat-no" title="statement not covered
   );<span class="cstat-no" title="statement not covered" ></span>
   const internal<span class="cstat-no" title="statement not covered" >Users = useMemo(() =&gt; internalUs</span>ersData?.users ?? [], [internalUsersData]);
 <span class="cstat-no" title="statement not covered" ></span>
-  const isAllowedViewScoreAndVoting = <span class="cstat-no" title="statement not covered" >isAllowed('VIEW_PARTICIPANT_PROJECT_SCOR</span>ING_VOTING');
+  const isAllowedViewScoreAndVoting = isAllowed<span class="cstat-no" title="statement not covered" >('VIEW_PARTICIPANT_PROJECT_SCORING_VOTIN</span>G');
 <span class="cstat-no" title="statement not covered" ></span>
   const [listReports, listRepo<span class="cstat-no" title="statement not covered" >rtsResponse] = useLazyListAcceleratorReportsQuery();</span>
   const acceleratorReports = useM<span class="cstat-no" title="statement not covered" >emo(</span>
@@ -1494,7 +1493,7 @@ const ProjectProfileView = ({<span class="cstat-no" title="statement not covered
 <span class="cstat-no" title="statement not covered" >      })</span>
       .map(<span class="fstat-no" title="function not covered" >(u</span>ser) =&gt; <span class="cstat-no" title="statement not covered" >`${user.userRole}: ${user.firstName} ${user.lastName}`)</span>
       .join('\n');
-  }, [activeLocale, firstPr<span class="cstat-no" title="statement not covered" >ojectLead, internalUsers, <span class="fstat-no" title="function not covered" >is</span>UsersRequestSuccess]);</span>
+  }, [activeLocale, firstPr<span class="cstat-no" title="statement not covered" >ojectLead, internalUsers, <span class="fstat-no" title="function not covered" >is</span>UsersRequestSuccess, strings]);</span>
 &nbsp;
   co<span class="cstat-no" title="statement not covered" >nst isProjectInPhase = useMemo(() =&gt; participantProject?.phase?.startsWith('Phase'), [participantProject?.phase]);</span>
 &nbsp;
@@ -1532,6 +1531,7 @@ const ProjectProfileView = ({<span class="cstat-no" title="statement not covered
     isTablet,
     theme,
     numberFormatter,
+    strings,
   ]);
 &nbsp;
   const lastPublishedReport = useMemo(() =&gt; {
@@ -2011,7 +2011,7 @@ export default ProjectProfileView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-13T23:36:40.557Z
+                at 2026-02-13T23:52:03.215Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

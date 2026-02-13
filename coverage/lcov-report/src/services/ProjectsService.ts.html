@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/64</span>
+                <span class='fraction'>0/61</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/18</span>
+                <span class='fraction'>0/17</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/55</span>
+                <span class='fraction'>0/53</span>
             </div>
         
             
@@ -230,23 +230,7 @@
 <a name='L165'></a><a href='#L165'>165</a>
 <a name='L166'></a><a href='#L166'>166</a>
 <a name='L167'></a><a href='#L167'>167</a>
-<a name='L168'></a><a href='#L168'>168</a>
-<a name='L169'></a><a href='#L169'>169</a>
-<a name='L170'></a><a href='#L170'>170</a>
-<a name='L171'></a><a href='#L171'>171</a>
-<a name='L172'></a><a href='#L172'>172</a>
-<a name='L173'></a><a href='#L173'>173</a>
-<a name='L174'></a><a href='#L174'>174</a>
-<a name='L175'></a><a href='#L175'>175</a>
-<a name='L176'></a><a href='#L176'>176</a>
-<a name='L177'></a><a href='#L177'>177</a>
-<a name='L178'></a><a href='#L178'>178</a>
-<a name='L179'></a><a href='#L179'>179</a>
-<a name='L180'></a><a href='#L180'>180</a>
-<a name='L181'></a><a href='#L181'>181</a>
-<a name='L182'></a><a href='#L182'>182</a>
-<a name='L183'></a><a href='#L183'>183</a>
-<a name='L184'></a><a href='#L184'>184</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L168'></a><a href='#L168'>168</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -277,7 +261,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -378,26 +361,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -443,58 +411,50 @@ import { parseSearc<span class="cstat-no" title="statement not covered" >hTerm }
 co<span class="cstat-no" title="statement not covered" >nst PROJECTS_ENDPOINT = '/api/v1/projects';</span>
 cons<span class="cstat-no" title="statement not covered" >t PROJECT_ENDPOINT = '/api/v1/projects/{id}';</span>
 const <span class="cstat-no" title="statement not covered" >PROJECT_ASSIGN_ENDPOINT = '/api/v1/projects/{id}/assign';</span>
-const PR<span class="cstat-no" title="statement not covered" >OJECT_INTERNAL_USERS_ENDPO<span class="fstat-no" title="function not covered" >IN</span>T = <span class="cstat-no" title="statement not covered" >'/api/v1/p</span>rojects/{id}/internalUsers';</span>
-&nbsp;
-ty<span class="cstat-no" title="statement not covered" >pe ListProj</span>ectsResponsePayload =
-  paths[typeof PROJECTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-type CreateProjectResponsePayload =
+type ListProjectsResponsePayload =
+<span class="cstat-no" title="statement not covered" >  paths[typeo</span>f PROJECTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+&nbsp;
+type CreatePro<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >je</span>ctResponsePayload =<span class="cstat-no" title="statement not covered" ></span></span>
   paths[typeof PROJECTS_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 type GetProjectResponsePayload = paths[typeof PROJECT_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 export type UpdateProjectResponsePayload =
   paths[typeof PROJECT_ENDPOINT]['put']['responses'][200]['content']['application/json'];
 export type DeleteProjectResponsePayload =
   paths[typeof PROJECT_ENDPOINT]['delete']['responses'][200]['content']['application/json'];
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-export type AssignPr<span class="cstat-no" title="statement not covered" >oje</span>ctRequestPayload = components['schemas']['AssignProjectRequestPayload'];
-<span class="cstat-no" title="statement not covered" >export type AssignProjectResponsePayload = components['schemas']['SimpleSuccessResponsePayload'];</span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-export type ListProjectInternalUsersResponsePayload =
-<span class="cstat-no" title="statement not covered" >  paths[typeof PROJECT_INTERNAL_USERS_ENDPOINT</span>]['get']['responses'][200]['content']['application/json'];
+&nbsp;
+export type AssignP<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ro</span>jectReq<span class="cstat-no" title="statement not covered" >uestPayload = components['schemas']['AssignProjectRequestPayloa</span></span>d'];
+export type AssignPr<span class="cstat-no" title="statement not covered" >oje</span>ctResponsePayload = components['schemas']['SimpleSuccessResponsePayload'];
 <span class="cstat-no" title="statement not covered" ></span>
-export type UpdateProjectIn<span class="cstat-no" title="statement not covered" >ternalUsersResponsePayload =</span>
-  paths[typeof PROJE<span class="cstat-no" title="statement not covered" >CT_INTERNAL_USERS_ENDPOINT][</span>'put']['responses'][200]['content']['application/json'];
-export type UpdateProjectI<span class="cstat-no" title="statement not covered" >nternalUsersRequest</span>Payload = components['schemas']['UpdateProjectInternalUserRequestPayload'];
-<span class="cstat-no" title="statement not covered" ></span>
-/**<span class="cstat-no" title="statement not covered" ></span>
- * exported type<span class="cstat-no" title="statement not covered" ></span>
- */<span class="cstat-no" title="statement not covered" ></span>
-export type ProjectsD<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >at</span>a = {</span>
-  projects?: Proj<span class="cstat-no" title="statement not covered" >ect</span>[];
+/**<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+ * exported type
+<span class="cstat-no" title="statement not covered" > */</span>
+export type ProjectsData <span class="cstat-no" title="statement not covered" >= {</span>
+  projects?: Project[];<span class="cstat-no" title="statement not covered" ></span>
 };<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-const httpProjects = HttpService.root(PROJECTS_ENDPOINT);
+const httpProjects = Http<span class="cstat-no" title="statement not covered" >Service.root(PROJECTS_EN</span>DPOINT);
 <span class="cstat-no" title="statement not covered" ></span>
-/**
- * List all projects
- */
-cons<span class="fstat-no" title="function not covered" >t </span>listProje<span class="cstat-no" title="statement not covered" >cts = async (organizationId?: number, locale?: string | null): Promise&lt;ProjectsData &amp; Response&gt; =&gt; {</span>
-  const params: { organizationId?: string } = {};<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+/**<span class="cstat-no" title="statement not covered" ></span>
+ * List all projects<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+ */<span class="cstat-no" title="statement not covered" ></span>
+co<span class="cstat-no" title="statement not covered" >nst listProjects = async (organizationId?: number, locale?: string | null): Promise&lt;ProjectsData &amp; Response&gt; =&gt; {</span>
+  co<span class="cstat-no" title="statement not covered" >nst params: { organizationId?: string } = {};</span>
   if (typeof organizationId === 'number') {
-    params.organizationId = organizationId.toString();
-<span class="cstat-no" title="statement not covered" >  }</span>
+    params.organiza<span class="cstat-no" title="statement not covered" >tionId = organizationId.toString();</span>
+  }
 &nbsp;
-  const response: Proje<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ct</span>sData &amp; Response = await httpProjects.get&lt;ListProjectsResponsePayload, ProjectsData&gt;(</span>
-    {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-      params,<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >    },</span>
+  const response: ProjectsData &amp; Response = await httpProjects.get&lt;ListProjectsResponsePayload, ProjectsData&gt;(
+<span class="fstat-no" title="function not covered" >    {<span class="cstat-no" title="statement not covered" ></span></span>
+      params,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+    },
     (data) =&gt; ({
-      projects: data?.projects.sort((a, b) =&gt; a.name.localeCompare(b.name, locale || undefined)),
+<span class="cstat-no" title="statement not covered" >      projects: dat</span>a?.projects.sort((a, b) =&gt; a.name.localeCompare(b.name, locale || undefined)),
     })
-  );
-&nbsp;
-  return response;
-};
+  );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  return response;<span class="cstat-no" title="statement not covered" ></span>
+};<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
 /**
  * Search projects
@@ -505,14 +465,14 @@ const searchProjects = async (organizationId: number, query?: string): Promise&l
         const { type, values } = parseSearchTerm(query);
         return {
           operation: 'or',
-          children: [<span class="cstat-no" title="statement not covered" ></span>
+          children: [
             {
               operation: 'field',
               field: 'name',
               type,
               values,
             },
-            {
+            {<span class="cstat-no" title="statement not covered" ></span>
               operation: 'field',
               field: 'description',
               type,
@@ -526,44 +486,44 @@ const searchProjects = async (organizationId: number, query?: string): Promise&l
   const searchParams: SearchRequestPayload = {
     prefix: 'projects',
     fields: ['name', 'description', 'id', 'organization_id'],
-<span class="cstat-no" title="statement not covered" >    search: {</span>
-<span class="cstat-no" title="statement not covered" >      operation: 'and',</span>
+    search: {
+      operation: 'and',
       children: [
-        {<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >          operation: 'field',</span>
+        {
+          operation: 'field',
           field: 'organization_id',
-          type: 'Exact<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >',<span class="cstat-no" title="statement not covered" ></span></span></span>
-          values: [organizationId],
-        },
-      ],<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-    },
-    sortOrder: [
+          type: 'Exact',
+<span class="cstat-no" title="statement not covered" >          values: [organizationId],</span>
+<span class="cstat-no" title="statement not covered" >        },</span>
+      ],
+    },<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >    sortOrder: [</span>
       {
-        field: 'name',
-<span class="fstat-no" title="function not covered" ></span>      },<span class="cstat-no" title="statement not covered" ></span>
+        field: 'name',<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+      },
     ],
     count: 0,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
   };
 &nbsp;
   if (searchField) {
     searchParams.search.children.push(searchField);
-  }<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+<span class="fstat-no" title="function not covered" >  }<span class="cstat-no" title="statement not covered" ></span></span>
 &nbsp;
-  const response = await SearchService.search(searchParams);
+  const response = await SearchS<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >er</span>vice.search(searchParam<span class="cstat-no" title="statement not covered" >s);</span></span>
   return response ? (response as Project[]) : null;
 };
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+&nbsp;
 /**
- * Create a project
+ * Create a project<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
  */
-const createProject = (project: Cre<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >at</span>eProjectRequest): Prom<span class="cstat-no" title="statement not covered" >ise&lt;Response2&lt;CreateProjectResponsePayload&gt;&gt; =&gt;</span></span>
+const createProject = (project: CreateProjectRequest): Promise&lt;Response2&lt;CreateProjectResponsePayload&gt;&gt; =&gt;
   httpProjects.post2({
     entity: project,
-  });
+  });<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 &nbsp;
-const getProject = (proj<span class="cstat-no" title="statement not covered" >ectId: number): Promise&lt;Response2&lt;Project&gt;&gt; =&gt;</span>
+const getProject = (projectId: number): Promise&lt;Response2&lt;Project&gt;&gt; =&gt;
   httpProjects.get&lt;GetProjectResponsePayload, { data: Project | undefined }&gt;(
-    {
+    {<span class="cstat-no" title="statement not covered" ></span>
       url: PROJECT_ENDPOINT,
       urlReplacements: { '{id}': `${projectId}` },
     },
@@ -571,8 +531,8 @@ const getProject = (proj<span class="cstat-no" title="statement not covered" >ec
   );
 &nbsp;
 const assignProjectToEntities = (projectId: number, entities: AssignProjectRequestPayload) =&gt;
-  httpProjects.post2<span class="cstat-no" title="statement not covered" >&lt;AssignProjectRe</span>sponsePayload&gt;({
-    url: PROJECT_ASSIGN_ENDPOINT,
+  httpProjects.post2&lt;AssignProjectResponsePayload&gt;({
+    url: PROJECT_ASS<span class="cstat-no" title="statement not covered" >IGN_ENDPOINT,</span>
     urlReplacements: { '{id}': `${projectId}` },
     entity: entities,
   });
@@ -590,13 +550,6 @@ const deleteProject = (projectId: number) =&gt;
     urlReplacements: { '{id}': `${projectId}` },
   });
 &nbsp;
-const updateProjectInternalUsers = (projectId: number, payload: UpdateProjectInternalUsersRequestPayload) =&gt;
-  httpProjects.put2&lt;UpdateProjectInternalUsersResponsePayload&gt;({
-    url: PROJECT_INTERNAL_USERS_ENDPOINT,
-    urlReplacements: { '{id}': `${projectId}` },
-    entity: payload,
-  });
-&nbsp;
 /**
  * Exported functions
  */
@@ -608,7 +561,6 @@ const ProjectsService = {
   getProject,
   updateProject,
   deleteProject,
-  updateProjectInternalUsers,
 };
 &nbsp;
 export default ProjectsService;
@@ -619,7 +571,7 @@ export default ProjectsService;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-13T23:36:40.557Z
+                at 2026-02-13T23:52:03.215Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
