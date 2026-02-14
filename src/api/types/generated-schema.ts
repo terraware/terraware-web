@@ -698,10 +698,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /**
-         * Lists accelerator related organizations and their projects.
-         * @description By default, only lists tagged organizations that have projects that have not been assigned to participants yet.
-         */
+        /** Lists accelerator related organizations and their projects. */
         get: operations["listAcceleratorOrganizations"];
         put?: never;
         post?: never;
@@ -4082,7 +4079,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Gets the list of annotations for a splat model. */
+        /**
+         * Use /info instead
+         * @deprecated
+         */
         get: operations["listObservationSplatAnnotations"];
         put?: never;
         /**
@@ -4090,6 +4090,23 @@ export interface paths {
          * @description Updates existing annotations that have IDs, deletes annotations not in the list, and creates new annotations without IDs.
          */
         post: operations["setObservationSplatAnnotations"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tracking/observations/{observationId}/splats/{fileId}/info": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Gets the info for a splat model, such as the list of annotations. */
+        get: operations["listSplatDetails"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -7380,6 +7397,12 @@ export interface components {
             observation: components["schemas"]["ObservationResultsPayload"];
             status: components["schemas"]["SuccessOrError"];
         };
+        GetObservationSplatInfoResponsePayload: {
+            annotations: components["schemas"]["SplatAnnotationPayload"][];
+            cameraPosition?: components["schemas"]["CoordinatePayload"];
+            originPosition?: components["schemas"]["CoordinatePayload"];
+            status: components["schemas"]["SuccessOrError"];
+        };
         GetOneAssignedPlotResponsePayload: {
             plot: components["schemas"]["AssignedPlotPayload"];
             status: components["schemas"]["SuccessOrError"];
@@ -10415,7 +10438,7 @@ export interface components {
             cursor?: string;
             fields: string[];
             filters?: components["schemas"]["PrefixedSearch"][];
-            prefix?: "accessionCollectors" | "accessions" | "bags" | "batchSubLocations" | "batchWithdrawals" | "batches" | "cohortModules" | "cohorts" | "countries" | "countrySubdivisions" | "deliverables" | "deliveries" | "documentTemplates" | "documents" | "draftPlantingSites" | "events" | "facilities" | "facilityInventories" | "facilityInventoryTotals" | "geolocations" | "internalTags" | "inventories" | "modules" | "monitoringPlotHistories" | "monitoringPlots" | "nurserySpeciesProjects" | "nurseryWithdrawals" | "observationBiomassDetails" | "observationBiomassQuadratSpecies" | "observationBiomassSpecies" | "observationPlotConditions" | "observationPlots" | "observations" | "organizationInternalTags" | "organizationUsers" | "organizations" | "participantProjectSpecies" | "plantingSeasons" | "plantingSiteHistories" | "plantingSitePopulations" | "plantingSites" | "plantings" | "projectAcceleratorDetails" | "projectDeliverables" | "projectInternalUsers" | "projectLandUseModelTypes" | "projectVariableValues" | "projectVariables" | "projects" | "recordedTrees" | "reports" | "species" | "speciesEcosystemTypes" | "speciesGrowthForms" | "speciesPlantMaterialSourcingMethods" | "speciesProblems" | "speciesSuccessionalGroups" | "strata" | "stratumHistories" | "stratumPopulations" | "subLocations" | "substrata" | "substratumHistories" | "substratumPopulations" | "users" | "variableSelectOptions" | "viabilityTestResults" | "viabilityTests" | "withdrawals";
+            prefix?: "accessionCollectors" | "accessions" | "applications" | "bags" | "batchSubLocations" | "batchWithdrawals" | "batches" | "cohortModules" | "cohorts" | "countries" | "countrySubdivisions" | "deliverables" | "deliveries" | "documentTemplates" | "documents" | "draftPlantingSites" | "events" | "facilities" | "facilityInventories" | "facilityInventoryTotals" | "geolocations" | "internalTags" | "inventories" | "modules" | "monitoringPlotHistories" | "monitoringPlots" | "nurserySpeciesProjects" | "nurseryWithdrawals" | "observationBiomassDetails" | "observationBiomassQuadratSpecies" | "observationBiomassSpecies" | "observationPlotConditions" | "observationPlots" | "observations" | "organizationInternalTags" | "organizationUsers" | "organizations" | "participantProjectSpecies" | "plantingSeasons" | "plantingSiteHistories" | "plantingSitePopulations" | "plantingSites" | "plantings" | "projectAcceleratorDetails" | "projectDeliverables" | "projectInternalUsers" | "projectLandUseModelTypes" | "projectVariableValues" | "projectVariables" | "projects" | "recordedTrees" | "reports" | "species" | "speciesEcosystemTypes" | "speciesGrowthForms" | "speciesPlantMaterialSourcingMethods" | "speciesProblems" | "speciesSuccessionalGroups" | "strata" | "stratumHistories" | "stratumPopulations" | "subLocations" | "substrata" | "substratumHistories" | "substratumPopulations" | "users" | "variableSelectOptions" | "viabilityTestResults" | "viabilityTests" | "withdrawals";
             search?: components["schemas"]["SearchNodePayload"];
             sortOrder?: components["schemas"]["SearchSortOrderElement"][];
         };
@@ -11763,6 +11786,11 @@ export interface components {
              */
             type: "Plot" | "Quadrat" | "Soil";
         };
+        UploadPlotMediaResponsePayload: {
+            /** Format: int64 */
+            fileId: number;
+            status: components["schemas"]["SuccessOrError"];
+        };
         UploadPlotPhotoRequestPayload: {
             caption?: string;
             gpsCoordinates: components["schemas"]["Point"];
@@ -11774,11 +11802,6 @@ export interface components {
              * @enum {string}
              */
             type: "Plot" | "Quadrat" | "Soil";
-        };
-        UploadPlotPhotoResponsePayload: {
-            /** Format: int64 */
-            fileId: number;
-            status: components["schemas"]["SuccessOrError"];
         };
         /** @description List of conditions that might cause the user to want to cancel the upload but that can be automatically resolved if desired. */
         UploadProblemPayload: {
@@ -13493,12 +13516,7 @@ export interface operations {
     };
     listAcceleratorOrganizations: {
         parameters: {
-            query?: {
-                /** @description Whether to also include projects that have been assigned to participants. */
-                includeParticipants?: boolean;
-                /** @description Whether to load all organizations with a project with an application. */
-                hasProjectApplication?: boolean;
-            };
+            query?: never;
             header?: never;
             path?: never;
             cookie?: never;
@@ -20694,7 +20712,11 @@ export interface operations {
     };
     uploadOtherPlotMedia: {
         parameters: {
-            query?: never;
+            query?: {
+                caption?: string;
+                position?: "SouthwestCorner" | "SoutheastCorner" | "NortheastCorner" | "NorthwestCorner";
+                type?: "Plot" | "Quadrat" | "Soil";
+            };
             header?: never;
             path: {
                 observationId: number;
@@ -20718,7 +20740,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["UploadPlotPhotoResponsePayload"];
+                    "application/json": components["schemas"]["UploadPlotMediaResponsePayload"];
                 };
             };
         };
@@ -20749,7 +20771,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["UploadPlotPhotoResponsePayload"];
+                    "application/json": components["schemas"]["UploadPlotMediaResponsePayload"];
                 };
             };
         };
@@ -21141,6 +21163,38 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+            /** @description The plot observation does not exist, or does not have a splat for the requested file ID. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    listSplatDetails: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                observationId: number;
+                fileId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetObservationSplatInfoResponsePayload"];
                 };
             };
             /** @description The plot observation does not exist, or does not have a splat for the requested file ID. */
