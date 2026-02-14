@@ -149,13 +149,13 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
 
   const isEditing = useMemo(() => activityId !== undefined, [activityId]);
 
-  const selectedParticipantProject = useMemo(() => {
+  const selectedAcceleratorProject = useMemo(() => {
     return acceleratorProjects.find((p) => p.projectId === projectId);
   }, [projectId, acceleratorProjects]);
 
   const projectName = useMemo(
-    () => (isAcceleratorRoute ? selectedParticipantProject?.dealName : selectedProject?.name) || '',
-    [isAcceleratorRoute, selectedParticipantProject?.dealName, selectedProject?.name]
+    () => (isAcceleratorRoute ? selectedAcceleratorProject?.dealName : selectedProject?.name) || '',
+    [isAcceleratorRoute, selectedAcceleratorProject?.dealName, selectedProject?.name]
   );
 
   const secondaryHeader = useMemo(
