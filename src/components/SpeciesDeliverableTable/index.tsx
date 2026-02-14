@@ -9,8 +9,8 @@ import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization, useUser } from 'src/providers';
 import { useSpeciesDeliverableSearch } from 'src/providers/Participant/useSpeciesDeliverableSearch';
-import { requestListParticipantProjectSpecies } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
-import { selectParticipantProjectSpeciesListRequest } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';
+import { requestListAcceleratorProjectSpecies } from 'src/redux/features/acceleratorProjectSpecies/acceleratorProjectSpeciesAsyncThunks';
+import { selectAcceleratorProjectSpeciesListRequest } from 'src/redux/features/acceleratorProjectSpecies/acceleratorProjectSpeciesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { DeliverableWithOverdue } from 'src/types/Deliverables';
@@ -50,14 +50,14 @@ const SpeciesDeliverableTable = ({ deliverable }: SpeciesDeliverableTableProps):
     reload: reloadSpeciesDeliverableSearch,
   } = useSpeciesDeliverableSearch();
 
-  const participantProjectSpecies = useAppSelector(selectParticipantProjectSpeciesListRequest(deliverable.projectId));
+  const acceleratorProjectSpecies = useAppSelector(selectAcceleratorProjectSpeciesListRequest(deliverable.projectId));
 
   const [selectedRows, setSelectedRows] = useState<TableRowType[]>([]);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [openedAddSpeciesModal, setOpenedAddSpeciesModal] = useState(false);
 
   const rows = useMemo(() => {
-    return (participantProjectSpecies?.data || []).map((value) => ({
+    return (acceleratorProjectSpecies?.data || []).map((value) => ({
       ...value,
       species_scientificName: value.species.scientificName,
       species_commonName: value.species.commonName,
@@ -65,16 +65,16 @@ const SpeciesDeliverableTable = ({ deliverable }: SpeciesDeliverableTableProps):
       participantProjectSpecies_rationale: value.participantProjectSpecies.rationale,
       participantProjectSpecies_submissionStatus: value.participantProjectSpecies.submissionStatus,
     }));
-  }, [participantProjectSpecies]);
+  }, [acceleratorProjectSpecies]);
 
   const isAllowedUpdateDeliverable = isAllowed('UPDATE_DELIVERABLE');
 
   useEffect(() => {
-    void dispatch(requestListParticipantProjectSpecies(deliverable.projectId));
+    void dispatch(requestListAcceleratorProjectSpecies(deliverable.projectId));
   }, [deliverable.projectId, dispatch]);
 
   const reload = useCallback(() => {
-    void dispatch(requestListParticipantProjectSpecies(deliverable.projectId));
+    void dispatch(requestListAcceleratorProjectSpecies(deliverable.projectId));
     reloadSpeciesDeliverableSearch();
   }, [deliverable.projectId, dispatch, reloadSpeciesDeliverableSearch]);
 
@@ -110,7 +110,7 @@ const SpeciesDeliverableTable = ({ deliverable }: SpeciesDeliverableTableProps):
           {openedAddSpeciesModal && (
             <AddSpeciesModal
               onClose={closeAddSpeciesModal}
-              participantProjectSpecies={participantProjectSpecies?.data || []}
+              acceleratorProjectSpecies={acceleratorProjectSpecies?.data || []}
               reload={reload}
               projectId={deliverable.projectId}
               hasActiveDeliverable={hasActiveDeliverable}

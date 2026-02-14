@@ -5,30 +5,30 @@ import _ from 'lodash';
 
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import {
-  requestGetParticipantProjectSpecies,
-  requestUpdateParticipantProjectSpecies,
-} from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
+  requestGetAcceleratorProjectSpecies,
+  requestUpdateAcceleratorProjectSpecies,
+} from 'src/redux/features/acceleratorProjectSpecies/acceleratorProjectSpeciesAsyncThunks';
 import {
-  selectParticipantProjectSpeciesGetRequest,
-  selectParticipantProjectSpeciesUpdateRequest,
-} from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';
+  selectAcceleratorProjectSpeciesGetRequest,
+  selectAcceleratorProjectSpeciesUpdateRequest,
+} from 'src/redux/features/acceleratorProjectSpecies/acceleratorProjectSpeciesSelectors';
 import { requestGetOneSpecies, requestUpdateSpecies } from 'src/redux/features/species/speciesAsyncThunks';
 import { selectSpeciesGetOneRequest, selectSpeciesUpdateRequest } from 'src/redux/features/species/speciesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { ParticipantProjectSpecies } from 'src/types/ParticipantProjectSpecies';
+import { AcceleratorProjectSpecies } from 'src/types/AcceleratorProjectSpecies';
 import { Species } from 'src/types/Species';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import { useDeliverableData } from '../Deliverable/DeliverableContext';
 import { useProjectData } from '../Project/ProjectContext';
-import { ParticipantProjectSpeciesContext, ParticipantProjectSpeciesData } from './ParticipantProjectSpeciesContext';
+import { AcceleratorProjectSpeciesContext, AcceleratorProjectSpeciesData } from './AcceleratorProjectSpeciesContext';
 
 export type Props = {
   children: React.ReactNode;
 };
 
-const isEqual = (a: ParticipantProjectSpecies | undefined, b: ParticipantProjectSpecies | undefined): boolean =>
+const isEqual = (a: AcceleratorProjectSpecies | undefined, b: AcceleratorProjectSpecies | undefined): boolean =>
   !!(
     a &&
     b &&
@@ -39,26 +39,26 @@ const isEqual = (a: ParticipantProjectSpecies | undefined, b: ParticipantProject
     a.submissionStatus === b.submissionStatus
   );
 
-const ParticipantProjectSpeciesProvider = ({ children }: Props) => {
+const AcceleratorProjectSpeciesProvider = ({ children }: Props) => {
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
   const { currentDeliverable, deliverableId } = useDeliverableData();
   const { projectId } = useProjectData();
-  const { goToAcceleratorProjectSpecies: _goToParticipantProjectSpecies } = useNavigateTo();
+  const { goToAcceleratorProjectSpecies: _goToAcceleratorProjectSpecies } = useNavigateTo();
   const params = useParams<{ acceleratorProjectSpeciesId?: string }>();
 
-  const participantProjectSpeciesId = Number(params.acceleratorProjectSpeciesId);
-  const [currentParticipantProjectSpecies, setCurrentParticipantProjectSpecies] = useState<ParticipantProjectSpecies>();
+  const acceleratorProjectSpeciesId = Number(params.acceleratorProjectSpeciesId);
+  const [currentAcceleratorProjectSpecies, setCurrentAcceleratorProjectSpecies] = useState<AcceleratorProjectSpecies>();
   const [currentSpecies, setCurrentSpecies] = useState<Species>();
 
   const [getPPSRequestId, setGetPPSRequestId] = useState('');
-  const getPPSResponse = useAppSelector(selectParticipantProjectSpeciesGetRequest(getPPSRequestId));
+  const getPPSResponse = useAppSelector(selectAcceleratorProjectSpeciesGetRequest(getPPSRequestId));
 
   const [getSpeciesRequestId, setGetSpeciesRequestId] = useState('');
   const getSpeciesResponse = useAppSelector(selectSpeciesGetOneRequest(getSpeciesRequestId));
 
   const [updatePPSRequestId, setUpdatePPSRequestId] = useState('');
-  const updatePPSResponse = useAppSelector(selectParticipantProjectSpeciesUpdateRequest(updatePPSRequestId));
+  const updatePPSResponse = useAppSelector(selectAcceleratorProjectSpeciesUpdateRequest(updatePPSRequestId));
 
   const [updateSpeciesRequestId, setUpdateSpeciesRequestId] = useState('');
   const updateSpeciesResponse = useAppSelector(selectSpeciesUpdateRequest(updateSpeciesRequestId));
@@ -66,33 +66,33 @@ const ParticipantProjectSpeciesProvider = ({ children }: Props) => {
   const [newStatus, setNewStatus] = useState('');
   const [ppsNeedsReload, setPpsNeedsReload] = useState(true);
 
-  const goToParticipantProjectSpecies = useCallback(() => {
-    _goToParticipantProjectSpecies(deliverableId, projectId, participantProjectSpeciesId);
-  }, [_goToParticipantProjectSpecies, deliverableId, projectId, participantProjectSpeciesId]);
+  const goToAcceleratorProjectSpecies = useCallback(() => {
+    _goToAcceleratorProjectSpecies(deliverableId, projectId, acceleratorProjectSpeciesId);
+  }, [_goToAcceleratorProjectSpecies, deliverableId, projectId, acceleratorProjectSpeciesId]);
 
   const reloadPPS = useCallback(() => {
-    if (isNaN(participantProjectSpeciesId)) {
+    if (isNaN(acceleratorProjectSpeciesId)) {
       return;
     }
 
-    const request = dispatch(requestGetParticipantProjectSpecies(participantProjectSpeciesId));
+    const request = dispatch(requestGetAcceleratorProjectSpecies(acceleratorProjectSpeciesId));
     setGetPPSRequestId(request.requestId);
-  }, [dispatch, participantProjectSpeciesId]);
+  }, [dispatch, acceleratorProjectSpeciesId]);
 
   const reloadSpecies = useCallback(() => {
-    if (!(currentParticipantProjectSpecies?.speciesId && currentDeliverable?.organizationId)) {
+    if (!(currentAcceleratorProjectSpecies?.speciesId && currentDeliverable?.organizationId)) {
       return;
     }
 
     const request = dispatch(
       requestGetOneSpecies({
         organizationId: currentDeliverable.organizationId,
-        speciesId: currentParticipantProjectSpecies.speciesId,
-      })
+        speciesId: currentAcceleratorProjectSpecies.speciesId,
+      }),
     );
 
     setGetSpeciesRequestId(request.requestId);
-  }, [dispatch, currentDeliverable, currentParticipantProjectSpecies]);
+  }, [dispatch, currentDeliverable, currentAcceleratorProjectSpecies]);
 
   const reload = useCallback(() => {
     reloadPPS();
@@ -100,21 +100,21 @@ const ParticipantProjectSpeciesProvider = ({ children }: Props) => {
   }, [reloadPPS, reloadSpecies]);
 
   const update = useCallback(
-    (species?: Species, participantProjectSpecies?: ParticipantProjectSpecies) => {
-      if (participantProjectSpecies && !isEqual(participantProjectSpecies, currentParticipantProjectSpecies)) {
+    (species?: Species, acceleratorProjectSpecies?: AcceleratorProjectSpecies) => {
+      if (acceleratorProjectSpecies && !isEqual(acceleratorProjectSpecies, currentAcceleratorProjectSpecies)) {
         // If the request is successful, and the status was changed, we will want to use the snackbar to tell the user it was approved
         if (
-          currentParticipantProjectSpecies?.submissionStatus !== 'Approved' &&
-          participantProjectSpecies.submissionStatus === 'Approved'
+          currentAcceleratorProjectSpecies?.submissionStatus !== 'Approved' &&
+          acceleratorProjectSpecies.submissionStatus === 'Approved'
         ) {
           setNewStatus('Approved');
         }
 
-        const updatePPSRequest = dispatch(requestUpdateParticipantProjectSpecies({ participantProjectSpecies }));
+        const updatePPSRequest = dispatch(requestUpdateAcceleratorProjectSpecies({ acceleratorProjectSpecies }));
         setUpdatePPSRequestId(updatePPSRequest.requestId);
       } else {
         // If there are no changes, just send them back to the single view
-        goToParticipantProjectSpecies();
+        goToAcceleratorProjectSpecies();
       }
 
       if (species && currentDeliverable && !_.isEqual(species, currentSpecies)) {
@@ -122,18 +122,18 @@ const ParticipantProjectSpeciesProvider = ({ children }: Props) => {
           requestUpdateSpecies({
             organizationId: currentDeliverable.organizationId,
             species,
-          })
+          }),
         );
         setUpdateSpeciesRequestId(updateSpeciesRequest.requestId);
       }
       setPpsNeedsReload(true);
     },
-    [currentDeliverable, currentParticipantProjectSpecies, currentSpecies, dispatch, goToParticipantProjectSpecies]
+    [currentDeliverable, currentAcceleratorProjectSpecies, currentSpecies, dispatch, goToAcceleratorProjectSpecies],
   );
 
-  const [participantProjectSpeciesData, setParticipantProjectSpeciesData] = useState<ParticipantProjectSpeciesData>({
+  const [acceleratorProjectSpeciesData, setAcceleratorProjectSpeciesData] = useState<AcceleratorProjectSpeciesData>({
     isBusy: updatePPSResponse?.status === 'pending' || updateSpeciesResponse?.status === 'pending',
-    participantProjectSpeciesId,
+    acceleratorProjectSpeciesId,
     reload,
     update,
   });
@@ -147,11 +147,11 @@ const ParticipantProjectSpeciesProvider = ({ children }: Props) => {
       reloadPPS();
       setPpsNeedsReload(false);
 
-      if (currentParticipantProjectSpecies && currentSpecies) {
+      if (currentAcceleratorProjectSpecies && currentSpecies) {
         if (newStatus === 'Approved') {
           snackbar.pageSuccess(
             strings.formatString(strings.YOU_APPROVED_SPECIES, currentSpecies.scientificName).toString(),
-            strings.SPECIES_APPROVED
+            strings.SPECIES_APPROVED,
           );
           setNewStatus('');
         } else {
@@ -159,14 +159,14 @@ const ParticipantProjectSpeciesProvider = ({ children }: Props) => {
         }
       }
 
-      goToParticipantProjectSpecies();
+      goToAcceleratorProjectSpecies();
     } else if (updatePPSResponse.status === 'error') {
       snackbar.toastError(strings.GENERIC_ERROR);
     }
   }, [
-    currentParticipantProjectSpecies,
+    currentAcceleratorProjectSpecies,
     currentSpecies,
-    goToParticipantProjectSpecies,
+    goToAcceleratorProjectSpecies,
     newStatus,
     ppsNeedsReload,
     reloadPPS,
@@ -193,7 +193,7 @@ const ParticipantProjectSpeciesProvider = ({ children }: Props) => {
     }
 
     if (getPPSResponse.status === 'success' && getPPSResponse.data) {
-      setCurrentParticipantProjectSpecies(getPPSResponse.data);
+      setCurrentAcceleratorProjectSpecies(getPPSResponse.data);
     } else if (getPPSResponse.status === 'error') {
       snackbar.toastError(strings.GENERIC_ERROR);
     }
@@ -212,35 +212,35 @@ const ParticipantProjectSpeciesProvider = ({ children }: Props) => {
   }, [getSpeciesResponse, snackbar]);
 
   useEffect(() => {
-    if (participantProjectSpeciesId) {
+    if (acceleratorProjectSpeciesId) {
       reloadPPS();
     }
-  }, [participantProjectSpeciesId, reloadPPS]);
+  }, [acceleratorProjectSpeciesId, reloadPPS]);
 
   useEffect(() => {
-    if (currentParticipantProjectSpecies?.speciesId) {
+    if (currentAcceleratorProjectSpecies?.speciesId) {
       reloadSpecies();
     }
-  }, [currentParticipantProjectSpecies, reloadSpecies]);
+  }, [currentAcceleratorProjectSpecies, reloadSpecies]);
 
   useEffect(() => {
     // This way we only update consumers when we have both
-    if (!(currentParticipantProjectSpecies && currentSpecies)) {
+    if (!(currentAcceleratorProjectSpecies && currentSpecies)) {
       return;
     }
 
-    setParticipantProjectSpeciesData({
-      currentParticipantProjectSpecies,
+    setAcceleratorProjectSpeciesData({
+      currentAcceleratorProjectSpecies,
       currentSpecies,
       isBusy: updatePPSResponse?.status === 'pending' || updateSpeciesResponse?.status === 'pending',
-      participantProjectSpeciesId,
+      acceleratorProjectSpeciesId,
       reload,
       update,
     });
   }, [
-    currentParticipantProjectSpecies,
+    currentAcceleratorProjectSpecies,
     currentSpecies,
-    participantProjectSpeciesId,
+    acceleratorProjectSpeciesId,
     reload,
     update,
     updatePPSResponse,
@@ -248,10 +248,10 @@ const ParticipantProjectSpeciesProvider = ({ children }: Props) => {
   ]);
 
   return (
-    <ParticipantProjectSpeciesContext.Provider value={participantProjectSpeciesData}>
+    <AcceleratorProjectSpeciesContext.Provider value={acceleratorProjectSpeciesData}>
       {children}
-    </ParticipantProjectSpeciesContext.Provider>
+    </AcceleratorProjectSpeciesContext.Provider>
   );
 };
 
-export default ParticipantProjectSpeciesProvider;
+export default AcceleratorProjectSpeciesProvider;
