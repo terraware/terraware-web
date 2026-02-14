@@ -2245,13 +2245,13 @@ const ProjectProfileEdit = () =&gt; {
   const { isAllowed } = useUser();
   const [validateFields, setValidateFields] = useState&lt;boolean&gt;(false);
 &nbsp;
-  const [updateParticipantProject, updateParticipantProjectResponse] = useUpdateProjectAcceleratorDetailsMutation();
-  const [participantProjectRecord, setParticipantProjectRecord, onChangeParticipantProject] =
+  const [updateAcceleratorProject, updateAcceleratorProjectResponse] = useUpdateProjectAcceleratorDetailsMutation();
+  const [acceleratorProjectRecord, setAcceleratorProjectRecord, onChangeAcceleratorProject] =
     useForm(acceleratorProj<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ec</span>t);</span>
 &nbsp;
   const [requestsIn<span class="cstat-no" title="statement not covered" >Progress, setRequestsInProgress] = </span>useState(false);
   const [initiat<span class="cstat-no" title="statement not covered" >edRequests, setInitiatedRequests</span>] = useState({
-    participantProj<span class="cstat-no" title="statement not covered" >ect: false,</span>
+    acceleratorProj<span class="cstat-no" title="statement not covered" >ect: false,</span>
     updateInternalUsers: false,<span class="cstat-no" title="statement not covered" ></span>
     uploadImages: false,<span class="cstat-no" title="statement not covered" ></span>
   });<span class="cstat-no" title="statement not covered" ></span>
@@ -2339,14 +2339,14 @@ const ProjectProfileEdit = () =&gt; {
 <span class="cstat-no" title="statement not covered" ></span>
     if (<span class="cstat-no" title="statement not covered" ></span>
       is<span class="cstat-no" title="statement not covered" >Complete(uploadImagesResponse?</span>.status, initiatedRequests.uploadImages) &amp;&amp;
-      isCompleteRtk(updateParticipantProjectResponse, initiatedRequests.participantProject) &amp;&amp;
+      isCompleteRtk(updateAcceleratorProjectResponse, initiatedRequests.acceleratorProject) &amp;&amp;
       is<span class="cstat-no" title="statement not covered" >CompleteRtk(updateInterna</span>lUsersResponse, initiatedRequests.updateInternalUsers)
     ) {
       setRequestsInProgress(false);
 &nbsp;
       if (
         uploadImagesResponse?.status === 'error' ||
-        updateParticipantProjectResponse.isError ||
+        updateAcceleratorProjectResponse.isError ||
         updateInternalUsersResponse.isError
       ) {
         snackbar.toastError();
@@ -2356,7 +2356,7 @@ const ProjectProfileEdit = () =&gt; {
 <span class="cstat-no" title="statement not covered" >      }</span>
     }<span class="cstat-no" title="statement not covered" ></span>
   }, [<span class="cstat-no" title="statement not covered" ></span>
-    updateParticipantProjectResponse,
+    updateAcceleratorProjectResponse,
     uploadImagesResponse,
 <span class="cstat-no" title="statement not covered" >    requestsInProgress,<span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >    initiatedRequests,</span>
@@ -2421,10 +2421,10 @@ const ProjectProfileEdit = () =&gt; {
 <span class="cstat-no" title="statement not covered" ></span>
   cons<span class="cstat-no" title="statement not covered" >t onChangeCountry = useCallback(</span>
     (c<span class="cstat-no" title="statement not covered" >ountryCode?: s</span>tring, region?: string) =&gt; {
-      onChangeParticipantProject('countryCode', countryCode);
-<span class="cstat-no" title="statement not covered" >      onChangeParticipantProje<span class="fstat-no" title="function not covered" >ct</span>('region<span class="cstat-no" title="statement not covered" >', region);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span>
+      onChangeAcceleratorProject('countryCode', countryCode);
+<span class="cstat-no" title="statement not covered" >      onChangeAcceleratorProje<span class="fstat-no" title="function not covered" >ct</span>('region<span class="cstat-no" title="statement not covered" >', region);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span>
     },<span class="cstat-no" title="statement not covered" ></span>
-    [o<span class="cstat-no" title="statement not covered" >nChangePartici</span>pantProject]
+    [o<span class="cstat-no" title="statement not covered" >nChangeAcceler</span>atorProject]
   );
 <span class="cstat-no" title="statement not covered" ></span>
   cons<span class="cstat-no" title="statement not covered" >t saveInternalUsers = use</span>Callback(() =&gt; {
@@ -2457,10 +2457,10 @@ const ProjectProfileEdit = () =&gt; {
 <span class="cstat-no" title="statement not covered" >    }</span>
 <span class="cstat-no" title="statement not covered" ></span>
     if<span class="cstat-no" title="statement not covered" > (</span>
-      (participantProjectRecord?.phase || '') !== '' &amp;&amp;
-      ((participantProjectRecord?.fileNaming || '') === '' ||
-        (participantProjectRecord?.dropboxFolderPath || '') === '' ||
-<span class="cstat-no" title="statement not covered" >        (participantProjectRecord?.googleFolderUrl || </span>'') === '')
+      (acceleratorProjectRecord?.phase || '') !== '' &amp;&amp;
+      ((acceleratorProjectRecord?.fileNaming || '') === '' ||
+        (acceleratorProjectRecord?.dropboxFolderPath || '') === '' ||
+<span class="cstat-no" title="statement not covered" >        (acceleratorProjectRecord?.googleFolderUrl || </span>'') === '')
     ) {
 <span class="cstat-no" title="statement not covered" >      setValidateFields(t</span>rue);
 <span class="cstat-no" title="statement not covered" >      snackbar.toastError(strings.PHASE_PROJECT_REQUI</span>RED_FIELDS_ERROR);
@@ -2468,18 +2468,18 @@ const ProjectProfileEdit = () =&gt; {
     }<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
     retu<span class="cstat-no" title="statement not covered" >rn true;</span>
-  }, [stableToVariable, isInternalUsersRequestSuccess, internalUsers, participantProjectRecord, strings, snackbar]);
+  }, [stableToVariable, isInternalUsersRequestSuccess, internalUsers, acceleratorProjectRecord, strings, snackbar]);
 &nbsp;
   const finishSave = useCallback(() =&gt; {
     setRequestsInProgress(true);
 &nbsp;
     const newInitiatedRequests = {
-      participantProject: false,
+      acceleratorProject: false,
 <span class="cstat-no" title="statement not covered" >      updateInternalUsers: false,</span>
       up<span class="cstat-no" title="statement not covered" >loadImages: false,</span>
     };
 &nbsp;
-    const updatedRecord = { ...participantProjectRecord } as AcceleratorProject;
+    const updatedRecord = { ...acceleratorProjectRecord } as AcceleratorProject;
 &nbsp;
     EXTERNAL_LINK_KEYS.forEach((key) =&gt; {
       const value = updatedRecord[key];
@@ -2488,21 +2488,21 @@ const ProjectProfileEdit = () =&gt; {
 <span class="cstat-no" title="statement not covered" >      }</span>
     })<span class="cstat-no" title="statement not covered" >;</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    const typesToRemove = Object.keys(participantProjectRecord?.landUseModelHectares || {}).filter(</span>
+<span class="cstat-no" title="statement not covered" >    const typesToRemove = Object.keys(acceleratorProjectRecord?.landUseModelHectares || {}).filter(</span>
 <span class="cstat-no" title="statement not covered" >      (type) =&gt; !(updatedRecord.land</span>UseModelTypes as string[]).includes(type)
     );<span class="cstat-no" title="statement not covered" ></span>
-    const updatedModelHectares = { ...(participantProjectRecord?.landUseModelHectares || {}) };
+    const updatedModelHectares = { ...(acceleratorProjectRecord?.landUseModelHectares || {}) };
 <span class="cstat-no" title="statement not covered" >    typesToRemove.forEach((type) =&gt; {</span>
       delete updatedModelHectares[type];
     });
     updatedRecord.landUseModelHectares = updatedModelHectares;
 &nbsp;
-    if (participantProjectRecord) {
-      void updateParticipantProject({
+    if (acceleratorProjectRecord) {
+      void updateAcceleratorProject({
         projectId,
         updateProjectAcceleratorDetailsRequestPayload: updatedRecord,
       });
-      newInitiatedRequests.participantProject = true;
+      newInitiatedRequests.acceleratorProject = true;
     }
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >    saveInternalUsers();</span>
@@ -2544,12 +2544,12 @@ const ProjectProfileEdit = () =&gt; {
     disp<span class="cstat-no" title="statement not covered" >atch,</span>
     mainPhoto,
     ma<span class="cstat-no" title="statement not covered" >pPhoto,</span>
-    participantProjectRecord,
+    acceleratorProjectRecord,
     projectId,
     redirectToProjectView,
     saveInternalUsers,<span class="cstat-no" title="statement not covered" ></span>
 <span class="fstat-no" title="function not covered" >    st</span>ableToVariable,
-    up<span class="cstat-no" title="statement not covered" >dateParticipantProject,</span>
+    up<span class="cstat-no" title="statement not covered" >dateAcceleratorProject,</span>
   ]);
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
   const handleSave = useCallback(() =&gt; {
@@ -2557,13 +2557,13 @@ const ProjectProfileEdit = () =&gt; {
       return;
     }
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >    if (participantPr<span class="fstat-no" title="function not covered" >oj</span>ectRecor<span class="cstat-no" title="statement not covered" >d?.phase !== acceleratorProject?.phase) {</span></span>
+<span class="cstat-no" title="statement not covered" >    if (acceleratorPr<span class="fstat-no" title="function not covered" >oj</span>ectRecor<span class="cstat-no" title="statement not covered" >d?.phase !== acceleratorProject?.phase) {</span></span>
       openConfirmModal();
       return;<span class="cstat-no" title="statement not covered" ></span>
 <span class="fstat-no" title="function not covered" >    }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
     fi<span class="cstat-no" title="statement not covered" >nishSave();</span>
-  }, [va<span class="cstat-no" title="statement not covered" >lidateSave, parti<span class="fstat-no" title="function not covered" >ci</span>pantProjectRecord?.phase, acceleratorProject?.phase, openConfirmModal, finishSave]);</span>
+  }, [va<span class="cstat-no" title="statement not covered" >lidateSave, accel<span class="fstat-no" title="function not covered" >er</span>atorProjectRecord?.phase, acceleratorProject?.phase, openConfirmModal, finishSave]);</span>
 <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
   const ha<span class="cstat-no" title="statement not covered" >ndleOnCancel = useCallback(() =&gt; goToParticipantProject(projectId), [goToParticipantProject, projectId]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
@@ -2575,9 +2575,9 @@ const ProjectProfileEdit = () =&gt; {
 <span class="cstat-no" title="statement not covered" ></span>
   useEffect(() =&gt; {
     if (acceleratorProject) {
-      setParticipantProjectRecord(acceleratorProject);
+      setAcceleratorProjectRecord(acceleratorProject);
     }
-  }, [acceleratorProject, setParticipantProjectRecord]);
+  }, [acceleratorProject, setAcceleratorProjectRecord]);
 <span class="cstat-no" title="statement not covered" ></span>
   us<span class="fstat-no" title="function not covered" >eE</span>ffect(() <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >=&gt;</span> {</span>
     if (!isAllowedEdit) {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
@@ -2594,23 +2594,23 @@ const ProjectProfileEdit = () =&gt; {
 &nbsp;
   const onChangeLandUseHectares = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    (t</span>ype: stri<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ng</span>, hectares: string) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >      const updated = {<span class="fstat-no" title="function not covered" > .</span>..partic<span class="cstat-no" title="statement not covered" >ipantProjectRecord?.landUseModelHect<span class="fstat-no" title="function not covered" >ar</span>es, [typ<span class="cstat-no" title="statement not covered" >e]: Number(h</span>e</span>ct</span>ares) };
+<span class="cstat-no" title="statement not covered" >      const updated = {<span class="fstat-no" title="function not covered" > .</span>..accele<span class="cstat-no" title="statement not covered" >ratorProjectRecord?.landUseModelHect<span class="fstat-no" title="function not covered" >ar</span>es, [typ<span class="cstat-no" title="statement not covered" >e]: Number(h</span>e</span>ct</span>ares) };
 <span class="cstat-no" title="statement not covered" >      if (hectares === '') {</span>
 <span class="cstat-no" title="statement not covered" >        delete updated[ty</span>pe];
       }
-      onChangeParticipantProject('landUseModelHectares', updated);
+      onChangeAcceleratorProject('landUseModelHectares', updated);
     },
-    [onChangeParticipantProject, participantProjectRecord]
+    [onChangeAcceleratorProject, acceleratorProjectRecord]
 <span class="cstat-no" title="statement not covered" >  );<span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" ></span>
   cons<span class="cstat-no" title="statement not covered" >t onChangeSdgList</span> = useCallback(
     (id: string, newList: string[]) =&gt; {
-      onChangeParticipantProject(
+      onChangeAcceleratorProject(
         id,<span class="cstat-no" title="statement not covered" ></span>
         newList.map((item) =&gt; Num<span class="cstat-no" title="statement not covered" >ber(item))<span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >      );</span>
     },
-    [onChangeParticipantProject]<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+    [onChangeAcceleratorProject]<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
   );<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
   const onClickAdd<span class="cstat-no" title="statement not covered" >Row = useCallback(() =&gt; {<span class="fstat-no" title="function not covered" ></span></span>
@@ -2708,8 +2708,8 @@ const ProjectProfileEdit = () =&gt; {
   );
 &nbsp;
   const sortedSelectedModelTypes = useMemo(() =&gt; {
-    return LAND_USE_MODEL_TYPES.filter((type) =&gt; participantProjectRecord?.landUseModelTypes?.includes(type));
-  }, [participantProjectRecord?.landUseModelTypes]);
+    return LAND_USE_MODEL_TYPES.filter((type) =&gt; acceleratorProjectRecord?.landUseModelTypes?.includes(type));
+  }, [acceleratorProjectRecord?.landUseModelTypes]);
 &nbsp;
   const phaseOptions: {
     label: string;
@@ -2727,9 +2727,9 @@ const ProjectProfileEdit = () =&gt; {
 &nbsp;
   const setPhase = useCallback(
     (_: string, value: string) =&gt; {
-      onChangeParticipantProject('phase', value === 'undefined' ? undefined : (value as PhaseType));
+      onChangeAcceleratorProject('phase', value === 'undefined' ? undefined : (value as PhaseType));
     },
-    [onChangeParticipantProject]
+    [onChangeAcceleratorProject]
   );
 &nbsp;
   return (
@@ -2751,13 +2751,13 @@ const ProjectProfileEdit = () =&gt; {
       &lt;PageForm
         busy={
           uploadImagesResponse?.status === 'pending' ||
-          updateParticipantPr<span class="fstat-no" title="function not covered" >oj</span>ectResponse.isLoading ||
+          updateAcceleratorPr<span class="fstat-no" title="function not covered" >oj</span>ectResponse.isLoading ||
           updateInternalUsersResponse.isLoading
 <span class="cstat-no" title="statement not covered" >        }</span>
-        cancelID='cancelNewParticipantProject'
+        cancelID='cancelNewAcceleratorProject'
         onCancel={handleOnCancel}
         onSave={handleSave}
-        saveID='createNewParticipantProject'
+        saveID='createNewAcceleratorProject'
       &gt;
         &lt;Box margin={theme.spacing(2, 3)}&gt;
           &lt;Typography fontSize={'24px'} lineHeight={'32px'} fontWeight={600}&gt;
@@ -2781,8 +2781,8 @@ const ProjectProfileEdit = () =&gt; {
                 id={'dealName'}
                 md={12}
                 label={strings.DEAL_NAME}
-                onChange={onChangeParticipantProject}
-                value={participantProjectRecord?.dealName}
+                onChange={onChangeAcceleratorProject}
+                value={acceleratorProjectRecord?.dealName}
               /&gt;
             &lt;/Grid&gt;
             &lt;Grid item md={6} display={'flex'} flexDirection={'column'}&gt;
@@ -2792,8 +2792,8 @@ const ProjectProfileEdit = () =&gt; {
                   md={12}
                   label={strings.COUNTRY}
                   onChange={onChangeCountry}
-                  region={participantProjectRecord?.region}
-                  value={participantProjectRecord?.countryCode}
+                  region={acceleratorProjectRecord?.region}
+                  value={acceleratorProjectRecord?.countryCode}
                 /&gt;
               &lt;/Box&gt;
             &lt;/Grid&gt;
@@ -2803,10 +2803,10 @@ const ProjectProfileEdit = () =&gt; {
                 id={'fileNaming'}
                 md={12}
                 label={strings.FILE_NAMING}
-                onChange={onChangeParticipantProject}
-                value={participantProjectRecord?.fileNaming}
-                required={!!participantProjectRecord?.phase}
-                validate={!!participantProjectRecord?.phase &amp;&amp; validateFields}
+                onChange={onChangeAcceleratorProject}
+                value={acceleratorProjectRecord?.fileNaming}
+                required={!!acceleratorProjectRecord?.phase}
+                validate={!!acceleratorProjectRecord?.phase &amp;&amp; validateFields}
               /&gt;
             &lt;/Grid&gt;
             &lt;Grid item md={6} display={'flex'} flexDirection={'column'}&gt;
@@ -2817,7 +2817,7 @@ const ProjectProfileEdit = () =&gt; {
                   label={strings.PHASE}
                   onChange={setPhase}
                   options={phaseOptions}
-                  value={participantProjectRecord?.phase}
+                  value={acceleratorProjectRecord?.phase}
                 /&gt;<span class="fstat-no" title="function not covered" ></span>
               &lt;/Box&gt;
 <span class="cstat-no" title="statement not covered" >            &lt;/Grid&gt;</span>
@@ -2927,15 +2927,15 @@ const ProjectProfileEdit = () =&gt; {
             &lt;ProjectFieldTextAreaEdit
               id={'dealDescription'}
               label={strings.PROJECT_OVERVIEW}
-              onChange={onChangeParticipantProject}
-              value={participantProjectRecord?.dealDescription}
+              onChange={onChangeAcceleratorProject}
+              value={acceleratorProjectRecord?.dealDescription}
             /&gt;
             &lt;Grid item md={12}&gt;
               &lt;LandUseMultiSelect
                 id={'landUseModelTypes'}
                 md={6}
                 label={strings.LAND_USE_MODEL_TYPE}
-                onChange={onChangeParticipantProject}
+                onChange={onChangeAcceleratorProject}
                 value={sortedSelectedModelTypes}
               /&gt;
             &lt;/Grid&gt;
@@ -2947,7 +2947,7 @@ const ProjectProfileEdit = () =&gt; {
                 label={strings.formatString(strings.X_HECTARES_HA, landUseModelType) as string}
                 onChange={onChangeLandUseHectares}
                 type={'number'}
-                value={participantProjectRecord?.landUseModelHectares?.[landUseModelType]}
+                value={acceleratorProjectRecord?.landUseModelHectares?.[landUseModelType]}
               /&gt;
             ))}
 &nbsp;
@@ -2963,44 +2963,44 @@ const ProjectProfileEdit = () =&gt; {
               id={'confirmedReforestableLand'}
               md={4}
               label={strings.ELIGIBLE_AREA_HA}
-              onChange={onChangeParticipantProject}
+              onChange={onChangeAcceleratorProject}
               type={'number'}
-              value={participantProjectRecord?.confirmedReforestableLand}
+              value={acceleratorProjectRecord?.confirmedReforestableLand}
               tooltip={strings.ELIGIBLE_AREA_DESCRIPTION}
             /&gt;
             &lt;ProjectFieldTextfield
               id={'projectArea'}
               md={4}
               label={strings.PROJECT_AREA_HA}
-              onChange={onChangeParticipantProject}
+              onChange={onChangeAcceleratorProject}
               type={'number'}
-              value={participantProjectRecord?.projectArea}
+              value={acceleratorProjectRecord?.projectArea}
               tooltip={strings.PROJECT_AREA_DESCRIPTION}
             /&gt;
             &lt;ProjectFieldTextfield
               id={'numNativeSpecies'}
               md={4}
               label={strings.NUMBER_OF_NATIVE_SPECIES}
-              onChange={onChangeParticipantProject}
+              onChange={onChangeAcceleratorProject}
               type={'number'}
-              value={participantProjectRecord?.numNativeSpecies}
+              value={acceleratorProjectRecord?.numNativeSpecies}
             /&gt;
             &lt;ProjectFieldTextfield
               id={'minProjectArea'}
               md={4}
               label={strings.MIN_PROJECT_AREA_HA}
-              onChange={onChangeParticipantProject}
+              onChange={onChangeAcceleratorProject}
               type={'number'}
-              value={participantProjectRecord?.minProjectArea}
+              value={acceleratorProjectRecord?.minProjectArea}
               tooltip={strings.MIN_PROJECT_AREA_DESCRIPTION}
             /&gt;
             &lt;ProjectFieldTextfield
               id={'totalExpansionPotential'}
               md={4}
               label={strings.EXPANSION_POTENTIAL_HA}
-              onChange={onChangeParticipantProject}
+              onChange={onChangeAcceleratorProject}
               type={'number'}
-              value={participantProjectRecord?.totalExpansionPotential}
+              value={acceleratorProjectRecord?.totalExpansionPotential}
               tooltip={strings.EXPANSION_POTENTIAL_DESCRIPTION}
             /&gt;
 &nbsp;
@@ -3014,48 +3014,48 @@ const ProjectProfileEdit = () =&gt; {
             &lt;MinMaxCarbonTextfield
               md={4}
               label={strings.MIN_MAX_CARBON_ACCUMULATION_UNITS}
-              onChange={onChangeParticipantProject}
-              valueMax={participantProjectRecord?.maxCarbonAccumulation}
-              valueMin={participantProjectRecord?.minCarbonAccumulation}
+              onChange={onChangeAcceleratorProject}
+              valueMax={acceleratorProjectRecord?.maxCarbonAccumulation}
+              valueMin={acceleratorProjectRecord?.minCarbonAccumulation}
             /&gt;
             &lt;ProjectFieldTextfield
               id={'totalVCU'}
               md={4}
               label={strings.TOTAL_VCU_T_40YRS}
-              onChange={onChangeParticipantProject}
+              onChange={onChangeAcceleratorProject}
               type={'number'}
-              value={participantProjectRecord?.totalVCU}
+              value={acceleratorProjectRecord?.totalVCU}
             /&gt;
             &lt;ProjectFieldTextfield
               id={'perHectareBudget'}
               md={4}
               label={strings.PER_HECTARE_ESTIMATED_BUDGET}
-              onChange={onChangeParticipantProject}
+              onChange={onChangeAcceleratorProject}
               type={'number'}
-              value={participantProjectRecord?.perHectareBudget}
+              value={acceleratorProjectRecord?.perHectareBudget}
             /&gt;
             &lt;ProjectFieldTextfield
               id={'accumulationRate'}
               md={4}
               label={strings.ACCUMULATION_RATE_UNITS}
-              onChange={onChangeParticipantProject}
+              onChange={onChangeAcceleratorProject}
               type={'number'}
-              value={participantProjectRecord?.accumulationRate}
+              value={acceleratorProjectRecord?.accumulationRate}
             /&gt;
             &lt;VariableSelect
               id={'standard'}
               md={4}
               label={strings.STANDARD}
-              onChange={onChangeParticipantProject}
-              value={participantProjectRecord?.standard}
+              onChange={onChangeAcceleratorProject}
+              value={acceleratorProjectRecord?.standard}
               options={(stableToVariable?.[standardStableId] as SelectVariable)?.options}
             /&gt;
             &lt;VariableSelect
               id={'methodologyNumber'}
               md={4}
               label={strings.METHODOLOGY_NUMBER}
-              onChange={onChangeParticipantProject}
-              value={participantProjectRecord?.methodologyNumber}
+              onChange={onChangeAcceleratorProject}
+              value={acceleratorProjectRecord?.methodologyNumber}
               options={(stableToVariable?.[methodologyNumberStableId] as SelectVariable)?.options}
             /&gt;
             {stableToVariable &amp;&amp; (
@@ -3063,8 +3063,8 @@ const ProjectProfileEdit = () =&gt; {
                 id={'carbonCertifications'}
                 md={4}
                 label={strings.CARBON_CERTIFICATIONS}
-                onChange={onChangeParticipantProject}
-                values={participantProjectRecord?.carbonCertifications}
+                onChange={onChangeAcceleratorProject}
+                values={acceleratorProjectRecord?.carbonCertifications}
                 options={(stableToVariable[carbonCertificationsStableId] as SelectVariable).options.reduce(
                   (map, option) =&gt; {
                     map.set(option.name, option.name);
@@ -3087,61 +3087,61 @@ const ProjectProfileEdit = () =&gt; {
               id={'googleFolderUrl'}
               md={4}
               label={strings.GDRIVE_LINK}
-              onChange={onChangeParticipantProject}
-              value={participantProjectRecord?.googleFolderUrl}
-              required={!!participantProjectRecord?.phase}
-              validate={!!participantProjectRecord?.phase &amp;&amp; validateFields}
+              onChange={onChangeAcceleratorProject}
+              value={acceleratorProjectRecord?.googleFolderUrl}
+              required={!!acceleratorProjectRecord?.phase}
+              validate={!!acceleratorProjectRecord?.phase &amp;&amp; validateFields}
             /&gt;
             &lt;ProjectFieldTextfield
               id={'verraLink'}
               md={4}
               label={strings.VERRA_LINK}
-              onChange={onChangeParticipantProject}
-              value={participantProjectRecord?.verraLink}
+              onChange={onChangeAcceleratorProject}
+              value={acceleratorProjectRecord?.verraLink}
             /&gt;
             &lt;ProjectFieldTextfield
               id={'clickUpLink'}
               md={4}
               label={strings.CLICK_UP_LINK}
-              onChange={onChangeParticipantProject}
-              value={participantProjectRecord?.clickUpLink}
+              onChange={onChangeAcceleratorProject}
+              value={acceleratorProjectRecord?.clickUpLink}
             /&gt;
             &lt;ProjectFieldTextfield
               id={'hubSpotUrl'}
               md={4}
               label={strings.HUBSPOT_LINK}
-              onChange={onChangeParticipantProject}
-              value={participantProjectRecord?.hubSpotUrl}
+              onChange={onChangeAcceleratorProject}
+              value={acceleratorProjectRecord?.hubSpotUrl}
             /&gt;
             &lt;ProjectFieldTextfield
               id={'riskTrackerLink'}
               md={4}
               label={strings.RISK_TRACKER_LINK}
-              onChange={onChangeParticipantProject}
-              value={participantProjectRecord?.riskTrackerLink}
+              onChange={onChangeAcceleratorProject}
+              value={acceleratorProjectRecord?.riskTrackerLink}
             /&gt;
             &lt;ProjectFieldTextfield
               id={'slackLink'}
               md={4}
               label={strings.SLACK_LINK}
-              onChange={onChangeParticipantProject}
-              value={participantProjectRecord?.slackLink}
+              onChange={onChangeAcceleratorProject}
+              value={acceleratorProjectRecord?.slackLink}
             /&gt;
             &lt;ProjectFieldTextfield
               id={'gisReportsLink'}
               md={4}
               label={strings.GIS_REPORT_LINK}
-              onChange={onChangeParticipantProject}
-              value={participantProjectRecord?.gisReportsLink}
+              onChange={onChangeAcceleratorProject}
+              value={acceleratorProjectRecord?.gisReportsLink}
             /&gt;
             &lt;ProjectFieldTextfield
               id={'dropboxFolderPath'}
               md={4}
               label={strings.DROPBOX_PATH}
-              onChange={onChangeParticipantProject}
-              value={participantProjectRecord?.dropboxFolderPath}
-              required={!!participantProjectRecord?.phase}
-              validate={!!participantProjectRecord?.phase &amp;&amp; validateFields}
+              onChange={onChangeAcceleratorProject}
+              value={acceleratorProjectRecord?.dropboxFolderPath}
+              required={!!acceleratorProjectRecord?.phase}
+              validate={!!acceleratorProjectRecord?.phase &amp;&amp; validateFields}
             /&gt;
 &nbsp;
             &lt;Grid container&gt;
@@ -3150,7 +3150,7 @@ const ProjectProfileEdit = () =&gt; {
                 md={6}
                 label={strings.UN_SDG}
                 onChange={onChangeSdgList}
-                value={participantProjectRecord?.sdgList}
+                value={acceleratorProjectRecord?.sdgList}
               /&gt;
             &lt;/Grid&gt;
           &lt;/Grid&gt;
@@ -3208,7 +3208,7 @@ export default ProjectProfileEdit;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-14T00:51:06.916Z
+                at 2026-02-14T00:59:13.337Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>
