@@ -267,7 +267,8 @@
 <a name='L202'></a><a href='#L202'>202</a>
 <a name='L203'></a><a href='#L203'>203</a>
 <a name='L204'></a><a href='#L204'>204</a>
-<a name='L205'></a><a href='#L205'>205</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L205'></a><a href='#L205'>205</a>
+<a name='L206'></a><a href='#L206'>206</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -443,6 +444,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -485,119 +487,120 @@ import { requestGe<span class="cstat-no" title="statement not covered" ><span cl
 im<span class="cstat-no" title="statement not covered" >port { useAppDispatch, useAppSelector } from 'src/redux/store';</span>
 impo<span class="cstat-no" title="statement not covered" >rt CohortModulesTable from 'src/scenes/AcceleratorRouter/Cohorts/CohortModulesTable';</span>
 import<span class="cstat-no" title="statement not covered" > strings from 'src/strings';</span>
-import {<span class="cstat-no" title="statement not covered" > CohortPhaseType, CreateCo<span class="fstat-no" title="function not covered" >ho</span>rtRe<span class="cstat-no" title="statement not covered" >questPaylo</span>ad, UpdateCohortRequestPayload } from 'src/types/Cohort';</span>
+import {<span class="cstat-no" title="statement not covered" > CreateCohortRequestPayloa<span class="fstat-no" title="function not covered" >d,</span> Upd<span class="cstat-no" title="statement not covered" >ateCohortR</span>equestPayload } from 'src/types/Cohort';</span>
 import { CohortModule } from 'src/types/Module';
-im<span class="cstat-no" title="statement not covered" >port useDev</span>iceInfo from 'src/utils/useDeviceInfo';
-&nbsp;
-type CohortFor<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >mP</span>rops&lt;T extends CreateCohortR<span class="cstat-no" title="statement not covered" >equestPayload | UpdateCohortRequestPayload&gt; = {</span></span>
+im<span class="cstat-no" title="statement not covered" >port { Phas</span>eType } from 'src/types/Phase';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+type CohortFormProps&lt;T extends CreateCohortRequestPayload | UpdateCohortRequestPayload&gt; = {
   busy?: boolean;
   cohortId?: number;
   onCancel: () =&gt; void;
   onSave: (cohort: T, modulesToUpdate?: CohortModule[], modulesToDelete?: CohortModule[]) =&gt; void;
   record: T;
 };
-&nbsp;
-export default func<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ti</span>on Coho<span class="cstat-no" title="statement not covered" >rtForm&lt;T extends CreateCohortRequestPayload | UpdateCohortReque</span></span>stPayload&gt;(
-  props: CohortFormP<span class="cstat-no" title="statement not covered" >rop</span>s&lt;T&gt;
-<span class="cstat-no" title="statement not covered" >): JSX.Element {</span>
-  const { b<span class="fstat-no" title="function not covered" >us</span>y, c<span class="cstat-no" title="statement not covered" >ohortId = -</span>1, onCancel, onSave, record } = props;
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  const dispatch = useAppDispatch();</span>
-  const { isMobile <span class="cstat-no" title="statement not covered" >} = useDeviceInfo();</span>
-  const { activeLocale<span class="cstat-no" title="statement not covered" > } = useLocalization();</span>
-  const theme = useTheme();<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+export default funct<span class="cstat-no" title="statement not covered" >ion</span> CohortForm&lt;T extends CreateCohortRequestPayload | UpdateCohortRequestPayload&gt;(
+<span class="cstat-no" title="statement not covered" >  props: CohortFormProps&lt;T&gt;</span>
+): JSX.Elem<span class="fstat-no" title="function not covered" >en</span>t {<span class="cstat-no" title="statement not covered" ></span>
+  const { busy, cohortId = -1, onCancel, onSave, record } = props;
 <span class="cstat-no" title="statement not covered" ></span>
-  const [localRecord, setLocalReco<span class="cstat-no" title="statement not covered" >rd] = useState&lt;T&gt;(record);</span>
-  const [validateFields, set<span class="cstat-no" title="statement not covered" >ValidateFields] = useState&lt;boolean&gt;(false);</span>
+  const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
+  const { isMobile } =<span class="cstat-no" title="statement not covered" > useDeviceInfo();</span>
+  const { activeLocale } = u<span class="cstat-no" title="statement not covered" >seLocalization();</span>
+  const theme = useThe<span class="cstat-no" title="statement not covered" >me();</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  const [localRecord, setLoc<span class="cstat-no" title="statement not covered" >alRecord] = useState&lt;T&gt;(record);</span>
+  const [validateFi<span class="cstat-no" title="statement not covered" >elds, setValidateFields] = useS</span>tate&lt;boolean&gt;(false);
 <span class="cstat-no" title="statement not covered" ></span>
   const cohort = useAppSelecto<span class="cstat-no" title="statement not covered" >r(selectCohort(cohortId));</span>
-  const { cohortModules, listC<span class="cstat-no" title="statement not covered" >ohortModules } = useListCohortModules();</span>
-  const { modules, <span class="cstat-no" title="statement not covered" >listModules } = useListModu</span>les();
-  const [pendingCohortModules, s<span class="cstat-no" title="statement not covered" >etPendingCohortModules] = useState&lt;CohortModule[]&gt;(cohortModules);</span>
+  const { cohortMod<span class="cstat-no" title="statement not covered" >ules, listCohortModules } =</span> useListCohortModules();
+  const { modules, listModules }<span class="cstat-no" title="statement not covered" > = useListModules();</span>
+  const [pendingCohor<span class="cstat-no" title="statement not covered" >tModules, setPendingCohortModule</span>s] = useState&lt;CohortModule[]&gt;(cohortModules);
+<span class="cstat-no" title="statement not covered" ></span>
+  useEffe<span class="fstat-no" title="function not covered" >ct(() =&gt; {</span>
+    setPendingCohortModules<span class="branch-0 cbranch-no" title="branch not covered" >(co</span>hortModules);<span class="cstat-no" title="statement not covered" ></span>
+  }, [cohortModules<span class="cstat-no" title="statement not covered" >]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
   useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-    setPe<span class="fstat-no" title="function not covered" >ndingCohort</span>Modules(cohortModules);
-  }, [cohortModules]);<span class="cstat-no" title="statement not covered" ><span class="branch-0 cbranch-no" title="branch not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" ></span>
-  useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-    if (cohortId) {<span class="cstat-no" title="statement not covered" ></span>
-      void listC<span class="cstat-no" title="statement not covered" >ohortModules(cohortId);</span>
+    if (cohortId<span class="cstat-no" title="statement not covered" >) {</span>
+      void listCohortModules(cohortId);<span class="cstat-no" title="statement not covered" ></span>
       void listModules();<span class="cstat-no" title="statement not covered" ></span>
     }<span class="cstat-no" title="statement not covered" ></span>
-  }, [cohortId, d<span class="cstat-no" title="statement not covered" >ispatch, listCohortModules, listModules]);</span>
+  }, [cohortId, dispatch, listCohortModules, li<span class="cstat-no" title="statement not covered" >stModules]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const currentPhaseDropdownOptions<span class="cstat-no" title="statement not covered" > = useMemo((): {</span>
-    label: string;<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >    value: CohortPhaseType;<span class="fstat-no" title="function not covered" ></span></span>
-  }[<span class="cstat-no" title="statement not covered" >] =&gt; {</span>
-    if (!activeLocale) {
-<span class="cstat-no" title="statement not covered" >      return [];<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >    }</span>
+  const currentPhaseDropdownOptions = useMemo((): {<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >    label: string;<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    value: PhaseType;</span>
+  }[] =&gt; {
+<span class="cstat-no" title="statement not covered" >    if (!activeLocale) {<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >      return [];</span>
+    }<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-    re<span class="cstat-no" title="statement not covered" >turn [</span>
+    return [
       { label: strings.COHORT_PHASE_DUE_DILIGENCE, value: 'Phase 0 - Due Diligence' },
-      { label: strings.COHORT_PHASE_FEASIBILITY_STUDY, value: 'Phase 1 - Feasibility Study' },
-      { label: strings.COHORT_PHASE_PL<span class="cstat-no" title="statement not covered" >AN_AND_SCALE, value: 'Phas<span class="fstat-no" title="function not covered" >e </span>2 - Plan and Scale' },</span>
-<span class="cstat-no" title="statement not covered" >      { label: strings.COHORT_PHASE_IMPLEMENT_AND_MONITOR, value: 'Phase 3 - Implement and Monitor' },</span>
-    ];<span class="cstat-no" title="statement not covered" ></span>
-  }, [activeLocale]);
-<span class="cstat-no" title="statement not covered" ></span>
+      { label: strings.COHORT_PHASE_FE<span class="cstat-no" title="statement not covered" >ASIBILITY_STUDY, value: 'P<span class="fstat-no" title="function not covered" >ha</span>se 1 - Feasibility Study' },</span>
+<span class="cstat-no" title="statement not covered" >      { label: strings.COHORT_PHASE_PLAN_AND_SCALE, value: 'Phase 2 - Plan and Scale' },</span>
+<span class="cstat-no" title="statement not covered" >      { label: st</span>rings.COHORT_PHASE_IMPLEMENT_AND_MONITOR, value: 'Phase 3 - Implement and Monitor' },
+    ];
+  },<span class="cstat-no" title="statement not covered" > [activeLocale]);</span>
+&nbsp;
   const updateField = (field: keyof T, value: any) =&gt; {
     setLocalRecord((prev) =&gt; ({
       ...prev,
       [field]: value,
     }));
-  };
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  co<span class="cstat-no" title="statement not covered" >nst validateFor<span class="fstat-no" title="function not covered" >m </span>= useCall<span class="cstat-no" title="statement not covered" >back(() =&gt; {</span></span>
+  };<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  const validateForm = useCallback(() =&gt; {
     if (!localRecord.name) {
       return false;
     }
-&nbsp;
-    if (!localRecord.ph<span class="cstat-no" title="statement not covered" >ase) {<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    if (!localRecord.phase) {</span>
 <span class="cstat-no" title="statement not covered" >      return false;</span>
-    }<span class="cstat-no" title="statement not covered" ></span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    return true;</span>
-  }, [<span class="cstat-no" title="statement not covered" >localRecord.na</span>me, localRecord.phase]);
-&nbsp;
-  co<span class="cstat-no" title="statement not covered" >nst onSaveHan</span>dler = useCallback(() =&gt; {
-    if (!validateForm()) {
-      setValidateFields(<span class="cstat-no" title="statement not covered" >true);<span class="fstat-no" title="function not covered" ></span></span>
+    }
+<span class="cstat-no" title="statement not covered" ></span>
+    re<span class="cstat-no" title="statement not covered" >turn true;</span>
+  }, [localRecord.name, localRecord.phase]);
+<span class="cstat-no" title="statement not covered" ></span>
+  const onSaveHandler = useCallback(() =&gt; {
+    if (!validateForm())<span class="cstat-no" title="statement not covered" > {<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >      setValidateFields(true);</span>
 <span class="cstat-no" title="statement not covered" >      return;</span>
     }<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
+    // determine modu<span class="cstat-no" title="statement not covered" >les to add, and modules to delete</span>
+    co<span class="fstat-no" title="function not covered" >ns</span>t toDelete = <span class="cstat-no" title="statement not covered" >cohortModules.filter(<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+      (oldModule) =&gt; pendingCohortModules.find((newModule) =&gt; newModule.id === oldModule.id) === undefined
+    );<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span>
+    const toAdd = pendingCohortModules.filter(
+      (newModule) =&gt; <span class="cstat-no" title="statement not covered" >cohortModules.find((oldModul<span class="fstat-no" title="function not covered" >e)</span> =&gt; oldModule.id === newModule.id) === undefined</span>
+    );<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 <span class="cstat-no" title="statement not covered" ></span>
-    // determine modules to add, and modules to delete
-    const toDelete = <span class="cstat-no" title="statement not covered" >cohortModules.filter(</span>
-<span class="fstat-no" title="function not covered" >      (o</span>ldModule) =&gt; <span class="cstat-no" title="statement not covered" >pendingCohortModules.find(<span class="fstat-no" title="function not covered" >(n</span>ewModule) =&gt; <span class="cstat-no" title="statement not covered" >newModule.id === oldModule.id)</span> === undefin</span>ed
-    );
-<span class="cstat-no" title="statement not covered" ></span>
-    co<span class="fstat-no" title="function not covered" >ns</span>t toAdd = pen<span class="cstat-no" title="statement not covered" >dingCohortModules.f<span class="fstat-no" title="function not covered" >il</span>ter(<span class="cstat-no" title="statement not covered" ></span></span>
-      (newModule) =&gt; cohortModules.find((oldModule) =&gt; oldModule.id === newModule.id) === undefined
-    );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-    co<span class="cstat-no" title="statement not covered" >nst toUpdate = pendingCohortModules.filter((newModule) =&gt; {</span>
-      const oldModule = cohortModules.find((module) =&gt; module.id === newModule.id);
-<span class="cstat-no" title="statement not covered" >      return (</span>
+    const toUpdate = pendingCohortModules.filter((newModule) =&gt; {
+<span class="cstat-no" title="statement not covered" >      const oldModule = cohortModules.find((module) =&gt; module.id === newModule.id);</span>
+      return (
         oldModule !== undefined &amp;&amp;
         !(
           oldModule.title === newModule.title &amp;&amp;
           oldModule.startDate === newModule.startDate &amp;&amp;
           oldModule.endDate === newModule.endDate
         )
-      );
-<span class="cstat-no" title="statement not covered" >    });<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" ></span>
-    onSave(
-<span class="cstat-no" title="statement not covered" >      {<span class="fstat-no" title="function not covered" ></span></span>
-        ...localRecord,<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >      },<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >      [...toAdd, ...toUpdate],</span>
-      to<span class="cstat-no" title="statement not covered" >Delete</span>
+<span class="cstat-no" title="statement not covered" >      );<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    });</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    onSave(<span class="fstat-no" title="function not covered" ></span></span>
+      {<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >        ...localReco<span class="fstat-no" title="function not covered" >rd</span>,</span>
+<span class="cstat-no" title="statement not covered" >      },</span>
+      [.<span class="cstat-no" title="statement not covered" >..toAdd, ...toUpdate],</span>
+      toDelete
     );
   }, [cohortModules, localRecord, pendingCohortModules, onSave, validateForm]);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(() =&gt; {</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  useEffect(() =&gt; {
     // update local record when cohort changes
     setLocalRecord(record);
   }, [record]);
@@ -635,8 +638,8 @@ export default func<span class="cstat-no" title="statement not covered" ><span c
           sx={{
             backgroundColor: theme.palette.TwClrBg,
             borderRadius: theme.spacing(4),
-            padding: theme.spacing(3),
-          }}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+            padding: t<span class="fstat-no" title="function not covered" >he</span>me.spacin<span class="cstat-no" title="statement not covered" >g(3),</span>
+          }}
           width={'100%'}
         &gt;
           &lt;Grid container spacing={theme.spacing(3)} width={'100%'}&gt;
@@ -645,8 +648,8 @@ export default func<span class="cstat-no" title="statement not covered" ><span c
                 errorText={validateFields &amp;&amp; !localRecord?.name ? strings.REQUIRED_FIELD : ''}
                 id='name'
                 label={strings.NAME}
-                onChange={(value) =&gt; updateField('name', value)}
-                requir<span class="fstat-no" title="function not covered" >ed<span class="cstat-no" title="statement not covered" ></span></span>
+                onChan<span class="fstat-no" title="function not covered" >ge</span>={(value)<span class="cstat-no" title="statement not covered" > =&gt; updateField('name', valu</span>e)}
+                required
                 type='text'
                 value={localRecord.name}
               /&gt;
@@ -682,7 +685,7 @@ export default func<span class="cstat-no" title="statement not covered" ><span c
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-14T00:00:41.249Z
+                at 2026-02-14T00:32:37.445Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

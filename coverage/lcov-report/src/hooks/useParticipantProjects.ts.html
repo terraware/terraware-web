@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/59</span>
+                <span class='fraction'>0/45</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/32</span>
+                <span class='fraction'>0/25</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/56</span>
+                <span class='fraction'>0/42</span>
             </div>
         
             
@@ -116,17 +116,7 @@
 <a name='L51'></a><a href='#L51'>51</a>
 <a name='L52'></a><a href='#L52'>52</a>
 <a name='L53'></a><a href='#L53'>53</a>
-<a name='L54'></a><a href='#L54'>54</a>
-<a name='L55'></a><a href='#L55'>55</a>
-<a name='L56'></a><a href='#L56'>56</a>
-<a name='L57'></a><a href='#L57'>57</a>
-<a name='L58'></a><a href='#L58'>58</a>
-<a name='L59'></a><a href='#L59'>59</a>
-<a name='L60'></a><a href='#L60'>60</a>
-<a name='L61'></a><a href='#L61'>61</a>
-<a name='L62'></a><a href='#L62'>62</a>
-<a name='L63'></a><a href='#L63'>63</a>
-<a name='L64'></a><a href='#L64'>64</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L54'></a><a href='#L54'>54</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -167,99 +157,79 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useCal<span class="cstat-no" title="statement not covered" >lback, useEffe</span>ct, useState } from 'react';
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useCal<span class="cstat-no" title="statement not covered" >lback, useEffe</span>ct, useMemo } from 'react';
 <span class="cstat-no" title="statement not covered" ></span>
 import { useLocalizatio<span class="cstat-no" title="statement not covered" >n } from 'src/providers';</span>
-import { requestListPart<span class="cstat-no" title="statement not covered" >icipantProjects } from 'src</span>/redux/features/participantProjects/participantProjectsAsyncThunks';
-import { selectPart<span class="cstat-no" title="statement not covered" >icipantProjectsListReq</span>uest } from 'src/redux/features/participantProjects/participantProjectsSelectors';
-import { useAppDisp<span class="cstat-no" title="statement not covered" >atch, useAppSelector } from 'src</span>/redux/store';
-import { Partic<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ip</span>antProject } from 'src/types/ParticipantProject';</span>
-im<span class="cstat-no" title="statement not covered" >port useSnackbar from 'src/utils/useSnackbar';</span>
+import { ParticipantProj<span class="cstat-no" title="statement not covered" >ect } from 'src/types/Parti</span>cipantProject';
+import useSnackbar <span class="cstat-no" title="statement not covered" >from 'src/utils/useSna</span>ckbar';
 <span class="cstat-no" title="statement not covered" ></span>
-export type UseParticipantProjectsResult = {
-  error: string | <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >nu</span>ll;</span>
-<span class="cstat-no" title="statement not covered" >  isLoading: boolean;</span>
-  pa<span class="cstat-no" title="statement not covered" >rticipantProjects: ParticipantProject[];</span>
-  refe<span class="cstat-no" title="statement not covered" >tch: () =&gt; void;</span>
-};<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-&nbsp;
-ex<span class="cstat-no" title="statement not covered" >port const </span>useParticipantProjects = (): UseParticipantProjectsResult =&gt; {
-  const { activeLocale, strings } = useLocalization();
-  const dispat<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ch</span> = useAppDispatch();<span class="cstat-no" title="statement not covered" ></span></span>
-  const snackbar = useSnackbar();
-&nbsp;
-  const [participantProjects, setParticipantProjects] = useState&lt;ParticipantProject[]&gt;([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState&lt;string | null&gt;(null);
-  const [listRequestId, setListRequestId] = useState('');
-&nbsp;
-  const participant<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Pr</span>ojectsL<span class="cstat-no" title="statement not covered" >istResult = useAppSelector(selectParticipantProjectsListRequest</span></span>(listRequestId));
+import { useLaz<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >yL</span>istProjectAcceleratorDetailsQuery } from '../queries/generated/acceleratorProjects';</span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  const fetchParticipantProjects = useCallback(() =&gt; {</span>
-    if (!activeLocale) {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-      return;
-<span class="cstat-no" title="statement not covered" >    }</span>
-<span class="cstat-no" title="statement not covered" ></span>
-    setIsLoading(true);<span class="cstat-no" title="statement not covered" ></span>
-    setError(null);<span class="cstat-no" title="statement not covered" ></span>
-    const request = dispatch(requestListPa<span class="cstat-no" title="statement not covered" >rticipantProjects({ locale: activeLocale }));</span>
-    setListRequestI<span class="cstat-no" title="statement not covered" >d(request.requestId);</span>
-  }, [activeLocale, dispa<span class="cstat-no" title="statement not covered" >tch]);</span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-    fetchParticipan<span class="cstat-no" title="statement not covered" >tProjects();</span>
-  }, [fetchParticip<span class="cstat-no" title="statement not covered" >antProjects]);</span>
-<span class="cstat-no" title="statement not covered" ></span>
-  useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-    if (participantProjectsL<span class="cstat-no" title="statement not covered" >istResult?.status === 'error') {</span>
-      const errorMessage = strings.GENERIC_E<span class="cstat-no" title="statement not covered" >RROR;</span>
-      setError(errorMessage);<span class="cstat-no" title="statement not covered" ></span>
-      snackbar.toastError(errorMess<span class="cstat-no" title="statement not covered" >age);<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >      setIsLoading(false);</span>
-    } <span class="cstat-no" title="statement not covered" >else if </span>(participantProjectsListResult?.status === 'success') {
-      setParticipantProjects(participantProjectsListResult?.data || []);
-<span class="cstat-no" title="statement not covered" >      setError(null);</span>
-<span class="cstat-no" title="statement not covered" >      setIsLoading(f</span>alse);
-    }<span class="cstat-no" title="statement not covered" ></span>
-  },<span class="cstat-no" title="statement not covered" > [participantProjectsListResult, snac</span>kbar, strings]);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  return {<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >    error,</span>
-    isLoading,
-<span class="cstat-no" title="statement not covered" >    participantProjects,<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >    refetch: fetchParticipantProjects,</span>
-  };<span class="cstat-no" title="statement not covered" ></span>
+expo<span class="cstat-no" title="statement not covered" >rt type UseParticipantProjectsResult = {</span>
+  isLoading: boolean;
+  participantProje<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ct</span>s: ParticipantProject[];</span>
+<span class="cstat-no" title="statement not covered" >  refetch: () =&gt; void;</span>
 };<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" ></span>
+export c<span class="cstat-no" title="statement not covered" >onst useParticipantProject<span class="fstat-no" title="function not covered" >s </span>= ()<span class="cstat-no" title="statement not covered" >: UseParti</span>cipantProjectsResult =&gt; {</span>
+  const { activeLocale, strings } = useLocalization();
+<span class="cstat-no" title="statement not covered" >  const snack</span>bar = useSnackbar();
+&nbsp;
+  const [listP<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ro</span>jectAcceleratorDetails, list<span class="cstat-no" title="statement not covered" >DetailsResponse] = useLazyListProjectAcceleratorDetailsQuery();</span></span>
+&nbsp;
+  const fetchParticipantProjects = useCallback(
+    (preferCached: boolean = false) =&gt; {
+      if (!activeLocale) {
+        return;
+      }
+&nbsp;
+      void listProj<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ec</span>tAccele<span class="cstat-no" title="statement not covered" >ratorDetails(undefined, preferCached);</span></span>
+    },<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >    [activeLocale, listProjectAcceleratorDetails]</span>
+  );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  useEffect(() =&gt; {</span>
+    fetchParticipan<span class="cstat-no" title="statement not covered" >tProjects(true);</span>
+  }, [fetchParticipantP<span class="cstat-no" title="statement not covered" >rojects]);</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  const participantProjects = use<span class="cstat-no" title="statement not covered" >Memo(</span>
+    () =&gt; (listDetailsResponse.<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >is</span>Success ? listDetailsResponse.data.details : []),</span>
+    [listDetailsResponse]<span class="cstat-no" title="statement not covered" ></span>
+  );<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+  useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" >    if</span> (listDetailsR<span class="branch-0 cbranch-no" title="branch not covered" >espons</span>e.isError) {
+<span class="cstat-no" title="statement not covered" >      const errorMessage = strings.GENERIC_ERROR;</span>
+      sn<span class="cstat-no" title="statement not covered" >ackbar.t</span>oastError(errorMessage);
+    }
+  }, [<span class="cstat-no" title="statement not covered" >listDetailsResponse.isError, snackbar, strings]);</span>
+&nbsp;
+  return {
+    isLoading: listDetailsResponse.isLoading,
+<span class="cstat-no" title="statement not covered" >    participantProjects,<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    refetch: fetchParticipantProject</span>s,
+  };
+};<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-14T00:00:41.249Z
+                at 2026-02-14T00:32:37.445Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

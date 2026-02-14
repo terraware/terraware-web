@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/317</span>
+                <span class='fraction'>0/312</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/355</span>
+                <span class='fraction'>0/353</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/82</span>
+                <span class='fraction'>0/81</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/292</span>
+                <span class='fraction'>0/288</span>
             </div>
         
             
@@ -1109,8 +1109,7 @@
 <a name='L1044'></a><a href='#L1044'>1044</a>
 <a name='L1045'></a><a href='#L1045'>1045</a>
 <a name='L1046'></a><a href='#L1046'>1046</a>
-<a name='L1047'></a><a href='#L1047'>1047</a>
-<a name='L1048'></a><a href='#L1048'>1048</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L1047'></a><a href='#L1047'>1047</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1187,7 +1186,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1205,7 +1203,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1214,8 +1211,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1291,7 +1286,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1417,7 +1411,9 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1461,6 +1457,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -2038,6 +2035,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2181,46 +2179,45 @@ import Icon from 'src/components/common/icon/Icon';
 import useBoolean from 'src/hooks/useBoolean';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization, useUser } from 'src/providers';
+import { useUpdateProjectAcceleratorDetailsMutation } from 'src/queries/generated/acceleratorProjects';
 import {
-  InternalUserPayload,
-  useGetInternalUse<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >rs</span>Query,<span class="cstat-no" title="statement not covered" ></span></span>
-  useUpdateInternalU<span class="cstat-no" title="statement not covered" >ser</span>Mutation,
-<span class="cstat-no" title="statement not covered" >} from 'src/queries/generated/projectInternalUsers';</span>
-import { se<span class="fstat-no" title="function not covered" >le</span>ctUp<span class="cstat-no" title="statement not covered" >loadImageValue</span> } from 'src/redux/features/documentProducer/values/valuesSelector';
-import {
-<span class="cstat-no" title="statement not covered" >  requestListSpecificVariablesValues,</span>
-  requestUploadMany<span class="cstat-no" title="statement not covered" >ImageValues,</span>
-} from 'src/redux/feat<span class="cstat-no" title="statement not covered" >ures/documentProducer/val</span>ues/valuesThunks';
-import { selectSpecificVaria<span class="cstat-no" title="statement not covered" >blesWithValues } from 'src/redux/feat</span>ures/documentProducer/variables/variablesSelector';
-import { requestListSpecif<span class="cstat-no" title="statement not covered" >icVariables } from 'src/redux/features/documentProducer/vari</span>ables/variablesThunks';
-import { requestListGlobalRolesUsers }<span class="cstat-no" title="statement not covered" > from 'src/redux/features/globalRoles/globalRolesAsyncThunks';</span>
-import { selectGlobalRolesU<span class="cstat-no" title="statement not covered" >sersSearchRequest } from 'src/redux/features/globalRoles/globa</span>lRolesSelectors';
-import { requestListOrganization<span class="cstat-no" title="statement not covered" >Users } from 'src/redux/features/organizationUser/organizationUsers</span>AsyncThunks';
-import { selectOrganizationUsers } <span class="cstat-no" title="statement not covered" >from 'src/redux/features/organizationUser/organizationUsersSelectors';</span>
-import { requestUpdatePar<span class="cstat-no" title="statement not covered" >ticipantProject } from 'src/redux/features/participantProjec</span>ts/participantProjectsAsyncThunks';
-import { selectParticipantPr<span class="cstat-no" title="statement not covered" >ojectUpdateRequest } from 'src/redux/features/participantProjec</span>ts/participantProjectsSelectors';
-import { useAppDispa<span class="cstat-no" title="statement not covered" >tch, useAppSelector } from 'src/redux/store';</span>
-import { CohortPhaseType }<span class="cstat-no" title="statement not covered" > from 'src/types/Cohort';</span>
-import { LAND_USE_MODEL<span class="cstat-no" title="statement not covered" >_TYPES, ParticipantProject } from 'src/types/ParticipantPr</span>oject';
-import { ProjectInternalUser<span class="cstat-no" title="statement not covered" >Role, getProjectInternalUserRoleString, projectInternalUserRole</span>s } from 'src/types/Project';
-import { Organizat<span class="cstat-no" title="statement not covered" >ionUser } from 'src/types/User';</span>
+  InternalUserPaylo<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ad</span>,<span class="cstat-no" title="statement not covered" ></span></span>
+  useGetInternalUser<span class="cstat-no" title="statement not covered" >sQu</span>ery,
+<span class="cstat-no" title="statement not covered" >  useUpdateInternalUserMutation,</span>
+} from 'src<span class="fstat-no" title="function not covered" >/q</span>ueri<span class="cstat-no" title="statement not covered" >es/generated/p</span>rojectInternalUsers';
+import { selectUploadImageValue } from 'src/redux/features/documentProducer/values/valuesSelector';
+<span class="cstat-no" title="statement not covered" >import {</span>
+  requestListSpecif<span class="cstat-no" title="statement not covered" >icVariablesValues,</span>
+  requestUploadManyIma<span class="cstat-no" title="statement not covered" >geValues,</span>
+} from 'src/redux/features/d<span class="cstat-no" title="statement not covered" >ocumentProducer/values/valuesThunks';</span>
+import { selectSpecificVar<span class="cstat-no" title="statement not covered" >iablesWithValues } from 'src/redux/features/documentProducer</span>/variables/variablesSelector';
+import { requestListSpecificVariables <span class="cstat-no" title="statement not covered" >} from 'src/redux/features/documentProducer/variables/variablesThu</span>nks';
+import { requestListGlobalR<span class="cstat-no" title="statement not covered" >olesUsers } from 'src/redux/features/globalRoles/globalRolesAs</span>yncThunks';
+import { selectGlobalRolesUsersS<span class="cstat-no" title="statement not covered" >earchRequest } from 'src/redux/features/globalRoles/globalRolesSele</span>ctors';
+import { requestListOrganizationUse<span class="cstat-no" title="statement not covered" >rs } from 'src/redux/features/organizationUser/organizationUsersAsyncT</span>hunks';
+import { selectOrganizati<span class="cstat-no" title="statement not covered" >onUsers } from 'src/redux/features/organizationUser/organiza</span>tionUsersSelectors';
+import { useAppDispatch, use<span class="cstat-no" title="statement not covered" >AppSelector } from 'src/redux/store';</span>
+import { LAND_USE_MO<span class="cstat-no" title="statement not covered" >DEL_TYPES, ParticipantProject } from 'src/types/Partici</span>pantProject';
+import { PhaseType } from <span class="cstat-no" title="statement not covered" >'src/types/Phase';</span>
+import { ProjectInterna<span class="cstat-no" title="statement not covered" >lUserRole, getProjectInternalUserRoleString, projectIntern</span>alUserRoles } from 'src/types/Project';
+import { OrganizationUser } <span class="cstat-no" title="statement not covered" >from 'src/types/User';</span>
 import { SelectVar<span class="cstat-no" title="statement not covered" >iable, VariableWithValues } from 'src/types/doc</span>umentProducer/Variable';
-import { getImagePath <span class="cstat-no" title="statement not covered" >} from 'src/utils/images';</span>
-import useForm fro<span class="cstat-no" title="statement not covered" >m 'src/utils/useForm';</span>
-import useSnackbar from <span class="cstat-no" title="statement not covered" >'src/utils/useSnackbar';</span>
+import { getImageP<span class="cstat-no" title="statement not covered" >ath } from 'src/utils/images';</span>
+import useForm from 's<span class="cstat-no" title="statement not covered" >rc/utils/useForm';</span>
+import useSnackbar<span class="cstat-no" title="statement not covered" > from 'src/utils/useSnackbar';</span>
 <span class="cstat-no" title="statement not covered" ></span>
-import { useParticipant<span class="cstat-no" title="statement not covered" >ProjectData } from '../Pa</span>rticipantProjectContext';
-import AddInternalUserRoleModal fr<span class="cstat-no" title="statement not covered" >om './AddInternalUserRoleModal';</span>
+import { useParticipantProj<span class="cstat-no" title="statement not covered" >ectData } from '../ParticipantProjectContext</span>';
+import AddInternalUserR<span class="cstat-no" title="statement not covered" >oleModal from './AddInter</span>nalUserRoleModal';
 <span class="cstat-no" title="statement not covered" ></span>
-type InternalUserItem = Om<span class="cstat-no" title="statement not covered" >it&lt;InternalUserPayload, 'userId'&gt; &amp; {</span>
+type InternalUserItem = Omit&lt;Inter<span class="cstat-no" title="statement not covered" >nalUserPayload, 'userId'&gt; &amp; {</span>
   userId?: number;<span class="cstat-no" title="statement not covered" ></span>
 };<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-const HighlightPhotoStableId = '55<span class="cstat-no" title="statement not covered" >1';</span>
-const ProjectZoneFigureStableId = '525';<span class="cstat-no" title="statement not covered" ></span>
+const HighlightPhotoStableId <span class="cstat-no" title="statement not covered" >= '551';</span>
+const ProjectZoneFigureStableId = '5<span class="cstat-no" title="statement not covered" >25';</span>
 const standardStableId = '350';<span class="cstat-no" title="statement not covered" ></span>
 const methodologyNumberStableId = '351';<span class="cstat-no" title="statement not covered" ></span>
-const carbonCertificationsStableId = '552'<span class="cstat-no" title="statement not covered" >;</span>
+const carbonCertificationsStableId = '55<span class="cstat-no" title="statement not covered" >2';</span>
 const variableStabl<span class="cstat-no" title="statement not covered" >eIds = [</span>
   HighlightPhotoStableId,<span class="cstat-no" title="statement not covered" ></span>
   ProjectZoneFigureSt<span class="cstat-no" title="statement not covered" >ableId,</span>
@@ -2248,122 +2245,118 @@ const ProjectProfileEdit = () =&gt; {
   const { isAllowed } = useUser();
   const [validateFields, setValidateFields] = useState&lt;boolean&gt;(false);
 &nbsp;
-  // Participant project (accelerator data) form record and update request
-  const [participantProjectRequestId, setParticipantProjectRequestId] = useState&lt;string&gt;('');
-  const participantProjectU<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >pd</span>ateResponse = useAppSelector(</span>
-    selectParticipantProjectUpdateRequest(participantProjectRequestId)
-  );<span class="cstat-no" title="statement not covered" ></span>
-  const [partici<span class="cstat-no" title="statement not covered" >pantProjectRecord, setParticipan</span>tProjectRecord, onChangeParticipantProject] =
-    useForm(partici<span class="cstat-no" title="statement not covered" >pantProject);</span>
-<span class="cstat-no" title="statement not covered" ></span>
-  const [requestsInProgress, setReque<span class="cstat-no" title="statement not covered" >stsInProgress] = useState(false);</span>
-  const [initiatedReques<span class="cstat-no" title="statement not covered" >ts, setInitiatedRequests] = useS</span>tate({
-    participantProject: false,<span class="cstat-no" title="statement not covered" ></span>
+  const [updateParticipantProject, updateParticipantProjectResponse] = useUpdateProjectAcceleratorDetailsMutation();
+  const [participantProjectRecord, setParticipantProjectRecord, onChangeParticipantProject] =
+    useForm(participantProj<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ec</span>t);</span>
+&nbsp;
+  const [requestsIn<span class="cstat-no" title="statement not covered" >Progress, setRequestsInProgress] = </span>useState(false);
+  const [initiat<span class="cstat-no" title="statement not covered" >edRequests, setInitiatedRequests</span>] = useState({
+    participantProj<span class="cstat-no" title="statement not covered" >ect: false,</span>
     updateInternalUsers: false,<span class="cstat-no" title="statement not covered" ></span>
     uploadImages: false,<span class="cstat-no" title="statement not covered" ></span>
-  });
-&nbsp;
-  const [organizationUsersRequestId, setOrganizationUsersRequestId] = useState&lt;string&gt;('');<span class="cstat-no" title="statement not covered" ></span>
-  const [listUsersRequestId, setListUsersRequestId] = <span class="cstat-no" title="statement not covered" >useState('');</span>
+  });<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const { data: internalUsersData, isSuccess: isInternalUsersRequestSuccess } = useGetInternalUsersQuery(projectId, {
+  const [organizationUsersRequestId, setOrganizationUsersRequestId] = u<span class="cstat-no" title="statement not covered" >seState&lt;string&gt;('');</span>
+  const [listUsersRequestId, setListUsersRequestId] = useState('');<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+  const { data: internalUsersData, isSuccess: isInte<span class="cstat-no" title="statement not covered" >rnalUsersRequestSuccess } = useGetInternalUsersQuery(projectId, {</span>
     skip: !projectId || projectId === -1,
   });
   const initialInternalUsers = useMemo(() =&gt; internalUsersData?.users ?? [], [internalUsersData]);
-  const [updateInternalUsers, updateInternalUsersResponse] = useUpdate<span class="cstat-no" title="statement not covered" >InternalUserMutation();</span>
+  const [updateInternalUsers, updateInternalUsersResponse] = useUpdateInternalUserMutation();
 <span class="cstat-no" title="statement not covered" ></span>
-  const listUsersRequest = useAppSelector(selectGlobalRolesUsersSearchRequest(li<span class="cstat-no" title="statement not covered" >stUsersRequestId));</span>
-  const [internalUsers, setInternalUsers] = useState&lt;InternalUserItem[]&gt;([]);
+  const listUsersRequest = useAppSelector(selectGlobal<span class="cstat-no" title="statement not covered" >RolesUsersSearchRequest(listUse</span>rsRequestId));
+  const [internalUsers, setInternalUsers] = useState&lt;InternalUserItem[]&gt;([]);<span class="cstat-no" title="statement not covered" ></span>
   const [uploadImagesRequestId, setUploadImagesRequestId] = useState('');
-  const uploadImagesResponse = <span class="cstat-no" title="statement not covered" >useAppSelector(selectUploa<span class="fstat-no" title="function not covered" >dI</span>mageValue(uploadImagesRequestId));</span>
-  const response = useAppSelector(selectOrganizationUsers(organizationUsersRequestId));
-<span class="cstat-no" title="statement not covered" ></span>
-  const variableValues = useAppSelector((state) =&gt;
-    selectSpecificVariablesWithValues(state, variableStableId<span class="cstat-no" title="statement not covered" >s, projectId)</span>
-  );<span class="cstat-no" title="statement not covered" ></span>
-  const [stableToVariable, setStableToVariab<span class="cstat-no" title="statement not covered" >le] = useState&lt;Record&lt;string, V</span>ariableWithValues&gt;&gt;();
-  const { activeLocale, strings } = useLocalization();<span class="cstat-no" title="statement not covered" ></span>
-  const [globalUsersOptions, se<span class="cstat-no" title="statement not covered" >tGlobalUsersOptions] = useState&lt;DropdownItem[]&gt;();</span>
-  const [organizati<span class="cstat-no" title="statement not covered" >onUsers, setOrganizationUsers] = useState&lt;OrganizationUser[]&gt;();</span>
-  const [mainPhoto, setMa<span class="cstat-no" title="statement not covered" >inPhoto] = useState&lt;FileWithUrl&gt;();</span>
-  co<span class="fstat-no" title="function not covered" >ns</span>t [mapPho<span class="cstat-no" title="statement not covered" >to, setMapPhoto] = useState&lt;FileWithUrl&gt;();</span>
-  const [customUserRoles, setCustomUserRoles] = useState&lt;string[]&gt;([]);
-  const [confirmModalOpen, , openConfirmModal, clo<span class="cstat-no" title="statement not covered" >seConfirmModal] = useBoolean(</span>false);
-<span class="cstat-no" title="statement not covered" ></span>
-  const isAllowedEdit = isAllowed('UPDATE_PARTICIPANT_<span class="cstat-no" title="statement not covered" >PROJECT');</span>
-<span class="cstat-no" title="statement not covered" ></span>
-  const redirectToProjectView = useC<span class="cstat-no" title="statement not covered" >allback(() =&gt; {</span>
-    reload();<span class="cstat-no" title="statement not covered" ></span>
-    snackbar.toastSuccess(strings.CHANGES_SAVED,<span class="cstat-no" title="statement not covered" > strings.SAVED);</span>
-    goToParticipantProject(projectId);<span class="cstat-no" title="statement not covered" ></span>
-  }, [reload, snackbar, <span class="cstat-no" title="statement not covered" >goToParticipantProject, projectId, strin</span>gs]);
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  co<span class="cstat-no" title="statement not covered" >nst addInt</span>ernalUserRole = useCallback(
-<span class="cstat-no" title="statement not covered" >    (internalUserRole: string) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >      const trimmedRole = internalUserR</span>ole.trim();
-      if (trimmedRole.length &amp;&amp; !customUserRoles.includes(trimmedRole)) {
-        setCustomUserRoles((pr<span class="cstat-no" title="statement not covered" >ev) =&gt; [...prev, trimmedRole]);</span>
-<span class="fstat-no" title="function not covered" ></span>      }
-    },<span class="cstat-no" title="statement not covered" ></span>
-    [c<span class="cstat-no" title="statement not covered" >ustomUserRoles, setCustomUserRoles]</span>
-  );<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  const uploadImagesResponse = useAppSelector(selectUploadImageValue(uploadImagesRequestId));
+  const response = useAppSelect<span class="cstat-no" title="statement not covered" >or(selectOrganizationUsers<span class="fstat-no" title="function not covered" >(o</span>rganizationUsersRequestId));</span>
 &nbsp;
+  co<span class="cstat-no" title="statement not covered" >nst variableValues = useAppSelector((state) =&gt;</span>
+    selectSpecificVariablesWithValues(state, variableStableIds, projectId)
+  );<span class="cstat-no" title="statement not covered" ></span>
+  const [stableToVariable, <span class="cstat-no" title="statement not covered" >setStableToVariable] = useState&lt;Record&lt;string, VariableWithValues&gt;&gt;();</span>
+  const { activeLocale, strings } = useLocal<span class="cstat-no" title="statement not covered" >ization();</span>
+  const [globalUsersOptions, setGlobalUsersOptions] = useSta<span class="cstat-no" title="statement not covered" >te&lt;DropdownItem[]&gt;();</span>
+  const [organizationUsers, set<span class="cstat-no" title="statement not covered" >OrganizationUsers] = useState&lt;OrganizationUser[]&gt;();</span>
+  const [mainPhoto,<span class="cstat-no" title="statement not covered" > setMainPhoto] = useState&lt;FileWithUrl&gt;();</span>
+  const [mapPhoto, setMap<span class="cstat-no" title="statement not covered" >Photo] = useState&lt;FileWithUrl&gt;();</span>
+  co<span class="fstat-no" title="function not covered" >ns</span>t [custom<span class="cstat-no" title="statement not covered" >UserRoles, setCustomUserRoles] = useState&lt;string[]&gt;([]);</span>
+  const [confirmModalOpen, , openConfirmModal, closeConfirmModal] = useBoolean(false);
+<span class="cstat-no" title="statement not covered" ></span>
+  const isAllowedEdit = isAllowed('U<span class="cstat-no" title="statement not covered" >PDATE_PARTICIPANT_PROJECT');</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  const redirectToProjectView = useCallback(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
+    reload();<span class="cstat-no" title="statement not covered" ></span>
+    snackbar.toastSuccess(strings.<span class="cstat-no" title="statement not covered" >CHANGES_SAVED, strings.SAVED)</span>;
+    goToParticipantProject(projectId);<span class="cstat-no" title="statement not covered" ></span>
+  }, [reload, snackbar, goToParticipantProject, projectId, strings])<span class="cstat-no" title="statement not covered" >;</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  const addInternalUserRole = us<span class="cstat-no" title="statement not covered" >eCallback(<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    (internalU</span>serRole: string) =&gt; {
+<span class="cstat-no" title="statement not covered" >      const trimmedRole = internalUserRole.trim();</span>
+<span class="cstat-no" title="statement not covered" >      if (trimmedRole.length &amp;&amp; !custom</span>UserRoles.includes(trimmedRole)) {
+        setCustomUserRoles((prev) =&gt; [...prev, trimmedRole]);
+      }<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" >    },</span>
+    [customUserRoles, setC<span class="cstat-no" title="statement not covered" >ustomUserRoles]</span>
+  );<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
   const internalUserRoleOptions = useMemo(
     () =&gt;
       [
-        ...projectInternalUserRole<span class="cstat-no" title="statement not covered" >s.map((role) =&gt; ({</span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span>          label: getProjectInternalUserRoleString(role, strings),</span>
-          value: role,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-        })),
+        ...projectInternalUserRoles.map((role) =&gt; ({
+          label: getProjectInterna<span class="cstat-no" title="statement not covered" >lUserRoleString(role, strings),</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span>          value: role,</span>
+        })),<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
         ...customUserRoles.map((role) =&gt; ({
           label: role,
-          value: role,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-        })),
+          value: role,
+        })),<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
       ].sort((a, b) =&gt; a.label.localeCompare(b.label, activeLocale || undefined)),
     [activeLocale, customUserRoles, strings]
-  );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-&nbsp;
+  );
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
   useEffect(() =&gt; {
-<span class="cstat-no" title="statement not covered" >    if (variableValues.length <span class="fstat-no" title="function not covered" >&gt; </span>0) {</span>
-<span class="cstat-no" title="statement not covered" >      setStableToVariable(</span>
+    if (variableValues.length &gt; 0) {
+<span class="cstat-no" title="statement not covered" >      setStableToVariable(<span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >        variableValues.reduce&lt;Record&lt;string, VariableWithValues&gt;&gt;((map, variableWithValues) =&gt; {</span>
-          map[variableWithValu<span class="fstat-no" title="function not covered" >es</span>.stableId] = variableWithValues;
-<span class="cstat-no" title="statement not covered" >          return map;</span>
+<span class="cstat-no" title="statement not covered" >          map[variableWithValues.stableId] = variableWithValues;</span>
+          return map;<span class="fstat-no" title="function not covered" ></span>
         },<span class="cstat-no" title="statement not covered" > {})</span>
-      );
+      );<span class="cstat-no" title="statement not covered" ></span>
     }
   }, [variableValues]);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(() =&gt; {<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >    if (!requestsInProgress) {</span>
+  useEffect(() =&gt; {
+<span class="cstat-no" title="statement not covered" >    if (!requestsInProgress) {<span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >      return;</span>
-    }
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-    const isComplete = (st<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >at</span>us: string | undefined, was<span class="cstat-no" title="statement not covered" >Initiated: boolean) =&gt;</span></span>
-<span class="cstat-no" title="statement not covered" >      !wasInitiated || status === 'success' || status === 'error';</span>
-    co<span class="cstat-no" title="statement not covered" >nst isCompleteRtk = (_response</span>: RequestStatusFlags, wasInitiated: boolean) =&gt;
-<span class="cstat-no" title="statement not covered" >      !wasInitiated || _response.isSuccess || _response.isError;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+    }<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
+    const isComplete = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tatus: string | undefine<span class="cstat-no" title="statement not covered" >d, wasInitiated: boolean) =&gt;</span></span>
+      !wasInitiated || sta<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >tu</span>s === 'success' || status =<span class="cstat-no" title="statement not covered" >== 'error';</span></span>
+<span class="cstat-no" title="statement not covered" >    const isCompleteRtk = (_response: RequestStatusFlags, wasInitiated: boolean) =&gt;</span>
+<span class="cstat-no" title="statement not covered" >      !wasInitiated || _response.isS</span>uccess || _response.isError;
 <span class="cstat-no" title="statement not covered" ></span>
     if (<span class="cstat-no" title="statement not covered" ></span>
-      is<span class="cstat-no" title="statement not covered" >Complete(participantProjectUpdateRes</span>ponse?.status, initiatedRequests.participantProject) &amp;&amp;
-      isComplete(uploadImagesResponse?.status, initiatedRequests.uploadImages) &amp;&amp;
+      is<span class="cstat-no" title="statement not covered" >Complete(uploadImagesResponse?</span>.status, initiatedRequests.uploadImages) &amp;&amp;
+      isCompleteRtk(updateParticipantProjectResponse, initiatedRequests.participantProject) &amp;&amp;
       is<span class="cstat-no" title="statement not covered" >CompleteRtk(updateInterna</span>lUsersResponse, initiatedRequests.updateInternalUsers)
     ) {
       setRequestsInProgress(false);
 &nbsp;
       if (
-        [participantProjectUpdateResponse, uploadImagesResponse].some((resp) =&gt; resp?.status === 'error') ||
+        uploadImagesResponse?.status === 'error' ||
+        updateParticipantProjectResponse.isError ||
         updateInternalUsersResponse.isError
       ) {
         snackbar.toastError();
         setUploadImagesRequestId('');
-        setParticipantProjectRequestId('');
       } else {
 <span class="cstat-no" title="statement not covered" >        redirectToProjectView(<span class="fstat-no" title="function not covered" >);</span></span>
 <span class="cstat-no" title="statement not covered" >      }</span>
     }<span class="cstat-no" title="statement not covered" ></span>
   }, [<span class="cstat-no" title="statement not covered" ></span>
-    participantProjectUpdateResponse,
+    updateParticipantProjectResponse,
     uploadImagesResponse,
 <span class="cstat-no" title="statement not covered" >    requestsInProgress,<span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >    initiatedRequests,</span>
@@ -2463,97 +2456,100 @@ const ProjectProfileEdit = () =&gt; {
       return false;
 <span class="cstat-no" title="statement not covered" >    }</span>
 <span class="cstat-no" title="statement not covered" ></span>
-    if (<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >      (participantProjectRecord?.phase || '') !== '' &amp;&amp;</span>
-<span class="cstat-no" title="statement not covered" >      ((participantProjectRecord?.fileNaming || '') ==</span>= '' ||
+    if<span class="cstat-no" title="statement not covered" > (</span>
+      (participantProjectRecord?.phase || '') !== '' &amp;&amp;
+      ((participantProjectRecord?.fileNaming || '') === '' ||
         (participantProjectRecord?.dropboxFolderPath || '') === '' ||
-<span class="cstat-no" title="statement not covered" >        (participantProje</span>ctRecord?.googleFolderUrl || '') === '')
-<span class="cstat-no" title="statement not covered" >    ) {</span>
-<span class="cstat-no" title="statement not covered" >      setValidateFields(true);</span>
-      snackbar.toastError(<span class="cstat-no" title="statement not covered" >str</span>ings.PHASE_PROJECT_REQUIRED_FIELDS_ERROR);
+<span class="cstat-no" title="statement not covered" >        (participantProjectRecord?.googleFolderUrl || </span>'') === '')
+    ) {
+<span class="cstat-no" title="statement not covered" >      setValidateFields(t</span>rue);
+<span class="cstat-no" title="statement not covered" >      snackbar.toastError(strings.PHASE_PROJECT_REQUI</span>RED_FIELDS_ERROR);
 <span class="cstat-no" title="statement not covered" >      return false;</span>
     }<span class="cstat-no" title="statement not covered" ></span>
-&nbsp;
-    return true;
+<span class="cstat-no" title="statement not covered" ></span>
+    retu<span class="cstat-no" title="statement not covered" >rn true;</span>
   }, [stableToVariable, isInternalUsersRequestSuccess, internalUsers, participantProjectRecord, strings, snackbar]);
 &nbsp;
   const finishSave = useCallback(() =&gt; {
     setRequestsInProgress(true);
 &nbsp;
-    co<span class="cstat-no" title="statement not covered" >nst newInitiatedRequests = {</span>
-      pa<span class="cstat-no" title="statement not covered" >rticipantProject: false,</span>
-      updateInternalUsers: false,
-      uploadImages: false,
+    const newInitiatedRequests = {
+      participantProject: false,
+<span class="cstat-no" title="statement not covered" >      updateInternalUsers: false,</span>
+      up<span class="cstat-no" title="statement not covered" >loadImages: false,</span>
     };
 &nbsp;
     const updatedRecord = { ...participantProjectRecord } as ParticipantProject;
 &nbsp;
     EXTERNAL_LINK_KEYS.forEach((key) =&gt; {
-      const value = updat<span class="cstat-no" title="statement not covered" >edRecord[key];</span>
-<span class="cstat-no" title="statement not covered" >      if (value &amp;&amp; !/^https?:\/\//.test(`${value}`)) {</span>
-<span class="cstat-no" title="statement not covered" >        updatedRecord[key] = `https://${value}`;</span>
-      }
-<span class="cstat-no" title="statement not covered" >    });</span>
-<span class="cstat-no" title="statement not covered" ></span>
-    co<span class="cstat-no" title="statement not covered" >nst typesToRemove = Objec</span>t.keys(participantProjectRecord?.landUseModelHectares || {}).filter(
-      (type) =&gt; !(updatedRecord.landUseModelTypes as string[]).includes(type)
-<span class="cstat-no" title="statement not covered" >    );</span>
+      const value = updatedRecord[key];
+      if (value &amp;&amp; !/^https?:\/\//.test(`${value}`)) {
+        updatedRecord[key<span class="cstat-no" title="statement not covered" >] = `https://${value}`;</span>
+<span class="cstat-no" title="statement not covered" >      }</span>
+    })<span class="cstat-no" title="statement not covered" >;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    const typesToRemove = Object.keys(participantProjectRecord?.landUseModelHectares || {}).filter(</span>
+<span class="cstat-no" title="statement not covered" >      (type) =&gt; !(updatedRecord.land</span>UseModelTypes as string[]).includes(type)
+    );<span class="cstat-no" title="statement not covered" ></span>
     const updatedModelHectares = { ...(participantProjectRecord?.landUseModelHectares || {}) };
-    typesToRemove.forEach((type) =&gt; {
+<span class="cstat-no" title="statement not covered" >    typesToRemove.forEach((type) =&gt; {</span>
       delete updatedModelHectares[type];
     });
     updatedRecord.landUseModelHectares = updatedModelHectares;
 &nbsp;
     if (participantProjectRecord) {
-      const dispatched = dispatch(requestUpdateParticipantProject(updatedRecord));
-      setParticipantProjectRequestId(dispatched.requestId);
+      void updateParticipantProject({
+        projectId,
+        updateProjectAcceleratorDetailsRequestPayload: updatedRecord,
+      });
       newInitiatedRequests.participantProject = true;
-    }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" ></span>
-    sa<span class="cstat-no" title="statement not covered" >veIntern</span>alUsers();
-    newInitiatedRequests.updateInternalUsers = true;
-<span class="cstat-no" title="statement not covered" ></span>
-    if<span class="cstat-no" title="statement not covered" > ((mainPhoto || mapP</span>hoto) &amp;&amp; stableToVariable) {
-<span class="cstat-no" title="statement not covered" >      const im</span>ageValues = [];
-      if (mainPhoto) {
-<span class="cstat-no" title="statement not covered" >        imageValue</span>s.push({
-          variableId: stableToVariable[HighlightPhotoStableId].id,
-          file: mainPhoto<span class="cstat-no" title="statement not covered" >.file,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-<span class="cstat-no" title="statement not covered" >          caption: '',<span class="fstat-no" title="function not covered" ></span></span>
-          citation: '',
-<span class="cstat-no" title="statement not covered" >          projectId,</span>
-<span class="cstat-no" title="statement not covered" >        });</span>
-      }
-      if (mapPhoto) {
-<span class="cstat-no" title="statement not covered" >        imageValues.push({<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >          variableId: stableToVariable[ProjectZoneFigureStableId].id,</span>
-<span class="cstat-no" title="statement not covered" >          file: mapPhoto.file,</span>
-          caption: '',
-          citation: '',
-<span class="cstat-no" title="statement not covered" >          projectId,<span class="fstat-no" title="function not covered" ></span></span>
+    }
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    saveInternalUsers();</span>
+    ne<span class="cstat-no" title="statement not covered" >wInitiat</span>edRequests.updateInternalUsers = true;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if ((mainPhoto || mapPhoto) &amp;&amp; stableToVariable) {</span>
+<span class="cstat-no" title="statement not covered" >      const imageValues = </span>[];
+<span class="cstat-no" title="statement not covered" >      if (main</span>Photo) {
+        imageValues.push({
+<span class="cstat-no" title="statement not covered" >          variable</span>Id: stableToVariable[HighlightPhotoStableId].id,
+          file: mainPhoto.file,
+          caption: '',<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+<span class="cstat-no" title="statement not covered" >          citation: '',<span class="fstat-no" title="function not covered" ></span></span>
+          projectId,
 <span class="cstat-no" title="statement not covered" >        });</span>
 <span class="cstat-no" title="statement not covered" >      }</span>
-      const dispatched = dispatch(requestUploadManyImageValues(imageValues));
+      if (mapPhoto) {
+        imageValues.push({
+<span class="cstat-no" title="statement not covered" >          variableId: stableTo<span class="fstat-no" title="function not covered" >Va</span>riable[ProjectZoneFigureStableId].id,</span>
+<span class="cstat-no" title="statement not covered" >          file: mapPhoto.file,</span>
+<span class="cstat-no" title="statement not covered" >          caption: '',</span>
+          citation: '',
+          projectId,
+<span class="cstat-no" title="statement not covered" >        });<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >      }</span>
+<span class="cstat-no" title="statement not covered" >      const dispatched = dispatch(request</span>UploadManyImageValues(imageValues));
       setUploadImagesRequestId(dispatched.requestId);
-<span class="cstat-no" title="statement not covered" >      newInitiatedRequests.upl<span class="fstat-no" title="function not covered" >oa</span>dImages = true;</span>
-<span class="cstat-no" title="statement not covered" >    }</span>
+      newInitiatedRequests.uploadImages = true;
+<span class="cstat-no" title="statement not covered" >    }<span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" ></span>
-    //<span class="cstat-no" title="statement not covered" > No requests were initiated</span>
-    if (!Object.values(newInitiatedRequests).some(Boolean)) {
+    // No requests wer<span class="cstat-no" title="statement not covered" >e initiated</span>
+    if<span class="cstat-no" title="statement not covered" > (!Object.values(newInitiatedRequests).some(Boolea</span>n)) {
       setRequestsInProgress(false);
-      redirectToProjectView();<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" >    }</span>
-<span class="cstat-no" title="statement not covered" ></span>
-    se<span class="cstat-no" title="statement not covered" >tInitiatedRequests(newInitiatedRequests);</span>
+      redirectToProjectView();
+    }<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" ></span>
+    setInitiatedReques<span class="cstat-no" title="statement not covered" >ts(newInitiatedRequests);</span>
   }, [<span class="cstat-no" title="statement not covered" ></span>
-    dispatch,
-    ma<span class="cstat-no" title="statement not covered" >inPhoto,</span>
-    mapPhoto,
+    disp<span class="cstat-no" title="statement not covered" >atch,</span>
+    mainPhoto,
+    ma<span class="cstat-no" title="statement not covered" >pPhoto,</span>
     participantProjectRecord,
     projectId,
-    redirectToProjectView,<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" >    sa</span>veInternalUsers,
-    st<span class="cstat-no" title="statement not covered" >ableToVariable,</span>
+    redirectToProjectView,
+    saveInternalUsers,<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" >    st</span>ableToVariable,
+    up<span class="cstat-no" title="statement not covered" >dateParticipantProject,</span>
   ]);
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
   const handleSave = useCallback(() =&gt; {
@@ -2717,7 +2713,7 @@ const ProjectProfileEdit = () =&gt; {
 &nbsp;
   const phaseOptions: {
     label: string;
-    value: CohortPhaseType | undefined;
+    value: PhaseType | undefined;
   }[] = useMemo(
     () =&gt; [
       { label: '--', value: undefined },
@@ -2731,7 +2727,7 @@ const ProjectProfileEdit = () =&gt; {
 &nbsp;
   const setPhase = useCallback(
     (_: string, value: string) =&gt; {
-      onChangeParticipantProject('phase', value === 'undefined' ? undefined : (value as CohortPhaseType));
+      onChangeParticipantProject('phase', value === 'undefined' ? undefined : (value as PhaseType));
     },
     [onChangeParticipantProject]
   );
@@ -2754,10 +2750,11 @@ const ProjectProfileEdit = () =&gt; {
       )}
       &lt;PageForm
         busy={
-          [participantProjectUpdateResponse?.status, uploadImagesResponse?.status].includes('pending') ||
-          updateInternalUsers<span class="fstat-no" title="function not covered" >Re</span>sponse.isLoading
-        }
-<span class="cstat-no" title="statement not covered" >        cancelID='cancelNewParticipantProject'</span>
+          uploadImagesResponse?.status === 'pending' ||
+          updateParticipantPr<span class="fstat-no" title="function not covered" >oj</span>ectResponse.isLoading ||
+          updateInternalUsersResponse.isLoading
+<span class="cstat-no" title="statement not covered" >        }</span>
+        cancelID='cancelNewParticipantProject'
         onCancel={handleOnCancel}
         onSave={handleSave}
         saveID='createNewParticipantProject'
@@ -2821,10 +2818,10 @@ const ProjectProfileEdit = () =&gt; {
                   onChange={setPhase}
                   options={phaseOptions}
                   value={participantProjectRecord?.phase}
-                /&gt;
-              &lt;/Box&gt;<span class="fstat-no" title="function not covered" ></span>
-            &lt;/Grid&gt;
-<span class="cstat-no" title="statement not covered" ></span>
+                /&gt;<span class="fstat-no" title="function not covered" ></span>
+              &lt;/Box&gt;
+<span class="cstat-no" title="statement not covered" >            &lt;/Grid&gt;</span>
+&nbsp;
             {isInternalUsersRequestSuccess &amp;&amp; (
               &lt;Grid item md={12}&gt;
                 &lt;Box border='1px solid gray' borderRadius='8px' marginX={theme.spacing(2)} padding={theme.spacing(2)}&gt;
@@ -2957,10 +2954,10 @@ const ProjectProfileEdit = () =&gt; {
             &lt;Box marginX={theme.spacing(2)} width={'100%'}&gt;
               &lt;Grid item xs={12} marginTop={theme.spacing(2)}&gt;
                 &lt;Typography fontSize='20px' fontWeight={600} lineHeight='28px'&gt;
-                  {strings.LAND_DATA}
-<span class="fstat-no" title="function not covered" ></span>                &lt;/Typography&gt;
+<span class="fstat-no" title="function not covered" ></span>                  {strings.LAND_DATA}
+<span class="cstat-no" title="statement not covered" >                &lt;/Typography&gt;</span>
 <span class="cstat-no" title="statement not covered" >              &lt;/Grid&gt;</span>
-            &lt;/<span class="cstat-no" title="statement not covered" >Box&gt;</span>
+            &lt;/Box&gt;
 &nbsp;
             &lt;ProjectFieldTextfield
               id={'confirmedReforestableLand'}
@@ -3083,8 +3080,8 @@ const ProjectProfileEdit = () =&gt; {
                 &lt;Typography fontSize='20px' fontWeight={600} lineHeight='28px'&gt;
                   {strings.PROJECT_LINKS}
                 &lt;/Typography&gt;
-              &lt;/Grid&gt;
-            &lt;/Box&gt;<span class="cstat-no" title="statement not covered" ></span>
+              &lt;/Grid<span class="cstat-no" title="statement not covered" >&gt;</span>
+            &lt;/Box&gt;
 &nbsp;
             &lt;ProjectFieldTextfield
               id={'googleFolderUrl'}
@@ -3211,7 +3208,7 @@ export default ProjectProfileEdit;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-14T00:00:41.249Z
+                at 2026-02-14T00:32:37.445Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>
