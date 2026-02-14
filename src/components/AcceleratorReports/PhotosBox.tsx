@@ -5,7 +5,6 @@ import { Textfield } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import useBoolean from 'src/hooks/useBoolean';
-import { PublishedReportPayload } from 'src/queries/generated/publishedReports';
 import { useBatchReportPhotosMutation } from 'src/queries/reports/photos';
 import strings from 'src/strings';
 import { AcceleratorReportPhoto, NewAcceleratorReportPhoto, isAcceleratorReport } from 'src/types/AcceleratorReport';
