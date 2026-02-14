@@ -9856,7 +9856,11 @@ export interface components {
         ProjectPayload: {
             /** Format: int64 */
             cohortId?: number;
-            /** @enum {string} */
+            /**
+             * @deprecated
+             * @description Use phase instead.
+             * @enum {string}
+             */
             cohortPhase?: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor" | "Pre-Screen" | "Application";
             /** Format: int64 */
             createdBy?: number;
@@ -9878,6 +9882,8 @@ export interface components {
              * @description If using this to check whether project is in cohort, use cohortPhase instead.
              */
             participantId?: number;
+            /** @enum {string} */
+            phase?: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor" | "Pre-Screen" | "Application";
         };
         ProjectReportSettingsPayload: {
             /** @description If true, reports are enabled for this project. */

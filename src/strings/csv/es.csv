@@ -339,10 +339,6 @@ CLOSE_AND_EDIT,Cerrar y editar,1c3ea202
 COHORT,Cohorte,81afe896
 COHORT_ADDED,{0} cohorte agregada,c8518668
 COHORT_NAME,Nombre del cohorte,655d8af3
-COHORT_PHASE_DUE_DILIGENCE,Fase 0 - Debida diligencia,6c20cb46
-COHORT_PHASE_FEASIBILITY_STUDY,Fase 1 - Estudio de factibilidad,94889837
-COHORT_PHASE_IMPLEMENT_AND_MONITOR,Fase 3 - Poner en práctica y supervisar,d8def4af
-COHORT_PHASE_PLAN_AND_SCALE,Fase 2 - Planear y ampliar,a51c9fc2
 COHORTS,Cohortes,b0aca6fa
 COHORTS_EMPTY_STATE,"Aún no tiene cohortes. Cuando agregue cohortes, los verá aquí.",b764b773
 COLLECTED_DATE,Fecha de recolección,3f1515d8
@@ -1569,6 +1565,10 @@ PROJECT_NOTES,Notas informativas adicionales sobre el proyecto,0c985c39
 PROJECT_OBJECTIVES,Objetivos del proyecto,20d1aaf6
 PROJECT_OR_PROJECTS,Proyecto(s),4b8c0060
 PROJECT_OVERVIEW,Resumen del proyecto,87fe4f18
+PROJECT_PHASE_DUE_DILIGENCE,Fase 0 - Diligencia Debida,6c20cb46
+PROJECT_PHASE_FEASIBILITY_STUDY,Fase 1 - Estudio de Viabilidad,94889837
+PROJECT_PHASE_IMPLEMENT_AND_MONITOR,Fase 3 - Implementar y Monitorear,d8def4af
+PROJECT_PHASE_PLAN_AND_SCALE,Fase 2 - Planificar y Escalar,a51c9fc2
 PROJECT_PHOTOS,Fotos del proyecto (máx. 30),25c80ed0
 PROJECT_PROFILE,Perfil del proyecto,cc49d0dc
 PROJECT_PROFILE_PUBLISHED,Publicado el perfil del proyecto,9f75ca71

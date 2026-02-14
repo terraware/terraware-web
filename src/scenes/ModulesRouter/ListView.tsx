@@ -58,7 +58,7 @@ export default function ListView(): JSX.Element {
     'Terraformation conducts due diligence to help the company identify and verify potential partners. Terraformation may be required by law to collect certain information to meet its international compliance obligations. In other instances, Terraformation may be required by investors to collect certain information before they will invest in the project. Finally, some information is required in order to register the project with Verra or another carbon registry.';
 
   const currentPhaseIndex = useMemo(
-    () => phases.findIndex((phase) => phase.name === currentParticipantProject?.cohortPhase),
+    () => phases.findIndex((phase) => phase.name === currentParticipantProject?.phase),
     [currentParticipantProject]
   );
 

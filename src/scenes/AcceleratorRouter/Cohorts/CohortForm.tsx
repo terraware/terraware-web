@@ -63,10 +63,10 @@ export default function CohortForm<T extends CreateCohortRequestPayload | Update
     }
 
     return [
-      { label: strings.COHORT_PHASE_DUE_DILIGENCE, value: 'Phase 0 - Due Diligence' },
-      { label: strings.COHORT_PHASE_FEASIBILITY_STUDY, value: 'Phase 1 - Feasibility Study' },
-      { label: strings.COHORT_PHASE_PLAN_AND_SCALE, value: 'Phase 2 - Plan and Scale' },
-      { label: strings.COHORT_PHASE_IMPLEMENT_AND_MONITOR, value: 'Phase 3 - Implement and Monitor' },
+      { label: strings.PROJECT_PHASE_DUE_DILIGENCE, value: 'Phase 0 - Due Diligence' },
+      { label: strings.PROJECT_PHASE_FEASIBILITY_STUDY, value: 'Phase 1 - Feasibility Study' },
+      { label: strings.PROJECT_PHASE_PLAN_AND_SCALE, value: 'Phase 2 - Plan and Scale' },
+      { label: strings.PROJECT_PHASE_IMPLEMENT_AND_MONITOR, value: 'Phase 3 - Implement and Monitor' },
     ];
   }, [activeLocale]);
 
