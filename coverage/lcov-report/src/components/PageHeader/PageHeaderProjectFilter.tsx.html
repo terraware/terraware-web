@@ -308,18 +308,18 @@ import { Project }<span class="cstat-no" title="statement not covered" ><span cl
 cons<span class="cstat-no" title="statement not covered" >t SELECTED_PROJECT_SESSION_KEY = 'selected-project-id';</span>
 <span class="cstat-no" title="statement not covered" ></span>
 type Pag<span class="cstat-no" title="statement not covered" >eHeaderProjectFilterProps <span class="fstat-no" title="function not covered" >= </span>{<span class="cstat-no" title="statement not covered" ></span></span>
-  currentParticipantProject?: Project;
+  currentAcceleratorProject?: Project;
 <span class="cstat-no" title="statement not covered" >  projectFilt</span>er: { projectId?: number | string };
   projects: Project[];
-  setCurrentPa<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >rt</span>icipantProject: (projectId: <span class="cstat-no" title="statement not covered" >string | number) =&gt; void;</span></span>
+  setCurrentAc<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ce</span>leratorProject: (projectId: <span class="cstat-no" title="statement not covered" >string | number) =&gt; void;</span></span>
   setProjectFilter: React.Dispatch&lt;React.SetStateAction&lt;{ projectId?: number | string }&gt;&gt;;
 };
 &nbsp;
 const PageHeaderProjectFilter = ({
-  currentParticipantProject,
+  currentAcceleratorProject,
   projectFilter,
   projects,
-  setCurrentPartici<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >pa</span>ntProje<span class="cstat-no" title="statement not covered" >ct,</span></span>
+  setCurrentAcceler<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >at</span>orProje<span class="cstat-no" title="statement not covered" >ct,</span></span>
   setProjectFilter,<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >}: PageHeaderProjectFilterProps) =&gt; {</span>
   const { s<span class="fstat-no" title="function not covered" >tr</span>ings<span class="cstat-no" title="statement not covered" > } = useLocali</span>zation();
@@ -342,32 +342,32 @@ const PageHeaderProjectFilter = ({
 &nbsp;
     if (isStoredProjectValid) {
       setProjectFilter<span class="cstat-no" title="statement not covered" >({ projectId: storedProjectIdNumber });</span>
-      setCurrentParticipantProjec<span class="cstat-no" title="statement not covered" >t(storedProjectIdNumber);</span>
-    } else if (currentPa<span class="cstat-no" title="statement not covered" >rticipantProject?.id) {</span>
-<span class="cstat-no" title="statement not covered" >      setProjectFilter({ proje<span class="fstat-no" title="function not covered" >ct</span>Id: currentParticipantProject.id });</span>
+      setCurrentAcceleratorProjec<span class="cstat-no" title="statement not covered" >t(storedProjectIdNumber);</span>
+    } else if (currentAc<span class="cstat-no" title="statement not covered" >celeratorProject?.id) {</span>
+<span class="cstat-no" title="statement not covered" >      setProjectFilter({ proje<span class="fstat-no" title="function not covered" >ct</span>Id: currentAcceleratorProject.id });</span>
 <span class="cstat-no" title="statement not covered" >    } else if (projects.length) {</span>
 <span class="cstat-no" title="statement not covered" >      setProje</span>ctFilter({ projectId: projects[0].id });
     }
   }, [<span class="cstat-no" title="statement not covered" ></span>
-    currentParticipantProject?.id,<span class="cstat-no" title="statement not covered" ></span>
+    currentAcceleratorProject?.id,<span class="cstat-no" title="statement not covered" ></span>
     projectFilter.projectId,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 <span class="cstat-no" title="statement not covered" >    projects,</span>
     se<span class="cstat-no" title="statement not covered" >tProjectFilter,</span>
-    se<span class="cstat-no" title="statement not covered" >tCurrentParticipantProject,</span>
+    se<span class="cstat-no" title="statement not covered" >tCurrentAcceleratorProject,</span>
   ]);<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
   // update<span class="cstat-no" title="statement not covered" > current participant project and save to session storage when project filter changes</span>
   useE<span class="cstat-no" title="statement not covered" >ffect(() =&gt; {</span>
     if (projectFilter.projectId) {
-      setCurrentParticipantProject(projectFilter.projectId);
+      setCurrentAcceleratorProject(projectFilter.projectId);
       // save the selected project ID to session storage
       sessionStorage.setItem(SELECTED_PROJECT_SESSION_KEY, String(projectFilter.projectId));
     } else if (projects.length === 1) {
-      setCurrentParticipantProject(projects[0].id);
+      setCurrentAcceleratorProject(projects[0].id);
       // save the selected project ID to session storage
       sessionStorage.setItem(SELECTED_PROJECT_SESSION_KEY, String(projects[0].id));
 <span class="cstat-no" title="statement not covered" >    }<span class="fstat-no" title="function not covered" ></span></span>
-  },<span class="cstat-no" title="statement not covered" > [projects, projectFilter.projectId, setCurrentParticipantProject]);</span>
+  },<span class="cstat-no" title="statement not covered" > [projects, projectFilter.projectId, setCurrentAcceleratorProject]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
   retu<span class="cstat-no" title="statement not covered" >rn (</span>
     &lt;Grid<span class="cstat-no" title="statement not covered" ></span>
@@ -415,7 +415,7 @@ export default PageHeaderProjectFilter;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-14T00:40:33.076Z
+                at 2026-02-14T00:51:06.916Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

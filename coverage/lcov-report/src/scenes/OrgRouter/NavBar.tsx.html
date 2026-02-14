@@ -1090,7 +1090,7 @@ export default functio<span class="cstat-no" title="statement not covered" >n Na
 <span class="cstat-no" title="statement not covered" ></span>
   const { isAllowedVie<span class="cstat-no" title="statement not covered" >wConsole } = useAccelera</span>torConsole();
   const { activeLocal<span class="cstat-no" title="statement not covered" >e } = useLocalization();</span>
-  const { currentParticipa<span class="cstat-no" title="statement not covered" >ntProject, setCurrentParticipantPr</span>oject, projectsWithModules, allParticipantProjects } =
+  const { currentAccelerat<span class="cstat-no" title="statement not covered" >orProject, setCurrentAcceleratorPr</span>oject, projectsWithModules, allAcceleratorProjects } =
     useParticipantData();<span class="cstat-no" title="statement not covered" ></span>
 <span class="fstat-no" title="function not covered" ></span>
   const isAccessionDashboardRoute = useMatch({ path: APP_PATHS.SEEDS_DASHBOARD + '/', end: false });
@@ -1164,10 +1164,10 @@ export default functio<span class="cstat-no" title="statement not covered" >n Na
   }, [<span class="cstat-no" title="statement not covered" >dispatch, selectedOrganizat</span>ion]);
 &nbsp;
   useEffect(() =&gt; {
-<span class="cstat-no" title="statement not covered" >    if (!currentParticipantPro<span class="fstat-no" title="function not covered" >je</span>ct &amp;&amp; projectsWithModules &amp;&amp; projectsWithModules.length &gt; 0) {</span>
-<span class="cstat-no" title="statement not covered" >      setCurrentParticipantProject(projectsWithModules[0].id);</span>
+<span class="cstat-no" title="statement not covered" >    if (!currentAcceleratorPro<span class="fstat-no" title="function not covered" >je</span>ct &amp;&amp; projectsWithModules &amp;&amp; projectsWithModules.length &gt; 0) {</span>
+<span class="cstat-no" title="statement not covered" >      setCurrentAcceleratorProject(projectsWithModules[0].id);</span>
     }<span class="cstat-no" title="statement not covered" ></span>
-  }, [projectsWithModules, currentParticipantProject, setCurrentParticipantProject]);
+  }, [projectsWithModules, currentAcceleratorProject, setCurrentAcceleratorProject]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  const getSeedlingsMenuItems <span class="fstat-no" title="function not covered" >= </span>() =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    const inventoryMenu = (</span>
@@ -1225,7 +1225,7 @@ export default functio<span class="cstat-no" title="statement not covered" >n Na
     () =&gt;
       isAllowed('READ_REPORTS', { organization: selectedOrganization }) &amp;&amp;
       !!orgFeatures?.data?.reports?.enabled &amp;&amp;
-      allParticipantProjects.length &gt; 0 &amp;&amp;
+      allAcceleratorProjects.length &gt; 0 &amp;&amp;
       activeLocale ? (
         &lt;NavItem
           icon='iconGraphReport'
@@ -1239,7 +1239,7 @@ export default functio<span class="cstat-no" title="statement not covered" >n Na
 <span class="cstat-no" title="statement not covered" >      ) : null,</span>
     [
       activeLocale,
-      allParticipantProjects.length,
+      allAcceleratorProjects.length,
       closeAndNavigateTo,
       isAllowed,
       isReportsRout<span class="fstat-no" title="function not covered" >e,</span>
@@ -1266,7 +1266,7 @@ export default functio<span class="cstat-no" title="statement not covered" >n Na
 &nbsp;
   const modulesMenu = useMemo&lt;JSX.Element | null&gt;(
     () =&gt;
-      currentPart<span class="fstat-no" title="function not covered" >ic</span>ipantProject &amp;&amp;
+      currentAcce<span class="fstat-no" title="function not covered" >le</span>ratorProject &amp;&amp;
       !!or<span class="cstat-no" title="statement not covered" >gFeatures?.data?.modules?.enabled &amp;&amp;</span>
       isManagerOrHigher(selectedOrganization) &amp;&amp;
       activeLocale ? (
@@ -1277,7 +1277,7 @@ export default functio<span class="cstat-no" title="statement not covered" >n Na
           onClick={() <span class="cstat-no" title="statement not covered" >=&gt; {</span>
 <span class="fstat-no" title="function not covered" ></span>            mixpanel?.track(MIXPANEL_EVENTS.PART_EX_LEFT_NAV_MODULES);
             closeAndNavigateTo(
-<span class="cstat-no" title="statement not covered" >              APP_PATHS.PROJECT_MODULES.replace(':projectId', currentParticipantProject.id.toString())</span>
+<span class="cstat-no" title="statement not covered" >              APP_PATHS.PROJECT_MODULES.replace(':projectId', currentAcceleratorProject.id.toString())</span>
             );
           }}
           id='modules-list'
@@ -1286,7 +1286,7 @@ export default functio<span class="cstat-no" title="statement not covered" >n Na
     [<span class="fstat-no" title="function not covered" ></span>
       active<span class="cstat-no" title="statement not covered" >Locale,</span>
       closeA<span class="cstat-no" title="statement not covered" >ndNavigateTo,</span>
-      currentParticipantProject,
+      currentAcceleratorProject,
       isProjectModulesRoute,
       mixpanel,
       orgFeatures?.data?.modules?.enabled,
@@ -1297,7 +1297,7 @@ export default functio<span class="cstat-no" title="statement not covered" >n Na
   const activityLogMenu = useMemo&lt;JSX.Element | null&gt;(
     () =&gt;
       isAllowed('READ_ACTIVITIES', { organization: selectedOrganization }) &amp;&amp;
-      currentParticipantProject &amp;&amp;
+      currentAcceleratorProject &amp;&amp;
       activeLocale ? (
         &lt;NavItem
           icon='checklist'
@@ -1309,7 +1309,7 @@ export default functio<span class="cstat-no" title="statement not covered" >n Na
           selected={!!isActivityLogRoute}
         /&gt;
       ) : null,
-    [activeLocale, closeAndNavigateTo, currentParticipantProject, isActivityLogRoute, isAllowed, selectedOrganization]
+    [activeLocale, closeAndNavigateTo, currentAcceleratorProject, isActivityLogRoute, isAllowed, selectedOrganization]
   );<span class="fstat-no" title="function not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
   const applicationMenu = useMemo&lt;JSX.Element | null&gt;(
@@ -1528,7 +1528,7 @@ export default functio<span class="cstat-no" title="statement not covered" >n Na
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-14T00:40:33.076Z
+                at 2026-02-14T00:51:06.916Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

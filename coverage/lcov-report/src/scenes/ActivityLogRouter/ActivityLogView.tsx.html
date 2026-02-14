@@ -483,8 +483,8 @@ impo<span class="cstat-no" title="statement not covered" >rt Page from 'src/comp
 import PageHeaderProjectFilter from 'src/components/PageHeader/PageHeaderProjectFilter';
 import Card from '<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >sr</span>c/components/common/Card';</span>
 im<span class="cstat-no" title="statement not covered" >port useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';</span>
-impo<span class="cstat-no" title="statement not covered" >rt useNavigateTo from 'src/hooks/useNavigateTo';</span>
-import<span class="cstat-no" title="statement not covered" > { useParticipantProjects } from 'src/hooks/useParticipantProjects';</span>
+impo<span class="cstat-no" title="statement not covered" >rt { useAcceleratorProjects } from 'src/hooks/useAcceleratorProjects';</span>
+import<span class="cstat-no" title="statement not covered" > useNavigateTo from 'src/hooks/useNavigateTo';</span>
 import {<span class="cstat-no" title="statement not covered" > useLocalization, useOrgan<span class="fstat-no" title="function not covered" >iz</span>atio<span class="cstat-no" title="statement not covered" >n, useUser</span> } from 'src/providers';</span>
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 im<span class="cstat-no" title="statement not covered" >port useDev</span>iceInfo from 'src/utils/useDeviceInfo';
@@ -498,9 +498,9 @@ export default function ActivityLogView(): JSX.Element {
   const query = useQuery();
   const { isDesktop, isMobile } = useDeviceInfo();
   const { goToAccel<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >er</span>atorAct<span class="cstat-no" title="statement not covered" >ivityCreate, goToActivityCreate } = useNavigateTo();</span></span>
-  const { currentPar<span class="cstat-no" title="statement not covered" >tic</span>ipantProject, allParticipantProjects, setCurrentParticipantProject } = useParticipantData();
+  const { currentAcc<span class="cstat-no" title="statement not covered" >ele</span>ratorProject, allAcceleratorProjects, setCurrentAcceleratorProject } = useParticipantData();
 <span class="cstat-no" title="statement not covered" >  const { isAcceleratorRoute } = useAcceleratorConsole();</span>
-  const { p<span class="fstat-no" title="function not covered" >ar</span>tici<span class="cstat-no" title="statement not covered" >pantProjects, is</span>Loading: participantProjectsLoading } = useParticipantProjects();
+  const { a<span class="fstat-no" title="function not covered" >cc</span>eler<span class="cstat-no" title="statement not covered" >atorProjects, is</span>Loading: participantProjectsLoading } = useAcceleratorProjects();
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  const [activityId, setActivityId] = useState</span>&lt;number&gt;();
   const [projectFil<span class="cstat-no" title="statement not covered" >ter, setProjectFilter] = u</span>seState&lt;{ projectId?: number | string }&gt;({});
@@ -512,7 +512,7 @@ export default function ActivityLogView(): JSX.Element {
     [isAcceleratorRoute, selectedOrga<span class="cstat-no" title="statement not covered" >nization]</span>
   );<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const isAllowedCreateActi<span class="cstat-no" title="statement not covered" >vities = isAllowed('CREATE_ACTIVITIES', { or</span>ganization });
+  const isAllowedCreateActivities = <span class="cstat-no" title="statement not covered" >isAllowed('CREATE_ACTIVITIES', { organizatio</span>n });
 <span class="cstat-no" title="statement not covered" ></span>
   const projectId = use<span class="cstat-no" title="statement not covered" >Memo(</span>
     () =&gt; (projectFilter.project<span class="cstat-no" title="statement not covered" >Id ? Number(projectFilter.projectId) : undefined),</span>
@@ -520,7 +520,7 @@ export default function ActivityLogView(): JSX.Element {
   );<span class="cstat-no" title="statement not covered" ></span>
 <span class="fstat-no" title="function not covered" ></span>
   const availableProjects = useMemo(<span class="cstat-no" title="statement not covered" >() =&gt; {</span>
-    return participantProjects<span class="cstat-no" title="statement not covered" ></span>
+    return acceleratorProjects<span class="cstat-no" title="statement not covered" ></span>
       .map((project) =&gt; <span class="cstat-no" title="statement not covered" >({</span>
         dealName<span class="cstat-no" title="statement not covered" >: project.dealName,</span>
         id: proj<span class="cstat-no" title="statement not covered" >ect.projectId,</span>
@@ -529,7 +529,7 @@ export default function ActivityLogView(): JSX.Element {
       }))<span class="cstat-no" title="statement not covered" ></span>
       .filter((project) =&gt; projec<span class="cstat-no" title="statement not covered" >t.dealName)</span>
       .sort((a, b) =&gt; a.dealName!.localeCompare(b.dealName!, activeLocale<span class="cstat-no" title="statement not covered" > || undefined));</span>
-  }, [activeLocale, participantProject<span class="cstat-no" title="statement not covered" >s]);</span>
+  }, [activeLocale, acceleratorProject<span class="cstat-no" title="statement not covered" >s]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
   const projectDealName = useMemo(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
     const project = availableProjects.find((p) =&gt; <span class="cstat-no" title="statement not covered" >p.id === projectId);</span>
@@ -560,20 +560,20 @@ export default function ActivityLogView(): JSX.Element {
   const PageHeaderLeftComponent = useMemo(
 <span class="cstat-no" title="statement not covered" >    () =&gt; (</span>
 <span class="cstat-no" title="statement not covered" >      &lt;PageHeaderProjectFilter</span>
-        currentParticipantProject={currentParticipantProject}
+        currentAcceleratorProject={currentAcceleratorProject}
 <span class="cstat-no" title="statement not covered" >        projectFilter={projectFilter}</span>
-        projects={isAcceleratorRoute ? availableProjects : allParticipantProjects}
-        setCurrentParticipantProject={setCurrentParticipantProject}
+        projects={isAcceleratorRoute ? availableProjects : allAcceleratorProjects}
+        setCurrentAcceleratorProject={setCurrentAcceleratorProject}
         setProjectFilter={setProjectFilt<span class="cstat-no" title="statement not covered" >er}<span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >      /&gt;</span>
     ),
 <span class="cstat-no" title="statement not covered" >    [<span class="fstat-no" title="function not covered" ></span></span>
-      allParticipantProj<span class="cstat-no" title="statement not covered" >ects,</span>
+      allAcceleratorProj<span class="cstat-no" title="statement not covered" >ects,</span>
 <span class="cstat-no" title="statement not covered" >      availableProjects,</span>
-      currentParticipantProject,
+      currentAcceleratorProject,
       isAcceleratorRoute,<span class="cstat-no" title="statement not covered" ></span>
 <span class="fstat-no" title="function not covered" ></span>      projectFilter,<span class="cstat-no" title="statement not covered" ></span>
-      setCurrentParticipantProject,
+      setCurrentAcceleratorProject,
     ]
   );
 &nbsp;
@@ -682,7 +682,7 @@ export default function ActivityLogView(): JSX.Element {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-14T00:40:33.076Z
+                at 2026-02-14T00:51:06.916Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
