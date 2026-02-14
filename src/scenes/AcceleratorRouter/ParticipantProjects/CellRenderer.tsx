@@ -7,7 +7,7 @@ import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
-import { CohortPhaseType, getPhaseString } from 'src/types/Cohort';
+import { PhaseType, getPhaseString } from 'src/types/Phase';
 import { getCountryByCode } from 'src/utils/country';
 
 export default function ParticipantProjectsCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
@@ -44,7 +44,7 @@ export default function ParticipantProjectsCellRenderer(props: RendererProps<Tab
   }
 
   if (column.key === 'cohortPhase') {
-    return <CellRenderer {...props} value={getPhaseString(value as CohortPhaseType)} />;
+    return <CellRenderer {...props} value={getPhaseString(value as PhaseType)} />;
   }
 
   if (column.key === 'landUseModelTypes') {
