@@ -1,3 +1,4 @@
+a0a0e68e13ed SW-8057 Use phase instead of cohortPhase on project payloads (#5233)
 3a2683612f8d SW-8057 Rename CohortPhaseType to PhaseType (#5231)
 08fe117b4947 Replace List Project Accelerator Details with RTK Query (#5230)
 5cac3c8bdad2 Replace Update Project Accelerator Details with RTK Query (#5229)
