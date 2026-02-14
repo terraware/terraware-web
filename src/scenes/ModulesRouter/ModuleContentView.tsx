@@ -34,7 +34,7 @@ interface ModuleContentViewProps {
 const ModuleContentView = ({ contentType }: ModuleContentViewProps) => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
-  const { currentParticipantProject, setCurrentParticipantProject } = useParticipantData();
+  const { currentAcceleratorProject, setCurrentAcceleratorProject } = useParticipantData();
   const pathParams = useParams<{ sessionId: string; moduleId: string; projectId: string }>();
 
   const projectId = Number(pathParams.projectId);
@@ -44,15 +44,15 @@ const ModuleContentView = ({ contentType }: ModuleContentViewProps) => {
 
   useEffect(() => {
     if (projectId) {
-      setCurrentParticipantProject(projectId);
+      setCurrentAcceleratorProject(projectId);
     }
-  }, [projectId, setCurrentParticipantProject]);
+  }, [projectId, setCurrentAcceleratorProject]);
 
   useEffect(() => {
-    if (currentParticipantProject && currentParticipantProject.cohortId) {
-      void getCohortModule({ moduleId, cohortId: currentParticipantProject.cohortId });
+    if (currentAcceleratorProject && currentAcceleratorProject.cohortId) {
+      void getCohortModule({ moduleId, cohortId: currentAcceleratorProject.cohortId });
     }
-  }, [currentParticipantProject, moduleId, getCohortModule]);
+  }, [currentAcceleratorProject, moduleId, getCohortModule]);
 
   const [content, setContent] = useState('');
 

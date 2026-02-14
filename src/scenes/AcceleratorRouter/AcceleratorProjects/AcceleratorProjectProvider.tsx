@@ -11,17 +11,17 @@ import { selectUser } from 'src/redux/features/user/usersSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { AcceleratorOrg } from 'src/types/Accelerator';
-import { ParticipantProject } from 'src/types/ParticipantProject';
+import { AcceleratorProject } from 'src/types/AcceleratorProject';
 import { ProjectMeta } from 'src/types/Project';
 import { getUserDisplayName } from 'src/utils/user';
 
-import { ParticipantProjectContext, ParticipantProjectData } from './ParticipantProjectContext';
+import { AcceleratorProjectContext, AcceleratorProjectData } from './AcceleratorProjectContext';
 
 export type Props = {
   children: React.ReactNode;
 };
 
-const ParticipantProjectProvider = ({ children }: Props) => {
+const AcceleratorProjectProvider = ({ children }: Props) => {
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
   const { project, projectId } = useProjectData();
@@ -38,13 +38,13 @@ const ParticipantProjectProvider = ({ children }: Props) => {
     }
   }, [projectId, getProjectAcceleratorDetails]);
 
-  const participantProject: ParticipantProject | undefined = useMemo(() => {
+  const acceleratorProject: AcceleratorProject | undefined = useMemo(() => {
     if (projectAcceleratorDetailsResponse.isSuccess) {
       return projectAcceleratorDetailsResponse.data.details;
     }
   }, [projectAcceleratorDetailsResponse]);
 
-  const [participantProjectData, setParticipantProjectData] = useState<ParticipantProjectData>({
+  const [acceleratorProjectData, setAcceleratorProjectData] = useState<AcceleratorProjectData>({
     crumbs: [],
     projectId,
     // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -93,11 +93,11 @@ const ParticipantProjectProvider = ({ children }: Props) => {
     setOrganization(acceleratorOrgs.find((org) => org.id === project.organizationId));
   }, [acceleratorOrgs, project?.organizationId]);
 
-  const participantProjectDataValues = useMemo(
+  const acceleratorProjectDataValues = useMemo(
     () => ({
       crumbs,
       organization,
-      participantProject,
+      acceleratorProject,
       project,
       projectId,
       projectMeta,
@@ -107,7 +107,7 @@ const ParticipantProjectProvider = ({ children }: Props) => {
     [
       crumbs,
       organization,
-      participantProject,
+      acceleratorProject,
       project,
       projectId,
       projectMeta,
@@ -117,12 +117,12 @@ const ParticipantProjectProvider = ({ children }: Props) => {
   );
 
   useEffect(() => {
-    setParticipantProjectData(participantProjectDataValues);
-  }, [participantProjectDataValues]);
+    setAcceleratorProjectData(acceleratorProjectDataValues);
+  }, [acceleratorProjectDataValues]);
 
   return (
-    <ParticipantProjectContext.Provider value={participantProjectData}>{children}</ParticipantProjectContext.Provider>
+    <AcceleratorProjectContext.Provider value={acceleratorProjectData}>{children}</AcceleratorProjectContext.Provider>
   );
 };
 
-export default ParticipantProjectProvider;
+export default AcceleratorProjectProvider;

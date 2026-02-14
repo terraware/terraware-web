@@ -27,7 +27,7 @@ export const useSpeciesDeliverableSearch = (): DeliverableSearch => {
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
 
-  const { currentParticipantProject, isLoading: isParticipantDataLoading, modules } = useParticipantData();
+  const { currentAcceleratorProject, isLoading: isParticipantDataLoading, modules } = useParticipantData();
 
   const [recentDeliverableSearchRequestId, setRecentDeliverableSearchRequestId] = useState('');
   const recentDeliverablesSearchRequest = useAppSelector(
@@ -55,7 +55,7 @@ export const useSpeciesDeliverableSearch = (): DeliverableSearch => {
 
     if (
       isParticipantDataLoading ||
-      !currentParticipantProject ||
+      !currentAcceleratorProject ||
       // We need to know the modules available to the participant before we
       // can search for associated deliverables
       _modules.length === 0
@@ -67,7 +67,7 @@ export const useSpeciesDeliverableSearch = (): DeliverableSearch => {
       requestListDeliverables({
         locale: activeLocale,
         listRequest: {
-          projectId: currentParticipantProject.id,
+          projectId: currentAcceleratorProject.id,
         },
         search: {
           operation: 'and',
@@ -89,7 +89,7 @@ export const useSpeciesDeliverableSearch = (): DeliverableSearch => {
       })
     );
     setRecentDeliverableSearchRequestId(deliverableRequest.requestId);
-  }, [currentParticipantProject, isParticipantDataLoading, modules, activeLocale, dispatch]);
+  }, [currentAcceleratorProject, isParticipantDataLoading, modules, activeLocale, dispatch]);
 
   // Initialize the hook
   useEffect(() => {

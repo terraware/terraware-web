@@ -6,10 +6,10 @@ import { useParticipantData } from 'src/providers/Participant/ParticipantContext
 
 // This injects ModuleTimelineProps from ParticipantProvider
 const ParticipantPage = (props: PageProps) => {
-  const { currentParticipantProject, modules } = useParticipantData();
+  const { currentAcceleratorProject, modules } = useParticipantData();
 
   return (
-    <PageWithModuleTimeline {...props} projectPhase={currentParticipantProject?.phase} modules={modules ?? []}>
+    <PageWithModuleTimeline {...props} projectPhase={currentAcceleratorProject?.phase} modules={modules ?? []}>
       {props.children}
     </PageWithModuleTimeline>
   );

@@ -88,15 +88,15 @@ const ModuleDetailsCardWrapper = ({ moduleId, project }: ModuleDetailsCardWrappe
 };
 
 const CurrentModule = () => {
-  const { currentParticipantProject } = useParticipantData();
+  const { currentAcceleratorProject } = useParticipantData();
 
   const { cohortModules, listCohortModules } = useListCohortModules();
 
   useEffect(() => {
-    if (currentParticipantProject && currentParticipantProject.cohortId) {
-      void listCohortModules(currentParticipantProject.cohortId);
+    if (currentAcceleratorProject && currentAcceleratorProject.cohortId) {
+      void listCohortModules(currentAcceleratorProject.cohortId);
     }
-  }, [currentParticipantProject, listCohortModules]);
+  }, [currentAcceleratorProject, listCohortModules]);
 
   // Only first active modules shown for now. TODO: upgrade to support multiple active modules for overlapping modules
   const activeModules = useMemo(() => {
@@ -107,14 +107,14 @@ const CurrentModule = () => {
     return cohortModules.filter((module) => module.isActive);
   }, [cohortModules]);
 
-  if (!currentParticipantProject || !activeModules) {
+  if (!currentAcceleratorProject || !activeModules) {
     return null;
   }
 
   return (
     <>
       {activeModules.map((module) => (
-        <ModuleDetailsCardWrapper moduleId={module.id} project={currentParticipantProject} key={module.id} />
+        <ModuleDetailsCardWrapper moduleId={module.id} project={currentAcceleratorProject} key={module.id} />
       ))}
     </>
   );

@@ -5,8 +5,8 @@ import { IconName, Separator } from '@terraware/web-components';
 
 import Page from 'src/components/Page';
 import ProjectsDropdown from 'src/components/ProjectsDropdown';
+import { useAcceleratorProjects } from 'src/hooks/useAcceleratorProjects';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { useParticipantProjects } from 'src/hooks/useParticipantProjects';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useUser } from 'src/providers';
 import strings from 'src/strings';
@@ -21,7 +21,7 @@ export default function DocumentsView(): JSX.Element | null {
   const { goToDocumentNew } = useNavigateTo();
   const { activeLocale } = useLocalization();
   const theme = useTheme();
-  const { participantProjects } = useParticipantProjects();
+  const { acceleratorProjects } = useAcceleratorProjects();
   const { isAllowed } = useUser();
   const canAddDocument = useMemo(() => isAllowed('CREATE_DOCUMENTS'), [isAllowed]);
 
@@ -29,12 +29,12 @@ export default function DocumentsView(): JSX.Element | null {
 
   const availableProjects = useMemo(
     () =>
-      participantProjects.map((project) => ({
+      acceleratorProjects.map((project) => ({
         id: project.projectId,
         name: project.dealName || '',
         dealName: project.dealName,
       })),
-    [participantProjects]
+    [acceleratorProjects]
   );
 
   const filteredProject = useMemo(() => {

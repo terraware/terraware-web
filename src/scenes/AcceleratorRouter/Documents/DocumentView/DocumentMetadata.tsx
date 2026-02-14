@@ -2,7 +2,7 @@ import React, { type JSX, useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
-import { useParticipantProjects } from 'src/hooks/useParticipantProjects';
+import { useAcceleratorProjects } from 'src/hooks/useAcceleratorProjects';
 import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
 import { selectUser } from 'src/redux/features/user/usersSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -23,7 +23,7 @@ const DocumentMetadata = ({ document, documentTemplate }: DocumentMetadataProps)
 
   const dispatch = useAppDispatch();
   const theme = useTheme();
-  const { participantProjects } = useParticipantProjects();
+  const { acceleratorProjects } = useAcceleratorProjects();
 
   const [modifiedByUser, setModifiedByUser] = useState<User>();
 
@@ -41,7 +41,7 @@ const DocumentMetadata = ({ document, documentTemplate }: DocumentMetadataProps)
   const modifiedByName = useMemo(() => getUserDisplayName(modifiedByUser), [modifiedByUser]);
   const modifiedTimeDisplay = useMemo(() => getDateTimeDisplayValue(new Date(modifiedTime).getTime()), [modifiedTime]);
 
-  const project = participantProjects?.find((proj) => proj.projectId === projectId);
+  const project = acceleratorProjects?.find((proj) => proj.projectId === projectId);
 
   return (
     <Box display='flex' flexDirection='column' marginTop={3}>

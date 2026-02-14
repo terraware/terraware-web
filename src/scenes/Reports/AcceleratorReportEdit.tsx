@@ -12,7 +12,7 @@ import AcceleratorReportEditForm from './AcceleratorReportEditForm';
 
 const AcceleratorReportEditView = (): JSX.Element | null => {
   const { activeLocale, strings } = useLocalization();
-  const { currentParticipantProject, setCurrentParticipantProject } = useParticipantData();
+  const { currentAcceleratorProject, setCurrentAcceleratorProject } = useParticipantData();
 
   const pathParams = useParams<{ projectId: string; reportId: string }>();
   const reportId = Number(pathParams.reportId);
@@ -22,10 +22,10 @@ const AcceleratorReportEditView = (): JSX.Element | null => {
   const snackbar = useSnackbar();
 
   useEffect(() => {
-    if (projectId !== currentParticipantProject?.id) {
-      setCurrentParticipantProject(projectId);
+    if (projectId !== currentAcceleratorProject?.id) {
+      setCurrentAcceleratorProject(projectId);
     }
-  }, [currentParticipantProject?.id, projectId, setCurrentParticipantProject]);
+  }, [currentAcceleratorProject?.id, projectId, setCurrentAcceleratorProject]);
 
   useEffect(() => {
     if (getReportResults.isError) {
@@ -49,7 +49,7 @@ const AcceleratorReportEditView = (): JSX.Element | null => {
     <Page
       title={
         <TitleBar
-          subtitle={currentParticipantProject ? `${strings.PROJECT}: ${currentParticipantProject?.name}` : ''}
+          subtitle={currentAcceleratorProject ? `${strings.PROJECT}: ${currentAcceleratorProject?.name}` : ''}
           title={activeLocale ? `${strings.REPORT} (${reportName})` : ''}
         />
       }

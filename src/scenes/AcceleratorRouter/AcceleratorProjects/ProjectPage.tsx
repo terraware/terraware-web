@@ -20,7 +20,7 @@ import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
-import { useParticipantProjectData } from './ParticipantProjectContext';
+import { useAcceleratorProjectData } from './AcceleratorProjectContext';
 import ProjectActivityLogView from './ProjectActivityLogView';
 import ProjectDeliverablesView from './ProjectDeliverablesView';
 import ProjectDocumentsView from './ProjectDocumentsView';
@@ -33,7 +33,7 @@ const ProjectPage = () => {
   const { strings } = useLocalization();
   const theme = useTheme();
   const { isAllowed } = useUser();
-  const projectData = useParticipantProjectData();
+  const projectData = useAcceleratorProjectData();
   const { goToAcceleratorActivityCreate, goToDocumentNew, goToParticipantProjectEdit } = useNavigateTo();
   const { getApplicationByProjectId } = useApplicationData();
   const { projectScore } = useProjectScore(projectData.projectId);
@@ -46,7 +46,7 @@ const ProjectPage = () => {
   const snackbar = useSnackbar();
   const { isDesktop, isMobile } = useDeviceInfo();
 
-  const isAllowedEdit = isAllowed('UPDATE_PARTICIPANT_PROJECT');
+  const isAllowedEdit = isAllowed('UPDATE_ACCELERATOR_PROJECT');
   const isAllowedPublish = isAllowed('PUBLISH_PROJECT_DETAILS');
   const isAllowedCreateActivities = isAllowed('CREATE_ACTIVITIES');
 
@@ -74,7 +74,7 @@ const ProjectPage = () => {
         children: (
           <ProjectProfileView
             {...projectData}
-            projectDetails={projectData.participantProject}
+            projectDetails={projectData.acceleratorProject}
             projectApplication={projectApplication}
             projectScore={projectScore}
             phaseVotes={phaseVotes}
@@ -88,7 +88,7 @@ const ProjectPage = () => {
         children: (
           <ProjectActivityLogView
             highlightsModalOpen={highlightsModalOpen}
-            projectDealName={projectData.participantProject?.dealName}
+            projectDealName={projectData.acceleratorProject?.dealName}
             projectId={projectData.projectId}
             setHighlightsModalOpen={setHighlightsModalOpen}
           />
@@ -158,17 +158,17 @@ const ProjectPage = () => {
 
   const publishProfile = useCallback(() => {
     const funderProjectDetails: FunderProjectDetails = {
-      ...projectData.participantProject,
+      ...projectData.acceleratorProject,
       projectId: projectData.projectId,
-      carbonCertifications: projectData.participantProject?.carbonCertifications || [],
-      landUseModelTypes: projectData.participantProject?.landUseModelTypes || [],
-      landUseModelHectares: projectData.participantProject?.landUseModelHectares || {},
-      metricProgress: projectData.participantProject?.metricProgress ?? [],
-      sdgList: projectData.participantProject?.sdgList || [],
+      carbonCertifications: projectData.acceleratorProject?.carbonCertifications || [],
+      landUseModelTypes: projectData.acceleratorProject?.landUseModelTypes || [],
+      landUseModelHectares: projectData.acceleratorProject?.landUseModelHectares || {},
+      metricProgress: projectData.acceleratorProject?.metricProgress ?? [],
+      sdgList: projectData.acceleratorProject?.sdgList || [],
     };
     const request = dispatch(requestPublishFunderProject(funderProjectDetails));
     setPublishRequestId(request.requestId);
-  }, [dispatch, projectData.participantProject, projectData.projectId]);
+  }, [dispatch, projectData.acceleratorProject, projectData.projectId]);
 
   const onOptionItemClick = useCallback((optionItem: DropdownItem) => {
     if (optionItem.value === 'publish') {
@@ -290,7 +290,7 @@ const ProjectPage = () => {
         {projectData.organization?.name?.toUpperCase()}
       </Typography>
       <Typography fontSize={'24px'} fontWeight={600}>
-        {projectData.participantProject?.dealName}
+        {projectData.acceleratorProject?.dealName}
       </Typography>
     </Box>
   );

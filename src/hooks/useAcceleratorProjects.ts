@@ -1,24 +1,24 @@
 import { useCallback, useEffect, useMemo } from 'react';
 
 import { useLocalization } from 'src/providers';
-import { ParticipantProject } from 'src/types/ParticipantProject';
+import { AcceleratorProject } from 'src/types/AcceleratorProject';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import { useLazyListProjectAcceleratorDetailsQuery } from '../queries/generated/acceleratorProjects';
 
-export type UseParticipantProjectsResult = {
+export type UseAcceleratorProjectsResult = {
   isLoading: boolean;
-  participantProjects: ParticipantProject[];
+  acceleratorProjects: AcceleratorProject[];
   refetch: () => void;
 };
 
-export const useParticipantProjects = (): UseParticipantProjectsResult => {
+export const useAcceleratorProjects = (): UseAcceleratorProjectsResult => {
   const { activeLocale, strings } = useLocalization();
   const snackbar = useSnackbar();
 
   const [listProjectAcceleratorDetails, listDetailsResponse] = useLazyListProjectAcceleratorDetailsQuery();
 
-  const fetchParticipantProjects = useCallback(
+  const fetchAcceleratorProjects = useCallback(
     (preferCached: boolean = false) => {
       if (!activeLocale) {
         return;
@@ -30,10 +30,10 @@ export const useParticipantProjects = (): UseParticipantProjectsResult => {
   );
 
   useEffect(() => {
-    fetchParticipantProjects(true);
-  }, [fetchParticipantProjects]);
+    fetchAcceleratorProjects(true);
+  }, [fetchAcceleratorProjects]);
 
-  const participantProjects = useMemo(
+  const acceleratorProjects = useMemo(
     () => (listDetailsResponse.isSuccess ? listDetailsResponse.data.details : []),
     [listDetailsResponse]
   );
@@ -47,7 +47,7 @@ export const useParticipantProjects = (): UseParticipantProjectsResult => {
 
   return {
     isLoading: listDetailsResponse.isLoading,
-    participantProjects,
-    refetch: fetchParticipantProjects,
+    acceleratorProjects,
+    refetch: fetchAcceleratorProjects,
   };
 };

@@ -8,7 +8,7 @@ import { getDateRangeString } from 'src/utils/dateFormatter';
 
 const Header = () => {
   const theme = useTheme();
-  const { currentParticipantProject, setCurrentParticipantProject, projectsWithModules, modules } =
+  const { currentAcceleratorProject, setCurrentAcceleratorProject, projectsWithModules, modules } =
     useParticipantData();
 
   const currentModule = useMemo(() => modules?.find((module) => module.isActive), [modules]);
@@ -44,10 +44,10 @@ const Header = () => {
           <Grid item>
             {options?.length > 1 ? (
               <Dropdown
-                onChange={setCurrentParticipantProject}
+                onChange={setCurrentAcceleratorProject}
                 options={options}
                 selectStyles={selectStyles}
-                selectedValue={currentParticipantProject?.id}
+                selectedValue={currentAcceleratorProject?.id}
               />
             ) : (
               <Typography sx={selectStyles.input}>{options[0].label}</Typography>

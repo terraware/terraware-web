@@ -11,7 +11,7 @@ import useListCohortModules from 'src/hooks/useListCohortModules';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 
-import { useParticipantProjectData } from '../ParticipantProjectContext';
+import { useAcceleratorProjectData } from '../AcceleratorProjectContext';
 
 export type Props = {
   children: React.ReactNode;
@@ -25,7 +25,7 @@ const ScoringWrapper = ({ children, isForm, isLoading, rightComponent }: Props):
   const theme = useTheme();
 
   const { cohortModules, listCohortModules } = useListCohortModules();
-  const { project } = useParticipantProjectData();
+  const { project } = useAcceleratorProjectData();
 
   useEffect(() => {
     if (project && project.cohortId) {

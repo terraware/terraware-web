@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useMemo } from 'react';
 import { DropdownItem } from '@terraware/web-components';
 
 import { useLocalization } from 'src/providers';
-import { Region, getRegionValue } from 'src/types/ParticipantProject';
+import { Region, getRegionValue } from 'src/types/AcceleratorProject';
 
 import { ProjectFieldEditProps } from '.';
 import ProjectFieldSelect from './Select';

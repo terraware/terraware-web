@@ -2,13 +2,13 @@ import { createContext, useContext } from 'react';
 
 import { Crumb } from 'src/components/BreadCrumbs';
 import { AcceleratorOrg } from 'src/types/Accelerator';
-import { ParticipantProject } from 'src/types/ParticipantProject';
+import { AcceleratorProject } from 'src/types/AcceleratorProject';
 import { Project, ProjectMeta } from 'src/types/Project';
 
-export type ParticipantProjectData = {
+export type AcceleratorProjectData = {
   crumbs: Crumb[];
   organization?: AcceleratorOrg;
-  participantProject?: ParticipantProject;
+  acceleratorProject?: AcceleratorProject;
   projectId: number;
   project?: Project;
   projectMeta?: ProjectMeta;
@@ -17,11 +17,11 @@ export type ParticipantProjectData = {
 };
 
 // default values pointing to nothing
-export const ParticipantProjectContext = createContext<ParticipantProjectData>({
+export const AcceleratorProjectContext = createContext<AcceleratorProjectData>({
   crumbs: [],
   projectId: -1,
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   reload: () => {},
 });
 
-export const useParticipantProjectData = () => useContext(ParticipantProjectContext);
+export const useAcceleratorProjectData = () => useContext(AcceleratorProjectContext);

@@ -2,13 +2,13 @@ import { components } from 'src/api/types/generated-schema';
 import strings from 'src/strings';
 
 // These will all change when the BE is done, some of the props might even come from different models
-export type ParticipantProject = components['schemas']['ProjectAcceleratorDetailsPayload'];
+export type AcceleratorProject = components['schemas']['ProjectAcceleratorDetailsPayload'];
 
-export type CarbonCertifications = ParticipantProject['carbonCertifications'];
+export type CarbonCertifications = AcceleratorProject['carbonCertifications'];
 
-export type LandUseModelType = ParticipantProject['landUseModelTypes'][0];
+export type LandUseModelType = AcceleratorProject['landUseModelTypes'][0];
 
-export type MetricProgress = ParticipantProject['metricProgress'][0];
+export type MetricProgress = AcceleratorProject['metricProgress'][0];
 
 // Types are in the preferred sorting order:
 export const LAND_USE_MODEL_TYPES: LandUseModelType[] = [
@@ -43,7 +43,7 @@ export const getLandUseModelType = (input: LandUseModelType): string => {
   }
 };
 
-export type Region = ParticipantProject['region'];
+export type Region = AcceleratorProject['region'];
 
 export type RegionLabel = {
   region: Region;

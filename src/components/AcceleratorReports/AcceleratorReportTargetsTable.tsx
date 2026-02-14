@@ -33,11 +33,11 @@ export type RowMetric = {
 
 export default function AcceleratorReportTargetsTable(): JSX.Element {
   const { isAcceleratorRoute } = useAcceleratorConsole();
-  const { currentParticipantProject } = useParticipantData();
+  const { currentAcceleratorProject } = useParticipantData();
   const { isAllowed } = useUser();
   const { selectedOrganization } = useOrganization();
   const pathParams = useParams<{ projectId: string }>();
-  const projectId = isAcceleratorRoute ? Number(pathParams.projectId) : currentParticipantProject?.id;
+  const projectId = isAcceleratorRoute ? Number(pathParams.projectId) : currentAcceleratorProject?.id;
   const snackbar = useSnackbar();
 
   const [getReportsYears, getReportsYearsResponse] = useLazyGetAcceleratorReportYearsQuery();
