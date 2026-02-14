@@ -88,7 +88,7 @@ const AcceleratorProjectSpeciesProvider = ({ children }: Props) => {
       requestGetOneSpecies({
         organizationId: currentDeliverable.organizationId,
         speciesId: currentAcceleratorProjectSpecies.speciesId,
-      }),
+      })
     );
 
     setGetSpeciesRequestId(request.requestId);
@@ -122,13 +122,13 @@ const AcceleratorProjectSpeciesProvider = ({ children }: Props) => {
           requestUpdateSpecies({
             organizationId: currentDeliverable.organizationId,
             species,
-          }),
+          })
         );
         setUpdateSpeciesRequestId(updateSpeciesRequest.requestId);
       }
       setPpsNeedsReload(true);
     },
-    [currentDeliverable, currentAcceleratorProjectSpecies, currentSpecies, dispatch, goToAcceleratorProjectSpecies],
+    [currentDeliverable, currentAcceleratorProjectSpecies, currentSpecies, dispatch, goToAcceleratorProjectSpecies]
   );
 
   const [acceleratorProjectSpeciesData, setAcceleratorProjectSpeciesData] = useState<AcceleratorProjectSpeciesData>({
@@ -151,7 +151,7 @@ const AcceleratorProjectSpeciesProvider = ({ children }: Props) => {
         if (newStatus === 'Approved') {
           snackbar.pageSuccess(
             strings.formatString(strings.YOU_APPROVED_SPECIES, currentSpecies.scientificName).toString(),
-            strings.SPECIES_APPROVED,
+            strings.SPECIES_APPROVED
           );
           setNewStatus('');
         } else {
