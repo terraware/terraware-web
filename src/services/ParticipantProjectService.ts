@@ -1,5 +1,5 @@
 import { paths } from 'src/api/types/generated-schema';
-import HttpService, { Response } from 'src/services/HttpService';
+import HttpService from 'src/services/HttpService';
 import SearchService from 'src/services/SearchService';
 import strings from 'src/strings';
 import { AcceleratorOrg } from 'src/types/Accelerator';
@@ -15,18 +15,11 @@ import { SearchOrderConfig, searchAndSort } from 'src/utils/searchAndSort';
  */
 
 const ENDPOINT_PARTICIPANT_PROJECTS = '/api/v1/accelerator/projects';
-const ENDPOINT_PARTICIPANT_PROJECT = '/api/v1/accelerator/projects/{projectId}';
-
-type UpdateProjectAcceleratorDetailsRequestPayload =
-  paths[typeof ENDPOINT_PARTICIPANT_PROJECT]['put']['requestBody']['content']['application/json'];
-type UpdateProjectAcceleratorDetailsResponsePayload =
-  paths[typeof ENDPOINT_PARTICIPANT_PROJECT]['put']['responses'][200]['content']['application/json'];
 
 type ListProjectAcceleratorDetailsResponsePayload =
   paths[typeof ENDPOINT_PARTICIPANT_PROJECTS]['get']['responses'][200]['content']['application/json'];
 
 const httpParticipantProjects = HttpService.root(ENDPOINT_PARTICIPANT_PROJECTS);
-const httpParticipantProject = HttpService.root(ENDPOINT_PARTICIPANT_PROJECT);
 
 const COHORT_ID_EXISTS_PREDICATE: SearchNodePayload = {
   operation: 'not',
@@ -142,22 +135,10 @@ const list = async (
   };
 };
 
-const update = async (participantProject: ParticipantProject): Promise<Response> => {
-  const { projectId, ...payload } = participantProject;
-
-  return httpParticipantProject.put2<UpdateProjectAcceleratorDetailsResponsePayload>({
-    urlReplacements: {
-      '{projectId}': `${projectId}`,
-    },
-    entity: payload as UpdateProjectAcceleratorDetailsRequestPayload,
-  });
-};
-
 const ParticipantProjectsService = {
   download,
   downloadList,
   list,
-  update,
 };
 
 export default ParticipantProjectsService;

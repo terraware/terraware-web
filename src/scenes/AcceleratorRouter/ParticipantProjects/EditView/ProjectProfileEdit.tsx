@@ -22,6 +22,7 @@ import Icon from 'src/components/common/icon/Icon';
 import useBoolean from 'src/hooks/useBoolean';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization, useUser } from 'src/providers';
+import { useUpdateProjectAcceleratorDetailsMutation } from 'src/queries/generated/acceleratorProjects';
 import {
   InternalUserPayload,
   useGetInternalUsersQuery,
@@ -38,8 +39,6 @@ import { requestListGlobalRolesUsers } from 'src/redux/features/globalRoles/glob
 import { selectGlobalRolesUsersSearchRequest } from 'src/redux/features/globalRoles/globalRolesSelectors';
 import { requestListOrganizationUsers } from 'src/redux/features/organizationUser/organizationUsersAsyncThunks';
 import { selectOrganizationUsers } from 'src/redux/features/organizationUser/organizationUsersSelectors';
-import { requestUpdateParticipantProject } from 'src/redux/features/participantProjects/participantProjectsAsyncThunks';
-import { selectParticipantProjectUpdateRequest } from 'src/redux/features/participantProjects/participantProjectsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { CohortPhaseType } from 'src/types/Cohort';
 import { LAND_USE_MODEL_TYPES, ParticipantProject } from 'src/types/ParticipantProject';
@@ -89,11 +88,7 @@ const ProjectProfileEdit = () => {
   const { isAllowed } = useUser();
   const [validateFields, setValidateFields] = useState<boolean>(false);
 
-  // Participant project (accelerator data) form record and update request
-  const [participantProjectRequestId, setParticipantProjectRequestId] = useState<string>('');
-  const participantProjectUpdateResponse = useAppSelector(
-    selectParticipantProjectUpdateRequest(participantProjectRequestId)
-  );
+  const [updateParticipantProject, updateParticipantProjectResponse] = useUpdateProjectAcceleratorDetailsMutation();
   const [participantProjectRecord, setParticipantProjectRecord, onChangeParticipantProject] =
     useForm(participantProject);
 
@@ -186,25 +181,25 @@ const ProjectProfileEdit = () => {
       !wasInitiated || _response.isSuccess || _response.isError;
 
     if (
-      isComplete(participantProjectUpdateResponse?.status, initiatedRequests.participantProject) &&
       isComplete(uploadImagesResponse?.status, initiatedRequests.uploadImages) &&
+      isCompleteRtk(updateParticipantProjectResponse, initiatedRequests.participantProject) &&
       isCompleteRtk(updateInternalUsersResponse, initiatedRequests.updateInternalUsers)
     ) {
       setRequestsInProgress(false);
 
       if (
-        [participantProjectUpdateResponse, uploadImagesResponse].some((resp) => resp?.status === 'error') ||
+        uploadImagesResponse?.status === 'error' ||
+        updateParticipantProjectResponse.isError ||
         updateInternalUsersResponse.isError
       ) {
         snackbar.toastError();
         setUploadImagesRequestId('');
-        setParticipantProjectRequestId('');
       } else {
         redirectToProjectView();
       }
     }
   }, [
-    participantProjectUpdateResponse,
+    updateParticipantProjectResponse,
     uploadImagesResponse,
     requestsInProgress,
     initiatedRequests,
@@ -346,8 +341,10 @@ const ProjectProfileEdit = () => {
     updatedRecord.landUseModelHectares = updatedModelHectares;
 
     if (participantProjectRecord) {
-      const dispatched = dispatch(requestUpdateParticipantProject(updatedRecord));
-      setParticipantProjectRequestId(dispatched.requestId);
+      void updateParticipantProject({
+        projectId,
+        updateProjectAcceleratorDetailsRequestPayload: updatedRecord,
+      });
       newInitiatedRequests.participantProject = true;
     }
 
@@ -395,6 +392,7 @@ const ProjectProfileEdit = () => {
     redirectToProjectView,
     saveInternalUsers,
     stableToVariable,
+    updateParticipantProject,
   ]);
 
   const handleSave = useCallback(() => {
@@ -595,7 +593,8 @@ const ProjectProfileEdit = () => {
       )}
       <PageForm
         busy={
-          [participantProjectUpdateResponse?.status, uploadImagesResponse?.status].includes('pending') ||
+          uploadImagesResponse?.status === 'pending' ||
+          updateParticipantProjectResponse.isLoading ||
           updateInternalUsersResponse.isLoading
         }
         cancelID='cancelNewParticipantProject'
