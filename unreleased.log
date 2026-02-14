@@ -1,3 +1,4 @@
+2a881a2421bc SW-8058 Remove params for Accelerator Orgs endpoint (#5232)
 ef29498998d0 SW-8057 Replace missed ParticipantProject references (#5235)
 8a2a827330b4 SW-8057 Replace ParticipantProject references with AcceleratorProject (#5234)
 a0a0e68e13ed SW-8057 Use phase instead of cohortPhase on project payloads (#5233)

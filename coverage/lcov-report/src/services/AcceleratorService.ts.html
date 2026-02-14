@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/42</span>
+                <span class='fraction'>0/37</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/32</span>
+                <span class='fraction'>0/24</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/39</span>
+                <span class='fraction'>0/34</span>
             </div>
         
             
@@ -117,21 +117,7 @@
 <a name='L52'></a><a href='#L52'>52</a>
 <a name='L53'></a><a href='#L53'>53</a>
 <a name='L54'></a><a href='#L54'>54</a>
-<a name='L55'></a><a href='#L55'>55</a>
-<a name='L56'></a><a href='#L56'>56</a>
-<a name='L57'></a><a href='#L57'>57</a>
-<a name='L58'></a><a href='#L58'>58</a>
-<a name='L59'></a><a href='#L59'>59</a>
-<a name='L60'></a><a href='#L60'>60</a>
-<a name='L61'></a><a href='#L61'>61</a>
-<a name='L62'></a><a href='#L62'>62</a>
-<a name='L63'></a><a href='#L63'>63</a>
-<a name='L64'></a><a href='#L64'>64</a>
-<a name='L65'></a><a href='#L65'>65</a>
-<a name='L66'></a><a href='#L66'>66</a>
-<a name='L67'></a><a href='#L67'>67</a>
-<a name='L68'></a><a href='#L68'>68</a>
-<a name='L69'></a><a href='#L69'>69</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L55'></a><a href='#L55'>55</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -177,15 +163,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -193,11 +170,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { paths <span class="cstat-no" title="statement not covered" >} from 'src/ap</span>i/types/generated-schema';
 import HttpServi<span class="cstat-no" title="statement not covered" >ce, { Response } from </span>'src/services/HttpService';
@@ -214,59 +186,45 @@ export type AcceleratorOrgData = {
 <span class="cstat-no" title="statement not covered" ></span>
 type A<span class="cstat-no" title="statement not covered" >cceleratorOrgsResponse =</span>
   paths[<span class="cstat-no" title="statement not covered" >typeof ACCELERATOR_ORGS_EN<span class="fstat-no" title="function not covered" >DP</span>OINT<span class="cstat-no" title="statement not covered" >]['get']['</span>responses'][200]['content']['application/json'];</span>
-export type AcceleratorOrgsListRequestParams = paths[typeof ACCELERATOR_ORGS_ENDPOINT]['get']['parameters']['query'];
-<span class="cstat-no" title="statement not covered" ></span>
-const listAcceleratorOrgs = async (
-  locale: stri<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ng</span> | null,<span class="cstat-no" title="statement not covered" ></span></span>
-  params?: AcceleratorOrgsListRequestParams,
-  search?: SearchNodePayload,
+&nbsp;
+co<span class="cstat-no" title="statement not covered" >nst listAcc</span>eleratorOrgs = async (
+  locale: string | null,
+  search?: Sea<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >rc</span>hNodePayload,<span class="cstat-no" title="statement not covered" ></span></span>
   searchSortOrder?: SearchSortOrder
 ): Promise&lt;Response &amp; AcceleratorOrgData&gt; =&gt; {
   let searchOrderConfig: SearchOrderConfig;
   if (searchSortOrder) {
     searchOrderConfig = {
-      locale,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-      sortOrder: sea<span class="cstat-no" title="statement not covered" >rch</span>SortOrder,
-<span class="cstat-no" title="statement not covered" >      numberFields: ['id'],</span>
-    };<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  }
-<span class="cstat-no" title="statement not covered" ></span>
-  const _params: { [key: <span class="cstat-no" title="statement not covered" >string]: string } = {};</span>
-<span class="cstat-no" title="statement not covered" ></span>
-  if (params?.includeParticipants <span class="cstat-no" title="statement not covered" >!== undefined) {</span>
-    _params.includeParticipants = `${params.inc<span class="cstat-no" title="statement not covered" >ludeParticipants}`;</span>
-  }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  if (params?.hasProjectApplication !== undefined) {</span>
-<span class="cstat-no" title="statement not covered" >    _params.hasProjectApplication = `${params.hasProjectApplication}`;</span>
-  }
-&nbsp;
+      locale,
+      sortOrder: searchSortOrder,
+      numberFields:<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > [</span>'id'],<span class="cstat-no" title="statement not covered" ></span></span>
+    };<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >  }</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
   return await HttpService.root(ACCELERATOR_ORGS_ENDPOINT).get&lt;AcceleratorOrgsResponse, AcceleratorOrgData&gt;(
-    {
-      params: _params,
-    },<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >    (data) =&gt; ({</span>
-<span class="cstat-no" title="statement not covered" >      organizations: searchAndSort(data?.organizations || [], searc</span>h, searchOrderConfig),
-    })
-<span class="cstat-no" title="statement not covered" >  );</span>
-};<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >    {},</span>
+    (data) =&gt; ({<span class="cstat-no" title="statement not covered" ></span>
+      organizations: search<span class="cstat-no" title="statement not covered" >AndSort(data?.organizations || [], </span>search, searchOrderConfig),
+    })<span class="cstat-no" title="statement not covered" ></span>
+  );<span class="cstat-no" title="statement not covered" ></span>
+};<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 &nbsp;
 co<span class="cstat-no" title="statement not covered" >nst assignTerraformationContact = async (</span>
-  organizationId: number,
+  or<span class="cstat-no" title="statement not covered" >ganizationId: number,</span>
   terraformationContactId: number
 ): Promise&lt;Response&gt; =&gt; {
-  re<span class="fstat-no" title="function not covered" >tu</span>rn HttpSe<span class="cstat-no" title="statement not covered" >rvice.root(ASSIGN_TERRAFORMATION_CONTACT_ENDPOINT).put({</span>
+  return HttpService.root(ASSIGN_TERRAFORMATION_CONTACT_ENDPOINT).put({
     entity: { userId: terraformationContactId },
     urlReplacements: { '{organizationId}': `${organizationId}` },
-  });
+<span class="cstat-no" title="statement not covered" >  });</span>
 };
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-co<span class="cstat-no" title="statement not covered" >nst AcceleratorService = {</span>
+const AcceleratorService = {
   listAcceleratorOrgs,
   assignTerraformationContact,
 };
-&nbsp;
-export default AcceleratorS<span class="cstat-no" title="statement not covered" >ervice;</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+ex<span class="cstat-no" title="statement not covered" >port default AcceleratorService;</span>
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -274,7 +232,7 @@ export default AcceleratorS<span class="cstat-no" title="statement not covered" 
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-14T00:59:13.337Z
+                at 2026-02-14T01:15:35.450Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

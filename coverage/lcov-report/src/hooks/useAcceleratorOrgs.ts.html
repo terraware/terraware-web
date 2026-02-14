@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/47</span>
+                <span class='fraction'>0/46</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/34</span>
+                <span class='fraction'>0/32</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/44</span>
+                <span class='fraction'>0/43</span>
             </div>
         
             
@@ -111,21 +111,7 @@
 <a name='L46'></a><a href='#L46'>46</a>
 <a name='L47'></a><a href='#L47'>47</a>
 <a name='L48'></a><a href='#L48'>48</a>
-<a name='L49'></a><a href='#L49'>49</a>
-<a name='L50'></a><a href='#L50'>50</a>
-<a name='L51'></a><a href='#L51'>51</a>
-<a name='L52'></a><a href='#L52'>52</a>
-<a name='L53'></a><a href='#L53'>53</a>
-<a name='L54'></a><a href='#L54'>54</a>
-<a name='L55'></a><a href='#L55'>55</a>
-<a name='L56'></a><a href='#L56'>56</a>
-<a name='L57'></a><a href='#L57'>57</a>
-<a name='L58'></a><a href='#L58'>58</a>
-<a name='L59'></a><a href='#L59'>59</a>
-<a name='L60'></a><a href='#L60'>60</a>
-<a name='L61'></a><a href='#L61'>61</a>
-<a name='L62'></a><a href='#L62'>62</a>
-<a name='L63'></a><a href='#L63'>63</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L49'></a><a href='#L49'>49</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -170,20 +156,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -202,52 +174,38 @@ export type Response = {
   re<span class="cstat-no" title="statement not covered" >load: () =&gt; void;</span>
 };<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-// The default behavior, if no options are passed in with the props,
-//<span class="cstat-no" title="statement not covered" >   is to ge</span>t all organizations that have an "accelerator internal tag"
-//
-// The `includ<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >eP</span>articipants` option will add<span class="cstat-no" title="statement not covered" >itionally contain organizations that have no internal tags,</span></span>
-//   but do have a project that is associated to a participant
-//
-// The `hasProjectApplication` option will only return organizations that have no internal tags,
-//   but have a project that has an application submitted
-export const useAcceleratorOrgs = (props?: {
-  includeParticipants?: boolean;
-  hasProjectApplication?: boolean;
-}): Response =&gt; {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  const { includePar<span class="cstat-no" title="statement not covered" >tic</span>ipants, hasProjectApplication } = props || {};
-<span class="cstat-no" title="statement not covered" ></span>
-  const { activeLocale<span class="fstat-no" title="function not covered" > }</span> = u<span class="cstat-no" title="statement not covered" >seLocalization();</span>
-  const dispatch = useAppDispatch();
-<span class="cstat-no" title="statement not covered" >  const snackbar = useSnackbar();</span>
-<span class="cstat-no" title="statement not covered" ></span>
-  const [requestId, set<span class="cstat-no" title="statement not covered" >RequestId] = useState&lt;str</span>ing&gt;('');
-  const result = useAppSelector(sele<span class="cstat-no" title="statement not covered" >ctAcceleratorOrgsRequest(requestId));</span>
-<span class="cstat-no" title="statement not covered" ></span>
-  useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-    if (result?.status ==<span class="cstat-no" title="statement not covered" >= 'error') {</span>
-      snackbar.toastError()<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >;</span></span>
-    }<span class="cstat-no" title="statement not covered" ></span>
-  }, [result?.status, snack<span class="cstat-no" title="statement not covered" >bar]);</span>
-<span class="cstat-no" title="statement not covered" ></span>
-  const reload = us<span class="cstat-no" title="statement not covered" >eCallback(() =&gt; {</span>
-    const request = dispatch(<span class="cstat-no" title="statement not covered" ></span>
-      requestAcce<span class="cstat-no" title="statement not covered" >leratorOrgs({ locale: activeLocale, hasProjectApplication, includeParticipants })</span>
-<span class="cstat-no" title="statement not covered" >    );<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >    setRequestId(request.requestId);</span>
-  }, [<span class="cstat-no" title="statement not covered" >activeLocale, dispatch,</span> hasProjectApplication, includeParticipants]);
+// Get all organizations that have a project with a phase or an application
+ex<span class="cstat-no" title="statement not covered" >port const </span>useAcceleratorOrgs = (): Response =&gt; {
+  const { activeLocale } = useLocalization();
+  const dispat<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ch</span> = useAppDispatch();<span class="cstat-no" title="statement not covered" ></span></span>
+  const snackbar = useSnackbar();
+&nbsp;
+  const [requestId, setRequestId] = useState&lt;string&gt;('');
+  const result = useAppSelector(selectAcceleratorOrgsRequest(requestId));
 &nbsp;
   useEffect(() =&gt; {
-    reload();<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+    if (result?.status === 'error') {
+      snackbar.toas<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >tE</span>rror();<span class="cstat-no" title="statement not covered" ></span></span>
+    }<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >  }, [result?.status, snackbar]);</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  const reload = useCallback(() =&gt; {
+<span class="cstat-no" title="statement not covered" >    const request = dispatch(requestAccelerato</span>rOrgs({ locale: activeLocale }));
+    setRequestId(re<span class="cstat-no" title="statement not covered" >quest.requestId);</span>
+  }, [activeLocale, dis<span class="cstat-no" title="statement not covered" >patch]);</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
+    reload();<span class="cstat-no" title="statement not covered" ></span>
   }, [reload]);<span class="cstat-no" title="statement not covered" ></span>
-&nbsp;
-  return useMemo&lt;Response&gt;(
-<span class="cstat-no" title="statement not covered" >    () =&gt; ({</span>
-      acceleratorOrgs: result?.status === 'success' ? result?.data : [],
-<span class="cstat-no" title="statement not covered" >      isBusy: result?.status =<span class="fstat-no" title="function not covered" >==</span> 'pending',</span>
-<span class="cstat-no" title="statement not covered" >      reload,</span>
-    }),
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  return useMemo&lt;Response&gt;(<span class="cstat-no" title="statement not covered" ></span>
+    () =&gt; ({<span class="cstat-no" title="statement not covered" ></span>
+      acceleratorOr<span class="cstat-no" title="statement not covered" >gs: result?.status === 'success' ?</span> result?.data : [],
+      isBusy: result?.status === 'pe<span class="cstat-no" title="statement not covered" >nding',</span>
+      reload,<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >    }),<span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >    [result, reload]</span>
-  );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  );<span class="cstat-no" title="statement not covered" ></span>
 };
 &nbsp;</pre></td></tr></table></pre>
 
@@ -256,7 +214,7 @@ export const useAcceleratorOrgs = (props?: {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-14T00:59:13.337Z
+                at 2026-02-14T01:15:35.450Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

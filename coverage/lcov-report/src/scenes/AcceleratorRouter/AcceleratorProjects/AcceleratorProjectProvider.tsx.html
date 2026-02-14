@@ -188,10 +188,7 @@
 <a name='L123'></a><a href='#L123'>123</a>
 <a name='L124'></a><a href='#L124'>124</a>
 <a name='L125'></a><a href='#L125'>125</a>
-<a name='L126'></a><a href='#L126'>126</a>
-<a name='L127'></a><a href='#L127'>127</a>
-<a name='L128'></a><a href='#L128'>128</a>
-<a name='L129'></a><a href='#L129'>129</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L126'></a><a href='#L126'>126</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -240,9 +237,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -346,31 +340,28 @@ const AcceleratorProjectProvider = ({ children }: Props) =&gt; {
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
   const { project, <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >pr</span>ojectId<span class="cstat-no" title="statement not covered" > } = useProjectData();</span></span>
-  const { accelerato<span class="cstat-no" title="statement not covered" >rOr</span>gs, reload: reloadAll } = useAcceleratorOrgs({
-<span class="cstat-no" title="statement not covered" >    hasProjectApplication: true,</span>
-    include<span class="fstat-no" title="function not covered" >Pa</span>rtic<span class="cstat-no" title="statement not covered" >ipants: true,</span>
-  });
+  const { accelerato<span class="cstat-no" title="statement not covered" >rOr</span>gs, reload: reloadAll } = useAcceleratorOrgs();
 <span class="cstat-no" title="statement not covered" ></span>
-  const [getProject<span class="cstat-no" title="statement not covered" >AcceleratorDetails, projec</span>tAcceleratorDetailsResponse] = useLazyGetProjectAcceleratorDetailsQuery();
-<span class="cstat-no" title="statement not covered" ></span>
-  useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-    if (projectId !== -<span class="cstat-no" title="statement not covered" >1) {</span>
-      void getProjectAcceler<span class="cstat-no" title="statement not covered" >atorDetails(projectId, true);</span>
+  const [ge<span class="fstat-no" title="function not covered" >tP</span>roje<span class="cstat-no" title="statement not covered" >ctAcceleratorD</span>etails, projectAcceleratorDetailsResponse] = useLazyGetProjectAcceleratorDetailsQuery();
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  useEffect(() =&gt; {</span>
+    if (projectId !<span class="cstat-no" title="statement not covered" >== -1) {</span>
+      void getProjectAc<span class="cstat-no" title="statement not covered" >celeratorDetails(projectI</span>d, true);
     }<span class="cstat-no" title="statement not covered" ></span>
-  }, [projectId, getProjectAcc<span class="cstat-no" title="statement not covered" >eleratorDetails]);</span>
+  }, [projectId, getPro<span class="cstat-no" title="statement not covered" >jectAcceleratorDetails]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const accelerator<span class="cstat-no" title="statement not covered" >Project: AcceleratorProject</span> | undefined = useMemo(() =&gt; {
-    if (projectAccele<span class="cstat-no" title="statement not covered" >ratorDetailsResponse.isSuccess) </span>{
-      return proje<span class="cstat-no" title="statement not covered" >ctAcceleratorDetailsRespon</span>se.data.details;
+  const acceleratorProject: Accel<span class="cstat-no" title="statement not covered" >eratorProject | undefined = useMemo(() =&gt; {</span>
+    if (projectAcceleratorDeta<span class="cstat-no" title="statement not covered" >ilsResponse.isSuccess) {</span>
+      return projectAccelera<span class="cstat-no" title="statement not covered" >torDetailsResponse.data.details;</span>
     }<span class="cstat-no" title="statement not covered" ></span>
-  }, [projectAcceleratorDetailsResp<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >on</span>se]);</span>
+  }, [projectAccelera<span class="cstat-no" title="statement not covered" >torDetailsResponse]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const [acceleratorProject<span class="cstat-no" title="statement not covered" >Data, setAcceleratorProjectData] = useSt</span>ate&lt;AcceleratorProjectData&gt;({
-    crumbs: [],<span class="cstat-no" title="statement not covered" ></span>
+  const [acceleratorProjectData, setAcc<span class="cstat-no" title="statement not covered" >eleratorProjectData] = useState&lt;Acceler</span>atorProjectData&gt;({
+    crumbs: [],<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
     projectId,<span class="cstat-no" title="statement not covered" ></span>
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    reload: () =&gt; {},
-  });
+    // eslint-disable-next-<span class="cstat-no" title="statement not covered" >line @typescript-eslint/no-empty-functio</span>n
+    reload: () =&gt; {},<span class="cstat-no" title="statement not covered" ></span>
+  });<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >  const createdByUser = useApp<span class="fstat-no" title="function not covered" >Se</span>lector(selectUser(project?.createdBy));</span>
   co<span class="cstat-no" title="statement not covered" >nst modifiedByUser = useAppSelector(selectUser(project?.modifiedBy));</span>
@@ -454,7 +445,7 @@ expo<span class="cstat-no" title="statement not covered" >rt default Accelerator
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-14T00:59:13.337Z
+                at 2026-02-14T01:15:35.450Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

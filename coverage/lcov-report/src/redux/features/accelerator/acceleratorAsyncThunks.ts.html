@@ -110,10 +110,7 @@
 <a name='L45'></a><a href='#L45'>45</a>
 <a name='L46'></a><a href='#L46'>46</a>
 <a name='L47'></a><a href='#L47'>47</a>
-<a name='L48'></a><a href='#L48'>48</a>
-<a name='L49'></a><a href='#L49'>49</a>
-<a name='L50'></a><a href='#L50'>50</a>
-<a name='L51'></a><a href='#L51'>51</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L48'></a><a href='#L48'>48</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -158,10 +155,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { create<span class="cstat-no" title="statement not covered" >AsyncThunk } f</span>rom '@reduxjs/toolkit';
 <span class="cstat-no" title="statement not covered" ></span>
@@ -175,43 +169,40 @@ ex<span class="cstat-no" title="statement not covered" >port const requestAccele
   async (
     request: {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >      locale: string | null;</span>
-<span class="cstat-no" title="statement not covered" >      includeParticipants?: boolean;</span>
-<span class="cstat-no" title="statement not covered" >      hasProjectApplication?: boolean;</span>
-      se<span class="cstat-no" title="statement not covered" >arch?: SearchNodePayload;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-      searchSortOrder?: SearchSortOrder;
-<span class="cstat-no" title="statement not covered" >    },</span>
+<span class="cstat-no" title="statement not covered" >      search?: SearchNodePayload;</span>
+<span class="cstat-no" title="statement not covered" >      searchSortOrder?: SearchSortOrder;</span>
+    },<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
     { rejectWithValue }
-  ) =&gt; {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-    const { locale, hasProjectApplication, includeParticipants, search, searchSortOrder } = request;
-&nbsp;
+<span class="cstat-no" title="statement not covered" >  ) =&gt; {</span>
+    const { locale, search, searchSortOrder } = request;
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
     const response: Response &amp; AcceleratorOrgData = await AcceleratorService.listAcceleratorOrgs(
       locale,
-      { hasProjectApplication, includeParticipants },
       search,
       searchSortOrder
-    );<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >    if (response &amp;&amp; response.requestSucceeded) {</span>
-      return response.orga<span class="fstat-no" title="function not covered" >ni</span>zati<span class="cstat-no" title="statement not covered" >ons;</span>
-    }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    return rejectWithValue(strings.GENERIC_ERR</span>OR);
-  }<span class="cstat-no" title="statement not covered" ></span>
-);<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span>
-export const requestAssignTerra<span class="cstat-no" title="statement not covered" >formationContact = createAsyncThunk(</span>
-  'terraformationContact/assign',
-<span class="fstat-no" title="function not covered" >  as</span>ync (request: { organizationId: number; terraformationContactId: number }, { rejectWithValue }) =&gt; {
-    const { organizationId, terraformationContactId } = request;<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span>
-    const response = await AcceleratorService.assignTerraformationContact(organizationId, terraformationContactId);
+    );
 &nbsp;
     if (response &amp;&amp; response.requestSucceeded) {
+      return respon<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >se</span>.organi<span class="cstat-no" title="statement not covered" >zations;</span></span>
+    }<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+    return rejectWithValue<span class="fstat-no" title="function not covered" >(s</span>trin<span class="cstat-no" title="statement not covered" >gs.GENERIC_ERROR);</span>
+  }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+);
+<span class="cstat-no" title="statement not covered" ></span>
+export const requestA<span class="cstat-no" title="statement not covered" >ssignTerraformationContact =</span> createAsyncThunk(
+  'terraformationContact/assign'<span class="cstat-no" title="statement not covered" >,</span>
+  async (request: { o<span class="cstat-no" title="statement not covered" >rganizationId: number; terraform</span>ationContactId: number }, { rejectWithValue }) =&gt; {
+    const { organizationId, ter<span class="cstat-no" title="statement not covered" >raformationContactId } = request;</span>
+&nbsp;
+<span class="fstat-no" title="function not covered" ></span>    const response = await AcceleratorService.assignTerraformationContact(organizationId, terraformationContactId);
+<span class="cstat-no" title="statement not covered" ></span>
+    if (response &amp;&amp; r<span class="cstat-no" title="statement not covered" >esponse.requestSucceeded) {</span>
       return response;
     }
-<span class="cstat-no" title="statement not covered" ></span>
-    re<span class="cstat-no" title="statement not covered" >turn rejectWithValue(strings.GE</span>NERIC_ERROR);
-  }
+&nbsp;
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }<span class="cstat-no" title="statement not covered" ></span>
 );<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;</pre></td></tr></table></pre>
 
@@ -220,7 +211,7 @@ export const requestAssignTerra<span class="cstat-no" title="statement not cover
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-14T00:59:13.337Z
+                at 2026-02-14T01:15:35.450Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
