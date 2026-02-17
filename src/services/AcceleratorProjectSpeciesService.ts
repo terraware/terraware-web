@@ -90,18 +90,18 @@ const list = (projectId: number): Promise<Response2<GetSpeciesForProjectResponse
     },
   });
 
-const update = (acceleartorProjectSpecies: AcceleratorProjectSpecies): Promise<Response2<UpdateResponse>> => {
+const update = (acceleratorProjectSpecies: AcceleratorProjectSpecies): Promise<Response2<UpdateResponse>> => {
   const entity: UpdateRequestPayload = {
-    feedback: acceleartorProjectSpecies.feedback,
-    internalComment: acceleartorProjectSpecies.internalComment,
-    speciesNativeCategory: acceleartorProjectSpecies.speciesNativeCategory,
-    rationale: acceleartorProjectSpecies.rationale,
-    submissionStatus: acceleartorProjectSpecies.submissionStatus,
+    feedback: acceleratorProjectSpecies.feedback,
+    internalComment: acceleratorProjectSpecies.internalComment,
+    speciesNativeCategory: acceleratorProjectSpecies.speciesNativeCategory,
+    rationale: acceleratorProjectSpecies.rationale,
+    submissionStatus: acceleratorProjectSpecies.submissionStatus,
   };
 
   return HttpService.root(ENDPOINT_ACCELERATOR_PROJECT_SPECIES_SINGULAR).put2<UpdateResponse>({
     urlReplacements: {
-      '{participantProjectSpeciesId}': `${acceleartorProjectSpecies.id}`,
+      '{participantProjectSpeciesId}': `${acceleratorProjectSpecies.id}`,
     },
     entity,
   });
