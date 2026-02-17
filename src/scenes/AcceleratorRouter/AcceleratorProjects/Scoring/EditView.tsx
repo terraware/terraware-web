@@ -6,14 +6,14 @@ import useProjectScore from 'src/hooks/useProjectScore';
 import { Score } from 'src/types/Score';
 import useForm from 'src/utils/useForm';
 
-import { useParticipantProjectData } from '../ParticipantProjectContext';
+import { useAcceleratorProjectData } from '../AcceleratorProjectContext';
 import ScoreCard from './ScoreCard';
 import ScoringWrapper from './ScoringWrapper';
 
 const ScorecardEditView = () => {
   const { goToAcceleratorProjectScore } = useNavigateTo();
 
-  const { project, projectId } = useParticipantProjectData();
+  const { project, projectId } = useAcceleratorProjectData();
   const { projectScore, updateProjectScore, updateStatus, getStatus } = useProjectScore(projectId);
   const [score, setScore, onChange] = useForm<Score>({});
 

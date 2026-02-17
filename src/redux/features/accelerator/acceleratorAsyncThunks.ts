@@ -10,18 +10,15 @@ export const requestAcceleratorOrgs = createAsyncThunk(
   async (
     request: {
       locale: string | null;
-      includeParticipants?: boolean;
-      hasProjectApplication?: boolean;
       search?: SearchNodePayload;
       searchSortOrder?: SearchSortOrder;
     },
     { rejectWithValue }
   ) => {
-    const { locale, hasProjectApplication, includeParticipants, search, searchSortOrder } = request;
+    const { locale, search, searchSortOrder } = request;
 
     const response: Response & AcceleratorOrgData = await AcceleratorService.listAcceleratorOrgs(
       locale,
-      { hasProjectApplication, includeParticipants },
       search,
       searchSortOrder
     );

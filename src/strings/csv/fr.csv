@@ -338,10 +338,6 @@ CLOSE_AND_EDIT,Fermer et modifier,1c3ea202
 COHORT,Cohorte,81afe896
 COHORT_ADDED,{0} Cohorte ajoutée,c8518668
 COHORT_NAME,Nom de la cohorte,655d8af3
-COHORT_PHASE_DUE_DILIGENCE,Phase 0 : Due Diligence,6c20cb46
-COHORT_PHASE_FEASIBILITY_STUDY,Phase 1 : étude de faisabilité,94889837
-COHORT_PHASE_IMPLEMENT_AND_MONITOR,Phase 3 - Mise en œuvre et suivi,d8def4af
-COHORT_PHASE_PLAN_AND_SCALE,Phase 2 : plan et échelle,a51c9fc2
 COHORTS,Cohortes,b0aca6fa
 COHORTS_EMPTY_STATE,"Vous n'avez pas encore de cohortes. Lorsque vous ajoutez des cohortes, ils apparaîtront ici.",b764b773
 COLLECTED_DATE,Date de la collecte,3f1515d8
@@ -369,6 +365,8 @@ CONDITIONAL,Conditionnel,605c68a6
 CONFIRM,Confirmer,fe564422
 CONFIRM_UPDATE_ALL_COHORT_MODULES,Les modifications apportées aux modules de ce projet affecteront tous les projets du groupe de projets. Ceci est temporaire pendant la suppression des groupes de Terraware. Êtes-vous sûr de vouloir modifier les modules pour tous les projets du groupe ?,db947325
 CONFIRM_UPDATE_ALL_COHORT_MODULES_TITLE,Confirmer la mise à jour de tous les modules du groupe,1b173015
+CONFIRM_UPDATE_ALL_COHORT_PHASE,Les modifications apportées à la phase de ce projet affecteront tous les projets du cohort du projet. Ceci est temporaire pendant la suppression des cohorts de Terraware. Êtes-vous sûr de vouloir modifier la phase de tous les projets du cohort ?,26d2dc4e
+CONFIRM_UPDATE_ALL_COHORT_PHASE_TITLE,Confirmer la mise à jour de la phase pour tous les projets de cohorte,774d5ec0
 CONFIRMED_RESTORABLE_LAND,TF Terres restaurables (ha),efa25d21
 CONSERVATION_CATEGORY,Catégorie de la liste rouge de l'UICN,115916f3
 CONTACT_TYPE,Type de contact,413b6c0e
@@ -552,7 +550,9 @@ DRAFT_PLANTING_SITES,Sites de plantation en brouillon,97403fcc
 DRAW_BOUNDARY_WITHIN_MAP,Tracer les limites sur une carte,d1ee6da4
 DRAW_PROPOSED_PROJECT_BOUNDARY,Tracer les limites du projet proposé,8b73e819
 DRONE_FLIGHT,Vol de drone,af8ec693
+DROPBOX,Dropbox,b2a4b1cb
 DROPBOX_FOLDER_URL,URL du dossier Dropbox,0ebe8363
+DROPBOX_PATH,Chemin Dropbox,8c95fa5f
 DRYING,Séchage en cours,97084385
 DUE,Échéance : {0},b72aaa1e
 DUE_DATE,Date d'échéance,705f0661
@@ -1311,7 +1311,6 @@ OR_SHRUBS,Arbustes de verger,a86cd003
 ORBIT,Orbiter,8e3af3cb
 ORG_NOTIFICATION_ACTION,"Pour modifier les préférences, rendez-vous [Paramètres > Organisation]",5cbf22d7
 ORGANIZATION,Organisation,b1115ab0
-ORGANIZATION_ADDED,Organisation ajoutée,0601cc78
 ORGANIZATION_CREATE_FAILED,Impossible de créer une organisation.,969a54ff
 ORGANIZATION_CREATED_MSG,Vous pouvez accéder aux organisations auxquelles vous appartenez en cliquant sur le menu du profil d'utilisateur dans le coin supérieur droit.,60a57d86
 ORGANIZATION_CREATED_MSG_DESKTOP,"Vous pouvez accéder aux organisations auxquelles vous appartenez en cliquant sur la flèche située dans le coin supérieur gauche, à côté du logo.",b843e803
@@ -1383,6 +1382,7 @@ PH,pH,8e3a7381
 PHASE,Phase,f9d98417
 PHASE_1,Phase 1 : étude de faisabilité,94889837
 PHASE_1_SCORE,Score de la phase 1,9f83e45f
+PHASE_PROJECT_REQUIRED_FIELDS_ERROR,"Le nom du fichier, le lien GDrive et le chemin Dropbox sont obligatoires lorsqu'une phase est sélectionnée.",93c006c2
 PHOTO_DATE_TIME,Date/heure de la photo,22e81710
 PHOTO_NORTHEAST_QUADRAT,Quadrat nord-est,05b4f331
 PHOTO_NORTHWEST_QUADRAT,Quadrat nord-ouest,9af609f8
@@ -1564,6 +1564,10 @@ PROJECT_NOTES,Notes d'informations complémentaires sur le projet,0c985c39
 PROJECT_OBJECTIVES,Objectifs du projet,20d1aaf6
 PROJECT_OR_PROJECTS,Projet(s),4b8c0060
 PROJECT_OVERVIEW,Aperçu du projet,87fe4f18
+PROJECT_PHASE_DUE_DILIGENCE,Phase 0 - Diligence raisonnable,6c20cb46
+PROJECT_PHASE_FEASIBILITY_STUDY,Phase 1 - Étude de faisabilité,94889837
+PROJECT_PHASE_IMPLEMENT_AND_MONITOR,Phase 3 - Mise en œuvre et suivi,d8def4af
+PROJECT_PHASE_PLAN_AND_SCALE,Phase 2 - Planification et mise à l’échelle,a51c9fc2
 PROJECT_PHOTOS,Photos du projet (max. 30),25c80ed0
 PROJECT_PROFILE,Profil du projet,cc49d0dc
 PROJECT_PROFILE_PUBLISHED,Profil du projet publié,9f75ca71
@@ -1667,8 +1671,6 @@ REMOVE_FUNDER_MODAL_TEXT,"Êtes-vous sûr de vouloir supprimer {0} ? Si vous les
 REMOVE_FUNDERS,Supprimer les bailleurs de fonds,79056524
 REMOVE_FUNDERS_MODAL_TEXT,"Êtes-vous sûr·e de vouloir supprimer ces bailleurs de fonds ? En les supprimant, ils n’auront plus accès aux données de cette entité de financement.",39e7bdae
 REMOVE_ONLY_ONE_ORG_AT_A_TIME,Vous ne pouvez vous retirer que d'une seule organisation à la fois.,26b664ad
-REMOVE_ORGANIZATION,Supprimer l'organisation ?,de4ffcda
-REMOVE_ORGANIZATION_MODAL_TEXT,Êtes-vous sûr de vouloir retirer ces organisations de la liste des participants à l’accélérateur ?,0572dfa5
 REMOVE_PARTICIPANT,Supprimer participant,54e10793
 REMOVE_PARTICIPANT_CONFIRMATION,Êtes-vous sûr(e) de vouloir supprimer le participant {0} ? Cette action est irréversible.,e04e1795
 REMOVE_PEOPLE,Supprimer des personnes,7fa1c6ab

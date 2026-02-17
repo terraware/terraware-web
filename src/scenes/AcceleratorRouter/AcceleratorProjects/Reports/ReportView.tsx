@@ -38,7 +38,7 @@ import strings from 'src/strings';
 import { MetricType } from 'src/types/AcceleratorReport';
 import useSnackbar from 'src/utils/useSnackbar';
 
-import { useParticipantProjectData } from '../ParticipantProjectContext';
+import { useAcceleratorProjectData } from '../AcceleratorProjectContext';
 import ApproveReportDialog from './ApproveReportDialog';
 import Metadata from './Metadata';
 import MetricRow from './MetricRow';
@@ -54,13 +54,13 @@ const ReportView = () => {
   const { isAllowed } = useUser();
   const [showApproveDialog, , openApprovalDialog, closeApproveDialog] = useBoolean(false);
   const [showRejectDialog, , openRejectDialog, closeRejectDialog] = useBoolean(false);
-  const { crumbs: participantProjectCrumbs, participantProject, project } = useParticipantProjectData();
+  const { crumbs: acceleratorProjectCrumbs, acceleratorProject, project } = useAcceleratorProjectData();
   const theme = useTheme();
   const [boxInEdit, setBoxInEdit] = useState<boolean>(false);
 
   const [showPublishModal, , openPublishModal, closePublishModal] = useBoolean(false);
   const snackbar = useSnackbar();
-  const { reload: reloadProject } = useParticipantProjectData();
+  const { reload: reloadProject } = useAcceleratorProjectData();
   const [publishedFunderView, setPublishedFunderView] = useState(false);
 
   const getReportResponse = useGetAcceleratorReportQuery({ reportId, projectId, includeMetrics: true });
@@ -155,10 +155,10 @@ const ReportView = () => {
     ];
     if (isAcceleratorRoute) {
       crumbsList = [
-        ...participantProjectCrumbs,
+        ...acceleratorProjectCrumbs,
         {
-          name: participantProject?.dealName || project?.name || '',
-          to: APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', participantProject?.projectId.toString() || ''),
+          name: acceleratorProject?.dealName || project?.name || '',
+          to: APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', acceleratorProject?.projectId.toString() || ''),
         },
       ].concat(crumbsList);
     }
@@ -167,9 +167,9 @@ const ReportView = () => {
   }, [
     activeLocale,
     isAcceleratorRoute,
-    participantProject?.dealName,
-    participantProject?.projectId,
-    participantProjectCrumbs,
+    acceleratorProject?.dealName,
+    acceleratorProject?.projectId,
+    acceleratorProjectCrumbs,
     project?.name,
     projectId,
     year,
@@ -273,7 +273,7 @@ const ReportView = () => {
         title={
           <TitleBar
             title={`${strings.REPORT} (${reportName})`}
-            header={participantProject ? `${strings.PROJECT}: ${participantProject?.dealName}` : ''}
+            header={acceleratorProject ? `${strings.PROJECT}: ${acceleratorProject?.dealName}` : ''}
             subtitle={
               publishedReport
                 ? strings

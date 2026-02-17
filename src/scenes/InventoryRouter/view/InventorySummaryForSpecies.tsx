@@ -12,6 +12,7 @@ import { NurseryInventoryService } from 'src/services';
 import strings from 'src/strings';
 import { SpeciesInventorySummary } from 'src/types/Inventory';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import useSnackbar from 'src/utils/useSnackbar';
 
 interface InventorySummaryProps {
@@ -26,6 +27,7 @@ export default function InventorySummaryForSpecies(props: InventorySummaryProps)
   const snackbar = useSnackbar();
   const { isMobile } = useDeviceInfo();
   const { selectedOrganization } = useOrganization();
+  const numberFormatter = useNumberFormatter();
 
   const speciesProjects = useAppSelector(selectSpeciesProjects(speciesId));
   const [summary, setSummary] = useState<SpeciesInventorySummary>();
@@ -76,43 +78,43 @@ export default function InventorySummaryForSpecies(props: InventorySummaryProps)
     return [
       {
         label: strings.GERMINATION_ESTABLISHMENT_QUANTITY,
-        value: germinatingQuantity.toString(),
+        value: numberFormatter.format(germinatingQuantity),
         tooltipTitle: strings.TOOLTIP_GERMINATION_ESTABLISHMENT_QUANTITY,
         gridColumns: topRowColumns,
       },
       {
         label: strings.ACTIVE_GROWTH_QUANTITY,
-        value: activeGrowthQuantity.toString(),
+        value: numberFormatter.format(activeGrowthQuantity),
         tooltipTitle: strings.TOOLTIP_ACTIVE_GROWTH_QUANTITY,
         gridColumns: topRowColumns,
       },
       {
         label: strings.HARDENING_OFF_QUANTITY,
-        value: hardeningOffQuantity.toString(),
+        value: numberFormatter.format(hardeningOffQuantity),
         tooltipTitle: strings.TOOLTIP_HARDENING_OFF_QUANTITY,
         gridColumns: topRowColumns,
       },
       {
         label: strings.READY_TO_PLANT_QUANTITY,
-        value: readyQuantity.toString(),
+        value: numberFormatter.format(readyQuantity),
         tooltipTitle: strings.TOOLTIP_READY_TO_PLANT_QUANTITY,
         gridColumns: topRowColumns,
       },
       {
         label: strings.TOTAL_QUANTITY,
-        value: totalQuantity.toString(),
+        value: numberFormatter.format(totalQuantity),
         tooltipTitle: strings.TOOLTIP_TOTAL_QUANTITY,
         gridColumns: topRowColumns,
       },
       {
         label: strings.TOTAL_WITHDRAWN,
-        value: totalWithdrawn.toString(),
+        value: numberFormatter.format(totalWithdrawn),
         tooltipTitle: strings.TOOLTIP_TOTAL_WITHDRAWN,
         gridColumns: bottomRowColumns,
       },
       {
         label: strings.LOSS_RATE,
-        value: `${lossRate || 0}%`,
+        value: `${numberFormatter.format(lossRate || 0)}%`,
         tooltipTitle: '',
         gridColumns: bottomRowColumns,
       },

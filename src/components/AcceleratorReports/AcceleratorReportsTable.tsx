@@ -34,7 +34,7 @@ const defaultSearchOrder: SearchSortOrder = {
 
 export default function AcceleratorReportsTable(): JSX.Element {
   const { strings } = useLocalization();
-  const { currentParticipantProject } = useParticipantData();
+  const { currentAcceleratorProject } = useParticipantData();
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const query = useQuery();
 
@@ -44,8 +44,8 @@ export default function AcceleratorReportsTable(): JSX.Element {
 
   const pathParams = useParams<{ projectId: string }>();
   const projectId = useMemo(
-    () => (isAcceleratorRoute ? Number(pathParams.projectId) : currentParticipantProject?.id),
-    [currentParticipantProject?.id, isAcceleratorRoute, pathParams.projectId]
+    () => (isAcceleratorRoute ? Number(pathParams.projectId) : currentAcceleratorProject?.id),
+    [currentAcceleratorProject?.id, isAcceleratorRoute, pathParams.projectId]
   );
 
   const [listCurrentYearReports, listCurrentYearReportsResults] = useLazyListAcceleratorReportsQuery();

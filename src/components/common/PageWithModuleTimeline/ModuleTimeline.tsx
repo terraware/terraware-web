@@ -8,8 +8,8 @@ import Stepper from '@mui/material/Stepper';
 import Typography from '@mui/material/Typography';
 import { Badge } from '@terraware/web-components';
 
-import { CohortPhaseType } from 'src/types/Cohort';
 import { CohortModule } from 'src/types/Module';
+import { PhaseType } from 'src/types/Phase';
 
 type AltStepIconProps = {
   index: number;
@@ -41,11 +41,11 @@ const AltStepIcon = ({ index, bgColor }: AltStepIconProps) => {
 };
 
 export type ModuleTimelineProps = {
-  cohortPhase?: CohortPhaseType;
+  projectPhase?: PhaseType;
   modules: CohortModule[];
 };
 
-const ModuleTimeline = ({ cohortPhase, modules }: ModuleTimelineProps) => {
+const ModuleTimeline = ({ projectPhase, modules }: ModuleTimelineProps) => {
   const theme = useTheme();
   const now = new Date();
   const futureModules = modules?.filter((module) => new Date(module.endDate) > now);
@@ -63,7 +63,7 @@ const ModuleTimeline = ({ cohortPhase, modules }: ModuleTimelineProps) => {
 
   return (
     <Box maxWidth={'206px'}>
-      <Box sx={{ marginBottom: '24px', paddingRight: '16px' }}>{cohortPhase && <Badge label={cohortPhase} />}</Box>
+      <Box sx={{ marginBottom: '24px', paddingRight: '16px' }}>{projectPhase && <Badge label={projectPhase} />}</Box>
 
       <Box sx={{ width: 180 }}>
         <Stepper orientation='vertical'>

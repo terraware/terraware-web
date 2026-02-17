@@ -31,7 +31,7 @@ import SubmitReportDialog from './SubmitReportDialog';
 
 const AcceleratorReportView = () => {
   const { activeLocale } = useLocalization();
-  const { currentParticipantProject, setCurrentParticipantProject } = useParticipantData();
+  const { currentAcceleratorProject, setCurrentAcceleratorProject } = useParticipantData();
   const theme = useTheme();
 
   const { goToAcceleratorReportEdit } = useNavigateTo();
@@ -52,10 +52,10 @@ const AcceleratorReportView = () => {
 
   const [showSubmitDialog, setShowSubmitDialog] = useState(false);
   useEffect(() => {
-    if (projectId !== currentParticipantProject?.id) {
-      setCurrentParticipantProject(projectId);
+    if (projectId !== currentAcceleratorProject?.id) {
+      setCurrentAcceleratorProject(projectId);
     }
-  }, [currentParticipantProject?.id, projectId, setCurrentParticipantProject]);
+  }, [currentAcceleratorProject?.id, projectId, setCurrentAcceleratorProject]);
 
   const year = useMemo(() => {
     return report?.startDate.split('-')[0];
@@ -135,7 +135,7 @@ const AcceleratorReportView = () => {
         rightComponent={rightComponent}
         title={
           <TitleBar
-            subtitle={currentParticipantProject ? `${strings.PROJECT}: ${currentParticipantProject?.name}` : ''}
+            subtitle={currentAcceleratorProject ? `${strings.PROJECT}: ${currentAcceleratorProject?.name}` : ''}
             title={`${strings.REPORT} (${reportName})`}
           />
         }

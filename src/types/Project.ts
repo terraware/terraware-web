@@ -1,6 +1,7 @@
 import { components } from 'src/api/types/generated-schema';
-import { ListProjectInternalUsersResponsePayload } from 'src/services/ProjectsService';
 import defaultStrings from 'src/strings';
+
+import { InternalUserPayload } from '../queries/generated/projectInternalUsers';
 
 export type Project = components['schemas']['ProjectPayload'];
 export type ProjectMeta = {
@@ -11,10 +12,7 @@ export type ProjectMeta = {
 export type CreateProjectRequest = components['schemas']['CreateProjectRequestPayload'];
 export type UpdateProjectRequest = components['schemas']['UpdateProjectRequestPayload'];
 
-export type ProjectInternalUsers = ListProjectInternalUsersResponsePayload['users'];
-export type ProjectInternalUser = ProjectInternalUsers[number];
-
-export type ProjectInternalUserRole = ProjectInternalUser['role'];
+export type ProjectInternalUserRole = InternalUserPayload['role'];
 
 export const projectInternalUserRoles: ProjectInternalUserRole[] = [
   'Carbon Lead',

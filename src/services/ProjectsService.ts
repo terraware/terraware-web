@@ -1,7 +1,7 @@
 import { components, paths } from 'src/api/types/generated-schema';
 import HttpService, { Response, Response2 } from 'src/services/HttpService';
 import SearchService from 'src/services/SearchService';
-import { CreateProjectRequest, Project, ProjectInternalUser, UpdateProjectRequest } from 'src/types/Project';
+import { CreateProjectRequest, Project, UpdateProjectRequest } from 'src/types/Project';
 import { OrNodePayload, SearchRequestPayload } from 'src/types/Search';
 import { parseSearchTerm } from 'src/utils/search';
 
@@ -12,7 +12,6 @@ import { parseSearchTerm } from 'src/utils/search';
 const PROJECTS_ENDPOINT = '/api/v1/projects';
 const PROJECT_ENDPOINT = '/api/v1/projects/{id}';
 const PROJECT_ASSIGN_ENDPOINT = '/api/v1/projects/{id}/assign';
-const PROJECT_INTERNAL_USERS_ENDPOINT = '/api/v1/projects/{id}/internalUsers';
 
 type ListProjectsResponsePayload =
   paths[typeof PROJECTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
@@ -28,23 +27,11 @@ export type DeleteProjectResponsePayload =
 export type AssignProjectRequestPayload = components['schemas']['AssignProjectRequestPayload'];
 export type AssignProjectResponsePayload = components['schemas']['SimpleSuccessResponsePayload'];
 
-export type ListProjectInternalUsersResponsePayload =
-  paths[typeof PROJECT_INTERNAL_USERS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
-
-export type AssignProjectInternalUserResponsePayload = components['schemas']['SimpleSuccessResponsePayload'];
-export type UpdateProjectInternalUsersResponsePayload =
-  paths[typeof PROJECT_INTERNAL_USERS_ENDPOINT]['put']['responses'][200]['content']['application/json'];
-export type UpdateProjectInternalUsersRequestPayload = components['schemas']['UpdateProjectInternalUserRequestPayload'];
-
 /**
  * exported type
  */
 export type ProjectsData = {
   projects?: Project[];
-};
-
-export type ProjectsInternalUsersData = {
-  users: ProjectInternalUser[];
 };
 
 const httpProjects = HttpService.root(PROJECTS_ENDPOINT);
@@ -164,28 +151,6 @@ const deleteProject = (projectId: number) =>
     urlReplacements: { '{id}': `${projectId}` },
   });
 
-const listProjectInternalUsers = async (projectId: number): Promise<ProjectsInternalUsersData & Response> => {
-  const response: ProjectsInternalUsersData & Response = await httpProjects.get<
-    ListProjectInternalUsersResponsePayload,
-    ProjectsInternalUsersData
-  >(
-    {
-      url: PROJECT_INTERNAL_USERS_ENDPOINT,
-      urlReplacements: { '{id}': `${projectId}` },
-    },
-    (data) => ({ users: data?.users || [] })
-  );
-
-  return response;
-};
-
-const updateProjectInternalUsers = (projectId: number, payload: UpdateProjectInternalUsersRequestPayload) =>
-  httpProjects.put2<UpdateProjectInternalUsersResponsePayload>({
-    url: PROJECT_INTERNAL_USERS_ENDPOINT,
-    urlReplacements: { '{id}': `${projectId}` },
-    entity: payload,
-  });
-
 /**
  * Exported functions
  */
@@ -197,8 +162,6 @@ const ProjectsService = {
   getProject,
   updateProject,
   deleteProject,
-  listProjectInternalUsers,
-  updateProjectInternalUsers,
 };
 
 export default ProjectsService;

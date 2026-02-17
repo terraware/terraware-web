@@ -8,14 +8,14 @@ import useProjectScore from 'src/hooks/useProjectScore';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 
-import { useParticipantProjectData } from '../ParticipantProjectContext';
+import { useAcceleratorProjectData } from '../AcceleratorProjectContext';
 import ScoreCard from './ScoreCard';
 import ScoringWrapper from './ScoringWrapper';
 
 const ScoreView = () => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
-  const { project, projectId } = useParticipantProjectData();
+  const { project, projectId } = useAcceleratorProjectData();
   const { projectScore, getStatus } = useProjectScore(projectId);
   const { goToAcceleratorProjectScoreEdit, goToAcceleratorProjectVote } = useNavigateTo();
 

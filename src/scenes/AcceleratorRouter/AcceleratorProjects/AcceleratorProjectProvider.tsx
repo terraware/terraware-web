@@ -5,43 +5,48 @@ import { APP_PATHS } from 'src/constants';
 import { useAcceleratorOrgs } from 'src/hooks/useAcceleratorOrgs';
 import { useLocalization } from 'src/providers';
 import { useProjectData } from 'src/providers/Project/ProjectContext';
-import { requestGetParticipantProject } from 'src/redux/features/participantProjects/participantProjectsAsyncThunks';
-import { selectParticipantProjectRequest } from 'src/redux/features/participantProjects/participantProjectsSelectors';
+import { useLazyGetProjectAcceleratorDetailsQuery } from 'src/queries/generated/acceleratorProjects';
 import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
 import { selectUser } from 'src/redux/features/user/usersSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { AcceleratorOrg } from 'src/types/Accelerator';
-import { ParticipantProject } from 'src/types/ParticipantProject';
+import { AcceleratorProject } from 'src/types/AcceleratorProject';
 import { ProjectMeta } from 'src/types/Project';
-import useSnackbar from 'src/utils/useSnackbar';
 import { getUserDisplayName } from 'src/utils/user';
 
-import { ParticipantProjectContext, ParticipantProjectData } from './ParticipantProjectContext';
+import { AcceleratorProjectContext, AcceleratorProjectData } from './AcceleratorProjectContext';
 
 export type Props = {
   children: React.ReactNode;
 };
 
-const ParticipantProjectProvider = ({ children }: Props) => {
+const AcceleratorProjectProvider = ({ children }: Props) => {
   const dispatch = useAppDispatch();
-  const snackbar = useSnackbar();
   const { activeLocale } = useLocalization();
   const { project, projectId } = useProjectData();
-  const { acceleratorOrgs, reload: reloadAll } = useAcceleratorOrgs({
-    hasProjectApplication: true,
-    includeParticipants: true,
-  });
+  const { acceleratorOrgs, reload: reloadAll } = useAcceleratorOrgs();
 
-  const [participantProject, setParticipantProject] = useState<ParticipantProject>();
-  const [participantProjectData, setParticipantProjectData] = useState<ParticipantProjectData>({
+  const [getProjectAcceleratorDetails, projectAcceleratorDetailsResponse] = useLazyGetProjectAcceleratorDetailsQuery();
+
+  useEffect(() => {
+    if (projectId !== -1) {
+      void getProjectAcceleratorDetails(projectId, true);
+    }
+  }, [projectId, getProjectAcceleratorDetails]);
+
+  const acceleratorProject: AcceleratorProject | undefined = useMemo(() => {
+    if (projectAcceleratorDetailsResponse.isSuccess) {
+      return projectAcceleratorDetailsResponse.data.details;
+    }
+  }, [projectAcceleratorDetailsResponse]);
+
+  const [acceleratorProjectData, setAcceleratorProjectData] = useState<AcceleratorProjectData>({
     crumbs: [],
     projectId,
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     reload: () => {},
   });
-
-  const getParticipantProjectResult = useAppSelector(selectParticipantProjectRequest(projectId));
 
   const createdByUser = useAppSelector(selectUser(project?.createdBy));
   const modifiedByUser = useAppSelector(selectUser(project?.modifiedBy));
@@ -57,15 +62,9 @@ const ParticipantProjectProvider = ({ children }: Props) => {
   const reload = useCallback(() => {
     reloadAll();
     if (projectId !== -1) {
-      void dispatch(requestGetParticipantProject(projectId));
+      void getProjectAcceleratorDetails(projectId);
     }
-  }, [dispatch, projectId, reloadAll]);
-
-  useEffect(() => {
-    if (projectId !== -1) {
-      void dispatch(requestGetParticipantProject(projectId));
-    }
-  }, [dispatch, projectId]);
+  }, [projectId, reloadAll, getProjectAcceleratorDetails]);
 
   useEffect(() => {
     const userIds = new Set([project?.createdBy, project?.modifiedBy]);
@@ -84,18 +83,6 @@ const ParticipantProjectProvider = ({ children }: Props) => {
   }, [createdByUser, modifiedByUser]);
 
   useEffect(() => {
-    if (!getParticipantProjectResult) {
-      return;
-    }
-
-    if (getParticipantProjectResult?.status === 'error') {
-      snackbar.toastError(strings.GENERIC_ERROR);
-    } else if (getParticipantProjectResult?.status === 'success' && getParticipantProjectResult?.data) {
-      setParticipantProject(getParticipantProjectResult.data);
-    }
-  }, [getParticipantProjectResult, snackbar]);
-
-  useEffect(() => {
     if (!acceleratorOrgs || !project?.organizationId) {
       return;
     }
@@ -103,36 +90,36 @@ const ParticipantProjectProvider = ({ children }: Props) => {
     setOrganization(acceleratorOrgs.find((org) => org.id === project.organizationId));
   }, [acceleratorOrgs, project?.organizationId]);
 
-  const participantProjectDataValues = useMemo(
+  const acceleratorProjectDataValues = useMemo(
     () => ({
       crumbs,
       organization,
-      participantProject,
+      acceleratorProject,
       project,
       projectId,
       projectMeta,
-      status: getParticipantProjectResult?.status ?? 'pending',
+      isLoading: projectAcceleratorDetailsResponse.isLoading,
       reload,
     }),
     [
       crumbs,
-      getParticipantProjectResult?.status,
       organization,
-      participantProject,
+      acceleratorProject,
       project,
       projectId,
       projectMeta,
+      projectAcceleratorDetailsResponse.isLoading,
       reload,
     ]
   );
 
   useEffect(() => {
-    setParticipantProjectData(participantProjectDataValues);
-  }, [participantProjectDataValues]);
+    setAcceleratorProjectData(acceleratorProjectDataValues);
+  }, [acceleratorProjectDataValues]);
 
   return (
-    <ParticipantProjectContext.Provider value={participantProjectData}>{children}</ParticipantProjectContext.Provider>
+    <AcceleratorProjectContext.Provider value={acceleratorProjectData}>{children}</AcceleratorProjectContext.Provider>
   );
 };
 
-export default ParticipantProjectProvider;
+export default AcceleratorProjectProvider;

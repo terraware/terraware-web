@@ -7,13 +7,13 @@ import { useParticipantData } from 'src/providers/Participant/ParticipantContext
 import ModuleEntry from './ModuleEntry';
 
 export default function ListModulesContent(): JSX.Element {
-  const { currentParticipantProject, modules } = useParticipantData();
+  const { currentAcceleratorProject, modules } = useParticipantData();
   const theme = useTheme();
   return (
     <Box paddingX={theme.spacing(2)}>
-      {currentParticipantProject &&
+      {currentAcceleratorProject &&
         modules?.map((module, index) => (
-          <ModuleEntry index={index} key={index} module={module} projectId={currentParticipantProject?.id} />
+          <ModuleEntry index={index} key={index} module={module} projectId={currentAcceleratorProject?.id} />
         ))}
     </Box>
   );

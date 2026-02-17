@@ -40,7 +40,7 @@ type AcceleratorReportEditFormProps = {
 };
 
 const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) => {
-  const { currentParticipantProject, setCurrentParticipantProject } = useParticipantData();
+  const { currentAcceleratorProject, setCurrentAcceleratorProject } = useParticipantData();
   const theme = useTheme();
   const { strings } = useLocalization();
   const { goToAcceleratorReport } = useNavigateTo();
@@ -122,10 +122,10 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
   ]);
 
   useEffect(() => {
-    if (projectId !== currentParticipantProject?.id) {
-      setCurrentParticipantProject(projectId);
+    if (projectId !== currentAcceleratorProject?.id) {
+      setCurrentAcceleratorProject(projectId);
     }
-  }, [currentParticipantProject?.id, projectId, setCurrentParticipantProject]);
+  }, [currentAcceleratorProject?.id, projectId, setCurrentAcceleratorProject]);
 
   const onChangeMetric = useCallback(
     (

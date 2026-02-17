@@ -58,13 +58,12 @@ type PermissionParticipant =
   | 'DELETE_PARTICIPANTS'
   | 'EXPORT_PARTICIPANTS'
   | 'ASSIGN_PARTICIPANT_TO_COHORT';
-type PermissionParticipantProject =
-  | 'READ_PARTICIPANT_PROJECT'
-  | 'UPDATE_PARTICIPANT_PROJECT'
-  | 'ASSIGN_PROJECT_TO_PARTICIPANT'
-  | 'VIEW_PARTICIPANT_PROJECT_SCORING_VOTING'
-  | 'UPDATE_PARTICIPANT_PROJECT_SCORING_VOTING'
-  | 'EXPORT_PARTICIPANT_PROJECT'
+type PermissionAcceleratorProject =
+  | 'READ_ACCELERATOR_PROJECT'
+  | 'UPDATE_ACCELERATOR_PROJECT'
+  | 'VIEW_ACCELERATOR_PROJECT_SCORING_VOTING'
+  | 'UPDATE_ACCELERATOR_PROJECT_SCORING_VOTING'
+  | 'EXPORT_ACCELERATOR_PROJECT'
   | 'PUBLISH_PROJECT_DETAILS';
 type PermissionProjectModules = 'UPDATE_PROJECT_MODULES';
 type PermissionSurvivalRate = 'EDIT_SURVIVAL_RATE_SETTINGS';
@@ -82,7 +81,7 @@ export type GlobalRolePermission =
   | PermissionObservations
   | PermissionOrganization
   | PermissionParticipant
-  | PermissionParticipantProject
+  | PermissionAcceleratorProject
   | PermissionProjectModules
   | PermissionSurvivalRate;
 
@@ -298,7 +297,6 @@ const isAllowedCreatePlantingSite: PermissionCheckFn<CreatePlantingSiteMetadata>
 const ACL: Record<GlobalRolePermission, UserGlobalRoles | PermissionCheckFn> = {
   ASSIGN_GLOBAL_ROLE_TO_USER: isAllowedAssignGlobalRoleToUser,
   ASSIGN_PARTICIPANT_TO_COHORT: TFExpertPlus,
-  ASSIGN_PROJECT_TO_PARTICIPANT: TFExpertPlus,
   ASSIGN_SOME_GLOBAL_ROLES: isAllowedAssignSomeGlobalRoles,
   CREATE_ACTIVITIES: isAllowedCreateActivities,
   CREATE_COHORTS: AcceleratorAdminPlus,
@@ -314,7 +312,7 @@ const ACL: Record<GlobalRolePermission, UserGlobalRoles | PermissionCheckFn> = {
   EDIT_REPORTS: AcceleratorAdminPlus,
   EDIT_SURVIVAL_RATE_SETTINGS: isAllowedEditSurvivalRateSettings,
   EXPORT_PARTICIPANTS: ReadOnlyPlus,
-  EXPORT_PARTICIPANT_PROJECT: ReadOnlyPlus,
+  EXPORT_ACCELERATOR_PROJECT: ReadOnlyPlus,
   INVITE_FUNDER: isAllowedInviteFunders,
   MANAGE_FUNDING_ENTITIES: isAllowedManageFundingEntities,
   PUBLISH_PROJECT_DETAILS: AcceleratorAdminPlus,
@@ -326,7 +324,7 @@ const ACL: Record<GlobalRolePermission, UserGlobalRoles | PermissionCheckFn> = {
   READ_FUNDING_ENTITIES: ReadOnlyPlus,
   READ_GLOBAL_ROLES: AcceleratorAdminPlus,
   READ_PARTICIPANTS: TFExpertPlus,
-  READ_PARTICIPANT_PROJECT: ReadOnlyPlus,
+  READ_ACCELERATOR_PROJECT: ReadOnlyPlus,
   READ_REPORTS: isAllowedReadReports,
   READ_SUBMISSION_DOCUMENT: ReadOnlyPlus,
   REVIEW_REPORTS_TARGETS: isAllowedReviewReportsTargets,
@@ -336,15 +334,15 @@ const ACL: Record<GlobalRolePermission, UserGlobalRoles | PermissionCheckFn> = {
   UPDATE_DELIVERABLE: TFExpertPlus,
   UPDATE_MATRIX_VIEW: TFExpertPlus,
   UPDATE_PARTICIPANTS: AcceleratorAdminPlus,
-  UPDATE_PARTICIPANT_PROJECT_SCORING_VOTING: TFExpertPlus,
+  UPDATE_ACCELERATOR_PROJECT_SCORING_VOTING: TFExpertPlus,
   UPDATE_PLANT_COUNTS: isAllowedUpdatePlantCounts,
   UPDATE_REPORTS_SETTINGS: AcceleratorAdminPlus,
   UPDATE_REPORTS_TARGETS: isAllowedUpdateReportsTargets,
-  UPDATE_PARTICIPANT_PROJECT: TFExpertPlus,
+  UPDATE_ACCELERATOR_PROJECT: TFExpertPlus,
   UPDATE_PROJECT_MODULES: AcceleratorAdminPlus,
   UPDATE_SUBMISSION_STATUS: TFExpertPlus,
   VIEW_CONSOLE: ReadOnlyPlus,
-  VIEW_PARTICIPANT_PROJECT_SCORING_VOTING: TFExpertPlus,
+  VIEW_ACCELERATOR_PROJECT_SCORING_VOTING: TFExpertPlus,
 };
 
 /**

@@ -23,11 +23,11 @@ import { MapData, MapEntity, MapSourceProperties } from 'src/types/Map';
 import { MultiPolygon } from 'src/types/Tracking';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
-import { useParticipantProjectData } from './ParticipantProjectContext';
+import { useAcceleratorProjectData } from './AcceleratorProjectContext';
 
 type StratumOrSiteOption = { name: string; type: 'stratum' | 'site'; showSeparator?: boolean };
 const ProjectProfileGisMaps = () => {
-  const projectData = useParticipantProjectData();
+  const projectData = useAcceleratorProjectData();
   const theme = useTheme();
   const [plantingSitesRequestId, setPlantingSitesRequestId] = useState('');
   const [boundariesRequestId, setBoundariesRequestId] = useState('');
@@ -48,7 +48,7 @@ const ProjectProfileGisMaps = () => {
   const [selectedLayer, setSelectedLayer] = useState<MapLayer>();
 
   useEffect(() => {
-    const projectDetails = projectData.participantProject;
+    const projectDetails = projectData.acceleratorProject;
     if (projectDetails && projectDetails.projectBoundariesCql) {
       const requestBoundaries = dispatch(
         requestGetGis({
@@ -85,7 +85,7 @@ const ProjectProfileGisMaps = () => {
   }, [gisBoundariesResponse]);
 
   const mapsNotUploaded = useMemo(() => {
-    return !projectData.participantProject?.projectBoundariesCql && !projectData.participantProject?.plantingSitesCql;
+    return !projectData.acceleratorProject?.projectBoundariesCql && !projectData.acceleratorProject?.plantingSitesCql;
   }, [projectData]);
 
   const plantingMapData = useMemo(() => {
@@ -353,7 +353,7 @@ const ProjectProfileGisMaps = () => {
   const projectViewTitle = (
     <Box paddingLeft={1}>
       <Typography fontSize={'24px'} fontWeight={600}>
-        {strings.MAPS_FOR} {projectData.participantProject?.dealName}
+        {strings.MAPS_FOR} {projectData.acceleratorProject?.dealName}
       </Typography>
     </Box>
   );

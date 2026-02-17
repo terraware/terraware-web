@@ -3,8 +3,8 @@ import React, { useMemo } from 'react';
 import { useTheme } from '@mui/material';
 
 import strings from 'src/strings';
+import { MetricProgress } from 'src/types/AcceleratorProject';
 import { SystemMetricName } from 'src/types/AcceleratorReport';
-import { MetricProgress } from 'src/types/ParticipantProject';
 
 import InvertedCard from './InvertedCard';
 

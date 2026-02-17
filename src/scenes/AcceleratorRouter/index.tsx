@@ -13,6 +13,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useStateLocation from 'src/utils/useStateLocation';
 
 import ActivityLogRouter from '../ActivityLogRouter';
+import AcceleratorProjects from './AcceleratorProjects';
 import Applications from './Applications';
 import Cohorts from './Cohorts';
 import Deliverables from './Deliverables';
@@ -23,8 +24,6 @@ import ModuleContent from './Modules';
 import EventEdit from './Modules/EventEdit';
 import ModuleView from './Modules/ModuleView';
 import NavBar from './NavBar';
-import Organizations from './Organizations';
-import ParticipantProjects from './ParticipantProjects';
 import People from './People';
 
 interface AcceleratorRouterProps {
@@ -94,8 +93,7 @@ const AcceleratorRouter = ({ showNavBar, setShowNavBar }: AcceleratorRouterProps
                 <Route path={`${APP_PATHS.ACCELERATOR_MODULE_CONTENT}/*`} element={<ModuleView />} />
                 <Route path={`${APP_PATHS.ACCELERATOR_MODULE_EVENTS_EDIT}/*`} element={<EventEdit />} />
                 <Route path={`${APP_PATHS.ACCELERATOR_PEOPLE}/*`} element={<People />} />
-                <Route path={`${APP_PATHS.ACCELERATOR_PROJECT_VIEW}/*`} element={<ParticipantProjects />} />
-                <Route path={`${APP_PATHS.ACCELERATOR_ORGANIZATIONS}/*`} element={<Organizations />} />
+                <Route path={`${APP_PATHS.ACCELERATOR_PROJECT_VIEW}/*`} element={<AcceleratorProjects />} />
                 <Route path={`${APP_PATHS.ACCELERATOR_FUNDING_ENTITIES}/*`} element={<FundingEntities />} />
                 <Route path={`${APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENTS}/*`} element={<DocumentsRouter />} />
                 <Route path={'*'} element={<Navigate to={APP_PATHS.ACCELERATOR_PROJECTS} />} />

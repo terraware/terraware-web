@@ -31,7 +31,6 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
   const isDeliverablesRoute = useMatch({ path: APP_PATHS.ACCELERATOR_DELIVERABLES, end: false });
   const isFundingEntitiesRoute = useMatch({ path: APP_PATHS.ACCELERATOR_FUNDING_ENTITIES, end: false });
   const isModuleContentRoute = useMatch({ path: APP_PATHS.ACCELERATOR_MODULES, end: false });
-  const isOrganizationRoute = useMatch({ path: APP_PATHS.ACCELERATOR_ORGANIZATIONS, end: false });
   const isPeopleRoute = useMatch({ path: APP_PATHS.ACCELERATOR_PEOPLE, end: false });
   const isScoringRoute = useMatch({ path: APP_PATHS.ACCELERATOR_PROJECT_SCORES, end: false });
   const isVotingRoute = useMatch({ path: APP_PATHS.ACCELERATOR_PROJECT_VOTES, end: false });
@@ -123,16 +122,6 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
       />
 
       <NavSection title={strings.SETTINGS} />
-
-      <NavItem
-        icon='organizationNav'
-        id='organizations'
-        label={strings.ORGANIZATIONS}
-        onClick={() => {
-          closeAndNavigateTo(APP_PATHS.ACCELERATOR_ORGANIZATIONS);
-        }}
-        selected={!!isOrganizationRoute}
-      />
 
       {isAllowedViewPeople && (
         <NavItem

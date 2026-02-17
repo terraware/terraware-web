@@ -1,15 +1,15 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import ApplicationStatusLink from 'src/components/ProjectField/ApplicationStatusLink';
-import CohortBadge from 'src/components/ProjectField/CohortBadge';
 import ProjectProfileFooter from 'src/components/ProjectField/Footer';
 import ProjectFieldInlineMeta from 'src/components/ProjectField/InlineMeta';
 import InvertedCard from 'src/components/ProjectField/InvertedCard';
 import LandUseModelTypeCard from 'src/components/ProjectField/LandUseModelTypeCard';
 import ProjectFieldLink from 'src/components/ProjectField/Link';
+import PhaseBadge from 'src/components/ProjectField/PhaseBadge';
 import ProjectCertificationDisplay from 'src/components/ProjectField/ProjectCertificationDisplay';
 import ProjectDataDisplay from 'src/components/ProjectField/ProjectDataDisplay';
 import ProjectFigureLabel from 'src/components/ProjectField/ProjectFigureLabel';
@@ -25,16 +25,14 @@ import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import useProjectFundingEntities from 'src/hooks/useProjectFundingEntities';
 import { useLocalization, useUser } from 'src/providers';
+import { useGetInternalUsersQuery } from 'src/queries/generated/projectInternalUsers';
 import { useLazyListAcceleratorReportsQuery } from 'src/queries/generated/reports';
-import { requestProjectInternalUsersList } from 'src/redux/features/projects/projectsAsyncThunks';
-import { selectProjectInternalUsersListRequest } from 'src/redux/features/projects/projectsSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import strings from 'src/strings';
+import { useAppDispatch } from 'src/redux/store';
 import { AcceleratorOrg } from 'src/types/Accelerator';
+import { AcceleratorProject } from 'src/types/AcceleratorProject';
 import { PublishedReport, getReportPrefix } from 'src/types/AcceleratorReport';
 import { Application } from 'src/types/Application';
 import { FunderProjectDetails } from 'src/types/FunderProject';
-import { ParticipantProject } from 'src/types/ParticipantProject';
 import { Project, ProjectMeta, getProjectInternalUserRoleString } from 'src/types/Project';
 import { Score } from 'src/types/Score';
 import { PhaseVotes } from 'src/types/Votes';
@@ -44,8 +42,8 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 type ProjectProfileViewProps = {
-  participantProject?: ParticipantProject;
-  projectDetails?: ParticipantProject | FunderProjectDetails;
+  acceleratorProject?: AcceleratorProject;
+  projectDetails?: AcceleratorProject | FunderProjectDetails;
   project?: Project;
   projectMeta?: ProjectMeta;
   organization?: AcceleratorOrg;
@@ -57,7 +55,7 @@ type ProjectProfileViewProps = {
 };
 
 const ProjectProfileView = ({
-  participantProject,
+  acceleratorProject,
   projectDetails,
   project,
   projectMeta,
@@ -70,15 +68,18 @@ const ProjectProfileView = ({
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const { isAllowed } = useUser();
-  const { activeLocale, countries } = useLocalization();
+  const { activeLocale, countries, strings } = useLocalization();
   const numberFormatter = useNumberFormatter();
   const { fundingEntities } = useProjectFundingEntities(funderView ? undefined : projectDetails?.projectId);
   const { isMobile, isTablet } = useDeviceInfo();
-  const [listInternalUsersRequestId, setListInternalUsersRequestId] = useState('');
-  const listInternalUsersRequest = useAppSelector((state) =>
-    selectProjectInternalUsersListRequest(state, listInternalUsersRequestId)
+
+  const { data: internalUsersData, isSuccess: isUsersRequestSuccess } = useGetInternalUsersQuery(
+    project ? project.id : -1,
+    { skip: !project }
   );
-  const isAllowedViewScoreAndVoting = isAllowed('VIEW_PARTICIPANT_PROJECT_SCORING_VOTING');
+  const internalUsers = useMemo(() => internalUsersData?.users ?? [], [internalUsersData]);
+
+  const isAllowedViewScoreAndVoting = isAllowed('VIEW_ACCELERATOR_PROJECT_SCORING_VOTING');
 
   const [listReports, listReportsResponse] = useLazyListAcceleratorReportsQuery();
   const acceleratorReports = useMemo(
@@ -91,16 +92,14 @@ const ProjectProfileView = ({
       return;
     }
     void listReports({ projectId: project.id }, true);
-    const request = dispatch(requestProjectInternalUsersList({ projectId: project.id }));
-    setListInternalUsersRequestId(request.requestId);
   }, [dispatch, listReports, project?.id]);
 
   const firstProjectLead = useMemo(() => {
-    if (listInternalUsersRequest?.status !== 'success') {
+    if (!isUsersRequestSuccess) {
       return undefined;
     }
 
-    return listInternalUsersRequest.data?.users
+    return internalUsers
       ?.filter((user) => user.role === 'Project Lead')
       ?.sort((a, b) => {
         // sort by modifiedTime ascending
@@ -108,14 +107,14 @@ const ProjectProfileView = ({
         const timeB = b.modifiedTime ? new Date(b.modifiedTime).getTime() : 0;
         return timeA - timeB;
       })?.[0];
-  }, [listInternalUsersRequest]);
+  }, [internalUsers, isUsersRequestSuccess]);
 
   const moreUsersTooltip = useMemo(() => {
-    if (listInternalUsersRequest?.status !== 'success') {
+    if (!isUsersRequestSuccess) {
       return '';
     }
 
-    return (listInternalUsersRequest?.data?.users || [])
+    return (internalUsers || [])
       .filter((user) => (firstProjectLead ? user.userId !== firstProjectLead.userId : true))
       .map((user) => {
         const userRole = user.roleName ? user.roleName : getProjectInternalUserRoleString(user.role, strings);
@@ -135,16 +134,13 @@ const ProjectProfileView = ({
       })
       .map((user) => `${user.userRole}: ${user.firstName} ${user.lastName}`)
       .join('\n');
-  }, [activeLocale, firstProjectLead, listInternalUsersRequest]);
+  }, [activeLocale, firstProjectLead, internalUsers, isUsersRequestSuccess, strings]);
 
-  const isProjectInPhase = useMemo(
-    () => participantProject?.cohortPhase?.startsWith('Phase'),
-    [participantProject?.cohortPhase]
-  );
+  const isProjectInPhase = useMemo(() => acceleratorProject?.phase?.startsWith('Phase'), [acceleratorProject?.phase]);
 
   const isPhaseZeroOrApplication = useMemo(
-    () => [undefined, 'Phase 0 - Due Diligence', 'Application', 'Pre-Screen'].includes(participantProject?.cohortPhase),
-    [participantProject?.cohortPhase]
+    () => [undefined, 'Phase 0 - Due Diligence', 'Application', 'Pre-Screen'].includes(acceleratorProject?.phase),
+    [acceleratorProject?.phase]
   );
 
   const projectSize = useMemo(() => {
@@ -156,7 +152,7 @@ const ProjectProfileView = ({
         value={value && strings.formatString(strings.X_HA, numberFormatter.format(value))?.toString()}
       />
     );
-    switch (participantProject?.cohortPhase) {
+    switch (acceleratorProject?.phase) {
       case 'Phase 1 - Feasibility Study':
         return getCard(strings.MIN_PROJECT_AREA, projectDetails?.minProjectArea);
       case 'Phase 2 - Plan and Scale':
@@ -169,13 +165,14 @@ const ProjectProfileView = ({
         return getCard(strings.ELIGIBLE_AREA, projectDetails?.confirmedReforestableLand);
     }
   }, [
-    participantProject?.cohortPhase,
+    acceleratorProject?.phase,
     projectDetails?.projectArea,
     projectDetails?.minProjectArea,
     projectDetails?.confirmedReforestableLand,
     isTablet,
     theme,
     numberFormatter,
+    strings,
   ]);
 
   const lastPublishedReport = useMemo(() => {
@@ -213,8 +210,7 @@ const ProjectProfileView = ({
           <Box display={'flex'} alignItems={'center'}>
             {isProjectInPhase && (
               <>
-                <CohortBadge label={participantProject?.cohortName} />
-                <CohortBadge label={participantProject?.cohortPhase} />
+                <PhaseBadge label={acceleratorProject?.phase} />
               </>
             )}
             {!isProjectInPhase && projectApplication && (
@@ -245,6 +241,7 @@ const ProjectProfileView = ({
         <ProjectOverviewCard
           md={isMobile || isTablet ? 12 : 9}
           dealDescription={projectDetails?.dealDescription}
+          fileNaming={projectDetails && 'fileNaming' in projectDetails ? projectDetails?.fileNaming : undefined}
           projectName={project?.name}
         />
         <Grid item md={isMobile || isTablet ? 12 : 3} xs={12}>
@@ -305,9 +302,9 @@ const ProjectProfileView = ({
             md={4}
             label={strings.MIN_MAX_CARBON_ACCUMULATION}
             value={
-              participantProject?.minCarbonAccumulation &&
-              participantProject?.maxCarbonAccumulation &&
-              `${participantProject.minCarbonAccumulation}-${participantProject.maxCarbonAccumulation}`
+              acceleratorProject?.minCarbonAccumulation &&
+              acceleratorProject?.maxCarbonAccumulation &&
+              `${acceleratorProject.minCarbonAccumulation}-${acceleratorProject.maxCarbonAccumulation}`
             }
             backgroundColor={theme.palette.TwClrBaseGray050}
             units={<Co2HectareYear />}
@@ -495,9 +492,9 @@ const ProjectProfileView = ({
                 label={strings.MIN_MAX_CARBON_ACCUMULATION}
                 md={4}
                 value={
-                  participantProject?.minCarbonAccumulation &&
-                  participantProject?.maxCarbonAccumulation &&
-                  `${participantProject.minCarbonAccumulation}-${participantProject.maxCarbonAccumulation}`
+                  acceleratorProject?.minCarbonAccumulation &&
+                  acceleratorProject?.maxCarbonAccumulation &&
+                  `${acceleratorProject.minCarbonAccumulation}-${acceleratorProject.maxCarbonAccumulation}`
                 }
                 units={<Co2HectareYear />}
               />
@@ -538,9 +535,9 @@ const ProjectProfileView = ({
                     label={strings.APPLICATION}
                   />
                 )}
-                {participantProject?.dealName && (
+                {acceleratorProject?.dealName && (
                   <ProjectFieldLink
-                    value={`${APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENTS}?dealName=${participantProject.dealName}`}
+                    value={`${APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENTS}?dealName=${acceleratorProject.dealName}`}
                     label={strings.DOCUMENTS}
                   />
                 )}
@@ -583,18 +580,24 @@ const ProjectProfileView = ({
               </Typography>
               {!funderView && (
                 <>
-                  <ProjectFieldLink value={participantProject?.googleFolderUrl} label={strings.GDRIVE} />
-                  <ProjectFieldLink value={participantProject?.hubSpotUrl} label={strings.HUBSPOT} />
-                  <ProjectFieldLink value={participantProject?.gisReportsLink} label={strings.GIS_REPORT} />
+                  <ProjectFieldLink value={acceleratorProject?.googleFolderUrl} label={strings.GDRIVE} />
+                  <ProjectFieldLink value={acceleratorProject?.hubSpotUrl} label={strings.HUBSPOT} />
+                  <ProjectFieldLink value={acceleratorProject?.gisReportsLink} label={strings.GIS_REPORT} />
                 </>
               )}
               <ProjectFieldLink value={projectDetails?.verraLink} label={strings.VERRA} />
               {!funderView && (
                 <>
-                  <ProjectFieldLink value={participantProject?.riskTrackerLink} label={strings.RISK_TRACKER} />
-
-                  <ProjectFieldLink value={participantProject?.clickUpLink} label={strings.CLICK_UP} />
-                  <ProjectFieldLink value={participantProject?.slackLink} label={strings.SLACK} />
+                  <ProjectFieldLink value={acceleratorProject?.riskTrackerLink} label={strings.RISK_TRACKER} />
+                  <ProjectFieldLink value={acceleratorProject?.clickUpLink} label={strings.CLICK_UP} />
+                  <ProjectFieldLink value={acceleratorProject?.slackLink} label={strings.SLACK} />
+                  <ProjectFieldLink
+                    value={
+                      acceleratorProject?.dropboxFolderPath &&
+                      `https://dropbox.com/home/${encodeURI(acceleratorProject.dropboxFolderPath)}`
+                    }
+                    label={strings.DROPBOX}
+                  />
                 </>
               )}
             </Box>

@@ -33,16 +33,6 @@ const injectedRtkApi = api.injectEndpoints({
         body: queryArg.assignProjectRequestPayload,
       }),
     }),
-    getInternalUsers: build.query<GetInternalUsersApiResponse, GetInternalUsersApiArg>({
-      query: (queryArg) => ({ url: `/api/v1/projects/${queryArg}/internalUsers` }),
-    }),
-    updateInternalUser: build.mutation<UpdateInternalUserApiResponse, UpdateInternalUserApiArg>({
-      query: (queryArg) => ({
-        url: `/api/v1/projects/${queryArg.id}/internalUsers`,
-        method: 'PUT',
-        body: queryArg.updateProjectInternalUserRequestPayload,
-      }),
-    }),
   }),
   overrideExisting: false,
 });
@@ -67,13 +57,6 @@ export type AssignProjectApiResponse = /** status 200 OK */ SimpleSuccessRespons
 export type AssignProjectApiArg = {
   id: number;
   assignProjectRequestPayload: AssignProjectRequestPayload;
-};
-export type GetInternalUsersApiResponse = /** status 200 OK */ ListProjectInternalUsersResponsePayload;
-export type GetInternalUsersApiArg = number;
-export type UpdateInternalUserApiResponse = /** status 200 OK */ SimpleSuccessResponsePayload;
-export type UpdateInternalUserApiArg = {
-  id: number;
-  updateProjectInternalUserRequestPayload: UpdateProjectInternalUserRequestPayload;
 };
 export type ProjectPayload = {
   cohortId?: number;
@@ -125,50 +108,6 @@ export type AssignProjectRequestPayload = {
   batchIds?: number[];
   plantingSiteIds?: number[];
 };
-export type ProjectInternalUserResponsePayload = {
-  createdTime: string;
-  email: string;
-  firstName?: string;
-  lastName?: string;
-  modifiedTime: string;
-  role?:
-    | 'Project Lead'
-    | 'Restoration Lead'
-    | 'Social Lead'
-    | 'GIS Lead'
-    | 'Carbon Lead'
-    | 'Phase Lead'
-    | 'Regional Expert'
-    | 'Project Finance Lead'
-    | 'Climate Impact Lead'
-    | 'Legal Lead'
-    | 'Consultant';
-  roleName?: string;
-  userId: number;
-};
-export type ListProjectInternalUsersResponsePayload = {
-  status: SuccessOrError;
-  users: ProjectInternalUserResponsePayload[];
-};
-export type InternalUserPayload = {
-  role?:
-    | 'Project Lead'
-    | 'Restoration Lead'
-    | 'Social Lead'
-    | 'GIS Lead'
-    | 'Carbon Lead'
-    | 'Phase Lead'
-    | 'Regional Expert'
-    | 'Project Finance Lead'
-    | 'Climate Impact Lead'
-    | 'Legal Lead'
-    | 'Consultant';
-  roleName?: string;
-  userId: number;
-};
-export type UpdateProjectInternalUserRequestPayload = {
-  internalUsers: InternalUserPayload[];
-};
 export const {
   useListProjectsQuery,
   useLazyListProjectsQuery,
@@ -178,7 +117,4 @@ export const {
   useLazyGetProjectQuery,
   useUpdateProjectMutation,
   useAssignProjectMutation,
-  useGetInternalUsersQuery,
-  useLazyGetInternalUsersQuery,
-  useUpdateInternalUserMutation,
 } = injectedRtkApi;

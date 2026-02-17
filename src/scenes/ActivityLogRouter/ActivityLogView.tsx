@@ -10,8 +10,8 @@ import Page from 'src/components/Page';
 import PageHeaderProjectFilter from 'src/components/PageHeader/PageHeaderProjectFilter';
 import Card from 'src/components/common/Card';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import { useAcceleratorProjects } from 'src/hooks/useAcceleratorProjects';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { useParticipantProjects } from 'src/hooks/useParticipantProjects';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -25,9 +25,9 @@ export default function ActivityLogView(): JSX.Element {
   const query = useQuery();
   const { isDesktop, isMobile } = useDeviceInfo();
   const { goToAcceleratorActivityCreate, goToActivityCreate } = useNavigateTo();
-  const { currentParticipantProject, allParticipantProjects, setCurrentParticipantProject } = useParticipantData();
+  const { currentAcceleratorProject, allAcceleratorProjects, setCurrentAcceleratorProject } = useParticipantData();
   const { isAcceleratorRoute } = useAcceleratorConsole();
-  const { participantProjects, isLoading: participantProjectsLoading } = useParticipantProjects();
+  const { acceleratorProjects, isLoading: acceleratorProjectsLoading } = useAcceleratorProjects();
 
   const [activityId, setActivityId] = useState<number>();
   const [projectFilter, setProjectFilter] = useState<{ projectId?: number | string }>({});
@@ -47,7 +47,7 @@ export default function ActivityLogView(): JSX.Element {
   );
 
   const availableProjects = useMemo(() => {
-    return participantProjects
+    return acceleratorProjects
       .map((project) => ({
         dealName: project.dealName,
         id: project.projectId,
@@ -56,7 +56,7 @@ export default function ActivityLogView(): JSX.Element {
       }))
       .filter((project) => project.dealName)
       .sort((a, b) => a.dealName!.localeCompare(b.dealName!, activeLocale || undefined));
-  }, [activeLocale, participantProjects]);
+  }, [activeLocale, acceleratorProjects]);
 
   const projectDealName = useMemo(() => {
     const project = availableProjects.find((p) => p.id === projectId);
@@ -87,20 +87,20 @@ export default function ActivityLogView(): JSX.Element {
   const PageHeaderLeftComponent = useMemo(
     () => (
       <PageHeaderProjectFilter
-        currentParticipantProject={currentParticipantProject}
+        currentAcceleratorProject={currentAcceleratorProject}
         projectFilter={projectFilter}
-        projects={isAcceleratorRoute ? availableProjects : allParticipantProjects}
-        setCurrentParticipantProject={setCurrentParticipantProject}
+        projects={isAcceleratorRoute ? availableProjects : allAcceleratorProjects}
+        setCurrentAcceleratorProject={setCurrentAcceleratorProject}
         setProjectFilter={setProjectFilter}
       />
     ),
     [
-      allParticipantProjects,
+      allAcceleratorProjects,
       availableProjects,
-      currentParticipantProject,
+      currentAcceleratorProject,
       isAcceleratorRoute,
       projectFilter,
-      setCurrentParticipantProject,
+      setCurrentAcceleratorProject,
     ]
   );
 
@@ -154,7 +154,7 @@ export default function ActivityLogView(): JSX.Element {
     <>
       <Page
         hierarchicalCrumbs={false}
-        isLoading={isAcceleratorRoute && participantProjectsLoading}
+        isLoading={isAcceleratorRoute && acceleratorProjectsLoading}
         leftComponent={PageHeaderLeftComponent}
         rightComponent={PageHeaderRightComponent}
         title={strings.ACTIVITY_LOG}

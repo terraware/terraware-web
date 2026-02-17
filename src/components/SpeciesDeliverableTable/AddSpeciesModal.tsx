@@ -36,7 +36,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
 
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
-  const { currentParticipantProject } = useParticipantData();
+  const { currentAcceleratorProject } = useParticipantData();
   const theme = useTheme();
   const docLinks = useDocLinks();
 
@@ -165,7 +165,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
             label={strings.NAME}
             type='text'
             display={true}
-            value={currentParticipantProject?.name}
+            value={currentAcceleratorProject?.name}
           />
         </Grid>
         <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
