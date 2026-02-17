@@ -34,7 +34,6 @@ import plantingsReducers from './features/plantings/plantingsSlice';
 import projectSpeciesReducers from './features/projectSpecies/projectSpeciesSlice';
 import projectToDoReducers from './features/projectToDo/projectToDoSlice';
 import projectsReducers from './features/projects/projectsSlice';
-import reportsReducers from './features/reports/reportsSlice';
 import reportsSettingsReducers from './features/reportsSettings/reportsSettingsSlice';
 import scoresReducers from './features/scores/scoresSlice';
 import snackbarReducers from './features/snackbar/snackbarSlice';
@@ -82,7 +81,6 @@ export const reducers = {
   ...projectsReducers,
   ...projectSpeciesReducers,
   ...projectToDoReducers,
-  ...reportsReducers,
   ...reportsSettingsReducers,
   ...scoresReducers,
   ...snackbarReducers,

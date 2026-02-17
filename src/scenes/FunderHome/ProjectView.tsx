@@ -11,6 +11,7 @@ import BreadCrumbs, { Crumb } from 'src/components/BreadCrumbs';
 import TfMain from 'src/components/common/TfMain';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
+import { PublishedReportPayload } from 'src/queries/generated/publishedReports';
 import { requestListFunderActivities } from 'src/redux/features/funder/activities/funderActivitiesAsyncThunks';
 import { selectListFunderActivitiesRequest } from 'src/redux/features/funder/activities/funderActivitiesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -29,7 +30,7 @@ type ProjectViewProps = {
   projectDetails: FunderProjectDetails;
   includeCrumbs: boolean;
   goToAllProjects: () => void;
-  publishedReports: PublishedReport[];
+  publishedReports: PublishedReportPayload[];
 };
 
 const ProjectView = ({ projectDetails, includeCrumbs, goToAllProjects, publishedReports }: ProjectViewProps) => {
