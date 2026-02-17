@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { RefObject, useCallback, useEffect, useMemo, useState } from 'react';
 import { MapRef } from 'react-map-gl/mapbox';
 import { useSearchParams } from 'react-router';
 
@@ -57,6 +57,7 @@ type ObservationMapProps = {
   adHocObservationResults: ObservationResultsPayload[];
   isBiomass?: boolean;
   isSingleView?: boolean;
+  mapRef: RefObject<MapRef | null>;
   observationResults: ObservationResultsPayload[];
   plantingSiteId?: number;
   selectPlantingSiteId?: (siteId: number) => void;
@@ -66,6 +67,7 @@ const ObservationMap = ({
   adHocObservationResults,
   isBiomass,
   isSingleView,
+  mapRef,
   observationResults,
   plantingSiteId,
   selectPlantingSiteId,
@@ -74,7 +76,6 @@ const ObservationMap = ({
   const defaultTimezone = useDefaultTimeZone().get().id;
   const { mapId, token } = useMapboxToken();
   const { selectedOrganization } = useOrganization();
-  const mapRef = useRef<MapRef | null>(null);
   const { fitBounds } = useMapUtils(mapRef);
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
   const [searchParams] = useSearchParams();
@@ -222,6 +223,23 @@ const ObservationMap = ({
     () => getPlantingSiteHistoryResult.data?.site,
     [getPlantingSiteHistoryResult.data?.site]
   );
+
+  useEffect(() => {
+    if (selectedHistory) {
+      const points = selectedHistory.boundary.coordinates
+        .flat()
+        .flat()
+        .map(
+          ([lng, lat]): MapPoint => ({
+            lat,
+            lng,
+          })
+        );
+
+      const bbox = getBoundingBoxFromPoints(points);
+      fitBounds(bbox);
+    }
+  }, [fitBounds, selectedHistory]);
 
   const selectFeature = useCallback(
     (_plantingSiteId: number) => (layerId: string, featureId: string) => () => {
@@ -459,7 +477,6 @@ const ObservationMap = ({
               latitude,
               onClick: () => {
                 selectPlantingSiteId?.(site.id);
-                fitBounds(bbox);
               },
             };
           }
