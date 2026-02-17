@@ -1,7 +1,8 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, CircularProgress, Tooltip, useTheme } from '@mui/material';
+import { Box, CircularProgress, IconButton, Tooltip, useTheme } from '@mui/material';
 import { BusySpinner, Button, EditableTable, EditableTableColumn } from '@terraware/web-components';
+import { Icon } from '@terraware/web-components';
 import {
   MRT_Cell,
   MRT_ShowHideColumnsButton,
@@ -23,6 +24,7 @@ import {
 } from 'src/redux/features/plantings/plantingsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import StatsWarningDialog from 'src/scenes/NurseryRouter/StatsWarningModal';
+import { exportNurseryPlantingProgress } from 'src/scenes/NurseryRouter/exportNurseryData';
 import strings from 'src/strings';
 import useSnackbar from 'src/utils/useSnackbar';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
@@ -285,6 +287,10 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
     [selectedRows]
   );
 
+  const onExport = useCallback(() => {
+    void exportNurseryPlantingProgress({ plantingProgress: rows || [] });
+  }, [rows]);
+
   if (!rows || hasStrata === undefined) {
     return <CircularProgress sx={{ margin: 'auto' }} />;
   }
@@ -344,6 +350,11 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
           ),
           renderToolbarInternalActions: ({ table }) => (
             <Box display='flex' gap={0.5}>
+              <Tooltip title={strings.EXPORT}>
+                <IconButton onClick={onExport}>
+                  <Icon name='iconExport' size='medium' />
+                </IconButton>
+              </Tooltip>
               <MRT_ToggleGlobalFilterButton table={table} />
               <MRT_ToggleFiltersButton table={table} />
               <MRT_ShowHideColumnsButton table={table} />

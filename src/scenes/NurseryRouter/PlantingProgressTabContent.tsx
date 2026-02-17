@@ -160,13 +160,15 @@ export default function PlantingProgress(): JSX.Element {
         initialView={initialView}
         onView={setActiveView}
         search={
-          <SearchComponent
-            view={activeView}
-            onChangePlantingSite={setSelectedPlantingSiteId}
-            featuredFilters={featuredFilters}
-            onExport={onExport}
-            {...searchProps}
-          />
+          activeView === 'list' ? undefined : (
+            <SearchComponent
+              view={activeView}
+              onChangePlantingSite={setSelectedPlantingSiteId}
+              featuredFilters={featuredFilters}
+              onExport={onExport}
+              {...searchProps}
+            />
+          )
         }
         list={<PlantingProgressList reloadTracking={reloadTrackingAndObservations} rows={rows} />}
         map={
