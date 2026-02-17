@@ -54,7 +54,7 @@ const search = async (
 ): Promise<ModuleSearchResult[] | null> => {
   const searchParams: SearchRequestPayload = {
     prefix: 'modules',
-    fields: ['id', 'name', 'projectModules.cohort_id', 'deliverables.id'],
+    fields: ['id', 'name', 'projectModules.project_id', 'deliverables.id'],
     search: searchPayload ?? { operation: 'and', children: [] },
     sortOrder: [sortOrder ?? { field: 'name' }],
     count: 0,
