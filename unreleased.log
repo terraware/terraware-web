@@ -1,3 +1,4 @@
+8bbdc1d93855 SW-8057 Replace ParticipantProject in navigation methods (#5237)
 108a0471d5cf Update Node.js to v24.13.1 (#5238)
 1aaf62cb1410 Bump jsonpath from 1.2.0 to 1.2.1 (#5214)
 2a881a2421bc SW-8058 Remove params for Accelerator Orgs endpoint (#5232)
