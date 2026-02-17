@@ -81,9 +81,24 @@ export default function useNavigateTo() {
         });
       },
 
-      goToAcceleratorProject: (projectId: number) => {
-        navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', `${projectId}`) });
+      goToAcceleratorProject: (projectId: number, activityId?: number, tab?: string) => {
+        const params = searchParamsWithMapViewState();
+        if (activityId !== undefined) {
+          params.set('activityId', activityId.toString());
+          if (tab) {
+            params.set('tab', tab);
+          }
+        }
+        navigate({
+          pathname: APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', `${projectId}`),
+          search: params.toString(),
+        });
       },
+
+      goToAcceleratorProjectEdit: (projectId: number) =>
+        navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_EDIT.replace(':projectId', `${projectId}`) }),
+
+      goToAcceleratorProjectList: () => navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECTS }),
 
       goToAcceleratorProjectModulesEdit: (projectId: number) => {
         navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_MODULES_EDIT.replace(':projectId', `${projectId}`) });
@@ -96,6 +111,27 @@ export default function useNavigateTo() {
       goToAcceleratorProjectScoreEdit: (projectId: number) => {
         navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_SCORES_EDIT.replace(':projectId', `${projectId}`) });
       },
+
+      goToAcceleratorProjectSpecies: (deliverableId: number, projectId: number, acceleratorProjectSpeciesId: number) =>
+        navigate({
+          pathname: APP_PATHS.ACCELERATOR_SPECIES.replace(
+            ':acceleratorProjectSpeciesId',
+            `${acceleratorProjectSpeciesId}`
+          )
+            .replace(':projectId', `${projectId}`)
+            .replace(':deliverableId', `${deliverableId}`),
+        }),
+
+      goToAcceleratorProjectSpeciesEdit: (
+        deliverableId: number,
+        projectId: number,
+        acceleratorProjectSpeciesId: number
+      ) =>
+        navigate(
+          APP_PATHS.ACCELERATOR_SPECIES_EDIT.replace(':acceleratorProjectSpeciesId', `${acceleratorProjectSpeciesId}`)
+            .replace(':projectId', `${projectId}`)
+            .replace(':deliverableId', `${deliverableId}`)
+        ),
 
       goToAcceleratorProjectVote: (projectId: number) => {
         navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_VOTES.replace(':projectId', `${projectId}`) });
@@ -310,46 +346,6 @@ export default function useNavigateTo() {
         });
         window.scrollTo(0, 0);
       },
-
-      goToParticipantProject: (projectId: number, activityId?: number, tab?: string) => {
-        const params = searchParamsWithMapViewState();
-        if (activityId !== undefined) {
-          params.set('activityId', activityId.toString());
-          if (tab) {
-            params.set('tab', tab);
-          }
-        }
-        navigate({
-          pathname: APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', `${projectId}`),
-          search: params.toString(),
-        });
-      },
-
-      goToParticipantProjectEdit: (projectId: number) =>
-        navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_EDIT.replace(':projectId', `${projectId}`) }),
-
-      goToParticipantProjectList: () => navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECTS }),
-
-      goToParticipantProjectSpecies: (deliverableId: number, projectId: number, participantProjectSpeciesId: number) =>
-        navigate({
-          pathname: APP_PATHS.ACCELERATOR_SPECIES.replace(
-            ':participantProjectSpeciesId',
-            `${participantProjectSpeciesId}`
-          )
-            .replace(':projectId', `${projectId}`)
-            .replace(':deliverableId', `${deliverableId}`),
-        }),
-
-      goToParticipantProjectSpeciesEdit: (
-        deliverableId: number,
-        projectId: number,
-        participantProjectSpeciesId: number
-      ) =>
-        navigate(
-          APP_PATHS.ACCELERATOR_SPECIES_EDIT.replace(':participantProjectSpeciesId', `${participantProjectSpeciesId}`)
-            .replace(':projectId', `${projectId}`)
-            .replace(':deliverableId', `${deliverableId}`)
-        ),
 
       goToPlantingSiteView: (plantingSiteId: number) =>
         navigate(APP_PATHS.PLANTING_SITES_VIEW.replace(':plantingSiteId', `${plantingSiteId}`)),

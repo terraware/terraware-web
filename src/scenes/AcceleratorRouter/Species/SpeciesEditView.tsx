@@ -22,7 +22,7 @@ import SpeciesInternalFieldsForm from './SpeciesInternalFieldsForm';
 
 export default function SpeciesEditView(): JSX.Element {
   const theme = useTheme();
-  const { goToParticipantProjectSpecies } = useNavigateTo();
+  const { goToAcceleratorProjectSpecies } = useNavigateTo();
   const { isMobile } = useDeviceInfo();
   const { selectedOrganization } = useOrganization();
   const { currentParticipantProjectSpecies, currentSpecies, isBusy, participantProjectSpeciesId, update } =
@@ -75,7 +75,7 @@ export default function SpeciesEditView(): JSX.Element {
         <PageForm
           cancelID='cancelEditSpecies'
           saveID='saveEditSpecies'
-          onCancel={() => goToParticipantProjectSpecies(deliverableId, projectId, participantProjectSpeciesId)}
+          onCancel={() => goToAcceleratorProjectSpecies(deliverableId, projectId, participantProjectSpeciesId)}
           onSave={saveSpecies}
         >
           <Box marginBottom={theme.spacing(4)} paddingLeft={theme.spacing(3)}>

@@ -25,7 +25,7 @@ import RejectedBox from './RejectedBox';
 export default function SpeciesDetailView(): JSX.Element {
   const theme = useTheme();
   const { activeLocale } = useLocalization();
-  const { goToParticipantProjectSpeciesEdit } = useNavigateTo();
+  const { goToAcceleratorProjectSpeciesEdit } = useNavigateTo();
   const { isMobile } = useDeviceInfo();
   const { projectId } = useProject();
   const { currentParticipantProjectSpecies, currentSpecies, isBusy, participantProjectSpeciesId, update } =
@@ -69,11 +69,11 @@ export default function SpeciesDetailView(): JSX.Element {
     (optionItem: DropdownItem) => {
       switch (optionItem.value) {
         case 'edit': {
-          goToParticipantProjectSpeciesEdit(deliverableId, projectId, participantProjectSpeciesId);
+          goToAcceleratorProjectSpeciesEdit(deliverableId, projectId, participantProjectSpeciesId);
         }
       }
     },
-    [deliverableId, goToParticipantProjectSpeciesEdit, participantProjectSpeciesId, projectId]
+    [deliverableId, goToAcceleratorProjectSpeciesEdit, participantProjectSpeciesId, projectId]
   );
 
   const onUpdateInternalComment = useCallback(

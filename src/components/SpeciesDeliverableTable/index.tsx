@@ -43,7 +43,7 @@ const SpeciesDeliverableTable = ({ deliverable }: SpeciesDeliverableTableProps):
   const { isAllowed } = useUser();
   const theme = useTheme();
   const { isAcceleratorRoute } = useAcceleratorConsole();
-  const { goToParticipantProjectSpecies } = useNavigateTo();
+  const { goToAcceleratorProjectSpecies } = useNavigateTo();
   const {
     hasActiveDeliverable,
     hasRecentDeliverable,
@@ -90,9 +90,9 @@ const SpeciesDeliverableTable = ({ deliverable }: SpeciesDeliverableTableProps):
 
   const onAcceleratorSpeciesClick = useCallback(
     (row: any) => {
-      goToParticipantProjectSpecies(deliverable.id, row.project.id, row.participantProjectSpecies.id);
+      goToAcceleratorProjectSpecies(deliverable.id, row.project.id, row.participantProjectSpecies.id);
     },
-    [deliverable.id, goToParticipantProjectSpecies]
+    [deliverable.id, goToAcceleratorProjectSpecies]
   );
 
   const closeAddSpeciesModal = useCallback(() => setOpenedAddSpeciesModal(false), []);

@@ -18,7 +18,7 @@ const ProjectProvider = ({ children }: Props) => {
   const dispatch = useAppDispatch();
   const pathParams = useParams<{ projectId: string }>();
   const pathProjectId = Number(pathParams.projectId);
-  const { goToParticipantProjectList } = useNavigateTo();
+  const { goToAcceleratorProjectList } = useNavigateTo();
 
   const [projectId, setProjectId] = useState<number>(-1);
   const project = useAppSelector(selectProject(projectId));
@@ -37,12 +37,12 @@ const ProjectProvider = ({ children }: Props) => {
 
   useEffect(() => {
     if (pathProjectId === -1) {
-      goToParticipantProjectList();
+      goToAcceleratorProjectList();
     } else if (!isNaN(pathProjectId)) {
       setProjectId(pathProjectId);
       reload();
     }
-  }, [dispatch, goToParticipantProjectList, pathProjectId, reload]);
+  }, [dispatch, goToAcceleratorProjectList, pathProjectId, reload]);
 
   useEffect(() => {
     setProjectData({

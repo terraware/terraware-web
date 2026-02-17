@@ -44,10 +44,10 @@ const ParticipantProjectSpeciesProvider = ({ children }: Props) => {
   const snackbar = useSnackbar();
   const { currentDeliverable, deliverableId } = useDeliverableData();
   const { projectId } = useProjectData();
-  const { goToParticipantProjectSpecies: _goToParticipantProjectSpecies } = useNavigateTo();
-  const params = useParams<{ participantProjectSpeciesId?: string }>();
+  const { goToAcceleratorProjectSpecies: _goToParticipantProjectSpecies } = useNavigateTo();
+  const params = useParams<{ acceleratorProjectSpeciesId?: string }>();
 
-  const participantProjectSpeciesId = Number(params.participantProjectSpeciesId);
+  const participantProjectSpeciesId = Number(params.acceleratorProjectSpeciesId);
   const [currentParticipantProjectSpecies, setCurrentParticipantProjectSpecies] = useState<ParticipantProjectSpecies>();
   const [currentSpecies, setCurrentSpecies] = useState<Species>();
 
