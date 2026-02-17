@@ -7,10 +7,10 @@ import { ViewProps } from 'src/components/DeliverableView/types';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization } from 'src/providers/hooks';
 import strings from 'src/strings';
-import { SpeciesForParticipantProject } from 'src/types/ParticipantProjectSpecies';
+import { SpeciesForAcceleratorProject } from 'src/types/AcceleratorProjectSpecies';
 
 type Props = ViewProps & {
-  species?: SpeciesForParticipantProject[] | undefined;
+  species?: SpeciesForAcceleratorProject[] | undefined;
 };
 
 const SpeciesDeliverableStatusMessage = ({ deliverable, species }: Props): JSX.Element | null => {

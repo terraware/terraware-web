@@ -90,7 +90,7 @@ const ParticipantProvider = ({ children }: Props) => {
       setModuleProjects(nextModuleProjects);
       setOrgHasModules(nextModuleProjects.length > 0);
 
-      // Assign the first project with modules as the current participant project
+      // Assign the first project with modules as the current accelerator project
       if (nextModuleProjects.length > 0 && !currentAcceleratorProject) {
         setCurrentAcceleratorProject(nextModuleProjects[0]);
       }

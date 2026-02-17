@@ -8,12 +8,12 @@ import PageSnackbar from 'src/components/PageSnackbar';
 import PageForm from 'src/components/common/PageForm';
 import TfMain from 'src/components/common/TfMain';
 import useNavigateTo from 'src/hooks/useNavigateTo';
+import { useAcceleratorProjectSpeciesData } from 'src/providers/AcceleratorProject/AcceleratorProjectSpeciesContext';
 import { useDeliverableData } from 'src/providers/Deliverable/DeliverableContext';
-import { useParticipantProjectSpeciesData } from 'src/providers/ParticipantProject/ParticipantProjectSpeciesContext';
 import { useLocalization, useOrganization, useProject } from 'src/providers/hooks';
 import SpeciesDetailsForm from 'src/scenes/Species/SpeciesDetailsForm';
 import strings from 'src/strings';
-import { ParticipantProjectSpecies, getSpeciesNativeCategoryOptions } from 'src/types/ParticipantProjectSpecies';
+import { AcceleratorProjectSpecies, getSpeciesNativeCategoryOptions } from 'src/types/AcceleratorProjectSpecies';
 import { Species } from 'src/types/Species';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useForm from 'src/utils/useForm';
@@ -25,15 +25,15 @@ export default function SpeciesEditView(): JSX.Element {
   const { goToAcceleratorProjectSpecies } = useNavigateTo();
   const { isMobile } = useDeviceInfo();
   const { selectedOrganization } = useOrganization();
-  const { currentParticipantProjectSpecies, currentSpecies, isBusy, participantProjectSpeciesId, update } =
-    useParticipantProjectSpeciesData();
+  const { currentAcceleratorProjectSpecies, currentSpecies, isBusy, acceleratorProjectSpeciesId, update } =
+    useAcceleratorProjectSpeciesData();
   const { projectId } = useProject();
   const { currentDeliverable, deliverableId } = useDeliverableData();
   const { activeLocale } = useLocalization();
 
   const [speciesRecord, setSpeciesRecord, , onChangeSpeciesCallback] = useForm<Species | undefined>(undefined);
-  const [participantProjectSpeciesRecord, setParticipantProjectSpeciesRecord, , onChangeProjectSpeciesCallback] =
-    useForm<ParticipantProjectSpecies | undefined>(undefined);
+  const [acceleratorProjectSpeciesRecord, setAcceleratorProjectSpeciesRecord, , onChangeProjectSpeciesCallback] =
+    useForm<AcceleratorProjectSpecies | undefined>(undefined);
 
   const [nameFormatError, setNameFormatError] = useState<string | string[]>('');
 
@@ -51,31 +51,31 @@ export default function SpeciesEditView(): JSX.Element {
   }, [currentSpecies, setSpeciesRecord]);
 
   useEffect(() => {
-    if (currentParticipantProjectSpecies) {
-      setParticipantProjectSpeciesRecord(currentParticipantProjectSpecies);
+    if (currentAcceleratorProjectSpecies) {
+      setAcceleratorProjectSpeciesRecord(currentAcceleratorProjectSpecies);
     }
-  }, [currentParticipantProjectSpecies, setParticipantProjectSpeciesRecord]);
+  }, [currentAcceleratorProjectSpecies, setAcceleratorProjectSpeciesRecord]);
 
   const saveSpecies = useCallback(() => {
-    if (!(currentParticipantProjectSpecies && speciesRecord)) {
+    if (!(currentAcceleratorProjectSpecies && speciesRecord)) {
       return;
     }
 
     if (!speciesRecord.scientificName) {
       setNameFormatError(strings.REQUIRED_FIELD);
     } else {
-      update(speciesRecord, participantProjectSpeciesRecord);
+      update(speciesRecord, acceleratorProjectSpeciesRecord);
     }
-  }, [currentParticipantProjectSpecies, participantProjectSpeciesRecord, speciesRecord, update]);
+  }, [currentAcceleratorProjectSpecies, acceleratorProjectSpeciesRecord, speciesRecord, update]);
 
   return (
     <TfMain>
-      {(isBusy || !speciesRecord || !participantProjectSpeciesRecord) && <BusySpinner withSkrim={true} />}
-      {speciesRecord && participantProjectSpeciesRecord && (
+      {(isBusy || !speciesRecord || !acceleratorProjectSpeciesRecord) && <BusySpinner withSkrim={true} />}
+      {speciesRecord && acceleratorProjectSpeciesRecord && (
         <PageForm
           cancelID='cancelEditSpecies'
           saveID='saveEditSpecies'
-          onCancel={() => goToAcceleratorProjectSpecies(deliverableId, projectId, participantProjectSpeciesId)}
+          onCancel={() => goToAcceleratorProjectSpecies(deliverableId, projectId, acceleratorProjectSpeciesId)}
           onSave={saveSpecies}
         >
           <Box marginBottom={theme.spacing(4)} paddingLeft={theme.spacing(3)}>
@@ -112,7 +112,7 @@ export default function SpeciesEditView(): JSX.Element {
             <Grid item xs={12} paddingBottom={theme.spacing(2)}>
               <Dropdown
                 id='speciesNativeCategory'
-                selectedValue={participantProjectSpeciesRecord?.speciesNativeCategory}
+                selectedValue={acceleratorProjectSpeciesRecord?.speciesNativeCategory}
                 onChange={onChangeProjectSpeciesCallback('speciesNativeCategory')}
                 options={getSpeciesNativeCategoryOptions(activeLocale)}
                 label={strings.NATIVE_NON_NATIVE}
@@ -127,7 +127,7 @@ export default function SpeciesEditView(): JSX.Element {
                 label={strings.RATIONALE}
                 id='rationale'
                 type='text'
-                value={participantProjectSpeciesRecord?.rationale}
+                value={acceleratorProjectSpeciesRecord?.rationale}
                 onChange={onChangeProjectSpeciesCallback('rationale')}
               />
             </Grid>
@@ -141,7 +141,7 @@ export default function SpeciesEditView(): JSX.Element {
                 <SpeciesDetailsForm
                   gridSize={gridSize()}
                   record={speciesRecord}
-                  participantProjectSpeciesRecord={participantProjectSpeciesRecord}
+                  acceleratorProjectSpeciesRecord={acceleratorProjectSpeciesRecord}
                   onChange={onChangeSpeciesCallback}
                   nameFormatError={nameFormatError}
                   setNameFormatError={setNameFormatError}

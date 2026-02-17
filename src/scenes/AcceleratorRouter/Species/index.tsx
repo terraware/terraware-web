@@ -13,8 +13,8 @@ import Checkbox from 'src/components/common/Checkbox';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
+import { useAcceleratorProjectSpeciesData } from 'src/providers/AcceleratorProject/AcceleratorProjectSpeciesContext';
 import { useDeliverableData } from 'src/providers/Deliverable/DeliverableContext';
-import { useParticipantProjectSpeciesData } from 'src/providers/ParticipantProject/ParticipantProjectSpeciesContext';
 import { useLocalization, useProject } from 'src/providers/hooks';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -28,8 +28,8 @@ export default function SpeciesDetailView(): JSX.Element {
   const { goToAcceleratorProjectSpeciesEdit } = useNavigateTo();
   const { isMobile } = useDeviceInfo();
   const { projectId } = useProject();
-  const { currentParticipantProjectSpecies, currentSpecies, isBusy, participantProjectSpeciesId, update } =
-    useParticipantProjectSpeciesData();
+  const { currentAcceleratorProjectSpecies, currentSpecies, isBusy, acceleratorProjectSpeciesId, update } =
+    useAcceleratorProjectSpeciesData();
   const { currentDeliverable, deliverableId } = useDeliverableData();
 
   const [showApproveDialog, setShowApproveDialog] = useState<boolean>(false);
@@ -43,9 +43,9 @@ export default function SpeciesDetailView(): JSX.Element {
   }, [isMobile]);
 
   const approveHandler = () => {
-    if (currentParticipantProjectSpecies) {
+    if (currentAcceleratorProjectSpecies) {
       update(undefined, {
-        ...currentParticipantProjectSpecies,
+        ...currentAcceleratorProjectSpecies,
         submissionStatus: 'Approved',
       });
     }
@@ -54,9 +54,9 @@ export default function SpeciesDetailView(): JSX.Element {
   };
 
   const rejectHandler = (feedback: string) => {
-    if (currentParticipantProjectSpecies) {
+    if (currentAcceleratorProjectSpecies) {
       update(undefined, {
-        ...currentParticipantProjectSpecies,
+        ...currentAcceleratorProjectSpecies,
         feedback,
         submissionStatus: 'Rejected',
       });
@@ -69,23 +69,23 @@ export default function SpeciesDetailView(): JSX.Element {
     (optionItem: DropdownItem) => {
       switch (optionItem.value) {
         case 'edit': {
-          goToAcceleratorProjectSpeciesEdit(deliverableId, projectId, participantProjectSpeciesId);
+          goToAcceleratorProjectSpeciesEdit(deliverableId, projectId, acceleratorProjectSpeciesId);
         }
       }
     },
-    [deliverableId, goToAcceleratorProjectSpeciesEdit, participantProjectSpeciesId, projectId]
+    [deliverableId, goToAcceleratorProjectSpeciesEdit, acceleratorProjectSpeciesId, projectId]
   );
 
   const onUpdateInternalComment = useCallback(
     (internalComment: string) => {
-      if (currentParticipantProjectSpecies) {
+      if (currentAcceleratorProjectSpecies) {
         update(undefined, {
-          ...currentParticipantProjectSpecies,
+          ...currentAcceleratorProjectSpecies,
           internalComment,
         });
       }
     },
-    [currentParticipantProjectSpecies, update]
+    [currentAcceleratorProjectSpecies, update]
   );
 
   const optionItems = useMemo(
@@ -102,14 +102,14 @@ export default function SpeciesDetailView(): JSX.Element {
   );
 
   const actions = useMemo(() => {
-    if (!(currentParticipantProjectSpecies && activeLocale)) {
+    if (!(currentAcceleratorProjectSpecies && activeLocale)) {
       return null;
     }
 
     return (
       <Box display='flex' flexDirection='row' flexGrow={0} marginRight={theme.spacing(3)} justifyContent='right'>
         <Button
-          disabled={currentParticipantProjectSpecies.submissionStatus === 'Rejected'}
+          disabled={currentAcceleratorProjectSpecies.submissionStatus === 'Rejected'}
           id='rejectDeliverable'
           label={strings.REQUEST_UPDATE_ACTION}
           priority='secondary'
@@ -118,7 +118,7 @@ export default function SpeciesDetailView(): JSX.Element {
           type='destructive'
         />
         <Button
-          disabled={currentParticipantProjectSpecies.submissionStatus === 'Approved'}
+          disabled={currentAcceleratorProjectSpecies.submissionStatus === 'Approved'}
           id='approveDeliverable'
           label={strings.APPROVE}
           onClick={() => void setShowApproveDialog(true)}
@@ -127,7 +127,7 @@ export default function SpeciesDetailView(): JSX.Element {
         <OptionsMenu onOptionItemClick={onOptionItemClick} optionItems={optionItems} />
       </Box>
     );
-  }, [activeLocale, currentParticipantProjectSpecies, onOptionItemClick, optionItems, theme]);
+  }, [activeLocale, currentAcceleratorProjectSpecies, onOptionItemClick, optionItems, theme]);
 
   const crumbs: Crumb[] = useMemo(
     () =>
@@ -167,9 +167,9 @@ export default function SpeciesDetailView(): JSX.Element {
       )}
       {showRejectDialog && <RejectDialog onClose={() => setShowRejectDialog(false)} onSubmit={rejectHandler} />}
 
-      {(isBusy || !currentSpecies || !currentParticipantProjectSpecies) && <BusySpinner withSkrim={true} />}
+      {(isBusy || !currentSpecies || !currentAcceleratorProjectSpecies) && <BusySpinner withSkrim={true} />}
 
-      {currentParticipantProjectSpecies && currentSpecies && (
+      {currentAcceleratorProjectSpecies && currentSpecies && (
         <Page
           title={
             <Box
@@ -198,8 +198,8 @@ export default function SpeciesDetailView(): JSX.Element {
           rightComponent={actions}
           crumbs={crumbs}
         >
-          {currentParticipantProjectSpecies.submissionStatus === 'Rejected' && (
-            <RejectedBox participantProjectSpecies={currentParticipantProjectSpecies} onSubmit={rejectHandler} />
+          {currentAcceleratorProjectSpecies.submissionStatus === 'Rejected' && (
+            <RejectedBox acceleratorProjectSpecies={currentAcceleratorProjectSpecies} onSubmit={rejectHandler} />
           )}
 
           <Grid container padding={theme.spacing(0, 0, 4, 0)}>
@@ -212,7 +212,7 @@ export default function SpeciesDetailView(): JSX.Element {
                 margin: 0,
               }}
             >
-              {currentParticipantProjectSpecies && (
+              {currentAcceleratorProjectSpecies && (
                 <Box display='flex' flexDirection='column' width='100%'>
                   <Box
                     border={`1px solid ${theme.palette.TwClrBaseGray100}`}
@@ -221,11 +221,11 @@ export default function SpeciesDetailView(): JSX.Element {
                     padding='16px'
                   >
                     <div style={{ float: 'right', marginBottom: '0px', marginLeft: '16px' }}>
-                      <DeliverableStatusBadge status={currentParticipantProjectSpecies.submissionStatus} />
+                      <DeliverableStatusBadge status={currentAcceleratorProjectSpecies.submissionStatus} />
                     </div>
 
                     {currentDeliverable && (
-                      <InternalComment entity={currentParticipantProjectSpecies} update={onUpdateInternalComment} />
+                      <InternalComment entity={currentAcceleratorProjectSpecies} update={onUpdateInternalComment} />
                     )}
                   </Box>
                 </Box>
@@ -235,7 +235,7 @@ export default function SpeciesDetailView(): JSX.Element {
                   label={strings.NATIVE_NON_NATIVE}
                   id='speciesNativeCategory'
                   type='text'
-                  value={currentParticipantProjectSpecies.speciesNativeCategory}
+                  value={currentAcceleratorProjectSpecies.speciesNativeCategory}
                   display={true}
                 />
               </GridItemWrapper>
@@ -244,7 +244,7 @@ export default function SpeciesDetailView(): JSX.Element {
                   label={strings.RATIONALE}
                   id='rationale'
                   type='text'
-                  value={currentParticipantProjectSpecies.rationale}
+                  value={currentAcceleratorProjectSpecies.rationale}
                   display={true}
                 />
               </GridItemWrapper>

@@ -3,6 +3,7 @@ import { Action, combineReducers } from '@reduxjs/toolkit';
 import { rtkReducers } from 'src/queries/reducers';
 
 import acceleratorReducers from './features/accelerator/acceleratorSlice';
+import acceleratorProjectSpeciesReducers from './features/acceleratorProjectSpecies/acceleratorProjectSpeciesSlice';
 import accessionsReducers from './features/accessions/accessionsSlice';
 import activityReducers from './features/activities/activitiesSlice';
 import appVersionReducers from './features/appVersion/appVersionSlice';
@@ -28,7 +29,6 @@ import nurseryWithdrawalsReducers from './features/nurseryWithdrawals/nurseryWit
 import observationsReducers from './features/observations/observationsSlice';
 import organizationUsersReducers from './features/organizationUser/organizationUsersSlice';
 import organizationsReducers from './features/organizations/organizationsSlice';
-import participantProjectSpeciesReducers from './features/participantProjectSpecies/participantProjectSpeciesSlice';
 import plantingSiteReducers from './features/plantingSite/plantingSiteSlice';
 import plantingsReducers from './features/plantings/plantingsSlice';
 import projectSpeciesReducers from './features/projectSpecies/projectSpeciesSlice';
@@ -75,7 +75,7 @@ export const reducers = {
   ...observationsReducers,
   ...organizationsReducers,
   ...organizationUsersReducers,
-  ...participantProjectSpeciesReducers,
+  ...acceleratorProjectSpeciesReducers,
   ...plantingsReducers,
   ...plantingSiteReducers,
   ...projectsReducers,
