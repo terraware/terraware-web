@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/78</span>
+                <span class='fraction'>0/77</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/75</span>
+                <span class='fraction'>0/74</span>
             </div>
         
             
@@ -174,9 +174,7 @@
 <a name='L109'></a><a href='#L109'>109</a>
 <a name='L110'></a><a href='#L110'>110</a>
 <a name='L111'></a><a href='#L111'>111</a>
-<a name='L112'></a><a href='#L112'>112</a>
-<a name='L113'></a><a href='#L113'>113</a>
-<a name='L114'></a><a href='#L114'>114</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L112'></a><a href='#L112'>112</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -256,8 +254,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -325,23 +321,22 @@ import plantingSiteReducers from './features/plantingSite/plantingSiteSlice';
 import projectSpecies<span class="cstat-no" title="statement not covered" >Reducers from './features/pr</span>ojectSpecies/projectSpeciesSlice';
 import projectToDoRedu<span class="cstat-no" title="statement not covered" >cers from './features/projectToD</span>o/projectToDoSlice';
 import projectsReducers from '<span class="cstat-no" title="statement not covered" >./features/projects/projectsSlice';</span>
-import reportsReducers from '<span class="cstat-no" title="statement not covered" >./features/reports/reportsSlice';</span>
 import reportsSettingsReducer<span class="cstat-no" title="statement not covered" >s from './features/reportsSettings/reportsSettingsSlice';</span>
 import scoresReducers from '.<span class="cstat-no" title="statement not covered" >/features/scores/scoresSlice';</span>
-import snackbarReducers from '<span class="cstat-no" title="statement not covered" >./features/snackbar/snackbarSlice';</span>
-import speciesReducers fro<span class="cstat-no" title="statement not covered" >m './features/species';</span>
-import speciesAsyncThunkReducers<span class="cstat-no" title="statement not covered" > from './features/species/speciesSlice';</span>
-import subLocationsReducer<span class="cstat-no" title="statement not covered" >s from './features/subLocations/subLocationsSlice';</span>
-import supportReducers from './<span class="cstat-no" title="statement not covered" >features/support/supportSlice';</span>
-import trackingReducers from <span class="cstat-no" title="statement not covered" >'./features/tracking/trackingSlice';</span>
-import userAnalyticsReducers f<span class="cstat-no" title="statement not covered" >rom './features/user/userAnalyticsSlice';</span>
-import usersReducers from './feature<span class="cstat-no" title="statement not covered" >s/user/usersSlice';</span>
-import userInternalIntere<span class="cstat-no" title="statement not covered" >stsReducers from './features/userInternalInterests</span>/userInternalInterestsSlice';
-import votesReducers from './featur<span class="cstat-no" title="statement not covered" >es/votes/votesSlice';</span>
+import snackbarReducers from <span class="cstat-no" title="statement not covered" >'./features/snackbar/snackbarSlice';</span>
+import speciesReducers from '.<span class="cstat-no" title="statement not covered" >/features/species';</span>
+import speciesAsyncThunkRe<span class="cstat-no" title="statement not covered" >ducers from './features/species/speciesSlice';</span>
+import subLocationsReducers from<span class="cstat-no" title="statement not covered" > './features/subLocations/subLocationsSlice';</span>
+import supportReducers fro<span class="cstat-no" title="statement not covered" >m './features/support/supportSlice';</span>
+import trackingReducers from '.<span class="cstat-no" title="statement not covered" >/features/tracking/trackingSlice';</span>
+import userAnalyticsReducers <span class="cstat-no" title="statement not covered" >from './features/user/userAnalyticsSlice';</span>
+import usersReducers from './f<span class="cstat-no" title="statement not covered" >eatures/user/usersSlice';</span>
+import userInternalInterestsReducers<span class="cstat-no" title="statement not covered" > from './features/userInternalInterests/userInternalInterestsSlice';</span>
+import votesReducers from<span class="cstat-no" title="statement not covered" > './features/votes/votesSlice';</span>
 <span class="cstat-no" title="statement not covered" ></span>
 // assembly of app reducers<span class="cstat-no" title="statement not covered" ></span>
-export const reducers <span class="cstat-no" title="statement not covered" >= {</span>
-  ...acceleratorReducers,<span class="cstat-no" title="statement not covered" ></span>
+export const reducers = {<span class="cstat-no" title="statement not covered" ></span>
+  ...acceleratorReduce<span class="cstat-no" title="statement not covered" >rs,</span>
   ...accessionsReducers,<span class="cstat-no" title="statement not covered" ></span>
   ...activityReducers,<span class="cstat-no" title="statement not covered" ></span>
   ...applicationReducers,<span class="cstat-no" title="statement not covered" ></span>
@@ -352,11 +347,11 @@ export const reducers <span class="cstat-no" title="statement not covered" >= {<
   ...deliverablesReducers,<span class="cstat-no" title="statement not covered" ></span>
   ...disclaimersReducers,<span class="cstat-no" title="statement not covered" ></span>
   ...documentProducerReducers,<span class="cstat-no" title="statement not covered" ></span>
-  ...draftPlantingSiteReduce<span class="cstat-no" title="statement not covered" >rs,</span>
+  ...draftPlantingSiteReducers,<span class="cstat-no" title="statement not covered" ></span>
   ...eventReducers,<span class="cstat-no" title="statement not covered" ></span>
   ...funderActivitiesReducers,<span class="cstat-no" title="statement not covered" ></span>
-  ...funderProjectsReducers<span class="cstat-no" title="statement not covered" >,</span>
-  ...fundingEntitiesReduce<span class="cstat-no" title="statement not covered" >rs,</span>
+  ...funderProjectsReducers,<span class="cstat-no" title="statement not covered" ></span>
+  ...fundingEntitiesReducer<span class="cstat-no" title="statement not covered" >s,</span>
   ...gisReducers,<span class="cstat-no" title="statement not covered" ></span>
   ...globalRolesReducers,<span class="cstat-no" title="statement not covered" ></span>
   ...locationReducers,<span class="cstat-no" title="statement not covered" ></span>
@@ -373,7 +368,6 @@ export const reducers <span class="cstat-no" title="statement not covered" >= {<
   ...projectsReducers,
   ...projectSpeciesReducers,
   ...projectToDoReducers,
-  ...reportsReducers,
   ...reportsSettingsReducers,
   ...scoresReducers,
   ...snackbarReducers,
@@ -409,7 +403,7 @@ export type RootState = ReturnType&lt;typeof rootReducer&gt;;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-17T14:40:38.200Z
+                at 2026-02-17T18:38:19.916Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

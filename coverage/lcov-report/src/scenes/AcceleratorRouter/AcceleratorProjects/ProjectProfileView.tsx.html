@@ -710,7 +710,8 @@
 <a name='L645'></a><a href='#L645'>645</a>
 <a name='L646'></a><a href='#L646'>646</a>
 <a name='L647'></a><a href='#L647'>647</a>
-<a name='L648'></a><a href='#L648'>648</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L648'></a><a href='#L648'>648</a>
+<a name='L649'></a><a href='#L649'>649</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1215,6 +1216,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1385,35 +1387,36 @@ import { APP_PATHS } from 'src/constants';
 import useProjectFundingEntities from 'src/hooks/useProjectFundingEntities';
 import { useLocaliz<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >at</span>ion, us<span class="cstat-no" title="statement not covered" >eUser } from 'src/providers';</span></span>
 import { useGetInter<span class="cstat-no" title="statement not covered" >nal</span>UsersQuery } from 'src/queries/generated/projectInternalUsers';
-<span class="cstat-no" title="statement not covered" >import { useLazyListAcceleratorReportsQuery } from 'src/queries/generated/reports';</span>
-import { us<span class="fstat-no" title="function not covered" >eA</span>ppDi<span class="cstat-no" title="statement not covered" >spatch } from </span>'src/redux/store';
-import { AcceleratorOrg } from 'src/types/Accelerator';
-<span class="cstat-no" title="statement not covered" >import { AcceleratorProject } from 'src/types/</span>AcceleratorProject';
-import { PublishedR<span class="cstat-no" title="statement not covered" >eport, getReportPrefix } f</span>rom 'src/types/AcceleratorReport';
-import { Application }<span class="cstat-no" title="statement not covered" > from 'src/types/Applicat</span>ion';
-import { FunderProj<span class="cstat-no" title="statement not covered" >ectDetails } from 'src/types/FunderProject'</span>;
-import { Project, ProjectMeta, getP<span class="cstat-no" title="statement not covered" >rojectInternalUserRoleString } from 'src/types/Project';</span>
-import { Score } fro<span class="cstat-no" title="statement not covered" >m 'src/types/Score';</span>
-import { PhaseVotes } fr<span class="cstat-no" title="statement not covered" >om 'src/types/Votes';</span>
-import { getCountryByCode <span class="cstat-no" title="statement not covered" >} from 'src/utils/country';</span>
-import { formatNumberScale } from <span class="cstat-no" title="statement not covered" >'src/utils/numbers';</span>
-import useDeviceIn<span class="cstat-no" title="statement not covered" >fo from 'src/utils/useDeviceInfo';</span>
-import { useNumberFormat<span class="cstat-no" title="statement not covered" >ter } from 'src/utils/useNumberFormatter';</span>
+<span class="cstat-no" title="statement not covered" >import { PublishedReportPayload } from 'src/queries/generated/publishedReports';</span>
+import { us<span class="fstat-no" title="function not covered" >eL</span>azyL<span class="cstat-no" title="statement not covered" >istAccelerator</span>ReportsQuery } from 'src/queries/generated/reports';
+import { useAppDispatch } from 'src/redux/store';
+<span class="cstat-no" title="statement not covered" >import { AcceleratorOrg } from 'src/types/Acce</span>lerator';
+import { Accelerato<span class="cstat-no" title="statement not covered" >rProject } from 'src/types</span>/AcceleratorProject';
+import { getReportPref<span class="cstat-no" title="statement not covered" >ix } from 'src/types/Acce</span>leratorReport';
+import { Applicatio<span class="cstat-no" title="statement not covered" >n } from 'src/types/Application';</span>
+import { FunderProjectDetails } fro<span class="cstat-no" title="statement not covered" >m 'src/types/FunderProject';</span>
+import { Project, Pr<span class="cstat-no" title="statement not covered" >ojectMeta, getProjectInternalUserRoleString } from 'src</span>/types/Project';
+import { Score } from 's<span class="cstat-no" title="statement not covered" >rc/types/Score';</span>
+import { PhaseVotes } from<span class="cstat-no" title="statement not covered" > 'src/types/Votes';</span>
+import { getCountryByCode } from '<span class="cstat-no" title="statement not covered" >src/utils/country';</span>
+import { formatNum<span class="cstat-no" title="statement not covered" >berScale } from 'src/utils/numbers';</span>
+import useDeviceInfo fro<span class="cstat-no" title="statement not covered" >m 'src/utils/useDeviceInfo';</span>
+import { useNumberFormatter } from 'src/u<span class="cstat-no" title="statement not covered" >tils/useNumberFormatter';</span>
 <span class="cstat-no" title="statement not covered" ></span>
 type ProjectProfileViewProps = {<span class="cstat-no" title="statement not covered" ></span>
-  acceleratorProject?: Accelerat<span class="cstat-no" title="statement not covered" >orProject;</span>
-  projectDetails?: Accel<span class="cstat-no" title="statement not covered" >eratorProject | FunderProjectDetails;</span>
+  acceleratorProject?: A<span class="cstat-no" title="statement not covered" >cceleratorProject;</span>
+  projectDetails?: AcceleratorPro<span class="cstat-no" title="statement not covered" >ject | FunderProjectDetails;</span>
   project?: Project;<span class="cstat-no" title="statement not covered" ></span>
   projectMeta?: ProjectMeta;<span class="cstat-no" title="statement not covered" ></span>
-  organization?: AcceleratorOr<span class="cstat-no" title="statement not covered" >g;</span>
-  projectApplication?: Applicat<span class="cstat-no" title="statement not covered" >ion | undefined;</span>
-  projectScore?: Score | undef<span class="cstat-no" title="statement not covered" >ined;</span>
-  phaseVotes?: PhaseVotes | unde<span class="cstat-no" title="statement not covered" >fined;</span>
-  funderView?: boolean;<span class="cstat-no" title="statement not covered" ></span>
-  publishedReports<span class="cstat-no" title="statement not covered" >: PublishedReport[];</span>
+  organization?: AcceleratorOrg<span class="cstat-no" title="statement not covered" >;</span>
+  projectApplication?: Applica<span class="cstat-no" title="statement not covered" >tion | undefined;</span>
+  projectScore?: Score | undefin<span class="cstat-no" title="statement not covered" >ed;</span>
+  phaseVotes?: PhaseVotes | <span class="cstat-no" title="statement not covered" >undefined;</span>
+  funderView?: boo<span class="cstat-no" title="statement not covered" >lean;</span>
+  publishedReports: Pub<span class="cstat-no" title="statement not covered" >lishedReportPayload[];</span>
 };<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-const ProjectProfileVie<span class="cstat-no" title="statement not covered" >w = ({</span>
+const ProjectProfileView = ({<span class="cstat-no" title="statement not covered" ></span>
   acceleratorProject,<span class="cstat-no" title="statement not covered" ></span>
   projectDetails,<span class="cstat-no" title="statement not covered" ></span>
   project,<span class="cstat-no" title="statement not covered" ></span>
@@ -1422,8 +1425,8 @@ const ProjectProfileVie<span class="cstat-no" title="statement not covered" >w =
   projectScore,<span class="cstat-no" title="statement not covered" ></span>
   phaseVotes,<span class="cstat-no" title="statement not covered" ></span>
   funderView,<span class="cstat-no" title="statement not covered" ></span>
-  publishedReports,<span class="cstat-no" title="statement not covered" ></span>
-}: ProjectProfileViewProps)<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > =</span>&gt; {</span>
+  publishedReports,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+}: ProjectProfileViewProps) =&gt; {
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const { isAllowed } = useUser();
@@ -1434,77 +1437,77 @@ const ProjectProfileVie<span class="cstat-no" title="statement not covered" >w =
 &nbsp;
   const { data: internalUsersData, isSuccess: isUsersRequestSuccess } = useGetInternalUsersQuery(
     project ? project.id : -1,
-    { skip: !project }
+    { skip: !projec<span class="cstat-no" title="statement not covered" >t }</span>
   );<span class="cstat-no" title="statement not covered" ></span>
-  const internal<span class="cstat-no" title="statement not covered" >Users = useMemo(() =&gt; internalUs</span>ersData?.users ?? [], [internalUsersData]);
+  const internalUsers = <span class="cstat-no" title="statement not covered" >useMemo(() =&gt; internalUsersData?</span>.users ?? [], [internalUsersData]);
 <span class="cstat-no" title="statement not covered" ></span>
-  const isAllowedViewScoreAndVoting = isAllowed<span class="cstat-no" title="statement not covered" >('VIEW_ACCELERATOR_PROJECT_SCORING_VOTIN</span>G');
+  const isAllowedViewScore<span class="cstat-no" title="statement not covered" >AndVoting = isAllowed('VIEW_ACCELERATOR_PROJECT_SCOR</span>ING_VOTING');
 <span class="cstat-no" title="statement not covered" ></span>
-  const [listReports, listRepo<span class="cstat-no" title="statement not covered" >rtsResponse] = useLazyListAcceleratorReportsQuery();</span>
-  const acceleratorReports = useM<span class="cstat-no" title="statement not covered" >emo(</span>
-    () =&gt; listReportsResponse.data?.reports ?? [],<span class="cstat-no" title="statement not covered" ></span>
+  const [listReports, listReports<span class="cstat-no" title="statement not covered" >Response] = useLazyListAcceleratorRe</span>portsQuery();
+  const acceleratorReports = useMemo(<span class="cstat-no" title="statement not covered" ></span>
+    () =&gt; listReportsResponse.data?.reports ?? [],
     [listReportsResponse.data?.reports]
   );
-&nbsp;
-  useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-    if (!project?.id) {
-<span class="cstat-no" title="statement not covered" >      return;</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  useEffect(() =&gt; {
+<span class="cstat-no" title="statement not covered" >    if (!project?.id) {</span>
+      return;
+    }<span class="cstat-no" title="statement not covered" ></span>
+    void listReports({ projectId: project.id <span class="cstat-no" title="statement not covered" >}, true);</span>
+  }, [dispatch, listReports, <span class="cstat-no" title="statement not covered" >project?.id]);</span>
+<span class="fstat-no" title="function not covered" ></span>
+  const firstProjectLead = useMemo(() =&gt; {
+    if<span class="cstat-no" title="statement not covered" > (!isUsersRequestSuccess) {</span>
+      return undefined;
     }
-    void listReports({ projectId: proj<span class="cstat-no" title="statement not covered" >ect.id }, true);</span>
-  }, [dispatch, listReports, project?.id]);<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span>
-  co<span class="fstat-no" title="function not covered" >ns</span>t firstProjectLead = useMemo(() =&gt; {
-    if (!isUsersRequestSuccess) {
-<span class="cstat-no" title="statement not covered" >      return undefined;</span>
-    }
 &nbsp;
-    return internalUsers
-<span class="cstat-no" title="statement not covered" >      ?.filter((user) =&gt; user.<span class="fstat-no" title="function not covered" >ro</span>le === 'Project Lead')</span>
-<span class="cstat-no" title="statement not covered" >      ?.sort((a, b) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >        // sor</span>t by modifiedTime ascending
-        const timeA = a.modifiedTime ? new Date(a.modifiedTime).getTime() : 0;
-<span class="cstat-no" title="statement not covered" >        const timeB = b.modifiedTime ? new Date(b.modif</span>iedTime).getTime() : 0;
-        return timeA - timeB;
-      })?.[0];<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  }, [internalUsers, isUsersRequestSuccess]);
+<span class="cstat-no" title="statement not covered" >    return internalUsers<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >      ?.filter((user) =&gt; user.role === 'Project Lead')</span>
+<span class="cstat-no" title="statement not covered" >      ?.sort((</span>a, b) =&gt; {
+        // sort by modifiedTime ascending
+<span class="cstat-no" title="statement not covered" >        const timeA = a.modifiedTime ? new Date(a.modif</span>iedTime).getTime() : 0;
+        const timeB = b.modifiedTime ? new Date(b.modifiedTime).getTime() : 0;
+        return timeA - time<span class="cstat-no" title="statement not covered" >B;<span class="fstat-no" title="function not covered" ></span></span>
+      })?.[0];
+  },<span class="cstat-no" title="statement not covered" > [internalUsers, isUsersRequestSuccess]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  cons<span class="cstat-no" title="statement not covered" >t moreUsersTool</span>tip = useMemo(() =&gt; {
-    if (!isUsersRequestSuccess) {
-<span class="cstat-no" title="statement not covered" >      return '';<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span>
+  const moreUsersTooltip = useMemo(() =&gt; {
+<span class="cstat-no" title="statement not covered" >    if (!isUsersRequestSuccess) {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span>
+      return '';<span class="cstat-no" title="statement not covered" ></span>
     }<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-    re<span class="cstat-no" title="statement not covered" >turn (internalUsers ||</span> [])
+    return (internalUsers || [])
       .filter((user) =&gt; (firstProjectLead ? user.userId !== firstProjectLead.userId : true))
-      .map((user) =&gt; {
-        const userRole = us<span class="cstat-no" title="statement not covered" >er.roleName ? user.roleNam<span class="fstat-no" title="function not covered" >e </span>: getProjectInternalUserRoleString(user.role, strings);</span>
-<span class="cstat-no" title="statement not covered" >        return { userRole, firstName: user.firstName || '', lastName: user.lastName || '' };</span>
-<span class="cstat-no" title="statement not covered" >      })</span>
-      .sort((a, b) =&gt; {
-<span class="cstat-no" title="statement not covered" >        // first sort by user role alpha<span class="fstat-no" title="function not covered" >be</span>tically<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-        if (a.userRole <span class="cstat-no" title="statement not covered" >!== b.userRole) {</span>
-<span class="cstat-no" title="statement not covered" >          return a.userRole.localeCompare(b.userRole, activeLocale || undefined);</span>
-        }<span class="fstat-no" title="function not covered" ></span>
-<span class="cstat-no" title="statement not covered" >        // then sort by first name alphabetically</span>
-<span class="cstat-no" title="statement not covered" >        if (a.firstName !== b.firstName) {</span>
-          return a.firstName.localeCompare(b.firstName, activeLocale || undefined);
+      .map((user) =&gt; {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >        const userRole = user.roleName ? user.roleName : getProjectInternalUserRoleString(user.role, strings);</span>
+<span class="cstat-no" title="statement not covered" >        return { </span>userRole, firstName: user.firstName || '', lastName: user.lastName || '' };
+      })
+<span class="cstat-no" title="statement not covered" >      .sort((a, b) =&gt; {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span>
+        // first sort b<span class="cstat-no" title="statement not covered" >y user role alphabetically</span>
+<span class="cstat-no" title="statement not covered" >        if (a.userRole !== b.userRole) {</span>
+          re<span class="fstat-no" title="function not covered" >tu</span>rn a.userRole.localeCompare(b.userRole, activeLocale || undefined);
 <span class="cstat-no" title="statement not covered" >        }</span>
-<span class="cstat-no" title="statement not covered" >        // finally sort by last name alphabetically</span>
-        return a.lastName.localeCompare(b.lastName, activeLocale || undefined);
-<span class="cstat-no" title="statement not covered" >      })</span>
-      .map(<span class="fstat-no" title="function not covered" >(u</span>ser) =&gt; <span class="cstat-no" title="statement not covered" >`${user.userRole}: ${user.firstName} ${user.lastName}`)</span>
-      .join('\n');
-  }, [activeLocale, firstPr<span class="cstat-no" title="statement not covered" >ojectLead, internalUsers, <span class="fstat-no" title="function not covered" >is</span>UsersRequestSuccess, strings]);</span>
-&nbsp;
-  co<span class="cstat-no" title="statement not covered" >nst isProjectInPhase = useMemo(() =&gt; acceleratorProject?.phase?.startsWith('Phase'), [acceleratorProject?.phase]);</span>
-&nbsp;
-  const isPhaseZeroOrApplication = <span class="cstat-no" title="statement not covered" >useMemo(</span>
-<span class="fstat-no" title="function not covered" >    ()</span> =&gt; <span class="cstat-no" title="statement not covered" >[undefined, 'Phase 0 - Due Diligence', 'Application', 'Pre-Screen'].includes(acceleratorProject?.phase),</span>
+<span class="cstat-no" title="statement not covered" >        // then sort by first name alphabetically</span>
+        if (a.firstName !== b.firstName) {
+<span class="cstat-no" title="statement not covered" >          return a.firstName.localeCompare(b.firstName, activeLocale || undefined);</span>
+<span class="cstat-no" title="statement not covered" >        }</span>
+        // finally sort by last name alphabetically
+<span class="cstat-no" title="statement not covered" >        return a.lastName.localeCompare(b.lastName, activeLocale || undefin</span>ed);
+      })<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+      .map((user) =&gt; `${user.userRole}: ${user.firstName} ${user.lastName}`)
+      .join('\n');<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  }, [activeLocale, firstProjectLead, internalUsers, isUsersRequestSuccess, strings]);
+<span class="cstat-no" title="statement not covered" ></span>
+  const isProjectInPhase = useMemo(() =&gt; acceleratorProject?.phase?.startsWith('Phase'), [acceleratorProject?.phase]);
+<span class="cstat-no" title="statement not covered" ></span>
+  co<span class="fstat-no" title="function not covered" >ns</span>t is<span class="cstat-no" title="statement not covered" >PhaseZeroOrApplication = useMemo(</span>
+    () =&gt; [undefined, 'Phase 0 - Due Diligence', 'Application', 'Pre-Screen'].includes(acceleratorProject?.phase),
     [acceleratorProject?.phase]
-  );
+  );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  const projectSize <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >= </span>useMemo(() =&gt; {</span>
-    const getCard = (label: string, value: number | undefined) =&gt; (
-<span class="cstat-no" title="statement not covered" >      &lt;InvertedCard</span>
+  const projectSize = useMemo(() =&gt; {
+    co<span class="cstat-no" title="statement not covered" >nst getCard = (label: string, value: number | undefined) =&gt; (</span>
+      &lt;InvertedCard
         md={isTablet ? 6 : 12}
         backgroundColor={theme.palette.TwClrBaseGray100}
         label={label}
@@ -1513,18 +1516,18 @@ const ProjectProfileVie<span class="cstat-no" title="statement not covered" >w =
     );
     switch (acceleratorProject?.phase) {
       case 'Phase 1 - Feasibility Study':
-        return getCard(strings.MIN_PROJECT_AREA, projectDetails?.minProjectArea);
-<span class="cstat-no" title="statement not covered" >      case 'Phase 2 - Plan and Scale':</span>
-      case 'Phase 3 - Implement and Monitor':
-<span class="cstat-no" title="statement not covered" >        return getCard(strings.PROJECT_AREA, projectDetails?.projectArea);</span>
+<span class="cstat-no" title="statement not covered" >        return getCard(strings.MIN_PROJECT_AREA, projectDetails?.minProjectArea);</span>
+      case 'Phase 2 - Plan and Scale':
+      ca<span class="cstat-no" title="statement not covered" >se 'Phase 3 - Implement and Monitor':</span>
+        return getCard(strings.PROJECT_AREA, projectDetails?.projectArea);
       case 'Application':
-      case 'Pre-Screen':
-      ca<span class="cstat-no" title="statement not covered" >se 'Phase 0 - Due Diligence':</span>
+      ca<span class="cstat-no" title="statement not covered" >se 'Pre-Screen':</span>
+      case 'Phase 0 - Due Diligence':
       default:
         return getCard(strings.ELIGIBLE_AREA, projectDetails?.confirmedReforestableLand);
     }
-  }, [
-    acce<span class="cstat-no" title="statement not covered" >leratorProject?.phase,</span>
+  }, [<span class="cstat-no" title="statement not covered" ></span>
+    acceleratorProject?.phase,
     projectDetails?.projectArea,
     projectDetails?.minProjectArea,
     projectDetails?.confirmedReforestableLand,
@@ -1535,24 +1538,24 @@ const ProjectProfileVie<span class="cstat-no" title="statement not covered" >w =
   ]);
 &nbsp;
   const lastPublishedReport = useMemo(() =&gt; {
-    if (publishedReports?.length &gt; 0) {
-      const sortedReports = pu<span class="cstat-no" title="statement not covered" >blishedReports.toSorted((a<span class="fstat-no" title="function not covered" >, </span>b) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >        const timeA = a.endDate ? new Date(a.endDate).getTime() : 0;</span>
-        const timeB = b.endD<span class="cstat-no" title="statement not covered" >ate ? new Date(b.endDate).<span class="fstat-no" title="function not covered" >ge</span>tTime() : 0;</span>
+    if (publishedReports?.leng<span class="cstat-no" title="statement not covered" >th &gt; 0) {<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >      const sortedReports = publishedReports.toSorted((a, b) =&gt; {</span>
+        const timeA = a.endD<span class="cstat-no" title="statement not covered" >ate ? new Date(a.endDate).<span class="fstat-no" title="function not covered" >ge</span>tTime() : 0;</span>
+        const timeB = <span class="cstat-no" title="statement not covered" >b.endDate ? new Date(b.endDate).getTime() : 0;</span>
         return timeB -<span class="cstat-no" title="statement not covered" > timeA;</span>
-      });<span class="cstat-no" title="statement not covered" ></span>
-      if<span class="cstat-no" title="statement not covered" > (sortedReports.length</span> &gt; 0) {
-        return sortedReports[0];
-<span class="cstat-no" title="statement not covered" >      }</span>
-    }<span class="cstat-no" title="statement not covered" ></span>
+      })<span class="cstat-no" title="statement not covered" >;</span>
+      if (sortedReports.length &gt; 0) {
+<span class="cstat-no" title="statement not covered" >        return sortedReports[0];</span>
+      }<span class="cstat-no" title="statement not covered" ></span>
+    }
   }, [publishedReports]);
 &nbsp;
-  const reportMetricCardFormatter = useCallback(
-    (value: number | undefined) =&gt; (<span class="cstat-no" title="statement not covered" >value ? formatNumberScale(value, value &lt; 999 ? 0 : 1) : '0'),</span>
-<span class="fstat-no" title="function not covered" >    []<span class="cstat-no" title="statement not covered" ></span></span>
+  const reportMetricCardFormatter = <span class="cstat-no" title="statement not covered" >useCallback(</span>
+<span class="fstat-no" title="function not covered" >    (v</span>alue: num<span class="cstat-no" title="statement not covered" >ber | undefined) =&gt; (value ? formatNumberScale(value, value &lt; 999 ? 0 : 1) : '0'</span>),
+    []
   );
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  return (
     &lt;Card
       flushMobile
       style={{
@@ -1846,8 +1849,8 @@ const ProjectProfileVie<span class="cstat-no" title="statement not covered" >w =
         )}
         {(funderView || !isPhaseZeroOrApplication) &amp;&amp; (
           &lt;&gt;
-            {!funderView &amp;&amp; (
-              &lt;ProjectDataDisplay<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+            {!funderView &amp;&amp; (<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+              &lt;ProjectDataDisplay
                 label={strings.MIN_MAX_CARBON_ACCUMULATION}
                 md={4}
                 value={
@@ -1860,8 +1863,8 @@ const ProjectProfileVie<span class="cstat-no" title="statement not covered" >w =
             )}
             &lt;ProjectDataDisplay label={strings.STANDARD} md={4} value={projectDetails?.standard} /&gt;
             &lt;ProjectDataDisplay label={strings.METHODOLOGY_NUMBER} md={4} value={projectDetails?.methodologyNumber} /&gt;
-          &lt;/&gt;
-        )}<span class="cstat-no" title="statement not covered" ></span>
+          &lt;/&gt;<span class="cstat-no" title="statement not covered" ></span>
+        )}
         &lt;ProjectCertificationDisplay certifications={projectDetails?.carbonCertifications} /&gt;
       &lt;/Grid&gt;
 &nbsp;
@@ -2011,7 +2014,7 @@ export default ProjectProfileView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-17T14:40:38.200Z
+                at 2026-02-17T18:38:19.916Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

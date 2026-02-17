@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/113</span>
+                <span class='fraction'>0/117</span>
             </div>
         
             
@@ -520,6 +520,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -555,32 +556,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -611,6 +600,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -756,8 +758,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -905,62 +905,62 @@ const MetricBox = ({<span class="cstat-no" title="statement not covered" ></span
   const theme = useTheme();
   const [record, setRecord, onChange, onChangeCallback] = useForm&lt;
     ReportProjectMetricPayload | ReportSystemMetricPayload | ReportStandardMetricPayload
-  &gt;(metric);<span class="cstat-no" title="statement not covered" ></span>
+  &gt;(metric);
 <span class="cstat-no" title="statement not covered" ></span>
-  const { isAcceleratorRoute } = <span class="cstat-no" title="statement not covered" >useAcceleratorConsole();</span>
-  const { isFunderRoute } = <span class="cstat-no" title="statement not covered" >useFunderPortal();</span>
-  const [progressModalOpened, , openProgressModal, closeProgresModal] = <span class="cstat-no" title="statement not covered" >useBoolean(false);</span>
-  const [resetMetricModalOpened, , openResetMetricModal, closeResetMetricModal] = <span class="cstat-no" title="statement not covered" >useBoolean(false);</span>
-  const [internalEditing, setInternalEditing, setInternalEditingTrue, setInternalEditingFalse] = <span class="cstat-no" title="statement not covered" >useBoolean(false);</span>
+  const { isAcceleratorRoute } = useAcceleratorConsole();<span class="cstat-no" title="statement not covered" ></span>
+  const { isFunderRoute } = useFu<span class="cstat-no" title="statement not covered" >nderPortal();</span>
+  const [progressModalOpened<span class="cstat-no" title="statement not covered" >, , openProgressModal, closeProgresMod</span>al] = useBoolean(false);
+  const [resetMetricModalOpened, , openResetMetricModal, closeResetMetri<span class="cstat-no" title="statement not covered" >cModal] = useBoolean(false);</span>
+  const [internalEditing, setInternalEditing, setInternalEditingTrue, setInternalE<span class="cstat-no" title="statement not covered" >ditingFalse] = useBoolean(false);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const [reviewReportMetrics, reviewReportMetricResponse] = us<span class="cstat-no" title="statement not covered" >eReviewAcceleratorReportMetricsMutation();</span>
-  const [refreshRep<span class="cstat-no" title="statement not covered" >ortMetrics, refreshReportMetricRes</span>ponse] = useRefreshAcceleratorReportSystemMetricsMutation();
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  co<span class="cstat-no" title="statement not covered" >nst snackbar = useSnackbar();</span>
+  const [reviewReportMetrics, reviewReportMetricResponse] = <span class="cstat-no" title="statement not covered" >useReviewAcceleratorReportMetricsMutation();</span>
+  const [refreshReportMetrics, refreshReportMetricResponse] = <span class="cstat-no" title="statement not covered" >useRefreshAcceleratorReportSystemMetricsMutation();</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  useEffect(() =&gt; {
-    if (JSON.stringify(record) !== JSON.stringify(metric)) {
-<span class="cstat-no" title="statement not covered" >      onChangeMetric?.(record,<span class="fstat-no" title="function not covered" > t</span>ype)<span class="cstat-no" title="statement not covered" >;</span></span>
-<span class="cstat-no" title="statement not covered" >    }<span class="fstat-no" title="function not covered" ></span></span>
-  },<span class="cstat-no" title="statement not covered" > [metric, onChangeMetric, record, type]);</span>
-<span class="cstat-no" title="statement not covered" ></span>
-  useEffect<span class="cstat-no" title="statement not covered" >(() =&gt; onEditChange?.(internalEditing), [internalEditing, onEditChange]);</span>
+<span class="cstat-no" title="statement not covered" >  const snackbar = useSnackbar<span class="fstat-no" title="function not covered" >()</span>;</span>
 <span class="cstat-no" title="statement not covered" ></span>
   useE<span class="cstat-no" title="statement not covered" >ffect(() =&gt; {</span>
-    if (reviewReportMetricResponse.isError) {
-      snackbar.toastError();
-    } else if (reviewReport<span class="cstat-no" title="statement not covered" >MetricResponse.isSuccess) {</span>
-<span class="fstat-no" title="function not covered" ></span>      setInternalEditing(false);
-<span class="cstat-no" title="statement not covered" >      snackbar.toastSuccess(strings.CHANGES_SAVED);</span>
-    }<span class="cstat-no" title="statement not covered" ></span>
-  }, [snackbar, setInternalEditing, reviewReportMetricResponse.isError, reviewReportMetricResponse.isSuccess]);
+    if (JSON.stringify(record) !== JSON.stringify(metric)) {
+      onChangeMetric?.(record, type);
+<span class="cstat-no" title="statement not covered" >    }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+<span class="cstat-no" title="statement not covered" >  }, [metric, onChangeMetric, <span class="fstat-no" title="function not covered" >re</span>cord, type]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const onChangeProgress = useCallback(
-    (newValue: string) =&gt; {
+  useE<span class="cstat-no" title="statement not covered" >ffect(() =&gt; onEditChang</span>e?.(internalEditing), [internalEditing, onEditChange]);
+<span class="cstat-no" title="statement not covered" ></span>
+  useE<span class="cstat-no" title="statement not covered" >ffect(() =&gt; {</span>
+    if<span class="cstat-no" title="statement not covered" > (reviewReportMetricResponse.isError) {</span>
+      snackbar.toastError();
+    } else if (reviewReportMetricResponse.isSuccess) {
+      setInternalEditing(fa<span class="cstat-no" title="statement not covered" >lse);</span>
+<span class="fstat-no" title="function not covered" ></span>      snackbar.toastSuccess(strings.CHANGES_SAVED);
+    }<span class="cstat-no" title="statement not covered" ></span>
+  }, [sn<span class="cstat-no" title="statement not covered" >ackbar, setInternalEditing, r</span>eviewReportMetricResponse.isError, reviewReportMetricResponse.isSuccess]);
+&nbsp;
+  const <span class="cstat-no" title="statement not covered" >onChangeProgress = useCallback(</span>
+    (newValue: string | undefined) =&gt; {
       if (isStandardOrProjectMetric(record)) {
         onChange('value', newValue);
-<span class="cstat-no" title="statement not covered" >      } else {<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >        onChange('overrideValue', newValue);</span>
-<span class="cstat-no" title="statement not covered" >      }</span>
-    },<span class="cstat-no" title="statement not covered" ></span>
+      } else {
+<span class="cstat-no" title="statement not covered" >        onChange('overrideValu<span class="fstat-no" title="function not covered" >e'</span>, newValue);</span>
+      }
+<span class="cstat-no" title="statement not covered" >    },</span>
     [o<span class="cstat-no" title="statement not covered" >nChange, record]</span>
   );<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  useEff<span class="cstat-no" title="statement not covered" >ect(() =&gt; {</span>
-    if (refreshReportMetricResponse.isError) {
-<span class="cstat-no" title="statement not covered" >      snackbar.toastError();</span>
+  useE<span class="cstat-no" title="statement not covered" >ffect(() =&gt; {</span>
+    if<span class="cstat-no" title="statement not covered" > (refreshReportMetricResponse.isError) {</span>
+      sn<span class="cstat-no" title="statement not covered" >ackbar.toastError();</span>
     } else if (refreshReportMetricResponse.isSuccess) {
-      closeResetMetricModal();
-      setInternalEditing<span class="cstat-no" title="statement not covered" >(false);<span class="fstat-no" title="function not covered" ></span></span>
-      if (isReportSyste<span class="cstat-no" title="statement not covered" >mMetric(metric)) {</span>
-        onChangeProgress(metric.systemValue.toString());
-      }
+<span class="cstat-no" title="statement not covered" >      closeResetMetricModal();</span>
+      setInternalEditing(false);
+      if (isReportSystemMetric(metric)) {
+        onChangeProgress<span class="cstat-no" title="statement not covered" >(metric.systemValue?.toString(<span class="fstat-no" title="function not covered" >))</span>;</span>
+      }<span class="cstat-no" title="statement not covered" ></span>
       snackbar.toastSuccess(strings.CHANGES_SAVED);
     }
-  },<span class="cstat-no" title="statement not covered" > [closeResetMetricModal, metric, onChangeProgress, refreshReportMetricResponse, setInternalEditing, snackbar]);</span>
-<span class="cstat-no" title="statement not covered" ></span>
-  const getUpdateBody = useCallback(() =&gt; {
-    const baseMetric = {
+  }, [closeResetMetricModal, metric, onChangeProgress, refreshReportMetricResponse, setInternalEditing, snackbar]);
+&nbsp;
+  co<span class="cstat-no" title="statement not covered" >nst getUpdateBody = useCallback(() =&gt; {</span>
+    co<span class="cstat-no" title="statement not covered" >nst baseMetric = {</span>
       projectsComments: record.projectsComments,
       progressNotes: record.progressNotes,
       status: record.status,
@@ -970,10 +970,10 @@ const MetricBox = ({<span class="cstat-no" title="statement not covered" ></span
         systemMetrics: [
           {
             ...record,
-<span class="cstat-no" title="statement not covered" >            metric: record.metric,</span>
-<span class="cstat-no" title="statement not covered" >            overrideValue: record.overrideValue,</span>
-            ...baseMetric,
-          },
+            metric: record.metric,
+            overrideValue: record.overrideValue,
+<span class="cstat-no" title="statement not covered" >            ...baseMetric,</span>
+<span class="cstat-no" title="statement not covered" >          },</span>
         ],
         projectMetrics: [],
         standardMetrics: [],
@@ -983,10 +983,10 @@ const MetricBox = ({<span class="cstat-no" title="statement not covered" ></span
         standardMetrics: [
           {
             ...record,
-<span class="cstat-no" title="statement not covered" >            id: record.id,</span>
-<span class="cstat-no" title="statement not covered" >            value: record.value,</span>
-            ...baseMetric,
-          },
+            id: record.id,
+            value: record.value,
+<span class="cstat-no" title="statement not covered" >            ...baseMetric,</span>
+<span class="cstat-no" title="statement not covered" >          },</span>
         ],
         systemMetrics: [],
         projectMetrics: [],
@@ -997,50 +997,50 @@ const MetricBox = ({<span class="cstat-no" title="statement not covered" ></span
           {
             ...record,
             id: record.id,
-<span class="cstat-no" title="statement not covered" >            value: record.value,</span>
+            value: record.value,
             ...baseMetric,
-          },
+<span class="cstat-no" title="statement not covered" >          },</span>
         ],
         standardMetrics: [],
         systemMetrics: [],
-      };<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >    }</span>
-    return {
-      systemMetrics: [],
+      };
+    }
+    return {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >      systemMetrics: [],</span>
       projectMetrics: [],
       standardMetrics: [],
     };
-  }, [record, type]);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" ></span>
-  cons<span class="cstat-no" title="statement not covered" >t onSave = useCallbac</span>k(() =&gt; {
-    void reviewReportMetrics({
+  }, [record, type]);
+&nbsp;
+  const onSave = useCallbac<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >k(</span>() =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    void reviewReportMetrics({</span>
 <span class="cstat-no" title="statement not covered" >      projectId,</span>
       reportId,
-      reviewAcceleratorReportMetricsRequestPayload: getUpdateBody(),
-    });<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  },<span class="cstat-no" title="statement not covered" > [getUpdateBody, projectId, reportId, reviewReportMetrics]);</span>
-<span class="cstat-no" title="statement not covered" ></span>
-  const getProgressValue = () =&gt; {
-    if<span class="cstat-no" title="statement not covered" > (isStandardOrProjectM</span>etric(record)) {
+<span class="cstat-no" title="statement not covered" >      reviewAcceleratorReportMetricsRequestPayload: getUp</span>dateBody(),
+    });
+  }, [getUpdateBody, projectId, reportId, reviewReportMetrics]);
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  co<span class="cstat-no" title="statement not covered" >nst getProgressValue = () =&gt; {</span>
+    if<span class="cstat-no" title="statement not covered" > (isStandardOrProjec</span>tMetric(record)) {
       return record.value;
-    } else {
-      return record.overrideVal<span class="cstat-no" title="statement not covered" >ue || record.systemValue;<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >    }</span>
-  };<span class="cstat-no" title="statement not covered" ></span>
-&nbsp;
-  const getMetricName = () =&gt; {
+    } <span class="cstat-no" title="statement not covered" >else {</span>
+      return record.overrideValue || record.systemValue;
+    }
+  };<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ></span>
+  cons<span class="cstat-no" title="statement not covered" >t getMetricName = () =&gt; {</span>
     if (isStandardOrProjectMetric(metric)) {
       return metric.name;
     } else {
       return metric.metric;
-    }<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  };<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" ></span>
-  co<span class="cstat-no" title="statement not covered" >nst onResetMetricHandler = </span>useCallback(() =&gt; {
-    if (isReportSystemMetric(metric)) {
-<span class="cstat-no" title="statement not covered" >      void refreshReportMetrics({</span>
+    }
+  };
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  const onResetMetricHa<span class="cstat-no" title="statement not covered" >ndler = useCallback(() =&gt; {<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    if (isReportSystemM</span>etric(metric)) {
+<span class="cstat-no" title="statement not covered" >      void refreshReportMetrics</span>({
         projectId,
-        reportId,
+<span class="cstat-no" title="statement not covered" >        reportId,</span>
         metrics: [metric.metric],
       });
     }
@@ -1123,7 +1123,7 @@ const MetricBox = ({<span class="cstat-no" title="statement not covered" ></span
 &nbsp;
               {metric.overrideValue &amp;&amp; (
                 &lt;Typography fontSize={'14px'} color={theme.palette.TwClrTxtSecondary} paddingTop={1.5}&gt;
-                  {strings.formatString(strings.OVERWRITTEN_ORIGINAL_VALUE, metric.systemValue)}
+                  {strings.formatString(strings.OVERWRITTEN_ORIGINAL_VALUE, metric.systemValue ?? '')}
                 &lt;/Typography&gt;
               )}
             &lt;/&gt;
@@ -1140,9 +1140,9 @@ const MetricBox = ({<span class="cstat-no" title="statement not covered" ></span
                   required={true}
                   min={0}
                 /&gt;
-                &lt;Typ<span class="cstat-no" title="statement not covered" >ography pa</span>ddingTop={3} paddingLeft={0.5}&gt;
+                &lt;Typography paddingTop={3} paddingLeft={0.5}&gt;
                   / {metric.target || 0} ({year} {strings.TARGET})
-                &lt;/Typography&gt;
+                &lt;/Ty<span class="cstat-no" title="statement not covered" >pography&gt;</span>
                 {'unit' in record &amp;&amp; record.unit &amp;&amp; (
                   &lt;Box paddingLeft={theme.spacing(3)}&gt;
                     &lt;Textfield type='text' label={strings.UNIT} value={record.unit} id={'unit'} display={true} /&gt;
@@ -1225,7 +1225,7 @@ export default MetricBox;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-17T14:40:38.200Z
+                at 2026-02-17T18:38:19.916Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

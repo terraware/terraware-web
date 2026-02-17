@@ -353,8 +353,7 @@
 <a name='L288'></a><a href='#L288'>288</a>
 <a name='L289'></a><a href='#L289'>289</a>
 <a name='L290'></a><a href='#L290'>290</a>
-<a name='L291'></a><a href='#L291'>291</a>
-<a name='L292'></a><a href='#L292'>292</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L291'></a><a href='#L291'>291</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -598,7 +597,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -652,57 +650,56 @@ import { Textfield } fro<span class="cstat-no" title="statement not covered" >m 
 import { useDeviceI<span class="cstat-no" title="statement not covered" >nfo } from '@terraware</span>/web-components/utils';
 <span class="cstat-no" title="statement not covered" ></span>
 import useBoole<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >an</span> from 'src/hooks/useBoolean';</span>
-im<span class="cstat-no" title="statement not covered" >port { PublishedReportPayload } from 'src/queries/generated/publishedReports';</span>
-impo<span class="cstat-no" title="statement not covered" >rt { useBatchReportPhotosMutation } from 'src/queries/reports/p</span>hotos';
-import strings from 'src/strings';
-import { Accelerat<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >or</span>ReportPhoto, NewAcceleratorReportPhoto, isAcceleratorReport } from 'src/types/AcceleratorReport';</span>
-im<span class="cstat-no" title="statement not covered" >port useSnackbar from 'src/utils/useSnackbar';</span>
+im<span class="cstat-no" title="statement not covered" >port { useBatchReportPhotosMutation } from 'src/queries/reports/photos';</span>
+impo<span class="cstat-no" title="statement not covered" >rt strings from 'src/strings';</span>
+import { AcceleratorReportPhoto, NewAcceleratorReportPhoto, isAcceleratorReport } from 'src/types/AcceleratorReport';
+import useSnackbar<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > f</span>rom 'src/utils/useSnackbar';</span>
 <span class="cstat-no" title="statement not covered" ></span>
-import<span class="cstat-no" title="statement not covered" > PhotoDragDrop from '../Photo/PhotoDragDrop';</span>
-import P<span class="cstat-no" title="statement not covered" >hotoPreview from '../Photo<span class="fstat-no" title="function not covered" >/P</span>hoto<span class="cstat-no" title="statement not covered" >Preview';</span></span>
-import EditableReportBox from './EditableReportBox';
-im<span class="cstat-no" title="statement not covered" >port { Repo</span>rtBoxProps } from './ReportBox';
-&nbsp;
-type ExistingP<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ho</span>toProp = {<span class="cstat-no" title="statement not covered" ></span></span>
-  imageUrl: string;
+impo<span class="cstat-no" title="statement not covered" >rt PhotoDragDrop from '../Photo/PhotoDragDrop';</span>
+import<span class="cstat-no" title="statement not covered" > PhotoPreview from '../Photo/PhotoPreview';</span>
+import E<span class="cstat-no" title="statement not covered" >ditableReportBox from './E<span class="fstat-no" title="function not covered" >di</span>tabl<span class="cstat-no" title="statement not covered" >eReportBox</span>';</span>
+import { ReportBoxProps } from './ReportBox';
+<span class="cstat-no" title="statement not covered" ></span>
+type ExistingPhotoProp = {
+  imageUrl: st<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ri</span>ng;<span class="cstat-no" title="statement not covered" ></span></span>
   includeBorder: boolean;
   caption: string | undefined;
   editing: boolean;
   setCaption: (caption: string | undefined) =&gt; void;
   onDelete: () =&gt; void;
 };
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-const ExistingPhoto <span class="cstat-no" title="statement not covered" >= (</span>{ imageUrl, includeBorder, caption, editing, setCaption, onDelete }: ExistingPhotoProp) =&gt; {
-<span class="cstat-no" title="statement not covered" >  const theme = useTheme();</span>
-  const { i<span class="fstat-no" title="function not covered" >sM</span>obil<span class="cstat-no" title="statement not covered" >e } = useDevic</span>eInfo();
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  const setCaptionCallback = useCallback(</span>
-    (value: any) =&gt;<span class="cstat-no" title="statement not covered" > {</span>
-      setCaption(value<span class="cstat-no" title="statement not covered" > as string);</span>
+const ExistingPhoto<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > =</span> ({ ima<span class="cstat-no" title="statement not covered" >geUrl, includeBorder, caption, editing, setCaption, onDelete }:</span></span> ExistingPhotoProp) =&gt; {
+  const theme = useT<span class="cstat-no" title="statement not covered" >hem</span>e();
+<span class="cstat-no" title="statement not covered" >  const { isMobile } = useDeviceInfo();</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  const setCaptionCallback = useCallback(
+<span class="cstat-no" title="statement not covered" >    (value: any) =&gt; {</span>
+      setCaption(va<span class="cstat-no" title="statement not covered" >lue as string);</span>
     },<span class="cstat-no" title="statement not covered" ></span>
     [setCaption]<span class="cstat-no" title="statement not covered" ></span>
   );<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
   if (editing) {<span class="cstat-no" title="statement not covered" ></span>
     return (<span class="cstat-no" title="statement not covered" ></span>
-      &lt;Box display='flex'<span class="cstat-no" title="statement not covered" > width='100%' padding={theme.spacing(1)}&gt;</span>
-        &lt;Box marginRight={i<span class="cstat-no" title="statement not covered" >sMobile ? theme.spacing(2) : theme.spacing(</span>3)} marginTop={theme.spacing(1)}&gt;
-          &lt;PhotoPreview im<span class="cstat-no" title="statement not covered" >gUrl={imageUrl} includeTrashIcon onTrashCl</span>ick={onDelete} /&gt;
+      &lt;Box display='flex' width<span class="cstat-no" title="statement not covered" >='100%' padding={theme.spacing(1)}&gt;</span>
+        &lt;Box marginRight=<span class="cstat-no" title="statement not covered" >{isMobile ? theme.spacing(2) : theme.spaci</span>ng(3)} marginTop={theme.spacing(1)}&gt;
+          &lt;PhotoPreview img<span class="cstat-no" title="statement not covered" >Url={imageUrl} includeTrashIcon onTrashClic</span>k={onDelete} /&gt;
         &lt;/Box&gt;<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-        &lt;Box wid<span class="cstat-no" title="statement not covered" >th='100%'&gt;</span>
-          &lt;Textfield ty<span class="cstat-no" title="statement not covered" >pe='text' label={strings.CAPTION} </span>id='citation' value={caption} onChange={setCaptionCallback} /&gt;
+<span class="cstat-no" title="statement not covered" ></span>
+        &lt;Box width='10<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >0%</span>'&gt;</span>
+          &lt;Textf<span class="cstat-no" title="statement not covered" >ield type='text' label={strings.</span>CAPTION} id='citation' value={caption} onChange={setCaptionCallback} /&gt;
         &lt;/Box&gt;<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" ></span>      &lt;/Box&gt;
-    );<span class="cstat-no" title="statement not covered" ></span>
-  } else {
+      &lt;/Box&gt;<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" >    );</span>
+  } el<span class="cstat-no" title="statement not covered" >se {</span>
     return (
       &lt;Box
-<span class="cstat-no" title="statement not covered" >        sx={{</span>
+        sx={{
 <span class="cstat-no" title="statement not covered" >          display: 'flex',</span>
-          flexDirection: 'column',
-<span class="cstat-no" title="statement not covered" >          alignItems: 'center',</span>
-          width: '100%',
+<span class="cstat-no" title="statement not covered" >          flexDirection: 'column',</span>
+          alignItems: 'center',
+<span class="cstat-no" title="statement not covered" >          width: '100%',</span>
           padding: theme.spacing(1),
         }}
         borderBottom={includeBorder ? `1px solid ${theme.palette.TwClrBgTertiary}` : ''}
@@ -718,18 +715,18 @@ type NewPhotoProp = {
   photo: NewAcceleratorReportPhoto;
   setCaption: (caption: string) =&gt; void;
   onDelete: () =&gt; void;
-};<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+};
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+const NewPhoto =<span class="cstat-no" title="statement not covered" > ({ photo, setCaption, onDelete </span>}: NewPhotoProp) =&gt; {
+  const theme = useThem<span class="cstat-no" title="statement not covered" >e();</span>
+  const { isMo<span class="cstat-no" title="statement not covered" >bile } = useDeviceInfo();<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 <span class="cstat-no" title="statement not covered" ></span>
-const NewPhoto = ({ pho<span class="cstat-no" title="statement not covered" >to, setCaption, onDelete }: NewPho</span>toProp) =&gt; {
-  const theme <span class="cstat-no" title="statement not covered" >= useTheme();<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  const { isMobile } = useDev<span class="cstat-no" title="statement not covered" >iceInfo();</span>
-<span class="fstat-no" title="function not covered" ></span>
-  cons<span class="cstat-no" title="statement not covered" >t url = useMemo(() </span>=&gt; URL.createObjectURL(photo.file), [photo]);
-&nbsp;
+  co<span class="fstat-no" title="function not covered" >ns</span>t url = useMemo(() =&gt; URL.createObjectURL(photo.file), [photo]);
+<span class="cstat-no" title="statement not covered" ></span>
   const setCaptionCallback = useCallback(
     (value: any) =&gt; {
-<span class="cstat-no" title="statement not covered" >      setCaption(value as string);</span>
-    },
+      setCaption(value as string);
+<span class="cstat-no" title="statement not covered" >    },</span>
     [setCaption]
   );
 &nbsp;
@@ -739,128 +736,128 @@ const NewPhoto = ({ pho<span class="cstat-no" title="statement not covered" >to,
         &lt;PhotoPreview imgUrl={url} includeTrashIcon onTrashClick={onDelete} /&gt;
       &lt;/Box&gt;
 &nbsp;
-      &lt;Box width='<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >10</span>0%'&gt;</span>
-        &lt;Textfield<span class="cstat-no" title="statement not covered" ></span>
+      &lt;Box width='100%'&gt;
+        &lt;Textfield<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
           type='text'<span class="cstat-no" title="statement not covered" ></span>
-          label={strings.CAPTI<span class="cstat-no" title="statement not covered" >ON}</span>
+          label={strings.CAPTION}<span class="cstat-no" title="statement not covered" ></span>
           id='citation'<span class="cstat-no" title="statement not covered" ></span>
           value={photo.caption}<span class="cstat-no" title="statement not covered" ></span>
-          onChange=<span class="cstat-no" title="statement not covered" >{setCaptionCallback}</span>
-        /&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >      &lt;/Box&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-    &lt;/Box&gt;
-  );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+          onChange={setCaptionCallback}<span class="cstat-no" title="statement not covered" ></span>
+        /&gt;<span class="cstat-no" title="statement not covered" ></span>
+      &lt;/Box&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    &lt;/Box&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  );
 };<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-const PhotosBox = (props: ReportBoxProps) =&gt; {
-  const <span class="cstat-no" title="statement not covered" >{ report, projectId, isConsoleView, editing, onChange, onEditChange, canEdit, funderReportView } = props;</span>
-&nbsp;
-  const [internalEditing, setInternalE<span class="fstat-no" title="function not covered" >di</span>ting, setInt<span class="cstat-no" title="statement not covered" >ernalEditingTrue]</span> = useBoolean(false);
-  const [photos, setPhotos] = useState&lt;AcceleratorReportPhoto[]&gt;(report?.photos || []);
+const <span class="cstat-no" title="statement not covered" >PhotosBox = (props: <span class="fstat-no" title="function not covered" >Re</span>portBoxProps) =&gt; {</span>
+  const { report, projectId, isConsoleView, editing, onChange, onEditChange, canEdit, funderReportView } = props;
+<span class="cstat-no" title="statement not covered" ></span>
+  const [internalEditing, setInternalEditing, setInternalEditingTrue] = useBoolean(false);
+  const [photos, setPhotos] = useState<span class="fstat-no" title="function not covered" >&lt;A</span>cceleratorRe<span class="cstat-no" title="statement not covered" >portPhoto[]&gt;(repo</span>rt?.photos || []);
   const [newPhotos, setNewPhotos] = useState&lt;NewAcceleratorReportPhoto[]&gt;([]);
 &nbsp;
   const [batchReportPhotos, { isLoading }] = useBatchReportPhotosMutation();
-<span class="cstat-no" title="statement not covered" >  const snackbar = useSnackbar<span class="fstat-no" title="function not covered" >()</span>;</span>
-<span class="cstat-no" title="statement not covered" ></span>
-  cons<span class="cstat-no" title="statement not covered" >t files = useMemo(() =&gt; {</span>
-    return newPhotos.map((photo) =&gt; photo.file);
+  const snackbar = useSnackbar();
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  co<span class="cstat-no" title="statement not covered" >nst files = useMemo(() =&gt; {</span>
+    re<span class="cstat-no" title="statement not covered" >turn newPhotos.map((photo) =&gt; photo.file);</span>
   }, [newPhotos]);
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  const setFiles = <span class="cstat-no" title="statement not covered" >useCallback((newFiles: Fil<span class="fstat-no" title="function not covered" >e[</span>]) =&gt; {</span>
-    setNewPhotos((_photos) =&gt; {
-<span class="cstat-no" title="statement not covered" >      return newFiles.map((newFile) =&gt; {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
-        return {
-          file: new<span class="cstat-no" title="statement not covered" >File,<span class="fstat-no" title="function not covered" ></span></span>
-          caption: _photos.find(({ file }) =&gt; file === newFile)?.caption,
-<span class="cstat-no" title="statement not covered" >        };</span>
-<span class="fstat-no" title="function not covered" >      })</span>;<span class="cstat-no" title="statement not covered" ></span>
-    });<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  }, []);
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  const setFiles = useCallback<span class="fstat-no" title="function not covered" >((</span>newF<span class="cstat-no" title="statement not covered" >iles: File[]) =&gt; {</span></span>
+    setNewPhotos((_<span class="cstat-no" title="statement not covered" >photos) =&gt; {<span class="fstat-no" title="function not covered" ></span></span>
+      return newFiles.map((newFile) =&gt; {
+<span class="cstat-no" title="statement not covered" >        return {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
+          file: newFile,
+          caption: <span class="cstat-no" title="statement not covered" >_photos.find(({ file }) =&gt;<span class="fstat-no" title="function not covered" > f</span>ile === newFile)?.caption,</span>
+        };
+<span class="cstat-no" title="statement not covered" >      });</span>
+    })<span class="fstat-no" title="function not covered" >;<span class="cstat-no" title="statement not covered" ></span></span>
+  }, [])<span class="fstat-no" title="function not covered" >;<span class="cstat-no" title="statement not covered" ></span></span>
 &nbsp;
   useEffect(() =&gt; {
-<span class="cstat-no" title="statement not covered" >    if (!editing) {<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >      setPhotos(report?.photos || []);</span>
-    }<span class="cstat-no" title="statement not covered" ></span>
-  }, [editing, report?.photos]);
+    if (!editing) {
+<span class="cstat-no" title="statement not covered" >      setPhotos(report?.photos<span class="fstat-no" title="function not covered" > |</span>| []);</span>
+<span class="cstat-no" title="statement not covered" >    }</span>
+  }, [<span class="cstat-no" title="statement not covered" >editing, report?.photos]);</span>
 &nbsp;
   useEffect(() =&gt; onEditChange?.(internalEditing), [internalEditing, onEditChange]);
 &nbsp;
   const toDelete = useMemo(() =&gt; {
     return (
-      report?.pho<span class="cstat-no" title="statement not covered" >tos.filter((existingPhoto) =&gt; <span class="fstat-no" title="function not covered" >!p</span>hotos.some((newPhoto) =&gt; newPhoto.fileId === existingPhoto.fileId)) ??</span>
-<span class="cstat-no" title="statement not covered" >      []</span>
-    );<span class="cstat-no" title="statement not covered" ></span>
-  }, [ph<span class="cstat-no" title="statement not covered" >otos, report?.photos]);</span>
+      report?.photos.filter((existingPhoto) =&gt; !photos.some((newPhoto) =&gt; newPhoto.fileId === existingPhoto.fileId)) ??
+      []<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    );</span>
+  }, [<span class="cstat-no" title="statement not covered" >photos, report?.photos]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const toUpdate = useMemo(() =&gt; {
-    re<span class="cstat-no" title="statement not covered" >turn (</span>
-      ph<span class="cstat-no" title="statement not covered" >otos.filter((newPhoto) =&gt;</span>
-        report?.photos.some(
+  const <span class="cstat-no" title="statement not covered" >toUpdate</span> = useMemo(() =&gt; {
+    return (
+<span class="cstat-no" title="statement not covered" >      photos.filter((newPhoto) =&gt;</span>
+<span class="cstat-no" title="statement not covered" >        report?.photos.some(</span>
           (existingPhoto) =&gt; newPhoto.fileId === existingPhoto.fileId &amp;&amp; newPhoto.caption !== existingPhoto.caption
         )
       ) ?? []
-    );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  }, [photos, report?.photos]);
-<span class="cstat-no" title="statement not covered" ></span>
+    );
+  }, [photos, report?.photos]);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+&nbsp;
   useEff<span class="cstat-no" title="statement not covered" >ect(() =&gt; {</span>
     if (<span class="cstat-no" title="statement not covered" >onChange) {</span>
-      onChange({
-<span class="cstat-no" title="statement not covered" >        toAdd: newPhotos,</span>
-        toDelete,
+      on<span class="cstat-no" title="statement not covered" >Change({</span>
+        toAdd: newPhotos,
+<span class="cstat-no" title="statement not covered" >        toDelete,</span>
         toUpdate,
       });
-    }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  },<span class="cstat-no" title="statement not covered" > [onChange, toDelete, toUpd</span>ate, newPhotos]);
+    }
+  }, [onChange, toD<span class="cstat-no" title="statement not covered" >elete, toUpdate, newPhotos]);<span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  co<span class="cstat-no" title="statement not covered" >nst onSave = useCa</span>llback(async () =&gt; {
-    if (isAcceleratorReport(report)) {
-      if (toDelete.length<span class="cstat-no" title="statement not covered" > === 0 &amp;&amp; toUpdate.length === 0 &amp;&amp; newPhotos.length === 0) {</span>
-<span class="fstat-no" title="function not covered" ></span>        setInte<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >rn</span>alEditing(false);</span>
-<span class="cstat-no" title="statement not covered" >        return;<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
-      }
+  co<span class="cstat-no" title="statement not covered" >nst onSave = useCallback(async () =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (isAcceleratorR</span>eport(report)) {
+      if (toDelete.length === 0 &amp;&amp; toUpdate.length === 0 &amp;&amp; newPhotos.length === 0) {
+        setInternalEditin<span class="cstat-no" title="statement not covered" >g(false);</span>
+<span class="fstat-no" title="function not covered" ></span>        return;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >      }<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
 &nbsp;
       try {
-        await batchRep<span class="cstat-no" title="statement not covered" >ortPhotos({</span>
-<span class="fstat-no" title="function not covered" ></span>          proje<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ct</span>Id,</span>
-<span class="cstat-no" title="statement not covered" >          report<span class="fstat-no" title="function not covered" >Id</span>: report.id<span class="cstat-no" title="statement not covered" >,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span>
-          photosToUpdate: toUpdate,
+        await batchReportPhotos({
+          projectId,<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" ></span>          repor<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >tI</span>d: report.id,</span>
+<span class="cstat-no" title="statement not covered" >          photos<span class="fstat-no" title="function not covered" >To</span>Update: toU<span class="cstat-no" title="statement not covered" >pdate,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span>
           photosToUpload: newPhotos,
           fileIdsToDelete: toDelete.map((photo) =&gt; photo.fileId),
-        }).unwrap();<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-<span class="cstat-no" title="statement not covered" >        snackbar.to<span class="fstat-no" title="function not covered" >as</span>tSuccess(st<span class="cstat-no" title="statement not covered" >rings.CHANGE<span class="fstat-no" title="function not covered" >S_</span>SAVED);<span class="cstat-no" title="statement not covered" ></span></span></span>
-        setInternalEditing(false);
+        }).unwrap();
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" ></span>        snackba<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >r.</span>toastSuccess(strings.CHANGES_SAVED);</span>
+<span class="cstat-no" title="statement not covered" >        setInternal<span class="fstat-no" title="function not covered" >Ed</span>iting(false<span class="cstat-no" title="statement not covered" >);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span>
         setNewPhotos([]);
       } catch (error) {
-        snackbar.toast<span class="cstat-no" title="statement not covered" >Error();</span>
-<span class="fstat-no" title="function not covered" ></span>      }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-    }<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
-  }, [report, toDelete, toUpdate, newPhotos, batchReportPhotos, projectId, setInternalEditing, snackbar]);
+        snackbar.toastError();
+      }<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" >    }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  }, [<span class="cstat-no" title="statement not covered" >report, to<span class="fstat-no" title="function not covered" >De</span>lete, toUpd<span class="cstat-no" title="statement not covered" >ate, newPhot<span class="fstat-no" title="function not covered" >os</span>, batchRepor<span class="cstat-no" title="statement not covered" >tPhotos, projectId, setInternalEditing, snac</span>k</span>ba</span>r]);
 &nbsp;
   const onCancel = useCallback(() =&gt; {
-    setInternalEditing<span class="cstat-no" title="statement not covered" >(false);</span>
-<span class="fstat-no" title="function not covered" >    se</span>tPhotos(report?.photos || []);
-    se<span class="cstat-no" title="statement not covered" >tNewPhotos([]);</span>
-  }, [report?.photo<span class="cstat-no" title="statement not covered" >s, setInternalEditing]);</span>
+    setInternalEditing(false);
+    setPhotos(report?.<span class="cstat-no" title="statement not covered" >photos || []);</span>
+<span class="fstat-no" title="function not covered" >    se</span>tNewPhotos([]);
+  }, [<span class="cstat-no" title="statement not covered" >report?.photos, setInternalEditing]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const de<span class="cstat-no" title="statement not covered" >leteNewPhoto </span>= useCallback(
-    (index<span class="cstat-no" title="statement not covered" >: number) =&gt; () =&gt; {</span>
-      setNew<span class="cstat-no" title="statement not covered" >Photos((_photos) =&gt; _photos.filter(</span>(_, i) =&gt; index !== i));
-    },
-    []<span class="cstat-no" title="statement not covered" ></span>
-  );<span class="cstat-no" title="statement not covered" ></span>
-&nbsp;
-  const deletePhoto = useCallback(
-    (ind<span class="cstat-no" title="statement not covered" >ex: number) =</span>&gt; () =&gt; {
-      setPhotos((_photos) =&gt; _photos.filter((_, i) =&gt; index !== i));
+  const <span class="cstat-no" title="statement not covered" >deleteNewPhoto = useCallback(</span>
+    (index<span class="cstat-no" title="statement not covered" >: number) =&gt; </span>() =&gt; {
+      setN<span class="cstat-no" title="statement not covered" >ewPhotos((_photos) =&gt; _photos.filter((_, i) =&gt; index !== i));</span>
     },<span class="cstat-no" title="statement not covered" ></span>
     []
+  );<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+  const deletePhoto = useCallback(
+    (index: number) =&gt; () =&gt; {
+      se<span class="cstat-no" title="statement not covered" >tPhotos((_pho</span>tos) =&gt; _photos.filter((_, i) =&gt; index !== i));
+    },
+    []<span class="cstat-no" title="statement not covered" ></span>
   );
 &nbsp;
   const updateNewPhoto = useCallback(
-    (index: number) <span class="cstat-no" title="statement not covered" >=&gt; (caption: string | unde<span class="fstat-no" title="function not covered" >fi</span>ned)<span class="cstat-no" title="statement not covered" > =&gt; {</span></span>
-<span class="cstat-no" title="statement not covered" >      setNewPhotos((_photos) =&gt; _photos.map((photo, i) =&gt; (index === i ? { ...photo, caption } : photo)));</span>
-    },
+    (index: number) =&gt; (caption: string | undefined) =&gt; {
+      setNewPhotos((<span class="cstat-no" title="statement not covered" >_photos) =&gt; _photos.map((p<span class="fstat-no" title="function not covered" >ho</span>to, <span class="cstat-no" title="statement not covered" >i) =&gt; (index === i ? { ...p</span>hoto, caption } : photo)));</span>
+<span class="cstat-no" title="statement not covered" >    },</span>
     []
   );
 &nbsp;
@@ -868,15 +865,15 @@ const PhotosBox = (props: ReportBoxProps) =&gt; {
     (index: number) =&gt; (caption: string | undefined) =&gt; {
       setPhotos((_photos) =&gt; _photos.map((photo, i) =&gt; (index === i ? { ...photo, caption } : photo)));
     },
-    []<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  );
+    []
+  );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 &nbsp;
   const getImageUrl = useCallback(
-    (fileId: nu<span class="fstat-no" title="function not covered" >mb</span>er, maxHeight?: number, maxWid<span class="cstat-no" title="statement not covered" >th?: number) =&gt; {</span>
-      if (report) {
+    (fileId: number, maxHeight?: number, maxWidth?: number) =&gt; {
+      if (repor<span class="fstat-no" title="function not covered" >t)</span> {<span class="cstat-no" title="statement not covered" ></span>
         let path = isAcceleratorReport(report)
           ? `/api/v1/accelerator/projects/${projectId}/reports/${report.id}/photos/${fileId}`
-          : `/api/v1/funder/reports/${(report as PublishedReportPayload).reportId}/photos/${fileId}`;
+          : `/api/v1/funder/reports/${report.reportId}/photos/${fileId}`;
 &nbsp;
         if (maxHeight !== undefined || maxWidth !== undefined) {
           path += '?';
@@ -884,12 +881,12 @@ const PhotosBox = (props: ReportBoxProps) =&gt; {
             path += `maxHeight=${maxHeight}&amp;`;
           }
           if (maxWidth !== undefined) {
-            path +<span class="fstat-no" title="function not covered" >= </span>`maxWidth=${maxWidth}`;<span class="cstat-no" title="statement not covered" ></span>
-          }
+            path += `maxWidth=${maxWidth}`;
+          }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
         }
 &nbsp;
-        return path;<span class="cstat-no" title="statement not covered" ></span>
-      } else {
+        return path;
+      } else {<span class="cstat-no" title="statement not covered" ></span>
         return '';
       }
     },
@@ -943,7 +940,7 @@ export default PhotosBox;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-17T14:40:38.200Z
+                at 2026-02-17T18:38:19.916Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
