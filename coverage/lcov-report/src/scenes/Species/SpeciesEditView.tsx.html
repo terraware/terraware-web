@@ -523,17 +523,17 @@ import { APP_PATHS<span class="cstat-no" title="statement not covered" ><span cl
 im<span class="cstat-no" title="statement not covered" >port { useSyncNavigate } from 'src/hooks/useSyncNavigate';</span>
 impo<span class="cstat-no" title="statement not covered" >rt { useOrganization } from 'src/providers/hooks';</span>
 import<span class="cstat-no" title="statement not covered" > {</span>
-  reques<span class="cstat-no" title="statement not covered" >tAddManyParticipantProject<span class="fstat-no" title="function not covered" >Sp</span>ecie<span class="cstat-no" title="statement not covered" >s,</span></span>
-  requestDeleteManyParticipantProjectSpecies,
-} <span class="cstat-no" title="statement not covered" >from 'src/r</span>edux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
+  reques<span class="cstat-no" title="statement not covered" >tAddManyAcceleratorProject<span class="fstat-no" title="function not covered" >Sp</span>ecie<span class="cstat-no" title="statement not covered" >s,</span></span>
+  requestDeleteManyAcceleratorProjectSpecies,
+} <span class="cstat-no" title="statement not covered" >from 'src/r</span>edux/features/acceleratorProjectSpecies/acceleratorProjectSpeciesAsyncThunks';
 import {
-  selectPartic<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ip</span>antProjectSpeciesAddManyRequ<span class="cstat-no" title="statement not covered" >est,</span></span>
-  selectParticipantProjectSpeciesDeleteManyRequest,
-} from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';
+  selectAccele<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ra</span>torProjectSpeciesAddManyRequ<span class="cstat-no" title="statement not covered" >est,</span></span>
+  selectAcceleratorProjectSpeciesDeleteManyRequest,
+} from 'src/redux/features/acceleratorProjectSpecies/acceleratorProjectSpeciesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import SpeciesDetailsForm from 'src/scenes/Species/SpeciesDetailsForm';
 import { SpeciesService } from 'src/services';
-import { CreateParticipantProjectSpeciesRequestPayload } from 'src/services/ParticipantProjectSpeciesService';
+import { CreateAcceleratorProjectSpeciesRequestPayload } from 'src/services/AcceleratorProjectSpeciesService';
 import strings from 'src/strings';
 import { Species } <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >fr</span>om 'src<span class="cstat-no" title="statement not covered" >/types/Species';</span></span>
 import useDeviceInfo<span class="cstat-no" title="statement not covered" > fr</span>om 'src/utils/useDeviceInfo';
@@ -570,8 +570,8 @@ export default func<span class="cstat-no" title="statement not covered" >tion Sp
 &nbsp;
   const [addRequestId, setAddRequestId] = useState&lt;string&gt;('');
   const [removeRequestId, setRemoveRequestId] = useState&lt;string&gt;('');
-  const a<span class="fstat-no" title="function not covered" >ddedResult = use</span>AppSelector(selectParticipantProjectSpeciesAddManyRequest(addRequestId));
-  const removedR<span class="cstat-no" title="statement not covered" >esult = useAppSelector(selectPar</span>ticipantProjectSpeciesDeleteManyRequest(removeRequestId));
+  const a<span class="fstat-no" title="function not covered" >ddedResult = use</span>AppSelector(selectAcceleratorProjectSpeciesAddManyRequest(addRequestId));
+  const removedR<span class="cstat-no" title="statement not covered" >esult = useAppSelector(selectAcc</span>eleratorProjectSpeciesDeleteManyRequest(removeRequestId));
   const dispatch = useAppDispatc<span class="cstat-no" title="statement not covered" >h();</span>
 <span class="cstat-no" title="statement not covered" ></span>
   const onRemoveExistin<span class="cstat-no" title="statement not covered" >gHandler = (removedIds: number[]) =&gt;</span> {
@@ -663,7 +663,7 @@ export default func<span class="cstat-no" title="statement not covered" >tion Sp
 <span class="cstat-no" title="statement not covered" >      setIsBus</span>y(false);
       if (response.requestSucceeded) {
 <span class="cstat-no" title="statement not covered" >        if (removedProjectsIds) {</span>
-<span class="cstat-no" title="statement not covered" >          const request = dispatch(requestDeleteManyParticipantPr</span>ojectSpecies(removedProjectsIds));
+<span class="cstat-no" title="statement not covered" >          const request = dispatch(requestDeleteManyAcceleratorPr</span>ojectSpecies(removedProjectsIds));
           setRemoveRequestId(request.requestId);
 <span class="cstat-no" title="statement not covered" >        }</span>
         if (addedProjec<span class="cstat-no" title="statement not covered" >tsSpecies &amp;&amp; speciesId) {</span>
@@ -672,9 +672,9 @@ export default func<span class="cstat-no" title="statement not covered" >tion Sp
 <span class="cstat-no" title="statement not covered" >              projectId: aPS.project.id,</span>
               speciesId: N<span class="cstat-no" title="statement not covered" >umber(speciesId),</span>
 <span class="cstat-no" title="statement not covered" >              speciesNativeCategory: aPS.nativeCa</span>tegory,
-            } as CreateParticipantProjectSpeciesRequestPayload;
+            } as CreateAcceleratorProjectSpeciesRequestPayload;
 <span class="cstat-no" title="statement not covered" >          });</span>
-          const request = dispatc<span class="cstat-no" title="statement not covered" >h(requestAddManyParticipa<span class="fstat-no" title="function not covered" >nt</span>ProjectSpecies(createRequests));</span>
+          const request = dispatc<span class="cstat-no" title="statement not covered" >h(requestAddManyAccelerat<span class="fstat-no" title="function not covered" >or</span>ProjectSpecies(createRequests));</span>
           se<span class="cstat-no" title="statement not covered" >tAddRequestId(request.requestId);</span>
         }
         if (
@@ -739,7 +739,7 @@ export default func<span class="cstat-no" title="statement not covered" >tion Sp
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-17T20:04:07.886Z
+                at 2026-02-17T20:28:53.610Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

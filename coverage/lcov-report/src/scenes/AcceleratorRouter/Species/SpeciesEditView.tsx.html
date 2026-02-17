@@ -391,12 +391,12 @@ import PageSnac<span class="cstat-no" title="statement not covered" ><span class
 im<span class="cstat-no" title="statement not covered" >port PageForm from 'src/components/common/PageForm';</span>
 impo<span class="cstat-no" title="statement not covered" >rt TfMain from 'src/components/common/TfMain';</span>
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { useDelive<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ra</span>bleData } from 'src/providers/Deliverable/DeliverableContext';</span>
-im<span class="cstat-no" title="statement not covered" >port { useParticipantProjectSpeciesData } from 'src/providers/ParticipantProject/ParticipantProjectSpeciesContext';</span>
+import { useAccele<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ra</span>torProjectSpeciesData } from 'src/providers/AcceleratorProject/AcceleratorProjectSpeciesContext';</span>
+im<span class="cstat-no" title="statement not covered" >port { useDeliverableData } from 'src/providers/Deliverable/DeliverableContext';</span>
 impo<span class="cstat-no" title="statement not covered" >rt { useLocalization, useOrganization, useProject } from 'src/providers/hooks';</span>
 import<span class="cstat-no" title="statement not covered" > SpeciesDetailsForm from 'src/scenes/Species/SpeciesDetailsForm';</span>
 import s<span class="cstat-no" title="statement not covered" >trings from 'src/strings';<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-import { ParticipantProjectSpecies, getSpeciesNativeCategoryOptions } from 'src/types/ParticipantProjectSpecies';
+import { AcceleratorProjectSpecies, getSpeciesNativeCategoryOptions } from 'src/types/AcceleratorProjectSpecies';
 im<span class="cstat-no" title="statement not covered" >port { Spec</span>ies } from 'src/types/Species';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useForm<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > f</span>rom 'src/utils/useForm';<span class="cstat-no" title="statement not covered" ></span></span>
@@ -408,15 +408,15 @@ export default function SpeciesEditView(): JSX.Element {
   const { goToAcceleratorProjectSpecies } = useNavigateTo();
   const { isMobile } = useDeviceInfo();
   const { selectedO<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >rg</span>anizati<span class="cstat-no" title="statement not covered" >on } = useOrganization();</span></span>
-  const { currentPar<span class="cstat-no" title="statement not covered" >tic</span>ipantProjectSpecies, currentSpecies, isBusy, participantProjectSpeciesId, update } =
-<span class="cstat-no" title="statement not covered" >    useParticipantProjectSpeciesData();</span>
+  const { currentAcc<span class="cstat-no" title="statement not covered" >ele</span>ratorProjectSpecies, currentSpecies, isBusy, acceleratorProjectSpeciesId, update } =
+<span class="cstat-no" title="statement not covered" >    useAcceleratorProjectSpeciesData();</span>
   const { p<span class="fstat-no" title="function not covered" >ro</span>ject<span class="cstat-no" title="statement not covered" >Id } = useProjec</span>t();
   const { currentDeliverable, deliverableId } = useDeliverableData();
 <span class="cstat-no" title="statement not covered" >  const { activeLocale } = useLocalization();</span>
 <span class="cstat-no" title="statement not covered" ></span>
   const [speciesRecord<span class="cstat-no" title="statement not covered" >, setSpeciesRecord, , onC</span>hangeSpeciesCallback] = useForm&lt;Species | undefined&gt;(undefined);
-  const [participantProjectS<span class="cstat-no" title="statement not covered" >peciesRecord, setParticipantProjectSp</span>eciesRecord, , onChangeProjectSpeciesCallback] =
-    useForm&lt;Participant<span class="cstat-no" title="statement not covered" >ProjectSpecies | undefined&gt;(undefined);</span>
+  const [acceleratorProjectS<span class="cstat-no" title="statement not covered" >peciesRecord, setAcceleratorProjectSp</span>eciesRecord, , onChangeProjectSpeciesCallback] =
+    useForm&lt;Accelerator<span class="cstat-no" title="statement not covered" >ProjectSpecies | undefined&gt;(undefined);</span>
 <span class="cstat-no" title="statement not covered" ></span>
   const [nameFormatErr<span class="cstat-no" title="statement not covered" >or, setNameFormatError] = useState&lt;string | string[</span>]&gt;('');
 <span class="cstat-no" title="statement not covered" ></span>
@@ -434,31 +434,31 @@ export default function SpeciesEditView(): JSX.Element {
   }, [currentSpecies, setSpeciesRecord]);
 <span class="cstat-no" title="statement not covered" ></span>
   useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-    if (currentParticip<span class="cstat-no" title="statement not covered" >antProjectSpecies) {</span>
-      setParticipantProjectSpeciesR<span class="cstat-no" title="statement not covered" >ecord(currentParticipantProjectSpeci</span>es);
+    if (currentAccelera<span class="cstat-no" title="statement not covered" >torProjectSpecies) {</span>
+      setAcceleratorProjectSpeciesR<span class="cstat-no" title="statement not covered" >ecord(currentAcceleratorProjectSpeci</span>es);
     }<span class="cstat-no" title="statement not covered" ></span>
-  }, [currentParticipant<span class="cstat-no" title="statement not covered" >ProjectSpecies, setParticipantP</span>rojectSpeciesRecord]);
+  }, [currentAccelerator<span class="cstat-no" title="statement not covered" >ProjectSpecies, setAcceleratorP</span>rojectSpeciesRecord]);
 <span class="cstat-no" title="statement not covered" ></span>
   const saveSpecies = useCa<span class="cstat-no" title="statement not covered" >llback(() =&gt; {</span>
-    if (!(currentParticipantProjectSpecies &amp;&amp; speciesRecord)) {<span class="cstat-no" title="statement not covered" ></span>
+    if (!(currentAcceleratorProjectSpecies &amp;&amp; speciesRecord)) {<span class="cstat-no" title="statement not covered" ></span>
       return;<span class="cstat-no" title="statement not covered" ></span>
     }<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >    if (!speciesRecord.scientificName) {</span>
 <span class="cstat-no" title="statement not covered" >      setNameForm</span>atError(strings.REQUIRED_FIELD);
     } else {
-<span class="cstat-no" title="statement not covered" >      update(s</span>peciesRecord, participantProjectSpeciesRecord);
+<span class="cstat-no" title="statement not covered" >      update(s</span>peciesRecord, acceleratorProjectSpeciesRecord);
     }
-<span class="cstat-no" title="statement not covered" >  }, [currentParticipantProjec<span class="fstat-no" title="function not covered" >tS</span>pecies, participantProjectSpeciesRecord, speciesRecord, update]);</span>
+<span class="cstat-no" title="statement not covered" >  }, [currentAcceleratorProjec<span class="fstat-no" title="function not covered" >tS</span>pecies, acceleratorProjectSpeciesRecord, speciesRecord, update]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
   retu<span class="cstat-no" title="statement not covered" >rn (</span>
     &lt;TfMain&gt;
-      {(isBusy || !speciesRecord || !participantProjectSpeciesRecord) &amp;&amp; &lt;BusySpinner withSkrim={true} /&gt;}
-<span class="cstat-no" title="statement not covered" >      {speciesRecord &amp;&amp; partic<span class="fstat-no" title="function not covered" >ip</span>antProjectSpeciesRecord &amp;&amp; (</span>
+      {(isBusy || !speciesRecord || !acceleratorProjectSpeciesRecord) &amp;&amp; &lt;BusySpinner withSkrim={true} /&gt;}
+<span class="cstat-no" title="statement not covered" >      {speciesRecord &amp;&amp; accele<span class="fstat-no" title="function not covered" >ra</span>torProjectSpeciesRecord &amp;&amp; (</span>
 <span class="cstat-no" title="statement not covered" >        &lt;PageForm</span>
 <span class="cstat-no" title="statement not covered" >          cancelID='cancelEditSpecies'</span>
           saveID='saveEditSpecies'
-          onCancel={() =&gt; goToAcceleratorProjectSpecies(deliverableId, projectId, participantProjectSpeciesId)}
+          onCancel={() =&gt; goToAcceleratorProjectSpecies(deliverableId, projectId, acceleratorProjectSpeciesId)}
           onSave={save<span class="cstat-no" title="statement not covered" >Species}<span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >        &gt;</span>
 <span class="cstat-no" title="statement not covered" >          &lt;Box</span> marginBottom={theme.spacing(4)} paddingLeft={theme.spacing(3)}&gt;
@@ -495,7 +495,7 @@ export default function SpeciesEditView(): JSX.Element {
             &lt;Grid item xs={12} paddingBottom={theme.spacing(2)}&gt;
               &lt;Dropdown
                 id='speciesNativeCategory'
-                selectedValue={participantProjectSpeciesRecord?.speciesNativeCategory}
+                selectedValue={acceleratorProjectSpeciesRecord?.speciesNativeCategory}
                 onChange={onChangeProjectSpeciesCallback('speciesNativeCategory')}
                 options={getSpeciesNativeCategoryOptions(activeLocale)}
                 label={strings.NATIVE_NON_NATIVE}
@@ -510,7 +510,7 @@ export default function SpeciesEditView(): JSX.Element {
                 label={strings.RATIONALE}
                 id='rationale'
                 type='text'
-                value={participantProjectSpeciesRecord?.rationale}
+                value={acceleratorProjectSpeciesRecord?.rationale}
                 onChange={onChangeProjectSpeciesCallback('rationale')}
               /&gt;
             &lt;/Grid&gt;
@@ -524,7 +524,7 @@ export default function SpeciesEditView(): JSX.Element {
                 &lt;SpeciesDetailsForm
                   gridSize={gridSize()}
                   record={speciesRecord}
-                  participantProjectSpeciesRecord={participantProjectSpeciesRecord}
+                  acceleratorProjectSpeciesRecord={acceleratorProjectSpeciesRecord}
                   onChange={onChangeSpeciesCallback}
                   nameFormatError={nameFormatError}
                   setNameFormatError={setNameFormatError}
@@ -547,7 +547,7 @@ export default function SpeciesEditView(): JSX.Element {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-17T20:04:07.886Z
+                at 2026-02-17T20:28:53.610Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

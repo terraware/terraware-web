@@ -3,15 +3,15 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/providers/ParticipantProject/ParticipantProjectSpeciesContext.tsx</title>
+    <title>Code coverage report for src/redux/features/acceleratorProjectSpecies/acceleratorProjectSpeciesSelectors.ts</title>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="../../../prettify.css" />
-    <link rel="stylesheet" href="../../../base.css" />
-    <link rel="shortcut icon" type="image/x-icon" href="../../../favicon.png" />
+    <link rel="stylesheet" href="../../../../prettify.css" />
+    <link rel="stylesheet" href="../../../../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../../../favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style type='text/css'>
         .coverage-summary .sorter {
-            background-image: url(../../../sort-arrow-sprite.png);
+            background-image: url(../../../../sort-arrow-sprite.png);
         }
     </style>
 </head>
@@ -19,13 +19,13 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/providers/ParticipantProject</a> ParticipantProjectSpeciesContext.tsx</h1>
+        <h1><a href="../../../../index.html">All files</a> / <a href="index.html">src/redux/features/acceleratorProjectSpecies</a> acceleratorProjectSpeciesSelectors.ts</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/25</span>
+                <span class='fraction'>0/47</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/25</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/22</span>
+                <span class='fraction'>0/31</span>
             </div>
         
             
@@ -85,10 +85,7 @@
 <a name='L20'></a><a href='#L20'>20</a>
 <a name='L21'></a><a href='#L21'>21</a>
 <a name='L22'></a><a href='#L22'>22</a>
-<a name='L23'></a><a href='#L23'>23</a>
-<a name='L24'></a><a href='#L24'>24</a>
-<a name='L25'></a><a href='#L25'>25</a>
-<a name='L26'></a><a href='#L26'>26</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L23'></a><a href='#L23'>23</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -109,52 +106,46 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { createC<span class="cstat-no" title="statement not covered" >ontext, useContext } f</span>rom 'react';
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { RootSta<span class="cstat-no" title="statement not covered" >te } from 'src/redux/r</span>ootReducer';
 <span class="cstat-no" title="statement not covered" ></span>
-import { ParticipantProj<span class="cstat-no" title="statement not covered" >ectSpecies } from 'src/type</span>s/ParticipantProjectSpecies';
-import { Species } <span class="cstat-no" title="statement not covered" >from 'src/types/Species';</span>
+export const selectAccel<span class="cstat-no" title="statement not covered" >eratorProjectSpeciesCreateR</span>equest = (requestId: string) =&gt; (state: RootState) =&gt;
+  state.accelerator<span class="cstat-no" title="statement not covered" >ProjectSpeciesCreate[requestId];</span>
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-ex<span class="cstat-no" title="statement not covered" >port type ParticipantProjectSpeciesData = {</span>
-  cu<span class="cstat-no" title="statement not covered" >rrentParticipantProjectSpecies?: ParticipantProjectSpecies;</span>
-  currentSpecies?: Species;
-  isBusy: boolean;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >  participantProjectSpeciesId: number;</span>
-  re<span class="cstat-no" title="statement not covered" >load: () =&gt; void;</span>
-  upda<span class="cstat-no" title="statement not covered" >te: (species?: Species, participantProjectSpecies?: ParticipantProjectSpecies) =&gt; void;</span>
-};<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+ex<span class="cstat-no" title="statement not covered" >port const selectAcceleratorProjectSpeciesGetRequest = (requestId: string) =&gt; (state: RootState) =&gt;</span>
+  st<span class="cstat-no" title="statement not covered" >ate.acceleratorProjectSpeciesGet[requestId];</span>
 &nbsp;
-//<span class="cstat-no" title="statement not covered" > default va</span>lues pointing to nothing
-export const ParticipantProjectSpeciesContext = createContext&lt;ParticipantProjectSpeciesData&gt;({
-  isBusy: false,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  participantProject<span class="cstat-no" title="statement not covered" >Spe</span>ciesId: -1,
-<span class="cstat-no" title="statement not covered" >  /* eslint-disable @typescript-eslint/no-empty-function */</span>
-  reload: () =&gt; {},<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  update: () =&gt; {},<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  /* eslint-enable @typescript-eslint/no-empty-function */
-<span class="cstat-no" title="statement not covered" >});</span>
+export const selec<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >tA</span>cceleratorProjectSpeciesListRequest = (projectId: number) =&gt; (state: RootState) =&gt;</span>
+<span class="cstat-no" title="statement not covered" >  state.acceleratorProjectSpeciesList[projectId];</span>
 <span class="cstat-no" title="statement not covered" ></span>
-export const useParticipantProjectSpecies<span class="cstat-no" title="statement not covered" >Data = () =&gt; useContext(ParticipantProjectSpeciesContext);</span>
-&nbsp;</pre></td></tr></table></pre>
+export<span class="cstat-no" title="statement not covered" > const selectAcceleratorProjectSpeciesDeleteManyRequest = (requestId: string) =&gt; (state: RootState) =&gt;</span>
+  state.<span class="cstat-no" title="statement not covered" >acceleratorProjectSpeciesD<span class="fstat-no" title="function not covered" >el</span>eteM<span class="cstat-no" title="statement not covered" >any[reques</span>tId];</span>
+&nbsp;
+ex<span class="cstat-no" title="statement not covered" >port const </span>selectAcceleratorProjectSpeciesAddManyRequest = (requestId: string) =&gt; (state: RootState) =&gt;
+  state.acceleratorProjectSpeciesAddMany[requestId];
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+export const selectA<span class="cstat-no" title="statement not covered" >cce</span>leratorProjectSpeciesUpdateRequest = (requestId: string) =&gt; (state: RootState) =&gt;
+<span class="cstat-no" title="statement not covered" >  state.acceleratorProjectSpeciesUpdate[requestId];</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+export const selectProjectsForSpeciesRequest = (<span class="fstat-no" title="function not covered" >re</span>ques<span class="cstat-no" title="statement not covered" >tId: string) =&gt; (state: RootState) =&gt;</span>
+  state.acceleratorProjectsForSpeciesGet[requestId];<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-17T20:04:07.886Z
+                at 2026-02-17T20:28:53.610Z
             </div>
-        <script src="../../../prettify.js"></script>
+        <script src="../../../../prettify.js"></script>
         <script>
             window.onload = function () {
                 prettyPrint();
             };
         </script>
-        <script src="../../../sorter.js"></script>
-        <script src="../../../block-navigation.js"></script>
+        <script src="../../../../sorter.js"></script>
+        <script src="../../../../block-navigation.js"></script>
     </body>
 </html>
     

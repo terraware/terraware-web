@@ -574,13 +574,13 @@ import { TableColum<span class="cstat-no" title="statement not covered" >nType }
 import TooltipB<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ut</span>ton from 'src/components/common/button/TooltipButton';</span>
 im<span class="cstat-no" title="statement not covered" >port Table from 'src/components/common/table';</span>
 impo<span class="cstat-no" title="statement not covered" >rt { useLocalization, useOrganization } from 'src/providers';</span>
-import { requestGetProjectsForSpecies } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
-import { selectPro<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >je</span>ctsForSpeciesRequest } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';</span>
+import { requestGetProjectsForSpecies } from 'src/redux/features/acceleratorProjectSpecies/acceleratorProjectSpeciesAsyncThunks';
+import { selectPro<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >je</span>ctsForSpeciesRequest } from 'src/redux/features/acceleratorProjectSpecies/acceleratorProjectSpeciesSelectors';</span>
 im<span class="cstat-no" title="statement not covered" >port { selectProjects } from 'src/redux/features/projects/projectsSelectors';</span>
 impo<span class="cstat-no" title="statement not covered" >rt { requestProjects } from 'src/redux/features/projects/projectsThunks';</span>
 import<span class="cstat-no" title="statement not covered" > { useAppDispatch, useAppSelector } from 'src/redux/store';</span>
 import s<span class="cstat-no" title="statement not covered" >trings from 'src/strings';<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-import { ParticipantProjectForSpecies } from 'src/types/ParticipantProjectSpecies';
+import { AcceleratorProjectForSpecies } from 'src/types/AcceleratorProjectSpecies';
 im<span class="cstat-no" title="statement not covered" >port { Proj</span>ect } from 'src/types/Project';
 import useSnackbar from 'src/utils/useSnackbar';
 <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
@@ -590,8 +590,8 @@ import SpeciesProjectsCellRenderer from './SpeciesProjectsCellRenderer';
 &nbsp;
 const columns = (): TableColumnType[] =&gt; [
   { key: 'projectName', name: strings.PROJECT, type: 'string' },
-  { key: 'participantProjectSpeciesNativeCategory', name: strings.NATIVE_NON_NATIVE, type: 'string' },
-  { key: 'participa<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >nt</span>Project<span class="cstat-no" title="statement not covered" >SpeciesSubmissionStatus', name: strings.STATUS, type: 'string' </span></span>},
+  { key: 'acceleratorProjectSpeciesNativeCategory', name: strings.NATIVE_NON_NATIVE, type: 'string' },
+  { key: 'accelerat<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >or</span>Project<span class="cstat-no" title="statement not covered" >SpeciesSubmissionStatus', name: strings.STATUS, type: 'string' </span></span>},
 ];<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
 const viewC<span class="fstat-no" title="function not covered" >ol</span>umns<span class="cstat-no" title="statement not covered" > = (): TableColumnTyp</span>e[] =&gt; [
@@ -631,8 +631,8 @@ export default function SpeciesProjectsTable({
   const [requestId, setRequestId] = useState('');
   const projectsForSpeciesRequest = useAppSelector(selectProjectsForSpeciesRequest(requestId));
 &nbsp;
-  const [searchResults, setSearchResults] = useState&lt;ParticipantProjectForSpecies[] | null&gt;();
-  const [filteredResults, setFilteredResults] = useState&lt;ParticipantProjectForSpecies[] | null&gt;();
+  const [searchResults, setSearchResults] = useState&lt;AcceleratorProjectForSpecies[] | null&gt;();
+  const [filteredResults, setFilteredResults] = useState&lt;AcceleratorProjectForSpecies[] | null&gt;();
   const [selectedRows, setSelectedRows] = useState&lt;TableRowType[]&gt;([]);
   const [showRemoveDialog, <span class="cstat-no" title="statement not covered" >setShowRemoveDialog] = useState(false);</span>
   const [reload, se<span class="cstat-no" title="statement not covered" >tReload] = useState(false);</span>
@@ -685,7 +685,7 @@ export default function SpeciesProjectsTable({
           projectName: allProjects?.find((proj) =&gt; proj.id === pS.project.id)?.name,
           speciesId,
           participantProjectSpeciesNativeCategory: pS.nativeCategory,
-        } as ParticipantProjectForSpecies;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+        } as AcceleratorProjectForSpecies;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
       });
       updatedResults = [...updatedResults, ...newProjects];
     }
@@ -823,7 +823,7 @@ export default function SpeciesProjectsTable({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-17T20:04:07.886Z
+                at 2026-02-17T20:28:53.610Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

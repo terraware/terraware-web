@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/providers/ParticipantProject/ParticipantProjectSpeciesProvider.tsx</title>
+    <title>Code coverage report for src/providers/AcceleratorProject/AcceleratorProjectSpeciesProvider.tsx</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../../prettify.css" />
     <link rel="stylesheet" href="../../../base.css" />
@@ -19,7 +19,7 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/providers/ParticipantProject</a> ParticipantProjectSpeciesProvider.tsx</h1>
+        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/providers/AcceleratorProject</a> AcceleratorProjectSpeciesProvider.tsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
@@ -584,30 +584,30 @@ import _ from 'lodash';<span class="cstat-no" title="statement not covered" ></s
 <span class="cstat-no" title="statement not covered" ></span>
 import useNavigateT<span class="cstat-no" title="statement not covered" >o from 'src/hooks/useNavigateTo'</span>;
 import {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >  requestGetParticipantProjectSpecies,</span>
-  re<span class="cstat-no" title="statement not covered" >questUpdateParticipantProjectSpecies,</span>
-} from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
+<span class="cstat-no" title="statement not covered" >  requestGetAcceleratorProjectSpecies,</span>
+  re<span class="cstat-no" title="statement not covered" >questUpdateAcceleratorProjectSpecies,</span>
+} from 'src/redux/features/acceleratorProjectSpecies/acceleratorProjectSpeciesAsyncThunks';
 import {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >  selectParticipantProjectSpeciesGetRequest,</span>
-  se<span class="cstat-no" title="statement not covered" >lectParticipantProjectSpeciesUpdateRequest,</span>
-} from<span class="cstat-no" title="statement not covered" > 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';</span>
+<span class="cstat-no" title="statement not covered" >  selectAcceleratorProjectSpeciesGetRequest,</span>
+  se<span class="cstat-no" title="statement not covered" >lectAcceleratorProjectSpeciesUpdateRequest,</span>
+} from<span class="cstat-no" title="statement not covered" > 'src/redux/features/acceleratorProjectSpecies/acceleratorProjectSpeciesSelectors';</span>
 import {<span class="cstat-no" title="statement not covered" > requestGetOneSpecies, req<span class="fstat-no" title="function not covered" >ue</span>stUp<span class="cstat-no" title="statement not covered" >dateSpecie</span>s } from 'src/redux/features/species/speciesAsyncThunks';</span>
 import { selectSpeciesGetOneRequest, selectSpeciesUpdateRequest } from 'src/redux/features/species/speciesSelectors';
 im<span class="cstat-no" title="statement not covered" >port { useA</span>ppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { Parti<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ci</span>pantProjectSpecies } from 's<span class="cstat-no" title="statement not covered" >rc/types/ParticipantProjectSpecies';</span></span>
+import { Accel<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >er</span>atorProjectSpecies } from 's<span class="cstat-no" title="statement not covered" >rc/types/AcceleratorProjectSpecies';</span></span>
 import { Species } from 'src/types/Species';
 import useSnackbar from 'src/utils/useSnackbar';
 &nbsp;
 import { useDeliverableData } from '../Deliverable/DeliverableContext';
 import { useProjectData } from '../Project/ProjectContext';
-import { ParticipantProjectSpeciesContext, ParticipantProjectSpeciesData } from './ParticipantProjectSpeciesContext';
+import { AcceleratorProjectSpeciesContext, AcceleratorProjectSpeciesData } from './AcceleratorProjectSpeciesContext';
 &nbsp;
 export type Props =<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > {<span class="cstat-no" title="statement not covered" ></span></span></span>
   children: React.Re<span class="cstat-no" title="statement not covered" >act</span>Node;
 <span class="cstat-no" title="statement not covered" >};</span>
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-const isEqual = (a: ParticipantProjectSpecies | undefined, b: ParticipantProjectSpecies | undefined): boolean =&gt;
+const isEqual = (a: AcceleratorProjectSpecies | undefined, b: AcceleratorProjectSpecies | undefined): boolean =&gt;
 <span class="cstat-no" title="statement not covered" >  !!(</span>
     a &amp;&amp;<span class="cstat-no" title="statement not covered" ></span>
     b &amp;&amp;<span class="cstat-no" title="statement not covered" ></span>
@@ -618,26 +618,26 @@ const isEqual = (a: ParticipantProjectSpecies | undefined, b: ParticipantProject
     a.submissionStatus === b.sub<span class="cstat-no" title="statement not covered" >missionStatus</span>
   );<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-const ParticipantProj<span class="cstat-no" title="statement not covered" >ectSpeciesProvider = ({ children</span> }: Props) =&gt; {
+const AcceleratorProj<span class="cstat-no" title="statement not covered" >ectSpeciesProvider = ({ children</span> }: Props) =&gt; {
   const dispatch = useApp<span class="cstat-no" title="statement not covered" >Dispatch();</span>
   const snackbar = useSnackbar()<span class="cstat-no" title="statement not covered" >;</span>
   const { currentDeliverable<span class="cstat-no" title="statement not covered" >, deliverableId } = useDeliverableDat</span>a();
   const { projectId } = useProjectData();<span class="cstat-no" title="statement not covered" ></span>
-  const { goToAc<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ce</span>leratorP<span class="cstat-no" title="statement not covered" >rojectSpecies: _goToParticipantProjectSpecies } = useNavigateTo();</span></span>
+  const { goToAc<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ce</span>leratorP<span class="cstat-no" title="statement not covered" >rojectSpecies: _goToAcceleratorProjectSpecies } = useNavigateTo();</span></span>
   const params = useParams&lt;{ acceleratorPr<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >oj</span>ectSpeciesId?: string }&gt;();</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const participant<span class="cstat-no" title="statement not covered" >ProjectSpeciesId = Number(params.a</span>cceleratorProjectSpeciesId);
-  const [currentParticipantProjectSpecies, setCu<span class="cstat-no" title="statement not covered" >rrentParticipantProjectSpecies] = useState&lt;Participa</span>ntProjectSpecies&gt;();
+  const accelerator<span class="cstat-no" title="statement not covered" >ProjectSpeciesId = Number(params.a</span>cceleratorProjectSpeciesId);
+  const [currentAcceleratorProjectSpecies, setCu<span class="cstat-no" title="statement not covered" >rrentAcceleratorProjectSpecies] = useState&lt;Accelerat</span>orProjectSpecies&gt;();
   const [currentSpecies,<span class="cstat-no" title="statement not covered" > setCurrentSpecies] = useState&lt;Species&gt;();</span>
 <span class="cstat-no" title="statement not covered" ></span>
   const [getPPSRe<span class="cstat-no" title="statement not covered" >questId, setGetPPSRequestId] = useSta</span>te('');
-  const getPPSResponse = useAppSelecto<span class="cstat-no" title="statement not covered" >r(selectParticipantProjectSpeciesGetRequest</span>(getPPSRequestId));
+  const getPPSResponse = useAppSelecto<span class="cstat-no" title="statement not covered" >r(selectAcceleratorProjectSpeciesGetRequest</span>(getPPSRequestId));
 <span class="cstat-no" title="statement not covered" ></span>
   const [getSpeciesRequestId, setGetSpeciesReq<span class="cstat-no" title="statement not covered" >uestId] = useState('');</span>
   const getSpeciesResponse = useAppSelector(sele<span class="cstat-no" title="statement not covered" >ctSpeciesGetOneRequest(getSpeci</span>esRequestId));
 <span class="cstat-no" title="statement not covered" ></span>
   const [updatePPSRequestId, setUpdatePPSRequestId] = us<span class="cstat-no" title="statement not covered" >eState('');</span>
-  const updatePPSResponse = u<span class="cstat-no" title="statement not covered" >seAppSelector(selectParticipantProjectSpeciesUpdateRequest(updatePPSRequestId));</span>
+  const updatePPSResponse = u<span class="cstat-no" title="statement not covered" >seAppSelector(selectAcceleratorProjectSpeciesUpdateRequest(updatePPSRequestId));</span>
 <span class="cstat-no" title="statement not covered" ></span>
   const [updateSpeciesReques<span class="cstat-no" title="statement not covered" >tId, setUpdateSpeciesRequestId] = useState('');</span>
   const updateSpeciesResponse = useAppSelector(selectSpeciesUp<span class="cstat-no" title="statement not covered" >dateRequest(updateSpeciesReques</span>tId));
@@ -645,33 +645,33 @@ const ParticipantProj<span class="cstat-no" title="statement not covered" >ectSp
   const [newStatus, setNewStatus] = <span class="cstat-no" title="statement not covered" >useState('');</span>
   const [ppsNeedsReload, setPpsNeedsReload] = <span class="cstat-no" title="statement not covered" >useState(true);</span>
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  co<span class="cstat-no" title="statement not covered" >nst goToParticipantProjectSpecies = useCallback(() =&gt; {</span>
-    _goToParticipantProjectSpecies(deliverableId, projectId, participantProjectSpeciesId);
-  }, [_goToParticipa<span class="cstat-no" title="statement not covered" >ntProjectSpecies, deliverableI<span class="fstat-no" title="function not covered" >d,</span> projectId, participantProjectSpeciesId]);</span>
+  co<span class="cstat-no" title="statement not covered" >nst goToAcceleratorProjectSpecies = useCallback(() =&gt; {</span>
+    _goToAcceleratorProjectSpecies(deliverableId, projectId, acceleratorProjectSpeciesId);
+  }, [_goToAccelerat<span class="cstat-no" title="statement not covered" >orProjectSpecies, deliverableI<span class="fstat-no" title="function not covered" >d,</span> projectId, acceleratorProjectSpeciesId]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
   cons<span class="cstat-no" title="statement not covered" >t reload</span>PPS = useCallback(() =&gt; {
-    if (isNaN(participantProjectSpeciesId)) {
+    if (isNaN(acceleratorProjectSpeciesId)) {
       return;<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >    }</span>
 &nbsp;
-    const request = disp<span class="cstat-no" title="statement not covered" >atch(requestGetParticipantProj<span class="fstat-no" title="function not covered" >ec</span>tSpecies(participantProjectSpeciesId));</span>
+    const request = disp<span class="cstat-no" title="statement not covered" >atch(requestGetAcceleratorProj<span class="fstat-no" title="function not covered" >ec</span>tSpecies(acceleratorProjectSpeciesId));</span>
 <span class="cstat-no" title="statement not covered" >    setGetPPSRequestId(request.requestId);</span>
-  }, [<span class="cstat-no" title="statement not covered" >dispatch</span>, participantProjectSpeciesId]);
+  }, [<span class="cstat-no" title="statement not covered" >dispatch</span>, acceleratorProjectSpeciesId]);
 &nbsp;
   const reloadSpecie<span class="cstat-no" title="statement not covered" >s = useCallback(() =&gt; {</span>
-    if (!(currentParticipantProjectSpecies?.speciesId &amp;&amp; currentDeliverable?.organizationId)) {
+    if (!(currentAcceleratorProjectSpecies?.speciesId &amp;&amp; currentDeliverable?.organizationId)) {
       return;
     }
 &nbsp;
     const request = dispatch(
 <span class="cstat-no" title="statement not covered" >      requestGetOneSpecies({</span>
         organizationId: currentDeliverable.organizationId,
-        speciesId<span class="cstat-no" title="statement not covered" >: currentParticipantProjectSpe<span class="fstat-no" title="function not covered" >ci</span>es.speciesId,</span>
+        speciesId<span class="cstat-no" title="statement not covered" >: currentAcceleratorProjectSpe<span class="fstat-no" title="function not covered" >ci</span>es.speciesId,</span>
 <span class="cstat-no" title="statement not covered" >      })</span>
 <span class="cstat-no" title="statement not covered" >    );</span>
 &nbsp;
     setGetSpecies<span class="cstat-no" title="statement not covered" >RequestId(request.requestId);</span>
-  },<span class="fstat-no" title="function not covered" > [</span>dispatch, currentDeliverable, currentParticipantProjectSpecies]);
+  },<span class="fstat-no" title="function not covered" > [</span>dispatch, currentDeliverable, currentAcceleratorProjectSpecies]);
 <span class="cstat-no" title="statement not covered" ></span>
   const <span class="cstat-no" title="statement not covered" >reload = useCallback(() =&gt; {</span>
     reload<span class="cstat-no" title="statement not covered" >PPS();</span>
@@ -679,21 +679,21 @@ const ParticipantProj<span class="cstat-no" title="statement not covered" >ectSp
   }, [reloadPPS, reloadSpecies]);<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
   const update = useCallback(
-    (spe<span class="cstat-no" title="statement not covered" >cies?: Species, participantProjec</span>tSpecies?: ParticipantProjectSpecies) =&gt; {
-      if (participantProjectSpecies &amp;&amp; !isEqual(participantProjectSpecies, currentParticipantProjectSpecies)) {
+    (spe<span class="cstat-no" title="statement not covered" >cies?: Species, acceleratorProjec</span>tSpecies?: AcceleratorProjectSpecies) =&gt; {
+      if (acceleratorProjectSpecies &amp;&amp; !isEqual(acceleratorProjectSpecies, currentAcceleratorProjectSpecies)) {
 <span class="cstat-no" title="statement not covered" >        // If the request is successful, and the status was changed, we will want to use the snackbar to tell the user it was approved</span>
         if (<span class="cstat-no" title="statement not covered" ></span>
-          currentParticipantProjectSpecies?.submissionStatus !== 'Approved' &amp;&amp;
-          participantProjectSpecies.submissionStatus === 'Approved'
+          currentAcceleratorProjectSpecies?.submissionStatus !== 'Approved' &amp;&amp;
+          acceleratorProjectSpecies.submissionStatus === 'Approved'
         ) {
           setNewStatus('Approved');
         }
 <span class="cstat-no" title="statement not covered" ></span>
-        const updatePPSRequest = dispatch(requestUpdateParticipantProjectSpecies({ participantProjectSpecies }));
+        const updatePPSRequest = dispatch(requestUpdateAcceleratorProjectSpecies({ acceleratorProjectSpecies }));
 <span class="cstat-no" title="statement not covered" >        setUpdatePPSRequestId(u</span>pdatePPSRequest.requestId);
       } else {
         // If there are no changes, just send them back to the single view
-        goToParticipantProjectSpecies();
+        goToAcceleratorProjectSpecies();
       }<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
       if (species &amp;&amp; currentDeliverable &amp;&amp; !_.isEqual(species, currentSpecies)) {
@@ -707,12 +707,12 @@ const ParticipantProj<span class="cstat-no" title="statement not covered" >ectSp
 <span class="cstat-no" title="statement not covered" >      }</span>
 <span class="cstat-no" title="statement not covered" >      setPpsNeedsRe</span>load(true);
     },<span class="cstat-no" title="statement not covered" ></span>
-    [c<span class="cstat-no" title="statement not covered" >urrentDeliverable, currentParticipantProjectSpecies, currentSpecies, dispatch, goToParticipantProjectSpecies]</span>
+    [c<span class="cstat-no" title="statement not covered" >urrentDeliverable, currentAcceleratorProjectSpecies, currentSpecies, dispatch, goToAcceleratorProjectSpecies]</span>
   );<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const [participantProjectSpeciesData, setParticipantProjectSpeciesData] = useState&lt;ParticipantProjectSpeciesData&gt;({
+  const [acceleratorProjectSpeciesData, setAcceleratorProjectSpeciesData] = useState&lt;AcceleratorProjectSpeciesData&gt;({
     isBusy: updatePPSResponse?.status === 'pending' || updateSpeciesResponse?.status === 'pending',
-    participantProjectSpeciesId,
+    acceleratorProjectSpeciesId,
     reload<span class="cstat-no" title="statement not covered" >,</span>
     update,
   });<span class="cstat-no" title="statement not covered" ></span>
@@ -726,7 +726,7 @@ const ParticipantProj<span class="cstat-no" title="statement not covered" >ectSp
       reloadPPS();
       setPpsNeedsReload(false);
 &nbsp;
-      if (currentParticipantProjectSpecies &amp;&amp; currentSpecies) {
+      if (currentAcceleratorProjectSpecies &amp;&amp; currentSpecies) {
         if (newStatus === 'Approved') {
           snackbar.pageSuccess(
             strings.formatString(strings.YOU_APPROVED_SPECIES, currentSpecies.scientificName).toString(),
@@ -738,14 +738,14 @@ const ParticipantProj<span class="cstat-no" title="statement not covered" >ectSp
         }
 <span class="cstat-no" title="statement not covered" >      }</span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >      goToParticipantProjectSpecies();</span>
+<span class="cstat-no" title="statement not covered" >      goToAcceleratorProjectSpecies();</span>
     } else <span class="cstat-no" title="statement not covered" >if (updatePPSResponse.status === 'error') {</span>
 <span class="cstat-no" title="statement not covered" >      snackbar.toastError(strings.GENERIC_ERROR);</span>
     }
   }, [
-<span class="cstat-no" title="statement not covered" >    currentParticipantProjectS<span class="fstat-no" title="function not covered" >pe</span>cies,</span>
+<span class="cstat-no" title="statement not covered" >    currentAcceleratorProjectS<span class="fstat-no" title="function not covered" >pe</span>cies,</span>
 <span class="cstat-no" title="statement not covered" >    currentSpecies,</span>
-    go<span class="cstat-no" title="statement not covered" >ToPartic</span>ipantProjectSpecies,
+    go<span class="cstat-no" title="statement not covered" >ToAccele</span>ratorProjectSpecies,
     newStatus,
 <span class="cstat-no" title="statement not covered" >    ppsNeedsReload,</span>
     re<span class="cstat-no" title="statement not covered" >loadPPS,</span>
@@ -772,7 +772,7 @@ const ParticipantProj<span class="cstat-no" title="statement not covered" >ectSp
 <span class="cstat-no" title="statement not covered" >    }</span>
 <span class="cstat-no" title="statement not covered" ></span>
     if (getPPSResponse.status === 'success' &amp;&amp; getPPSResponse.data) {
-      setCurrentParticipantProjectSpecies(getPPSResponse.data);
+      setCurrentAcceleratorProjectSpecies(getPPSResponse.data);
 <span class="cstat-no" title="statement not covered" >    } else if (getPPSResponse.<span class="fstat-no" title="function not covered" >st</span>atus === 'error') {</span>
 <span class="cstat-no" title="statement not covered" >      snackbar.toastError(strings.GENERIC_ERROR);</span>
     }<span class="cstat-no" title="statement not covered" ></span>
@@ -791,35 +791,35 @@ const ParticipantProj<span class="cstat-no" title="statement not covered" >ectSp
   }, [getSpeciesResponse, snackbar]);
 &nbsp;
   useEffect(() =&gt; {
-    if (participantProjectSpeciesId) {
+    if (acceleratorProjectSpeciesId) {
       reloadPPS();
     }
-<span class="cstat-no" title="statement not covered" >  }, [participantProjectSpeciesId, reloadPPS]);</span>
+<span class="cstat-no" title="statement not covered" >  }, [acceleratorProjectSpeciesId, reloadPPS]);</span>
 &nbsp;
   useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-    if (currentParticipantProjectSpecies?.speciesId) {
+    if (currentAcceleratorProjectSpecies?.speciesId) {
       reloadSpecies();
     }
-  }, [currentParticipantProjectSpecies, reloadSpecies]);
+  }, [currentAcceleratorProjectSpecies, reloadSpecies]);
 &nbsp;
   useEffect(() =&gt; {
     // This way we only update consumers when we have both
-    if (!(currentParticipantProjectSpecies &amp;&amp; currentSpecies)) {
+    if (!(currentAcceleratorProjectSpecies &amp;&amp; currentSpecies)) {
       return;
     }
 &nbsp;
-    setParticipantProjectSpeciesData({
-      currentParticipantProjectSpecies,
+    setAcceleratorProjectSpeciesData({
+      currentAcceleratorProjectSpecies,
       currentSpecies,
       isBusy: updatePPSResponse?.status === 'pending' || updateSpeciesResponse?.status === 'pending',
-      participantProjectSpeciesId,
+      acceleratorProjectSpeciesId,
       reload,
       update,
     });
   }, [
-    currentParticipantProjectSpecies,
+    currentAcceleratorProjectSpecies,
     currentSpecies,
-    participantProjectSpeciesId,
+    acceleratorProjectSpeciesId,
     reload,
     update,
     updatePPSResponse,
@@ -827,13 +827,13 @@ const ParticipantProj<span class="cstat-no" title="statement not covered" >ectSp
   ]);
 &nbsp;
   return (
-    &lt;ParticipantProjectSpeciesContext.Provider value={participantProjectSpeciesData}&gt;
+    &lt;AcceleratorProjectSpeciesContext.Provider value={acceleratorProjectSpeciesData}&gt;
       {children}
-    &lt;/ParticipantProjectSpeciesContext.Provider&gt;
+    &lt;/AcceleratorProjectSpeciesContext.Provider&gt;
   );
 };
 &nbsp;
-export default ParticipantProjectSpeciesProvider;
+export default AcceleratorProjectSpeciesProvider;
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -841,7 +841,7 @@ export default ParticipantProjectSpeciesProvider;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-17T20:04:07.886Z
+                at 2026-02-17T20:28:53.610Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

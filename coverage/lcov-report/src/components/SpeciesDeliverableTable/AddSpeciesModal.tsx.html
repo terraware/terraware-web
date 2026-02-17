@@ -523,12 +523,12 @@ impo<span class="cstat-no" title="statement not covered" >rt { useDocLinks } fro
 import { useLocalization } from 'src/providers';
 import { usePartic<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ip</span>antData } from 'src/providers/Participant/ParticipantContext';</span>
 im<span class="cstat-no" title="statement not covered" >port { useSpeciesData } from 'src/providers/Species/SpeciesContext';</span>
-impo<span class="cstat-no" title="statement not covered" >rt { requestCreateParticipantProjectSpecies } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';</span>
-import<span class="cstat-no" title="statement not covered" > { selectParticipantProjectSpeciesCreateRequest } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';</span>
+impo<span class="cstat-no" title="statement not covered" >rt { requestCreateAcceleratorProjectSpecies } from 'src/redux/features/acceleratorProjectSpecies/acceleratorProjectSpeciesAsyncThunks';</span>
+import<span class="cstat-no" title="statement not covered" > { selectAcceleratorProjectSpeciesCreateRequest } from 'src/redux/features/acceleratorProjectSpecies/acceleratorProjectSpeciesSelectors';</span>
 import {<span class="cstat-no" title="statement not covered" > useAppDispatch, useAppSel<span class="fstat-no" title="function not covered" >ec</span>tor <span class="cstat-no" title="statement not covered" >} from 'sr</span>c/redux/store';</span>
-import { CreateParticipantProjectSpeciesRequestPayload } from 'src/services/ParticipantProjectSpeciesService';
+import { CreateAcceleratorProjectSpeciesRequestPayload } from 'src/services/AcceleratorProjectSpeciesService';
 im<span class="cstat-no" title="statement not covered" >port string</span>s from 'src/strings';
-import { SpeciesForParticipantProject, getSpeciesNativeCategoryOptions } from 'src/types/ParticipantProjectSpecies';
+import { SpeciesForAcceleratorProject, getSpeciesNativeCategoryOptions } from 'src/types/AcceleratorProjectSpecies';
 import { Speci<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >es</span> } from 'src/types/Species';<span class="cstat-no" title="statement not covered" ></span></span>
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -539,13 +539,13 @@ export interface AddSpeciesModalProps {
   hasActiveDeliverable: boolean;
   hasRecentDelivera<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >bl</span>e: bool<span class="cstat-no" title="statement not covered" >ean;</span></span>
   onClose: () =&gt; voi<span class="cstat-no" title="statement not covered" >d;</span>
-<span class="cstat-no" title="statement not covered" >  participantProjectSpecies: SpeciesForParticipantProject[];</span>
+<span class="cstat-no" title="statement not covered" >  acceleratorProjectSpecies: SpeciesForAcceleratorProject[];</span>
   projectId<span class="fstat-no" title="function not covered" >: </span>numb<span class="cstat-no" title="statement not covered" >er;</span>
   reload: () =&gt; void;
 <span class="cstat-no" title="statement not covered" >}</span>
 <span class="cstat-no" title="statement not covered" ></span>
 export default functio<span class="cstat-no" title="statement not covered" >n AddSpeciesModal(props: </span>AddSpeciesModalProps): JSX.Element {
-  const { hasActiveDeliverab<span class="cstat-no" title="statement not covered" >le, hasRecentDeliverable, onClose, pa</span>rticipantProjectSpecies, reload, projectId } = props;
+  const { hasActiveDeliverab<span class="cstat-no" title="statement not covered" >le, hasRecentDeliverable, onClose, ac</span>celeratorProjectSpecies, reload, projectId } = props;
 <span class="cstat-no" title="statement not covered" ></span>
   const dispatch = useA<span class="cstat-no" title="statement not covered" >ppDispatch();</span>
   const snackbar = u<span class="cstat-no" title="statement not covered" >seSnackbar();</span>
@@ -556,19 +556,19 @@ export default functio<span class="cstat-no" title="statement not covered" >n Ad
   const { species } = useSpeciesData();<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
   const [requestId,<span class="cstat-no" title="statement not covered" > setRequestId] = useState&lt;s</span>tring&gt;('');
-  const result = useA<span class="cstat-no" title="statement not covered" >ppSelector(selectParticipantProj</span>ectSpeciesCreateRequest(requestId));
+  const result = useA<span class="cstat-no" title="statement not covered" >ppSelector(selectAcceleratorProj</span>ectSpeciesCreateRequest(requestId));
 <span class="cstat-no" title="statement not covered" ></span>
   const [error, setEr<span class="cstat-no" title="statement not covered" >ror] = useState&lt;string&gt;('');</span>
 <span class="cstat-no" title="statement not covered" ></span>
   const selectableSpecies <span class="cstat-no" title="statement not covered" >= useMemo(() =&gt; {</span>
     retur<span class="fstat-no" title="function not covered" >n (</span>
       species.filter((_species) =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-        return !par<span class="cstat-no" title="statement not covered" >ticipantProjectSpecies?.find((proje</span>ctSpecies) =&gt; _species.id === projectSpecies.species.id);
+        return !acc<span class="cstat-no" title="statement not covered" >eleratorProjectSpecies?.find((proje</span>ctSpecies) =&gt; _species.id === projectSpecies.species.id);
       }) ?? []<span class="cstat-no" title="statement not covered" ></span>
     );<span class="cstat-no" title="statement not covered" ></span>
-  }, [species, p<span class="cstat-no" title="statement not covered" >articipantProjectSpecies]);</span>
+  }, [species, a<span class="cstat-no" title="statement not covered" >cceleratorProjectSpecies]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const [record, setRe<span class="cstat-no" title="statement not covered" >cord, , onChangeCallback] = useForm&lt;Partial&lt;</span>CreateParticipantProjectSpeciesRequestPayload&gt;&gt;({
+  const [record, setRe<span class="cstat-no" title="statement not covered" >cord, , onChangeCallback] = useForm&lt;Partial&lt;</span>CreateAcceleratorProjectSpeciesRequestPayload&gt;&gt;({
     projectId: -1,<span class="cstat-no" title="statement not covered" ></span>
   });<span class="cstat-no" title="statement not covered" ></span>
   const { activeLocale } = u<span class="cstat-no" title="statement not covered" >seLocalization();</span>
@@ -590,9 +590,9 @@ export default functio<span class="cstat-no" title="statement not covered" >n Ad
   }, [<span class="cstat-no" title="statement not covered" >projectId, </span>setRecord]);
 &nbsp;
   const save = () =&gt; {
-<span class="cstat-no" title="statement not covered" >    const payload: CreateParti<span class="fstat-no" title="function not covered" >ci</span>pantProjectSpeciesRequestPayload = {</span>
+<span class="cstat-no" title="statement not covered" >    const payload: CreateAccel<span class="fstat-no" title="function not covered" >er</span>atorProjectSpeciesRequestPayload = {</span>
 <span class="cstat-no" title="statement not covered" >      ...recor<span class="fstat-no" title="function not covered" >d,<span class="cstat-no" title="statement not covered" ></span></span></span>
-    } as CreateParticipantProjectSpeciesRequestPayload;
+    } as CreateAcceleratorProjectSpeciesRequestPayload;
 &nbsp;
     if (!payload || !payload.projectId || !payload.rationale || !payload.speciesId || !payload.speciesNativeCategory) {
       setError(strings.REQUIRED_FIELD);
@@ -600,7 +600,7 @@ export default functio<span class="cstat-no" title="statement not covered" >n Ad
     }<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
     setError('');
-<span class="cstat-no" title="statement not covered" >    const request = dispatch(requestCreateParticipantProjectSpecies(payload));</span>
+<span class="cstat-no" title="statement not covered" >    const request = dispatch(requestCreateAcceleratorProjectSpecies(payload));</span>
     se<span class="cstat-no" title="statement not covered" >tRequestId(request.requestId);</span>
   };<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
@@ -742,7 +742,7 @@ export default functio<span class="cstat-no" title="statement not covered" >n Ad
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-17T20:04:07.886Z
+                at 2026-02-17T20:28:53.610Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/redux/features/participantProjectSpecies/participantProjectSpeciesSlice.ts</title>
+    <title>Code coverage report for src/redux/features/acceleratorProjectSpecies/acceleratorProjectSpeciesSlice.ts</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../../../prettify.css" />
     <link rel="stylesheet" href="../../../../base.css" />
@@ -19,13 +19,13 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../../index.html">All files</a> / <a href="index.html">src/redux/features/participantProjectSpecies</a> participantProjectSpeciesSlice.ts</h1>
+        <h1><a href="../../../../index.html">All files</a> / <a href="index.html">src/redux/features/acceleratorProjectSpecies</a> acceleratorProjectSpeciesSlice.ts</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/57</span>
+                <span class='fraction'>0/53</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/21</span>
+                <span class='fraction'>0/19</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/55</span>
+                <span class='fraction'>0/51</span>
             </div>
         
             
@@ -192,23 +192,7 @@
 <a name='L127'></a><a href='#L127'>127</a>
 <a name='L128'></a><a href='#L128'>128</a>
 <a name='L129'></a><a href='#L129'>129</a>
-<a name='L130'></a><a href='#L130'>130</a>
-<a name='L131'></a><a href='#L131'>131</a>
-<a name='L132'></a><a href='#L132'>132</a>
-<a name='L133'></a><a href='#L133'>133</a>
-<a name='L134'></a><a href='#L134'>134</a>
-<a name='L135'></a><a href='#L135'>135</a>
-<a name='L136'></a><a href='#L136'>136</a>
-<a name='L137'></a><a href='#L137'>137</a>
-<a name='L138'></a><a href='#L138'>138</a>
-<a name='L139'></a><a href='#L139'>139</a>
-<a name='L140'></a><a href='#L140'>140</a>
-<a name='L141'></a><a href='#L141'>141</a>
-<a name='L142'></a><a href='#L142'>142</a>
-<a name='L143'></a><a href='#L143'>143</a>
-<a name='L144'></a><a href='#L144'>144</a>
-<a name='L145'></a><a href='#L145'>145</a>
-<a name='L146'></a><a href='#L146'>146</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L130'></a><a href='#L130'>130</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -224,7 +208,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -305,16 +288,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -324,11 +297,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -357,147 +325,131 @@
 <span class="cstat-no" title="statement not covered" ></span>
 import { StatusT, buildR<span class="cstat-no" title="statement not covered" >educers } from 'src/redux/f</span>eatures/asyncUtils';
 import {<span class="cstat-no" title="statement not covered" ></span>
-  ParticipantPr<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >oj</span>ectForSpecies,</span>
-<span class="cstat-no" title="statement not covered" >  ParticipantProjectSpecies,</span>
-  Sp<span class="cstat-no" title="statement not covered" >eciesForParticipantProject,</span>
-} from 'src/types/ParticipantProjectSpecies';
+  AcceleratorPr<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >oj</span>ectForSpecies,</span>
+<span class="cstat-no" title="statement not covered" >  AcceleratorProjectSpecies,</span>
+  Sp<span class="cstat-no" title="statement not covered" >eciesForAcceleratorProject,</span>
+} from 'src/types/AcceleratorProjectSpecies';
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 im<span class="cstat-no" title="statement not covered" >port {</span>
-  re<span class="cstat-no" title="statement not covered" >questAddManyParticipantProjectSpecies,</span>
-  requ<span class="cstat-no" title="statement not covered" >estAssignParticipantProjectSpecies,</span>
-  reques<span class="cstat-no" title="statement not covered" >tCreateParticipantProjectS<span class="fstat-no" title="function not covered" >pe</span>cies<span class="cstat-no" title="statement not covered" >,</span></span>
-  requestDeleteManyParticipantProjectSpecies,
-<span class="cstat-no" title="statement not covered" >  requestGetP</span>articipantProjectSpecies,
-  requestGetProjectsForSpecies,
-  requestListPartic<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ip</span>antProj<span class="cstat-no" title="statement not covered" >ectSpecies,</span></span>
-  requestUpdateParti<span class="cstat-no" title="statement not covered" >cip</span>antProjectSpecies,
-<span class="cstat-no" title="statement not covered" >} from './participantProjectSpeciesAsyncThunks';</span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  re<span class="cstat-no" title="statement not covered" >questAddManyAcceleratorProjectSpecies,</span>
+  requ<span class="cstat-no" title="statement not covered" >estCreateAcceleratorProjectSpecies,</span>
+  reques<span class="cstat-no" title="statement not covered" >tDeleteManyAcceleratorProj<span class="fstat-no" title="function not covered" >ec</span>tSpe<span class="cstat-no" title="statement not covered" >cies,</span></span>
+  requestGetAcceleratorProjectSpecies,
+<span class="cstat-no" title="statement not covered" >  requestGetP</span>rojectsForSpecies,
+  requestListAcceleratorProjectSpecies,
+  requestUpdateAcce<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >le</span>ratorPr<span class="cstat-no" title="statement not covered" >ojectSpecies,</span></span>
+} from './accelerato<span class="cstat-no" title="statement not covered" >rPr</span>ojectSpeciesAsyncThunks';
+<span class="cstat-no" title="statement not covered" ></span>
 /**<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
- * Assign Participant Projects Species<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+ * Create Accelerator Projects Species<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
  */<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-const initialStateParticipantProjectSpeciesA<span class="fstat-no" title="function not covered" >ss</span>ign:<span class="cstat-no" title="statement not covered" > { [key: string]: StatusT&lt;boolean&gt; } = {}</span>;
+const initialStateAcceleratorProjectS<span class="fstat-no" title="function not covered" >pe</span>cies<span class="cstat-no" title="statement not covered" >Create: { [key: string]: StatusT&lt;A</span>cceleratorProjectSpecies&gt; } = {};
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-export const participantProjectSpecies<span class="fstat-no" title="function not covered" >As</span>sign<span class="cstat-no" title="statement not covered" >Slice = createSlice({</span>
-  name: 'participantProjectSpeciesAssign<span class="fstat-no" title="function not covered" >Sl</span>ice'<span class="cstat-no" title="statement not covered" >,</span>
-  initialState: initialStateParticipantPr<span class="fstat-no" title="function not covered" >oj</span>ectS<span class="cstat-no" title="statement not covered" >peciesAssign,</span>
+export const acceleratorProjectSpeciesCr<span class="fstat-no" title="function not covered" >ea</span>teSl<span class="cstat-no" title="statement not covered" >ice = createSlice({</span>
+  name: 'acceleratorProjectSpeciesCreateS<span class="fstat-no" title="function not covered" >li</span>ce',<span class="cstat-no" title="statement not covered" ></span>
+  initialSt<span class="fstat-no" title="function not covered" >at</span>e: i<span class="cstat-no" title="statement not covered" >nitialStateAcc</span>eleratorProjectSpeciesCreate,
   reducers: {},
 <span class="cstat-no" title="statement not covered" >  extraReducers: (builder) =&gt; {</span>
-    buildReducers(req<span class="cstat-no" title="statement not covered" >uestAssignParticipantProject</span>Species)(builder);
+    buildReducers(req<span class="cstat-no" title="statement not covered" >uestCreateAcceleratorProject</span>Species)(builder);
   },<span class="cstat-no" title="statement not covered" ></span>
 });<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
 /**<span class="cstat-no" title="statement not covered" ></span>
- * Create Participant Projects Species
+ * Remove Accelerator Project Species
  */
-const initialStateParticipantProjectSpeciesCreate: { [key: string]: StatusT&lt;ParticipantProjectSpecies&gt; } = {};
+const initialStateAcceleratorProjectDeleteMany: { [key: string]: StatusT&lt;boolean&gt; } = {};
 <span class="fstat-no" title="function not covered" ></span>
-expo<span class="cstat-no" title="statement not covered" >rt const participantProjectSpeciesCreateSlice = createSlice({</span>
-  name: 'participantProjectSpeciesCreateSlice',
-  initialState: initialStateParticipantProjectSpeciesCreate,
+expo<span class="cstat-no" title="statement not covered" >rt const acceleratorProjectSpeciesDeleteManySlice = createSlice({</span>
+  name: 'acceleratorProjectSpeciesDeleteManySlice',
+  initialState: initialStateAcceleratorProjectDeleteMany,
   reducers: {},<span class="cstat-no" title="statement not covered" ></span>
   extraReducers: (builder) =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-    buildReducers(requestCreateParticipantProjectSpecies)(builder);
+    buildReducers(requestDeleteManyAcceleratorProjectSpecies)(builder);
   },
 });
 <span class="fstat-no" title="function not covered" ></span>
 /**<span class="cstat-no" title="statement not covered" ></span>
- * Remove Participant Project Species
+ * Add Accelerator Project Species
  */
-const initialStateParticipantProjectDeleteMany: {<span class="cstat-no" title="statement not covered" > [k</span>ey: string]: StatusT&lt;boolean&gt; } = {};
+const initialStateAcceleratorProjectAddMany: {<span class="cstat-no" title="statement not covered" > [k</span>ey: string]: StatusT&lt;boolean&gt; } = {};
 <span class="cstat-no" title="statement not covered" ></span>
-export const participantProjectSpeciesDeleteManySlice = createSlice({
-  name: 'participantProjectSpeciesDeleteManySlice',
-  initialState: initialStateParticipantProjectDeleteMany,
+export const acceleratorProjectSpeciesAddManySlice = createSlice({
+  name: 'acceleratorProjectSpeciesAddManySlice',
+  initialState: initialStateAcceleratorProjectAddMany,
   reducers: {},<span class="fstat-no" title="function not covered" ></span>
   ex<span class="cstat-no" title="statement not covered" >traReducers: (builder) =&gt; {</span>
-    buildReducers(requestDeleteManyParticipantProjectSpecies)(builder);
+    buildReducers(requestAddManyAcceleratorProjectSpecies)(builder);
   },
 });<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
 /**
- * Add Participant Project Species
+ * Get Accelerator Project Species
  */
-const initialStat<span class="fstat-no" title="function not covered" >eP</span>articipantProjectAddMany: { [key: string]: StatusT&lt;boolean&gt; } = {};
+const initialStat<span class="fstat-no" title="function not covered" >eA</span>cceleratorProjectGet: { [key: string]: StatusT&lt;AcceleratorProjectSpecies&gt; } = {};
 <span class="cstat-no" title="statement not covered" ></span>
-export const participantProjectSpeciesAddManySlice = createSlice({
-  name: 'participantProjectSpeciesAddManySlice',
-  initialState: initialStateParticipantPro<span class="cstat-no" title="statement not covered" >jec</span>tAddMany,
+export const acceleratorProjectSpeciesGetSlice = createSlice({
+  name: 'acceleratorProjectSpeciesGetSlice',
+  initialState: initialStateAcceleratorProjectGet,<span class="cstat-no" title="statement not covered" ></span>
   reducers: {},<span class="cstat-no" title="statement not covered" ></span>
   extraReducers: (builder) =&gt; {
-    buildReducers(requestAddManyParticipantProjectSpecies)(builder);
+    buildReducers(requestGetAcceleratorProjectSpecies, true)(builder);
   },
 });<span class="fstat-no" title="function not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
 /**
- * Get Participant Project Species
+ * Get Projects for Species
  */<span class="cstat-no" title="statement not covered" ></span>
-const initialStateParticipantProjectGet: { [ke<span class="cstat-no" title="statement not covered" >y: string]: StatusT&lt;ParticipantProjectSpecies&gt; } = {};</span>
+const initialStateAcceleratorProjectsForSpe<span class="cstat-no" title="statement not covered" >ciesGet: { [key: string]: StatusT&lt;AcceleratorProjectForSpecies[]&gt; } = {};</span>
 &nbsp;
-export const participantProjectSpeciesGetSlice = createSlice({
-  name: 'participantProjectSpeciesGetSlice',
-  initialState: i<span class="fstat-no" title="function not covered" >ni</span>tialStateParticipantProjectGet,
+export const acceleratorProjectsForSpeciesGetSlice = createSlice({
+  name: 'acceleratorProjectsForSpeciesGetSlice',
+  initialState: i<span class="fstat-no" title="function not covered" >ni</span>tialStateAcceleratorProjectsForSpeciesGet,
   re<span class="cstat-no" title="statement not covered" >ducers: {},</span>
   extraReducers: (builder) =&gt; {
-    buildReducers(requestGetParticipantProjectSpecies, true)(builder);
+    buildReducers(requestGetProjectsForSpecies)(builder);
   },<span class="cstat-no" title="statement not covered" ></span>
 });<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
 /**
- * Get Projects for Species
+ * List Accelerator Project Species
  */<span class="fstat-no" title="function not covered" ></span>
-cons<span class="cstat-no" title="statement not covered" >t initialStateParticipantProjectsForSpeciesGet: { [key: string]: StatusT&lt;ParticipantProjectForSpecies[]&gt; } = {};</span>
+cons<span class="cstat-no" title="statement not covered" >t initialStateAcceleratorProjectsList: { [key: string]: StatusT&lt;SpeciesForAcceleratorProject[]&gt; } = {};</span>
 &nbsp;
-export const participantProjectsForSpeciesGetSlice = createSlice({
-  name: 'participantProjectsForSpeciesGetSlic<span class="cstat-no" title="statement not covered" >e',</span>
-  initialState: initialStateParticipantProjec<span class="cstat-no" title="statement not covered" >tsForSpeciesGet,</span>
-  reducers: {},
-  extraReducers: (builder) =&gt; {
-    buildReducers(requestGetProjectsForSpecies)(builder);
-  },<span class="fstat-no" title="function not covered" ></span>
-});<span class="cstat-no" title="statement not covered" ></span>
-&nbsp;
-/**
- * List Participant Project Species<span class="cstat-no" title="statement not covered" ></span>
- */
-const initialStateParticipantProjectsList: { [key: string]: StatusT&lt;SpeciesForParticipantProject[]&gt; } = {};
-&nbsp;
-export const participantProjectSpeciesListSlice = createSlice({
-  name: 'participantProjectSpeciesListSlice',
-  initialState: initialStateParticipantProjectsList,
+export const acceleratorProjectSpeciesListSlice = createSlice({
+  name: 'acceleratorProjectSpeciesListSlic<span class="cstat-no" title="statement not covered" >e',</span>
+  initialState: initialStateAcceleratorProjectsList,
   reducers: {},
   extraReducers: (builder) =&gt; {
     // Project ID used as arg
-    buildReducers(re<span class="cstat-no" title="statement not covered" >questListParticipantProjectSpecies</span>, true)(builder);
+    buildReducers(requestListAcceleratorProjectSpecies, true)(builder);
   },
 });
 &nbsp;
-/**
- * Update Participant Project Species
+/**<span class="cstat-no" title="statement not covered" ></span>
+ * Update Accelerator Project Species
  */
-const initialStateParticipantProjectUpdate: { [key: string]: StatusT&lt;boolean&gt; } = {};
+const initialStateAcceleratorProjectUpdate: { [key: string]: StatusT&lt;boolean&gt; } = {};
 &nbsp;
-export const participantProjectSpeciesUpdateSlice = createSlice({
-  name: 'participantProjectSpeciesUpdateSlice',
-  initialState: initialStateParticipantProjectUpdate,
+export const acceleratorProjectSpeciesUpdateSlice = createSlice({
+  name: 'acceleratorProjectSpeciesUpdateSlice',
+  initialState: initialStateAcceleratorProjectUpdate,
   reducers: {},
   extraReducers: (builder) =&gt; {
-    buildReducers(requestUpdateParticipantProjectSpecies, true)(builder);
+    buildReducers(requestUpdateAcceleratorProjectSpecies, true)(builder);
   },
 });
 &nbsp;
-const participantProjectSpeciesReducers = {
-  participantProjectSpeciesAssign: participantProjectSpeciesAssignSlice.reducer,
-  participantProjectSpeciesCreate: participantProjectSpeciesCreateSlice.reducer,
-  participantProjectSpeciesDeleteMany: participantProjectSpeciesDeleteManySlice.reducer,
-  participantProjectSpeciesAddMany: participantProjectSpeciesAddManySlice.reducer,
-  participantProjectSpeciesGet: participantProjectSpeciesGetSlice.reducer,
-  participantProjectSpeciesList: participantProjectSpeciesListSlice.reducer,
-  participantProjectSpeciesUpdate: participantProjectSpeciesUpdateSlice.reducer,
-  participantProjectsForSpeciesGet: participantProjectsForSpeciesGetSlice.reducer,
+const acceleratorProjectSpeciesReducers = {
+  acceleratorProjectSpeciesCreate: acceleratorProjectSpeciesCreateSlice.reducer,
+  acceleratorProjectSpeciesDeleteMany: acceleratorProjectSpeciesDeleteManySlice.reducer,
+  acceleratorProjectSpeciesAddMany: acceleratorProjectSpeciesAddManySlice.reducer,
+  acceleratorProjectSpeciesGet: acceleratorProjectSpeciesGetSlice.reducer,
+  acceleratorProjectSpeciesList: acceleratorProjectSpeciesListSlice.reducer,
+  acceleratorProjectSpeciesUpdate: acceleratorProjectSpeciesUpdateSlice.reducer,
+  acceleratorProjectsForSpeciesGet: acceleratorProjectsForSpeciesGetSlice.reducer,
 };
 &nbsp;
-export default participantProjectSpeciesReducers;
+export default acceleratorProjectSpeciesReducers;
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -505,7 +457,7 @@ export default participantProjectSpeciesReducers;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-17T20:04:07.886Z
+                at 2026-02-17T20:28:53.610Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

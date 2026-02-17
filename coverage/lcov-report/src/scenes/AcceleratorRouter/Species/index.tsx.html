@@ -1082,8 +1082,8 @@ im<span class="cstat-no" title="statement not covered" >port Checkbox from 'src/
 impo<span class="cstat-no" title="statement not covered" >rt OptionsMenu from 'src/components/common/OptionsMenu';</span>
 import<span class="cstat-no" title="statement not covered" > { APP_PATHS } from 'src/constants';</span>
 import u<span class="cstat-no" title="statement not covered" >seNavigateTo from 'src/hoo<span class="fstat-no" title="function not covered" >ks</span>/use<span class="cstat-no" title="statement not covered" >NavigateTo</span>';</span>
-import { useDeliverableData } from 'src/providers/Deliverable/DeliverableContext';
-im<span class="cstat-no" title="statement not covered" >port { useP</span>articipantProjectSpeciesData } from 'src/providers/ParticipantProject/ParticipantProjectSpeciesContext';
+import { useAcceleratorProjectSpeciesData } from 'src/providers/AcceleratorProject/AcceleratorProjectSpeciesContext';
+im<span class="cstat-no" title="statement not covered" >port { useD</span>eliverableData } from 'src/providers/Deliverable/DeliverableContext';
 import { useLocalization, useProject } from 'src/providers/hooks';
 import strings<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > f</span>rom 'src/strings';<span class="cstat-no" title="statement not covered" ></span></span>
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -1097,8 +1097,8 @@ export default function SpeciesDetailView(): JSX.Element {
   const { goToAccele<span class="cstat-no" title="statement not covered" >rat</span>orProjectSpeciesEdit } = useNavigateTo();
 <span class="cstat-no" title="statement not covered" >  const { isMobile } = useDeviceInfo();</span>
   const { p<span class="fstat-no" title="function not covered" >ro</span>ject<span class="cstat-no" title="statement not covered" >Id } = useProject(</span>);
-  const { currentParticipantProjectSpecies, currentSpecies, isBusy, participantProjectSpeciesId, update } =
-<span class="cstat-no" title="statement not covered" >    useParticipantProjectSpeciesData();</span>
+  const { currentAcceleratorProjectSpecies, currentSpecies, isBusy, acceleratorProjectSpeciesId, update } =
+<span class="cstat-no" title="statement not covered" >    useAcceleratorProjectSpeciesData();</span>
   const { currentDe<span class="cstat-no" title="statement not covered" >liverable, deliverableId }</span> = useDeliverableData();
 <span class="cstat-no" title="statement not covered" ></span>
   const [showApproveDialog, <span class="cstat-no" title="statement not covered" >setShowApproveDialog] = useState&lt;bool</span>ean&gt;(false);
@@ -1112,9 +1112,9 @@ export default function SpeciesDetailView(): JSX.Element {
   }, [isMobile]);<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
   const approveHandler = () =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-    if (currentParticipantProjectSpecies) {<span class="cstat-no" title="statement not covered" ></span>
+    if (currentAcceleratorProjec<span class="cstat-no" title="statement not covered" >tSpecies) {</span>
       update(undefi<span class="cstat-no" title="statement not covered" >ned, {</span>
-        ...currentPar<span class="cstat-no" title="statement not covered" >ticipantProjectSpecies,</span>
+        ...currentAcc<span class="cstat-no" title="statement not covered" >eleratorProjectSpecies,</span>
         submissionStatus: '<span class="cstat-no" title="statement not covered" >Approved',</span>
       });<span class="cstat-no" title="statement not covered" ></span>
     }<span class="cstat-no" title="statement not covered" ></span>
@@ -1123,9 +1123,9 @@ export default function SpeciesDetailView(): JSX.Element {
   };<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
   const rejectHandler = (feedback: string) =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-    if (currentParticip<span class="cstat-no" title="statement not covered" >antProjectSpecies) {</span>
+    if (currentAccelera<span class="cstat-no" title="statement not covered" >torProjectSpecies) {</span>
       update(undefined, <span class="cstat-no" title="statement not covered" >{</span>
-        ...currentParticipantProjectSpecies,<span class="cstat-no" title="statement not covered" ></span>
+        ...currentAcceleratorProjectSpecies,<span class="cstat-no" title="statement not covered" ></span>
         feedback,<span class="cstat-no" title="statement not covered" ></span>
         submissionStatus: 'Rejected',<span class="cstat-no" title="statement not covered" ></span>
       });<span class="cstat-no" title="statement not covered" ></span>
@@ -1138,23 +1138,23 @@ export default function SpeciesDetailView(): JSX.Element {
     (optionItem: Dropdown<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >It</span>em) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      switch (optionItem.value) {</span>
 <span class="cstat-no" title="statement not covered" >        case 'edit': {</span>
-          goToAcceleratorProjectSpeciesEdit(deliverableId, projectId, participantProjectSpeciesId);
+          goToAcceleratorProjectSpeciesEdit(deliverableId, projectId, acceleratorProjectSpeciesId);
         }
       }
     },
-<span class="cstat-no" title="statement not covered" >    [deliverableId, goToAccelerat</span>orProjectSpeciesEdit, participantProjectSpeciesId, projectId]
+<span class="cstat-no" title="statement not covered" >    [deliverableId, goToAccelerat</span>orProjectSpeciesEdit, acceleratorProjectSpeciesId, projectId]
   );
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
   co<span class="cstat-no" title="statement not covered" >nst onUpdateInternalComment = useCallback(</span>
     (i<span class="cstat-no" title="statement not covered" >nternalComment: string) =&gt; {</span>
-      if (currentParticipantProjectSpecies) {
+      if (currentAcceleratorProjectSpecies) {
         update(undefined, {
-          ...currentParticipantProjectSpecies,
+          ...currentAcceleratorProjectSpecies,
           internalComment,
         });
 <span class="cstat-no" title="statement not covered" >      }</span>
     },
-    [currentParticipantProje<span class="cstat-no" title="statement not covered" >ctSpecies, update]</span>
+    [currentAcceleratorProje<span class="cstat-no" title="statement not covered" >ctSpecies, update]</span>
   );<span class="fstat-no" title="function not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
   const <span class="branch-0 cbranch-no" title="branch not covered" >optionItems = useMemo(</span>
@@ -1171,14 +1171,14 @@ export default function SpeciesDetailView(): JSX.Element {
   );
 &nbsp;
   const actions = useMemo(() =&gt; {
-    if (!(currentParticipantProjectSpecies &amp;&amp; activeLocale)) {
+    if (!(currentAcceleratorProjectSpecies &amp;&amp; activeLocale)) {
       return null;
     }
 &nbsp;
     return (<span class="cstat-no" title="statement not covered" ></span>
 <span class="fstat-no" title="function not covered" ></span>      &lt;Box<span class="cstat-no" title="statement not covered" > display='flex' flexDirection='row' flexGrow={0} marginRight={theme.spacing(3)} justifyContent='right'&gt;</span>
         &lt;Button
-          disabled={currentParticipantProjectSpecies.submissionStatus === 'Rejected'}
+          disabled={currentAcceleratorProjectSpecies.submissionStatus === 'Rejected'}
           id='rejectDeliverable'
           label={strings.REQUEST_UPDATE_ACTION}
           priority='secondary'
@@ -1187,7 +1187,7 @@ export default function SpeciesDetailView(): JSX.Element {
           type='de<span class="cstat-no" title="statement not covered" >structive'<span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >        /&gt;</span>
 <span class="cstat-no" title="statement not covered" >        &lt;Button</span>
-          disabled={currentParticipantProjectSpecies.submissionStatus === 'Approved'}
+          disabled={currentAcceleratorProjectSpecies.submissionStatus === 'Approved'}
 <span class="cstat-no" title="statement not covered" >          id='approveDeliverable'</span>
           label={strings.APPROVE}
           onClick={() =&gt; void setShowApproveDialog(true)}
@@ -1196,7 +1196,7 @@ export default function SpeciesDetailView(): JSX.Element {
         &lt;OptionsMenu onOptionItemClick={onOptionItemClick} optionItems={optionItems} /&gt;
       &lt;/Box&gt;
     );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  }, [activeLocale, currentParticipantProjectSpecies, onOptionItemClick, optionItems, theme]);
+  }, [activeLocale, currentAcceleratorProjectSpecies, onOptionItemClick, optionItems, theme]);
 &nbsp;
   const crumbs: Crumb[] = useMemo(
     () =&gt;
@@ -1236,9 +1236,9 @@ export default function SpeciesDetailView(): JSX.Element {
       )}
       {showRejectDialog &amp;&amp; &lt;RejectDialog onClose={() =&gt; setShowRejectDialog(false)} onSubmit={rejectHandler} /&gt;}
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-      {(isBusy || !currentSpecies || !currentParticipantProjectSpecies) &amp;&amp; &lt;BusySpinner withSkrim={true} /&gt;}
+      {(isBusy || !currentSpecies || !currentAcceleratorProjectSpecies) &amp;&amp; &lt;BusySpinner withSkrim={true} /&gt;}
 &nbsp;
-      {currentParticipantProjectSpecies &amp;&amp; currentSpecies &amp;&amp; (
+      {currentAcceleratorProjectSpecies &amp;&amp; currentSpecies &amp;&amp; (
         &lt;Page
           title={
             &lt;Box
@@ -1267,8 +1267,8 @@ export default function SpeciesDetailView(): JSX.Element {
           rightComponent={actions}
           crumbs={crumbs}
         &gt;
-          {currentParticipantProjectSpecies.submissionStatus === 'Rejected' &amp;&amp; (
-            &lt;RejectedBox participantProjectSpecies={currentParticipantProjectSpecies} onSubmit={rejectHandler} /&gt;
+          {currentAcceleratorProjectSpecies.submissionStatus === 'Rejected' &amp;&amp; (
+            &lt;RejectedBox acceleratorProjectSpecies={currentAcceleratorProjectSpecies} onSubmit={rejectHandler} /&gt;
           )}
 &nbsp;
           &lt;Grid container padding={theme.spacing(0, 0, 4, 0)}&gt;
@@ -1281,7 +1281,7 @@ export default function SpeciesDetailView(): JSX.Element {
                 margin: 0,
               }}
             &gt;
-              {currentParticipantProjectSpecies &amp;&amp; (
+              {currentAcceleratorProjectSpecies &amp;&amp; (
                 &lt;Box display='flex' flexDirection='column' width='100%'&gt;
                   &lt;Box
                     border={`1px solid ${theme.palette.TwClrBaseGray100}`}
@@ -1290,11 +1290,11 @@ export default function SpeciesDetailView(): JSX.Element {
                     padding='16px'
                   &gt;
                     &lt;div style={{ float: 'right', marginBottom: '0px', marginLeft: '16px' }}&gt;
-                      &lt;DeliverableStatusBadge status={currentParticipantProjectSpecies.submissionStatus} /&gt;
+                      &lt;DeliverableStatusBadge status={currentAcceleratorProjectSpecies.submissionStatus} /&gt;
                     &lt;/div&gt;
 &nbsp;
                     {currentDeliverable &amp;&amp; (
-                      &lt;InternalComment entity={currentParticipantProjectSpecies} update={onUpdateInternalComment} /&gt;
+                      &lt;InternalComment entity={currentAcceleratorProjectSpecies} update={onUpdateInternalComment} /&gt;
                     )}
                   &lt;/Box&gt;
                 &lt;/Box&gt;
@@ -1304,7 +1304,7 @@ export default function SpeciesDetailView(): JSX.Element {
                   label={strings.NATIVE_NON_NATIVE}
                   id='speciesNativeCategory'
                   type='text'
-                  value={currentParticipantProjectSpecies.speciesNativeCategory}
+                  value={currentAcceleratorProjectSpecies.speciesNativeCategory}
                   display={true}
                 /&gt;
               &lt;/GridItemWrapper&gt;
@@ -1313,7 +1313,7 @@ export default function SpeciesDetailView(): JSX.Element {
                   label={strings.RATIONALE}
                   id='rationale'
                   type='text'
-                  value={currentParticipantProjectSpecies.rationale}
+                  value={currentAcceleratorProjectSpecies.rationale}
                   display={true}
                 /&gt;
               &lt;/GridItemWrapper&gt;
@@ -1576,7 +1576,7 @@ export default function SpeciesDetailView(): JSX.Element {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-17T20:04:07.886Z
+                at 2026-02-17T20:28:53.610Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
