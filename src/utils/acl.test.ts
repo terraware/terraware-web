@@ -19,11 +19,6 @@ describe('isAllowed', () => {
     expect(isAllowed(user, 'READ_COHORTS')).toBeTruthy();
     expect(isAllowed(user, 'UPDATE_COHORTS')).toBeTruthy();
     expect(isAllowed(user, 'DELETE_COHORTS')).toBeTruthy();
-    expect(isAllowed(user, 'CREATE_PARTICIPANTS')).toBeTruthy();
-    expect(isAllowed(user, 'READ_PARTICIPANTS')).toBeTruthy();
-    expect(isAllowed(user, 'UPDATE_PARTICIPANTS')).toBeTruthy();
-    expect(isAllowed(user, 'DELETE_PARTICIPANTS')).toBeTruthy();
-    expect(isAllowed(user, 'ASSIGN_PARTICIPANT_TO_COHORT')).toBeTruthy();
     expect(isAllowed(user, 'READ_ACCELERATOR_PROJECT')).toBeTruthy();
     expect(isAllowed(user, 'UPDATE_ACCELERATOR_PROJECT')).toBeTruthy();
 
@@ -51,11 +46,6 @@ describe('isAllowed', () => {
     expect(isAllowed(user, 'READ_COHORTS')).toBeTruthy();
     expect(isAllowed(user, 'UPDATE_COHORTS')).toBeTruthy();
     expect(isAllowed(user, 'DELETE_COHORTS')).toBeTruthy();
-    expect(isAllowed(user, 'CREATE_PARTICIPANTS')).toBeTruthy();
-    expect(isAllowed(user, 'READ_PARTICIPANTS')).toBeTruthy();
-    expect(isAllowed(user, 'UPDATE_PARTICIPANTS')).toBeTruthy();
-    expect(isAllowed(user, 'DELETE_PARTICIPANTS')).toBeTruthy();
-    expect(isAllowed(user, 'ASSIGN_PARTICIPANT_TO_COHORT')).toBeTruthy();
     expect(isAllowed(user, 'READ_ACCELERATOR_PROJECT')).toBeTruthy();
     expect(isAllowed(user, 'UPDATE_ACCELERATOR_PROJECT')).toBeTruthy();
 
@@ -79,9 +69,6 @@ describe('isAllowed', () => {
     // Allowed permissions
     expect(isAllowed(user, 'VIEW_CONSOLE')).toBeTruthy();
     expect(isAllowed(user, 'READ_COHORTS')).toBeTruthy();
-    expect(isAllowed(user, 'READ_PARTICIPANTS')).toBeTruthy();
-    expect(isAllowed(user, 'UPDATE_PARTICIPANTS')).toBeFalsy();
-    expect(isAllowed(user, 'ASSIGN_PARTICIPANT_TO_COHORT')).toBeTruthy();
     expect(isAllowed(user, 'READ_ACCELERATOR_PROJECT')).toBeTruthy();
     expect(isAllowed(user, 'UPDATE_ACCELERATOR_PROJECT')).toBeTruthy();
 
@@ -90,8 +77,6 @@ describe('isAllowed', () => {
     expect(isAllowed(user, 'CREATE_COHORTS')).toBeFalsy();
     expect(isAllowed(user, 'UPDATE_COHORTS')).toBeFalsy();
     expect(isAllowed(user, 'DELETE_COHORTS')).toBeFalsy();
-    expect(isAllowed(user, 'CREATE_PARTICIPANTS')).toBeFalsy();
-    expect(isAllowed(user, 'DELETE_PARTICIPANTS')).toBeFalsy();
 
     // Role to set must be passed for this rule
     expect(isAllowed(user, 'ASSIGN_GLOBAL_ROLE_TO_USER')).toBeFalsy();
@@ -120,11 +105,6 @@ describe('isAllowed', () => {
     expect(isAllowed(user, 'CREATE_COHORTS')).toBeFalsy();
     expect(isAllowed(user, 'UPDATE_COHORTS')).toBeFalsy();
     expect(isAllowed(user, 'DELETE_COHORTS')).toBeFalsy();
-    expect(isAllowed(user, 'CREATE_PARTICIPANTS')).toBeFalsy();
-    expect(isAllowed(user, 'READ_PARTICIPANTS')).toBeFalsy();
-    expect(isAllowed(user, 'UPDATE_PARTICIPANTS')).toBeFalsy();
-    expect(isAllowed(user, 'DELETE_PARTICIPANTS')).toBeFalsy();
-    expect(isAllowed(user, 'ASSIGN_PARTICIPANT_TO_COHORT')).toBeFalsy();
     expect(isAllowed(user, 'UPDATE_ACCELERATOR_PROJECT')).toBeFalsy();
 
     // Role to set must be passed for this rule
