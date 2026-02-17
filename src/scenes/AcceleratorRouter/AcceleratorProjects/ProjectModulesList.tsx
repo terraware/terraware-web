@@ -12,7 +12,7 @@ import { ModulePayload } from 'src/queries/generated/modules';
 import { ProjectModulePayload } from 'src/queries/generated/projectModules';
 import { SearchSortOrder } from 'src/types/Search';
 
-import AddModuleModal from '../Cohorts/AddModuleModal';
+import AddModuleModal from '../Projects/AddModuleModal';
 import ProjectModulesCellRenderer from './ProjectModulesCellRenderer';
 
 const defaultSortOrder: SearchSortOrder = {

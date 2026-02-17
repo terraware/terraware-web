@@ -7,7 +7,7 @@ import Table from 'src/components/common/table';
 import strings from 'src/strings';
 import { CohortModule, Module, ModuleDeliverable } from 'src/types/Module';
 
-import AddModuleModal from './AddModuleModal';
+import AddModuleModal from '../Projects/AddModuleModal';
 import CohortModulesCellRenderer from './CohortModulesCellRenderer';
 import ModuleDeliverablesModal from './ModuleDeliverablesModal';
 
