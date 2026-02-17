@@ -1,15 +1,13 @@
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import { Grid, Typography } from '@mui/material';
 import { Separator } from '@terraware/web-components';
 
-import CohortsDropdown from 'src/components/CohortsDropdown';
 import DeliverablesTable from 'src/components/DeliverablesTable';
 import PageHeader from 'src/components/PageHeader';
+import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import { FilterField } from 'src/components/common/FilterGroup';
-import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
-import { useCohorts } from 'src/hooks/useCohorts';
 import { useProjects } from 'src/hooks/useProjects';
 import { useLocalization } from 'src/providers';
 import AcceleratorMain from 'src/scenes/AcceleratorRouter/AcceleratorMain';
@@ -21,26 +19,24 @@ import { SearchNodePayload } from 'src/types/Search';
 const DeliverablesList = () => {
   const { activeLocale } = useLocalization();
   const { availableProjects: availableProjectOptions } = useProjects();
-  const { availableCohorts } = useCohorts();
-  const contentRef = useRef(null);
 
-  const [cohortFilter, setCohortFilter] = useState<{ id?: number }>({ id: undefined });
+  const [projectFilter, setProjectFilter] = useState<{ projectId?: number }>({ projectId: undefined });
 
   const availableProjects = useMemo(() => availableProjectOptions || [], [availableProjectOptions]);
 
   const extraTableFilters: SearchNodePayload[] = useMemo(
     () =>
-      cohortFilter.id
+      projectFilter.projectId
         ? [
             {
               operation: 'field',
-              field: 'cohortId',
+              field: 'projectId',
               type: 'Exact',
-              values: [`${cohortFilter.id}`],
+              values: [`${projectFilter.projectId}`],
             },
           ]
         : [],
-    [cohortFilter]
+    [projectFilter]
   );
 
   const PageHeaderLeftComponent = useMemo(
@@ -53,40 +49,27 @@ const DeliverablesList = () => {
             </Grid>
             <Grid item>
               <Typography sx={{ lineHeight: '40px' }} component={'span'}>
-                {strings.COHORT}
+                {strings.PROJECT}
               </Typography>
             </Grid>
             <Grid item sx={{ marginLeft: theme.spacing(1.5) }}>
-              <CohortsDropdown
+              <ProjectsDropdown
                 allowUnselect
-                availableCohorts={availableCohorts}
-                record={cohortFilter}
-                setRecord={setCohortFilter}
+                availableProjects={availableProjects}
                 label={''}
+                record={projectFilter}
+                setRecord={setProjectFilter}
                 unselectLabel={strings.ALL}
               />
             </Grid>
           </Grid>
         </>
       ) : null,
-    [activeLocale, availableCohorts, cohortFilter]
+    [activeLocale, availableProjects, projectFilter]
   );
 
   const iconFilters: FilterConfig[] = useMemo(() => {
     const _filters = [
-      {
-        field: 'projectId',
-        label: strings.PROJECT,
-        type: 'multiple_selection' as FilterField['type'],
-        options: availableProjects?.map((p) => p.id),
-        pillValueRenderer: (values: (string | number | null)[]) =>
-          values
-            ?.map((value) => availableProjects.find((p) => p.id.toString() === value?.toString())?.name || '')
-            .join(', '),
-        renderOption: (value: string | number) => {
-          return availableProjects.find((p) => p.id.toString() === value.toString())?.name || '';
-        },
-      },
       {
         field: 'type',
         label: strings.TYPE,
@@ -100,13 +83,11 @@ const DeliverablesList = () => {
     ];
 
     return activeLocale ? _filters : [];
-  }, [activeLocale, availableProjects]);
+  }, [activeLocale]);
 
   return (
     <AcceleratorMain>
-      <PageHeaderWrapper nextElement={contentRef.current}>
-        <PageHeader title={strings.DELIVERABLES} leftComponent={PageHeaderLeftComponent} />
-      </PageHeaderWrapper>
+      <PageHeader title={strings.DELIVERABLES} leftComponent={PageHeaderLeftComponent} />
 
       {/* -1 for "non-organization scoped search" IE admin search */}
       <DeliverablesTable
