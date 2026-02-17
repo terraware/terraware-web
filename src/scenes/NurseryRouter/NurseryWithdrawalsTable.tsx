@@ -585,7 +585,8 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     for (const row of data) {
       const values = headers.map((header) => {
         const val = row[header];
-        return `"${val}"`;
+        const escaped = String(val ?? '').replace(/"/g, '""');
+        return `"${escaped}"`;
       });
       csvRows.push(values.join(','));
     }
