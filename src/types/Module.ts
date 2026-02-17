@@ -2,6 +2,7 @@ import { components } from 'src/api/types/generated-schema';
 import strings from 'src/strings';
 
 export type CohortModule = components['schemas']['CohortModulePayload'];
+export type ProjectModule = components['schemas']['ProjectModulePayload'];
 export type Module = components['schemas']['ModulePayload'];
 
 export type ModuleDeliverable = components['schemas']['ModuleDeliverablePayload'];

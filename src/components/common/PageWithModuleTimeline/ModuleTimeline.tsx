@@ -8,7 +8,7 @@ import Stepper from '@mui/material/Stepper';
 import Typography from '@mui/material/Typography';
 import { Badge } from '@terraware/web-components';
 
-import { CohortModule } from 'src/types/Module';
+import { ProjectModule } from 'src/types/Module';
 import { PhaseType } from 'src/types/Phase';
 
 type AltStepIconProps = {
@@ -42,7 +42,7 @@ const AltStepIcon = ({ index, bgColor }: AltStepIconProps) => {
 
 export type ModuleTimelineProps = {
   projectPhase?: PhaseType;
-  modules: CohortModule[];
+  modules: ProjectModule[];
 };
 
 const ModuleTimeline = ({ projectPhase, modules }: ModuleTimelineProps) => {
