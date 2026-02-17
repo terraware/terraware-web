@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
+import { useLazyGetProjectModuleQuery } from 'src/queries/generated/projectModules';
 import { ProjectModule } from 'src/types/Module';
-
-import { useLazyGetProjectModuleQuery } from '../queries/generated/projectModules';
 
 const useGetProjectModule = () => {
   const [getProjectModuleQuery, projectModuleResult] = useLazyGetProjectModuleQuery();
