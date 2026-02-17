@@ -25,7 +25,6 @@ import {
   MRT_ToggleDensePaddingButton,
   MRT_ToggleFiltersButton,
   MRT_ToggleFullScreenButton,
-  MRT_ToggleGlobalFilterButton,
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
@@ -896,7 +895,6 @@ const MatrixView = () => {
     editDisplayMode: 'cell',
     renderToolbarInternalActions: ({ table }) => (
       <Box>
-        <MRT_ToggleGlobalFilterButton table={table} />
         <MRT_ToggleFiltersButton table={table} />
         <Tooltip title={strings.MANAGE_COLUMNS}>
           <IconButton onClick={onColumnsClickHandler} id='manageColumns'>
@@ -940,6 +938,7 @@ const MatrixView = () => {
       columnPinning,
       columnOrder,
       globalFilter,
+      showGlobalFilter: true,
     },
     onGlobalFilterChange: setGlobalFilter,
     onColumnFiltersChange: setColumnFilters,
