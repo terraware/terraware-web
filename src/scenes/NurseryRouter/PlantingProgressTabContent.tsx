@@ -144,11 +144,6 @@ export default function PlantingProgress(): JSX.Element {
       <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt} marginBottom={theme.spacing(1)}>
         {strings.PLANTING_PROGRESS}
       </Typography>
-      <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxt}>
-        {activeView === 'list'
-          ? strings.PLANTING_PROGRESS_TABLE_DESCRIPTION
-          : strings.PLANTING_PROGRESS_MAP_DESCRIPTION}
-      </Typography>
       <ListMapView
         data={plantingSite?.strata}
         style={{
