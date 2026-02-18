@@ -224,8 +224,12 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
         id: 'plantingCompleted',
         header: strings.PLANTING_COMPLETE,
         accessorFn: (row) => {
-          if (row.plantingCompleted === true) return strings.YES;
-          if (row.plantingCompleted === false) return strings.NO;
+          if (row.plantingCompleted === true) {
+            return strings.YES;
+          }
+          if (row.plantingCompleted === false) {
+            return strings.NO;
+          }
           return '';
         },
         filterVariant: 'select',
@@ -323,7 +327,9 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
           enableColumnPinning: true,
           enableColumnActions: true,
           enableHiding: true,
+          enableGrouping: false,
           enableColumnDragging: true,
+          positionGlobalFilter: 'right',
           getRowId: (row, index) => String(index),
           renderToolbarAlertBannerContent: ({ selectedAlert }) => (
             <Box display='flex' gap={1} alignItems='center' justifyContent='space-between' width='100%'>
@@ -369,12 +375,16 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
           },
           muiTablePaperProps: {
             elevation: 0,
+            sx: { padding: 0 },
           },
           muiTopToolbarProps: {
             sx: {
               position: 'relative',
               '& > .MuiBox-root': {
                 position: 'relative',
+              },
+              '& .Mui-ToolbarDropZone': {
+                display: 'none',
               },
             },
           },
@@ -394,6 +404,7 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
             },
           },
         }}
+        sx={{ padding: 0 }}
       />
     </Box>
   );
