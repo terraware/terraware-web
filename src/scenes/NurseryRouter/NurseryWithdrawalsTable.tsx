@@ -685,6 +685,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         enableColumnPinning: true,
         enableColumnActions: true,
         enableHiding: true,
+        enableGrouping: false,
         enableColumnDragging: false,
         enableColumnOrdering: false,
         positionGlobalFilter: 'right',
@@ -718,6 +719,9 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
             '& > .MuiBox-root': {
               position: 'relative',
             },
+            '& .Mui-ToolbarDropZone': {
+              display: 'none',
+            },
           },
         },
         muiTableBodyRowProps: {
@@ -728,6 +732,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
           },
         },
       }}
+      sx={{ padding: 0 }}
     />
   );
 }
