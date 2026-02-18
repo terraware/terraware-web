@@ -15,7 +15,6 @@ import { PublishedReportPayload } from 'src/queries/generated/publishedReports';
 import { requestListFunderActivities } from 'src/redux/features/funder/activities/funderActivitiesAsyncThunks';
 import { selectListFunderActivitiesRequest } from 'src/redux/features/funder/activities/funderActivitiesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { PublishedReport } from 'src/types/AcceleratorReport';
 import { FunderProjectDetails } from 'src/types/FunderProject';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
@@ -57,7 +56,7 @@ const ProjectView = ({ projectDetails, includeCrumbs, goToAllProjects, published
     }
   }, [funderListActivitiesRequest]);
 
-  const [selectedReport, setSelectedReport] = useState<PublishedReport>();
+  const [selectedReport, setSelectedReport] = useState<PublishedReportPayload>();
   const [quarterDropdownData, setQuarterDropdownData] = useState<QuarterDropdownData | undefined>(undefined);
 
   useEffect(() => {
@@ -160,19 +159,23 @@ const ProjectView = ({ projectDetails, includeCrumbs, goToAllProjects, published
               {strippedDealName}
             </Typography>
             {activeTab === 'report' && (publishedReports?.length ?? 0) > 0 && (
-              <SelectT<PublishedReport>
+              <SelectT<PublishedReportPayload>
                 id='report'
                 label={''}
                 placeholder={strings.SELECT}
                 options={publishedReports}
-                onChange={(_report: PublishedReport) => {
+                onChange={(_report: PublishedReportPayload) => {
                   setSelectedReport(_report);
                 }}
                 selectedValue={selectedReport}
-                isEqual={(a: PublishedReport, b: PublishedReport) => a.reportId === b.reportId}
-                renderOption={(_report: PublishedReport) => `${_report?.startDate?.split('-')[0]} ${_report?.quarter}`}
-                displayLabel={(_report: PublishedReport) => `${_report?.startDate?.split('-')[0]} ${_report?.quarter}`}
-                toT={(name: string) => ({ name }) as unknown as PublishedReport}
+                isEqual={(a: PublishedReportPayload, b: PublishedReportPayload) => a.reportId === b.reportId}
+                renderOption={(_report: PublishedReportPayload) =>
+                  `${_report?.startDate?.split('-')[0]} ${_report?.quarter}`
+                }
+                displayLabel={(_report: PublishedReportPayload) =>
+                  `${_report?.startDate?.split('-')[0]} ${_report?.quarter}`
+                }
+                toT={(name: string) => ({ name }) as unknown as PublishedReportPayload}
                 selectStyles={{ inputContainer: { 'margin-top': isMobile ? theme.spacing(2) : 0 } }}
               />
             )}

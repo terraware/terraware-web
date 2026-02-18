@@ -728,53 +728,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/accelerator/participants": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * OBSOLETE
-         * @deprecated
-         * @description This used to create a new participant; now it just sets the cohort on a project.
-         */
-        post: operations["createParticipant"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/accelerator/participants/{participantId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * OBSOLETE
-         * @deprecated
-         * @description Gets a project's cohort.
-         */
-        get: operations["getParticipant"];
-        /**
-         * OBSOLETE
-         * @deprecated
-         * @description Updates a project's cohort.
-         */
-        put: operations["updateParticipant"];
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/v1/accelerator/projects": {
         parameters: {
             query?: never;
@@ -6399,16 +6352,6 @@ export interface components {
             /** @enum {string} */
             speciesNativeCategory?: "Native" | "Non-native";
         };
-        CreateParticipantRequestPayload: {
-            /**
-             * Format: int64
-             * @description Assign the participant to this cohort. If null, the participant will not be assigned to any cohort initially.
-             */
-            cohortId?: number;
-            name: string;
-            /** @description Assign these projects to the new participant. If projects are already assigned to other participants, they will be reassigned to the new one. */
-            projectIds?: number[];
-        };
         CreatePlantingSiteRequestPayload: {
             boundary?: components["schemas"]["MultiPolygon"] | components["schemas"]["Polygon"];
             description?: string;
@@ -7548,10 +7491,6 @@ export interface components {
         };
         GetParticipantProjectsForSpeciesResponsePayload: {
             participantProjectsForSpecies: components["schemas"]["ParticipantProjectForSpeciesPayload"][];
-            status: components["schemas"]["SuccessOrError"];
-        };
-        GetParticipantResponsePayload: {
-            participant: components["schemas"]["ParticipantPayload"];
             status: components["schemas"]["SuccessOrError"];
         };
         GetPlantingSiteHistoryResponsePayload: {
@@ -9446,17 +9385,6 @@ export interface components {
             /** @enum {string} */
             role: "Contributor" | "Manager" | "Admin" | "Owner" | "Terraformation Contact";
         };
-        ParticipantPayload: {
-            /** Format: int64 */
-            cohortId?: number;
-            cohortName?: string;
-            /** @enum {string} */
-            cohortPhase?: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor" | "Pre-Screen" | "Application";
-            /** Format: int64 */
-            id: number;
-            name: string;
-            projects: components["schemas"]["ParticipantProjectPayload"][];
-        };
         ParticipantProjectForSpeciesPayload: {
             /**
              * Format: int64
@@ -9474,15 +9402,6 @@ export interface components {
             projectName: string;
             /** Format: int64 */
             speciesId: number;
-        };
-        ParticipantProjectPayload: {
-            /** Format: int64 */
-            organizationId: number;
-            organizationName: string;
-            projectDealName?: string;
-            /** Format: int64 */
-            projectId: number;
-            projectName: string;
         };
         ParticipantProjectSpeciesPayload: {
             feedback?: string;
@@ -11582,13 +11501,6 @@ export interface components {
             speciesNativeCategory?: "Native" | "Non-native";
             /** @enum {string} */
             submissionStatus: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed" | "Completed";
-        };
-        UpdateParticipantRequestPayload: {
-            /**
-             * Format: int64
-             * @description Assign the project to this cohort. If null, remove the project from its current cohort, if any.
-             */
-            cohortId?: number;
         };
         UpdatePlantingSiteRequestPayload: {
             /** @description Site boundary. Ignored if this is a detailed planting site. */
@@ -13703,96 +13615,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-                };
-            };
-        };
-    };
-    createParticipant: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateParticipantRequestPayload"];
-            };
-        };
-        responses: {
-            /** @description The requested operation succeeded. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["GetParticipantResponsePayload"];
-                };
-            };
-        };
-    };
-    getParticipant: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                participantId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description The requested operation succeeded. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["GetParticipantResponsePayload"];
-                };
-            };
-            /** @description The requested resource was not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-                };
-            };
-        };
-    };
-    updateParticipant: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                participantId: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateParticipantRequestPayload"];
-            };
-        };
-        responses: {
-            /** @description The requested operation succeeded. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-                };
-            };
-            /** @description The requested resource was not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
                 };
             };
         };

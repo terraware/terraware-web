@@ -429,7 +429,7 @@ export type AcceleratorReportPayload = {
   endDate: string;
   feedback?: string;
   financialSummaries?: string;
-  frequency: 'Quarterly' | 'Annual';
+  frequency: 'Quarterly';
   highlights?: string;
   id: number;
   internalComment?: string;
@@ -455,7 +455,7 @@ export type ListAcceleratorReportsResponsePayload = {
 };
 export type ExistingAcceleratorReportConfigPayload = {
   configId: number;
-  frequency: 'Quarterly' | 'Annual';
+  frequency: 'Quarterly';
   logframeUrl?: string;
   projectId: number;
   reportingEndDate: string;
