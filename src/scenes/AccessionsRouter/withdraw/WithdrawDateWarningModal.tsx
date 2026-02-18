@@ -24,19 +24,19 @@ const WithdrawDateWarningModal = ({ onClose, onContinue }: WithdrawDateWarningMo
         middleButtons={[
           <Button
             id='cancelWithdrawDateWarning'
-            label={strings.CANCEL}
-            priority='secondary'
-            type='passive'
-            onClick={onClose}
-            size='medium'
             key='button-1'
+            label={strings.CANCEL}
+            onClick={onClose}
+            priority='secondary'
+            size='medium'
+            type='passive'
           />,
           <Button
             id='continueWithdrawDateWarning'
+            key='button-2'
             label={strings.CONTINUE}
             onClick={onContinue}
             size='medium'
-            key='button-2'
           />,
         ]}
         onClose={onClose}
