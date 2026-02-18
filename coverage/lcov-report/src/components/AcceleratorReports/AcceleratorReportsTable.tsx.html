@@ -25,21 +25,21 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/116</span>
+                <span class='fraction'>0/115</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/70</span>
+                <span class='fraction'>0/68</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/33</span>
+                <span class='fraction'>0/32</span>
             </div>
         
             
@@ -284,9 +284,7 @@
 <a name='L219'></a><a href='#L219'>219</a>
 <a name='L220'></a><a href='#L220'>220</a>
 <a name='L221'></a><a href='#L221'>221</a>
-<a name='L222'></a><a href='#L222'>222</a>
-<a name='L223'></a><a href='#L223'>223</a>
-<a name='L224'></a><a href='#L224'>224</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L222'></a><a href='#L222'>222</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -493,8 +491,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -592,37 +588,35 @@ export default functio<span class="cstat-no" title="statement not covered" >n Ac
 &nbsp;
   const acceleratorReports = useMemo((): AcceleratorReportRow[] =&gt; {
     return (
-      projectReports
-        ?.filter((report) =&gt; report.frequency !== 'Annual')
-        .map((report) =&gt; {
-          const<span class="cstat-no" title="statement not covered" > year = report.startDate.s<span class="fstat-no" title="function not covered" >pl</span>it('<span class="cstat-no" title="statement not covered" >-')[0];</span></span>
-          const reportNam<span class="cstat-no" title="statement not covered" >e = getReportName(report);<span class="fstat-no" title="function not covered" ></span></span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >          return {</span>
-            ...report,
-            reportName,<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" ></span>            year,
-          };
-<span class="cstat-no" title="statement not covered" >        }) ?? []</span>
+      projectReports.map((report) =&gt; {
+        const year = report.startDate.split('-')[0];
+        const reportName = getReportName(report);
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+        return {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+          ...report,
+<span class="cstat-no" title="statement not covered" >          reportName,</span>
+          year,
+        };<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" ></span>      }) ?? []
     );
-  }, [projectReports]);
+  }, [<span class="cstat-no" title="statement not covered" >projectReports]);</span>
 &nbsp;
-  const columns = useMemo(():<span class="cstat-no" title="statement not covered" > TableColumnType[] =&gt; {<span class="fstat-no" title="function not covered" ></span></span>
+  const columns = useMemo((): TableColumnType[] =&gt; {
     return [
-<span class="cstat-no" title="statement not covered" >      {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span>
-        key: 'repor<span class="cstat-no" title="statement not covered" >tName',</span>
-        name: strings.REP<span class="cstat-no" title="statement not covered" >ORT,</span>
-<span class="cstat-no" title="statement not covered" >        type: 'string',</span>
-      },
-      {
+      {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+        key: 'reportName',
+<span class="cstat-no" title="statement not covered" >        name: strings.REPORT,<span class="fstat-no" title="function not covered" ></span></span>
+        type: 'stri<span class="cstat-no" title="statement not covered" >ng',</span>
+      },<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >      {</span>
         key: 'status',
         name: strings.STATUS,
         type: 'string',
       },
-      {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >        key: 'modifiedBy',</span>
-        name: strings.LAST_EDITED_BY,
-        type: 'string',
+      {
+        key: 'modifiedBy',
+        name: stri<span class="cstat-no" title="statement not covered" >ngs.LAST_EDITED_BY,<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >        type: 'string',</span>
       },
       {
         key: 'submittedBy',
@@ -648,76 +642,76 @@ export default functio<span class="cstat-no" title="statement not covered" >n Ac
       const lastCurrentYear = currentYearReports.length &gt; 0 ? currentYear : currentYear - 1;
       const lastYear = Math.min(endYear, lastCurrentYear);
 &nbsp;
-      return Array.from({ l<span class="cstat-no" title="statement not covered" >ength: lastYear - startYear + <span class="fstat-no" title="function not covered" >1 </span>}, (<span class="cstat-no" title="statement not covered" >_, i) </span>=&gt; st</span>artYear + i);
-    } else {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-      return [];<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-    }
-  },<span class="cstat-no" title="statement not covered" > [currentYear, currentYearReports.length, getReportYearsResults.data?.years]);</span>
-<span class="cstat-no" title="statement not covered" ></span>
-  const yearFilterOption<span class="cstat-no" title="statement not covered" >s = useMemo(() =&gt; {</span>
-    return allReportYears.map(<span class="cstat-no" title="statement not covered" >(year) =&gt; year.toString());</span>
-  }, [allReportYears]);<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  useEffect(() =&gt; {
-    if<span class="cstat-no" title="statement not covered" > (allReport</span>Years.length) {
-      if (yearQuery &amp;&amp; allReportYears.includes(Number(yearQuery))) {
-        setYearFilter(Number(yearQuery));
-        return;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >      }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-      if (allReportYears.includes(currentYear)) {
-<span class="cstat-no" title="statement not covered" >        setYearFilter(currentY<span class="fstat-no" title="function not covered" >ea</span>r);</span>
-<span class="cstat-no" title="statement not covered" >      } else {</span>
-<span class="cstat-no" title="statement not covered" >        const futureYears = allReportYears.filter((year) =&gt; year &gt; currentYear).sort((a, b) =&gt; a - b);</span>
-<span class="cstat-no" title="statement not covered" >        if (futureYears.length) {</span>
-<span class="cstat-no" title="statement not covered" >          setYea</span>rFilter(futureYears[0]);
-        } else {
-<span class="cstat-no" title="statement not covered" >          const pastYears = allReportYears.filter((year) =&gt; year &lt; currentYear).sort((a, b) =&gt; b - a);</span>
-<span class="cstat-no" title="statement not covered" >          setYearFilter(pastYears[0]</span>);
-        }
-      }<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
-    }<span class="cstat-no" title="statement not covered" ></span>
-  }, [allR<span class="cstat-no" title="statement not covered" >eportYears, currentYear, yearQu</span>ery]);
+      return Array.from({ length: lastYear - startYear + 1 }, (_, i) =&gt; startYear + i);
+    } else {
+      return [];<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+    }<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  }, [currentYear, curren<span class="cstat-no" title="statement not covered" >tYearReports.length, getRe<span class="fstat-no" title="function not covered" >po</span>rtYearsResults.data?.years]);</span>
 &nbsp;
-  const featuredFilters: Fil<span class="cstat-no" title="statement not covered" >terConfigWithValues[] <span class="fstat-no" title="function not covered" >= </span>useMemo(<span class="cstat-no" title="statement not covered" >() =&gt; {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span>
-    const <span class="cstat-no" title="statement not covered" >rejectedStatus = isAccelerato</span>rRoute ? strings.UPDATE_REQUESTED : strings.UPDATE_NEEDED;
-    const filters: FilterConfigWithValues[] = [
-      {
+  co<span class="cstat-no" title="statement not covered" >nst yearFilterOptions = useMemo(() =&gt; {</span>
+    return allReportYe<span class="cstat-no" title="statement not covered" >ars.map((year) =&gt; year.toString());</span>
+  }, [allReportYears]);<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+  useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
+    if<span class="cstat-no" title="statement not covered" > (allReportYears.length) {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+      if (yearQuery &amp;&amp; allReportYears.includes(Number(yearQuery))) {
+<span class="cstat-no" title="statement not covered" >        setYearFi</span>lter(Number(yearQuery));
+        return;
+      }
+      if (allReportYears.inc<span class="cstat-no" title="statement not covered" >ludes(currentYear)) {<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >        setYearFilter(currentY<span class="fstat-no" title="function not covered" >ea</span>r);<span class="cstat-no" title="statement not covered" ></span></span>
+      } else {
+<span class="cstat-no" title="statement not covered" >        const futureYears = al<span class="fstat-no" title="function not covered" >lR</span>eportYears.filter((year) =&gt; year &gt; currentYear).sort((a, b) =&gt; a - b);</span>
+<span class="cstat-no" title="statement not covered" >        if (futureYears.length) {</span>
+<span class="cstat-no" title="statement not covered" >          setYearFilter(futureYears[0]);</span>
+<span class="cstat-no" title="statement not covered" >        } else {</span>
+<span class="cstat-no" title="statement not covered" >          const </span>pastYears = allReportYears.filter((year) =&gt; year &lt; currentYear).sort((a, b) =&gt; b - a);
+          setYearFilter(pastYears[0]);
+<span class="cstat-no" title="statement not covered" >        }</span>
+      }<span class="cstat-no" title="statement not covered" ></span>
+    }
+  }, [allReportYears, curren<span class="cstat-no" title="statement not covered" >tYear, yearQuery]);<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
+<span class="cstat-no" title="statement not covered" ></span>
+  const fe<span class="cstat-no" title="statement not covered" >aturedFilters: FilterConfigWith</span>Values[] = useMemo(() =&gt; {
+    const rejectedStatus = isAcceleratorRoute ? strings.UPDATE_REQUESTED : strings.UPDATE_NEEDED;
+    const filters: FilterCon<span class="cstat-no" title="statement not covered" >figWithValues[] = [<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
+      {<span class="cstat-no" title="statement not covered" ></span>
         field: 'status',
         label: strings.STATUS,
-        options: Accelerat<span class="cstat-no" title="statement not covered" >orReportStatuses,<span class="fstat-no" title="function not covered" ></span></span>
-        pillValueRenderer: <span class="cstat-no" title="statement not covered" >(values: (string | number | null)[]) =&gt;</span>
-          values.map<span class="cstat-no" title="statement not covered" >((value) =&gt; (value === 'Rejected' ? rejectedStatus : value)).join(', '),</span>
-        renderOption: (value: string | number) =&gt; (value.toString() === 'Rejected' ? rejectedStatus : value.toString()),
-      },
+        options: AcceleratorReportStatuses,
+        pillValueRenderer: (values: (string | number | null)[]) =&gt;
+          values.map((valu<span class="cstat-no" title="statement not covered" >e) =&gt; (value === 'Rejected<span class="fstat-no" title="function not covered" >' </span>? rejectedStatus : value)).join(', '),</span>
+        renderOption: (valu<span class="cstat-no" title="statement not covered" >e: string | number) =&gt; (value.toString() === 'Rejected' ? rejectedStat</span>us : value.toString()),
+      },<span class="cstat-no" title="statement not covered" ></span>
     ];
 &nbsp;
-    return filters;<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span>
-  }, [isAcceleratorRou<span class="fstat-no" title="function not covered" >te</span>, strings<span class="cstat-no" title="statement not covered" >]);</span>
-&nbsp;
-  const extraFilter = useMemo(
-<span class="cstat-no" title="statement not covered" >    () =&gt; (</span>
+    return filters;
+  }, [isAcceleratorRoute, strings]);
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span>
+  const extraFilter = <span class="fstat-no" title="function not covered" >us</span>eMemo(<span class="cstat-no" title="statement not covered" ></span>
+    () =&gt; (
       &lt;Box marginTop={0.5} paddingLeft={1}&gt;
-        &lt;Select<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" ></span>          id='yearFilter'<span class="cstat-no" title="statement not covered" ></span>
-          label=''
-          onChange={(value: string) =&gt; setYearFilter(Number(value))}
+<span class="cstat-no" title="statement not covered" >        &lt;Select</span>
+          id='yearFilter'
+          label=''<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" ></span>          onChange={(value<span class="cstat-no" title="statement not covered" >: string) =&gt; setYearFilter(Number(value))}</span>
           options={yearFilterOptions}
           placeholder={strings.YEAR}
-          selected<span class="fstat-no" title="function not covered" >Va</span>lue={year<span class="cstat-no" title="statement not covered" >Filter.toString()}</span>
+          selectedValue={yearFilter.toString()}
           sx={{ textAlign: 'left' }}
-        /&gt;
+        /&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
       &lt;/Box&gt;
     ),
     [strings, yearFilter, yearFilterOptions]
   );
 &nbsp;
   if (!projectId) {
-<span class="cstat-no" title="statement not covered" >    return &lt;&gt;&lt;/&gt;;</span>
-  }<span class="cstat-no" title="statement not covered" ></span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+    return &lt;&gt;&lt;/&gt;;
+  }
+<span class="cstat-no" title="statement not covered" ></span>
+  re<span class="cstat-no" title="statement not covered" >turn (</span>
     &lt;ClientSideFilterTable
-      busy={busy}
+<span class="cstat-no" title="statement not covered" >      busy={busy}</span>
       columns={columns}
       defaultSortOrder={defaultSearchOrder}
       extraComponent={extraFilter}
@@ -739,7 +733,7 @@ export default functio<span class="cstat-no" title="statement not covered" >n Ac
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-17T20:36:28.506Z
+                at 2026-02-18T22:49:27.434Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

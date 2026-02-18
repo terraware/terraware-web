@@ -260,7 +260,10 @@
 <a name='L195'></a><a href='#L195'>195</a>
 <a name='L196'></a><a href='#L196'>196</a>
 <a name='L197'></a><a href='#L197'>197</a>
-<a name='L198'></a><a href='#L198'>198</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L198'></a><a href='#L198'>198</a>
+<a name='L199'></a><a href='#L199'>199</a>
+<a name='L200'></a><a href='#L200'>200</a>
+<a name='L201'></a><a href='#L201'>201</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -456,6 +459,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > useEffect, us</span>eMemo, useState } from 'react';
 <span class="cstat-no" title="statement not covered" ></span>
@@ -474,87 +480,86 @@ import<span class="cstat-no" title="statement not covered" > { PublishedReportPa
 import {<span class="cstat-no" title="statement not covered" > requestListFunderActiviti<span class="fstat-no" title="function not covered" >es</span> } f<span class="cstat-no" title="statement not covered" >rom 'src/r</span>edux/features/funder/activities/funderActivitiesAsyncThunks';</span>
 import { selectListFunderActivitiesRequest } from 'src/redux/features/funder/activities/funderActivitiesSelectors';
 im<span class="cstat-no" title="statement not covered" >port { useA</span>ppDispatch, useAppSelector } from 'src/redux/store';
-import { PublishedReport } from 'src/types/AcceleratorReport';
-import { Funde<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >rP</span>rojectDetails } from 'src/ty<span class="cstat-no" title="statement not covered" >pes/FunderProject';</span></span>
-import useQuery from 'src/utils/useQuery';
+import { FunderProjectDetails } from 'src/types/FunderProject';
+import useQuer<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >y </span>from 'src/utils/useQuery';<span class="cstat-no" title="statement not covered" ></span></span>
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import useStickyTabs from 'src/utils/useStickyTabs';
 &nbsp;
 import ProjectProfileView from '../AcceleratorRouter/AcceleratorProjects/ProjectProfileView';
 import FunderReportView from '../FunderReport/FunderReportView';
 &nbsp;
-const DEAL_NAME_COU<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >NT</span>RY_CODE<span class="cstat-no" title="statement not covered" >_REGEX = /^[A-Z]{3}_/;</span></span>
-<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >type ProjectViewProps = {</span>
-  projectDe<span class="fstat-no" title="function not covered" >ta</span>ils:<span class="cstat-no" title="statement not covered" > FunderProject</span>Details;
-  includeCrumbs: boolean;
-<span class="cstat-no" title="statement not covered" >  goToAllProjects: () =&gt; void;</span>
-  publishedReports:<span class="cstat-no" title="statement not covered" > PublishedReportPayload[];</span>
+const DEAL_NAME_COUNTRY_CODE_REGEX = /^[A-Z]{3}_/;
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+type ProjectViewProp<span class="cstat-no" title="statement not covered" >s =</span> {
+<span class="cstat-no" title="statement not covered" >  projectDetails: FunderProjectDetails;</span>
+  includeCr<span class="fstat-no" title="function not covered" >um</span>bs: <span class="cstat-no" title="statement not covered" >boolean;</span>
+  goToAllProjects: () =&gt; void;
+<span class="cstat-no" title="statement not covered" >  publishedReports: PublishedReportPayload[];</span>
 };<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-const ProjectView =<span class="cstat-no" title="statement not covered" > ({ projectDetails, includeCrumbs, goToAllP</span>rojects, publishedReports }: ProjectViewProps) =&gt; {
-  const theme = useTheme();<span class="cstat-no" title="statement not covered" ></span>
-  const { isMobile } = useDeviceInfo();<span class="cstat-no" title="statement not covered" ></span>
-  const { strings } = use<span class="cstat-no" title="statement not covered" >Localization();</span>
-  const query = useQ<span class="cstat-no" title="statement not covered" >uery();</span>
-  const location = useStateLo<span class="cstat-no" title="statement not covered" >cation();</span>
-  const navigate = useS<span class="cstat-no" title="statement not covered" >yncNavigate();</span>
-  const [requestId, setRequestId] = useSt<span class="cstat-no" title="statement not covered" >ate('');</span>
-  const [activities, setActivities] = u<span class="cstat-no" title="statement not covered" >seState&lt;TypedActivity[]&gt;([]);</span>
-  const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
+const ProjectView = ({ proje<span class="cstat-no" title="statement not covered" >ctDetails, includeCrumbs, goToAllProj</span>ects, publishedReports }: ProjectViewProps) =&gt; {
+  const theme = use<span class="cstat-no" title="statement not covered" >Theme();</span>
+  const { isMobile } = useDevice<span class="cstat-no" title="statement not covered" >Info();</span>
+  const { strings } = useLocalization()<span class="cstat-no" title="statement not covered" >;</span>
+  const query = useQuery(<span class="cstat-no" title="statement not covered" >);</span>
+  const location = u<span class="cstat-no" title="statement not covered" >seStateLocation();</span>
+  const navigate = useSyncNav<span class="cstat-no" title="statement not covered" >igate();</span>
+  const [requestId, set<span class="cstat-no" title="statement not covered" >RequestId] = useState('')</span>;
+  const [activities, setActivities] = use<span class="cstat-no" title="statement not covered" >State&lt;TypedActivity[]&gt;([]);</span>
+  const dispatch = useAppDispatch();<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const funderListActivitiesRe<span class="cstat-no" title="statement not covered" >quest = useAppSelector(selectListFunderActiviti</span>esRequest(requestId));
+  const funderListActi<span class="cstat-no" title="statement not covered" >vitiesRequest = useAppSelector(selectLi</span>stFunderActivitiesRequest(requestId));
 <span class="cstat-no" title="statement not covered" ></span>
   useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-    const request = dispatch(r<span class="cstat-no" title="statement not covered" >equestListFunderActivities(projectDetails.projectId))</span>;
-    setRequestId(request.requestId);<span class="cstat-no" title="statement not covered" ></span>
-  }, [dispatch, proj<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ec</span>tDetails.projectId]);</span>
-&nbsp;
-  useEffect(() =<span class="cstat-no" title="statement not covered" >&gt; {</span>
-    if (funderListActiv<span class="cstat-no" title="statement not covered" >itiesRequest?.status === 'success'</span>) {
-      setActivities(fu<span class="cstat-no" title="statement not covered" >nderListActivitiesRequest?.data?.map((pa</span>yload) =&gt; ({ type: 'funder', payload })) ?? []);
+    const request = dispatch(req<span class="cstat-no" title="statement not covered" >uestListFunderActivities(projectDetails.projectId));</span>
+    setRequestId(request.reque<span class="cstat-no" title="statement not covered" >stId);</span>
+  }, [dispatch, projectDetails.projec<span class="cstat-no" title="statement not covered" >tId]);</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  useEffect(() =&gt; {
+    if (funderLi<span class="cstat-no" title="statement not covered" >stActivitiesRequest?.status === </span>'success') {
+      setActivities(fun<span class="cstat-no" title="statement not covered" >derListActivitiesRequest?.data?.ma</span>p((payload) =&gt; ({ type: 'funder', payload })) ?? []);
     }<span class="cstat-no" title="statement not covered" ></span>
-  }, [funderListAct<span class="cstat-no" title="statement not covered" >ivitiesRequest]);</span>
+  }, [funderList<span class="cstat-no" title="statement not covered" >ActivitiesRequest]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const [selectedReport, setSelected<span class="cstat-no" title="statement not covered" >Report] = useState&lt;PublishedRep</span>ort&gt;();
-  const [quarterDropdownData, setQuart<span class="cstat-no" title="statement not covered" >erDropdownData] = useState&lt;Quar</span>terDropdownData | undefined&gt;(undefined);
+  const [selectedRe<span class="cstat-no" title="statement not covered" >port, setSelectedReport] = useState&lt;PublishedR</span>eportPayload&gt;();
+  const [quarterDropdownData, setQua<span class="cstat-no" title="statement not covered" >rterDropdownData] = useState&lt;Qu</span>arterDropdownData | undefined&gt;(undefined);
 <span class="cstat-no" title="statement not covered" ></span>
   useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >    if (!selectedReport &amp;&amp; pub<span class="fstat-no" title="function not covered" >li</span>shedReports?.length) {</span>
-      if (query.get(<span class="cstat-no" title="statement not covered" >'reportId')) {</span>
-<span class="cstat-no" title="statement not covered" >        const found = publishedReport</span>s?.find((r) =&gt; r.reportId.toString() === query.get('reportId'));
-        setSelectedReport(found || publishedReports[0]);
-<span class="cstat-no" title="statement not covered" >        query.delete('reportId<span class="fstat-no" title="function not covered" >')</span>;</span>
-        navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
-<span class="cstat-no" title="statement not covered" >      } else {</span>
-<span class="cstat-no" title="statement not covered" >        setSelectedReport(publishedReports[0]);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-      }
+    if (!selectedReport &amp;&amp; publishedRe<span class="cstat-no" title="statement not covered" >ports?.length) {</span>
+<span class="cstat-no" title="statement not covered" >      if (query.get('reportId'<span class="fstat-no" title="function not covered" >))</span> {</span>
+        const found <span class="cstat-no" title="statement not covered" >= publishedReports?.find((r) =&gt; r.reportId.toString() === query.get('reportId'));</span>
+<span class="cstat-no" title="statement not covered" >        setSelectedReport(found || pu</span>blishedReports[0]);
+        query.delete('reportId');
+<span class="cstat-no" title="statement not covered" >        navigate(getLocation(l<span class="fstat-no" title="function not covered" >oc</span>ation.pathname, location, query.toString()), { replace: true });</span>
+      } else {
+<span class="cstat-no" title="statement not covered" >        setSelectedReport(publishedReports[0]);</span>
+<span class="cstat-no" title="statement not covered" >      }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
     }
-  }, [location, navigate, query, publishedRepo<span class="cstat-no" title="statement not covered" >rts, selectedReport]);</span>
+  }, [location, navigate, query, publishedReports, selectedReport]);
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  const strippedDealName = use<span class="fstat-no" title="function not covered" >Me</span>mo(() =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (projectDetails?.dealName?.match(DEAL_NAME_COUNTRY_CODE_REGEX)) {</span>
+  const strippedDealName = useMemo(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >    if (projectDetails?.dealNa<span class="fstat-no" title="function not covered" >me</span>?.match(DEAL_NAME_COUNTRY_CODE_REGEX)) {</span>
 <span class="cstat-no" title="statement not covered" >      return projectDetails?.dealName?.replace(DEAL_NAME_COUNTRY_CODE_REGEX, '');</span>
-    } else {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-      re<span class="cstat-no" title="statement not covered" >turn projectDetails?.dealName;</span>
+    } <span class="cstat-no" title="statement not covered" >else {</span>
+      return projectDe<span class="cstat-no" title="statement not covered" >tails?.dealName;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
     }<span class="cstat-no" title="statement not covered" ></span>
   }, [pr<span class="cstat-no" title="statement not covered" >ojectDetails?.dealName]);</span>
-&nbsp;
-  const <span class="cstat-no" title="statement not covered" >tabs = useMemo(() =&gt; {</span>
-    return [
+<span class="cstat-no" title="statement not covered" ></span>
+  const tabs = useMemo(() =&gt; {
+    retu<span class="cstat-no" title="statement not covered" >rn [</span>
       {
         id: 'projectProfile',
-        label: strings.PROJ<span class="cstat-no" title="statement not covered" >ECT_PROFILE,<span class="fstat-no" title="function not covered" ></span></span>
-        children: (
-<span class="cstat-no" title="statement not covered" >          &lt;ProjectProfileView funderView={true} projectDetails={projectDetails} publishedReports={publishedReports} /&gt;</span>
+        label: strings.PROJECT_PROFILE,
+        children: (<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+          &lt;ProjectProfileView funderView={true} projectDetails={projectDetails} publishedReports={publishedReports} /&gt;
 <span class="cstat-no" title="statement not covered" >        ),</span>
-      },
-<span class="cstat-no" title="statement not covered" >      {</span>
-        id: 'report',
-        label: strings.REPORT,
-        childre<span class="cstat-no" title="statement not covered" >n: &lt;FunderReportView selec<span class="fstat-no" title="function not covered" >te</span>dProjectId={projectDetails.projectId} selectedReport={selectedReport} /&gt;,</span>
 <span class="cstat-no" title="statement not covered" >      },</span>
-      ...(activities.length &gt; 0
+      {
+<span class="cstat-no" title="statement not covered" >        id: 'report',</span>
+        label: strings.REPORT,
+        children: &lt;FunderReportView selectedProjectId={projectDetails.projectId} selectedReport={selectedReport} /&gt;,
+      },<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >      ...(activities.length &gt; 0</span>
         ? [
             {
               id: 'quarterlyHighlights',
@@ -587,22 +592,22 @@ const ProjectView =<span class="cstat-no" title="statement not covered" > ({ pro
 &nbsp;
   const crumbs: Crumb[] = useMemo(
     () =&gt;
-      includeCrumbs<span class="cstat-no" title="statement not covered" ></span>
-        ? [
+      includeCrumbs
+        ? [<span class="cstat-no" title="statement not covered" ></span>
             {
               name: strings.ALL_PROJECTS,
               onClick: goToAllProjects,
-            },<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span>          ]</span>
-        : [],
+            },
+          ]<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" ></span>        : <span class="cstat-no" title="statement not covered" >[],</span>
     [strings, includeCrumbs, goToAllProjects]
   );
 &nbsp;
   return (
     &lt;TfMain&gt;
       &lt;&gt;{crumbs &amp;&amp; &lt;BreadCrumbs crumbs={crumbs} /&gt;}&lt;/&gt;
-<span class="cstat-no" title="statement not covered" >      &lt;Box</span>
-        component='main'
+      &lt;Box
+<span class="cstat-no" title="statement not covered" >        component='main'</span>
         sx={{
           display: 'flex',
           flexDirection: 'column',
@@ -619,27 +624,31 @@ const ProjectView =<span class="cstat-no" title="statement not covered" > ({ pro
               {strippedDealName}
             &lt;/Typography&gt;
             {activeTab === 'report' &amp;&amp; (publishedReports?.length ?? 0) &gt; 0 &amp;&amp; (
-              &lt;SelectT&lt;PublishedReport&gt;
+              &lt;SelectT&lt;PublishedReportPayload&gt;
                 id='report'
                 label={''}
                 placeholder={strings.SELECT}
                 options={publishedReports}
-                onChange={(_report: PublishedReport) =&gt; {
+                onChange={(_report: PublishedReportPayload) =&gt; {
                   setSelectedReport(_report);
-                }}<span class="fstat-no" title="function not covered" ></span>
-<span class="cstat-no" title="statement not covered" >                selectedValue={selectedR</span>eport}
-                isEqual={(a: PublishedReport, b: PublishedReport) =&gt; a.reportId === b.reportId}
-                renderOption={(_report: PublishedReport) =&gt; `${_report?.startDate?.split('-')[0]} ${_report?.quarter}`}
-                dis<span class="fstat-no" title="function not covered" >pl</span>ayLabel=<span class="cstat-no" title="statement not covered" >{(_report: PublishedReport</span>) =&gt; `${_report?.startDate?.split('-')[0]} ${_report?.quarter}`}
-                toT={(na<span class="fstat-no" title="function not covered" >me</span>: string) =&gt; ({ name }) as unknown as PublishedReport}
-                selectStyles={{ inputContainer: { 'margin-top': isMobile ? theme.spacing(2) : 0 } }}
-<span class="cstat-no" title="statement not covered" >              /&gt;</span>
-            )}
-            {activeTab =<span class="fstat-no" title="function not covered" >==</span> 'quarterlyHighlights' &amp;&amp;
-              quarterDropdownData &amp;&amp;
-<span class="cstat-no" title="statement not covered" >              quarterDropdownData.dropdownOptions.length &gt; 0 &amp;&amp; (</span>
+                }}
+                sele<span class="fstat-no" title="function not covered" >ct</span>edValue={selectedReport}
+<span class="cstat-no" title="statement not covered" >                isEqual={(a: PublishedRe</span>portPayload, b: PublishedReportPayload) =&gt; a.reportId === b.reportId}
+                renderOption={(_report: PublishedReportPayload) =&gt;
+                  `${_report?.startDate?.split('-')[0]} ${_report?.quarter}`
+                }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+                displayL<span class="fstat-no" title="function not covered" >ab</span>el={(_report: PublishedReportPayload) =&gt;
+                  `${_report?.startDate?.split('-')[0]} ${_report?.quarter}`
+<span class="cstat-no" title="statement not covered" >                }</span>
+                toT={(name: string) =&gt; ({ name }) as unknown as PublishedReportPayload}
+                selectSt<span class="fstat-no" title="function not covered" >yl</span>es={{ inputContainer: { 'margin-top': isMobile ? theme.spacing(2) : 0 } }}
+              /&gt;
+<span class="cstat-no" title="statement not covered" >            )}</span>
+            {activeTab === 'quarterlyHighlights' &amp;&amp;
+              q<span class="fstat-no" title="function not covered" >ua</span>rterDropd<span class="cstat-no" title="statement not covered" >ownData &amp;</span>&amp;
+              quarterDropdownData.dropdownOptions.length &gt; 0 &amp;&amp; (
                 &lt;Dropdown
-<span class="fstat-no" title="function not covered" ></span>                  label=''<span class="cstat-no" title="statement not covered" ></span>
+                  label=''
                   onChange={quarterDropdownData.onChangeQuarter}
                   options={quarterDropdownData.dropdownOptions}
                   selectedValue={quarterDropdownData.selectedQuarter}
@@ -652,7 +661,7 @@ const ProjectView =<span class="cstat-no" title="statement not covered" > ({ pro
     &lt;/TfMain&gt;
   );
 };
-&nbsp;
+<span class="cstat-no" title="statement not covered" ></span>
 export default ProjectView;
 &nbsp;</pre></td></tr></table></pre>
 
@@ -661,7 +670,7 @@ export default ProjectView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-17T20:36:28.506Z
+                at 2026-02-18T22:49:27.434Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

@@ -1,3 +1,7 @@
+a16f8c74d9ed Removed annual reports and type references (#5251)
+4b97fec6b7b2 SW-8046 Removed plant drawer counter when selecting feature (#5253)
+29ab7c046ea9 SW-8026 Fit bounds to selected site history (#5252)
+4a6eaf089ab2 SW8023 Zoom on map only when focused (#5254)
 24a7004626a4 Always show projects view global filter, instead of only after click (#5248)
 a204fa56737d SW-8057 Replace ParticipantProject in species-related code (#5240)
 f08c8ac3426a Move AddModuleModal to projects scene (#5247)
