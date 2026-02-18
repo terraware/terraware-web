@@ -21,11 +21,13 @@ import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
 import {
   selectNurseryWithdrawalsCount,
+  selectNurseryWithdrawalsFilterOptions,
   selectNurseryWithdrawalsList,
 } from 'src/redux/features/nurseryWithdrawals/nurseryWithdrawalsSelectors';
 import {
   requestCountNurseryWithdrawals,
   requestListNurseryWithdrawals,
+  requestNurseryWithdrawalsFilterOptions,
 } from 'src/redux/features/nurseryWithdrawals/nurseryWithdrawalsThunks';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -96,6 +98,8 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   const withdrawalsListResult = useAppSelector(selectNurseryWithdrawalsList(listRequestId));
   const [countRequestId, setCountRequestId] = useState<string>('');
   const countResult = useAppSelector(selectNurseryWithdrawalsCount(countRequestId));
+  const [filterOptionsRequestId, setFilterOptionsRequestId] = useState<string>('');
+  const filterOptionsResult = useAppSelector(selectNurseryWithdrawalsFilterOptions(filterOptionsRequestId));
 
   const [filters, setFilters] = useState<Record<string, SearchNodePayload>>({});
   const [rows, setRows] = useState<SearchResponseElement[] | null>();
@@ -144,6 +148,24 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   const reloadData = useCallback(() => {
     setReloadTrigger((prev) => prev + 1);
   }, []);
+
+  const [nurseryNames, setNurseryNames] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (selectedOrganization) {
+      const request = dispatch(requestNurseryWithdrawalsFilterOptions({ organizationId: selectedOrganization.id }));
+      setFilterOptionsRequestId(request.requestId);
+    }
+  }, [dispatch, selectedOrganization]);
+
+  useEffect(() => {
+    if (filterOptionsResult?.status === 'success' && filterOptionsResult?.data) {
+      const names = (filterOptionsResult.data['facility_name']?.values ?? [])
+        .filter((v): v is string => typeof v === 'string' && v !== '')
+        .sort();
+      setNurseryNames(names);
+    }
+  }, [filterOptionsResult]);
 
   // Get all project names for filter (from all available projects, not just current results)
   const uniqueProjectNames = useMemo(() => {
@@ -281,7 +303,10 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         header: strings.FROM_NURSERY,
         accessorKey: 'facility_name',
         enableEditing: false,
-        filterVariant: 'text',
+        filterVariant: 'select',
+        filterSelectOptions: nurseryNames,
+        enableColumnFilterModes: false,
+        filterFn: () => true,
       },
       {
         id: 'destinationName',
@@ -340,6 +365,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     ],
     [
       strings,
+      nurseryNames,
       uniqueProjectNames,
       purposeOptions,
       WithdrawnDateCell,
@@ -663,6 +689,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         enableHiding: true,
         enableColumnDragging: false,
         enableColumnOrdering: false,
+        positionGlobalFilter: 'right',
         renderToolbarInternalActions: ({ table }) => (
           <Box display='flex' gap={0.5}>
             <Tooltip title={strings.EXPORT}>
