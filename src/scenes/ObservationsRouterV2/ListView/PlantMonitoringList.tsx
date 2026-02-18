@@ -23,6 +23,7 @@ import PlantMonitoringCellRenderer from './PlantMonitoringCellRenderer';
 
 type PlotSelectionType = 'assigned' | 'adHoc';
 type PlantMonitoringRow = {
+  adHocPlotNumber?: number;
   observationId: number;
   observationDate?: string;
   state: ObservationState;
@@ -45,87 +46,134 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
   const defaultTimezone = useDefaultTimeZone().get().id;
   const scheduleObservationsEnabled = isAdmin(selectedOrganization);
   const { activeLocale, strings } = useLocalization();
+  const [selectedPlotSelection, setSelectedPlotSelection] = useState<PlotSelectionType>('assigned');
 
   const columns = useMemo((): TableColumnType[] => {
-    const defaultColumns: TableColumnType[] = [
-      {
-        key: 'observationDate',
-        name: strings.DATE,
-        type: 'string',
-      },
-      {
-        key: 'state',
-        name: strings.STATUS,
-        type: 'string',
-      },
-      {
-        key: 'plantingSiteName',
-        name: strings.PLANTING_SITE,
-        type: 'string',
-      },
-      {
-        key: 'strata',
-        name: strings.STRATA,
-        type: 'string',
-      },
-      {
-        key: 'totalLive',
-        name: strings.LIVE_PLANTS,
-        tooltipTitle: strings.TOOLTIP_LIVE_PLANTS,
-        type: 'number',
-      },
-      {
-        key: 'totalPlants',
-        name: strings.TOTAL_PLANTS,
-        tooltipTitle: strings.TOOLTIP_TOTAL_PLANTS,
-        type: 'number',
-      },
-      {
-        key: 'totalSpecies',
-        name: strings.SPECIES,
-        type: 'number',
-      },
-      {
-        key: 'plantingDensity',
-        name: strings.PLANT_DENSITY,
-        type: 'number',
-      },
-      {
-        key: 'survivalRate',
-        name: strings.SURVIVAL_RATE,
-        tooltipTitle: strings.SURVIVAL_RATE_COLUMN_TOOLTIP,
-        type: 'number',
-      },
-      {
-        key: 'completedDate',
-        name: strings.DATE_OBSERVED,
-        type: 'date',
-        tooltipTitle: strings.DATE_OBSERVED_TOOLTIP,
-      },
-    ];
-
-    if (scheduleObservationsEnabled) {
-      return [
-        ...defaultColumns,
+    if (selectedPlotSelection === 'assigned') {
+      const defaultColumns: TableColumnType[] = [
         {
-          key: 'actionsMenu',
-          name: '',
+          key: 'observationDate',
+          name: strings.DATE,
           type: 'string',
         },
+        {
+          key: 'state',
+          name: strings.STATUS,
+          type: 'string',
+        },
+        {
+          key: 'plantingSiteName',
+          name: strings.PLANTING_SITE,
+          type: 'string',
+        },
+        {
+          key: 'strata',
+          name: strings.STRATA,
+          type: 'string',
+        },
+        {
+          key: 'totalLive',
+          name: strings.LIVE_PLANTS,
+          tooltipTitle: strings.TOOLTIP_LIVE_PLANTS,
+          type: 'number',
+        },
+        {
+          key: 'totalPlants',
+          name: strings.TOTAL_PLANTS,
+          tooltipTitle: strings.TOOLTIP_TOTAL_PLANTS,
+          type: 'number',
+        },
+        {
+          key: 'totalSpecies',
+          name: strings.SPECIES,
+          type: 'number',
+        },
+        {
+          key: 'plantingDensity',
+          name: strings.PLANT_DENSITY,
+          type: 'number',
+        },
+        {
+          key: 'survivalRate',
+          name: strings.SURVIVAL_RATE,
+          tooltipTitle: strings.SURVIVAL_RATE_COLUMN_TOOLTIP,
+          type: 'number',
+        },
+        {
+          key: 'completedDate',
+          name: strings.DATE_OBSERVED,
+          type: 'date',
+          tooltipTitle: strings.DATE_OBSERVED_TOOLTIP,
+        },
       ];
-    } else {
-      return defaultColumns;
-    }
-  }, [scheduleObservationsEnabled, strings]);
 
-  const defaultSearchOrder: SearchSortOrder = {
-    field: 'completedDate',
-    direction: 'Descending',
-  };
+      if (scheduleObservationsEnabled) {
+        return [
+          ...defaultColumns,
+          {
+            key: 'actionsMenu',
+            name: '',
+            type: 'string',
+          },
+        ];
+      } else {
+        return defaultColumns;
+      }
+    } else {
+      return [
+        {
+          key: 'adHocPlotNumber',
+          name: strings.PLOT,
+          type: 'string',
+        },
+        {
+          key: 'plantingSiteName',
+          name: strings.PLANTING_SITE,
+          type: 'string',
+        },
+        {
+          key: 'completedDate',
+          name: strings.DATE_OBSERVED,
+          type: 'date',
+          tooltipTitle: strings.DATE_OBSERVED_TOOLTIP,
+        },
+        {
+          key: 'totalLive',
+          name: strings.LIVE_PLANTS,
+          tooltipTitle: strings.TOOLTIP_LIVE_PLANTS,
+          type: 'number',
+        },
+        {
+          key: 'totalPlants',
+          name: strings.TOTAL_PLANTS,
+          tooltipTitle: strings.TOOLTIP_TOTAL_PLANTS,
+          type: 'number',
+        },
+        {
+          key: 'totalSpecies',
+          name: strings.SPECIES,
+          type: 'number',
+        },
+      ];
+    }
+  }, [scheduleObservationsEnabled, selectedPlotSelection, strings]);
+
+  const defaultSearchOrder: SearchSortOrder = useMemo(() => {
+    if (selectedPlotSelection === 'assigned') {
+      return {
+        field: 'completedDate',
+        direction: 'Descending',
+      };
+    } else {
+      return {
+        field: 'adHocPlotNumber',
+        direction: 'Ascending',
+      };
+    }
+  }, [selectedPlotSelection]);
 
   const fuzzySearchColumns = ['plantingSiteName', 'strata'];
 
-  const [selectedPlotSelection, setSelectedPlotSelection] = useState<PlotSelectionType>('assigned');
   const [listObservationResults, listObservationsResultsResponse] = useLazyListObservationResultsQuery();
   const [listAdHocObservationResults, listAdHocObservationResultsResponse] = useLazyListAdHocObservationResultsQuery();
   const [listPlantingSites, listPlantingSitesResult] = useLazyListPlantingSitesQuery();
@@ -219,6 +267,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
         const observationDate = getShortDate(completedDate ?? observationResult.startDate, activeLocale);
 
         return {
+          adHocPlotNumber: observationResult.adHocPlot?.monitoringPlotNumber,
           observationId: observationResult.observationId,
           observationDate,
           state: observationResult.state,
