@@ -368,6 +368,7 @@ CONFIRM_UPDATE_ALL_COHORT_MODULES,Changes to this project's modules will affect 
 CONFIRM_UPDATE_ALL_COHORT_MODULES_TITLE,Confirm Update to All Cohort Modules,
 CONFIRM_UPDATE_ALL_COHORT_PHASE,Changes to this project's phase will affect all projects in the project's cohort. This is temporary while cohorts are being removed from Terraware. Are you sure you want to modify the phase for all projects in the cohort?,
 CONFIRM_UPDATE_ALL_COHORT_PHASE_TITLE,Confirm Update Phase for All Cohort Projects,
+CONFIRM_WITHDRAWAL,Confirm Withdrawal,
 CONFIRMED_RESTORABLE_LAND,TF Restorable Land (ha),
 CONSERVATION_CATEGORY,IUCN Red List Category,
 CONTACT_TYPE,Contact Type,

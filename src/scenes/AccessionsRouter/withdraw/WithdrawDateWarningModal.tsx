@@ -43,7 +43,7 @@ const WithdrawDateWarningModal = ({ onClose, onContinue }: WithdrawDateWarningMo
         open
         size='medium'
         skrim
-        title={strings.WITHDRAW_SEEDS}
+        title={strings.CONFIRM_WITHDRAWAL}
       />
     </Box>
   );
