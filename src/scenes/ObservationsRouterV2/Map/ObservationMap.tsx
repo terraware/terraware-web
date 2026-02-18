@@ -245,9 +245,10 @@ const ObservationMap = ({
     (_plantingSiteId: number) => (layerId: string, featureId: string) => () => {
       setSelectedFeature({ layerFeatureId: { layerId, featureId }, plantingSiteId: _plantingSiteId });
       selectPhotos([]);
+      selectPlants([]);
       setDrawerOpen(true);
     },
-    [selectPhotos]
+    [selectPhotos, selectPlants]
   );
 
   const layers = useMemo((): MapLayer[] => {
