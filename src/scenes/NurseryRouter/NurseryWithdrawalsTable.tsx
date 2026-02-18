@@ -150,6 +150,9 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   }, []);
 
   const [nurseryNames, setNurseryNames] = useState<string[]>([]);
+  const [destinationNames, setDestinationNames] = useState<string[]>([]);
+  const [substratumOptions, setSubstratumOptions] = useState<string[]>([]);
+  const [speciesOptions, setSpeciesOptions] = useState<string[]>([]);
 
   useEffect(() => {
     if (selectedOrganization) {
@@ -159,11 +162,15 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   }, [dispatch, selectedOrganization]);
 
   useEffect(() => {
-    if (filterOptionsResult?.status === 'success' && filterOptionsResult?.data) {
-      const names = (filterOptionsResult.data['facility_name']?.values ?? [])
-        .filter((v): v is string => typeof v === 'string' && v !== '')
-        .sort();
-      setNurseryNames(names);
+    if (filterOptionsResult?.status === 'success' && filterOptionsResult.data) {
+      const toStrings = (key: string) =>
+        (filterOptionsResult.data![key]?.values ?? [])
+          .filter((v): v is string => typeof v === 'string' && v !== '')
+          .sort();
+      setNurseryNames(toStrings('facility_name'));
+      setDestinationNames(toStrings('destinationName'));
+      setSubstratumOptions(toStrings('substratumNames'));
+      setSpeciesOptions(toStrings('batchWithdrawals.batch_species_scientificName'));
     }
   }, [filterOptionsResult]);
 
@@ -310,10 +317,13 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
       },
       {
         id: 'destinationName',
-        header: strings.DESTINATION,
+        header: strings.PLANTING_SITE,
         accessorKey: 'destinationName',
         enableEditing: false,
-        filterVariant: 'text',
+        filterVariant: 'multi-select',
+        filterSelectOptions: destinationNames,
+        enableColumnFilterModes: false,
+        filterFn: () => true,
       },
       {
         id: 'project_names',
@@ -334,7 +344,10 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         header: strings.TO_SUBSTRATUM,
         accessorKey: 'substratumNames',
         enableEditing: false,
-        filterVariant: 'text',
+        filterVariant: 'multi-select',
+        filterSelectOptions: substratumOptions,
+        enableColumnFilterModes: false,
+        filterFn: () => true,
         Cell: SubstratumNamesCell,
       },
       {
@@ -342,7 +355,10 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         header: strings.SPECIES,
         accessorKey: 'speciesScientificNames',
         enableEditing: false,
-        filterVariant: 'text',
+        filterVariant: 'multi-select',
+        filterSelectOptions: speciesOptions,
+        enableColumnFilterModes: false,
+        filterFn: () => true,
         Cell: SpeciesScientificNamesCell,
       },
       {
@@ -366,6 +382,9 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     [
       strings,
       nurseryNames,
+      destinationNames,
+      substratumOptions,
+      speciesOptions,
       uniqueProjectNames,
       purposeOptions,
       WithdrawnDateCell,
@@ -380,7 +399,12 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   // Convert MRT column filters to backend search format
   const columnFilterNodes: SearchNodePayload[] = useMemo(() => {
     return columnFilters.map((filter) => {
-      const fieldName = filter.id === 'project_names' ? 'batchWithdrawals.batch_project_name' : filter.id;
+      const fieldName =
+        filter.id === 'project_names'
+          ? 'batchWithdrawals.batch_project_name'
+          : filter.id === 'speciesScientificNames'
+            ? 'batchWithdrawals.batch_species_scientificName'
+            : filter.id;
       let filterValue = filter.value;
 
       // For purpose filter, convert label back to value
@@ -391,9 +415,26 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
       // Find the column definition to check filter type
       const column = columns.find((col) => col.id === filter.id);
       const isSelectFilter = column?.filterVariant === 'select';
+      const isMultiSelectFilter = column?.filterVariant === 'multi-select';
 
       // Handle different filter types
       if (Array.isArray(filterValue)) {
+        // Multi-select filter: OR across selected values
+        if (isMultiSelectFilter && filterValue.length > 0) {
+          const selected = filterValue.filter((v) => v !== undefined && v !== '');
+          if (selected.length === 1) {
+            return { operation: 'field', field: fieldName, type: 'Exact', values: [selected[0]] };
+          }
+          return {
+            operation: 'or',
+            children: selected.map((v) => ({
+              operation: 'field',
+              field: fieldName,
+              type: 'Exact',
+              values: [v],
+            })),
+          } as OrNodePayload;
+        }
         // Range filter (e.g., numbers)
         if (filterValue.length === 2) {
           const children: SearchNodePayload[] = [];

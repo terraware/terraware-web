@@ -146,6 +146,13 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
     );
   }, []);
 
+  const uniqueSiteNames = useMemo(() => {
+    if (!rows) {
+      return [];
+    }
+    return Array.from(new Set(rows.map((row) => row.siteName).filter((name): name is string => !!name))).sort();
+  }, [rows]);
+
   const uniqueProjectNames = useMemo(() => {
     if (!rows) {
       return [];
@@ -162,7 +169,8 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
         id: 'siteName',
         header: strings.PLANTING_SITE,
         accessorKey: 'siteName',
-        filterVariant: 'text',
+        filterVariant: 'select',
+        filterSelectOptions: uniqueSiteNames,
       },
       {
         id: 'projectName',
@@ -179,7 +187,7 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
         Cell: TotalSeedlingsSentCell,
       },
     ],
-    [TotalSeedlingsSentCell, uniqueProjectNames]
+    [TotalSeedlingsSentCell, uniqueSiteNames, uniqueProjectNames]
   );
 
   const PlantingCompleteHeader = useCallback(
@@ -206,7 +214,8 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
         id: 'siteName',
         header: strings.PLANTING_SITE,
         accessorKey: 'siteName',
-        filterVariant: 'text',
+        filterVariant: 'select',
+        filterSelectOptions: uniqueSiteNames,
       },
       {
         id: 'stratumName',
@@ -267,6 +276,7 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
       TotalSeedlingsSentCell,
       PlantingCompleteHeader,
       TargetPlantingDensityHeader,
+      uniqueSiteNames,
       uniqueProjectNames,
     ]
   );
