@@ -367,6 +367,7 @@ CONFIRM_UPDATE_ALL_COHORT_MODULES,Les modifications apportées aux modules de ce
 CONFIRM_UPDATE_ALL_COHORT_MODULES_TITLE,Confirmer la mise à jour de tous les modules du groupe,1b173015
 CONFIRM_UPDATE_ALL_COHORT_PHASE,Les modifications apportées à la phase de ce projet affecteront tous les projets du cohort du projet. Ceci est temporaire pendant la suppression des cohorts de Terraware. Êtes-vous sûr de vouloir modifier la phase de tous les projets du cohort ?,26d2dc4e
 CONFIRM_UPDATE_ALL_COHORT_PHASE_TITLE,Confirmer la mise à jour de la phase pour tous les projets de cohorte,774d5ec0
+CONFIRM_WITHDRAWAL,Confirmer le retrait,827db4bd
 CONFIRMED_RESTORABLE_LAND,TF Terres restaurables (ha),efa25d21
 CONSERVATION_CATEGORY,Catégorie de la liste rouge de l'UICN,115916f3
 CONTACT_TYPE,Type de contact,413b6c0e
@@ -2431,6 +2432,7 @@ WILD_IN_SITU_DESCRIPTION,Plantes qui se trouvent naturellement dans des zones sa
 WITHDRAW,Retirer,3aeae714
 WITHDRAW_ALL,Retirer tout,cc50ccca
 WITHDRAW_BY,Prélèvement par,54fccc5e
+WITHDRAW_DATE_PREDATES_RECEIVED_DATE_WARNING,"La date indiquée pour ce retrait est antérieure à la date à laquelle la quantité actuelle d'accession a été fournie. Par conséquent, la quantité retirée ne sera pas soustraite de la quantité d'accession. Après l'enregistrement du retrait, la quantité peut être ajustée manuellement pour refléter la quantité retirée. Êtes-vous sûr de vouloir enregistrer ce retrait sans modification de la quantité ?",2283d4eb
 WITHDRAW_DATE_REQUIRED,Date de retrait *,86478a68
 WITHDRAW_FROM_BATCHES,Retirer des lots,184d96f3
 WITHDRAW_INSTRUCTIONS,Sélectionnez un but de retrait et saisissez les quantités de chaque lot à retirer.,1636e2b4
