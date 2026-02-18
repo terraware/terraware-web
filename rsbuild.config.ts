@@ -1,4 +1,4 @@
-import { defineConfig, loadEnv } from '@rsbuild/core';
+import { defineConfig, loadEnv, rspack } from '@rsbuild/core';
 import { pluginReact } from '@rsbuild/plugin-react';
 import { pluginSass } from '@rsbuild/plugin-sass';
 import { pluginSvgr } from '@rsbuild/plugin-svgr';
@@ -105,28 +105,29 @@ export default defineConfig({
     ],
   },
 
-  // tools: {
-  //   rspack: {
-  //     // Worker loader alias for mapbox compatibility
-  //     resolveLoader: {
-  //       alias: {
-  //         'worker-loader': require.resolve('worker-rspack-loader'),
-  //       },
-  //     },
-  //
-  //     // TODO handle changes in web-components
-  //     // Snapshot configuration for @terraware/web-components watching
-  //     experiments: {
-  //       cache: {
-  //         type: 'filesystem',
-  //         snapshot: {
-  //           // Watch web-components, but not other modules, for changes
-  //           managedPaths: [/^(.+?[\\/]node_modules[\\/](?!(@terraware[\\/]web-components))(@.+?[\\/])?.+?)[\\/]/],
-  //         },
-  //       },
-  //     },
-  //   },
-  // },
+  tools: {
+    rspack: {
+      plugins: [new rspack.IgnorePlugin({ resourceRegExp: /^sync-ammo$/ })],
+      //     // Worker loader alias for mapbox compatibility
+      //     resolveLoader: {
+      //       alias: {
+      //         'worker-loader': require.resolve('worker-rspack-loader'),
+      //       },
+      //     },
+      //
+      //     // TODO handle changes in web-components
+      //     // Snapshot configuration for @terraware/web-components watching
+      //     experiments: {
+      //       cache: {
+      //         type: 'filesystem',
+      //         snapshot: {
+      //           // Watch web-components, but not other modules, for changes
+      //           managedPaths: [/^(.+?[\\/]node_modules[\\/](?!(@terraware[\\/]web-components))(@.+?[\\/])?.+?)[\\/]/],
+      //         },
+      //       },
+      //     },
+    },
+  },
 
   performance: {
     // Enable build cache for faster rebuilds
