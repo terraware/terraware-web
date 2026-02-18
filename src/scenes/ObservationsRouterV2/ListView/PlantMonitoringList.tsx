@@ -48,115 +48,116 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
   const { activeLocale, strings } = useLocalization();
   const [selectedPlotSelection, setSelectedPlotSelection] = useState<PlotSelectionType>('assigned');
 
-  const columns = useMemo((): TableColumnType[] => {
-    if (selectedPlotSelection === 'assigned') {
-      const defaultColumns: TableColumnType[] = [
-        {
-          key: 'observationDate',
-          name: strings.DATE,
-          type: 'string',
-        },
-        {
-          key: 'state',
-          name: strings.STATUS,
-          type: 'string',
-        },
-        {
-          key: 'plantingSiteName',
-          name: strings.PLANTING_SITE,
-          type: 'string',
-        },
-        {
-          key: 'strata',
-          name: strings.STRATA,
-          type: 'string',
-        },
-        {
-          key: 'totalLive',
-          name: strings.LIVE_PLANTS,
-          tooltipTitle: strings.TOOLTIP_LIVE_PLANTS,
-          type: 'number',
-        },
-        {
-          key: 'totalPlants',
-          name: strings.TOTAL_PLANTS,
-          tooltipTitle: strings.TOOLTIP_TOTAL_PLANTS,
-          type: 'number',
-        },
-        {
-          key: 'totalSpecies',
-          name: strings.SPECIES,
-          type: 'number',
-        },
-        {
-          key: 'plantingDensity',
-          name: strings.PLANT_DENSITY,
-          type: 'number',
-        },
-        {
-          key: 'survivalRate',
-          name: strings.SURVIVAL_RATE,
-          tooltipTitle: strings.SURVIVAL_RATE_COLUMN_TOOLTIP,
-          type: 'number',
-        },
-        {
-          key: 'completedDate',
-          name: strings.DATE_OBSERVED,
-          type: 'date',
-          tooltipTitle: strings.DATE_OBSERVED_TOOLTIP,
-        },
-      ];
+  const assignedColumns = useMemo((): TableColumnType[] => {
+    const defaultColumns: TableColumnType[] = [
+      {
+        key: 'observationDate',
+        name: strings.DATE,
+        type: 'string',
+      },
+      {
+        key: 'state',
+        name: strings.STATUS,
+        type: 'string',
+      },
+      {
+        key: 'plantingSiteName',
+        name: strings.PLANTING_SITE,
+        type: 'string',
+      },
+      {
+        key: 'strata',
+        name: strings.STRATA,
+        type: 'string',
+      },
+      {
+        key: 'totalLive',
+        name: strings.LIVE_PLANTS,
+        tooltipTitle: strings.TOOLTIP_LIVE_PLANTS,
+        type: 'number',
+      },
+      {
+        key: 'totalPlants',
+        name: strings.TOTAL_PLANTS,
+        tooltipTitle: strings.TOOLTIP_TOTAL_PLANTS,
+        type: 'number',
+      },
+      {
+        key: 'totalSpecies',
+        name: strings.SPECIES,
+        type: 'number',
+      },
+      {
+        key: 'plantingDensity',
+        name: strings.PLANT_DENSITY,
+        type: 'number',
+      },
+      {
+        key: 'survivalRate',
+        name: strings.SURVIVAL_RATE,
+        tooltipTitle: strings.SURVIVAL_RATE_COLUMN_TOOLTIP,
+        type: 'number',
+      },
+      {
+        key: 'completedDate',
+        name: strings.DATE_OBSERVED,
+        type: 'date',
+        tooltipTitle: strings.DATE_OBSERVED_TOOLTIP,
+      },
+    ];
 
-      if (scheduleObservationsEnabled) {
-        return [
-          ...defaultColumns,
-          {
-            key: 'actionsMenu',
-            name: '',
-            type: 'string',
-          },
-        ];
-      } else {
-        return defaultColumns;
-      }
-    } else {
+    if (scheduleObservationsEnabled) {
       return [
+        ...defaultColumns,
         {
-          key: 'adHocPlotNumber',
-          name: strings.PLOT,
+          key: 'actionsMenu',
+          name: '',
           type: 'string',
-        },
-        {
-          key: 'plantingSiteName',
-          name: strings.PLANTING_SITE,
-          type: 'string',
-        },
-        {
-          key: 'completedDate',
-          name: strings.DATE_OBSERVED,
-          type: 'date',
-          tooltipTitle: strings.DATE_OBSERVED_TOOLTIP,
-        },
-        {
-          key: 'totalLive',
-          name: strings.LIVE_PLANTS,
-          tooltipTitle: strings.TOOLTIP_LIVE_PLANTS,
-          type: 'number',
-        },
-        {
-          key: 'totalPlants',
-          name: strings.TOTAL_PLANTS,
-          tooltipTitle: strings.TOOLTIP_TOTAL_PLANTS,
-          type: 'number',
-        },
-        {
-          key: 'totalSpecies',
-          name: strings.SPECIES,
-          type: 'number',
         },
       ];
+    } else {
+      return defaultColumns;
     }
-  }, [scheduleObservationsEnabled, selectedPlotSelection, strings]);
+  }, [scheduleObservationsEnabled, strings]);
+
+  const adHocColumns = useMemo(
+    (): TableColumnType[] => [
+      {
+        key: 'adHocPlotNumber',
+        name: strings.PLOT,
+        type: 'string',
+      },
+      {
+        key: 'plantingSiteName',
+        name: strings.PLANTING_SITE,
+        type: 'string',
+      },
+      {
+        key: 'completedDate',
+        name: strings.DATE_OBSERVED,
+        type: 'date',
+        tooltipTitle: strings.DATE_OBSERVED_TOOLTIP,
+      },
+      {
+        key: 'totalLive',
+        name: strings.LIVE_PLANTS,
+        tooltipTitle: strings.TOOLTIP_LIVE_PLANTS,
+        type: 'number',
+      },
+      {
+        key: 'totalPlants',
+        name: strings.TOTAL_PLANTS,
+        tooltipTitle: strings.TOOLTIP_TOTAL_PLANTS,
+        type: 'number',
+      },
+      {
+        key: 'totalSpecies',
+        name: strings.SPECIES,
+        type: 'number',
+      },
+    ],
+    [strings]
+  );
 
   const defaultSearchOrder: SearchSortOrder = useMemo(() => {
     if (selectedPlotSelection === 'assigned') {
@@ -310,17 +311,32 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
 
   return (
     <Card radius={'8px'} style={{ width: '100%' }}>
-      <ClientSideFilterTable
-        busy={isLoading}
-        columns={columns}
-        defaultSortOrder={defaultSearchOrder}
-        fuzzySearchColumns={fuzzySearchColumns}
-        id='plant-monitoring-table'
-        Renderer={PlantMonitoringCellRenderer}
-        rows={rows}
-        title={strings.PLANT_MONITORING}
-        rightComponent={rightComponent}
-      />
+      {selectedPlotSelection === 'assigned' && (
+        <ClientSideFilterTable
+          busy={isLoading}
+          columns={assignedColumns}
+          defaultSortOrder={defaultSearchOrder}
+          fuzzySearchColumns={fuzzySearchColumns}
+          id='assigned-plant-monitoring-table'
+          Renderer={PlantMonitoringCellRenderer}
+          rows={rows}
+          title={strings.PLANT_MONITORING}
+          rightComponent={rightComponent}
+        />
+      )}
+      {selectedPlotSelection === 'adHoc' && (
+        <ClientSideFilterTable
+          busy={isLoading}
+          columns={adHocColumns}
+          defaultSortOrder={defaultSearchOrder}
+          fuzzySearchColumns={fuzzySearchColumns}
+          id='ad-hoc-plant-monitoring-table'
+          Renderer={PlantMonitoringCellRenderer}
+          rows={rows}
+          title={strings.PLANT_MONITORING}
+          rightComponent={rightComponent}
+        />
+      )}
     </Card>
   );
 };
