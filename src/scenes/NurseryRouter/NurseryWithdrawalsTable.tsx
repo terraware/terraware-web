@@ -664,6 +664,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
       enableSorting={true}
       enableGlobalFilter={true}
       enableColumnFilters={true}
+      enableColumnOrdering={true}
       storageKey='nursery-withdrawals-table'
       enablePagination={true}
       enableTopToolbar={true}
@@ -686,8 +687,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         enableColumnActions: true,
         enableHiding: true,
         enableGrouping: false,
-        enableColumnDragging: false,
-        enableColumnOrdering: false,
+        enableColumnDragging: true,
         positionGlobalFilter: 'right',
         renderToolbarInternalActions: ({ table }) => (
           <Box display='flex' gap={0.5}>
