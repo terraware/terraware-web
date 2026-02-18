@@ -40,7 +40,7 @@ export default function ModuleDetails({ moduleId, module }: ModuleDetailsProps):
 
   useEffect(() => {
     if (module?.id) {
-      void requestListModuleProjects(moduleId);
+      void requestListModuleProjects(moduleId, true);
     }
   }, [module?.id, moduleId, requestListModuleProjects]);
 
