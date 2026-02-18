@@ -162,14 +162,12 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
         id: 'siteName',
         header: strings.PLANTING_SITE,
         accessorKey: 'siteName',
-        enableEditing: false,
         filterVariant: 'text',
       },
       {
         id: 'projectName',
         header: strings.PROJECT,
         accessorKey: 'projectName',
-        enableEditing: false,
         filterVariant: 'select',
         filterSelectOptions: uniqueProjectNames,
       },
@@ -177,7 +175,6 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
         id: 'totalSeedlingsSent',
         header: strings.TOTAL_SEEDLINGS_SENT,
         accessorKey: 'totalSeedlingsSent',
-        enableEditing: false,
         filterVariant: 'range',
         Cell: TotalSeedlingsSentCell,
       },
@@ -209,29 +206,30 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
         id: 'siteName',
         header: strings.PLANTING_SITE,
         accessorKey: 'siteName',
-        enableEditing: false,
         filterVariant: 'text',
       },
       {
         id: 'stratumName',
         header: strings.STRATUM,
         accessorKey: 'stratumName',
-        enableEditing: false,
         filterVariant: 'text',
       },
       {
         id: 'substratumName',
         header: strings.SUBSTRATUM,
         accessorKey: 'substratumName',
-        enableEditing: false,
         filterVariant: 'text',
       },
       {
         id: 'plantingCompleted',
         header: strings.PLANTING_COMPLETE,
-        accessorKey: 'plantingCompleted',
-        enableEditing: false,
+        accessorFn: (row) => {
+          if (row.plantingCompleted === true) return strings.YES;
+          if (row.plantingCompleted === false) return strings.NO;
+          return '';
+        },
         filterVariant: 'select',
+        filterSelectOptions: [strings.YES, strings.NO],
         Header: PlantingCompleteHeader,
       },
       {
@@ -309,6 +307,7 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
         enableSorting={true}
         enableGlobalFilter={true}
         enableColumnFilters={true}
+        enableColumnOrdering={true}
         stickyFilters={true}
         storageKey={hasStrata ? 'plantings-progress-table-with-strata' : 'plantings-progress-table-without-strata'}
         enablePagination={false}
@@ -324,8 +323,7 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
           enableColumnPinning: true,
           enableColumnActions: true,
           enableHiding: true,
-          enableColumnDragging: false,
-          enableColumnOrdering: false,
+          enableColumnDragging: true,
           getRowId: (row, index) => String(index),
           renderToolbarAlertBannerContent: ({ selectedAlert }) => (
             <Box display='flex' gap={1} alignItems='center' justifyContent='space-between' width='100%'>
