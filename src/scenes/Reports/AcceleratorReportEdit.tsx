@@ -39,7 +39,7 @@ const AcceleratorReportEditView = (): JSX.Element | null => {
     return report?.startDate?.split('-')[0];
   }, [report]);
 
-  const reportName = report?.frequency === 'Annual' ? `${year}` : report?.quarter ? `${year}-${report?.quarter}` : '';
+  const reportName = report?.quarter ? `${year}-${report?.quarter}` : year ? `${year}` : '';
 
   if (!report) {
     return null;
