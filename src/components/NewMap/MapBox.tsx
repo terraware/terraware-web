@@ -104,6 +104,7 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
   const [cursor, setCursor] = useState<MapCursor>('auto');
   const [hoverFeatureId, setHoverFeatureId] = useState<string>();
   const [zoom, setZoom] = useState<number>();
+  const [focused, setFocused] = useState<boolean>(false);
 
   const loadImages = useCallback(
     (map: MapRef) => {
@@ -596,6 +597,20 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
     mapRef.current.resize();
   }, [drawerOpen, mapRef]);
 
+  // Handle clicks outside the map to unfocus
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (mapRef.current && !mapRef.current.getContainer().contains(event.target as Node)) {
+        setFocused(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [mapRef]);
+
   // Hovering interactive layers
   const onMouseEnter = useCallback(() => setCursor(cursorInteract ?? 'pointer'), [cursorInteract]);
   const onMouseLeave = useCallback(() => setCursor('auto'), []);
@@ -607,6 +622,9 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
   // On layer click
   const onMapClick = useCallback(
     (event: MapMouseEvent) => {
+      // Focus the map on any click
+      setFocused(true);
+
       if (featureGroups && event.features?.length) {
         const properties = event.features
           .map((feature) => feature.properties)
@@ -677,7 +695,7 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
       mapboxAccessToken={token}
       mapStyle={stylesUrl[mapViewStyle]}
       ref={mapRefCallback}
-      scrollZoom={!disableZoom}
+      scrollZoom={!disableZoom && focused}
       style={{ width: 'auto', height: isDesktop ? 'auto' : '80vh', flexGrow: isDesktop ? 1 : undefined }}
       onClick={onMapClick}
       onError={onMapError}
