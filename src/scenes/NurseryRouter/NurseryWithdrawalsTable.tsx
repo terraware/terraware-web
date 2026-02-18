@@ -548,8 +548,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         },
       }));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [siteParam, query, location]);
+  }, [siteParam, query, location, navigate]);
 
   useEffect(() => {
     if (substratumParam) {
@@ -565,8 +564,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         },
       }));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [substratumParam, query, location]);
+  }, [substratumParam, query, location, navigate]);
 
   // Sync sorting state with search sort order
   useEffect(() => {
