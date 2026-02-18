@@ -172,7 +172,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
     }
   }, [selectedPlotSelection]);
 
-  const fuzzySearchColumns = ['plantingSiteName', 'strata'];
+  const fuzzySearchColumns = ['adHocPlotNumber', 'plantingSiteName', 'strata'];
 
   const [listObservationResults, listObservationsResultsResponse] = useLazyListObservationResultsQuery();
   const [listAdHocObservationResults, listAdHocObservationResultsResponse] = useLazyListAdHocObservationResultsQuery();
@@ -315,7 +315,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
         columns={columns}
         defaultSortOrder={defaultSearchOrder}
         fuzzySearchColumns={fuzzySearchColumns}
-        id='biomass-measurement-table'
+        id='plant-monitoring-table'
         Renderer={PlantMonitoringCellRenderer}
         rows={rows}
         title={strings.PLANT_MONITORING}
