@@ -2431,6 +2431,7 @@ WILD_IN_SITU_DESCRIPTION,Plantes qui se trouvent naturellement dans des zones sa
 WITHDRAW,Retirer,3aeae714
 WITHDRAW_ALL,Retirer tout,cc50ccca
 WITHDRAW_BY,Prélèvement par,54fccc5e
+WITHDRAW_DATE_PREDATES_RECEIVED_DATE_WARNING,"La date indiquée pour ce retrait est antérieure à la date à laquelle la quantité actuelle d'accession a été fournie. Par conséquent, la quantité retirée ne sera pas soustraite de la quantité d'accession. Après l'enregistrement du retrait, la quantité peut être ajustée manuellement pour refléter la quantité retirée. Êtes-vous sûr de vouloir enregistrer ce retrait sans modification de la quantité ?",2283d4eb
 WITHDRAW_DATE_REQUIRED,Date de retrait *,86478a68
 WITHDRAW_FROM_BATCHES,Retirer des lots,184d96f3
 WITHDRAW_INSTRUCTIONS,Sélectionnez un but de retrait et saisissez les quantités de chaque lot à retirer.,1636e2b4

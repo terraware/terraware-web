@@ -2431,6 +2431,7 @@ WILD_IN_SITU_DESCRIPTION,Plants that occur naturally in wild areas and were not 
 WITHDRAW,Withdraw,
 WITHDRAW_ALL,Withdraw all,
 WITHDRAW_BY,Withdraw By,
+WITHDRAW_DATE_PREDATES_RECEIVED_DATE_WARNING,"The date provided for this Withdrawal is earlier than the date that the current Accession Quantity was provided. Therefore, the quantity withdrawn will not be subtracted from the Accession Quantity. After the Withdrawal is recorded, the Quantity can be manually adjusted to reflect the withdrawn quantity. Are you sure you want to log this withdrawal without quantity changes?",
 WITHDRAW_DATE_REQUIRED,Withdraw Date *,
 WITHDRAW_FROM_BATCHES,Withdraw from Batches,
 WITHDRAW_INSTRUCTIONS,Select a withdrawal purpose and enter the quantities from each batch to withdraw.,
