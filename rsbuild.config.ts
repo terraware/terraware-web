@@ -107,7 +107,10 @@ export default defineConfig({
 
   tools: {
     rspack: {
-      plugins: [new rspack.IgnorePlugin({ resourceRegExp: /^sync-ammo$/ })],
+      plugins: [
+        // sync-ammo is only needed for playcancas when usePhysics is enabled, but we don't need this and it causes a compilation error, so ignore it
+        new rspack.IgnorePlugin({ resourceRegExp: /^sync-ammo$/ }),
+      ],
       //     // Worker loader alias for mapbox compatibility
       //     resolveLoader: {
       //       alias: {
