@@ -8,7 +8,7 @@ import { Crumb } from 'src/components/BreadCrumbs';
 import ModuleDetailsCard from 'src/components/ModuleDetailsCard';
 import ParticipantPage from 'src/components/common/PageWithModuleTimeline/ParticipantPage';
 import { APP_PATHS } from 'src/constants';
-import useGetCohortModule from 'src/hooks/useGetCohortModule';
+import useGetProjectModule from 'src/hooks/useGetProjectModule';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import useProjectModuleDeliverables from 'src/hooks/useProjectModuleDeliverables';
 import useProjectModuleEvents from 'src/hooks/useProjectModuleEvents';
@@ -35,17 +35,17 @@ const ModuleView = () => {
     }
   }, [projectId, setCurrentAcceleratorProject]);
 
-  const { cohortModule, getCohortModule } = useGetCohortModule();
+  const { projectModule, getProjectModule } = useGetProjectModule();
   const { deliverables, listProjectModuleDeliverables } = useProjectModuleDeliverables();
   const { events, listProjectModuleEvents } = useProjectModuleEvents();
 
   useEffect(() => {
-    if (currentAcceleratorProject && currentAcceleratorProject.cohortId) {
-      void getCohortModule({ moduleId, cohortId: currentAcceleratorProject.cohortId });
+    if (currentAcceleratorProject && currentAcceleratorProject.id) {
+      void getProjectModule({ moduleId, projectId: currentAcceleratorProject.id });
       void listProjectModuleDeliverables({ moduleId, projectId: currentAcceleratorProject.id });
       void listProjectModuleEvents({ moduleId, projectId: currentAcceleratorProject.id });
     }
-  }, [currentAcceleratorProject, moduleId, getCohortModule, listProjectModuleDeliverables, listProjectModuleEvents]);
+  }, [currentAcceleratorProject, moduleId, getProjectModule, listProjectModuleDeliverables, listProjectModuleEvents]);
 
   const deliverableDetails = useMemo(
     () =>
@@ -74,13 +74,13 @@ const ModuleView = () => {
 
   const moduleDetails = useMemo(
     () =>
-      cohortModule
+      projectModule
         ? {
-            ...cohortModule,
-            title: activeLocale ? strings.formatString(strings.TITLE_OVERVIEW, cohortModule.title).toString() : '',
+            ...projectModule,
+            title: activeLocale ? strings.formatString(strings.TITLE_OVERVIEW, projectModule.title).toString() : '',
           }
         : undefined,
-    [activeLocale, cohortModule]
+    [activeLocale, projectModule]
   );
 
   const crumbs: Crumb[] = useMemo(
@@ -97,7 +97,7 @@ const ModuleView = () => {
     <ParticipantPage
       crumbs={crumbs}
       hierarchicalCrumbs={false}
-      title={<ModuleViewTitle module={cohortModule} projectId={projectId} />}
+      title={<ModuleViewTitle module={projectModule} projectId={projectId} />}
     >
       {moduleDetails && (
         <ModuleDetailsCard
