@@ -85,7 +85,7 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
 
   const saveReportPhotos = useCallback(async () => {
     if (photos.toDelete.length === 0 && photos.toUpdate.length === 0 && photos.toAdd.length === 0) {
-      return false;
+      goToReport();
     }
 
     try {
@@ -100,7 +100,6 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
       goToReport();
     } catch (error) {
       snackbar.toastError();
-      return false;
     }
   }, [photos.toDelete, photos.toUpdate, photos.toAdd, batchReportPhotos, projectId, report.id, goToReport, snackbar]);
 
