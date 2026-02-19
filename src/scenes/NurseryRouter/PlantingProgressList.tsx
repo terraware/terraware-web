@@ -55,6 +55,8 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
   const snackbar = useSnackbar();
   const [showWarningModal, setShowWarningModal] = useState(false);
   const [markingAsComplete, setMarkingAsComplete] = useState(false);
+  const [showColumnFilters, setShowColumnFilters] = useState(false);
+  const [showGlobalFilter, setShowGlobalFilter] = useState(false);
 
   const selectedRows = useMemo(
     () =>
@@ -299,9 +301,6 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
     [selectedRows]
   );
 
-  const onExport = useCallback(() => {
-    void exportNurseryPlantingProgress({ plantingProgress: rows || [] });
-  }, [rows]);
 
   if (!rows || hasStrata === undefined) {
     return <CircularProgress sx={{ margin: 'auto' }} />;
@@ -331,8 +330,12 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
         tableOptions={{
           state: {
             rowSelection,
+            showColumnFilters,
+            showGlobalFilter,
           },
           onRowSelectionChange: setRowSelection,
+          onShowColumnFiltersChange: setShowColumnFilters,
+          onShowGlobalFilterChange: setShowGlobalFilter,
           enableRowSelection: true,
           enableColumnPinning: true,
           enableColumnActions: true,
@@ -365,7 +368,12 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
           renderToolbarInternalActions: ({ table }) => (
             <Box display='flex' gap={0.5}>
               <Tooltip title={strings.EXPORT}>
-                <IconButton onClick={onExport}>
+                <IconButton
+                  onClick={() => {
+                    const filteredRows = table.getFilteredRowModel().rows.map((row) => row.original);
+                    void exportNurseryPlantingProgress({ plantingProgress: filteredRows });
+                  }}
+                >
                   <Icon name='iconExport' size='medium' />
                 </IconButton>
               </Tooltip>

@@ -108,6 +108,9 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   const debouncedSearchTerm = useDebounce(searchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
   const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder>(DEFAULT_SORT_ORDER);
 
+  const [showColumnFilters, setShowColumnFilters] = useState(false);
+  const [showGlobalFilter, setShowGlobalFilter] = useState(false);
+
   // Material React Table state
   const [pagination, setPagination] = useState<MRT_PaginationState>({
     pageIndex: 0,
@@ -238,12 +241,12 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
           String(row.undoesWithdrawalId)
         );
         return (
-          <p>
+          <span style={{ display: 'block', margin: 0 }}>
             {`${strings.UNDO} `}
             <Link to={undoWithdrawalDetailLocation} style={linkStyles}>
               {String(row.undoesWithdrawalDate)}
             </Link>
-          </p>
+          </span>
         );
       }
     },
@@ -376,6 +379,9 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         enableEditing: false,
         enableColumnFilter: false,
         enableSorting: false,
+        enableColumnActions: false,
+        enableColumnDragging: false,
+        enableHiding: false,
         Cell: MenuCell,
       },
     ],
@@ -716,10 +722,14 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
           pagination,
           sorting,
           columnFilters,
+          showColumnFilters,
+          showGlobalFilter,
         },
         onPaginationChange: setPagination,
         onSortingChange: setSorting,
         onColumnFiltersChange: handleColumnFiltersChange,
+        onShowColumnFiltersChange: setShowColumnFilters,
+        onShowGlobalFilterChange: setShowGlobalFilter,
         manualPagination: true,
         manualSorting: true,
         manualFiltering: true,
@@ -765,6 +775,8 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
             },
           },
         },
+        muiTableHeadCellProps: ({ column }) =>
+          column.id === 'menu' ? { sx: { '& .Mui-TableHeadCell-Content': { display: 'none' } } } : {},
         muiTableBodyRowProps: {
           sx: {
             '& td': {
