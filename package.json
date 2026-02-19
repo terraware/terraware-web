@@ -39,7 +39,7 @@
     "playwright:debug": "yarn run playwright test playwright/e2e --debug --project=dev",
     "playwright:demo": "SLOW_MO=750 TIMEOUT=600000 yarn run playwright test playwright/e2e --headed --project=dev",
     "playwright:run:prod": "yarn run playwright test playwright/e2e --project=prod",
-    "test:e2e": "yarn run wait-on -t 60 http://localhost:3001 && NODE_OPTIONS=--max-old-space-size=16384 yarn run playwright:run:prod",
+    "test:e2e": "yarn run wait-on -t 60000 http://localhost:3001 && NODE_OPTIONS=--max-old-space-size=16384 yarn run playwright:run:prod",
     "dump:local": "./scripts/dump.sh local",
     "dump:docker": "./scripts/dump.sh docker",
     "postinstall": "patch-package",
