@@ -395,16 +395,16 @@ const ObservationMap = ({
         {
           features:
             selectedHistory.strata?.map((stratum) => ({
-              featureId: `${stratum.stratumId}`,
+              featureId: `${stratum.name}`,
               geometry: {
                 type: 'MultiPolygon',
                 coordinates: stratum.boundary?.coordinates ?? [],
               },
               label: stratum.name,
-              onClick: selectClickableFeature(selectedHistory.plantingSiteId)('strata', `${stratum.stratumId}`),
+              onClick: selectClickableFeature(selectedHistory.plantingSiteId)('strata', `${stratum.name}`),
               selected:
                 selectedFeature?.layerFeatureId.layerId === 'strata' &&
-                selectedFeature?.layerFeatureId.featureId === `${stratum.stratumId}`,
+                selectedFeature?.layerFeatureId.featureId === `${stratum.name}`,
             })) ?? [],
           layerId: 'strata',
           style: strataLayerStyle,
@@ -591,9 +591,9 @@ const ObservationMap = ({
 
     selectedResults.strata.forEach((stratum) => {
       const selectedStratumHistory = selectedHistory.strata.find(
-        (stratumHistory) => stratumHistory.stratumId === stratum.stratumId
+        (stratumHistory) => stratumHistory.name === stratum.name
       );
-      const stratumId = { layerId: 'strata', featureId: `${selectedStratumHistory?.stratumId}` };
+      const stratumId = { layerId: 'strata', featureId: `${selectedStratumHistory?.name}` };
       sortFeatureBySurvivalRate(stratumId, stratum.survivalRate);
 
       stratum.substrata.forEach((substratum) => {
