@@ -63,13 +63,9 @@ const ObservationStatsDrawer = ({
         survivalRate: results?.survivalRate,
       };
     } else if (layerFeatureId.layerId === 'strata') {
-      const stratumHistory = siteHistory?.strata?.find(
-        (_stratum) => _stratum.stratumId === Number(layerFeatureId.featureId)
-      );
-      const stratum = plantingSite?.strata?.find((_stratum) => _stratum.id === Number(layerFeatureId.featureId));
-      const stratumResults = results?.strata?.find(
-        (_stratum) => _stratum.stratumId === Number(layerFeatureId.featureId)
-      );
+      const stratumHistory = siteHistory?.strata?.find((_stratum) => _stratum.name === layerFeatureId.featureId);
+      const stratum = plantingSite?.strata?.find((_stratum) => _stratum.name === layerFeatureId.featureId);
+      const stratumResults = results?.strata?.find((_stratum) => _stratum.name === layerFeatureId.featureId);
       return {
         name: stratumHistory?.name ?? stratum?.name,
         observedPlants: stratumResults?.totalPlants,
