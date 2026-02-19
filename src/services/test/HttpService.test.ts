@@ -1,7 +1,9 @@
+import { Mocked, rstest } from '@rstest/core';
+
 import axios from '../axios';
 import HttpService, { Response, ServerData } from '../HttpService';
 
-jest.mock('axios');
+rstest.mock('../axios', { mock: true });
 
 type DummyData = ServerData & {
   status: string;
@@ -38,10 +40,10 @@ const DUMMY_ERROR_EXCEPTION = (statusCode: number = 500, error: string = 'Dummy 
 });
 
 /* eslint-disable @typescript-eslint/unbound-method */
-const axiosGet = axios.get as jest.MockedFunction<typeof axios.get>;
-const axiosPut = axios.put as jest.MockedFunction<typeof axios.put>;
-const axiosPost = axios.post as jest.MockedFunction<typeof axios.post>;
-const axiosDelete = axios.delete as jest.MockedFunction<typeof axios.delete>;
+const axiosGet = axios.get as Mocked<typeof axios.get>;
+const axiosPut = axios.put as Mocked<typeof axios.put>;
+const axiosPost = axios.post as Mocked<typeof axios.post>;
+const axiosDelete = axios.delete as Mocked<typeof axios.delete>;
 /* eslint-enable @typescript-eslint/unbound-method */
 
 describe('HttpService', () => {
