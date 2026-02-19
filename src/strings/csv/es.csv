@@ -68,7 +68,6 @@ ADD_ADDRESS,Añadir dirección,8262aa95
 ADD_AN_ACCESSION,Añadir una accesión,e4b619b4
 ADD_ANNOTATION,Agregar anotación,91742a0f
 ADD_BATCH,Añadir lote,0d9f7a4a
-ADD_COHORT,Agregar cohorte,094d5510
 ADD_DOCUMENT,Añadir documento,af87beed
 ADD_FUNDING_ENTITY,Agregar entidad financiadora,47c0142d
 ADD_GPS_COORDINATES,Añadir coordenadas GPS,d87d2fa2
@@ -337,10 +336,7 @@ CLIMATE_IMPACT,Impacto climático,876c48a4
 CLOSE,Cerrar,e6e3f022
 CLOSE_AND_EDIT,Cerrar y editar,1c3ea202
 COHORT,Cohorte,81afe896
-COHORT_ADDED,{0} cohorte agregada,c8518668
-COHORT_NAME,Nombre del cohorte,655d8af3
 COHORTS,Cohortes,b0aca6fa
-COHORTS_EMPTY_STATE,"Aún no tiene cohortes. Cuando agregue cohortes, los verá aquí.",b764b773
 COLLECTED_DATE,Fecha de recolección,3f1515d8
 COLLECTED_FROM,Recolectado de,ffc6ad60
 COLLECTING_SITE,Lugar de recolección,7491b42b
@@ -586,8 +582,6 @@ EDIT_ACCOUNT,Editar cuenta,b77ad44d
 EDIT_ACTIVITY,Editar actividad,5b6476f3
 EDIT_ANNOTATION,Editar anotación,82bcb054
 EDIT_BATCH_DETAILS,Editar detalles del lote,d2f2112a
-EDIT_COHORT,Editar cohorte,4c88b04a
-EDIT_COHORT_TO_ADD_MODULES,Edite esta cohorte para añadir módulos.,376bbb6d
 EDIT_DOCUMENT_DETAILS,Editar detalles del documento,92155983
 EDIT_FEEDBACK,Editar retroalimentación,6b52e0e6
 EDIT_FUNDING_ENTITY,Editar entidad financiadora,f21be0e0
