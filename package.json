@@ -162,6 +162,7 @@
     "@rsbuild/plugin-sass": "^1.4.0",
     "@rsbuild/plugin-svgr": "^1.2.3",
     "@rstest/core": "^0.8.5",
+    "@rstest/coverage-istanbul": "^0.2.1",
     "@rtk-query/codegen-openapi": "^2.1.0",
     "@storybook/addon-essentials": "^7.0.12",
     "@storybook/addon-interactions": "^7.0.12",

@@ -11,4 +11,7 @@ export default defineConfig({
     },
   },
   globals: true,
+  coverage: {
+    reportsDirectory: 'docs/coverage',
+  },
 });
