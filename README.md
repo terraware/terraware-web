@@ -27,8 +27,8 @@ but not everything is ready yet.
 ## How to Run the App in Development Mode
 
 1. Copy `.env.sample` from the root directory of this repo to the same directory, with the filename `.env`
-    1. If you work for Terraformation and are using existing Keycloak setup, refer to the secrets in the "Onboarding
-       Plan for Frontend WebApp Developers" confluence page
+   1. If you work for Terraformation and are using existing Keycloak setup, refer to the secrets in the "Onboarding
+      Plan for Frontend WebApp Developers" confluence page
 2. Login to Docker hub
 
 ```shell

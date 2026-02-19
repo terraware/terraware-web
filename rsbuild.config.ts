@@ -6,7 +6,12 @@ import chokidar from 'chokidar';
 
 const { convertAllLocales } = require('./src/strings/export');
 
-const terrawareApi = process.env.PUBLIC_TERRAWARE_API;
+const serverProxy = {
+  target: process.env.PUBLIC_TERRAWARE_API,
+  secure: false,
+  changeOrigin: false,
+  xfwd: true,
+};
 
 export default defineConfig({
   plugins: [
@@ -42,42 +47,12 @@ export default defineConfig({
 
   server: {
     proxy: {
-      '/admin': {
-        target: terrawareApi,
-        secure: false,
-        changeOrigin: false,
-        xfwd: true,
-      },
-      '/api': {
-        target: terrawareApi,
-        secure: false,
-        changeOrigin: false,
-        xfwd: true,
-      },
-      '/sso': {
-        target: terrawareApi,
-        secure: false,
-        changeOrigin: false,
-        xfwd: true,
-      },
-      '/swagger-ui.html': {
-        target: terrawareApi,
-        secure: false,
-        changeOrigin: false,
-        xfwd: true,
-      },
-      '/swagger-ui': {
-        target: terrawareApi,
-        secure: false,
-        changeOrigin: false,
-        xfwd: true,
-      },
-      '/v3': {
-        target: terrawareApi,
-        secure: false,
-        changeOrigin: false,
-        xfwd: true,
-      },
+      '/admin': serverProxy,
+      '/api': serverProxy,
+      '/sso': serverProxy,
+      '/swagger-ui.html': serverProxy,
+      '/swagger-ui': serverProxy,
+      '/v3': serverProxy,
     },
     open: true,
   },
