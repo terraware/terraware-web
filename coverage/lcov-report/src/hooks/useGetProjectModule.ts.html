@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/hooks/useGetCohortModule.ts</title>
+    <title>Code coverage report for src/hooks/useGetProjectModule.ts</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../prettify.css" />
     <link rel="stylesheet" href="../../base.css" />
@@ -19,20 +19,20 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/hooks</a> useGetCohortModule.ts</h1>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/hooks</a> useGetProjectModule.ts</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/38</span>
+                <span class='fraction'>0/33</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/36</span>
+                <span class='fraction'>0/31</span>
             </div>
         
             
@@ -96,13 +96,7 @@
 <a name='L31'></a><a href='#L31'>31</a>
 <a name='L32'></a><a href='#L32'>32</a>
 <a name='L33'></a><a href='#L33'>33</a>
-<a name='L34'></a><a href='#L34'>34</a>
-<a name='L35'></a><a href='#L35'>35</a>
-<a name='L36'></a><a href='#L36'>36</a>
-<a name='L37'></a><a href='#L37'>37</a>
-<a name='L38'></a><a href='#L38'>38</a>
-<a name='L39'></a><a href='#L39'>39</a>
-<a name='L40'></a><a href='#L40'>40</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L34'></a><a href='#L34'>34</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -130,64 +124,52 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useCall<span class="cstat-no" title="statement not covered" >back, useEffect, useMe</span>mo, useState } from 'react';
 <span class="cstat-no" title="statement not covered" ></span>
-import { requestGetCohor<span class="cstat-no" title="statement not covered" >tModule } from 'src/redux/f</span>eatures/cohortModules/cohortModulesAsyncThunks';
-import { selectCoho<span class="cstat-no" title="statement not covered" >rtModuleRequest } from 'src/redu</span>x/features/cohortModules/cohortModulesSelectors';
-import { useApp<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Di</span>spatch, useAppSelector } from 'src/redux/store';</span>
-im<span class="cstat-no" title="statement not covered" >port { CohortModule } from 'src/types/Module';</span>
+import { useLazyGetProje<span class="cstat-no" title="statement not covered" >ctModuleQuery } from 'src/q</span>ueries/generated/projectModules';
+import { ProjectMod<span class="cstat-no" title="statement not covered" >ule } from 'src/types/Module';</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+co<span class="cstat-no" title="statement not covered" >nst useGetProjectModule = () =&gt; {</span>
+  co<span class="cstat-no" title="statement not covered" >nst [getProjectModuleQuery, projectModuleResult] = useLazyGetPr</span>ojectModuleQuery();
+&nbsp;
+  const [projectMo<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >du</span>le, setProjectModule] = useState&lt;ProjectModule&gt;();</span>
 <span class="cstat-no" title="statement not covered" ></span>
-const useGetCohortModule = () =&gt; {
-  const dispatch =<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > u</span>seAppDispatch();</span>
-<span class="cstat-no" title="statement not covered" ></span>
-  co<span class="cstat-no" title="statement not covered" >nst [moduleRequestId, setModuleRequestId] = useState&lt;string&gt;('');</span>
-  cons<span class="cstat-no" title="statement not covered" >t [cohortModule, setCohortModule] = useState&lt;CohortModule&gt;();</span>
+  co<span class="cstat-no" title="statement not covered" >nst getProjectModule = useCallback(</span>
+    (r<span class="cstat-no" title="statement not covered" >equest: { projectId: number; moduleId: number }) =&gt; {</span>
+      vo<span class="cstat-no" title="statement not covered" >id getProjectModuleQuery(r<span class="fstat-no" title="function not covered" >eq</span>uest<span class="cstat-no" title="statement not covered" >);</span></span>
+    },
+<span class="cstat-no" title="statement not covered" >    [getProje</span>ctModuleQuery]
+  );
 <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  const getModuleResponse = useAppSelector(selectCohortModuleRequest(moduleRequestId));
-<span class="cstat-no" title="statement not covered" ></span>
-  const getCohortModule = useCallback(
-    (request: { coh<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >or</span>tId: nu<span class="cstat-no" title="statement not covered" >mber; moduleId: number }) =&gt; {</span></span>
-      const getModul<span class="cstat-no" title="statement not covered" >e =</span> dispatch(requestGetCohortModule(request));
-<span class="cstat-no" title="statement not covered" >      setModuleRequestId(getModule.requestId);</span>
-    },<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-    [dispatch, setModuleRequestId]
-<span class="cstat-no" title="statement not covered" >  );</span>
-<span class="cstat-no" title="statement not covered" ></span>
   useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-    if (getModuleResponse &amp;&amp; getModu<span class="cstat-no" title="statement not covered" >leResponse.status === 'success') {</span>
-      setCohortModu<span class="cstat-no" title="statement not covered" >le(getModuleResponse.data);</span>
-    }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  }, [getModuleResp<span class="cstat-no" title="statement not covered" >onse, setCohortModule]);</span>
+<span class="cstat-no" title="statement not covered" >    if (projectModuleResult.isSuccess) {</span>
+      setPr<span class="fstat-no" title="function not covered" >oj</span>ectM<span class="cstat-no" title="statement not covered" >odule(projectM</span>oduleResult.data.module);
+    }
+<span class="cstat-no" title="statement not covered" >  }, [projectModuleResult, setProjectModule]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
   return useMemo(<span class="cstat-no" title="statement not covered" ></span>
-    () =&gt; ({<span class="cstat-no" title="statement not covered" ></span>
-      cohortModule,<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" ></span>      getCohortModule,
+    () =&gt; ({<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+      projectModule,<span class="cstat-no" title="statement not covered" ></span>
+      getProjectModule,<span class="cstat-no" title="statement not covered" ></span>
     }),<span class="cstat-no" title="statement not covered" ></span>
-    [g<span class="cstat-no" title="statement not covered" >etCohortModule, cohortModule]</span>
-  );
+<span class="fstat-no" title="function not covered" >    [g</span>etProjectModule, projectModule]
+  );<span class="cstat-no" title="statement not covered" ></span>
 };
 &nbsp;
-ex<span class="cstat-no" title="statement not covered" >port default useGetCohortMod<span class="fstat-no" title="function not covered" >ul</span>e;</span>
-<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
+export default useGetProjectModule;
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-19T18:20:59.688Z
+                at 2026-02-19T22:22:50.759Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

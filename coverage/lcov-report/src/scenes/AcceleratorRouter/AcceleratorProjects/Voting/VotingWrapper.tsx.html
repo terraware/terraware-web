@@ -230,9 +230,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -266,7 +266,7 @@ import { Crumb } fr<span class="cstat-no" title="statement not covered" >om 'src
 import Card fro<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >m </span>'src/components/common/Card';</span>
 im<span class="cstat-no" title="statement not covered" >port PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';</span>
 impo<span class="cstat-no" title="statement not covered" >rt { APP_PATHS } from 'src/constants';</span>
-import useListCohortModules from 'src/hooks/useListCohortModules';
+import useListProjectModules from 'src/hooks/useListProjectModules';
 import { useLocali<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >za</span>tion } from 'src/providers';</span>
 im<span class="cstat-no" title="statement not covered" >port strings from 'src/strings';</span>
 <span class="cstat-no" title="statement not covered" ></span>
@@ -285,13 +285,13 @@ const VotingWrapper = ({ children, isForm, rightComponent }: Props): JSX.Element
   const theme = useTheme();
   const { phaseVote<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >s,</span> projec<span class="cstat-no" title="statement not covered" >t, status } = useVotingData();</span></span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  const { cohortModules, listCohortModules } = useListCohortModules();</span>
+<span class="cstat-no" title="statement not covered" >  const { projectModules, listProjectModules } = useListProjectModules();</span>
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
   useEffect(() =&gt; {
-<span class="cstat-no" title="statement not covered" >    if (project &amp;&amp; project.cohortId) {</span>
-      void listCoho<span class="cstat-no" title="statement not covered" >rtModules(project.cohortId</span>);
+<span class="cstat-no" title="statement not covered" >    if (project &amp;&amp; project.id) {</span>
+      void listProj<span class="cstat-no" title="statement not covered" >ectModules(project.id);</span>
     }<span class="cstat-no" title="statement not covered" ></span>
-  }, [project, listCohortMod<span class="cstat-no" title="statement not covered" >ules]);</span>
+  }, [project, listProjectMo<span class="cstat-no" title="statement not covered" >dules]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
   // construct the bread crumbs back<span class="cstat-no" title="statement not covered" > to originating context</span>
   const crumbs: Crumb[]<span class="cstat-no" title="statement not covered" > = useMemo(</span>
@@ -300,7 +300,7 @@ const VotingWrapper = ({ children, isForm, rightComponent }: Props): JSX.Element
         ? [<span class="cstat-no" title="statement not covered" ></span>
             {<span class="cstat-no" title="statement not covered" ></span>
               name: strin<span class="cstat-no" title="statement not covered" >gs.PROJECTS,</span>
-              to: APP_PATHS<span class="cstat-no" title="statement not covered" >.ACCELERATOR_PROJECTS, // T</span>ODO switch to project management page holding the project id
+              to: APP_PATHS<span class="cstat-no" title="statement not covered" >.ACCELERATOR_PROJECTS,</span>
             },<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
             {<span class="cstat-no" title="statement not covered" ></span>
               na<span class="cstat-no" title="statement not covered" >me: project?.name ?? '--',</span>
@@ -321,15 +321,15 @@ const VotingWrapper = ({ children, isForm, rightComponent }: Props): JSX.Element
       rightComponent={rightComponent}
       title={strings.INVESTMENT_COMMITTEE_VOTES}
       projectPhase={project?.phase}
-      modules={cohortModules ?? []}
+      modules={projectModules ?? []}
     &gt;
       {phaseVotes &amp;&amp; phaseVotes.votes.length &gt; 0 ? (
         &lt;Card
           style={{
             display: 'flex',
-            flexDirection: 'column',
-            flexGrow: 1<span class="cstat-no" title="statement not covered" >,</span>
-<span class="cstat-no" title="statement not covered" >            padding: theme.spacing(isForm ? 0 : 3),</span>
+            flexDirecti<span class="cstat-no" title="statement not covered" >on: 'column',</span>
+<span class="cstat-no" title="statement not covered" >            flexGrow: 1,</span>
+            padding: theme.spacing(isForm ? 0 : 3),
           }}
         &gt;
           {status === 'pending' &amp;&amp; &lt;BusySpinner withSkrim={true} /&gt;}
@@ -361,7 +361,7 @@ export default VotingWrapper;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-19T18:20:59.688Z
+                at 2026-02-19T22:22:50.759Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

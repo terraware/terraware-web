@@ -317,7 +317,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > useCallback, </span>useEffect, useState } from 'react';
 <span class="cstat-no" title="statement not covered" ></span>
-import useListCohortMod<span class="cstat-no" title="statement not covered" >ules from 'src/hooks/useListCoho</span>rtModules';
+import useListProjectMo<span class="cstat-no" title="statement not covered" >dules from 'src/hooks/useListPro</span>jectModules';
 import { useLocalization<span class="cstat-no" title="statement not covered" >, useOrganization } from 's</span>rc/providers/hooks';
 import { requestLis<span class="cstat-no" title="statement not covered" >tModuleProjects } from</span> 'src/redux/features/modules/modulesAsyncThunks';
 import { selectModu<span class="cstat-no" title="statement not covered" >leProjects } from 'src/redux/fea</span>tures/modules/modulesSelectors';
@@ -348,7 +348,7 @@ const ParticipantProvider = ({ children }: Props) =&gt; {
   const moduleProjectsListRequest = useAppSelector(selectModuleProjects(listModuleProjectsRequestId));
 <span class="cstat-no" title="statement not covered" >  const projects = useAppSelector(selectProjec</span>ts);
 <span class="cstat-no" title="statement not covered" ></span>
-  const { listCohortModules, cohor<span class="cstat-no" title="statement not covered" >tModules, status: listModulesStatus } = useListCoho</span>rtModules();
+  const { listProjectModules, proje<span class="cstat-no" title="statement not covered" >ctModules, isLoading: listModulesIsLoading } = useLi</span>stProjectModules();
 <span class="cstat-no" title="statement not covered" ></span>
   const _setCurrentAcceleratorPr<span class="cstat-no" title="statement not covered" >oject = useCallback(</span>
     (projectId: string | numbe<span class="cstat-no" title="statement not covered" >r) =&gt; {</span>
@@ -360,7 +360,7 @@ const ParticipantProvider = ({ children }: Props) =&gt; {
   const [participan<span class="cstat-no" title="statement not covered" >tData, setParticipantData] = useSta</span>te&lt;ParticipantData&gt;({
     isLoading: true,<span class="cstat-no" title="statement not covered" ></span>
     projectsWithModules: mo<span class="cstat-no" title="statement not covered" >duleProjects,</span>
-    modules: cohortModules,<span class="cstat-no" title="statement not covered" ></span>
+    modules: projectModules,<span class="cstat-no" title="statement not covered" ></span>
     orgHasModules,<span class="cstat-no" title="statement not covered" ></span>
     orgHasParticipants,<span class="cstat-no" title="statement not covered" ></span>
     allAcceleratorProjects: acceleratorProje<span class="cstat-no" title="statement not covered" >cts,</span>
@@ -392,10 +392,10 @@ const ParticipantProvider = ({ children }: Props) =&gt; {
   }, [<span class="cstat-no" title="statement not covered" >selectedOrganization, dispatch]</span>);
 <span class="cstat-no" title="statement not covered" ></span>
   useE<span class="cstat-no" title="statement not covered" >ffect(() =&gt; {</span>
-    if (currentAcceleratorProject &amp;&amp; currentAcceleratorProject.cohortId) {
-      void listCohortModules(currentAcceleratorProject.cohortId);
+    if (currentAcceleratorProject &amp;&amp; currentAcceleratorProject.id) {
+      void listProjectModules(currentAcceleratorProject.id);
 <span class="cstat-no" title="statement not covered" >    }<span class="fstat-no" title="function not covered" ></span></span>
-  }, [currentAcceleratorProject, lis<span class="cstat-no" title="statement not covered" >tCohortModules]);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  }, [currentAcceleratorProject, lis<span class="cstat-no" title="statement not covered" >tProjectModules]);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 <span class="cstat-no" title="statement not covered" ></span>
   us<span class="cstat-no" title="statement not covered" >eEffect(() =&gt; {</span>
     if (moduleProjectsListRequest &amp;&amp; moduleProjectsListRequest.status === 'success' &amp;&amp; moduleProjectsListRequest.data) {
@@ -407,7 +407,7 @@ const ParticipantProvider = ({ children }: Props) =&gt; {
       setModuleProjects(nextModuleProjects);
 <span class="cstat-no" title="statement not covered" >      setOrgHasModules(nextMod<span class="fstat-no" title="function not covered" >ul</span>eProjects.length &gt; 0);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >      // Assign the first project with modules as the current acce</span>lerator project
+<span class="cstat-no" title="statement not covered" >      // Assign the first project with modules as the current</span> accelerator project
       if (nextModuleProjects.length &gt; 0 &amp;&amp; !currentAcceleratorProject) {
         setCurrentAcceleratorProject(nextModuleProjects[0]);
 <span class="cstat-no" title="statement not covered" >      }<span class="fstat-no" title="function not covered" ></span></span>
@@ -417,9 +417,9 @@ const ParticipantProvider = ({ children }: Props) =&gt; {
   useE<span class="cstat-no" title="statement not covered" >ffect(() =&gt; {</span>
     se<span class="cstat-no" title="statement not covered" >tParticipantData({</span>
       cu<span class="cstat-no" title="statement not covered" >rrentAcceleratorProject,</span>
-      isLoading: moduleProjectsListRequest?.status === 'pending' || listModulesStatus === 'pending',
+      isLoading: moduleProjectsListRequest?.status === 'pending' || listModulesIsLoading,
       projectsWithModules: moduleProjects,
-      modules: cohortModules,
+      modules: projectModules,
 <span class="cstat-no" title="statement not covered" >      allAcceleratorProjects: <span class="fstat-no" title="function not covered" >ac</span>celeratorProjects,</span>
 <span class="cstat-no" title="statement not covered" >      orgHasModules,</span>
       orgHasParticipants,
@@ -427,8 +427,8 @@ const ParticipantProvider = ({ children }: Props) =&gt; {
     });
   }, [
     currentAcceleratorProject,
-    listModulesStatus,
-    cohortModules,
+    listModulesIsLoading,
+    projectModules,
     moduleProjects,
     moduleProjectsListRequest,
     orgHasModules,
@@ -448,7 +448,7 @@ export default ParticipantProvider;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-19T18:20:59.688Z
+                at 2026-02-19T22:22:50.759Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

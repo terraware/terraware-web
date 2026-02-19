@@ -533,8 +533,8 @@ import { Crumb <span class="cstat-no" title="statement not covered" ><span class
 im<span class="cstat-no" title="statement not covered" >port Link from 'src/components/common/Link';</span>
 impo<span class="cstat-no" title="statement not covered" >rt ParticipantPage from 'src/components/common/PageWithModuleTi</span>meline/ParticipantPage';
 import { APP_PATHS } from 'src/constants';
-import useGetCohor<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >tM</span>odule from 'src/hooks/useGetCohortModule';</span>
-im<span class="cstat-no" title="statement not covered" >port useGetEvent from 'src/hooks/useGetEvent';</span>
+import useGetEvent<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > f</span>rom 'src/hooks/useGetEvent';</span>
+im<span class="cstat-no" title="statement not covered" >port useGetProjectModule from 'src/hooks/useGetProjectModule';</span>
 impo<span class="cstat-no" title="statement not covered" >rt { useLocalization } from 'src/providers';</span>
 import<span class="cstat-no" title="statement not covered" > { useParticipantData } from 'src/providers/Participant/ParticipantContext';</span>
 import s<span class="cstat-no" title="statement not covered" >trings from 'src/strings';<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
@@ -562,10 +562,10 @@ const ModuleEventSe<span class="cstat-no" title="statement not covered" ><span c
     if (projectId)<span class="cstat-no" title="statement not covered" > {</span>
       setCurrentAcceleratorPr<span class="cstat-no" title="statement not covered" >oject(projectId);</span>
     }<span class="cstat-no" title="statement not covered" ></span>
-  }, [projectId, setCurrentAccel<span class="cstat-no" title="statement not covered" >eratorProject]);</span>
+  }, [projectId, setCurre<span class="cstat-no" title="statement not covered" >ntAcceleratorProject]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
   const { event, getEve<span class="cstat-no" title="statement not covered" >nt } = useGetEvent();</span>
-  const { cohortModule, getCohor<span class="cstat-no" title="statement not covered" >tModule } = useGetCohortModule();</span>
+  const { projectModule, getProj<span class="cstat-no" title="statement not covered" >ectModule } = useGetProjectModule();</span>
 <span class="cstat-no" title="statement not covered" ></span>
   useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
     if (sessionId) {<span class="cstat-no" title="statement not covered" ></span>
@@ -574,10 +574,10 @@ const ModuleEventSe<span class="cstat-no" title="statement not covered" ><span c
 <span class="cstat-no" title="statement not covered" >  }, [getEvent, sessionId]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
   useEffect(() =&gt; {
-    if (currentAcceleratorProject &amp;&amp; currentAcceleratorProject.cohortId) {
-      void getCohortModule({ mo<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >du</span>leId, cohortId: currentAcceleratorProject.cohortId });</span>
+    if (currentAcceleratorProject &amp;&amp; currentAcceleratorProject.id) {
+      void getProjectModule({ m<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >od</span>uleId, projectId: currentAcceleratorProject.id });</span>
     }
-  }, [currentAcceleratorPro<span class="cstat-no" title="statement not covered" >ject, moduleId, getCohortModule]);</span>
+  }, [currentAcceleratorPro<span class="cstat-no" title="statement not covered" >ject, moduleId, getProjectModule]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
   const eventType = event?.type ? getEventType(event.type) : '';<span class="cstat-no" title="statement not covered" ></span>
   const isRecordedSes<span class="cstat-no" title="statement not covered" >sion = eventType === 'Recorded Sessio</span>n';
@@ -590,7 +590,7 @@ const ModuleEventSe<span class="cstat-no" title="statement not covered" ><span c
   const slidesLabel = isRecordedSession
     ? strings.SESSION_SLIDES
     : eventType<span class="cstat-no" title="statement not covered" ></span>
-      ? strings.formatString(strings.EVENT_N<span class="cstat-no" title="statement not covered" >AME_SLIDES, eventType)</span>
+      ? strings.formatString(strings.EVENT_NAM<span class="cstat-no" title="statement not covered" >E_SLIDES, eventType)</span>
 <span class="cstat-no" title="statement not covered" >      : '';<span class="fstat-no" title="function not covered" ></span></span>
   co<span class="cstat-no" title="statement not covered" >nst startTimeRenderer = isRecordedSession ? getLongDate : getLongDateTime;</span>
 <span class="cstat-no" title="statement not covered" ></span>
@@ -601,18 +601,18 @@ const ModuleEventSe<span class="cstat-no" title="statement not covered" ><span c
 <span class="cstat-no" title="statement not covered" >        to: APP_PATHS.PROJECT_MODULES.replace(':projectId', `${projectId}`),</span>
       },
       {
-        name: cohort<span class="cstat-no" title="statement not covered" >Module?.title || '',</span>
+        name: projec<span class="cstat-no" title="statement not covered" >tModule?.title || '',</span>
         to: APP_PATHS.PROJEC<span class="cstat-no" title="statement not covered" >T_MODULE.replace(':projectId', `$</span>{projectId}`).replace(':moduleId', `${moduleId}`),
       },<span class="cstat-no" title="statement not covered" ></span>
     ],<span class="cstat-no" title="statement not covered" ></span>
-    [activeLocale, pro<span class="cstat-no" title="statement not covered" >jectId, cohortModule, moduleId]</span>
+    [activeLocale, pro<span class="cstat-no" title="statement not covered" >jectId, projectModule, moduleId]</span>
   );<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
   re<span class="fstat-no" title="function not covered" >tu</span>rn (<span class="cstat-no" title="statement not covered" ></span>
     &lt;ParticipantPage
       crumbs={crumbs}
       hierarchicalCrumbs={false}
-      title={&lt;ModuleViewTitle module={cohortModule} projectId={projectId} /&gt;}
+      title={&lt;ModuleViewTitle module={projectModule} projectId={projectId} /&gt;}
     &gt;
       &lt;Card
         sx={{
@@ -760,7 +760,7 @@ export default ModuleEventSessionView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-19T18:20:59.688Z
+                at 2026-02-19T22:22:50.759Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

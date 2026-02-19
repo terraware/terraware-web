@@ -156,7 +156,8 @@
 <a name='L91'></a><a href='#L91'>91</a>
 <a name='L92'></a><a href='#L92'>92</a>
 <a name='L93'></a><a href='#L93'>93</a>
-<a name='L94'></a><a href='#L94'>94</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L94'></a><a href='#L94'>94</a>
+<a name='L95'></a><a href='#L95'>95</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -222,6 +223,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -253,68 +255,69 @@
 import strings f<span class="cstat-no" title="statement not covered" >rom 'src/strings';</span>
 <span class="cstat-no" title="statement not covered" ></span>
 export type CohortModule<span class="cstat-no" title="statement not covered" > = components['schemas']['C</span>ohortModulePayload'];
-export type Module <span class="cstat-no" title="statement not covered" >= components['schemas'</span>]['ModulePayload'];
+export type Project<span class="cstat-no" title="statement not covered" >Module = components['s</span>chemas']['ProjectModulePayload'];
+export type Module <span class="cstat-no" title="statement not covered" >= components['schemas']['ModuleP</span>ayload'];
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+ex<span class="cstat-no" title="statement not covered" >port type ModuleDeliverable = components['schemas']['ModuleDeliverablePayload'];</span>
 <span class="cstat-no" title="statement not covered" ></span>
-export type Mod<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ul</span>eDeliverable = components['schemas']['ModuleDeliverablePayload'];</span>
-<span class="cstat-no" title="statement not covered" ></span>
-expo<span class="cstat-no" title="statement not covered" >rt type ModuleEvent = components['schemas']['ModuleEvent'];</span>
-export type ModuleEventPartial = Omit&lt;Partial&lt;components['schemas']['ModuleEvent']&gt;, 'projects'&gt; &amp; {
-  projects?: Modul<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >eE</span>ventProject[];</span>
-<span class="cstat-no" title="statement not covered" >  feId?: symbol;</span>
+export type ModuleEvent = components['schemas']['ModuleEvent'];
+export type Module<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Ev</span>entPartial = Omit&lt;Partial&lt;components['schemas']['ModuleEvent']&gt;, 'projects'&gt; &amp; {</span>
+<span class="cstat-no" title="statement not covered" >  projects?: ModuleEventProject[];</span>
+  fe<span class="cstat-no" title="statement not covered" >Id?: symbol;</span>
 };<span class="cstat-no" title="statement not covered" ></span>
-export<span class="cstat-no" title="statement not covered" > type ModuleEventProject = Partial&lt;NonNullable&lt;components['schemas']['ModuleEvent']['projects']&gt;[0]&gt;;</span>
-export t<span class="cstat-no" title="statement not covered" >ype ModuleEventWithStartTi<span class="fstat-no" title="function not covered" >me</span> = O<span class="cstat-no" title="statement not covered" >mit&lt;Module</span>Event, 'startTime'&gt; &amp; { startTime: string };</span>
-&nbsp;
-ex<span class="cstat-no" title="statement not covered" >port type M</span>oduleEventStatus = components['schemas']['ModuleEvent']['status'];
-export type ModuleEventType = ModuleEvent['type'];
-export type Im<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >po</span>rtModuleProblemElement = com<span class="cstat-no" title="statement not covered" >ponents['schemas']['ImportModuleProblemElement'];</span></span>
+export t<span class="cstat-no" title="statement not covered" >ype ModuleEventProject = P<span class="fstat-no" title="function not covered" >ar</span>tial<span class="cstat-no" title="statement not covered" >&lt;NonNullab</span>le&lt;components['schemas']['ModuleEvent']['projects']&gt;[0]&gt;;</span>
+export type ModuleEventWithStartTime = Omit&lt;ModuleEvent, 'startTime'&gt; &amp; { startTime: string };
+<span class="cstat-no" title="statement not covered" ></span>
+export type ModuleEventStatus = components['schemas']['ModuleEvent']['status'];
+export type Mo<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >du</span>leEventType = ModuleEvent['t<span class="cstat-no" title="statement not covered" >ype'];</span></span>
+export type ImportModuleProblemElement = components['schemas']['ImportModuleProblemElement'];
 export const MODULE_EVENTS: ModuleEventType[] = ['Live Session', 'One-on-One Session', 'Recorded Session', 'Workshop'];
 &nbsp;
 export const getEventType = (input: ModuleEventType): string =&gt; {
   switch (input) {
     case 'Live Session':
       return strings.LIVE_SESSION;
-    case 'One-on-One Session':
-      return string<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >s.</span>ONE_ON_<span class="cstat-no" title="statement not covered" >ONE_SESSION;</span></span>
-    case 'Recorded S<span class="cstat-no" title="statement not covered" >ess</span>ion':
-<span class="cstat-no" title="statement not covered" >      return strings.RECORDED_SESSION;</span>
-    case 'Worksho<span class="fstat-no" title="function not covered" >p'</span>:<span class="cstat-no" title="statement not covered" ></span>
-      return strin<span class="fstat-no" title="function not covered" >gs</span>.WOR<span class="cstat-no" title="statement not covered" >KSHOP;</span>
-    default:<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-      return `${input as string}`;
-<span class="cstat-no" title="statement not covered" >  }</span>
+    case 'One-on-On<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >e </span>Session<span class="cstat-no" title="statement not covered" >':</span></span>
+      return strings<span class="cstat-no" title="statement not covered" >.ON</span>E_ON_ONE_SESSION;
+<span class="cstat-no" title="statement not covered" >    case 'Recorded Session':</span>
+      return stri<span class="fstat-no" title="function not covered" >ng</span>s.RE<span class="cstat-no" title="statement not covered" >CORDED_SESSION</span>;
+    case 'Workshop<span class="fstat-no" title="function not covered" >':<span class="cstat-no" title="statement not covered" ></span></span>
+      return str<span class="fstat-no" title="function not covered" >in</span>gs.W<span class="cstat-no" title="statement not covered" >ORKSHOP;</span>
+    default:
+<span class="cstat-no" title="statement not covered" >      return `${input as string}`;</span>
+  }<span class="cstat-no" title="statement not covered" ></span>
 };<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+ex<span class="cstat-no" title="statement not covered" >port type ModuleProjectSearchResult = {</span>
+  id: number;
+  coho<span class="cstat-no" title="statement not covered" >rt?: {</span>
+    cohortModules?: {
+<span class="cstat-no" title="statement not covered" >      module_id: string;</span>
+    }[];
+  };<span class="cstat-no" title="statement not covered" ></span>
+};
 <span class="cstat-no" title="statement not covered" ></span>
-export type ModulePro<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >je</span>ctSearchResult = {</span>
-<span class="cstat-no" title="statement not covered" >  id: number;</span>
-  cohort?: {
-    co<span class="cstat-no" title="statement not covered" >hortModules?: {</span>
-      module_id: string;
-    }[<span class="cstat-no" title="statement not covered" >];</span>
-  };
-};<span class="cstat-no" title="statement not covered" ></span>
-&nbsp;
-export<span class="cstat-no" title="statement not covered" > type ModuleCohortsSearchResult = {</span>
-  cohortModules?: {
-    ti<span class="cstat-no" title="statement not covered" >tle: string;</span>
+export type ModuleCohortsSearchResult = {
+  coho<span class="cstat-no" title="statement not covered" >rtModules?: {</span>
+    title: string;
     startDate: string;
-    endDate: string;
-    cohort: {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >      id: number;</span>
-      name: string;
-<span class="cstat-no" title="statement not covered" >      projects: {</span>
+    endDate: string;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    cohort: {</span>
+      id: number;
+<span class="cstat-no" title="statement not covered" >      name: string;</span>
+      projects: {
         id: number;
-        name: string;
-<span class="cstat-no" title="statement not covered" >      }[];</span>
+<span class="cstat-no" title="statement not covered" >        name: string;</span>
+      }[];
     };
-  }[];
-};<span class="cstat-no" title="statement not covered" ></span>
+  }[];<span class="cstat-no" title="statement not covered" ></span>
+};
 &nbsp;
-export type CohortModuleWithProject = Partial&lt;NonNullable&lt;ModuleCohortsSearchResult['cohortModules']&gt;[0]['cohort']&gt;;
-<span class="cstat-no" title="statement not covered" ></span>
+export<span class="cstat-no" title="statement not covered" > type CohortModuleWithProject = Partial&lt;NonNullab</span>le&lt;ModuleCohortsSearchResult['cohortModules']&gt;[0]['cohort']&gt;;
+&nbsp;
 export const getEventStatus = (status: ModuleEventStatus) =&gt; {
-  switch (status) {
-    ca<span class="cstat-no" title="statement not covered" >se 'Not Started': {</span>
+  swit<span class="cstat-no" title="statement not covered" >ch (status) {</span>
+    case 'Not Started': {
       return strings.SESSION_HAS_NOT_STARTED;
     }
     case 'Starting Soon': {
@@ -339,7 +342,7 @@ export type ModuleSearchResult = {
   id: number;
   name: string;
   phaseId: string;
-  cohortsQuantity: number;
+  projectsQuantity: number;
   deliverablesQuantity: number;
 };
 &nbsp;</pre></td></tr></table></pre>
@@ -349,7 +352,7 @@ export type ModuleSearchResult = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-19T18:20:59.688Z
+                at 2026-02-19T22:22:50.759Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

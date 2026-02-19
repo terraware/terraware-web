@@ -211,8 +211,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -230,7 +230,7 @@ import { Crumb } fr<span class="cstat-no" title="statement not covered" >om 'src
 import Card fro<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >m </span>'src/components/common/Card';</span>
 im<span class="cstat-no" title="statement not covered" >port PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';</span>
 impo<span class="cstat-no" title="statement not covered" >rt { APP_PATHS } from 'src/constants';</span>
-import useListCohortModules from 'src/hooks/useListCohortModules';
+import useListProjectModules from 'src/hooks/useListProjectModules';
 import { useLocali<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >za</span>tion } from 'src/providers';</span>
 im<span class="cstat-no" title="statement not covered" >port strings from 'src/strings';</span>
 <span class="cstat-no" title="statement not covered" ></span>
@@ -247,14 +247,14 @@ const ScoringWrapper = ({ children, isForm, isLoading, rightComponent }: Props):
   const { activeLocale } = useLocalization();
   const theme = useTheme();
 &nbsp;
-  const { cohortMod<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ul</span>es, lis<span class="cstat-no" title="statement not covered" >tCohortModules } = useListCohortModules();</span></span>
+  const { projectMo<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >du</span>les, li<span class="cstat-no" title="statement not covered" >stProjectModules } = useListProjectModules();</span></span>
   const { project } <span class="cstat-no" title="statement not covered" >= u</span>seAcceleratorProjectData();
 <span class="cstat-no" title="statement not covered" ></span>
   useEffect<span class="fstat-no" title="function not covered" >((</span>) =&gt;<span class="cstat-no" title="statement not covered" > {</span>
-    if (project &amp;&amp; project.cohortId) {
-<span class="cstat-no" title="statement not covered" >      void listCohortModules(project.cohortId)</span>;
+    if (project &amp;&amp; project.id) {
+<span class="cstat-no" title="statement not covered" >      listProjectModules(project.id);</span>
     }<span class="cstat-no" title="statement not covered" ></span>
-  }, [project, listCoh<span class="cstat-no" title="statement not covered" >ortModules]);</span>
+  }, [project, listPro<span class="cstat-no" title="statement not covered" >jectModules]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
   // construct the<span class="cstat-no" title="statement not covered" > bread crumbs back to originating context</span>
   const crumbs: Crumb[] = useMemo(<span class="cstat-no" title="statement not covered" ></span>
@@ -263,11 +263,11 @@ const ScoringWrapper = ({ children, isForm, isLoading, rightComponent }: Props):
         ? [<span class="cstat-no" title="statement not covered" ></span>
             {<span class="cstat-no" title="statement not covered" ></span>
               name: strings.PROJECTS,<span class="cstat-no" title="statement not covered" ></span>
-              to: APP_P<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >AT</span>HS.ACCELERATOR_PROJECTS, // TODO switch to project management page holding the project id</span>
+              to: APP_P<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >AT</span>HS.ACCELERATOR_PROJECTS,</span>
             },
             {<span class="cstat-no" title="statement not covered" ></span>
               na<span class="cstat-no" title="statement not covered" >me: project?.name ?? '--',</span>
-              to: APP_PATHS.ACCELERATOR_PROJECT<span class="cstat-no" title="statement not covered" >_VIEW.replace(':projectId', `${project?.id}</span>`),
+              to: APP_PATHS.ACCELERATOR_PROJECT_V<span class="cstat-no" title="statement not covered" >IEW.replace(':projectId', `${project?.id}`),</span>
             },<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >          ]<span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >        : [],</span>
@@ -282,7 +282,7 @@ const ScoringWrapper = ({ children, isForm, isLoading, rightComponent }: Props):
       rightComponent={rightComponent}
       title={`${project?.name ?? ''} ${strings.SCORES}`}
       projectPhase={project?.phase}
-      modules={cohortModules ?? []}
+      modules={projectModules ?? []}
     &gt;
       &lt;Card
         style={{
@@ -290,8 +290,8 @@ const ScoringWrapper = ({ children, isForm, isLoading, rightComponent }: Props):
           flexDirection: 'column',
           flexGrow: 1,
           padding: theme.spacing(isForm ? 0 : 3),
-        }}
-<span class="cstat-no" title="statement not covered" >      &gt;</span>
+<span class="cstat-no" title="statement not covered" >        }}</span>
+      &gt;
         {isLoading &amp;&amp; &lt;BusySpinner withSkrim={true} /&gt;}
         {children}
       &lt;/Card&gt;
@@ -307,7 +307,7 @@ export default ScoringWrapper;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-19T18:20:59.688Z
+                at 2026-02-19T22:22:50.759Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>
