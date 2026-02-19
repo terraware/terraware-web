@@ -59,19 +59,19 @@ jobs:
       #- name: generate schemas
       #  run: yarn generate-types
 
-      #      - name: Check that changed code is formatted
-      #        if: github.ref != 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/')
-      #        run: |
-      #          gh pr view ${{ github.event.pull_request.number }} --json files -q '.files.[].path' | \
-      #            grep -E '\.(js|ts|tsx|json|css|scss|md)$' | \
-      #            (while read path; do if [ -f "$path" ]; then echo "$path"; fi; done) | \
-      #            xargs -r npx prettier --check
-      #        env:
-      #          GH_TOKEN: ${{ github.token }}
-      #
-      #      - name: Check that all code is formatted
-      #        if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')
-      #        run: yarn prettier --check .
+      - name: Check that changed code is formatted
+        if: github.ref != 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/')
+        run: |
+          gh pr view ${{ github.event.pull_request.number }} --json files -q '.files.[].path' | \
+            grep -E '\.(js|ts|tsx|json|css|scss|md)$' | \
+            (while read path; do if [ -f "$path" ]; then echo "$path"; fi; done) | \
+            xargs -r npx prettier --check
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Check that all code is formatted
+        if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')
+        run: yarn prettier --check .
 
       - name: Generate strings
         run: yarn generate-strings
@@ -100,12 +100,8 @@ jobs:
         if: github.ref != 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/') && steps.playwright-cache.outputs.cache-hit != 'true'
         run: yarn playwright install --with-deps chromium-headless-shell
 
-      - name: temp-test
-        run: |
-          pwd && ls -lah && rm -rf dist && mkdir dist
-
       - name: build
-        run: yarn build
+        run: rm -rf dist && yarn build
         env:
           PUBLIC_TERRAWARE_API: ''
           PUBLIC_TERRAWARE_TIER: ${{ env.LOWER_TIER }}
