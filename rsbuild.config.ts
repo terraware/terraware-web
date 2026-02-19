@@ -42,6 +42,8 @@ export default defineConfig({
   },
 
   server: {
+    htmlFallback: false,
+    historyApiFallback: true,
     proxy: {
       '/admin': serverProxy,
       '/api': serverProxy,
