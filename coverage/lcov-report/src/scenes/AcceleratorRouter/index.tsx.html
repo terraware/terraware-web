@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/59</span>
+                <span class='fraction'>0/58</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/56</span>
+                <span class='fraction'>0/55</span>
             </div>
         
             
@@ -170,9 +170,7 @@
 <a name='L105'></a><a href='#L105'>105</a>
 <a name='L106'></a><a href='#L106'>106</a>
 <a name='L107'></a><a href='#L107'>107</a>
-<a name='L108'></a><a href='#L108'>108</a>
-<a name='L109'></a><a href='#L109'>109</a>
-<a name='L110'></a><a href='#L110'>110</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L108'></a><a href='#L108'>108</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -203,7 +201,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -267,7 +264,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -298,36 +294,35 @@ impo<span class="cstat-no" title="statement not covered" >rt useStateLocation fr
 import A<span class="cstat-no" title="statement not covered" >ctivityLogRouter from '../<span class="fstat-no" title="function not covered" >Ac</span>tivi<span class="cstat-no" title="statement not covered" >tyLogRoute</span>r';</span>
 import AcceleratorProjects from './AcceleratorProjects';
 im<span class="cstat-no" title="statement not covered" >port Applic</span>ations from './Applications';
-import Cohorts from './Cohorts';
-import Deliver<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ab</span>les from './Deliverables';<span class="cstat-no" title="statement not covered" ></span></span>
-import DocumentsRouter from './Documents';
+import Deliverables from './Deliverables';
+import Documen<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ts</span>Router from './Documents';<span class="cstat-no" title="statement not covered" ></span></span>
 import FundingEntities from './FundingEntities';
 import MatrixView from './MatrixView';
 import ModuleContent from './Modules';
 import EventEdit from './Modules/EventEdit';
 import ModuleView from './Modules/ModuleView';
 import NavBar from './NavBar';
-import People from <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >'.</span>/People<span class="cstat-no" title="statement not covered" >';</span></span>
+import People from './People';
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+interface Accelerato<span class="cstat-no" title="statement not covered" >rRo</span>uterProps {
+<span class="cstat-no" title="statement not covered" >  showNavBar: boolean;</span>
+  setShowNa<span class="fstat-no" title="function not covered" >vB</span>ar: <span class="cstat-no" title="statement not covered" >(value: boolea</span>n) =&gt; void;
+}
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >interface AcceleratorRouterProps {</span>
-  showNavBa<span class="fstat-no" title="function not covered" >r:</span> boo<span class="cstat-no" title="statement not covered" >lean;</span>
-  setShowNavBar: (value: boolean) =&gt; void;
-<span class="cstat-no" title="statement not covered" >}</span>
+const AcceleratorRo<span class="cstat-no" title="statement not covered" >uter = ({ showNavBar, setS</span>howNavBar }: AcceleratorRouterProps) =&gt; {
+  const { type } = useDevi<span class="cstat-no" title="statement not covered" >ceInfo();</span>
+  const location = use<span class="cstat-no" title="statement not covered" >StateLocation();</span>
+  const theme = useTheme();<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-const AcceleratorRouter = <span class="cstat-no" title="statement not covered" >({ showNavBar, setShowNa</span>vBar }: AcceleratorRouterProps) =&gt; {
-  const { type } = use<span class="cstat-no" title="statement not covered" >DeviceInfo();</span>
-  const location = useState<span class="cstat-no" title="statement not covered" >Location();</span>
-  const theme = useThem<span class="cstat-no" title="statement not covered" >e();</span>
-<span class="cstat-no" title="statement not covered" ></span>
-  const viewHasBackgroundImag<span class="cstat-no" title="statement not covered" >e = useCallback((): boolean =&gt; {</span>
-    return location.pathname.start<span class="cstat-no" title="statement not covered" >sWith(APP_PATHS.ACCELERATOR_PROJECTS);</span>
+  const viewHasBackground<span class="cstat-no" title="statement not covered" >Image = useCallback((): boolean =&gt; {</span>
+    return location.pathname.<span class="cstat-no" title="statement not covered" >startsWith(APP_PATHS.ACCELERATOR_PROJECTS);</span>
   }, [location]);<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
   const navBarOpened = {<span class="cstat-no" title="statement not covered" ></span>
-    backdropFilter: 'blur(8px)'<span class="cstat-no" title="statement not covered" >,</span>
-    background: getRgbaFromHex(th<span class="cstat-no" title="statement not covered" >eme.palette.TwClrBgSecondary as string, 0.</span>8),
+    backdropFilter: 'blur(8px)<span class="cstat-no" title="statement not covered" >',</span>
+    background: getRgbaFromHex(<span class="cstat-no" title="statement not covered" >theme.palette.TwClrBgSecondary as string,</span> 0.8),
     height: '100%',<span class="cstat-no" title="statement not covered" ></span>
-    alignItems: 'cent<span class="cstat-no" title="statement not covered" >er',</span>
+    alignItems: 'center',<span class="cstat-no" title="statement not covered" ></span>
     position: 'fixed',<span class="cstat-no" title="statement not covered" ></span>
     zIndex: 1300,<span class="cstat-no" title="statement not covered" ></span>
     inset: '0px',<span class="cstat-no" title="statement not covered" ></span>
@@ -370,13 +365,12 @@ const AcceleratorRouter = <span class="cstat-no" title="statement not covered" >
                 &lt;Route path={`${APP_PATHS.ACCELERATOR_PROJECTS}/*`} element={&lt;MatrixView /&gt;} /&gt;
                 &lt;Route path={`${APP_PATHS.ACCELERATOR_ACTIVITY_LOG}/*`} element={&lt;ActivityLogRouter /&gt;} /&gt;
                 &lt;Route path={`${APP_PATHS.ACCELERATOR_APPLICATIONS}/*`} element={&lt;Applications /&gt;} /&gt;
-                &lt;Route path={`${APP_PATHS.ACCELERATOR_COHORTS}/*`} element={&lt;Cohorts /&gt;} /&gt;
                 &lt;Route path={`${APP_PATHS.ACCELERATOR_DELIVERABLES}/*`} element={&lt;Deliverables /&gt;} /&gt;
                 &lt;Route path={`${APP_PATHS.ACCELERATOR_MODULES}/*`} element={&lt;ModuleContent /&gt;} /&gt;
                 &lt;Route path={`${APP_PATHS.ACCELERATOR_MODULE_CONTENT}/*`} element={&lt;ModuleView /&gt;} /&gt;
                 &lt;Route path={`${APP_PATHS.ACCELERATOR_MODULE_EVENTS_EDIT}/*`} element={&lt;EventEdit /&gt;} /&gt;
-                &lt;Rou<span class="cstat-no" title="statement not covered" >te path={`${APP_PA</span>THS.ACCELERATOR_PEOPLE}/*`} element={&lt;People /&gt;} /&gt;
-                &lt;Route path={`${APP_PATHS.ACCELERATOR_PROJECT_VIEW}/*`} element={&lt;AcceleratorProjects /&gt;} /&gt;
+                &lt;Route path={`${APP_PATHS.ACCELERATOR_PEOPLE}/*`} element={&lt;People /&gt;} /&gt;
+                &lt;Rou<span class="cstat-no" title="statement not covered" >te path={`${APP_PA</span>THS.ACCELERATOR_PROJECT_VIEW}/*`} element={&lt;AcceleratorProjects /&gt;} /&gt;
                 &lt;Route path={`${APP_PATHS.ACCELERATOR_FUNDING_ENTITIES}/*`} element={&lt;FundingEntities /&gt;} /&gt;
                 &lt;Route path={`${APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENTS}/*`} element={&lt;DocumentsRouter /&gt;} /&gt;
                 &lt;Route path={'*'} element={&lt;Navigate to={APP_PATHS.ACCELERATOR_PROJECTS} /&gt;} /&gt;
@@ -397,7 +391,7 @@ export default AcceleratorRouter;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-19T22:33:18.318Z
+                at 2026-02-19T23:00:46.101Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
