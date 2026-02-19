@@ -1,7 +1,8 @@
 import React, { RefObject, useCallback, useEffect, useMemo, useState } from 'react';
-import { MapRef } from 'react-map-gl/mapbox';
+import { MapMouseEvent, MapRef, Point } from 'react-map-gl/mapbox';
 import { useSearchParams } from 'react-router';
 
+import { Typography, useTheme } from '@mui/material';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import MapComponent from 'src/components/NewMap';
@@ -15,6 +16,7 @@ import {
   MapMarkerGroup,
   MapNameTag,
   MapPoint,
+  MapProperties,
 } from 'src/components/NewMap/types';
 import useMapFeatureStyles from 'src/components/NewMap/useMapFeatureStyles';
 import useMapPhotoDrawer, { PlotPhoto, PlotSplat } from 'src/components/NewMap/useMapPhotoDrawer';
@@ -73,6 +75,7 @@ const ObservationMap = ({
   selectPlantingSiteId,
 }: ObservationMapProps) => {
   const { activeLocale, strings } = useLocalization();
+  const theme = useTheme();
   const defaultTimezone = useDefaultTimeZone().get().id;
   const { mapId, token } = useMapboxToken();
   const { selectedOrganization } = useOrganization();
@@ -1122,8 +1125,59 @@ const ObservationMap = ({
     }
   }, [photoDrawerSize, plantDrawerSize, selectedPhotos.length, selectedPlants.length]);
 
+  const [showHoverLocation, setShowHoverTextLocation] = useState<Point>();
+  const onHover = useCallback((event: MapMouseEvent) => {
+    const features = event.features;
+    if (features && features.length) {
+      const properties = features
+        .map((feature) => feature.properties)
+        .filter(
+          (featureProperties): featureProperties is MapProperties =>
+            !!featureProperties && featureProperties.id !== undefined && featureProperties.priority !== undefined
+        );
+
+      if (properties.length && properties.every((featureProperties) => !featureProperties.clickable)) {
+        setShowHoverTextLocation(event.point);
+        return;
+      }
+    }
+
+    setShowHoverTextLocation(undefined);
+  }, []);
+
+  const unclickableHoverTag = useMemo(() => {
+    if (showHoverLocation) {
+      return (
+        <div
+          style={{
+            background: 'rgba(255, 255, 255, 0.4)',
+            padding: '4px 8px',
+            borderRadius: '8px',
+            position: 'absolute',
+            left: showHoverLocation.x,
+            top: showHoverLocation.y,
+            pointerEvents: 'none',
+          }}
+        >
+          <Typography
+            fontSize={'12px'}
+            fontWeight={400}
+            lineHeight={'20px'}
+            color={theme.palette.TwClrBaseWhite}
+            whiteSpace={'nowrap'}
+          >
+            {strings.AREA_NOT_OBSERVED}
+          </Typography>
+        </div>
+      );
+    } else {
+      return undefined;
+    }
+  }, [showHoverLocation, strings.AREA_NOT_OBSERVED, theme.palette.TwClrBaseWhite]);
+
   return (
     <MapComponent
+      additionalComponent={unclickableHoverTag}
       clusterMaxZoom={20}
       drawerChildren={drawerContent}
       drawerHeader={drawerHeader}
@@ -1136,6 +1190,7 @@ const ObservationMap = ({
       mapLayers={layers}
       mapRef={mapRef}
       nameTags={nameTags}
+      onMouseMove={onHover}
       token={token ?? ''}
       setDrawerOpen={setDrawerOpenCallback}
     />

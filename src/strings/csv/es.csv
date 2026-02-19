@@ -201,6 +201,7 @@ APPROX_SYMBOL,~,acb59e95
 AR,RA,25a8e55a
 ARE_YOU_SURE,¿Está seguro(a)?,d4536b91
 AREA_HA,Área (ha),8ab5d500
+AREA_NOT_OBSERVED,Área no observada,2c3a3737
 ARROW_KEYS,Flechas del teclado,5cefb475
 AS_OF_X,desde {0},6d77dc0f
 ASSIGN,Asignar,d1afb440
