@@ -112,7 +112,7 @@ jobs:
 
       #      TODO REMOVE
       - name: TEST
-        run: docker container ls -a
+        run: docker container ls -a && docker logs terraware-web-nginx-1 && echo '' && docker logs terraware-web-postgres-1 && echo '' && docker logs terraware-web-terraware-server-1
 
       - name: Run end-to-end playwright tests
         if: github.ref != 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/')
