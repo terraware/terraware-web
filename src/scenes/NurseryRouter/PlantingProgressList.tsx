@@ -5,6 +5,7 @@ import { BusySpinner, Button, EditableTable, EditableTableColumn } from '@terraw
 import { Icon } from '@terraware/web-components';
 import {
   MRT_Cell,
+  MRT_DensityState,
   MRT_ShowHideColumnsButton,
   MRT_ToggleDensePaddingButton,
   MRT_ToggleFiltersButton,
@@ -57,6 +58,13 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
   const [markingAsComplete, setMarkingAsComplete] = useState(false);
   const [showColumnFilters, setShowColumnFilters] = useState(false);
   const [showGlobalFilter, setShowGlobalFilter] = useState(false);
+  const [density, setDensity] = useState<MRT_DensityState>(() => {
+    try {
+      return (localStorage.getItem('plantings-progress-table-density') as MRT_DensityState) || 'comfortable';
+    } catch {
+      return 'comfortable';
+    }
+  });
 
   const selectedRows = useMemo(
     () =>
@@ -332,10 +340,22 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
             rowSelection,
             showColumnFilters,
             showGlobalFilter,
+            density,
           },
           onRowSelectionChange: setRowSelection,
           onShowColumnFiltersChange: setShowColumnFilters,
           onShowGlobalFilterChange: setShowGlobalFilter,
+          onDensityChange: (updater) => {
+            setDensity((prev) => {
+              const next = typeof updater === 'function' ? updater(prev) : updater;
+              try {
+                localStorage.setItem('plantings-progress-table-density', next);
+              } catch {
+                // ignore
+              }
+              return next;
+            });
+          },
           enableRowSelection: true,
           enableColumnPinning: true,
           enableColumnActions: true,

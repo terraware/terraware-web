@@ -6,6 +6,7 @@ import { EditableTable, EditableTableColumn, Icon } from '@terraware/web-compone
 import {
   MRT_Cell,
   MRT_ColumnFiltersState,
+  MRT_DensityState,
   MRT_PaginationState,
   MRT_ShowHideColumnsButton,
   MRT_SortingState,
@@ -110,6 +111,13 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
 
   const [showColumnFilters, setShowColumnFilters] = useState(false);
   const [showGlobalFilter, setShowGlobalFilter] = useState(false);
+  const [density, setDensity] = useState<MRT_DensityState>(() => {
+    try {
+      return (localStorage.getItem('nursery-withdrawals-table-density') as MRT_DensityState) || 'comfortable';
+    } catch {
+      return 'comfortable';
+    }
+  });
 
   // Material React Table state
   const [pagination, setPagination] = useState<MRT_PaginationState>({
@@ -724,12 +732,24 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
           columnFilters,
           showColumnFilters,
           showGlobalFilter,
+          density,
         },
         onPaginationChange: setPagination,
         onSortingChange: setSorting,
         onColumnFiltersChange: handleColumnFiltersChange,
         onShowColumnFiltersChange: setShowColumnFilters,
         onShowGlobalFilterChange: setShowGlobalFilter,
+        onDensityChange: (updater) => {
+          setDensity((prev) => {
+            const next = typeof updater === 'function' ? updater(prev) : updater;
+            try {
+              localStorage.setItem('nursery-withdrawals-table-density', next);
+            } catch {
+              // ignore
+            }
+            return next;
+          });
+        },
         manualPagination: true,
         manualSorting: true,
         manualFiltering: true,
