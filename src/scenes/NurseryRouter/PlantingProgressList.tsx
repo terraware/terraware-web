@@ -309,7 +309,6 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
     [selectedRows]
   );
 
-
   if (!rows || hasStrata === undefined) {
     return <CircularProgress sx={{ margin: 'auto' }} />;
   }
