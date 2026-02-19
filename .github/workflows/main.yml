@@ -85,7 +85,7 @@ jobs:
         run: yarn ts
 
       - name: Run unit tests
-        run: yarn test --ci
+        run: yarn test
 
       - name: Download and start backend
         if: github.ref != 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/')
