@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/scenes/AcceleratorRouter/Modules/CohortsAndProjectsRenderer.tsx</title>
+    <title>Code coverage report for src/scenes/AcceleratorRouter/Modules/ModuleProjectRenderer.tsx</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../../../prettify.css" />
     <link rel="stylesheet" href="../../../../base.css" />
@@ -19,7 +19,7 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../../index.html">All files</a> / <a href="index.html">src/scenes/AcceleratorRouter/Modules</a> CohortsAndProjectsRenderer.tsx</h1>
+        <h1><a href="../../../../index.html">All files</a> / <a href="index.html">src/scenes/AcceleratorRouter/Modules</a> ModuleProjectRenderer.tsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
@@ -90,8 +90,7 @@
 <a name='L25'></a><a href='#L25'>25</a>
 <a name='L26'></a><a href='#L26'>26</a>
 <a name='L27'></a><a href='#L27'>27</a>
-<a name='L28'></a><a href='#L28'>28</a>
-<a name='L29'></a><a href='#L29'>29</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L28'></a><a href='#L28'>28</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -117,7 +116,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > type JSX } fr</span>om 'react';
 <span class="cstat-no" title="statement not covered" ></span>
@@ -126,27 +124,26 @@ import CellRenderer, { T<span class="cstat-no" title="statement not covered" >ab
 import { RendererPr<span class="cstat-no" title="statement not covered" >ops } from 'src/compon</span>ents/common/table/types';
 import { APP_PATHS <span class="cstat-no" title="statement not covered" >} from 'src/constants';</span>
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-ex<span class="cstat-no" title="statement not covered" >port default function CohortsAndProjectsRenderer(props: RendererProps&lt;TableRowType&gt;): JSX.Element {</span>
+ex<span class="cstat-no" title="statement not covered" >port default function ModuleProjectRenderer(props: RendererProps&lt;TableRowType&gt;): JSX.Element {</span>
   co<span class="cstat-no" title="statement not covered" >nst { column, row, index, value } = props;</span>
 &nbsp;
-  if (column.key =<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >==</span> 'cohortName') {</span>
-<span class="cstat-no" title="statement not covered" >    // if it is not edit mode</span>
+  if (column.key =<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >==</span> 'projectName') {</span>
 <span class="cstat-no" title="statement not covered" >    return (</span>
 <span class="cstat-no" title="statement not covered" >      &lt;CellRenderer</span>
-<span class="cstat-no" title="statement not covered" >        index={index}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-        column={column}
-<span class="cstat-no" title="statement not covered" >        value</span>={
-          &lt;Link fontSize='16px' to={APP_PATHS.ACCELERATOR_COHORTS_VIEW.replace(':cohortId', row.cohortId)}&gt;
-            {v<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >al</span>ue as React.ReactNode}<span class="cstat-no" title="statement not covered" ></span></span>
-          &lt;/Link&gt;
+<span class="cstat-no" title="statement not covered" >        index={index}</span>
+<span class="cstat-no" title="statement not covered" >        column={column}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+        value={
+<span class="cstat-no" title="statement not covered" >          &lt;Li</span>nk fontSize='16px' to={APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', row.projectId)}&gt;
+            {value as React.ReactNode}
+          &lt;/Li<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >nk</span>&gt;<span class="cstat-no" title="statement not covered" ></span></span>
         }
         row={row}
       /&gt;
     );
   }
 &nbsp;
-  return &lt;CellRende<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >re</span>r {...p<span class="cstat-no" title="statement not covered" >rops} /&gt;;</span></span>
-}<span class="cstat-no" title="statement not covered" ></span>
+  return &lt;CellRenderer {...props} /&gt;;
+}<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 <span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -154,7 +151,7 @@ ex<span class="cstat-no" title="statement not covered" >port default function Co
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-19T22:22:50.759Z
+                at 2026-02-19T22:33:18.318Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
