@@ -299,8 +299,8 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
           filter={['all', groupFilter, clickableFilter, notSelectedFilter, notHoverFilter]}
         />,
         <Layer
-          key={`${group.layerId}-unselected`}
-          id={`${group.layerId}-unselected`}
+          key={`${group.layerId}-unselected-non-clickable`}
+          id={`${group.layerId}-unselected-non-clickable`}
           source={'mapData'}
           type={'fill'}
           paint={
