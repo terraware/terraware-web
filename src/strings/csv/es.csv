@@ -1087,10 +1087,10 @@ MISSING_SUBSET_WEIGHT_ERROR_NURSERY,"Debe introducir el peso de un subconjunto p
 MISSING_SUBSET_WEIGHT_ERROR_VIABILITY_TEST,"Para crear una prueba de viabilidad, debe introducir el peso de un subconjunto. Para ello, edite la cantidad de esta accesión.",5ffd97b6
 MITIGATION_PLAN,Plan de mitigación,c13d7b11
 MODULE,Módulo,019952ca
-MODULE_COHORTS_DESCRIPTION,A continuación se muestra una lista de grupos que han añadido este módulo.,b187422b
 MODULE_CONTENT,Contenido del módulo,0ec0af7d
 MODULE_DETAILS,Detalles del módulo,66959ca8
 MODULE_ID,ID del módulo,9c2e85f6
+MODULE_PROJECTS_DESCRIPTION,A continuación se muestra una lista de Proyectos que han agregado este módulo.,350c32a7
 MODULES,Módulos,474ac433
 MODULES_FOR_PROJECT,Módulos para {0},5d950bb2
 MODULES_IMPORT_COMPLETE,¡Completada la importación de datos de los módulos!,76a99df8

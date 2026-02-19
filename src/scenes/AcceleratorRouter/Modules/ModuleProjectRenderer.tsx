@@ -5,17 +5,16 @@ import CellRenderer, { TableRowType } from 'src/components/common/table/TableCel
 import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 
-export default function CohortsAndProjectsRenderer(props: RendererProps<TableRowType>): JSX.Element {
+export default function ModuleProjectRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const { column, row, index, value } = props;
 
-  if (column.key === 'cohortName') {
-    // if it is not edit mode
+  if (column.key === 'projectName') {
     return (
       <CellRenderer
         index={index}
         column={column}
         value={
-          <Link fontSize='16px' to={APP_PATHS.ACCELERATOR_COHORTS_VIEW.replace(':cohortId', row.cohortId)}>
+          <Link fontSize='16px' to={APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', row.projectId)}>
             {value as React.ReactNode}
           </Link>
         }
