@@ -9,12 +9,13 @@ const useMonitoringPlotsMapLegend = (
   disabled?: boolean,
   excludePermanentPlots?: boolean,
   excludeTemporaryPlots?: boolean,
-  excludeAdHocPlots?: boolean
+  excludeAdHocPlots?: boolean,
+  defaultVisibility?: boolean
 ) => {
   const { strings } = useLocalization();
-  const [permanentPlotsVisible, setPermanentPlotsVisible] = useState<boolean>(false);
-  const [temporaryPlotsVisible, setTemporaryPlotsVisible] = useState<boolean>(false);
-  const [adHocPlotsVisible, setAdHocPlotsVisible] = useState<boolean>(false);
+  const [permanentPlotsVisible, setPermanentPlotsVisible] = useState<boolean>(defaultVisibility ?? false);
+  const [temporaryPlotsVisible, setTemporaryPlotsVisible] = useState<boolean>(defaultVisibility ?? false);
+  const [adHocPlotsVisible, setAdHocPlotsVisible] = useState<boolean>(defaultVisibility ?? false);
 
   const { permanentPlotsLayerStyle, temporaryPlotsLayerStyle, adHocPlotsLayerStyle } = useMapFeatureStyles();
   const monitoringPlotsLegendGroup = useMemo((): MapMultiSelectLegendGroup => {
