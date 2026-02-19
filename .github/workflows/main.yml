@@ -76,29 +76,29 @@ jobs:
       - name: Generate strings
         run: yarn generate-strings
 
-      #      # Remove the jsx-no-bind rule because it has lots of errors currently
-      #      - name: Run linter
-      #        run: >
-      #          yarn lint --rule "react/jsx-no-bind: 0"
-      #
-      #      - name: Do typescript check
-      #        run: yarn ts
-      #
-      #      - name: Run unit tests
-      #        run: yarn test:ci
-      #
-      #      - name: Download and start backend
-      #        if: github.ref != 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/')
-      #        run: yarn server:reset
-      #        env:
-      #          SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_ISSUERURI: https://auth.staging.terraware.io/realms/terraware
-      #          SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_CLIENTSECRET: dummy
-      #          SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUERURI: https://auth.staging.terraware.io/realms/terraware
-      #          TERRAWARE_MAPBOX_API_TOKEN: ${{ secrets.REACT_APP_MAPBOX_TOKEN }}
-      #
-      #      - name: Install Playwright Browsers
-      #        if: github.ref != 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/') && steps.playwright-cache.outputs.cache-hit != 'true'
-      #        run: yarn playwright install --with-deps chromium-headless-shell
+      # Remove the jsx-no-bind rule because it has lots of errors currently
+      - name: Run linter
+        run: >
+          yarn lint --rule "react/jsx-no-bind: 0"
+
+      - name: Do typescript check
+        run: yarn ts
+
+      - name: Run unit tests
+        run: yarn test:ci
+
+      - name: Download and start backend
+        if: github.ref != 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/')
+        run: yarn server:reset
+        env:
+          SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_ISSUERURI: https://auth.staging.terraware.io/realms/terraware
+          SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_CLIENTSECRET: dummy
+          SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUERURI: https://auth.staging.terraware.io/realms/terraware
+          TERRAWARE_MAPBOX_API_TOKEN: ${{ secrets.REACT_APP_MAPBOX_TOKEN }}
+
+      - name: Install Playwright Browsers
+        if: github.ref != 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/') && steps.playwright-cache.outputs.cache-hit != 'true'
+        run: yarn playwright install --with-deps chromium-headless-shell
 
       - name: temp-test
         run: |
