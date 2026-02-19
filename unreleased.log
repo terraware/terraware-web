@@ -1,3 +1,5 @@
+1f0b72a6cb4c Updated strings (#5261)
+5b115927ea9f SW-8048 Set observation plot visibility to be true by default (#5260)
 1b881c011fbb SW-8049 Updated columns of ad-hoc observation (#5259)
 cbcf88aa6cde SW-7859: Accessions: Add messaging about Quantity for Seed withdrawals with Dates prior to Accession creation (#5258)
 a16f8c74d9ed Removed annual reports and type references (#5251)

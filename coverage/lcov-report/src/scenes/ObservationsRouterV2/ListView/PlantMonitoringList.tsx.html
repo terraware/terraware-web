@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/97</span>
+                <span class='fraction'>0/98</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/93</span>
+                <span class='fraction'>0/94</span>
             </div>
         
             
@@ -460,6 +460,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -729,7 +730,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -766,7 +766,7 @@ import {<span class="cstat-no" title="statement not covered" ><span class="fstat
   us<span class="cstat-no" title="statement not covered" >eLazyListObservationResultsQuery,</span>
 } from<span class="cstat-no" title="statement not covered" > 'src/queries/generated/observations';</span>
 import {<span class="cstat-no" title="statement not covered" > PlantingSitePayload, useL<span class="fstat-no" title="function not covered" >az</span>yLis<span class="cstat-no" title="statement not covered" >tPlantingS</span>itesQuery } from 'src/queries/generated/plantingSites';</span>
-import { ObservationState } from 'src/types/Observations';
+import { getStatus } from 'src/types/Observations';
 im<span class="cstat-no" title="statement not covered" >port { Sear</span>chSortOrder } from 'src/types/Search';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { isAdm<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >in</span> } from 'src/utils/organizat<span class="cstat-no" title="statement not covered" >ion';</span></span>
@@ -779,7 +779,7 @@ type PlantMonitoringRow = {
   adHocPlotNumber?: number;
   observationId: nu<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >mb</span>er;<span class="cstat-no" title="statement not covered" ></span></span>
   observationDate?: <span class="cstat-no" title="statement not covered" >str</span>ing;
-<span class="cstat-no" title="statement not covered" >  state: ObservationState;</span>
+<span class="cstat-no" title="statement not covered" >  state: string;</span>
   plantingS<span class="fstat-no" title="function not covered" >it</span>eNam<span class="cstat-no" title="statement not covered" >e?: string;</span>
   strata?: string;
 <span class="cstat-no" title="statement not covered" >  totalLive?: number;</span>
@@ -794,17 +794,17 @@ export type PlantMonitorin<span class="cstat-no" title="statement not covered" >
   plantingSiteId?: number;<span class="cstat-no" title="statement not covered" ></span>
 };<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-const PlantMonitoringList = ({<span class="cstat-no" title="statement not covered" > plantingSiteId }: PlantMonitoringList</span>Props) =&gt; {
-  const { selectedOrganization } = useOrg<span class="cstat-no" title="statement not covered" >anization();</span>
-  const defaultTimezone = us<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >eD</span>efaultTimeZone().get().id;</span>
-  const scheduleObservationsEnabled<span class="cstat-no" title="statement not covered" > = isAdmin(selectedOrganization);</span>
-  const { activeLocale, st<span class="cstat-no" title="statement not covered" >rings } = useLocalization();</span>
-  const [selectedPlotSelection, setSel<span class="cstat-no" title="statement not covered" >ectedPlotSelection] = useState&lt;PlotSelectionType&gt;('assi</span>gned');
+const PlantMonitoringList <span class="cstat-no" title="statement not covered" >= ({ plantingSiteId }: PlantMonito</span>ringListProps) =&gt; {
+  const { selectedOrganization<span class="cstat-no" title="statement not covered" > } = useOrganization();</span>
+  const defaultTimezone = useDefaultTimeZ<span class="cstat-no" title="statement not covered" >one().get().id;</span>
+  const scheduleObservations<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >En</span>abled = isAdmin(selectedOrganization);</span>
+  const { activeLocale, strings } =<span class="cstat-no" title="statement not covered" > useLocalization();</span>
+  const [selectedPlotSelec<span class="cstat-no" title="statement not covered" >tion, setSelectedPlotSelection] = useState&lt;PlotSelectionTyp</span>e&gt;('assigned');
 <span class="cstat-no" title="statement not covered" ></span>
-  const assignedColumns = useMemo((): TableColumnType[] =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-    const defaultColumns: <span class="cstat-no" title="statement not covered" >TableColumnType[] = [<span class="fstat-no" title="function not covered" ></span></span>
-      {<span class="cstat-no" title="statement not covered" ></span>
-        key: 'observationDate',
+  const assignedColumns = useMemo(()<span class="cstat-no" title="statement not covered" >: TableColumnType[] =&gt; {</span>
+    const defaultColumns: TableColumnType[] = [<span class="cstat-no" title="statement not covered" ></span>
+      {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+        key: 'observationDa<span class="cstat-no" title="statement not covered" >te',</span>
         name: strings.DATE,
         type: 'string',
       },
@@ -859,9 +859,9 @@ const PlantMonitoringList = ({<span class="cstat-no" title="statement not covere
       },
     ];
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    if (scheduleObservationsEnabled) {</span>
+    if (scheduleObservationsEnabled) {
 <span class="cstat-no" title="statement not covered" >      return [</span>
-        ...defaultColumns,
+<span class="cstat-no" title="statement not covered" >        ...defaultColumns,</span>
         {
           key: 'actionsMenu',
           name: '',
@@ -869,12 +869,12 @@ const PlantMonitoringList = ({<span class="cstat-no" title="statement not covere
         },
       ];
     } else {
-<span class="cstat-no" title="statement not covered" >      return defaultColumns;</span>
-    }
+      return defaultColumns;
+    }<span class="cstat-no" title="statement not covered" ></span>
   }, [scheduleObservationsEnabled, strings]);
-<span class="cstat-no" title="statement not covered" ></span>
-  co<span class="fstat-no" title="function not covered" >ns</span>t ad<span class="cstat-no" title="statement not covered" >HocColumns = useMemo(</span>
-    (): TableColumnType[] =&gt; [
+&nbsp;
+  const adHocColumns = <span class="cstat-no" title="statement not covered" >useMemo(</span>
+<span class="fstat-no" title="function not covered" >    ()</span>: Ta<span class="cstat-no" title="statement not covered" >bleColumnType[] =&gt; [</span>
       {
         key: 'adHocPlotNumber',
         name: strings.PLOT,
@@ -910,46 +910,46 @@ const PlantMonitoringList = ({<span class="cstat-no" title="statement not covere
       },
     ],
     [strings]
-  );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" ></span>
-  cons<span class="cstat-no" title="statement not covered" >t defaultSearchOrder: SearchSortOrder = useMemo(() =&gt; {</span>
-    if (selectedPlotSelection === 'assigned') {
+  );
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  co<span class="cstat-no" title="statement not covered" >nst defaultSearchOrder: SearchSortOrder = useMemo(() =&gt; {</span>
+    if<span class="cstat-no" title="statement not covered" > (selectedPlotSelection === 'assigned') {</span>
       return {
         field: 'completedDate',
         direction: 'Descending',
-<span class="cstat-no" title="statement not covered" >      };</span>
-    } else {
+      };
+    } <span class="cstat-no" title="statement not covered" >else {</span>
       return {
         field: 'adHocPlotNumber',
         direction: 'Ascending',
       };
-    }<span class="cstat-no" title="statement not covered" ></span>
-  }, [selectedPlotSelection]);<span class="cstat-no" title="statement not covered" ></span>
+    }
+  }, [selectedPlotSelection])<span class="cstat-no" title="statement not covered" >;</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const fuzzySearchColumns = ['adHocPlotNumber', 'plant<span class="cstat-no" title="statement not covered" >ingSiteName', 'strata'];</span>
+  const fuzzySearchColumns = ['adHocPlotNumber', 'plantingSiteName', 'strata'<span class="cstat-no" title="statement not covered" >];</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  co<span class="fstat-no" title="function not covered" >ns</span>t [l<span class="cstat-no" title="statement not covered" >istObservationResults, listObservationsResultsResponse] = useLazyListObservationResultsQuer</span>y();
-  const [listAdHocObservationResults, listAdHocObservationResultsResponse] = useLazyListAdHocObservationResultsQuery();
+  const [listObserva<span class="cstat-no" title="statement not covered" >tionResults, listObservationsResultsResponse] = useLazyListObservationResultsQuery();</span>
+  co<span class="fstat-no" title="function not covered" >ns</span>t [l<span class="cstat-no" title="statement not covered" >istAdHocObservationResults, listAdHocObservationResultsResponse] = useLazyListAdHocObservat</span>ionResultsQuery();
   const [listPlantingSites, listPlantingSitesResult] = useLazyListPlantingSitesQuery();
-<span class="cstat-no" title="statement not covered" ></span>
-  co<span class="fstat-no" title="function not covered" >ns</span>t isLoading = useMemo(
-    () =&gt; listObservationsResultsResponse.isLoading || listAdHocObservationResultsResponse.isLoading,
-    [l<span class="cstat-no" title="statement not covered" >istAdHocObservationResultsResponse.isLoading, listObservationsResultsResponse.isLoading]</span>
-  );<span class="fstat-no" title="function not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span>
-  const pl<span class="cstat-no" title="statement not covered" >antingSitesByI</span>d = useMemo(
-    () =&gt;
+&nbsp;
+  const isLoading = useMemo(<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" >    ()</span> =&gt; listObservationsResultsResponse.isLoading || listAdHocObservationResultsResponse.isLoading,
+    [listAdHocObservationResultsResponse.isLoading, listObservationsResultsResponse.isLoading]
+  );<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" ></span>
+  const pl<span class="cstat-no" title="statement not covered" >antingSitesById = useMe</span>mo(
+    () =&gt;<span class="cstat-no" title="statement not covered" ></span>
       (listPlantingSitesResult.data?.sites ?? []).reduce(
         (sites, site) =&gt; {
           sites[site.id] = site;
           return sites;
         },
-<span class="cstat-no" title="statement not covered" >        {} as { [siteId: numbe<span class="fstat-no" title="function not covered" >r]</span>: PlantingSitePayload }</span>
-<span class="cstat-no" title="statement not covered" >      ),</span>
-    [l<span class="cstat-no" title="statement not covered" >istPlantingSitesResult.data]</span>
+        {} as { [siteId: number]: PlantingSitePayload }
+<span class="cstat-no" title="statement not covered" >      ),<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    [listPlantingSitesResult.data]</span>
   );<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  useEffect(() =&gt; {
+  useEff<span class="cstat-no" title="statement not covered" >ect(() =&gt; {</span>
     if (selectedOrganization) {
       void listPlantingSites({ organizationId: selectedOrganization.id, full: true }, true);
       if (selectedPlotSelection === 'adHoc') {
@@ -957,8 +957,8 @@ const PlantMonitoringList = ({<span class="cstat-no" title="statement not covere
           {
             organizationId: selectedOrganization.id,
             plantingSiteId,
-<span class="cstat-no" title="statement not covered" >            includePlants: true,</span>
-          },
+            includePlants: true,
+<span class="cstat-no" title="statement not covered" >          },</span>
           true
         );
       } else {
@@ -975,42 +975,42 @@ const PlantMonitoringList = ({<span class="cstat-no" title="statement not covere
   }, [
     listAdHocObservationResults,
     listObservationResults,
-    listPlantingSites,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >    selectedPlotSelection,</span>
-    se<span class="cstat-no" title="statement not covered" >lectedOrganization,</span>
-    plan<span class="cstat-no" title="statement not covered" >tingSiteId,</span>
-  ]);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-&nbsp;
+    listPlantingSites,
+    selectedPlotSelection,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    selectedOrganization,</span>
+    pl<span class="cstat-no" title="statement not covered" >antingSiteId,</span>
+  ]);<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
   const observationResults = useMemo(() =&gt; {
-    if (<span class="cstat-no" title="statement not covered" >selectedPlo</span>tSelection === 'adHoc') {
-      if (listAdHocObservationResultsResponse.isSuccess) {
+    if (selectedPlotSelection === 'adHoc') {
+      if<span class="cstat-no" title="statement not covered" > (listAdHoc</span>ObservationResultsResponse.isSuccess) {
         return listAdHocObservationResultsResponse.data.observations.filter(
-<span class="cstat-no" title="statement not covered" >          (observation) =&gt; observation.type === 'Monitoring'</span>
+          (observation) =&gt; observation.type === 'Monitoring'
 <span class="cstat-no" title="statement not covered" >        );</span>
-      } el<span class="fstat-no" title="function not covered" >se</span> {<span class="cstat-no" title="statement not covered" ></span>
-        return [];
+      } <span class="cstat-no" title="statement not covered" >else {</span>
+        re<span class="fstat-no" title="function not covered" >tu</span>rn [];<span class="cstat-no" title="statement not covered" ></span>
       }
-    } el<span class="cstat-no" title="statement not covered" >se {</span>
-      if (listObservationsResultsResponse.isSuccess) {
+    } else {
+      if<span class="cstat-no" title="statement not covered" > (listObser</span>vationsResultsResponse.isSuccess) {
         return listObservationsResultsResponse.data.observations.filter(
           (observation) =&gt; observation.type === 'Monitoring'
-        );<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" ></span>      } el<span class="cstat-no" title="statement not covered" >se {<span class="fstat-no" title="function not covered" ></span></span>
-        return [];
-      }<span class="cstat-no" title="statement not covered" ></span>
-    }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  }, [listAdHocObservationResultsResponse, listObservationsResultsResponse, selectedPlotSelection]);
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  const <span class="cstat-no" title="statement not covered" >rows = useMemo(</span>
-    () =&gt;<span class="cstat-no" title="statement not covered" ></span>
-      observationResults.map((observationResult): PlantMonitoringRow =&gt; {
-        co<span class="cstat-no" title="statement not covered" >nst plantingSite = pl</span>antingSitesById[observationResult.plantingSiteId];
+        );
+      } else {<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" ></span>        re<span class="cstat-no" title="statement not covered" >turn [];<span class="fstat-no" title="function not covered" ></span></span>
+      }
+    }<span class="cstat-no" title="statement not covered" ></span>
+  }, [listAdHocObserv<span class="cstat-no" title="statement not covered" >ationResultsResponse, listObserv<span class="fstat-no" title="function not covered" >at</span>ionsResultsResponse, selectedPlotSelection]);</span>
 &nbsp;
+  const rows = useMemo(<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+    () =<span class="cstat-no" title="statement not covered" >&gt;</span>
+      obse<span class="cstat-no" title="statement not covered" >rvationResults.map((observationResult): PlantMonit</span>oringRow =&gt; {
+        const plantingSite = plantingSitesById[observationResult.plantingSiteId];
+<span class="cstat-no" title="statement not covered" ></span>
         const strata = observationResult.strata.reduce((stratumNames, stratumResult) =&gt; {
-          const obsrvedStrat<span class="cstat-no" title="statement not covered" >um = plantingSite?.strata?.find((stratum) =&gt; stratum.id === stratumResult.stratumId);</span>
-          if (obsrvedStratum) <span class="cstat-no" title="statement not covered" >{</span>
-<span class="cstat-no" title="statement not covered" >            return stratumNames + `\r${obsrvedStratum.name}`;</span>
-          } else {
+          const obsrvedStratum = plantingSite?.strata?.find((stratum) =&gt; stratum.id === stratumResult.stratumId);
+          if (obsrvedStratum<span class="cstat-no" title="statement not covered" >) {</span>
+            return stratumName<span class="cstat-no" title="statement not covered" >s + `\r${obsrvedStratum.name}`;</span>
+<span class="cstat-no" title="statement not covered" >          } else {</span>
             return stratumNames;
           }
         }, '');
@@ -1024,14 +1024,14 @@ const PlantMonitoringList = ({<span class="cstat-no" title="statement not covere
           adHocPlotNumber: observationResult.adHocPlot?.monitoringPlotNumber,
           observationId: observationResult.observationId,
           observationDate,
-          state: observationResult.state,
-          plantingSiteNam<span class="cstat-no" title="statement not covered" >e: plantingSite?.name,<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >          strata,</span>
-          totalPlants: observationResult.totalPlants,
+          state: getStatus(observationResult.state),
+          plantingSiteName: plantingSite?.name,
+          strata,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >          totalPlants: observationResult.totalPlants,</span>
           totalSpecies: observationResult.totalSpecies,
           plantingDensity: observationResult.plantingDensity,
-          survival<span class="fstat-no" title="function not covered" >Ra</span>te: observat<span class="cstat-no" title="statement not covered" >ionResult.survivalRate,</span>
-          completedDate: observationResult.completedTime,
+          survivalRate: observationResult.survivalRate,
+          complete<span class="fstat-no" title="function not covered" >dD</span>ate: observa<span class="cstat-no" title="statement not covered" >tionResult.completedTime,</span>
         };
       }),
     [activeLocale, defaultTimezone, observationResults, plantingSitesById]
@@ -1044,8 +1044,8 @@ const PlantMonitoringList = ({<span class="cstat-no" title="statement not covere
         &lt;Typography sx={{ paddingRight: 1 }} fontSize={'16px'} fontWeight={500}&gt;
           {strings.PLOT_SELECTION}
         &lt;/Typography&gt;
-<span class="cstat-no" title="statement not covered" >        &lt;Dropdown</span>
-          id='plot-selection-selector'
+        &lt;Dropdown
+<span class="cstat-no" title="statement not covered" >          id='plot-selection-selector'</span>
           onChange={(newValue) =&gt; setSelectedPlotSelection(newValue as PlotSelectionType)}
           options={[
             { label: strings.ASSIGNED, value: 'assigned' },
@@ -1072,8 +1072,8 @@ const PlantMonitoringList = ({<span class="cstat-no" title="statement not covere
           fuzzySearchColumns={fuzzySearchColumns}
           id='assigned-plant-monitoring-table'
           Renderer={PlantMonitoringCellRenderer}
-          rows={rows<span class="cstat-no" title="statement not covered" >}</span>
-          title={strings.PLANT_MONITORING}
+          rows={rows}
+          title={str<span class="cstat-no" title="statement not covered" >ings.PLANT_MONITORIN</span>G}
           rightComponent={rightComponent}
         /&gt;
       )}
@@ -1102,7 +1102,7 @@ export default PlantMonitoringList;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-19T01:05:45.315Z
+                at 2026-02-19T18:20:59.688Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

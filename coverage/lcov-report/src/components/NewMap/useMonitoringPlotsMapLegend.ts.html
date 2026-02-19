@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/24</span>
+                <span class='fraction'>0/30</span>
             </div>
         
             
@@ -143,7 +143,8 @@
 <a name='L78'></a><a href='#L78'>78</a>
 <a name='L79'></a><a href='#L79'>79</a>
 <a name='L80'></a><a href='#L80'>80</a>
-<a name='L81'></a><a href='#L81'>81</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L81'></a><a href='#L81'>81</a>
+<a name='L82'></a><a href='#L82'>82</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -210,6 +211,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -234,38 +236,39 @@ co<span class="cstat-no" title="statement not covered" >nst useMonitoringPlotsMa
   di<span class="cstat-no" title="statement not covered" >sabled?: boolean,</span>
   excludePermanentPlots?: boolean,
   excludeTemporary<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Pl</span>ots?: boolean,</span>
-<span class="cstat-no" title="statement not covered" >  excludeAdHocPlots?: boolean</span>
-) =&gt;<span class="cstat-no" title="statement not covered" > {</span>
-  cons<span class="cstat-no" title="statement not covered" >t { strings } = useLocalization();</span>
-  const <span class="cstat-no" title="statement not covered" >[permanentPlotsVisible, se<span class="fstat-no" title="function not covered" >tP</span>erma<span class="cstat-no" title="statement not covered" >nentPlotsV</span>isible] = useState&lt;boolean&gt;(false);</span>
-  const [temporaryPlotsVisible, setTemporaryPlotsVisible] = useState&lt;boolean&gt;(false);
-<span class="cstat-no" title="statement not covered" >  const [adHo</span>cPlotsVisible, setAdHocPlotsVisible] = useState&lt;boolean&gt;(false);
-&nbsp;
-  const { perm<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >an</span>entPlotsLayerStyle, temporar<span class="cstat-no" title="statement not covered" >yPlotsLayerStyle, adHocPlotsLayerStyle } = useMapFeatureStyles();</span></span>
+<span class="cstat-no" title="statement not covered" >  excludeAdHocPlots?: boolean,</span>
+  de<span class="cstat-no" title="statement not covered" >faultVisibility?: boolean</span>
+) =&gt; {<span class="cstat-no" title="statement not covered" ></span>
+  const <span class="cstat-no" title="statement not covered" >{ strings } = useLocalizat<span class="fstat-no" title="function not covered" >io</span>n();<span class="cstat-no" title="statement not covered" ></span></span>
+  const [permanentPlotsVisible, setPermanentPlotsVisible] = useState&lt;boolean&gt;(defaultVisibility ?? false);
+<span class="cstat-no" title="statement not covered" >  const [temp</span>oraryPlotsVisible, setTemporaryPlotsVisible] = useState&lt;boolean&gt;(defaultVisibility ?? false);
+  const [adHocPlotsVisible, setAdHocPlotsVisible] = useState&lt;boolean&gt;(defaultVisibility ?? false);
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  const { permanentPlotsLayerStyle, temporaryPlotsLayerStyle, adHocPlotsLayerStyle } = useMapFeatureStyles();
   const monitoringPlotsLegendGroup = useMemo((): MapMultiSelectLegendGroup =&gt; {
     return {
       disabled,
       items: [
         !excludePermanentPlots
           ? ({
-              id: 'live-plants',
-              label<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >: </span>strings<span class="cstat-no" title="statement not covered" >.PERMANENT_PLOTS,</span></span>
-              setVis<span class="cstat-no" title="statement not covered" >ibl</span>e: setPermanentPlotsVisible,
-<span class="cstat-no" title="statement not covered" >              style: permanentPlotsLayerStyle,</span>
-<span class="fstat-no" title="function not covered" ></span>              vis<span class="cstat-no" title="statement not covered" >ible: permanen</span>tPlotsVisible,
-            } as MapMultiSelectLegendItem)
-<span class="cstat-no" title="statement not covered" >          : undefined,</span>
-        !excludeTem<span class="cstat-no" title="statement not covered" >poraryPlots</span>
+              id: '<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >li</span>ve-plan<span class="cstat-no" title="statement not covered" >ts',</span></span>
+              label:<span class="cstat-no" title="statement not covered" > st</span>rings.PERMANENT_PLOTS,
+<span class="cstat-no" title="statement not covered" >              setVisible: setPermanentPlotsVisible,</span>
+<span class="fstat-no" title="function not covered" ></span>              sty<span class="cstat-no" title="statement not covered" >le: permanentP</span>lotsLayerStyle,
+              visible: permanentPlotsVisible,
+<span class="cstat-no" title="statement not covered" >            } as MapMultiSelectLegendItem)</span>
+          : undefin<span class="cstat-no" title="statement not covered" >ed,</span>
+        !excludeTempora<span class="cstat-no" title="statement not covered" >ryPlots</span>
           ? ({<span class="cstat-no" title="statement not covered" ></span>
-              id: 'dead-plants',<span class="cstat-no" title="statement not covered" ></span>
-              label: strings.TEMPORA<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >RY</span>_PLOTS,</span>
-              setVisib<span class="cstat-no" title="statement not covered" >le: setTemporaryPlotsVisible,</span>
+              id: 'dead-plants',<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+              label: s<span class="cstat-no" title="statement not covered" >trings.TEMPORARY_PLOTS,</span>
+              setVisible: setTemporaryPlotsVisible,<span class="cstat-no" title="statement not covered" ></span>
               style: temporaryPlotsLayerStyle,<span class="cstat-no" title="statement not covered" ></span>
               visible: temporaryPlotsVisible,<span class="cstat-no" title="statement not covered" ></span>
             } as MapMultiSelectLegendItem)<span class="cstat-no" title="statement not covered" ></span>
-          : undefined,<span class="cstat-no" title="statement not covered" ></span>
-        !excludeAdHocPlots<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >          ? ({</span>
+          : undefined,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >        !excludeAdHocPlots</span>
+          ? ({
               id: 'dead-plants',
               label: strings.AD_HOC_PLOTS,
               setVisible: setAdHocPlotsVisible,
@@ -288,8 +291,8 @@ co<span class="cstat-no" title="statement not covered" >nst useMonitoringPlotsMa
     permanentPlotsVisible,
     strings.AD_HOC_PLOTS,
     strings.MONITORING_PLOTS,
-    strings.PERMANENT_PLOTS,
-    strings.TEM<span class="fstat-no" title="function not covered" >PO</span>RARY_PLO<span class="cstat-no" title="statement not covered" >TS,</span>
+    strings.PER<span class="fstat-no" title="function not covered" >MA</span>NENT_PLO<span class="cstat-no" title="statement not covered" >TS,</span>
+    strings.TEMPORARY_PLOTS,
     temporaryPlotsLayerStyle,
     temporaryPlotsVisible,
   ]);
@@ -310,7 +313,7 @@ export default useMonitoringPlotsMapLegend;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-19T01:05:45.315Z
+                at 2026-02-19T18:20:59.688Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
