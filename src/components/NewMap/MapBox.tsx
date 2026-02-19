@@ -253,6 +253,7 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
 
     const _fillLayers = featureGroups?.flatMap((group) => {
       const opacity = Math.min(0.4, group.style.opacity ?? 0.2);
+      const nonClickableOpacity = opacity * 0.5;
       const selectedOpacity = opacity * 2;
       const hoverOpacity = opacity * 1.5;
       const hoverAndSelectedOpacity = opacity * 2.5;
@@ -260,6 +261,7 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
       const groupFilter: FilterSpecification = ['==', ['get', 'layerId'], group.layerId];
 
       const clickableFilter: FilterSpecification = ['==', ['get', 'clickable'], true];
+      const notClickableFilter: FilterSpecification = ['==', ['get', 'clickable'], false];
 
       const selectedFilter: FilterSpecification = ['==', ['get', 'selected'], true];
       const notSelectedFilter: FilterSpecification = ['==', ['get', 'selected'], false];
@@ -294,7 +296,25 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
                   'fill-opacity': opacity,
                 }
           }
-          filter={['all', groupFilter, notSelectedFilter, notHoverFilter]}
+          filter={['all', groupFilter, clickableFilter, notSelectedFilter, notHoverFilter]}
+        />,
+        <Layer
+          key={`${group.layerId}-unselected-non-clickable`}
+          id={`${group.layerId}-unselected-non-clickable`}
+          source={'mapData'}
+          type={'fill'}
+          paint={
+            group.style.fillPatternUrl
+              ? {
+                  'fill-pattern': group.style.fillPatternUrl,
+                  'fill-opacity': nonClickableOpacity,
+                }
+              : {
+                  'fill-color': group.style.fillColor,
+                  'fill-opacity': nonClickableOpacity,
+                }
+          }
+          filter={['all', groupFilter, notClickableFilter, notSelectedFilter, notHoverFilter]}
         />,
         /* Fill for seleced layer */
         <Layer

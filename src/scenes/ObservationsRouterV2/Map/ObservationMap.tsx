@@ -251,6 +251,44 @@ const ObservationMap = ({
     [selectPhotos, selectPlants]
   );
 
+  const selectClickableFeature = useCallback(
+    (_plantingSiteId: number) => (layerId: string, featureId: string) => {
+      let observed: boolean = false;
+      if (selectedResults && selectedResults.plantingSiteId === _plantingSiteId) {
+        if (layerId === 'sites') {
+          observed = true;
+        } else if (layerId === 'strata') {
+          if (selectedResults.strata.find((stratum) => stratum.name === featureId)) {
+            observed = true;
+          }
+        } else if (layerId === 'substrata') {
+          const substrata = selectedResults.strata.flatMap((stratum) => stratum.substrata);
+          if (substrata.find((substratum) => substratum.substratumId === Number(featureId))) {
+            observed = true;
+          }
+        } else if (layerId === 'permanentPlots' || layerId === 'temporaryPlots') {
+          const plots = selectedResults.strata
+            .flatMap((stratum) => stratum.substrata)
+            .flatMap((substratum) => substratum.monitoringPlots);
+          if (plots.find((plot) => plot.monitoringPlotId === Number(featureId))) {
+            observed = true;
+          }
+        } else if (layerId === 'adHocPlots') {
+          if (selectedResults.adHocPlot) {
+            observed = true;
+          }
+        }
+      }
+
+      if (observed) {
+        return selectFeature(_plantingSiteId)(layerId, featureId);
+      } else {
+        return undefined;
+      }
+    },
+    [selectFeature, selectedResults]
+  );
+
   const layers = useMemo((): MapLayer[] => {
     if (plantingSiteId === undefined) {
       // Show only sites if no layers selected.
@@ -278,7 +316,7 @@ const ObservationMap = ({
               coordinates: [plot.boundary?.coordinates ?? []],
             },
             label: `${plot.monitoringPlotNumber}`,
-            onClick: selectFeature(selectedHistory.plantingSiteId)('adHocPlots', `${plot.monitoringPlotId}`),
+            onClick: selectClickableFeature(selectedHistory.plantingSiteId)('adHocPlots', `${plot.monitoringPlotId}`),
             selected:
               selectedFeature?.layerFeatureId.layerId === 'adHocPlots' &&
               selectedFeature?.layerFeatureId.featureId === `${plot.monitoringPlotId}`,
@@ -297,7 +335,10 @@ const ObservationMap = ({
                 coordinates: [plot.boundary?.coordinates ?? []],
               },
               label: `${plot.monitoringPlotNumber}`,
-              onClick: selectFeature(selectedHistory.plantingSiteId)('temporaryPlots', `${plot.monitoringPlotId}`),
+              onClick: selectClickableFeature(selectedHistory.plantingSiteId)(
+                'temporaryPlots',
+                `${plot.monitoringPlotId}`
+              ),
               selected:
                 selectedFeature?.layerFeatureId.layerId === 'temporaryPlots' &&
                 selectedFeature?.layerFeatureId.featureId === `${plot.monitoringPlotId}`,
@@ -316,7 +357,10 @@ const ObservationMap = ({
                 coordinates: [plot.boundary?.coordinates ?? []],
               },
               label: `${plot.monitoringPlotNumber}`,
-              onClick: selectFeature(selectedHistory.plantingSiteId)('permanentPlots', `${plot.monitoringPlotId}`),
+              onClick: selectClickableFeature(selectedHistory.plantingSiteId)(
+                'permanentPlots',
+                `${plot.monitoringPlotId}`
+              ),
               selected:
                 selectedFeature?.layerFeatureId.layerId === 'permanentPlots' &&
                 selectedFeature?.layerFeatureId.featureId === `${plot.monitoringPlotId}`,
@@ -335,7 +379,10 @@ const ObservationMap = ({
                   coordinates: substratum.boundary?.coordinates ?? [],
                 },
                 label: substratum.name,
-                onClick: selectFeature(selectedHistory.plantingSiteId)('substrata', `${substratum.substratumId}`),
+                onClick: selectClickableFeature(selectedHistory.plantingSiteId)(
+                  'substrata',
+                  `${substratum.substratumId}`
+                ),
                 selected:
                   selectedFeature?.layerFeatureId.layerId === 'substrata' &&
                   selectedFeature?.layerFeatureId.featureId === `${substratum.substratumId}`,
@@ -348,16 +395,16 @@ const ObservationMap = ({
         {
           features:
             selectedHistory.strata?.map((stratum) => ({
-              featureId: `${stratum.stratumId}`,
+              featureId: `${stratum.name}`,
               geometry: {
                 type: 'MultiPolygon',
                 coordinates: stratum.boundary?.coordinates ?? [],
               },
               label: stratum.name,
-              onClick: selectFeature(selectedHistory.plantingSiteId)('strata', `${stratum.stratumId}`),
+              onClick: selectClickableFeature(selectedHistory.plantingSiteId)('strata', `${stratum.name}`),
               selected:
                 selectedFeature?.layerFeatureId.layerId === 'strata' &&
-                selectedFeature?.layerFeatureId.featureId === `${stratum.stratumId}`,
+                selectedFeature?.layerFeatureId.featureId === `${stratum.name}`,
             })) ?? [],
           layerId: 'strata',
           style: strataLayerStyle,
@@ -371,7 +418,10 @@ const ObservationMap = ({
                 type: 'MultiPolygon',
                 coordinates: selectedHistory.boundary?.coordinates ?? [],
               },
-              onClick: selectFeature(selectedHistory.plantingSiteId)('sites', `${selectedHistory.plantingSiteId}`),
+              onClick: selectClickableFeature(selectedHistory.plantingSiteId)(
+                'sites',
+                `${selectedHistory.plantingSiteId}`
+              ),
               selected:
                 selectedFeature?.layerFeatureId.layerId === 'sites' &&
                 selectedFeature?.layerFeatureId.featureId === `${selectedHistory.plantingSiteId}`,
@@ -401,7 +451,7 @@ const ObservationMap = ({
         {
           features:
             plantingSite.strata?.map((stratum) => ({
-              featureId: `${stratum.id}`,
+              featureId: `${stratum.name}`,
               geometry: {
                 type: 'MultiPolygon',
                 coordinates: stratum.boundary?.coordinates ?? [],
@@ -441,7 +491,7 @@ const ObservationMap = ({
     permanentPlotsVisible,
     plantingSite,
     plantingSiteId,
-    selectFeature,
+    selectClickableFeature,
     selectedFeature?.layerFeatureId.featureId,
     selectedFeature?.layerFeatureId.layerId,
     selectedHistory,
@@ -541,9 +591,9 @@ const ObservationMap = ({
 
     selectedResults.strata.forEach((stratum) => {
       const selectedStratumHistory = selectedHistory.strata.find(
-        (stratumHistory) => stratumHistory.stratumId === stratum.stratumId
+        (stratumHistory) => stratumHistory.name === stratum.name
       );
-      const stratumId = { layerId: 'strata', featureId: `${selectedStratumHistory?.stratumId}` };
+      const stratumId = { layerId: 'strata', featureId: `${selectedStratumHistory?.name}` };
       sortFeatureBySurvivalRate(stratumId, stratum.survivalRate);
 
       stratum.substrata.forEach((substratum) => {
