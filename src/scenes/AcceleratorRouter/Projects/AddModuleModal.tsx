@@ -9,13 +9,13 @@ import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
 import { ProjectModulePayload } from 'src/queries/generated/projectModules';
 import strings from 'src/strings';
-import { CohortModule, Module } from 'src/types/Module';
+import { Module, ProjectModule } from 'src/types/Module';
 import useForm from 'src/utils/useForm';
 
 export interface AddModuleModalProps {
   onClose: () => void;
-  onSave: (cohortModule: CohortModule | ProjectModulePayload) => void;
-  selectedModule?: CohortModule | ProjectModulePayload;
+  onSave: (cohortModule: ProjectModule | ProjectModulePayload) => void;
+  selectedModule?: ProjectModule | ProjectModulePayload;
   unusedModules: Module[] | ProjectModulePayload[];
 }
 
@@ -24,7 +24,7 @@ export default function AddModuleModal(props: AddModuleModalProps): JSX.Element 
 
   const theme = useTheme();
 
-  const [record, , onChange, onChangeCallback] = useForm<Partial<CohortModule>>(selectedModule ?? {});
+  const [record, , onChange, onChangeCallback] = useForm<Partial<ProjectModule>>(selectedModule ?? {});
   const [validate, setValidate] = useState(false);
 
   const save = () => {
