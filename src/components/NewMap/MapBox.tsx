@@ -34,6 +34,7 @@ import {
 import { useMaintainLayerOrder } from './useMaintainLayerOrder';
 
 export type MapBoxProps = {
+  additionalComponent?: React.ReactNode;
   clusterMaxZoom?: number;
   clusterRadius?: number;
   containerId?: string;
@@ -63,6 +64,7 @@ export type MapBoxProps = {
   nameTags?: MapNameTag[];
   onClickCanvas?: (event: MapMouseEvent) => void;
   onMapMove?: (view: ViewStateChangeEvent) => void;
+  onMouseMove?: (event: MapMouseEvent) => void;
   onTokenExpired?: () => void;
   setMapViewStyle: (style: MapViewStyle) => void;
   token: string;
@@ -70,6 +72,7 @@ export type MapBoxProps = {
 
 const MapBox = (props: MapBoxProps): JSX.Element => {
   const {
+    additionalComponent,
     clusterMaxZoom,
     clusterRadius,
     containerId,
@@ -95,6 +98,7 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
     nameTags,
     onClickCanvas,
     onMapMove,
+    onMouseMove,
     onTokenExpired,
     setMapViewStyle,
     token,
@@ -198,9 +202,7 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
 
   // Find all layers with at least some clickable elements
   const interactiveLayerIds = useMemo(() => {
-    return featureGroups
-      ?.filter((group) => group.features.some((feature) => feature.onClick !== undefined))
-      ?.map((group) => group.layerId);
+    return featureGroups?.map((group) => group.layerId);
   }, [featureGroups]);
 
   const geojson = useMemo((): FeatureCollection | undefined => {
@@ -277,7 +279,7 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
           source={'mapData'}
           type={'fill'}
           paint={{ 'fill-opacity': 0 }}
-          filter={['all', groupFilter, clickableFilter]}
+          filter={['all', groupFilter]}
         />,
         /* Fill for base layer */
         <Layer
@@ -573,29 +575,37 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
     }
   }, [nameTags, theme]);
 
-  const onMouseMove = useCallback((event: MapMouseEvent) => {
-    if (event.features && event.features.length) {
-      const properties = event.features
-        .map((feature) => feature.properties)
-        .filter(
-          (featureProperties): featureProperties is MapProperties =>
-            featureProperties &&
-            featureProperties.id !== undefined &&
-            featureProperties.priority !== undefined &&
-            featureProperties.clickable
-        );
+  const onMouseMoveCallback = useCallback(
+    (event: MapMouseEvent) => {
+      onMouseMove?.(event);
+      if (event.features && event.features.length) {
+        const properties = event.features
+          .map((feature) => feature.properties)
+          .filter(
+            (featureProperties): featureProperties is MapProperties =>
+              featureProperties &&
+              featureProperties.id !== undefined &&
+              featureProperties.priority !== undefined &&
+              featureProperties.clickable
+          );
 
-      if (properties.length) {
-        const topPriorityFeature = properties.reduce((top, current) => {
-          return current.priority > top.priority ? current : top;
-        }, properties[0]);
-        setHoverFeatureId(topPriorityFeature.id);
+        if (properties.length) {
+          const topPriorityFeature = properties.reduce((top, current) => {
+            return current.priority > top.priority ? current : top;
+          }, properties[0]);
 
-        return;
+          setCursor(cursorInteract ?? 'pointer');
+          setHoverFeatureId(topPriorityFeature.id);
+
+          return;
+        } else {
+          setCursor('auto');
+        }
       }
-    }
-    setHoverFeatureId(undefined);
-  }, []);
+      setHoverFeatureId(undefined);
+    },
+    [cursorInteract, onMouseMove]
+  );
 
   useEffect(() => {
     if (!mapRef.current) {
@@ -632,7 +642,27 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
   }, [mapRef]);
 
   // Hovering interactive layers
-  const onMouseEnter = useCallback(() => setCursor(cursorInteract ?? 'pointer'), [cursorInteract]);
+  const onMouseEnter = useCallback(
+    (event: MapMouseEvent) => {
+      if (event.features?.length) {
+        const clickable = event.features
+          .map((feature) => feature.properties)
+          .some(
+            (featureProperties): featureProperties is MapProperties =>
+              featureProperties &&
+              featureProperties.id !== undefined &&
+              featureProperties.priority !== undefined &&
+              featureProperties.clickable
+          );
+        if (clickable) {
+          setCursor(cursorInteract ?? 'pointer');
+          return;
+        }
+      }
+      setCursor('auto');
+    },
+    [cursorInteract]
+  );
   const onMouseLeave = useCallback(() => setCursor('auto'), []);
 
   // Entering and exiting canvases
@@ -724,7 +754,7 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
       onMouseLeave={onMouseLeave}
       onMouseOver={onMouseOver}
       onMouseOut={onMouseOut}
-      onMouseMove={onMouseMove}
+      onMouseMove={onMouseMoveCallback}
       onZoom={onMove}
     >
       {isDesktop && !hideFullScreenControl && <FullscreenControl position='top-left' containerId={containerId} />}
@@ -793,6 +823,7 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
       )}
       {markersComponents}
       {nameTagMarkers}
+      {additionalComponent}
     </Map>
   );
 };
