@@ -5,6 +5,8 @@ import { Button, EditableTable, EditableTableColumn, TableColumnType } from '@te
 import _, { isArray } from 'lodash';
 import {
   MRT_Cell,
+  MRT_ColumnOrderState,
+  MRT_DensityState,
   MRT_RowSelectionState,
   MRT_ShowHideColumnsButton,
   MRT_SortingState,
@@ -75,6 +77,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
   const theme = useTheme();
   const { sessionFilters, setSessionFilters } = useSessionFilters(origin.toLowerCase());
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
+  const [pillListPortalEl, setPillListPortalEl] = useState<HTMLElement | null>(null);
   const [withdrawTooltip, setWithdrawTooltip] = useState<string>();
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const [modalValues, setModalValues] = useState<{ type: string; openChangeQuantityModal: boolean; batch?: any }>({
@@ -527,8 +530,48 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
     }
   }, [sorting, setSearchSortOrder]);
 
+  const [columnOrder, setColumnOrder] = useState<MRT_ColumnOrderState>(() => {
+    try {
+      const saved = localStorage.getItem(`inventoryTable_${origin.toLowerCase()}_columnOrder`);
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(`inventoryTable_${origin.toLowerCase()}_columnOrder`, JSON.stringify(columnOrder));
+    } catch {
+      // ignore
+    }
+  }, [columnOrder, origin]);
+
+  const [density, setDensity] = useState<MRT_DensityState>(() => {
+    try {
+      return (localStorage.getItem(`inventoryTable_${origin.toLowerCase()}_density`) as MRT_DensityState) || 'comfortable';
+    } catch {
+      return 'comfortable';
+    }
+  });
+
+  const [showGlobalFilter, setShowGlobalFilter] = useState(false);
+
+  const [showColumnFilters, setShowColumnFilters] = useState(() => {
+    try {
+      const saved = localStorage.getItem(`inventoryTable_${origin.toLowerCase()}_columnFilters`);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        return Array.isArray(parsed) && parsed.length > 0;
+      }
+    } catch {
+      // ignore
+    }
+    return false;
+  });
+
   return (
-    <>
+    <Box position={'relative'}>
       <DeleteBatchesModal open={openDeleteModal} onClose={onCloseDeleteBatchesModal} onSubmit={deleteSelectedBatches} />
       {modalValues.openChangeQuantityModal && modalValues.batch && (
         <ChangeQuantityModal
@@ -551,6 +594,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
           showEmptyNurseriesFilter={origin === 'Nursery'}
           showProjectsFilter={false}
           showSearch={false}
+          pillListPortalEl={pillListPortalEl}
         />
       </Box>
       <Grid item xs={12}>
@@ -573,15 +617,34 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                   state: {
                     rowSelection,
                     sorting,
+                    columnOrder,
+                    density,
+                    showColumnFilters,
+                    showGlobalFilter,
                   },
                   onRowSelectionChange: setRowSelection,
                   onSortingChange: setSorting,
+                  onColumnOrderChange: setColumnOrder,
+                  onShowColumnFiltersChange: setShowColumnFilters,
+                  onShowGlobalFilterChange: setShowGlobalFilter,
+                  onDensityChange: (updater) => {
+                    setDensity((prev) => {
+                      const next = typeof updater === 'function' ? updater(prev) : updater;
+                      try {
+                        localStorage.setItem(`inventoryTable_${origin.toLowerCase()}_density`, next);
+                      } catch {
+                        // ignore
+                      }
+                      return next;
+                    });
+                  },
                   enableRowSelection: true,
                   enableColumnPinning: true,
                   enableColumnActions: true,
                   enableHiding: true,
-                  enableColumnDragging: false,
-                  enableColumnOrdering: false,
+                  enableColumnDragging: true,
+                  enableColumnOrdering: true,
+                  positionGlobalFilter: 'right',
                   getRowId: (row, index) => String(index),
                   renderToolbarAlertBannerContent: ({ selectedAlert }) => (
                     <Box display='flex' gap={1} alignItems='center' justifyContent='space-between' width='100%'>
@@ -614,6 +677,14 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                         </Tooltip>
                       </Box>
                     </Box>
+                  ),
+                  renderTopToolbarCustomActions: () => (
+                    <Box
+                      ref={setPillListPortalEl}
+                      display='flex'
+                      alignItems='center'
+                      sx={{ flex: 1, overflow: 'hidden' }}
+                    />
                   ),
                   renderToolbarInternalActions: ({ table }) => (
                     <Box display='flex' gap={0.5}>
@@ -704,6 +775,9 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                       '& > .MuiBox-root': {
                         position: 'relative',
                       },
+                      '& .Mui-ToolbarDropZone': {
+                        display: 'none',
+                      },
                     },
                   },
                   muiToolbarAlertBannerProps: {
@@ -727,11 +801,12 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                       }
                     : undefined,
                 }}
+                sx={{ padding: 0 }}
               />
             </Grid>
           </Grid>
         </div>
       </Grid>
-    </>
+    </Box>
   );
 }

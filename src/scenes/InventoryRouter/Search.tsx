@@ -1,4 +1,5 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
+import { createPortal } from 'react-dom';
 
 import { Box, Grid, Popover, useTheme } from '@mui/material';
 import { Button, PillListItem, Textfield, Tooltip } from '@terraware/web-components';
@@ -57,6 +58,7 @@ interface SearchProps {
   showEmptyNurseriesFilter?: boolean;
   showProjectsFilter?: boolean;
   showSearch?: boolean;
+  pillListPortalEl?: HTMLElement | null;
 }
 
 type PillListItemWithEmptyValue = Omit<PillListItem<string>, 'id'> & {
@@ -76,6 +78,7 @@ export default function Search(props: SearchProps): JSX.Element | null {
     showEmptyNurseriesFilter,
     showProjectsFilter,
     showSearch,
+    pillListPortalEl,
   } = props;
 
   const dispatch = useAppDispatch();
@@ -328,8 +331,15 @@ export default function Search(props: SearchProps): JSX.Element | null {
     return null;
   }
 
+  if (!showSearch && pillListPortalEl) {
+    return createPortal(
+      <PillList data={filterPillData} onRemove={onRemovePillList} />,
+      pillListPortalEl
+    );
+  }
+
   return (
-    <>
+    <Box>
       <Grid container display='flex' flexDirection='row' alignItems='center' gap={theme.spacing(1)}>
         {showSearch && (
           <>
@@ -464,9 +474,14 @@ export default function Search(props: SearchProps): JSX.Element | null {
 
         {showSearch && <TableSettingsButton />}
       </Grid>
-      <Grid display='flex' flexDirection='row' alignItems='center' sx={{ marginTop: theme.spacing(2) }}>
+      <Grid
+        display='flex'
+        flexDirection='row'
+        alignItems='center'
+        sx={{ marginTop: showSearch ? theme.spacing(2) : 0 }}
+      >
         <PillList data={filterPillData} onRemove={onRemovePillList} />
       </Grid>
-    </>
+    </Box>
   );
 }

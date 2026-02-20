@@ -25,7 +25,6 @@ type InventoryListByNurseryProps = {
 export default function InventoryListByNursery({ setReportData }: InventoryListByNurseryProps) {
   const { activeLocale, strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
-  const theme = useTheme();
 
   const [filters, setFilters] = useForm<InventoryFiltersUnion>({});
   const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>(null);
@@ -153,16 +152,6 @@ export default function InventoryListByNursery({ setReportData }: InventoryListB
 
   return (
     <Card flushMobile>
-      <Typography
-        sx={{
-          fontSize: '20px',
-          fontWeight: 600,
-          color: theme.palette.TwClrTxt,
-          marginBottom: theme.spacing(2),
-        }}
-      >
-        {strings.BY_NURSERY}
-      </Typography>
       {showResults ? (
         <InventoryTable
           results={searchResults || []}

@@ -25,7 +25,6 @@ type InventoryListByBatchProps = {
 export default function InventoryListByBatch({ setReportData }: InventoryListByBatchProps) {
   const { activeLocale, strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
-  const theme = useTheme();
 
   const [filters, setFilters] = useForm<InventoryFiltersUnion>({});
   const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>(null);
@@ -192,16 +191,6 @@ export default function InventoryListByBatch({ setReportData }: InventoryListByB
 
   return (
     <Card flushMobile>
-      <Typography
-        sx={{
-          fontSize: '20px',
-          fontWeight: 600,
-          color: theme.palette.TwClrTxt,
-          marginBottom: theme.spacing(2),
-        }}
-      >
-        {strings.BY_BATCH}
-      </Typography>
       {showResults ? (
         <InventoryTable
           results={searchResults || []}

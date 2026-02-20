@@ -6,6 +6,7 @@ import { EditableTable, EditableTableColumn, Icon } from '@terraware/web-compone
 import {
   MRT_Cell,
   MRT_ColumnFiltersState,
+  MRT_ColumnOrderState,
   MRT_DensityState,
   MRT_PaginationState,
   MRT_ShowHideColumnsButton,
@@ -110,7 +111,18 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   const debouncedSearchTerm = useDebounce(searchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
   const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder>(DEFAULT_SORT_ORDER);
 
-  const [showColumnFilters, setShowColumnFilters] = useState(false);
+  const [showColumnFilters, setShowColumnFilters] = useState(() => {
+    try {
+      const saved = localStorage.getItem('nursery-withdrawals-table-columnFilters');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        return Array.isArray(parsed) && parsed.length > 0;
+      }
+    } catch {
+      // ignore
+    }
+    return false;
+  });
   const [showGlobalFilter, setShowGlobalFilter] = useState(false);
   const [density, setDensity] = useState<MRT_DensityState>(() => {
     try {
@@ -149,6 +161,23 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
       // Silently fail if localStorage is not available
     }
   }, [columnFilters]);
+
+  const [columnOrder, setColumnOrder] = useState<MRT_ColumnOrderState>(() => {
+    try {
+      const saved = localStorage.getItem('nursery-withdrawals-table-columnOrder');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('nursery-withdrawals-table-columnOrder', JSON.stringify(columnOrder));
+    } catch {
+      // ignore
+    }
+  }, [columnOrder]);
 
   const handleColumnFiltersChange = useCallback((updater: any) => {
     setColumnFilters(updater);
@@ -702,12 +731,14 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
           showColumnFilters,
           showGlobalFilter,
           density,
+          columnOrder,
         },
         onPaginationChange: setPagination,
         onSortingChange: setSorting,
         onColumnFiltersChange: handleColumnFiltersChange,
         onShowColumnFiltersChange: setShowColumnFilters,
         onShowGlobalFilterChange: setShowGlobalFilter,
+        onColumnOrderChange: setColumnOrder,
         onDensityChange: (updater) => {
           setDensity((prev) => {
             const next = typeof updater === 'function' ? updater(prev) : updater;
