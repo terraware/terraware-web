@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/74</span>
+                <span class='fraction'>0/75</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/71</span>
+                <span class='fraction'>0/72</span>
             </div>
         
             
@@ -222,7 +222,8 @@
 <a name='L157'></a><a href='#L157'>157</a>
 <a name='L158'></a><a href='#L158'>158</a>
 <a name='L159'></a><a href='#L159'>159</a>
-<a name='L160'></a><a href='#L160'>160</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L160'></a><a href='#L160'>160</a>
+<a name='L161'></a><a href='#L161'>161</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -271,6 +272,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -395,12 +397,12 @@ import PageForm fr<span class="cstat-no" title="statement not covered" ><span cl
 im<span class="cstat-no" title="statement not covered" >port TextField from 'src/components/common/Textfield/Textfield';</span>
 impo<span class="cstat-no" title="statement not covered" >rt { APP_PATHS } from 'src/constants';</span>
 import<span class="cstat-no" title="statement not covered" > { useSyncNavigate } from 'src/hooks/useSyncNavigate';</span>
-import {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  useCreateAcceleratorReportConfigMutation,
-<span class="cstat-no" title="statement not covered" >  useLazyList</span>AcceleratorReportConfigQuery,
-  useUpdateProjectAcceleratorReportConfigMutation,
-} from 'src/qu<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >er</span>ies/generated/reports';<span class="cstat-no" title="statement not covered" ></span></span>
-import strings from 'src/strings';
+import {<span class="cstat-no" title="statement not covered" > useLocalization } from 's<span class="fstat-no" title="function not covered" >rc</span>/pro<span class="cstat-no" title="statement not covered" >viders';</span></span>
+import {
+<span class="cstat-no" title="statement not covered" >  useCreateAc</span>celeratorReportConfigMutation,
+  useLazyListAcceleratorReportConfigQuery,
+  useUpdatePro<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >je</span>ctAcceleratorReportConfigMut<span class="cstat-no" title="statement not covered" >ation,</span></span>
+} from 'src/queries/generated/reports';
 import { NewAcceleratorReportConfig } from 'src/types/AcceleratorReport';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -408,29 +410,30 @@ import useSnackbar from 'src/utils/useSnackbar';
 export default function EditSettings(): JSX.Element {
   const theme = useTheme();
   const navigate = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >us</span>eSyncNa<span class="cstat-no" title="statement not covered" >vigate();</span></span>
-  const { isMobile }<span class="cstat-no" title="statement not covered" > = </span>useDeviceInfo();
-<span class="cstat-no" title="statement not covered" >  const pathParams = useParams&lt;{ projectId: string }&gt;();</span>
-  const pro<span class="fstat-no" title="function not covered" >je</span>ctId<span class="cstat-no" title="statement not covered" > = Number(pat</span>hParams.projectId);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  const [listReportConfigs, listReportConfigRe</span>sponse] = useLazyListAcceleratorReportConfigQuery();
-  const [createRepo<span class="cstat-no" title="statement not covered" >rtConfig, createReportConf</span>igResponse] = useCreateAcceleratorReportConfigMutation();
-  const [updateReportConfi<span class="cstat-no" title="statement not covered" >g, updateReportConfigRes</span>ponse] = useUpdateProjectAcceleratorReportConfigMutation();
+  const { strings } <span class="cstat-no" title="statement not covered" >= u</span>seLocalization();
+<span class="cstat-no" title="statement not covered" >  const { isMobile } = useDeviceInfo();</span>
+  const pat<span class="fstat-no" title="function not covered" >hP</span>aram<span class="cstat-no" title="statement not covered" >s = useParams</span>&lt;{ projectId: string }&gt;();
+  const projectId = Number(pathParams.projectId);
 <span class="cstat-no" title="statement not covered" ></span>
-  const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
+  const [listReport<span class="cstat-no" title="statement not covered" >Configs, listReportConfigR</span>esponse] = useLazyListAcceleratorReportConfigQuery();
+  const [createReportConfi<span class="cstat-no" title="statement not covered" >g, createReportConfigRes</span>ponse] = useCreateAcceleratorReportConfigMutation();
+  const [updateReportC<span class="cstat-no" title="statement not covered" >onfig, updateReportConfig</span>Response] = useUpdateProjectAcceleratorReportConfigMutation();
 <span class="cstat-no" title="statement not covered" ></span>
-  const goToProjec<span class="cstat-no" title="statement not covered" >tReports = useCallback(() =&gt; {</span>
-    navigate(`${APP_PATH<span class="cstat-no" title="statement not covered" >S.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', p</span>rojectId.toString())}?tab=settings`);
-  }, [navigate, projec<span class="cstat-no" title="statement not covered" >tId]);</span>
+  const snackbar =<span class="cstat-no" title="statement not covered" > useSnackbar();</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  const goToProjectRepor<span class="cstat-no" title="statement not covered" >ts = useCallback(() =&gt; {</span>
+    navigate(`${APP_PA<span class="cstat-no" title="statement not covered" >THS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId</span>', projectId.toString())}?tab=settings`);
+  }, [navigate, project<span class="cstat-no" title="statement not covered" >Id]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
   useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
     if (projectId) {<span class="cstat-no" title="statement not covered" ></span>
       void listReport<span class="cstat-no" title="statement not covered" >Configs(projectId, true);</span>
     }<span class="cstat-no" title="statement not covered" ></span>
-  }, [projectId, list<span class="cstat-no" title="statement not covered" >ReportConfigs]);</span>
-<span class="cstat-no" title="statement not covered" ></span>
-  const p<span class="fstat-no" title="function not covered" >rojectReportC</span>onfig = useMemo(
-    () =&gt; listReportConfigResponse.data?.configs?.[0],
-    [listReportC<span class="cstat-no" title="statement not covered" >onfigResponse.data?.configs]</span>
+  }, [projectId, listRepo<span class="cstat-no" title="statement not covered" >rtConfigs]);</span>
+<span class="fstat-no" title="function not covered" ></span>
+  const projectReportConfig = useMemo(
+    () =&gt; listRe<span class="cstat-no" title="statement not covered" >portConfigResponse.data?.configs</span>?.[0],
+    [listReportConf<span class="cstat-no" title="statement not covered" >igResponse.data?.configs]</span>
   );<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
   useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
@@ -547,7 +550,7 @@ export default function EditSettings(): JSX.Element {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-20T20:48:01.071Z
+                at 2026-02-20T22:17:46.060Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

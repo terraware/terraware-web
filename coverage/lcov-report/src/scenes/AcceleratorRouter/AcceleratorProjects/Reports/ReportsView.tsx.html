@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/46</span>
+                <span class='fraction'>0/43</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/31</span>
+                <span class='fraction'>0/29</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/43</span>
+                <span class='fraction'>0/40</span>
             </div>
         
             
@@ -129,12 +129,7 @@
 <a name='L64'></a><a href='#L64'>64</a>
 <a name='L65'></a><a href='#L65'>65</a>
 <a name='L66'></a><a href='#L66'>66</a>
-<a name='L67'></a><a href='#L67'>67</a>
-<a name='L68'></a><a href='#L68'>68</a>
-<a name='L69'></a><a href='#L69'>69</a>
-<a name='L70'></a><a href='#L70'>70</a>
-<a name='L71'></a><a href='#L71'>71</a>
-<a name='L72'></a><a href='#L72'>72</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L67'></a><a href='#L67'>67</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -182,10 +177,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -204,7 +195,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > useMemo } fro</span>m 'react';
 <span class="cstat-no" title="statement not covered" ></span>
 import { Box } from '@m<span class="cstat-no" title="statement not covered" >ui/material';</span>
@@ -215,49 +205,44 @@ import Accelera<span class="cstat-no" title="statement not covered" ><span class
 im<span class="cstat-no" title="statement not covered" >port Page from 'src/components/Page';</span>
 impo<span class="cstat-no" title="statement not covered" >rt { APP_PATHS } from 'src/constants';</span>
 import { useLocalization } from 'src/providers';
-import strings fro<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >m </span>'src/strings';</span>
-im<span class="cstat-no" title="statement not covered" >port useStickyTabs from 'src/utils/useStickyTabs';</span>
+import useStickyTa<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >bs</span> from 'src/utils/useStickyTabs';</span>
 <span class="cstat-no" title="statement not covered" ></span>
-import<span class="cstat-no" title="statement not covered" > { useAcceleratorProjectData } from '../AcceleratorProjectContext';</span>
-import R<span class="cstat-no" title="statement not covered" >eportsSettings from './Rep<span class="fstat-no" title="function not covered" >or</span>tsSe<span class="cstat-no" title="statement not covered" >ttings';</span></span>
-&nbsp;
-co<span class="cstat-no" title="statement not covered" >nst Reports</span>View = () =&gt; {
-  const { crumbs, acceleratorProject, project } = useAcceleratorProjectData();
-  const { acti<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ve</span>Locale } = useLocalization()<span class="cstat-no" title="statement not covered" >;</span></span>
-&nbsp;
+impo<span class="cstat-no" title="statement not covered" >rt { useAcceleratorProjectData } from '../AcceleratorProjectContext';</span>
+import<span class="cstat-no" title="statement not covered" > ReportsSettings from './ReportsSettings';</span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+const ReportsView = () =&gt; {
+<span class="cstat-no" title="statement not covered" >  const { cru</span>mbs, acceleratorProject, project } = useAcceleratorProjectData();
+  const { strings } = useLocalization();
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
   const tabs = useMemo(() =&gt; {
-    if (!activeLocale) {
-      return [];
-    }
-&nbsp;
     return [
+      {
+        id: 'reports',
+        label: strings.REPORTS,
+        children: &lt;AcceleratorReportsTable /&gt;,
+      },
       {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-        id: 'reports<span class="cstat-no" title="statement not covered" >',</span>
-<span class="cstat-no" title="statement not covered" >        label: strings.REPORTS,</span>
-        chi<span class="fstat-no" title="function not covered" >ld</span>ren:<span class="cstat-no" title="statement not covered" > &lt;AcceleratorR</span>eportsTable /&gt;,
+        id: 'targets<span class="cstat-no" title="statement not covered" >',</span>
+<span class="cstat-no" title="statement not covered" >        label: strings.TARGETS,</span>
+        chi<span class="fstat-no" title="function not covered" >ld</span>ren:<span class="cstat-no" title="statement not covered" > &lt;AcceleratorR</span>eportTargetsTable /&gt;,
       },
 <span class="cstat-no" title="statement not covered" >      {</span>
-        id: 'target<span class="cstat-no" title="statement not covered" >s',</span>
-        label: strings<span class="cstat-no" title="statement not covered" >.TARGETS,</span>
-        children: <span class="cstat-no" title="statement not covered" >&lt;AcceleratorReportTargetsTable /&gt;,</span>
-      },<span class="cstat-no" title="statement not covered" ></span>
-      {<span class="cstat-no" title="statement not covered" ></span>
-        id: 'setti<span class="cstat-no" title="statement not covered" >ngs',</span>
-        label: strings.<span class="cstat-no" title="statement not covered" >SETTINGS,</span>
-        children: &lt;Repo<span class="cstat-no" title="statement not covered" >rtsSettings /&gt;,</span>
+        id: 'settin<span class="cstat-no" title="statement not covered" >gs',</span>
+        label: strings<span class="cstat-no" title="statement not covered" >.SETTINGS,</span>
+        children: <span class="cstat-no" title="statement not covered" >&lt;ReportsSettings /&gt;,</span>
       },<span class="cstat-no" title="statement not covered" ></span>
     ];<span class="cstat-no" title="statement not covered" ></span>
-  }, [activeLocale]);<span class="cstat-no" title="statement not covered" ></span>
+  }, [strings]);<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const { activeTab,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > o</span>nChangeTab } = useStickyTabs({</span>
+  const { activeTab, on<span class="cstat-no" title="statement not covered" >ChangeTab } = useStickyTa</span>bs({
     defaultTab: 'reports',<span class="cstat-no" title="statement not covered" ></span>
     tabs,<span class="cstat-no" title="statement not covered" ></span>
-    viewIdentif<span class="cstat-no" title="statement not covered" >ier: 'project-reports',<span class="fstat-no" title="function not covered" ></span></span>
-  })<span class="cstat-no" title="statement not covered" >;</span>
+    viewIdentifier: 'project-<span class="cstat-no" title="statement not covered" >reports',</span>
+  });<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  return (
-<span class="cstat-no" title="statement not covered" >    &lt;Page</span>
-      hierarchicalCrumbs={false}
+  return (<span class="cstat-no" title="statement not covered" ></span>
+    &lt;Page<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >      hierarchicalCrumbs={false}</span>
       crumbs={[
         ...crumbs,
         {
@@ -274,8 +259,8 @@ co<span class="cstat-no" title="statement not covered" >nst Reports</span>View =
     &lt;/Page&gt;
   );
 };
-<span class="cstat-no" title="statement not covered" ></span>
-export default ReportsView;
+&nbsp;
+export default ReportsView;<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -283,7 +268,7 @@ export default ReportsView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-20T20:48:01.071Z
+                at 2026-02-20T22:17:46.060Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

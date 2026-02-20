@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/111</span>
+                <span class='fraction'>0/114</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/117</span>
+                <span class='fraction'>0/119</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/23</span>
+                <span class='fraction'>0/24</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/105</span>
+                <span class='fraction'>0/108</span>
             </div>
         
             
@@ -448,7 +448,14 @@
 <a name='L383'></a><a href='#L383'>383</a>
 <a name='L384'></a><a href='#L384'>384</a>
 <a name='L385'></a><a href='#L385'>385</a>
-<a name='L386'></a><a href='#L386'>386</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L386'></a><a href='#L386'>386</a>
+<a name='L387'></a><a href='#L387'>387</a>
+<a name='L388'></a><a href='#L388'>388</a>
+<a name='L389'></a><a href='#L389'>389</a>
+<a name='L390'></a><a href='#L390'>390</a>
+<a name='L391'></a><a href='#L391'>391</a>
+<a name='L392'></a><a href='#L392'>392</a>
+<a name='L393'></a><a href='#L393'>393</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -656,7 +663,12 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -758,6 +770,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1040,18 +1054,25 @@ const MetricBox = ({<span class="cstat-no" title="statement not covered" ></span
 <span class="cstat-no" title="statement not covered" >    if (isReportSystemM</span>etric(metric)) {
 <span class="cstat-no" title="statement not covered" >      void refreshReportMetrics</span>({
         projectId,
-<span class="cstat-no" title="statement not covered" >        reportId,</span>
-        metrics: [metric.metric],
-      });
+<span class="cstat-no" title="statement not covered" >        reportId,<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >        metrics: [metric.metric],</span>
+<span class="cstat-no" title="statement not covered" >      });</span>
     }
   }, [metric, projectId, refreshReportMetrics, reportId]);
-&nbsp;
+<span class="cstat-no" title="statement not covered" ></span>
   const isEditing = useMemo(() =&gt; editing || internalEditing, [editing, internalEditing]);
 &nbsp;
   const handleCancel = useCallback(() =&gt; {
     setRecord(metric);
     setInternalEditingFalse();
   }, [metric, setInternalEditingFalse, setRecord]);
+&nbsp;
+  useEffect(() =&gt; {
+    // If user has exited editting. Keep in sync with latest data
+    if (!isEditing) {
+      setRecord(metric);
+    }
+  }, [isEditing, metric, setRecord]);
 &nbsp;
   return (
     &lt;&gt;
@@ -1140,9 +1161,9 @@ const MetricBox = ({<span class="cstat-no" title="statement not covered" ></span
                   required={true}
                   min={0}
                 /&gt;
-                &lt;Typography paddingTop={3} paddingLeft={0.5}&gt;
+                &lt;Typ<span class="cstat-no" title="statement not covered" >ography pa</span>ddingTop={3} paddingLeft={0.5}&gt;
                   / {metric.target || 0} ({year} {strings.TARGET})
-                &lt;/Ty<span class="cstat-no" title="statement not covered" >pography&gt;</span>
+                &lt;/Typography&gt;
                 {'unit' in record &amp;&amp; record.unit &amp;&amp; (
                   &lt;Box paddingLeft={theme.spacing(3)}&gt;
                     &lt;Textfield type='text' label={strings.UNIT} value={record.unit} id={'unit'} display={true} /&gt;
@@ -1225,7 +1246,7 @@ export default MetricBox;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-20T20:48:01.071Z
+                at 2026-02-20T22:17:46.060Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

@@ -202,21 +202,21 @@
 import { Box, useTheme <span class="cstat-no" title="statement not covered" >} from '@mui/material';</span>
 <span class="cstat-no" title="statement not covered" ></span>
 import AcceleratorR<span class="cstat-no" title="statement not covered" >eportStatusBadge from </span>'src/components/AcceleratorReports/AcceleratorReportStatusBadge';
-import { useUser } <span class="cstat-no" title="statement not covered" >from 'src/providers';</span>
+import { useLocaliz<span class="cstat-no" title="statement not covered" >ation, useUser } from 'src/provi</span>ders';
 import { Accele<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ra</span>torReportPayload, useReviewAcceleratorReportMutation } from 'src/queries/generated/reports';</span>
-im<span class="cstat-no" title="statement not covered" >port strings from 'src/strings';</span>
-impo<span class="cstat-no" title="statement not covered" >rt { AcceleratorReportStatus } from 'src/types/AcceleratorRepor</span>t';
-import useSnackbar from 'src/utils/useSnackbar';
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-im<span class="cstat-no" title="statement not covered" >port InternalComment from './InternalComment';</span>
-<span class="cstat-no" title="statement not covered" ></span>
-export<span class="cstat-no" title="statement not covered" > type MetadataProps = {</span>
-  report<span class="cstat-no" title="statement not covered" >: AcceleratorReportPayload<span class="fstat-no" title="function not covered" >;<span class="cstat-no" title="statement not covered" ></span></span></span>
-  projectId: number;
-};<span class="cstat-no" title="statement not covered" ></span>
+im<span class="cstat-no" title="statement not covered" >port { AcceleratorReportStatus } from 'src/types/AcceleratorReport';</span>
+impo<span class="cstat-no" title="statement not covered" >rt useSnackbar from 'src/utils/useSnackbar';</span>
 &nbsp;
-const Metadata<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > =</span> (props: MetadataProps): JSX<span class="cstat-no" title="statement not covered" >.Element =&gt; {</span></span>
-  const { report, projectId } = props;
+import InternalCom<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >me</span>nt from './InternalComment';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+expo<span class="cstat-no" title="statement not covered" >rt type MetadataProps = {</span>
+  repo<span class="cstat-no" title="statement not covered" >rt: AcceleratorReportPayload;</span>
+  projec<span class="cstat-no" title="statement not covered" >tId: number;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+};
+<span class="cstat-no" title="statement not covered" ></span>
+const Metadata = (props: MetadataProps): JSX.Element =&gt; {
+  const { repo<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >rt</span>, projectId } = props;<span class="cstat-no" title="statement not covered" ></span></span>
+  const { strings } = useLocalization();
 &nbsp;
   const [reviewReport, reviewReportResponse] = useReviewAcceleratorReportMutation();
 &nbsp;
@@ -230,14 +230,14 @@ const Metadata<span class="cstat-no" title="statement not covered" ><span class=
     } else if (reviewReportResponse.isSuccess) {
 <span class="cstat-no" title="statement not covered" >      snackbar.toastSuccess(strings.CHANGES_SA</span>VED);
     }<span class="cstat-no" title="statement not covered" ></span>
-  }, [snackbar, review<span class="cstat-no" title="statement not covered" >ReportResponse.isError, r</span>eviewReportResponse.isSuccess]);
+  }, [snackbar, review<span class="cstat-no" title="statement not covered" >ReportResponse.isError, r</span>eviewReportResponse.isSuccess, strings.CHANGES_SAVED]);
 <span class="cstat-no" title="statement not covered" ></span>
   const onUpdateInterna<span class="cstat-no" title="statement not covered" >lComment = useCallback(</span>
     (internalComment:<span class="cstat-no" title="statement not covered" > string, status: AcceleratorReportStatus)</span> =&gt; {
-      void reviewRepo<span class="cstat-no" title="statement not covered" >rt({</span>
-        reportId: report.<span class="cstat-no" title="statement not covered" >id,</span>
-        projectId,<span class="cstat-no" title="statement not covered" ></span>
-        reviewAcc<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >el</span>eratorReportRequestPayload: {</span>
+      void reviewReport({<span class="cstat-no" title="statement not covered" ></span>
+        reportId: report.id,<span class="cstat-no" title="statement not covered" ></span>
+        projectId<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >,</span></span>
+        reviewAcceleratorReportR<span class="cstat-no" title="statement not covered" >equest</span>Payload: {
           review: {<span class="cstat-no" title="statement not covered" ></span>
             ...report,<span class="cstat-no" title="statement not covered" ></span>
             inte<span class="cstat-no" title="statement not covered" >rnalComment,</span>
@@ -271,7 +271,7 @@ export default Metadata;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-20T20:48:01.071Z
+                at 2026-02-20T22:17:46.060Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

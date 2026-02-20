@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/38</span>
+                <span class='fraction'>0/39</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/35</span>
+                <span class='fraction'>0/36</span>
             </div>
         
             
@@ -135,7 +135,8 @@
 <a name='L70'></a><a href='#L70'>70</a>
 <a name='L71'></a><a href='#L71'>71</a>
 <a name='L72'></a><a href='#L72'>72</a>
-<a name='L73'></a><a href='#L73'>73</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L73'></a><a href='#L73'>73</a>
+<a name='L74'></a><a href='#L74'>74</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -172,6 +173,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -212,7 +214,7 @@
 import { Box, Typograph<span class="cstat-no" title="statement not covered" >y, useTheme } from '@mui/materia</span>l';
 import { Button, DialogB<span class="cstat-no" title="statement not covered" >ox, Textfield } from '@terr</span>aware/web-components';
 <span class="cstat-no" title="statement not covered" ></span>
-import strings from<span class="cstat-no" title="statement not covered" > 'src/strings';</span>
+import { useLocaliz<span class="cstat-no" title="statement not covered" >ation } from 'src/providers';</span>
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 ex<span class="cstat-no" title="statement not covered" >port type RejectDialogProps = {</span>
   on<span class="cstat-no" title="statement not covered" >Close: () =&gt; void;</span>
@@ -224,29 +226,30 @@ export<span class="cstat-no" title="statement not covered" > default function Re
   const <span class="cstat-no" title="statement not covered" >[feedback, setFeedback] = <span class="fstat-no" title="function not covered" >us</span>eSta<span class="cstat-no" title="statement not covered" >te&lt;string&gt;</span>(initialFeedback ?? '');</span>
   const [validate, setValidate] = useState&lt;boolean&gt;(false);
 <span class="cstat-no" title="statement not covered" >  const theme</span> = useTheme();
-&nbsp;
-  const reject<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > =</span> useCallback(() =&gt; {<span class="cstat-no" title="statement not covered" ></span></span>
+  const { strings } = useLocalization();
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  const reject = useCallback(() =&gt; {
     setValidate(true);
     if (feedback) {
       onSubmit(feedback);
     }
   }, [feedback, onSubmit]);
 &nbsp;
-  const setFeedbackCallback = useCallback((value: any) =&gt; {
-    setFeedback(val<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ue</span> as str<span class="cstat-no" title="statement not covered" >ing);</span></span>
-  }, []);<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span>
-  return (<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-    &lt;DialogBox
-<span class="cstat-no" title="statement not covered" >      open={true}</span>
-      title={string<span class="cstat-no" title="statement not covered" >s.REQUEST_UPDATE}</span>
+  const setFeedback<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Ca</span>llback <span class="cstat-no" title="statement not covered" >= useCallback((value: any) =&gt; {</span></span>
+    setFeedback(valu<span class="cstat-no" title="statement not covered" >e a</span>s string);
+<span class="cstat-no" title="statement not covered" >  }, []);</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  return (
+<span class="cstat-no" title="statement not covered" >    &lt;DialogBox</span>
+      open={true}<span class="cstat-no" title="statement not covered" ></span>
+      title={strings.R<span class="cstat-no" title="statement not covered" >EQUEST_UPDATE}</span>
       size='medium'<span class="cstat-no" title="statement not covered" ></span>
       onClose={onClose}<span class="cstat-no" title="statement not covered" ></span>
-      middleButtons={<span class="cstat-no" title="statement not covered" >[</span>
-        &lt;<span class="fstat-no" title="function not covered" >Button</span>
+      mid<span class="fstat-no" title="function not covered" >dleButtons={[</span>
+        &lt;Button<span class="cstat-no" title="statement not covered" ></span>
           id='cancelReject'<span class="cstat-no" title="statement not covered" ></span>
-          label={strings.CANCEL}<span class="cstat-no" title="statement not covered" ></span>
-          priori<span class="cstat-no" title="statement not covered" >ty='secondary'</span>
+          label=<span class="cstat-no" title="statement not covered" >{strings.CANCEL}</span>
+          priority='se<span class="cstat-no" title="statement not covered" >condary'</span>
           type='p<span class="cstat-no" title="statement not covered" >assive'<span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >          onClick={onCl</span>ose}
 <span class="cstat-no" title="statement not covered" >          key='button-1'</span>
@@ -286,7 +289,7 @@ export<span class="cstat-no" title="statement not covered" > default function Re
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-20T20:48:01.071Z
+                at 2026-02-20T22:17:46.060Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

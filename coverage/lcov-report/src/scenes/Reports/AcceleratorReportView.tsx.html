@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/89</span>
+                <span class='fraction'>0/88</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/98</span>
+                <span class='fraction'>0/96</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/85</span>
+                <span class='fraction'>0/84</span>
             </div>
         
             
@@ -264,8 +264,7 @@
 <a name='L199'></a><a href='#L199'>199</a>
 <a name='L200'></a><a href='#L200'>200</a>
 <a name='L201'></a><a href='#L201'>201</a>
-<a name='L202'></a><a href='#L202'>202</a>
-<a name='L203'></a><a href='#L203'>203</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L202'></a><a href='#L202'>202</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -296,7 +295,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -493,35 +491,34 @@ import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { useGetAcceleratorReportQuery, useSubmitAcceleratorReportMutation } from 'src/queries/generated/reports';
-import strings from<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > '</span>src/str<span class="cstat-no" title="statement not covered" >ings';</span></span>
-import { MetricType <span class="cstat-no" title="statement not covered" >} f</span>rom 'src/types/AcceleratorReport';
+import { MetricType<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > }</span> from '<span class="cstat-no" title="statement not covered" >src/types/AcceleratorReport';</span></span>
 <span class="cstat-no" title="statement not covered" ></span>
-import Subm<span class="fstat-no" title="function not covered" >it</span>Repo<span class="cstat-no" title="statement not covered" >rtDialog from </span>'./SubmitReportDialog';
-&nbsp;
-<span class="cstat-no" title="statement not covered" >const AcceleratorReportView = () =&gt; {</span>
-  const { activeLoc<span class="cstat-no" title="statement not covered" >ale } = useLocalization();</span>
-  const { currentAccelerat<span class="cstat-no" title="statement not covered" >orProject, setCurrentAcc</span>eleratorProject } = useParticipantData();
-  const theme = useThe<span class="cstat-no" title="statement not covered" >me();</span>
+<span class="cstat-no" title="statement not covered" >import SubmitReportDialog from './SubmitReportDialog';</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+const AcceleratorReportView = () =&gt; {
+<span class="cstat-no" title="statement not covered" >  const { strings } = useLocalization();</span>
+  const { currentAc<span class="cstat-no" title="statement not covered" >celeratorProject, setCurre</span>ntAcceleratorProject } = useParticipantData();
+  const theme = useTheme()<span class="cstat-no" title="statement not covered" >;</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const { goToAccel<span class="cstat-no" title="statement not covered" >eratorReportEdit </span>} = useNavigateTo();
+  const { goToAcceleratorRep<span class="cstat-no" title="statement not covered" >ortEdit } = useNavigateTo();</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const pathParams = useParam<span class="cstat-no" title="statement not covered" >s&lt;{ projectId: string; reportId: string }&gt;();</span>
-  const reportId = Number(pathParam<span class="cstat-no" title="statement not covered" >s.reportId);</span>
+  const pathParams = useParams&lt;{ projectId<span class="cstat-no" title="statement not covered" >: string; reportId: string }&gt;();</span>
+  const reportId = Number(pat<span class="cstat-no" title="statement not covered" >hParams.reportId);</span>
   const projectId = Number(pathPara<span class="cstat-no" title="statement not covered" >ms.projectId);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const reportResponse = useGetAc<span class="cstat-no" title="statement not covered" >celeratorReportQuery({</span>
+  const reportResponse = useGetAccele<span class="cstat-no" title="statement not covered" >ratorReportQuery({</span>
     projectId,<span class="cstat-no" title="statement not covered" ></span>
     reportId,<span class="cstat-no" title="statement not covered" ></span>
     includeMetrics: tru<span class="cstat-no" title="statement not covered" >e,</span>
   });<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const report = u<span class="cstat-no" title="statement not covered" >seMemo(() =&gt; reportResponse?.data?.report, [rep</span>ortResponse?.data]);
+  const report = u<span class="cstat-no" title="statement not covered" >seMemo(() =&gt; reportResponse?.data?.repor</span>t, [reportResponse?.data]);
 <span class="cstat-no" title="statement not covered" ></span>
-  const [submit, submit<span class="cstat-no" title="statement not covered" >Response] = useSubmitAcce</span>leratorReportMutation();
+  const [submit, submi<span class="cstat-no" title="statement not covered" >tResponse] = useSubmitAcceleratorReportMutation();</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const [showSubmitDial<span class="cstat-no" title="statement not covered" >og, setShowSubmitDialog] </span>= useState(false);
+  const [showSubmitDialog, <span class="cstat-no" title="statement not covered" >setShowSubmitDialog] = useState(false);</span>
   useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-    if (projectId !==<span class="cstat-no" title="statement not covered" > currentAcceleratorProject?.id) {</span>
+    if (projectId !== currentAcc<span class="cstat-no" title="statement not covered" >eleratorProject?.id) {</span>
       setCurrentAccel<span class="cstat-no" title="statement not covered" >eratorProject(projectId);</span>
     }<span class="cstat-no" title="statement not covered" ></span>
   }, [currentAcceleratorProjec<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >t?</span>.id, projectId, setCurrentAcceleratorProject]);</span>
@@ -533,11 +530,11 @@ import Subm<span class="fstat-no" title="function not covered" >it</span>Repo<sp
   const crumbs: Cru<span class="cstat-no" title="statement not covered" >mb[] = useMemo(</span>
     () =&gt; [<span class="cstat-no" title="statement not covered" ></span>
       {<span class="cstat-no" title="statement not covered" ></span>
-        name: activeLocale ? strings.REPORTS : '',
+        name: strings.REPORTS,
         to: year ? `${APP_PATHS.REPORTS}?year=${year}` : APP_PATHS.REPORTS,
       },
     ],
-    [activeLocale<span class="cstat-no" title="statement not covered" >, year]<span class="fstat-no" title="function not covered" ></span></span>
+    [strings, yea<span class="cstat-no" title="statement not covered" >r]<span class="fstat-no" title="function not covered" ></span></span>
   );
 <span class="cstat-no" title="statement not covered" ></span>
   const goToReportEdit = useCallback(() =&gt; {
@@ -572,7 +569,7 @@ import Subm<span class="fstat-no" title="function not covered" >it</span>Repo<sp
         /&gt;
       &lt;/&gt;
     );
-  }, [goToReportEdit, report?.id, report?.status, reportResponse.isLoading, submitResponse.isLoading]);
+  }, [goToReportEdit, report?.id, report?.status, reportResponse.isLoading, strings, submitResponse.isLoading]);
 &nbsp;
   const rightComponent = useMemo(
     () =&gt; (
@@ -676,7 +673,7 @@ export default AcceleratorReportView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-20T20:48:01.071Z
+                at 2026-02-20T22:17:46.060Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

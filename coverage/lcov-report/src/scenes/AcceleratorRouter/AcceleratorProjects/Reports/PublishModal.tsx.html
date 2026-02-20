@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/30</span>
+                <span class='fraction'>0/31</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/27</span>
+                <span class='fraction'>0/28</span>
             </div>
         
             
@@ -107,7 +107,8 @@
 <a name='L42'></a><a href='#L42'>42</a>
 <a name='L43'></a><a href='#L43'>43</a>
 <a name='L44'></a><a href='#L44'>44</a>
-<a name='L45'></a><a href='#L45'>45</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L45'></a><a href='#L45'>45</a>
+<a name='L46'></a><a href='#L46'>46</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -144,6 +145,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -156,7 +158,7 @@
 import { Typography, us<span class="cstat-no" title="statement not covered" >eTheme } from '@mui/material';</span>
 import { Confirm } from <span class="cstat-no" title="statement not covered" >'@terraware/web-components'</span>;
 <span class="cstat-no" title="statement not covered" ></span>
-import strings from<span class="cstat-no" title="statement not covered" > 'src/strings';</span>
+import { useLocaliz<span class="cstat-no" title="statement not covered" >ation } from 'src/providers';</span>
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 ex<span class="cstat-no" title="statement not covered" >port type PublishModalProps = {</span>
   on<span class="cstat-no" title="statement not covered" >Close: () =&gt; void;</span>
@@ -165,30 +167,31 @@ ex<span class="cstat-no" title="statement not covered" >port type PublishModalPr
 <span class="cstat-no" title="statement not covered" ></span>
 expo<span class="cstat-no" title="statement not covered" >rt default function PublishModal({ onClose, onSubmit }: PublishModalProps): JSX.Element {</span>
   cons<span class="cstat-no" title="statement not covered" >t theme = useTheme();</span>
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  return (
-<span class="cstat-no" title="statement not covered" >    &lt;Confirm</span>
-      size={'medium'}
-      closeBut<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >to</span>nId='cancelPublish'<span class="cstat-no" title="statement not covered" ></span></span>
+  const <span class="cstat-no" title="statement not covered" >{ strings } = useLocalizat<span class="fstat-no" title="function not covered" >io</span>n();<span class="cstat-no" title="statement not covered" ></span></span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  return (</span>
+    &lt;Confirm
+      size={'m<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ed</span>ium'}<span class="cstat-no" title="statement not covered" ></span></span>
+      closeButtonId='cancelPublish'
       closeButtonText={strings.CANCEL}
       confirmButtonId='confirmPublish'
       confirmButtonText={strings.PUBLISH}
       message={
         &lt;&gt;
           &lt;Typography fontSize='16px' fontWeight={400} lineHeight='24px' marginBottom={theme.spacing(2)}&gt;
-            {strings.YOU_ARE_ABOUT_TO_PUBLISH}
-          &lt;/Typogra<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ph</span>y&gt;<span class="cstat-no" title="statement not covered" ></span></span>
+            {string<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >s.</span>YOU_ARE<span class="cstat-no" title="statement not covered" >_ABOUT_TO_PUBLISH}</span></span>
+          &lt;/Typograp<span class="cstat-no" title="statement not covered" >hy&gt;</span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >          &lt;Typography fontSize='16px' fontWeight={600} lineHeight='24px' marginBottom={theme.spacing(2)}&gt;</span>
-<span class="fstat-no" title="function not covered" >            {</span>stri<span class="cstat-no" title="statement not covered" >ngs.THIS_ACTI</span>ON_IS_NON_REVERSIBLE}
-          &lt;/Typography&gt;
+          &lt;<span class="fstat-no" title="function not covered" >Ty</span>pogr<span class="cstat-no" title="statement not covered" >aphy fontSize</span>='16px' fontWeight={600} lineHeight='24px' marginBottom={theme.spacing(2)}&gt;
+            {strings.THIS_ACTION_IS_NON_REVERSIBLE}
+<span class="cstat-no" title="statement not covered" >          &lt;/Typography&gt;</span>
 <span class="cstat-no" title="statement not covered" ></span>
-          &lt;Typograp<span class="cstat-no" title="statement not covered" >hy fontSize='16px' fontWei</span>ght={400} lineHeight='24px' marginBottom={theme.spacing(2)}&gt;
-            {strings.A<span class="cstat-no" title="statement not covered" >RE_YOU_SURE}</span>
+          &lt;Typography <span class="cstat-no" title="statement not covered" >fontSize='16px' fontWeigh</span>t={400} lineHeight='24px' marginBottom={theme.spacing(2)}&gt;
+            {strings.ARE_YOU<span class="cstat-no" title="statement not covered" >_SURE}</span>
           &lt;/Typography&gt;<span class="cstat-no" title="statement not covered" ></span>
-        &lt;/&gt;<span class="cstat-no" title="statement not covered" ></span>
-      }<span class="fstat-no" title="function not covered" ></span>
-      onClose={o<span class="cstat-no" title="statement not covered" >nClose}</span>
+        &lt;<span class="fstat-no" title="function not covered" >/&gt;</span>
+      }<span class="cstat-no" title="statement not covered" ></span>
+      onClose={onClose<span class="cstat-no" title="statement not covered" >}</span>
 <span class="cstat-no" title="statement not covered" >      onConfirm={onSubmit}</span>
       open={true}
       title={strings.PUBLISH_TO_FUNDER_PORTAL}
@@ -202,7 +205,7 @@ expo<span class="cstat-no" title="statement not covered" >rt default function Pu
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-20T20:48:01.071Z
+                at 2026-02-20T22:17:46.060Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

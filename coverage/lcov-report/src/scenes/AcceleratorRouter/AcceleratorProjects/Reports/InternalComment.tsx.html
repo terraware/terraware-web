@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/55</span>
+                <span class='fraction'>0/56</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/50</span>
+                <span class='fraction'>0/51</span>
             </div>
         
             
@@ -193,7 +193,8 @@
 <a name='L128'></a><a href='#L128'>128</a>
 <a name='L129'></a><a href='#L129'>129</a>
 <a name='L130'></a><a href='#L130'>130</a>
-<a name='L131'></a><a href='#L131'>131</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L131'></a><a href='#L131'>131</a>
+<a name='L132'></a><a href='#L132'>132</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -235,6 +236,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -331,8 +333,8 @@ import TextField fr<span class="cstat-no" title="statement not covered" >om '@te
 <span class="cstat-no" title="statement not covered" ></span>
 import DialogBo<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >x </span>from 'src/components/common/DialogBox/DialogBox';</span>
 im<span class="cstat-no" title="statement not covered" >port Button from 'src/components/common/button/Button';</span>
-impo<span class="cstat-no" title="statement not covered" >rt { AcceleratorReportPayload } from 'src/queries/generated/rep</span>orts';
-import strings from 'src/strings';
+impo<span class="cstat-no" title="statement not covered" >rt { useLocalization } from 'src/providers';</span>
+import { AcceleratorReportPayload } from 'src/queries/generated/reports';
 import { Accelerat<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >or</span>ReportStatus, AcceleratorReportStatuses } from 'src/types/AcceleratorReport';</span>
 <span class="cstat-no" title="statement not covered" ></span>
 inte<span class="cstat-no" title="statement not covered" >rface InternalCommentProps {</span>
@@ -342,29 +344,30 @@ inte<span class="cstat-no" title="statement not covered" >rface InternalCommentP
 }<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
 function Inter<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >na</span>lComment({ entity, update, d<span class="cstat-no" title="statement not covered" >isabled }: InternalCommentProps) {</span></span>
+  const { strings } = useLocalization();
   const [isDialogOpen, setIsDialogOpen] = useState&lt;boolean&gt;(false);
   const [internalComment, setInternalComment] = useState(entity.internalComment || '');
   const [status, setStatus] = useState&lt;AcceleratorReportStatus&gt;(entity.status || '');
 &nbsp;
   const toggleDialog = useCallback(() =&gt; {
     setIsDialogOpen((prev) =&gt; !prev);
-  }, []);
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  const handleUpdate<span class="cstat-no" title="statement not covered" > = </span>useCallback(() =&gt; {
-<span class="cstat-no" title="statement not covered" >    update(internalComment, status);</span>
-    toggleD<span class="fstat-no" title="function not covered" >ia</span>log(<span class="cstat-no" title="statement not covered" >);</span>
-  }, [internalComment, status, toggleDialog, update]);
+  }, []);<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >  const handleUpdate = useCallback(() =&gt; {</span>
+    update(<span class="fstat-no" title="function not covered" >in</span>tern<span class="cstat-no" title="statement not covered" >alComment, sta</span>tus);
+    toggleDialog();
+<span class="cstat-no" title="statement not covered" >  }, [internalComment, status, toggleDialog, u</span>pdate]);
 <span class="cstat-no" title="statement not covered" ></span>
   useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-    if (entity.interna<span class="cstat-no" title="statement not covered" >lComment) {</span>
-      setInternalComment(ent<span class="cstat-no" title="statement not covered" >ity.internalComment);</span>
+    if (entity.internalComme<span class="cstat-no" title="statement not covered" >nt) {</span>
+      setInternalCommen<span class="cstat-no" title="statement not covered" >t(entity.internalComment);</span>
     }<span class="cstat-no" title="statement not covered" ></span>
-  }, [entity.internalCo<span class="cstat-no" title="statement not covered" >mment]);</span>
+  }, [entity.interna<span class="cstat-no" title="statement not covered" >lComment]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
   useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-    setStatus(entity.status);<span class="cstat-no" title="statement not covered" ></span>
-  }, [ent<span class="fstat-no" title="function not covered" >ity.status]);</span>
-&nbsp;
+    setSt<span class="fstat-no" title="function not covered" >atus(entity.stat</span>us);
+  }, [entity.status]);
+<span class="cstat-no" title="statement not covered" ></span>
   const setInternalCommentCallback = useCa<span class="cstat-no" title="statement not covered" >llback((value: any) =&gt; {</span>
     setInternalComment(value as string);<span class="cstat-no" title="statement not covered" ></span>
   }, []);<span class="cstat-no" title="statement not covered" ></span>
@@ -460,7 +463,7 @@ export default InternalComment;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-20T20:48:01.071Z
+                at 2026-02-20T22:17:46.060Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>
