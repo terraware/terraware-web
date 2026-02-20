@@ -218,6 +218,13 @@ const MetricBox = ({
     setInternalEditingFalse();
   }, [metric, setInternalEditingFalse, setRecord]);
 
+  useEffect(() => {
+    // If user has exited editting. Keep in sync with latest data
+    if (!isEditing) {
+      setRecord(metric);
+    }
+  }, [isEditing, metric, setRecord]);
+
   return (
     <>
       {progressModalOpened && (
