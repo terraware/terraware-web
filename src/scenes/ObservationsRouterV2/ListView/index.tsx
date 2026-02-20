@@ -1,25 +1,31 @@
 import React, { type JSX, useEffect, useMemo } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import { Dropdown, DropdownItem, Separator, Tabs } from '@terraware/web-components';
+import { Button, Dropdown, DropdownItem, Separator, Tabs } from '@terraware/web-components';
 
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
+import { APP_PATHS } from 'src/constants';
 import useStickyPlantingSiteId from 'src/hooks/useStickyPlantingSiteId';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
 import { useLazyListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
 import MobileAppCard from 'src/scenes/Home/MobileAppCard';
+import { isAdmin } from 'src/utils/organization';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
 import ObservationMapWrapper from '../Map';
+import useObservablePlantingSites from '../Schedule/useObservablePlantingSites';
 import BiomassList from './BiomassList';
 import PlantMonitoringList from './PlantMonitoringList';
 
 const ObservationListView = (): JSX.Element => {
   const { selectedOrganization } = useOrganization();
   const { strings } = useLocalization();
+  const navigate = useSyncNavigate();
   const theme = useTheme();
 
+  const observableSites = useObservablePlantingSites();
   const [listPlantingSites, listPlantingSitesResult] = useLazyListPlantingSitesQuery();
   const { selectPlantingSite, selectedPlantingSiteId } = useStickyPlantingSiteId('observations-list', -1);
 
@@ -93,9 +99,32 @@ const ObservationListView = (): JSX.Element => {
   });
 
   const isBiomass = useMemo(() => activeTab === 'biomassMeasurements', [activeTab]);
+  const scheduleObservationEnabled = useMemo(
+    () => observableSites && isAdmin(selectedOrganization),
+    [observableSites, selectedOrganization]
+  );
+
+  const scheduleObservationButton = useMemo(() => {
+    if (scheduleObservationEnabled) {
+      return (
+        <Button
+          id={'schedule-observation'}
+          label={strings.SCHEDULE_OBSERVATION}
+          onClick={() => navigate(APP_PATHS.SCHEDULE_OBSERVATION)}
+          size='medium'
+        />
+      );
+    } else {
+      return undefined;
+    }
+  }, [navigate, scheduleObservationEnabled, strings.SCHEDULE_OBSERVATION]);
 
   return (
-    <Page title={strings.OBSERVATIONS} leftComponent={PageHeaderPlantingSiteDropdown}>
+    <Page
+      title={strings.OBSERVATIONS}
+      leftComponent={PageHeaderPlantingSiteDropdown}
+      rightComponent={scheduleObservationButton}
+    >
       <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs}>
         <Card radius={'8px'} style={{ marginBottom: theme.spacing(3), width: '100%' }}>
           <ObservationMapWrapper

@@ -6,6 +6,7 @@ import CellRenderer, { TableRowType } from 'src/components/common/table/TableCel
 import TableRowPopupMenu from 'src/components/common/table/TableRowPopupMenu';
 import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 
 import useObservationExports from '../useObservationExports';
@@ -15,6 +16,7 @@ export default function PlantMonitoringCellRenderer(props: RendererProps<TableRo
   const { strings } = useLocalization();
   const observationId = row.observationId as number;
   const { downloadObservationCsv, downloadObservationGpx, downloadObservationResults } = useObservationExports();
+  const navigate = useSyncNavigate();
 
   const textStyles = {
     fontSize: '16px',
@@ -54,6 +56,11 @@ export default function PlantMonitoringCellRenderer(props: RendererProps<TableRo
 
   if (column.key === 'actionsMenu') {
     const exportDisabled = row.state === 'Upcoming';
+    const rescheduleDisabled =
+      row.state === 'Completed' ||
+      row.state === 'Abandoned' ||
+      row.hasObservedPermanentPlots ||
+      row.hasObservedTemporaryPlots;
     const tableMenuItem = observationId ? (
       <TableRowPopupMenu
         menuItems={[
@@ -78,6 +85,13 @@ export default function PlantMonitoringCellRenderer(props: RendererProps<TableRo
             label: strings.EXPORT_RESULTS,
             onClick: () => {
               void downloadObservationResults(observationId);
+            },
+          },
+          {
+            disabled: rescheduleDisabled,
+            label: strings.RESCHEDULE,
+            onClick: () => {
+              navigate(APP_PATHS.RESCHEDULE_OBSERVATION.replace(':observationId', observationId.toString()));
             },
           },
           // TODO add reschedule and end observations
