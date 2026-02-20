@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/322</span>
+                <span class='fraction'>0/323</span>
             </div>
         
             
@@ -1208,7 +1208,11 @@
 <a name='L1143'></a><a href='#L1143'>1143</a>
 <a name='L1144'></a><a href='#L1144'>1144</a>
 <a name='L1145'></a><a href='#L1145'>1145</a>
-<a name='L1146'></a><a href='#L1146'>1146</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L1146'></a><a href='#L1146'>1146</a>
+<a name='L1147'></a><a href='#L1147'>1147</a>
+<a name='L1148'></a><a href='#L1148'>1148</a>
+<a name='L1149'></a><a href='#L1149'>1149</a>
+<a name='L1150'></a><a href='#L1150'>1150</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1361,6 +1365,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2129,6 +2134,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2241,6 +2247,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2506,28 +2514,29 @@ const ObservationMap = ({<span class="cstat-no" title="statement not covered" ><
         label: observationDate,
         value: `${observation.observationId}`,
       };
-    });<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  }, [activeLocale, defaultTimezone, observationResults, plantingSite?.timeZone]);
+    });
+  }, [activeLocale, defa<span class="fstat-no" title="function not covered" >ul</span>tTimezone<span class="cstat-no" title="statement not covered" >, observationResults, plantingSite?.timeZone]);</span>
 &nbsp;
-  const [selectedObservati<span class="cstat-no" title="statement not covered" >onId, setSelectedObservati<span class="fstat-no" title="function not covered" >on</span>Id] = useState&lt;number&gt;();</span>
-<span class="cstat-no" title="statement not covered" ></span>
-  useE<span class="cstat-no" title="statement not covered" >ffect(() =&gt; {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-    if (obs<span class="cstat-no" title="statement not covered" >ervationResultsOptions.length) {</span>
-<span class="cstat-no" title="statement not covered" >      setSelectedObservationId(Number(obs</span>ervationResultsOptions[0].value));
-    } else {
-<span class="cstat-no" title="statement not covered" >      setSelectedObse</span>rvationId(undefined);
-    }
-  }, [observationResultsOptions]);
+  const [selectedObservationId, setSelectedObservationId] = useState&lt;number&gt;();
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  co<span class="cstat-no" title="statement not covered" >nst observationDropdownLegendGroup = useMemo((): MapDropdownLegendGroup =&gt; {</span>
-    re<span class="cstat-no" title="statement not covered" >turn {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
-      title: strings.OBSERVATION,
+  us<span class="cstat-no" title="statement not covered" >eEffect(() =&gt; {</span>
+    if<span class="cstat-no" title="statement not covered" > (observationResultsOptions.len<span class="fstat-no" title="function not covered" >gt</span>h) {<span class="cstat-no" title="statement not covered" ></span></span>
+      setSe<span class="cstat-no" title="statement not covered" >lectedObservationId(Number(observationResultsOptions[0].value));</span>
+    } <span class="cstat-no" title="statement not covered" >else {</span>
+      setSelectedObservationId(undefined);
+    }<span class="cstat-no" title="statement not covered" ></span>
+  }, [observationResultsOptions]);
+&nbsp;
+  const observationDropdow<span class="cstat-no" title="statement not covered" >nLegendGroup = useMemo(():<span class="fstat-no" title="function not covered" > M</span>apDropdownLegendGroup =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    return {</span>
+<span class="cstat-no" title="statement not covered" >      title: strings.ASSIGNED_OBSERVATION,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
+      tooltip: strings.ASSIGNED_OBSERVATION_TOOLTIP,
 <span class="cstat-no" title="statement not covered" >      type: 'drop</span>down',
       items: observationResultsOptions,
       selectedValue: selectedObservationId !== undefined ? `${selectedObservationId}` : undefined,
       setSelectedValu<span class="cstat-no" title="statement not covered" >e: (value: string | undefi<span class="fstat-no" title="function not covered" >ne</span>d) =&gt; setSelectedObservationId(value ? Number(value) : undefined),</span>
 <span class="cstat-no" title="statement not covered" >    };<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span></span></span>
-  }, [observationResultsOptions, selectedObservationId, strings.OBSERVATION]);
+  }, [observationResultsOptions, selectedObservationId, strings]);
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
   co<span class="cstat-no" title="statement not covered" >nst selectedResults = useMemo(() =&gt; {</span>
     if<span class="cstat-no" title="statement not covered" > (observationResults.length) {</span>
@@ -3292,38 +3301,38 @@ const ObservationMap = ({<span class="cstat-no" title="statement not covered" ><
           } else {
             return [];
           }
-        });<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" ></span>
-<span class="cstat-no" title="statement not covered" >        return [...adHocPlotPlants, ...monitoringPlotPlants];</span>
-      } <span class="cstat-no" title="statement not covered" >else {</span>
-        return [];
-      }<span class="cstat-no" title="statement not covered" ></span>
+        });
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" ></span>        return [...adHocPlotPlants, ...monitoringPlotPlants];
+<span class="cstat-no" title="statement not covered" >      } else {</span>
+<span class="cstat-no" title="statement not covered" >        return [];</span>
+      }
     },<span class="cstat-no" title="statement not covered" ></span>
-    [adH<span class="cstat-no" title="statement not covered" >ocPlots, isBiomass</span>, selectPlant, selectedPlants, selectedResults]
+    [adH<span class="cstat-no" title="statement not covered" >ocPlots, isBiomass, selectPl</span>ant, selectedPlants, selectedResults]
   );<span class="cstat-no" title="statement not covered" ></span>
-&nbsp;
+<span class="cstat-no" title="statement not covered" ></span>
   const markers = useMemo((): MapMarkerGroup[] =&gt; {
     return [
       {
-<span class="cstat-no" title="statement not covered" >        markers: photoMarkers,<span class="fstat-no" title="function not covered" ></span></span>
-        markerGroupId: 'plot-<span class="cstat-no" title="statement not covered" >photos',</span>
-<span class="cstat-no" title="statement not covered" >        onClusterClick: selectPhotosFromMarkers,</span>
+        markers: photoMarkers,
+<span class="cstat-no" title="statement not covered" >        markerGroupId: 'plot-p<span class="fstat-no" title="function not covered" >ho</span>tos',</span>
+        onClusterClick: selec<span class="cstat-no" title="statement not covered" >tPhotosFromMarkers,</span>
 <span class="cstat-no" title="statement not covered" >        style: plotPhotoStyle,</span>
-        visible: plotPhotosVisible,
+<span class="cstat-no" title="statement not covered" >        visible: plotPhotosVisible,</span>
       },
-      {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >        markers: virtualPlotMarker,</span>
+      {
+        markers: virtual<span class="cstat-no" title="statement not covered" >PlotMarker,<span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >        markerGroupId: 'virtual-plot',</span>
 <span class="cstat-no" title="statement not covered" >        onClusterClick: selectSplatFromMarkers,</span>
-        style: virtualPlotStyle,
+<span class="cstat-no" title="statement not covered" >        style: virtualPlotStyle,</span>
         visible: virtualPlotVisible,
       },
       {
         markers: plantsMarkers('Live'),
         markerGroupId: 'live-plants',
         onClusterClick: selectPlantsFromMarkers,
-<span class="cstat-no" title="statement not covered" >        style: livePlantStyle,</span>
-        visible: livePlantsVisible,
+        style: livePlantStyle,
+<span class="cstat-no" title="statement not covered" >        visible: livePlantsVisible,</span>
       },
       {
         markers: plantsMarkers('Dead'),
@@ -3332,12 +3341,12 @@ const ObservationMap = ({<span class="cstat-no" title="statement not covered" ><
         style: deadPlantStyle,
         visible: deadPlantsVisible,
       },
-<span class="cstat-no" title="statement not covered" >      {</span>
-<span class="cstat-no" title="statement not covered" >        markers: treesMarkers(tru</span>e),
-        markerGroupId: 'live-trees',
-<span class="cstat-no" title="statement not covered" >        style: {</span>
+      {
+<span class="cstat-no" title="statement not covered" >        markers: treesMarkers(true),</span>
+<span class="cstat-no" title="statement not covered" >        markerGroupId: 'live-tree</span>s',
+        style: {
 <span class="cstat-no" title="statement not covered" >          iconColor: '#40B0A6',</span>
-          iconName: 'iconLivePlant',
+<span class="cstat-no" title="statement not covered" >          iconName: 'iconLivePlan</span>t',
           type: 'icon',
         },
         visible: livePlantsVisible,
@@ -3347,26 +3356,26 @@ const ObservationMap = ({<span class="cstat-no" title="statement not covered" ><
         markerGroupId: 'dead-trees',
         style: {
           iconColor: '#E1BE6A',
-          iconName: 'ic<span class="cstat-no" title="statement not covered" >onLivePlant',<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >          type: 'icon',</span>
+          iconName: 'iconLivePlant',
+          type: 'icon',<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >        },</span>
-        vis<span class="cstat-no" title="statement not covered" >ible: deadPlantsVisible,</span>
-<span class="cstat-no" title="statement not covered" >      },</span>
-    ];
-  }, [<span class="cstat-no" title="statement not covered" ></span>
-    deadPlantStyle,
+<span class="cstat-no" title="statement not covered" >        visible: deadPlantsVisib</span>le,
+      },<span class="cstat-no" title="statement not covered" ></span>
+    ];<span class="cstat-no" title="statement not covered" ></span>
+  }, [
+    de<span class="cstat-no" title="statement not covered" >adPlantStyle,</span>
     deadPlantsVisible,
-    livePlantStyle,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >    livePlantsVisible,</span>
-    ph<span class="cstat-no" title="statement not covered" >otoMarkers,</span>
-    plantsM<span class="cstat-no" title="statement not covered" >arkers,</span>
-    pl<span class="cstat-no" title="statement not covered" >otPhotoStyle,</span>
-    plotPhotosVisible,
-    se<span class="cstat-no" title="statement not covered" >lectPhotosFromMa</span>rkers,
-    selectPlantsFromMarkers,
+    livePlantStyle,
+    livePlantsVisible<span class="cstat-no" title="statement not covered" >,<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    photoMarkers,</span>
+    pl<span class="cstat-no" title="statement not covered" >antsMarkers,</span>
+    plotPho<span class="cstat-no" title="statement not covered" >toStyle,</span>
+    pl<span class="cstat-no" title="statement not covered" >otPhotosVisible,</span>
+    selectPhotosFromMarkers,
+    se<span class="cstat-no" title="statement not covered" >lectPlantsFromMa</span>rkers,
     selectSplatFromMarkers,
-<span class="cstat-no" title="statement not covered" >    treesMarkers,</span>
-    virtualPlotMarker,
+    treesMarkers,
+<span class="cstat-no" title="statement not covered" >    virtualPlotMarker,</span>
     virtualPlotStyle,
     virtualPlotVisible,
   ]);
@@ -3381,15 +3390,18 @@ const ObservationMap = ({<span class="cstat-no" title="statement not covered" ><
         : plantingSiteLegendGroup;
 &nbsp;
     return [
-      ...(isBiomass || isSingleView || plantingSiteId === undefined ? [] : [observationDropdownLegendGroup]),
+      ...(isBiomass || isSingleView || plantingSiteId === undefined || observationResults.length === 0
+        ? []
+        : [observationDropdownLegendGroup]),
       siteLegendGroup,
       monitoringPlotsLegendGroup,
-      plotPhotosLegendGroup,
-      plantMakersLeg<span class="cstat-no" title="statement not covered" >endGroup,</span>
+      plotPhotosLege<span class="cstat-no" title="statement not covered" >ndGroup,</span>
+      plantMakersLegendGroup,
       ...(isBiomass ? [] : [survivalRateLegendGroup]),
     ];
   }, [
     observationDropdownLegendGroup,
+    observationResults,
     plantingSiteId,
     plantingSiteLegendGroup,
     monitoringPlotsLegendGroup,
@@ -3505,7 +3517,7 @@ export default ObservationMap;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-20T03:42:31.247Z
+                at 2026-02-20T03:49:02.257Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

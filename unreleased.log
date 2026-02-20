@@ -1,3 +1,5 @@
+4acd2643bab4 SW-8052 Update map legend texts (#5272)
+fbbb4cfac83e SW-8009 Go back to report immediately if no photos to save (#5264)
 0dfbe32d7db2 Remove unused cohortId from document service (#5273)
 b05e81572e3e Remove acl permissions for cohorts (#5271)
 5b6fc9c2858d Remove cohort modules from redux (#5268)
