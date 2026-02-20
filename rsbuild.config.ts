@@ -1,7 +1,9 @@
 import { defineConfig, loadEnv, rspack } from '@rsbuild/core';
+import { pluginEslint } from '@rsbuild/plugin-eslint';
 import { pluginReact } from '@rsbuild/plugin-react';
 import { pluginSass } from '@rsbuild/plugin-sass';
 import { pluginSvgr } from '@rsbuild/plugin-svgr';
+import { pluginTypeCheck } from '@rsbuild/plugin-type-check';
 import chokidar from 'chokidar';
 
 const { convertAllLocales } = require('./src/strings/export');
@@ -13,12 +15,19 @@ const serverProxy = {
   xfwd: true,
 };
 
+const isDev = process.env.NODE_ENV === 'development';
+
 export default defineConfig({
   plugins: [
     pluginReact(),
     pluginSass(),
     pluginSvgr({
       mixedImport: true, // Support both default and named imports for SVGs
+    }),
+    pluginTypeCheck({ enable: isDev }),
+    pluginEslint({
+      enable: isDev,
+      eslintPluginOptions: { configType: 'flat' },
     }),
   ],
 
@@ -84,13 +93,6 @@ export default defineConfig({
         // sync-ammo is only needed for playcancas when usePhysics is enabled, but we don't need this and it causes a compilation error, so ignore it
         new rspack.IgnorePlugin({ resourceRegExp: /^sync-ammo$/ }),
       ],
-      //     // Worker loader alias for mapbox compatibility
-      //     resolveLoader: {
-      //       alias: {
-      //         'worker-loader': require.resolve('worker-rspack-loader'),
-      //       },
-      //     },
-      //
       //     // TODO handle changes in web-components
       //     // Snapshot configuration for @terraware/web-components watching
       //     experiments: {
