@@ -119,7 +119,7 @@ const AcceleratorReportView = () => {
     setShowSubmitDialog(false);
   }, [projectId, reportId, submit]);
 
-  const reportName = report?.frequency === 'Annual' ? year : report?.quarter ? `${year}-${report?.quarter}` : '';
+  const reportName = report?.quarter ? `${year}-${report?.quarter}` : year ? `${year}` : '';
 
   const yearToUse = useMemo(
     () => (year ? Number(report?.startDate.split('-')[0]) : DateTime.now().year),

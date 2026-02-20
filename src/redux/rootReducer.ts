@@ -3,12 +3,12 @@ import { Action, combineReducers } from '@reduxjs/toolkit';
 import { rtkReducers } from 'src/queries/reducers';
 
 import acceleratorReducers from './features/accelerator/acceleratorSlice';
+import acceleratorProjectSpeciesReducers from './features/acceleratorProjectSpecies/acceleratorProjectSpeciesSlice';
 import accessionsReducers from './features/accessions/accessionsSlice';
 import activityReducers from './features/activities/activitiesSlice';
 import appVersionReducers from './features/appVersion/appVersionSlice';
 import applicationReducers from './features/application/applicationSlice';
 import batchesReducers from './features/batches/batchesSlice';
-import cohortModuleReducers from './features/cohortModules/cohortModulesSlice';
 import cohortsReducers from './features/cohorts/cohortsSlice';
 import deliverablesReducers from './features/deliverables/deliverablesSlice';
 import disclaimersReducers from './features/disclaimer/disclaimerSlice';
@@ -28,13 +28,11 @@ import nurseryWithdrawalsReducers from './features/nurseryWithdrawals/nurseryWit
 import observationsReducers from './features/observations/observationsSlice';
 import organizationUsersReducers from './features/organizationUser/organizationUsersSlice';
 import organizationsReducers from './features/organizations/organizationsSlice';
-import participantProjectSpeciesReducers from './features/participantProjectSpecies/participantProjectSpeciesSlice';
 import plantingSiteReducers from './features/plantingSite/plantingSiteSlice';
 import plantingsReducers from './features/plantings/plantingsSlice';
 import projectSpeciesReducers from './features/projectSpecies/projectSpeciesSlice';
 import projectToDoReducers from './features/projectToDo/projectToDoSlice';
 import projectsReducers from './features/projects/projectsSlice';
-import reportsReducers from './features/reports/reportsSlice';
 import reportsSettingsReducers from './features/reportsSettings/reportsSettingsSlice';
 import scoresReducers from './features/scores/scoresSlice';
 import snackbarReducers from './features/snackbar/snackbarSlice';
@@ -56,7 +54,6 @@ export const reducers = {
   ...applicationReducers,
   ...appVersionReducers,
   ...batchesReducers,
-  ...cohortModuleReducers,
   ...cohortsReducers,
   ...deliverablesReducers,
   ...disclaimersReducers,
@@ -76,13 +73,12 @@ export const reducers = {
   ...observationsReducers,
   ...organizationsReducers,
   ...organizationUsersReducers,
-  ...participantProjectSpeciesReducers,
+  ...acceleratorProjectSpeciesReducers,
   ...plantingsReducers,
   ...plantingSiteReducers,
   ...projectsReducers,
   ...projectSpeciesReducers,
   ...projectToDoReducers,
-  ...reportsReducers,
   ...reportsSettingsReducers,
   ...scoresReducers,
   ...snackbarReducers,
@@ -107,7 +103,7 @@ export const rootReducer = (state: CombinedState | undefined, action: Action) =>
     state = undefined;
   }
 
-  return combinedReducers(state as any, action);
+  return combinedReducers(state, action);
 };
 
 export type RootState = ReturnType<typeof rootReducer>;

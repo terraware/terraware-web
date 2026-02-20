@@ -9,7 +9,7 @@ import Card from 'src/components/common/Card';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
-import { MonitoringPlotStatus, ObservationState } from 'src/types/Observations';
+import { ObservationState, getPlotStatus } from 'src/types/Observations';
 import { SearchSortOrder } from 'src/types/Search';
 import { isManagerOrHigher } from 'src/utils/organization';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
@@ -24,7 +24,7 @@ type MonitoringPlotRow = {
   stratumName: string;
   substratumName: string;
   completedDate?: string;
-  status: MonitoringPlotStatus;
+  status: string;
   isPermanent?: boolean;
   totalLive?: number;
   totalPlants?: number;
@@ -116,7 +116,7 @@ export default function MonitoringPlotList(): JSX.Element {
             stratumName: stratumResult.name,
             substratumName: substratum.name,
             completedDate: plot.completedTime ? getDateDisplayValue(plot.completedTime, timeZone) : undefined,
-            status: plot.status,
+            status: getPlotStatus(plot.status),
             isPermanent: plot.isPermanent,
             totalLive,
             totalPlants: plot.totalPlants,

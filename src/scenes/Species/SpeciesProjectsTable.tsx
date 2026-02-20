@@ -7,13 +7,13 @@ import { TableColumnType } from '@terraware/web-components/components/table/type
 import TooltipButton from 'src/components/common/button/TooltipButton';
 import Table from 'src/components/common/table';
 import { useLocalization, useOrganization } from 'src/providers';
-import { requestGetProjectsForSpecies } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
-import { selectProjectsForSpeciesRequest } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';
+import { requestGetProjectsForSpecies } from 'src/redux/features/acceleratorProjectSpecies/acceleratorProjectSpeciesAsyncThunks';
+import { selectProjectsForSpeciesRequest } from 'src/redux/features/acceleratorProjectSpecies/acceleratorProjectSpeciesSelectors';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { requestProjects } from 'src/redux/features/projects/projectsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { ParticipantProjectForSpecies } from 'src/types/ParticipantProjectSpecies';
+import { AcceleratorProjectForSpecies } from 'src/types/AcceleratorProjectSpecies';
 import { Project } from 'src/types/Project';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -23,8 +23,8 @@ import SpeciesProjectsCellRenderer from './SpeciesProjectsCellRenderer';
 
 const columns = (): TableColumnType[] => [
   { key: 'projectName', name: strings.PROJECT, type: 'string' },
-  { key: 'participantProjectSpeciesNativeCategory', name: strings.NATIVE_NON_NATIVE, type: 'string' },
-  { key: 'participantProjectSpeciesSubmissionStatus', name: strings.STATUS, type: 'string' },
+  { key: 'acceleratorProjectSpeciesNativeCategory', name: strings.NATIVE_NON_NATIVE, type: 'string' },
+  { key: 'acceleratorProjectSpeciesSubmissionStatus', name: strings.STATUS, type: 'string' },
 ];
 
 const viewColumns = (): TableColumnType[] => [
@@ -64,8 +64,8 @@ export default function SpeciesProjectsTable({
   const [requestId, setRequestId] = useState('');
   const projectsForSpeciesRequest = useAppSelector(selectProjectsForSpeciesRequest(requestId));
 
-  const [searchResults, setSearchResults] = useState<ParticipantProjectForSpecies[] | null>();
-  const [filteredResults, setFilteredResults] = useState<ParticipantProjectForSpecies[] | null>();
+  const [searchResults, setSearchResults] = useState<AcceleratorProjectForSpecies[] | null>();
+  const [filteredResults, setFilteredResults] = useState<AcceleratorProjectForSpecies[] | null>();
   const [selectedRows, setSelectedRows] = useState<TableRowType[]>([]);
   const [showRemoveDialog, setShowRemoveDialog] = useState(false);
   const [reload, setReload] = useState(false);
@@ -118,7 +118,7 @@ export default function SpeciesProjectsTable({
           projectName: allProjects?.find((proj) => proj.id === pS.project.id)?.name,
           speciesId,
           participantProjectSpeciesNativeCategory: pS.nativeCategory,
-        } as ParticipantProjectForSpecies;
+        } as AcceleratorProjectForSpecies;
       });
       updatedResults = [...updatedResults, ...newProjects];
     }

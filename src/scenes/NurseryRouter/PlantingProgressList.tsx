@@ -5,6 +5,7 @@ import { BusySpinner, Button, EditableTable, EditableTableColumn } from '@terraw
 import { Icon } from '@terraware/web-components';
 import {
   MRT_Cell,
+  MRT_DensityState,
   MRT_ShowHideColumnsButton,
   MRT_ToggleDensePaddingButton,
   MRT_ToggleFiltersButton,
@@ -55,6 +56,23 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
   const snackbar = useSnackbar();
   const [showWarningModal, setShowWarningModal] = useState(false);
   const [markingAsComplete, setMarkingAsComplete] = useState(false);
+  const [showColumnFilters, setShowColumnFilters] = useState(false);
+  const [showGlobalFilter, setShowGlobalFilter] = useState(false);
+  const [density, setDensity] = useState<MRT_DensityState>(() => {
+    try {
+      return (localStorage.getItem('plantings-progress-table-density') as MRT_DensityState) || 'comfortable';
+    } catch {
+      return 'comfortable';
+    }
+  });
+
+  const selectedRows = useMemo(
+    () =>
+      Object.keys(rowSelection)
+        .map((index) => (rows || [])[Number(index)])
+        .filter(Boolean),
+    [rowSelection, rows]
+  );
 
   const selectedRows = useMemo(
     () =>
@@ -146,6 +164,13 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
     );
   }, []);
 
+  const uniqueSiteNames = useMemo(() => {
+    if (!rows) {
+      return [];
+    }
+    return Array.from(new Set(rows.map((row) => row.siteName).filter((name): name is string => !!name))).sort();
+  }, [rows]);
+
   const uniqueProjectNames = useMemo(() => {
     if (!rows) {
       return [];
@@ -162,24 +187,28 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
         id: 'siteName',
         header: strings.PLANTING_SITE,
         accessorKey: 'siteName',
-        filterVariant: 'text',
+        filterVariant: 'select',
+        filterSelectOptions: uniqueSiteNames,
+        sortUndefined: 'last',
       },
       {
         id: 'projectName',
         header: strings.PROJECT,
         accessorKey: 'projectName',
-        filterVariant: 'select',
+        filterVariant: 'multi-select',
         filterSelectOptions: uniqueProjectNames,
+        sortUndefined: 'last',
       },
       {
         id: 'totalSeedlingsSent',
         header: strings.TOTAL_SEEDLINGS_SENT,
         accessorKey: 'totalSeedlingsSent',
         filterVariant: 'range',
+        sortUndefined: 'last',
         Cell: TotalSeedlingsSentCell,
       },
     ],
-    [TotalSeedlingsSentCell, uniqueProjectNames]
+    [TotalSeedlingsSentCell, uniqueSiteNames, uniqueProjectNames]
   );
 
   const PlantingCompleteHeader = useCallback(
@@ -206,19 +235,23 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
         id: 'siteName',
         header: strings.PLANTING_SITE,
         accessorKey: 'siteName',
-        filterVariant: 'text',
+        filterVariant: 'select',
+        filterSelectOptions: uniqueSiteNames,
+        sortUndefined: 'last',
       },
       {
         id: 'stratumName',
         header: strings.STRATUM,
         accessorKey: 'stratumName',
         filterVariant: 'text',
+        sortUndefined: 'last',
       },
       {
         id: 'substratumName',
         header: strings.SUBSTRATUM,
         accessorKey: 'substratumName',
         filterVariant: 'text',
+        sortUndefined: 'last',
       },
       {
         id: 'plantingCompleted',
@@ -234,6 +267,7 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
         },
         filterVariant: 'select',
         filterSelectOptions: [strings.YES, strings.NO],
+        sortUndefined: 'last',
         Header: PlantingCompleteHeader,
       },
       {
@@ -241,8 +275,9 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
         header: strings.PROJECT,
         accessorKey: 'projectName',
         enableEditing: false,
-        filterVariant: 'select',
+        filterVariant: 'multi-select',
         filterSelectOptions: uniqueProjectNames,
+        sortUndefined: 'last',
       },
       {
         id: 'targetPlantingDensity',
@@ -250,6 +285,7 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
         accessorKey: 'targetPlantingDensity',
         enableEditing: false,
         filterVariant: 'range',
+        sortUndefined: 'last',
         Cell: TargetPlantingDensityCell,
         Header: TargetPlantingDensityHeader,
       },
@@ -259,6 +295,7 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
         accessorKey: 'totalSeedlingsSent',
         enableEditing: false,
         filterVariant: 'range',
+        sortUndefined: 'last',
         Cell: TotalSeedlingsSentCell,
       },
     ],
@@ -267,6 +304,7 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
       TotalSeedlingsSentCell,
       PlantingCompleteHeader,
       TargetPlantingDensityHeader,
+      uniqueSiteNames,
       uniqueProjectNames,
     ]
   );
@@ -288,10 +326,6 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
     () => selectedRows.every((row: any) => row.plantingCompleted === true),
     [selectedRows]
   );
-
-  const onExport = useCallback(() => {
-    void exportNurseryPlantingProgress({ plantingProgress: rows || [] });
-  }, [rows]);
 
   if (!rows || hasStrata === undefined) {
     return <CircularProgress sx={{ margin: 'auto' }} />;
@@ -321,8 +355,24 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
         tableOptions={{
           state: {
             rowSelection,
+            showColumnFilters,
+            showGlobalFilter,
+            density,
           },
           onRowSelectionChange: setRowSelection,
+          onShowColumnFiltersChange: setShowColumnFilters,
+          onShowGlobalFilterChange: setShowGlobalFilter,
+          onDensityChange: (updater) => {
+            setDensity((prev) => {
+              const next = typeof updater === 'function' ? updater(prev) : updater;
+              try {
+                localStorage.setItem('plantings-progress-table-density', next);
+              } catch {
+                // ignore
+              }
+              return next;
+            });
+          },
           enableRowSelection: true,
           enableColumnPinning: true,
           enableColumnActions: true,
@@ -355,7 +405,12 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
           renderToolbarInternalActions: ({ table }) => (
             <Box display='flex' gap={0.5}>
               <Tooltip title={strings.EXPORT}>
-                <IconButton onClick={onExport}>
+                <IconButton
+                  onClick={() => {
+                    const filteredRows = table.getFilteredRowModel().rows.map((row) => row.original);
+                    void exportNurseryPlantingProgress({ plantingProgress: filteredRows });
+                  }}
+                >
                   <Icon name='iconExport' size='medium' />
                 </IconButton>
               </Tooltip>

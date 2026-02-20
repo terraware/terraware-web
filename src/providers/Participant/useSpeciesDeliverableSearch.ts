@@ -18,7 +18,7 @@ interface DeliverableSearch {
 
 /**
  * This hook only works within the ParticipantProvider
- * Encapsulated deliverable search based on current participant project, and modules available to them, for retrieving the
+ * Encapsulated deliverable search based on current accelerator project, and modules available to them, for retrieving the
  * active or most recent species deliverable
  * @param param0
  * @returns

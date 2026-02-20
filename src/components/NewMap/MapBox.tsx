@@ -34,6 +34,7 @@ import {
 import { useMaintainLayerOrder } from './useMaintainLayerOrder';
 
 export type MapBoxProps = {
+  additionalComponent?: React.ReactNode;
   clusterMaxZoom?: number;
   clusterRadius?: number;
   containerId?: string;
@@ -63,6 +64,7 @@ export type MapBoxProps = {
   nameTags?: MapNameTag[];
   onClickCanvas?: (event: MapMouseEvent) => void;
   onMapMove?: (view: ViewStateChangeEvent) => void;
+  onMouseMove?: (event: MapMouseEvent) => void;
   onTokenExpired?: () => void;
   setMapViewStyle: (style: MapViewStyle) => void;
   token: string;
@@ -70,6 +72,7 @@ export type MapBoxProps = {
 
 const MapBox = (props: MapBoxProps): JSX.Element => {
   const {
+    additionalComponent,
     clusterMaxZoom,
     clusterRadius,
     containerId,
@@ -95,6 +98,7 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
     nameTags,
     onClickCanvas,
     onMapMove,
+    onMouseMove,
     onTokenExpired,
     setMapViewStyle,
     token,
@@ -104,6 +108,7 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
   const [cursor, setCursor] = useState<MapCursor>('auto');
   const [hoverFeatureId, setHoverFeatureId] = useState<string>();
   const [zoom, setZoom] = useState<number>();
+  const [focused, setFocused] = useState<boolean>(false);
 
   const loadImages = useCallback(
     (map: MapRef) => {
@@ -197,9 +202,7 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
 
   // Find all layers with at least some clickable elements
   const interactiveLayerIds = useMemo(() => {
-    return featureGroups
-      ?.filter((group) => group.features.some((feature) => feature.onClick !== undefined))
-      ?.map((group) => group.layerId);
+    return featureGroups?.map((group) => group.layerId);
   }, [featureGroups]);
 
   const geojson = useMemo((): FeatureCollection | undefined => {
@@ -252,6 +255,7 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
 
     const _fillLayers = featureGroups?.flatMap((group) => {
       const opacity = Math.min(0.4, group.style.opacity ?? 0.2);
+      const nonClickableOpacity = opacity * 0.5;
       const selectedOpacity = opacity * 2;
       const hoverOpacity = opacity * 1.5;
       const hoverAndSelectedOpacity = opacity * 2.5;
@@ -259,6 +263,7 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
       const groupFilter: FilterSpecification = ['==', ['get', 'layerId'], group.layerId];
 
       const clickableFilter: FilterSpecification = ['==', ['get', 'clickable'], true];
+      const notClickableFilter: FilterSpecification = ['==', ['get', 'clickable'], false];
 
       const selectedFilter: FilterSpecification = ['==', ['get', 'selected'], true];
       const notSelectedFilter: FilterSpecification = ['==', ['get', 'selected'], false];
@@ -274,7 +279,7 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
           source={'mapData'}
           type={'fill'}
           paint={{ 'fill-opacity': 0 }}
-          filter={['all', groupFilter, clickableFilter]}
+          filter={['all', groupFilter]}
         />,
         /* Fill for base layer */
         <Layer
@@ -293,7 +298,25 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
                   'fill-opacity': opacity,
                 }
           }
-          filter={['all', groupFilter, notSelectedFilter, notHoverFilter]}
+          filter={['all', groupFilter, clickableFilter, notSelectedFilter, notHoverFilter]}
+        />,
+        <Layer
+          key={`${group.layerId}-unselected-non-clickable`}
+          id={`${group.layerId}-unselected-non-clickable`}
+          source={'mapData'}
+          type={'fill'}
+          paint={
+            group.style.fillPatternUrl
+              ? {
+                  'fill-pattern': group.style.fillPatternUrl,
+                  'fill-opacity': nonClickableOpacity,
+                }
+              : {
+                  'fill-color': group.style.fillColor,
+                  'fill-opacity': nonClickableOpacity,
+                }
+          }
+          filter={['all', groupFilter, notClickableFilter, notSelectedFilter, notHoverFilter]}
         />,
         /* Fill for seleced layer */
         <Layer
@@ -552,29 +575,37 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
     }
   }, [nameTags, theme]);
 
-  const onMouseMove = useCallback((event: MapMouseEvent) => {
-    if (event.features && event.features.length) {
-      const properties = event.features
-        .map((feature) => feature.properties)
-        .filter(
-          (featureProperties): featureProperties is MapProperties =>
-            featureProperties &&
-            featureProperties.id !== undefined &&
-            featureProperties.priority !== undefined &&
-            featureProperties.clickable
-        );
+  const onMouseMoveCallback = useCallback(
+    (event: MapMouseEvent) => {
+      onMouseMove?.(event);
+      if (event.features && event.features.length) {
+        const properties = event.features
+          .map((feature) => feature.properties)
+          .filter(
+            (featureProperties): featureProperties is MapProperties =>
+              featureProperties &&
+              featureProperties.id !== undefined &&
+              featureProperties.priority !== undefined &&
+              featureProperties.clickable
+          );
 
-      if (properties.length) {
-        const topPriorityFeature = properties.reduce((top, current) => {
-          return current.priority > top.priority ? current : top;
-        }, properties[0]);
-        setHoverFeatureId(topPriorityFeature.id);
+        if (properties.length) {
+          const topPriorityFeature = properties.reduce((top, current) => {
+            return current.priority > top.priority ? current : top;
+          }, properties[0]);
 
-        return;
+          setCursor(cursorInteract ?? 'pointer');
+          setHoverFeatureId(topPriorityFeature.id);
+
+          return;
+        } else {
+          setCursor('auto');
+        }
       }
-    }
-    setHoverFeatureId(undefined);
-  }, []);
+      setHoverFeatureId(undefined);
+    },
+    [cursorInteract, onMouseMove]
+  );
 
   useEffect(() => {
     if (!mapRef.current) {
@@ -596,8 +627,42 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
     mapRef.current.resize();
   }, [drawerOpen, mapRef]);
 
+  // Handle clicks outside the map to unfocus
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (mapRef.current && !mapRef.current.getContainer().contains(event.target as Node)) {
+        setFocused(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [mapRef]);
+
   // Hovering interactive layers
-  const onMouseEnter = useCallback(() => setCursor(cursorInteract ?? 'pointer'), [cursorInteract]);
+  const onMouseEnter = useCallback(
+    (event: MapMouseEvent) => {
+      if (event.features?.length) {
+        const clickable = event.features
+          .map((feature) => feature.properties)
+          .some(
+            (featureProperties): featureProperties is MapProperties =>
+              featureProperties &&
+              featureProperties.id !== undefined &&
+              featureProperties.priority !== undefined &&
+              featureProperties.clickable
+          );
+        if (clickable) {
+          setCursor(cursorInteract ?? 'pointer');
+          return;
+        }
+      }
+      setCursor('auto');
+    },
+    [cursorInteract]
+  );
   const onMouseLeave = useCallback(() => setCursor('auto'), []);
 
   // Entering and exiting canvases
@@ -607,6 +672,9 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
   // On layer click
   const onMapClick = useCallback(
     (event: MapMouseEvent) => {
+      // Focus the map on any click
+      setFocused(true);
+
       if (featureGroups && event.features?.length) {
         const properties = event.features
           .map((feature) => feature.properties)
@@ -677,7 +745,7 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
       mapboxAccessToken={token}
       mapStyle={stylesUrl[mapViewStyle]}
       ref={mapRefCallback}
-      scrollZoom={!disableZoom}
+      scrollZoom={!disableZoom && focused}
       style={{ width: 'auto', height: isDesktop ? 'auto' : '80vh', flexGrow: isDesktop ? 1 : undefined }}
       onClick={onMapClick}
       onError={onMapError}
@@ -686,7 +754,7 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
       onMouseLeave={onMouseLeave}
       onMouseOver={onMouseOver}
       onMouseOut={onMouseOut}
-      onMouseMove={onMouseMove}
+      onMouseMove={onMouseMoveCallback}
       onZoom={onMove}
     >
       {isDesktop && !hideFullScreenControl && <FullscreenControl position='top-left' containerId={containerId} />}
@@ -755,6 +823,7 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
       )}
       {markersComponents}
       {nameTagMarkers}
+      {additionalComponent}
     </Map>
   );
 };

@@ -7,16 +7,16 @@ import TextField from '@terraware/web-components/components/Textfield/Textfield'
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
 import strings from 'src/strings';
-import { ParticipantProjectSpecies } from 'src/types/ParticipantProjectSpecies';
+import { AcceleratorProjectSpecies } from 'src/types/AcceleratorProjectSpecies';
 
 interface RejectedBoxProps {
-  participantProjectSpecies: ParticipantProjectSpecies;
+  acceleratorProjectSpecies: AcceleratorProjectSpecies;
   onSubmit: (feedback: string) => void;
 }
 
-const RejectedBox = ({ participantProjectSpecies, onSubmit }: RejectedBoxProps) => {
+const RejectedBox = ({ acceleratorProjectSpecies, onSubmit }: RejectedBoxProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
-  const [feedback, setFeedback] = useState(participantProjectSpecies.feedback || '');
+  const [feedback, setFeedback] = useState(acceleratorProjectSpecies.feedback || '');
 
   const toggleDialog = useCallback(() => {
     setIsDialogOpen((prev) => !prev);
@@ -35,7 +35,7 @@ const RejectedBox = ({ participantProjectSpecies, onSubmit }: RejectedBoxProps) 
           priority='critical'
           body={
             <Box>
-              <Typography>{participantProjectSpecies.feedback}</Typography>
+              <Typography>{acceleratorProjectSpecies.feedback}</Typography>
               <Box textAlign='right'>
                 <Button
                   icon='iconEdit'

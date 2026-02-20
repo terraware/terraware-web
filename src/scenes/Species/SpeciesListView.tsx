@@ -110,7 +110,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
       ...(orgHasParticipants
         ? ([
             {
-              key: 'participantProjects',
+              key: 'acceleratorProjects',
               name: strings.PROJECTS,
               type: 'string',
             },
@@ -378,7 +378,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
           searchResults?.forEach((result) => {
             speciesResults.push({
               id: result.id as number,
-              participantProjects: (result.participantProjectSpecies as any[])?.map(
+              acceleratorProjects: (result.acceleratorProjectSpecies as any[])?.map(
                 (ppsData) => ppsData.project.name
               ) as string[],
               problems: species.find((sp) => sp.id.toString() === (result.id as string))?.problems,

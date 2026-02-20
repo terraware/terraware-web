@@ -15,7 +15,6 @@ import useStateLocation from 'src/utils/useStateLocation';
 import ActivityLogRouter from '../ActivityLogRouter';
 import AcceleratorProjects from './AcceleratorProjects';
 import Applications from './Applications';
-import Cohorts from './Cohorts';
 import Deliverables from './Deliverables';
 import DocumentsRouter from './Documents';
 import FundingEntities from './FundingEntities';
@@ -87,7 +86,6 @@ const AcceleratorRouter = ({ showNavBar, setShowNavBar }: AcceleratorRouterProps
                 <Route path={`${APP_PATHS.ACCELERATOR_PROJECTS}/*`} element={<MatrixView />} />
                 <Route path={`${APP_PATHS.ACCELERATOR_ACTIVITY_LOG}/*`} element={<ActivityLogRouter />} />
                 <Route path={`${APP_PATHS.ACCELERATOR_APPLICATIONS}/*`} element={<Applications />} />
-                <Route path={`${APP_PATHS.ACCELERATOR_COHORTS}/*`} element={<Cohorts />} />
                 <Route path={`${APP_PATHS.ACCELERATOR_DELIVERABLES}/*`} element={<Deliverables />} />
                 <Route path={`${APP_PATHS.ACCELERATOR_MODULES}/*`} element={<ModuleContent />} />
                 <Route path={`${APP_PATHS.ACCELERATOR_MODULE_CONTENT}/*`} element={<ModuleView />} />

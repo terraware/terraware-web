@@ -6,12 +6,12 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import Button from 'src/components/common/button/Button';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import strings from 'src/strings';
-import { CohortModule } from 'src/types/Module';
+import { ProjectModule } from 'src/types/Module';
 import { getDateRangeString } from 'src/utils/dateFormatter';
 
 interface ModuleEntryProps {
   index: number;
-  module: CohortModule;
+  module: ProjectModule;
   projectId: number;
 }
 

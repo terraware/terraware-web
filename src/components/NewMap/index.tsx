@@ -12,6 +12,7 @@ import useStickyMapViewStyle from './useStickyMapViewStyle';
 import { getBoundingBoxFromMultiPolygons, getBoundsZoomLevel } from './utils';
 
 export type MapComponentProps = {
+  additionalComponent?: React.ReactNode;
   clusterMaxZoom?: number;
   clusterRadius?: number;
   containerStyle?: CSSProperties;
@@ -44,6 +45,7 @@ export type MapComponentProps = {
   nameTags?: MapNameTag[];
   onClickCanvas?: (event: MapMouseEvent) => void;
   onMapMove?: (view: ViewStateChangeEvent) => void;
+  onMouseMove?: (event: MapMouseEvent) => void;
   onTokenExpired?: () => void;
   setDrawerOpen?: (open: boolean) => void;
   token: string;
@@ -51,6 +53,7 @@ export type MapComponentProps = {
 
 const MapComponent = (props: MapComponentProps) => {
   const {
+    additionalComponent,
     clusterMaxZoom,
     clusterRadius,
     containerStyle,
@@ -83,6 +86,7 @@ const MapComponent = (props: MapComponentProps) => {
     nameTags,
     onClickCanvas,
     onMapMove,
+    onMouseMove,
     onTokenExpired,
     setDrawerOpen,
     token,
@@ -134,6 +138,7 @@ const MapComponent = (props: MapComponentProps) => {
   const map = useMemo(() => {
     return (
       <MapBox
+        additionalComponent={additionalComponent}
         clusterMaxZoom={clusterMaxZoom}
         clusterRadius={clusterRadius}
         containerId={mapContainerId ?? 'map-container'}
@@ -159,12 +164,14 @@ const MapComponent = (props: MapComponentProps) => {
         nameTags={nameTags}
         onClickCanvas={onClickCanvas}
         onMapMove={onMapMove}
+        onMouseMove={onMouseMove}
         onTokenExpired={onTokenExpired}
         setMapViewStyle={updateMapViewStyle}
         token={token}
       />
     );
   }, [
+    additionalComponent,
     clusterMaxZoom,
     clusterRadius,
     mapContainerId,
@@ -190,6 +197,7 @@ const MapComponent = (props: MapComponentProps) => {
     nameTags,
     onClickCanvas,
     onMapMove,
+    onMouseMove,
     onTokenExpired,
     updateMapViewStyle,
     token,

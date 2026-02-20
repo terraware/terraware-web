@@ -1,34 +1,25 @@
-import React, { type JSX, useEffect, useState } from 'react';
+import React, { type JSX, useEffect, useMemo } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
 import Table from 'src/components/common/table';
-import { requestListModuleCohorts } from 'src/redux/features/modules/modulesAsyncThunks';
-import { selectModuleCohorts } from 'src/redux/features/modules/modulesSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useLazyGetModuleProjectsQuery } from 'src/queries/search/projectModules';
 import strings from 'src/strings';
 import { Module } from 'src/types/Module';
 
-import CohortsAndProjectsRenderer from './CohortsAndProjectsRenderer';
+import ModuleProjectRenderer from './ModuleProjectRenderer';
 
 interface ModuleDetailsProps {
   moduleId: string;
   module?: Module;
 }
 
-type CohortsTableRow = {
-  cohortId: number;
-  cohortName: string;
-  startDate: string;
-  endDate: string;
-};
-
 const columns = (): TableColumnType[] => [
   {
-    key: 'cohortName',
-    name: strings.COHORT,
+    key: 'projectName',
+    name: strings.PROJECT,
     type: 'string',
   },
   {
@@ -45,32 +36,20 @@ const columns = (): TableColumnType[] => [
 
 export default function ModuleDetails({ moduleId, module }: ModuleDetailsProps): JSX.Element {
   const theme = useTheme();
-  const dispatch = useAppDispatch();
-  const result = useAppSelector(selectModuleCohorts(moduleId));
-  const [tableRows, setTableRows] = useState<CohortsTableRow[]>();
+  const [requestListModuleProjects, moduleProjectsListResponse] = useLazyGetModuleProjectsQuery();
 
   useEffect(() => {
     if (module?.id) {
-      void dispatch(requestListModuleCohorts(moduleId));
+      void requestListModuleProjects(moduleId, true);
     }
-  }, [module?.id, dispatch, moduleId]);
+  }, [module?.id, moduleId, requestListModuleProjects]);
 
-  useEffect(() => {
-    if (result?.status === 'success') {
-      const rows: CohortsTableRow[] = [];
-      const cohortModules = result.data?.cohortModules;
-      cohortModules?.forEach((cm) => {
-        rows.push({
-          cohortId: cm.cohort.id,
-          cohortName: cm.cohort.name,
-          startDate: cm.startDate,
-          endDate: cm.endDate,
-        });
-      });
-
-      setTableRows(rows);
+  const tableRows = useMemo(() => {
+    if (moduleProjectsListResponse.isSuccess) {
+      return moduleProjectsListResponse.data;
     }
-  }, [result]);
+    return [];
+  }, [moduleProjectsListResponse]);
 
   return (
     <Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
@@ -97,18 +76,18 @@ export default function ModuleDetails({ moduleId, module }: ModuleDetailsProps):
         </Grid>
         <Grid item xs={12}>
           <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt} paddingBottom={1}>
-            {strings.COHORTS}
+            {strings.PROJECTS}
           </Typography>
           <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxt}>
-            {strings.MODULE_COHORTS_DESCRIPTION}
+            {strings.MODULE_PROJECTS_DESCRIPTION}
           </Typography>
           <Box paddingTop={4}>
             <Table
-              rows={tableRows || []}
+              rows={tableRows}
               columns={columns}
-              id={'module-cohorts-and-projects'}
-              orderBy={'cohortName'}
-              Renderer={CohortsAndProjectsRenderer}
+              id={'module-projects'}
+              orderBy={'projectName'}
+              Renderer={ModuleProjectRenderer}
             />
           </Box>
         </Grid>

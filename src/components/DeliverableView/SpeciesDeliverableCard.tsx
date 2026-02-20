@@ -6,8 +6,8 @@ import Metadata from 'src/components/DeliverableView/Metadata';
 import { EditProps } from 'src/components/DeliverableView/types';
 import SpeciesDeliverableTable from 'src/components/SpeciesDeliverableTable';
 import Card from 'src/components/common/Card';
-import { requestListParticipantProjectSpecies } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
-import { selectParticipantProjectSpeciesListRequest } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';
+import { requestListAcceleratorProjectSpecies } from 'src/redux/features/acceleratorProjectSpecies/acceleratorProjectSpeciesAsyncThunks';
+import { selectAcceleratorProjectSpeciesListRequest } from 'src/redux/features/acceleratorProjectSpecies/acceleratorProjectSpeciesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 
 import SpeciesDeliverableStatusMessage from './SpeciesDeliverableStatusMessage';
@@ -16,7 +16,7 @@ const SpeciesDeliverableCard = (props: EditProps): JSX.Element => {
   const { deliverable, setSubmitButtonDisabled } = props;
   const dispatch = useAppDispatch();
 
-  const ppsSearchResults = useAppSelector(selectParticipantProjectSpeciesListRequest(deliverable.projectId));
+  const ppsSearchResults = useAppSelector(selectAcceleratorProjectSpeciesListRequest(deliverable.projectId));
 
   useEffect(() => {
     const disabled =
@@ -26,7 +26,7 @@ const SpeciesDeliverableCard = (props: EditProps): JSX.Element => {
   }, [ppsSearchResults, setSubmitButtonDisabled]);
 
   useEffect(() => {
-    void dispatch(requestListParticipantProjectSpecies(deliverable.projectId));
+    void dispatch(requestListAcceleratorProjectSpecies(deliverable.projectId));
   }, [deliverable.projectId, dispatch]);
 
   return (

@@ -728,53 +728,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/accelerator/participants": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * OBSOLETE
-         * @deprecated
-         * @description This used to create a new participant; now it just sets the cohort on a project.
-         */
-        post: operations["createParticipant"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/accelerator/participants/{participantId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * OBSOLETE
-         * @deprecated
-         * @description Gets a project's cohort.
-         */
-        get: operations["getParticipant"];
-        /**
-         * OBSOLETE
-         * @deprecated
-         * @description Updates a project's cohort.
-         */
-        put: operations["updateParticipant"];
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/v1/accelerator/projects": {
         parameters: {
             query?: never;
@@ -996,7 +949,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/accelerator/projects/{projectId}/reports/targets": {
+    "/api/v1/accelerator/projects/{projectId}/reports/projectMetricTarget": {
         parameters: {
             query?: never;
             header?: never;
@@ -1005,8 +958,110 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Update project metric targets. */
-        post: operations["updateProjectMetricTargets"];
+        /** Update project metric target for a year. */
+        post: operations["updateProjectMetricTarget"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/accelerator/projects/{projectId}/reports/projectMetricTargets": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get all project metric targets for a project. */
+        get: operations["getProjectMetricTargets"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/accelerator/projects/{projectId}/reports/standardMetricTarget": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Update standard metric target for a year. */
+        post: operations["updateStandardMetricTarget"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/accelerator/projects/{projectId}/reports/standardMetricTargets": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get all standard metric targets for a project. */
+        get: operations["getStandardMetricTargets"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/accelerator/projects/{projectId}/reports/systemMetricTarget": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Update system metric target for a year. */
+        post: operations["updateSystemMetricTarget"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/accelerator/projects/{projectId}/reports/systemMetricTargets": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get all system metric targets for a project. */
+        get: operations["getSystemMetricTargets"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/accelerator/projects/{projectId}/reports/years": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get project reporting years */
+        get: operations["getAcceleratorReportYears"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -3804,6 +3859,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/tracking/observations/{observationId}/birdnet": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Gets information about BirdNet results from an observation. */
+        get: operations["getObservationBirdnetResults"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/tracking/observations/{observationId}/mergeOtherSpecies": {
         parameters: {
             query?: never;
@@ -3924,7 +3996,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Adds a photo of a monitoring plot after an observation is complete. */
+        /** Adds a photo/video of a monitoring plot after an observation is complete. */
         post: operations["uploadOtherPlotMedia"];
         delete?: never;
         options?: never;
@@ -6280,16 +6352,6 @@ export interface components {
             /** @enum {string} */
             speciesNativeCategory?: "Native" | "Non-native";
         };
-        CreateParticipantRequestPayload: {
-            /**
-             * Format: int64
-             * @description Assign the participant to this cohort. If null, the participant will not be assigned to any cohort initially.
-             */
-            cohortId?: number;
-            name: string;
-            /** @description Assign these projects to the new participant. If projects are already assigned to other participants, they will be reassigned to the new one. */
-            projectIds?: number[];
-        };
         CreatePlantingSiteRequestPayload: {
             boundary?: components["schemas"]["MultiPolygon"] | components["schemas"]["Polygon"];
             description?: string;
@@ -7223,6 +7285,10 @@ export interface components {
             report: components["schemas"]["AcceleratorReportPayload"];
             status: components["schemas"]["SuccessOrError"];
         };
+        GetAcceleratorReportYearsResponsePayload: {
+            status: components["schemas"]["SuccessOrError"];
+            years?: components["schemas"]["ReportYearsPayload"];
+        };
         GetAccessionHistoryResponsePayload: {
             /** @description History of changes in descending time order (newest first.) */
             history: components["schemas"]["AccessionHistoryEntryPayload"][];
@@ -7427,10 +7493,6 @@ export interface components {
             participantProjectsForSpecies: components["schemas"]["ParticipantProjectForSpeciesPayload"][];
             status: components["schemas"]["SuccessOrError"];
         };
-        GetParticipantResponsePayload: {
-            participant: components["schemas"]["ParticipantPayload"];
-            status: components["schemas"]["SuccessOrError"];
-        };
         GetPlantingSiteHistoryResponsePayload: {
             site: components["schemas"]["PlantingSiteHistoryPayload"];
             status: components["schemas"]["SuccessOrError"];
@@ -7473,6 +7535,10 @@ export interface components {
         GetProjectAcceleratorDetailsResponsePayload: {
             details: components["schemas"]["ProjectAcceleratorDetailsPayload"];
             status: components["schemas"]["SuccessOrError"];
+        };
+        GetProjectMetricTargetsResponsePayload: {
+            status: components["schemas"]["SuccessOrError"];
+            targets: components["schemas"]["ReportProjectMetricTargetPayload"][];
         };
         GetProjectModuleResponsePayload: {
             module: components["schemas"]["ProjectModulePayload"];
@@ -7615,9 +7681,17 @@ export interface components {
             status: components["schemas"]["SuccessOrError"];
             summary: components["schemas"]["SpeciesSummaryPayload"];
         };
+        GetStandardMetricTargetsResponsePayload: {
+            status: components["schemas"]["SuccessOrError"];
+            targets: components["schemas"]["ReportStandardMetricTargetPayload"][];
+        };
         GetSubLocationResponsePayload: {
             status: components["schemas"]["SuccessOrError"];
             subLocation: components["schemas"]["SubLocationPayload"];
+        };
+        GetSystemMetricTargetsResponsePayload: {
+            status: components["schemas"]["SuccessOrError"];
+            targets: components["schemas"]["ReportSystemMetricTargetPayload"][];
         };
         GetUploadStatusDetailsPayload: {
             errors?: components["schemas"]["UploadProblemPayload"][];
@@ -7973,6 +8047,10 @@ export interface components {
         };
         ListModulesResponsePayload: {
             modules: components["schemas"]["ModulePayload"][];
+            status: components["schemas"]["SuccessOrError"];
+        };
+        ListObservationBirdnetResultsResponsePayload: {
+            results: components["schemas"]["ObservationBirdnetResultPayload"][];
             status: components["schemas"]["SuccessOrError"];
         };
         ListObservationResultsResponsePayload: {
@@ -8731,6 +8809,15 @@ export interface components {
             /** Format: int64 */
             id: number;
         };
+        ObservationBirdnetResultPayload: {
+            /** Format: int64 */
+            fileId: number;
+            /** Format: int64 */
+            monitoringPlotId: number;
+            resultsStorageUrl?: string;
+            /** @enum {string} */
+            status: "Preparing" | "Ready" | "Errored";
+        };
         ObservationMonitoringPlotCoordinatesPayload: {
             gpsCoordinates: components["schemas"]["Point"];
             /** @enum {string} */
@@ -9298,17 +9385,6 @@ export interface components {
             /** @enum {string} */
             role: "Contributor" | "Manager" | "Admin" | "Owner" | "Terraformation Contact";
         };
-        ParticipantPayload: {
-            /** Format: int64 */
-            cohortId?: number;
-            cohortName?: string;
-            /** @enum {string} */
-            cohortPhase?: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor" | "Pre-Screen" | "Application";
-            /** Format: int64 */
-            id: number;
-            name: string;
-            projects: components["schemas"]["ParticipantProjectPayload"][];
-        };
         ParticipantProjectForSpeciesPayload: {
             /**
              * Format: int64
@@ -9326,15 +9402,6 @@ export interface components {
             projectName: string;
             /** Format: int64 */
             speciesId: number;
-        };
-        ParticipantProjectPayload: {
-            /** Format: int64 */
-            organizationId: number;
-            organizationName: string;
-            projectDealName?: string;
-            /** Format: int64 */
-            projectId: number;
-            projectName: string;
         };
         ParticipantProjectSpeciesPayload: {
             feedback?: string;
@@ -10220,12 +10287,6 @@ export interface components {
             challenge: string;
             mitigationPlan: string;
         };
-        ReportMetricTargetPayload: {
-            /** Format: int64 */
-            reportId: number;
-            /** Format: int32 */
-            target?: number;
-        };
         ReportPhotoPayload: {
             caption?: string;
             /** Format: int64 */
@@ -10238,8 +10299,6 @@ export interface components {
             projectsComments?: string;
             /** @enum {string} */
             status?: "Achieved" | "On-Track" | "Unlikely";
-            /** Format: int32 */
-            target?: number;
             /** Format: int32 */
             value?: number;
         };
@@ -10264,6 +10323,12 @@ export interface components {
             /** Format: int32 */
             value?: number;
         };
+        ReportProjectMetricTargetPayload: {
+            /** Format: int64 */
+            metricId: number;
+            target?: number;
+            year: number;
+        };
         ReportReviewPayload: {
             achievements: string[];
             additionalComments?: string;
@@ -10285,8 +10350,6 @@ export interface components {
             projectsComments?: string;
             /** @enum {string} */
             status?: "Achieved" | "On-Track" | "Unlikely";
-            /** Format: int32 */
-            target?: number;
             /** Format: int32 */
             value?: number;
         };
@@ -10310,6 +10373,12 @@ export interface components {
             /** Format: int32 */
             value?: number;
         };
+        ReportStandardMetricTargetPayload: {
+            /** Format: int64 */
+            metricId: number;
+            target?: number;
+            year: number;
+        };
         ReportSystemMetricEntriesPayload: {
             /** @enum {string} */
             metric: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Hectares Planted" | "Survival Rate";
@@ -10319,8 +10388,6 @@ export interface components {
             projectsComments?: string;
             /** @enum {string} */
             status?: "Achieved" | "On-Track" | "Unlikely";
-            /** Format: int32 */
-            target?: number;
         };
         ReportSystemMetricPayload: {
             /** @enum {string} */
@@ -10339,11 +10406,23 @@ export interface components {
             /** Format: date-time */
             systemTime?: string;
             /** Format: int32 */
-            systemValue: number;
+            systemValue?: number;
             /** Format: int32 */
             target?: number;
             /** @enum {string} */
             type: "Activity" | "Output" | "Outcome" | "Impact";
+        };
+        ReportSystemMetricTargetPayload: {
+            /** @enum {string} */
+            metric: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Hectares Planted" | "Survival Rate";
+            target?: number;
+            year: number;
+        };
+        ReportYearsPayload: {
+            /** Format: int32 */
+            endYear: number;
+            /** Format: int32 */
+            startYear: number;
         };
         ReportedSpeciesPayload: {
             /** Format: int64 */
@@ -11355,13 +11434,6 @@ export interface components {
         UpdateGlobalRolesRequestPayload: {
             globalRoles: ("Super-Admin" | "Accelerator Admin" | "TF Expert" | "Read Only")[];
         };
-        UpdateMetricTargetsPayload: {
-            targets: components["schemas"]["ReportMetricTargetPayload"][];
-            type: string;
-        };
-        UpdateMetricTargetsRequestPayload: {
-            metric: components["schemas"]["UpdateProjectMetricTargetsPayload"] | components["schemas"]["UpdateStandardMetricTargetsPayload"] | components["schemas"]["UpdateSystemMetricTargetsPayload"];
-        };
         UpdateModuleEventProjectsRequestPayload: {
             addProjects?: number[];
             removeProjects?: number[];
@@ -11429,13 +11501,6 @@ export interface components {
             speciesNativeCategory?: "Native" | "Non-native";
             /** @enum {string} */
             submissionStatus: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed" | "Completed";
-        };
-        UpdateParticipantRequestPayload: {
-            /**
-             * Format: int64
-             * @description Assign the project to this cohort. If null, remove the project from its current cohort, if any.
-             */
-            cohortId?: number;
         };
         UpdatePlantingSiteRequestPayload: {
             /** @description Site boundary. Ignored if this is a detailed planting site. */
@@ -11530,15 +11595,13 @@ export interface components {
         UpdateProjectMetricRequestPayload: {
             metric: components["schemas"]["ExistingProjectMetricPayload"];
         };
-        UpdateProjectMetricTargetsPayload: Omit<WithRequired<components["schemas"]["UpdateMetricTargetsPayload"], "targets">, "type"> & {
+        UpdateProjectMetricTargetRequestPayload: {
             /** Format: int64 */
             metricId: number;
-        } & {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            type: "project";
+            /** Format: int32 */
+            target?: number;
+            /** Format: int32 */
+            year: number;
         };
         UpdateProjectModuleRequestPayload: {
             /** Format: date */
@@ -11578,15 +11641,13 @@ export interface components {
         UpdateStandardMetricRequestPayload: {
             metric: components["schemas"]["ExistingStandardMetricPayload"];
         };
-        UpdateStandardMetricTargetsPayload: Omit<WithRequired<components["schemas"]["UpdateMetricTargetsPayload"], "targets">, "type"> & {
+        UpdateStandardMetricTargetRequestPayload: {
             /** Format: int64 */
             metricId: number;
-        } & {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            type: "standard";
+            /** Format: int32 */
+            target?: number;
+            /** Format: int32 */
+            year: number;
         };
         UpdateSubLocationRequestPayload: {
             name: string;
@@ -11600,15 +11661,13 @@ export interface components {
         UpdateSubstratumRequestPayload: {
             plantingCompleted: boolean;
         };
-        UpdateSystemMetricTargetsPayload: Omit<WithRequired<components["schemas"]["UpdateMetricTargetsPayload"], "targets">, "type"> & {
+        UpdateSystemMetricTargetRequestPayload: {
             /** @enum {string} */
             metric: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Hectares Planted" | "Survival Rate";
-        } & {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            type: "system";
+            /** Format: int32 */
+            target?: number;
+            /** Format: int32 */
+            year: number;
         };
         UpdateUserCookieConsentRequestPayload: {
             /** @description If true, the user consents to the use of analytics cookies. If false, they decline. */
@@ -13560,96 +13619,6 @@ export interface operations {
             };
         };
     };
-    createParticipant: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateParticipantRequestPayload"];
-            };
-        };
-        responses: {
-            /** @description The requested operation succeeded. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["GetParticipantResponsePayload"];
-                };
-            };
-        };
-    };
-    getParticipant: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                participantId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description The requested operation succeeded. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["GetParticipantResponsePayload"];
-                };
-            };
-            /** @description The requested resource was not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-                };
-            };
-        };
-    };
-    updateParticipant: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                participantId: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateParticipantRequestPayload"];
-            };
-        };
-        responses: {
-            /** @description The requested operation succeeded. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-                };
-            };
-            /** @description The requested resource was not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-                };
-            };
-        };
-    };
     listProjectAcceleratorDetails: {
         parameters: {
             query?: never;
@@ -14307,12 +14276,9 @@ export interface operations {
             };
         };
     };
-    updateProjectMetricTargets: {
+    updateProjectMetricTarget: {
         parameters: {
-            query?: {
-                /** @description Update targets for submitted reports. Require TF Experts privileges. */
-                updateSubmitted?: boolean;
-        };
+            query?: never;
             header?: never;
             path: {
                 projectId: number;
@@ -14321,7 +14287,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["UpdateMetricTargetsRequestPayload"];
+                "application/json": components["schemas"]["UpdateProjectMetricTargetRequestPayload"];
             };
         };
         responses: {
@@ -14332,6 +14298,173 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+            /** @description The request was not valid. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    getProjectMetricTargets: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetProjectMetricTargetsResponsePayload"];
+                };
+            };
+        };
+    };
+    updateStandardMetricTarget: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateStandardMetricTargetRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+            /** @description The request was not valid. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    getStandardMetricTargets: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetStandardMetricTargetsResponsePayload"];
+                };
+            };
+        };
+    };
+    updateSystemMetricTarget: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateSystemMetricTargetRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+            /** @description The request was not valid. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    getSystemMetricTargets: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetSystemMetricTargetsResponsePayload"];
+                };
+            };
+        };
+    };
+    getAcceleratorReportYears: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetAcceleratorReportYearsResponsePayload"];
                 };
             };
         };
@@ -20423,6 +20556,42 @@ export interface operations {
             };
             /** @description Observation is already completed or abandoned. */
             409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    getObservationBirdnetResults: {
+        parameters: {
+            query?: {
+                /** @description If present, only list results for this monitoring plot. */
+                monitoringPlotId?: number;
+                /** @description If present, only return information about the result for this video file. */
+                fileId?: number;
+            };
+            header?: never;
+            path: {
+                observationId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListObservationBirdnetResultsResponsePayload"];
+                };
+            };
+            /** @description The observation does not exist. */
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };

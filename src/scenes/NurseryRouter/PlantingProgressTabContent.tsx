@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Typography, useTheme } from '@mui/material';
+import { useTheme } from '@mui/material';
 
 import ListMapView from 'src/components/ListMapView';
 import Card from 'src/components/common/Card';
@@ -141,16 +141,13 @@ export default function PlantingProgress(): JSX.Element {
 
   return (
     <Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-      <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt} marginBottom={theme.spacing(1)}>
-        {strings.PLANTING_PROGRESS}
-      </Typography>
       <ListMapView
         data={plantingSite?.strata}
         style={{
           display: 'flex',
           flexDirection: 'column',
           flexGrow: 1,
-          padding: isMobile ? theme.spacing(3) : theme.spacing(3, 0, 0),
+          padding: isMobile ? theme.spacing(3) : 0,
         }}
         initialView={initialView}
         onView={setActiveView}

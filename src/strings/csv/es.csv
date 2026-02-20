@@ -68,7 +68,6 @@ ADD_ADDRESS,Añadir dirección,8262aa95
 ADD_AN_ACCESSION,Añadir una accesión,e4b619b4
 ADD_ANNOTATION,Agregar anotación,91742a0f
 ADD_BATCH,Añadir lote,0d9f7a4a
-ADD_COHORT,Agregar cohorte,094d5510
 ADD_DOCUMENT,Añadir documento,af87beed
 ADD_FUNDING_ENTITY,Agregar entidad financiadora,47c0142d
 ADD_GPS_COORDINATES,Añadir coordenadas GPS,d87d2fa2
@@ -201,6 +200,7 @@ APPROX_SYMBOL,~,acb59e95
 AR,RA,25a8e55a
 ARE_YOU_SURE,¿Está seguro(a)?,d4536b91
 AREA_HA,Área (ha),8ab5d500
+AREA_NOT_OBSERVED,Área no observada,2c3a3737
 ARROW_KEYS,Flechas del teclado,5cefb475
 AS_OF_X,desde {0},6d77dc0f
 ASSIGN,Asignar,d1afb440
@@ -210,6 +210,8 @@ ASSIGN_OWNER,Asignar propietario,dc696cfa
 ASSIGN_OWNER_ELLIPSIS,Asignar propietario...,8053cd0e
 ASSIGNED,Asignada,29aa3dd8
 ASSIGNED_NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP,El Número de Plantas Vivas por Especie muestra la cantidad de plantas observadas por especie registradas como vivas. No se incluyen las plantas registradas como preexistentes o cuya especie es desconocida.,526a70bc
+ASSIGNED_OBSERVATION,Observación asignada,b242459e
+ASSIGNED_OBSERVATION_TOOLTIP,Seleccione una observación de parcela asignada para ver los datos de la observación en el mapa.,2a1963a4
 ATTACH_IMAGES_OR_VIDEOS,Adjunte imágenes o videos,c229aa87
 ATTACHMENT_DESCRIPTION,Adjunte hasta {0} archivos. Cada archivo tiene un tamaño máximo de {1} MB.,8ba18a63
 ATTACHMENT_LIMIT_REACHED,Se alcanzó el límite de archivos adjuntos,9f9323bc
@@ -337,10 +339,7 @@ CLIMATE_IMPACT,Impacto climático,876c48a4
 CLOSE,Cerrar,e6e3f022
 CLOSE_AND_EDIT,Cerrar y editar,1c3ea202
 COHORT,Cohorte,81afe896
-COHORT_ADDED,{0} cohorte agregada,c8518668
-COHORT_NAME,Nombre del cohorte,655d8af3
 COHORTS,Cohortes,b0aca6fa
-COHORTS_EMPTY_STATE,"Aún no tiene cohortes. Cuando agregue cohortes, los verá aquí.",b764b773
 COLLECTED_DATE,Fecha de recolección,3f1515d8
 COLLECTED_FROM,Recolectado de,ffc6ad60
 COLLECTING_SITE,Lugar de recolección,7491b42b
@@ -368,6 +367,7 @@ CONFIRM_UPDATE_ALL_COHORT_MODULES,Los cambios en los módulos de este proyecto a
 CONFIRM_UPDATE_ALL_COHORT_MODULES_TITLE,Confirmar actualización de todos los módulos de la cohorte,1b173015
 CONFIRM_UPDATE_ALL_COHORT_PHASE,Los cambios en la fase de este proyecto afectarán a todos los proyectos en la cohorte del proyecto. Esto es temporal mientras se eliminan las cohortes de Terraware. ¿Está seguro de que desea modificar la fase de todos los proyectos en la cohorte?,26d2dc4e
 CONFIRM_UPDATE_ALL_COHORT_PHASE_TITLE,Confirmar actualización de fase para todos los proyectos del cohorte,774d5ec0
+CONFIRM_WITHDRAWAL,Confirmar retiro,827db4bd
 CONFIRMED_RESTORABLE_LAND,Terreno recuperable TF (ha),efa25d21
 CONSERVATION_CATEGORY,Categoría de lista roja de la UICN,115916f3
 CONTACT_TYPE,Tipo de contacto,413b6c0e
@@ -585,8 +585,6 @@ EDIT_ACCOUNT,Editar cuenta,b77ad44d
 EDIT_ACTIVITY,Editar actividad,5b6476f3
 EDIT_ANNOTATION,Editar anotación,82bcb054
 EDIT_BATCH_DETAILS,Editar detalles del lote,d2f2112a
-EDIT_COHORT,Editar cohorte,4c88b04a
-EDIT_COHORT_TO_ADD_MODULES,Edite esta cohorte para añadir módulos.,376bbb6d
 EDIT_DOCUMENT_DETAILS,Editar detalles del documento,92155983
 EDIT_FEEDBACK,Editar retroalimentación,6b52e0e6
 EDIT_FUNDING_ENTITY,Editar entidad financiadora,f21be0e0
@@ -1086,10 +1084,10 @@ MISSING_SUBSET_WEIGHT_ERROR_NURSERY,"Debe introducir el peso de un subconjunto p
 MISSING_SUBSET_WEIGHT_ERROR_VIABILITY_TEST,"Para crear una prueba de viabilidad, debe introducir el peso de un subconjunto. Para ello, edite la cantidad de esta accesión.",5ffd97b6
 MITIGATION_PLAN,Plan de mitigación,c13d7b11
 MODULE,Módulo,019952ca
-MODULE_COHORTS_DESCRIPTION,A continuación se muestra una lista de grupos que han añadido este módulo.,b187422b
 MODULE_CONTENT,Contenido del módulo,0ec0af7d
 MODULE_DETAILS,Detalles del módulo,66959ca8
 MODULE_ID,ID del módulo,9c2e85f6
+MODULE_PROJECTS_DESCRIPTION,A continuación se muestra una lista de Proyectos que han agregado este módulo.,350c32a7
 MODULES,Módulos,474ac433
 MODULES_FOR_PROJECT,Módulos para {0},5d950bb2
 MODULES_IMPORT_COMPLETE,¡Completada la importación de datos de los módulos!,76a99df8
@@ -2431,6 +2429,7 @@ WILD_IN_SITU_DESCRIPTION,Las plantas que crecen naturalmente en áreas silvestre
 WITHDRAW,Retirar,3aeae714
 WITHDRAW_ALL,Extraer todas,cc50ccca
 WITHDRAW_BY,Extraídas por,54fccc5e
+WITHDRAW_DATE_PREDATES_RECEIVED_DATE_WARNING,"La fecha proporcionada para este retiro es anterior a la fecha en que se registró la cantidad actual de la accesión. Por lo tanto, la cantidad retirada no se restará de la cantidad de la accesión. Después de registrar el retiro, la cantidad puede ajustarse manualmente para reflejar la cantidad retirada. ¿Está seguro de que desea registrar este retiro sin cambios en la cantidad?",2283d4eb
 WITHDRAW_DATE_REQUIRED,Fecha de extracción *,86478a68
 WITHDRAW_FROM_BATCHES,Extraer de Lotes,184d96f3
 WITHDRAW_INSTRUCTIONS,Seleccionar propósito de extracción e ingresar las cantidades a extraer de cada lote.,1636e2b4
