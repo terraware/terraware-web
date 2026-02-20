@@ -549,7 +549,9 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
 
   const [density, setDensity] = useState<MRT_DensityState>(() => {
     try {
-      return (localStorage.getItem(`inventoryTable_${origin.toLowerCase()}_density`) as MRT_DensityState) || 'comfortable';
+      return (
+        (localStorage.getItem(`inventoryTable_${origin.toLowerCase()}_density`) as MRT_DensityState) || 'comfortable'
+      );
     } catch {
       return 'comfortable';
     }

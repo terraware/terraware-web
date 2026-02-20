@@ -332,10 +332,7 @@ export default function Search(props: SearchProps): JSX.Element | null {
   }
 
   if (!showSearch && pillListPortalEl) {
-    return createPortal(
-      <PillList data={filterPillData} onRemove={onRemovePillList} />,
-      pillListPortalEl
-    );
+    return createPortal(<PillList data={filterPillData} onRemove={onRemovePillList} />, pillListPortalEl);
   }
 
   return (
