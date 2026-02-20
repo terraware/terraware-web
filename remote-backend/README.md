@@ -11,7 +11,7 @@ Here's how to set that up using Docker Desktop on MacOS.
 1. From the directory of this readme, generate a self-signed certificate. The following command should work. You'll only
    need
    to do this once.
-   1. You might need to change `--` to `-` for all params in this request if it fails
+    1. You might need to change `--` to `-` for all params in this request if it fails
 
 ```shell
 openssl req \
@@ -30,7 +30,7 @@ openssl req \
 4. Start (or restart) the Node dev server, e.g., by running `yarn start:dev` in the repo
    root directory.
 5. In this directory, run `docker compose up -d`.
-   1. Or alternatively from the top level run `yarn run docker:remote-be:start`.
+    1. Or alternatively from the top level run `yarn run docker:remote-be:start`.
 6. Point your browser at `https://localhost/` (HTTPS and no port number).
 7. Accept the self-signed certificate. In Chrome, you'd click the "Advanced" button on the
    warning message, then click the "Proceed" link. You should only need to do this once;
@@ -62,7 +62,7 @@ yarn build
 docker build --no-cache -t terraware-web-local-1 .
 
 ## Run the docker image (pointing to a staging environment)
-docker run --env SERVER_URL=https://staging.yourdomain.com -p 80:80 -v "$(pwd)/dist:/usr/share/nginx/html" terraware-web-local-1
+docker run --env SERVER_URL=https://staging.yourdomain.com -p 80:80 -v "$(pwd)/build:/usr/share/nginx/html" terraware-web-local-1
 ```
 
 A container with a production build of the React app is now running. The next step is to turn on the remote backend
@@ -79,7 +79,8 @@ service in the `docker-compose.yml` in this directory:
 And then run `docker compose up -d`.
 
 Now, when you visit https://localhost, we will load the FE through the production-build container. This application will
-attempt to resolve any API requests to the `SERVER_URL` provided to the running `terraware-web-local-1`. The request flow
+attempt to resolve any API requests to the `SERVER_URL` provided to the running `terraware-web-local-1`. The request
+flow
 should look like this:
 
 ```

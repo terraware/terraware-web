@@ -39,7 +39,7 @@ services:
     image: nginx
     volumes:
       - ./nginx:/etc/nginx/templates
-      - ./dist:/usr/share/nginx/html
+      - ./build:/usr/share/nginx/html
     ports:
       - '3001:80'
     environment:
@@ -48,4 +48,4 @@ services:
       - 'terraware-server'
     # Only launch nginx listening on http://localhost:3001 if
     # `--profile prod` is passed to `docker compose`.
-    profiles: [prod]
+    profiles: [ prod ]
