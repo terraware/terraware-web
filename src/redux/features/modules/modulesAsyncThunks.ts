@@ -3,7 +3,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { SearchService } from 'src/services';
 import ModuleService from 'src/services/ModuleService';
 import strings from 'src/strings';
-import { ModuleCohortsSearchResult, ModuleProjectSearchResult, ModuleSearchResult } from 'src/types/Module';
+import { ModuleProjectSearchResult, ModuleProjectsSearchResult, ModuleSearchResult } from 'src/types/Module';
 import { SearchNodePayload, SearchRequestPayload, SearchSortOrder } from 'src/types/Search';
 
 export const requestGetModule = createAsyncThunk(
@@ -29,12 +29,12 @@ export const requestListModules = createAsyncThunk('modules/list', async (_, { r
   return rejectWithValue(strings.GENERIC_ERROR);
 });
 
-export const requestListModuleProjects = createAsyncThunk(
-  'modules/listProjects',
+export const requestListOrgProjectsAndModules = createAsyncThunk(
+  'modules/listProjectModules',
   async (organizationId: number, { rejectWithValue }) => {
     const searchParams: SearchRequestPayload = {
       prefix: 'projects',
-      fields: ['id', 'cohort.cohortModules.module_id'],
+      fields: ['id', 'projectModules.module_id'],
       search: {
         operation: 'field',
         field: 'organization.id',
@@ -48,9 +48,7 @@ export const requestListModuleProjects = createAsyncThunk(
 
     if (response) {
       const moduleProjectIds = response
-        .filter(
-          (moduleProject) => moduleProject.cohort?.cohortModules && moduleProject.cohort?.cohortModules.length > 0
-        )
+        .filter((moduleProject) => moduleProject.projectModules && moduleProject.projectModules.length > 0)
         .map(({ id }) => Number(id));
       return moduleProjectIds;
     }
@@ -59,19 +57,17 @@ export const requestListModuleProjects = createAsyncThunk(
   }
 );
 
-export const requestListModuleCohorts = createAsyncThunk(
-  'module/cohortsAndProjects',
+export const requestListModuleProjects = createAsyncThunk(
+  'module/projects',
   async (moduleId: string, { rejectWithValue }) => {
     const searchParams: SearchRequestPayload = {
       prefix: 'modules',
       fields: [
-        'cohortModules.title',
-        'cohortModules.startDate',
-        'cohortModules.endDate',
-        'cohortModules.cohort.id',
-        'cohortModules.cohort.name',
-        'cohortModules.cohort.projects.id',
-        'cohortModules.cohort.projects.name',
+        'projectModules.title',
+        'projectModules.startDate',
+        'projectModules.endDate',
+        'projectModules.project_id',
+        'projectModules.project_name',
       ],
       search: {
         operation: 'field',
@@ -82,7 +78,7 @@ export const requestListModuleCohorts = createAsyncThunk(
       count: 20,
     };
 
-    const response: ModuleCohortsSearchResult[] | null = await SearchService.search(searchParams);
+    const response: ModuleProjectsSearchResult[] | null = await SearchService.search(searchParams);
 
     if (response) {
       return response[0];

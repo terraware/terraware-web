@@ -2,8 +2,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 
 import useListProjectModules from 'src/hooks/useListProjectModules';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
-import { requestListModuleProjects } from 'src/redux/features/modules/modulesAsyncThunks';
-import { selectModuleProjects } from 'src/redux/features/modules/modulesSelectors';
+import { requestListOrgProjectsAndModules } from 'src/redux/features/modules/modulesAsyncThunks';
+import { selectModuleOrgProjects } from 'src/redux/features/modules/modulesSelectors';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { requestProjects } from 'src/redux/features/projects/projectsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -28,7 +28,7 @@ const ParticipantProvider = ({ children }: Props) => {
 
   const [listModuleProjectsRequestId, setListModuleProjectsRequestId] = useState<string>('');
 
-  const moduleProjectsListRequest = useAppSelector(selectModuleProjects(listModuleProjectsRequestId));
+  const moduleProjectsListRequest = useAppSelector(selectModuleOrgProjects(listModuleProjectsRequestId));
   const projects = useAppSelector(selectProjects);
 
   const { listProjectModules, projectModules, isLoading: listModulesIsLoading } = useListProjectModules();
@@ -69,7 +69,7 @@ const ParticipantProvider = ({ children }: Props) => {
 
   useEffect(() => {
     if (selectedOrganization) {
-      const request = dispatch(requestListModuleProjects(selectedOrganization.id));
+      const request = dispatch(requestListOrgProjectsAndModules(selectedOrganization.id));
       setListModuleProjectsRequestId(request.requestId);
     }
   }, [selectedOrganization, dispatch]);
