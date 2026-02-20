@@ -165,6 +165,7 @@ test.describe('AccessionTests', () => {
       );
       await page.getByRole('button', { name: 'Seedlings' }).click();
       await page.getByRole('button', { name: 'Inventory', ...exactOptions }).click();
+      await page.getByLabel('By Species').getByText('By Species').waitFor({ state: 'visible' });
       await page.getByText('Coconut', exactOptions).locator('../..').waitFor({ state: 'visible' });
       const coconutRowNum = (
         await page
@@ -192,6 +193,7 @@ test.describe('AccessionTests', () => {
           .evaluate((el) => el.id)
       ).replace('-accessionNumber', '');
       await page.locator(`#${accessionRow}-accessionNumber`).getByText(accessionId).click();
+      await page.getByRole('button', { name: 'Withdraw' }).waitFor({ state: 'visible' });
       await page.getByRole('button', { name: 'Withdraw' }).click();
 
       await page.getByPlaceholder('Select...').first().click();
