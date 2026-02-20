@@ -113,7 +113,7 @@
     "slate-dom": "^0.123.0",
     "slate-react": "^0.123.0",
     "styled-components": "^6.0.0",
-    "swiper": "^12.0.3",
+    "swiper": "^12.1.2",
     "utm": "^1.1.1",
     "wait-on": "^9.0.3",
     "web-vitals": "^5.0.0"
