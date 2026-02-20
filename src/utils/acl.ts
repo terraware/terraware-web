@@ -38,7 +38,6 @@ type PermissionApplication =
   | 'READ_ALL_APPLICATIONS'
   | 'UPDATE_APPLICATION_INTERNAL_COMMENTS'
   | 'UPDATE_APPLICATION_STATUS';
-type PermissionCohort = 'CREATE_COHORTS' | 'READ_COHORTS' | 'UPDATE_COHORTS' | 'DELETE_COHORTS';
 type PermissionConsole = 'VIEW_CONSOLE' | 'UPDATE_MATRIX_VIEW';
 type PermissionDeliverable =
   | 'CREATE_SUBMISSION'
@@ -65,7 +64,6 @@ export type GlobalRolePermission =
   | PermissionAcceleratorReports
   | PermissionActivities
   | PermissionApplication
-  | PermissionCohort
   | PermissionConsole
   | PermissionDeliverable
   | PermissionDocuments
@@ -290,13 +288,11 @@ const ACL: Record<GlobalRolePermission, UserGlobalRoles | PermissionCheckFn> = {
   ASSIGN_GLOBAL_ROLE_TO_USER: isAllowedAssignGlobalRoleToUser,
   ASSIGN_SOME_GLOBAL_ROLES: isAllowedAssignSomeGlobalRoles,
   CREATE_ACTIVITIES: isAllowedCreateActivities,
-  CREATE_COHORTS: AcceleratorAdminPlus,
   CREATE_DOCUMENTS: TFExpertPlus,
   CREATE_PLANTING_SITE: isAllowedCreatePlantingSite,
   CREATE_SUBMISSION: isAllowedCreateSubmission,
   DELETE_ACTIVITIES_NON_PUBLISHED: isAllowedDeleteNonPublishedActivities,
   DELETE_ACTIVITIES_PUBLISHED: AcceleratorAdminPlus,
-  DELETE_COHORTS: AcceleratorAdminPlus,
   EDIT_ACTIVITIES: isAllowedEditActivities,
   EDIT_REPORTS: AcceleratorAdminPlus,
   EDIT_SURVIVAL_RATE_SETTINGS: isAllowedEditSurvivalRateSettings,
@@ -307,7 +303,6 @@ const ACL: Record<GlobalRolePermission, UserGlobalRoles | PermissionCheckFn> = {
   PUBLISH_REPORTS: AcceleratorAdminPlus,
   READ_ACTIVITIES: isAllowedReadActivities,
   READ_ALL_APPLICATIONS: ReadOnlyPlus,
-  READ_COHORTS: TFExpertPlus,
   READ_DELIVERABLE: isAllowedReadDeliverable,
   READ_FUNDING_ENTITIES: ReadOnlyPlus,
   READ_GLOBAL_ROLES: AcceleratorAdminPlus,
@@ -317,7 +312,6 @@ const ACL: Record<GlobalRolePermission, UserGlobalRoles | PermissionCheckFn> = {
   REVIEW_REPORTS_TARGETS: isAllowedReviewReportsTargets,
   UPDATE_APPLICATION_INTERNAL_COMMENTS: TFExpertPlus,
   UPDATE_APPLICATION_STATUS: TFExpertPlus,
-  UPDATE_COHORTS: AcceleratorAdminPlus,
   UPDATE_DELIVERABLE: TFExpertPlus,
   UPDATE_MATRIX_VIEW: TFExpertPlus,
   UPDATE_ACCELERATOR_PROJECT_SCORING_VOTING: TFExpertPlus,
