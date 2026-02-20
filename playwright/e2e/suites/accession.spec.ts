@@ -166,11 +166,11 @@ test.describe('AccessionTests', () => {
       await page.getByRole('button', { name: 'Seedlings' }).click();
       await page.getByRole('button', { name: 'Inventory', ...exactOptions }).click();
       await page.getByLabel('By Species').getByText('By Species').waitFor({ state: 'visible' });
-      await page.getByText('Coconut', exactOptions).locator('../..').waitFor({ state: 'visible' });
+      await page.getByText('Coconut', exactOptions).locator('..').waitFor({ state: 'visible' });
       const coconutRowNum = (
         await page
           .getByText('Coconut', exactOptions)
-          .locator('../..')
+          .locator('..')
           .evaluate((el) => el.id)
       ).replace('-scientificName', '');
       await expect(page.locator(`#${coconutRowNum}-scientificName`)).toContainText('Coconut');
