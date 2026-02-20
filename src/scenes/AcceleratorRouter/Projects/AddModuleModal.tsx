@@ -14,7 +14,7 @@ import useForm from 'src/utils/useForm';
 
 export interface AddModuleModalProps {
   onClose: () => void;
-  onSave: (cohortModule: ProjectModule | ProjectModulePayload) => void;
+  onSave: (projectModule: ProjectModule | ProjectModulePayload) => void;
   selectedModule?: ProjectModule | ProjectModulePayload;
   unusedModules: Module[] | ProjectModulePayload[];
 }
