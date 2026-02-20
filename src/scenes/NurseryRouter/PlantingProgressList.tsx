@@ -74,14 +74,6 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
     [rowSelection, rows]
   );
 
-  const selectedRows = useMemo(
-    () =>
-      Object.keys(rowSelection)
-        .map((index) => (rows || [])[Number(index)])
-        .filter(Boolean),
-    [rowSelection, rows]
-  );
-
   useEffect(() => {
     if (rows && hasStrata === undefined) {
       setHasStrata(rows.some((d) => d.substratumName));
