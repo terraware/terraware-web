@@ -193,6 +193,7 @@ test.describe('AccessionTests', () => {
           .evaluate((el) => el.id)
       ).replace('-accessionNumber', '');
       await page.locator(`#${accessionRow}-accessionNumber`).getByText(accessionId).click();
+      await page.getByRole('button', { name: 'Withdraw' }).waitFor({ state: 'visible' });
       await page.getByRole('button', { name: 'Withdraw' }).click();
 
       await page.getByPlaceholder('Select...').first().click();
