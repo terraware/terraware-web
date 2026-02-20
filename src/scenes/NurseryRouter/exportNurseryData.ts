@@ -88,9 +88,7 @@ const makeNurseryWithdrawalResultsCsv = ({
     purpose: withdrawal.purpose,
     facility_name: withdrawal.facility_name,
     destinationName: withdrawal.destinationName,
-    project_names: (withdrawal.project_names as string[] | undefined)
-      ?.filter((name: string) => !!name)
-      .join(', '),
+    project_names: (withdrawal.project_names as string[] | undefined)?.filter((name: string) => !!name).join(', '),
     substratumNames: withdrawal.substratumNames,
     speciesScientificNames: (withdrawal.speciesScientificNames as string[] | undefined)?.join(', '),
     totalWithdrawn: withdrawal['totalWithdrawn(raw)'],
