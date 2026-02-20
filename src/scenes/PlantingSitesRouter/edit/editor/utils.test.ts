@@ -1,6 +1,3 @@
-/**
- * @jest-environment node
- */
 import { Feature } from 'geojson';
 import { GeometryFeature } from 'src/types/Map';
 import { DraftPlantingSite } from 'src/types/PlantingSite';
