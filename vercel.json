@@ -12,6 +12,5 @@
       "source": "/api/:path*/",
       "destination": "https://staging.terraware.io/api/:path*/"
     }
-  ],
-  "outputDirectory": "dist"
+  ]
 }
