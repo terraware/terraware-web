@@ -1,7 +1,6 @@
 import { components } from 'src/api/types/generated-schema';
 import strings from 'src/strings';
 
-export type CohortModule = components['schemas']['CohortModulePayload'];
 export type ProjectModule = components['schemas']['ProjectModulePayload'];
 export type Module = components['schemas']['ModulePayload'];
 
@@ -18,7 +17,6 @@ export type ModuleEventWithStartTime = Omit<ModuleEvent, 'startTime'> & { startT
 export type ModuleEventStatus = components['schemas']['ModuleEvent']['status'];
 export type ModuleEventType = ModuleEvent['type'];
 export type ImportModuleProblemElement = components['schemas']['ImportModuleProblemElement'];
-export const MODULE_EVENTS: ModuleEventType[] = ['Live Session', 'One-on-One Session', 'Recorded Session', 'Workshop'];
 
 export const getEventType = (input: ModuleEventType): string => {
   switch (input) {
@@ -37,30 +35,25 @@ export const getEventType = (input: ModuleEventType): string => {
 
 export type ModuleProjectSearchResult = {
   id: number;
-  cohort?: {
-    cohortModules?: {
-      module_id: string;
-    }[];
-  };
-};
-
-export type ModuleCohortsSearchResult = {
-  cohortModules?: {
-    title: string;
-    startDate: string;
-    endDate: string;
-    cohort: {
-      id: number;
-      name: string;
-      projects: {
-        id: number;
-        name: string;
-      }[];
-    };
+  projectModules?: {
+    module_id: string;
   }[];
 };
 
-export type CohortModuleWithProject = Partial<NonNullable<ModuleCohortsSearchResult['cohortModules']>[0]['cohort']>;
+export type ModuleProjectsSearchResult = {
+  projectModules?: {
+    title: string;
+    startDate: string;
+    endDate: string;
+    project_id: number;
+    project_name: string;
+  }[];
+};
+
+export type ProjectInModule = Omit<
+  NonNullable<ModuleProjectsSearchResult['projectModules']>[0],
+  'title' | 'startDate' | 'endDate'
+>;
 
 export const getEventStatus = (status: ModuleEventStatus) => {
   switch (status) {
@@ -82,8 +75,6 @@ export const getEventStatus = (status: ModuleEventStatus) => {
 };
 
 export type ModuleContentType = keyof Pick<Module, 'additionalResources' | 'preparationMaterials'>;
-
-export type UpdateCohortModuleRequest = components['schemas']['UpdateCohortModuleRequestPayload'];
 
 export type ModuleSearchResult = {
   id: number;

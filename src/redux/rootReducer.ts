@@ -9,7 +9,6 @@ import activityReducers from './features/activities/activitiesSlice';
 import appVersionReducers from './features/appVersion/appVersionSlice';
 import applicationReducers from './features/application/applicationSlice';
 import batchesReducers from './features/batches/batchesSlice';
-import cohortsReducers from './features/cohorts/cohortsSlice';
 import deliverablesReducers from './features/deliverables/deliverablesSlice';
 import disclaimersReducers from './features/disclaimer/disclaimerSlice';
 import documentProducerReducers from './features/documentProducer';
@@ -54,7 +53,6 @@ export const reducers = {
   ...applicationReducers,
   ...appVersionReducers,
   ...batchesReducers,
-  ...cohortsReducers,
   ...deliverablesReducers,
   ...disclaimersReducers,
   ...documentProducerReducers,

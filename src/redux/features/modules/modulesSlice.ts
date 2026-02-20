@@ -1,13 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { Module, ModuleCohortsSearchResult, ModuleSearchResult } from 'src/types/Module';
+import { Module, ModuleProjectsSearchResult, ModuleSearchResult } from 'src/types/Module';
 
 import { StatusT, buildReducers } from '../asyncUtils';
 import {
   requestGetModule,
-  requestListModuleCohorts,
   requestListModuleProjects,
   requestListModules,
+  requestListOrgProjectsAndModules,
   requestSearchModules,
 } from './modulesAsyncThunks';
 
@@ -42,28 +42,28 @@ export const moduleListSlice = createSlice({
 /**
  * List projects with modules in an organization
  */
-const initialStateModuleProjects: { [key: string]: StatusT<number[]> } = {};
+const initialStateModuleOrgProjects: { [key: string]: StatusT<number[]> } = {};
+
+export const moduleOrgProjectsSlice = createSlice({
+  name: 'moduleOrgProjectsSlice',
+  initialState: initialStateModuleOrgProjects,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestListOrgProjectsAndModules)(builder);
+  },
+});
+
+/**
+ * List all projects associated with a module
+ */
+const initialStateModuleProjects: { [key: string]: StatusT<ModuleProjectsSearchResult> } = {};
 
 export const moduleProjectsSlice = createSlice({
   name: 'moduleProjectsSlice',
   initialState: initialStateModuleProjects,
   reducers: {},
   extraReducers: (builder) => {
-    buildReducers(requestListModuleProjects)(builder);
-  },
-});
-
-/**
- * List all cohorts associated with a module
- */
-const initialStateModuleCohorts: { [key: string]: StatusT<ModuleCohortsSearchResult> } = {};
-
-export const moduleCohortsSlice = createSlice({
-  name: 'moduleCohortsSlice',
-  initialState: initialStateModuleCohorts,
-  reducers: {},
-  extraReducers: (builder) => {
-    buildReducers(requestListModuleCohorts, true)(builder);
+    buildReducers(requestListModuleProjects, true)(builder);
   },
 });
 
@@ -84,8 +84,8 @@ export const searchModulesSlice = createSlice({
 const moduleReducers = {
   module: moduleSlice.reducer,
   moduleList: moduleListSlice.reducer,
+  moduleOrgProjects: moduleOrgProjectsSlice.reducer,
   moduleProjects: moduleProjectsSlice.reducer,
-  moduleCohorts: moduleCohortsSlice.reducer,
   searchModules: searchModulesSlice.reducer,
 };
 
