@@ -94,7 +94,7 @@ export default function SpeciesProjectsTable({
   useEffect(() => {
     const assignedProjectsIds = filteredResults?.map((fr) => Number(fr.projectId));
     const pendingProjects = allProjects?.filter((project) => {
-      return project.participantId && !assignedProjectsIds?.includes(project.id);
+      return project.phase && !assignedProjectsIds?.includes(project.id);
     });
     setSelectableProjects(pendingProjects || []);
   }, [filteredResults, allProjects]);
