@@ -1,3 +1,4 @@
+5b6fc9c2858d Remove cohort modules from redux (#5268)
 c22c1d712106 Remove cohort pages (#5257)
 b5c89e489e67 SW-7937 Replace Cohorts list with Projects list in View Module page (#5255)
 1473e207f3d0 SW-7936 Change modules list cohorts quantity to projects quantity (#5220)
