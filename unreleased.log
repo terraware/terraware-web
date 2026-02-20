@@ -1,3 +1,5 @@
+835e21580d9c Fixed marker icons, location and onClick. Added tree markers and drawers (#5265)
+464b02681371 SW-8062 Added not observed tag (#5263)
 4acd2643bab4 SW-8052 Update map legend texts (#5272)
 fbbb4cfac83e SW-8009 Go back to report immediately if no photos to save (#5264)
 0dfbe32d7db2 Remove unused cohortId from document service (#5273)
