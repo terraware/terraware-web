@@ -32,6 +32,7 @@ import {
 } from 'src/redux/features/nurseryWithdrawals/nurseryWithdrawalsThunks';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { exportNurseryWithdrawalResults } from 'src/scenes/NurseryRouter/exportNurseryData';
 import UndoWithdrawalModal from 'src/scenes/NurseryRouter/UndoWithdrawalModal';
 import WithdrawalHistoryMenu from 'src/scenes/NurseryRouter/WithdrawalHistoryMenu';
 import { NurseryWithdrawalPurpose, NurseryWithdrawalPurposes, purposeLabel } from 'src/types/Batch';
@@ -303,6 +304,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         accessorKey: 'withdrawnDate',
         enableEditing: false,
         filterVariant: 'date-range',
+        sortUndefined: 'last',
         Cell: WithdrawnDateCell,
       },
       {
@@ -313,6 +315,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         filterVariant: 'select',
         filterSelectOptions: purposeOptions,
         enableColumnFilterModes: false,
+        sortUndefined: 'last',
         filterFn: () => true,
         Cell: PurposeCell,
       },
@@ -324,6 +327,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         filterVariant: 'select',
         filterSelectOptions: nurseryNames,
         enableColumnFilterModes: false,
+        sortUndefined: 'last',
         filterFn: () => true,
       },
       {
@@ -334,6 +338,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         filterVariant: 'multi-select',
         filterSelectOptions: destinationNames,
         enableColumnFilterModes: false,
+        sortUndefined: 'last',
         filterFn: () => true,
       },
       {
@@ -341,9 +346,10 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         header: strings.PROJECTS,
         accessorKey: 'project_names',
         enableEditing: false,
-        filterVariant: 'select',
+        filterVariant: 'multi-select',
         filterSelectOptions: uniqueProjectNames,
         enableColumnFilterModes: false,
+        sortUndefined: 'last',
         filterFn: () => true, // Disable client-side filtering, handled by backend
         Cell: ({ cell }) => {
           const value = cell.getValue() as string[] | undefined;
@@ -358,6 +364,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         filterVariant: 'multi-select',
         filterSelectOptions: substratumOptions,
         enableColumnFilterModes: false,
+        sortUndefined: 'last',
         filterFn: () => true,
         Cell: SubstratumNamesCell,
       },
@@ -369,6 +376,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         filterVariant: 'multi-select',
         filterSelectOptions: speciesOptions,
         enableColumnFilterModes: false,
+        sortUndefined: 'last',
         filterFn: () => true,
         Cell: SpeciesScientificNamesCell,
       },
@@ -378,6 +386,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         accessorKey: 'totalWithdrawn(raw)',
         enableEditing: false,
         filterVariant: 'range',
+        sortUndefined: 'last',
         Cell: TotalWithdrawnCell,
       },
       {
@@ -640,49 +649,9 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
 
   const onExport = useCallback(() => {
     if (selectedOrganization && rows) {
-      const nurseryName = (rows[0]?.facility_name as string) || strings.UNKNOWN;
-      const csvData = rows.map((withdrawal: SearchResponseElement) => ({
-        ...withdrawal,
-        project_names: (withdrawal.project_names as string[] | undefined)
-          ?.filter((projectName) => !!projectName)
-          .join(', '),
-        speciesScientificNames: (withdrawal.speciesScientificNames as string[] | undefined)?.join(', '),
-      }));
-
-      // Use MRT's built-in CSV export or implement custom export logic here
-      const csv = convertToCSV(csvData);
-      downloadCSV(csv, `${nurseryName}-${strings.NURSERY_WITHDRAWALS}`);
+      void exportNurseryWithdrawalResults({ nurseryWithdrawalResults: rows });
     }
-  }, [rows, selectedOrganization, strings]);
-
-  const convertToCSV = (data: any[]) => {
-    if (data.length === 0) {
-      return '';
-    }
-    const headers = Object.keys(data[0]);
-    const csvRows = [headers.join(',')];
-    for (const row of data) {
-      const values = headers.map((header) => {
-        const val = row[header];
-        const escaped = String(val ?? '').replace(/"/g, '""');
-        return `"${escaped}"`;
-      });
-      csvRows.push(values.join(','));
-    }
-    return csvRows.join('\n');
-  };
-
-  const downloadCSV = (csv: string, filename: string) => {
-    const blob = new Blob([csv], { type: 'text/csv' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.setAttribute('hidden', '');
-    a.setAttribute('href', url);
-    a.setAttribute('download', `${filename}.csv`);
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-  };
+  }, [rows, selectedOrganization]);
 
   // Request count for pagination
   useEffect(() => {
