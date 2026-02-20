@@ -9,7 +9,6 @@ import activityReducers from './features/activities/activitiesSlice';
 import appVersionReducers from './features/appVersion/appVersionSlice';
 import applicationReducers from './features/application/applicationSlice';
 import batchesReducers from './features/batches/batchesSlice';
-import cohortModuleReducers from './features/cohortModules/cohortModulesSlice';
 import cohortsReducers from './features/cohorts/cohortsSlice';
 import deliverablesReducers from './features/deliverables/deliverablesSlice';
 import disclaimersReducers from './features/disclaimer/disclaimerSlice';
@@ -55,7 +54,6 @@ export const reducers = {
   ...applicationReducers,
   ...appVersionReducers,
   ...batchesReducers,
-  ...cohortModuleReducers,
   ...cohortsReducers,
   ...deliverablesReducers,
   ...disclaimersReducers,
@@ -105,7 +103,7 @@ export const rootReducer = (state: CombinedState | undefined, action: Action) =>
     state = undefined;
   }
 
-  return combinedReducers(state as any, action);
+  return combinedReducers(state, action);
 };
 
 export type RootState = ReturnType<typeof rootReducer>;
