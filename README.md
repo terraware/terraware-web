@@ -116,7 +116,7 @@ yarn format          # run code formatter
 yarn lint            # run linter to check for code quality issues
 yarn ts              # run the typescript types checker
 yarn translate       # generate translations; requires OpenAI API key
-yarn test            # run the Jest (unit and integration) tests
+yarn test            # run the rstest (unit and integration) tests
 # run the end to end tests, see the section below for more details
 ```
 
