@@ -209,6 +209,8 @@ ASSIGN_OWNER,Asignar propietario,dc696cfa
 ASSIGN_OWNER_ELLIPSIS,Asignar propietario...,8053cd0e
 ASSIGNED,Asignada,29aa3dd8
 ASSIGNED_NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP,El Número de Plantas Vivas por Especie muestra la cantidad de plantas observadas por especie registradas como vivas. No se incluyen las plantas registradas como preexistentes o cuya especie es desconocida.,526a70bc
+ASSIGNED_OBSERVATION,Observación asignada,b242459e
+ASSIGNED_OBSERVATION_TOOLTIP,Seleccione una observación de parcela asignada para ver los datos de la observación en el mapa.,2a1963a4
 ATTACH_IMAGES_OR_VIDEOS,Adjunte imágenes o videos,c229aa87
 ATTACHMENT_DESCRIPTION,Adjunte hasta {0} archivos. Cada archivo tiene un tamaño máximo de {1} MB.,8ba18a63
 ATTACHMENT_LIMIT_REACHED,Se alcanzó el límite de archivos adjuntos,9f9323bc

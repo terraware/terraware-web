@@ -166,13 +166,14 @@ const ObservationMap = ({
 
   const observationDropdownLegendGroup = useMemo((): MapDropdownLegendGroup => {
     return {
-      title: strings.OBSERVATION,
+      title: strings.ASSIGNED_OBSERVATION,
+      tooltip: strings.ASSIGNED_OBSERVATION_TOOLTIP,
       type: 'dropdown',
       items: observationResultsOptions,
       selectedValue: selectedObservationId !== undefined ? `${selectedObservationId}` : undefined,
       setSelectedValue: (value: string | undefined) => setSelectedObservationId(value ? Number(value) : undefined),
     };
-  }, [observationResultsOptions, selectedObservationId, strings.OBSERVATION]);
+  }, [observationResultsOptions, selectedObservationId, strings]);
 
   const selectedResults = useMemo(() => {
     if (observationResults.length) {
@@ -1026,7 +1027,9 @@ const ObservationMap = ({
         : plantingSiteLegendGroup;
 
     return [
-      ...(isBiomass || isSingleView || plantingSiteId === undefined ? [] : [observationDropdownLegendGroup]),
+      ...(isBiomass || isSingleView || plantingSiteId === undefined || observationResults.length === 0
+        ? []
+        : [observationDropdownLegendGroup]),
       siteLegendGroup,
       monitoringPlotsLegendGroup,
       plotPhotosLegendGroup,
@@ -1035,6 +1038,7 @@ const ObservationMap = ({
     ];
   }, [
     observationDropdownLegendGroup,
+    observationResults,
     plantingSiteId,
     plantingSiteLegendGroup,
     monitoringPlotsLegendGroup,
