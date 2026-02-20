@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, CircularProgress, Container, Typography, useTheme } from '@mui/material';
+import { Box, CircularProgress, Container } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
