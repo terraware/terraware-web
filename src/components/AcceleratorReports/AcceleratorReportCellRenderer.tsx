@@ -35,14 +35,14 @@ const ReportCell = ({ renderProps, projectId }: ReportCellProps): JSX.Element =>
     const to = reportUrl.replace(':reportId', `${row.id}`).replace(':projectId', projectId.toString());
 
     const year = row.startDate.split('-')[0];
-    const reportName = row.frequency === 'Annual' ? `${year}` : `${year}-${row.quarter}`;
+    const reportName = row.quarter ? `${year}-${row.quarter}` : `${year}`;
 
     return (
       <Link to={to}>
         <TextTruncated fontSize={16} fontWeight={500} stringList={[reportName]} width={400} />
       </Link>
     );
-  }, [isAcceleratorRoute, projectId, row.frequency, row.id, row.quarter, row.startDate]);
+  }, [isAcceleratorRoute, projectId, row.id, row.quarter, row.startDate]);
 
   if (column.key === 'reportName') {
     return (

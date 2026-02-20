@@ -101,7 +101,7 @@ const MetricBox = ({
   }, [snackbar, setInternalEditing, reviewReportMetricResponse.isError, reviewReportMetricResponse.isSuccess]);
 
   const onChangeProgress = useCallback(
-    (newValue: string) => {
+    (newValue: string | undefined) => {
       if (isStandardOrProjectMetric(record)) {
         onChange('value', newValue);
       } else {
@@ -118,7 +118,7 @@ const MetricBox = ({
       closeResetMetricModal();
       setInternalEditing(false);
       if (isReportSystemMetric(metric)) {
-        onChangeProgress(metric.systemValue.toString());
+        onChangeProgress(metric.systemValue?.toString());
       }
       snackbar.toastSuccess(strings.CHANGES_SAVED);
     }
@@ -288,7 +288,7 @@ const MetricBox = ({
 
               {metric.overrideValue && (
                 <Typography fontSize={'14px'} color={theme.palette.TwClrTxtSecondary} paddingTop={1.5}>
-                  {strings.formatString(strings.OVERWRITTEN_ORIGINAL_VALUE, metric.systemValue)}
+                  {strings.formatString(strings.OVERWRITTEN_ORIGINAL_VALUE, metric.systemValue ?? '')}
                 </Typography>
               )}
             </>

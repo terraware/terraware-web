@@ -13,11 +13,9 @@ export type AcceleratorOrgData = {
 
 type AcceleratorOrgsResponse =
   paths[typeof ACCELERATOR_ORGS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
-export type AcceleratorOrgsListRequestParams = paths[typeof ACCELERATOR_ORGS_ENDPOINT]['get']['parameters']['query'];
 
 const listAcceleratorOrgs = async (
   locale: string | null,
-  params?: AcceleratorOrgsListRequestParams,
   search?: SearchNodePayload,
   searchSortOrder?: SearchSortOrder
 ): Promise<Response & AcceleratorOrgData> => {
@@ -30,20 +28,8 @@ const listAcceleratorOrgs = async (
     };
   }
 
-  const _params: { [key: string]: string } = {};
-
-  if (params?.includeParticipants !== undefined) {
-    _params.includeParticipants = `${params.includeParticipants}`;
-  }
-
-  if (params?.hasProjectApplication !== undefined) {
-    _params.hasProjectApplication = `${params.hasProjectApplication}`;
-  }
-
   return await HttpService.root(ACCELERATOR_ORGS_ENDPOINT).get<AcceleratorOrgsResponse, AcceleratorOrgData>(
-    {
-      params: _params,
-    },
+    {},
     (data) => ({
       organizations: searchAndSort(data?.organizations || [], search, searchOrderConfig),
     })

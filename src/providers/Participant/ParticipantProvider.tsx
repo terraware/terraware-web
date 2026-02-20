@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import useListCohortModules from 'src/hooks/useListCohortModules';
+import useListProjectModules from 'src/hooks/useListProjectModules';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { requestListModuleProjects } from 'src/redux/features/modules/modulesAsyncThunks';
 import { selectModuleProjects } from 'src/redux/features/modules/modulesSelectors';
@@ -20,8 +20,8 @@ const ParticipantProvider = ({ children }: Props) => {
   const { selectedOrganization } = useOrganization();
   const { activeLocale } = useLocalization();
 
-  const [currentParticipantProject, setCurrentParticipantProject] = useState<Project>();
-  const [participantProjects, setParticipantProjects] = useState<Project[]>([]);
+  const [currentAcceleratorProject, setCurrentAcceleratorProject] = useState<Project>();
+  const [acceleratorProjects, setAcceleratorProjects] = useState<Project[]>([]);
   const [moduleProjects, setModuleProjects] = useState<Project[]>([]);
   const [orgHasModules, setOrgHasModules] = useState<boolean | undefined>(undefined);
   const [orgHasParticipants, setOrgHasParticipants] = useState<boolean | undefined>(undefined);
@@ -31,40 +31,40 @@ const ParticipantProvider = ({ children }: Props) => {
   const moduleProjectsListRequest = useAppSelector(selectModuleProjects(listModuleProjectsRequestId));
   const projects = useAppSelector(selectProjects);
 
-  const { listCohortModules, cohortModules, status: listModulesStatus } = useListCohortModules();
+  const { listProjectModules, projectModules, isLoading: listModulesIsLoading } = useListProjectModules();
 
-  const _setCurrentParticipantProject = useCallback(
+  const _setCurrentAcceleratorProject = useCallback(
     (projectId: string | number) => {
-      setCurrentParticipantProject(participantProjects.find((project) => project.id === Number(projectId)));
+      setCurrentAcceleratorProject(acceleratorProjects.find((project) => project.id === Number(projectId)));
     },
-    [participantProjects]
+    [acceleratorProjects]
   );
 
   const [participantData, setParticipantData] = useState<ParticipantData>({
     isLoading: true,
     projectsWithModules: moduleProjects,
-    modules: cohortModules,
+    modules: projectModules,
     orgHasModules,
     orgHasParticipants,
-    allParticipantProjects: participantProjects,
-    setCurrentParticipantProject: _setCurrentParticipantProject,
+    allAcceleratorProjects: acceleratorProjects,
+    setCurrentAcceleratorProject: _setCurrentAcceleratorProject,
   });
 
   useEffect(() => {
     if (selectedOrganization && activeLocale) {
-      setCurrentParticipantProject(undefined);
+      setCurrentAcceleratorProject(undefined);
       setModuleProjects([]);
       setOrgHasModules(undefined);
       setOrgHasParticipants(undefined);
-      setParticipantProjects([]);
+      setAcceleratorProjects([]);
       void dispatch(requestProjects(selectedOrganization.id, activeLocale));
     }
   }, [activeLocale, dispatch, selectedOrganization]);
 
   useEffect(() => {
-    const nextParticipantProjects = (projects || []).filter((project) => !!project.participantId);
-    setParticipantProjects(nextParticipantProjects);
-    setOrgHasParticipants(nextParticipantProjects.length > 0);
+    const nextAcceleratorProjects = (projects || []).filter((project) => !!project.phase);
+    setAcceleratorProjects(nextAcceleratorProjects);
+    setOrgHasParticipants(nextAcceleratorProjects.length > 0);
   }, [projects]);
 
   useEffect(() => {
@@ -75,49 +75,49 @@ const ParticipantProvider = ({ children }: Props) => {
   }, [selectedOrganization, dispatch]);
 
   useEffect(() => {
-    if (currentParticipantProject && currentParticipantProject.cohortId) {
-      void listCohortModules(currentParticipantProject.cohortId);
+    if (currentAcceleratorProject && currentAcceleratorProject.id) {
+      void listProjectModules(currentAcceleratorProject.id);
     }
-  }, [currentParticipantProject, listCohortModules]);
+  }, [currentAcceleratorProject, listProjectModules]);
 
   useEffect(() => {
     if (moduleProjectsListRequest && moduleProjectsListRequest.status === 'success' && moduleProjectsListRequest.data) {
       const nextModuleProjects = moduleProjectsListRequest.data
-        .map((id) => participantProjects.find((project) => project.id === id))
+        .map((id) => acceleratorProjects.find((project) => project.id === id))
         .filter((project): project is Project => !!project)
         .sort((a, b) => a.name.localeCompare(b.name));
 
       setModuleProjects(nextModuleProjects);
       setOrgHasModules(nextModuleProjects.length > 0);
 
-      // Assign the first project with modules as the current participant project
-      if (nextModuleProjects.length > 0 && !currentParticipantProject) {
-        setCurrentParticipantProject(nextModuleProjects[0]);
+      // Assign the first project with modules as the current accelerator project
+      if (nextModuleProjects.length > 0 && !currentAcceleratorProject) {
+        setCurrentAcceleratorProject(nextModuleProjects[0]);
       }
     }
-  }, [moduleProjectsListRequest, currentParticipantProject, participantProjects]);
+  }, [moduleProjectsListRequest, currentAcceleratorProject, acceleratorProjects]);
 
   useEffect(() => {
     setParticipantData({
-      currentParticipantProject,
-      isLoading: moduleProjectsListRequest?.status === 'pending' || listModulesStatus === 'pending',
+      currentAcceleratorProject,
+      isLoading: moduleProjectsListRequest?.status === 'pending' || listModulesIsLoading,
       projectsWithModules: moduleProjects,
-      modules: cohortModules,
-      allParticipantProjects: participantProjects,
+      modules: projectModules,
+      allAcceleratorProjects: acceleratorProjects,
       orgHasModules,
       orgHasParticipants,
-      setCurrentParticipantProject: _setCurrentParticipantProject,
+      setCurrentAcceleratorProject: _setCurrentAcceleratorProject,
     });
   }, [
-    currentParticipantProject,
-    listModulesStatus,
-    cohortModules,
+    currentAcceleratorProject,
+    listModulesIsLoading,
+    projectModules,
     moduleProjects,
     moduleProjectsListRequest,
     orgHasModules,
     orgHasParticipants,
-    participantProjects,
-    _setCurrentParticipantProject,
+    acceleratorProjects,
+    _setCurrentAcceleratorProject,
   ]);
 
   return <ParticipantContext.Provider value={participantData}>{children}</ParticipantContext.Provider>;

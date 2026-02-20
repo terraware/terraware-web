@@ -23,7 +23,7 @@ export type Props = {
 const ToDoProvider = ({ children }: Props) => {
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
-  const { currentParticipantProject } = useParticipantData();
+  const { currentAcceleratorProject } = useParticipantData();
 
   const [toDoItems, setToDoItems] = useState<ToDoItem[]>([]);
   const [upcomingItems, setUpcomingItems] = useState<ToDoItem[]>([]);
@@ -42,16 +42,16 @@ const ToDoProvider = ({ children }: Props) => {
   });
 
   useEffect(() => {
-    if (currentParticipantProject && !isNaN(currentParticipantProject.id) && currentParticipantProject.id > 0) {
-      setProjectId(currentParticipantProject.id);
+    if (currentAcceleratorProject && !isNaN(currentAcceleratorProject.id) && currentAcceleratorProject.id > 0) {
+      setProjectId(currentAcceleratorProject.id);
       const deliverablesRequest = dispatch(
-        requestProjectToDoDeliverables({ locale: activeLocale, projectId: currentParticipantProject.id })
+        requestProjectToDoDeliverables({ locale: activeLocale, projectId: currentAcceleratorProject.id })
       );
-      const eventsRequest = dispatch(requestProjectToDoEvents({ projectId: currentParticipantProject.id }));
+      const eventsRequest = dispatch(requestProjectToDoEvents({ projectId: currentAcceleratorProject.id }));
       setDeliverablesRequestId(deliverablesRequest.requestId);
       setEventsRequestId(eventsRequest.requestId);
     }
-  }, [dispatch, currentParticipantProject, activeLocale]);
+  }, [dispatch, currentAcceleratorProject, activeLocale]);
 
   useEffect(() => {
     if (!toDoDeliverablesRequest || !toDoEventsRequest) {

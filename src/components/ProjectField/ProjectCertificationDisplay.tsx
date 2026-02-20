@@ -3,7 +3,7 @@ import React from 'react';
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 
 import strings from 'src/strings';
-import { CarbonCertifications } from 'src/types/ParticipantProject';
+import { CarbonCertifications } from 'src/types/AcceleratorProject';
 
 const ProjectCertificationDisplay = ({ certifications }: { certifications?: CarbonCertifications }) => {
   const theme = useTheme();

@@ -13,7 +13,7 @@ import {
   useLazyListObservationResultsQuery,
 } from 'src/queries/generated/observations';
 import { PlantingSitePayload, useLazyListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
-import { ObservationState } from 'src/types/Observations';
+import { getStatus } from 'src/types/Observations';
 import { SearchSortOrder } from 'src/types/Search';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { isAdmin } from 'src/utils/organization';
@@ -23,9 +23,10 @@ import PlantMonitoringCellRenderer from './PlantMonitoringCellRenderer';
 
 type PlotSelectionType = 'assigned' | 'adHoc';
 type PlantMonitoringRow = {
+  adHocPlotNumber?: number;
   observationId: number;
   observationDate?: string;
-  state: ObservationState;
+  state: string;
   plantingSiteName?: string;
   strata?: string;
   totalLive?: number;
@@ -45,8 +46,9 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
   const defaultTimezone = useDefaultTimeZone().get().id;
   const scheduleObservationsEnabled = isAdmin(selectedOrganization);
   const { activeLocale, strings } = useLocalization();
+  const [selectedPlotSelection, setSelectedPlotSelection] = useState<PlotSelectionType>('assigned');
 
-  const columns = useMemo((): TableColumnType[] => {
+  const assignedColumns = useMemo((): TableColumnType[] => {
     const defaultColumns: TableColumnType[] = [
       {
         key: 'observationDate',
@@ -118,14 +120,61 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
     }
   }, [scheduleObservationsEnabled, strings]);
 
-  const defaultSearchOrder: SearchSortOrder = {
-    field: 'completedDate',
-    direction: 'Descending',
-  };
+  const adHocColumns = useMemo(
+    (): TableColumnType[] => [
+      {
+        key: 'adHocPlotNumber',
+        name: strings.PLOT,
+        type: 'string',
+      },
+      {
+        key: 'plantingSiteName',
+        name: strings.PLANTING_SITE,
+        type: 'string',
+      },
+      {
+        key: 'completedDate',
+        name: strings.DATE_OBSERVED,
+        type: 'date',
+        tooltipTitle: strings.DATE_OBSERVED_TOOLTIP,
+      },
+      {
+        key: 'totalLive',
+        name: strings.LIVE_PLANTS,
+        tooltipTitle: strings.TOOLTIP_LIVE_PLANTS,
+        type: 'number',
+      },
+      {
+        key: 'totalPlants',
+        name: strings.TOTAL_PLANTS,
+        tooltipTitle: strings.TOOLTIP_TOTAL_PLANTS,
+        type: 'number',
+      },
+      {
+        key: 'totalSpecies',
+        name: strings.SPECIES,
+        type: 'number',
+      },
+    ],
+    [strings]
+  );
 
-  const fuzzySearchColumns = ['plantingSiteName', 'strata'];
+  const defaultSearchOrder: SearchSortOrder = useMemo(() => {
+    if (selectedPlotSelection === 'assigned') {
+      return {
+        field: 'completedDate',
+        direction: 'Descending',
+      };
+    } else {
+      return {
+        field: 'adHocPlotNumber',
+        direction: 'Ascending',
+      };
+    }
+  }, [selectedPlotSelection]);
 
-  const [selectedPlotSelection, setSelectedPlotSelection] = useState<PlotSelectionType>('assigned');
+  const fuzzySearchColumns = ['adHocPlotNumber', 'plantingSiteName', 'strata'];
+
   const [listObservationResults, listObservationsResultsResponse] = useLazyListObservationResultsQuery();
   const [listAdHocObservationResults, listAdHocObservationResultsResponse] = useLazyListAdHocObservationResultsQuery();
   const [listPlantingSites, listPlantingSitesResult] = useLazyListPlantingSitesQuery();
@@ -219,9 +268,10 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
         const observationDate = getShortDate(completedDate ?? observationResult.startDate, activeLocale);
 
         return {
+          adHocPlotNumber: observationResult.adHocPlot?.monitoringPlotNumber,
           observationId: observationResult.observationId,
           observationDate,
-          state: observationResult.state,
+          state: getStatus(observationResult.state),
           plantingSiteName: plantingSite?.name,
           strata,
           totalPlants: observationResult.totalPlants,
@@ -261,17 +311,32 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
 
   return (
     <Card radius={'8px'} style={{ width: '100%' }}>
-      <ClientSideFilterTable
-        busy={isLoading}
-        columns={columns}
-        defaultSortOrder={defaultSearchOrder}
-        fuzzySearchColumns={fuzzySearchColumns}
-        id='biomass-measurement-table'
-        Renderer={PlantMonitoringCellRenderer}
-        rows={rows}
-        title={strings.PLANT_MONITORING}
-        rightComponent={rightComponent}
-      />
+      {selectedPlotSelection === 'assigned' && (
+        <ClientSideFilterTable
+          busy={isLoading}
+          columns={assignedColumns}
+          defaultSortOrder={defaultSearchOrder}
+          fuzzySearchColumns={fuzzySearchColumns}
+          id='assigned-plant-monitoring-table'
+          Renderer={PlantMonitoringCellRenderer}
+          rows={rows}
+          title={strings.PLANT_MONITORING}
+          rightComponent={rightComponent}
+        />
+      )}
+      {selectedPlotSelection === 'adHoc' && (
+        <ClientSideFilterTable
+          busy={isLoading}
+          columns={adHocColumns}
+          defaultSortOrder={defaultSearchOrder}
+          fuzzySearchColumns={fuzzySearchColumns}
+          id='ad-hoc-plant-monitoring-table'
+          Renderer={PlantMonitoringCellRenderer}
+          rows={rows}
+          title={strings.PLANT_MONITORING}
+          rightComponent={rightComponent}
+        />
+      )}
     </Card>
   );
 };

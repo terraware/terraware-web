@@ -3,7 +3,7 @@ import React from 'react';
 import { useTheme } from '@mui/material';
 
 import { APP_PATHS } from 'src/constants';
-import VoteBadge from 'src/scenes/AcceleratorRouter/ParticipantProjects/Voting/VoteBadge';
+import VoteBadge from 'src/scenes/AcceleratorRouter/AcceleratorProjects/Voting/VoteBadge';
 import strings from 'src/strings';
 import { PhaseVotes } from 'src/types/Votes';
 

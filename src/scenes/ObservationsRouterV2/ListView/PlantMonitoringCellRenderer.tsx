@@ -23,7 +23,7 @@ export default function PlantMonitoringCellRenderer(props: RendererProps<TableRo
     },
   };
 
-  if (column.key === 'observationDate') {
+  if (column.key === 'observationDate' || column.key === 'adHocPlotNumber') {
     const url = APP_PATHS.OBSERVATION_DETAILS_V2.replace(':observationId', observationId.toString());
     return (
       <CellRenderer

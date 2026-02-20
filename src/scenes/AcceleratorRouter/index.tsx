@@ -13,8 +13,8 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useStateLocation from 'src/utils/useStateLocation';
 
 import ActivityLogRouter from '../ActivityLogRouter';
+import AcceleratorProjects from './AcceleratorProjects';
 import Applications from './Applications';
-import Cohorts from './Cohorts';
 import Deliverables from './Deliverables';
 import DocumentsRouter from './Documents';
 import FundingEntities from './FundingEntities';
@@ -23,7 +23,6 @@ import ModuleContent from './Modules';
 import EventEdit from './Modules/EventEdit';
 import ModuleView from './Modules/ModuleView';
 import NavBar from './NavBar';
-import ParticipantProjects from './ParticipantProjects';
 import People from './People';
 
 interface AcceleratorRouterProps {
@@ -87,13 +86,12 @@ const AcceleratorRouter = ({ showNavBar, setShowNavBar }: AcceleratorRouterProps
                 <Route path={`${APP_PATHS.ACCELERATOR_PROJECTS}/*`} element={<MatrixView />} />
                 <Route path={`${APP_PATHS.ACCELERATOR_ACTIVITY_LOG}/*`} element={<ActivityLogRouter />} />
                 <Route path={`${APP_PATHS.ACCELERATOR_APPLICATIONS}/*`} element={<Applications />} />
-                <Route path={`${APP_PATHS.ACCELERATOR_COHORTS}/*`} element={<Cohorts />} />
                 <Route path={`${APP_PATHS.ACCELERATOR_DELIVERABLES}/*`} element={<Deliverables />} />
                 <Route path={`${APP_PATHS.ACCELERATOR_MODULES}/*`} element={<ModuleContent />} />
                 <Route path={`${APP_PATHS.ACCELERATOR_MODULE_CONTENT}/*`} element={<ModuleView />} />
                 <Route path={`${APP_PATHS.ACCELERATOR_MODULE_EVENTS_EDIT}/*`} element={<EventEdit />} />
                 <Route path={`${APP_PATHS.ACCELERATOR_PEOPLE}/*`} element={<People />} />
-                <Route path={`${APP_PATHS.ACCELERATOR_PROJECT_VIEW}/*`} element={<ParticipantProjects />} />
+                <Route path={`${APP_PATHS.ACCELERATOR_PROJECT_VIEW}/*`} element={<AcceleratorProjects />} />
                 <Route path={`${APP_PATHS.ACCELERATOR_FUNDING_ENTITIES}/*`} element={<FundingEntities />} />
                 <Route path={`${APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENTS}/*`} element={<DocumentsRouter />} />
                 <Route path={'*'} element={<Navigate to={APP_PATHS.ACCELERATOR_PROJECTS} />} />

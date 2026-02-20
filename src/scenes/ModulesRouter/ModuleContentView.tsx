@@ -6,7 +6,7 @@ import { Box, Card, Grid, Typography, useTheme } from '@mui/material';
 import { Crumb } from 'src/components/BreadCrumbs';
 import ParticipantPage from 'src/components/common/PageWithModuleTimeline/ParticipantPage';
 import { APP_PATHS } from 'src/constants';
-import useGetCohortModule from 'src/hooks/useGetCohortModule';
+import useGetProjectModule from 'src/hooks/useGetProjectModule';
 import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import strings from 'src/strings';
@@ -34,25 +34,25 @@ interface ModuleContentViewProps {
 const ModuleContentView = ({ contentType }: ModuleContentViewProps) => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
-  const { currentParticipantProject, setCurrentParticipantProject } = useParticipantData();
+  const { currentAcceleratorProject, setCurrentAcceleratorProject } = useParticipantData();
   const pathParams = useParams<{ sessionId: string; moduleId: string; projectId: string }>();
 
   const projectId = Number(pathParams.projectId);
   const moduleId = Number(pathParams.moduleId);
 
-  const { cohortModule, getCohortModule } = useGetCohortModule();
+  const { projectModule, getProjectModule } = useGetProjectModule();
 
   useEffect(() => {
     if (projectId) {
-      setCurrentParticipantProject(projectId);
+      setCurrentAcceleratorProject(projectId);
     }
-  }, [projectId, setCurrentParticipantProject]);
+  }, [projectId, setCurrentAcceleratorProject]);
 
   useEffect(() => {
-    if (currentParticipantProject && currentParticipantProject.cohortId) {
-      void getCohortModule({ moduleId, cohortId: currentParticipantProject.cohortId });
+    if (currentAcceleratorProject && currentAcceleratorProject.id) {
+      void getProjectModule({ moduleId, projectId: currentAcceleratorProject.id });
     }
-  }, [currentParticipantProject, moduleId, getCohortModule]);
+  }, [currentAcceleratorProject, moduleId, getProjectModule]);
 
   const [content, setContent] = useState('');
 
@@ -63,11 +63,11 @@ const ModuleContentView = ({ contentType }: ModuleContentViewProps) => {
         to: APP_PATHS.PROJECT_MODULES.replace(':projectId', `${projectId}`),
       },
       {
-        name: cohortModule?.title || '',
+        name: projectModule?.title || '',
         to: APP_PATHS.PROJECT_MODULE.replace(':projectId', `${projectId}`).replace(':moduleId', `${moduleId}`),
       },
     ],
-    [activeLocale, cohortModule, projectId, moduleId]
+    [activeLocale, projectModule, projectId, moduleId]
   );
 
   const addBlankTargetToHtmlAHref = (htmlString: string): string => {
@@ -84,13 +84,13 @@ const ModuleContentView = ({ contentType }: ModuleContentViewProps) => {
   };
 
   useEffect(() => {
-    const nextContent = (cohortModule || {})[contentType];
-    if (cohortModule && nextContent) {
+    const nextContent = (projectModule || {})[contentType];
+    if (projectModule && nextContent) {
       setContent(addBlankTargetToHtmlAHref(nextContent));
     }
-  }, [cohortModule, contentType]);
+  }, [projectModule, contentType]);
 
-  if (!cohortModule) {
+  if (!projectModule) {
     return null;
   }
 
@@ -98,7 +98,7 @@ const ModuleContentView = ({ contentType }: ModuleContentViewProps) => {
     <ParticipantPage
       crumbs={crumbs}
       hierarchicalCrumbs={false}
-      title={<ModuleViewTitle module={cohortModule} projectId={projectId} />}
+      title={<ModuleViewTitle module={projectModule} projectId={projectId} />}
     >
       <Card
         sx={{
@@ -111,16 +111,16 @@ const ModuleContentView = ({ contentType }: ModuleContentViewProps) => {
           padding: `${theme.spacing(2)} ${theme.spacing(1)}`,
         }}
       >
-        {cohortModule && (
+        {projectModule && (
           <Grid container spacing={theme.spacing(1)}>
             <Grid item xs style={{ flexGrow: 1, padding: `${theme.spacing(1)} ${theme.spacing(3)}` }}>
               <ModuleContentSection>
                 <Typography fontSize={'16px'} lineHeight={'24px'} fontWeight={500}>
-                  {cohortModule.title}
+                  {projectModule.title}
                 </Typography>
 
                 <Typography fontSize={'24px'} lineHeight={'32px'} fontWeight={600}>
-                  {cohortModule.name}
+                  {projectModule.name}
                 </Typography>
               </ModuleContentSection>
 

@@ -7,7 +7,7 @@ import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 
 const ListViewHeader = () => {
-  const { currentParticipantProject, projectsWithModules, setCurrentParticipantProject } = useParticipantData();
+  const { currentAcceleratorProject, projectsWithModules, setCurrentAcceleratorProject } = useParticipantData();
   const { goToModules } = useNavigateTo();
 
   const options: DropdownItem[] = useMemo(
@@ -38,14 +38,14 @@ const ListViewHeader = () => {
     <Dropdown
       onChange={(id) => {
         const projectId = +id;
-        if (projectId !== currentParticipantProject?.id) {
-          setCurrentParticipantProject(projectId);
+        if (projectId !== currentAcceleratorProject?.id) {
+          setCurrentAcceleratorProject(projectId);
           goToModules(projectId);
         }
       }}
       options={options}
       selectStyles={selectStyles}
-      selectedValue={currentParticipantProject?.id}
+      selectedValue={currentAcceleratorProject?.id}
     />
   ) : (
     <Typography sx={selectStyles.input}>{options[0]?.label}</Typography>

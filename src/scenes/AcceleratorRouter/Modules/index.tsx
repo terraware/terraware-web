@@ -19,7 +19,7 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
     ? [
         { key: 'name', name: strings.MODULE, type: 'string' },
         { key: 'id', name: strings.MODULE_ID, type: 'string' },
-        { key: 'cohortsQuantity', name: strings.COHORTS, type: 'number' },
+        { key: 'projectsQuantity', name: strings.PROJECTS, type: 'number' },
         { key: 'deliverablesQuantity', name: strings.DELIVERABLES, type: 'number' },
       ]
     : [];
@@ -76,7 +76,7 @@ export default function ModuleContentView() {
       id: 'modules-list',
       rows: modules,
       Renderer: ModulesCellRenderer,
-      clientSortedFields: ['cohortsQuantity', 'deliverablesQuantity'],
+      clientSortedFields: ['projectsQuantity', 'deliverablesQuantity'],
     },
   };
 

@@ -342,8 +342,8 @@ const PlantDashboardMap = ({
               return filteredPlants.map(
                 (plant): MapMarker => ({
                   id: `plants/${plant.id}`,
-                  longitude: plant.gpsCoordinates.coordinates[1],
-                  latitude: plant.gpsCoordinates.coordinates[0],
+                  longitude: plant.gpsCoordinates.coordinates[0],
+                  latitude: plant.gpsCoordinates.coordinates[1],
                   onClick: selectPlant(plot.monitoringPlotId, results.observationId, plant),
                   selected: selectedPlants.find((selected) => selected.plant.id === plant.id) !== undefined,
                   properties: {

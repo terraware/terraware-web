@@ -1,4 +1,5 @@
 export enum QueryTagTypes {
+  AcceleratorProjects = 'AcceleratorProjects',
   DraftPlantingSites = 'DraftPlantingSites',
   Funders = 'Funders',
   FundingEntities = 'FundingEntities',
@@ -8,6 +9,7 @@ export enum QueryTagTypes {
   ObservationMedia = 'ObservationMedia',
   ObservationSplats = 'ObservationSplats',
   PlantingSites = 'PlantingSites',
+  ProjectInternalUsers = 'ProjectInternalUsers',
   ProjectMetricTargets = 'ProjectMetricTargets',
   ProjectMetrics = 'ProjectMetrics',
   ProjectModules = 'ProjectModules',

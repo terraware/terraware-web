@@ -13,18 +13,18 @@ import { Project } from 'src/types/Project';
 const SELECTED_PROJECT_SESSION_KEY = 'selected-project-id';
 
 type PageHeaderProjectFilterProps = {
-  currentParticipantProject?: Project;
+  currentAcceleratorProject?: Project;
   projectFilter: { projectId?: number | string };
   projects: Project[];
-  setCurrentParticipantProject: (projectId: string | number) => void;
+  setCurrentAcceleratorProject: (projectId: string | number) => void;
   setProjectFilter: React.Dispatch<React.SetStateAction<{ projectId?: number | string }>>;
 };
 
 const PageHeaderProjectFilter = ({
-  currentParticipantProject,
+  currentAcceleratorProject,
   projectFilter,
   projects,
-  setCurrentParticipantProject,
+  setCurrentAcceleratorProject,
   setProjectFilter,
 }: PageHeaderProjectFilterProps) => {
   const { strings } = useLocalization();
@@ -47,32 +47,32 @@ const PageHeaderProjectFilter = ({
 
     if (isStoredProjectValid) {
       setProjectFilter({ projectId: storedProjectIdNumber });
-      setCurrentParticipantProject(storedProjectIdNumber);
-    } else if (currentParticipantProject?.id) {
-      setProjectFilter({ projectId: currentParticipantProject.id });
+      setCurrentAcceleratorProject(storedProjectIdNumber);
+    } else if (currentAcceleratorProject?.id) {
+      setProjectFilter({ projectId: currentAcceleratorProject.id });
     } else if (projects.length) {
       setProjectFilter({ projectId: projects[0].id });
     }
   }, [
-    currentParticipantProject?.id,
+    currentAcceleratorProject?.id,
     projectFilter.projectId,
     projects,
     setProjectFilter,
-    setCurrentParticipantProject,
+    setCurrentAcceleratorProject,
   ]);
 
-  // update current participant project and save to session storage when project filter changes
+  // update current accelerator project and save to session storage when project filter changes
   useEffect(() => {
     if (projectFilter.projectId) {
-      setCurrentParticipantProject(projectFilter.projectId);
+      setCurrentAcceleratorProject(projectFilter.projectId);
       // save the selected project ID to session storage
       sessionStorage.setItem(SELECTED_PROJECT_SESSION_KEY, String(projectFilter.projectId));
     } else if (projects.length === 1) {
-      setCurrentParticipantProject(projects[0].id);
+      setCurrentAcceleratorProject(projects[0].id);
       // save the selected project ID to session storage
       sessionStorage.setItem(SELECTED_PROJECT_SESSION_KEY, String(projects[0].id));
     }
-  }, [projects, projectFilter.projectId, setCurrentParticipantProject]);
+  }, [projects, projectFilter.projectId, setCurrentAcceleratorProject]);
 
   return (
     <Grid

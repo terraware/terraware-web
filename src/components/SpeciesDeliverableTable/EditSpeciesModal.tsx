@@ -8,15 +8,15 @@ import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
-import { requestUpdateParticipantProjectSpecies } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
-import { selectParticipantProjectSpeciesUpdateRequest } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';
+import { requestUpdateAcceleratorProjectSpecies } from 'src/redux/features/acceleratorProjectSpecies/acceleratorProjectSpeciesAsyncThunks';
+import { selectAcceleratorProjectSpeciesUpdateRequest } from 'src/redux/features/acceleratorProjectSpecies/acceleratorProjectSpeciesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import {
-  SpeciesForParticipantProject,
+  SpeciesForAcceleratorProject,
   SpeciesNativeCategory,
   getSpeciesNativeCategoryOptions,
-} from 'src/types/ParticipantProjectSpecies';
+} from 'src/types/AcceleratorProjectSpecies';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -25,7 +25,7 @@ import Link from '../common/Link';
 export interface EditSpeciesModalProps {
   onClose: () => void;
   reload: () => void;
-  projectSpecies: SpeciesForParticipantProject;
+  projectSpecies: SpeciesForAcceleratorProject;
 }
 
 export default function EditSpeciesModal(props: EditSpeciesModalProps): JSX.Element {
@@ -33,11 +33,11 @@ export default function EditSpeciesModal(props: EditSpeciesModalProps): JSX.Elem
   const theme = useTheme();
   const [requestId, setRequestId] = useState<string>('');
   const dispatch = useAppDispatch();
-  const result = useAppSelector(selectParticipantProjectSpeciesUpdateRequest(requestId));
+  const result = useAppSelector(selectAcceleratorProjectSpeciesUpdateRequest(requestId));
   const snackbar = useSnackbar();
 
   const [error, setError] = useState('');
-  const [record, setRecord] = useForm<SpeciesForParticipantProject>(projectSpecies);
+  const [record, setRecord] = useForm<SpeciesForAcceleratorProject>(projectSpecies);
   const { activeLocale } = useLocalization();
 
   useEffect(() => {
@@ -56,8 +56,8 @@ export default function EditSpeciesModal(props: EditSpeciesModalProps): JSX.Elem
     }
 
     const request = dispatch(
-      requestUpdateParticipantProjectSpecies({
-        participantProjectSpecies: record.participantProjectSpecies,
+      requestUpdateAcceleratorProjectSpecies({
+        acceleratorProjectSpecies: record.participantProjectSpecies,
       })
     );
     setRequestId(request.requestId);
@@ -65,22 +65,22 @@ export default function EditSpeciesModal(props: EditSpeciesModalProps): JSX.Elem
 
   const onChangeRationale = (rationale: unknown) => {
     setRecord((prev) => {
-      const previousParticipantProjectSpecies = { ...prev.participantProjectSpecies };
-      previousParticipantProjectSpecies.rationale = rationale as string;
+      const previousAcceleratorProjectSpecies = { ...prev.participantProjectSpecies };
+      previousAcceleratorProjectSpecies.rationale = rationale as string;
       return {
         ...prev,
-        participantProjectSpecies: previousParticipantProjectSpecies,
+        participantProjectSpecies: previousAcceleratorProjectSpecies,
       };
     });
   };
 
   const onChangeNativeCategory = (value: unknown) => {
     setRecord((prev) => {
-      const previousParticipantProjectSpecies = { ...prev.participantProjectSpecies };
-      previousParticipantProjectSpecies.speciesNativeCategory = value as SpeciesNativeCategory;
+      const previousAcceleratorProjectSpecies = { ...prev.participantProjectSpecies };
+      previousAcceleratorProjectSpecies.speciesNativeCategory = value as SpeciesNativeCategory;
       return {
         ...prev,
-        participantProjectSpecies: previousParticipantProjectSpecies,
+        participantProjectSpecies: previousAcceleratorProjectSpecies,
       };
     });
   };

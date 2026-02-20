@@ -19,16 +19,6 @@ export type SustainableDevelopmentGoal = components['schemas']['GoalProgressPayl
 
 export type ReportStatus = 'New' | 'In Progress' | 'Locked' | 'Submitted';
 
-export type ReportMetricTargets = components['schemas']['ReportMetricTargetPayload'];
-
-export type UpdateReportMetricTargets = components['schemas']['UpdateMetricTargetsRequestPayload'];
-
-export type UpdateProjectMetricTargets = components['schemas']['UpdateProjectMetricTargetsPayload'];
-
-export type UpdateStandardMetricTargets = components['schemas']['UpdateStandardMetricTargetsPayload'];
-
-export type UpdateSystemMetricTargets = components['schemas']['UpdateSystemMetricTargetsPayload'];
-
 export function statusName(status: ReportStatus): string {
   switch (status) {
     case 'New':

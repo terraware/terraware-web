@@ -68,7 +68,6 @@ ADD_ADDRESS,Ajouter une adresse,8262aa95
 ADD_AN_ACCESSION,Ajouter une accession,e4b619b4
 ADD_ANNOTATION,Ajouter une annotation,91742a0f
 ADD_BATCH,Ajouter un lot,0d9f7a4a
-ADD_COHORT,Ajouter une cohorte,094d5510
 ADD_DOCUMENT,Ajouter un document,af87beed
 ADD_FUNDING_ENTITY,Ajouter une entité de financement,47c0142d
 ADD_GPS_COORDINATES,Ajouter des coordonnées GPS,d87d2fa2
@@ -200,6 +199,7 @@ APPROX_SYMBOL,~,acb59e95
 AR,RA,25a8e55a
 ARE_YOU_SURE,Êtes-vous sûr ?,d4536b91
 AREA_HA,Superficie (ha),8ab5d500
+AREA_NOT_OBSERVED,Zone non observée,2c3a3737
 ARROW_KEYS,Touches fléchées,5cefb475
 AS_OF_X,à partir de {0},6d77dc0f
 ASSIGN,Attribuer,d1afb440
@@ -209,6 +209,8 @@ ASSIGN_OWNER,Attribuer un propriétaire,dc696cfa
 ASSIGN_OWNER_ELLIPSIS,Attribuer un propriétaire...,8053cd0e
 ASSIGNED,Désigné,29aa3dd8
 ASSIGNED_NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP,Le nombre de plants vivants par espèce indique le nombre de plants observés par espèce enregistrés comme vivants. Les plants enregistrés comme préexistants ou dont l'espèce est inconnue ne sont pas inclus.,526a70bc
+ASSIGNED_OBSERVATION,Observation attribuée,b242459e
+ASSIGNED_OBSERVATION_TOOLTIP,Sélectionnez une observation de parcelle attribuée pour afficher les données d'observation sur la carte.,2a1963a4
 ATTACH_IMAGES_OR_VIDEOS,Joindre une (des) image(s) ou une (des) vidéo(s),c229aa87
 ATTACHMENT_DESCRIPTION,Joindre jusqu'à {0} fichiers. Chaque fichier a une taille maximale de {1}MB.,8ba18a63
 ATTACHMENT_LIMIT_REACHED,Limite de pièces jointes atteinte,9f9323bc
@@ -336,14 +338,7 @@ CLIMATE_IMPACT,Impact sur le climat,876c48a4
 CLOSE,Fermer,e6e3f022
 CLOSE_AND_EDIT,Fermer et modifier,1c3ea202
 COHORT,Cohorte,81afe896
-COHORT_ADDED,{0} Cohorte ajoutée,c8518668
-COHORT_NAME,Nom de la cohorte,655d8af3
-COHORT_PHASE_DUE_DILIGENCE,Phase 0 : Due Diligence,6c20cb46
-COHORT_PHASE_FEASIBILITY_STUDY,Phase 1 : étude de faisabilité,94889837
-COHORT_PHASE_IMPLEMENT_AND_MONITOR,Phase 3 - Mise en œuvre et suivi,d8def4af
-COHORT_PHASE_PLAN_AND_SCALE,Phase 2 : plan et échelle,a51c9fc2
 COHORTS,Cohortes,b0aca6fa
-COHORTS_EMPTY_STATE,"Vous n'avez pas encore de cohortes. Lorsque vous ajoutez des cohortes, ils apparaîtront ici.",b764b773
 COLLECTED_DATE,Date de la collecte,3f1515d8
 COLLECTED_FROM,Collecté à partir de,ffc6ad60
 COLLECTING_SITE,Site de collecte,7491b42b
@@ -371,6 +366,7 @@ CONFIRM_UPDATE_ALL_COHORT_MODULES,Les modifications apportées aux modules de ce
 CONFIRM_UPDATE_ALL_COHORT_MODULES_TITLE,Confirmer la mise à jour de tous les modules du groupe,1b173015
 CONFIRM_UPDATE_ALL_COHORT_PHASE,Les modifications apportées à la phase de ce projet affecteront tous les projets du cohort du projet. Ceci est temporaire pendant la suppression des cohorts de Terraware. Êtes-vous sûr de vouloir modifier la phase de tous les projets du cohort ?,26d2dc4e
 CONFIRM_UPDATE_ALL_COHORT_PHASE_TITLE,Confirmer la mise à jour de la phase pour tous les projets de cohorte,774d5ec0
+CONFIRM_WITHDRAWAL,Confirmer le retrait,827db4bd
 CONFIRMED_RESTORABLE_LAND,TF Terres restaurables (ha),efa25d21
 CONSERVATION_CATEGORY,Catégorie de la liste rouge de l'UICN,115916f3
 CONTACT_TYPE,Type de contact,413b6c0e
@@ -588,8 +584,6 @@ EDIT_ACCOUNT,Modifier le compte,b77ad44d
 EDIT_ACTIVITY,Modifier l’activité,5b6476f3
 EDIT_ANNOTATION,Modifier l’annotation,82bcb054
 EDIT_BATCH_DETAILS,Modifier les détails du lot,d2f2112a
-EDIT_COHORT,Modifier la cohorte,4c88b04a
-EDIT_COHORT_TO_ADD_MODULES,Modifier cette cohorte pour ajouter des modules.,376bbb6d
 EDIT_DOCUMENT_DETAILS,Modifier les détails du document,92155983
 EDIT_FEEDBACK,Modifier les commentaires,6b52e0e6
 EDIT_FUNDING_ENTITY,Modifier l'organisme de financement,f21be0e0
@@ -1089,10 +1083,10 @@ MISSING_SUBSET_WEIGHT_ERROR_NURSERY,Vous devez entrer le poids d'un sous-ensembl
 MISSING_SUBSET_WEIGHT_ERROR_VIABILITY_TEST,Vous devez entrer un poids de sous-ensemble pour créer un test de viabilité. Vous pouvez le faire en éditant la quantité de cet accès.,5ffd97b6
 MITIGATION_PLAN,Plan d'atténuation,c13d7b11
 MODULE,Module,019952ca
-MODULE_COHORTS_DESCRIPTION,Ci-dessous une liste de Cohortes qui ont ajouté ce module.,b187422b
 MODULE_CONTENT,Contenu du module,0ec0af7d
 MODULE_DETAILS,Détails du module,66959ca8
 MODULE_ID,Identifiant du module,9c2e85f6
+MODULE_PROJECTS_DESCRIPTION,Vous trouverez ci-dessous une liste des projets ayant ajouté ce module.,350c32a7
 MODULES,Modules,474ac433
 MODULES_FOR_PROJECT,Modules pour {0},5d950bb2
 MODULES_IMPORT_COMPLETE,Importation des données des modules terminée !,76a99df8
@@ -1568,6 +1562,10 @@ PROJECT_NOTES,Notes d'informations complémentaires sur le projet,0c985c39
 PROJECT_OBJECTIVES,Objectifs du projet,20d1aaf6
 PROJECT_OR_PROJECTS,Projet(s),4b8c0060
 PROJECT_OVERVIEW,Aperçu du projet,87fe4f18
+PROJECT_PHASE_DUE_DILIGENCE,Phase 0 - Diligence raisonnable,6c20cb46
+PROJECT_PHASE_FEASIBILITY_STUDY,Phase 1 - Étude de faisabilité,94889837
+PROJECT_PHASE_IMPLEMENT_AND_MONITOR,Phase 3 - Mise en œuvre et suivi,d8def4af
+PROJECT_PHASE_PLAN_AND_SCALE,Phase 2 - Planification et mise à l’échelle,a51c9fc2
 PROJECT_PHOTOS,Photos du projet (max. 30),25c80ed0
 PROJECT_PROFILE,Profil du projet,cc49d0dc
 PROJECT_PROFILE_PUBLISHED,Profil du projet publié,9f75ca71
@@ -2431,6 +2429,7 @@ WILD_IN_SITU_DESCRIPTION,Plantes qui se trouvent naturellement dans des zones sa
 WITHDRAW,Retirer,3aeae714
 WITHDRAW_ALL,Retirer tout,cc50ccca
 WITHDRAW_BY,Prélèvement par,54fccc5e
+WITHDRAW_DATE_PREDATES_RECEIVED_DATE_WARNING,"La date indiquée pour ce retrait est antérieure à la date à laquelle la quantité actuelle d'accession a été fournie. Par conséquent, la quantité retirée ne sera pas soustraite de la quantité d'accession. Après l'enregistrement du retrait, la quantité peut être ajustée manuellement pour refléter la quantité retirée. Êtes-vous sûr de vouloir enregistrer ce retrait sans modification de la quantité ?",2283d4eb
 WITHDRAW_DATE_REQUIRED,Date de retrait *,86478a68
 WITHDRAW_FROM_BATCHES,Retirer des lots,184d96f3
 WITHDRAW_INSTRUCTIONS,Sélectionnez un but de retrait et saisissez les quantités de chaque lot à retirer.,1636e2b4

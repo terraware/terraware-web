@@ -54,7 +54,7 @@ const search = async (
 ): Promise<ModuleSearchResult[] | null> => {
   const searchParams: SearchRequestPayload = {
     prefix: 'modules',
-    fields: ['id', 'name', 'cohortModules.cohort_id', 'deliverables.id'],
+    fields: ['id', 'name', 'projectModules.project_id', 'deliverables.id'],
     search: searchPayload ?? { operation: 'and', children: [] },
     sortOrder: [sortOrder ?? { field: 'name' }],
     count: 0,
@@ -67,12 +67,12 @@ const search = async (
   }
 
   return response.map((result: SearchResponseElement) => {
-    const { id, name, cohortModules, deliverables } = result;
+    const { id, name, projectModules, deliverables } = result;
 
     return {
       id,
       name,
-      cohortsQuantity: Array.isArray(cohortModules) ? cohortModules.length : 0,
+      projectsQuantity: Array.isArray(projectModules) ? projectModules.length : 0,
       deliverablesQuantity: Array.isArray(deliverables) ? deliverables.length : 0,
     } as ModuleSearchResult;
   });

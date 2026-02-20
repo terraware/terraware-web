@@ -40,7 +40,7 @@ type AcceleratorReportEditFormProps = {
 };
 
 const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) => {
-  const { currentParticipantProject, setCurrentParticipantProject } = useParticipantData();
+  const { currentAcceleratorProject, setCurrentAcceleratorProject } = useParticipantData();
   const theme = useTheme();
   const { strings } = useLocalization();
   const { goToAcceleratorReport } = useNavigateTo();
@@ -85,7 +85,7 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
 
   const saveReportPhotos = useCallback(async () => {
     if (photos.toDelete.length === 0 && photos.toUpdate.length === 0 && photos.toAdd.length === 0) {
-      return false;
+      goToReport();
     }
 
     try {
@@ -100,7 +100,6 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
       goToReport();
     } catch (error) {
       snackbar.toastError();
-      return false;
     }
   }, [photos.toDelete, photos.toUpdate, photos.toAdd, batchReportPhotos, projectId, report.id, goToReport, snackbar]);
 
@@ -122,10 +121,10 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
   ]);
 
   useEffect(() => {
-    if (projectId !== currentParticipantProject?.id) {
-      setCurrentParticipantProject(projectId);
+    if (projectId !== currentAcceleratorProject?.id) {
+      setCurrentAcceleratorProject(projectId);
     }
-  }, [currentParticipantProject?.id, projectId, setCurrentParticipantProject]);
+  }, [currentAcceleratorProject?.id, projectId, setCurrentAcceleratorProject]);
 
   const onChangeMetric = useCallback(
     (
