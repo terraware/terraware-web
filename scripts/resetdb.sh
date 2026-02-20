@@ -62,7 +62,7 @@ UPDATE public.identifier_sequences
 SET prefix = TO_CHAR(CURRENT_DATE, 'YY') || SUBSTRING(prefix FROM 3)
 WHERE prefix ~ '^\d{2}-';
 
-UPDATE accelerator.cohort_modules
+UPDATE accelerator.project_modules
 SET end_date = CURRENT_DATE + 1
 WHERE module_id = 1000;
 "
