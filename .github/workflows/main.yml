@@ -84,9 +84,8 @@ jobs:
       - name: Do typescript check
         run: yarn ts
 
-      # Disable until rstest is added (later PR)
-      #      - name: Run unit tests
-      #        run: yarn test:ci
+      - name: Run unit tests
+        run: yarn test:ci
 
       # dist is getting created with root user somewhere. Remove this so that the build process can create it with the right permissions.
       # this has to be done before starting the BE because removing it later will break the nginx container
