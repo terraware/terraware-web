@@ -24,13 +24,12 @@ import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { useGetAcceleratorReportQuery, useSubmitAcceleratorReportMutation } from 'src/queries/generated/reports';
-import strings from 'src/strings';
 import { MetricType } from 'src/types/AcceleratorReport';
 
 import SubmitReportDialog from './SubmitReportDialog';
 
 const AcceleratorReportView = () => {
-  const { activeLocale } = useLocalization();
+  const { strings } = useLocalization();
   const { currentAcceleratorProject, setCurrentAcceleratorProject } = useParticipantData();
   const theme = useTheme();
 
@@ -64,11 +63,11 @@ const AcceleratorReportView = () => {
   const crumbs: Crumb[] = useMemo(
     () => [
       {
-        name: activeLocale ? strings.REPORTS : '',
+        name: strings.REPORTS,
         to: year ? `${APP_PATHS.REPORTS}?year=${year}` : APP_PATHS.REPORTS,
       },
     ],
-    [activeLocale, year]
+    [strings, year]
   );
 
   const goToReportEdit = useCallback(() => {
@@ -103,7 +102,7 @@ const AcceleratorReportView = () => {
         />
       </>
     );
-  }, [goToReportEdit, report?.id, report?.status, reportResponse.isLoading, submitResponse.isLoading]);
+  }, [goToReportEdit, report?.id, report?.status, reportResponse.isLoading, strings, submitResponse.isLoading]);
 
   const rightComponent = useMemo(
     () => (

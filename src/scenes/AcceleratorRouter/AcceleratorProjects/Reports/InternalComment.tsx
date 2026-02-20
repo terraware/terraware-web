@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
+import strings from '';
 import { Box, Grid } from '@mui/material';
 import { Dropdown, DropdownItem } from '@terraware/web-components';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
@@ -7,7 +8,6 @@ import TextField from '@terraware/web-components/components/Textfield/Textfield'
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
 import { AcceleratorReportPayload } from 'src/queries/generated/reports';
-import strings from 'src/strings';
 import { AcceleratorReportStatus, AcceleratorReportStatuses } from 'src/types/AcceleratorReport';
 
 interface InternalCommentProps {

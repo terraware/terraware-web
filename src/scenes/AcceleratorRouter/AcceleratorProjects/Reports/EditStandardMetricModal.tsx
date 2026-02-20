@@ -7,8 +7,8 @@ import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
 import useBoolean from 'src/hooks/useBoolean';
+import { useLocalization } from 'src/providers';
 import { useUpdateStandardMetricMutation } from 'src/queries/generated/reportMetrics';
-import strings from 'src/strings';
 import { StandardMetric } from 'src/types/AcceleratorReport';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -25,6 +25,7 @@ export default function EditStandardMetricModal({
   standardMetric,
 }: EditStandardMetricModalProps): JSX.Element {
   const snackbar = useSnackbar();
+  const { strings } = useLocalization();
 
   const [record, , , onChangeCallback] = useForm<StandardMetric>(standardMetric);
   const [validate, setValidate] = useState(false);
@@ -39,7 +40,7 @@ export default function EditStandardMetricModal({
       onClose();
       snackbar.toastSuccess(strings.STANDARD_METRIC_SAVED);
     }
-  }, [updateStandardMetricResponse, snackbar, onClose]);
+  }, [updateStandardMetricResponse, snackbar, onClose, strings.STANDARD_METRIC_SAVED]);
 
   const save = useCallback(() => {
     if (!record.name || !record.reference) {

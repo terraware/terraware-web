@@ -3,7 +3,7 @@ import React, { type JSX } from 'react';
 import { Typography, useTheme } from '@mui/material';
 import { Confirm } from '@terraware/web-components';
 
-import strings from 'src/strings';
+import { useLocalization } from 'src/providers';
 
 export type ApproveDialogProps = {
   onClose: () => void;
@@ -12,6 +12,7 @@ export type ApproveDialogProps = {
 
 export default function ApproveReportDialog({ onClose, onSubmit }: ApproveDialogProps): JSX.Element {
   const theme = useTheme();
+  const { strings } = useLocalization();
 
   return (
     <Confirm
