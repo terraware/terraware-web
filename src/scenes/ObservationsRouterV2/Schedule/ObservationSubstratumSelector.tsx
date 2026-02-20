@@ -28,65 +28,72 @@ const ObservationSubstratumSelector = ({
   const [selectAll, setSelectAll] = useState<boolean>(false);
 
   const getPlantingSiteResponse = useGetPlantingSiteQuery(plantingSiteId);
-  const [selectedSubstrata, setSelectedSubstrata] = useState(new Map<number, boolean>());
+  const [selectedSubstrata, setSelectedSubstrata] = useState<number[]>([]);
 
   const plantingSite = useMemo(() => getPlantingSiteResponse.data?.site, [getPlantingSiteResponse.data?.site]);
 
-  const handleOnChangeSelectedSubstrata = useCallback(
-    (nextSelectedSubstrata: Map<number, boolean>) => {
-      setSelectedSubstrata(nextSelectedSubstrata);
-
-      // If we were using es2015 or above, this entire function can go away
-      // We could call onChangeSelectedSubstrata with a one liner array creation from the map
-      const selectedSubstratumIds: number[] = [];
-      nextSelectedSubstrata.forEach((value: boolean, substratumId: number) => {
-        if (value) {
-          selectedSubstratumIds.push(substratumId);
-        }
-      });
-      onChangeSelectedSubstrata(selectedSubstratumIds);
-    },
-    [onChangeSelectedSubstrata]
-  );
-
   const onChangeSubstratumCheckbox = useCallback(
     (substratumId: number) => (value: boolean) => {
-      // Consider using es2015 or above so we can spread iterators and interact with Map a bit better
-      const nextSelectedSubstrata = new Map(selectedSubstrata).set(substratumId, value);
-      handleOnChangeSelectedSubstrata(nextSelectedSubstrata);
+      setSelectedSubstrata((existingSelectedSubstrata) => {
+        if (!existingSelectedSubstrata.includes(substratumId) && value) {
+          return [...existingSelectedSubstrata, substratumId];
+        } else if (existingSelectedSubstrata.includes(substratumId) && !value) {
+          return existingSelectedSubstrata.filter((existingId) => existingId !== substratumId);
+        }
+        return existingSelectedSubstrata;
+      });
     },
-    [handleOnChangeSelectedSubstrata, selectedSubstrata]
+    []
   );
 
   const onChangeStratumCheckbox = useCallback(
     (stratum: Stratum) => (value: boolean) => {
-      const nextSelectedSubstrata = new Map(selectedSubstrata);
-      stratum.substrata.forEach((substratum) => {
-        nextSelectedSubstrata.set(substratum.id, value);
+      setSelectedSubstrata((existingSelectedSubstrata) => {
+        if (value) {
+          const nextSelectedSubstrata = [...existingSelectedSubstrata];
+          stratum.substrata.forEach((substratum) => {
+            if (!existingSelectedSubstrata.includes(substratum.id)) {
+              nextSelectedSubstrata.push(substratum.id);
+            }
+          });
+          return nextSelectedSubstrata;
+        } else {
+          return existingSelectedSubstrata.filter(
+            (substratumId) => stratum.substrata.find((substratum) => substratum.id === substratumId) !== undefined
+          );
+        }
       });
-
-      handleOnChangeSelectedSubstrata(nextSelectedSubstrata);
     },
-    [handleOnChangeSelectedSubstrata, selectedSubstrata]
+    []
   );
 
-  const isStratumFullySelected = (stratum: Stratum) =>
-    stratum.substrata.every((substratum) => selectedSubstrata.get(substratum.id));
+  const isStratumFullySelected = useCallback(
+    (stratum: Stratum) =>
+      stratum.substrata.every(
+        (substratum) => !!selectedSubstrata.find((substratumId) => substratumId === substratum.id)
+      ),
+    [selectedSubstrata]
+  );
 
-  const isStratumPartiallySelected = (stratum: Stratum) =>
-    !isStratumFullySelected(stratum) && stratum.substrata.some((substratum) => selectedSubstrata.get(substratum.id));
+  const isStratumPartiallySelected = useCallback(
+    (stratum: Stratum) =>
+      !isStratumFullySelected(stratum) &&
+      stratum.substrata.some((substratum) => selectedSubstrata.find((substratumId) => substratumId === substratum.id)),
+    [isStratumFullySelected, selectedSubstrata]
+  );
 
   useEffect(() => {
     if (plantingSite) {
       // Initialize all substratum selections
-      const initialSelectedSubstrata = new Map(
-        plantingSite.strata?.flatMap((stratum) =>
-          stratum.substrata.map((substratum) => [substratum.id, selectAll ? true : false])
-        )
-      );
-      handleOnChangeSelectedSubstrata(initialSelectedSubstrata);
+      const initialSelectedSubstrata =
+        plantingSite.strata?.flatMap((stratum) => stratum.substrata.map((substratum) => substratum.id)) ?? [];
+      setSelectedSubstrata(selectAll ? initialSelectedSubstrata : []);
     }
-  }, [handleOnChangeSelectedSubstrata, plantingSite, selectAll]);
+  }, [plantingSite, selectAll]);
+
+  useEffect(() => {
+    onChangeSelectedSubstrata(selectedSubstrata);
+  }, [onChangeSelectedSubstrata, selectedSubstrata]);
 
   return (
     plantingSite &&
@@ -161,7 +168,7 @@ const ObservationSubstratumSelector = ({
                         label={substratum.name}
                         name='Limit Observation to Substratum'
                         onChange={onChangeSubstratumCheckbox(substratum.id)}
-                        value={selectedSubstrata.get(substratum.id)}
+                        value={selectedSubstrata.includes(substratum.id)}
                       />
                       {substratum.latestObservationCompletedTime && (
                         <Typography

@@ -26,14 +26,7 @@ export default function ScheduleObservation(): JSX.Element {
       snackbar.toastSuccess(strings.OBSERVATION_SCHEDULED);
       goToObservations();
     }
-  }, [
-    goToObservations,
-    snackbar,
-    strings.OBSERVATION_RESCHEDULED,
-    scheduleResponse.isError,
-    scheduleResponse.isSuccess,
-    strings.OBSERVATION_SCHEDULED,
-  ]);
+  }, [goToObservations, snackbar, scheduleResponse.isError, scheduleResponse.isSuccess, strings.OBSERVATION_SCHEDULED]);
 
   const onSave = useCallback(
     (data: ScheduleObservationRequestPayload) => {
