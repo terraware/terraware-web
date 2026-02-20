@@ -26,7 +26,7 @@ openssl req \
 ```
 
 2. Figure out the server URL you want to use, e.g., `https://terraware.io` for production.
-3. Set `REACT_APP_TERRAWARE_API` to that URL in the `.env` file in the repo root directory.
+3. Set `PUBLIC_TERRAWARE_API` to that URL in the `.env` file in the repo root directory.
 4. Start (or restart) the Node dev server, e.g., by running `yarn start:dev` in the repo
    root directory.
 5. In this directory, run `docker compose up -d`.
@@ -62,7 +62,7 @@ yarn build
 docker build --no-cache -t terraware-web-local-1 .
 
 ## Run the docker image (pointing to a staging environment)
-docker run --env SERVER_URL=https://staging.yourdomain.com -p 80:80 -v "$(pwd)/build:/usr/share/nginx/html" terraware-web-local-1
+docker run --env SERVER_URL=https://staging.yourdomain.com -p 80:80 -v "$(pwd)/dist:/usr/share/nginx/html" terraware-web-local-1
 ```
 
 A container with a production build of the React app is now running. The next step is to turn on the remote backend
@@ -79,9 +79,8 @@ service in the `docker-compose.yml` in this directory:
 And then run `docker compose up -d`.
 
 Now, when you visit https://localhost, we will load the FE through the production-build container. This application will
-attempt to
-resolve any API requests to the `SERVER_URL` provided to the running `terraware-web-local-1`. The request flow should
-look like this:
+attempt to resolve any API requests to the `SERVER_URL` provided to the running `terraware-web-local-1`. The request
+flow should look like this:
 
 ```
 browser ----> localhost
