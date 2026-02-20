@@ -22,7 +22,7 @@ export const useSeedBankSummary = () => {
       void populateSummary();
 
       // Update interval that keeps summary up to date
-      if (!process.env.REACT_APP_DISABLE_RECURRENT_REQUESTS) {
+      if (!import.meta.env.PUBLIC_DISABLE_RECURRENT_REQUESTS) {
         setPopulateSummaryInterval((currInterval) => {
           if (currInterval) {
             // Clear an existing interval when the facilityId changes
