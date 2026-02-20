@@ -268,13 +268,7 @@
 <a name='L203'></a><a href='#L203'>203</a>
 <a name='L204'></a><a href='#L204'>204</a>
 <a name='L205'></a><a href='#L205'>205</a>
-<a name='L206'></a><a href='#L206'>206</a>
-<a name='L207'></a><a href='#L207'>207</a>
-<a name='L208'></a><a href='#L208'>208</a>
-<a name='L209'></a><a href='#L209'>209</a>
-<a name='L210'></a><a href='#L210'>210</a>
-<a name='L211'></a><a href='#L211'>211</a>
-<a name='L212'></a><a href='#L212'>212</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L206'></a><a href='#L206'>206</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -459,12 +453,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -487,7 +475,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > type JSX, use</span>Callback, useEffect, useMemo, useState } from 'react';
 <span class="cstat-no" title="statement not covered" ></span>
-import { Typography, us<span class="cstat-no" title="statement not covered" >eTheme } from '@mui/material';</span>
+import { useTheme } fro<span class="cstat-no" title="statement not covered" >m '@mui/material';</span>
 <span class="cstat-no" title="statement not covered" ></span>
 import ListMapView <span class="cstat-no" title="statement not covered" >from 'src/components/L</span>istMapView';
 import Card from 's<span class="cstat-no" title="statement not covered" >rc/components/common/Card';</span>
@@ -628,54 +616,48 @@ export defa<span class="fstat-no" title="function not covered" >ul</span>t fu<sp
 &nbsp;
   return (
     &lt;Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}&gt;
-      &lt;Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt} marginBottom={theme.spacing(1)}&gt;
-        {strings.PLANTING_PROGRESS}
-      &lt;/Typography&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >      &lt;Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxt}&gt;</span>
-        {activeView === 'list'
-<span class="cstat-no" title="statement not covered" >          ? strings.PLANTING_PROGRESS_TABLE_DESCRIPTION</span>
-          : strings.PLANTING_PROGRESS_MAP_DESCRIPTION}
-      &lt;/Typography&gt;
       &lt;ListMapView
         data={plantingSite?.strata}
-        style={{
-          display: 'flex',
+        style={{<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >          display: 'flex',</span>
           flexDirection: 'column',
-          flexGrow: 1,
-          padding: isMobile ? theme.spacing(3) : theme.spacing(3, 0, 0),
+<span class="cstat-no" title="statement not covered" >          flexGrow: 1,</span>
+          padding: isMobile ? theme.spacing(3) : 0,
         }}
         initialView={initialView}
         onView={setActiveView}
         search={
-          &lt;SearchComponent
-            view={activeView}
-            onChangePlantingSite={setSelectedPlantingSiteId}
-            featuredFilters={featuredFilters}
-            onExport={onExport}
-            {...searchProps}
-          /&gt;
+          activeView === 'list' ? undefined : (
+            &lt;SearchComponent
+              view={activeView}
+              onChangePlantingSite={setSelectedPlantingSiteId}
+              featuredFilters={featuredFilters}
+              onExport={onExport}
+              {...searchProps}
+            /&gt;
+          )
         }
         list={&lt;PlantingProgressList reloadTracking={reloadTrackingAndObservations} rows={rows} /&gt;}
         map={
           &lt;PlantingProgressMap plantingSiteId={selectedPlantingSiteId} reloadTracking={reloadTrackingAndObservations} /&gt;
         }
       /&gt;
-    &lt;/Car<span class="fstat-no" title="function not covered" >d&gt;</span>
+    &lt;/Card&gt;
   );
 }
 &nbsp;
 type SearchComponentProps = SearchProps &amp; {
   view: View;
-  onChangePlantingSite: (newSiteId: number) =&gt; void;
+  onChang<span class="fstat-no" title="function not covered" >ePlantingSite: (</span>newSiteId: number) =&gt; void;
   featuredFilters?: FeaturedFilterConfig[];
 };
-<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
 function SearchComponent({
   featuredFilters,
   filtersProps,
   onChangePlantingSite,
   onExport,
-  onSearch,
+<span class="cstat-no" title="statement not covered" >  onSearch,</span>
   search,
   view,
 }: SearchComponentProps): JSX.Element {
@@ -703,7 +685,7 @@ function SearchComponent({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-20T05:26:44.658Z
+                at 2026-02-20T14:07:55.546Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

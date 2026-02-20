@@ -1,3 +1,4 @@
+508fff454c58 SW-8003 Inventory Withdrawals: Ability to customize columns/filters in Withdrawal - withdrawals history (#5250)
 835e21580d9c Fixed marker icons, location and onClick. Added tree markers and drawers (#5265)
 464b02681371 SW-8062 Added not observed tag (#5263)
 4acd2643bab4 SW-8052 Update map legend texts (#5272)
