@@ -13,8 +13,8 @@ import TextField from 'src/components/common/Textfield/Textfield';
 import { APP_PATHS } from 'src/constants';
 import useBoolean from 'src/hooks/useBoolean';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
+import { useLocalization } from 'src/providers';
 import { useCreateStandardMetricMutation } from 'src/queries/generated/reportMetrics';
-import strings from 'src/strings';
 import { CreateStandardMetricRequestPayload } from 'src/types/AcceleratorReport';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -25,6 +25,7 @@ export default function NewStandardMetric(): JSX.Element {
   const theme = useTheme();
   const navigate = useSyncNavigate();
   const snackbar = useSnackbar();
+  const { strings } = useLocalization();
   const { isMobile } = useDeviceInfo();
   const pathParams = useParams<{ projectId: string }>();
   const projectId = String(pathParams.projectId);
@@ -45,7 +46,7 @@ export default function NewStandardMetric(): JSX.Element {
       snackbar.toastSuccess(strings.STANDARD_METRIC_SAVED);
       goToProjectReports();
     }
-  }, [createStandardMetricResponse, snackbar, goToProjectReports]);
+  }, [createStandardMetricResponse, snackbar, goToProjectReports, strings.STANDARD_METRIC_SAVED]);
 
   const [newMetric, , , onChangeCallback] = useForm<CreateStandardMetricRequestPayload['metric']>({
     component: 'Biodiversity',

@@ -3,9 +3,8 @@ import React, { type JSX, useCallback, useEffect } from 'react';
 import { Box, useTheme } from '@mui/material';
 
 import AcceleratorReportStatusBadge from 'src/components/AcceleratorReports/AcceleratorReportStatusBadge';
-import { useUser } from 'src/providers';
+import { useLocalization, useUser } from 'src/providers';
 import { AcceleratorReportPayload, useReviewAcceleratorReportMutation } from 'src/queries/generated/reports';
-import strings from 'src/strings';
 import { AcceleratorReportStatus } from 'src/types/AcceleratorReport';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -18,6 +17,7 @@ export type MetadataProps = {
 
 const Metadata = (props: MetadataProps): JSX.Element => {
   const { report, projectId } = props;
+  const { strings } = useLocalization();
 
   const [reviewReport, reviewReportResponse] = useReviewAcceleratorReportMutation();
 
@@ -31,7 +31,7 @@ const Metadata = (props: MetadataProps): JSX.Element => {
     } else if (reviewReportResponse.isSuccess) {
       snackbar.toastSuccess(strings.CHANGES_SAVED);
     }
-  }, [snackbar, reviewReportResponse.isError, reviewReportResponse.isSuccess]);
+  }, [snackbar, reviewReportResponse.isError, reviewReportResponse.isSuccess, strings.CHANGES_SAVED]);
 
   const onUpdateInternalComment = useCallback(
     (internalComment: string, status: AcceleratorReportStatus) => {

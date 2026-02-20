@@ -8,7 +8,6 @@ import AcceleratorReportsTable from 'src/components/AcceleratorReports/Accelerat
 import Page from 'src/components/Page';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
-import strings from 'src/strings';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
 import { useAcceleratorProjectData } from '../AcceleratorProjectContext';
@@ -16,13 +15,9 @@ import ReportsSettings from './ReportsSettings';
 
 const ReportsView = () => {
   const { crumbs, acceleratorProject, project } = useAcceleratorProjectData();
-  const { activeLocale } = useLocalization();
+  const { strings } = useLocalization();
 
   const tabs = useMemo(() => {
-    if (!activeLocale) {
-      return [];
-    }
-
     return [
       {
         id: 'reports',
@@ -40,7 +35,7 @@ const ReportsView = () => {
         children: <ReportsSettings />,
       },
     ];
-  }, [activeLocale]);
+  }, [strings]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'reports',
