@@ -59,7 +59,7 @@ const ObservationSubstratumSelector = ({
           return nextSelectedSubstrata;
         } else {
           return existingSelectedSubstrata.filter(
-            (substratumId) => stratum.substrata.find((substratum) => substratum.id === substratumId) !== undefined
+            (substratumId) => stratum.substrata.find((substratum) => substratum.id === substratumId) === undefined
           );
         }
       });
