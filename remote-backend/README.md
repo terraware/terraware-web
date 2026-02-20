@@ -62,7 +62,7 @@ yarn build
 docker build --no-cache -t terraware-web-local-1 .
 
 ## Run the docker image (pointing to a staging environment)
-docker run --env SERVER_URL=https://staging.yourdomain.com -p 80:80 -v "$(pwd)/build:/usr/share/nginx/html" terraware-web-local-1
+docker run --env SERVER_URL=https://staging.yourdomain.com -p 80:80 -v "$(pwd)/dist:/usr/share/nginx/html" terraware-web-local-1
 ```
 
 A container with a production build of the React app is now running. The next step is to turn on the remote backend

@@ -90,7 +90,7 @@ jobs:
       # dist is getting created with root user somewhere. Remove this so that the build process can create it with the right permissions.
       # this has to be done before starting the BE because removing it later will break the nginx container
       - name: Remove dist folder
-        run: rm -rf build
+        run: rm -rf dist
 
       - name: Download and start backend
         if: github.ref != 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/')
