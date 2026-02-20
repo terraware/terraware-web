@@ -21,6 +21,7 @@ import {
 import useMapFeatureStyles from 'src/components/NewMap/useMapFeatureStyles';
 import useMapPhotoDrawer, { PlotPhoto, PlotSplat } from 'src/components/NewMap/useMapPhotoDrawer';
 import useMapPlantDrawer, { PlotPlant } from 'src/components/NewMap/useMapPlantDrawer';
+import useMapTreeDrawer, { BiomassTree } from 'src/components/NewMap/useMapTreeDrawer';
 import useMapUtils from 'src/components/NewMap/useMapUtils';
 import useMonitoringPlotsMapLegend from 'src/components/NewMap/useMonitoringPlotsMapLegend';
 import usePlantMarkersMapLegend from 'src/components/NewMap/usePlantMarkersMapLegend';
@@ -31,7 +32,11 @@ import { getBoundingBoxFromPoints } from 'src/components/NewMap/utils';
 import isEnabled from 'src/features';
 import { useLocalization, useOrganization } from 'src/providers';
 import { ObservationSplatPayload, useLazyListObservationSplatsQuery } from 'src/queries/generated/observationSplats';
-import { ObservationMonitoringPlotResultsPayload, ObservationResultsPayload } from 'src/queries/generated/observations';
+import {
+  ExistingTreePayload,
+  ObservationMonitoringPlotResultsPayload,
+  ObservationResultsPayload,
+} from 'src/queries/generated/observations';
 import {
   useLazyGetPlantingSiteHistoryQuery,
   useLazyGetPlantingSiteQuery,
@@ -114,6 +119,7 @@ const ObservationMap = ({
   } = useMapFeatureStyles();
 
   const [selectedFeature, setSelectedFeature] = useState<LayerFeature>();
+  const { treeDrawerContent, treeDrawerHeader, treeDrawerSize, selectedTrees, selectTrees } = useMapTreeDrawer();
   const { plantDrawerContent, plantDrawerHeader, plantDrawerSize, selectedPlants, selectPlants } = useMapPlantDrawer();
   const { photoDrawerContent, photoDrawerHeader, photoDrawerSize, selectedPhotos, selectPhotos } = useMapPhotoDrawer();
 
@@ -643,10 +649,11 @@ const ObservationMap = ({
     (monitoringPlotId: number, observationId: number, photo: ObservationMonitoringPlotPhotoWithGps) => () => {
       selectPhotos([{ monitoringPlotId, observationId, photo }]);
       selectPlants([]);
+      selectTrees([]);
       setSelectedFeature(undefined);
       setDrawerOpen(true);
     },
-    [selectPhotos, selectPlants]
+    [selectPhotos, selectPlants, selectTrees]
   );
 
   const selectPhotosFromMarkers = useCallback(
@@ -663,10 +670,11 @@ const ObservationMap = ({
         .filter((photo): photo is PlotPhoto => photo !== undefined);
       selectPhotos(photos);
       selectPlants([]);
+      selectTrees([]);
       setSelectedFeature(undefined);
       setDrawerOpen(true);
     },
-    [selectPhotos, selectPlants]
+    [selectPhotos, selectPlants, selectTrees]
   );
 
   const selectSplatFromMarkers = useCallback(
@@ -683,20 +691,22 @@ const ObservationMap = ({
         .filter((photo): photo is PlotSplat => photo !== undefined);
       selectPhotos(photos);
       selectPlants([]);
+      selectTrees([]);
       setSelectedFeature(undefined);
       setDrawerOpen(true);
     },
-    [selectPhotos, selectPlants]
+    [selectPhotos, selectPlants, selectTrees]
   );
 
   const selectPlant = useCallback(
     (monitoringPlotId: number, observationId: number, plant: RecordedPlant) => () => {
       selectPhotos([]);
       selectPlants([{ monitoringPlotId, observationId, plant }]);
+      selectTrees([]);
       setSelectedFeature(undefined);
       setDrawerOpen(true);
     },
-    [selectPhotos, selectPlants]
+    [selectPhotos, selectPlants, selectTrees]
   );
 
   const selectPlantsFromMarkers = useCallback(
@@ -713,10 +723,42 @@ const ObservationMap = ({
         .filter((plant): plant is PlotPlant => plant !== undefined);
       selectPhotos([]);
       selectPlants(plants);
+      selectTrees([]);
       setSelectedFeature(undefined);
       setDrawerOpen(true);
     },
-    [selectPhotos, selectPlants]
+    [selectPhotos, selectPlants, selectTrees]
+  );
+
+  const selectTree = useCallback(
+    (observationId: number, tree: ExistingTreePayload) => () => {
+      selectPhotos([]);
+      selectPlants([]);
+      selectTrees([{ observationId, tree }]);
+      setSelectedFeature(undefined);
+      setDrawerOpen(true);
+    },
+    [selectPhotos, selectPlants, selectTrees]
+  );
+
+  const selectTreesFromMarkers = useCallback(
+    (selectedMarkers: MapMarker[]) => {
+      const trees = selectedMarkers
+        .map((marker): BiomassTree | undefined => {
+          if (marker.properties) {
+            const observationId = marker.properties.observationId as number;
+            const tree = marker.properties.tree as ExistingTreePayload;
+            return { observationId, tree };
+          }
+        })
+        .filter((tree): tree is BiomassTree => tree !== undefined);
+      selectPhotos([]);
+      selectPlants([]);
+      selectTrees(trees);
+      setSelectedFeature(undefined);
+      setDrawerOpen(true);
+    },
+    [selectPhotos, selectPlants, selectTrees]
   );
 
   const photoMarkers = useMemo((): MapMarker[] => {
@@ -877,8 +919,14 @@ const ObservationMap = ({
               if (tree.gpsCoordinates) {
                 return {
                   id: `trees/${tree.id}`,
-                  longitude: tree.gpsCoordinates.coordinates[1],
-                  latitude: tree.gpsCoordinates.coordinates[0],
+                  longitude: tree.gpsCoordinates.coordinates[0],
+                  latitude: tree.gpsCoordinates.coordinates[1],
+                  onClick: selectTree(observation.observationId, tree),
+                  selected: selectedTrees.find((selected) => selected.tree.id === tree.id) !== undefined,
+                  properties: {
+                    observationId: observation.observationId,
+                    tree,
+                  },
                 };
               } else {
                 return undefined;
@@ -890,7 +938,7 @@ const ObservationMap = ({
         return [];
       }
     },
-    [adHocObservationResults, isBiomass]
+    [adHocObservationResults, isBiomass, selectTree, selectedTrees]
   );
 
   const plantsMarkers = useCallback(
@@ -908,8 +956,8 @@ const ObservationMap = ({
               return filteredPlants.map(
                 (plant): MapMarker => ({
                   id: `plants/${plant.id}`,
-                  longitude: plant.gpsCoordinates.coordinates[1],
-                  latitude: plant.gpsCoordinates.coordinates[0],
+                  longitude: plant.gpsCoordinates.coordinates[0],
+                  latitude: plant.gpsCoordinates.coordinates[1],
                   onClick: selectPlant(plot.monitoringPlotId, selectedResults.observationId, plant),
                   selected: selectedPlants.find((selected) => selected.plant.id === plant.id) !== undefined,
                   properties: {
@@ -929,8 +977,10 @@ const ObservationMap = ({
             return filteredPlants.map(
               (plant): MapMarker => ({
                 id: `plants/${plant.id}`,
-                longitude: plant.gpsCoordinates.coordinates[1],
-                latitude: plant.gpsCoordinates.coordinates[0],
+                longitude: plant.gpsCoordinates.coordinates[0],
+                latitude: plant.gpsCoordinates.coordinates[1],
+                onClick: selectPlant(plot.monitoringPlotId, selectedResults.observationId, plant),
+                selected: selectedPlants.find((selected) => selected.plant.id === plant.id) !== undefined,
                 properties: {
                   monitoringPlotId: plot.monitoringPlotId,
                   observationId: selectedResults.observationId,
@@ -984,21 +1034,15 @@ const ObservationMap = ({
       {
         markers: treesMarkers(true),
         markerGroupId: 'live-trees',
-        style: {
-          iconColor: '#40B0A6',
-          iconName: 'iconLivePlant',
-          type: 'icon',
-        },
+        onClusterClick: selectTreesFromMarkers,
+        style: livePlantStyle,
         visible: livePlantsVisible,
       },
       {
         markers: treesMarkers(false),
         markerGroupId: 'dead-trees',
-        style: {
-          iconColor: '#E1BE6A',
-          iconName: 'iconLivePlant',
-          type: 'icon',
-        },
+        onClusterClick: selectTreesFromMarkers,
+        style: deadPlantStyle,
         visible: deadPlantsVisible,
       },
     ];
@@ -1014,6 +1058,7 @@ const ObservationMap = ({
     selectPhotosFromMarkers,
     selectPlantsFromMarkers,
     selectSplatFromMarkers,
+    selectTreesFromMarkers,
     treesMarkers,
     virtualPlotMarker,
     virtualPlotStyle,
@@ -1099,6 +1144,9 @@ const ObservationMap = ({
     if (selectedPlants.length > 0) {
       return plantDrawerContent;
     }
+    if (selectedTrees.length > 0) {
+      return treeDrawerContent;
+    }
   }, [
     isBiomass,
     photoDrawerContent,
@@ -1107,6 +1155,8 @@ const ObservationMap = ({
     selectedPhotos.length,
     selectedPlants.length,
     selectedResults,
+    selectedTrees.length,
+    treeDrawerContent,
   ]);
 
   const drawerHeader = useMemo(() => {
@@ -1114,20 +1164,38 @@ const ObservationMap = ({
       return photoDrawerHeader;
     } else if (selectedPlants.length > 0) {
       return plantDrawerHeader;
+    } else if (selectedTrees.length > 0) {
+      return treeDrawerHeader;
     } else {
       return undefined;
     }
-  }, [photoDrawerHeader, plantDrawerHeader, selectedPhotos.length, selectedPlants.length]);
+  }, [
+    photoDrawerHeader,
+    plantDrawerHeader,
+    selectedPhotos.length,
+    selectedPlants.length,
+    selectedTrees.length,
+    treeDrawerHeader,
+  ]);
 
   const drawerSize: MapDrawerSize = useMemo(() => {
     if (selectedPhotos.length > 0) {
       return photoDrawerSize;
     } else if (selectedPlants.length > 0) {
       return plantDrawerSize;
+    } else if (selectedTrees.length > 0) {
+      return treeDrawerSize;
     } else {
       return 'small';
     }
-  }, [photoDrawerSize, plantDrawerSize, selectedPhotos.length, selectedPlants.length]);
+  }, [
+    photoDrawerSize,
+    plantDrawerSize,
+    selectedPhotos.length,
+    selectedPlants.length,
+    selectedTrees.length,
+    treeDrawerSize,
+  ]);
 
   const [showHoverLocation, setShowHoverTextLocation] = useState<Point>();
   const onHover = useCallback((event: MapMouseEvent) => {
