@@ -347,7 +347,7 @@ export default fixupConfigRules([
       'react/display-name': 'error',
       'react/jsx-boolean-value': 'off',
       'react/jsx-key': 'error',
-      'react/jsx-no-bind': 'error',
+      'react/jsx-no-bind': process.env.NODE_ENV === 'development' ? 'off' : 'error',
       'react/jsx-no-comment-textnodes': 'error',
       'react/jsx-no-duplicate-props': 'error',
       'react/jsx-no-target-blank': 'error',

@@ -14,7 +14,7 @@ const baseQueryWithInterceptors: BaseQueryFn<string | FetchArgs, unknown, FetchB
   api,
   extraOptions
 ) => {
-  const shouldDelay = process.env.REACT_APP_DELAY_QUERIES === 'true';
+  const shouldDelay = import.meta.env.PUBLIC_DELAY_QUERIES === 'true';
 
   // --- simulate network delay (like your proxy)
   if (shouldDelay) {
