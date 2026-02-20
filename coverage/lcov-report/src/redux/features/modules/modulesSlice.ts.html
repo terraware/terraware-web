@@ -249,14 +249,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { createS<span class="cstat-no" title="statement not covered" >lice } from '@reduxjs/</span>toolkit';
 <span class="cstat-no" title="statement not covered" ></span>
-import { Module, ModuleC<span class="cstat-no" title="statement not covered" >ohortsSearchResult, ModuleS</span>earchResult } from 'src/types/Module';
+import { Module, ModuleP<span class="cstat-no" title="statement not covered" >rojectsSearchResult, Module</span>SearchResult } from 'src/types/Module';
 <span class="cstat-no" title="statement not covered" ></span>
 import { Status<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >T,</span> buildReducers } from '../asyncUtils';</span>
 im<span class="cstat-no" title="statement not covered" >port {</span>
   re<span class="cstat-no" title="statement not covered" >questGetModule,</span>
-  requestListModuleCohorts,
-  requestListModul<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >eP</span>rojects,</span>
-<span class="cstat-no" title="statement not covered" >  requestListModules,</span>
+  requestListModuleProjects,
+  requestListModul<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >es</span>,</span>
+<span class="cstat-no" title="statement not covered" >  requestListOrgProjectsAndModules,</span>
   re<span class="cstat-no" title="statement not covered" >questSearchModules,</span>
 } from<span class="cstat-no" title="statement not covered" > './modulesAsyncThunks';</span>
 <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
@@ -267,7 +267,7 @@ const initialStateM<span class="cstat-no" title="statement not covered" ><span c
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >export const moduleSlice = createSlice({</span>
   name: 'mo<span class="fstat-no" title="function not covered" >du</span>leSl<span class="cstat-no" title="statement not covered" >ice',</span>
-  initialState: initia<span class="fstat-no" title="function not covered" >lS</span>tate<span class="cstat-no" title="statement not covered" >Module,</span>
+  initialState: ini<span class="fstat-no" title="function not covered" >ti</span>alSt<span class="cstat-no" title="statement not covered" >ateModule,</span>
   reducers: {},<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
   extraReducers: (build<span class="fstat-no" title="function not covered" >er</span>) =&gt;<span class="cstat-no" title="statement not covered" > {</span>
     buildReduce<span class="fstat-no" title="function not covered" >rs</span>(req<span class="cstat-no" title="statement not covered" >uestGetModul</span>e)(builder);
@@ -291,28 +291,28 @@ export const moduleListSlice = createSlice({
 /**
  * List projects with modules in an organization
  */
-const initialStat<span class="fstat-no" title="function not covered" >eM</span>oduleProjects: { [key: string]: StatusT&lt;number[]&gt; } = {};
+const initialStat<span class="fstat-no" title="function not covered" >eM</span>oduleOrgProjects: { [key: string]: StatusT&lt;number[]&gt; } = {};
 <span class="cstat-no" title="statement not covered" ></span>
-export const moduleProjectsSlice = createSlice({
-  name: 'moduleProjectsSlice',
-  initialState: initialStateModuleP<span class="cstat-no" title="statement not covered" >roj</span>ects,
+export const moduleOrgProjectsSlice = createSlice({
+  name: 'moduleOrgProjectsSlice',
+  initialState: initialStateModuleOrgP<span class="cstat-no" title="statement not covered" >roj</span>ects,
   reducers: {},<span class="cstat-no" title="statement not covered" ></span>
   extraReducers: (builder) =&gt; {
-    buildReducers(requestListModuleProjects)(builder);
+    buildReducers(requestListOrgProjectsAndModules)(builder);
   },
 });<span class="fstat-no" title="function not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
 /**
- * List all cohorts associated with a module
+ * List all projects associated with a module
  */<span class="cstat-no" title="statement not covered" ></span>
-const initialStateModuleCoh<span class="cstat-no" title="statement not covered" >orts: { [key: string]: StatusT&lt;ModuleCohortsSearchResult&gt; } = {};</span>
+const initialStateModuleProj<span class="cstat-no" title="statement not covered" >ects: { [key: string]: StatusT&lt;ModuleProjectsSearchResult&gt; } = {};</span>
 &nbsp;
-export const moduleCohortsSlice = createSlice({
-  name: 'moduleCohortsSlice',
-  initialState: i<span class="fstat-no" title="function not covered" >ni</span>tialStateModuleCohorts,
+export const moduleProjectsSlice = createSlice({
+  name: 'moduleProjectsSlice',
+  initialState: i<span class="fstat-no" title="function not covered" >ni</span>tialStateModuleProjects,
   re<span class="cstat-no" title="statement not covered" >ducers: {},</span>
   extraReducers: (builder) =&gt; {
-    buildReducers(requestListModuleCohorts, true)(builder);
+    buildReducers(requestListModuleProjects, true)(builder);
   },<span class="cstat-no" title="statement not covered" ></span>
 });<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
@@ -333,8 +333,8 @@ export const searchModulesSlice = createSlice({
 const moduleReducers = {
   module: moduleSlice.reducer,
   moduleList: moduleListSlice.reducer,
+  moduleOrgProjects: moduleOrgProjectsSlice.reducer,
   moduleProjects: moduleProjectsSlice.reducer,
-  moduleCohorts: moduleCohortsSlice.reducer,
   searchModules: searchModulesSlice.reducer,
 };
 &nbsp;
@@ -346,7 +346,7 @@ export default moduleReducers;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-20T18:25:20.902Z
+                at 2026-02-20T19:31:59.754Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

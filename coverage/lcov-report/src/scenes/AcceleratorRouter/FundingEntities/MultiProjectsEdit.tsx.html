@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/58</span>
+                <span class='fraction'>0/60</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/24</span>
+                <span class='fraction'>0/26</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/19</span>
+                <span class='fraction'>0/20</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/52</span>
+                <span class='fraction'>0/53</span>
             </div>
         
             
@@ -162,7 +162,8 @@
 <a name='L97'></a><a href='#L97'>97</a>
 <a name='L98'></a><a href='#L98'>98</a>
 <a name='L99'></a><a href='#L99'>99</a>
-<a name='L100'></a><a href='#L100'>100</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L100'></a><a href='#L100'>100</a>
+<a name='L101'></a><a href='#L101'>101</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -222,6 +223,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -285,7 +287,7 @@ type ProjectsEditProps = {
 &nbsp;
 const MultiProjectsEdit = (props: ProjectsEditProps): JSX.Element =&gt; {
   const { projects, allProjects, setProjects, tooltip } = props;
-  const [rows, setRows] = useState&lt;Partial&lt;ProjectsEditOption&gt; &amp; { projectId: number }[]&gt;([]);
+  const [rows, setRows] = useState&lt;ProjectsEditOption[]&gt;([]);
 &nbsp;
   useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
     if (!rows.length<span class="cstat-no" title="statement not covered" >) {</span>
@@ -301,28 +303,29 @@ const MultiProjectsEdit = (props: ProjectsEditProps): JSX.Element =&gt; {
     (deletedIndex:<span class="cstat-no" title="statement not covered" > number) =&gt; {</span>
       const filteredR<span class="cstat-no" title="statement not covered" >ows = rows.filter((_row, _index)</span> =&gt; _index !== deletedIndex);
       setRows(filteredRows<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >);</span></span>
-      setProjects(filteredRows as ProjectsEditOption[]);<span class="cstat-no" title="statement not covered" ></span>
+      setProjects(filteredRows);<span class="cstat-no" title="statement not covered" ></span>
     },<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >    [rows, setRows, setProject<span class="fstat-no" title="function not covered" >s]</span></span>
   );<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
   const selectProject = useCallback(
     (updatedIndex: number, newProjectId: number) =&gt; {
-      const updatedRows<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > =</span> rows.map((project, index) =&gt;</span>
-<span class="cstat-no" title="statement not covered" >        index === updatedIndex ? { ...project, </span>projectId: newProjectId } : project
-      );
-      setRows(updatedRows)<span class="cstat-no" title="statement not covered" >;</span>
-<span class="fstat-no" title="function not covered" ></span>      setProjects(updatedRows as ProjectsEditOption[]);
-    },<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-    [r<span class="cstat-no" title="statement not covered" >ows, setRows, setProjec</span>ts]
-  );<span class="cstat-no" title="statement not covered" ></span>
+      const updatedRows<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > =</span> rows.map((project, index) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        const foundProject = allProjects.find((</span>p) =&gt; p.projectId === newProjectId);
+        return index === updatedIndex ? { projectId: newProjectId, dealName: foundProject?.dealName } : project;
+      });<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" ></span>      setRows(updatedRows);
+      setProjects(updatedRo<span class="cstat-no" title="statement not covered" >ws);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+    },<span class="cstat-no" title="statement not covered" ></span>
+    [r<span class="cstat-no" title="statement not covered" >ows, setProjects, allProjec</span>ts]
+  );
 &nbsp;
   return (
-    &lt;Grid container key='projects' spacing={2}&gt;
-      {rows.map((project<span class="cstat-no" title="statement not covered" >, index) =&gt; (</span>
-<span class="fstat-no" title="function not covered" ></span>        &lt;Fragment key={index}&gt;
-          &lt;Grid item xs={1<span class="cstat-no" title="statement not covered" >1} rowSpacing={2}&gt;</span>
-<span class="fstat-no" title="function not covered" ></span>            &lt;ProjectsDropdow<span class="cstat-no" title="statement not covered" >n</span>
+    &lt;Grid container key=<span class="cstat-no" title="statement not covered" >'projects' spacing={2}&gt;</span>
+<span class="fstat-no" title="function not covered" ></span>      {rows.map((project, index) =&gt; (
+        &lt;Fragment key={ind<span class="cstat-no" title="statement not covered" >ex}&gt;<span class="fstat-no" title="function not covered" ></span></span>
+          &lt;Grid item xs={11} <span class="cstat-no" title="statement not covered" >rowSpacing={2}&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+<span class="cstat-no" title="statement not covered" >            &lt;ProjectsDropdown</span>
               placeholder={strings.SELECT}
 <span class="cstat-no" title="statement not covered" >              availableProje</span>cts={allProjects
 <span class="cstat-no" title="statement not covered" >                .filter((p) =&gt; p</span>.projectId === project.projectId || !rows.map((r) =&gt; r.projectId).includes(p.projectId))
@@ -367,7 +370,7 @@ export default MultiProjectsEdit;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-20T18:25:20.902Z
+                at 2026-02-20T19:31:59.754Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

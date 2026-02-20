@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/42</span>
+                <span class='fraction'>0/40</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/39</span>
+                <span class='fraction'>0/37</span>
             </div>
         
             
@@ -149,15 +149,7 @@
 <a name='L84'></a><a href='#L84'>84</a>
 <a name='L85'></a><a href='#L85'>85</a>
 <a name='L86'></a><a href='#L86'>86</a>
-<a name='L87'></a><a href='#L87'>87</a>
-<a name='L88'></a><a href='#L88'>88</a>
-<a name='L89'></a><a href='#L89'>89</a>
-<a name='L90'></a><a href='#L90'>90</a>
-<a name='L91'></a><a href='#L91'>91</a>
-<a name='L92'></a><a href='#L92'>92</a>
-<a name='L93'></a><a href='#L93'>93</a>
-<a name='L94'></a><a href='#L94'>94</a>
-<a name='L95'></a><a href='#L95'>95</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L87'></a><a href='#L87'>87</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -188,9 +180,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -223,12 +213,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -271,56 +255,50 @@ export type ModuleEventWithStartTime = Omit&lt;ModuleEvent, 'startTime'&gt; &amp
 export type ModuleEventStatus = components['schemas']['ModuleEvent']['status'];
 export type Mo<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >du</span>leEventType = ModuleEvent['t<span class="cstat-no" title="statement not covered" >ype'];</span></span>
 export type ImportModuleProblemElement = components['schemas']['ImportModuleProblemElement'];
-export const MODULE_EVENTS: ModuleEventType[] = ['Live Session', 'One-on-One Session', 'Recorded Session', 'Workshop'];
 &nbsp;
 export const getEventType = (input: ModuleEventType): string =&gt; {
   switch (input) {
     case 'Live Session':
       return strings.LIVE_SESSION;
-    case 'One-on-On<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >e </span>Session<span class="cstat-no" title="statement not covered" >':</span></span>
-      return strings<span class="cstat-no" title="statement not covered" >.ON</span>E_ON_ONE_SESSION;
-<span class="cstat-no" title="statement not covered" >    case 'Recorded Session':</span>
-      return stri<span class="fstat-no" title="function not covered" >ng</span>s.RE<span class="cstat-no" title="statement not covered" >CORDED_SESSION</span>;
+    case 'One-on-One Session':
+      return string<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >s.</span>ONE_ON_<span class="cstat-no" title="statement not covered" >ONE_SESSION;</span></span>
+    case 'Recorded S<span class="cstat-no" title="statement not covered" >ess</span>ion':
+<span class="cstat-no" title="statement not covered" >      return strings.RECORDED_SESSION;</span>
     case 'Workshop<span class="fstat-no" title="function not covered" >':<span class="cstat-no" title="statement not covered" ></span></span>
       return str<span class="fstat-no" title="function not covered" >in</span>gs.W<span class="cstat-no" title="statement not covered" >ORKSHOP;</span>
     default:
 <span class="cstat-no" title="statement not covered" >      return `${input as string}`;</span>
   }<span class="cstat-no" title="statement not covered" ></span>
-};<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-ex<span class="cstat-no" title="statement not covered" >port type ModuleProjectSearchResult = {</span>
-  id: number;
-  coho<span class="cstat-no" title="statement not covered" >rt?: {</span>
-    cohortModules?: {
-<span class="cstat-no" title="statement not covered" >      module_id: string;</span>
-    }[];
-  };<span class="cstat-no" title="statement not covered" ></span>
-};
+};<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" ></span>
-export type ModuleCohortsSearchResult = {
-  coho<span class="cstat-no" title="statement not covered" >rtModules?: {</span>
-    title: string;
+export type ModuleProjectSearchResult = {
+  id: <span class="cstat-no" title="statement not covered" >number;</span>
+  projectModules?: {
+    mo<span class="cstat-no" title="statement not covered" >dule_id: string;</span>
+  }[];
+};<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
+export<span class="cstat-no" title="statement not covered" > type ModuleProjectsSearchResult = {</span>
+  projectModules?: {
+    ti<span class="cstat-no" title="statement not covered" >tle: string;</span>
     startDate: string;
-    endDate: string;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >    cohort: {</span>
-      id: number;
-<span class="cstat-no" title="statement not covered" >      name: string;</span>
-      projects: {
-        id: number;
-<span class="cstat-no" title="statement not covered" >        name: string;</span>
-      }[];
-    };
-  }[];<span class="cstat-no" title="statement not covered" ></span>
-};
+    endDate: string;
+    project_id: number;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    project_name: string;</span>
+  }[];
+};<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
-export<span class="cstat-no" title="statement not covered" > type CohortModuleWithProject = Partial&lt;NonNullab</span>le&lt;ModuleCohortsSearchResult['cohortModules']&gt;[0]['cohort']&gt;;
-&nbsp;
+export type ProjectInModule = Omit&lt;
+  NonN<span class="cstat-no" title="statement not covered" >ullable&lt;ModuleProjectsSearchResult['projectModules']&gt;[0]</span>,
+  'title' | 'startDate' | 'endDate'
+&gt;;
+<span class="cstat-no" title="statement not covered" ></span>
 export const getEventStatus = (status: ModuleEventStatus) =&gt; {
-  swit<span class="cstat-no" title="statement not covered" >ch (status) {</span>
-    case 'Not Started': {
+  switch (status) {
+    ca<span class="cstat-no" title="statement not covered" >se 'Not Started': {</span>
       return strings.SESSION_HAS_NOT_STARTED;
     }
-    case 'Starting Soon': {
+    ca<span class="cstat-no" title="statement not covered" >se 'Starting Soon': </span>{
       return strings.SESSION_IS_STARTING_SOON;
     }
     case 'In Progress': {
@@ -336,8 +314,6 @@ export const getEventStatus = (status: ModuleEventStatus) =&gt; {
 &nbsp;
 export type ModuleContentType = keyof Pick&lt;Module, 'additionalResources' | 'preparationMaterials'&gt;;
 &nbsp;
-export type UpdateCohortModuleRequest = components['schemas']['UpdateCohortModuleRequestPayload'];
-&nbsp;
 export type ModuleSearchResult = {
   id: number;
   name: string;
@@ -352,7 +328,7 @@ export type ModuleSearchResult = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-20T18:25:20.902Z
+                at 2026-02-20T19:31:59.754Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

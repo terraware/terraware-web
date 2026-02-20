@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/48</span>
+                <span class='fraction'>0/44</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/60</span>
+                <span class='fraction'>0/58</span>
             </div>
         
             
@@ -167,11 +167,7 @@
 <a name='L102'></a><a href='#L102'>102</a>
 <a name='L103'></a><a href='#L103'>103</a>
 <a name='L104'></a><a href='#L104'>104</a>
-<a name='L105'></a><a href='#L105'>105</a>
-<a name='L106'></a><a href='#L106'>106</a>
-<a name='L107'></a><a href='#L107'>107</a>
-<a name='L108'></a><a href='#L108'>108</a>
-<a name='L109'></a><a href='#L109'>109</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L105'></a><a href='#L105'>105</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -247,11 +243,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -277,14 +268,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { create<span class="cstat-no" title="statement not covered" >AsyncThunk } f</span>rom '@reduxjs/toolkit';
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { create<span class="cstat-no" title="statement not covered" >AsyncThunk } f</span>rom '@reduxjs/toolkit';
 <span class="cstat-no" title="statement not covered" ></span>
 import { SearchService <span class="cstat-no" title="statement not covered" >} from 'src/services';</span>
 import ModuleService fro<span class="cstat-no" title="statement not covered" >m 'src/services/ModuleServi</span>ce';
 import strings from<span class="cstat-no" title="statement not covered" > 'src/strings';</span>
-import { ModuleCoho<span class="cstat-no" title="statement not covered" >rtsSearchResult, ModuleProjectSe</span>archResult, ModuleSearchResult } from 'src/types/Module';
+import { ModuleProj<span class="cstat-no" title="statement not covered" >ectSearchResult, ModuleProjectsS</span>earchResult, ModuleSearchResult } from 'src/types/Module';
 import { Search<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >No</span>dePayload, SearchRequestPayload, SearchSortOrder } from 'src/types/Search';</span>
 <span class="cstat-no" title="statement not covered" ></span>
 expo<span class="cstat-no" title="statement not covered" >rt const requestGetModule = createAsyncThunk(</span>
@@ -310,12 +302,12 @@ export const requestListModules = createAsyncThunk('modules/list', async (_, { r
 <span class="cstat-no" title="statement not covered" >  return rejectWithValue(strings.GENERIC_ERROR);</span>
 });<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-export const requestListModul<span class="fstat-no" title="function not covered" >eP</span>roje<span class="cstat-no" title="statement not covered" >cts = createAsyncThunk(</span>
-  'modules/listProject<span class="fstat-no" title="function not covered" >s'</span>,<span class="cstat-no" title="statement not covered" ></span>
+export const requestLi<span class="fstat-no" title="function not covered" >st</span>OrgP<span class="cstat-no" title="statement not covered" >rojectsAndModules =</span> createAsyncThunk(
+  'modules/listProjectModules',<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
   async (organizationId:<span class="fstat-no" title="function not covered" > n</span>umbe<span class="cstat-no" title="statement not covered" >r, { rejectWithValue </span>}) =&gt; {
     const searchParams: SearchRequestPayload = {
 <span class="cstat-no" title="statement not covered" >      prefix: 'projects',</span>
-      fields: ['id', <span class="cstat-no" title="statement not covered" >'cohort.cohortModules.module</span>_id'],
+      fields: ['id', <span class="cstat-no" title="statement not covered" >'projectModules.module_id'],</span>
       search: {<span class="cstat-no" title="statement not covered" ></span>
         operation: 'field',<span class="cstat-no" title="statement not covered" ></span>
         field: 'organ<span class="cstat-no" title="statement not covered" >ization.id',</span>
@@ -329,46 +321,42 @@ export const requestListModul<span class="fstat-no" title="function not covered"
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (response) {</span>
       const moduleProjectIds = response
-        .filter(
-          (moduleProject) =<span class="cstat-no" title="statement not covered" >&gt; moduleProject.cohort?.cohortModules &amp;&amp; moduleProjec<span class="fstat-no" title="function not covered" >t.</span>cohort?.cohortModules.length &gt; 0</span>
-        )
-        .map(({ id <span class="cstat-no" title="statement not covered" >}) =&gt; Number(id));</span>
-<span class="cstat-no" title="statement not covered" >      return moduleProjectIds;</span>
-<span class="cstat-no" title="statement not covered" >    }</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    return rejectWithValue(strings.GENERIC_ERROR);</span>
+        .filter((moduleProject) =&gt; moduleProject.projectModules &amp;&amp; moduleProject.projectModules.length &gt; 0)
+        .map(({ id }) =&gt; Nu<span class="cstat-no" title="statement not covered" >mber(id));<span class="fstat-no" title="function not covered" ></span></span>
+      return moduleProjectIds;
+    }<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >    return rejectWithValue(strings</span>.GENERIC_ERROR);
   }
 );<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
-ex<span class="fstat-no" title="function not covered" >po</span>rt const requestListModuleCohorts = createAsyncThunk(
-  'module/cohortsAndProje<span class="cstat-no" title="statement not covered" >cts',</span>
-  async (moduleId: string, { rejectWithValue }) =&gt; {
-    const searchParams: SearchRequestPayload = {
+export const requestListModuleProjects = <span class="cstat-no" title="statement not covered" >createAsyncThunk(</span>
+  'module/projects',
+<span class="fstat-no" title="function not covered" >  as</span>ync (moduleId: string, { rejectWithValue }) =&gt; {
+    const searchParams: S<span class="cstat-no" title="statement not covered" >earchRequestPayload = {</span>
       prefix: 'modules',
       fields: [
-        'cohortModules.title',
-        'cohortModules.startDate',
-        'cohortModules.endDate',
-        'cohortModules.cohort.id',
-        'cohortModules.cohort.name',
-        'cohortModules.cohort.projects.id',
-        'cohortModule<span class="cstat-no" title="statement not covered" >s.cohort.projects.name',</span>
-<span class="cstat-no" title="statement not covered" >      ],</span>
-      search: {<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" >        op</span>eration: 'field',
-        field: 'id',
-        ty<span class="cstat-no" title="statement not covered" >pe: 'Exact',</span>
-        values: [moduleId.toString()],
-      },<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >      count: 20,</span>
-    };
-<span class="cstat-no" title="statement not covered" ></span>
-    const response: ModuleCohortsSearchResult[] | null = await SearchService.search(searchParams);
+        'projectModules.title',
+        'projectModules.startDate',
+        'projectModules.endDate',
+        'projectModules.project_id',
+        'projectModules.project_name',
+      ],
+      search: {
+        operation: 'field',
+        field: 'id',<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >        type: 'Exact',</span>
+        values: [moduleId.toStr<span class="cstat-no" title="statement not covered" >ing()],<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
+<span class="cstat-no" title="statement not covered" >      },</span>
+      count: 20,
+<span class="cstat-no" title="statement not covered" >    };</span>
 &nbsp;
-    if (response) {<span class="cstat-no" title="statement not covered" ></span>
-      return response[0];
-<span class="fstat-no" title="function not covered" ></span>    }
+    const response: ModuleProjectsSearchResult[] | null = await SearchService.search(searchParams);
 <span class="cstat-no" title="statement not covered" ></span>
+    if (response) {
+<span class="fstat-no" title="function not covered" ></span>      return response[0];
+    }<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
     return rejectWithValue(strings.GENERIC_ERROR);
   }
 );
@@ -384,17 +372,17 @@ export const requestSearchModules = createAsyncThunk(
       return response;
     }
 &nbsp;
-    return rejectWithValue(strings.GENERIC_ERROR);
-  }
-);
-<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
+    return rejectWith<span class="cstat-no" title="statement not covered" >Value(strings.GENERIC_ERROR);</span>
+  }<span class="cstat-no" title="statement not covered" ></span>
+);<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-20T18:25:20.902Z
+                at 2026-02-20T19:31:59.754Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
