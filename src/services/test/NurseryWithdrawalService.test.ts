@@ -1,9 +1,12 @@
+import { Mocked, rstest } from '@rstest/core';
+
 import { readData } from './utils';
 import SearchService from '../SearchService';
 import NurseryWithdrawalService from '../NurseryWithdrawalService';
-jest.mock('../SearchService');
 
-const search = SearchService.search as jest.MockedFunction<typeof SearchService.search>;
+rstest.mock('../SearchService', { mock: true });
+
+const search = SearchService.search as Mocked<typeof SearchService.search>;
 
 describe('Nursery withdrawals service', () => {
   describe('list withdrawals', () => {

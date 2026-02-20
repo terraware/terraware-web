@@ -3,7 +3,7 @@ import type { ConfigFile } from '@rtk-query/codegen-openapi';
 require('dotenv').config();
 
 const config: ConfigFile = {
-  schemaFile: `${process.env.REACT_APP_TERRAWARE_API}/v3/api-docs`,
+  schemaFile: `${process.env.PUBLIC_TERRAWARE_API}/v3/api-docs`,
   apiFile: './src/queries/baseApi.ts',
   apiImport: 'baseApi',
   exportName: 'api',

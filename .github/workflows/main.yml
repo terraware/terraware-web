@@ -85,7 +85,12 @@ jobs:
         run: yarn ts
 
       - name: Run unit tests
-        run: yarn test --ci
+        run: yarn test:ci
+
+      # dist is getting created with root user somewhere. Remove this so that the build process can create it with the right permissions.
+      # this has to be done before starting the BE because removing it later will break the nginx container
+      - name: Remove dist folder
+        run: rm -rf dist
 
       - name: Download and start backend
         if: github.ref != 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/')
@@ -103,12 +108,12 @@ jobs:
       - name: build
         run: yarn build
         env:
-          REACT_APP_TERRAWARE_API: ''
-          REACT_APP_TERRAWARE_TIER: ${{ env.LOWER_TIER }}
-          REACT_APP_DATADOG_APP_ID: ${{ secrets.DATADOG_APP_ID }}
-          REACT_APP_DATADOG_CLIENT_TOKEN: ${{ secrets.DATADOG_CLIENT_TOKEN }}
-          REACT_APP_TERRAWARE_FE_BUILD_VERSION: ${{ env.APP_VERSION }}
-          REACT_APP_MIXPANEL_TOKEN: ${{ secrets[env.MIXPANEL_SECRET_NAME] }}
+          PUBLIC_TERRAWARE_API: ''
+          PUBLIC_TERRAWARE_TIER: ${{ env.LOWER_TIER }}
+          PUBLIC_DATADOG_APP_ID: ${{ secrets.DATADOG_APP_ID }}
+          PUBLIC_DATADOG_CLIENT_TOKEN: ${{ secrets.DATADOG_CLIENT_TOKEN }}
+          PUBLIC_TERRAWARE_FE_BUILD_VERSION: ${{ env.APP_VERSION }}
+          PUBLIC_MIXPANEL_TOKEN: ${{ secrets[env.MIXPANEL_SECRET_NAME] }}
 
       - name: Run end-to-end playwright tests
         if: github.ref != 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/')

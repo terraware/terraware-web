@@ -116,7 +116,7 @@ yarn format          # run code formatter
 yarn lint            # run linter to check for code quality issues
 yarn ts              # run the typescript types checker
 yarn translate       # generate translations; requires OpenAI API key
-yarn test            # run the Jest (unit and integration) tests
+yarn test            # run the Rstest (unit and integration) tests
 # run the end to end tests, see the section below for more details
 ```
 
@@ -175,7 +175,7 @@ To exit the PostgreSQL client, type `\quit` or hit control-D.
 ## Running a prod-like build locally with `nginx`
 
 Developer builds use non-optimized, hot-reloading builds served via
-Craco on http://localhost:3000 . These are ideal for the normal
+Rsbuild on http://localhost:3000 . These are ideal for the normal
 developer workflow, but you'll want to run a production-like build in
 order to test changes to:
 
