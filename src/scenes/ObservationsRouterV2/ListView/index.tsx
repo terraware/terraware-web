@@ -4,6 +4,7 @@ import { Box, Typography, useTheme } from '@mui/material';
 import { Button, Dropdown, DropdownItem, Separator, Tabs } from '@terraware/web-components';
 
 import Page from 'src/components/Page';
+import SurvivalRateMessageV2 from 'src/components/SurvivalRate/SurvivalRateMessageV2';
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import useStickyPlantingSiteId from 'src/hooks/useStickyPlantingSiteId';
@@ -125,6 +126,11 @@ const ObservationListView = (): JSX.Element => {
       leftComponent={PageHeaderPlantingSiteDropdown}
       rightComponent={scheduleObservationButton}
     >
+      {activeTab === 'plantMonitoring' && (
+        <SurvivalRateMessageV2
+          selectedPlantingSiteId={selectedPlantingSiteId === -1 ? undefined : selectedPlantingSiteId}
+        />
+      )}
       <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs}>
         <Card radius={'8px'} style={{ marginBottom: theme.spacing(3), width: '100%' }}>
           <ObservationMapWrapper
