@@ -1763,6 +1763,9 @@ SEE_ALL_ACCESSIONS,Ver todas las accesiones,2d1b160b
 SEE_IC_VOTES,Ver votos IC,a6e1094b
 SEE_LESS,Ver menos,519e0ef0
 SEE_MORE,Ver más,dfcb6964
+SEE_OBSERVATION_DETAILS,Ver detalles de la observación,5ad3ed38
+SEE_OBSERVATION_PLOT_DETAILS,Ver detalles de la parcela,923c4ac8
+SEE_OBSERVATION_STRATUM_DETAILS,Ver detalles del estrato,45fa4e0c
 SEE_PROJECT_DETAILS,Ver detalles del proyecto,93dbc5c4
 SEE_WITHDRAWAL_HISTORY,Ver historial de retirada,a925fc5e
 SEED,Semilla,aad75809
