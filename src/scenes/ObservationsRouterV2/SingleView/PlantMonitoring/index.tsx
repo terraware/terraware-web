@@ -3,6 +3,7 @@ import { Route, Routes, useParams } from 'react-router';
 
 import { BusySpinner } from '@terraware/web-components';
 
+import SurvivalRateMessageV2 from 'src/components/SurvivalRate/SurvivalRateMessageV2';
 import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
 
 import MonitoringPlotDetails from './MonitoringPlot';
@@ -35,16 +36,19 @@ const PlantMonitoringView = (): JSX.Element => {
   }
 
   return (
-    <Routes>
-      <Route
-        path={'/stratum/:stratumName/plot/:monitoringPlotId/virtual/:fileId'}
-        element={<VirtualMonitoringPlotPage />}
-      />
-      <Route path={'/stratum/:stratumName/plot/:monitoringPlotId'} element={<MonitoringPlotDetails />} />
-      <Route path={'/stratum/:stratumName/plot/:monitoringPlotId/photos'} element={<MonitoringPlotEditPhotos />} />
-      <Route path={'/stratum/:stratumName'} element={<StratumDetails />} />
-      <Route path={'/*'} element={<SiteDetails />} />
-    </Routes>
+    <>
+      <SurvivalRateMessageV2 selectedPlantingSiteId={results?.plantingSiteId} />
+      <Routes>
+        <Route
+          path={'/stratum/:stratumName/plot/:monitoringPlotId/virtual/:fileId'}
+          element={<VirtualMonitoringPlotPage />}
+        />
+        <Route path={'/stratum/:stratumName/plot/:monitoringPlotId'} element={<MonitoringPlotDetails />} />
+        <Route path={'/stratum/:stratumName/plot/:monitoringPlotId/photos'} element={<MonitoringPlotEditPhotos />} />
+        <Route path={'/stratum/:stratumName'} element={<StratumDetails />} />
+        <Route path={'/*'} element={<SiteDetails />} />
+      </Routes>
+    </>
   );
 };
 
