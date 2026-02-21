@@ -5,13 +5,18 @@ import CellRenderer, { TableRowType } from 'src/components/common/table/TableCel
 import TableRowPopupMenu from 'src/components/common/table/TableRowPopupMenu';
 import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
-import { useLocalization } from 'src/providers';
+import { useLocalization, useOrganization } from 'src/providers';
+import { useReassignPlotModal } from 'src/scenes/ObservationsRouterV2/Reassign';
 import { MonitoringPlotStatus, ObservationState, getPlotStatus } from 'src/types/Observations';
+import { isManagerOrHigher } from 'src/utils/organization';
 
 export default function MonitoringPlotCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const NO_DATA_FIELDS = ['totalPlants', 'totalSpecies'];
   const { column, row, value } = props;
   const { strings } = useLocalization();
+  const { openReassignPlotModal } = useReassignPlotModal();
+  const { selectedOrganization } = useOrganization();
+  const replaceObservationPlotEnabled = isManagerOrHigher(selectedOrganization);
   const observationId = row.observationId as number;
   const observationState = row.observationState as ObservationState;
   const stratumName = row.stratumName as string;
@@ -62,10 +67,10 @@ export default function MonitoringPlotCellRenderer(props: RendererProps<TableRow
       <TableRowPopupMenu
         menuItems={[
           {
-            disabled: row.completedDate || observationState === 'Abandoned', // cannot replace observation plots that are completed
+            disabled: !replaceObservationPlotEnabled || row.completedDate || observationState === 'Abandoned', // cannot replace observation plots that are completed
             label: strings.REQUEST_REASSIGNMENT,
             onClick: () => {
-              // TODO show reassignment
+              openReassignPlotModal(observationId, monitoringPlotId);
             },
           },
         ]}

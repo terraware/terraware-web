@@ -1,14 +1,18 @@
 import React, { type JSX, useMemo } from 'react';
 
-import { Box, CircularProgress } from '@mui/material';
+import { Box, CircularProgress, useTheme } from '@mui/material';
 
 import MapDrawerTable, { MapDrawerTableRow } from 'src/components/MapDrawerTable';
 import { MapLayerFeatureId } from 'src/components/NewMap/types';
+import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
-import { useLocalization } from 'src/providers';
+import { useLocalization, useOrganization } from 'src/providers';
 import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
 import { useGetPlantingSiteQuery, useLazyGetPlantingSiteHistoryQuery } from 'src/queries/generated/plantingSites';
 import { MonitoringPlotStatus, ObservationState } from 'src/types/Observations';
+import { isManagerOrHigher } from 'src/utils/organization';
+
+import { useReassignPlotModal } from '../Reassign';
 
 type ObservationStatsProperties = {
   name: string | undefined;
@@ -34,6 +38,10 @@ const ObservationStatsDrawer = ({
   observationId,
 }: ObservationStatsDrawerProps): JSX.Element | undefined => {
   const { strings } = useLocalization();
+  const theme = useTheme();
+  const { openReassignPlotModal } = useReassignPlotModal();
+  const { selectedOrganization } = useOrganization();
+  const replaceObservationPlotEnabled = isManagerOrHigher(selectedOrganization);
 
   const { data: observationResultsResponse, isLoading: observationResultsLoading } = useGetObservationResultsQuery({
     observationId,
@@ -234,6 +242,43 @@ const ObservationStatsDrawer = ({
     return undefined;
   }, [layerFeatureId, observationId, results]);
 
+  const actionButton = useMemo(() => {
+    if (layerFeatureId.layerId === 'permanentPlots' || layerFeatureId.layerId === 'temporaryPlots') {
+      const monitoringPlotId = Number(layerFeatureId.featureId);
+      const allplotResults =
+        results?.strata
+          ?.flatMap((_stratum) => _stratum.substrata)
+          ?.flatMap((_substratum) => _substratum.monitoringPlots) ?? [];
+      const plotResults = allplotResults.find((_plot) => _plot.monitoringPlotId === monitoringPlotId);
+
+      if (
+        plotResults &&
+        replaceObservationPlotEnabled &&
+        plotResults.status !== 'Completed' &&
+        plotResults.status !== 'Not Observed'
+      ) {
+        return (
+          <Button
+            id='reassignPlot'
+            label={`${strings.REQUEST_REASSIGNMENT}...`}
+            type='passive'
+            onClick={() => openReassignPlotModal(observationId, monitoringPlotId)}
+            priority='secondary'
+          />
+        );
+      }
+    }
+    return undefined;
+  }, [
+    layerFeatureId.featureId,
+    layerFeatureId.layerId,
+    observationId,
+    openReassignPlotModal,
+    replaceObservationPlotEnabled,
+    results?.strata,
+    strings.REQUEST_REASSIGNMENT,
+  ]);
+
   if (isLoading) {
     return (
       <Box display={'flex'} width={'100%'} justifyContent={'center'}>
@@ -247,6 +292,11 @@ const ObservationStatsDrawer = ({
       {properties && (
         <Box display={'flex'} width={'100%'} flexDirection={'column'}>
           <MapDrawerTable header={properties.name} rows={rows} subheader={subheader} subheaderUrl={subheaderUrl} />
+          {actionButton && (
+            <Box display='flex' padding={theme.spacing(2)}>
+              {actionButton}
+            </Box>
+          )}
         </Box>
       )}
     </>
