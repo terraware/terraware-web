@@ -1,3 +1,4 @@
+59ae319c866a SW-8069 Added see plot details link and update table content for observation drawers (#5284)
 c4f9507c74a5 Remove reference to project participant ID (#5282)
 ea6c5d7089cf SW-8009 Fixed metrics not refreshing after network call (#5279)
 055ef77abf20 SW-8018 Implemented schedule/reschedule observations using RTK Query (#5274)
