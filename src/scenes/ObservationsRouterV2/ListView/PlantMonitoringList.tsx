@@ -1,18 +1,23 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, Typography } from '@mui/material';
-import { Dropdown, Separator } from '@terraware/web-components';
-import { getDateDisplayValue } from '@terraware/web-components/utils';
+import { Box, Typography, useTheme } from '@mui/material';
+import { Dropdown, Icon, Separator } from '@terraware/web-components';
+import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/utils';
 
 import ClientSideFilterTable from 'src/components/Tables/ClientSideFilterTable';
 import Card from 'src/components/common/Card';
+import Link from 'src/components/common/Link';
 import { TableColumnType } from 'src/components/common/table/types';
+import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
 import {
   useLazyListAdHocObservationResultsQuery,
   useLazyListObservationResultsQuery,
 } from 'src/queries/generated/observations';
 import { PlantingSitePayload, useLazyListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
+import { useLazyGetAllT0SiteDataSetQuery } from 'src/queries/generated/t0';
+import { useLazyGetPlotsWithObservationsQuery } from 'src/queries/search/t0';
 import { getStatus } from 'src/types/Observations';
 import { SearchSortOrder } from 'src/types/Search';
 import { getShortDate } from 'src/utils/dateFormatter';
@@ -42,10 +47,13 @@ export type PlantMonitoringListProps = {
 };
 
 const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
+  const theme = useTheme();
   const { selectedOrganization } = useOrganization();
   const defaultTimezone = useDefaultTimeZone().get().id;
   const scheduleObservationsEnabled = isAdmin(selectedOrganization);
   const { activeLocale, strings } = useLocalization();
+  const { isMobile } = useDeviceInfo();
+  const navigate = useSyncNavigate();
   const [selectedPlotSelection, setSelectedPlotSelection] = useState<PlotSelectionType>('assigned');
 
   const assignedColumns = useMemo((): TableColumnType[] => {
@@ -177,7 +185,15 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
 
   const [listObservationResults, listObservationsResultsResponse] = useLazyListObservationResultsQuery();
   const [listAdHocObservationResults, listAdHocObservationResultsResponse] = useLazyListAdHocObservationResultsQuery();
-  const [listPlantingSites, listPlantingSitesResult] = useLazyListPlantingSitesQuery();
+  const [listPlantingSites, listPlantingSitesResponse] = useLazyListPlantingSitesQuery();
+  const [getT0SiteDataSet, getT0SiteDataSetResponse] = useLazyGetAllT0SiteDataSetQuery();
+  const [getPlotsWithObservations, getPlotsWithObservationsResponse] = useLazyGetPlotsWithObservationsQuery();
+
+  const survivalRateSet = useMemo(() => getT0SiteDataSetResponse.data?.allSet, [getT0SiteDataSetResponse.data?.allSet]);
+  const plotsWithObservations = useMemo(
+    () => getPlotsWithObservationsResponse.data ?? [],
+    [getPlotsWithObservationsResponse.data]
+  );
 
   const isLoading = useMemo(
     () => listObservationsResultsResponse.isLoading || listAdHocObservationResultsResponse.isLoading,
@@ -186,14 +202,14 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
 
   const plantingSitesById = useMemo(
     () =>
-      (listPlantingSitesResult.data?.sites ?? []).reduce(
+      (listPlantingSitesResponse.data?.sites ?? []).reduce(
         (sites, site) => {
           sites[site.id] = site;
           return sites;
         },
         {} as { [siteId: number]: PlantingSitePayload }
       ),
-    [listPlantingSitesResult.data]
+    [listPlantingSitesResponse.data]
   );
 
   useEffect(() => {
@@ -227,6 +243,13 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
     selectedOrganization,
     plantingSiteId,
   ]);
+
+  useEffect(() => {
+    if (plantingSiteId) {
+      void getT0SiteDataSet(plantingSiteId, true);
+      void getPlotsWithObservations(plantingSiteId, true);
+    }
+  }, [getPlotsWithObservations, getT0SiteDataSet, plantingSiteId]);
 
   const observationResults = useMemo(() => {
     if (selectedPlotSelection === 'adHoc') {
@@ -284,6 +307,14 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
     [activeLocale, defaultTimezone, observationResults, plantingSitesById]
   );
 
+  const navigateToSurvivalRateSettings = useCallback(() => {
+    if (plantingSiteId) {
+      navigate({
+        pathname: APP_PATHS.SURVIVAL_RATE_SETTINGS_V2.replace(':plantingSiteId', plantingSiteId.toString()),
+      });
+    }
+  }, [navigate, plantingSiteId]);
+
   const rightComponent = useMemo(() => {
     return (
       <Box display={'flex'} flexDirection={'row'} flexGrow={1} alignItems={'center'} justifyContent={'start'}>
@@ -305,9 +336,47 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           }}
           fullWidth
         />
+        {plantingSiteId && selectedPlotSelection === 'assigned' && !!observationResults.length && (
+          <Box display={'flex'} alignItems={'center'} flexBasis={isMobile ? '100%' : 'content'}>
+            <Link
+              onClick={navigateToSurvivalRateSettings}
+              fontSize='16px'
+              style={{
+                paddingLeft: isMobile ? 0 : theme.spacing(2),
+                paddingRight: theme.spacing(0.5),
+                paddingTop: isMobile ? theme.spacing(1) : 0,
+              }}
+              disabled={plotsWithObservations.length === 0}
+            >
+              {strings.SURVIVAL_RATE_SETTINGS}
+            </Link>
+            {!!plotsWithObservations.length && (
+              <>
+                {survivalRateSet ? (
+                  <Icon name='success' fillColor={theme.palette.TwClrBgSuccess} />
+                ) : (
+                  <Icon name='iconUnavailable' fillColor={theme.palette.TwClrBgDanger} />
+                )}
+              </>
+            )}
+          </Box>
+        )}
       </Box>
     );
-  }, [selectedPlotSelection, strings.AD_HOC, strings.ASSIGNED, strings.PLOT_SELECTION]);
+  }, [
+    isMobile,
+    navigateToSurvivalRateSettings,
+    observationResults?.length,
+    plantingSiteId,
+    plotsWithObservations.length,
+    selectedPlotSelection,
+    strings.AD_HOC,
+    strings.ASSIGNED,
+    strings.PLOT_SELECTION,
+    strings.SURVIVAL_RATE_SETTINGS,
+    survivalRateSet,
+    theme,
+  ]);
 
   return (
     <Card radius={'8px'} style={{ width: '100%' }}>
