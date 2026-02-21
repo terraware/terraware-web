@@ -110,7 +110,7 @@ const injectedRtkApi = api.injectEndpoints({
           count: 0,
         },
       }),
-      transformResponse: (results: SerachMonitoringPlotApiResponse) =>
+      transformResponse: (results: SearchMonitoringPlotApiResponse) =>
         results.results.map((result) => ({
           id: Number(result.id),
           plotNumber: result.plotNumber,
@@ -155,7 +155,7 @@ export type PlantingSiteSummary = {
   isDraft?: boolean;
 };
 
-type SerachMonitoringPlotApiResponse = {
+type SearchMonitoringPlotApiResponse = {
   results: MonitoringPlotSearchResult[];
 };
 

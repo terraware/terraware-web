@@ -6,10 +6,11 @@ import MapDrawerTable, { MapDrawerTableRow } from 'src/components/MapDrawerTable
 import { MapLayerFeatureId } from 'src/components/NewMap/types';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
-import { useLocalization } from 'src/providers';
+import { useLocalization, useOrganization } from 'src/providers';
 import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
 import { useGetPlantingSiteQuery, useLazyGetPlantingSiteHistoryQuery } from 'src/queries/generated/plantingSites';
 import { MonitoringPlotStatus, ObservationState } from 'src/types/Observations';
+import { isManagerOrHigher } from 'src/utils/organization';
 
 import { useReassignPlotModal } from '../Reassign';
 
@@ -39,6 +40,8 @@ const ObservationStatsDrawer = ({
   const { strings } = useLocalization();
   const theme = useTheme();
   const { openReassignPlotModal } = useReassignPlotModal();
+  const { selectedOrganization } = useOrganization();
+  const replaceObservationPlotEnabled = isManagerOrHigher(selectedOrganization);
 
   const { data: observationResultsResponse, isLoading: observationResultsLoading } = useGetObservationResultsQuery({
     observationId,
@@ -248,7 +251,12 @@ const ObservationStatsDrawer = ({
           ?.flatMap((_substratum) => _substratum.monitoringPlots) ?? [];
       const plotResults = allplotResults.find((_plot) => _plot.monitoringPlotId === monitoringPlotId);
 
-      if (plotResults && plotResults.status !== 'Completed' && plotResults.status !== 'Not Observed') {
+      if (
+        plotResults &&
+        replaceObservationPlotEnabled &&
+        plotResults.status !== 'Completed' &&
+        plotResults.status !== 'Not Observed'
+      ) {
         return (
           <Button
             id='reassignPlot'
@@ -266,6 +274,7 @@ const ObservationStatsDrawer = ({
     layerFeatureId.layerId,
     observationId,
     openReassignPlotModal,
+    replaceObservationPlotEnabled,
     results?.strata,
     strings.REQUEST_REASSIGNMENT,
   ]);
