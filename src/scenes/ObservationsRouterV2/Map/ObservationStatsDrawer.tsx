@@ -4,15 +4,19 @@ import { Box, CircularProgress } from '@mui/material';
 
 import MapDrawerTable, { MapDrawerTableRow } from 'src/components/MapDrawerTable';
 import { MapLayerFeatureId } from 'src/components/NewMap/types';
+import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
 import { useGetPlantingSiteQuery, useLazyGetPlantingSiteHistoryQuery } from 'src/queries/generated/plantingSites';
+import { MonitoringPlotStatus, ObservationState } from 'src/types/Observations';
 
 type ObservationStatsProperties = {
   name: string | undefined;
   observedPlants: number | undefined;
   observedSpecies: number | undefined;
   observedDensity: number | undefined;
+  observationState?: ObservationState;
+  plotStatus?: MonitoringPlotStatus;
   plotType?: 'permanent' | 'temporary' | 'adHoc';
   survivalRate: number | undefined;
 };
@@ -60,6 +64,7 @@ const ObservationStatsDrawer = ({
         observedPlants: results?.totalPlants,
         observedSpecies: results?.totalSpecies,
         observedDensity: results?.plantingDensity,
+        observationState: results?.state,
         survivalRate: results?.survivalRate,
       };
     } else if (layerFeatureId.layerId === 'strata') {
@@ -108,12 +113,14 @@ const ObservationStatsDrawer = ({
         (_plot) => _plot.monitoringPlotId === Number(layerFeatureId.featureId)
       );
       const plotType = plotResults?.isAdHoc ? 'adHoc' : plotResults?.isPermanent ? 'permanent' : 'temporary';
+      const plotStatus = plotResults?.isAdHoc ? 'Completed' : plotResults?.status;
       return {
         name: plot ? `${plot.plotNumber}` : undefined,
         observedPlants: plotResults?.totalPlants,
         observedSpecies: plotResults?.totalSpecies,
         observedDensity: plotResults?.plantingDensity,
         plotType,
+        plotStatus,
         survivalRate: plotResults?.survivalRate,
       };
     } else {
@@ -137,13 +144,47 @@ const ObservationStatsDrawer = ({
           value,
         });
       }
+      if (properties.plotStatus) {
+        const value =
+          properties.plotStatus === 'Claimed'
+            ? strings.CLAIMED
+            : properties.plotStatus === 'Completed'
+              ? strings.COMPLETED
+              : properties.plotStatus === 'Not Observed'
+                ? strings.NOT_OBSERVED
+                : properties.plotStatus === 'Unclaimed'
+                  ? strings.UNCLAIMED
+                  : strings.NO_DATA_YET;
+        drawerRows.push({
+          key: strings.STATUS,
+          value,
+        });
+      }
+      if (properties.observationState) {
+        const value =
+          properties.observationState === 'Abandoned'
+            ? strings.COMPLETED_ENDED
+            : properties.observationState === 'Completed'
+              ? strings.COMPLETED
+              : properties.observationState === 'InProgress'
+                ? strings.IN_PROGRESS
+                : properties.observationState === 'Overdue'
+                  ? strings.OVERDUE
+                  : properties.observationState === 'Upcoming'
+                    ? strings.UPCOMING
+                    : strings.NO_DATA_YET;
+        drawerRows.push({
+          key: strings.STATE,
+          value,
+        });
+      }
       drawerRows.push({
-        key: strings.OBSERVED_PLANTS,
+        key: strings.PLANTS,
         value: properties.observedPlants ? `${properties.observedPlants}` : strings.NO_DATA_YET,
       });
 
       drawerRows.push({
-        key: strings.OBSERVED_SPECIES,
+        key: strings.SPECIES,
         value: properties.observedSpecies ? `${properties.observedSpecies}` : strings.NO_DATA_YET,
       });
 
@@ -161,6 +202,38 @@ const ObservationStatsDrawer = ({
     return drawerRows;
   }, [properties, strings]);
 
+  const subheader = useMemo(() => {
+    if (
+      layerFeatureId.layerId === 'permanentPlots' ||
+      layerFeatureId.layerId === 'temporaryPlots' ||
+      layerFeatureId.layerId === 'adHocPlots'
+    ) {
+      return strings.SEE_OBSERVATION_PLOT_DETAILS;
+    } else {
+      return undefined;
+    }
+  }, [layerFeatureId.layerId, strings]);
+
+  const subheaderUrl = useMemo(() => {
+    if (layerFeatureId.layerId === 'adHocPlots') {
+      return APP_PATHS.OBSERVATION_DETAILS_V2.replace(':observationId', `${observationId}`);
+    } else if (layerFeatureId.layerId === 'permanentPlots' || layerFeatureId.layerId === 'temporaryPlots') {
+      if (results) {
+        const plotStratum = results.strata.find((stratum) =>
+          stratum.substrata
+            .flatMap((substratum) => substratum.monitoringPlots)
+            .some((plot) => plot.monitoringPlotId === Number(layerFeatureId.featureId))
+        );
+        if (plotStratum) {
+          return APP_PATHS.OBSERVATION_MONITORING_PLOT_DETAILS_V2.replace(':observationId', `${observationId}`)
+            .replace(':stratumName', plotStratum?.name)
+            .replace(':monitoringPlotId', layerFeatureId.featureId);
+        }
+      }
+    }
+    return undefined;
+  }, [layerFeatureId, observationId, results]);
+
   if (isLoading) {
     return (
       <Box display={'flex'} width={'100%'} justifyContent={'center'}>
@@ -173,7 +246,7 @@ const ObservationStatsDrawer = ({
     <>
       {properties && (
         <Box display={'flex'} width={'100%'} flexDirection={'column'}>
-          <MapDrawerTable header={properties.name} rows={rows} />
+          <MapDrawerTable header={properties.name} rows={rows} subheader={subheader} subheaderUrl={subheaderUrl} />
         </Box>
       )}
     </>
