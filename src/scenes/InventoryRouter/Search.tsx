@@ -1,4 +1,5 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
+import { createPortal } from 'react-dom';
 
 import { Box, Grid, Popover, useTheme } from '@mui/material';
 import { Button, PillListItem, Textfield, Tooltip } from '@terraware/web-components';
@@ -56,6 +57,8 @@ interface SearchProps {
   showEmptySpeciesFilter?: boolean;
   showEmptyNurseriesFilter?: boolean;
   showProjectsFilter?: boolean;
+  showSearch?: boolean;
+  pillListPortalEl?: HTMLElement | null;
 }
 
 type PillListItemWithEmptyValue = Omit<PillListItem<string>, 'id'> & {
@@ -74,6 +77,8 @@ export default function Search(props: SearchProps): JSX.Element | null {
     showEmptySpeciesFilter,
     showEmptyNurseriesFilter,
     showProjectsFilter,
+    showSearch,
+    pillListPortalEl,
   } = props;
 
   const dispatch = useAppDispatch();
@@ -326,68 +331,76 @@ export default function Search(props: SearchProps): JSX.Element | null {
     return null;
   }
 
+  if (!showSearch && pillListPortalEl) {
+    return createPortal(<PillList data={filterPillData} onRemove={onRemovePillList} />, pillListPortalEl);
+  }
+
   return (
-    <>
+    <Box>
       <Grid container display='flex' flexDirection='row' alignItems='center' gap={theme.spacing(1)}>
-        <Box width='300px'>
-          <Textfield
-            placeholder={strings.SEARCH}
-            iconLeft='search'
-            label=''
-            id='search'
-            type='text'
-            onChange={(value) => onSearch(value as string)}
-            value={searchValue}
-            iconRight='cancel'
-            onClickRightIcon={() => onSearch('')}
-          />
-        </Box>
-
-        {origin === 'Species' && (
-          <InventoryFilters
-            filters={filters}
-            setFilters={setFilters}
-            label={strings.NURSERY}
-            filterKey='facilityIds'
-            options={nurseries.map((n: Facility) => n.id)}
-            renderOption={(id: string | number) => nurseries.find((n) => n.id === id)?.name ?? ''}
-          />
-        )}
-        {origin === 'Nursery' && (
-          <InventoryFilters
-            filters={filters}
-            setFilters={setFilters}
-            label={strings.SPECIES}
-            filterKey='speciesIds'
-            options={[...(availableSpecies || [])]
-              .sort((a, b) => a.scientificName.localeCompare(b.scientificName, activeLocale || undefined))
-              .map((n: Species) => n.id)}
-            renderOption={(id: string | number) =>
-              (availableSpecies || []).find((n) => n.id === id)?.scientificName ?? ''
-            }
-          />
-        )}
-
-        {origin === 'Batches' && (
+        {showSearch && (
           <>
-            <InventoryFilters
-              filters={filters}
-              setFilters={setFilters}
-              label={strings.NURSERY}
-              filterKey='facilityIds'
-              options={nurseries.map((n: Facility) => n.id)}
-              renderOption={(id: string | number) => nurseries.find((n) => n.id === id)?.name ?? ''}
-            />
-            {filters.facilityIds && filters.facilityIds.length > 0 && (
+            <Box width='300px'>
+              <Textfield
+                placeholder={strings.SEARCH}
+                iconLeft='search'
+                label=''
+                id='search'
+                type='text'
+                onChange={(value) => onSearch(value as string)}
+                value={searchValue}
+                iconRight='cancel'
+                onClickRightIcon={() => onSearch('')}
+              />
+            </Box>
+
+            {origin === 'Species' && (
               <InventoryFilters
                 filters={filters}
                 setFilters={setFilters}
-                disabled={!filters.facilityIds?.length}
-                label={strings.SUB_LOCATIONS}
-                filterKey='subLocationsIds'
-                options={subLocations?.map((sl: SubLocation) => sl.id) ?? []}
-                renderOption={(id: string | number) => subLocations?.find((sl) => sl.id === id)?.name ?? ''}
+                label={strings.NURSERY}
+                filterKey='facilityIds'
+                options={nurseries.map((n: Facility) => n.id)}
+                renderOption={(id: string | number) => nurseries.find((n) => n.id === id)?.name ?? ''}
               />
+            )}
+            {origin === 'Nursery' && (
+              <InventoryFilters
+                filters={filters}
+                setFilters={setFilters}
+                label={strings.SPECIES}
+                filterKey='speciesIds'
+                options={[...(availableSpecies || [])]
+                  .sort((a, b) => a.scientificName.localeCompare(b.scientificName, activeLocale || undefined))
+                  .map((n: Species) => n.id)}
+                renderOption={(id: string | number) =>
+                  (availableSpecies || []).find((n) => n.id === id)?.scientificName ?? ''
+                }
+              />
+            )}
+
+            {origin === 'Batches' && (
+              <>
+                <InventoryFilters
+                  filters={filters}
+                  setFilters={setFilters}
+                  label={strings.NURSERY}
+                  filterKey='facilityIds'
+                  options={nurseries.map((n: Facility) => n.id)}
+                  renderOption={(id: string | number) => nurseries.find((n) => n.id === id)?.name ?? ''}
+                />
+                {filters.facilityIds && filters.facilityIds.length > 0 && (
+                  <InventoryFilters
+                    filters={filters}
+                    setFilters={setFilters}
+                    disabled={!filters.facilityIds?.length}
+                    label={strings.SUB_LOCATIONS}
+                    filterKey='subLocationsIds'
+                    options={subLocations?.map((sl: SubLocation) => sl.id) ?? []}
+                    renderOption={(id: string | number) => subLocations?.find((sl) => sl.id === id)?.name ?? ''}
+                  />
+                )}
+              </>
             )}
           </>
         )}
@@ -405,7 +418,7 @@ export default function Search(props: SearchProps): JSX.Element | null {
           />
         )}
 
-        {(showEmptyBatchesFilter || showEmptySpeciesFilter || showEmptyNurseriesFilter) && (
+        {showSearch && (showEmptyBatchesFilter || showEmptySpeciesFilter || showEmptyNurseriesFilter) && (
           <Box sx={{ marginTop: theme.spacing(0.5) }}>
             <Tooltip title={strings.FILTER}>
               <Button
@@ -456,11 +469,16 @@ export default function Search(props: SearchProps): JSX.Element | null {
           </Box>
         )}
 
-        <TableSettingsButton />
+        {showSearch && <TableSettingsButton />}
       </Grid>
-      <Grid display='flex' flexDirection='row' alignItems='center' sx={{ marginTop: theme.spacing(2) }}>
+      <Grid
+        display='flex'
+        flexDirection='row'
+        alignItems='center'
+        sx={{ marginTop: showSearch ? theme.spacing(2) : 0 }}
+      >
         <PillList data={filterPillData} onRemove={onRemovePillList} />
       </Grid>
-    </>
+    </Box>
   );
 }
