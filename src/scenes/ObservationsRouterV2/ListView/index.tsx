@@ -18,8 +18,8 @@ import useStickyTabs from 'src/utils/useStickyTabs';
 import ObservationMapWrapper from '../Map';
 import useObservablePlantingSites from '../Schedule/useObservablePlantingSites';
 import BiomassList from './BiomassList';
-import PlantMonitoringList from './PlantMonitoringList';
 import ObservationsEventsNotification from './ObservationsEventsNotification';
+import PlantMonitoringList from './PlantMonitoringList';
 
 const ObservationListView = (): JSX.Element => {
   const { selectedOrganization } = useOrganization();
