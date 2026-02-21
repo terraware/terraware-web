@@ -8,13 +8,18 @@ import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
+import { ObservationState } from 'src/types/Observations';
 
+import { useAbandonObservationModal } from '../Abandon';
 import useObservationExports from '../useObservationExports';
 
 export default function PlantMonitoringCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const { column, row, value } = props;
   const { strings } = useLocalization();
+  const { openAbandonObservationModal } = useAbandonObservationModal();
+
   const observationId = row.observationId as number;
+  const observationState = row.observationState as ObservationState;
   const { downloadObservationCsv, downloadObservationGpx, downloadObservationResults } = useObservationExports();
   const navigate = useSyncNavigate();
 
@@ -94,7 +99,13 @@ export default function PlantMonitoringCellRenderer(props: RendererProps<TableRo
               navigate(APP_PATHS.RESCHEDULE_OBSERVATION.replace(':observationId', observationId.toString()));
             },
           },
-          // TODO add reschedule and end observations
+          {
+            disabled: observationState === 'Completed' || observationState === 'Abandoned',
+            label: strings.END_OBSERVATION,
+            onClick: () => {
+              openAbandonObservationModal(observationId);
+            },
+          },
         ]}
       />
     ) : null;
