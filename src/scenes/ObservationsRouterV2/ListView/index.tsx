@@ -19,6 +19,7 @@ import ObservationMapWrapper from '../Map';
 import useObservablePlantingSites from '../Schedule/useObservablePlantingSites';
 import BiomassList from './BiomassList';
 import PlantMonitoringList from './PlantMonitoringList';
+import ObservationsEventsNotification from './ObservationsEventsNotification';
 
 const ObservationListView = (): JSX.Element => {
   const { selectedOrganization } = useOrganization();
@@ -126,6 +127,7 @@ const ObservationListView = (): JSX.Element => {
       leftComponent={PageHeaderPlantingSiteDropdown}
       rightComponent={scheduleObservationButton}
     >
+      <ObservationsEventsNotification />
       {activeTab === 'plantMonitoring' && (
         <SurvivalRateMessageV2
           selectedPlantingSiteId={selectedPlantingSiteId === -1 ? undefined : selectedPlantingSiteId}
