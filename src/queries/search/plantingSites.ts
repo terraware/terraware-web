@@ -83,6 +83,39 @@ const injectedRtkApi = api.injectEndpoints({
           timeZoneId: result.timeZone,
         })),
     }),
+
+    searchMonitoringPlots: build.query<MonitoringPlotSearchResult[], number[]>({
+      query: (monitoringPlotIds) => ({
+        url: '/api/v1/search',
+        method: 'POST',
+        body: {
+          fields: ['id', 'plotNumber'],
+          prefix: 'monitoringPlots',
+          search: {
+            operation: 'and',
+            children: [
+              {
+                field: 'id',
+                operation: 'field',
+                values: monitoringPlotIds,
+              },
+            ],
+          },
+          sortOrder: [
+            {
+              field: 'id',
+              direction: 'Ascending',
+            },
+          ],
+          count: 0,
+        },
+      }),
+      transformResponse: (results: SerachMonitoringPlotApiResponse) =>
+        results.results.map((result) => ({
+          id: Number(result.id),
+          plotNumber: result.plotNumber,
+        })),
+    }),
   }),
 });
 
@@ -122,6 +155,15 @@ export type PlantingSiteSummary = {
   isDraft?: boolean;
 };
 
+type SerachMonitoringPlotApiResponse = {
+  results: MonitoringPlotSearchResult[];
+};
+
+export type MonitoringPlotSearchResult = {
+  id: number;
+  plotNumber: string;
+};
+
 export { injectedRtkApi as api };
 
 export const {
@@ -129,4 +171,6 @@ export const {
   useLazyCountPlantingSitesQuery,
   useSearchPlantingSitesQuery,
   useLazySearchPlantingSitesQuery,
+  useSearchMonitoringPlotsQuery,
+  useLazySearchMonitoringPlotsQuery,
 } = injectedRtkApi;
