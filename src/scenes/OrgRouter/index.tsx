@@ -50,7 +50,6 @@ import useEnvironment from 'src/utils/useEnvironment';
 import useStateLocation from 'src/utils/useStateLocation';
 
 import ActivityLogRouter from '../ActivityLogRouter';
-import SurvivalRateSettingsRouter from '../SurvivalRateSettingsRouter';
 
 interface OrgRouterProps {
   showNavBar: boolean;
@@ -243,10 +242,6 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
 
             {!isProduction && (
               <Route path={APP_PATHS.OPT_IN} element={<OptInFeaturesView refresh={reloadPreferences} />} />
-            )}
-
-            {newObservationViewEnabled && (
-              <Route path={APP_PATHS.SURVIVAL_RATE_SETTINGS_V2} element={<SurvivalRateSettingsRouter />} />
             )}
 
             <Route path='*' element={<Navigate to={APP_PATHS.HOME} />} />
