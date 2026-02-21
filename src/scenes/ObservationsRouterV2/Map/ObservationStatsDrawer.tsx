@@ -12,6 +12,7 @@ import { useGetPlantingSiteQuery, useLazyGetPlantingSiteHistoryQuery } from 'src
 import { MonitoringPlotStatus, ObservationState } from 'src/types/Observations';
 import { isManagerOrHigher } from 'src/utils/organization';
 
+import { useAbandonObservationModal } from '../Abandon';
 import { useReassignPlotModal } from '../Reassign';
 
 type ObservationStatsProperties = {
@@ -39,6 +40,7 @@ const ObservationStatsDrawer = ({
 }: ObservationStatsDrawerProps): JSX.Element | undefined => {
   const { strings } = useLocalization();
   const theme = useTheme();
+  const { openAbandonObservationModal } = useAbandonObservationModal();
   const { openReassignPlotModal } = useReassignPlotModal();
   const { selectedOrganization } = useOrganization();
   const replaceObservationPlotEnabled = isManagerOrHigher(selectedOrganization);
@@ -268,14 +270,30 @@ const ObservationStatsDrawer = ({
         );
       }
     }
+
+    if (layerFeatureId.layerId === 'sites') {
+      if (results && results.state !== 'Completed' && results.state !== 'Abandoned') {
+        return (
+          <Button
+            id='reassignPlot'
+            label={strings.END_OBSERVATION}
+            type='passive'
+            onClick={() => openAbandonObservationModal(observationId)}
+            priority='secondary'
+          />
+        );
+      }
+    }
     return undefined;
   }, [
     layerFeatureId.featureId,
     layerFeatureId.layerId,
     observationId,
+    openAbandonObservationModal,
     openReassignPlotModal,
     replaceObservationPlotEnabled,
-    results?.strata,
+    results,
+    strings.END_OBSERVATION,
     strings.REQUEST_REASSIGNMENT,
   ]);
 
@@ -290,7 +308,7 @@ const ObservationStatsDrawer = ({
   return (
     <>
       {properties && (
-        <Box display={'flex'} width={'100%'} flexDirection={'column'}>
+        <Box display={'flex'} width={'100%'} flexDirection={'column'} alignItems={'center'}>
           <MapDrawerTable header={properties.name} rows={rows} subheader={subheader} subheaderUrl={subheaderUrl} />
           {actionButton && (
             <Box display='flex' padding={theme.spacing(2)}>
