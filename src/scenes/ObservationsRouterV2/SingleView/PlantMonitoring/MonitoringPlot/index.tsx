@@ -6,6 +6,7 @@ import { Tabs } from '@terraware/web-components';
 
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
+import SurvivalRateMessageV2 from 'src/components/SurvivalRate/SurvivalRateMessageV2';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
@@ -93,7 +94,8 @@ const MonitoringPlotDetails = (): JSX.Element => {
   });
 
   return (
-    <Page crumbs={crumbs} title={title} titleContainerStyle={{ paddingTop: 3, paddingBottom: 1 }}>
+    <Page crumbs={crumbs} title={title}>
+      <SurvivalRateMessageV2 selectedPlantingSiteId={results?.plantingSiteId} />
       <Box width='100%'>
         <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />
       </Box>

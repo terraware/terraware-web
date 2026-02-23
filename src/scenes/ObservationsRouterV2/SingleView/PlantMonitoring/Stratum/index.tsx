@@ -17,6 +17,7 @@ import { getShortDate } from 'src/utils/dateFormatter';
 import AggregatedPlantsStats from '../AggregatedPlantsStats';
 import useObservationSpecies from '../useObservationSpecies';
 import MonitoringPlotList from './MonitoringPlotList';
+import SurvivalRateMessageV2 from 'src/components/SurvivalRate/SurvivalRateMessageV2';
 
 const StratumDetails = (): JSX.Element => {
   const theme = useTheme();
@@ -71,7 +72,8 @@ const StratumDetails = (): JSX.Element => {
   const species = useObservationSpecies(stratumResult?.species ?? []);
 
   return (
-    <Page crumbs={crumbs} title={title} titleContainerStyle={{ paddingTop: 3, paddingBottom: 1 }}>
+    <Page crumbs={crumbs} title={title}>
+      <SurvivalRateMessageV2 selectedPlantingSiteId={results?.plantingSiteId} />
       <AggregatedPlantsStats
         completedTime={stratumResult?.completedTime}
         totalSpecies={stratumResult?.totalSpecies}

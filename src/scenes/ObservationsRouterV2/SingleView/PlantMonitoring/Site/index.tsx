@@ -18,6 +18,7 @@ import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 import AggregatedPlantsStats from '../AggregatedPlantsStats';
 import useObservationSpecies from '../useObservationSpecies';
 import StratumList from './StratumList';
+import SurvivalRateMessageV2 from 'src/components/SurvivalRate/SurvivalRateMessageV2';
 
 const SiteDetails = (): JSX.Element => {
   const theme = useTheme();
@@ -68,7 +69,8 @@ const SiteDetails = (): JSX.Element => {
   const species = useObservationSpecies(results?.species ?? []);
 
   return (
-    <Page crumbs={crumbs} title={title} titleContainerStyle={{ paddingTop: 3, paddingBottom: 1 }}>
+    <Page crumbs={crumbs} title={title}>
+      <SurvivalRateMessageV2 selectedPlantingSiteId={results?.plantingSiteId} />
       <AggregatedPlantsStats
         completedTime={results?.completedTime}
         totalSpecies={results?.totalSpecies}
