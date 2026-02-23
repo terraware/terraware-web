@@ -14,6 +14,7 @@ import {
   MRT_ToggleFiltersButton,
   MRT_ToggleFullScreenButton,
   MRT_ToggleGlobalFilterButton,
+  MRT_VisibilityState,
 } from 'material-react-table';
 
 import ProjectAssignTopBarButton from 'src/components/ProjectAssignTopBarButton';
@@ -592,6 +593,23 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
 
   const [showGlobalFilter, setShowGlobalFilter] = useState(false);
 
+  const [columnVisibility, setColumnVisibility] = useState<MRT_VisibilityState>(() => {
+    try {
+      const saved = localStorage.getItem(`inventoryTable_${origin.toLowerCase()}_columnVisibility`);
+      return saved ? JSON.parse(saved) : {};
+    } catch {
+      return {};
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(`inventoryTable_${origin.toLowerCase()}_columnVisibility`, JSON.stringify(columnVisibility));
+    } catch {
+      // ignore
+    }
+  }, [columnVisibility, origin]);
+
   const [showColumnFilters, setShowColumnFilters] = useState(() => {
     try {
       const saved = localStorage.getItem(`inventoryTable_${origin.toLowerCase()}_columnFilters`);
@@ -653,6 +671,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                     rowSelection,
                     sorting,
                     columnOrder,
+                    columnVisibility,
                     density,
                     showColumnFilters,
                     showGlobalFilter,
@@ -660,6 +679,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                   onRowSelectionChange: setRowSelection,
                   onSortingChange: setSorting,
                   onColumnOrderChange: setColumnOrder,
+                  onColumnVisibilityChange: setColumnVisibility,
                   onShowColumnFiltersChange: setShowColumnFilters,
                   onShowGlobalFilterChange: setShowGlobalFilter,
                   onDensityChange: (updater) => {

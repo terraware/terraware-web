@@ -15,6 +15,7 @@ import {
   MRT_ToggleFiltersButton,
   MRT_ToggleFullScreenButton,
   MRT_ToggleGlobalFilterButton,
+  MRT_VisibilityState,
 } from 'material-react-table';
 
 import TextTruncated from 'src/components/common/TextTruncated';
@@ -131,6 +132,23 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
       return 'comfortable';
     }
   });
+
+  const [columnVisibility, setColumnVisibility] = useState<MRT_VisibilityState>(() => {
+    try {
+      const saved = localStorage.getItem('nursery-withdrawals-table-columnVisibility');
+      return saved ? JSON.parse(saved) : {};
+    } catch {
+      return {};
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('nursery-withdrawals-table-columnVisibility', JSON.stringify(columnVisibility));
+    } catch {
+      // ignore
+    }
+  }, [columnVisibility]);
 
   // Material React Table state
   const [pagination, setPagination] = useState<MRT_PaginationState>({
@@ -728,6 +746,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
           pagination,
           sorting,
           columnFilters,
+          columnVisibility,
           showColumnFilters,
           showGlobalFilter,
           density,
@@ -736,6 +755,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         onPaginationChange: setPagination,
         onSortingChange: setSorting,
         onColumnFiltersChange: handleColumnFiltersChange,
+        onColumnVisibilityChange: setColumnVisibility,
         onShowColumnFiltersChange: setShowColumnFilters,
         onShowGlobalFilterChange: setShowGlobalFilter,
         onColumnOrderChange: setColumnOrder,
