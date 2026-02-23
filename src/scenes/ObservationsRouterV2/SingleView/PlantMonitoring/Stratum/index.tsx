@@ -6,6 +6,7 @@ import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
+import SurvivalRateMessageV2 from 'src/components/SurvivalRate/SurvivalRateMessageV2';
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
@@ -17,7 +18,6 @@ import { getShortDate } from 'src/utils/dateFormatter';
 import AggregatedPlantsStats from '../AggregatedPlantsStats';
 import useObservationSpecies from '../useObservationSpecies';
 import MonitoringPlotList from './MonitoringPlotList';
-import SurvivalRateMessageV2 from 'src/components/SurvivalRate/SurvivalRateMessageV2';
 
 const StratumDetails = (): JSX.Element => {
   const theme = useTheme();

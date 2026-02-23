@@ -6,6 +6,7 @@ import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
+import SurvivalRateMessageV2 from 'src/components/SurvivalRate/SurvivalRateMessageV2';
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
@@ -18,7 +19,6 @@ import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 import AggregatedPlantsStats from '../AggregatedPlantsStats';
 import useObservationSpecies from '../useObservationSpecies';
 import StratumList from './StratumList';
-import SurvivalRateMessageV2 from 'src/components/SurvivalRate/SurvivalRateMessageV2';
 
 const SiteDetails = (): JSX.Element => {
   const theme = useTheme();
