@@ -956,8 +956,8 @@ const ObservationMap = ({
               return filteredPlants.map(
                 (plant): MapMarker => ({
                   id: `plants/${plant.id}`,
-                  longitude: plant.gpsCoordinates.coordinates[0],
-                  latitude: plant.gpsCoordinates.coordinates[1],
+                  longitude: plant.gpsCoordinates.coordinates[1],
+                  latitude: plant.gpsCoordinates.coordinates[0],
                   onClick: selectPlant(plot.monitoringPlotId, selectedResults.observationId, plant),
                   selected: selectedPlants.find((selected) => selected.plant.id === plant.id) !== undefined,
                   properties: {
