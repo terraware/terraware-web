@@ -275,7 +275,7 @@ const ObservationStatsDrawer = ({
       if (results && results.state !== 'Completed' && results.state !== 'Abandoned') {
         return (
           <Button
-            id='reassignPlot'
+            id='abandonPlot'
             label={strings.END_OBSERVATION}
             type='passive'
             onClick={() => openAbandonObservationModal(observationId)}
