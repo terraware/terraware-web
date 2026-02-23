@@ -5,6 +5,7 @@ import { BusySpinner, Button, EditableTable, EditableTableColumn } from '@terraw
 import { Icon } from '@terraware/web-components';
 import {
   MRT_Cell,
+  MRT_ColumnOrderState,
   MRT_DensityState,
   MRT_ShowHideColumnsButton,
   MRT_ToggleDensePaddingButton,
@@ -56,7 +57,25 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
   const snackbar = useSnackbar();
   const [showWarningModal, setShowWarningModal] = useState(false);
   const [markingAsComplete, setMarkingAsComplete] = useState(false);
-  const [showColumnFilters, setShowColumnFilters] = useState(false);
+  const [showColumnFilters, setShowColumnFilters] = useState(() => {
+    try {
+      for (const key of [
+        'plantings-progress-table-with-strata_columnFilters',
+        'plantings-progress-table-without-strata_columnFilters',
+      ]) {
+        const saved = localStorage.getItem(key);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            return true;
+          }
+        }
+      }
+    } catch {
+      // ignore
+    }
+    return false;
+  });
   const [showGlobalFilter, setShowGlobalFilter] = useState(false);
   const [density, setDensity] = useState<MRT_DensityState>(() => {
     try {
@@ -65,6 +84,43 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
       return 'comfortable';
     }
   });
+
+  const [columnOrderWithStrata, setColumnOrderWithStrata] = useState<MRT_ColumnOrderState>(() => {
+    try {
+      const saved = localStorage.getItem('plantings-progress-table-with-strata-columnOrder');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  const [columnOrderWithoutStrata, setColumnOrderWithoutStrata] = useState<MRT_ColumnOrderState>(() => {
+    try {
+      const saved = localStorage.getItem('plantings-progress-table-without-strata-columnOrder');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('plantings-progress-table-with-strata-columnOrder', JSON.stringify(columnOrderWithStrata));
+    } catch {
+      // ignore
+    }
+  }, [columnOrderWithStrata]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(
+        'plantings-progress-table-without-strata-columnOrder',
+        JSON.stringify(columnOrderWithoutStrata)
+      );
+    } catch {
+      // ignore
+    }
+  }, [columnOrderWithoutStrata]);
 
   const selectedRows = useMemo(
     () =>
@@ -350,10 +406,15 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
             showColumnFilters,
             showGlobalFilter,
             density,
+            columnOrder: hasStrata ? columnOrderWithStrata : columnOrderWithoutStrata,
           },
           onRowSelectionChange: setRowSelection,
           onShowColumnFiltersChange: setShowColumnFilters,
           onShowGlobalFilterChange: setShowGlobalFilter,
+          onColumnOrderChange: (updater) => {
+            const setter = hasStrata ? setColumnOrderWithStrata : setColumnOrderWithoutStrata;
+            setter((prev) => (typeof updater === 'function' ? updater(prev) : updater));
+          },
           onDensityChange: (updater) => {
             setDensity((prev) => {
               const next = typeof updater === 'function' ? updater(prev) : updater;

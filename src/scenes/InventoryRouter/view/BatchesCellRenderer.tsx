@@ -15,11 +15,15 @@ import QuantitiesMenu from './QuantitiesMenu';
 export type ModalValuesType = {
   type: string;
   openChangeQuantityModal: boolean;
+  batch?: any;
 };
 
 export default function BatchesCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const { column, row, value, index, onRowClick } = props;
-  const [modalValues, setModalValues] = useState({ type: 'germinating', openChangeQuantityModal: false });
+  const [modalValues, setModalValues] = useState<ModalValuesType>({
+    type: 'germinating',
+    openChangeQuantityModal: false,
+  });
 
   const textStyles = {
     fontSize: '14px',
@@ -79,11 +83,11 @@ export default function BatchesCellRenderer(props: RendererProps<TableRowType>):
         row={row}
         value={
           <>
-            {modalValues.openChangeQuantityModal && (
+            {modalValues.openChangeQuantityModal && modalValues.batch && (
               <ChangeQuantityModal
                 onClose={() => setModalValues({ openChangeQuantityModal: false, type: 'germinating' })}
                 modalValues={modalValues}
-                row={row as Batch}
+                row={modalValues.batch as Batch}
                 reload={onRowClick}
               />
             )}
