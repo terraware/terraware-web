@@ -18,7 +18,7 @@ import {
 import { PlantingSitePayload, useLazyListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
 import { useLazyGetAllT0SiteDataSetQuery } from 'src/queries/generated/t0';
 import { useLazyGetPlotsWithObservationsQuery } from 'src/queries/search/t0';
-import { getStatus } from 'src/types/Observations';
+import { ObservationState, getStatus } from 'src/types/Observations';
 import { SearchSortOrder } from 'src/types/Search';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { isAdmin } from 'src/utils/organization';
@@ -31,6 +31,7 @@ type PlantMonitoringRow = {
   adHocPlotNumber?: number;
   observationId: number;
   observationDate?: string;
+  observationState?: ObservationState;
   state: string;
   plantingSiteName?: string;
   strata?: string;
@@ -294,6 +295,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           adHocPlotNumber: observationResult.adHocPlot?.monitoringPlotNumber,
           observationId: observationResult.observationId,
           observationDate,
+          observationState: observationResult.state,
           state: getStatus(observationResult.state),
           plantingSiteName: plantingSite?.name,
           strata,
