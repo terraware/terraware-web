@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/33</span>
+                <span class='fraction'>0/35</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/30</span>
+                <span class='fraction'>0/32</span>
             </div>
         
             
@@ -84,7 +84,11 @@
 <a name='L19'></a><a href='#L19'>19</a>
 <a name='L20'></a><a href='#L20'>20</a>
 <a name='L21'></a><a href='#L21'>21</a>
-<a name='L22'></a><a href='#L22'>22</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L22'></a><a href='#L22'>22</a>
+<a name='L23'></a><a href='#L23'>23</a>
+<a name='L24'></a><a href='#L24'>24</a>
+<a name='L25'></a><a href='#L25'>25</a>
+<a name='L26'></a><a href='#L26'>26</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -103,27 +107,35 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > type JSX } fr</span>om 'react';
 import { Route, <span class="cstat-no" title="statement not covered" >Routes } from 'react-r</span>outer';
 <span class="cstat-no" title="statement not covered" ></span>
-import ObservationListVi<span class="cstat-no" title="statement not covered" >ew from './ListView';</span>
-import ReassignPlot<span class="cstat-no" title="statement not covered" >ModalProvider from './</span>Reassign';
-import ObservationS<span class="cstat-no" title="statement not covered" >cheduleRouter from './Schedule';</span>
-import Observat<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >io</span>nSingleView from './SingleView';</span>
-<span class="cstat-no" title="statement not covered" ></span>
-cons<span class="cstat-no" title="statement not covered" >t ObservationsRouterV2 = (): JSX.Element =&gt; {</span>
-  return (
-    &lt;ReassignPlotM<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >od</span>alProvider&gt;</span>
+import SurvivalRateSetti<span class="cstat-no" title="statement not covered" >ngs from '../SurvivalRateSe</span>ttings';
+import EditSurvival<span class="cstat-no" title="statement not covered" >RateSettings from '../</span>SurvivalRateSettings/EditSurvivalRateSettings';
+import ObservationL<span class="cstat-no" title="statement not covered" >istView from './ListView';</span>
+import Reassign<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Pl</span>otModalProvider from './Reassign';</span>
+im<span class="cstat-no" title="statement not covered" >port ObservationScheduleRouter from './Schedule';</span>
+impo<span class="cstat-no" title="statement not covered" >rt ObservationSingleView from './SingleView';</span>
+&nbsp;
+const Observations<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Ro</span>uterV2 = (): JSX.Element =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  return (</span>
+<span class="cstat-no" title="statement not covered" >    &lt;ReassignPlotModalProvider&gt;</span>
 <span class="cstat-no" title="statement not covered" >      &lt;Routes&gt;</span>
-<span class="cstat-no" title="statement not covered" >        &lt;Route path={'/:observationId/*'} element={&lt;ObservationSingleView /&gt;} /&gt;</span>
-<span class="cstat-no" title="statement not covered" >        &lt;Route path={'/schedule/*'} element={&lt;ObservationScheduleRouter /&gt;} /&gt;</span>
-<span class="cstat-no" title="statement not covered" >        &lt;Route path={'/*'} element<span class="fstat-no" title="function not covered" >={</span>&lt;Obs<span class="cstat-no" title="statement not covered" >ervationLi</span>stView /&gt;} /&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;Route path={'/:observatio<span class="fstat-no" title="function not covered" >nI</span>d/*'<span class="cstat-no" title="statement not covered" >} element=</span>{&lt;ObservationSingleView /&gt;} /&gt;</span>
+        &lt;Route path={'/schedule/*'} element={&lt;ObservationScheduleRouter /&gt;} /&gt;
+<span class="cstat-no" title="statement not covered" >        &lt;Rout</span>e path={'/survival-rate-settings/:plantingSiteId'} element={&lt;SurvivalRateSettings /&gt;} /&gt;
+        &lt;Route path={'/survival-rate-settings/:plantingSiteId/edit'} element={&lt;EditSurvivalRateSettings /&gt;} /&gt;
+        &lt;Route<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > p</span>ath={'/*'} element={&lt;Observa<span class="cstat-no" title="statement not covered" >tionListView /&gt;} /&gt;</span></span>
       &lt;/Routes&gt;
-<span class="cstat-no" title="statement not covered" >    &lt;/Reassig</span>nPlotModalProvider&gt;
+    &lt;/ReassignPlotModalProvider&gt;
   );
-};<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+};
 &nbsp;
 export default ObservationsRouterV2;
 &nbsp;</pre></td></tr></table></pre>
@@ -133,7 +145,7 @@ export default ObservationsRouterV2;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-23T18:34:54.424Z
+                at 2026-02-23T18:51:39.822Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
