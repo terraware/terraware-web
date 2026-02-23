@@ -4,7 +4,6 @@ import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { RequestStatusFlags } from '@reduxjs/toolkit/dist/query/core/apiState';
 import { Button, Dropdown, DropdownItem, IconTooltip } from '@terraware/web-components';
 
-import ConfirmModal from 'src/components/Application/ConfirmModal';
 import PhotoSelectorWithPreview, { FileWithUrl } from 'src/components/Photo/PhotoSelectorWithPreview';
 import CountrySelect from 'src/components/ProjectField/CountrySelect';
 import LandUseMultiSelect from 'src/components/ProjectField/LandUseMultiSelect';
@@ -19,7 +18,6 @@ import Card from 'src/components/common/Card';
 import Link from 'src/components/common/Link';
 import PageForm from 'src/components/common/PageForm';
 import Icon from 'src/components/common/icon/Icon';
-import useBoolean from 'src/hooks/useBoolean';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization, useUser } from 'src/providers';
 import { useUpdateProjectAcceleratorDetailsMutation } from 'src/queries/generated/acceleratorProjects';
@@ -124,7 +122,6 @@ const ProjectProfileEdit = () => {
   const [mainPhoto, setMainPhoto] = useState<FileWithUrl>();
   const [mapPhoto, setMapPhoto] = useState<FileWithUrl>();
   const [customUserRoles, setCustomUserRoles] = useState<string[]>([]);
-  const [confirmModalOpen, , openConfirmModal, closeConfirmModal] = useBoolean(false);
 
   const isAllowedEdit = isAllowed('UPDATE_ACCELERATOR_PROJECT');
 
@@ -400,13 +397,8 @@ const ProjectProfileEdit = () => {
       return;
     }
 
-    if (acceleratorProjectRecord?.phase !== acceleratorProject?.phase) {
-      openConfirmModal();
-      return;
-    }
-
     finishSave();
-  }, [validateSave, acceleratorProjectRecord?.phase, acceleratorProject?.phase, openConfirmModal, finishSave]);
+  }, [validateSave, finishSave]);
 
   const handleOnCancel = useCallback(() => goToAcceleratorProject(projectId), [goToAcceleratorProject, projectId]);
 
@@ -577,13 +569,6 @@ const ProjectProfileEdit = () => {
 
   return (
     <Grid container paddingRight={theme.spacing(3)}>
-      <ConfirmModal
-        open={confirmModalOpen}
-        title={strings.CONFIRM_UPDATE_ALL_COHORT_PHASE_TITLE}
-        body={strings.CONFIRM_UPDATE_ALL_COHORT_PHASE}
-        onClose={closeConfirmModal}
-        onConfirm={finishSave}
-      />
       {addInternalUserRoleModalOpen && (
         <AddInternalUserRoleModal
           addInternalUserRole={addInternalUserRole}
