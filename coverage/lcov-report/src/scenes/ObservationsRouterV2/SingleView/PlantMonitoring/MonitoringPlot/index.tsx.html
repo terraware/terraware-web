@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/69</span>
+                <span class='fraction'>0/70</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/57</span>
+                <span class='fraction'>0/59</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/62</span>
+                <span class='fraction'>0/63</span>
             </div>
         
             
@@ -167,7 +167,9 @@
 <a name='L102'></a><a href='#L102'>102</a>
 <a name='L103'></a><a href='#L103'>103</a>
 <a name='L104'></a><a href='#L104'>104</a>
-<a name='L105'></a><a href='#L105'>105</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L105'></a><a href='#L105'>105</a>
+<a name='L106'></a><a href='#L106'>106</a>
+<a name='L107'></a><a href='#L107'>107</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -212,7 +214,11 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -220,9 +226,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -271,7 +274,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > type JSX, use</span>Effect, useMemo } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > type JSX, use</span>Effect, useMemo } from 'react';
 import { usePara<span class="cstat-no" title="statement not covered" >ms } from 'react-route</span>r';
 <span class="cstat-no" title="statement not covered" ></span>
 import { Box, Typography<span class="cstat-no" title="statement not covered" >, useTheme } from '@mui/mat</span>erial';
@@ -279,35 +283,36 @@ import { Tabs } fro<span class="cstat-no" title="statement not covered" >m '@ter
 <span class="cstat-no" title="statement not covered" ></span>
 import { Crumb <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >} </span>from 'src/components/BreadCrumbs';</span>
 im<span class="cstat-no" title="statement not covered" >port Page from 'src/components/Page';</span>
-impo<span class="cstat-no" title="statement not covered" >rt { APP_PATHS } from 'src/constants';</span>
-import { useLocalization } from 'src/providers';
-import { useGetObs<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >er</span>vationResultsQuery } from 'src/queries/generated/observations';</span>
-im<span class="cstat-no" title="statement not covered" >port { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';</span>
-impo<span class="cstat-no" title="statement not covered" >rt useStickyTabs from 'src/utils/useStickyTabs';</span>
-<span class="cstat-no" title="statement not covered" ></span>
-import M<span class="cstat-no" title="statement not covered" >onitoringPlotObservationDa<span class="fstat-no" title="function not covered" >ta</span>Tab <span class="cstat-no" title="statement not covered" >from './Mo</span>nitoringPlotObservationDataTab';</span>
-import MonitoringPlotPhotosTab from './MonitoringPlotPhotosTab';
-<span class="cstat-no" title="statement not covered" ></span>
-const MonitoringPlotDetails = (): JSX.Element =&gt; {
-  const theme <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >= </span>useTheme();<span class="cstat-no" title="statement not covered" ></span></span>
+impo<span class="cstat-no" title="statement not covered" >rt SurvivalRateMessageV2 from 'src/components/SurvivalRate/Surv</span>ivalRateMessageV2';
+import { APP_PATHS } from 'src/constants';
+import { useLocali<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >za</span>tion } from 'src/providers';</span>
+im<span class="cstat-no" title="statement not covered" >port { useGetObservationResultsQuery } from 'src/queries/generated/observations';</span>
+impo<span class="cstat-no" title="statement not covered" >rt { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';</span>
+import<span class="cstat-no" title="statement not covered" > useStickyTabs from 'src/utils/useStickyTabs';</span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+import MonitoringPlotObservationDataTab from './MonitoringPlotObservationDataTab';
+im<span class="cstat-no" title="statement not covered" >port Monito</span>ringPlotPhotosTab from './MonitoringPlotPhotosTab';
+&nbsp;
+const Monitori<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ng</span>PlotDetails = (): JSX.Elemen<span class="cstat-no" title="statement not covered" >t =&gt; {</span></span>
+  const theme = useTheme();
   const { strings } = useLocalization();
   const params = useParams&lt;{ observationId: string; stratumName: string; monitoringPlotId: string }&gt;();
   const observationId = Number(params.observationId);
   const stratumName = params.stratumName;
   const monitoringPlotId = Number(params.monitoringPlotId);
   const { data: observationResultsResponse } = useGetObservationResultsQuery({ observationId });
-  const [getPlantingSite, getPlantingSiteResult] = useLazyGetPlantingSiteQuery();
-  const results = u<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >se</span>Memo(()<span class="cstat-no" title="statement not covered" > =&gt; observationResultsResponse?.observation, [observationResult</span></span>sResponse?.observation]);
-  const plantingSite<span class="cstat-no" title="statement not covered" > = </span>useMemo(() =&gt; getPlantingSiteResult.data?.site, [getPlantingSiteResult.data?.site]);
-<span class="cstat-no" title="statement not covered" >  const monitoringPlot = useMemo(</span>
-    () =&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-      results?.isAdHoc
-<span class="cstat-no" title="statement not covered" >        ? results?.adHocPlot</span>
-        : results?.<span class="cstat-no" title="statement not covered" >strata</span>
-            .flatMap((stra<span class="cstat-no" title="statement not covered" >tum) =&gt; stratum.substrat</span>a)
-            ?.flatMap(<span class="cstat-no" title="statement not covered" >(substratum) =&gt; substratu</span>m?.monitoringPlots)
-            .find((plot) =&gt; <span class="cstat-no" title="statement not covered" >plot.monitoringPlotId === monitoringP</span>lotId),
-    [monitoringPlo<span class="cstat-no" title="statement not covered" >tId, results?.adHocPlot, results?.isAdHo</span>c, results?.strata]
+  const [getPlantin<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >gS</span>ite, ge<span class="cstat-no" title="statement not covered" >tPlantingSiteResult] = useLazyGetPlantingSiteQuery();</span></span>
+  const results = us<span class="cstat-no" title="statement not covered" >eMe</span>mo(() =&gt; observationResultsResponse?.observation, [observationResultsResponse?.observation]);
+<span class="cstat-no" title="statement not covered" >  const plantingSite = useMemo(() =&gt; getPlantingSiteResult.data?.site, [getPlantingSiteResult.data?.site]);</span>
+  const mon<span class="fstat-no" title="function not covered" >it</span>orin<span class="cstat-no" title="statement not covered" >gPlot = useMem</span>o(
+    () =&gt;
+<span class="cstat-no" title="statement not covered" >      results?.isAdHoc</span>
+        ? results?.<span class="cstat-no" title="statement not covered" >adHocPlot</span>
+        : results?.strata<span class="cstat-no" title="statement not covered" ></span>
+            .flatMap((<span class="cstat-no" title="statement not covered" >stratum) =&gt; stratum.subst</span>rata)
+            ?.flatMap((subst<span class="cstat-no" title="statement not covered" >ratum) =&gt; substratum?.monitoringPlots</span>)
+            .find(<span class="cstat-no" title="statement not covered" >(plot) =&gt; plot.monitoringPlotId === moni</span>toringPlotId),
+    [monitoringPlotId, results?.adH<span class="cstat-no" title="statement not covered" >ocPlot, results?.isAdHoc, results?.strata]</span>
   );<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
   useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
@@ -366,7 +371,8 @@ const MonitoringPlotDetails = (): JSX.Element =&gt; {
   })<span class="cstat-no" title="statement not covered" >;</span>
 &nbsp;
   return (
-    &lt;Page crumbs={crumbs} title={title} titleContainerStyle={{ paddingTop: 3, paddingBottom: 1 }}&gt;
+    &lt;Page crumbs={crumbs} title={title}&gt;
+      &lt;SurvivalRateMessageV2 selectedPlantingSiteId={results?.plantingSiteId} /&gt;
       &lt;Box width='100%'&gt;
         &lt;Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} /&gt;
       &lt;/Box&gt;
@@ -375,14 +381,14 @@ const MonitoringPlotDetails = (): JSX.Element =&gt; {
 };
 &nbsp;
 export default MonitoringPlotDetails;
-&nbsp;</pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-23T19:52:38.668Z
+                at 2026-02-23T21:07:02.255Z
             </div>
         <script src="../../../../../../prettify.js"></script>
         <script>
