@@ -12,6 +12,7 @@ import {
   MRT_ToggleFiltersButton,
   MRT_ToggleFullScreenButton,
   MRT_ToggleGlobalFilterButton,
+  MRT_VisibilityState,
 } from 'material-react-table';
 
 import FormattedNumber from 'src/components/common/FormattedNumber';
@@ -121,6 +122,46 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
       // ignore
     }
   }, [columnOrderWithoutStrata]);
+
+  const [columnVisibilityWithStrata, setColumnVisibilityWithStrata] = useState<MRT_VisibilityState>(() => {
+    try {
+      const saved = localStorage.getItem('plantings-progress-table-with-strata-columnVisibility');
+      return saved ? JSON.parse(saved) : {};
+    } catch {
+      return {};
+    }
+  });
+
+  const [columnVisibilityWithoutStrata, setColumnVisibilityWithoutStrata] = useState<MRT_VisibilityState>(() => {
+    try {
+      const saved = localStorage.getItem('plantings-progress-table-without-strata-columnVisibility');
+      return saved ? JSON.parse(saved) : {};
+    } catch {
+      return {};
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(
+        'plantings-progress-table-with-strata-columnVisibility',
+        JSON.stringify(columnVisibilityWithStrata)
+      );
+    } catch {
+      // ignore
+    }
+  }, [columnVisibilityWithStrata]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(
+        'plantings-progress-table-without-strata-columnVisibility',
+        JSON.stringify(columnVisibilityWithoutStrata)
+      );
+    } catch {
+      // ignore
+    }
+  }, [columnVisibilityWithoutStrata]);
 
   const selectedRows = useMemo(
     () =>
@@ -403,12 +444,17 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
         tableOptions={{
           state: {
             rowSelection,
+            columnVisibility: hasStrata ? columnVisibilityWithStrata : columnVisibilityWithoutStrata,
             showColumnFilters,
             showGlobalFilter,
             density,
             columnOrder: hasStrata ? columnOrderWithStrata : columnOrderWithoutStrata,
           },
           onRowSelectionChange: setRowSelection,
+          onColumnVisibilityChange: (updater) => {
+            const setter = hasStrata ? setColumnVisibilityWithStrata : setColumnVisibilityWithoutStrata;
+            setter((prev) => (typeof updater === 'function' ? updater(prev) : updater));
+          },
           onShowColumnFiltersChange: setShowColumnFilters,
           onShowGlobalFilterChange: setShowGlobalFilter,
           onColumnOrderChange: (updater) => {
