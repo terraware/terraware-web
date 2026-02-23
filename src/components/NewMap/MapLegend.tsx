@@ -286,9 +286,9 @@ const MapLegend = ({ legends }: MapLegendProps): JSX.Element => {
       justifyItems='flex-start'
       padding={theme.spacing(2, 1)}
       flexDirection={'column'}
-      maxWidth={isDesktop ? '184px' : 'stretch'}
-      minWidth={isDesktop ? '184px' : undefined}
-      width={isDesktop ? '184px' : 'stretch'}
+      maxWidth={isDesktop ? '220px' : 'stretch'}
+      minWidth={isDesktop ? '220px' : undefined}
+      width={isDesktop ? '220px' : 'stretch'}
       margin={0}
       overflow={'scroll'}
     >
