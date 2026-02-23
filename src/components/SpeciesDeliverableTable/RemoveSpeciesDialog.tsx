@@ -2,8 +2,8 @@ import React, { type JSX, useCallback, useEffect, useState } from 'react';
 
 import { Button, DialogBox } from '@terraware/web-components';
 
-import { requestDeleteManyParticipantProjectSpecies } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
-import { selectParticipantProjectSpeciesDeleteManyRequest } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';
+import { requestDeleteManyAcceleratorProjectSpecies } from 'src/redux/features/acceleratorProjectSpecies/acceleratorProjectSpeciesAsyncThunks';
+import { selectAcceleratorProjectSpeciesDeleteManyRequest } from 'src/redux/features/acceleratorProjectSpecies/acceleratorProjectSpeciesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -22,14 +22,14 @@ export default function RemoveSpeciesDialog(props: RemoveSpeciesDialogProps): JS
   const snackbar = useSnackbar();
 
   const [requestId, setRequestId] = useState('');
-  const deleteRequest = useAppSelector(selectParticipantProjectSpeciesDeleteManyRequest(requestId));
+  const deleteRequest = useAppSelector(selectAcceleratorProjectSpeciesDeleteManyRequest(requestId));
 
-  const removeSelectedSpeciesFromParticipantProject = useCallback(() => {
+  const removeSelectedSpeciesFromAcceleratorProject = useCallback(() => {
     if (!speciesToRemove?.length) {
       return;
     }
 
-    const request = dispatch(requestDeleteManyParticipantProjectSpecies(speciesToRemove));
+    const request = dispatch(requestDeleteManyAcceleratorProjectSpecies(speciesToRemove));
     setRequestId(request.requestId);
   }, [dispatch, speciesToRemove]);
 
@@ -66,7 +66,7 @@ export default function RemoveSpeciesDialog(props: RemoveSpeciesDialogProps): JS
         <Button
           key='button-2'
           label={strings.REMOVE}
-          onClick={removeSelectedSpeciesFromParticipantProject}
+          onClick={removeSelectedSpeciesFromAcceleratorProject}
           size='medium'
           type='destructive'
         />,

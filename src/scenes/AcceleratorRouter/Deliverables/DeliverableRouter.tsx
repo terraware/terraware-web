@@ -8,7 +8,7 @@ const DeliverableRouter = () => {
   return (
     <Routes>
       <Route path={''} element={<DeliverableView />} />
-      <Route path={'/species/:participantProjectSpeciesId/*'} element={<SpeciesDeliverableRouter />} />
+      <Route path={'/species/:acceleratorProjectSpeciesId/*'} element={<SpeciesDeliverableRouter />} />
     </Routes>
   );
 };

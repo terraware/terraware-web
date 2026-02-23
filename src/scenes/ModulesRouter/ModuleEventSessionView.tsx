@@ -8,8 +8,8 @@ import { Crumb } from 'src/components/BreadCrumbs';
 import Link from 'src/components/common/Link';
 import ParticipantPage from 'src/components/common/PageWithModuleTimeline/ParticipantPage';
 import { APP_PATHS } from 'src/constants';
-import useGetCohortModule from 'src/hooks/useGetCohortModule';
 import useGetEvent from 'src/hooks/useGetEvent';
+import useGetProjectModule from 'src/hooks/useGetProjectModule';
 import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import strings from 'src/strings';
@@ -40,7 +40,7 @@ const ModuleEventSessionView = () => {
   }, [projectId, setCurrentAcceleratorProject]);
 
   const { event, getEvent } = useGetEvent();
-  const { cohortModule, getCohortModule } = useGetCohortModule();
+  const { projectModule, getProjectModule } = useGetProjectModule();
 
   useEffect(() => {
     if (sessionId) {
@@ -49,10 +49,10 @@ const ModuleEventSessionView = () => {
   }, [getEvent, sessionId]);
 
   useEffect(() => {
-    if (currentAcceleratorProject && currentAcceleratorProject.cohortId) {
-      void getCohortModule({ moduleId, cohortId: currentAcceleratorProject.cohortId });
+    if (currentAcceleratorProject && currentAcceleratorProject.id) {
+      void getProjectModule({ moduleId, projectId: currentAcceleratorProject.id });
     }
-  }, [currentAcceleratorProject, moduleId, getCohortModule]);
+  }, [currentAcceleratorProject, moduleId, getProjectModule]);
 
   const eventType = event?.type ? getEventType(event.type) : '';
   const isRecordedSession = eventType === 'Recorded Session';
@@ -76,18 +76,18 @@ const ModuleEventSessionView = () => {
         to: APP_PATHS.PROJECT_MODULES.replace(':projectId', `${projectId}`),
       },
       {
-        name: cohortModule?.title || '',
+        name: projectModule?.title || '',
         to: APP_PATHS.PROJECT_MODULE.replace(':projectId', `${projectId}`).replace(':moduleId', `${moduleId}`),
       },
     ],
-    [activeLocale, projectId, cohortModule, moduleId]
+    [activeLocale, projectId, projectModule, moduleId]
   );
 
   return (
     <ParticipantPage
       crumbs={crumbs}
       hierarchicalCrumbs={false}
-      title={<ModuleViewTitle module={cohortModule} projectId={projectId} />}
+      title={<ModuleViewTitle module={projectModule} projectId={projectId} />}
     >
       <Card
         sx={{

@@ -11,8 +11,8 @@ const DELIVERABLES_SEARCH_FIELDS = [
   'dueDate',
   'id',
   'module_id',
-  'module_cohortModules_endDate',
-  'module_cohortModules_startDate',
+  'module_projectModules_endDate',
+  'module_projectModules_startDate',
   'project_id',
 ];
 
@@ -51,14 +51,15 @@ const searchSpeciesDeliverables = async (projectIds: number[]): Promise<SpeciesD
 
   return response.map((result: SearchResponseElement): SpeciesDeliverable => {
     // eslint-disable-next-line @typescript-eslint/naming-convention
-    const { dueDate, id, module_id, module_cohortModules_endDate, module_cohortModules_startDate, project_id } = result;
+    const { dueDate, id, module_id, module_projectModules_endDate, module_projectModules_startDate, project_id } =
+      result;
 
     return {
       dueDate: DateTime.fromISO(String(dueDate)),
       id: Number(id),
-      moduleStartDate: DateTime.fromISO(String(module_cohortModules_startDate)),
+      moduleStartDate: DateTime.fromISO(String(module_projectModules_startDate)),
       moduleId: Number(module_id),
-      moduleEndDate: DateTime.fromISO(String(module_cohortModules_endDate)),
+      moduleEndDate: DateTime.fromISO(String(module_projectModules_endDate)),
       projectId: Number(project_id),
     };
   });

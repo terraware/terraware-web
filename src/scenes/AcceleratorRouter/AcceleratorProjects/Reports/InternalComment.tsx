@@ -6,8 +6,8 @@ import TextField from '@terraware/web-components/components/Textfield/Textfield'
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
+import { useLocalization } from 'src/providers';
 import { AcceleratorReportPayload } from 'src/queries/generated/reports';
-import strings from 'src/strings';
 import { AcceleratorReportStatus, AcceleratorReportStatuses } from 'src/types/AcceleratorReport';
 
 interface InternalCommentProps {
@@ -17,6 +17,7 @@ interface InternalCommentProps {
 }
 
 function InternalComment({ entity, update, disabled }: InternalCommentProps) {
+  const { strings } = useLocalization();
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [internalComment, setInternalComment] = useState(entity.internalComment || '');
   const [status, setStatus] = useState<AcceleratorReportStatus>(entity.status || '');

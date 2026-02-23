@@ -11,7 +11,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import AcceleratorReportEditForm from './AcceleratorReportEditForm';
 
 const AcceleratorReportEditView = (): JSX.Element | null => {
-  const { activeLocale, strings } = useLocalization();
+  const { strings } = useLocalization();
   const { currentAcceleratorProject, setCurrentAcceleratorProject } = useParticipantData();
 
   const pathParams = useParams<{ projectId: string; reportId: string }>();
@@ -39,7 +39,7 @@ const AcceleratorReportEditView = (): JSX.Element | null => {
     return report?.startDate?.split('-')[0];
   }, [report]);
 
-  const reportName = report?.frequency === 'Annual' ? `${year}` : report?.quarter ? `${year}-${report?.quarter}` : '';
+  const reportName = report?.quarter ? `${year}-${report?.quarter}` : year ? `${year}` : '';
 
   if (!report) {
     return null;
@@ -50,7 +50,7 @@ const AcceleratorReportEditView = (): JSX.Element | null => {
       title={
         <TitleBar
           subtitle={currentAcceleratorProject ? `${strings.PROJECT}: ${currentAcceleratorProject?.name}` : ''}
-          title={activeLocale ? `${strings.REPORT} (${reportName})` : ''}
+          title={`${strings.REPORT} (${reportName})`}
         />
       }
     >

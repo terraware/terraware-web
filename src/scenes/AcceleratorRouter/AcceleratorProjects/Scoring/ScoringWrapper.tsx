@@ -7,7 +7,7 @@ import { Crumb } from 'src/components/BreadCrumbs';
 import Card from 'src/components/common/Card';
 import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
 import { APP_PATHS } from 'src/constants';
-import useListCohortModules from 'src/hooks/useListCohortModules';
+import useListProjectModules from 'src/hooks/useListProjectModules';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 
@@ -24,14 +24,14 @@ const ScoringWrapper = ({ children, isForm, isLoading, rightComponent }: Props):
   const { activeLocale } = useLocalization();
   const theme = useTheme();
 
-  const { cohortModules, listCohortModules } = useListCohortModules();
+  const { projectModules, listProjectModules } = useListProjectModules();
   const { project } = useAcceleratorProjectData();
 
   useEffect(() => {
-    if (project && project.cohortId) {
-      void listCohortModules(project.cohortId);
+    if (project && project.id) {
+      listProjectModules(project.id);
     }
-  }, [project, listCohortModules]);
+  }, [project, listProjectModules]);
 
   // construct the bread crumbs back to originating context
   const crumbs: Crumb[] = useMemo(
@@ -40,7 +40,7 @@ const ScoringWrapper = ({ children, isForm, isLoading, rightComponent }: Props):
         ? [
             {
               name: strings.PROJECTS,
-              to: APP_PATHS.ACCELERATOR_PROJECTS, // TODO switch to project management page holding the project id
+              to: APP_PATHS.ACCELERATOR_PROJECTS,
             },
             {
               name: project?.name ?? '--',
@@ -59,7 +59,7 @@ const ScoringWrapper = ({ children, isForm, isLoading, rightComponent }: Props):
       rightComponent={rightComponent}
       title={`${project?.name ?? ''} ${strings.SCORES}`}
       projectPhase={project?.phase}
-      modules={cohortModules ?? []}
+      modules={projectModules ?? []}
     >
       <Card
         style={{

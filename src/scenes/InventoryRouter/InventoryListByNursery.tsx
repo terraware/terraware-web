@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, CircularProgress, Container, Typography, useTheme } from '@mui/material';
+import { Box, CircularProgress, Container } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
@@ -25,7 +25,6 @@ type InventoryListByNurseryProps = {
 export default function InventoryListByNursery({ setReportData }: InventoryListByNurseryProps) {
   const { activeLocale, strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
-  const theme = useTheme();
 
   const [filters, setFilters] = useForm<InventoryFiltersUnion>({});
   const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>(null);
@@ -153,16 +152,6 @@ export default function InventoryListByNursery({ setReportData }: InventoryListB
 
   return (
     <Card flushMobile>
-      <Typography
-        sx={{
-          fontSize: '20px',
-          fontWeight: 600,
-          color: theme.palette.TwClrTxt,
-          marginBottom: theme.spacing(2),
-        }}
-      >
-        {strings.BY_NURSERY}
-      </Typography>
       {showResults ? (
         <InventoryTable
           results={searchResults || []}

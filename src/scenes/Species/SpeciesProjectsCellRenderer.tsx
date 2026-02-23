@@ -34,7 +34,7 @@ export default function SpeciesProjectsCellRenderer(props: RendererProps<TableRo
     }
   }
 
-  if (column.key === 'participantProjectSpeciesSubmissionStatus') {
+  if (column.key === 'acceleratorProjectSpeciesSubmissionStatus') {
     return (
       <CellRenderer
         style={{ width: '50px' }}

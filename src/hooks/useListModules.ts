@@ -5,7 +5,7 @@ import { selectModuleList } from 'src/redux/features/modules/modulesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { Module } from 'src/types/Module';
 
-const useListCohortModules = () => {
+const useListModules = () => {
   const dispatch = useAppDispatch();
 
   const [requestId, setRequestId] = useState<string>('');
@@ -33,4 +33,4 @@ const useListCohortModules = () => {
   );
 };
 
-export default useListCohortModules;
+export default useListModules;

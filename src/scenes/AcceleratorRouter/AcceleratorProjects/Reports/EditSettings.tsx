@@ -12,12 +12,12 @@ import PageForm from 'src/components/common/PageForm';
 import TextField from 'src/components/common/Textfield/Textfield';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
+import { useLocalization } from 'src/providers';
 import {
   useCreateAcceleratorReportConfigMutation,
   useLazyListAcceleratorReportConfigQuery,
   useUpdateProjectAcceleratorReportConfigMutation,
 } from 'src/queries/generated/reports';
-import strings from 'src/strings';
 import { NewAcceleratorReportConfig } from 'src/types/AcceleratorReport';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -25,6 +25,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 export default function EditSettings(): JSX.Element {
   const theme = useTheme();
   const navigate = useSyncNavigate();
+  const { strings } = useLocalization();
   const { isMobile } = useDeviceInfo();
   const pathParams = useParams<{ projectId: string }>();
   const projectId = Number(pathParams.projectId);

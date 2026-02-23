@@ -1,13 +1,13 @@
 import { createContext, useContext } from 'react';
 
-import { CohortModule } from 'src/types/Module';
+import { ProjectModule } from 'src/types/Module';
 import { Project } from 'src/types/Project';
 
 export type ParticipantData = {
   allAcceleratorProjects: Project[];
   currentAcceleratorProject?: Project;
   isLoading: boolean;
-  modules?: CohortModule[];
+  modules?: ProjectModule[];
   orgHasModules: boolean | undefined; // undefined for unknown, useful for showing loading spinner
   orgHasParticipants: boolean | undefined; // undefined for unknown, useful for showing loading spinner
   projectsWithModules: Project[];

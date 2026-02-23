@@ -93,7 +93,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
   const { selectedProject } = useProjects({ projectId });
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const navigate = useSyncNavigate();
-  const { goToAcceleratorActivityLog, goToActivityLog, goToParticipantProject } = useNavigateTo();
+  const { goToAcceleratorActivityLog, goToActivityLog, goToAcceleratorProject } = useNavigateTo();
   const location = useStateLocation();
   const query = useQuery();
 
@@ -181,7 +181,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
       isAcceleratorRoute &&
       source === APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', projectId.toString())
     ) {
-      goToParticipantProject(projectId, editingActivityId, 'activityLog');
+      goToAcceleratorProject(projectId, editingActivityId, 'activityLog');
     } else if (isAcceleratorRoute) {
       goToAcceleratorActivityLog(editingActivityId);
     } else {
@@ -191,7 +191,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
     activityId,
     goToAcceleratorActivityLog,
     goToActivityLog,
-    goToParticipantProject,
+    goToAcceleratorProject,
     isAcceleratorRoute,
     isEditing,
     projectId,

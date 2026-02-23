@@ -60,6 +60,7 @@ export type AssignProjectApiArg = {
 };
 export type ProjectPayload = {
   cohortId?: number;
+  /** Use phase instead. */
   cohortPhase?:
     | 'Phase 0 - Due Diligence'
     | 'Phase 1 - Feasibility Study'
@@ -77,6 +78,13 @@ export type ProjectPayload = {
   organizationId: number;
   /** If using this to check whether project is in cohort, use cohortPhase instead. */
   participantId?: number;
+  phase?:
+    | 'Phase 0 - Due Diligence'
+    | 'Phase 1 - Feasibility Study'
+    | 'Phase 2 - Plan and Scale'
+    | 'Phase 3 - Implement and Monitor'
+    | 'Pre-Screen'
+    | 'Application';
 };
 export type SuccessOrError = 'ok' | 'error';
 export type ListProjectsResponsePayload = {

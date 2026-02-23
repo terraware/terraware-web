@@ -14,10 +14,9 @@ import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import { PublishedReportPayload, useListPublishedReportsQuery } from 'src/queries/generated/publishedReports';
 import { AcceleratorReportPayload, useListAcceleratorReportsQuery } from 'src/queries/generated/reports';
-import { ACCELERATOR_REPORT_PHOTO_ENDPOINT, FUNDER_REPORT_PHOTO_ENDPOINT } from 'src/services/AcceleratorReportService';
 import { ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/ActivityService';
 import { FUNDER_ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/funder/FunderActivityService';
-import { AcceleratorReport, PublishedReport } from 'src/types/AcceleratorReport';
+import { AcceleratorReport } from 'src/types/AcceleratorReport';
 import { ActivityMediaFile, activityTypeLabel } from 'src/types/Activity';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
@@ -49,6 +48,10 @@ const carouselContainerStyles = {
     width: '100%',
   },
 };
+
+export const ACCELERATOR_REPORT_PHOTO_ENDPOINT =
+  '/api/v1/accelerator/projects/{projectId}/reports/{reportId}/photos/{fileId}';
+export const FUNDER_REPORT_PHOTO_ENDPOINT = '/api/v1/funder/reports/{reportId}/photos/{fileId}';
 
 const carouselSlideContentStyles =
   (coverPhotoURL: string | undefined): SxProps<Theme> =>
@@ -248,7 +251,7 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
 
     if (selectedQuarterReport) {
       const reportIdValue = isFunderRoute
-        ? (selectedQuarterReport as PublishedReport).reportId
+        ? (selectedQuarterReport as PublishedReportPayload).reportId
         : (selectedQuarterReport as AcceleratorReport).id;
       const photoEndpointUrl = isFunderRoute ? FUNDER_REPORT_PHOTO_ENDPOINT : ACCELERATOR_REPORT_PHOTO_ENDPOINT;
       const firstSlide: ActivityHighlightSlide = {
@@ -494,11 +497,11 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
                           {getReportMetrics(strings).map(({ metric, formatter }) => {
                             const selMetric = slide.report?.systemMetrics.find((sm) =>
                               isFunderRoute
-                                ? (sm as PublishedReport['systemMetrics'][0]).name === metric
+                                ? (sm as PublishedReportPayload['systemMetrics'][0]).name === metric
                                 : (sm as AcceleratorReport['systemMetrics'][0]).metric === metric
                             );
                             const value = isFunderRoute
-                              ? (selMetric as PublishedReport['systemMetrics'][0])?.value || 0
+                              ? (selMetric as PublishedReportPayload['systemMetrics'][0])?.value || 0
                               : (selMetric as AcceleratorReport['systemMetrics'][0]).overrideValue ||
                                 (selMetric as AcceleratorReport['systemMetrics'][0])?.systemValue ||
                                 0;

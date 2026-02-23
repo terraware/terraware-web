@@ -12,17 +12,17 @@ import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers/hooks';
 import {
-  requestAddManyParticipantProjectSpecies,
-  requestDeleteManyParticipantProjectSpecies,
-} from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
+  requestAddManyAcceleratorProjectSpecies,
+  requestDeleteManyAcceleratorProjectSpecies,
+} from 'src/redux/features/acceleratorProjectSpecies/acceleratorProjectSpeciesAsyncThunks';
 import {
-  selectParticipantProjectSpeciesAddManyRequest,
-  selectParticipantProjectSpeciesDeleteManyRequest,
-} from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';
+  selectAcceleratorProjectSpeciesAddManyRequest,
+  selectAcceleratorProjectSpeciesDeleteManyRequest,
+} from 'src/redux/features/acceleratorProjectSpecies/acceleratorProjectSpeciesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import SpeciesDetailsForm from 'src/scenes/Species/SpeciesDetailsForm';
 import { SpeciesService } from 'src/services';
-import { CreateParticipantProjectSpeciesRequestPayload } from 'src/services/ParticipantProjectSpeciesService';
+import { CreateAcceleratorProjectSpeciesRequestPayload } from 'src/services/AcceleratorProjectSpeciesService';
 import strings from 'src/strings';
 import { Species } from 'src/types/Species';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -59,8 +59,8 @@ export default function SpeciesEditView(): JSX.Element {
 
   const [addRequestId, setAddRequestId] = useState<string>('');
   const [removeRequestId, setRemoveRequestId] = useState<string>('');
-  const addedResult = useAppSelector(selectParticipantProjectSpeciesAddManyRequest(addRequestId));
-  const removedResult = useAppSelector(selectParticipantProjectSpeciesDeleteManyRequest(removeRequestId));
+  const addedResult = useAppSelector(selectAcceleratorProjectSpeciesAddManyRequest(addRequestId));
+  const removedResult = useAppSelector(selectAcceleratorProjectSpeciesDeleteManyRequest(removeRequestId));
   const dispatch = useAppDispatch();
 
   const onRemoveExistingHandler = (removedIds: number[]) => {
@@ -152,7 +152,7 @@ export default function SpeciesEditView(): JSX.Element {
       setIsBusy(false);
       if (response.requestSucceeded) {
         if (removedProjectsIds) {
-          const request = dispatch(requestDeleteManyParticipantProjectSpecies(removedProjectsIds));
+          const request = dispatch(requestDeleteManyAcceleratorProjectSpecies(removedProjectsIds));
           setRemoveRequestId(request.requestId);
         }
         if (addedProjectsSpecies && speciesId) {
@@ -161,9 +161,9 @@ export default function SpeciesEditView(): JSX.Element {
               projectId: aPS.project.id,
               speciesId: Number(speciesId),
               speciesNativeCategory: aPS.nativeCategory,
-            } as CreateParticipantProjectSpeciesRequestPayload;
+            } as CreateAcceleratorProjectSpeciesRequestPayload;
           });
-          const request = dispatch(requestAddManyParticipantProjectSpecies(createRequests));
+          const request = dispatch(requestAddManyAcceleratorProjectSpecies(createRequests));
           setAddRequestId(request.requestId);
         }
         if (

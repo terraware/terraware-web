@@ -4,8 +4,8 @@ export const selectModuleRequest = (requestId: string) => (state: RootState) => 
 
 export const selectModuleList = (requestId: string) => (state: RootState) => state.moduleList[requestId];
 
-export const selectModuleProjects = (requestId: string) => (state: RootState) => state.moduleProjects[requestId];
+export const selectModuleOrgProjects = (requestId: string) => (state: RootState) => state.moduleOrgProjects[requestId];
 
-export const selectModuleCohorts = (moduleId: string) => (state: RootState) => state.moduleCohorts[moduleId];
+export const selectModuleProjects = (moduleId: string) => (state: RootState) => state.moduleProjects[moduleId];
 
 export const selectSearchModules = (requestId: string) => (state: RootState) => state.searchModules[requestId];

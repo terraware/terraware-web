@@ -12,7 +12,7 @@ import { useParticipantData } from 'src/providers/Participant/ParticipantContext
 import { useLocalization } from 'src/providers/hooks';
 import { SpeciesService } from 'src/services';
 import strings from 'src/strings';
-import { ParticipantProjectSpecies } from 'src/types/ParticipantProjectSpecies';
+import { AcceleratorProjectSpecies } from 'src/types/AcceleratorProjectSpecies';
 import {
   EcosystemType,
   GrowthForm,
@@ -37,7 +37,7 @@ type SpeciesDetailsFormProps = {
   gridSize: number;
   nameFormatError: string | string[];
   onChange: (id: string) => (value: unknown) => void;
-  participantProjectSpeciesRecord?: ParticipantProjectSpecies;
+  acceleratorProjectSpeciesRecord?: AcceleratorProjectSpecies;
   record: Species;
   setNameFormatError: React.Dispatch<React.SetStateAction<string | string[]>>;
   onAdd?: (projectSpecies: ProjectSpecies[]) => void;

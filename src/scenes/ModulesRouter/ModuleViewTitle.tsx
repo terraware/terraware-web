@@ -4,11 +4,11 @@ import { Box, Typography } from '@mui/material';
 
 import { selectProject } from 'src/redux/features/projects/projectsSelectors';
 import { useAppSelector } from 'src/redux/store';
-import { CohortModule } from 'src/types/Module';
+import { ProjectModule } from 'src/types/Module';
 import { getDateRangeString } from 'src/utils/dateFormatter';
 
 type ModulePageTitleProps = {
-  module: CohortModule | undefined;
+  module: ProjectModule | undefined;
   projectId: number;
 };
 

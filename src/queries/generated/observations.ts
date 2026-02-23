@@ -72,6 +72,18 @@ const injectedRtkApi = api.injectEndpoints({
     abandonObservation: build.mutation<AbandonObservationApiResponse, AbandonObservationApiArg>({
       query: (queryArg) => ({ url: `/api/v1/tracking/observations/${queryArg}/abandon`, method: 'POST' }),
     }),
+    getObservationBirdnetResults: build.query<
+      GetObservationBirdnetResultsApiResponse,
+      GetObservationBirdnetResultsApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/api/v1/tracking/observations/${queryArg.observationId}/birdnet`,
+        params: {
+          monitoringPlotId: queryArg.monitoringPlotId,
+          fileId: queryArg.fileId,
+        },
+      }),
+    }),
     mergeOtherSpecies: build.mutation<MergeOtherSpeciesApiResponse, MergeOtherSpeciesApiArg>({
       query: (queryArg) => ({
         url: `/api/v1/tracking/observations/${queryArg.observationId}/mergeOtherSpecies`,
@@ -245,6 +257,15 @@ export type RescheduleObservationApiArg = {
 export type AbandonObservationApiResponse =
   /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
 export type AbandonObservationApiArg = number;
+export type GetObservationBirdnetResultsApiResponse =
+  /** status 200 The requested operation succeeded. */ ListObservationBirdnetResultsResponsePayload;
+export type GetObservationBirdnetResultsApiArg = {
+  observationId: number;
+  /** If present, only list results for this monitoring plot. */
+  monitoringPlotId?: number;
+  /** If present, only return information about the result for this video file. */
+  fileId?: number;
+};
 export type MergeOtherSpeciesApiResponse = /** status 200 OK */ SimpleSuccessResponsePayload;
 export type MergeOtherSpeciesApiArg = {
   observationId: number;
@@ -904,12 +925,28 @@ export type SimpleErrorResponsePayload = {
   error: ErrorDetails;
   status: SuccessOrError;
 };
+export type ObservationBirdnetResultPayload = {
+  fileId: number;
+  monitoringPlotId: number;
+  resultsStorageUrl?: string;
+  status: 'Preparing' | 'Ready' | 'Errored';
+};
+export type ListObservationBirdnetResultsResponsePayload = {
+  results: ObservationBirdnetResultPayload[];
+  status: SuccessOrError;
+};
 export type MergeOtherSpeciesRequestPayload = {
   /** Name of the species of certainty Other whose recorded plants should be updated to refer to the known species. */
   otherSpeciesName: string;
   /** ID of the existing species that the Other species' recorded plants should be merged into. */
   speciesId: number;
 };
+export type GeometryCollection = {
+  type: 'GeometryCollection';
+} & GeometryBase & {
+    geometries: object[];
+    type: 'GeometryCollection';
+  };
 export type LineString = {
   type: 'LineString';
 } & GeometryBase & {
@@ -933,12 +970,6 @@ export type MultiPolygon = {
 } & GeometryBase & {
     coordinates: number[][][][];
     type: 'MultiPolygon';
-  };
-export type GeometryCollection = {
-  type: 'GeometryCollection';
-} & GeometryBase & {
-    geometries: (GeometryCollection | LineString | MultiLineString | MultiPoint | MultiPolygon | Point | Polygon)[];
-    type: 'GeometryCollection';
   };
 export type Geometry = GeometryCollection | LineString | MultiLineString | MultiPoint | MultiPolygon | Point | Polygon;
 export type AssignedPlotPayload = {
@@ -1170,6 +1201,8 @@ export const {
   useLazyGetObservationQuery,
   useRescheduleObservationMutation,
   useAbandonObservationMutation,
+  useGetObservationBirdnetResultsQuery,
+  useLazyGetObservationBirdnetResultsQuery,
   useMergeOtherSpeciesMutation,
   useListAssignedPlotsQuery,
   useLazyListAssignedPlotsQuery,

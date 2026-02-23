@@ -70,6 +70,7 @@ export default function WithdrawalHistoryMenu(props: WithdrawalHistoryMenuProps)
           type='passive'
           priority='ghost'
           size='medium'
+          sx={{ padding: '0 !important', margin: '0 !important', minHeight: '0 !important' }}
         />
       </Tooltip>
     </>

@@ -215,6 +215,7 @@ test.describe('InventoryTests', () => {
     await expect(page.getByText('Species Banana')).toBeVisible();
     const newBatchNumber = await getBatchNumberBySpecies(page.locator('.MuiTable-root'), 'Banana');
     await page.getByRole('button', { name: newBatchNumber }).click();
+    await page.getByRole('tab', { name: 'History' }).waitFor({ state: 'visible' });
     await page.getByRole('tab', { name: 'History' }).click();
     await expect(page.getByRole('cell', { name: 'Nursery Transfer' })).toBeVisible();
     await expect(page.getByRole('cell', { name: 'Super Admin' })).toBeVisible();
@@ -256,8 +257,8 @@ test.describe('InventoryTests', () => {
     await expect(page.getByRole('cell', { name: 'Planting Site' })).toBeVisible();
     await expect(page.getByRole('cell', { name: '60' })).toBeVisible();
     await page.getByRole('link', { name: '60' }).click();
-    await expect(page.getByText('Destination:Planting Site')).toBeVisible();
-    await expect(page.getByText('Substratum:East-North')).toBeVisible();
+    await expect(page.locator('thead').getByText('Planting Site')).toBeVisible();
+    await expect(page.getByText('East-North')).toBeVisible();
     await expect(page.locator('#row1-purpose')).toContainText('Planting');
     await expect(page.locator('#row1-facility_name')).toContainText('Nursery');
     await expect(page.locator('#row1-destinationName')).toContainText('Planting Site');
@@ -289,7 +290,7 @@ test.describe('InventoryTests', () => {
       .click();
 
     await page.mouse.down();
-    await expect(page.getByLabel('Planting Progress').getByText('Planting Progress')).toBeVisible();
+    await expect(page.locator('div').filter({ hasText: /^List$/ })).toBeVisible();
     await page.waitForTimeout(6000); //Wait for map to load
     await expect(page.locator('.mapboxgl-canvas')).toBeVisible();
     await page.locator('.mapboxgl-map').click({
@@ -302,8 +303,8 @@ test.describe('InventoryTests', () => {
     await expect(page.getByText('60 Seedlings Sent')).toBeVisible();
     await expect(page.getByText('Kousa Dogwood')).toBeVisible();
     await page.getByRole('link', { name: 'See Withdrawal History' }).click();
-    await expect(page.getByText('Destination:Planting Site')).toBeVisible();
-    await expect(page.getByText('Substratum:East-North')).toBeVisible();
+    await expect(page.locator('thead').getByText('Planting Site')).toBeVisible();
+    await expect(page.getByText('East-North')).toBeVisible();
   });
 });
 
@@ -314,8 +315,7 @@ const getBatchNumberBySpeciesAndNursery = async (page: Page, species: string, nu
       .locator('../..')
       .getByText(species)
       .first()
-      .locator('..')
-      .evaluate((el) => el.id)
+      .evaluate((el) => (el.closest('td') ?? el).id)
   )
     .replace('-species_scientificName', '')
     .replace('-scientificName', '')

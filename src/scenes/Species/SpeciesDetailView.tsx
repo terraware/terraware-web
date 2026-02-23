@@ -215,7 +215,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
               value={species?.rare}
             />
           </GridItemWrapper>
-          {/* TODO this will eventually come from the participant project species, not the org species */}
+          {/* TODO this will eventually come from the accelerator project species, not the org species */}
           {/* <GridItemWrapper>
                 <TextField
                   id={'nativeStatus'}

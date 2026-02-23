@@ -84,7 +84,7 @@ const ProjectProfileEdit = () => {
   const theme = useTheme();
   const snackbar = useSnackbar();
   const { acceleratorProject, projectId, organization, reload } = useAcceleratorProjectData();
-  const { goToParticipantProject } = useNavigateTo();
+  const { goToAcceleratorProject } = useNavigateTo();
   const { isAllowed } = useUser();
   const [validateFields, setValidateFields] = useState<boolean>(false);
 
@@ -131,8 +131,8 @@ const ProjectProfileEdit = () => {
   const redirectToProjectView = useCallback(() => {
     reload();
     snackbar.toastSuccess(strings.CHANGES_SAVED, strings.SAVED);
-    goToParticipantProject(projectId);
-  }, [reload, snackbar, goToParticipantProject, projectId, strings]);
+    goToAcceleratorProject(projectId);
+  }, [reload, snackbar, goToAcceleratorProject, projectId, strings]);
 
   const addInternalUserRole = useCallback(
     (internalUserRole: string) => {
@@ -408,7 +408,7 @@ const ProjectProfileEdit = () => {
     finishSave();
   }, [validateSave, acceleratorProjectRecord?.phase, acceleratorProject?.phase, openConfirmModal, finishSave]);
 
-  const handleOnCancel = useCallback(() => goToParticipantProject(projectId), [goToParticipantProject, projectId]);
+  const handleOnCancel = useCallback(() => goToAcceleratorProject(projectId), [goToAcceleratorProject, projectId]);
 
   useEffect(() => {
     if (response?.status === 'success') {
@@ -424,9 +424,9 @@ const ProjectProfileEdit = () => {
 
   useEffect(() => {
     if (!isAllowedEdit) {
-      goToParticipantProject(projectId);
+      goToAcceleratorProject(projectId);
     }
-  }, [goToParticipantProject, isAllowedEdit, projectId]);
+  }, [goToAcceleratorProject, isAllowedEdit, projectId]);
 
   useEffect(() => {
     if (organization?.id) {

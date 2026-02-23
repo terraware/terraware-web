@@ -1,8 +1,8 @@
+import { PublishedReportPayload } from 'src/queries/generated/publishedReports';
 import { AcceleratorReportPayload } from 'src/queries/generated/reports';
-import { PublishedReport } from 'src/types/AcceleratorReport';
 
 export type ReportBoxProps = {
-  report?: AcceleratorReportPayload | PublishedReport;
+  report?: AcceleratorReportPayload | PublishedReportPayload;
   projectId: number;
   isConsoleView?: boolean;
   editing?: boolean;

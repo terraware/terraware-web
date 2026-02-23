@@ -61,7 +61,7 @@ const PageHeaderProjectFilter = ({
     setCurrentAcceleratorProject,
   ]);
 
-  // update current participant project and save to session storage when project filter changes
+  // update current accelerator project and save to session storage when project filter changes
   useEffect(() => {
     if (projectFilter.projectId) {
       setCurrentAcceleratorProject(projectFilter.projectId);

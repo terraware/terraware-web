@@ -7,7 +7,7 @@ import { Crumb } from 'src/components/BreadCrumbs';
 import Card from 'src/components/common/Card';
 import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
 import { APP_PATHS } from 'src/constants';
-import useListCohortModules from 'src/hooks/useListCohortModules';
+import useListProjectModules from 'src/hooks/useListProjectModules';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 
@@ -26,13 +26,13 @@ const VotingWrapper = ({ children, isForm, rightComponent }: Props): JSX.Element
   const theme = useTheme();
   const { phaseVotes, project, status } = useVotingData();
 
-  const { cohortModules, listCohortModules } = useListCohortModules();
+  const { projectModules, listProjectModules } = useListProjectModules();
 
   useEffect(() => {
-    if (project && project.cohortId) {
-      void listCohortModules(project.cohortId);
+    if (project && project.id) {
+      void listProjectModules(project.id);
     }
-  }, [project, listCohortModules]);
+  }, [project, listProjectModules]);
 
   // construct the bread crumbs back to originating context
   const crumbs: Crumb[] = useMemo(
@@ -41,7 +41,7 @@ const VotingWrapper = ({ children, isForm, rightComponent }: Props): JSX.Element
         ? [
             {
               name: strings.PROJECTS,
-              to: APP_PATHS.ACCELERATOR_PROJECTS, // TODO switch to project management page holding the project id
+              to: APP_PATHS.ACCELERATOR_PROJECTS,
             },
             {
               name: project?.name ?? '--',
@@ -62,7 +62,7 @@ const VotingWrapper = ({ children, isForm, rightComponent }: Props): JSX.Element
       rightComponent={rightComponent}
       title={strings.INVESTMENT_COMMITTEE_VOTES}
       projectPhase={project?.phase}
-      modules={cohortModules ?? []}
+      modules={projectModules ?? []}
     >
       {phaseVotes && phaseVotes.votes.length > 0 ? (
         <Card

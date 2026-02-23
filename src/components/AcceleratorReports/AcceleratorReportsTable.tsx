@@ -81,18 +81,16 @@ export default function AcceleratorReportsTable(): JSX.Element {
 
   const acceleratorReports = useMemo((): AcceleratorReportRow[] => {
     return (
-      projectReports
-        ?.filter((report) => report.frequency !== 'Annual')
-        .map((report) => {
-          const year = report.startDate.split('-')[0];
-          const reportName = getReportName(report);
+      projectReports.map((report) => {
+        const year = report.startDate.split('-')[0];
+        const reportName = getReportName(report);
 
-          return {
-            ...report,
-            reportName,
-            year,
-          };
-        }) ?? []
+        return {
+          ...report,
+          reportName,
+          year,
+        };
+      }) ?? []
     );
   }, [projectReports]);
 

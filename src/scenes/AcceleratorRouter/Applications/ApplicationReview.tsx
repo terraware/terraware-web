@@ -20,7 +20,7 @@ type ApplicationReviewProps = {
 
 const ApplicationReview = ({ application }: ApplicationReviewProps) => {
   const theme = useTheme();
-  const { goToParticipantProject } = useNavigateTo();
+  const { goToAcceleratorProject } = useNavigateTo();
   const { isAllowed } = useUser();
 
   const canUpdateInternalComments = isAllowed('UPDATE_APPLICATION_INTERNAL_COMMENTS');
@@ -93,7 +93,7 @@ const ApplicationReview = ({ application }: ApplicationReviewProps) => {
           <Button
             label={strings.SEE_PROJECT_DETAILS}
             onClick={() => {
-              goToParticipantProject(application.projectId);
+              goToAcceleratorProject(application.projectId);
             }}
             size={'small'}
             priority={'ghost'}

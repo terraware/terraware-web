@@ -22,7 +22,7 @@ type ProjectsEditProps = {
 
 const MultiProjectsEdit = (props: ProjectsEditProps): JSX.Element => {
   const { projects, allProjects, setProjects, tooltip } = props;
-  const [rows, setRows] = useState<Partial<ProjectsEditOption> & { projectId: number }[]>([]);
+  const [rows, setRows] = useState<ProjectsEditOption[]>([]);
 
   useEffect(() => {
     if (!rows.length) {
@@ -38,20 +38,21 @@ const MultiProjectsEdit = (props: ProjectsEditProps): JSX.Element => {
     (deletedIndex: number) => {
       const filteredRows = rows.filter((_row, _index) => _index !== deletedIndex);
       setRows(filteredRows);
-      setProjects(filteredRows as ProjectsEditOption[]);
+      setProjects(filteredRows);
     },
     [rows, setRows, setProjects]
   );
 
   const selectProject = useCallback(
     (updatedIndex: number, newProjectId: number) => {
-      const updatedRows = rows.map((project, index) =>
-        index === updatedIndex ? { ...project, projectId: newProjectId } : project
-      );
+      const updatedRows = rows.map((project, index) => {
+        const foundProject = allProjects.find((p) => p.projectId === newProjectId);
+        return index === updatedIndex ? { projectId: newProjectId, dealName: foundProject?.dealName } : project;
+      });
       setRows(updatedRows);
-      setProjects(updatedRows as ProjectsEditOption[]);
+      setProjects(updatedRows);
     },
-    [rows, setRows, setProjects]
+    [rows, setProjects, allProjects]
   );
 
   return (

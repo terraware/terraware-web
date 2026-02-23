@@ -6,7 +6,7 @@ export type SpeciesSearchResultRow = Omit<
 > & {
   conservationCategory?: string;
   growthForms?: string[];
-  participantProjects?: string[];
+  acceleratorProjects?: string[];
   rare?: string;
   seedStorageBehavior?: string;
   ecosystemTypes?: string[];

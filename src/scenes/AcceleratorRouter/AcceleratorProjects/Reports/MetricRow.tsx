@@ -5,12 +5,12 @@ import { Icon } from '@terraware/web-components';
 
 import MetricStatusBadge from 'src/components/AcceleratorReports/MetricStatusBadge';
 import ProgressChart from 'src/components/common/Chart/ProgressChart';
+import { useLocalization } from 'src/providers';
 import {
   ReportProjectMetricPayload,
   ReportStandardMetricPayload,
   ReportSystemMetricPayload,
 } from 'src/queries/generated/reports';
-import strings from 'src/strings';
 import { MetricType } from 'src/types/AcceleratorReport';
 
 export const isReportSystemMetric = (metric: any): metric is ReportSystemMetricPayload => {
@@ -30,6 +30,7 @@ type MetricRowProps = {
 
 const MetricRow = ({ metric, reportLabel = '', year }: MetricRowProps): JSX.Element => {
   const theme = useTheme();
+  const { strings } = useLocalization();
   const [expanded, setExpanded] = useState(false);
 
   const getMetricName = () => {

@@ -1,18 +1,26 @@
 import React, { type JSX, useMemo } from 'react';
 
-import { Box, CircularProgress } from '@mui/material';
+import { Box, CircularProgress, useTheme } from '@mui/material';
 
 import MapDrawerTable, { MapDrawerTableRow } from 'src/components/MapDrawerTable';
 import { MapLayerFeatureId } from 'src/components/NewMap/types';
-import { useLocalization } from 'src/providers';
+import Button from 'src/components/common/button/Button';
+import { APP_PATHS } from 'src/constants';
+import { useLocalization, useOrganization } from 'src/providers';
 import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
 import { useGetPlantingSiteQuery, useLazyGetPlantingSiteHistoryQuery } from 'src/queries/generated/plantingSites';
+import { MonitoringPlotStatus, ObservationState } from 'src/types/Observations';
+import { isManagerOrHigher } from 'src/utils/organization';
+
+import { useReassignPlotModal } from '../Reassign';
 
 type ObservationStatsProperties = {
   name: string | undefined;
   observedPlants: number | undefined;
   observedSpecies: number | undefined;
   observedDensity: number | undefined;
+  observationState?: ObservationState;
+  plotStatus?: MonitoringPlotStatus;
   plotType?: 'permanent' | 'temporary' | 'adHoc';
   survivalRate: number | undefined;
 };
@@ -30,6 +38,10 @@ const ObservationStatsDrawer = ({
   observationId,
 }: ObservationStatsDrawerProps): JSX.Element | undefined => {
   const { strings } = useLocalization();
+  const theme = useTheme();
+  const { openReassignPlotModal } = useReassignPlotModal();
+  const { selectedOrganization } = useOrganization();
+  const replaceObservationPlotEnabled = isManagerOrHigher(selectedOrganization);
 
   const { data: observationResultsResponse, isLoading: observationResultsLoading } = useGetObservationResultsQuery({
     observationId,
@@ -60,16 +72,13 @@ const ObservationStatsDrawer = ({
         observedPlants: results?.totalPlants,
         observedSpecies: results?.totalSpecies,
         observedDensity: results?.plantingDensity,
+        observationState: results?.state,
         survivalRate: results?.survivalRate,
       };
     } else if (layerFeatureId.layerId === 'strata') {
-      const stratumHistory = siteHistory?.strata?.find(
-        (_stratum) => _stratum.stratumId === Number(layerFeatureId.featureId)
-      );
-      const stratum = plantingSite?.strata?.find((_stratum) => _stratum.id === Number(layerFeatureId.featureId));
-      const stratumResults = results?.strata?.find(
-        (_stratum) => _stratum.stratumId === Number(layerFeatureId.featureId)
-      );
+      const stratumHistory = siteHistory?.strata?.find((_stratum) => _stratum.name === layerFeatureId.featureId);
+      const stratum = plantingSite?.strata?.find((_stratum) => _stratum.name === layerFeatureId.featureId);
+      const stratumResults = results?.strata?.find((_stratum) => _stratum.name === layerFeatureId.featureId);
       return {
         name: stratumHistory?.name ?? stratum?.name,
         observedPlants: stratumResults?.totalPlants,
@@ -112,12 +121,14 @@ const ObservationStatsDrawer = ({
         (_plot) => _plot.monitoringPlotId === Number(layerFeatureId.featureId)
       );
       const plotType = plotResults?.isAdHoc ? 'adHoc' : plotResults?.isPermanent ? 'permanent' : 'temporary';
+      const plotStatus = plotResults?.isAdHoc ? 'Completed' : plotResults?.status;
       return {
         name: plot ? `${plot.plotNumber}` : undefined,
         observedPlants: plotResults?.totalPlants,
         observedSpecies: plotResults?.totalSpecies,
         observedDensity: plotResults?.plantingDensity,
         plotType,
+        plotStatus,
         survivalRate: plotResults?.survivalRate,
       };
     } else {
@@ -141,13 +152,47 @@ const ObservationStatsDrawer = ({
           value,
         });
       }
+      if (properties.plotStatus) {
+        const value =
+          properties.plotStatus === 'Claimed'
+            ? strings.CLAIMED
+            : properties.plotStatus === 'Completed'
+              ? strings.COMPLETED
+              : properties.plotStatus === 'Not Observed'
+                ? strings.NOT_OBSERVED
+                : properties.plotStatus === 'Unclaimed'
+                  ? strings.UNCLAIMED
+                  : strings.NO_DATA_YET;
+        drawerRows.push({
+          key: strings.STATUS,
+          value,
+        });
+      }
+      if (properties.observationState) {
+        const value =
+          properties.observationState === 'Abandoned'
+            ? strings.COMPLETED_ENDED
+            : properties.observationState === 'Completed'
+              ? strings.COMPLETED
+              : properties.observationState === 'InProgress'
+                ? strings.IN_PROGRESS
+                : properties.observationState === 'Overdue'
+                  ? strings.OVERDUE
+                  : properties.observationState === 'Upcoming'
+                    ? strings.UPCOMING
+                    : strings.NO_DATA_YET;
+        drawerRows.push({
+          key: strings.STATE,
+          value,
+        });
+      }
       drawerRows.push({
-        key: strings.OBSERVED_PLANTS,
+        key: strings.PLANTS,
         value: properties.observedPlants ? `${properties.observedPlants}` : strings.NO_DATA_YET,
       });
 
       drawerRows.push({
-        key: strings.OBSERVED_SPECIES,
+        key: strings.SPECIES,
         value: properties.observedSpecies ? `${properties.observedSpecies}` : strings.NO_DATA_YET,
       });
 
@@ -165,6 +210,75 @@ const ObservationStatsDrawer = ({
     return drawerRows;
   }, [properties, strings]);
 
+  const subheader = useMemo(() => {
+    if (
+      layerFeatureId.layerId === 'permanentPlots' ||
+      layerFeatureId.layerId === 'temporaryPlots' ||
+      layerFeatureId.layerId === 'adHocPlots'
+    ) {
+      return strings.SEE_OBSERVATION_PLOT_DETAILS;
+    } else {
+      return undefined;
+    }
+  }, [layerFeatureId.layerId, strings]);
+
+  const subheaderUrl = useMemo(() => {
+    if (layerFeatureId.layerId === 'adHocPlots') {
+      return APP_PATHS.OBSERVATION_DETAILS_V2.replace(':observationId', `${observationId}`);
+    } else if (layerFeatureId.layerId === 'permanentPlots' || layerFeatureId.layerId === 'temporaryPlots') {
+      if (results) {
+        const plotStratum = results.strata.find((stratum) =>
+          stratum.substrata
+            .flatMap((substratum) => substratum.monitoringPlots)
+            .some((plot) => plot.monitoringPlotId === Number(layerFeatureId.featureId))
+        );
+        if (plotStratum) {
+          return APP_PATHS.OBSERVATION_MONITORING_PLOT_DETAILS_V2.replace(':observationId', `${observationId}`)
+            .replace(':stratumName', plotStratum?.name)
+            .replace(':monitoringPlotId', layerFeatureId.featureId);
+        }
+      }
+    }
+    return undefined;
+  }, [layerFeatureId, observationId, results]);
+
+  const actionButton = useMemo(() => {
+    if (layerFeatureId.layerId === 'permanentPlots' || layerFeatureId.layerId === 'temporaryPlots') {
+      const monitoringPlotId = Number(layerFeatureId.featureId);
+      const allplotResults =
+        results?.strata
+          ?.flatMap((_stratum) => _stratum.substrata)
+          ?.flatMap((_substratum) => _substratum.monitoringPlots) ?? [];
+      const plotResults = allplotResults.find((_plot) => _plot.monitoringPlotId === monitoringPlotId);
+
+      if (
+        plotResults &&
+        replaceObservationPlotEnabled &&
+        plotResults.status !== 'Completed' &&
+        plotResults.status !== 'Not Observed'
+      ) {
+        return (
+          <Button
+            id='reassignPlot'
+            label={`${strings.REQUEST_REASSIGNMENT}...`}
+            type='passive'
+            onClick={() => openReassignPlotModal(observationId, monitoringPlotId)}
+            priority='secondary'
+          />
+        );
+      }
+    }
+    return undefined;
+  }, [
+    layerFeatureId.featureId,
+    layerFeatureId.layerId,
+    observationId,
+    openReassignPlotModal,
+    replaceObservationPlotEnabled,
+    results?.strata,
+    strings.REQUEST_REASSIGNMENT,
+  ]);
+
   if (isLoading) {
     return (
       <Box display={'flex'} width={'100%'} justifyContent={'center'}>
@@ -177,7 +291,12 @@ const ObservationStatsDrawer = ({
     <>
       {properties && (
         <Box display={'flex'} width={'100%'} flexDirection={'column'}>
-          <MapDrawerTable header={properties.name} rows={rows} />
+          <MapDrawerTable header={properties.name} rows={rows} subheader={subheader} subheaderUrl={subheaderUrl} />
+          {actionButton && (
+            <Box display='flex' padding={theme.spacing(2)}>
+              {actionButton}
+            </Box>
+          )}
         </Box>
       )}
     </>

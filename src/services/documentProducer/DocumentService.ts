@@ -72,7 +72,7 @@ const searchDocuments = async (request: {
     searchOrderConfig = {
       locale: locale ?? null,
       sortOrder: searchSortOrder,
-      numberFields: ['cohortId', 'id'],
+      numberFields: ['id'],
     };
   }
 

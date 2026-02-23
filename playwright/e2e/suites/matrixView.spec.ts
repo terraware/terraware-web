@@ -16,7 +16,6 @@ test.describe('MatrixViewTests', () => {
     await page.locator('#current-view').click();
     await page.locator('#noFilter').click();
 
-    await expect(page.getByLabel('Show/Hide search')).toBeVisible();
     await expect(page.getByLabel('Show/Hide filters')).toBeVisible();
     await expect(page.locator('#manageColumns')).toBeVisible();
     await expect(page.getByLabel('Toggle density')).toBeVisible();

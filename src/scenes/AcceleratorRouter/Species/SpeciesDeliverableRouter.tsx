@@ -1,19 +1,19 @@
 import React from 'react';
 import { Route, Routes } from 'react-router';
 
-import ParticipantProjectSpeciesProvider from 'src/providers/ParticipantProject/ParticipantProjectSpeciesProvider';
+import AcceleratorProjectSpeciesProvider from 'src/providers/AcceleratorProject/AcceleratorProjectSpeciesProvider';
 
 import Species from '.';
 import SpeciesEditView from './SpeciesEditView';
 
 const SpeciesDeliverableRouter = () => {
   return (
-    <ParticipantProjectSpeciesProvider>
+    <AcceleratorProjectSpeciesProvider>
       <Routes>
         <Route path={''} element={<Species />} />
         <Route path={'/edit'} element={<SpeciesEditView />} />
       </Routes>
-    </ParticipantProjectSpeciesProvider>
+    </AcceleratorProjectSpeciesProvider>
   );
 };
 

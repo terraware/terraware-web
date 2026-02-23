@@ -1,4 +1,5 @@
-import React, { type JSX, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useEffect, useMemo, useRef, useState } from 'react';
+import { MapRef } from 'react-map-gl/mapbox';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
@@ -33,6 +34,7 @@ const ObservationMapWrapper = ({
   const { strings } = useLocalization();
   const theme = useTheme();
   const defaultTimezone = useDefaultTimeZone().get().id;
+  const mapRef = useRef<MapRef | null>(null);
 
   const [getPlantingSite, getPlantingSiteResult] = useLazyGetPlantingSiteQuery();
   const [getObservationResult, getObservationResultResponse] = useLazyGetObservationResultsQuery();
@@ -152,6 +154,7 @@ const ObservationMapWrapper = ({
         adHocObservationResults={singleObservationResult ? [singleObservationResult] : selectedAdHocObservationResults}
         isBiomass={isBiomass}
         isSingleView={!!singleObservationResult}
+        mapRef={mapRef}
         observationResults={singleObservationResult ? [singleObservationResult] : selectedObservationResults}
         plantingSiteId={plantingSiteId}
         selectPlantingSiteId={selectPlantingSiteId}

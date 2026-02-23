@@ -10,7 +10,7 @@ import { requestSpeciesDeliverables } from 'src/redux/features/projectSpecies/pr
 import { selectSpeciesDeliverables } from 'src/redux/features/projectSpecies/projectSpeciesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { getSpeciesNativeCategoryOptions } from 'src/types/ParticipantProjectSpecies';
+import { getSpeciesNativeCategoryOptions } from 'src/types/AcceleratorProjectSpecies';
 import { Project } from 'src/types/Project';
 import { SpeciesDeliverable } from 'src/types/ProjectSpecies';
 import { today } from 'src/utils/dateUtils';

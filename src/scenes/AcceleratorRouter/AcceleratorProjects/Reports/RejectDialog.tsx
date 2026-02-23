@@ -3,7 +3,7 @@ import React, { type JSX, useCallback, useState } from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button, DialogBox, Textfield } from '@terraware/web-components';
 
-import strings from 'src/strings';
+import { useLocalization } from 'src/providers';
 
 export type RejectDialogProps = {
   onClose: () => void;
@@ -15,6 +15,7 @@ export default function RejectDialog({ onClose, onSubmit, initialFeedback }: Rej
   const [feedback, setFeedback] = useState<string>(initialFeedback ?? '');
   const [validate, setValidate] = useState<boolean>(false);
   const theme = useTheme();
+  const { strings } = useLocalization();
 
   const reject = useCallback(() => {
     setValidate(true);

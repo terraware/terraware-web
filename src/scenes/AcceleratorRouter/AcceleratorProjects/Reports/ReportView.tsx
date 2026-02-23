@@ -34,7 +34,6 @@ import {
   useReviewAcceleratorReportMutation,
 } from 'src/queries/generated/reports';
 import FunderReportView from 'src/scenes/FunderReport/FunderReportView';
-import strings from 'src/strings';
 import { MetricType } from 'src/types/AcceleratorReport';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -46,7 +45,7 @@ import PublishModal from './PublishModal';
 import RejectDialog from './RejectDialog';
 
 const ReportView = () => {
-  const { activeLocale } = useLocalization();
+  const { strings } = useLocalization();
   const pathParams = useParams<{ projectId: string; reportId: string }>();
   const projectId = Number(pathParams.projectId);
   const reportId = Number(pathParams.reportId);
@@ -138,7 +137,7 @@ const ReportView = () => {
       reloadProject();
       closePublishModal();
     }
-  }, [closePublishModal, publishReportResponse, reloadProject, snackbar]);
+  }, [closePublishModal, publishReportResponse, reloadProject, snackbar, strings]);
 
   const year = useMemo(() => {
     return report?.startDate.split('-')[0];
@@ -147,7 +146,7 @@ const ReportView = () => {
   const crumbs: Crumb[] = useMemo(() => {
     let crumbsList: Crumb[] = [
       {
-        name: activeLocale ? strings.REPORTS : '',
+        name: strings.REPORTS,
         to: year
           ? `${APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', projectId.toString())}?year=${year}`
           : APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', projectId.toString()),
@@ -165,13 +164,13 @@ const ReportView = () => {
 
     return crumbsList;
   }, [
-    activeLocale,
     isAcceleratorRoute,
     acceleratorProject?.dealName,
     acceleratorProject?.projectId,
     acceleratorProjectCrumbs,
     project?.name,
     projectId,
+    strings,
     year,
   ]);
 
@@ -188,17 +187,14 @@ const ReportView = () => {
   );
 
   const optionItems = useMemo(
-    (): DropdownItem[] =>
-      activeLocale
-        ? [
-            {
-              label: strings.PUBLISH,
-              value: 'publish',
-              disabled: report?.status !== 'Approved',
-            },
-          ]
-        : [],
-    [activeLocale, report?.status]
+    (): DropdownItem[] => [
+      {
+        label: strings.PUBLISH,
+        value: 'publish',
+        disabled: report?.status !== 'Approved',
+      },
+    ],
+    [report?.status, strings]
   );
 
   const callToAction = useMemo(() => {
@@ -232,7 +228,7 @@ const ReportView = () => {
         </>
       )
     );
-  }, [isAllowed, report?.status, openRejectDialog, openApprovalDialog, onOptionItemClick, optionItems]);
+  }, [isAllowed, report?.status, openRejectDialog, openApprovalDialog, onOptionItemClick, optionItems, strings]);
 
   const rightComponent = useMemo(
     () => (

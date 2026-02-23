@@ -114,7 +114,7 @@ export default function SpeciesCellRenderer(props: RendererProps<TableRowType>):
         title={value as string}
       />
     );
-  } else if (column.key === 'participantProjects') {
+  } else if (column.key === 'acceleratorProjects') {
     return (
       <CellRenderer
         {...props}

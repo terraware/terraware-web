@@ -9,12 +9,12 @@ import CellRenderer, { TableRowType } from 'src/components/common/table/TableCel
 import { RendererProps } from 'src/components/common/table/types';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization } from 'src/providers';
-import { requestUpdateParticipantProjectSpecies } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
-import { selectParticipantProjectSpeciesUpdateRequest } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';
+import { requestUpdateAcceleratorProjectSpecies } from 'src/redux/features/acceleratorProjectSpecies/acceleratorProjectSpeciesAsyncThunks';
+import { selectAcceleratorProjectSpeciesUpdateRequest } from 'src/redux/features/acceleratorProjectSpecies/acceleratorProjectSpeciesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
+import { SpeciesForAcceleratorProject } from 'src/types/AcceleratorProjectSpecies';
 import { DeliverableStatusType } from 'src/types/Deliverables';
-import { SpeciesForParticipantProject } from 'src/types/ParticipantProjectSpecies';
 
 import EditSpeciesModal from './EditSpeciesModal';
 
@@ -29,7 +29,7 @@ export default function SpeciesDeliverableCellRenderer(props: RendererProps<Tabl
   const [showRejectDialog, setShowRejectDialog] = useState<boolean>(false);
 
   const [requestId, setRequestId] = useState<string>('');
-  const result = useAppSelector(selectParticipantProjectSpeciesUpdateRequest(requestId));
+  const result = useAppSelector(selectAcceleratorProjectSpeciesUpdateRequest(requestId));
 
   useEffect(() => {
     if (result?.status === 'success' && reloadData) {
@@ -69,7 +69,7 @@ export default function SpeciesDeliverableCellRenderer(props: RendererProps<Tabl
               <EditSpeciesModal
                 onClose={closeEditSpeciesModal}
                 reload={reloadData}
-                projectSpecies={row as SpeciesForParticipantProject}
+                projectSpecies={row as SpeciesForAcceleratorProject}
               />
             )}
             {isAcceleratorRoute
@@ -102,8 +102,8 @@ export default function SpeciesDeliverableCellRenderer(props: RendererProps<Tabl
   if (column.key === 'reject') {
     const rejectHandler = (feedback: string) => {
       const request = dispatch(
-        requestUpdateParticipantProjectSpecies({
-          participantProjectSpecies: {
+        requestUpdateAcceleratorProjectSpecies({
+          acceleratorProjectSpecies: {
             ...row.participantProjectSpecies,
             feedback,
             submissionStatus: 'Rejected',
@@ -142,8 +142,8 @@ export default function SpeciesDeliverableCellRenderer(props: RendererProps<Tabl
   if (column.key === 'approve') {
     const approveHandler = () => {
       const request = dispatch(
-        requestUpdateParticipantProjectSpecies({
-          participantProjectSpecies: {
+        requestUpdateAcceleratorProjectSpecies({
+          acceleratorProjectSpecies: {
             ...row.participantProjectSpecies,
             submissionStatus: 'Approved',
           },

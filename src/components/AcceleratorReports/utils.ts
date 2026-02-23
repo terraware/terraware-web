@@ -1,7 +1,7 @@
+import { PublishedReportPayload } from 'src/queries/generated/publishedReports';
 import { AcceleratorReportPayload } from 'src/queries/generated/reports';
-import { PublishedReport } from 'src/types/AcceleratorReport';
 
-export const getReportName = (report: AcceleratorReportPayload | PublishedReport) => {
+export const getReportName = (report: AcceleratorReportPayload | PublishedReportPayload) => {
   const year = report.startDate?.split('-')[0];
-  return report.frequency === 'Annual' ? year : report.quarter ? `${year}-${report.quarter}` : '';
+  return report.quarter ? `${year}-${report.quarter}` : year;
 };
