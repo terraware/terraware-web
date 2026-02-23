@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/32</span>
+                <span class='fraction'>0/33</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/29</span>
+                <span class='fraction'>0/30</span>
             </div>
         
             
@@ -81,7 +81,10 @@
 <a name='L16'></a><a href='#L16'>16</a>
 <a name='L17'></a><a href='#L17'>17</a>
 <a name='L18'></a><a href='#L18'>18</a>
-<a name='L19'></a><a href='#L19'>19</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L19'></a><a href='#L19'>19</a>
+<a name='L20'></a><a href='#L20'>20</a>
+<a name='L21'></a><a href='#L21'>21</a>
+<a name='L22'></a><a href='#L22'>22</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -99,32 +102,38 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > type JSX } fr</span>om 'react';
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > type JSX } fr</span>om 'react';
 import { Route, <span class="cstat-no" title="statement not covered" >Routes } from 'react-r</span>outer';
 <span class="cstat-no" title="statement not covered" ></span>
 import ObservationListVi<span class="cstat-no" title="statement not covered" >ew from './ListView';</span>
-import ObservationS<span class="cstat-no" title="statement not covered" >cheduleRouter from './</span>Schedule';
-import ObservationS<span class="cstat-no" title="statement not covered" >ingleView from './SingleView';</span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-co<span class="cstat-no" title="statement not covered" >nst ObservationsRouterV2 = (): JSX.Element =&gt; {</span>
-  re<span class="cstat-no" title="statement not covered" >turn (</span>
-    &lt;Routes&gt;
-      &lt;Route path=<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >{'</span>/:observationId/*'} element={&lt;ObservationSingleView /&gt;} /&gt;</span>
-<span class="cstat-no" title="statement not covered" >      &lt;Route path={'/schedule/*'} element={&lt;ObservationScheduleRouter /&gt;} /&gt;</span>
-<span class="cstat-no" title="statement not covered" >      &lt;Route path={'/*'} element={&lt;ObservationListView /&gt;} /&gt;</span>
-    &lt;/<span class="cstat-no" title="statement not covered" >Routes&gt;</span>
-  );<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-};
+import ReassignPlot<span class="cstat-no" title="statement not covered" >ModalProvider from './</span>Reassign';
+import ObservationS<span class="cstat-no" title="statement not covered" >cheduleRouter from './Schedule';</span>
+import Observat<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >io</span>nSingleView from './SingleView';</span>
 <span class="cstat-no" title="statement not covered" ></span>
+cons<span class="cstat-no" title="statement not covered" >t ObservationsRouterV2 = (): JSX.Element =&gt; {</span>
+  return (
+    &lt;ReassignPlotM<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >od</span>alProvider&gt;</span>
+<span class="cstat-no" title="statement not covered" >      &lt;Routes&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;Route path={'/:observationId/*'} element={&lt;ObservationSingleView /&gt;} /&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;Route path={'/schedule/*'} element={&lt;ObservationScheduleRouter /&gt;} /&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;Route path={'/*'} element<span class="fstat-no" title="function not covered" >={</span>&lt;Obs<span class="cstat-no" title="statement not covered" >ervationLi</span>stView /&gt;} /&gt;</span>
+      &lt;/Routes&gt;
+<span class="cstat-no" title="statement not covered" >    &lt;/Reassig</span>nPlotModalProvider&gt;
+  );
+};<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+&nbsp;
 export default ObservationsRouterV2;
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></pre></td></tr></table></pre>
+&nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-23T14:36:46.902Z
+                at 2026-02-23T18:34:54.424Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
