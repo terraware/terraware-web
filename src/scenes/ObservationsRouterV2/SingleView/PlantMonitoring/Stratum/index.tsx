@@ -6,6 +6,7 @@ import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
+import SurvivalRateMessageV2 from 'src/components/SurvivalRate/SurvivalRateMessageV2';
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
@@ -71,7 +72,8 @@ const StratumDetails = (): JSX.Element => {
   const species = useObservationSpecies(stratumResult?.species ?? []);
 
   return (
-    <Page crumbs={crumbs} title={title} titleContainerStyle={{ paddingTop: 3, paddingBottom: 1 }}>
+    <Page crumbs={crumbs} title={title}>
+      <SurvivalRateMessageV2 selectedPlantingSiteId={results?.plantingSiteId} />
       <AggregatedPlantsStats
         completedTime={stratumResult?.completedTime}
         totalSpecies={stratumResult?.totalSpecies}

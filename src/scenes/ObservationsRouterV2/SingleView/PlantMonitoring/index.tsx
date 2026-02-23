@@ -3,7 +3,6 @@ import { Route, Routes, useParams } from 'react-router';
 
 import { BusySpinner } from '@terraware/web-components';
 
-import SurvivalRateMessageV2 from 'src/components/SurvivalRate/SurvivalRateMessageV2';
 import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
 
 import MonitoringPlotDetails from './MonitoringPlot';
@@ -37,7 +36,6 @@ const PlantMonitoringView = (): JSX.Element => {
 
   return (
     <>
-      <SurvivalRateMessageV2 selectedPlantingSiteId={results?.plantingSiteId} />
       <Routes>
         <Route
           path={'/stratum/:stratumName/plot/:monitoringPlotId/virtual/:fileId'}
