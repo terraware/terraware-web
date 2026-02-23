@@ -22,7 +22,7 @@ import Link from 'src/components/common/Link';
 import TextTruncated from 'src/components/common/TextTruncated';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { useLocalization } from 'src/providers';
+import { useLocalization, useOrganization } from 'src/providers';
 import { convertFilterGroupToMap } from 'src/scenes/InventoryRouter/FilterUtils';
 import { OriginPage } from 'src/scenes/InventoryRouter/InventoryBatchView';
 import { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';
@@ -30,6 +30,7 @@ import Search from 'src/scenes/InventoryRouter/Search';
 import { NurseryBatchService } from 'src/services';
 import { SearchNodePayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import { useSessionFilters } from 'src/utils/filterHooks/useSessionFilters';
+import { getAllNurseries } from 'src/utils/organization';
 import useForm from 'src/utils/useForm';
 import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -70,6 +71,11 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
   } = props;
 
   const { strings } = useLocalization();
+  const { selectedOrganization } = useOrganization();
+  const nurseries = useMemo(
+    () => (selectedOrganization ? getAllNurseries(selectedOrganization) : []),
+    [selectedOrganization]
+  );
   const navigate = useSyncNavigate();
   const snackbar = useSnackbar();
   const query = useQuery();
@@ -191,11 +197,21 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
       };
     }
 
+    if (filters.facilityIds?.length) {
+      updates.facilityIds = {
+        field: 'facilityIds',
+        values: filters.facilityIds.map((id) => id.toString()),
+        type: 'Exact',
+        operation: 'field',
+      };
+    }
+
     setFilterGroupFilters(updates);
   }, [
     filters.showEmptyBatches,
     filters.showEmptySpecies,
     filters.showEmptyNurseries,
+    filters.facilityIds,
     setFilterGroupFilters,
     initialFilters,
   ]);
@@ -217,6 +233,13 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
         showLabel: false,
         type: 'boolean',
       });
+      if (nurseries.length > 0) {
+        columnsToReturn.push({
+          name: 'facilityIds',
+          label: strings.NURSERY,
+          type: 'multiple_selection',
+        });
+      }
     }
     if (origin === 'Nursery') {
       columnsToReturn.push({
@@ -227,7 +250,17 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
       });
     }
     return columnsToReturn;
-  }, [origin, strings]);
+  }, [origin, strings, nurseries]);
+
+  const filterGroupOptionsRenderer = useCallback(
+    (filterName: string) => {
+      if (filterName === 'facilityIds') {
+        return nurseries.map((n) => ({ label: n.name, value: n.id.toString(), disabled: false }));
+      }
+      return undefined;
+    },
+    [nurseries]
+  );
 
   const withdrawInventory = () => {
     const path = origin === 'Species' ? APP_PATHS.INVENTORY_WITHDRAW : APP_PATHS.BATCH_WITHDRAW;
@@ -276,8 +309,8 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
       case 'Nursery':
         return selectedRows.length === 1 && selectedRows.some((row) => hasWithdrawableQuantity(row));
       case 'Batches': {
-        const nurseries = new Set(selectedRows.map((row) => row.facility_id));
-        return nurseries.size === 1 && selectedRows.some((row) => row.id && hasWithdrawableQuantity(row));
+        const nurseriesSet = new Set(selectedRows.map((row) => row.facility_id));
+        return nurseriesSet.size === 1 && selectedRows.some((row) => row.id && hasWithdrawableQuantity(row));
       }
     }
   };
@@ -292,8 +325,8 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
   );
 
   useEffect(() => {
-    const nurseries = new Set(selectedRows.map((row) => row.facility_id));
-    if ((origin === 'Nursery' && selectedRows.length > 1) || (origin === 'Batches' && nurseries.size > 1)) {
+    const nurseriesSet = new Set(selectedRows.map((row) => row.facility_id));
+    if ((origin === 'Nursery' && selectedRows.length > 1) || (origin === 'Batches' && nurseriesSet.size > 1)) {
       setWithdrawTooltip(strings.WITHDRAW_SINGLE_NURSERY);
     } else if (totalSelectedQuantity === 0) {
       setWithdrawTooltip(strings.NO_WITHDRAWABLE_QUANTITIES_FOUND);
@@ -726,6 +759,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                               key={JSON.stringify(filterGroupFilters)}
                               initialFilters={filterGroupFilters}
                               fields={filterGroupColumns}
+                              optionsRenderer={filterGroupOptionsRenderer}
                               onConfirm={(_filterGroupFilters: Record<string, SearchNodePayload>) => {
                                 handleFilterClose();
                                 setFilterGroupFilters(_filterGroupFilters);
@@ -733,7 +767,15 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                                   setFilters({});
                                   setSessionFilters({});
                                 } else {
-                                  const newFilters = { ...filters, ...convertFilterGroupToMap(_filterGroupFilters) };
+                                  const converted = convertFilterGroupToMap(_filterGroupFilters);
+                                  const newFilters: InventoryFiltersUnion = { ...filters, ...converted };
+                                  if (_filterGroupFilters.facilityIds) {
+                                    newFilters.facilityIds = (_filterGroupFilters.facilityIds.values as string[])
+                                      .filter(Boolean)
+                                      .map(Number);
+                                  } else {
+                                    delete newFilters.facilityIds;
+                                  }
                                   setFilters(newFilters);
                                   setSessionFilters(newFilters);
                                 }
