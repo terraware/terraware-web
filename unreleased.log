@@ -1,3 +1,6 @@
+fcb398a4973a SW-5486 Add Nursery filter in By Species view (#5293)
+d64c018cb276 Update dependency swiper to v12.1.2 [SECURITY] (#5277)
+6ec51321ebd2 Remove confirmation modal for updating phase or modules of a project (#5256)
 f274c3a18ed5 Added observation event notifications (#5290)
 f964e88f7cb4 Added new router for survival rate settings (#5289)
 161ed430b138 Implemented plot reassignment modal (#5287)

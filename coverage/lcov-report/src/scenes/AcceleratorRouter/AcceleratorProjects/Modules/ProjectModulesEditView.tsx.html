@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/97</span>
+                <span class='fraction'>0/94</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/86</span>
+                <span class='fraction'>0/83</span>
             </div>
         
             
@@ -225,18 +225,7 @@
 <a name='L160'></a><a href='#L160'>160</a>
 <a name='L161'></a><a href='#L161'>161</a>
 <a name='L162'></a><a href='#L162'>162</a>
-<a name='L163'></a><a href='#L163'>163</a>
-<a name='L164'></a><a href='#L164'>164</a>
-<a name='L165'></a><a href='#L165'>165</a>
-<a name='L166'></a><a href='#L166'>166</a>
-<a name='L167'></a><a href='#L167'>167</a>
-<a name='L168'></a><a href='#L168'>168</a>
-<a name='L169'></a><a href='#L169'>169</a>
-<a name='L170'></a><a href='#L170'>170</a>
-<a name='L171'></a><a href='#L171'>171</a>
-<a name='L172'></a><a href='#L172'>172</a>
-<a name='L173'></a><a href='#L173'>173</a>
-<a name='L174'></a><a href='#L174'>174</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L163'></a><a href='#L163'>163</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -283,7 +272,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -292,7 +280,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -320,7 +307,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -367,15 +353,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -414,61 +392,59 @@ import { usePara<span class="cstat-no" title="statement not covered" >ms } from 
 <span class="cstat-no" title="statement not covered" ></span>
 import { Box, Grid, Typo<span class="cstat-no" title="statement not covered" >graphy, useTheme } from '@m</span>ui/material';
 <span class="cstat-no" title="statement not covered" ></span>
-import ConfirmModal<span class="cstat-no" title="statement not covered" > from 'src/components/Applicatio</span>n/ConfirmModal';
-import PageForm<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > f</span>rom 'src/components/common/PageForm';</span>
-im<span class="cstat-no" title="statement not covered" >port TfMain from 'src/components/common/TfMain';</span>
-impo<span class="cstat-no" title="statement not covered" >rt useBoolean from 'src/hooks/useBoolean';</span>
-import useNavigateTo from 'src/hooks/useNavigateTo';
-import { useLocali<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >za</span>tion } from 'src/providers';</span>
-im<span class="cstat-no" title="statement not covered" >port { useListModulesQuery } from 'src/queries/generated/modules';</span>
-impo<span class="cstat-no" title="statement not covered" >rt {</span>
-  Proj<span class="cstat-no" title="statement not covered" >ectModulePayload,</span>
-  Update<span class="cstat-no" title="statement not covered" >ProjectModuleApiArg,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  useDeleteProjectModuleMutation,
-<span class="cstat-no" title="statement not covered" >  useListProj</span>ectModulesQuery,
-  useUpdateProjectModuleMutation,
-} from 'src/qu<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >er</span>ies/generated/projectModules<span class="cstat-no" title="statement not covered" >';</span></span>
-import { ProjectPayload, useGetProjectQuery } from 'src/queries/generated/projects';
+import PageForm fro<span class="cstat-no" title="statement not covered" >m 'src/components/common/PageFor</span>m';
+import TfMain f<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ro</span>m 'src/components/common/TfMain';</span>
+im<span class="cstat-no" title="statement not covered" >port useBoolean from 'src/hooks/useBoolean';</span>
+impo<span class="cstat-no" title="statement not covered" >rt useNavigateTo from 'src/hooks/useNavigateTo';</span>
+import { useLocalization } from 'src/providers';
+import { useListMo<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >du</span>lesQuery } from 'src/queries/generated/modules';</span>
+im<span class="cstat-no" title="statement not covered" >port {</span>
+  Pr<span class="cstat-no" title="statement not covered" >ojectModulePayload,</span>
+  Upda<span class="cstat-no" title="statement not covered" >teProjectModuleApiArg,</span>
+  useDel<span class="cstat-no" title="statement not covered" >eteProjectModuleMutation,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  useListProjectModulesQuery,
+<span class="cstat-no" title="statement not covered" >  useUpdatePr</span>ojectModuleMutation,
+} from 'src/queries/generated/projectModules';
+import { Proje<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ct</span>Payload, useGetProjectQuery <span class="cstat-no" title="statement not covered" >} from 'src/queries/generated/projects';</span></span>
 import useSnackbar from 'src/utils/useSnackbar';
 &nbsp;
 import ProjectModulesList from '../ProjectModulesList';
 &nbsp;
 const modulePayloadToUpdatePayload = (projectId: number, module: ProjectModulePayload): UpdateProjectModuleApiArg =&gt; {
   return {
-    projectId,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-    moduleId: module<span class="cstat-no" title="statement not covered" >.id</span>,
-<span class="cstat-no" title="statement not covered" >    updateProjectModuleRequestPayload: {</span>
-      ...mo<span class="fstat-no" title="function not covered" >du</span>le,<span class="cstat-no" title="statement not covered" ></span>
-    },
-<span class="cstat-no" title="statement not covered" >  };</span>
-};<span class="cstat-no" title="statement not covered" ></span>
+    projectId,
+    moduleId: modul<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >e.</span>id,<span class="cstat-no" title="statement not covered" ></span></span>
+    updateProjectMod<span class="cstat-no" title="statement not covered" >ule</span>RequestPayload: {
+<span class="cstat-no" title="statement not covered" >      ...module,</span>
+    },<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  };
+<span class="cstat-no" title="statement not covered" >};</span>
 <span class="cstat-no" title="statement not covered" ></span>
-export default functio<span class="cstat-no" title="statement not covered" >n ProjectModulesEditView(</span>): JSX.Element {
-  const { strings } = useL<span class="cstat-no" title="statement not covered" >ocalization();</span>
+export default function Pr<span class="cstat-no" title="statement not covered" >ojectModulesEditView(): </span>JSX.Element {
+  const { strings } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const theme = useThe<span class="cstat-no" title="statement not covered" >me();</span>
   const { goToAccele<span class="cstat-no" title="statement not covered" >ratorProject } = useNavigateTo();</span>
   const [saveIsLoading, <span class="cstat-no" title="statement not covered" >, setSaveIsLoadingTrue, setSaveIsLoadingF</span>alse] = useBoolean(false);
-  const [confirmModalOpen, <span class="cstat-no" title="statement not covered" >, openConfirmModal, closeConfirmModal] = use</span>Boolean(false);
-  const { projectId: pr<span class="cstat-no" title="statement not covered" >ojectIdString } = usePara</span>ms&lt;{ projectId: string }&gt;();
-  const projectId = u<span class="cstat-no" title="statement not covered" >seMemo(() =&gt; Number(projectIdString || -1</span>), [projectIdString]);
-  const { data: projectData <span class="cstat-no" title="statement not covered" >} = useGetProjectQuery(projectId);</span>
-  const project = useM<span class="cstat-no" title="statement not covered" >emo(() =&gt; (projectData?.project || {}) as </span>ProjectPayload, [projectData]);
-  const snackbar = useSna<span class="cstat-no" title="statement not covered" >ckbar();</span>
+  const { projectId: projec<span class="cstat-no" title="statement not covered" >tIdString } = useParams&lt;{ projectId: string </span>}&gt;();
+  const projectId = use<span class="cstat-no" title="statement not covered" >Memo(() =&gt; Number(project</span>IdString || -1), [projectIdString]);
+  const { data: proje<span class="cstat-no" title="statement not covered" >ctData } = useGetProjectQuery(projectId);</span>
+  const project = useMemo(()<span class="cstat-no" title="statement not covered" > =&gt; (projectData?.project || {}) as ProjectPaylo</span>ad, [projectData]);
+  const snackbar = use<span class="cstat-no" title="statement not covered" >Snackbar();</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const [deleteProjectModule] = useDe<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >le</span>teProjectModuleMutation();</span>
-<span class="cstat-no" title="statement not covered" >  const [updateProjectModule] = useUpdateProjectModuleMutation();</span>
-  const { data: allModulesData, isLoading: isAllModulesListLoading } = useListModulesQuery();
+  const [deleteProjectModule] = <span class="cstat-no" title="statement not covered" >useDeleteProjectModuleMutation();</span>
+  const [updateProjectModule] = useUp<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >da</span>teProjectModuleMutation();</span>
+<span class="cstat-no" title="statement not covered" >  const { data: allModulesData, isLoading: isAllModulesListLoading } = useListModulesQuery();</span>
   const allModules = useMemo(() =&gt; allModulesData?.modules || [], [allModulesData?.modules]);
   const { data: projectModulesData, isLoading: isProjectModulesListLoading } = useListProjectModulesQuery(projectId);
   const projectModules = useMemo(() =&gt; projectModulesData?.modules || [], [projectModulesData?.modules]);
   const [pendingModules, setPendingModules] = useState&lt;ProjectModulePayload[]&gt;(projectModules);
 &nbsp;
   useEffect(() =&gt; {
-    setPe<span class="fstat-no" title="function not covered" >ndingModules(projectMod</span>ules);
-  }, [projectModules])<span class="cstat-no" title="statement not covered" >;</span>
+    setPendingModules(projectModules);
+  }, [pro<span class="fstat-no" title="function not covered" >jectModules]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const backToProjectDeliverables = u<span class="cstat-no" title="statement not covered" >seCallback(</span>
-    () =&gt; goToAcceleratorProject(projectId),<span class="cstat-no" title="statement not covered" ></span>
+  const backToPr<span class="cstat-no" title="statement not covered" >ojectDeliverables = useCallback(</span>
+    () =&gt; goToAcceleratorProject(proj<span class="cstat-no" title="statement not covered" >ectId),</span>
     [goToAcceleratorProject, projectId]<span class="cstat-no" title="statement not covered" ></span>
   );<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
@@ -480,22 +456,21 @@ export default functio<span class="cstat-no" title="statement not covered" >n Pr
     }<span class="cstat-no" title="statement not covered" ></span>
     const save = asyn<span class="cstat-no" title="statement not covered" >c () =&gt; {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
       try {<span class="cstat-no" title="statement not covered" ></span>
-        closeConfirmModal<span class="cstat-no" title="statement not covered" >();<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-        setSaveIsLoadingTrue();<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >        const toDelete = proje<span class="fstat-no" title="function not covered" >ct</span>Modules.filter(</span>
-<span class="cstat-no" title="statement not covered" >          (oldModule) =&gt; pendingModules</span>.find((newModule) =&gt; newModule.id === oldModule.id) === undefined
+        setSaveIsLoadingT<span class="cstat-no" title="statement not covered" >rue();<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+        const toDelete = projectModules.filter<span class="cstat-no" title="statement not covered" >(</span>
+<span class="cstat-no" title="statement not covered" >          (oldModule) =&gt; pendi<span class="fstat-no" title="function not covered" >ng</span>Modules.find((newModule) =&gt; newModule.id === oldModule.id) === undefined</span>
+<span class="cstat-no" title="statement not covered" >        );</span>
+&nbsp;
+        const toAdd = pendingModules<span class="cstat-no" title="statement not covered" >.filter(</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span>          (newModule) =&gt; projectModules.find</span>((oldModule) =&gt; oldModule.id === newModule.id) === undefined
         );
-<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" ></span>        co<span class="cstat-no" title="statement not covered" >nst toAdd = pendingModules.filter(</span>
-          (newModule) =&gt; projectModules.find((oldModule) =&gt; oldModule.id === newModule.id) === undefined
-        );
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >        const toUpdate = pendingModules.filter((newModule) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >          cons</span>t oldModule = projectModules.find((module) =&gt; module.id === newModule.id);
-          return (
-            oldMo<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >du</span>le !== undefined &amp;&amp;</span>
-<span class="cstat-no" title="statement not covered" >            !(</span>
-<span class="cstat-no" title="statement not covered" >              oldModule.title</span> === newModule.title &amp;&amp;
+&nbsp;
+        const toUpdate<span class="cstat-no" title="statement not covered" > = pendingModules.filter((newM<span class="fstat-no" title="function not covered" >od</span>ule) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >          const oldModule = projectModules.find((module) =&gt; module.id === newModule.id);</span>
+<span class="cstat-no" title="statement not covered" >          retu</span>rn (
+            oldModule !== undefined &amp;&amp;
+            !(<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >              oldModule.title === newModule.title &amp;&amp;</span>
 <span class="cstat-no" title="statement not covered" >              oldModule.startDat</span>e === newModule.startDate &amp;&amp;
               oldModule.e<span class="cstat-no" title="statement not covered" >ndDate === newModule.endDate</span>
 <span class="fstat-no" title="function not covered" ></span>            )<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
@@ -533,22 +508,14 @@ export default functio<span class="cstat-no" title="statement not covered" >n Pr
     projectId,
     deleteProjectModule,
     updateProjectModule,
-    closeConfirmModal,
     setSaveIsLoadingTrue,
     setSaveIsLoadingFalse,
   ]);
 &nbsp;
   return (
     &lt;TfMain&gt;
-      &lt;ConfirmModal
-<span class="cstat-no" title="statement not covered" >        open={confirmModalOpen}</span>
-        title={strings.CONFIRM_UPDATE_ALL_COHORT_MODULES_TITLE}
-        body={strings.CONFIRM_UPDATE_ALL_COHORT_MODULES}
-        onClose={closeConfirmModal}
-        onConfirm={saveModules}
-      /&gt;
       &lt;Box padding={theme.spacing(3)}&gt;
-        &lt;Typography fontSize='24px' fontWeight={600}&gt;
+<span class="cstat-no" title="statement not covered" >        &lt;Typography fontSize='24px' fontWeight={600}&gt;</span>
           {strings.formatString(strings.MODULES_FOR_PROJECT, project.name)}
         &lt;/Typography&gt;
       &lt;/Box&gt;
@@ -556,7 +523,7 @@ export default functio<span class="cstat-no" title="statement not covered" >n Pr
         cancelID={'cancelEditModules'}
         saveID={'saveEditModules'}
         onCancel={backToProjectDeliverables}
-        onSave={openConfirmModal}
+        onSave={saveModules}
         style={{ display: 'flex', flexGrow: 1 }}
         busy={saveIsLoading}
       &gt;
@@ -589,7 +556,7 @@ export default functio<span class="cstat-no" title="statement not covered" >n Pr
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-23T19:01:54.163Z
+                at 2026-02-23T19:37:32.990Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>
