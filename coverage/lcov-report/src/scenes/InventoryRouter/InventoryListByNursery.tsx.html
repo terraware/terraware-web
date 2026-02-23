@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/80</span>
+                <span class='fraction'>0/79</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/70</span>
+                <span class='fraction'>0/69</span>
             </div>
         
             
@@ -252,18 +252,7 @@
 <a name='L187'></a><a href='#L187'>187</a>
 <a name='L188'></a><a href='#L188'>188</a>
 <a name='L189'></a><a href='#L189'>189</a>
-<a name='L190'></a><a href='#L190'>190</a>
-<a name='L191'></a><a href='#L191'>191</a>
-<a name='L192'></a><a href='#L192'>192</a>
-<a name='L193'></a><a href='#L193'>193</a>
-<a name='L194'></a><a href='#L194'>194</a>
-<a name='L195'></a><a href='#L195'>195</a>
-<a name='L196'></a><a href='#L196'>196</a>
-<a name='L197'></a><a href='#L197'>197</a>
-<a name='L198'></a><a href='#L198'>198</a>
-<a name='L199'></a><a href='#L199'>199</a>
-<a name='L200'></a><a href='#L200'>200</a>
-<a name='L201'></a><a href='#L201'>201</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L190'></a><a href='#L190'>190</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -316,7 +305,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -421,16 +409,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -465,7 +443,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > useCallback, </span>useEffect, useMemo, useState } from 'react';
 <span class="cstat-no" title="statement not covered" ></span>
-import { Box, CircularP<span class="cstat-no" title="statement not covered" >rogress, Container, Typography, </span>useTheme } from '@mui/material';
+import { Box, CircularP<span class="cstat-no" title="statement not covered" >rogress, Container } from '@mui/</span>material';
 import { TableColumnType<span class="cstat-no" title="statement not covered" > } from '@terraware/web-com</span>ponents';
 <span class="cstat-no" title="statement not covered" ></span>
 import Card from 's<span class="cstat-no" title="statement not covered" >rc/components/common/Card';</span>
@@ -490,29 +468,28 @@ type InventoryListByNurseryProps = {
 export default function InventoryListByNursery({ setReportData }: InventoryListByNurseryProps) {
   const { activeLocale, strings } = useLocalization();
   const { selectedO<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >rg</span>anizati<span class="cstat-no" title="statement not covered" >on } = useOrganization();</span></span>
-  const theme = useT<span class="cstat-no" title="statement not covered" >hem</span>e();
 <span class="cstat-no" title="statement not covered" ></span>
-  const [fi<span class="fstat-no" title="function not covered" >lt</span>ers,<span class="cstat-no" title="statement not covered" > setFilters] = useForm&lt;</span>InventoryFiltersUnion&gt;({});
-  const [searchResults, setSearchResults] = useState&lt;SearchResponseElement[] | null&gt;(null);
-<span class="cstat-no" title="statement not covered" >  const [showResults, setShowResults] = useSta</span>te(false);
-  const [searchSort<span class="cstat-no" title="statement not covered" >Order, setSearchSortOrder]</span> = useState&lt;SearchSortOrder | undefined&gt;({
-    field: 'facility_n<span class="cstat-no" title="statement not covered" >ame',</span>
-    direction: 'As<span class="cstat-no" title="statement not covered" >cending',</span>
+<span class="cstat-no" title="statement not covered" >  const [filters, setFilters] = useForm&lt;InventoryFiltersUnion&gt;({});</span>
+  const [se<span class="fstat-no" title="function not covered" >ar</span>chRe<span class="cstat-no" title="statement not covered" >sults, setSearchResults</span>] = useState&lt;SearchResponseElement[] | null&gt;(null);
+  const [showResults, setShowResults] = useState(false);
+<span class="cstat-no" title="statement not covered" >  const [searchSortOrder, setSearchSortOrder] </span>= useState&lt;SearchSortOrder | undefined&gt;({
+    field: 'facilit<span class="cstat-no" title="statement not covered" >y_name',</span>
+    direction: 'Ascend<span class="cstat-no" title="statement not covered" >ing',</span>
   });<span class="cstat-no" title="statement not covered" ></span>
-  const [temporalSearch<span class="cstat-no" title="statement not covered" >Value, setTemporalSearchV</span>alue] = useState('');
+  const [temporalSearchValue<span class="cstat-no" title="statement not covered" >, setTemporalSearchValue] = useState('');</span>
   const debouncedSearch<span class="cstat-no" title="statement not covered" >Term = useDebounce(tempor</span>alSearchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
 <span class="cstat-no" title="statement not covered" ></span>
-  const onSearchSortOrder = <span class="cstat-no" title="statement not covered" >useCallback(</span>
-    (order: SearchSort<span class="cstat-no" title="statement not covered" >Order) =&gt; {</span>
-      const isClientSorted = BE_SORTE<span class="cstat-no" title="statement not covered" >D_FIELDS.indexOf(order.field) === -1;</span>
-      setSearchSortOrder<span class="cstat-no" title="statement not covered" >(isClientSorted ? undefined : or</span>der);
+  const onSearchSortOrder<span class="cstat-no" title="statement not covered" > = useCallback(</span>
+    (order: SearchSortOrder)<span class="cstat-no" title="statement not covered" > =&gt; {</span>
+      const isClientSo<span class="cstat-no" title="statement not covered" >rted = BE_SORTED_FIELDS.</span>indexOf(order.field) === -1;
+      setSearchSortOrder(isClientSort<span class="cstat-no" title="statement not covered" >ed ? undefined : order);</span>
     },<span class="cstat-no" title="statement not covered" ></span>
-    [setSearchSortOrd<span class="cstat-no" title="statement not covered" >er]</span>
-  );<span class="fstat-no" title="function not covered" ></span>
-&nbsp;
-  const columns = useMemo(<span class="cstat-no" title="statement not covered" ></span>
+    [setSearchSortOrder]<span class="cstat-no" title="statement not covered" ></span>
+  );<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" ></span>
+  const columns = useMemo(
     (): TableColumnType[] =&gt; [<span class="cstat-no" title="statement not covered" ></span>
-      { key: 'fa<span class="cstat-no" title="statement not covered" >cility_name', name: strings.NURS</span>ERY, type: 'string' },
+      { key: 'facility_name', name:<span class="cstat-no" title="statement not covered" > strings.NURSERY, type: 'string' },</span>
       {<span class="cstat-no" title="statement not covered" ></span>
         key: 'facilityInventories',<span class="cstat-no" title="statement not covered" ></span>
         name: strings.SPECIES,<span class="cstat-no" title="statement not covered" ></span>
@@ -618,19 +595,9 @@ export default function InventoryListByNursery({ setReportData }: InventoryListB
 &nbsp;
   return (<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 <span class="cstat-no" title="statement not covered" >    &lt;Card flushMobile&gt;<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >      &lt;Typography</span>
-        sx={{
-<span class="cstat-no" title="statement not covered" >          fontSize: '20px',</span>
-          fontWeight: 600,
-          color: theme.palette.TwClrTxt,
-          marginBottom: theme.spacing(2),
-        }}
-      &gt;
-        {strings.BY_NURSERY}
-      &lt;/Typography&gt;
-      {showResults ? (
+<span class="cstat-no" title="statement not covered" >      {showResults ? (</span>
         &lt;InventoryTable
-          results={searchResults || []}
+<span class="cstat-no" title="statement not covered" >          results={searchResults || []}</span>
           temporalSearchValue={temporalSearchValue}
           setTemporalSearchValue={setTemporalSearchValue}
           filters={filters}
@@ -670,7 +637,7 @@ export default function InventoryListByNursery({ setReportData }: InventoryListB
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-21T04:40:33.826Z
+                at 2026-02-23T14:36:46.902Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
