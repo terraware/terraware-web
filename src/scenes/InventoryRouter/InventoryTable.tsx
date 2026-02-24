@@ -625,29 +625,32 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
     return false;
   });
 
-  const handleExport = useCallback((table: MRT_TableInstance<SearchResponseElement>) => {
-    const visibleColumns = table
-      .getVisibleLeafColumns()
-      .filter((col) => !col.id.startsWith('mrt-') && col.id !== 'quantitiesMenu');
-    const filteredRows = table.getFilteredRowModel().rows;
+  const handleExport = useCallback(
+    (table: MRT_TableInstance<SearchResponseElement>) => {
+      const visibleColumns = table
+        .getVisibleLeafColumns()
+        .filter((col) => !col.id.startsWith('mrt-') && col.id !== 'quantitiesMenu');
+      const filteredRows = table.getFilteredRowModel().rows;
 
-    const escape = (val: unknown): string => {
-      const s = val === null || val === undefined ? '' : String(val).replace(/\r/g, ', ');
-      return `"${s.replace(/"/g, '""')}"`;
-    };
+      const escape = (val: unknown): string => {
+        const s = val === null || val === undefined ? '' : String(val).replace(/\r/g, ', ');
+        return `"${s.replace(/"/g, '""')}"`;
+      };
 
-    const headers = visibleColumns.map((col) => {
-      const h = col.columnDef.header;
-      return escape(typeof h === 'string' ? h : col.id);
-    });
+      const headers = visibleColumns.map((col) => {
+        const h = col.columnDef.header;
+        return escape(typeof h === 'string' ? h : col.id);
+      });
 
-    const csvLines = [
-      headers.join(','),
-      ...filteredRows.map((row) => visibleColumns.map((col) => escape(row.getValue(col.id))).join(',')),
-    ];
+      const csvLines = [
+        headers.join(','),
+        ...filteredRows.map((row) => visibleColumns.map((col) => escape(row.getValue(col.id))).join(',')),
+      ];
 
-    downloadCsv(`inventory-${origin.toLowerCase()}`, csvLines.join('\n'));
-  }, [origin]);
+      downloadCsv(`inventory-${origin.toLowerCase()}`, csvLines.join('\n'));
+    },
+    [origin]
+  );
 
   return (
     <Box position={'relative'}>
