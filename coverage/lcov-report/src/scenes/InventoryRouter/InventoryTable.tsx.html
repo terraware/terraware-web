@@ -940,7 +940,8 @@
 <a name='L875'></a><a href='#L875'>875</a>
 <a name='L876'></a><a href='#L876'>876</a>
 <a name='L877'></a><a href='#L877'>877</a>
-<a name='L878'></a><a href='#L878'>878</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L878'></a><a href='#L878'>878</a>
+<a name='L879'></a><a href='#L879'>879</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1140,13 +1141,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1547,6 +1548,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2017,13 +2019,13 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
       };
 <span class="cstat-no" title="statement not covered" >    }</span>
 <span class="cstat-no" title="statement not covered" ></span>
-    if (filters.facilityIds?.length) {
+    if (<span class="cstat-no" title="statement not covered" >filters.facilityIds?.length) {</span>
       updates.facilityIds = {
         field: 'facilityIds',
         values: filters.facilityIds.map((id) =&gt; id.toString()),
         type: 'Exact',
-<span class="cstat-no" title="statement not covered" >        operation: 'field',</span>
-      };<span class="cstat-no" title="statement not covered" ></span>
+        operation: 'field',
+<span class="cstat-no" title="statement not covered" >      };</span>
     }
 &nbsp;
     setFilterGroupFilters(updates);
@@ -2047,19 +2049,19 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
       });
     }<span class="cstat-no" title="statement not covered" ></span>
     if (origin === 'Species') {
-      columnsToReturn.push({
-        name: 'showEmptySpecies',
-        label: strings.FILTE<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >R_</span>SHOW_EMPTY_SPECIES,</span>
-        showLabel<span class="cstat-no" title="statement not covered" >: false,</span>
-        type: 'boolean'<span class="cstat-no" title="statement not covered" >,<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
-<span class="cstat-no" title="statement not covered" >      });</span>
-<span class="cstat-no" title="statement not covered" >      if (nurs</span>eries.length &gt; 0) {
+      if (nurseries.length &gt; 0) {
         columnsToReturn.push({
-          name: 'faci<span class="cstat-no" title="statement not covered" >lityIds',<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span></span></span></span></span>
-          label: strings.<span class="cstat-no" title="statement not covered" >NURSERY,</span>
-<span class="cstat-no" title="statement not covered" >          type: 'multiple_selection',</span>
-        });
-      }
+          name: 'facilityIds<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >',</span></span>
+          label: <span class="cstat-no" title="statement not covered" >strings.NURSERY,</span>
+          type: 'multip<span class="cstat-no" title="statement not covered" >le_selection',<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
+<span class="cstat-no" title="statement not covered" >        });</span>
+<span class="cstat-no" title="statement not covered" >      }</span>
+      columnsToReturn.push({
+        name: 'showEm<span class="cstat-no" title="statement not covered" >ptySpecies',<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span></span></span></span></span>
+        label: strings.FI<span class="cstat-no" title="statement not covered" >LTER_SHOW_EMPTY_SPECIES,</span>
+<span class="cstat-no" title="statement not covered" >        showLabel: false,</span>
+        type: 'boolean',
+      });
     }
     if (origin === 'Nursery') {
       columnsToReturn.push({<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
@@ -2462,30 +2464,30 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
           searchValue={temporalSearchValue}
           setFilters={setSearchFilters}
           showEmptyBatchesFilter={origin === 'Batches'}
-          showEmptySpecie<span class="fstat-no" title="function not covered" >sF</span>ilter={origin === 'Species'}
-          showEm<span class="cstat-no" title="statement not covered" >ptyNurseriesFilter={o</span>rigin === 'Nursery'}
+          showEmptySpeciesFilter={origin === 'Species'}
+          showEmptyNurser<span class="fstat-no" title="function not covered" >ie</span>sFilter={origin === 'Nursery'}
           showPr<span class="cstat-no" title="statement not covered" >ojectsFilter={false}</span>
           showSe<span class="cstat-no" title="statement not covered" >arch={false}</span>
-          pillList<span class="cstat-no" title="statement not covered" >PortalEl={pillLi</span>stPortalEl}
+          pillLi<span class="cstat-no" title="statement not covered" >stPortalEl={pillListPortalEl}</span>
         /&gt;<span class="cstat-no" title="statement not covered" ></span>
-      &lt;/Box&gt;
-      &lt;Grid item xs={12}&gt;<span class="cstat-no" title="statement not covered" ></span>
+      &lt;/Box&gt;<span class="cstat-no" title="statement not covered" ></span>
+      &lt;Grid item xs={12}&gt;
         &lt;div&gt;<span class="cstat-no" title="statement not covered" ></span>
-          &lt;Grid co<span class="cstat-no" title="statement not covered" >ntainer spacing={0} marginTop={0}&gt;</span>
-            &lt;Grid it<span class="cstat-no" title="statement not covered" >em xs={12}&gt;</span>
-              &lt;EditableTable
-                colu<span class="cstat-no" title="statement not covered" >mns={editableColumns}</span>
-                data={results}
-                en<span class="cstat-no" title="statement not covered" >ableEditing={false}</span>
-                en<span class="cstat-no" title="statement not covered" >ableSorting={!isPresorted}</span>
-                enableGlobalFilter={true}
+          &lt;Grid container spacing={0}<span class="cstat-no" title="statement not covered" > marginTop={0}&gt;</span>
+            &lt;Grid <span class="cstat-no" title="statement not covered" >item xs={12}&gt;</span>
+              &lt;Edita<span class="cstat-no" title="statement not covered" >bleTable</span>
+                columns={editableColumns}
+                data<span class="cstat-no" title="statement not covered" >={results}</span>
+                enableEditing={false}
+                en<span class="cstat-no" title="statement not covered" >ableSorting={!isPresorte</span>d}
+                en<span class="cstat-no" title="statement not covered" >ableGlobalFilter={true}</span>
                 enableColumnFilters={true}
                 stickyFilters={true}
                 storageKey={`inventoryTable_${origin.toLowerCase()}`}
                 enablePagination={false}
                 enableTopToolbar={true}
-                enableBottomToo<span class="fstat-no" title="function not covered" >lb</span>ar={false}<span class="cstat-no" title="statement not covered" ></span>
-                tableOptions={{
+                enableBottomToolbar={false}
+                tableOptions={{<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
                   state: {
                     rowSelection,
                     sorting,
@@ -2495,8 +2497,8 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                     showColumnFilters,
                     showGlobalFilter,
                   },
-                  onRowSelectio<span class="fstat-no" title="function not covered" >nC</span>hange: setRowSe<span class="cstat-no" title="statement not covered" >lection,</span>
-                  onSortingChange: setSorting,
+                  onRowSelectionChange: setRowSelection,
+                  onSortingChan<span class="fstat-no" title="function not covered" >ge</span>: setSorting,<span class="cstat-no" title="statement not covered" ></span>
                   onColumnOrderChange: setColumnOrder,
                   onColumnVisibilityChange: setColumnVisibility,
                   onShowColumnFiltersChange: setShowColumnFilters,
@@ -2599,6 +2601,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                               initialFilters={filterGroupFilters}
                               fields={filterGroupColumns}
                               optionsRenderer={filterGroupOptionsRenderer}
+                              noScroll
                               onConfirm={(_filterGroupFilters: Record&lt;string, SearchNodePayload&gt;) =&gt; {
                                 handleFilterClose();
                                 setFilterGroupFilters(_filterGroupFilters);
@@ -2701,7 +2704,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-24T16:16:24.391Z
+                at 2026-02-24T17:14:48.996Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
