@@ -8,13 +8,14 @@ import ProjectsRouter from 'src/components/Projects/Router';
 import SeedFundReportsRouter from 'src/components/SeedFundReports/Router';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
-import { useOrgTracking } from 'src/hooks/useOrgTracking';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
 import ApplicationProvider from 'src/providers/Application';
 import ParticipantProvider from 'src/providers/Participant/ParticipantProvider';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import SpeciesProvider from 'src/providers/Species/SpeciesProvider';
 import PlantingSiteProvider from 'src/providers/Tracking/PlantingSiteProvider';
+import { useLazyCountObservationsQuery } from 'src/queries/search/observations';
+import { useLazyCountPlantingSitesQuery } from 'src/queries/search/plantingSites';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { requestProjects } from 'src/redux/features/projects/projectsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -69,12 +70,20 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
   const newObservationViewEnabled = isEnabled('New Observation View');
 
   const { species } = useSpeciesData();
-  const { plantingSites, observationResults } = useOrgTracking();
   const projects: Project[] | undefined = useAppSelector(selectProjects);
 
-  const hasObservationsResults = useMemo(() => {
-    return observationResults.length > 0;
-  }, [observationResults.length]);
+  const [countPlantingSites, countPlantingSitesResult] = useLazyCountPlantingSitesQuery();
+  const [countObservations, countObservationsResult] = useLazyCountObservationsQuery();
+
+  useEffect(() => {
+    if (selectedOrganization) {
+      void countPlantingSites(selectedOrganization.id, true);
+      void countObservations({ organizationId: selectedOrganization.id }, true);
+    }
+  }, [countObservations, countPlantingSites, selectedOrganization]);
+
+  const hasObservationsResults = useMemo(() => !!countObservationsResult, [countObservationsResult]);
+  const hasPlantingSites = useMemo(() => !!countPlantingSitesResult.data, [countPlantingSitesResult.data]);
 
   const contentStyles = {
     height: '100%',
@@ -140,11 +149,6 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
 
   const selectedOrgHasProjects = useCallback((): boolean => projects !== undefined && projects.length > 0, [projects]);
 
-  const selectedOrgHasPlantingSites = useCallback(
-    (): boolean => plantingSites !== undefined && plantingSites.length > 0,
-    [plantingSites]
-  );
-
   const viewHasBackgroundImage = useCallback((): boolean => {
     return (
       location.pathname.startsWith(APP_PATHS.HOME) ||
@@ -155,14 +159,14 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
       (location.pathname.startsWith(APP_PATHS.SEED_BANKS) && !selectedOrgHasSeedBanks()) ||
       (location.pathname.startsWith(APP_PATHS.NURSERIES) && !selectedOrgHasNurseries()) ||
       (location.pathname.startsWith(APP_PATHS.OBSERVATIONS) && !hasObservationsResults) ||
-      (location.pathname.startsWith(APP_PATHS.PLANTING_SITES) && !selectedOrgHasPlantingSites()) ||
+      (location.pathname.startsWith(APP_PATHS.PLANTING_SITES) && !hasPlantingSites) ||
       (location.pathname.startsWith(APP_PATHS.PROJECTS) && !selectedOrgHasProjects())
     );
   }, [
     hasObservationsResults,
+    hasPlantingSites,
     location.pathname,
     selectedOrgHasNurseries,
-    selectedOrgHasPlantingSites,
     selectedOrgHasProjects,
     selectedOrgHasSeedBanks,
     selectedOrgHasSpecies,
@@ -176,7 +180,7 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
             <NavBar
               setShowNavBar={setShowNavBar}
               withdrawalCreated={withdrawalCreated}
-              hasPlantingSites={selectedOrgHasPlantingSites()}
+              hasPlantingSites={hasPlantingSites}
             />
           </Box>
         </Slide>
@@ -185,7 +189,7 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
           setShowNavBar={setShowNavBar}
           backgroundTransparent={viewHasBackgroundImage()}
           withdrawalCreated={withdrawalCreated}
-          hasPlantingSites={selectedOrgHasPlantingSites()}
+          hasPlantingSites={hasPlantingSites}
         />
       )}
       <Box
