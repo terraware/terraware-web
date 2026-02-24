@@ -1,3 +1,4 @@
+c51256683a5a Filter out invalid marker locations (#5308)
 735838e452a7 SW-8052 Added ad-hoc observations selector (#5307)
 ab865969f08d Flipped tree statuses on map (#5306)
 c3c031757991 De-select trees on drawer close (#5305)
