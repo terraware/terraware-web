@@ -278,6 +278,10 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
       observationResults.map((observationResult): PlantMonitoringRow => {
         const plantingSite = plantingSitesById[observationResult.plantingSiteId];
 
+        const totalLive = observationResult.species.reduce(
+          (total, plantSpecies) => (total += plantSpecies.totalLive),
+          0
+        );
         const strata = observationResult.strata.reduce((stratumNames, stratumResult) => {
           const obsrvedStratum = plantingSite?.strata?.find((stratum) => stratum.id === stratumResult.stratumId);
           if (obsrvedStratum) {
@@ -300,6 +304,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           state: getStatus(observationResult.state),
           plantingSiteName: plantingSite?.name,
           strata,
+          totalLive,
           totalPlants: observationResult.totalPlants,
           totalSpecies: observationResult.totalSpecies,
           plantingDensity: observationResult.plantingDensity,
