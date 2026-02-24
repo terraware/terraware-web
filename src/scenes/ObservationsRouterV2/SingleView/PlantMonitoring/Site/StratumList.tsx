@@ -35,7 +35,6 @@ export default function StratumList(): JSX.Element {
     return [
       { key: 'stratumName', name: strings.STRATUM, type: 'string' },
       { key: 'completedDate', name: strings.DATE, type: 'string' },
-      { key: 'state', name: strings.STATUS, type: 'string' },
       { key: 'totalLive', name: strings.LIVE_PLANTS, tooltipTitle: strings.TOOLTIP_LIVE_PLANTS, type: 'number' },
       { key: 'totalPlants', name: strings.TOTAL_PLANTS, tooltipTitle: strings.TOOLTIP_TOTAL_PLANTS, type: 'number' },
       { key: 'totalSpecies', name: strings.SPECIES, type: 'number' },

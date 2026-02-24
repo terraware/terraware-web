@@ -17,6 +17,10 @@ import { useReassignPlotModal } from '../Reassign';
 
 type ObservationStatsProperties = {
   name: string | undefined;
+  observedPermanentPlots?: number;
+  totalPermanentPlots?: number;
+  observedTemporaryPlots?: number;
+  totalTemporaryPlots?: number;
   observedPlants: number | undefined;
   observedSpecies: number | undefined;
   observedDensity: number | undefined;
@@ -69,6 +73,15 @@ const ObservationStatsDrawer = ({
 
   const properties = useMemo((): ObservationStatsProperties | undefined => {
     if (layerFeatureId.layerId === 'sites') {
+      const plots =
+        results?.strata?.flatMap((startum) => startum.substrata)?.flatMap((substartum) => substartum.monitoringPlots) ??
+        [];
+
+      const totalPermanentPlots = plots.filter((plot) => plot.isPermanent).length;
+      const totalTemporaryPlots = plots.filter((plot) => !plot.isPermanent).length;
+      const observedPermanentPlots = plots.filter((plot) => plot.isPermanent && plot.completedTime).length;
+      const observedTemporaryPlots = plots.filter((plot) => !plot.isPermanent && plot.completedTime).length;
+
       return {
         name: plantingSite?.name,
         observedPlants: results?.totalPlants,
@@ -76,17 +89,32 @@ const ObservationStatsDrawer = ({
         observedDensity: results?.plantingDensity,
         observationState: results?.state,
         survivalRate: results?.survivalRate,
+        totalPermanentPlots,
+        totalTemporaryPlots,
+        observedPermanentPlots,
+        observedTemporaryPlots,
       };
     } else if (layerFeatureId.layerId === 'strata') {
       const stratumHistory = siteHistory?.strata?.find((_stratum) => _stratum.name === layerFeatureId.featureId);
       const stratum = plantingSite?.strata?.find((_stratum) => _stratum.name === layerFeatureId.featureId);
       const stratumResults = results?.strata?.find((_stratum) => _stratum.name === layerFeatureId.featureId);
+
+      const plots = stratumResults?.substrata?.flatMap((substartum) => substartum.monitoringPlots) ?? [];
+
+      const totalPermanentPlots = plots.filter((plot) => plot.isPermanent).length;
+      const totalTemporaryPlots = plots.filter((plot) => !plot.isPermanent).length;
+      const observedPermanentPlots = plots.filter((plot) => plot.isPermanent && plot.completedTime).length;
+      const observedTemporaryPlots = plots.filter((plot) => !plot.isPermanent && plot.completedTime).length;
       return {
         name: stratumHistory?.name ?? stratum?.name,
         observedPlants: stratumResults?.totalPlants,
         observedSpecies: stratumResults?.totalSpecies,
         observedDensity: stratumResults?.plantingDensity,
         survivalRate: stratumResults?.survivalRate,
+        totalPermanentPlots,
+        totalTemporaryPlots,
+        observedPermanentPlots,
+        observedTemporaryPlots,
       };
     } else if (layerFeatureId.layerId === 'substrata') {
       const substratumHistory = siteHistory?.strata
@@ -98,12 +126,23 @@ const ObservationStatsDrawer = ({
       const substratumResults = results?.strata
         ?.flatMap((_stratum) => _stratum.substrata)
         ?.find((_substratum) => _substratum.substratumId === Number(layerFeatureId.featureId));
+
+      const plots = substratumResults?.monitoringPlots ?? [];
+
+      const totalPermanentPlots = plots.filter((plot) => plot.isPermanent).length;
+      const totalTemporaryPlots = plots.filter((plot) => !plot.isPermanent).length;
+      const observedPermanentPlots = plots.filter((plot) => plot.isPermanent && plot.completedTime).length;
+      const observedTemporaryPlots = plots.filter((plot) => !plot.isPermanent && plot.completedTime).length;
       return {
         name: substratumHistory?.name ?? substratum?.name,
         observedPlants: substratumResults?.totalPlants,
         observedSpecies: substratumResults?.totalSpecies,
         observedDensity: substratumResults?.plantingDensity,
         survivalRate: substratumResults?.survivalRate,
+        totalPermanentPlots,
+        totalTemporaryPlots,
+        observedPermanentPlots,
+        observedTemporaryPlots,
       };
     } else if (
       layerFeatureId.layerId === 'permanentPlots' ||
@@ -188,6 +227,21 @@ const ObservationStatsDrawer = ({
           value,
         });
       }
+
+      if (properties.totalPermanentPlots !== undefined && properties.observedPermanentPlots !== undefined) {
+        drawerRows.push({
+          key: strings.PERMANENT_PLOTS,
+          value: `${properties.observedPermanentPlots} / ${properties.totalPermanentPlots}`,
+        });
+      }
+
+      if (properties.totalTemporaryPlots !== undefined && properties.observedTemporaryPlots !== undefined) {
+        drawerRows.push({
+          key: strings.TEMPORARY_PLOTS,
+          value: `${properties.observedTemporaryPlots} / ${properties.totalTemporaryPlots}`,
+        });
+      }
+
       drawerRows.push({
         key: strings.PLANTS,
         value: properties.observedPlants ? `${properties.observedPlants}` : strings.NO_DATA_YET,
