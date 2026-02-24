@@ -17,7 +17,6 @@ import { isAdmin } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
-import DownloadReportModal from './DownloadReportModal';
 import ImportInventoryModal from './ImportInventoryModal';
 import InventoryListByBatch from './InventoryListByBatch';
 import InventoryListByNursery from './InventoryListByNursery';
