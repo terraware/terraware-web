@@ -1,3 +1,4 @@
+ab865969f08d Flipped tree statuses on map (#5306)
 c3c031757991 De-select trees on drawer close (#5305)
 10af66c295a5 SW-8089 Make export files match customized and filtered tables (#5303)
 c5eecbd60d99 SW-5486 Move filter above empty species checkbox (#5301)
