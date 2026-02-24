@@ -184,7 +184,7 @@ const ObservationStatsDrawer = ({
                     ? strings.UPCOMING
                     : strings.NO_DATA_YET;
         drawerRows.push({
-          key: strings.STATE,
+          key: strings.STATUS,
           value,
         });
       }
