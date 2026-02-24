@@ -151,7 +151,7 @@ const ObservationMapWrapper = ({
         </Box>
       )}
       <ObservationMap
-        adHocObservationResults={singleObservationResult ? [singleObservationResult] : selectedAdHocObservationResults}
+        adHocObservationResults={selectedAdHocObservationResults}
         isBiomass={isBiomass}
         isSingleView={!!singleObservationResult}
         mapRef={mapRef}
