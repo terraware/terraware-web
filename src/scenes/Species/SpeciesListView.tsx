@@ -684,7 +684,10 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
                   <MRT_ToggleFullScreenButton table={table} />
                 </Box>
               ),
-              muiTableBodyCellProps: ({ row, column }) => ({ id: `row${row.index + 1}-${column.id}` }),
+              muiTableBodyCellProps: ({ row, column, table }) => {
+                const visualIndex = table.getSortedRowModel().rows.findIndex((r) => r.id === row.id);
+                return { id: `row${visualIndex + 1}-${column.id}` };
+              },
               muiTableBodyProps: {
                 sx: {
                   '& tr:nth-of-type(odd) > td': {
