@@ -1106,9 +1106,10 @@ const ObservationMap = ({
         setSelectedFeature(undefined);
         selectPhotos([]);
         selectPlants([]);
+        selectTrees([]);
       }
     },
-    [selectPhotos, selectPlants]
+    [selectPhotos, selectPlants, selectTrees]
   );
 
   useEffect(() => {
