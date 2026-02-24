@@ -9,6 +9,7 @@ import {
   MRT_DensityState,
   MRT_ShowHideColumnsButton,
   MRT_SortingState,
+  MRT_TableInstance,
   MRT_ToggleDensePaddingButton,
   MRT_ToggleFiltersButton,
   MRT_ToggleFullScreenButton,
@@ -33,7 +34,7 @@ import SearchService from 'src/services/SearchService';
 import strings from 'src/strings';
 import { SearchRequestPayload } from 'src/types/Search';
 import { Species, SpeciesProblemElement } from 'src/types/Species';
-import { downloadCsv } from 'src/utils/csv';
+import { makeCsv } from 'src/utils/csv';
 import { isContributor } from 'src/utils/organization';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -100,18 +101,6 @@ type SpeciesListProps = {
   species: Species[];
 };
 
-// These need to be in the same order as in the import template.
-const CSV_FIELDS = [
-  'scientificName',
-  'commonName',
-  'familyName',
-  'conservationCategory',
-  'rare',
-  'growthForms.growthForm',
-  'seedStorageBehavior',
-  'ecosystemTypes.ecosystemType',
-];
-
 export default function SpeciesListView({ reloadData, species }: SpeciesListProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
@@ -161,7 +150,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
 
   const [showColumnFilters, setShowColumnFilters] = useState(() => {
     try {
-      const saved = localStorage.getItem('species-list-table-columnFilters');
+      const saved = localStorage.getItem('species-list-table_columnFilters');
       if (saved) {
         const parsed = JSON.parse(saved);
         return Array.isArray(parsed) && parsed.length > 0;
@@ -319,13 +308,35 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
     navigate(APP_PATHS.SPECIES_NEW);
   };
 
-  const downloadReportHandler = async () => {
-    const params = getParams();
-    params.fields = CSV_FIELDS;
-    const apiResponse = await SearchService.searchCsv(params);
-    if (apiResponse !== null) {
-      downloadCsv('species', apiResponse);
-    }
+  const downloadReportHandler = (table: MRT_TableInstance<SpeciesSearchResultRow>) => {
+    const filteredRows = table.getFilteredRowModel().rows;
+    const csvColumns = [
+      { key: 'scientificName', displayLabel: strings.SCIENTIFIC_NAME },
+      { key: 'commonName', displayLabel: strings.COMMON_NAME },
+      { key: 'familyName', displayLabel: strings.FAMILY },
+      { key: 'conservationCategory', displayLabel: strings.CONSERVATION_CATEGORY },
+      { key: 'rare', displayLabel: strings.RARE },
+      { key: 'growthForms', displayLabel: strings.GROWTH_FORM },
+      { key: 'seedStorageBehavior', displayLabel: strings.SEED_STORAGE_BEHAVIOR },
+      { key: 'ecosystemTypes', displayLabel: strings.ECOSYSTEM_TYPE },
+    ];
+    const csvData = filteredRows.map((row) => ({
+      scientificName: row.original.scientificName ?? '',
+      commonName: row.original.commonName ?? '',
+      familyName: row.original.familyName ?? '',
+      conservationCategory: row.original.conservationCategory ?? '',
+      rare: row.original.rare === 'true' ? strings.YES : strings.NO,
+      growthForms: (row.original.growthForms ?? []).join(', '),
+      seedStorageBehavior: row.original.seedStorageBehavior ?? '',
+      ecosystemTypes: (row.original.ecosystemTypes ?? []).join(', '),
+    }));
+    const blob = makeCsv(csvColumns, csvData);
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'species.csv');
+    link.click();
+    URL.revokeObjectURL(url);
   };
 
   const onImportSpecies = () => {
@@ -631,6 +642,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
             enableGlobalFilter={true}
             enableColumnFilters={true}
             enableColumnOrdering={true}
+            stickyFilters={true}
             storageKey='species-list-table'
             enablePagination={false}
             enableTopToolbar={true}
@@ -666,14 +678,10 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
               enableColumnDragging: true,
               positionGlobalFilter: 'right',
               getRowId: (_row, index) => String(index),
-              muiTableBodyRowProps: ({ row }) => ({
-                onClick: () => navigate(APP_PATHS.SPECIES_EDIT.replace(':speciesId', String(row.original.id))),
-                sx: { cursor: 'pointer' },
-              }),
               renderToolbarInternalActions: ({ table }) => (
                 <Box display='flex' gap={0.5}>
                   <Tooltip title={strings.EXPORT}>
-                    <IconButton onClick={() => void downloadReportHandler()}>
+                    <IconButton onClick={() => downloadReportHandler(table)}>
                       <Icon name='iconExport' size='medium' />
                     </IconButton>
                   </Tooltip>
