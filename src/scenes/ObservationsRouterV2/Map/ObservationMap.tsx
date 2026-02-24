@@ -207,11 +207,11 @@ const ObservationMap = ({
       title: strings.AD_HOC_PLOTS,
       type: 'dropdown',
       items: adHocPlotOptions,
-      selectedValue: selectedObservationId !== undefined ? `${selectedObservationId}` : undefined,
+      selectedValue: `${selectedAdHocObservationId}`,
       setSelectedValue: (value: string | undefined) =>
         setSelectedAdHocObservationId(value === 'all' ? value : Number(value)),
     };
-  }, [adHocPlotOptions, selectedObservationId, strings.AD_HOC_PLOTS]);
+  }, [adHocPlotOptions, selectedAdHocObservationId, strings.AD_HOC_PLOTS]);
 
   const selectedAdHocResults = useMemo(() => {
     if (selectedAdHocObservationId === 'all') {
