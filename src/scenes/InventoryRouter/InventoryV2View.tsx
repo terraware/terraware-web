@@ -162,8 +162,7 @@ export default function InventoryV2View(props: InventoryProps): JSX.Element {
   const { hasNurseries, hasSpecies } = props;
   const [importInventoryModalOpen, setImportInventoryModalOpen] = useState(false);
   const contentRef = useRef(null);
-  const [reportModalOpen, setReportModalOpen] = useState(false);
-  const [reportData, setReportData] = useState<SearchInventoryParams>();
+  const [, setReportData] = useState<SearchInventoryParams>();
 
   const messageStyles = {
     margin: '0 auto',
@@ -179,14 +178,6 @@ export default function InventoryV2View(props: InventoryProps): JSX.Element {
     [navigate]
   );
 
-  const onCloseDownloadReportModal = useCallback(() => {
-    setReportModalOpen(false);
-  }, [setReportModalOpen]);
-
-  const onDownloadReport = useCallback(() => {
-    setReportModalOpen(true);
-  }, [setReportModalOpen]);
-
   const isOnboarded = hasNurseries && hasSpecies;
 
   const onOptionItemClick = useCallback(
@@ -194,11 +185,8 @@ export default function InventoryV2View(props: InventoryProps): JSX.Element {
       if (optionItem.value === 'import') {
         setImportInventoryModalOpen(true);
       }
-      if (optionItem.value === 'export') {
-        onDownloadReport();
-      }
     },
-    [onDownloadReport, setImportInventoryModalOpen]
+    [setImportInventoryModalOpen]
   );
 
   const importInventory = () => {
@@ -275,14 +263,6 @@ export default function InventoryV2View(props: InventoryProps): JSX.Element {
   return (
     <TfMain>
       <ImportInventoryModal open={importInventoryModalOpen} onClose={onCloseImportInventoryModal} />
-      {reportData && (
-        <DownloadReportModal
-          reportData={reportData}
-          open={reportModalOpen}
-          onClose={onCloseDownloadReportModal}
-          tab={activeTab}
-        />
-      )}
       <PageHeaderWrapper nextElement={contentRef.current}>
         <Box sx={{ paddingBottom: theme.spacing(4), paddingLeft: theme.spacing(3) }}>
           <Grid container>
@@ -318,10 +298,7 @@ export default function InventoryV2View(props: InventoryProps): JSX.Element {
                     </Box>
                     <OptionsMenu
                       onOptionItemClick={onOptionItemClick}
-                      optionItems={[
-                        { label: strings.IMPORT, value: 'import' },
-                        { label: strings.EXPORT, value: 'export' },
-                      ]}
+                      optionItems={[{ label: strings.IMPORT, value: 'import' }]}
                     />
                   </>
                 )}
