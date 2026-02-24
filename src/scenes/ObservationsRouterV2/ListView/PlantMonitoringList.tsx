@@ -8,6 +8,7 @@ import ClientSideFilterTable from 'src/components/Tables/ClientSideFilterTable';
 import Card from 'src/components/common/Card';
 import Link from 'src/components/common/Link';
 import { TableColumnType } from 'src/components/common/table/types';
+import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
@@ -380,6 +381,25 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
     theme,
   ]);
 
+  const emptyStateContent = useMemo(() => {
+    return (
+      <EmptyStateContent
+        title={''}
+        subtitle={
+          selectedPlotSelection === 'assigned'
+            ? [strings.OBSERVATIONS_EMPTY_STATE_MESSAGE_1, strings.OBSERVATIONS_EMPTY_STATE_MESSAGE_2]
+            : [strings.AD_HOC_OBSERVATIONS_EMPTY_STATE_MESSAGE_1, strings.AD_HOC_OBSERVATIONS_EMPTY_STATE_MESSAGE_2]
+        }
+      />
+    );
+  }, [
+    selectedPlotSelection,
+    strings.AD_HOC_OBSERVATIONS_EMPTY_STATE_MESSAGE_1,
+    strings.AD_HOC_OBSERVATIONS_EMPTY_STATE_MESSAGE_2,
+    strings.OBSERVATIONS_EMPTY_STATE_MESSAGE_1,
+    strings.OBSERVATIONS_EMPTY_STATE_MESSAGE_2,
+  ]);
+
   return (
     <Card radius={'8px'} style={{ width: '100%' }}>
       {selectedPlotSelection === 'assigned' && (
@@ -387,6 +407,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           busy={isLoading}
           columns={assignedColumns}
           defaultSortOrder={defaultSearchOrder}
+          emptyState={emptyStateContent}
           fuzzySearchColumns={fuzzySearchColumns}
           id='assigned-plant-monitoring-table'
           Renderer={PlantMonitoringCellRenderer}
@@ -400,6 +421,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           busy={isLoading}
           columns={adHocColumns}
           defaultSortOrder={defaultSearchOrder}
+          emptyState={emptyStateContent}
           fuzzySearchColumns={fuzzySearchColumns}
           id='ad-hoc-plant-monitoring-table'
           Renderer={PlantMonitoringCellRenderer}

@@ -22,7 +22,6 @@ import { requestOrganizationFeatures } from 'src/redux/features/organizations/or
 import { listOrganizationFeatures } from 'src/redux/features/organizations/organizationsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { NurseryWithdrawalService } from 'src/services';
-import strings from 'src/strings';
 import { isAdmin, isContributor, isManagerOrHigher } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
@@ -52,7 +51,7 @@ export default function NavBar({
   const orgFeatures = useAppSelector(listOrganizationFeatures(orgFeaturesRequestId));
 
   const { isAllowedViewConsole } = useAcceleratorConsole();
-  const { activeLocale } = useLocalization();
+  const { strings } = useLocalization();
   const { currentAcceleratorProject, setCurrentAcceleratorProject, projectsWithModules, allAcceleratorProjects } =
     useParticipantData();
 
@@ -162,7 +161,7 @@ export default function NavBar({
 
   const deliverablesMenu = useMemo<JSX.Element | null>(
     () =>
-      !!orgFeatures?.data?.deliverables?.enabled && activeLocale ? (
+      orgFeatures?.data?.deliverables?.enabled ? (
         <NavItem
           label={strings.DELIVERABLES}
           icon='iconSubmit'
@@ -176,7 +175,7 @@ export default function NavBar({
       ) : null,
     [
       orgFeatures?.data?.deliverables?.enabled,
-      activeLocale,
+      strings.DELIVERABLES,
       isDeliverablesRoute,
       mixpanel,
       closeAndNavigateTo,
@@ -188,8 +187,7 @@ export default function NavBar({
     () =>
       isAllowed('READ_REPORTS', { organization: selectedOrganization }) &&
       !!orgFeatures?.data?.reports?.enabled &&
-      allAcceleratorProjects.length > 0 &&
-      activeLocale ? (
+      allAcceleratorProjects.length > 0 ? (
         <NavItem
           icon='iconGraphReport'
           label={strings.REPORTS}
@@ -201,19 +199,19 @@ export default function NavBar({
         />
       ) : null,
     [
-      activeLocale,
       allAcceleratorProjects.length,
       closeAndNavigateTo,
       isAllowed,
       isReportsRoute,
       orgFeatures?.data?.reports?.enabled,
       selectedOrganization,
+      strings.REPORTS,
     ]
   );
 
   const seedFundReportsMenu = useMemo<JSX.Element | null>(
     () =>
-      selectedOrganization?.canSubmitReports && isAdmin(selectedOrganization) && activeLocale ? (
+      selectedOrganization?.canSubmitReports && isAdmin(selectedOrganization) ? (
         <NavItem
           icon='iconGraphReport'
           label={strings.SEED_FUND_REPORTS}
@@ -224,15 +222,12 @@ export default function NavBar({
           id='seed-fund-reports-list'
         />
       ) : null,
-    [activeLocale, closeAndNavigateTo, isSeedFundReportsRoute, selectedOrganization]
+    [closeAndNavigateTo, isSeedFundReportsRoute, selectedOrganization, strings.SEED_FUND_REPORTS]
   );
 
   const modulesMenu = useMemo<JSX.Element | null>(
     () =>
-      currentAcceleratorProject &&
-      !!orgFeatures?.data?.modules?.enabled &&
-      isManagerOrHigher(selectedOrganization) &&
-      activeLocale ? (
+      currentAcceleratorProject && !!orgFeatures?.data?.modules?.enabled && isManagerOrHigher(selectedOrganization) ? (
         <NavItem
           icon='iconModule'
           label={strings.MODULES}
@@ -247,21 +242,19 @@ export default function NavBar({
         />
       ) : null,
     [
-      activeLocale,
       closeAndNavigateTo,
       currentAcceleratorProject,
       isProjectModulesRoute,
       mixpanel,
       orgFeatures?.data?.modules?.enabled,
       selectedOrganization,
+      strings.MODULES,
     ]
   );
 
   const activityLogMenu = useMemo<JSX.Element | null>(
     () =>
-      isAllowed('READ_ACTIVITIES', { organization: selectedOrganization }) &&
-      currentAcceleratorProject &&
-      activeLocale ? (
+      isAllowed('READ_ACTIVITIES', { organization: selectedOrganization }) && currentAcceleratorProject ? (
         <NavItem
           icon='checklist'
           id='activity-log'
@@ -272,12 +265,19 @@ export default function NavBar({
           selected={!!isActivityLogRoute}
         />
       ) : null,
-    [activeLocale, closeAndNavigateTo, currentAcceleratorProject, isActivityLogRoute, isAllowed, selectedOrganization]
+    [
+      closeAndNavigateTo,
+      currentAcceleratorProject,
+      isActivityLogRoute,
+      isAllowed,
+      selectedOrganization,
+      strings.ACTIVITY_LOG,
+    ]
   );
 
   const applicationMenu = useMemo<JSX.Element | null>(
     () =>
-      !!orgFeatures?.data?.applications?.enabled && activeLocale ? (
+      orgFeatures?.data?.applications?.enabled ? (
         <NavItem
           label={
             <Box
@@ -305,10 +305,10 @@ export default function NavBar({
         />
       ) : null,
     [
-      activeLocale,
       closeAndNavigateTo,
       isApplicationRoute,
       orgFeatures?.data?.applications?.enabled,
+      strings.APPLICATION,
       theme.palette.TwClrIcnSecondary,
       theme.palette.TwClrTxt,
     ]
@@ -316,7 +316,7 @@ export default function NavBar({
 
   const acceleratorSectionTitle = useMemo<string>(
     () => (deliverablesMenu || modulesMenu ? strings.ACCELERATOR.toUpperCase() : ''),
-    [deliverablesMenu, modulesMenu]
+    [deliverablesMenu, modulesMenu, strings.ACCELERATOR]
   );
 
   return (

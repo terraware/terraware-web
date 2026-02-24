@@ -11,6 +11,7 @@ import useStickyPlantingSiteId from 'src/hooks/useStickyPlantingSiteId';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
 import { useLazyListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
+import { useLazyCountObservationsQuery } from 'src/queries/search/observations';
 import MobileAppCard from 'src/scenes/Home/MobileAppCard';
 import { isAdmin } from 'src/utils/organization';
 import useStickyTabs from 'src/utils/useStickyTabs';
@@ -30,6 +31,9 @@ const ObservationListView = (): JSX.Element => {
   const observableSites = useObservablePlantingSites();
   const [listPlantingSites, listPlantingSitesResult] = useLazyListPlantingSitesQuery();
   const { selectPlantingSite, selectedPlantingSiteId } = useStickyPlantingSiteId('observations-list', -1);
+
+  const [countObservations, countObservationsResult] = useLazyCountObservationsQuery();
+  const hasObservationsResults = useMemo(() => !!countObservationsResult.data, [countObservationsResult]);
 
   useEffect(() => {
     if (selectedOrganization) {
@@ -121,6 +125,28 @@ const ObservationListView = (): JSX.Element => {
     }
   }, [navigate, scheduleObservationEnabled, strings.SCHEDULE_OBSERVATION]);
 
+  useEffect(() => {
+    if (selectedOrganization) {
+      if (activeTab === 'biomassMeasurements') {
+        void countObservations(
+          {
+            organizationId: selectedOrganization.id,
+            observationType: 'Biomass Measurements',
+          },
+          true
+        );
+      } else if (activeTab === 'plantMonitoring') {
+        void countObservations(
+          {
+            organizationId: selectedOrganization.id,
+            observationType: 'Monitoring',
+          },
+          true
+        );
+      }
+    }
+  }, [activeTab, countObservations, selectedOrganization]);
+
   return (
     <Page
       title={strings.OBSERVATIONS}
@@ -134,13 +160,15 @@ const ObservationListView = (): JSX.Element => {
         />
       )}
       <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs}>
-        <Card radius={'8px'} style={{ marginBottom: theme.spacing(3), width: '100%' }}>
-          <ObservationMapWrapper
-            isBiomass={isBiomass}
-            plantingSiteId={selectedPlantingSiteId === -1 ? undefined : selectedPlantingSiteId}
-            selectPlantingSiteId={selectPlantingSite}
-          />
-        </Card>
+        {hasObservationsResults && (
+          <Card radius={'8px'} style={{ marginBottom: theme.spacing(3), width: '100%' }}>
+            <ObservationMapWrapper
+              isBiomass={isBiomass}
+              plantingSiteId={selectedPlantingSiteId === -1 ? undefined : selectedPlantingSiteId}
+              selectPlantingSiteId={selectPlantingSite}
+            />
+          </Card>
+        )}
       </Tabs>
       <Box marginTop={'24px'} width={'100%'}>
         <MobileAppCard

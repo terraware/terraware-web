@@ -4,6 +4,7 @@ import { TableColumnType } from '@terraware/web-components';
 
 import ClientSideFilterTable from 'src/components/Tables/ClientSideFilterTable';
 import Card from 'src/components/common/Card';
+import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { useLazyListAdHocObservationResultsQuery } from 'src/queries/generated/observations';
 import { useLazyListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
@@ -113,12 +114,23 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
     }
   }, [adHocObservationsResultsResponse, plantingSitesNames]);
 
+  const isLoading = useMemo(
+    () => adHocObservationsResultsResponse.isFetching || listPlantingSitesResult.isFetching,
+    [adHocObservationsResultsResponse.isFetching, listPlantingSitesResult.isFetching]
+  );
+
   return (
     <Card radius={'8px'} style={{ width: '100%' }}>
       <ClientSideFilterTable
-        busy={adHocObservationsResultsResponse.isLoading}
+        busy={isLoading}
         columns={columns}
         defaultSortOrder={defaultSearchOrder}
+        emptyState={
+          <EmptyStateContent
+            title={''}
+            subtitle={[strings.BIOMASS_EMPTY_STATE_MESSAGE_1, strings.BIOMASS_EMPTY_STATE_MESSAGE_2]}
+          />
+        }
         fuzzySearchColumns={fuzzySearchColumns}
         id='biomass-measurement-table'
         Renderer={BiomassCellRenderer}
