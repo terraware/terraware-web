@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/82</span>
+                <span class='fraction'>0/87</span>
             </div>
         
             
@@ -316,7 +316,13 @@
 <a name='L251'></a><a href='#L251'>251</a>
 <a name='L252'></a><a href='#L252'>252</a>
 <a name='L253'></a><a href='#L253'>253</a>
-<a name='L254'></a><a href='#L254'>254</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L254'></a><a href='#L254'>254</a>
+<a name='L255'></a><a href='#L255'>255</a>
+<a name='L256'></a><a href='#L256'>256</a>
+<a name='L257'></a><a href='#L257'>257</a>
+<a name='L258'></a><a href='#L258'>258</a>
+<a name='L259'></a><a href='#L259'>259</a>
+<a name='L260'></a><a href='#L260'>260</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -381,6 +387,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -524,6 +531,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -596,26 +608,28 @@ export interface ClientSideFilterTableProps
   clientSortedFields?: string[];
   columns: TableColumnType[] | ((activeLocale: string | null) =&gt; TableColumnType[]);
   defaultSortOrder:<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > S</span>earchSo<span class="cstat-no" title="statement not covered" >rtOrder;</span></span>
-  extraComponent?: R<span class="cstat-no" title="statement not covered" >eac</span>t.ReactNode;
-<span class="cstat-no" title="statement not covered" >  extraTableFilters?: SearchNodePayload[];</span>
-  featuredF<span class="fstat-no" title="function not covered" >il</span>ters<span class="cstat-no" title="statement not covered" >?: FilterConfi</span>gWithValues[];
-  filterModifiers?: (filters: FilterConfig[]) =&gt; FilterConfig[];
-<span class="cstat-no" title="statement not covered" >  fuzzySearchColumns?: string[];</span>
-  iconFilters?: Fil<span class="cstat-no" title="statement not covered" >terConfig[];</span>
-  onFilterApplied?: (f<span class="cstat-no" title="statement not covered" >ilter: string, values: (s</span>tring | number | null)[]) =&gt; void;
-  rightComponent?:<span class="cstat-no" title="statement not covered" > React.ReactNode;</span>
+  emptyState?: React<span class="cstat-no" title="statement not covered" >.Re</span>actNode;
+<span class="cstat-no" title="statement not covered" >  extraComponent?: React.ReactNode;</span>
+  extraTabl<span class="fstat-no" title="function not covered" >eF</span>ilte<span class="cstat-no" title="statement not covered" >rs?: SearchNod</span>ePayload[];
+  featuredFilters?: FilterConfigWithValues[];
+<span class="cstat-no" title="statement not covered" >  filterModifiers?: (filters: FilterConfig[]) </span>=&gt; FilterConfig[];
+  fuzzySearchColumn<span class="cstat-no" title="statement not covered" >s?: string[];</span>
+  iconFilters?: Filter<span class="cstat-no" title="statement not covered" >Config[];</span>
+  onFilterApplied?<span class="cstat-no" title="statement not covered" >: (filter: string, values: (string | number | n</span>ull)[]) =&gt; void;
+  rightComponent?: React.ReactNode;<span class="cstat-no" title="statement not covered" ></span>
   rows: TableRowType[];<span class="cstat-no" title="statement not covered" ></span>
-  searchAndSort?: SearchAndSo<span class="cstat-no" title="statement not covered" >rtFn&lt;TableRowType&gt;;</span>
-  stickyFilters?: b<span class="cstat-no" title="statement not covered" >oolean;</span>
+  searchAndSort?: S<span class="cstat-no" title="statement not covered" >earchAndSortFn&lt;TableRowType&gt;;</span>
+  stickyFilters?: boolean;<span class="cstat-no" title="statement not covered" ></span>
   title?: string;<span class="cstat-no" title="statement not covered" ></span>
 }<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-const ClientSideFilterTable = (<span class="cstat-no" title="statement not covered" >props: ClientSideFilterTableProps) =&gt; {</span>
+const ClientSideFilt<span class="cstat-no" title="statement not covered" >erTable = (props: ClientSide</span>FilterTableProps) =&gt; {
   const {<span class="cstat-no" title="statement not covered" ></span>
     busy,<span class="cstat-no" title="statement not covered" ></span>
-    clientSortedFields,<span class="cstat-no" title="statement not covered" ></span>
-    columns,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+    clientSortedFields,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+    columns,
     defaultSortOrder,
+    emptyState,
     extraComponent,
     extraTableFilters,
     featuredFilters,
@@ -633,121 +647,121 @@ const ClientSideFilterTable = (<span class="cstat-no" title="statement not cover
   } = props;
 &nbsp;
   const { activeLocale } = useLocalization();
-&nbsp;
-  cons<span class="cstat-no" title="statement not covered" >t [fil</span>ters, setFilters] = useState&lt;Record&lt;string, SearchNodePayload&gt;&gt;({});
-  const [searchValue, setSe<span class="cstat-no" title="statement not covered" >archValue] = useState('');</span>
-  const debouncedSearchTerm = us<span class="cstat-no" title="statement not covered" >eDebounce(searchValue, DEFAULT_</span>SEARCH_DEBOUNCE_MS);
-  const [searchSortOrder, setSearchSortO<span class="cstat-no" title="statement not covered" >rder] = useState&lt;SearchSortOrde</span>r | undefined&gt;(defaultSortOrder);
-  const { sessionFilters } = u<span class="cstat-no" title="statement not covered" >seSessionFilters(id);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const onSortChangeHandler =<span class="cstat-no" title="statement not covered" > (order: SearchSortOrder) =&gt; {</span>
-    const isClientSorted = cli<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >en</span>tSortedFields ? clientSortedFields.indexOf(order.field) &gt; -1 : false;</span>
-    setSearchSortOrder(isCl<span class="cstat-no" title="statement not covered" >ientSorted ? undefined : order);</span>
-  };<span class="cstat-no" title="statement not covered" ></span>
-&nbsp;
-  const onSortChange = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(o</span>rder: SortOrder, orderBy: string) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    onSortChangeHandler({</span>
+  const [filters, setFilter<span class="cstat-no" title="statement not covered" >s] = useState&lt;Record&lt;string, SearchNodeP</span>ayload&gt;&gt;({});
+  const [searchValue, setSearchV<span class="cstat-no" title="statement not covered" >alue] = useState('');</span>
+  const debouncedSearchTerm = useDebounc<span class="cstat-no" title="statement not covered" >e(searchValue, DEFAULT_SEARCH_D</span>EBOUNCE_MS);
+  const [searchSortOrder, setS<span class="cstat-no" title="statement not covered" >earchSortOrder] = useState&lt;SearchSortOrder | undefined&gt;(defaultSortOrder);</span>
+  const { sessionFilters } = useSessionFilters(i<span class="cstat-no" title="statement not covered" >d);</span>
+<span class="cstat-no" title="statement not covered" ></span>
+  const onSortChangeHandler = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(o</span>rder: SearchSortOrder) =&gt; {</span>
+    const isClientSorted = <span class="cstat-no" title="statement not covered" >clientSortedFields ? clientSortedFields.indexOf(order.field) &gt; -1 : false;</span>
+<span class="cstat-no" title="statement not covered" >    setSearchSortOrder(isClientSorted ? undefined : order</span>);
+  };
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  co<span class="cstat-no" title="statement not covered" >nst onSortChange = (order: SortOrder, orderBy: string) =&gt; {</span>
+    onSortChangeHandler({
       field: orderBy,
       direction: order === 'asc' ? 'Ascending' : 'Descending',
     });
-  };
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  const getSearchPayload = useC<span class="cstat-no" title="statement not covered" >all</span>back((): SearchNodePayload =&gt; {
-<span class="cstat-no" title="statement not covered" >    const searchNodeChildren: SearchNodePayload[] = [];</span>
+  };<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" ></span>
-    // Apply search field to search API<span class="cstat-no" title="statement not covered" > payload</span>
-    if (<span class="fstat-no" title="function not covered" >de</span>bouncedSea<span class="cstat-no" title="statement not covered" >rchTerm &amp;&amp; fuzzySearchColumns) {</span>
+  co<span class="cstat-no" title="statement not covered" >nst getSearchPayload = useCallback((): SearchNodePayload =&gt; {</span>
+    const searchNodeChildren: S<span class="cstat-no" title="statement not covered" >earchNodePayload[] = [];</span>
+<span class="cstat-no" title="statement not covered" ></span>
+    // A<span class="fstat-no" title="function not covered" >pp</span>ly search <span class="cstat-no" title="statement not covered" >field to search API payload</span>
+    if (debouncedSearchTerm &amp;&amp; fuzzySearchColumns) {
       const { type, values } = parseSearchTerm(debouncedSearchTerm);
       const fuzzySearchValueChildren = fuzzySearchColumns.map(
         (field: string): FieldNodePayload =&gt; ({
           field,
           operation: 'field',
-          type,
-<span class="cstat-no" title="statement not covered" >          values,</span>
+<span class="cstat-no" title="statement not covered" >          type,</span>
+          values,
         })
       );
 &nbsp;
-      searchNodeChildren.push({
-<span class="cstat-no" title="statement not covered" >        operation: 'or',</span>
-        children: fuzzySearchValue<span class="cstat-no" title="statement not covered" >Children,<span class="fstat-no" title="function not covered" ></span></span>
-      });
-    }<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-    //<span class="cstat-no" title="statement not covered" > Apply filters to search API payload</span>
+<span class="cstat-no" title="statement not covered" >      searchNodeChildren.push({</span>
+        operation: 'or',<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+        children: fuzzySearchValueChildren,
+      })<span class="cstat-no" title="statement not covered" >;</span>
+    }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ></span>
+    // Apply filters to search API payload
     if (Object.keys(filters).length &gt; 0) {
       const filterValueChildren = Object.keys(filters)
         .filter((field: string) =&gt; (filters[field]?.values || []).length &gt; 0)
-        .map((field: string): SearchNodePayload =&gt; filters[field]);
-<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >      searchNodeChildren.push({<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >        operation: 'and',</span>
+<span class="cstat-no" title="statement not covered" >        .map((field: string): SearchNodePayload =&gt; filters[field]);</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+      se<span class="cstat-no" title="statement not covered" >archNodeChildren.push({</span>
+        operation: 'and',
         children: filterValueChildren,
-      });
-<span class="cstat-no" title="statement not covered" >    }</span>
+<span class="cstat-no" title="statement not covered" >      });</span>
+    }
 &nbsp;
     // Apply filters that are outside the table but pertinent to the view (like participants or projects)
     if (extraTableFilters) {
-      extraTableFilters.forEach((searchNodeChild: SearchNodePayload) =&gt; {
-<span class="cstat-no" title="statement not covered" >        searchNodeChildren.pus<span class="fstat-no" title="function not covered" >h(</span>searchNodeChild);</span>
-<span class="cstat-no" title="statement not covered" >      });<span class="fstat-no" title="function not covered" ></span></span>
-    }
-<span class="cstat-no" title="statement not covered" ></span>
-    re<span class="cstat-no" title="statement not covered" >turn {<span class="fstat-no" title="function not covered" ></span></span>
-      operation: 'and',<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >      extraTableFilters.forEac<span class="fstat-no" title="function not covered" >h(</span>(searchNodeChild: SearchNodePayload) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        searchN<span class="fstat-no" title="function not covered" >od</span>eChildren.push(searchNodeChild);</span>
+      });
+    }<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+    return {<span class="cstat-no" title="statement not covered" ></span>
+      operation: 'and',
       children: searchNodeChildren,
     };
-  }, [debouncedSearchTerm, filters, fuzzySearchColumns, extraTableFilters]);
-<span class="cstat-no" title="statement not covered" ></span>
-  // reset filters when extraTableFilters change
-  useE<span class="cstat-no" title="statement not covered" >ffect(() =&gt; {</span>
+  }, [de<span class="cstat-no" title="statement not covered" >bouncedSearchTerm, filters</span>, fuzzySearchColumns, extraTableFilters]);
+&nbsp;
+  // r<span class="cstat-no" title="statement not covered" >eset filters when e</span>xtraTableFilters change
+  useEffect(() =&gt; {
     setFilters((_filters) =&gt; {
-      const newFilters = { ..._filters };
-<span class="cstat-no" title="statement not covered" >      Object.keys(newFilters)?<span class="fstat-no" title="function not covered" >.f</span>orEach((key) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >        const filter = {</span>
-<span class="cstat-no" title="statement not covered" >          ...n</span>ewFilters[key],
-          values: [],
+<span class="cstat-no" title="statement not covered" >      const newFilters = { ...<span class="fstat-no" title="function not covered" >_f</span>ilters };</span>
+<span class="cstat-no" title="statement not covered" >      Object.keys(newFilters)?.forEach((key) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        const </span>filter = {
+          ...newFilters[key],
+<span class="cstat-no" title="statement not covered" >          values: [],</span>
 <span class="cstat-no" title="statement not covered" >        };</span>
-<span class="cstat-no" title="statement not covered" >        newFil</span>ters[key] = filter;
-      });
-      return newFilters;<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-<span class="cstat-no" title="statement not covered" >    });</span>
-  }, [extraTableFilters]);<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+        newFilters[key] = filter;
+      });<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+<span class="cstat-no" title="statement not covered" >      return newFilters;</span>
+    });<span class="cstat-no" title="statement not covered" ></span>
+  }, [ex<span class="fstat-no" title="function not covered" >tr</span>aTableFilters]);<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
   // set current filters if any featuredFilters has initial value, but not if we have sticky filters
   useEffect(() =&gt; {
     if (!sessionFilters) {
       // Wait for session filters to finish loading
-      return;
+<span class="cstat-no" title="statement not covered" >      return;</span>
+    }
+&nbsp;
+    if (stickyFilters &amp;&amp; Ob<span class="cstat-no" title="statement not covered" >ject.keys(sessionFilters).<span class="fstat-no" title="function not covered" >le</span>ngth &gt; 0) {</span>
+<span class="cstat-no" title="statement not covered" >      return;</span>
     }<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
-    if (stickyFilters &amp;&amp; Object.keys(sessionFilters).length &gt; 0) {
-      return;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >    }</span>
-<span class="cstat-no" title="statement not covered" ></span>
-    const filtersWithValues = featuredFilters?.filter((ff) =&gt; ff.values &amp;&amp; ff.values.length &gt; 0);
-<span class="cstat-no" title="statement not covered" >    if (filtersWithValues &amp;&amp; filtersWithValues.length &gt; 0) {</span>
-      const newCurrentFilters = filtersWithValues.reduce(
-        (<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-          acc: {<span class="cstat-no" title="statement not covered" ></span>
-            [x: string]: <span class="cstat-no" title="statement not covered" >SearchNodePayload;<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
-          },
+<span class="cstat-no" title="statement not covered" >    const filtersWithValues = featuredFilters?.filter((ff) =&gt; ff.values &amp;&amp; ff.val</span>ues.length &gt; 0);
+    if (filtersWithValues &amp;&amp; filtersWithValues.length &gt; 0) {
+      const newCurrentFilters <span class="cstat-no" title="statement not covered" >= filtersWithValues.reduce<span class="fstat-no" title="function not covered" >(</span></span>
+        (<span class="cstat-no" title="statement not covered" ></span>
+          acc: {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
+            [x: string]: SearchNodePayload;
+<span class="cstat-no" title="statement not covered" >          },</span>
 <span class="cstat-no" title="statement not covered" >          filter: FilterConfigWithValues</span>
-<span class="cstat-no" title="statement not covered" >        ): {</span>
+        ): {
           [x: string]: SearchNodePayload;
         } =&gt; ({
           ...acc,
           [filter.field]: filter.searchNodeCreator
-            ? filter.searchNodeCreator(filter.values || [])
+<span class="cstat-no" title="statement not covered" >            ? filter.searchNodeCreator(filter.values || [])</span>
 <span class="cstat-no" title="statement not covered" >            : defaultSearchNodeCreator(filter.field, filter.values || []),</span>
-<span class="cstat-no" title="statement not covered" >        }),</span>
-        {} as {
-<span class="cstat-no" title="statement not covered" >          [x: str</span>ing]: SearchNodePayload;
-        }
-      );<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" ></span>      setF<span class="cstat-no" title="statement not covered" >ilters(newCurrentFilters);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+        }),
+<span class="cstat-no" title="statement not covered" >        {} as {</span>
+          [x: string]: SearchNodePayload;
+        }<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" ></span>      );<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+      setFilters(newCurrentFilters);
     }
-  }, [featuredFilters, sessionFilters, stickyFilters]);
-<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >  }, [featuredFilters, sessionFilters, stickyFilters]);</span>
+&nbsp;
   const _featuredFilters = useMemo(() =&gt; {
     if (!featuredFilters) {
       return undefined;
@@ -775,8 +789,8 @@ const ClientSideFilterTable = (<span class="cstat-no" title="statement not cover
       return searchAndSort
         ? searchAndSort(rows, search, searchOrderConfig)
         : genericSearchAndSort(rows, search, searchOrderConfig);
-    }
-<span class="cstat-no" title="statement not covered" ></span>
+    }<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
     return rows;
   }, [activeLocale, columns, getSearchPayload, rows, searchAndSort, searchSortOrder]);
 &nbsp;
@@ -804,18 +818,22 @@ const ClientSideFilterTable = (<span class="cstat-no" title="statement not cover
           /&gt;
         &lt;/Grid&gt;
 &nbsp;
-        &lt;Grid item xs={12}&gt;
-          &lt;OrderPreservedTable
-            {...tableProps}
-            columns={tableColumns}
-            id={id}
-            isPresorted={!!searchSortOrder}
-            order={searchSortOrder?.direction === 'Ascending' ? 'asc' : 'desc'}
-            orderBy={searchSortOrder?.field || defaultSortOrder.field}
-            rows={_filteredSortedRows}
-            sortHandler={onSortChange}
-          /&gt;
-        &lt;/Grid&gt;
+        {emptyState &amp;&amp; !busy &amp;&amp; _filteredSortedRows.length === 0 ? (
+          emptyState
+        ) : (
+          &lt;Grid item xs={12}&gt;
+            &lt;OrderPreservedTable
+              {...tableProps}
+              columns={tableColumns}
+              id={id}
+              isPresorted={!!searchSortOrder}
+              order={searchSortOrder?.direction === 'Ascending' ? 'asc' : 'desc'}
+              orderBy={searchSortOrder?.field || defaultSortOrder.field}
+              rows={_filteredSortedRows}
+              sortHandler={onSortChange}
+            /&gt;
+          &lt;/Grid&gt;
+        )}
       &lt;/Card&gt;
     &lt;/Container&gt;
   );
@@ -829,7 +847,7 @@ export default ClientSideFilterTable;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-24T01:33:21.561Z
+                at 2026-02-24T16:16:24.391Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

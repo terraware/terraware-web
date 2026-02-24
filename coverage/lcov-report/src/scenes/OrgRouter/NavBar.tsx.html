@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/154</span>
+                <span class='fraction'>0/153</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/163</span>
+                <span class='fraction'>0/155</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/151</span>
+                <span class='fraction'>0/150</span>
             </div>
         
             
@@ -605,7 +605,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -826,12 +825,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1020,12 +1026,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1059,37 +1059,36 @@ import { requestOrganizationFeatures } from 'src/redux/features/organizations/or
 import { listOrganizationFeatures } from 'src/redux/features/organizations/organizationsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { NurseryWithdrawalService } from 'src/services';
-import strings from 'src/strings';
 import { isAdmin, isContributor, isManagerOrHigher } from 'src/utils/organization';
-import useDeviceInf<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >o </span>from 's<span class="cstat-no" title="statement not covered" >rc/utils/useDeviceInfo';</span></span>
-<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >type NavBarProps = {</span>
-  backgroun<span class="fstat-no" title="function not covered" >dT</span>rans<span class="cstat-no" title="statement not covered" >parent?</span>: boolean;
-  hasPlantingSites?: boolean;
-<span class="cstat-no" title="statement not covered" >  setShowNavBar: (value: boolean) =&gt; void;</span>
-  withdrawalCreated<span class="cstat-no" title="statement not covered" >?: boolean;</span>
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+type NavBarProps = {<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >  backgroundTransparent?: boolean;</span>
+  hasPlanti<span class="fstat-no" title="function not covered" >ng</span>Site<span class="cstat-no" title="statement not covered" >s?: boo</span>lean;
+  setShowNavBar: (value: boolean) =&gt; void;
+<span class="cstat-no" title="statement not covered" >  withdrawalCreated?: boolean;</span>
 };<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-export default functio<span class="cstat-no" title="statement not covered" >n NavBar({</span>
-  backgroundTransparent,<span class="cstat-no" title="statement not covered" ></span>
+export default function Na<span class="cstat-no" title="statement not covered" >vBar({</span>
+  backgroundTransparen<span class="cstat-no" title="statement not covered" >t,</span>
   hasPlantingSites,<span class="cstat-no" title="statement not covered" ></span>
   setShowNavBar,<span class="cstat-no" title="statement not covered" ></span>
   withdrawalCreated,<span class="cstat-no" title="statement not covered" ></span>
-}: NavBarProps): JSX.<span class="cstat-no" title="statement not covered" >Element | null {</span>
-  const { isAllowed } = <span class="cstat-no" title="statement not covered" >useUser();</span>
-  const { selectedOr<span class="cstat-no" title="statement not covered" >ganization } = useOrganization();</span>
-  const theme = useThe<span class="cstat-no" title="statement not covered" >me();</span>
-  const dispatch = useA<span class="cstat-no" title="statement not covered" >ppDispatch();</span>
-  const [showNurseryWithdrawals, se<span class="cstat-no" title="statement not covered" >tShowNurseryWithdrawals] = useState&lt;boolean&gt;(false);</span>
-  const { isDesktop, isMobile<span class="cstat-no" title="statement not covered" > } = useDeviceInfo();</span>
-  const navigate = useSyncNa<span class="cstat-no" title="statement not covered" >vigate();</span>
-  const mixpanel = useMixpanel()<span class="cstat-no" title="statement not covered" >;</span>
+}: NavBarProps): JSX.El<span class="cstat-no" title="statement not covered" >ement | null {</span>
+  const { isAllowed }<span class="cstat-no" title="statement not covered" > = useUser();</span>
+  const { selectedOrgani<span class="cstat-no" title="statement not covered" >zation } = useOrganization();</span>
+  const theme = useT<span class="cstat-no" title="statement not covered" >heme();</span>
+  const dispatch = use<span class="cstat-no" title="statement not covered" >AppDispatch();</span>
+  const [showNurseryWit<span class="cstat-no" title="statement not covered" >hdrawals, setShowNurseryW</span>ithdrawals] = useState&lt;boolean&gt;(false);
+  const { isDesktop, isMobile } = u<span class="cstat-no" title="statement not covered" >seDeviceInfo();</span>
+  const navigate = useSyncNav<span class="cstat-no" title="statement not covered" >igate();</span>
+  const mixpanel = useMixpan<span class="cstat-no" title="statement not covered" >el();</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const [orgFeaturesRequestId, setOrgF<span class="cstat-no" title="statement not covered" >eaturesRequestId] = useState&lt;string&gt;('');</span>
-  const orgFeatures = useAppSelector<span class="cstat-no" title="statement not covered" >(listOrganizationFeatures(orgFeaturesRequestId));</span>
+  const [orgFeature<span class="cstat-no" title="statement not covered" >sRequestId, setOrgFeaturesReque</span>stId] = useState&lt;string&gt;('');
+  const orgFeatures = useAppSelector(l<span class="cstat-no" title="statement not covered" >istOrganizationFeatures(orgFeaturesRequestId));</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const { isAllowedVie<span class="cstat-no" title="statement not covered" >wConsole } = useAccelera</span>torConsole();
-  const { activeLocal<span class="cstat-no" title="statement not covered" >e } = useLocalization();</span>
+  const { isAllowed<span class="cstat-no" title="statement not covered" >ViewConsole } = useAccelera</span>torConsole();
+  const { strings } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const { currentAccelerat<span class="cstat-no" title="statement not covered" >orProject, setCurrentAcceleratorPr</span>oject, projectsWithModules, allAcceleratorProjects } =
     useParticipantData();<span class="cstat-no" title="statement not covered" ></span>
 <span class="fstat-no" title="function not covered" ></span>
@@ -1110,7 +1109,7 @@ export default functio<span class="cstat-no" title="statement not covered" >n Na
   const isPlantingSitesRoute = useMatch({ path: APP_PATHS.<span class="cstat-no" title="statement not covered" >PLANTING_SITES + '/', end: fals</span>e });
   const isPlantsDashbo<span class="cstat-no" title="statement not covered" >ardRoute = useMatch({ path: APP_PATHS.PLANTS_DASHBOARD + '/', end: false });</span>
   const isWithdrawalLogRoute = useM<span class="cstat-no" title="statement not covered" >atch({ path: APP_PATHS.NURSERY_WITHDRAWALS +</span> '/', end: false });
-  const isReassignmentRoute<span class="cstat-no" title="statement not covered" > = useMatch({ path: APP_PATHS.NURSER</span>Y_REASSIGNMENT + '/', end: false });
+  const isReassignment<span class="cstat-no" title="statement not covered" >Route = useMatch({ path: APP_PATHS.N</span>URSERY_REASSIGNMENT + '/', end: false });
   const isReportsRoute = useMatch({ path: APP_PATHS.REPORTS + '/', end: false });<span class="cstat-no" title="statement not covered" ></span>
   const isSeedFundReportsRoute = use<span class="cstat-no" title="statement not covered" >Match({ path: APP_PATHS.SEED_FUND_REPORTS + '/', end: false });</span>
   const isObservationsRoute <span class="cstat-no" title="statement not covered" >= useMatch({ path: APP_PATHS.OBSERVATIONS + '/', end: false });</span>
@@ -1199,7 +1198,7 @@ export default functio<span class="cstat-no" title="statement not covered" >n Na
 &nbsp;
   const deliverablesMenu = useMemo&lt;JSX.Element | null&gt;(
     () =&gt;<span class="fstat-no" title="function not covered" ></span>
-      !!or<span class="cstat-no" title="statement not covered" >gFeatures?.data?.deliverables?.enabled &amp;&amp; activeLocale ? (</span>
+      orgF<span class="cstat-no" title="statement not covered" >eatures?.data?.deliverables?.enabled ? (</span>
         &lt;NavItem
           label={strings.DELIVERABLES}
           icon='iconSubmit'
@@ -1213,7 +1212,7 @@ export default functio<span class="cstat-no" title="statement not covered" >n Na
 <span class="cstat-no" title="statement not covered" >      ) : null,</span>
     [
       orgFeatures?.data?.deliverables?.enabled,
-      activeLocale,
+      strings.DELIVERABLES,
       isDeliverablesRoute,
       mixpanel,
       closeAndNavig<span class="fstat-no" title="function not covered" >at</span>eTo,
@@ -1225,32 +1224,31 @@ export default functio<span class="cstat-no" title="statement not covered" >n Na
     () =&gt;
       isAllowed('READ_REPORTS', { organization: selectedOrganization }) &amp;&amp;
       !!orgFeatures?.data?.reports?.enabled &amp;&amp;
-      allAcceleratorProjects.length &gt; 0 &amp;&amp;
-      activeLocale ? (
+      allAcceleratorProjects.length &gt; 0 ? (
         &lt;NavItem
           icon='iconGraphReport'
           label={strings.REPORTS}
           selected={!!isReportsRoute}
           onClick={() =&gt; {
             closeAndNavigateTo(APP_PATHS.REPORTS);
-          }}<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" ></span>          id='reports-list'
-        /&gt;
-<span class="cstat-no" title="statement not covered" >      ) : null,</span>
-    [
-      activeLocale,
+          }}
+          id='reports-<span class="cstat-no" title="statement not covered" >list'</span>
+<span class="fstat-no" title="function not covered" ></span>        /&gt;
+      ) : null,
+    [<span class="cstat-no" title="statement not covered" ></span>
       allAcceleratorProjects.length,
       closeAndNavigateTo,
       isAllowed,
-      isReportsRout<span class="fstat-no" title="function not covered" >e,</span>
-      orgFea<span class="cstat-no" title="statement not covered" >tures?.data?.reports?.enabled,</span>
-      selectedOrganization,
+      isReportsRoute,
+      orgFeatures?.data?.reports?.enabled,
+      selectedOrgan<span class="fstat-no" title="function not covered" >iz</span>ation,
+      string<span class="cstat-no" title="statement not covered" >s.REPORTS,</span>
     ]
   );
 &nbsp;
   const seedFundReportsMenu = useMemo&lt;JSX.Element | null&gt;(
     () =&gt;
-      selectedOrganization?.canSubmitReports &amp;&amp; isAdmin(selectedOrganization) &amp;&amp; activeLocale ? (
+      selectedOrganization?.canSubmitReports &amp;&amp; isAdmin(selectedOrganization) ? (
         &lt;NavItem
           icon='iconGraphReport'
           label={strings.SEED_FUND_REPORTS}
@@ -1259,75 +1257,77 @@ export default functio<span class="cstat-no" title="statement not covered" >n Na
             closeAndNavigateTo(APP_PATHS.SEED_FUND_REPORTS);
           }}
           id='seed-fund-reports-list'
-        /&gt;<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" ></span>      ) : <span class="cstat-no" title="statement not covered" >null,</span>
-    [activeLocale, closeAndNavigateTo, isSeedFundReportsRoute, selectedOrganization]
+        /&gt;
+      ) : null,<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" >    [c</span>lose<span class="cstat-no" title="statement not covered" >AndNavigateTo, isSeedFundReportsRoute, selectedOrganization, strings.SEED_FUND_REPORTS]</span>
   );
 &nbsp;
   const modulesMenu = useMemo&lt;JSX.Element | null&gt;(
     () =&gt;
-      currentAcce<span class="fstat-no" title="function not covered" >le</span>ratorProject &amp;&amp;
-      !!or<span class="cstat-no" title="statement not covered" >gFeatures?.data?.modules?.enabled &amp;&amp;</span>
-      isManagerOrHigher(selectedOrganization) &amp;&amp;
-      activeLocale ? (
-        &lt;NavItem
-          icon='iconModule'
+      currentAcceleratorProject &amp;&amp; !!orgFeatures?.data?.modules?.enabled &amp;&amp; isManagerOrHigher(selectedOrganization) ? (
+        &lt;NavItem<span class="fstat-no" title="function not covered" ></span>
+<span class="cstat-no" title="statement not covered" >          icon='iconModule'</span>
           label={strings.MODULES}
           selected={!!isProjectModulesRoute}
-          onClick={() <span class="cstat-no" title="statement not covered" >=&gt; {</span>
-<span class="fstat-no" title="function not covered" ></span>            mixpanel?.track(MIXPANEL_EVENTS.PART_EX_LEFT_NAV_MODULES);
+          onClick={() =&gt; {
+            mixpanel?.track(MIXPANEL_EVENTS.PART_EX_LEFT_NAV_MODULES);
             closeAndNavigateTo(
-<span class="cstat-no" title="statement not covered" >              APP_PATHS.PROJECT_MODULES.replace(':projectId', currentAcceleratorProject.id.toString())</span>
-            );
-          }}
+              APP_PATHS.PROJECT_MODULES.replace(':projectId', currentAcceleratorProject.id.toString())
+            );<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" ></span>          }}
           id='modules-list'
-        /&gt;
+<span class="cstat-no" title="statement not covered" >        /&gt;</span>
       ) : null,
-    [<span class="fstat-no" title="function not covered" ></span>
-      active<span class="cstat-no" title="statement not covered" >Locale,</span>
-      closeA<span class="cstat-no" title="statement not covered" >ndNavigateTo,</span>
+    [
+      closeAndNavigateTo,
       currentAcceleratorProject,
       isProjectModulesRoute,
-      mixpanel,
-      orgFeatures?.data?.modules?.enabled,
-      selectedOrganization,
+      mixpanel,<span class="fstat-no" title="function not covered" ></span>
+      orgFea<span class="cstat-no" title="statement not covered" >tures?.data?.modules?.enabled,</span>
+      select<span class="cstat-no" title="statement not covered" >edOrganization,</span>
+      strings.MODULES,
     ]
   );
 &nbsp;
   const activityLogMenu = useMemo&lt;JSX.Element | null&gt;(
     () =&gt;
-      isAllowed('READ_ACTIVITIES', { organization: selectedOrganization }) &amp;&amp;
-      currentAcceleratorProject &amp;&amp;
-      activeLocale ? (
+      isAllowed('READ_ACTIVITIES', { organization: selectedOrganization }) &amp;&amp; currentAcceleratorProject ? (
         &lt;NavItem
           icon='checklist'
           id='activity-log'
           label={strings.ACTIVITY_LOG}
-          onClick={() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span>            closeAndNavigateTo(APP_PATHS.ACTIVITY_LOG);</span>
+          onClick={() =&gt; {
+            closeAndNavigateTo(APP_PATHS.ACTIVITY_LOG);
           }}
           selected={!!isActivityLogRoute}
         /&gt;
       ) : null,
-    [activeLocale, closeAndNavigateTo, currentAcceleratorProject, isActivityLogRoute, isAllowed, selectedOrganization]
-  );<span class="fstat-no" title="function not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span>
+    [<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" ></span>      clos<span class="cstat-no" title="statement not covered" >eAndNavigateTo,</span>
+      currentAcceleratorProject,
+      isActivityLogRoute,
+      isAllowed,
+      selectedOrganization,
+      strings.ACTIVITY_LOG,
+    ]<span class="fstat-no" title="function not covered" ></span>
+  );<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
   const applicationMenu = useMemo&lt;JSX.Element | null&gt;(
     () =&gt;
-      !!orgFeatures?.data?.applications?.enabled &amp;&amp; activeLocale ? (
+      orgFeatures?.data?.applications?.enabled ? (
         &lt;NavItem
           label={
             &lt;Box
-              display='fle<span class="cstat-no" title="statement not covered" >x'</span>
-<span class="fstat-no" title="function not covered" ></span>              alignItems={'center'}
+              display='flex'
+              alignItems={'center'}
               padding={'11px 0px'}
-<span class="cstat-no" title="statement not covered" >              sx={{</span>
+              sx={{
                 '&amp;:hover': {
                   cursor: 'pointer',
-                },
-              }}
+                },<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" ></span>              }}
             &gt;
-              &lt;Icon name='iconFile' className='nav-item--icon' fillColor={theme.palette.TwClrIcnSecondary} /&gt;
+<span class="cstat-no" title="statement not covered" >              &lt;Icon name='iconFile' className='nav-item--icon' fillColor={theme.palette.TwClrIcnSecondary} /&gt;</span>
               &lt;Typography fontSize={'14px'} fontWeight={500} color={theme.palette.TwClrTxt} lineHeight={'normal'}&gt;
                 {strings.APPLICATION}
               &lt;/Typography&gt;
@@ -1341,177 +1341,177 @@ export default functio<span class="cstat-no" title="statement not covered" >n Na
           id='applications-list'
         /&gt;
       ) : null,
-    [<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-      activeLocale,
+    [
       closeAndNavigateTo,
       isApplicationRoute,
       orgFeatures?.data?.applications?.enabled,
+      strings.APPLICATION,
       theme.palette.TwClrIcnSecondary,
-      theme.palette.TwClrTxt,
+      theme.palette<span class="fstat-no" title="function not covered" >.T</span>wClr<span class="cstat-no" title="statement not covered" >Txt,</span>
     ]
   );
 &nbsp;
   const acceleratorSectionTitle = useMemo&lt;string&gt;(
     () =&gt; (deliverablesMenu || modulesMenu ? strings.ACCELERATOR.toUpperCase() : ''),
-    [deliverablesMenu, modulesMenu]
+    [deliverablesMenu, modulesMenu, strings.ACCELERATOR]
   );
-<span class="cstat-no" title="statement not covered" ></span>
-  re<span class="fstat-no" title="function not covered" >tu</span>rn (<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
+  return (
     &lt;Navbar
       setShowNavBar={setShowNavBar as React.Dispatch&lt;React.SetStateAction&lt;boolean&gt;&gt;}
-<span class="cstat-no" title="statement not covered" >      backgroundTransparent={backgroundTransparent}</span>
+      backgroundTransparent={backgroundTransparent}
     &gt;
-      {isMobile &amp;&amp; isAllowedViewConsole &amp;&amp; (
-        &lt;NavItem
+      {isMobile &amp;&amp; isAllowedViewCo<span class="cstat-no" title="statement not covered" >nsole &amp;&amp; (</span>
+<span class="fstat-no" title="function not covered" ></span>        &lt;N<span class="cstat-no" title="statement not covered" >avItem</span>
           label={strings.ACCELERATOR_CONSOLE}
           icon='home'
-          onClick={() =&gt; closeAndNavigateTo(APP_PATHS.ACCELERATOR_PROJECTS)}
+<span class="cstat-no" title="statement not covered" >          onClick={() =&gt; closeAndNavigateTo(APP_PATHS.ACCELERATOR_PROJECTS)}</span>
           id='console'
         /&gt;
       )}
       &lt;NavItem
-        label={st<span class="fstat-no" title="function not covered" >ri</span>ngs.<span class="cstat-no" title="statement not covered" >HOME}</span>
+        label={strings.HOME}
         icon='home'
         selected={!!isHomeRoute}
         onClick={() =&gt; {
           closeAndNavigateTo(APP_PATHS.HOME);
         }}
-        id='home'
+        id='home'<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
       /&gt;
       &lt;NavItem
         label={strings.SPECIES}
-        icon='spe<span class="fstat-no" title="function not covered" >ci</span>es'
-        se<span class="cstat-no" title="statement not covered" >lected={!!isSpeciesRoute}</span>
+        icon='species'
+        selected={!!isSpeciesRoute}
         onClick={() =&gt; {
           closeAndNavigateTo(APP_PATHS.SPECIES);
         }}
         id='speciesNb'
-      /&gt;
-      {(applicationMenu ||
+      /&gt;<span class="fstat-no" title="function not covered" ></span>
+      {(ap<span class="cstat-no" title="statement not covered" >plicationMenu ||</span>
         deliverablesMenu ||
         modulesMenu ||
         activityLogMenu ||
         reportsMenu ||
-        seedFundR<span class="fstat-no" title="function not covered" >ep</span>ortsMenu) &amp;&amp; (
-        &lt;&gt;<span class="cstat-no" title="statement not covered" ></span>
+        seedFundReportsMenu) &amp;&amp; (
+        &lt;&gt;
           &lt;NavSection title={acceleratorSectionTitle} /&gt;
           {applicationMenu}
           {deliverablesMenu}
           {modulesMenu}
-          {activityLogMenu}
-          {reportsMenu}
+          {activi<span class="fstat-no" title="function not covered" >ty</span>LogMenu}
+<span class="cstat-no" title="statement not covered" >          {reportsMenu}</span>
           {seedFundReportsMenu}
         &lt;/&gt;
       )}
       &lt;NavSection /&gt;
       &lt;NavItem label={strings.SEEDS} icon='seeds' id='seeds'&gt;
-        &lt;SubNavba<span class="fstat-no" title="function not covered" >r&gt;</span>
-<span class="cstat-no" title="statement not covered" >          &lt;NavItem</span>
+        &lt;SubNavbar&gt;
+          &lt;NavItem
             label={strings.DASHBOARD}
             selected={!!isAccessionDashboardRoute}
             onClick={() =&gt; {
               closeAndNavigateTo(isAccessionDashboardRoute ? '' : APP_PATHS.SEEDS_DASHBOARD);
-            }}
-            id='seeds-dashboard'
+            }}<span class="fstat-no" title="function not covered" ></span>
+<span class="cstat-no" title="statement not covered" >            id='seeds-dashboard'</span>
           /&gt;
           &lt;NavItem
-            label<span class="fstat-no" title="function not covered" >={</span>strings.ACCESSIONS}
-<span class="cstat-no" title="statement not covered" >            selected={isAccessionsRoute || isCheckInRoute ? true : fa</span>lse}
+            label={strings.ACCESSIONS}
+            selected={isAccessionsRoute || isCheckInRoute ? true : false}
             onClick={() =&gt; {
               closeAndNavigateTo(APP_PATHS.ACCESSIONS);
             }}
             id='accessions'
-          /&gt;
-        &lt;/SubNavbar&gt;
+          /&gt;<span class="fstat-no" title="function not covered" ></span>
+        &lt;/<span class="cstat-no" title="statement not covered" >SubNavbar&gt;</span>
       &lt;/NavItem&gt;
       &lt;NavItem label={strings.SEEDLINGS} icon='iconSeedling' id='seedlings'&gt;
         &lt;SubNavbar&gt;{getSeedlingsMenuItems()}&lt;/SubNavbar&gt;
       &lt;/NavItem&gt;
-      &lt;NavItem la<span class="fstat-no" title="function not covered" >be</span>l={strings.PLANTS} icon='iconRestorationSite' id='plants'&gt;
-        &lt;S<span class="cstat-no" title="statement not covered" >ubNavbar&gt;</span>
+      &lt;NavItem label={strings.PLANTS} icon='iconRestorationSite' id='plants'&gt;
+        &lt;SubNavbar&gt;
           &lt;NavItem
             label={strings.DASHBOARD}
             selected={!!isPlantsDashboardRoute}
             onClick={() =&gt; {
-              closeAndNavigateTo(APP_PATHS.PLANTS_DASHBOARD);
-            }}
+              clo<span class="fstat-no" title="function not covered" >se</span>AndNavigateTo(APP_PATHS.PLANTS_DASHBOARD);
+<span class="cstat-no" title="statement not covered" >            }}</span>
             id='plants-dashboard'
           /&gt;
-          {hasPla<span class="fstat-no" title="function not covered" >nt</span>ingSites === true ? (
-<span class="cstat-no" title="statement not covered" >            &lt;NavItem</span>
+          {hasPlantingSites === true ? (
+            &lt;NavItem
               label={strings.OBSERVATIONS}
               selected={!!isObservationsRoute}
               onClick={() =&gt; {
                 closeAndNavigateTo(APP_PATHS.OBSERVATIONS);
-              }}
-              id='observations'
+              }}<span class="fstat-no" title="function not covered" ></span>
+<span class="cstat-no" title="statement not covered" >              id='observations'</span>
             /&gt;
           ) : (
             &lt;&gt;&lt;/&gt;
           )}
         &lt;/SubNavbar&gt;
-      &lt;/NavItem&gt;<span class="fstat-no" title="function not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span>
+      &lt;/NavItem&gt;
+&nbsp;
       &lt;NavSection title={strings.SETTINGS.toUpperCase()} /&gt;
       {isAdmin(selectedOrganization) &amp;&amp; (
         &lt;NavItem
           label={strings.ORGANIZATION}
-          icon='organizationNav'
-          selected={!!isOrganizationRoute}
+          icon='o<span class="fstat-no" title="function not covered" >rg</span>anizationNav'
+<span class="cstat-no" title="statement not covered" >          selected={!!isOrganizationRoute}</span>
           onClick={() =&gt; {
             closeAndNavigateTo(isOrganizationRoute ? '' : APP_PATHS.ORGANIZATION);
           }}
           id='organization'
-        /&gt;<span class="fstat-no" title="function not covered" ></span>
-      )}<span class="cstat-no" title="statement not covered" ></span>
+        /&gt;
+      )}
       &lt;NavItem
         label={strings.PEOPLE}
         icon='peopleNav'
         selected={!!isPeopleRoute}
-        onClick={() =&gt; {
-          closeAndNavigateTo(APP_PATHS.PEOPLE);
+        onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; {
+<span class="cstat-no" title="statement not covered" >          closeAndNavigateTo(APP_PATHS.PEOPLE);</span>
         }}
         id='people'
       /&gt;
       {isAdmin(selectedOrganization) &amp;&amp; (
-        &lt;&gt;<span class="fstat-no" title="function not covered" ></span>
-<span class="cstat-no" title="statement not covered" >          &lt;NavItem</span>
+        &lt;&gt;
+          &lt;NavItem
             label={strings.PROJECTS}
             icon='iconFolder'
             selected={!!(isProjectsRoute || isProjectRoute)}
             onClick={() =&gt; {
-              closeAndNavigateTo(APP_PATHS.PROJECTS);
-            }}
+              clo<span class="fstat-no" title="function not covered" >se</span>AndNavigateTo(APP_PATHS.PROJECTS);
+<span class="cstat-no" title="statement not covered" >            }}</span>
             id='projects'
           /&gt;
-          &lt;NavIte<span class="fstat-no" title="function not covered" >m </span>label={strings.LOCATIONS} icon='iconMyLocation' id='locations'&gt;
-<span class="cstat-no" title="statement not covered" >            &lt;SubNavbar&gt;</span>
+          &lt;NavItem label={strings.LOCATIONS} icon='iconMyLocation' id='locations'&gt;
+            &lt;SubNavbar&gt;
               &lt;NavItem
                 label={strings.SEED_BANKS}
                 selected={!!isSeedBanksRoute}
                 onClick={() =&gt; {
-                  closeAndNavigateTo(APP_PATHS.SEED_BANKS);
-                }}
+<span class="fstat-no" title="function not covered" >                  c</span>loseAndNavigateTo(APP_PATHS.SEED_BANKS);
+<span class="cstat-no" title="statement not covered" >                }}</span>
                 id='seedbanks'
               /&gt;
-              &lt;Na<span class="fstat-no" title="function not covered" >vI</span>tem
-<span class="cstat-no" title="statement not covered" >                label={strings.NURSERIES}</span>
+              &lt;NavItem
+                label={strings.NURSERIES}
                 selected={!!isNurseriesRoute}
                 onClick={() =&gt; {
                   closeAndNavigateTo(APP_PATHS.NURSERIES);
                 }}
-                id='nurseries'
-              /&gt;
+                i<span class="fstat-no" title="function not covered" >d=</span>'nurseries'
+<span class="cstat-no" title="statement not covered" >              /&gt;</span>
               &lt;NavItem
                 label={strings.PLANTING_SITES}
-                s<span class="fstat-no" title="function not covered" >el</span>ected={!!isPlantingSitesRoute}
-<span class="cstat-no" title="statement not covered" >                onClick={() =&gt; {</span>
+                selected={!!isPlantingSitesRoute}
+                onClick={() =&gt; {
                   closeAndNavigateTo(APP_PATHS.PLANTING_SITES);
                 }}
                 id='plantingSites'
               /&gt;
-            &lt;/SubNavbar&gt;
-          &lt;/NavItem&gt;
+            &lt;/Sub<span class="fstat-no" title="function not covered" >Na</span>vbar&gt;
+<span class="cstat-no" title="statement not covered" >          &lt;/NavItem&gt;</span>
         &lt;/&gt;
       )}
 &nbsp;
@@ -1528,7 +1528,7 @@ export default functio<span class="cstat-no" title="statement not covered" >n Na
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-24T01:33:21.561Z
+                at 2026-02-24T16:16:24.391Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

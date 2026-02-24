@@ -1,3 +1,4 @@
+b1cb28e00ffc SW-8050 Added empty states for observations pages (#5300)
 26aa8736649a Removed status column and showed assigned plot observation progress (#5299)
 7c06d8611052 Renamed state to status for observation drawer (#5298)
 0ac12e93f4cf Changed survival rate message placement (#5297)
