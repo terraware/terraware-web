@@ -228,12 +228,6 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
       });
     }
     if (origin === 'Species') {
-      columnsToReturn.push({
-        name: 'showEmptySpecies',
-        label: strings.FILTER_SHOW_EMPTY_SPECIES,
-        showLabel: false,
-        type: 'boolean',
-      });
       if (nurseries.length > 0) {
         columnsToReturn.push({
           name: 'facilityIds',
@@ -241,6 +235,12 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
           type: 'multiple_selection',
         });
       }
+      columnsToReturn.push({
+        name: 'showEmptySpecies',
+        label: strings.FILTER_SHOW_EMPTY_SPECIES,
+        showLabel: false,
+        type: 'boolean',
+      });
     }
     if (origin === 'Nursery') {
       columnsToReturn.push({
@@ -780,6 +780,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                               initialFilters={filterGroupFilters}
                               fields={filterGroupColumns}
                               optionsRenderer={filterGroupOptionsRenderer}
+                              noScroll
                               onConfirm={(_filterGroupFilters: Record<string, SearchNodePayload>) => {
                                 handleFilterClose();
                                 setFilterGroupFilters(_filterGroupFilters);
