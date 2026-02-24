@@ -1032,14 +1032,14 @@ const ObservationMap = ({
         visible: deadPlantsVisible,
       },
       {
-        markers: treesMarkers(true),
+        markers: treesMarkers(false),
         markerGroupId: 'live-trees',
         onClusterClick: selectTreesFromMarkers,
         style: livePlantStyle,
         visible: livePlantsVisible,
       },
       {
-        markers: treesMarkers(false),
+        markers: treesMarkers(true),
         markerGroupId: 'dead-trees',
         onClusterClick: selectTreesFromMarkers,
         style: deadPlantStyle,
