@@ -1,7 +1,7 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, Grid, Popover, Tooltip, useTheme } from '@mui/material';
-import { Button, EditableTable, EditableTableColumn, TableColumnType } from '@terraware/web-components';
+import { Box, Grid, IconButton, Popover, Tooltip, useTheme } from '@mui/material';
+import { Button, EditableTable, EditableTableColumn, Icon, TableColumnType } from '@terraware/web-components';
 import _, { isArray } from 'lodash';
 import {
   MRT_Cell,
@@ -10,6 +10,7 @@ import {
   MRT_RowSelectionState,
   MRT_ShowHideColumnsButton,
   MRT_SortingState,
+  MRT_TableInstance,
   MRT_ToggleDensePaddingButton,
   MRT_ToggleFiltersButton,
   MRT_ToggleFullScreenButton,
@@ -30,6 +31,7 @@ import { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilte
 import Search from 'src/scenes/InventoryRouter/Search';
 import { NurseryBatchService } from 'src/services';
 import { SearchNodePayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
+import { downloadCsv } from 'src/utils/csv';
 import { useSessionFilters } from 'src/utils/filterHooks/useSessionFilters';
 import { getAllNurseries } from 'src/utils/organization';
 import useForm from 'src/utils/useForm';
@@ -623,6 +625,33 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
     return false;
   });
 
+  const handleExport = useCallback(
+    (table: MRT_TableInstance<SearchResponseElement>) => {
+      const visibleColumns = table
+        .getVisibleLeafColumns()
+        .filter((col) => !col.id.startsWith('mrt-') && col.id !== 'quantitiesMenu');
+      const filteredRows = table.getFilteredRowModel().rows;
+
+      const escape = (val: unknown): string => {
+        const s = val === null || val === undefined ? '' : String(val).replace(/\r/g, ', ');
+        return `"${s.replace(/"/g, '""')}"`;
+      };
+
+      const headers = visibleColumns.map((col) => {
+        const h = col.columnDef.header;
+        return escape(typeof h === 'string' ? h : col.id);
+      });
+
+      const csvLines = [
+        headers.join(','),
+        ...filteredRows.map((row) => visibleColumns.map((col) => escape(row.getValue(col.id))).join(',')),
+      ];
+
+      downloadCsv(`inventory-${origin.toLowerCase()}`, csvLines.join('\n'));
+    },
+    [origin]
+  );
+
   return (
     <Box position={'relative'}>
       <DeleteBatchesModal open={openDeleteModal} onClose={onCloseDeleteBatchesModal} onSubmit={deleteSelectedBatches} />
@@ -743,6 +772,11 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                   ),
                   renderToolbarInternalActions: ({ table }) => (
                     <Box display='flex' gap={0.5}>
+                      <Tooltip title={strings.EXPORT}>
+                        <IconButton onClick={() => handleExport(table)}>
+                          <Icon name='iconExport' size='medium' />
+                        </IconButton>
+                      </Tooltip>
                       {filterGroupColumns.length > 0 && (
                         <>
                           <Tooltip title={strings.FILTER}>
