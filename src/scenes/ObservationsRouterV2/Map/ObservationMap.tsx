@@ -184,6 +184,10 @@ const ObservationMap = ({
   const [selectedAdHocObservationId, setSelectedAdHocObservationId] = useState<number | 'all'>('all');
 
   useEffect(() => {
+    setSelectedAdHocObservationId('all');
+  }, [adHocObservationResults]);
+
+  useEffect(() => {
     if (observationResultsOptions.length) {
       setSelectedObservationId(Number(observationResultsOptions[0].value));
     } else {
@@ -320,10 +324,12 @@ const ObservationMap = ({
           if (plots.find((plot) => plot.monitoringPlotId === Number(featureId))) {
             observed = true;
           }
-        } else if (layerId === 'adHocPlots') {
-          if (selectedResults.adHocPlot) {
-            observed = true;
-          }
+        }
+      }
+
+      if (layerId === 'adHocPlots') {
+        if (selectedAdHocResults.find((result) => result.adHocPlot?.monitoringPlotId === Number(featureId))) {
+          observed = true;
         }
       }
 
@@ -333,7 +339,7 @@ const ObservationMap = ({
         return undefined;
       }
     },
-    [selectFeature, selectedResults]
+    [selectFeature, selectedAdHocResults, selectedResults]
   );
 
   const layers = useMemo((): MapLayer[] => {
@@ -1172,13 +1178,22 @@ const ObservationMap = ({
           />
         );
       } else {
-        return (
-          <ObservationStatsDrawer
-            layerFeatureId={selectedFeature.layerFeatureId}
-            observationId={selectedResults.observationId}
-            plantingSiteId={selectedFeature.plantingSiteId}
-          />
-        );
+        const observationId =
+          selectedFeature.layerFeatureId.layerId === 'adHocPlots'
+            ? selectedAdHocResults.find(
+                (result) => result.adHocPlot?.monitoringPlotId === Number(selectedFeature.layerFeatureId.featureId)
+              )?.observationId
+            : selectedResults.observationId;
+
+        if (observationId) {
+          return (
+            <ObservationStatsDrawer
+              layerFeatureId={selectedFeature.layerFeatureId}
+              observationId={observationId}
+              plantingSiteId={selectedFeature.plantingSiteId}
+            />
+          );
+        }
       }
     }
     if (selectedPhotos.length > 0) {
@@ -1194,6 +1209,7 @@ const ObservationMap = ({
     isBiomass,
     photoDrawerContent,
     plantDrawerContent,
+    selectedAdHocResults,
     selectedFeature,
     selectedPhotos.length,
     selectedPlants.length,
