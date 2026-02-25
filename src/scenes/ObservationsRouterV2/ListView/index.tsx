@@ -127,12 +127,14 @@ const ObservationListView = (): JSX.Element => {
   }, [navigate, scheduleObservationEnabled, strings.SCHEDULE_OBSERVATION]);
 
   useEffect(() => {
+    const siteId = selectedPlantingSiteId === -1 ? undefined : selectedPlantingSiteId;
     if (selectedOrganization) {
       if (activeTab === 'biomassMeasurements') {
         void countObservations(
           {
             organizationId: selectedOrganization.id,
             observationType: 'Biomass Measurements',
+            plantingSiteId: siteId,
           },
           true
         );
@@ -141,12 +143,13 @@ const ObservationListView = (): JSX.Element => {
           {
             organizationId: selectedOrganization.id,
             observationType: 'Monitoring',
+            plantingSiteId: siteId,
           },
           true
         );
       }
     }
-  }, [activeTab, countObservations, selectedOrganization]);
+  }, [activeTab, countObservations, selectedOrganization, selectedPlantingSiteId]);
 
   return (
     <Page
