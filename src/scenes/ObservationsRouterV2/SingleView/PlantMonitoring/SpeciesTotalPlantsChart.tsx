@@ -10,13 +10,13 @@ export type SpeciesTotalPlantsChartProps = {
   chartId: string;
   minHeight?: string;
   species?: ObservationSpeciesResults[];
-  isCompleted: boolean;
+  isNotCompleted?: boolean;
 };
 
 export default function SpeciesTotalPlantsChart({
   minHeight,
   species,
-  isCompleted,
+  isNotCompleted,
 }: SpeciesTotalPlantsChartProps): JSX.Element {
   type Data = {
     labels: string[];
@@ -53,7 +53,7 @@ export default function SpeciesTotalPlantsChart({
 
   return (
     <Box position='relative'>
-      {!isCompleted && (
+      {isNotCompleted && (
         <Box
           sx={{
             backgroundColor: theme.palette.TwClrBgSecondary,
