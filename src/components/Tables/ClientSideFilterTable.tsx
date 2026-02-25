@@ -25,6 +25,7 @@ export interface ClientSideFilterTableProps
   clientSortedFields?: string[];
   columns: TableColumnType[] | ((activeLocale: string | null) => TableColumnType[]);
   defaultSortOrder: SearchSortOrder;
+  emptyState?: React.ReactNode;
   extraComponent?: React.ReactNode;
   extraTableFilters?: SearchNodePayload[];
   featuredFilters?: FilterConfigWithValues[];
@@ -45,6 +46,7 @@ const ClientSideFilterTable = (props: ClientSideFilterTableProps) => {
     clientSortedFields,
     columns,
     defaultSortOrder,
+    emptyState,
     extraComponent,
     extraTableFilters,
     featuredFilters,
@@ -233,18 +235,22 @@ const ClientSideFilterTable = (props: ClientSideFilterTableProps) => {
           />
         </Grid>
 
-        <Grid item xs={12}>
-          <OrderPreservedTable
-            {...tableProps}
-            columns={tableColumns}
-            id={id}
-            isPresorted={!!searchSortOrder}
-            order={searchSortOrder?.direction === 'Ascending' ? 'asc' : 'desc'}
-            orderBy={searchSortOrder?.field || defaultSortOrder.field}
-            rows={_filteredSortedRows}
-            sortHandler={onSortChange}
-          />
-        </Grid>
+        {emptyState && !busy && _filteredSortedRows.length === 0 ? (
+          emptyState
+        ) : (
+          <Grid item xs={12}>
+            <OrderPreservedTable
+              {...tableProps}
+              columns={tableColumns}
+              id={id}
+              isPresorted={!!searchSortOrder}
+              order={searchSortOrder?.direction === 'Ascending' ? 'asc' : 'desc'}
+              orderBy={searchSortOrder?.field || defaultSortOrder.field}
+              rows={_filteredSortedRows}
+              sortHandler={onSortChange}
+            />
+          </Grid>
+        )}
       </Card>
     </Container>
   );

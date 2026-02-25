@@ -150,9 +150,27 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
         return [];
       }
 
+      const filteredMarkers = markers.filter(
+        (marker) =>
+          marker.latitude >= -90 && marker.latitude <= 90 && marker.longitude >= -180 && marker.longitude < 180
+      );
+
+      if (process.env.NODE_ENV === 'development') {
+        if (filteredMarkers.length !== markers.length) {
+          const invalidMarkers = markers.filter(
+            (marker) => filteredMarkers.find((validMarker) => marker.id === validMarker.id) === undefined
+          );
+
+          const invalidMarkerIds = invalidMarkers.map((marker) => marker.id).join(', ');
+
+          // eslint-disable-next-line no-console
+          console.log(`[MAP] Markers with invalid IDs: ${invalidMarkerIds}`);
+        }
+      }
+
       const visited = new Set<string>();
       const markerPixels: Record<string, Point> = {};
-      markers.forEach((marker) => {
+      filteredMarkers.forEach((marker) => {
         markerPixels[marker.id] = map.project({
           lat: marker.latitude,
           lon: marker.longitude,
@@ -161,10 +179,10 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
 
       const clusters: MapMarker[][] = [];
 
-      markers.forEach((marker, idx) => {
+      filteredMarkers.forEach((marker, idx) => {
         if (!visited.has(marker.id)) {
           const cluster = [marker];
-          markers.slice(idx + 1).forEach((otherMarker) => {
+          filteredMarkers.slice(idx + 1).forEach((otherMarker) => {
             if (!visited.has(otherMarker.id)) {
               const dx = markerPixels[marker.id].x - markerPixels[otherMarker.id].x;
               const dy = markerPixels[marker.id].y - markerPixels[otherMarker.id].y;
@@ -492,7 +510,6 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
         return [];
       }
 
-      // cluster markers here
       const clusteredMarkers = clusterMarkers(mapRef.current, markerGroup.markers, markerGroup.onClusterClick);
 
       return clusteredMarkers.map((cluster, i) => {

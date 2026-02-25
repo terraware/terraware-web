@@ -542,6 +542,15 @@ const ProjectProfileEdit = () => {
     [internalUsers]
   );
 
+  const hasInvalidUsers = useMemo(
+    () =>
+      !!globalUsersOptions &&
+      internalUsers.some(
+        (user) => user.userId !== undefined && !globalUsersOptions.some((opt) => opt.value === user.userId)
+      ),
+    [globalUsersOptions, internalUsers]
+  );
+
   const sortedSelectedModelTypes = useMemo(() => {
     return LAND_USE_MODEL_TYPES.filter((type) => acceleratorProjectRecord?.landUseModelTypes?.includes(type));
   }, [acceleratorProjectRecord?.landUseModelTypes]);
@@ -585,6 +594,7 @@ const ProjectProfileEdit = () => {
         cancelID='cancelNewAcceleratorProject'
         onCancel={handleOnCancel}
         onSave={handleSave}
+        saveDisabled={hasInvalidUsers}
         saveID='createNewAcceleratorProject'
       >
         <Box margin={theme.spacing(2, 3)}>
@@ -682,47 +692,58 @@ const ProjectProfileEdit = () => {
                     </Grid>
                   </Grid>
 
-                  {internalUsers.map((user, index) => (
-                    <Grid container key={`internal-user-${index}`} marginBottom='8px'>
-                      <Grid item md={6} paddingRight='8px'>
-                        <Dropdown
-                          autocomplete
-                          fullWidth
-                          hideClearIcon
-                          id={`internal-user-id-${index}`}
-                          label=''
-                          onChange={getOnChangeInternalUser(index)}
-                          options={getInternalUserOptions(user.userId)}
-                          placeholder={strings.SELECT}
-                          selectedValue={user?.userId}
-                        />
-                      </Grid>
-
-                      <Grid item md={showDeleteInternalUserButton ? 5 : 6}>
-                        <Dropdown
-                          autocomplete
-                          fullWidth
-                          hideClearIcon
-                          id={`internal-user-role-${index}`}
-                          label=''
-                          onChange={getOnChangeInternalUserRole(index)}
-                          options={internalUserRoleOptions}
-                          placeholder={strings.SELECT}
-                          selectedValue={internalUsers?.[index]?.role || internalUsers?.[index]?.roleName}
-                        />
-                      </Grid>
-
-                      {showDeleteInternalUserButton && (
-                        <Grid item xs={1} display={'flex'} flexDirection={'column'}>
-                          <Link onClick={getOnRemoveInternalUser(index)} style={{ height: '100%' }}>
-                            <Box paddingTop='8px'>
-                              <Icon name='iconSubtract' size='medium' />
-                            </Box>
-                          </Link>
+                  {internalUsers.map((user, index) => {
+                    const isInvalidUser =
+                      !!globalUsersOptions &&
+                      user.userId !== undefined &&
+                      !globalUsersOptions.some((opt) => opt.value === user.userId);
+                    return (
+                      <Grid container key={`internal-user-${index}`} marginBottom='8px'>
+                        <Grid item md={6} paddingRight='8px'>
+                          <Dropdown
+                            autocomplete
+                            fullWidth
+                            hideClearIcon
+                            id={`internal-user-id-${index}`}
+                            label=''
+                            onChange={getOnChangeInternalUser(index)}
+                            options={getInternalUserOptions(user.userId)}
+                            placeholder={strings.SELECT}
+                            selectedValue={user?.userId}
+                          />
+                          {isInvalidUser && (
+                            <Typography color='error' fontSize='12px' marginTop='4px'>
+                              {strings.INVALID_USER_SELECT_DELETE}
+                            </Typography>
+                          )}
                         </Grid>
-                      )}
-                    </Grid>
-                  ))}
+
+                        <Grid item md={showDeleteInternalUserButton ? 5 : 6}>
+                          <Dropdown
+                            autocomplete
+                            fullWidth
+                            hideClearIcon
+                            id={`internal-user-role-${index}`}
+                            label=''
+                            onChange={getOnChangeInternalUserRole(index)}
+                            options={internalUserRoleOptions}
+                            placeholder={strings.SELECT}
+                            selectedValue={internalUsers?.[index]?.role || internalUsers?.[index]?.roleName}
+                          />
+                        </Grid>
+
+                        {showDeleteInternalUserButton && (
+                          <Grid item xs={1} display={'flex'} flexDirection={'column'}>
+                            <Link onClick={getOnRemoveInternalUser(index)} style={{ height: '100%' }}>
+                              <Box paddingTop='8px'>
+                                <Icon name='iconSubtract' size='medium' />
+                              </Box>
+                            </Link>
+                          </Grid>
+                        )}
+                      </Grid>
+                    );
+                  })}
 
                   <Grid container>
                     <Grid item md={6}>

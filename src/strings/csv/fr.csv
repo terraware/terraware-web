@@ -201,8 +201,8 @@ ASSIGN_OWNER,Attribuer un propriétaire,dc696cfa
 ASSIGN_OWNER_ELLIPSIS,Attribuer un propriétaire...,8053cd0e
 ASSIGNED,Désigné,29aa3dd8
 ASSIGNED_NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP,Le nombre de plants vivants par espèce indique le nombre de plants observés par espèce enregistrés comme vivants. Les plants enregistrés comme préexistants ou dont l'espèce est inconnue ne sont pas inclus.,526a70bc
-ASSIGNED_OBSERVATION,Observation attribuée,b242459e
-ASSIGNED_OBSERVATION_TOOLTIP,Sélectionnez une observation de parcelle attribuée pour afficher les données d'observation sur la carte.,2a1963a4
+ASSIGNED_PLOT_OBSERVATION,Observation de parcelle attribuée,9175acf6
+ASSIGNED_PLOT_OBSERVATION_TOOLTIP,Sélectionnez une observation de parcelle attribuée pour afficher les données d'observation sur la carte.,2a1963a4
 ATTACH_IMAGES_OR_VIDEOS,Joindre une (des) image(s) ou une (des) vidéo(s),c229aa87
 ATTACHMENT_DESCRIPTION,Joindre jusqu'à {0} fichiers. Chaque fichier a une taille maximale de {1}MB.,8ba18a63
 ATTACHMENT_LIMIT_REACHED,Limite de pièces jointes atteinte,9f9323bc
@@ -871,6 +871,7 @@ INTERNAL_LEADS,Responsables internes,ea24d417
 INTERNAL_LEADS_TOOLTIP,Le chef de projet et le responsable de la restauration sélectionnés se verront attribuer le rôle de contact Terraformation. Les contacts Terraformation ont accès à l'organisation des projets sur Terraware et reçoivent des notifications concernant les activités des projets sur Terraware.,3086312d
 INVALID_DATE,Date invalide,4945dd0d
 INVALID_EDITOR,Ce rapport est en cours d'édition par un autre utilisateur,6c883a63
+INVALID_USER_SELECT_DELETE,Utilisateur invalide ; veuillez sélectionner un utilisateur ou supprimer avant d’enregistrer,ae7a8dc1
 INVALID_VALUE,Valeur invalide,6efa77a5
 INVASIVE,Invasive,6d785c90
 INVASIVE_AND_THREATENED_SPECIES,Espèces envahissantes et menacées,d12cca9f

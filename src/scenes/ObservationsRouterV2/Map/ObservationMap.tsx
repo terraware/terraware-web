@@ -163,7 +163,29 @@ const ObservationMap = ({
     });
   }, [activeLocale, defaultTimezone, observationResults, plantingSite?.timeZone]);
 
+  const adHocPlotOptions = useMemo((): MapDropdownLegendItem[] => {
+    const plotOptions = adHocObservationResults.map((observation): MapDropdownLegendItem => {
+      return {
+        label: `${observation.adHocPlot?.monitoringPlotNumber}`,
+        value: `${observation.observationId}`,
+      };
+    });
+
+    return [
+      {
+        label: strings.ALL,
+        value: 'all',
+      },
+      ...plotOptions,
+    ];
+  }, [adHocObservationResults, strings.ALL]);
+
   const [selectedObservationId, setSelectedObservationId] = useState<number>();
+  const [selectedAdHocObservationId, setSelectedAdHocObservationId] = useState<number | 'all'>('all');
+
+  useEffect(() => {
+    setSelectedAdHocObservationId('all');
+  }, [adHocObservationResults]);
 
   useEffect(() => {
     if (observationResultsOptions.length) {
@@ -175,8 +197,8 @@ const ObservationMap = ({
 
   const observationDropdownLegendGroup = useMemo((): MapDropdownLegendGroup => {
     return {
-      title: strings.ASSIGNED_OBSERVATION,
-      tooltip: strings.ASSIGNED_OBSERVATION_TOOLTIP,
+      title: strings.ASSIGNED_PLOT_OBSERVATION,
+      tooltip: strings.ASSIGNED_PLOT_OBSERVATION_TOOLTIP,
       type: 'dropdown',
       items: observationResultsOptions,
       selectedValue: selectedObservationId !== undefined ? `${selectedObservationId}` : undefined,
@@ -184,15 +206,34 @@ const ObservationMap = ({
     };
   }, [observationResultsOptions, selectedObservationId, strings]);
 
+  const adHocObservationDropdownLegendGroup = useMemo((): MapDropdownLegendGroup => {
+    return {
+      title: strings.AD_HOC_PLOTS,
+      type: 'dropdown',
+      items: adHocPlotOptions,
+      selectedValue: `${selectedAdHocObservationId}`,
+      setSelectedValue: (value: string | undefined) =>
+        setSelectedAdHocObservationId(value === 'all' ? value : Number(value)),
+    };
+  }, [adHocPlotOptions, selectedAdHocObservationId, strings.AD_HOC_PLOTS]);
+
+  const selectedAdHocResults = useMemo(() => {
+    if (selectedAdHocObservationId === 'all') {
+      return adHocObservationResults;
+    } else {
+      return adHocObservationResults.filter((result) => selectedAdHocObservationId === result.observationId);
+    }
+  }, [adHocObservationResults, selectedAdHocObservationId]);
+
   const selectedResults = useMemo(() => {
     if (observationResults.length) {
       return observationResults.find((observation) => observation.observationId === selectedObservationId);
-    } else if (adHocObservationResults.length) {
-      return adHocObservationResults[0];
+    } else if (selectedAdHocResults.length) {
+      return selectedAdHocResults[0];
     } else {
       return undefined;
     }
-  }, [adHocObservationResults, observationResults, selectedObservationId]);
+  }, [observationResults, selectedAdHocResults, selectedObservationId]);
 
   const monitoringPlots = useMemo(() => {
     if (selectedResults) {
@@ -205,11 +246,11 @@ const ObservationMap = ({
   }, [selectedResults]);
 
   const adHocPlots = useMemo(() => {
-    return adHocObservationResults
+    return selectedAdHocResults
       .filter((observation) => observation.isAdHoc)
       .map((observation) => observation.adHocPlot)
       .filter((plot): plot is ObservationMonitoringPlotResultsPayload => plot !== undefined);
-  }, [adHocObservationResults]);
+  }, [selectedAdHocResults]);
 
   useEffect(() => {
     if (selectedResults && selectedResults.plantingSiteHistoryId) {
@@ -283,10 +324,12 @@ const ObservationMap = ({
           if (plots.find((plot) => plot.monitoringPlotId === Number(featureId))) {
             observed = true;
           }
-        } else if (layerId === 'adHocPlots') {
-          if (selectedResults.adHocPlot) {
-            observed = true;
-          }
+        }
+      }
+
+      if (layerId === 'adHocPlots') {
+        if (selectedAdHocResults.find((result) => result.adHocPlot?.monitoringPlotId === Number(featureId))) {
+          observed = true;
         }
       }
 
@@ -296,7 +339,7 @@ const ObservationMap = ({
         return undefined;
       }
     },
-    [selectFeature, selectedResults]
+    [selectFeature, selectedAdHocResults, selectedResults]
   );
 
   const layers = useMemo((): MapLayer[] => {
@@ -911,7 +954,7 @@ const ObservationMap = ({
   const treesMarkers = useCallback(
     (isDead: boolean): MapMarker[] => {
       if (isBiomass) {
-        return adHocObservationResults.flatMap((observation) => {
+        return selectedAdHocResults.flatMap((observation) => {
           const trees = observation.biomassMeasurements?.trees ?? [];
           return trees
             .filter((tree) => tree.isDead === isDead)
@@ -938,7 +981,7 @@ const ObservationMap = ({
         return [];
       }
     },
-    [adHocObservationResults, isBiomass, selectTree, selectedTrees]
+    [isBiomass, selectTree, selectedAdHocResults, selectedTrees]
   );
 
   const plantsMarkers = useCallback(
@@ -1032,14 +1075,14 @@ const ObservationMap = ({
         visible: deadPlantsVisible,
       },
       {
-        markers: treesMarkers(true),
+        markers: treesMarkers(false),
         markerGroupId: 'live-trees',
         onClusterClick: selectTreesFromMarkers,
         style: livePlantStyle,
         visible: livePlantsVisible,
       },
       {
-        markers: treesMarkers(false),
+        markers: treesMarkers(true),
         markerGroupId: 'dead-trees',
         onClusterClick: selectTreesFromMarkers,
         style: deadPlantStyle,
@@ -1078,6 +1121,9 @@ const ObservationMap = ({
       ...(isBiomass || isSingleView || plantingSiteId === undefined || observationResults.length === 0
         ? []
         : [observationDropdownLegendGroup]),
+      ...(isSingleView || plantingSiteId === undefined || adHocObservationResults.length <= 1
+        ? []
+        : [adHocObservationDropdownLegendGroup]),
       siteLegendGroup,
       monitoringPlotsLegendGroup,
       plotPhotosLegendGroup,
@@ -1085,15 +1131,17 @@ const ObservationMap = ({
       ...(isBiomass ? [] : [survivalRateLegendGroup]),
     ];
   }, [
-    observationDropdownLegendGroup,
-    observationResults,
     plantingSiteId,
     plantingSiteLegendGroup,
+    isBiomass,
+    isSingleView,
+    observationResults.length,
+    observationDropdownLegendGroup,
+    adHocObservationResults.length,
+    adHocObservationDropdownLegendGroup,
     monitoringPlotsLegendGroup,
     plotPhotosLegendGroup,
     plantMakersLegendGroup,
-    isBiomass,
-    isSingleView,
     survivalRateLegendGroup,
   ]);
 
@@ -1106,9 +1154,10 @@ const ObservationMap = ({
         setSelectedFeature(undefined);
         selectPhotos([]);
         selectPlants([]);
+        selectTrees([]);
       }
     },
-    [selectPhotos, selectPlants]
+    [selectPhotos, selectPlants, selectTrees]
   );
 
   useEffect(() => {
@@ -1117,7 +1166,7 @@ const ObservationMap = ({
     if (!virtualPlotParam) {
       setDrawerOpenCallback(false);
     }
-  }, [plantingSiteId, observationResults, adHocObservationResults, setDrawerOpenCallback, searchParams]);
+  }, [plantingSiteId, observationResults, selectedAdHocResults, setDrawerOpenCallback, searchParams]);
 
   const drawerContent = useMemo(() => {
     if (selectedFeature && selectedResults) {
@@ -1129,13 +1178,22 @@ const ObservationMap = ({
           />
         );
       } else {
-        return (
-          <ObservationStatsDrawer
-            layerFeatureId={selectedFeature.layerFeatureId}
-            observationId={selectedResults.observationId}
-            plantingSiteId={selectedFeature.plantingSiteId}
-          />
-        );
+        const observationId =
+          selectedFeature.layerFeatureId.layerId === 'adHocPlots'
+            ? selectedAdHocResults.find(
+                (result) => result.adHocPlot?.monitoringPlotId === Number(selectedFeature.layerFeatureId.featureId)
+              )?.observationId
+            : selectedResults.observationId;
+
+        if (observationId) {
+          return (
+            <ObservationStatsDrawer
+              layerFeatureId={selectedFeature.layerFeatureId}
+              observationId={observationId}
+              plantingSiteId={selectedFeature.plantingSiteId}
+            />
+          );
+        }
       }
     }
     if (selectedPhotos.length > 0) {
@@ -1151,6 +1209,7 @@ const ObservationMap = ({
     isBiomass,
     photoDrawerContent,
     plantDrawerContent,
+    selectedAdHocResults,
     selectedFeature,
     selectedPhotos.length,
     selectedPlants.length,
