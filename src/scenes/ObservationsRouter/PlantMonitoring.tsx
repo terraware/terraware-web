@@ -10,6 +10,7 @@ import { View } from 'src/components/common/ListMapSelector';
 import { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useGetAllT0SiteDataSetQuery } from 'src/queries/generated/t0';
 import { useGetPlotsWithObservationsQuery } from 'src/queries/search/t0';
@@ -37,6 +38,7 @@ export default function PlantMonitoring(props: PlantMonitoringProps): JSX.Elemen
   const theme = useTheme();
   const navigate = useSyncNavigate();
 
+  const newObservationViewEnabled = isEnabled('New Observation View');
   const [selectedPlotSelection, setSelectedPlotSelection] = useState<PlotSelectionType>('assigned');
   const allObservationsResults = useAppSelector(selectObservationsResults);
   const allAdHocObservationResults = useAppSelector(selectAdHocObservationResults);
@@ -73,16 +75,12 @@ export default function PlantMonitoring(props: PlantMonitoringProps): JSX.Elemen
     );
   }, [allAdHocObservationResults, selectedPlantingSite]);
 
-  const navigateToSurvivalRateSettings = useCallback(
-    () =>
-      navigate({
-        pathname: APP_PATHS.SURVIVAL_RATE_SETTINGS.replace(
-          ':plantingSiteId',
-          selectedPlantingSite?.id.toString() || ''
-        ),
-      }),
-    [navigate, selectedPlantingSite?.id]
-  );
+  const navigateToSurvivalRateSettings = useCallback(() => {
+    const baseUrl = newObservationViewEnabled ? APP_PATHS.SURVIVAL_RATE_SETTINGS_V2 : APP_PATHS.SURVIVAL_RATE_SETTINGS;
+    navigate({
+      pathname: baseUrl.replace(':plantingSiteId', selectedPlantingSite?.id.toString() || ''),
+    });
+  }, [navigate, newObservationViewEnabled, selectedPlantingSite?.id]);
 
   return (
     <Card>

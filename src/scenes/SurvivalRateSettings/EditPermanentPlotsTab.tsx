@@ -4,6 +4,7 @@ import { Box, useTheme } from '@mui/material';
 import { PageForm } from '@terraware/web-components';
 
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { useAssignT0SiteDataMutation } from 'src/queries/generated/t0';
@@ -35,6 +36,7 @@ const EditPermanentPlotsTab = ({
   const { reload: reloadPlantingSiteData } = usePlantingSiteData();
   const [updateT0, updateT0Result] = useAssignT0SiteDataMutation();
   const theme = useTheme();
+  const newObservationViewEnabled = isEnabled('New Observation View');
 
   const [record, setRecord] = useForm<AssignSiteT0Data>({
     plantingSiteId,
@@ -48,8 +50,9 @@ const EditPermanentPlotsTab = ({
   }, [plantingSiteId, setRecord, t0Plots]);
 
   const goToViewSettings = useCallback(() => {
-    navigate(APP_PATHS.SURVIVAL_RATE_SETTINGS.replace(':plantingSiteId', plantingSiteId.toString()));
-  }, [navigate, plantingSiteId]);
+    const baseUrl = newObservationViewEnabled ? APP_PATHS.SURVIVAL_RATE_SETTINGS_V2 : APP_PATHS.SURVIVAL_RATE_SETTINGS;
+    navigate(baseUrl.replace(':plantingSiteId', plantingSiteId.toString()));
+  }, [navigate, newObservationViewEnabled, plantingSiteId]);
 
   const getFilteredPlots = useCallback(() => {
     return record.plots.filter((plot) => {
