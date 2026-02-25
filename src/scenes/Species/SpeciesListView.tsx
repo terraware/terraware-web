@@ -677,7 +677,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
               enableHiding: true,
               enableColumnDragging: true,
               positionGlobalFilter: 'right',
-              getRowId: (_row, index) => String(index),
+              getRowId: (row) => String(row.id),
               renderToolbarInternalActions: ({ table }) => (
                 <Box display='flex' gap={0.5}>
                   <Tooltip title={strings.EXPORT}>
