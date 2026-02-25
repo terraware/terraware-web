@@ -1,23 +1,30 @@
 import React, { type JSX, useMemo } from 'react';
 
+import { Box, useTheme } from '@mui/material';
+
 import BarChart from 'src/components/common/Chart/BarChart';
+import { useLocalization } from 'src/providers';
 import { ObservationSpeciesResults } from 'src/types/Observations';
 
 export type SpeciesTotalPlantsChartProps = {
   chartId: string;
   minHeight?: string;
   species?: ObservationSpeciesResults[];
+  isNotCompleted?: boolean;
 };
 
 export default function SpeciesTotalPlantsChart({
   chartId,
   minHeight,
   species,
+  isNotCompleted,
 }: SpeciesTotalPlantsChartProps): JSX.Element {
   type Data = {
     labels: string[];
     values: number[];
   };
+  const theme = useTheme();
+  const { strings } = useLocalization();
 
   const totals = useMemo((): Data => {
     const data: Data = { labels: [], values: [] };
@@ -45,5 +52,28 @@ export default function SpeciesTotalPlantsChart({
     [totals]
   );
 
-  return <BarChart chartId={chartId} chartData={chartData} barWidth={0} minHeight={minHeight} />;
+  return (
+    <Box position='relative'>
+      {isNotCompleted && (
+        <Box
+          sx={{
+            backgroundColor: theme.palette.TwClrBgSecondary,
+            padding: '10px',
+            color: theme.palette.TwClrBaseBlack,
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            zIndex: 1,
+            borderRadius: '4px',
+            textAlign: 'center',
+            whiteSpace: 'nowrap',
+          }}
+        >
+          {strings.DATA_IS_NOT_YET_AVAILABLE}
+        </Box>
+      )}
+      <BarChart chartId={chartId} chartData={chartData} barWidth={0} minHeight={minHeight} />
+    </Box>
+  );
 }
