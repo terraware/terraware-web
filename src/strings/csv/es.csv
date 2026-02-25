@@ -872,6 +872,7 @@ INTERNAL_LEADS,Responsables internos,ea24d417
 INTERNAL_LEADS_TOOLTIP,El Responsable del proyecto y el Responsable de restauración seleccionados serán designados en el rol de Contacto de Terraformation. Los Contactos de Terraformation tienen acceso a la Organización de Proyectos en Terraware y reciben notificaciones sobre las actividades de los Proyectos en Terraware.,3086312d
 INVALID_DATE,Fecha no válida,4945dd0d
 INVALID_EDITOR,Este informe está siendo editado por otro usuario,6c883a63
+INVALID_USER_SELECT_DELETE,Usuario no válido; seleccione un usuario o elimine antes de guardar,ae7a8dc1
 INVALID_VALUE,Valor no válido,6efa77a5
 INVASIVE,Invasiva,6d785c90
 INVASIVE_AND_THREATENED_SPECIES,Especies invasoras y amenazadas,d12cca9f
