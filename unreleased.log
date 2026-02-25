@@ -1,3 +1,4 @@
+66d0b6e7d3fe Change resetdb script to update project_modules (#5269)
 8504ee4db7d9 SW-8094 Don't allow saving invalid internal leads (#5312)
 9b84b8d69a77 SW-8097 Hide module edit buttons if no permission (#5311)
 733d7e18771e Fixed a bug where ad-hoc plots were not clickable (#5310)
