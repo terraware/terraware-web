@@ -630,7 +630,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
       const visibleColumns = table
         .getVisibleLeafColumns()
         .filter((col) => !col.id.startsWith('mrt-') && col.id !== 'quantitiesMenu');
-      const filteredRows = table.getFilteredRowModel().rows;
+      const filteredRows = table.getSortedRowModel().rows;
 
       const escape = (val: unknown): string => {
         const s = val === null || val === undefined ? '' : String(val).replace(/\r/g, ', ');
@@ -884,6 +884,9 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                     sx: {
                       backgroundColor: theme.palette.TwClrBaseGray050,
                       '.MuiPaper-root': {
+                        padding: theme.spacing(1, 3),
+                      },
+                      '.MuiAlert-message': {
                         padding: theme.spacing(1, 3),
                       },
                     },

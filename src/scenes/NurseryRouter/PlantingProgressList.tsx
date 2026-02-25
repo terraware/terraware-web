@@ -506,7 +506,7 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
               <Tooltip title={strings.EXPORT}>
                 <IconButton
                   onClick={() => {
-                    const filteredRows = table.getFilteredRowModel().rows.map((row) => row.original);
+                    const filteredRows = table.getSortedRowModel().rows.map((row) => row.original);
                     void exportNurseryPlantingProgress({ plantingProgress: filteredRows });
                   }}
                 >
