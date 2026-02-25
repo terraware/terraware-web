@@ -205,24 +205,22 @@ const MonitoringPlotObservationDataTab = () => {
           </Box>
         </Box>
 
-        {monitoringPlot?.isPermanent && (
-          <Box flex={1} minWidth='500px'>
-            <Box display='flex' alignItems={'center'}>
-              <Typography fontSize={'20px'} fontWeight={600}>
-                {strings.SURVIVAL_RATE_PER_SPECIES_AS_OF_THIS_OBSERVATION}
-              </Typography>
-              <IconTooltip title={strings.SURVIVAL_RATE_PER_SPECIES_AS_OF_THIS_OBSERVATION_TOOLTIP} />
-            </Box>
-            <Box height='245px'>
-              <SpeciesSurvivalRateChart
-                chartId={'plotSpeciesSurvivalRate'}
-                minHeight='245px'
-                species={monitoringPlotSpecies}
-                isCompleted={!!monitoringPlot.completedTime}
-              />
-            </Box>
+        <Box flex={1} minWidth='500px'>
+          <Box display='flex' alignItems={'center'}>
+            <Typography fontSize={'20px'} fontWeight={600}>
+              {strings.SURVIVAL_RATE_PER_SPECIES_AS_OF_THIS_OBSERVATION}
+            </Typography>
+            <IconTooltip title={strings.SURVIVAL_RATE_PER_SPECIES_AS_OF_THIS_OBSERVATION_TOOLTIP} />
           </Box>
-        )}
+          <Box height='245px'>
+            <SpeciesSurvivalRateChart
+              chartId={'plotSpeciesSurvivalRate'}
+              minHeight='245px'
+              species={monitoringPlotSpecies}
+              isCompleted={!!monitoringPlot?.completedTime}
+            />
+          </Box>
+        </Box>
       </Box>
       <Box
         display={'flex'}
