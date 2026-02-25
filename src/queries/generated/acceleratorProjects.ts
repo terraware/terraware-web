@@ -51,16 +51,6 @@ export type ProjectAcceleratorDetailsPayload = {
   carbonCapacity?: number;
   carbonCertifications?: 'CCB Standard'[];
   clickUpLink?: string;
-  cohortId?: number;
-  cohortName?: string;
-  /** Use phase instead. */
-  cohortPhase?:
-    | 'Phase 0 - Due Diligence'
-    | 'Phase 1 - Feasibility Study'
-    | 'Phase 2 - Plan and Scale'
-    | 'Phase 3 - Implement and Monitor'
-    | 'Pre-Screen'
-    | 'Application';
   confirmedReforestableLand?: number;
   countryAlpha3?: string;
   countryCode?: string;

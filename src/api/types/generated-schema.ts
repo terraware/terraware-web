@@ -355,82 +355,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/accelerator/cohorts": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Gets the list of cohorts. */
-        get: operations["listCohorts"];
-        put?: never;
-        /** Creates a new cohort. */
-        post: operations["createCohort"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/accelerator/cohorts/{cohortId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Gets information about a single cohort. */
-        get: operations["getCohort"];
-        /** Updates the information within a single cohort. */
-        put: operations["updateCohort"];
-        post?: never;
-        /** Deletes a single cohort. */
-        delete: operations["deleteCohort"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/accelerator/cohorts/{cohortId}/modules": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** List cohort modules. */
-        get: operations["listCohortModules"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/accelerator/cohorts/{cohortId}/modules/{moduleId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Gets one cohort module. */
-        get: operations["getCohortModule"];
-        /**
-         * Updates the information about a module's use by a cohort.
-         * @description Adds the module to the cohort if it is not already associated.
-         */
-        put: operations["updateCohortModule"];
-        post?: never;
-        /** Deletes a module from a cohort if it is currently associated. */
-        delete: operations["deleteCohortModule"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/v1/accelerator/deliverables": {
         parameters: {
             query?: never;
@@ -848,7 +772,7 @@ export interface paths {
          */
         put: operations["updateProjectModule"];
         post?: never;
-        /** Deletes a module from a cohort if it is currently associated. */
+        /** Deletes a module from a project if it is currently associated. */
         delete: operations["deleteProjectModule"];
         options?: never;
         head?: never;
@@ -4925,8 +4849,6 @@ export interface components {
         };
         AcceleratorProjectPayload: {
             /** Format: int64 */
-            cohortId?: number;
-            /** Format: int64 */
             id: number;
             name: string;
         };
@@ -4938,8 +4860,6 @@ export interface components {
             endDate: string;
             feedback?: string;
             financialSummaries?: string;
-            /** @enum {string} */
-            frequency: "Quarterly" | "Annual";
             highlights?: string;
             /** Format: int64 */
             id: number;
@@ -5845,52 +5765,6 @@ export interface components {
              */
             quantity: number;
         };
-        CohortListResponsePayload: {
-            cohorts: components["schemas"]["CohortPayload"][];
-            status: components["schemas"]["SuccessOrError"];
-        };
-        CohortModulePayload: {
-            additionalResources?: string;
-            /** Format: date */
-            endDate: string;
-            eventDescriptions: {
-                [key: string]: string;
-            };
-            /** Format: int64 */
-            id: number;
-            isActive: boolean;
-            name: string;
-            overview?: string;
-            preparationMaterials?: string;
-            /** Format: date */
-            startDate: string;
-            title: string;
-        };
-        CohortPayload: {
-            /** Format: int64 */
-            createdBy: number;
-            /** Format: date-time */
-            createdTime: string;
-            /** Format: int64 */
-            id: number;
-            /** Format: int64 */
-            modifiedBy: number;
-            /** Format: date-time */
-            modifiedTime: string;
-            name: string;
-            /**
-             * @deprecated
-             * @description Use projectIds instead
-             */
-            participantIds?: number[];
-            /** @enum {string} */
-            phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor" | "Pre-Screen" | "Application";
-            projectIds?: number[];
-        };
-        CohortResponsePayload: {
-            cohort: components["schemas"]["CohortPayload"];
-            status: components["schemas"]["SuccessOrError"];
-        };
         CompleteAdHocObservationRequestPayload: {
             /** @description Biomass Measurements. Required for biomass measurement observations */
             biomassMeasurements?: components["schemas"]["NewBiomassMeasurementPayload"];
@@ -6058,11 +5932,6 @@ export interface components {
             /** @enum {string} */
             treatment?: "Soak" | "Scarify" | "Chemical" | "Stratification" | "Other" | "Light";
             treatmentNotes?: string;
-        };
-        CreateCohortRequestPayload: {
-            name: string;
-            /** @enum {string} */
-            phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor" | "Pre-Screen" | "Application";
         };
         CreateDeviceRequestPayload: {
             /**
@@ -6847,8 +6716,6 @@ export interface components {
         ExistingAcceleratorReportConfigPayload: {
             /** Format: int64 */
             configId: number;
-            /** @enum {string} */
-            frequency: "Quarterly" | "Annual";
             /** Format: uri */
             logframeUrl?: string;
             /** Format: int64 */
@@ -7329,10 +7196,6 @@ export interface components {
         };
         GetBatchHistoryResponsePayload: {
             history: components["schemas"]["BatchHistoryPayload"][];
-            status: components["schemas"]["SuccessOrError"];
-        };
-        GetCohortModuleResponsePayload: {
-            module: components["schemas"]["CohortModulePayload"];
             status: components["schemas"]["SuccessOrError"];
         };
         GetCountryBorderResponsePayload: {
@@ -7938,10 +7801,6 @@ export interface components {
         };
         ListBatchPhotosResponsePayload: {
             photos: components["schemas"]["BatchPhotoPayload"][];
-            status: components["schemas"]["SuccessOrError"];
-        };
-        ListCohortModulesResponsePayload: {
-            modules: components["schemas"]["CohortModulePayload"][];
             status: components["schemas"]["SuccessOrError"];
         };
         ListDeliverablesElement: {
@@ -9382,7 +9241,7 @@ export interface components {
         ParticipantProjectForSpeciesPayload: {
             /**
              * Format: int64
-             * @description This deliverable ID is associated to the active or most recent cohort module, if available.
+             * @description This deliverable ID is associated with the project's active or most recent module, if any.
              */
             deliverableId?: number;
             /** Format: int64 */
@@ -9827,15 +9686,6 @@ export interface components {
             carbonCertifications?: "CCB Standard"[];
             /** Format: uri */
             clickUpLink?: string;
-            /** Format: int64 */
-            cohortId?: number;
-            cohortName?: string;
-            /**
-             * @deprecated
-             * @description Use phase instead.
-             * @enum {string}
-             */
-            cohortPhase?: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor" | "Pre-Screen" | "Application";
             confirmedReforestableLand?: number;
             countryAlpha3?: string;
             countryCode?: string;
@@ -9939,14 +9789,6 @@ export interface components {
         };
         ProjectPayload: {
             /** Format: int64 */
-            cohortId?: number;
-            /**
-             * @deprecated
-             * @description Use phase instead.
-             * @enum {string}
-             */
-            cohortPhase?: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor" | "Pre-Screen" | "Application";
-            /** Format: int64 */
             createdBy?: number;
             /** Format: date-time */
             createdTime?: string;
@@ -9960,12 +9802,6 @@ export interface components {
             name: string;
             /** Format: int64 */
             organizationId: number;
-            /**
-             * Format: int64
-             * @deprecated
-             * @description If using this to check whether project is in cohort, use cohortPhase instead.
-             */
-            participantId?: number;
             /** @enum {string} */
             phase?: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor" | "Pre-Screen" | "Application";
         };
@@ -10021,8 +9857,6 @@ export interface components {
             /** Format: date */
             endDate: string;
             financialSummaries?: string;
-            /** @enum {string} */
-            frequency: "Quarterly" | "Annual";
             highlights?: string;
             photos: components["schemas"]["ReportPhotoPayload"][];
             /** Format: int64 */
@@ -10511,7 +10345,7 @@ export interface components {
             cursor?: string;
             fields: string[];
             filters?: components["schemas"]["PrefixedSearch"][];
-            prefix?: "accessionCollectors" | "accessions" | "applications" | "bags" | "batchSubLocations" | "batchWithdrawals" | "batches" | "cohortModules" | "cohorts" | "countries" | "countrySubdivisions" | "deliverables" | "deliveries" | "documentTemplates" | "documents" | "draftPlantingSites" | "events" | "facilities" | "facilityInventories" | "facilityInventoryTotals" | "geolocations" | "internalTags" | "inventories" | "modules" | "monitoringPlotHistories" | "monitoringPlots" | "nurserySpeciesProjects" | "nurseryWithdrawals" | "observationBiomassDetails" | "observationBiomassQuadratSpecies" | "observationBiomassSpecies" | "observationPlotConditions" | "observationPlots" | "observations" | "organizationInternalTags" | "organizationUsers" | "organizations" | "participantProjectSpecies" | "plantingSeasons" | "plantingSiteHistories" | "plantingSitePopulations" | "plantingSites" | "plantings" | "projectAcceleratorDetails" | "projectDeliverables" | "projectInternalUsers" | "projectLandUseModelTypes" | "projectModules" | "projectVariableValues" | "projectVariables" | "projects" | "recordedTrees" | "reports" | "species" | "speciesEcosystemTypes" | "speciesGrowthForms" | "speciesPlantMaterialSourcingMethods" | "speciesProblems" | "speciesSuccessionalGroups" | "strata" | "stratumHistories" | "stratumPopulations" | "subLocations" | "substrata" | "substratumHistories" | "substratumPopulations" | "users" | "variableSelectOptions" | "viabilityTestResults" | "viabilityTests" | "withdrawals";
+            prefix?: "accessionCollectors" | "accessions" | "applications" | "bags" | "batchSubLocations" | "batchWithdrawals" | "batches" | "countries" | "countrySubdivisions" | "deliverables" | "deliveries" | "documentTemplates" | "documents" | "draftPlantingSites" | "events" | "facilities" | "facilityInventories" | "facilityInventoryTotals" | "geolocations" | "internalTags" | "inventories" | "modules" | "monitoringPlotHistories" | "monitoringPlots" | "nurserySpeciesProjects" | "nurseryWithdrawals" | "observationBiomassDetails" | "observationBiomassQuadratSpecies" | "observationBiomassSpecies" | "observationPlotConditions" | "observationPlots" | "observations" | "organizationInternalTags" | "organizationUsers" | "organizations" | "participantProjectSpecies" | "plantingSeasons" | "plantingSiteHistories" | "plantingSitePopulations" | "plantingSites" | "plantings" | "projectAcceleratorDetails" | "projectDeliverables" | "projectInternalUsers" | "projectLandUseModelTypes" | "projectModules" | "projectVariableValues" | "projectVariables" | "projects" | "recordedTrees" | "reports" | "species" | "speciesEcosystemTypes" | "speciesGrowthForms" | "speciesPlantMaterialSourcingMethods" | "speciesProblems" | "speciesSuccessionalGroups" | "strata" | "stratumHistories" | "stratumPopulations" | "subLocations" | "substrata" | "substratumHistories" | "substratumPopulations" | "users" | "variableSelectOptions" | "viabilityTestResults" | "viabilityTests" | "withdrawals";
             search?: components["schemas"]["SearchNodePayload"];
             sortOrder?: components["schemas"]["SearchSortOrderElement"][];
         };
@@ -11288,18 +11122,6 @@ export interface components {
             treatmentNotes?: string;
             /** Format: int32 */
             version: number;
-        };
-        UpdateCohortModuleRequestPayload: {
-            /** Format: date */
-            endDate: string;
-            /** Format: date */
-            startDate: string;
-            title: string;
-        };
-        UpdateCohortRequestPayload: {
-            name: string;
-            /** @enum {string} */
-            phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor" | "Pre-Screen" | "Application";
         };
         UpdateDeviceRequestPayload: {
             /**
@@ -12745,284 +12567,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SubmitApplicationResponsePayload"];
-                };
-            };
-        };
-    };
-    listCohorts: {
-        parameters: {
-            query?: {
-                /** @description If specified, retrieve associated entities to the supplied depth. For example, 'participant' depth will return the participants associated to the cohort. */
-                cohortDepth?: "Cohort" | "Project";
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description The requested operation succeeded. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CohortListResponsePayload"];
-                };
-            };
-        };
-    };
-    createCohort: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateCohortRequestPayload"];
-            };
-        };
-        responses: {
-            /** @description The cohort was created successfully. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CohortResponsePayload"];
-                };
-            };
-        };
-    };
-    getCohort: {
-        parameters: {
-            query?: {
-                /** @description If specified, retrieve associated entities to the supplied depth. For example, 'participant' depth will return the participants associated to the cohort. */
-                cohortDepth?: "Cohort" | "Project";
-            };
-            header?: never;
-            path: {
-                cohortId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description The requested operation succeeded. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CohortResponsePayload"];
-                };
-            };
-            /** @description The requested resource was not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-                };
-            };
-        };
-    };
-    updateCohort: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                cohortId: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateCohortRequestPayload"];
-            };
-        };
-        responses: {
-            /** @description The requested operation succeeded. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CohortResponsePayload"];
-                };
-            };
-            /** @description The requested resource was not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-                };
-            };
-        };
-    };
-    deleteCohort: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                cohortId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description The requested operation succeeded. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-                };
-            };
-            /** @description The requested resource was not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-                };
-            };
-        };
-    };
-    listCohortModules: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                cohortId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description The requested operation succeeded. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ListCohortModulesResponsePayload"];
-                };
-            };
-            /** @description The requested resource was not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-                };
-            };
-        };
-    };
-    getCohortModule: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                cohortId: number;
-                moduleId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description The requested operation succeeded. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["GetCohortModuleResponsePayload"];
-                };
-            };
-            /** @description The requested resource was not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-                };
-            };
-        };
-    };
-    updateCohortModule: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                cohortId: number;
-                moduleId: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateCohortModuleRequestPayload"];
-            };
-        };
-        responses: {
-            /** @description The requested operation succeeded. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-                };
-            };
-            /** @description The requested resource was not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-                };
-            };
-        };
-    };
-    deleteCohortModule: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                cohortId: number;
-                moduleId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description The requested operation succeeded. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-                };
-            };
-            /** @description The requested resource was not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
                 };
             };
         };

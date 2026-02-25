@@ -57,7 +57,6 @@ export type PublishedReportPayload = {
   challenges: ReportChallengePayload[];
   endDate: string;
   financialSummaries?: string;
-  frequency: 'Quarterly';
   highlights?: string;
   photos: ReportPhotoPayload[];
   projectId: number;
