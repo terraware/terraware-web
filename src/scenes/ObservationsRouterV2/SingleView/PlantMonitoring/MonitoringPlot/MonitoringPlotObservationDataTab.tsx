@@ -103,15 +103,13 @@ const MonitoringPlotObservationDataTab = () => {
       tooltip: results?.isAdHoc ? strings.AD_HOC_PLOT_PLANT_DENSITY_TOOLTIP : strings.PLOT_PLANT_DENSITY_TOOLTIP,
       value: monitoringPlot?.plantingDensity,
     },
-    ...(monitoringPlot?.survivalRate !== undefined
-      ? [
-          {
-            label: strings.SURVIVAL_RATE,
-            tooltip: strings.PLOT_SURVIVAL_RATE_TOOLTIP,
-            value: `${monitoringPlot?.survivalRate}%`,
-          },
-        ]
-      : []),
+    {
+      label: strings.SURVIVAL_RATE,
+      tooltip: strings.PLOT_SURVIVAL_RATE_TOOLTIP,
+      value: monitoringPlot?.isPermanent
+        ? `${monitoringPlot.survivalRate ?? '-'}%`
+        : strings.NOT_CALCULATED_FOR_TEMPORARY_PLOTS,
+    },
   ];
 
   useEffect(() => {
