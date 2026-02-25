@@ -59,15 +59,6 @@ export type AssignProjectApiArg = {
   assignProjectRequestPayload: AssignProjectRequestPayload;
 };
 export type ProjectPayload = {
-  cohortId?: number;
-  /** Use phase instead. */
-  cohortPhase?:
-    | 'Phase 0 - Due Diligence'
-    | 'Phase 1 - Feasibility Study'
-    | 'Phase 2 - Plan and Scale'
-    | 'Phase 3 - Implement and Monitor'
-    | 'Pre-Screen'
-    | 'Application';
   createdBy?: number;
   createdTime?: string;
   description?: string;
@@ -76,8 +67,6 @@ export type ProjectPayload = {
   modifiedTime?: string;
   name: string;
   organizationId: number;
-  /** If using this to check whether project is in cohort, use cohortPhase instead. */
-  participantId?: number;
   phase?:
     | 'Phase 0 - Due Diligence'
     | 'Phase 1 - Feasibility Study'
