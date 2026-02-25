@@ -201,6 +201,7 @@ const MonitoringPlotObservationDataTab = () => {
               chartId={'plotSpeciesTotalChart'}
               minHeight='245px'
               species={monitoringPlotSpecies}
+              isCompleted={!!monitoringPlot?.completedTime}
             />
           </Box>
         </Box>
@@ -218,6 +219,7 @@ const MonitoringPlotObservationDataTab = () => {
               minHeight='245px'
               species={monitoringPlotSpecies}
               isCompleted={!!monitoringPlot?.completedTime}
+              isTemporary={!monitoringPlot?.isPermanent}
             />
           </Box>
         </Box>
