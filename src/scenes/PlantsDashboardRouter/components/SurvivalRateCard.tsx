@@ -8,6 +8,7 @@ import Card from 'src/components/common/Card';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import strings from 'src/strings';
 
@@ -19,6 +20,7 @@ export default function SurvivalRateCard(): JSX.Element {
   const theme = useTheme();
   const { observationSummaries, plantingSite } = usePlantingSiteData();
   const { isDesktop } = useDeviceInfo();
+  const newObservationViewEnabled = isEnabled('New Observation View');
 
   const separatorStyles = {
     width: '1px',
@@ -74,7 +76,10 @@ export default function SurvivalRateCard(): JSX.Element {
                   strings.SET_T0_DATA_IN_THE,
                   <Link
                     fontSize='16px'
-                    to={APP_PATHS.SURVIVAL_RATE_SETTINGS.replace(':plantingSiteId', plantingSite.id.toString())}
+                    to={(newObservationViewEnabled
+                      ? APP_PATHS.SURVIVAL_RATE_SETTINGS_V2
+                      : APP_PATHS.SURVIVAL_RATE_SETTINGS
+                    ).replace(':plantingSiteId', plantingSite.id.toString())}
                   >
                     {strings.SURVIVAL_RATE_SETTINGS}
                   </Link>

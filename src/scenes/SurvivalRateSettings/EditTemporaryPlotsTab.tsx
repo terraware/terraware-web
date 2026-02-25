@@ -4,6 +4,7 @@ import { Box, useTheme } from '@mui/material';
 import { Checkbox, Icon, PageForm, Tooltip } from '@terraware/web-components';
 
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import {
   UpdatePlantingSiteApiArg,
@@ -44,6 +45,7 @@ const EditTemporaryPlotsTab = ({
   const [updateT0, updateT0Result] = useAssignT0TempSiteDataMutation();
   const { data: plantingSiteData } = useGetPlantingSiteQuery(plantingSiteId);
   const plantingSite = useMemo(() => plantingSiteData?.site, [plantingSiteData]);
+  const newObservationViewEnabled = isEnabled('New Observation View');
 
   const [record, setRecord] = useForm<AssignSiteT0TempData>({
     plantingSiteId,
@@ -63,8 +65,10 @@ const EditTemporaryPlotsTab = ({
   }, [plantingSiteId, setRecord, strata]);
 
   const goToViewSettings = useCallback(() => {
-    navigate(APP_PATHS.SURVIVAL_RATE_SETTINGS.replace(':plantingSiteId', plantingSiteId.toString()));
-  }, [navigate, plantingSiteId]);
+    const baseUrl = newObservationViewEnabled ? APP_PATHS.SURVIVAL_RATE_SETTINGS_V2 : APP_PATHS.SURVIVAL_RATE_SETTINGS;
+
+    navigate(baseUrl.replace(':plantingSiteId', plantingSiteId.toString()));
+  }, [navigate, newObservationViewEnabled, plantingSiteId]);
 
   const updatePlantingSiteSetting = useCallback(() => {
     if (alreadyIncluding !== isTemporaryPlotsChecked) {

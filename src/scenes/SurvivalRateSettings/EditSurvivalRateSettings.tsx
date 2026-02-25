@@ -7,6 +7,7 @@ import { Tabs } from '@terraware/web-components';
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import { useGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
@@ -42,6 +43,7 @@ const EditSurvivalRateSettings = () => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
   const navigate = useSyncNavigate();
+  const newObservationViewEnabled = isEnabled('New Observation View');
 
   const permanentPlots = useMemo(() => {
     return plotsWithObservations?.filter(
@@ -102,12 +104,13 @@ const EditSurvivalRateSettings = () => {
 
   const continueChangeTab = useCallback(() => {
     setShowChangeTabWarning(false);
+    const baseUrl = newObservationViewEnabled ? APP_PATHS.SURVIVAL_RATE_SETTINGS_V2 : APP_PATHS.SURVIVAL_RATE_SETTINGS;
 
     navigate({
-      pathname: APP_PATHS.SURVIVAL_RATE_SETTINGS.replace(':plantingSiteId', plantingSiteId.toString()),
+      pathname: baseUrl.replace(':plantingSiteId', plantingSiteId.toString()),
       search: `tab=${activeTab === 'permanent' ? 'temporary' : 'permanent'}`,
     });
-  }, [activeTab, navigate, plantingSiteId]);
+  }, [activeTab, navigate, newObservationViewEnabled, plantingSiteId]);
 
   const onChangeTabHandler = useCallback(
     (newTab: string) => {
