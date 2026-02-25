@@ -1,3 +1,5 @@
+2082990e4e53 SW-8050 Used observations count per site to determine if map should be visible. (#5317)
+d632e18840c0 SW-7979 Species: Ability to customize columns/filters in Species table (#5302)
 b47b22be4973 SW-8086 Removed map for plot details (#5316)
 19ea3ed1a43f Generate types and queries to remove cohorts from the api (#5314)
 733ec7c00c7d SW-8088 Fixed url when using new observations router (#5315)

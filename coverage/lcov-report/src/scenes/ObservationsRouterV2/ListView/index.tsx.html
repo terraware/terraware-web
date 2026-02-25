@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/90</span>
+                <span class='fraction'>0/91</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/46</span>
+                <span class='fraction'>0/48</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/84</span>
+                <span class='fraction'>0/85</span>
             </div>
         
             
@@ -252,7 +252,10 @@
 <a name='L187'></a><a href='#L187'>187</a>
 <a name='L188'></a><a href='#L188'>188</a>
 <a name='L189'></a><a href='#L189'>189</a>
-<a name='L190'></a><a href='#L190'>190</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L190'></a><a href='#L190'>190</a>
+<a name='L191'></a><a href='#L191'>191</a>
+<a name='L192'></a><a href='#L192'>192</a>
+<a name='L193'></a><a href='#L193'>193</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -394,14 +397,17 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -570,27 +576,30 @@ const ObservationListView = (): JSX.Element =&gt; {
   }, [navigate, scheduleObservationEnabled, strings.SCHEDULE_OBSERVATION]);
 &nbsp;
   useEffect(() =&gt; {
-    if (selectedOrganization) {
-      if (activeTab<span class="fstat-no" title="function not covered" > =</span>== '<span class="cstat-no" title="statement not covered" >biomassMeasurements') {</span>
+    const siteId = selectedPlantingSiteId === -1 ? undefined : selectedPlantingSiteId;
+    if (selectedOrg<span class="fstat-no" title="function not covered" >an</span>izat<span class="cstat-no" title="statement not covered" >ion) {</span>
+      if (activeTab === 'biomassMeasurements') {
         void countObservations(
           {
             organizationId: selectedOrganization.id,
-            observationType: 'Biomass Measurements',
-<span class="cstat-no" title="statement not covered" >          },</span>
-          true
-        );
-<span class="cstat-no" title="statement not covered" >      } else if (activeTab ===<span class="fstat-no" title="function not covered" > '</span>plantMonitoring') {</span>
+<span class="cstat-no" title="statement not covered" >            observati</span>onType: 'Biomass Measurements',
+            plantingSiteId: siteId,
+          },
+<span class="cstat-no" title="statement not covered" >          true<span class="fstat-no" title="function not covered" ></span></span>
+        );<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >      } else if (activeTab === 'plantMonitoring') {</span>
 <span class="cstat-no" title="statement not covered" >        void countObservations(</span>
 <span class="cstat-no" title="statement not covered" >          {</span>
-<span class="cstat-no" title="statement not covered" >            organizationId: selectedOrganization.id,</span>
+            organizationId: selectedOrganization.id,
             observationType: 'Monitoring',
+            plantingSiteId: siteId,
           },
           true
         );
       }
-    }
-  }, [activeT<span class="cstat-no" title="statement not covered" >ab, countObservations, selectedOrganization]);</span>
-<span class="cstat-no" title="statement not covered" ></span>
+    }<span class="cstat-no" title="statement not covered" ></span>
+  }, [ac<span class="cstat-no" title="statement not covered" >tiveTab, countObservations, selectedOrganization, selectedPlantingSiteId]);</span>
+&nbsp;
   return (
     &lt;Page
       title={strings.OBSERVATIONS}
@@ -637,7 +646,7 @@ export default ObservationListView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-25T18:20:07.345Z
+                at 2026-02-25T18:33:21.196Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
