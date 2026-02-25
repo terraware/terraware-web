@@ -133,6 +133,7 @@ const ObservationListView = (): JSX.Element => {
           {
             organizationId: selectedOrganization.id,
             observationType: 'Biomass Measurements',
+            plantingSiteId: selectedPlantingSiteId,
           },
           true
         );
@@ -141,12 +142,13 @@ const ObservationListView = (): JSX.Element => {
           {
             organizationId: selectedOrganization.id,
             observationType: 'Monitoring',
+            plantingSiteId: selectedPlantingSiteId,
           },
           true
         );
       }
     }
-  }, [activeTab, countObservations, selectedOrganization]);
+  }, [activeTab, countObservations, selectedOrganization, selectedPlantingSiteId]);
 
   return (
     <Page
