@@ -9,6 +9,7 @@ import Card from 'src/components/common/Card';
 import Link from 'src/components/common/Link';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization, useOrganization } from 'src/providers';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
@@ -19,6 +20,7 @@ import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
 
 import SurvivalRateMessage from '../SurvivalRate/SurvivalRateMessage';
+import SurvivalRateMessageV2 from '../SurvivalRate/SurvivalRateMessageV2';
 import FormattedNumber from '../common/FormattedNumber';
 import PageHeaderWrapper from '../common/PageHeaderWrapper';
 import PlantsDashboardEmptyMessage from '../emptyStatePages/PlantsDashboardEmptyMessage';
@@ -74,6 +76,7 @@ export default function PlantsPrimaryPageView({
   const dispatch = useAppDispatch();
   const { allPlantingSites, isLoading, isInitiated, plantingSite } = usePlantingSiteData();
   const [delayedIsPlantingSiteSet, setDelayedIsPlantingSiteSet] = useState(false);
+  const newObservationViewEnabled = isEnabled('New Observation View');
 
   const hasSites = useMemo(() => {
     return (
@@ -200,9 +203,13 @@ export default function PlantsPrimaryPageView({
               />
             </Box>
           )}
-          {showSurvivalRateMessage && selectedPlantingSiteId && (
-            <SurvivalRateMessage selectedPlantingSiteId={selectedPlantingSiteId} />
-          )}
+          {showSurvivalRateMessage &&
+            selectedPlantingSiteId &&
+            (newObservationViewEnabled ? (
+              <SurvivalRateMessageV2 selectedPlantingSiteId={selectedPlantingSiteId} />
+            ) : (
+              <SurvivalRateMessage selectedPlantingSiteId={selectedPlantingSiteId} />
+            ))}
           {(isAcceleratorRoute || (!isAcceleratorRoute && options.length > 0)) && isPlantingSiteSet && (
             <Card radius={'8px'} style={{ 'margin-bottom': '32px' }}>
               <Grid container alignItems={'center'} spacing={4}>
