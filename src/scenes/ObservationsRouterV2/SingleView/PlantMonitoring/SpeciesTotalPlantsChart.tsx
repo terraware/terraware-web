@@ -14,6 +14,7 @@ export type SpeciesTotalPlantsChartProps = {
 };
 
 export default function SpeciesTotalPlantsChart({
+  chartId,
   minHeight,
   species,
   isNotCompleted,
@@ -72,7 +73,7 @@ export default function SpeciesTotalPlantsChart({
           {strings.DATA_IS_NOT_YET_AVAILABLE}
         </Box>
       )}
-      <BarChart chartId='observationsTotalPlantsBySpecies' chartData={chartData} barWidth={0} minHeight={minHeight} />
+      <BarChart chartId={chartId} chartData={chartData} barWidth={0} minHeight={minHeight} />
     </Box>
   );
 }
