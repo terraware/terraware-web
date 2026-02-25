@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/149</span>
+                <span class='fraction'>0/147</span>
             </div>
         
             
@@ -357,9 +357,7 @@
 <a name='L292'></a><a href='#L292'>292</a>
 <a name='L293'></a><a href='#L293'>293</a>
 <a name='L294'></a><a href='#L294'>294</a>
-<a name='L295'></a><a href='#L295'>295</a>
-<a name='L296'></a><a href='#L296'>296</a>
-<a name='L297'></a><a href='#L297'>297</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L295'></a><a href='#L295'>295</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -622,8 +620,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -862,28 +858,26 @@ import Moni<span class="fstat-no" title="function not covered" >to</span>ring<sp
           &lt;/Box&gt;
         &lt;/Box&gt;
 &nbsp;
-        {monitoringPlot?.isPermanent &amp;&amp; (
-          &lt;Box flex={1} minWidth='500px'&gt;
-            &lt;Box display='flex' alignItems={'center'}&gt;
-              &lt;Typography fontSize={'20px'} fontWeight={600}&gt;
-                {strings.SURVIVAL_RATE_PER_SPECIES_AS_OF_THIS_OBSERVATION}
-              &lt;/Typography&gt;
-              &lt;IconTooltip title={strings.SURVIVAL_RATE_PER_SPECIES_AS_OF_THIS_OBSERVATION_TOOLTIP} /&gt;
-            &lt;/Box&gt;
-            &lt;Box height='245px'&gt;
-              &lt;SpeciesSurvivalRateChart
-                chartId={'plotSpeciesSurvivalRate'}
-                minHeight='245px'
-                species={monitoringPlotSpecies}
-                isCompleted={!!monitoringPlot.completedTime}
-              /&gt;
-            &lt;/Box&gt;
+        &lt;Box flex={1} minWidth='500px'&gt;
+          &lt;Box display='flex' alignItems={'center'}&gt;
+            &lt;Typography fontSize={'20px'} fontWeight={600}&gt;
+              {strings.SURVIVAL_RATE_PER_SPECIES_AS_OF_THIS_OBSERVATION}
+            &lt;/Typography&gt;
+            &lt;IconTooltip title={strings.SURVIVAL_RATE_PER_SPECIES_AS_OF_THIS_OBSERVATION_TOOLTIP} /&gt;
           &lt;/Box&gt;
-        )}
+          &lt;Box height='245px'&gt;
+            &lt;SpeciesSurvivalRateChart
+              chartId={'plotSpeciesSurvivalRate'}
+              minHeight='245px'
+              species={monitoringPlotSpecies}
+              isCompleted={!!monitoringPlot?.completedTime}
+            /&gt;
+          &lt;/Box&gt;
+        &lt;/Box&gt;
       &lt;/Box&gt;
-      &lt;Box<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+      &lt;Box
         display={'flex'}
-        justifyContent={'end'}
+        justifyCo<span class="fstat-no" title="function not covered" >nt</span>ent=<span class="cstat-no" title="statement not covered" >{'end'}</span>
         borderBottom={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
         paddingBottom={1.5}
       &gt;
@@ -892,9 +886,9 @@ import Moni<span class="fstat-no" title="function not covered" >to</span>ring<sp
           label={strings.MATCH_UNRECOGNIZED_SPECIES}
           icon='iconSynced'
           onClick={() =&gt; setShowMatchSpeciesModal(true)}
-          disable<span class="fstat-no" title="function not covered" >d=</span>{!un<span class="cstat-no" title="statement not covered" >recognizedSpecies || unrecognizedSpecies.length</span> === 0}
+          disabled={!unrecognizedSpecies || unrecognizedSpecies.length === 0}
           sx={{ fontWeight: '400 !important' }}
-        /&gt;
+        /&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
         &lt;Button
           priority='ghost'
           label={strings.EXPORT_DATA}
@@ -917,9 +911,9 @@ import Moni<span class="fstat-no" title="function not covered" >to</span>ring<sp
               )
             )}
           &lt;/Typography&gt;
-        )}<span class="cstat-no" title="statement not covered" ></span>
+        )}
         {monitoringPlot &amp;&amp; !!monitoringPlot.completedTime &amp;&amp; (
-          &lt;Button
+          &lt;Button<span class="cstat-no" title="statement not covered" ></span>
             id='edit'
             label={strings.EDIT}
             onClick={onEditQualitativeData}
@@ -958,7 +952,7 @@ export default MonitoringPlotObservationDataTab;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-25T21:00:49.842Z
+                at 2026-02-25T21:53:20.192Z
             </div>
         <script src="../../../../../../prettify.js"></script>
         <script>
