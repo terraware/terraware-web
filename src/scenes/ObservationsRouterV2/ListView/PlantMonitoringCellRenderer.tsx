@@ -2,6 +2,7 @@ import React, { type JSX } from 'react';
 
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
+import TextTruncated from 'src/components/common/TextTruncated';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import TableRowPopupMenu from 'src/components/common/table/TableRowPopupMenu';
 import { RendererProps } from 'src/components/common/table/types';
@@ -28,6 +29,11 @@ export default function PlantMonitoringCellRenderer(props: RendererProps<TableRo
     '& > p': {
       fontSize: '16px',
     },
+  };
+
+  const getTruncatedNames = (inputNames: string) => {
+    const names = inputNames.split('\r');
+    return <TextTruncated fontSize={16} stringList={names} moreText={strings.TRUNCATED_TEXT_MORE_LINK} />;
   };
 
   if (column.key === 'observationDate' || column.key === 'adHocPlotNumber') {
@@ -57,6 +63,10 @@ export default function PlantMonitoringCellRenderer(props: RendererProps<TableRo
         value={typeof value === 'number' ? <FormattedNumber value={value} /> : undefined}
       />
     );
+  }
+
+  if (column.key === 'strata' || column.key === 'substrata') {
+    return <CellRenderer {...props} value={getTruncatedNames(value as string)} sx={textStyles} />;
   }
 
   if (column.key === 'actionsMenu') {
