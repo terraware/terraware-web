@@ -40,6 +40,16 @@ export type UpdateProjectAcceleratorDetailsApiArg = {
   projectId: number;
   updateProjectAcceleratorDetailsRequestPayload: UpdateProjectAcceleratorDetailsRequestPayload;
 };
+export type IndicatorProgressPayload = {
+  indicator:
+    | 'Seeds Collected'
+    | 'Seedlings'
+    | 'Trees Planted'
+    | 'Species Planted'
+    | 'Hectares Planted'
+    | 'Survival Rate';
+  progress: number;
+};
 export type MetricProgressPayload = {
   metric: 'Seeds Collected' | 'Seedlings' | 'Trees Planted' | 'Species Planted' | 'Hectares Planted' | 'Survival Rate';
   progress: number;
@@ -79,6 +89,7 @@ export type ProjectAcceleratorDetailsPayload = {
   gisReportsLink?: string;
   googleFolderUrl?: string;
   hubSpotUrl?: string;
+  indicatorProgress: IndicatorProgressPayload[];
   investmentThesis?: string;
   landUseModelHectares?: {
     [key: string]: number;
@@ -95,6 +106,7 @@ export type ProjectAcceleratorDetailsPayload = {
   )[];
   maxCarbonAccumulation?: number;
   methodologyNumber?: string;
+  /** Use indicatorProgress instead */
   metricProgress: MetricProgressPayload[];
   minCarbonAccumulation?: number;
   minProjectArea?: number;
