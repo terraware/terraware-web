@@ -339,25 +339,25 @@ const ProjectProfileView = ({
           backgroundColor={theme.palette.TwClrBaseGray050}
         />
       </Grid>
-      {projectDetails && projectDetails.metricProgress.length > 0 && (
+      {projectDetails && (projectDetails.metricProgress || []).length > 0 && (
         <>
           <Grid container>
             <ReportMetricCard
               label={strings.TOTAL_PLANTED}
-              metricProgress={projectDetails.metricProgress}
+              metricProgress={projectDetails.metricProgress || []}
               metricName={'Hectares Planted'}
               units={'ha'}
             />
             <ReportMetricCard
               label={strings.TOTAL_PLANTED}
-              metricProgress={projectDetails.metricProgress}
+              metricProgress={projectDetails.metricProgress || []}
               metricName={'Trees Planted'}
               units={strings.PLANTS}
               formatter={reportMetricCardFormatter}
             />
             <ReportMetricCard
               label={strings.TOTAL_PLANTED}
-              metricProgress={projectDetails.metricProgress}
+              metricProgress={projectDetails.metricProgress || []}
               metricName={'Species Planted'}
               units={strings.SPECIES}
             />

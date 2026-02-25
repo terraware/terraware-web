@@ -1217,6 +1217,58 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/accelerator/reports/autoCalculatedIndicators": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List all auto calculated indicators. */
+        get: operations["listAutoCalculatedIndicators"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/accelerator/reports/commonIndicators": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List all common indicators. */
+        get: operations["listCommonIndicators"];
+        /** Insert common indicator, that projects will report on all future reports. */
+        put: operations["createCommonIndicator"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/accelerator/reports/commonIndicators/{indicatorId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Update one common indicator by ID. */
+        post: operations["updateCommonIndicator"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/accelerator/reports/standardMetrics": {
         parameters: {
             query?: never;
@@ -1224,9 +1276,15 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** List all standard metrics. */
+        /**
+         * Use /commonIndicators instead
+         * @deprecated
+         */
         get: operations["listStandardMetric"];
-        /** Insert standard metric, that projects will report on all future reports. */
+        /**
+         * Use /commonIndicators instead
+         * @deprecated
+         */
         put: operations["createStandardMetric"];
         post?: never;
         delete?: never;
@@ -1244,7 +1302,10 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Update one standard metric by ID. */
+        /**
+         * Use /commonIndicators/{indicatorId} instead
+         * @deprecated
+         */
         post: operations["updateStandardMetric"];
         delete?: never;
         options?: never;
@@ -1259,7 +1320,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** List all system metrics. */
+        /**
+         * Use /autoCalculatedIndicators instead
+         * @deprecated
+         */
         get: operations["listSystemMetrics"];
         put?: never;
         post?: never;
@@ -5316,6 +5380,17 @@ export interface components {
             substratumId?: number;
             substratumName: string;
         };
+        AutoCalculatedIndicatorPayload: {
+            /** @enum {string} */
+            category: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
+            description: string;
+            /** @enum {string} */
+            indicator: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Hectares Planted" | "Survival Rate";
+            /** @enum {string} */
+            level: "Activity" | "Output" | "Outcome" | "Impact";
+            name: string;
+            reference: string;
+        };
         AutomationPayload: {
             /** @description Human-readable description of this automation. */
             description?: string;
@@ -5933,6 +6008,9 @@ export interface components {
             treatment?: "Soak" | "Scarify" | "Chemical" | "Stratification" | "Other" | "Light";
             treatmentNotes?: string;
         };
+        CreateCommonIndicatorRequestPayload: {
+            indicator: components["schemas"]["NewIndicatorPayload"];
+        };
         CreateDeviceRequestPayload: {
             /**
              * @description Protocol-specific address of device, e.g., an IP address or a Bluetooth device ID.
@@ -6276,6 +6354,10 @@ export interface components {
             id: number;
             status: components["schemas"]["SuccessOrError"];
         };
+        /**
+         * @deprecated
+         * @description Use CreateCommonIndicatorRequestPayload instead
+         */
         CreateStandardMetricRequestPayload: {
             metric: components["schemas"]["NewMetricPayload"];
         };
@@ -6775,6 +6857,19 @@ export interface components {
             speciesId?: number;
             speciesName?: string;
         };
+        ExistingCommonIndicatorPayload: {
+            /** @enum {string} */
+            category: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
+            description?: string;
+            /** Format: int64 */
+            id: number;
+            isPublishable: boolean;
+            /** @enum {string} */
+            level: "Activity" | "Output" | "Outcome" | "Impact";
+            name: string;
+            reference: string;
+            unit?: string;
+        };
         ExistingDateValuePayload: Omit<WithRequired<components["schemas"]["ExistingValuePayload"], "id" | "listPosition" | "type">, "type"> & {
             /** Format: date */
             dateValue: string;
@@ -6879,6 +6974,10 @@ export interface components {
              */
             type: "Select";
         };
+        /**
+         * @deprecated
+         * @description Use ExistingCommonIndicatorPayload instead
+         */
         ExistingStandardMetricPayload: {
             /** @enum {string} */
             component: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
@@ -7087,12 +7186,17 @@ export interface components {
             countryCode?: string;
             dealDescription?: string;
             dealName?: string;
+            indicatorProgress?: components["schemas"]["IndicatorProgressPayload"][];
             landUseModelHectares: {
                 [key: string]: number;
             };
             landUseModelTypes: ("Native Forest" | "Monoculture" | "Sustainable Timber" | "Other Timber" | "Mangroves" | "Agroforestry" | "Silvopasture" | "Other Land-Use Model")[];
             methodologyNumber?: string;
-            metricProgress: components["schemas"]["MetricProgressPayload"][];
+            /**
+             * @deprecated
+             * @description Use indicatorProgress instead
+             */
+            metricProgress?: components["schemas"]["MetricProgressPayload"][];
             minProjectArea?: number;
             /** Format: int32 */
             numNativeSpecies?: number;
@@ -7138,7 +7242,7 @@ export interface components {
             type: "Point" | "LineString" | "Polygon" | "MultiPoint" | "MultiLineString" | "MultiPolygon" | "GeometryCollection";
         };
         GeometryCollection: Omit<WithRequired<components["schemas"]["Geometry"], "type">, "type"> & {
-            geometries: (components["schemas"]["GeometryCollection"] | components["schemas"]["LineString"] | components["schemas"]["MultiLineString"] | components["schemas"]["MultiPoint"] | components["schemas"]["MultiPolygon"] | components["schemas"]["Point"] | components["schemas"]["Polygon"])[];
+            geometries: Record<string, never>[];
             /** @enum {string} */
             type: "GeometryCollection";
         } & {
@@ -7716,6 +7820,12 @@ export interface components {
             problems: components["schemas"]["ImportModuleProblemElement"][];
             status: components["schemas"]["SuccessOrError"];
         };
+        IndicatorProgressPayload: {
+            /** @enum {string} */
+            indicator: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Hectares Planted" | "Survival Rate";
+            /** Format: int32 */
+            progress: number;
+        };
         InternalTagPayload: {
             /** Format: int64 */
             id: number;
@@ -7795,12 +7905,20 @@ export interface components {
             plots: components["schemas"]["AssignedPlotPayload"][];
             status: components["schemas"]["SuccessOrError"];
         };
+        ListAutoCalculatedIndicatorsResponsePayload: {
+            indicators: components["schemas"]["AutoCalculatedIndicatorPayload"][];
+            status: components["schemas"]["SuccessOrError"];
+        };
         ListAutomationsResponsePayload: {
             automations: components["schemas"]["AutomationPayload"][];
             status: components["schemas"]["SuccessOrError"];
         };
         ListBatchPhotosResponsePayload: {
             photos: components["schemas"]["BatchPhotoPayload"][];
+            status: components["schemas"]["SuccessOrError"];
+        };
+        ListCommonIndicatorsResponsePayload: {
+            indicators: components["schemas"]["ExistingCommonIndicatorPayload"][];
             status: components["schemas"]["SuccessOrError"];
         };
         ListDeliverablesElement: {
@@ -8064,6 +8182,10 @@ export interface components {
             species: components["schemas"]["SpeciesResponseElement"][];
             status: components["schemas"]["SuccessOrError"];
         };
+        /**
+         * @deprecated
+         * @description Use ListCommonIndicatorsResponsePayload instead
+         */
         ListStandardMetricsResponsePayload: {
             metrics: components["schemas"]["ExistingStandardMetricPayload"][];
             status: components["schemas"]["SuccessOrError"];
@@ -8080,6 +8202,10 @@ export interface components {
             status: components["schemas"]["SuccessOrError"];
             types: ("Bug Report" | "Feature Request" | "Contact Us")[];
         };
+        /**
+         * @deprecated
+         * @description Use ListAutoCalculatedIndicatorsResponsePayload instead
+         */
         ListSystemMetricsResponsePayload: {
             metrics: components["schemas"]["SystemMetricPayload"][];
             status: components["schemas"]["SuccessOrError"];
@@ -8127,6 +8253,10 @@ export interface components {
              */
             speciesId: number;
         };
+        /**
+         * @deprecated
+         * @description Use IndicatorProgressPayload instead
+         */
         MetricProgressPayload: {
             /** @enum {string} */
             metric: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Hectares Planted" | "Survival Rate";
@@ -8371,6 +8501,17 @@ export interface components {
              */
             type: "Image";
         };
+        NewIndicatorPayload: {
+            /** @enum {string} */
+            category: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
+            description?: string;
+            isPublishable: boolean;
+            /** @enum {string} */
+            level: "Activity" | "Output" | "Outcome" | "Impact";
+            name: string;
+            reference: string;
+            unit?: string;
+        };
         NewLinkValuePayload: Omit<components["schemas"]["NewValuePayload"], "type"> & {
             citation?: string;
             title?: string;
@@ -8383,6 +8524,10 @@ export interface components {
              */
             type: "Link";
         };
+        /**
+         * @deprecated
+         * @description Use NewIndicatorPayload instead
+         */
         NewMetricPayload: {
             /** @enum {string} */
             component: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
@@ -9702,6 +9847,7 @@ export interface components {
             googleFolderUrl?: string;
             /** Format: uri */
             hubSpotUrl?: string;
+            indicatorProgress: components["schemas"]["IndicatorProgressPayload"][];
             investmentThesis?: string;
             landUseModelHectares?: {
                 [key: string]: number;
@@ -9709,6 +9855,10 @@ export interface components {
             landUseModelTypes: ("Native Forest" | "Monoculture" | "Sustainable Timber" | "Other Timber" | "Mangroves" | "Agroforestry" | "Silvopasture" | "Other Land-Use Model")[];
             maxCarbonAccumulation?: number;
             methodologyNumber?: string;
+            /**
+             * @deprecated
+             * @description Use indicatorProgress instead
+             */
             metricProgress: components["schemas"]["MetricProgressPayload"][];
             minCarbonAccumulation?: number;
             minProjectArea?: number;
@@ -10872,6 +11022,10 @@ export interface components {
             species: number;
             status: components["schemas"]["SuccessOrError"];
         };
+        /**
+         * @deprecated
+         * @description Use AutoCalculatedIndicatorPayload instead
+         */
         SystemMetricPayload: {
             /** @enum {string} */
             component: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
@@ -11122,6 +11276,9 @@ export interface components {
             treatmentNotes?: string;
             /** Format: int32 */
             version: number;
+        };
+        UpdateCommonIndicatorRequestPayload: {
+            indicator: components["schemas"]["ExistingCommonIndicatorPayload"];
         };
         UpdateDeviceRequestPayload: {
             /**
@@ -11454,6 +11611,10 @@ export interface components {
         UpdateSavedDocumentVersionRequestPayload: {
             isSubmitted: boolean;
         };
+        /**
+         * @deprecated
+         * @description Use UpdateCommonIndicatorRequestPayload instead
+         */
         UpdateStandardMetricRequestPayload: {
             metric: components["schemas"]["ExistingStandardMetricPayload"];
         };
@@ -14689,6 +14850,96 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    listAutoCalculatedIndicators: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListAutoCalculatedIndicatorsResponsePayload"];
+                };
+            };
+        };
+    };
+    listCommonIndicators: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListCommonIndicatorsResponsePayload"];
+                };
+            };
+        };
+    };
+    createCommonIndicator: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateCommonIndicatorRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+        };
+    };
+    updateCommonIndicator: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                indicatorId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateCommonIndicatorRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
                 };
             };
         };
