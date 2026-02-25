@@ -1,3 +1,6 @@
+b47b22be4973 SW-8086 Removed map for plot details (#5316)
+19ea3ed1a43f Generate types and queries to remove cohorts from the api (#5314)
+733ec7c00c7d SW-8088 Fixed url when using new observations router (#5315)
 74aaaef0f228 SW-8078 Planting Site Dropdown: Expand to fill name (#5313)
 66d0b6e7d3fe Change resetdb script to update project_modules (#5269)
 8504ee4db7d9 SW-8094 Don't allow saving invalid internal leads (#5312)
