@@ -309,7 +309,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
   };
 
   const downloadReportHandler = (table: MRT_TableInstance<SpeciesSearchResultRow>) => {
-    const filteredRows = table.getFilteredRowModel().rows;
+    const filteredRows = table.getSortedRowModel().rows;
     const csvColumns = [
       { key: 'scientificName', displayLabel: strings.SCIENTIFIC_NAME },
       { key: 'commonName', displayLabel: strings.COMMON_NAME },
