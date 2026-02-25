@@ -1,3 +1,4 @@
+37484fcca14c Fix metric progress becoming optional (#5318)
 2082990e4e53 SW-8050 Used observations count per site to determine if map should be visible. (#5317)
 d632e18840c0 SW-7979 Species: Ability to customize columns/filters in Species table (#5302)
 b47b22be4973 SW-8086 Removed map for plot details (#5316)
