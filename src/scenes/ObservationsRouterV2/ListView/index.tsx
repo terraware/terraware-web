@@ -65,9 +65,9 @@ const ObservationListView = (): JSX.Element => {
 
   const PageHeaderPlantingSiteDropdown = useMemo(
     () => (
-      <Box display={'flex'} flexDirection={'row'}>
+      <Box display={'flex'} flexDirection={'row'} width={'100%'}>
         <Separator height={'40px'} />
-        <Typography lineHeight={'40px'} marginRight={theme.spacing(1)}>
+        <Typography lineHeight={'40px'} marginRight={theme.spacing(1)} whiteSpace={'nowrap'}>
           {strings.PLANTING_SITE}
         </Typography>
         <Dropdown
@@ -76,6 +76,7 @@ const ObservationListView = (): JSX.Element => {
           selectedValue={selectedPlantingSiteId}
           options={plantingSiteOptions}
           onChange={(value: any) => selectPlantingSite(Number(value))}
+          sx={{ minWidth: '400px' }}
         />
       </Box>
     ),
