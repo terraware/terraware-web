@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { IconName, TableColumnType } from '@terraware/web-components';
 
 import PageListView, { PageListViewProps } from 'src/components/DocumentProducer/PageListView';
-import { useLocalization } from 'src/providers';
+import { useLocalization, useUser } from 'src/providers';
 import { requestSearchModules } from 'src/redux/features/modules/modulesAsyncThunks';
 import { selectSearchModules } from 'src/redux/features/modules/modulesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -33,6 +33,7 @@ const fuzzySearchColumns = ['name'];
 
 export default function ModuleContentView() {
   const { activeLocale } = useLocalization();
+  const { isAllowed } = useUser();
   const [openUploadModal, setOpenUploadModal] = useState(false);
   const dispatch = useAppDispatch();
   const [requestId, setRequestId] = useState('');
@@ -63,11 +64,13 @@ export default function ModuleContentView() {
 
   const listViewProps: PageListViewProps = {
     title: strings.MODULES,
-    primaryButton: {
-      title: strings.UPLOAD_ELLIPSIS,
-      onClick: showUploadModal,
-      icon: 'iconImport' as IconName,
-    },
+    primaryButton: isAllowed('UPDATE_PROJECT_MODULES')
+      ? {
+          title: strings.UPLOAD_ELLIPSIS,
+          onClick: showUploadModal,
+          icon: 'iconImport' as IconName,
+        }
+      : undefined,
     tableWithSearchProps: {
       columns: () => columns(activeLocale),
       defaultSearchOrder,

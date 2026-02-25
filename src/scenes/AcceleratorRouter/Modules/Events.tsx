@@ -7,6 +7,7 @@ import Card from 'src/components/common/Card';
 import Table from 'src/components/common/table';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
+import { useUser } from 'src/providers';
 import EventsCellRenderer from 'src/scenes/AcceleratorRouter/Modules/EventsCellRenderer';
 import strings from 'src/strings';
 import { Module, ModuleEvent } from 'src/types/Module';
@@ -62,6 +63,8 @@ const columns = (): TableColumnType[] => [
 export default function ModuleEvents({ events, module }: ModuleEventsProps): JSX.Element {
   const theme = useTheme();
   const navigate = useSyncNavigate();
+  const { isAllowed } = useUser();
+  const canEdit = isAllowed('UPDATE_PROJECT_MODULES');
 
   const liveSessions = events?.filter((ev) => ev.type === 'Live Session');
   const oneOnOneSessions = events?.filter((ev) => ev.type === 'One-on-One Session');
@@ -86,7 +89,7 @@ export default function ModuleEvents({ events, module }: ModuleEventsProps): JSX
               <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt}>
                 {strings.LIVE_SESSIONS}
               </Typography>
-              {module && (
+              {module && canEdit && (
                 <Button
                   id='edit'
                   label={strings.EDIT}
@@ -122,7 +125,7 @@ export default function ModuleEvents({ events, module }: ModuleEventsProps): JSX
               <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt}>
                 {strings.ONE_ON_ONE_SESSIONS}
               </Typography>
-              {module && (
+              {module && canEdit && (
                 <Button
                   id='edit'
                   label={strings.EDIT}
@@ -158,7 +161,7 @@ export default function ModuleEvents({ events, module }: ModuleEventsProps): JSX
               <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt}>
                 {strings.RECORDED_SESSIONS}
               </Typography>
-              {module && (
+              {module && canEdit && (
                 <Button
                   id='edit'
                   label={strings.EDIT}
@@ -194,7 +197,7 @@ export default function ModuleEvents({ events, module }: ModuleEventsProps): JSX
               <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt}>
                 {strings.WORKSHOPS}
               </Typography>
-              {module && (
+              {module && canEdit && (
                 <Button
                   id='edit'
                   label={strings.EDIT}
