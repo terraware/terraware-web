@@ -1,3 +1,4 @@
+27c214532118 SW-8105 Showed empty survival rate and tooltip if T0 not set (#5320)
 2b3d7b774948 SW-8088 Used new survival rate message (#5319)
 37484fcca14c Fix metric progress becoming optional (#5318)
 2082990e4e53 SW-8050 Used observations count per site to determine if map should be visible. (#5317)
