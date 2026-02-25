@@ -1,3 +1,4 @@
+9b84b8d69a77 SW-8097 Hide module edit buttons if no permission (#5311)
 733d7e18771e Fixed a bug where ad-hoc plots were not clickable (#5310)
 62ca2f121d49 Added total live count for observations list (#5309)
 c51256683a5a Filter out invalid marker locations (#5308)
