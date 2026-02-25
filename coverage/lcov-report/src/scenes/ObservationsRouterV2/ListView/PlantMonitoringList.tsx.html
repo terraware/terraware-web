@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/122</span>
+                <span class='fraction'>0/124</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/28</span>
+                <span class='fraction'>0/29</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/118</span>
+                <span class='fraction'>0/120</span>
             </div>
         
             
@@ -500,7 +500,12 @@
 <a name='L435'></a><a href='#L435'>435</a>
 <a name='L436'></a><a href='#L436'>436</a>
 <a name='L437'></a><a href='#L437'>437</a>
-<a name='L438'></a><a href='#L438'>438</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L438'></a><a href='#L438'>438</a>
+<a name='L439'></a><a href='#L439'>439</a>
+<a name='L440'></a><a href='#L440'>440</a>
+<a name='L441'></a><a href='#L441'>441</a>
+<a name='L442'></a><a href='#L442'>442</a>
+<a name='L443'></a><a href='#L443'>443</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -778,10 +783,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -789,6 +798,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1214,9 +1224,13 @@ const PlantMonitoringList = ({<span class="cstat-no" title="statement not covere
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
   const rows = useMemo(
     () =&gt;<span class="cstat-no" title="statement not covered" ></span>
-      observationResu<span class="cstat-no" title="statement not covered" >lts.map((observationResult): Pla<span class="fstat-no" title="function not covered" >nt</span>MonitoringRow =&gt; {</span>
-        const plantingSite = plantingSitesById[observationResult.plantingSiteId];
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+      observationResults<span class="cstat-no" title="statement not covered" >.map((observationResult): PlantMonitoringRow =&gt; {</span>
+<span class="fstat-no" title="function not covered" >        co</span>nst plantingSite = plan<span class="cstat-no" title="statement not covered" >tingSitesById[observationResult.</span>plantingSiteId];
+&nbsp;
+        const totalLive = observationResult.species.reduce(
+          (total, pla<span class="cstat-no" title="statement not covered" >ntSpecies) =&gt; (total += plantSpe<span class="fstat-no" title="function not covered" >ci</span>es.totalLive),</span>
+          0
+        );<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 <span class="cstat-no" title="statement not covered" >        const strata = observationResult.strata.reduce((stratumNames, stratumResult) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >          const obsrvedStratum = plantingSite?.strata?.find(</span>(stratum) =&gt; stratum.id === stratumResult.stratumId);
           if (obsrvedStratum) {
@@ -1239,6 +1253,7 @@ const PlantMonitoringList = ({<span class="cstat-no" title="statement not covere
           state: getStatus(observationResult.state),
           plantingSiteName: plantingSite?.name,
           strata,
+          totalLive,
           totalPlants: observationResult.totalPlants,
           totalSpecies: observationResult.totalSpecies,
           plantingDensity: observationResult.plantingDensity,
@@ -1381,7 +1396,7 @@ export default PlantMonitoringList;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-24T23:16:24.345Z
+                at 2026-02-25T00:02:24.682Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
