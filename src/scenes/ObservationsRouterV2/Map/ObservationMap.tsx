@@ -90,7 +90,10 @@ const ObservationMap = ({
 
   const isVirtualPlotsEnabled = isEnabled('Virtual Monitoring Plots');
 
-  const { selectedLayer, plantingSiteLegendGroup } = usePlantingSiteMapLegend('sites', plantingSiteId === undefined);
+  const { selectedLayer, plantingSiteLegendGroup } = usePlantingSiteMapLegend(
+    'substrata',
+    plantingSiteId === undefined
+  );
   const {
     livePlantsVisible,
     deadPlantsVisible,
