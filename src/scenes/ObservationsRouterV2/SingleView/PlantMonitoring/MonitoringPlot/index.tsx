@@ -54,9 +54,11 @@ const MonitoringPlotDetails = (): JSX.Element => {
     () =>
       results?.isAdHoc
         ? undefined
-        : results?.strata
-            .flatMap((stratumResults) => stratumResults.substrata)
-            .find((substratumResults) => substratumResults.substratumId === substratum?.substratumId),
+        : results?.strata.find((stratumResults) =>
+            stratumResults.substrata.some(
+              (substratumResults) => substratumResults.substratumId === substratum?.substratumId
+            )
+          ),
     [results?.isAdHoc, results?.strata, substratum?.substratumId]
   );
 
