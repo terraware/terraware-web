@@ -16,7 +16,7 @@ import {
   useLazyGetObservationQuery,
 } from 'src/queries/generated/observations';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
-import SmallSiteWarningDialog from 'src/scenes/ObservationsRouter/schedule/SmallSiteWarningDialog';
+import SmallSiteWarningDialog from 'src/scenes/ObservationsRouterV2/Schedule/SmallSiteWarningDialog';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import ObservationSubstratumSelector from './ObservationSubstratumSelector';
@@ -127,31 +127,35 @@ export default function ScheduleObservationForm({
       }
     }
 
-    if (!requestedSubstratumIds || requestedSubstratumIds?.length === 0) {
-      _substratumError = strings.SELECT_AT_LEAST_ONE_SUBSTRATUM;
+    if (observationId === undefined) {
+      if (!requestedSubstratumIds || requestedSubstratumIds?.length === 0) {
+        _substratumError = strings.SELECT_AT_LEAST_ONE_SUBSTRATUM;
+      }
+
+      const _showSmallSiteWarning =
+        selectedSite?.areaHa !== undefined && selectedSite.areaHa < WARN_IF_SITE_LESS_THAN_HECTARES;
+
+      setStartDateError(_startDateError);
+      setEndDateError(_endDateError);
+      setSubstratumError(_substratumError);
+      setShowSmallSiteWarning(_showSmallSiteWarning);
+      return _startDateError || _endDateError || _substratumError || _showSmallSiteWarning;
+    } else {
+      return _startDateError || _endDateError || _substratumError;
     }
-
-    const _showSmallSiteWarning =
-      selectedSite?.areaHa !== undefined && selectedSite.areaHa < WARN_IF_SITE_LESS_THAN_HECTARES;
-
-    setStartDateError(_startDateError);
-    setEndDateError(_endDateError);
-    setSubstratumError(_substratumError);
-    setShowSmallSiteWarning(_showSmallSiteWarning);
-
-    return _startDateError || _endDateError || _substratumError || _showSmallSiteWarning;
   }, [
-    endDate,
-    selectedSite?.areaHa,
-    requestedSubstratumIds,
     startDate,
-    strings.INVALID_DATE,
+    endDate,
+    observationId,
     strings.REQUIRED_FIELD,
+    strings.INVALID_DATE,
     strings.SELECT_AT_LEAST_ONE_SUBSTRATUM,
+    requestedSubstratumIds,
+    selectedSite?.areaHa,
   ]);
 
   const doSave = useCallback(() => {
-    if (plantingSite && onReschedule && startDate && endDate) {
+    if (onReschedule && startDate && endDate) {
       onReschedule({ startDate, endDate });
     }
 
@@ -160,7 +164,7 @@ export default function ScheduleObservationForm({
     }
 
     setShowSmallSiteWarning(false);
-  }, [endDate, onReschedule, onSchedule, plantingSite, requestedSubstratumIds, selectedSite, startDate]);
+  }, [endDate, onReschedule, onSchedule, requestedSubstratumIds, selectedSite, startDate]);
 
   const onSubmit = useCallback(() => {
     setValidate(true);
@@ -203,7 +207,7 @@ export default function ScheduleObservationForm({
                 options={siteOptions}
                 selectedValue={plantingSite?.id ?? selectedPlantingSiteId}
                 disabled={!!plantingSite}
-                errorText={validate && !selectedPlantingSiteId ? strings.REQUIRED_FIELD : ''}
+                errorText={validate && !observationId ? strings.REQUIRED_FIELD : ''}
                 fullWidth
               />
             </Grid>

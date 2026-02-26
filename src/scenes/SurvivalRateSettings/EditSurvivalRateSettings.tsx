@@ -7,13 +7,11 @@ import { Tabs } from '@terraware/web-components';
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import { useGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import { useGetT0SiteDataQuery, useGetT0SpeciesForPlantingSiteQuery } from 'src/queries/generated/t0';
 import { useGetPlotsWithObservationsQuery } from 'src/queries/search/t0';
-import strings from 'src/strings';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
 import ChangeTabWarningModal from './ChangeTabWarningModal';
@@ -22,6 +20,7 @@ import EditTemporaryPlotsTab from './EditTemporaryPlotsTab';
 import SurvivalRateInstructions from './SurvivalRateInstructions';
 
 const EditSurvivalRateSettings = () => {
+  const { strings } = useLocalization();
   const [showChangeTabWarning, setShowChangeTabWarning] = useState(false);
   const params = useParams<{ plantingSiteId: string }>();
   const plantingSiteId = Number(params.plantingSiteId);
@@ -43,8 +42,6 @@ const EditSurvivalRateSettings = () => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
   const navigate = useSyncNavigate();
-  const newObservationViewEnabled = isEnabled('New Observation View');
-
   const permanentPlots = useMemo(() => {
     return plotsWithObservations?.filter(
       (p) => !!p.permanentIndex && p.observationPlots.some((op) => op.isPermanent === 'true')
@@ -94,7 +91,18 @@ const EditSurvivalRateSettings = () => {
     }
 
     return _tabs;
-  }, [activeLocale, permanentPlots, plantingSiteId, t0SiteData, temporaryPlots, withdrawnSpeciesPlots]);
+  }, [
+    activeLocale,
+    permanentPlots,
+    plantingSiteId,
+    strings.PERMANENT_PLOTS,
+    strings.TEMPORARY_PLOTS,
+    t0SiteData?.plots,
+    t0SiteData?.strata,
+    t0SiteData?.survivalRateIncludesTempPlots,
+    temporaryPlots,
+    withdrawnSpeciesPlots,
+  ]);
 
   const { activeTab } = useStickyTabs({
     defaultTab: 'permanent',
@@ -104,13 +112,13 @@ const EditSurvivalRateSettings = () => {
 
   const continueChangeTab = useCallback(() => {
     setShowChangeTabWarning(false);
-    const baseUrl = newObservationViewEnabled ? APP_PATHS.SURVIVAL_RATE_SETTINGS_V2 : APP_PATHS.SURVIVAL_RATE_SETTINGS;
+    const baseUrl = APP_PATHS.SURVIVAL_RATE_SETTINGS_V2;
 
     navigate({
       pathname: baseUrl.replace(':plantingSiteId', plantingSiteId.toString()),
       search: `tab=${activeTab === 'permanent' ? 'temporary' : 'permanent'}`,
     });
-  }, [activeTab, navigate, newObservationViewEnabled, plantingSiteId]);
+  }, [activeTab, navigate, plantingSiteId]);
 
   const onChangeTabHandler = useCallback(
     (newTab: string) => {

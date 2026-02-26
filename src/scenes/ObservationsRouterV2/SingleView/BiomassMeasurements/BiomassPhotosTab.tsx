@@ -10,8 +10,8 @@ import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
-import EventLog from 'src/scenes/ObservationsRouter/common/EventLog';
-import MonitoringPlotPhotosWithActions from 'src/scenes/ObservationsRouter/common/MonitoringPlotPhotosWithActions';
+import EventLog from 'src/scenes/ObservationsRouterV2/SingleView/EventLog';
+import MonitoringPlotPhotosWithActions from 'src/scenes/ObservationsRouterV2/SingleView/MonitoringPlotPhotosWithActions';
 
 const BiomassPhotosTab = () => {
   const theme = useTheme();

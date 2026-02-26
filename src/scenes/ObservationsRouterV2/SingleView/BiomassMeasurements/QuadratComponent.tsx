@@ -5,7 +5,7 @@ import { Box, Typography, useTheme } from '@mui/material';
 
 import { useLocalization } from 'src/providers';
 import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
-import MonitoringPlotPhotos from 'src/scenes/ObservationsRouter/common/MonitoringPlotPhotos';
+import MonitoringPlotPhotos from 'src/scenes/ObservationsRouterV2/SingleView/MonitoringPlotPhotos';
 import { ObservationMonitoringPlotPosition, getQuadratLabel } from 'src/types/Observations';
 
 import QuadratSpeciesEditableTable from './QuadratSpeciesEditableTable';
