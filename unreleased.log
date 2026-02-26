@@ -1,3 +1,6 @@
+ea5c39318a8a SW-7979 Use selected columns instead of harcoded (#5331)
+6649bc1068d4 SW-8047 Updated to select substrata by default on map legend (#5333)
+711279a30d25 SW-8070 Zoom out to see all sites when all planting site selected (#5332)
 855d393746fb SW-8114 Updated tooltip content for plot info to include stratum and substratum name (#5329)
 f43a9c23601d SW-8068 Removed table tiltes (#5330)
 38f8eb19c3ab SW-8112 Show match species message when unreconized species exist (#5328)
