@@ -16,7 +16,7 @@ import {
   useLazyGetObservationQuery,
 } from 'src/queries/generated/observations';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
-import SmallSiteWarningDialog from 'src/scenes/ObservationsRouter/schedule/SmallSiteWarningDialog';
+import SmallSiteWarningDialog from 'src/scenes/ObservationsRouterV2/Schedule/SmallSiteWarningDialog';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import ObservationSubstratumSelector from './ObservationSubstratumSelector';

@@ -99,12 +99,9 @@ const DetailsRenderer =
     };
 
     const createLinkToPlot = (iValue: React.ReactNode | unknown[]) => {
-      const adHocObservationUrl = APP_PATHS.OBSERVATION_AD_HOC_PLOT_DETAILS;
+      const adHocObservationUrl = APP_PATHS.OBSERVATION_DETAILS_V2;
 
-      const to = adHocObservationUrl
-        .replace(':monitoringPlotId', row.adHocPlot?.monitoringPlotId?.toString())
-        .replace(':observationId', row.observationId?.toString())
-        .replace(':plantingSiteId', row.plantingSiteId?.toString());
+      const to = adHocObservationUrl.replace(':observationId', row.observationId?.toString());
 
       return (
         <Link fontSize='16px' to={to}>

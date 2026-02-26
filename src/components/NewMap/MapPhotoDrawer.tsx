@@ -54,10 +54,7 @@ const MapPhotoDrawer = ({
 
   const observationUrl = useMemo(() => {
     if (result) {
-      return APP_PATHS.OBSERVATION_DETAILS.replace(':plantingSiteId', `${result.plantingSiteId}`).replace(
-        ':observationId',
-        `${result.observationId}`
-      );
+      return APP_PATHS.OBSERVATION_DETAILS_V2.replace(':observationId', `${result.observationId}`);
     }
   }, [result]);
 

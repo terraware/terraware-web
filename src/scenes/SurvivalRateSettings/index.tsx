@@ -195,7 +195,7 @@ const SurvivalRateSettings = () => {
 
   const goToEditSurvivalRateSettings = useCallback(() => {
     navigate({
-      pathname: APP_PATHS.EDIT_SURVIVAL_RATE_SETTINGS.replace(':plantingSiteId', plantingSiteId.toString()),
+      pathname: APP_PATHS.EDIT_SURVIVAL_RATE_SETTINGS_V2.replace(':plantingSiteId', plantingSiteId.toString()),
       search: `tab=${activeTab}`,
     });
   }, [activeTab, navigate, plantingSiteId]);

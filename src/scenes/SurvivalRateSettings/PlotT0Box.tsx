@@ -21,7 +21,7 @@ type PlotT0BoxProps = {
   withdrawnSpeciesPlot?: SpeciesPlot;
 };
 
-const PlotT0Box = ({ plot, plantingSiteId, t0Plot, withdrawnSpeciesPlot }: PlotT0BoxProps) => {
+const PlotT0Box = ({ plot, t0Plot, withdrawnSpeciesPlot }: PlotT0BoxProps) => {
   const theme = useTheme();
   const { species } = useSpeciesData();
   const { activeLocale } = useLocalization();
@@ -95,10 +95,7 @@ const PlotT0Box = ({ plot, plantingSiteId, t0Plot, withdrawnSpeciesPlot }: PlotT
                       strings.USING_OBSERVATION_DATA_FROM,
                       <Link
                         fontSize={'16px'}
-                        to={APP_PATHS.OBSERVATION_DETAILS.replace(':plantingSiteId', plantingSiteId.toString()).replace(
-                          ':observationId',
-                          t0Plot.observationId.toString()
-                        )}
+                        to={APP_PATHS.OBSERVATION_DETAILS_V2.replace(':observationId', t0Plot.observationId.toString())}
                       >
                         {observationPlot ? getShortDate(observationPlot.observation_completedTime, activeLocale) : ''}
                       </Link>
