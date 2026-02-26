@@ -1,3 +1,5 @@
+855d393746fb SW-8114 Updated tooltip content for plot info to include stratum and substratum name (#5329)
+f43a9c23601d SW-8068 Removed table tiltes (#5330)
 38f8eb19c3ab SW-8112 Show match species message when unreconized species exist (#5328)
 ec461154ebbd SW-8104 Make fields editable on Report view (#5326)
 5619ab7bb24b SW-8106 Added tooltip for sites/strata with observed permanent plots (#5327)
