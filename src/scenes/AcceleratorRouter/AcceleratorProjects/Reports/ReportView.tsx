@@ -358,6 +358,10 @@ const ReportView = () => {
                       metric={metric}
                       reportLabel={report?.quarter}
                       year={yearToUse}
+                      projectId={projectId}
+                      reportId={Number(reportId)}
+                      canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
+                      onEditChange={onEditChange}
                     />
                   ) : (
                     <MetricBox
