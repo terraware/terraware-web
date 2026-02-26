@@ -1,3 +1,5 @@
+ec461154ebbd SW-8104 Make fields editable on Report view (#5326)
+5619ab7bb24b SW-8106 Added tooltip for sites/strata with observed permanent plots (#5327)
 df1c40b9c0c0 Added plot info tooltip next to plot title (#5325)
 10b2633dc13e Implemented kebab menu for match unrecognized species (#5324)
 abbbafdf0fbd Used truncated text for observed strata names (#5323)
