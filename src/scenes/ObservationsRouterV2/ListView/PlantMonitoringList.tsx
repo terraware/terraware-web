@@ -282,14 +282,13 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           (total, plantSpecies) => (total += plantSpecies.totalLive),
           0
         );
-        const strata = observationResult.strata.reduce((stratumNames, stratumResult) => {
-          const obsrvedStratum = plantingSite?.strata?.find((stratum) => stratum.id === stratumResult.stratumId);
-          if (obsrvedStratum) {
-            return stratumNames + `\r${obsrvedStratum.name}`;
-          } else {
-            return stratumNames;
-          }
-        }, '');
+
+        const strataNames = observationResult.strata
+          .map((stratumResult) => {
+            const observedStratum = plantingSite?.strata?.find((stratum) => stratum.id === stratumResult.stratumId);
+            return observedStratum?.name;
+          })
+          .filter((stratumName): stratumName is string => stratumName !== undefined);
 
         const completedDate = observationResult.completedTime
           ? getDateDisplayValue(observationResult.completedTime, plantingSite?.timeZone ?? defaultTimezone)
@@ -303,7 +302,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           observationState: observationResult.state,
           state: getStatus(observationResult.state),
           plantingSiteName: plantingSite?.name,
-          strata,
+          strata: strataNames.join('\r'),
           totalLive,
           totalPlants: observationResult.totalPlants,
           totalSpecies: observationResult.totalSpecies,
