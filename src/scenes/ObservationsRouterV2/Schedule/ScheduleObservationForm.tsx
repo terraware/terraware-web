@@ -203,7 +203,7 @@ export default function ScheduleObservationForm({
                 options={siteOptions}
                 selectedValue={plantingSite?.id ?? selectedPlantingSiteId}
                 disabled={!!plantingSite}
-                errorText={validate && !selectedPlantingSiteId ? strings.REQUIRED_FIELD : ''}
+                errorText={validate && !selectedPlantingSiteId && !plantingSite?.id ? strings.REQUIRED_FIELD : ''}
                 fullWidth
               />
             </Grid>
