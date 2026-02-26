@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/124</span>
+                <span class='fraction'>0/123</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/29</span>
+                <span class='fraction'>0/30</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/120</span>
+                <span class='fraction'>0/119</span>
             </div>
         
             
@@ -502,8 +502,7 @@
 <a name='L437'></a><a href='#L437'>437</a>
 <a name='L438'></a><a href='#L438'>438</a>
 <a name='L439'></a><a href='#L439'>439</a>
-<a name='L440'></a><a href='#L440'>440</a>
-<a name='L441'></a><a href='#L441'>441</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L440'></a><a href='#L440'>440</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -789,10 +788,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -909,6 +904,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1224,18 +1222,17 @@ const PlantMonitoringList = ({<span class="cstat-no" title="statement not covere
 <span class="fstat-no" title="function not covered" >        co</span>nst plantingSite = plan<span class="cstat-no" title="statement not covered" >tingSitesById[observationResult.</span>plantingSiteId];
 &nbsp;
         const totalLive = observationResult.species.reduce(
-          (total, pla<span class="cstat-no" title="statement not covered" >ntSpecies) =&gt; (total += plantSpe<span class="fstat-no" title="function not covered" >ci</span>es.totalLive),</span>
+          (total, plantSpe<span class="cstat-no" title="statement not covered" >cies) =&gt; (total += plantSpeci<span class="fstat-no" title="function not covered" >es</span>.totalLive),</span>
           0
         );<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-<span class="cstat-no" title="statement not covered" >        const strata = observationResult.strata.reduce((stratumNames, stratumResult) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >          const obsrvedStratum = plantingSite?.strata?.find(</span>(stratum) =&gt; stratum.id === stratumResult.stratumId);
-          if (obsrvedStratum) {
-<span class="cstat-no" title="statement not covered" >            return stratumNames</span> + `\r${obsrvedStratum.name}`;
-          } else {
-            return stratumNames;
-          }<span class="cstat-no" title="statement not covered" ></span>
-        }, '');<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
+        const st<span class="fstat-no" title="function not covered" >ra</span>taNames = obser<span class="cstat-no" title="statement not covered" >vationResult.strata</span>
+          .map((stratumResul<span class="cstat-no" title="statement not covered" >t) =&gt; {</span>
+            const observedStra<span class="cstat-no" title="statement not covered" >tum = plantingSite?.strata?.find((stratum) =&gt; stratum.id === stratumResult.stratumId);</span>
+<span class="cstat-no" title="statement not covered" >            return observedStratum?.name;</span>
+          })
+          .filter((stratumName): stratumName is string =&gt; stratumName !== undefined);
+&nbsp;
         const completedDate = observationResult.completedTime
           ? getDateDisplayValue(observationResult.completedTime, plantingSite?.timeZone ?? defaultTimezone)
           : undefined;
@@ -1248,24 +1245,24 @@ const PlantMonitoringList = ({<span class="cstat-no" title="statement not covere
           observationState: observationResult.state,
           state: getStatus(observationResult.state),
           plantingSiteName: plantingSite?.name,
-          strata,
+          strata: strataNames.join('\r'),
           totalLive,
-          totalPlants: observationResult.totalPlants,
-          totalSpecies: observationResult.totalSpecies,
-          plantingDensity: observationResult.plantingDensity,
-          survivalRate: observationResult<span class="cstat-no" title="statement not covered" >.survivalRate,<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >          completedDate: observationResult.completedTime,</span>
-<span class="cstat-no" title="statement not covered" >        };</span>
+          totalPlants: observationResult.<span class="cstat-no" title="statement not covered" >totalPlants,<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >          totalSpecies: observationResult.totalSpecies,</span>
+<span class="cstat-no" title="statement not covered" >          plantingDensity: observationResult.plantingDensity,</span>
+          survivalRate: observationResult.survivalRate,
+          completedDate: observationResult.completedTime,
+        };
       }),
-    [activeLocale, defaultTimezone, observationResults, plantingSitesById]
-  );
+    [activeLocale, defaul<span class="cstat-no" title="statement not covered" >tTimezone, observationResu<span class="fstat-no" title="function not covered" >lt</span>s, plantingSitesById]</span>
+  );<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
-  const navigateToSurviva<span class="cstat-no" title="statement not covered" >lRateSettings = useCallbac<span class="fstat-no" title="function not covered" >k(</span>() =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (plantingSiteId) {</span>
-      navigate({
+  const navigateToSurvivalRateSettings = useCallback(() =&gt; {
+    if (plantingSiteId) {
+      navigate({<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
         pathname: APP_PATHS.SURVIVAL_RATE_SETTINGS_V2.replace(':plantingSiteId', plantingSiteId.toString()),
       });
-    }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+    }
   }, [navigate, plantingSiteId]);
 &nbsp;
   const rightComponent = useMemo(() =&gt; {
@@ -1302,11 +1299,11 @@ const PlantMonitoringList = ({<span class="cstat-no" title="statement not covere
               disabled={plotsWithObservations.length === 0}
             &gt;
               {strings.SURVIVAL_RATE_SETTINGS}
-            &lt;/Link&gt;
-            {!!plotsWithObservations.length &amp;&amp; (
+            &lt;/Link&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >            {!!plotsWithObservations.length &amp;&amp; (</span>
               &lt;&gt;
-                {survivalRat<span class="cstat-no" title="statement not covered" >eSet ? (<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >                  &lt;Icon name='success' fillColor={theme.palette.TwClrBgSuccess} /&gt;</span>
+                {survivalRateSet ? (
+                  &lt;Icon name='success' fillColor={theme.palette.TwClrBgSuccess} /&gt;
                 ) : (
                   &lt;Icon name='iconUnavailable' fillColor={theme.palette.TwClrBgDanger} /&gt;
                 )}
@@ -1317,10 +1314,10 @@ const PlantMonitoringList = ({<span class="cstat-no" title="statement not covere
       &lt;/Box&gt;
     );
   }, [
-    isMobile,
+<span class="cstat-no" title="statement not covered" >    isMobile,</span>
     navigateToSurvivalRateSettings,
     observationResults?.length,
-<span class="cstat-no" title="statement not covered" >    plantingSiteId,</span>
+    plantingSiteId,
     plotsWithObservations.length,
     selectedPlotSelection,
     strings.AD_HOC,
@@ -1345,10 +1342,10 @@ const PlantMonitoringList = ({<span class="cstat-no" title="statement not covere
   }, [
     selectedPlotSelection,
     strings.AD_HOC_OBSERVATIONS_EMPTY_STATE_MESSAGE_1,
-    strings.AD_HOC_OBSERVATIONS_EMPTY_STATE_MESSAGE_2,
+    strings.AD_HOC_O<span class="cstat-no" title="statement not covered" >BSERVATIONS_EMPTY_ST</span>ATE_MESSAGE_2,
     strings.OBSERVATIONS_EMPTY_STATE_MESSAGE_1,
     strings.OBSERVATIONS_EMPTY_STATE_MESSAGE_2,
-  ]);<span class="cstat-no" title="statement not covered" ></span>
+  ]);
 &nbsp;
   return (
     &lt;Card radius={'8px'} style={{ width: '100%' }}&gt;
@@ -1390,7 +1387,7 @@ export default PlantMonitoringList;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-26T19:34:45.438Z
+                at 2026-02-26T20:01:00.571Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

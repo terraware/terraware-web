@@ -1,3 +1,4 @@
+504bc98a8149 Fixed issue with an extra return character when processing strata names (#5338)
 ea5c39318a8a SW-7979 Use selected columns instead of harcoded (#5331)
 6649bc1068d4 SW-8047 Updated to select substrata by default on map legend (#5333)
 711279a30d25 SW-8070 Zoom out to see all sites when all planting site selected (#5332)
