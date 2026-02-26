@@ -46,7 +46,10 @@ const TableRowPopupMenu = ({ menuItems }: TableRowPopupMenuProps): JSX.Element =
               <MenuItem
                 key={index}
                 id={`${menuItem.label}_${index}`}
-                onClick={menuItem.onClick}
+                onClick={() => {
+                  menuItem.onClick();
+                  closeMenuHandler();
+                }}
                 sx={{ padding: theme.spacing(1, 2) }}
                 disabled={menuItem.disabled}
               >

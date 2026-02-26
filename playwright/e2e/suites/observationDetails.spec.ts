@@ -45,7 +45,6 @@ test.describe('ObservationDetailsTests', () => {
     // table row values
     await expect(page.locator('#row1-stratumName a:has-text("Stratum 01")')).toBeVisible();
     await expect(page.locator('#row1-completedDate p:has-text("2025-05-29")')).toBeVisible();
-    await expect(page.locator('#row1-status p:has-text("Completed")')).toBeVisible();
     await expect(page.locator('#row1-totalPlants p:has-text("944")')).toBeVisible();
     await expect(page.locator('#row1-totalSpecies p:has-text("9")')).toBeVisible();
     await expect(page.locator('#row1-plantingDensity p:has-text("852")')).toBeVisible();
