@@ -28,7 +28,6 @@ import TfMain from 'src/components/common/TfMain';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import SearchService from 'src/services/SearchService';
 import strings from 'src/strings';
@@ -109,7 +108,6 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
   const [results, setResults] = useState<SpeciesSearchResultRow[]>();
   const query = useQuery();
   const navigate = useSyncNavigate();
-  const { orgHasParticipants } = useParticipantData();
   const { activeLocale } = useLocalization();
 
   const contentRef = React.useRef(null);
@@ -557,7 +555,6 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
   }, [
     activeLocale,
     showProblemsColumn,
-    orgHasParticipants,
     uniqueAcceleratorProjects,
     uniqueConservationCategories,
     uniqueGrowthForms,
