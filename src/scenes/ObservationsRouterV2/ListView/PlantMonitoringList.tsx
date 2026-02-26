@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import { Dropdown, Icon, Separator } from '@terraware/web-components';
+import { Dropdown, Icon } from '@terraware/web-components';
 import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/utils';
 
 import ClientSideFilterTable from 'src/components/Tables/ClientSideFilterTable';
@@ -326,7 +326,6 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
   const rightComponent = useMemo(() => {
     return (
       <Box display={'flex'} flexDirection={'row'} flexGrow={1} alignItems={'center'} justifyContent={'start'}>
-        <Separator height={'40px'} />
         <Typography sx={{ paddingRight: 1 }} fontSize={'16px'} fontWeight={500}>
           {strings.PLOT_SELECTION}
         </Typography>
