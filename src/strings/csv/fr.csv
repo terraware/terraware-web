@@ -342,7 +342,9 @@ COLLECTOR,Collecteur,cf2069b8
 COLLECTORS,Collecteurs,55432568
 COLOR,Couleur,e96df902
 COMMENTS,Commentaires,5a6f1269
+COMMON,Commun,69695656
 COMMON_NAME,Nom commun,d7db2e57
+COMMON_QUESTION,Commun ?,68715b60
 COMMUNITY,Communauté,a1e5aaf2
 COMPLETE,Complet,348b099c
 COMPLETE_REPORTS,Compléter les rapports,7f777ccd
@@ -440,6 +442,7 @@ DEAD_PLANTS_OBSERVED,Plantes mortes observées,3ff4f3af
 DEAL_NAME,Nom de l'offre,be1bd4c5
 DECLINE,Refuser,67618a4e
 DEFAULT_LANGUAGE_SELECTED,Langue par défaut : {0},74d18404
+DEFINITION,Définition,b17769ee
 DELETE,Supprimer,43cbbd0c
 DELETE_ACCESSION,Supprimer l'accession,b3a13e44
 DELETE_ACCESSION_MESSAGE,Vous vous apprêtez à supprimer l'accession {0}.,dd39f8dd
@@ -500,6 +503,7 @@ DEV_SERVER_ERROR,Serveur non disponible (possibilité de redémarrage avec mise 
 DIAMETER_AT_BREAST_HEIGHT,Diamètre à hauteur de poitrine (DHP) à maturité (cm),6b42a16f
 DIAMETER_CM,Diamètre (cm),242d8114
 DIFFICULT_ACCESSIBILITY,Accessibilité difficile,18c83274
+DISAGGREGATION,Désagrégation,31fbdf6c
 DISMISS,Fermer,a56709f4
 DO_NOT_USE,Ne pas utiliser,6950f9e5
 DOC_PRODUCER,Producteur de docs,e40f8aa1
@@ -735,6 +739,7 @@ FREEZER,Congélateur,18226170
 FREEZER_1,Congélateur 1,953b9b90
 FREEZER_2,Congélateur 2,8e57368e
 FREEZER_3,Congélateur 3,333c5d1e
+FREQUENCY_OF_REPORTING,Fréquence de rapport,8d823c4c
 FRESH,Frais,79e86995
 FROM,De,3b922b12
 FROM_GIS_DATABASE,(à partir de la base de données SIG),7b29f44f
@@ -857,6 +862,8 @@ IN_STORAGE,Stocké,e17c2135
 INCLUDE_EMPTY_FIELDS,Inclure des champs vides,a4ba1236
 INCOMPLETE,Incomplet,5f524fdf
 INCORRECT_EMAIL_FORMAT,Format d'e-mail incorrect.,19f1a8c9
+INDICATOR_LEVEL,Niveau d’indicateur,b128c992
+INDICATORS,Indicateurs,ea71857f
 INFRASTRUCTURE,Infrastructure,c8fe126f
 INSTANCES,Instances,fcc19322
 INSTRUCTIONS,Instructions :,4abbf6f0
@@ -1456,6 +1463,7 @@ PREVIEW,Aperçu,a2aefa10
 PREVIEW_HIGHLIGHTS,Aperçu des points forts,248bb9ae
 PREVIEW_WILL_DISPLAY_AFTER_SAVING,L’aperçu s’affichera après l’enregistrement,475b4844
 PREVIOUS,Précédent,156ee39e
+PRIMARY_DATA_SOURCE,Source de données principale,4ad95dc9
 PRIVACY_POLICY,Engagement de confidentialité,47ab3e90
 PROBLEMS,Problèmes,25b5d615
 PROBLEMS_WITH_ENTRIES,Il y a eu un problème avec certaines saisies dans ce formulaire.,86f72cd9
@@ -1576,6 +1584,7 @@ RECORDED_SESSIONS,Sessions enregistrées,60a9c3c7
 RECORDING_DATE,Date d'enregistrement,255056cf
 RECORDING_DATE_ERROR,Cela doit être postérieur à la date de début,3ca9e68a
 RECORDING_URL,URL de l'enregistrement,0c9daf58
+REF_ID,ID de référence,89bd78ee
 REFERENCE,Référence,0a82a6a5
 REFERENCE_DBH,Citez la référence pour « DHP à maturité ».,9e786693
 REFERENCE_HEIGHT_AT_MATURITY,Citez la référence pour « Hauteur à maturité ».,40d3e9bd
@@ -2083,6 +2092,7 @@ TEST_METHOD_REQUIRED,Méthode du test *,7d040e4d
 TEST_TYPE,Type de test,523d6bdd
 TESTING_STAFF,Personnel chargé des essais,32f891bd
 TEXT_REQUIRED_BOTH_FIELDS,Le texte est obligatoire pour les deux champs.,a4c500b6
+TF_OWNER_REVIEWER,Propriétaire / Réviseur TF,3627b045
 THANK_YOU_FOR_CONTACTING_SUPPORT,Merci d'avoir contacté le service d'assistance de Terraware. Votre demande a été reçue. L'ID de votre demande est {0}.,733b2c42
 THANK_YOU_FOR_USING_TERRAWARE,Merci d'utiliser Terraware !,c6999786
 THERE_ARE_NO_SPECIES_ADDED_TO_THIS_PROJET_YET,Aucune espèce n'a encore été ajoutée à ce projet.,02f58d0e
@@ -2227,6 +2237,7 @@ TREES_TRUNKS,Arbres / troncs,029487f6
 TRUNCATED_TEXT_MORE_LINK,plus,9c3efa68
 TRY_AGAIN,Réessayer,1e18e638
 TUTORIAL_PREFIX,Tutoriel : {0},71025393
+TW_DATA,Données TW,ea2a4098
 TYPE,Type,c1d026e9
 TYPE_OF_FOREST,Type de forêt,6fd02b1c
 UN_SDG,Objectifs de développement durable des Nations Unies (SDG),7d6c756a
