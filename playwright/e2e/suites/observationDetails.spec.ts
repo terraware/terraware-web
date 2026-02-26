@@ -126,7 +126,7 @@ test.describe('ObservationDetailsTests', () => {
     await expect(page.getByText('Stratum: Stratum 01')).toBeVisible();
     await expect(page.getByText('Substratum: Substratum A')).toBeVisible();
     await expect(page.getByText('Plot Type: Permanent')).toBeVisible();
-    await expect(page.getByText('Location: 38.44150597, 15.6977629')).toBeVisible();
+    await expect(page.getByText('Location: 15.6977629, 38.44150597')).toBeVisible();
     await expect(page.locator('p:has-text("Total Plants")')).toBeVisible();
     await expect(page.getByText('85')).toBeVisible();
     await expect(page.locator('p').filter({ hasText: /^Species$/ })).toBeVisible();
