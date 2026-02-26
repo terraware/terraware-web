@@ -39,7 +39,7 @@ services:
     image: nginx
     volumes:
       - ./nginx:/etc/nginx/templates
-      - ./build:/usr/share/nginx/html
+      - ./dist:/usr/share/nginx/html
     ports:
       - '3001:80'
     environment:

@@ -175,7 +175,7 @@ To exit the PostgreSQL client, type `\quit` or hit control-D.
 ## Running a prod-like build locally with `nginx`
 
 Developer builds use non-optimized, hot-reloading builds served via
-Craco on http://localhost:3000 . These are ideal for the normal
+rsbuild on http://localhost:3000 . These are ideal for the normal
 developer workflow, but you'll want to run a production-like build in
 order to test changes to:
 
@@ -186,7 +186,7 @@ order to test changes to:
 then run the following steps to launch a prod-like build on
 http://localhost:3001 :
 
-(Note that you have to have this in .env before building: `REACT_APP_TERRAWARE_API=http://localhost:8080`)
+(Note that you have to have this in .env before building: `PUBLIC_TERRAWARE_API=http://localhost:8080`)
 
 ```shell
 yarn docker:start:prod      # run once to start terraware-server and nginx
