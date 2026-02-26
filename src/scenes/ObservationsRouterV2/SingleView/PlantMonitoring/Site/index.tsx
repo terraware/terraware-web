@@ -1,4 +1,4 @@
-import React, { type JSX, useEffect, useMemo } from 'react';
+import React, { type JSX, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Typography, useTheme } from '@mui/material';
@@ -8,11 +8,15 @@ import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
 import SurvivalRateMessageV2 from 'src/components/SurvivalRate/SurvivalRateMessageV2';
 import Card from 'src/components/common/Card';
+import OptionsMenu from 'src/components/common/OptionsMenu';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
+import MatchSpeciesModal from 'src/scenes/ObservationsRouter/common/MatchSpeciesModal';
+import UnrecognizedSpeciesPageMessage from 'src/scenes/ObservationsRouter/common/UnrecognizedSpeciesPageMessage';
 import ObservationMapWrapper from 'src/scenes/ObservationsRouterV2/Map';
+import { useOnSaveMergedSpeciesRtk } from 'src/scenes/ObservationsRouterV2/useOnSaveMergedSpeciesRtk';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
@@ -26,6 +30,12 @@ const SiteDetails = (): JSX.Element => {
   const { activeLocale, strings } = useLocalization();
   const params = useParams<{ observationId: string }>();
   const observationId = Number(params.observationId);
+  const [showPageMessage, setShowPageMessage] = useState(false);
+  const [showMatchSpeciesModal, setShowMatchSpeciesModal] = useState(false);
+  const onSaveMergedSpecies = useOnSaveMergedSpeciesRtk({
+    observationId,
+    onComplete: () => setShowMatchSpeciesModal(false),
+  });
 
   const crumbs: Crumb[] = useMemo(() => {
     const crumbsData: Crumb[] = [
@@ -68,8 +78,56 @@ const SiteDetails = (): JSX.Element => {
 
   const species = useObservationSpecies(results?.species ?? []);
 
+  const unrecognizedSpecies = useMemo(() => {
+    if (results?.species) {
+      const speciesWithNoIds = results.species.filter(
+        (observationSpecies) => observationSpecies.speciesId === undefined
+      );
+      const combinedNames = Array.from(
+        new Set(
+          speciesWithNoIds
+            .map((observationSpecies) => observationSpecies.speciesName)
+            .filter((s): s is string => s !== undefined)
+        )
+      ).toSorted();
+
+      return combinedNames;
+    } else {
+      return [];
+    }
+  }, [results?.species]);
+
+  const matchedUnrecognizedSpeciesMenu = useMemo(() => {
+    return (
+      <OptionsMenu
+        onOptionItemClick={() => setShowMatchSpeciesModal(true)}
+        optionItems={[
+          {
+            label: strings.MATCH_UNRECOGNIZED_SPECIES,
+            value: 'match',
+            disabled: (unrecognizedSpecies?.length || 0) === 0,
+          },
+        ]}
+      />
+    );
+  }, [strings.MATCH_UNRECOGNIZED_SPECIES, unrecognizedSpecies?.length]);
+
   return (
-    <Page crumbs={crumbs} title={title}>
+    <Page crumbs={crumbs} title={title} rightComponent={matchedUnrecognizedSpeciesMenu}>
+      {showPageMessage && (
+        <UnrecognizedSpeciesPageMessage
+          setShowMatchSpeciesModal={setShowMatchSpeciesModal}
+          setShowPageMessage={setShowPageMessage}
+          unrecognizedSpecies={unrecognizedSpecies}
+        />
+      )}
+      {showMatchSpeciesModal && (
+        <MatchSpeciesModal
+          onClose={() => setShowMatchSpeciesModal(false)}
+          onSave={onSaveMergedSpecies}
+          unrecognizedSpecies={unrecognizedSpecies}
+        />
+      )}
       <SurvivalRateMessageV2 selectedPlantingSiteId={results?.plantingSiteId} />
       <AggregatedPlantsStats
         completedTime={results?.completedTime}
