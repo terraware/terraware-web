@@ -28,7 +28,6 @@ import TfMain from 'src/components/common/TfMain';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import SearchService from 'src/services/SearchService';
 import strings from 'src/strings';
@@ -109,7 +108,6 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
   const [results, setResults] = useState<SpeciesSearchResultRow[]>();
   const query = useQuery();
   const navigate = useSyncNavigate();
-  const { orgHasParticipants } = useParticipantData();
   const { activeLocale } = useLocalization();
 
   const contentRef = React.useRef(null);
@@ -310,26 +308,21 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
 
   const downloadReportHandler = (table: MRT_TableInstance<SpeciesSearchResultRow>) => {
     const filteredRows = table.getSortedRowModel().rows;
-    const csvColumns = [
-      { key: 'scientificName', displayLabel: strings.SCIENTIFIC_NAME },
-      { key: 'commonName', displayLabel: strings.COMMON_NAME },
-      { key: 'familyName', displayLabel: strings.FAMILY },
-      { key: 'conservationCategory', displayLabel: strings.CONSERVATION_CATEGORY },
-      { key: 'rare', displayLabel: strings.RARE },
-      { key: 'growthForms', displayLabel: strings.GROWTH_FORM },
-      { key: 'seedStorageBehavior', displayLabel: strings.SEED_STORAGE_BEHAVIOR },
-      { key: 'ecosystemTypes', displayLabel: strings.ECOSYSTEM_TYPE },
-    ];
-    const csvData = filteredRows.map((row) => ({
-      scientificName: row.original.scientificName ?? '',
-      commonName: row.original.commonName ?? '',
-      familyName: row.original.familyName ?? '',
-      conservationCategory: row.original.conservationCategory ?? '',
-      rare: row.original.rare === 'true' ? strings.YES : strings.NO,
-      growthForms: (row.original.growthForms ?? []).join(', '),
-      seedStorageBehavior: row.original.seedStorageBehavior ?? '',
-      ecosystemTypes: (row.original.ecosystemTypes ?? []).join(', '),
+    const visibleColumns = table
+      .getVisibleLeafColumns()
+      .filter((col) => !col.id.startsWith('mrt-') && col.id !== 'problems' && typeof col.columnDef.header === 'string');
+    const csvColumns = visibleColumns.map((col) => ({
+      key: col.id,
+      displayLabel: col.columnDef.header as string,
     }));
+    const csvData = filteredRows.map((row) => {
+      const rowData: Record<string, string> = {};
+      visibleColumns.forEach((col) => {
+        const value = row.getValue(col.id);
+        rowData[col.id] = value !== null && value !== undefined ? String(value) : '';
+      });
+      return rowData;
+    });
     const blob = makeCsv(csvColumns, csvData);
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -499,20 +492,16 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
         filterVariant: 'text',
         sortUndefined: 'last',
       },
-      ...(orgHasParticipants
-        ? [
-            {
-              id: 'acceleratorProjects',
-              header: strings.PROJECTS,
-              accessorFn: (row: SpeciesSearchResultRow) => (row.acceleratorProjects ?? []).join(', '),
-              enableEditing: false,
-              filterVariant: 'multi-select' as const,
-              filterSelectOptions: uniqueAcceleratorProjects,
-              sortUndefined: 'last' as const,
-              Cell: AcceleratorProjectsCell,
-            },
-          ]
-        : []),
+      {
+        id: 'acceleratorProjects',
+        header: strings.PROJECTS,
+        accessorFn: (row: SpeciesSearchResultRow) => (row.acceleratorProjects ?? []).join(', '),
+        enableEditing: false,
+        filterVariant: 'multi-select' as const,
+        filterSelectOptions: uniqueAcceleratorProjects,
+        sortUndefined: 'last' as const,
+        Cell: AcceleratorProjectsCell,
+      },
       {
         id: 'conservationCategory',
         header: strings.CONSERVATION_CATEGORY,
@@ -566,7 +555,6 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
   }, [
     activeLocale,
     showProblemsColumn,
-    orgHasParticipants,
     uniqueAcceleratorProjects,
     uniqueConservationCategories,
     uniqueGrowthForms,
