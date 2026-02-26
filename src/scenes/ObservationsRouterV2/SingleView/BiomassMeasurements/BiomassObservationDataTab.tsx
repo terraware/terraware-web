@@ -189,6 +189,12 @@ const BiomassObservationDataTab = () => {
     onComplete: () => setShowMatchSpeciesModal(false),
   });
 
+  useEffect(() => {
+    if (unrecognizedSpecies.length) {
+      setShowPageMessage(true);
+    }
+  }, [unrecognizedSpecies.length]);
+
   return (
     <Card radius='24px'>
       {editQualitativeDataModalOpen && initialQualitativeData && (

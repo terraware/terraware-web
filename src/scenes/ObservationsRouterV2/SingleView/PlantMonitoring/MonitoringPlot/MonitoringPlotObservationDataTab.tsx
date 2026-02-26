@@ -146,6 +146,12 @@ const MonitoringPlotObservationDataTab = () => {
     onComplete: () => setShowMatchSpeciesModal(false),
   });
 
+  useEffect(() => {
+    if (unrecognizedSpecies.length) {
+      setShowPageMessage(true);
+    }
+  }, [unrecognizedSpecies.length]);
+
   const extraItems = [
     {
       label: strings.PLOT_CONDITIONS,
