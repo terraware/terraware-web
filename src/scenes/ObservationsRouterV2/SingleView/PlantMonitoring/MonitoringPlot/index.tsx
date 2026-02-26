@@ -2,7 +2,7 @@ import React, { type JSX, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import { Tabs } from '@terraware/web-components';
+import { Tabs, Tooltip } from '@terraware/web-components';
 
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
@@ -66,11 +66,47 @@ const MonitoringPlotDetails = (): JSX.Element => {
     return crumbsData;
   }, [observationId, plantingSite, results?.isAdHoc, stratumName, strings.OBSERVATIONS]);
 
-  const title = (
-    <Typography fontSize='20px' lineHeight='28px' fontWeight={600} color={theme.palette.TwClrTxt}>
-      {monitoringPlot?.monitoringPlotNumber}
-    </Typography>
-  );
+  const title = useMemo(() => {
+    const swCoordinatesLat = monitoringPlot?.boundary?.coordinates?.[0]?.[0]?.[1];
+    const swCoordinatesLng = monitoringPlot?.boundary?.coordinates?.[0]?.[0]?.[0];
+    return (
+      <Box display='flex' alignItems={'end'}>
+        <Typography fontSize='20px' lineHeight='28px' fontWeight={600} color={theme.palette.TwClrTxt}>
+          {monitoringPlot?.monitoringPlotNumber}
+        </Typography>
+        <Tooltip
+          placement='bottom'
+          title={
+            <Box>
+              <Typography>
+                {strings.PLOT_TYPE}: {strings.AD_HOC}
+              </Typography>
+              <Typography>
+                {strings.LOCATION}: {swCoordinatesLat}, {swCoordinatesLng}
+              </Typography>
+            </Box>
+          }
+        >
+          <Typography
+            fontSize='16px'
+            color={theme.palette.TwClrTxtBrand}
+            fontWeight={400}
+            paddingLeft={theme.spacing(1)}
+          >
+            {strings.PLOT_INFO}
+          </Typography>
+        </Tooltip>
+      </Box>
+    );
+  }, [
+    monitoringPlot?.boundary?.coordinates,
+    monitoringPlot?.monitoringPlotNumber,
+    strings.AD_HOC,
+    strings.LOCATION,
+    strings.PLOT_INFO,
+    strings.PLOT_TYPE,
+    theme,
+  ]);
 
   const tabs = useMemo(() => {
     return [
