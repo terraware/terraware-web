@@ -1,3 +1,5 @@
+3619b3e6fe7e Add rtk tags to module projects search for cache invalidation (#5336)
+c0def4aa868a Remove unused useListModules hook (#5334)
 504bc98a8149 Fixed issue with an extra return character when processing strata names (#5338)
 ea5c39318a8a SW-7979 Use selected columns instead of harcoded (#5331)
 6649bc1068d4 SW-8047 Updated to select substrata by default on map legend (#5333)
