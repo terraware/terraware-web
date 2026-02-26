@@ -494,20 +494,16 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
         filterVariant: 'text',
         sortUndefined: 'last',
       },
-      ...(orgHasParticipants
-        ? [
-            {
-              id: 'acceleratorProjects',
-              header: strings.PROJECTS,
-              accessorFn: (row: SpeciesSearchResultRow) => (row.acceleratorProjects ?? []).join(', '),
-              enableEditing: false,
-              filterVariant: 'multi-select' as const,
-              filterSelectOptions: uniqueAcceleratorProjects,
-              sortUndefined: 'last' as const,
-              Cell: AcceleratorProjectsCell,
-            },
-          ]
-        : []),
+      {
+        id: 'acceleratorProjects',
+        header: strings.PROJECTS,
+        accessorFn: (row: SpeciesSearchResultRow) => (row.acceleratorProjects ?? []).join(', '),
+        enableEditing: false,
+        filterVariant: 'multi-select' as const,
+        filterSelectOptions: uniqueAcceleratorProjects,
+        sortUndefined: 'last' as const,
+        Cell: AcceleratorProjectsCell,
+      },
       {
         id: 'conservationCategory',
         header: strings.CONSERVATION_CATEGORY,
