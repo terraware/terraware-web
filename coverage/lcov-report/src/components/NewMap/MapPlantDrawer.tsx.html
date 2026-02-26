@@ -199,10 +199,7 @@
 <a name='L134'></a><a href='#L134'>134</a>
 <a name='L135'></a><a href='#L135'>135</a>
 <a name='L136'></a><a href='#L136'>136</a>
-<a name='L137'></a><a href='#L137'>137</a>
-<a name='L138'></a><a href='#L138'>138</a>
-<a name='L139'></a><a href='#L139'>139</a>
-<a name='L140'></a><a href='#L140'>140</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L137'></a><a href='#L137'>137</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -254,9 +251,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -374,28 +368,25 @@ const MapPlantDrawer = ({ monitoringPlotId, observationId, plant }: MapPlantDraw
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  const observationUrl = useMemo(() =&gt; {</span>
     if (result) {<span class="cstat-no" title="statement not covered" ></span>
-      return APP_PATHS<span class="cstat-no" title="statement not covered" >.OBSERVATION_DETAILS.repl</span>ace(':plantingSiteId', `${result.plantingSiteId}`).replace(
-        ':observationId',<span class="cstat-no" title="statement not covered" ></span>
-        `${result.obser<span class="cstat-no" title="statement not covered" >vationId}`</span>
-      );<span class="cstat-no" title="statement not covered" ></span>
+      return APP_PATHS<span class="cstat-no" title="statement not covered" >.OBSERVATION_DETAILS_V2.r</span>eplace(':observationId', `${result.observationId}`);
     }<span class="cstat-no" title="statement not covered" ></span>
   }, [result]);<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const monitoringPlot = useMemo<span class="cstat-no" title="statement not covered" >(() =&gt; {</span>
-    const monitoringPlo<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ts</span> =</span>
-      result?.strata.flatMap((stratu<span class="cstat-no" title="statement not covered" >m) =&gt; stratum.substrata).flatMap((substr</span>atum) =&gt; substratum.monitoringPlots) ?? [];
-    const adHocPlots <span class="cstat-no" title="statement not covered" >= result?.adHocPlot ? [result.adHocPlot] : [];</span>
+  const monitoringPlot = use<span class="cstat-no" title="statement not covered" >Memo(() =&gt; {</span>
+    const monitoringPlots <span class="cstat-no" title="statement not covered" >=</span>
+      result?.strata.flatMa<span class="cstat-no" title="statement not covered" >p((stratum) =&gt; stratum.substrata).f</span>latMap((substratum) =&gt; substratum.monitoringPlots) ?? [];
+    const adHocPlots = result?.a<span class="cstat-no" title="statement not covered" >dHocPlot ? [result.adHocPlot] : [];</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+    return [...monitoringPlots, ...a<span class="cstat-no" title="statement not covered" >dHocPlots].find((plot) =&gt; plot.monitorin</span>gPlotId === monitoringPlotId);
+  }, [monitoringPlotI<span class="cstat-no" title="statement not covered" >d, result?.adHocPlot, result?.strata]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-    return [...monitor<span class="cstat-no" title="statement not covered" >ingPlots, ...adHocPlots].find((plot) =&gt; plot</span>.monitoringPlotId === monitoringPlotId);
-  }, [monitoringP<span class="cstat-no" title="statement not covered" >lotId, result?.adHocPlot, <span class="fstat-no" title="function not covered" >re</span>sult?.strata]);</span>
-<span class="cstat-no" title="statement not covered" ></span>
-  const observer = useMemo(() =&gt; {
-    return monitoringPlot<span class="cstat-no" title="statement not covered" >?.claimedByName;<span class="fstat-no" title="function not covered" ></span></span>
+  const observer = use<span class="cstat-no" title="statement not covered" >Memo(() =&gt; {</span>
+    return monito<span class="cstat-no" title="statement not covered" >ringPlot?.claimedByName;<span class="fstat-no" title="function not covered" ></span></span>
   },<span class="cstat-no" title="statement not covered" > [monitoringPlot?.claimedByName]);</span>
-<span class="cstat-no" title="statement not covered" ></span>
-  const formatGPS = useCallback(
-    (lon: number, lat: number): string =&gt; {
-      const latHemisphere = lat &gt;= 0 ? 'N' : 'S';
+&nbsp;
+  const formatGPS = useCa<span class="cstat-no" title="statement not covered" >llback(<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    (lon: number, lat: number): string =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      const latHemisphere = lat &gt;= 0 ? 'N' : 'S';</span>
       const lonHemisphere = lon &gt;= 0 ? 'E' : 'W';
 &nbsp;
       const latAbs = Math<span class="cstat-no" title="statement not covered" >.abs(lat).toFixed(4);<span class="fstat-no" title="function not covered" ></span></span>
@@ -487,7 +478,7 @@ export default MapPlantDrawer;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-26T20:40:42.579Z
+                at 2026-02-26T22:39:32.633Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

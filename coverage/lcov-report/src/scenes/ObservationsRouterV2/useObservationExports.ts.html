@@ -502,8 +502,7 @@
 <a name='L437'></a><a href='#L437'>437</a>
 <a name='L438'></a><a href='#L438'>438</a>
 <a name='L439'></a><a href='#L439'>439</a>
-<a name='L440'></a><a href='#L440'>440</a>
-<a name='L441'></a><a href='#L441'>441</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L440'></a><a href='#L440'>440</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -915,7 +914,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1097,30 +1095,29 @@ const useObservationExports = () =&gt; {
               [0, 0, 0]
             );
 &nbsp;
-            const pathPattern = APP_PATHS.OBSERVATION_MONITORING_PLOT_DETAILS;
+            const pathPattern = APP_PATHS.OBSERVATION_MONITORING_PLOT_DETAILS_V2;
             const detailsLink = new URL(
               pathPattern
-                .re<span class="cstat-no" title="statement not covered" >place(':plantingSiteId', observationResults.plantingSiteId.toString())</span>
-<span class="fstat-no" title="function not covered" ></span>                .repl<span class="cstat-no" title="statement not covered" >ace(':observationId', observationResults.observationId.toString())</span>
-<span class="fstat-no" title="function not covered" ></span>                .replace('<span class="cstat-no" title="statement not covered" >:stratumName', encodeURICompone<span class="fstat-no" title="function not covered" >nt</span>(stratum.name))</span>
-                .replace(':moni<span class="cstat-no" title="statement not covered" >toringPlotId', monitoringPlot.monitoringPlotId.toString()),</span>
+                .re<span class="cstat-no" title="statement not covered" >place(':observationId', observationResults.observationId.toString())</span>
+<span class="fstat-no" title="function not covered" ></span>                .repl<span class="cstat-no" title="statement not covered" >ace(':stratumName', encodeURIComponent(stratum.name))</span>
+<span class="fstat-no" title="function not covered" ></span>                .replace('<span class="cstat-no" title="statement not covered" >:monitoringPlotId', monitoringP<span class="fstat-no" title="function not covered" >lo</span>t.monitoringPlotId.toString()),</span>
               location.href<span class="cstat-no" title="statement not covered" ></span>
-            ).<span class="fstat-no" title="function not covered" >to</span>String();<span class="cstat-no" title="statement not covered" ></span>
-&nbsp;
+            ).toString();<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
             const dateObserved = monitoringPlot.completedTime
               ? getDateDisplayValue(monitoringPlot.completedTime, timezone)
               : '';
 &nbsp;
             // Plot polygon has a single ring of coordinates. They're in order SW-SE-NE-NW-SW, with
-            // longitude first i<span class="cstat-no" title="statement not covered" >n each coordinate pair.</span>
+            // longitude first in each coordinate pair.
             const plotCoordinate<span class="cstat-no" title="statement not covered" >s: number[][] = monitoringPlot.boundary.coordinates[0];</span>
-&nbsp;
+<span class="cstat-no" title="statement not covered" ></span>
             return {
               dateObserved,
-              detailsLink,<span class="cstat-no" title="statement not covered" ></span>
-              northeastLatitude: plo<span class="cstat-no" title="statement not covered" >tCoordinates[2][1],</span>
-<span class="cstat-no" title="statement not covered" >              northeastLongitude: plotCoordinates[2][0],</span>
-              northwestLatitude: plotCoordinates[3][1],
+              detailsLink,
+              northeastLatitude: <span class="cstat-no" title="statement not covered" >plotCoordinates[2][1],</span>
+              northeastLongitude: pl<span class="cstat-no" title="statement not covered" >otCoordinates[2][0],</span>
+<span class="cstat-no" title="statement not covered" >              northwestLatitude: plotCoordinates[3][1],</span>
               northwestLongitude: plotCoordinates[3][0],
               monitoringPlotNumber: monitoringPlot.monitoringPlotNumber,
               plantingDensity: monitoringPlot.plantingDensity,
@@ -1146,8 +1143,8 @@ const useObservationExports = () =&gt; {
       return makeCsv(columnHeaders, data);
     },
     [
-<span class="cstat-no" title="statement not covered" >      strings.DATE_OBSERVED,</span>
-      strings.DEAD_PLANTS_OBSERVED,
+      strings.DATE_OBSERVED,
+<span class="cstat-no" title="statement not covered" >      strings.DEAD_PLANTS_OBSERVED,</span>
       strings.LINK_TO_PLOT_OBSERVATION_DETAILS,
       strings.LIVE_PLANTS_OBSERVED,
       strings.MONITORING_PLOT,
@@ -1175,10 +1172,10 @@ const useObservationExports = () =&gt; {
 &nbsp;
   const makePlotSpeciesCsv = useCallback(
     (observationResults: ObservationResultsPayload): Blob =&gt; {
-      const columnHeaders = [<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" ></span>        {
-          key: 'monitoringPl<span class="cstat-no" title="statement not covered" >ot',</span>
-          displayLabel: strings.MONITORING_PLOT,
+      const columnHeaders = [
+        {<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" ></span>          key: 'monitoringPlot',
+          displayLabel: stri<span class="cstat-no" title="statement not covered" >ngs.MONITORING_PLOT,</span>
         },
         {
           key: 'scientificName',
@@ -1203,21 +1200,21 @@ const useObservationExports = () =&gt; {
       ];
 &nbsp;
       const data = observationResults.strata.flatMap((stratum) =&gt;
-        stratum.sub<span class="cstat-no" title="statement not covered" >strata.flatMap((substratum) =&gt;</span>
-<span class="fstat-no" title="function not covered" ></span>          substratum.<span class="cstat-no" title="statement not covered" >monitoringPlots.flatMap((monitoringPlot) =&gt; {</span>
-<span class="fstat-no" title="function not covered" ></span>            const allSpeci<span class="cstat-no" title="statement not covered" >es = monitoringPlot.unknownSpecies<span class="fstat-no" title="function not covered" ></span></span>
-              ? [...monitoringP<span class="cstat-no" title="statement not covered" >lot.species, monitoringPlot.unknownSpecies]</span>
-<span class="cstat-no" title="statement not covered" >              : monitoringPlot.spe<span class="fstat-no" title="function not covered" >ci</span>es;</span>
-            return allSpecies.map((observedSpecies) =&gt; {
-<span class="cstat-no" title="statement not covered" >              let speciesName: string;</span>
-              if<span class="cstat-no" title="statement not covered" > (observedSpecies.speciesId) {</span>
-                speci<span class="cstat-no" title="statement not covered" >esName = scientificNamesById[observedSpecies.speciesId];</span>
-              } <span class="cstat-no" title="statement not covered" >else if (observedSpecies.speciesName) {</span>
-                speciesName = strings.formatString(strings.OTHER_VALUE, observedSpecies.speciesName) as string;
-              } <span class="cstat-no" title="statement not covered" >else {</span>
-                speciesName = strings.UNKNOWN;
-<span class="cstat-no" title="statement not covered" >              }</span>
-&nbsp;
+        stratum.substrata.flatMap((substratum) =&gt;
+          substratu<span class="cstat-no" title="statement not covered" >m.monitoringPlots.flatMap((monitoringPlot) =&gt; {</span>
+<span class="fstat-no" title="function not covered" ></span>            const all<span class="cstat-no" title="statement not covered" >Species = monitoringPlot.unknownSpecies</span>
+<span class="fstat-no" title="function not covered" ></span>              ? [...monito<span class="cstat-no" title="statement not covered" >ringPlot.species, monitoringPlot.un<span class="fstat-no" title="function not covered" >kn</span>ownSpecies]</span>
+              : monitoringPlot.<span class="cstat-no" title="statement not covered" >species;</span>
+<span class="cstat-no" title="statement not covered" >            return allSpecies.map(<span class="fstat-no" title="function not covered" >(o</span>bservedSpecies) =&gt; {</span>
+              let speciesName: string;
+<span class="cstat-no" title="statement not covered" >              if (observedSpecies.speciesId) {</span>
+<span class="cstat-no" title="statement not covered" >                speciesName = scientificNamesById[observedSpecies.speciesId];</span>
+              } else <span class="cstat-no" title="statement not covered" >if (observedSpecies.speciesName) {</span>
+<span class="cstat-no" title="statement not covered" >                speciesName = strings.formatString(strings.OTHER_VALUE, observedSpecies.speciesName) a</span>s string;
+              } else {
+<span class="cstat-no" title="statement not covered" >                speciesName = strings.UNKNOWN;</span>
+              }
+<span class="cstat-no" title="statement not covered" ></span>
               return {
                 monitoringPlot: monitoringPlot.monitoringPlotNumber,
                 scientificName: speciesName,
@@ -1228,22 +1225,22 @@ const useObservationExports = () =&gt; {
               };
             });
           })
-<span class="cstat-no" title="statement not covered" >        )</span>
-      );
+        )
+<span class="cstat-no" title="statement not covered" >      );</span>
 &nbsp;
       return makeCsv(columnHeaders, data);
-    },<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" >    [s</span>cientificNamesById, strings]
-  );
-<span class="cstat-no" title="statement not covered" ></span>
-  const downloadObservationResult<span class="cstat-no" title="statement not covered" >s = useCallback(</span>
-    async (observationId: <span class="cstat-no" title="statement not covered" >number) =&gt; {</span>
-      const results<span class="cstat-no" title="statement not covered" > = await getObser</span>vationResults({ observationId, includePlants: true }, true).unwrap();
-      const observationResul<span class="cstat-no" title="statement not covered" >ts = results.observation;</span>
-<span class="cstat-no" title="statement not covered" ></span>
-      const siteResult<span class="cstat-no" title="statement not covered" >s = await getPlantingSite(observati</span>onResults.plantingSiteId, true).unwrap();
-<span class="cstat-no" title="statement not covered" >      const site = siteResults.site;</span>
+    },
+    [scientificNamesById, strings]<span class="cstat-no" title="statement not covered" ></span>
+  );<span class="fstat-no" title="function not covered" ></span>
 &nbsp;
+  const downloadObserv<span class="cstat-no" title="statement not covered" >ationResults = useCallback(</span>
+    async (observationId: number)<span class="cstat-no" title="statement not covered" > =&gt; {</span>
+      const results = awai<span class="cstat-no" title="statement not covered" >t getObservationResults({ observationId, includePlants: true }, true).un</span>wrap();
+      const observa<span class="cstat-no" title="statement not covered" >tionResults = res</span>ults.observation;
+<span class="cstat-no" title="statement not covered" ></span>
+      const siteResul<span class="cstat-no" title="statement not covered" >ts = await getPlantingSite(obser</span>vationResults.plantingSiteId, true).unwrap();
+      const site = sit<span class="cstat-no" title="statement not covered" >eResults.site;</span>
+<span class="cstat-no" title="statement not covered" ></span>
       const completedDate = observationResults.completedTime
         ? getDateDisplayValue(observationResults.completedTime, site.timeZone ?? selectedOrganization?.timeZone)
         : strings.INCOMPLETE;
@@ -1268,56 +1265,56 @@ const useObservationExports = () =&gt; {
     },
     [
       getObservationResults,
-      getPlantingSite,<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" ></span>      makeObservationCsv,
-      makePlotSpeciesCsv,
-      selectedOrganiza<span class="cstat-no" title="statement not covered" >tion?.timeZone,</span>
+      getPlantingSite,
+      makeObservationCsv,<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" ></span>      makePlotSpeciesCsv,
+      selectedOrganization?.timeZone,
       strings.INCOMPLE<span class="cstat-no" title="statement not covered" >TE,</span>
-      strings.OBSERVATION,<span class="cstat-no" title="statement not covered" ></span>
+      strings.OBSERVAT<span class="cstat-no" title="statement not covered" >ION,</span>
       strings.SPECIES,<span class="cstat-no" title="statement not covered" ></span>
     ]<span class="cstat-no" title="statement not covered" ></span>
   );<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const downloadObserva<span class="cstat-no" title="statement not covered" >tionCsv = useCallback(</span>
-    async (observationId:<span class="cstat-no" title="statement not covered" > number) =&gt; {</span>
-      const content<span class="cstat-no" title="statement not covered" > = await exportObservationCs</span>v(observationId, true).unwrap();
-<span class="cstat-no" title="statement not covered" >      const results = await getObservationRes</span>ults({ observationId, includePlants: true }, true).unwrap();
-<span class="cstat-no" title="statement not covered" >      const observationResults = results.observ</span>ation;
+  const downloadObservationCsv =<span class="cstat-no" title="statement not covered" > useCallback(</span>
+    async (observationI<span class="cstat-no" title="statement not covered" >d: number) =&gt; {</span>
+      const content = awa<span class="cstat-no" title="statement not covered" >it exportObservationCsv(observationId, true).unwrap();</span>
+      const results<span class="cstat-no" title="statement not covered" > = await getObservationResul</span>ts({ observationId, includePlants: true }, true).unwrap();
+<span class="cstat-no" title="statement not covered" >      const observationResults = results.obse</span>rvation;
 <span class="cstat-no" title="statement not covered" ></span>
-      const siteResults = await getPlantingSite(observationResults.plantingSiteId, true).unwrap();
+<span class="cstat-no" title="statement not covered" >      const siteResu</span>lts = await getPlantingSite(observationResults.plantingSiteId, true).unwrap();
       const site = siteResults.site;
 &nbsp;
-      const completedDate = obser<span class="cstat-no" title="statement not covered" >vationResults.completedTime</span>
-<span class="fstat-no" title="function not covered" ></span>        ? getDateDisplayValue(observationResults.completedTime, site.timeZone ?? selectedOrganization?.timeZone)
-        : strings.INCOMPLETE;
-<span class="cstat-no" title="statement not covered" ></span>
+      const completedDate = observationResults.completedTime
+        ? getDateDisplayValue(obs<span class="cstat-no" title="statement not covered" >ervationResults.completedTime, site.timeZone ?? selectedOrganization?.timeZone)</span>
+<span class="fstat-no" title="function not covered" ></span>        : strings.INCOMPLETE;
+&nbsp;
       const sanitizedS<span class="cstat-no" title="statement not covered" >iteName = sanitize(site.name);</span>
-      const fileName = `${sanitiz<span class="cstat-no" title="statement not covered" >edSiteName}-${comple</span>tedDate}.csv`;
-      const encodedUri = '<span class="cstat-no" title="statement not covered" >data:text/csv;charset=utf-8,' + encodeURIComponent(content);</span>
+      const fileName =<span class="cstat-no" title="statement not covered" > `${sanitizedSiteName}-${completedDate}.csv`;</span>
+      const encodedUri = 'data:te<span class="cstat-no" title="statement not covered" >xt/csv;charset=utf-8</span>,' + encodeURIComponent(content);
 <span class="cstat-no" title="statement not covered" ></span>
-      const link = document.<span class="cstat-no" title="statement not covered" >createElement('a');</span>
-      link.setAttribute('href', <span class="cstat-no" title="statement not covered" >encodedUri);</span>
-      link.setAttribute<span class="cstat-no" title="statement not covered" >('download', fileName);</span>
+      const link = <span class="cstat-no" title="statement not covered" >document.createEl</span>ement('a');
+      link.setAttribute('hre<span class="cstat-no" title="statement not covered" >f', encodedUri);</span>
+      link.setAttribute('downloa<span class="cstat-no" title="statement not covered" >d', fileName);</span>
       link.click();<span class="cstat-no" title="statement not covered" ></span>
     },<span class="cstat-no" title="statement not covered" ></span>
-    [e<span class="cstat-no" title="statement not covered" >xportObservationCsv, getObservationResu</span>lts, getPlantingSite, selectedOrganization?.timeZone, strings.INCOMPLETE]
+    [exportObservat<span class="cstat-no" title="statement not covered" >ionCsv, getObservationResult</span>s, getPlantingSite, selectedOrganization?.timeZone, strings.INCOMPLETE]
   );<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const downloadObservationGpx = useCallback(
+  cons<span class="cstat-no" title="statement not covered" >t downloadObse</span>rvationGpx = useCallback(
     async (observationId: number) =&gt; {
       const content = await exportObservationGpx(observationId, true).unwrap();
-      const results = await getObservationRe<span class="cstat-no" title="statement not covered" >sults({ observationId, includePlants: true }, true).unwrap();</span>
-<span class="fstat-no" title="function not covered" ></span>      const observationResults = results.observation;
+      const results = await getObservationResults({ observationId, includePlants: true }, true).unwrap();
+      const observationResults = results.obs<span class="cstat-no" title="statement not covered" >ervation;</span>
+<span class="fstat-no" title="function not covered" ></span>
+      const siteResult<span class="cstat-no" title="statement not covered" >s = await getPlantingSite(observationResults.plantingSiteId, true).unwrap();</span>
+      const site = siteResults.si<span class="cstat-no" title="statement not covered" >te;</span>
 <span class="cstat-no" title="statement not covered" ></span>
-      const siteResults = await g<span class="cstat-no" title="statement not covered" >etPlantingSite(obser</span>vationResults.plantingSiteId, true).unwrap();
-      const site = siteRes<span class="cstat-no" title="statement not covered" >ults.site;</span>
+      const complet<span class="cstat-no" title="statement not covered" >edDate = observat</span>ionResults.completedTime
+        ? getDateDisplayValue<span class="cstat-no" title="statement not covered" >(observationResults.completedTime, site.timeZone ?? selectedOrganization?.timeZone)</span>
+        : strings.INCOMPLET<span class="cstat-no" title="statement not covered" >E;</span>
 <span class="cstat-no" title="statement not covered" ></span>
-      const completedDate = o<span class="cstat-no" title="statement not covered" >bservationResults.completedTime</span>
-        ? getDateDisplayVal<span class="cstat-no" title="statement not covered" >ue(observationResults.completedTime, site.timeZone ?? s</span>electedOrganization?.timeZone)
-        : strings.INCOMPLETE;<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >      const sanitizedSiteName = sanitize(site.name);</span>
-      const fileName = `${sanitizedSiteName}-${completedDate}.gpx`;
+      const sanitizedSiteName = s<span class="cstat-no" title="statement not covered" >anitize(site.name);</span>
+<span class="cstat-no" title="statement not covered" >      const fileName = `${sanitizedSiteName}-${completedDate}.gpx`;</span>
       const encodedUri = 'data:application/gpx+xml;charset=utf-8,' + encodeURIComponent(content);
 &nbsp;
       const link = document.createElement('a');
@@ -1347,15 +1344,15 @@ const useObservationExports = () =&gt; {
         files: [
           {
             fileName: `${fileNamePrefix}-${strings.PLOT}`,
-<span class="cstat-no" title="statement not covered" >            content: biomassPlots,</span>
-          },
+            content: biomassPlots,
+<span class="cstat-no" title="statement not covered" >          },</span>
           {
             fileName: `${fileNamePrefix}-${strings.SPECIES_CLASSIFICATION}`,
             content: biomassSpecies,
           },
           {
-            fileName<span class="cstat-no" title="statement not covered" >: `${fileNamePrefix}-$</span>{strings.TREES_AND_SHRUBS}`,
-            content: biomassTreesShrubs,
+            fileName: `${fileNamePrefix}-${strings.TREES_AND_SHRUBS}`,
+            content:<span class="cstat-no" title="statement not covered" > biomassTreesShrubs,</span>
           },
         ],
         suffix: '.csv',
@@ -1390,7 +1387,7 @@ export default useObservationExports;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-26T20:40:42.579Z
+                at 2026-02-26T22:39:32.633Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

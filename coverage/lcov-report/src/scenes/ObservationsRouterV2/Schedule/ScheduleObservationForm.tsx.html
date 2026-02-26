@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/117</span>
+                <span class='fraction'>0/119</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/115</span>
+                <span class='fraction'>0/119</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/111</span>
+                <span class='fraction'>0/113</span>
             </div>
         
             
@@ -327,7 +327,11 @@
 <a name='L262'></a><a href='#L262'>262</a>
 <a name='L263'></a><a href='#L263'>263</a>
 <a name='L264'></a><a href='#L264'>264</a>
-<a name='L265'></a><a href='#L265'>265</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L265'></a><a href='#L265'>265</a>
+<a name='L266'></a><a href='#L266'>266</a>
+<a name='L267'></a><a href='#L267'>267</a>
+<a name='L268'></a><a href='#L268'>268</a>
+<a name='L269'></a><a href='#L269'>269</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -463,12 +467,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -479,6 +486,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -517,7 +526,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -609,7 +617,7 @@ impo<span class="cstat-no" title="statement not covered" >rt {</span>
   useLazyGetObservationQuery,
 } <span class="cstat-no" title="statement not covered" >from 'src/q</span>ueries/generated/observations';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
-import SmallSi<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >te</span>WarningDialog from 'src/scen<span class="cstat-no" title="statement not covered" >es/ObservationsRouter/schedule/SmallSiteWarningDialog';</span></span>
+import SmallSi<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >te</span>WarningDialog from 'src/scen<span class="cstat-no" title="statement not covered" >es/ObservationsRouterV2/Schedule/SmallSiteWarningDialog';</span></span>
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 &nbsp;
 import ObservationSubstratumSelector from './ObservationSubstratumSelector';
@@ -720,54 +728,58 @@ export default function Sc<span class="cstat-no" title="statement not covered" >
       }<span class="cstat-no" title="statement not covered" ></span>
     }<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-    if (<span class="cstat-no" title="statement not covered" >!requestedSubstratumIds || requestedSubs</span>tratumIds?.length === 0) {
-      _substr<span class="cstat-no" title="statement not covered" >atumError = strings.SELECT_AT_LEAST_ONE_SUBSTRATUM;</span>
-    }<span class="cstat-no" title="statement not covered" ></span>
+    if (<span class="cstat-no" title="statement not covered" >observationId === undefined) {</span>
+      if (!re<span class="cstat-no" title="statement not covered" >questedSubstratumIds || requestedSubstratumIds?.length === 0) {</span>
+<span class="cstat-no" title="statement not covered" >        _substratumError = strings.SELECT_AT_L</span>EAST_ONE_SUBSTRATUM;
+      }
 &nbsp;
-    const _showSmallSiteWarning =
-<span class="cstat-no" title="statement not covered" >      selectedSite?.areaHa !== undefined &amp;&amp; selectedSite.areaHa &lt; WARN_IF_SITE_LESS_THAN_HECTARES;</span>
+<span class="cstat-no" title="statement not covered" >      const _showSmallSiteWarning =</span>
+<span class="cstat-no" title="statement not covered" >        selectedSite?.areaHa !== undefined &amp;&amp; selectedSite.areaHa &lt; WARN_IF_SITE_LESS_THAN_HECTARES;</span>
 <span class="cstat-no" title="statement not covered" ></span>
-    setStartDateError(_startDateError);
-    setEndDateError(_endDateError)<span class="cstat-no" title="statement not covered" >;</span>
-<span class="cstat-no" title="statement not covered" >    setSubstratumError(_substratumError)</span>;
-<span class="cstat-no" title="statement not covered" >    setShowSmallSiteWarning(_showSma</span>llSiteWarning);
-<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >    return _startDateError || _endDateError || _subs</span>tratumError || _showSmallSiteWarning;
-  },<span class="cstat-no" title="statement not covered" > [</span>
-    endDate,
-    selectedSite?.areaHa,
-    requestedSubstratumIds,
+      setStartDateError(_startDateError);
+      setEndDateError(_endDateError)<span class="cstat-no" title="statement not covered" >;</span>
+<span class="cstat-no" title="statement not covered" >      setSubstratumError(_substratumError)</span>;
+<span class="cstat-no" title="statement not covered" >      setShowSmallSiteWarning(_showSma</span>llSiteWarning);
+<span class="cstat-no" title="statement not covered" >      return _startDateError || _endDateErro</span>r || _substratumError || _showSmallSiteWarning;
+    } <span class="cstat-no" title="statement not covered" >else {</span>
+<span class="cstat-no" title="statement not covered" >      return _startDateError || _endDateError || _substratumError;</span>
+    }
+  }, [<span class="cstat-no" title="statement not covered" ></span>
     startDate,
-    strings.INVALID_DATE,
+    endDate,
+    observationId,
     strings.REQUIRED_FIELD,
+    strings.INVALID_DATE,
     strings.SELECT_AT_LEAST_ONE_SUBSTRATUM,
+    requestedSubstratumIds,
+    selectedSite?.areaHa,
   ]);
 &nbsp;
-  const doSave = <span class="cstat-no" title="statement not covered" >useCallback(() =&gt; {<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >    if (plantingSite &amp;&amp; onReschedule &amp;&amp; startDate &amp;&amp; endDate) {</span>
+  const doSave = useCallback(() =&gt; {
+    if (onResched<span class="cstat-no" title="statement not covered" >ule &amp;&amp; startDate &amp;&amp; endDate) {<span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >      onReschedule({ startDate, endDate });</span>
+    }<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (onSchedule &amp;&amp; startDate &amp;&amp; endDate &amp;&amp; requestedSubstratumIds &amp;&amp; selectedSite) {</span>
+<span class="cstat-no" title="statement not covered" >      onSchedule({ startDate, endDate, requestedSubstratumIds, plantingSiteId: selectedSite.id });</span>
     }
 <span class="cstat-no" title="statement not covered" ></span>
-    if<span class="cstat-no" title="statement not covered" > (onSchedule &amp;&amp; startDate &amp;&amp; endDate &amp;&amp; requestedSubstratumIds &amp;&amp; selectedSite) {</span>
-      onSchedule({ startDate, endDate, requestedSubstratumIds, plantingSiteId: selectedSite.id });
-<span class="cstat-no" title="statement not covered" >    }</span>
-&nbsp;
-    setShowSmallSit<span class="cstat-no" title="statement not covered" >eWarning(false);<span class="fstat-no" title="function not covered" ></span></span>
-  },<span class="cstat-no" title="statement not covered" > [endDate, onResche</span>dule, onSchedule, plantingSite, requestedSubstratumIds, selectedSite, startDate]);
+    setShowSmallSiteWarning(false);
+  }, [endDate, onRe<span class="cstat-no" title="statement not covered" >schedule, onSchedule, requeste<span class="fstat-no" title="function not covered" >dS</span>ubstratumIds, selectedSite, startDate]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  cons<span class="cstat-no" title="statement not covered" >t onSubmit</span> = useCallback(() =&gt; {
-    setValidate(true);
+  co<span class="cstat-no" title="statement not covered" >nst onSubmit = useCallback(() =&gt; {</span>
+    se<span class="cstat-no" title="statement not covered" >tValidate(</span>true);
     if (!findErrors()) {
-      doSave();<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" >    }<span class="cstat-no" title="statement not covered" ></span></span>
-  }, [doSave, findErrors, setValidate]);
+      doSave();
+    }<span class="cstat-no" title="statement not covered" ></span>
+  },<span class="fstat-no" title="function not covered" > [</span>doSave, f<span class="cstat-no" title="statement not covered" >indErrors, setValidate]);</span>
 &nbsp;
-  const setStartDateCallback <span class="cstat-no" title="statement not covered" >= useCallback(</span>
-<span class="fstat-no" title="function not covered" >    (v</span>alue: Dat<span class="cstat-no" title="statement not covered" >eTime&lt;boolean&gt; | undefined) =&gt; setStartDate(value?.toISODate() || u</span>ndefined),
-    []
+  const setStartDateCallback = useCallback(
+    (value: DateTime&lt;boolean&gt;<span class="cstat-no" title="statement not covered" > | undefined) =&gt; setStartDate(value?.toISODate() || undefined),</span>
+<span class="fstat-no" title="function not covered" >    []<span class="cstat-no" title="statement not covered" ></span></span>
   );
-<span class="cstat-no" title="statement not covered" >  const setEndDateCallback = useCallback(</span>
-    (value: DateTime&lt;boolean&gt; | undefined) =&gt; setEndDate(value?.toISODate() || undefined),
+  const setEndDateCallback = useCallback(
+<span class="cstat-no" title="statement not covered" >    (value: DateTime&lt;boolean&gt; | undefined) =&gt; setEndDate(value?.toISODate() || undefined),</span>
     []
   );
 &nbsp;
@@ -780,8 +792,8 @@ export default function Sc<span class="cstat-no" title="statement not covered" >
         onSave={onSubmit}
       &gt;
         &lt;Box marginBottom={theme.spacing(4)} paddingLeft={theme.spacing(3)}&gt;
-          &lt;Typogra<span class="fstat-no" title="function not covered" >ph</span>y fontSiz<span class="cstat-no" title="statement not covered" >e='24px' fontWeight={600}&gt;</span>
-            {title}
+          &lt;Typography fontSize='24px' fontWeight={600}&gt;
+            {title<span class="fstat-no" title="function not covered" >}<span class="cstat-no" title="statement not covered" ></span></span>
           &lt;/Typography&gt;
           &lt;PageSnackbar /&gt;
         &lt;/Box&gt;
@@ -796,7 +808,7 @@ export default function Sc<span class="cstat-no" title="statement not covered" >
                 options={siteOptions}
                 selectedValue={plantingSite?.id ?? selectedPlantingSiteId}
                 disabled={!!plantingSite}
-                errorText={validate &amp;&amp; !selectedPlantingSiteId ? strings.REQUIRED_FIELD : ''}
+                errorText={validate &amp;&amp; !observationId ? strings.REQUIRED_FIELD : ''}
                 fullWidth
               /&gt;
             &lt;/Grid&gt;
@@ -862,7 +874,7 @@ export default function Sc<span class="cstat-no" title="statement not covered" >
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-26T20:40:42.579Z
+                at 2026-02-26T22:39:32.633Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

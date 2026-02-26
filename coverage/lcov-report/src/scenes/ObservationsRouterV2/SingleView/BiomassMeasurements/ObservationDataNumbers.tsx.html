@@ -3,15 +3,15 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/components/SurvivalRate/SurvivalRateMessage.tsx</title>
+    <title>Code coverage report for src/scenes/ObservationsRouterV2/SingleView/BiomassMeasurements/ObservationDataNumbers.tsx</title>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="../../../prettify.css" />
-    <link rel="stylesheet" href="../../../base.css" />
-    <link rel="shortcut icon" type="image/x-icon" href="../../../favicon.png" />
+    <link rel="stylesheet" href="../../../../../prettify.css" />
+    <link rel="stylesheet" href="../../../../../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../../../../favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style type='text/css'>
         .coverage-summary .sorter {
-            background-image: url(../../../sort-arrow-sprite.png);
+            background-image: url(../../../../../sort-arrow-sprite.png);
         }
     </style>
 </head>
@@ -19,7 +19,7 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/components/SurvivalRate</a> SurvivalRateMessage.tsx</h1>
+        <h1><a href="../../../../../index.html">All files</a> / <a href="index.html">src/scenes/ObservationsRouterV2/SingleView/BiomassMeasurements</a> ObservationDataNumbers.tsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
@@ -32,14 +32,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/18</span>
+                <span class='fraction'>0/32</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
@@ -109,7 +109,21 @@
 <a name='L44'></a><a href='#L44'>44</a>
 <a name='L45'></a><a href='#L45'>45</a>
 <a name='L46'></a><a href='#L46'>46</a>
-<a name='L47'></a><a href='#L47'>47</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L47'></a><a href='#L47'>47</a>
+<a name='L48'></a><a href='#L48'>48</a>
+<a name='L49'></a><a href='#L49'>49</a>
+<a name='L50'></a><a href='#L50'>50</a>
+<a name='L51'></a><a href='#L51'>51</a>
+<a name='L52'></a><a href='#L52'>52</a>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -152,55 +166,83 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React fr<span class="cstat-no" title="statement not covered" >om 'react';</span>
 <span class="cstat-no" title="statement not covered" ></span>
 import { Box, Typograph<span class="cstat-no" title="statement not covered" >y, useTheme } from '@mui/materia</span>l';
-import { Message } from <span class="cstat-no" title="statement not covered" >'@terraware/web-components'</span>;
+import { Icon, Tooltip }<span class="cstat-no" title="statement not covered" > from '@terraware/web-compo</span>nents';
 <span class="cstat-no" title="statement not covered" ></span>
-import { APP_PATHS <span class="cstat-no" title="statement not covered" >} from 'src/constants';</span>
-import { useKno<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >wl</span>edgeBaseLinks } from 'src/knowledgeBaseLinks';</span>
-im<span class="cstat-no" title="statement not covered" >port strings from 'src/strings';</span>
+import FormattedNum<span class="cstat-no" title="statement not covered" >ber from 'src/components/common/</span>FormattedNumber';
+import { useLoc<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >al</span>ization } from 'src/providers';</span>
 <span class="cstat-no" title="statement not covered" ></span>
-import Link from '../common/Link';
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-ty<span class="cstat-no" title="statement not covered" >pe SurvivalRateMessageProps = {</span>
-  se<span class="cstat-no" title="statement not covered" >lectedPlantingSiteId: number;</span>
+type<span class="cstat-no" title="statement not covered" > ObservationDataNumbersProps = {</span>
+  items: { label: string; tooltip: string; value?: string | number }[];
+  isCompleted: boo<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >le</span>an;</span>
 };<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-const SurvivalRateMessage = ({ selectedPlantingSiteId }: SurvivalRateMessageProps) =&gt; {
-<span class="cstat-no" title="statement not covered" >  const theme</span> = useTheme();
-  const knowledgeBaseLinks = useKnowledgeBaseLinks();
-  return (<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-    &lt;Box marginBottom={theme.spacing(4)} width={'100%'}&gt;
-      &lt;Message
-        title={strings.SURVIVAL_RATES_UNAVAILABLE_TITLE}
-        body={
-          &lt;Typography&gt;
-            {strings.formatString(
-              strings.SURVIVAL_RATES_UNAVAILABLE_BODY,
-              &lt;Link<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-                font<span class="cstat-no" title="statement not covered" >Siz</span>e={'16px'}
-<span class="cstat-no" title="statement not covered" >                to={APP_PATHS.SURVIVAL_RATE_SETTINGS.replace(':plantingSiteId', selectedPlantingSiteId.toString())}</span>
-<span class="fstat-no" title="function not covered" ></span>              &gt;<span class="cstat-no" title="statement not covered" ></span>
-                {strings.SURVIVAL_RATE_SETTINGS}
-<span class="cstat-no" title="statement not covered" >              &lt;/Link&gt;,</span>
-              &lt;Link<span class="cstat-no" title="statement not covered" > to={knowledgeBaseLinks['/</span>observations.*/survival-rate-settings']} fontSize={'16px'} target='_blank'&gt;
-                {strin<span class="cstat-no" title="statement not covered" >gs.KNOWLEDGE_BASE}</span>
-              &lt;/Link&gt;<span class="cstat-no" title="statement not covered" ></span>
-            )}<span class="cstat-no" title="statement not covered" ></span>
-          &lt;/Typography&gt;<span class="cstat-no" title="statement not covered" ></span>
-        }<span class="cstat-no" title="statement not covered" ></span>
-        priority='<span class="cstat-no" title="statement not covered" >info'</span>
-        type='page'<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-      /&gt;<span class="cstat-no" title="statement not covered" ></span>
-    &lt;/Box&gt;<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  );</span>
+<span class="cstat-no" title="statement not covered" ></span>
+const <span class="cstat-no" title="statement not covered" >ObservationDataNumbers = ({ items, isCompleted }: ObservationDataNumbersProps) =&gt; {</span>
+  const <span class="cstat-no" title="statement not covered" >theme = useTheme();<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  const { strings } = useLocalization();
+<span class="cstat-no" title="statement not covered" >  return (</span>
+    &lt;Box display='grid' paddingBottom={3} gridTemplateColumns={`repeat(${items.length}, 1fr)`} gap={2}&gt;
+      {items.m<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ap</span>((item, index) =&gt; {<span class="cstat-no" title="statement not covered" ></span></span>
+        const isTemporarySurvivalRateItem =
+          item.label === strings.SURVIVAL_RATE &amp;&amp; item.value === strings.NOT_CALCULATED_FOR_TEMPORARY_PLOTS;
+        return (
+          &lt;Box
+            key={index}
+            borderLeft={index !== 0 ? `1px solid ${theme.palette.TwClrBrdrTertiary}` : 'none'}
+            paddingLeft={2}
+            padding<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Bo</span>ttom={2<span class="cstat-no" title="statement not covered" >}</span></span>
+          &gt;<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >            &lt;Box display='flex'&gt;</span>
+<span class="fstat-no" title="function not covered" ></span>              &lt;Ty<span class="cstat-no" title="statement not covered" >pography fontW</span>eight={600} paddingRight={0.5}&gt;
+                {item.label}
+<span class="cstat-no" title="statement not covered" >              &lt;/Typography&gt;</span>
+              &lt;Tool<span class="cstat-no" title="statement not covered" >tip title={item.tooltip}&gt;</span>
+                &lt;Icon <span class="cstat-no" title="statement not covered" >name='info' fillColor={th</span>eme.palette.TwClrIcnSecondary} /&gt;
+              &lt;/Tooltip&gt;<span class="cstat-no" title="statement not covered" ></span>
+            &lt;/Box&gt;<span class="cstat-no" title="statement not covered" ></span>
+            &lt;Box&gt;<span class="cstat-no" title="statement not covered" ></span>
+              &lt;Typography<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >                fontWeight={isTemporarySurvivalR</span>ateItem ? 400 : 600}
+                fontSi<span class="cstat-no" title="statement not covered" >ze={isTemporarySurvivalRateItem ? '16px'</span> : '24px'}
+<span class="cstat-no" title="statement not covered" >              &gt;<span class="fstat-no" title="function not covered" ></span></span>
+                {isCompleted || isTempor<span class="cstat-no" title="statement not covered" >arySurvivalRateItem ? (</span>
+<span class="cstat-no" title="statement not covered" >                  typeof item.value === 'number' ? (</span>
+                    &lt;FormattedNumber value={item.value} /&gt;
+                  ) : (
+                    item.value
+                  )
+                ) : (
+                  '-'
+                )}
+              &lt;/Typography&gt;
+            &lt;/Box&gt;
+          &lt;/Box&gt;
+        );
+      })}
+    &lt;/Box&gt;
+  );
 };
 &nbsp;
-export default SurvivalRateMessage;
+export default ObservationDataNumbers;
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -208,16 +250,16 @@ export default SurvivalRateMessage;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-26T20:40:42.579Z
+                at 2026-02-26T22:39:32.633Z
             </div>
-        <script src="../../../prettify.js"></script>
+        <script src="../../../../../prettify.js"></script>
         <script>
             window.onload = function () {
                 prettyPrint();
             };
         </script>
-        <script src="../../../sorter.js"></script>
-        <script src="../../../block-navigation.js"></script>
+        <script src="../../../../../sorter.js"></script>
+        <script src="../../../../../block-navigation.js"></script>
     </body>
 </html>
     

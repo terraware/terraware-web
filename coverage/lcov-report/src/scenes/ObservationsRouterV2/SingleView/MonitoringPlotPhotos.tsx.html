@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/scenes/ObservationsRouter/biomass/PlotActions.tsx</title>
+    <title>Code coverage report for src/scenes/ObservationsRouterV2/SingleView/MonitoringPlotPhotos.tsx</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../../../prettify.css" />
     <link rel="stylesheet" href="../../../../base.css" />
@@ -19,7 +19,7 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../../index.html">All files</a> / <a href="index.html">src/scenes/ObservationsRouter/biomass</a> PlotActions.tsx</h1>
+        <h1><a href="../../../../index.html">All files</a> / <a href="index.html">src/scenes/ObservationsRouterV2/SingleView</a> MonitoringPlotPhotos.tsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
@@ -39,7 +39,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
@@ -94,18 +94,7 @@
 <a name='L29'></a><a href='#L29'>29</a>
 <a name='L30'></a><a href='#L30'>30</a>
 <a name='L31'></a><a href='#L31'>31</a>
-<a name='L32'></a><a href='#L32'>32</a>
-<a name='L33'></a><a href='#L33'>33</a>
-<a name='L34'></a><a href='#L34'>34</a>
-<a name='L35'></a><a href='#L35'>35</a>
-<a name='L36'></a><a href='#L36'>36</a>
-<a name='L37'></a><a href='#L37'>37</a>
-<a name='L38'></a><a href='#L38'>38</a>
-<a name='L39'></a><a href='#L39'>39</a>
-<a name='L40'></a><a href='#L40'>40</a>
-<a name='L41'></a><a href='#L41'>41</a>
-<a name='L42'></a><a href='#L42'>42</a>
-<a name='L43'></a><a href='#L43'>43</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L32'></a><a href='#L32'>32</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -136,67 +125,45 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React fr<span class="cstat-no" title="statement not covered" >om 'react';</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {<span class="cstat-no" title="statement not covered" > type JSX, use</span>Memo } from 'react';
 <span class="cstat-no" title="statement not covered" ></span>
-import { Box, useTheme <span class="cstat-no" title="statement not covered" >} from '@mui/material';</span>
-import { Button } from '<span class="cstat-no" title="statement not covered" >@terraware/web-components';</span>
+import PhotosList from <span class="cstat-no" title="statement not covered" >'src/components/common/PhotosLis</span>t';
+import { ObservationMoni<span class="cstat-no" title="statement not covered" >toringPlotPhoto } from 'src</span>/types/Observations';
 <span class="cstat-no" title="statement not covered" ></span>
-import strings from<span class="cstat-no" title="statement not covered" > 'src/strings';</span>
+const PHOTO_URL = '<span class="cstat-no" title="statement not covered" >/api/v1/tracking/observations/{o</span>bservationId}/plots/{monitoringPlotId}/photos/{fileId}';
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-ty<span class="cstat-no" title="statement not covered" >pe PlotActionsProps = {</span>
-  un<span class="cstat-no" title="statement not covered" >recognizedSpecies?: string[];</span>
-  onExportData: () =&gt; void;
-  onMatchSpecies: <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; void;</span>
+ex<span class="cstat-no" title="statement not covered" >port type MonitoringPlotPhotosProps = {</span>
+  ob<span class="cstat-no" title="statement not covered" >servationId: number;</span>
+  monitoringPlotId: number;
+  photos?: Observa<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ti</span>onMonitoringPlotPhoto[];</span>
 };<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-const <span class="cstat-no" title="statement not covered" >PlotActions = ({ unrecognizedSpecies, onExportData, onMatchSpecies }: PlotActionsProps) =&gt; {</span>
-  const <span class="cstat-no" title="statement not covered" >theme = useTheme();<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  return (
-<span class="cstat-no" title="statement not covered" >    &lt;Box</span>
-      display={'flex'}
-      justifyC<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >on</span>tent={'end'}<span class="cstat-no" title="statement not covered" ></span></span>
-      borderBottom={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
-      paddingBottom={1.5}
-    &gt;
-      &lt;Button
-        priority='ghost'
-        label={strings.MATCH_UNRECOGNIZED_SPECIES}
-        icon='iconSynced'
-        onClick={on<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Ma</span>tchSpec<span class="cstat-no" title="statement not covered" >ies}</span></span>
-        disabled={!u<span class="cstat-no" title="statement not covered" >nre</span>cognizedSpecies || unrecognizedSpecies.length === 0}
-<span class="cstat-no" title="statement not covered" >        sx={{ fontWeight: '400 !important' }}</span>
-      /&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-      &lt;Button
-<span class="cstat-no" title="statement not covered" >        priority='ghost'</span>
-        label={stri<span class="cstat-no" title="statement not covered" >ngs.EXPORT_DATA}</span>
-        icon='iconImpo<span class="cstat-no" title="statement not covered" >rt'</span>
-        onClick={onExportDat<span class="cstat-no" title="statement not covered" >a}</span>
-        sx={{ fontWei<span class="cstat-no" title="statement not covered" >ght: '400 !important' }}</span>
-      /&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-    &lt;/Box&gt;<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  );</span>
-};
+export<span class="cstat-no" title="statement not covered" > default function MonitoringPlotPhotos({</span>
+  observ<span class="cstat-no" title="statement not covered" >ationId,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  monitoringPlotId,
+<span class="cstat-no" title="statement not covered" >  photos,</span>
+}: MonitoringPlotPhotosProps): JSX.Element {
+  const photoU<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >rl</span>s = useMemo(() =&gt; {<span class="cstat-no" title="statement not covered" ></span></span>
+    const rootUrl = PHOTO_URL.replace('{observationId}', observationId.toString()).replace(
+      '{monitoringPlotId}',
+      monitoringPlotId.toString()
+    );
 &nbsp;
-export default PlotActions;
-&nbsp;</pre></td></tr></table></pre>
+    return (photos ?? []).map((photo: ObservationMonitoringPlotPhoto) =&gt;
+      rootUrl.replace('{fileId}', photo.fileId.toString())
+    );<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  }, [observationId,<span class="cstat-no" title="statement not covered" > mo</span>nitoringPlotId, photos]);
+<span class="cstat-no" title="statement not covered" ></span>
+  return &lt;P<span class="fstat-no" title="function not covered" >ho</span>tosL<span class="cstat-no" title="statement not covered" >ist photoUrls={photoU</span>rls} fillSpace /&gt;;
+}
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-26T20:40:42.579Z
+                at 2026-02-26T22:39:32.633Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

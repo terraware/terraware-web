@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/88</span>
+                <span class='fraction'>0/86</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/63</span>
+                <span class='fraction'>0/67</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/81</span>
+                <span class='fraction'>0/79</span>
             </div>
         
             
@@ -220,7 +220,15 @@
 <a name='L155'></a><a href='#L155'>155</a>
 <a name='L156'></a><a href='#L156'>156</a>
 <a name='L157'></a><a href='#L157'>157</a>
-<a name='L158'></a><a href='#L158'>158</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L158'></a><a href='#L158'>158</a>
+<a name='L159'></a><a href='#L159'>159</a>
+<a name='L160'></a><a href='#L160'>160</a>
+<a name='L161'></a><a href='#L161'>161</a>
+<a name='L162'></a><a href='#L162'>162</a>
+<a name='L163'></a><a href='#L163'>163</a>
+<a name='L164'></a><a href='#L164'>164</a>
+<a name='L165'></a><a href='#L165'>165</a>
+<a name='L166'></a><a href='#L166'>166</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -270,14 +278,13 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -290,7 +297,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -340,7 +346,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -366,7 +383,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -386,144 +402,152 @@ import { Tabs } fro<span class="cstat-no" title="statement not covered" >m '@ter
 import Page fro<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >m </span>'src/components/Page';</span>
 im<span class="cstat-no" title="statement not covered" >port Card from 'src/components/common/Card';</span>
 impo<span class="cstat-no" title="statement not covered" >rt { APP_PATHS } from 'src/constants';</span>
-import isEnabled from 'src/features';
-import { useSyncNa<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >vi</span>gate } from 'src/hooks/useSyncNavigate';</span>
-im<span class="cstat-no" title="statement not covered" >port { useLocalization } from 'src/providers';</span>
-impo<span class="cstat-no" title="statement not covered" >rt { useGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';</span>
-import<span class="cstat-no" title="statement not covered" > { useGetT0SiteDataQuery, useGetT0SpeciesForPlantingSiteQuery } from 'src/queries/generated/t0';</span>
-import {<span class="cstat-no" title="statement not covered" > useGetPlotsWithObservatio<span class="fstat-no" title="function not covered" >ns</span>Quer<span class="cstat-no" title="statement not covered" >y } from '</span>src/queries/search/t0';</span>
-import strings from 'src/strings';
-im<span class="cstat-no" title="statement not covered" >port useSti</span>ckyTabs from 'src/utils/useStickyTabs';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
+import { useLocali<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >za</span>tion } from 'src/providers';</span>
+im<span class="cstat-no" title="statement not covered" >port { useGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';</span>
+impo<span class="cstat-no" title="statement not covered" >rt { useGetT0SiteDataQuery, useGetT0SpeciesForPlantingSiteQuery } from 'src/queries/generated/t0';</span>
+import<span class="cstat-no" title="statement not covered" > { useGetPlotsWithObservationsQuery } from 'src/queries/search/t0';</span>
+import u<span class="cstat-no" title="statement not covered" >seStickyTabs from 'src/uti<span class="fstat-no" title="function not covered" >ls</span>/use<span class="cstat-no" title="statement not covered" >StickyTabs</span>';</span>
 &nbsp;
-import ChangeT<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ab</span>WarningModal from './ChangeT<span class="cstat-no" title="statement not covered" >abWarningModal';</span></span>
+im<span class="cstat-no" title="statement not covered" >port Change</span>TabWarningModal from './ChangeTabWarningModal';
 import EditPermanentPlotsTab from './EditPermanentPlotsTab';
-import EditTemporaryPlotsTab from './EditTemporaryPlotsTab';
+import EditTem<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >po</span>raryPlotsTab from './EditTem<span class="cstat-no" title="statement not covered" >poraryPlotsTab';</span></span>
 import SurvivalRateInstructions from './SurvivalRateInstructions';
 &nbsp;
 const EditSurvivalRateSettings = () =&gt; {
+  const { strings } = useLocalization();
   const [showChangeTabWarning, setShowChangeTabWarning] = useState(false);
   const params = useParams&lt;{ plantingSiteId: string }&gt;();
-  const plantingSit<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >eI</span>d = Num<span class="cstat-no" title="statement not covered" >ber(params.plantingSiteId);</span></span>
-  const skipPlanting<span class="cstat-no" title="statement not covered" >Sit</span>e = useMemo(
-<span class="cstat-no" title="statement not covered" >    () =&gt; plantingSiteId === undefined || isNaN(plantingSiteId) || plantingSiteId === -1,</span>
-    [planti<span class="fstat-no" title="function not covered" >ng</span>Site<span class="cstat-no" title="statement not covered" >Id]</span>
-  );
-<span class="cstat-no" title="statement not covered" >  const { data: plantingSite } = useGetPlantin</span>gSiteQuery(plantingSiteId, { skip: skipPlantingSite });
-  const { data: t0S<span class="cstat-no" title="statement not covered" >iteResponse } = useGetT0Si</span>teDataQuery(plantingSiteId, { skip: skipPlantingSite });
-  const t0SiteData = useMe<span class="cstat-no" title="statement not covered" >mo(() =&gt; t0SiteResponse?</span>.data, [t0SiteResponse]);
-  const { data: withdr<span class="cstat-no" title="statement not covered" >awnSpeciesResponse } = us</span>eGetT0SpeciesForPlantingSiteQuery(plantingSiteId, {
-    skip: skipPlantingSite,<span class="cstat-no" title="statement not covered" ></span>
-  });<span class="cstat-no" title="statement not covered" ></span>
-  const withdrawnS<span class="cstat-no" title="statement not covered" >peciesPlots = useMemo(() =&gt; withdrawnSpeciesRes</span>ponse?.plots, [withdrawnSpeciesResponse]);
-  const { data: plotsWi<span class="cstat-no" title="statement not covered" >thObservations } = useGet</span>PlotsWithObservationsQuery(plantingSiteId, {
+  const plantingSiteId = Number(params.plantingSiteId);
+  const skipPlantin<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >gS</span>ite = u<span class="cstat-no" title="statement not covered" >seMemo(</span></span>
+    () =&gt; plantingSi<span class="cstat-no" title="statement not covered" >teI</span>d === undefined || isNaN(plantingSiteId) || plantingSiteId === -1,
+<span class="cstat-no" title="statement not covered" >    [plantingSiteId]</span>
+  );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  const { data: plantingSite } = useGetPlantingSiteQuery(plantingSiteId, { skip: skipPlantingSite });
+<span class="cstat-no" title="statement not covered" >  const { data: t0SiteResponse } = useGetT0Sit</span>eDataQuery(plantingSiteId, { skip: skipPlantingSite });
+  const t0SiteData <span class="cstat-no" title="statement not covered" >= useMemo(() =&gt; t0SiteResp</span>onse?.data, [t0SiteResponse]);
+  const { data: withdrawnS<span class="cstat-no" title="statement not covered" >peciesResponse } = useGe</span>tT0SpeciesForPlantingSiteQuery(plantingSiteId, {
     skip: skipPlanting<span class="cstat-no" title="statement not covered" >Site,</span>
+  });<span class="cstat-no" title="statement not covered" ></span>
+  const withdrawnS<span class="cstat-no" title="statement not covered" >peciesPlots = useMemo(() =&gt; withdrawnSpe</span>ciesResponse?.plots, [withdrawnSpeciesResponse]);
+  const { data: pl<span class="cstat-no" title="statement not covered" >otsWithObservations } = useGetPlotsWithObservat</span>ionsQuery(plantingSiteId, {
+    skip: skipPlantingS<span class="cstat-no" title="statement not covered" >ite,</span>
   });<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const navigate <span class="cstat-no" title="statement not covered" >= useSyncNavigate();</span>
-  const newObservatio<span class="cstat-no" title="statement not covered" >nViewEnabled = isEnabled('New Ob</span>servation View');
-<span class="cstat-no" title="statement not covered" ></span>
-  const permanentPlots = useMemo(()<span class="cstat-no" title="statement not covered" > =&gt; {</span>
+  const permanentPlots = us<span class="cstat-no" title="statement not covered" >eMemo(() =&gt; {</span>
     return plotsWithObservations?.f<span class="cstat-no" title="statement not covered" >ilter(</span>
       (p) =&gt; !!p.permanentIndex &amp;&amp; <span class="cstat-no" title="statement not covered" >p.observationPlots.some((op) =&gt; op.isPermane</span>nt === 'true')
     );<span class="cstat-no" title="statement not covered" ></span>
-  }, [plotsWithObservations]);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-&nbsp;
-  const temporaryPlots = useMemo(() =&gt; {<span class="cstat-no" title="statement not covered" ></span>
-    return plotsW<span class="cstat-no" title="statement not covered" >ithObservations?.filter(</span>
-      (p) =&gt; !p.permanent<span class="cstat-no" title="statement not covered" >Index &amp;&amp; p.observationPlots.so</span>me((op) =&gt; op.isPermanent === 'false')
+  }, [plotsWithObservations]);<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  const temporaryPlots = useMemo(() =&gt; {
+    return plotsWithOb<span class="cstat-no" title="statement not covered" >servations?.filter(</span>
+      (p) =&gt; !p.permanentIndex &amp;&amp; p.observationPlots.some(<span class="cstat-no" title="statement not covered" >(op) =&gt; op.isPermanent === 'false'</span>)
     );<span class="cstat-no" title="statement not covered" ></span>
-  },<span class="fstat-no" title="function not covered" > [</span>plot<span class="cstat-no" title="statement not covered" >sWithObservations]);</span>
-&nbsp;
-  const tabs = useMemo(() =&gt; {
-    if (!activeLocale) {<span class="cstat-no" title="statement not covered" ></span>
-      return [];<span class="cstat-no" title="statement not covered" ></span>
-    }<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  }, [plotsWithObservatio<span class="cstat-no" title="statement not covered" >ns]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-    const _tabs = [
-      {
-        id: 'permanent',<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-        label: strings.PERMANENT_PLOTS,<span class="cstat-no" title="statement not covered" ></span>
-        children: (
-          &lt;EditPermanentPlotsTab
-            plantingSiteId=<span class="cstat-no" title="statement not covered" >{plantingSiteId}</span>
-            plot<span class="cstat-no" title="statement not covered" >sWithObservations={permanentPlot</span>s}
-            t0Plots<span class="cstat-no" title="statement not covered" >={t0SiteData?.plots}</span>
-            withdrawnSpeciesPlots={w<span class="cstat-no" title="statement not covered" >ithdrawnSpeciesPlots}</span>
-          /&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >        ),</span>
-<span class="fstat-no" title="function not covered" >      },<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span>
-    ];
+  co<span class="fstat-no" title="function not covered" >ns</span>t ta<span class="cstat-no" title="statement not covered" >bs = useMemo(() =&gt; {</span>
+    if (!activeLocale) {
+      return [];
+    }<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+    const _tabs = [<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+      {<span class="cstat-no" title="statement not covered" ></span>
+        id: 'permanent',
+        label: strings.PERMANENT_PLOTS,
+        children: (<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+          &lt;EditPermanentPlotsTab<span class="cstat-no" title="statement not covered" ></span>
+            plantingSiteId={plantingSiteId}
+            plotsWithObservations={permanentPlots}
+            t0Plots={t0Site<span class="cstat-no" title="statement not covered" >Data?.plots}</span>
+            with<span class="cstat-no" title="statement not covered" >drawnSpeciesPlots={withdrawnSpec</span>iesPlots}
+          /&gt;<span class="cstat-no" title="statement not covered" ></span>
+        ),<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >      },</span>
+    ];<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span>
 &nbsp;
-    if ((temporaryPlots?.<span class="cstat-no" title="statement not covered" >length || 0) &gt; 0) {<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >      _tabs.push({</span>
-<span class="fstat-no" title="function not covered" ></span>        id: '<span class="cstat-no" title="statement not covered" >temporary',<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-        label: strings.TEMPORARY_PLOTS,
+    if ((temporaryPlots?.length || 0) &gt; 0) {
+      _tabs.push({<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >        id: 'temporary',</span>
+<span class="fstat-no" title="function not covered" ></span>        label<span class="cstat-no" title="statement not covered" >: strings.TEMPORARY_PLOTS,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
         children: (
-          &lt;Edit<span class="cstat-no" title="statement not covered" >TemporaryPlotsTab<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >            plantingSiteId={plantingSiteId}</span>
-<span class="cstat-no" title="statement not covered" >            tempo</span>raryPlotsWithObservations={temporaryPlots}
-            strata={t0SiteData?.strata}
-            withdr<span class="cstat-no" title="statement not covered" >awnSpeciesPlots={withdrawnSpeciesPlots}</span>
-            alreadyIncluding={t0SiteData?.survivalRateIncludesTempPlots}
+          &lt;EditTemporaryPlotsTab
+            pla<span class="cstat-no" title="statement not covered" >ntingSiteId={plantingSiteI<span class="fstat-no" title="function not covered" >d}</span></span>
+<span class="cstat-no" title="statement not covered" >            temporaryPlotsWithObservations={temporaryPlots}</span>
+<span class="cstat-no" title="statement not covered" >            strat</span>a={t0SiteData?.strata}
+            withdrawnSpeciesPlots={withdrawnSpeciesPlots}
+            alread<span class="cstat-no" title="statement not covered" >yIncluding={t0SiteData?.survivalRateIncludesTempPlots}</span>
           /&gt;
         ),
       });
     }
 &nbsp;
     return _tabs;
-  }, [activeLocale, permanentPlots, plantingSiteId, t0SiteData, temporaryPlots, withdrawnSpeciesPlots]);
+  }, [
+    activeLocale,
+    permanentPlots,
+    plantingSiteId,
+    strings.PERMANENT_PLOTS,
+    strings.TEMPORARY_PLOTS,
+    t0SiteData?.plots,
+    t0SiteData?.strata,
+<span class="cstat-no" title="statement not covered" >    t0SiteData?.survivalRateIncludesTempPlots,</span>
+    te<span class="cstat-no" title="statement not covered" >mporaryPlots,</span>
+    withdrawnSpeciesPlots,
+  ]);
 &nbsp;
   const { activeTab } = useStickyTabs({
     defaultTab: 'permanent',
     tabs,
     viewIdentifier: 'edit-survival-rate-settings',
   });
-<span class="cstat-no" title="statement not covered" ></span>
-  cons<span class="cstat-no" title="statement not covered" >t continueChangeTab = useCallback(() =&gt; {</span>
+&nbsp;
+  const continueChangeTab = useCallback(() =&gt; {
     setShowChangeTabWarning(false);
-    const baseUrl = newObservationViewEnabled ? APP_PATHS.SURVIVAL_RATE_SETTINGS_V2 : APP_PATHS.SURVIVAL_RATE_SETTINGS;
+    const baseUrl = APP_PATHS.SURVIVAL_RATE_SETTINGS_V2;
 &nbsp;
     navigate({
-      pathname: baseUrl.replace(':plantingSiteId', plantingSiteId.toString()),
+<span class="cstat-no" title="statement not covered" >      pathname: ba</span>seUrl.replace(':plantingSiteId', plantingSiteId.toString()),
       search: `tab=${activeTab === 'permanent' ? 'temporary' : 'permanent'}`,
     });
-  }, [activeTab, navigate, newObservationViewEnabled, plantingSiteId]);
+  }, [activeTab, navigate, plantingSiteId]);
 &nbsp;
   const onChangeTabHandler = useCallback(
     (newTab: string) =&gt; {
       if (newTab !== activeTab) {
         setShowChangeTabWarning(true);
       }
-<span class="cstat-no" title="statement not covered" >    },</span>
+    },
     [activeTab]
-  );<span class="cstat-no" title="statement not covered" ></span>
-&nbsp;
+  );
+<span class="cstat-no" title="statement not covered" ></span>
   const closeChangeTabWarning = useCallback(() =&gt; {
     setShowChangeTabWarning(false);
   }, []);
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-  re<span class="cstat-no" title="statement not covered" >turn (</span>
-    &lt;Page title={str<span class="cstat-no" title="statement not covered" >ings.formatString(strings.EDIT_SURVIVAL_RATE_SETTINGS_FOR, plantingSite?.site?.name || '')}&gt;</span>
-<span class="cstat-no" title="statement not covered" >      {showChangeTabWarning &amp;&amp; (</span>
-        &lt;ChangeTabWarningModal
+&nbsp;
+  return (<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    &lt;Page title={strings.formatStrin</span>g(strings.EDIT_SURVIVAL_RATE_SETTINGS_FOR, plantingSite?.site?.name || '')}&gt;
+      {showChangeTab<span class="cstat-no" title="statement not covered" >Warning &amp;&amp; (</span>
+<span class="cstat-no" title="statement not covered" >        &lt;ChangeTabWarningModal</span>
           onClose={closeChangeTabWarning}
           onExit={continueChangeTab}
           type={activeTab ?? 'permanent'}
-        /&gt;<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" ></span>      )}
-<span class="cstat-no" title="statement not covered" >      &lt;Card radius='8px' flushMobile&gt;</span>
-<span class="cstat-no" title="statement not covered" >        &lt;Box marginBottom={theme.spacin</span>g(4)}&gt;
-          &lt;SurvivalRateInstructions /&gt;
+        /&gt;
+      )}<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" ></span>      &lt;Card radius='8px' flushMobile&gt;
+<span class="cstat-no" title="statement not covered" >        &lt;Box marginBottom={theme.spacing(4)}&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;SurvivalRateInstructions /&gt;</span>
         &lt;/Box&gt;
         &lt;Tabs
           activeTab={activeTab}
-          onChangeTab={onChangeT<span class="cstat-no" title="statement not covered" >abHandler}<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >          tabs={tabs}</span>
-          headerBorder={true}
-<span class="cstat-no" title="statement not covered" >          sx={{</span>
-            '&amp; .tab-header': {
+          onChangeTab={onChangeTabHandler}
+          tabs={tabs}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >          headerBorder={true}</span>
+          sx={{
+<span class="cstat-no" title="statement not covered" >            '&amp; .tab-header': {</span>
               margin: 0,
             },
           }}
@@ -541,7 +565,7 @@ export default EditSurvivalRateSettings;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-26T20:40:42.579Z
+                at 2026-02-26T22:39:32.633Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

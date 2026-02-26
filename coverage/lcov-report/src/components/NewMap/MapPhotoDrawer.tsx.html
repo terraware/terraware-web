@@ -313,10 +313,7 @@
 <a name='L248'></a><a href='#L248'>248</a>
 <a name='L249'></a><a href='#L249'>249</a>
 <a name='L250'></a><a href='#L250'>250</a>
-<a name='L251'></a><a href='#L251'>251</a>
-<a name='L252'></a><a href='#L252'>252</a>
-<a name='L253'></a><a href='#L253'>253</a>
-<a name='L254'></a><a href='#L254'>254</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L251'></a><a href='#L251'>251</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -387,9 +384,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -625,24 +619,21 @@ const MapPhotoDrawer<span class="cstat-no" title="statement not covered" > = </s
 <span class="cstat-no" title="statement not covered" ></span>
   const observationUr<span class="cstat-no" title="statement not covered" >l = useMemo(() =&gt; {</span>
     if (result) {<span class="cstat-no" title="statement not covered" ></span>
-      return APP_PATHS.OBSERVATION_DETAILS.repla<span class="cstat-no" title="statement not covered" >ce(':plantingSiteId', `${result.planti</span>ngSiteId}`).replace(
-        ':observationId',<span class="cstat-no" title="statement not covered" ></span>
-        `${result.observationId}<span class="cstat-no" title="statement not covered" >`</span>
-      );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >    }</span>
-  }, [<span class="cstat-no" title="statement not covered" >result]);</span>
-&nbsp;
+      return APP_PATHS.OBSERVATION_DETAILS_V2.re<span class="cstat-no" title="statement not covered" >place(':observationId', `${result.obse</span>rvationId}`);
+    }<span class="cstat-no" title="statement not covered" ></span>
+  }, [result]);<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
   co<span class="cstat-no" title="statement not covered" >nst monitoringPlot = useMemo(() =&gt; {</span>
-    const monitoringPlots =
-      result?.str<span class="cstat-no" title="statement not covered" >ata.flatMap((stratum) =&gt; s<span class="fstat-no" title="function not covered" >tr</span>atum.substrata).flatMap((substratum) =&gt; substratum.monitoringPlots) ?? [];</span>
-<span class="cstat-no" title="statement not covered" >    const adHocPlots = result?.adHocPlot ? [result.ad</span>HocPlot] : [];
+    co<span class="cstat-no" title="statement not covered" >nst monitoringP</span>lots =
+      result?.strata.flatMap((stratum) =&gt; stratum.substrata).flatMap((substratum) =&gt; substratum.monitoringPlots) ?? [];
+<span class="cstat-no" title="statement not covered" >    const adHocPlots = result?.adHocPlot ? [result.adHocPlot] : [];</span>
 &nbsp;
-    return [...monitoring<span class="cstat-no" title="statement not covered" >Plots, ...adHocPlots].find<span class="fstat-no" title="function not covered" >((</span>plot) =&gt; plot.monitoringPlotId === monitoringPlotId);</span>
-  },<span class="cstat-no" title="statement not covered" > [monitoringPlotId, result?.adHocPlot, result?.strata]);</span>
-<span class="cstat-no" title="statement not covered" ></span>
-  const stratumName = useMemo(() =&gt; {
-    const stratum = result?.strata.find((_stratum) =&gt;
-      _stratum.substrata.some((substratum) =&gt;
+    return [...mo<span class="cstat-no" title="statement not covered" >nitoringPlots, ...adHocPlo<span class="fstat-no" title="function not covered" >ts</span>].find((plot) =&gt; plot.monitoringPlotId === monitoringPlotId);</span>
+  },<span class="cstat-no" title="statement not covered" > [monitoringPlotId, result?.adHocPlot, result?.st</span>rata]);
+&nbsp;
+  const stratumName = use<span class="cstat-no" title="statement not covered" >Memo(() =&gt; {<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    const stratum = result?.strata.find((_stratum) =&gt;</span>
+<span class="cstat-no" title="statement not covered" >      _stratum.substrata.some((substratum) =&gt;</span>
         substratum.monitoringPlots.some((plot) =&gt; plot.monitoringPlotId === monitoringPlotId)
       )
     );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
@@ -829,7 +820,7 @@ export default MapPhotoDrawer;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-26T20:40:42.579Z
+                at 2026-02-26T22:39:32.633Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

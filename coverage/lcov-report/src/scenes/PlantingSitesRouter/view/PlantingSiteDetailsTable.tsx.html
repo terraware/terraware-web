@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/60</span>
+                <span class='fraction'>0/54</span>
             </div>
         
             
@@ -263,10 +263,7 @@
 <a name='L198'></a><a href='#L198'>198</a>
 <a name='L199'></a><a href='#L199'>199</a>
 <a name='L200'></a><a href='#L200'>200</a>
-<a name='L201'></a><a href='#L201'>201</a>
-<a name='L202'></a><a href='#L202'>202</a>
-<a name='L203'></a><a href='#L203'>203</a>
-<a name='L204'></a><a href='#L204'>204</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L201'></a><a href='#L201'>201</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -461,9 +458,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -570,19 +564,16 @@ const Det<span class="fstat-no" title="function not covered" >ailsRenderer =</sp
     };
 &nbsp;
     const createLinkToPlot = (iValue: React.ReactNode | unknown[]) =&gt; {
-      const adHocObservationUrl <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >= </span>APP_PATHS.OBSERVATION_AD_HOC_PLOT_DETAILS;</span>
+      const adHocObservationUrl <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >= </span>APP_PATHS.OBSERVATION_DETAILS_V2;</span>
 <span class="cstat-no" title="statement not covered" ></span>
-      const to = adHocObservationUrl
-        .replace(':monitoringPlotId', row.adHocPlot?.monitoringPlotId?.toString())
-        .replace(':observationId', row.observationId?.toString())
-<span class="cstat-no" title="statement not covered" >        .replace(':plantingSiteId', row.plantingSiteId?.toString());</span>
+      const to = adHocObservationUrl.replace(':observationId', row.observationId?.toString());
 &nbsp;
-      return (<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-        &lt;Link fontSize='16px' to={to}&gt;
-          {iValue as React.ReactNo<span class="cstat-no" title="statement not covered" >de}</span>
-        &lt;/Link&gt;<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >      );</span>
-    };
+      return (
+<span class="cstat-no" title="statement not covered" >        &lt;Link fontSize='16px' to={to}&gt;</span>
+          {iValue as React.ReactNode}
+        &lt;/Link&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+      );
+    };<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
     if<span class="cstat-no" title="statement not covered" > (column.key === 'name') {</span>
       return &lt;CellRenderer {...props} value={createLinkToStratum()} sx={textStyles} title={value as string} /&gt;;
@@ -598,8 +589,8 @@ const Det<span class="fstat-no" title="function not covered" >ailsRenderer =</sp
 <span class="cstat-no" title="statement not covered" >      return &lt;CellRenderer {...props} value={value || ''} sx={textStyles} /&gt;;</span>
     }<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
-    if (column.key === 'substrata') {
-      return &lt;CellRenderer {...props} value={row.substrata.length} sx={textStyles} /&gt;;
+<span class="cstat-no" title="statement not covered" >    if (column.key === 'substrata') {</span>
+<span class="cstat-no" title="statement not covered" >      return &lt;CellRenderer {...props} value={row.substrata.length} sx={textStyles} /&gt;;</span>
     }
 &nbsp;
     if (column.key === 'plotNumber') {
@@ -608,14 +599,14 @@ const Det<span class="fstat-no" title="function not covered" >ailsRenderer =</sp
           {...props}
           column={column}
           value={createLinkToPlot(row.plotNumber)}
-<span class="cstat-no" title="statement not covered" >          row={row}</span>
-          sx={textStyles}<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" ></span>          title={value as<span class="cstat-no" title="statement not covered" > string}</span>
-        /&gt;
-<span class="cstat-no" title="statement not covered" >      );</span>
-    }
+          row={row}
+          sx={textStyles}
+          title={value as string}
+<span class="cstat-no" title="statement not covered" >        /&gt;</span>
+      );<span class="cstat-no" title="statement not covered" ></span>
+    }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 &nbsp;
-    if (column.key === 'plantingCompleted') {
+    if<span class="cstat-no" title="statement not covered" > (column.key === 'plantingCompleted') {</span>
       const isPlantingCompleted = row.substrata.every(
         (_substratum: MinimalSubstratum) =&gt; _substratum.plantingCompleted
       );
@@ -624,11 +615,11 @@ const Det<span class="fstat-no" title="function not covered" >ailsRenderer =</sp
           {...props}
           column={column}
           value={isPlantingCompleted}
-<span class="cstat-no" title="statement not covered" >          row={row}</span>
-<span class="cstat-no" title="statement not covered" >          sx={textStyles}</span>
+          row={row}
+          sx={textStyles}
           title={value as string}
-        /&gt;
-      );
+<span class="cstat-no" title="statement not covered" >        /&gt;</span>
+<span class="cstat-no" title="statement not covered" >      );</span>
     }
 &nbsp;
     if (column.key === 'observationDate') {
@@ -637,11 +628,11 @@ const Det<span class="fstat-no" title="function not covered" >ailsRenderer =</sp
           {...props}
           column={column}
           value={row.completedTime ? getDateDisplayValue(row.completedTime, timeZone) : row.startDate}
-<span class="cstat-no" title="statement not covered" >          row={row}</span>
-<span class="cstat-no" title="statement not covered" >          sx={textStyles}</span>
+          row={row}
+          sx={textStyles}
           title={value as string}
-        /&gt;
-      );
+<span class="cstat-no" title="statement not covered" >        /&gt;</span>
+<span class="cstat-no" title="statement not covered" >      );</span>
     }
 &nbsp;
     if (column.key === 'totalPlants') {
@@ -650,11 +641,11 @@ const Det<span class="fstat-no" title="function not covered" >ailsRenderer =</sp
           {...props}
           column={column}
           value={row.adHocPlot?.totalPlants}
-<span class="cstat-no" title="statement not covered" >          row={row}</span>
-<span class="cstat-no" title="statement not covered" >          sx={textStyles}</span>
+          row={row}
+          sx={textStyles}
           title={value as string}
-        /&gt;
-      );
+<span class="cstat-no" title="statement not covered" >        /&gt;</span>
+<span class="cstat-no" title="statement not covered" >      );</span>
     }
 &nbsp;
     if (column.key === 'totalSpecies') {
@@ -663,10 +654,10 @@ const Det<span class="fstat-no" title="function not covered" >ailsRenderer =</sp
           {...props}
           column={column}
           value={row.adHocPlot?.totalSpecies}
-<span class="cstat-no" title="statement not covered" >          row={row}</span>
+          row={row}
           sx={textStyles}
           title={value as string}
-        /&gt;
+<span class="cstat-no" title="statement not covered" >        /&gt;</span>
       );
     }
 &nbsp;
@@ -679,7 +670,7 @@ const Det<span class="fstat-no" title="function not covered" >ailsRenderer =</sp
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-26T20:40:42.579Z
+                at 2026-02-26T22:39:32.633Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/46</span>
+                <span class='fraction'>0/44</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/48</span>
+                <span class='fraction'>0/46</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/43</span>
+                <span class='fraction'>0/41</span>
             </div>
         
             
@@ -200,12 +200,7 @@
 <a name='L135'></a><a href='#L135'>135</a>
 <a name='L136'></a><a href='#L136'>136</a>
 <a name='L137'></a><a href='#L137'>137</a>
-<a name='L138'></a><a href='#L138'>138</a>
-<a name='L139'></a><a href='#L139'>139</a>
-<a name='L140'></a><a href='#L140'>140</a>
-<a name='L141'></a><a href='#L141'>141</a>
-<a name='L142'></a><a href='#L142'>142</a>
-<a name='L143'></a><a href='#L143'>143</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L138'></a><a href='#L138'>138</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -250,9 +245,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -268,9 +261,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -357,46 +347,44 @@ import Card fro<span class="cstat-no" title="statement not covered" ><span class
 im<span class="cstat-no" title="statement not covered" >port FormattedNumber from 'src/components/common/FormattedNumber';</span>
 impo<span class="cstat-no" title="statement not covered" >rt Link from 'src/components/common/Link';</span>
 import { APP_PATHS } from 'src/constants';
-import isEnabled f<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ro</span>m 'src/features';</span>
-im<span class="cstat-no" title="statement not covered" >port { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';</span>
-impo<span class="cstat-no" title="statement not covered" >rt strings from 'src/strings';</span>
+import { usePlanti<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ng</span>SiteData } from 'src/providers/Tracking/PlantingSiteContext';</span>
+im<span class="cstat-no" title="statement not covered" >port strings from 'src/strings';</span>
 <span class="cstat-no" title="statement not covered" ></span>
-import H<span class="cstat-no" title="statement not covered" >ighestAndLowestSurvivalRat<span class="fstat-no" title="function not covered" >eS</span>peci<span class="cstat-no" title="statement not covered" >esCard fro</span>m './HighestAndLowestSurvivalRateSpeciesCard';</span>
-import HighestAndLowestSurvivalRateStrataCard from './HighestAndLowestSurvivalRateStrataCard';
-im<span class="cstat-no" title="statement not covered" >port LiveDe</span>adPlantsPerSpeciesCard from './LiveDeadPlantsPerSpeciesCard';
-&nbsp;
-export default<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > f</span>unction SurvivalRateCard(): <span class="cstat-no" title="statement not covered" >JSX.Element {</span></span>
-  const theme = useTheme();
+import<span class="cstat-no" title="statement not covered" > HighestAndLowestSurvivalRateSpeciesCard from './HighestAndLowestSurvivalRateSpeciesCard';</span>
+import H<span class="cstat-no" title="statement not covered" >ighestAndLowestSurvivalRat<span class="fstat-no" title="function not covered" >eS</span>trat<span class="cstat-no" title="statement not covered" >aCard from</span> './HighestAndLowestSurvivalRateStrataCard';</span>
+import LiveDeadPlantsPerSpeciesCard from './LiveDeadPlantsPerSpeciesCard';
+<span class="cstat-no" title="statement not covered" ></span>
+export default function SurvivalRateCard(): JSX.Element {
+  const theme <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >= </span>useTheme();<span class="cstat-no" title="statement not covered" ></span></span>
   const { observationSummaries, plantingSite } = usePlantingSiteData();
   const { isDesktop } = useDeviceInfo();
-  const newObservationViewEnabled = isEnabled('New Observation View');
 &nbsp;
   const separatorStyles = {
     width: '1px',
-    height: 'auto',<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-    backgroundColor:<span class="cstat-no" title="statement not covered" > th</span>eme.palette.TwClrBrdrTertiary,
-<span class="cstat-no" title="statement not covered" >    marginRight: '24px',</span>
-    marginL<span class="fstat-no" title="function not covered" >ef</span>t: '<span class="cstat-no" title="statement not covered" >24px',</span>
-  };
-<span class="cstat-no" title="statement not covered" ></span>
-  const latestSumma<span class="cstat-no" title="statement not covered" >ry = useMemo(</span>
-    () =&gt; (observation<span class="cstat-no" title="statement not covered" >Summaries &amp;&amp; observationS</span>ummaries.length &gt; 0 ? observationSummaries[0] : undefined),
-    [observationSummaries]<span class="cstat-no" title="statement not covered" ></span>
+    height: 'auto',
+    backgroundColor: theme.palette.TwClrBrdrTertiary,
+    marginRight: '2<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >4p</span>x',<span class="cstat-no" title="statement not covered" ></span></span>
+    marginLeft: '24p<span class="cstat-no" title="statement not covered" >x',</span>
+<span class="cstat-no" title="statement not covered" >  };</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+  const latestSummary = useMemo(
+<span class="cstat-no" title="statement not covered" >    () =&gt; (observationSummaries &amp;&amp; observation</span>Summaries.length &gt; 0 ? observationSummaries[0] : undefined),
+    [observationSum<span class="cstat-no" title="statement not covered" >maries]</span>
   );<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
   return (<span class="cstat-no" title="statement not covered" ></span>
     &lt;Card<span class="cstat-no" title="statement not covered" ></span>
       radius='8px'<span class="cstat-no" title="statement not covered" ></span>
-      style={{ display<span class="cstat-no" title="statement not covered" >: 'flex', 'justify-content': 'spa</span>ce-between', flexDirection: isDesktop ? 'row' : 'column' }}
+      style={{ dis<span class="cstat-no" title="statement not covered" >play: 'flex', 'justify-content': 'space-between</span>', flexDirection: isDesktop ? 'row' : 'column' }}
     &gt;<span class="cstat-no" title="statement not covered" ></span>
-      &lt;Box flexBasis=<span class="cstat-no" title="statement not covered" >'100%'&gt;</span>
-        &lt;Box display={'flex'} alignItems={'center'}&gt;<span class="cstat-no" title="statement not covered" ></span>
-          &lt;Typography fontSize={'20px'} fontWeight={<span class="cstat-no" title="statement not covered" >600} marginRight={1}&gt;</span>
+      &lt;Box flexBasis='100%'&gt;<span class="cstat-no" title="statement not covered" ></span>
+        &lt;Box display=<span class="cstat-no" title="statement not covered" >{'flex'} alignItems={'center'}&gt;</span>
+          &lt;Typography fontSize={'20px'} fontWeight={6<span class="cstat-no" title="statement not covered" >00} marginRight={1}&gt;</span>
             {strings.SURVIVAL_RATE}<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" >          &lt;/Typography&gt;</span>
-          &lt;Toolt<span class="cstat-no" title="statement not covered" >ip title={strings.SURVIVAL_RATE_</span>TOOLTIP}&gt;
-            &lt;Box display='flex'&gt;<span class="cstat-no" title="statement not covered" ></span>
-              &lt;Icon fill<span class="cstat-no" title="statement not covered" >Color={theme.palette.TwClrIcnInfo}</span> name='info' size='small' /&gt;
+          &lt;/Typography&gt;<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" >          &lt;Tooltip title={</span>strings.SURVIVAL_RATE_TOOLTIP}&gt;
+            &lt;Box<span class="cstat-no" title="statement not covered" > display='flex'&gt;</span>
+              &lt;Icon fillColor={theme.palette.TwCl<span class="cstat-no" title="statement not covered" >rIcnInfo} name='info' size='small' /&gt;</span>
             &lt;/Box&gt;<span class="cstat-no" title="statement not covered" ></span>
           &lt;/Tooltip&gt;<span class="cstat-no" title="statement not covered" ></span>
         &lt;/Box&gt;
@@ -425,10 +413,7 @@ export default<span class="cstat-no" title="statement not covered" ><span class=
                   strings.SET_T0_DATA_IN_THE,
                   &lt;Link
                     fontSize='16px'
-                    to={(newObservationViewEnabled
-                      ? APP_PATHS.SURVIVAL_RATE_SETTINGS_V2
-                      : APP_PATHS.SURVIVAL_RATE_SETTINGS
-                    ).replace(':plantingSiteId', plantingSite.id.toString())}
+                    to={APP_PATHS.SURVIVAL_RATE_SETTINGS_V2.replace(':plantingSiteId', plantingSite.id.toString())}
                   &gt;
                     {strings.SURVIVAL_RATE_SETTINGS}
                   &lt;/Link&gt;
@@ -496,7 +481,7 @@ export default<span class="cstat-no" title="statement not covered" ><span class=
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-26T20:40:42.579Z
+                at 2026-02-26T22:39:32.633Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
