@@ -29,9 +29,9 @@ test.describe('ObservationDetailsTests', () => {
 
     // charts
     await expect(page.getByText('Number of Live Plants per Species')).toBeVisible();
-    await expect(page.locator('#observationsTotalPlantsBySpecies')).toBeVisible();
+    await expect(page.locator('#observationSpeciesTotalChart')).toBeVisible();
     await expect(page.getByText('Survival Rate per Species')).toBeVisible();
-    await expect(page.locator('#observationsSurvivalRateBySpecies')).toBeVisible();
+    await expect(page.locator('#observationSurvivalRateChart')).toBeVisible();
 
     // table column headers
     await expect(page.getByRole('columnheader', { name: 'Stratum' })).toBeVisible();
@@ -73,9 +73,9 @@ test.describe('ObservationDetailsTests', () => {
 
     // charts
     await expect(page.getByText('Number of Live Plants per Species')).toBeVisible();
-    await expect(page.locator('#observationsTotalPlantsBySpecies')).toBeVisible();
+    await expect(page.locator('#observationSpeciesTotalChart')).toBeVisible();
     await expect(page.getByText('Survival Rate per Species')).toBeVisible();
-    await expect(page.locator('#observationsSurvivalRateBySpecies')).toBeVisible();
+    await expect(page.locator('#observationSurvivalRateChart')).toBeVisible();
 
     // table column headers
     await expect(page.getByRole('columnheader', { name: 'Monitoring Plot', exact: true })).toBeVisible();
@@ -150,9 +150,9 @@ test.describe('ObservationDetailsTests', () => {
 
     // charts
     await expect(page.getByText('Number of Live Plants per Species')).toBeVisible();
-    await expect(page.locator('#observationsTotalPlantsBySpecies')).toBeVisible();
+    await expect(page.locator('#plotSpeciesTotalChart')).toBeVisible();
     await expect(page.getByText('Survival Rate per Species')).toBeVisible();
-    await expect(page.locator('#observationsSurvivalRateBySpecies')).toBeVisible();
+    await expect(page.locator('#plotSpeciesSurvivalRate')).toBeVisible();
 
     // photos
     await expect(page.getByRole('tab', { name: 'Photos & Videos' })).toBeVisible();

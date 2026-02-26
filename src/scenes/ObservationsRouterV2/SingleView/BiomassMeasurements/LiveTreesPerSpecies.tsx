@@ -40,5 +40,5 @@ export default function LiveTreesPerSpecies({ trees }: LiveTreesPerSpeciesProps)
     [availableSpecies, treeSpecies]
   );
 
-  return <BarChart chartId='observationsSurvivalRateBySpecies' chartData={chartData} barWidth={0} minHeight='300px' />;
+  return <BarChart chartId='liveTreeSpecies' chartData={chartData} barWidth={0} minHeight='300px' />;
 }
