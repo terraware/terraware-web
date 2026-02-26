@@ -1,3 +1,4 @@
+100d01cf1304 SW-8068 Removed divider before plot selection (#5335)
 3619b3e6fe7e Add rtk tags to module projects search for cache invalidation (#5336)
 c0def4aa868a Remove unused useListModules hook (#5334)
 504bc98a8149 Fixed issue with an extra return character when processing strata names (#5338)
