@@ -417,7 +417,6 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           id='assigned-plant-monitoring-table'
           Renderer={PlantMonitoringCellRenderer}
           rows={rows}
-          title={strings.PLANT_MONITORING}
           rightComponent={rightComponent}
         />
       )}
@@ -431,7 +430,6 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           id='ad-hoc-plant-monitoring-table'
           Renderer={PlantMonitoringCellRenderer}
           rows={rows}
-          title={strings.PLANT_MONITORING}
           rightComponent={rightComponent}
         />
       )}
