@@ -141,7 +141,6 @@ export default function MonitoringPlotList(): JSX.Element {
         id='observation-stratum-table'
         Renderer={MonitoringPlotCellRenderer}
         rows={rows}
-        title={strings.MONITORING_PLOTS}
       />
     </Card>
   );

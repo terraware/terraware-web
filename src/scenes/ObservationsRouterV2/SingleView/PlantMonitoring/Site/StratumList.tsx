@@ -97,7 +97,6 @@ export default function StratumList(): JSX.Element {
         id='observation-site-table'
         Renderer={StratumCellRenderer}
         rows={rows}
-        title={strings.STRATA}
       />
     </Card>
   );

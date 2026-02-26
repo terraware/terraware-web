@@ -135,7 +135,6 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
         id='biomass-measurement-table'
         Renderer={BiomassCellRenderer}
         rows={adHocObservationsResults}
-        title={strings.BIOMASS_MONITORING}
       />
     </Card>
   );
