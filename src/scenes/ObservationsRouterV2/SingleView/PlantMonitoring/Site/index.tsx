@@ -122,6 +122,12 @@ const SiteDetails = (): JSX.Element => {
     return permanentPlots.some((plot) => plot.status === 'Completed');
   }, [results?.strata]);
 
+  useEffect(() => {
+    if (unrecognizedSpecies.length) {
+      setShowPageMessage(true);
+    }
+  }, [unrecognizedSpecies.length]);
+
   return (
     <Page crumbs={crumbs} title={title} rightComponent={matchedUnrecognizedSpeciesMenu}>
       {showPageMessage && (
