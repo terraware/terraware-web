@@ -36,7 +36,6 @@ test.describe('ObservationDetailsTests', () => {
     // table column headers
     await expect(page.getByRole('columnheader', { name: 'Stratum' })).toBeVisible();
     await expect(page.getByRole('columnheader', { name: 'Date' })).toBeVisible();
-    await expect(page.getByRole('columnheader', { name: 'Status' })).toBeVisible();
     await expect(page.getByRole('columnheader', { name: 'Live Plants' })).toBeVisible();
     await expect(page.getByRole('columnheader', { name: 'Total Plants' })).toBeVisible();
     await expect(page.getByRole('columnheader', { name: 'Species', exact: true })).toBeVisible();
@@ -81,6 +80,7 @@ test.describe('ObservationDetailsTests', () => {
     await expect(page.getByRole('columnheader', { name: 'Monitoring Plot', exact: true })).toBeVisible();
     await expect(page.getByRole('columnheader', { name: 'Substratum' })).toBeVisible();
     await expect(page.getByRole('columnheader', { name: 'Date' })).toBeVisible();
+    await expect(page.getByRole('columnheader', { name: 'Status' })).toBeVisible();
     await expect(page.getByRole('columnheader', { name: 'Monitoring Plot Type' })).toBeVisible();
     await expect(page.getByRole('columnheader', { name: 'Live Plants' })).toBeVisible();
     await expect(page.getByRole('columnheader', { name: 'Total Plants' })).toBeVisible();

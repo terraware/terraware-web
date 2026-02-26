@@ -84,7 +84,7 @@ export default function AbandonObservationModal(): JSX.Element {
               priority='secondary'
               key='button-1'
             />,
-            <Button id='end-observation' onClick={onSave} label={strings.END_OBSERVATION} key='button-2' />,
+            <Button id='end-observation-confirm' onClick={onSave} label={strings.END_OBSERVATION} key='button-2' />,
           ]}
           scrolled
         >

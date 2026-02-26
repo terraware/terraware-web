@@ -100,10 +100,10 @@ test.describe('ObservationsTests', () => {
     await page.getByRole('menuitem', { name: 'End Observation' }).click();
 
     // wait for save button to load
-    await waitFor(page, '#end-observation');
+    await waitFor(page, '#end-observation-confirm');
 
     // save
-    await page.locator('#end-observation').click();
+    await page.locator('#end-observation-confirm').click();
 
     // wait for success toast message
     await waitFor(page, '#snackbar p:has-text("observation has been ended")');
