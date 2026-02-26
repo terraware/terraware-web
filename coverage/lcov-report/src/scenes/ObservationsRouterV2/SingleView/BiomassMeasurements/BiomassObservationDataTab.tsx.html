@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/109</span>
+                <span class='fraction'>0/112</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/166</span>
+                <span class='fraction'>0/168</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/27</span>
+                <span class='fraction'>0/28</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/99</span>
+                <span class='fraction'>0/102</span>
             </div>
         
             
@@ -384,7 +384,13 @@
 <a name='L319'></a><a href='#L319'>319</a>
 <a name='L320'></a><a href='#L320'>320</a>
 <a name='L321'></a><a href='#L321'>321</a>
-<a name='L322'></a><a href='#L322'>322</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L322'></a><a href='#L322'>322</a>
+<a name='L323'></a><a href='#L323'>323</a>
+<a name='L324'></a><a href='#L324'>324</a>
+<a name='L325'></a><a href='#L325'>325</a>
+<a name='L326'></a><a href='#L326'>326</a>
+<a name='L327'></a><a href='#L327'>327</a>
+<a name='L328'></a><a href='#L328'>328</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -586,7 +592,11 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -602,6 +612,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -674,6 +685,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -896,17 +908,23 @@ import TreesAndShru<span class="cstat-no" title="statement not covered" ><span c
     on<span class="cstat-no" title="statement not covered" >Complete: () =&gt; setShowMatchSpeciesModal(false),</span>
   });
 &nbsp;
-  return (
+  useEffect(() =&gt; {
+    if (unrecognizedSpecies.length) {
+      setShowPageMessage(true);
+    }<span class="cstat-no" title="statement not covered" ></span>
+  }, [unrecognizedSpecies.length]);
+&nbsp;
+  return (<span class="cstat-no" title="statement not covered" ></span>
     &lt;Card radius='24px'&gt;
-      {editQualitativeDataModalOpen &amp;&amp; initialQualitativeData &amp;&amp; (
-<span class="cstat-no" title="statement not covered" >        &lt;EditBiomassQ</span>ualitativeDataModal
-          open={editQualitativeDataModalOpen}
-          setOpen={setEditQualitativeDataModalOpen}
-          initialFormData={ini<span class="cstat-no" title="statement not covered" >tialQualitativeData}</span>
+      {editQuali<span class="fstat-no" title="function not covered" >ta</span>tive<span class="cstat-no" title="statement not covered" >DataModalOpen &amp;&amp; initialQualitat</span>iveData &amp;&amp; (
+        &lt;EditBiomassQualitativeDataModal
+<span class="cstat-no" title="statement not covered" >          open={editQualitativ<span class="fstat-no" title="function not covered" >eD</span>ataModalOpen}</span>
+<span class="cstat-no" title="statement not covered" >          setOpen={setEditQualitativeDataModalOpen}</span>
+<span class="cstat-no" title="statement not covered" >          initialFormData={initi</span>alQualitativeData}
         /&gt;
-      )}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-      {showPageMessage &amp;&amp; (
-<span class="cstat-no" title="statement not covered" >        &lt;UnrecognizedSpeciesPageMessage</span>
+      )}
+<span class="cstat-no" title="statement not covered" >      {showPageMessage &amp;&amp; (</span>
+        &lt;UnrecognizedSpeciesPageMessage
           setShowMatchSpeciesModal={setShowMatchSpeciesModal}
           setShowPageMessage={setShowPageMessage}
           unrecognizedSpecies={unrecognizedSpecies}
@@ -922,8 +940,8 @@ import TreesAndShru<span class="cstat-no" title="statement not covered" ><span c
       &lt;ObservationDataNumbers items={items} isCompleted={!!results?.completedTime} /&gt;
       &lt;Box display='flex' sx={{ paddingBottom: 2, paddingTop: 3, alignItems: 'center' }}&gt;
         &lt;Typography fontSize='20px' lineHeight='28px' fontWeight={600} color={theme.palette.TwClrTxt} paddingRight={1}&gt;
-          {strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES}
-        &lt;/Typog<span class="fstat-no" title="function not covered" >ra</span>phy&gt;<span class="cstat-no" title="statement not covered" ></span>
+          {stri<span class="fstat-no" title="function not covered" >ng</span>s.NU<span class="cstat-no" title="statement not covered" >MBER_OF_LIVE_PLANTS_PER_SPECIES}</span>
+        &lt;/Typography&gt;
         &lt;Tooltip title={strings.BIOMASS_NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP}&gt;
           &lt;Box display='flex'&gt;
             &lt;Icon name='info' fillColor={theme.palette.TwClrIcnSecondary} /&gt;
@@ -940,8 +958,8 @@ import TreesAndShru<span class="cstat-no" title="statement not covered" ><span c
         paddingBottom={1.5}
       &gt;
         &lt;Button
-          priority='ghost'
-          label={<span class="fstat-no" title="function not covered" >st</span>ring<span class="cstat-no" title="statement not covered" >s.MATCH_UNRECOGNIZED_SPECIES}</span>
+          priorit<span class="fstat-no" title="function not covered" >y=</span>'gho<span class="cstat-no" title="statement not covered" >st'</span>
+          label={strings.MATCH_UNRECOGNIZED_SPECIES}
           icon='iconSynced'
           onClick={() =&gt; setShowMatchSpeciesModal(true)}
           disabled={!unrecognizedSpecies || unrecognizedSpecies.length === 0}
@@ -951,8 +969,8 @@ import TreesAndShru<span class="cstat-no" title="statement not covered" ><span c
           priority='ghost'
           label={strings.EXPORT_DATA}
           icon='iconImport'
-          onClick={() =&gt; void downloadBiomassObservationDetails(observationId)}
-          sx={{ f<span class="fstat-no" title="function not covered" >on</span>tWei<span class="cstat-no" title="statement not covered" >ght: '400 !important' }}</span>
+          onClick<span class="fstat-no" title="function not covered" >={</span>() =<span class="cstat-no" title="statement not covered" >&gt; void downloadBiomassObservationDetails(observationId</span>)}
+          sx={{ fontWeight: '400 !important' }}
         /&gt;
       &lt;/Box&gt;
       &lt;Box paddingY={2} display={'flex'} justifyContent={'space-between'} alignItems={'center'}&gt;
@@ -993,8 +1011,8 @@ import TreesAndShru<span class="cstat-no" title="statement not covered" ><span c
               monitoringPlotId={Number(monitoringPlot?.monitoringPlotId)}
               photos={[soilPhoto]}
             /&gt;
-          )}
-          &lt;Box&gt;<span class="cstat-no" title="statement not covered" ></span>
+          )}<span class="cstat-no" title="statement not covered" ></span>
+          &lt;Box&gt;
             &lt;Textfield
               id='soilDescription'
               label={strings.DESCRIPTION_NOTES}
@@ -1033,7 +1051,7 @@ export default BiomassObservationDataTab;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-26T18:09:39.770Z
+                at 2026-02-26T19:03:54.382Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

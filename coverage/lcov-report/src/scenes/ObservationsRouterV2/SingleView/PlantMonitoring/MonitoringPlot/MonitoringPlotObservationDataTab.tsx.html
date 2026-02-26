@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/106</span>
+                <span class='fraction'>0/109</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/151</span>
+                <span class='fraction'>0/153</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/27</span>
+                <span class='fraction'>0/28</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/97</span>
+                <span class='fraction'>0/100</span>
             </div>
         
             
@@ -359,7 +359,13 @@
 <a name='L294'></a><a href='#L294'>294</a>
 <a name='L295'></a><a href='#L295'>295</a>
 <a name='L296'></a><a href='#L296'>296</a>
-<a name='L297'></a><a href='#L297'>297</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L297'></a><a href='#L297'>297</a>
+<a name='L298'></a><a href='#L298'>298</a>
+<a name='L299'></a><a href='#L299'>299</a>
+<a name='L300'></a><a href='#L300'>300</a>
+<a name='L301'></a><a href='#L301'>301</a>
+<a name='L302'></a><a href='#L302'>302</a>
+<a name='L303'></a><a href='#L303'>303</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -521,8 +527,13 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -624,6 +635,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -803,30 +815,36 @@ import Moni<span class="fstat-no" title="function not covered" >to</span>ring<sp
 <span class="cstat-no" title="statement not covered" >    onComplete: () =&gt; setShowMatchSpeciesModal(false),</span>
   });<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
-  const extraItems = [
-    {
+  useEffect(() =&gt; {
+    if (unrecognizedSpecies.length) {
+      setShowPageMessage(true);
+    }<span class="cstat-no" title="statement not covered" ></span>
+  }, [unrecognizedSpecies.length]);
+&nbsp;
+  const extraItems = [<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    {</span>
       label: strings.PLOT_CONDITIONS,
-<span class="cstat-no" title="statement not covered" >      value: monitori</span>ngPlot?.conditions?.map((condition) =&gt; getConditionString(condition)).join(', ') || '- -',
+      value: monitoringPlot?.c<span class="cstat-no" title="statement not covered" >onditions?.map((condition) =&gt; getConditionString(condition)).join(', ') || '- -',</span>
     },
-    {
-      label: strings.FIELD_NOTES<span class="cstat-no" title="statement not covered" >,<span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" >      value: monitoringPlot?.notes || '- -'</span>,
-    },
+    {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+      label: strings.FIELD_NOTES,
+<span class="cstat-no" title="statement not covered" >      value: monitoringPlot?.n<span class="fstat-no" title="function not covered" >ot</span>es || '- -',</span>
+<span class="cstat-no" title="statement not covered" >    },</span>
   ];<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
-  return (<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-    &lt;Card radius='24px'&gt;
-      {editQualitativ<span class="cstat-no" title="statement not covered" >eDataModalOpen &amp;&amp; initialQualitativeData &amp;&amp; (</span>
+  return (
+    &lt;Card radius='24p<span class="cstat-no" title="statement not covered" >x'&gt;</span>
+      {editQualitativeDataModalOpen &amp;&amp; initialQualitativeData &amp;&amp; (
         &lt;EditMonitoringPlotQualitativeDataModal
-          open={editQualitativeDataModalOpen}
-          setOpen={setEditQualitativeDataModalOpen}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+          open={editQualitativeDataModalOpen}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+          setOpen={setEditQualitativeDataModalOpen}
           initialFormData={initialQualitativeData}
         /&gt;
       )}
       {showPageMessage &amp;&amp; (
         &lt;UnrecognizedSpeciesPageMessage
-          setShowMatchSpeciesModal={setShowMatchSpeciesModal}
-<span class="cstat-no" title="statement not covered" >          setShowPageMessage={setShowPageMessage}</span>
+<span class="cstat-no" title="statement not covered" >          setShowMatchSpeciesModal={setShowMatchSpeciesModal}</span>
+          setShowPageMessage={setShowPageMessage}
           unrecognizedSpecies={unrecognizedSpecies}
         /&gt;
       )}
@@ -842,8 +860,8 @@ import Moni<span class="fstat-no" title="function not covered" >to</span>ring<sp
         &lt;Box flex={1} minWidth='500px'&gt;
           &lt;Box display='flex' alignContent={'center'}&gt;
             &lt;Typography fontSize={'20px'} fontWeight={600}&gt;
-              {strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES}
-            &lt;/T<span class="fstat-no" title="function not covered" >yp</span>ogra<span class="cstat-no" title="statement not covered" >phy&gt;</span>
+              {<span class="fstat-no" title="function not covered" >st</span>ring<span class="cstat-no" title="statement not covered" >s.NUMBER_OF_LIVE_PLANTS_PER_SPEC</span>IES}
+            &lt;/Typography&gt;
             &lt;IconTooltip
               title={
                 results?.isAdHoc
@@ -882,8 +900,8 @@ import Moni<span class="fstat-no" title="function not covered" >to</span>ring<sp
         &lt;/Box&gt;
       &lt;/Box&gt;
       &lt;Box
-        display={'flex'}
-        justifyCo<span class="fstat-no" title="function not covered" >nt</span>ent=<span class="cstat-no" title="statement not covered" >{'end'}</span>
+        display={<span class="fstat-no" title="function not covered" >'f</span>lex'<span class="cstat-no" title="statement not covered" >}</span>
+        justifyContent={'end'}
         borderBottom={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
         paddingBottom={1.5}
       &gt;
@@ -893,8 +911,8 @@ import Moni<span class="fstat-no" title="function not covered" >to</span>ring<sp
           icon='iconSynced'
           onClick={() =&gt; setShowMatchSpeciesModal(true)}
           disabled={!unrecognizedSpecies || unrecognizedSpecies.length === 0}
-          sx={{ fontWeight: '400 !important' }}
-        /&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+          sx={{ f<span class="fstat-no" title="function not covered" >on</span>tWei<span class="cstat-no" title="statement not covered" >ght: '400 !important' }}</span>
+        /&gt;
         &lt;Button
           priority='ghost'
           label={strings.EXPORT_DATA}
@@ -918,8 +936,8 @@ import Moni<span class="fstat-no" title="function not covered" >to</span>ring<sp
             )}
           &lt;/Typography&gt;
         )}
-        {monitoringPlot &amp;&amp; !!monitoringPlot.completedTime &amp;&amp; (
-          &lt;Button<span class="cstat-no" title="statement not covered" ></span>
+        {monitoringP<span class="cstat-no" title="statement not covered" >lot &amp;&amp; !!monitoringPlot.completed</span>Time &amp;&amp; (
+          &lt;Button
             id='edit'
             label={strings.EDIT}
             onClick={onEditQualitativeData}
@@ -958,7 +976,7 @@ export default MonitoringPlotObservationDataTab;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-26T18:09:39.770Z
+                at 2026-02-26T19:03:54.382Z
             </div>
         <script src="../../../../../../prettify.js"></script>
         <script>
