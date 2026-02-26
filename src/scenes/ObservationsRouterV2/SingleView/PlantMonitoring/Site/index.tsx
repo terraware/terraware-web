@@ -112,6 +112,16 @@ const SiteDetails = (): JSX.Element => {
     );
   }, [strings.MATCH_UNRECOGNIZED_SPECIES, unrecognizedSpecies?.length]);
 
+  const hasObservedPermanentPlots = useMemo(() => {
+    const permanentPlots =
+      results?.strata
+        .flatMap((stratum) => stratum.substrata)
+        .flatMap((substratum) => substratum.monitoringPlots)
+        .filter((plot) => plot.isPermanent) ?? [];
+
+    return permanentPlots.some((plot) => plot.status === 'Completed');
+  }, [results?.strata]);
+
   return (
     <Page crumbs={crumbs} title={title} rightComponent={matchedUnrecognizedSpeciesMenu}>
       {showPageMessage && (
@@ -131,6 +141,7 @@ const SiteDetails = (): JSX.Element => {
       <SurvivalRateMessageV2 selectedPlantingSiteId={results?.plantingSiteId} />
       <AggregatedPlantsStats
         completedTime={results?.completedTime}
+        hasObservedPermanentPlots={hasObservedPermanentPlots}
         totalSpecies={results?.totalSpecies}
         plantingDensity={results?.plantingDensity}
         survivalRate={results?.survivalRate}
