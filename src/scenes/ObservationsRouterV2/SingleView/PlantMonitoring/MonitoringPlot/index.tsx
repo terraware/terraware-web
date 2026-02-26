@@ -32,10 +32,34 @@ const MonitoringPlotDetails = (): JSX.Element => {
       results?.isAdHoc
         ? results?.adHocPlot
         : results?.strata
-            .flatMap((stratum) => stratum.substrata)
-            ?.flatMap((substratum) => substratum?.monitoringPlots)
+            .flatMap((stratumResults) => stratumResults.substrata)
+            ?.flatMap((substratumResults) => substratumResults?.monitoringPlots)
             .find((plot) => plot.monitoringPlotId === monitoringPlotId),
     [monitoringPlotId, results?.adHocPlot, results?.isAdHoc, results?.strata]
+  );
+
+  const substratum = useMemo(
+    () =>
+      results?.isAdHoc
+        ? undefined
+        : results?.strata
+            .flatMap((stratumResults) => stratumResults.substrata)
+            .find((substratumResults) =>
+              substratumResults.monitoringPlots.some((plot) => plot.monitoringPlotId === monitoringPlotId)
+            ),
+    [monitoringPlotId, results?.isAdHoc, results?.strata]
+  );
+
+  const stratum = useMemo(
+    () =>
+      results?.isAdHoc
+        ? undefined
+        : results?.strata.find((stratumResults) =>
+            stratumResults.substrata.some(
+              (substratumResults) => substratumResults.substratumId === substratum?.substratumId
+            )
+          ),
+    [results?.isAdHoc, results?.strata, substratum?.substratumId]
   );
 
   useEffect(() => {
@@ -69,6 +93,7 @@ const MonitoringPlotDetails = (): JSX.Element => {
   const title = useMemo(() => {
     const swCoordinatesLat = monitoringPlot?.boundary?.coordinates?.[0]?.[0]?.[1];
     const swCoordinatesLng = monitoringPlot?.boundary?.coordinates?.[0]?.[0]?.[0];
+
     return (
       <Box display='flex' alignItems={'end'}>
         <Typography fontSize='20px' lineHeight='28px' fontWeight={600} color={theme.palette.TwClrTxt}>
@@ -78,8 +103,23 @@ const MonitoringPlotDetails = (): JSX.Element => {
           placement='bottom'
           title={
             <Box>
+              {!monitoringPlot?.isAdHoc && (
+                <Typography>
+                  {strings.STRATUM}: {stratum?.name}
+                </Typography>
+              )}
+              {!monitoringPlot?.isAdHoc && (
+                <Typography>
+                  {strings.SUBSTRATUM}: {substratum?.name}
+                </Typography>
+              )}
               <Typography>
-                {strings.PLOT_TYPE}: {strings.AD_HOC}
+                {strings.PLOT_TYPE}:{' '}
+                {monitoringPlot?.isAdHoc
+                  ? strings.AD_HOC
+                  : monitoringPlot?.isPermanent
+                    ? strings.PERMANENT
+                    : strings.TEMPORARY}
               </Typography>
               <Typography>
                 {strings.LOCATION}: {swCoordinatesLat}, {swCoordinatesLng}
@@ -100,11 +140,19 @@ const MonitoringPlotDetails = (): JSX.Element => {
     );
   }, [
     monitoringPlot?.boundary?.coordinates,
+    monitoringPlot?.isAdHoc,
+    monitoringPlot?.isPermanent,
     monitoringPlot?.monitoringPlotNumber,
+    stratum?.name,
     strings.AD_HOC,
     strings.LOCATION,
+    strings.PERMANENT,
     strings.PLOT_INFO,
     strings.PLOT_TYPE,
+    strings.STRATUM,
+    strings.SUBSTRATUM,
+    strings.TEMPORARY,
+    substratum?.name,
     theme,
   ]);
 
