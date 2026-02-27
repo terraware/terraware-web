@@ -218,7 +218,6 @@ export default function ReportsSettings(): JSX.Element {
     primaryDataSource?: string;
     frequencyOfReporting?: string;
     tfOwnerReviewer?: string;
-    disaggregation?: string;
     notes?: string;
     indicatorType: 'project' | 'common' | 'autoCalculated';
     originalProjectIndicator?: ExistingProjectIndicatorPayload;
@@ -443,13 +442,6 @@ export default function ReportsSettings(): JSX.Element {
         size: 180,
       },
       {
-        id: 'disaggregation',
-        header: strings.DISAGGREGATION,
-        accessorKey: 'disaggregation',
-        enableEditing: false,
-        size: 180,
-      },
-      {
         id: 'notes',
         header: strings.NOTES,
         accessorKey: 'notes',
@@ -469,7 +461,10 @@ export default function ReportsSettings(): JSX.Element {
         <EditStandardMetricModal onClose={closeEditStandardMetricModal} standardMetric={selectedStandardMetric} />
       )}
       {editProjectIndicatorModalOpened && selectedProjectIndicator && (
-        <EditProjectIndicatorModal onClose={closeEditProjectIndicatorModal} projectIndicator={selectedProjectIndicator} />
+        <EditProjectIndicatorModal
+          onClose={closeEditProjectIndicatorModal}
+          projectIndicator={selectedProjectIndicator}
+        />
       )}
       {editCommonIndicatorModalOpened && selectedCommonIndicator && (
         <EditCommonIndicatorModal onClose={closeEditCommonIndicatorModal} commonIndicator={selectedCommonIndicator} />
