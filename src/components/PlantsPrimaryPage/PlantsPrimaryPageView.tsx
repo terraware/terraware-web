@@ -200,7 +200,7 @@ export default function PlantsPrimaryPageView({
               />
             </Box>
           )}
-          {showSurvivalRateMessage && selectedPlantingSiteId && (
+          {showSurvivalRateMessage && selectedPlantingSiteId && selectedPlantingSiteId > 0 && (
             <SurvivalRateMessageV2 selectedPlantingSiteId={selectedPlantingSiteId} />
           )}
           {(isAcceleratorRoute || (!isAcceleratorRoute && options.length > 0)) && isPlantingSiteSet && (
