@@ -41,7 +41,9 @@ import {
 import { ProjectMetric, StandardMetric, SystemMetric } from 'src/types/AcceleratorReport';
 
 import DefaultMetricsRenderer from './DefaultMetricsRenderer';
+import EditCommonIndicatorModal from './EditCommonIndicatorModal';
 import EditMetricModal from './EditMetricModal';
+import EditProjectIndicatorModal from './EditProjectIndicatorModal';
 import EditStandardMetricModal from './EditStandardMetricModal';
 import SystemMetricsRenderer from './SystemMetricsRenderer';
 
@@ -56,8 +58,14 @@ export default function ReportsSettings(): JSX.Element {
   const { goToAcceleratorEditReportSettings, goToNewProjectMetric, goToNewStandardMetric } = useNavigateTo();
   const [selectedProjectMetric, setSelectedProjectMetric] = useState<ExistingProjectMetricPayload>();
   const [selectedStandardMetric, setSelectedStandardMetric] = useState<ExistingStandardMetricPayload>();
+  const [selectedProjectIndicator, setSelectedProjectIndicator] = useState<ExistingProjectIndicatorPayload>();
+  const [selectedCommonIndicator, setSelectedCommonIndicator] = useState<ExistingCommonIndicatorPayload>();
   const [editProjectMetricModalOpened, , openEditProjectMetricModal, closeEditProjectMetricModal] = useBoolean(false);
   const [editStandardMetricModalOpened, , openEditStandardMetricModal, closeEditStandardMetricModal] =
+    useBoolean(false);
+  const [editProjectIndicatorModalOpened, , openEditProjectIndicatorModal, closeEditProjectIndicatorModal] =
+    useBoolean(false);
+  const [editCommonIndicatorModalOpened, , openEditCommonIndicatorModal, closeEditCommonIndicatorModal] =
     useBoolean(false);
   const { isAllowed } = useUser();
 
@@ -273,24 +281,15 @@ export default function ReportsSettings(): JSX.Element {
 
   const onClickIndicatorRow = useCallback(
     (row: IndicatorRow) => {
-      const ind = row.originalProjectIndicator ?? row.originalCommonIndicator;
-      if (!ind) {
-        return;
+      if (row.originalProjectIndicator) {
+        setSelectedProjectIndicator(row.originalProjectIndicator);
+        openEditProjectIndicatorModal();
+      } else if (row.originalCommonIndicator) {
+        setSelectedCommonIndicator(row.originalCommonIndicator);
+        openEditCommonIndicatorModal();
       }
-      const asStandardMetric: StandardMetric = {
-        id: ind.id,
-        name: ind.name,
-        description: ind.description,
-        component: ind.category,
-        type: ind.level,
-        unit: ind.unit,
-        reference: ind.refId,
-        isPublishable: ind.isPublishable,
-      };
-      setSelectedStandardMetric(asStandardMetric);
-      openEditStandardMetricModal();
     },
-    [openEditStandardMetricModal]
+    [openEditProjectIndicatorModal, openEditCommonIndicatorModal]
   );
 
   const NameCell = useCallback(
@@ -468,6 +467,12 @@ export default function ReportsSettings(): JSX.Element {
       )}
       {editStandardMetricModalOpened && selectedStandardMetric && (
         <EditStandardMetricModal onClose={closeEditStandardMetricModal} standardMetric={selectedStandardMetric} />
+      )}
+      {editProjectIndicatorModalOpened && selectedProjectIndicator && (
+        <EditProjectIndicatorModal onClose={closeEditProjectIndicatorModal} projectIndicator={selectedProjectIndicator} />
+      )}
+      {editCommonIndicatorModalOpened && selectedCommonIndicator && (
+        <EditCommonIndicatorModal onClose={closeEditCommonIndicatorModal} commonIndicator={selectedCommonIndicator} />
       )}
       <Card
         style={{ display: 'flex', flexDirection: 'column' }}

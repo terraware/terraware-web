@@ -344,6 +344,8 @@ COLLECTORS,Recolectores,55432568
 COLOR,Color,e96df902
 COMMENTS,Comentarios,5a6f1269
 COMMON,Común,69695656
+COMMON_INDICATOR,Indicador Común,78d9c492
+COMMON_INDICATOR_SAVED,Indicador Común Guardado,6e09bf56
 COMMON_NAME,Nombre común,d7db2e57
 COMMON_QUESTION,¿Común?,68715b60
 COMMUNITY,Comunidad,a1e5aaf2
@@ -571,6 +573,8 @@ EDIT_ACCOUNT,Editar cuenta,b77ad44d
 EDIT_ACTIVITY,Editar actividad,5b6476f3
 EDIT_ANNOTATION,Editar anotación,82bcb054
 EDIT_BATCH_DETAILS,Editar detalles del lote,d2f2112a
+EDIT_COMMON_INDICATOR,Editar Indicador Común,e14bc686
+EDIT_COMMON_INDICATOR_CONFIRMATION,Las modificaciones a este indicador común se aplicarán en TODOS los proyectos. ¿Está seguro de que desea que estas actualizaciones se apliquen a todos los proyectos?,8a103582
 EDIT_DOCUMENT_DETAILS,Editar detalles del documento,92155983
 EDIT_FEEDBACK,Editar retroalimentación,6b52e0e6
 EDIT_FUNDING_ENTITY,Editar entidad financiadora,f21be0e0
@@ -1494,6 +1498,8 @@ PROJECT_HIGHLIGHT_IMAGE,Imagen destacada del proyecto,a7d500cb
 PROJECT_IMPACT,Impacto del proyecto,7daa6ba5
 PROJECT_IMPACT_INSTRUCTIONS,"Proporcione los detalles de su impacto durante el período del informe, incluidos los logros más importantes y los avances hacia la consecución de los objetivos declarados y las metas principales. Además de los objetivos forestales, por favor incluya los puestos de trabajo creados (a tiempo completo, a tiempo parcial y estacionales), con cifras específicas desglosadas por género. (Aproximadamente una página).",57149db5
 PROJECT_IMPACT_REQUIRED,Impacto del proyecto *,d64d1635
+PROJECT_INDICATOR,Indicador de Proyecto,e893a286
+PROJECT_INDICATOR_SAVED,Indicador de Proyecto Guardado,a1be5605
 PROJECT_INFORMATION,Información sobre el proyecto,20e59559
 PROJECT_INTERNAL_USER_ROLE_CARBON_LEAD,Responsable de carbono,894929ea
 PROJECT_INTERNAL_USER_ROLE_CLIMATE_IMPACT_LEAD,Responsable de impacto climático,b00dd731

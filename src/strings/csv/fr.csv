@@ -343,6 +343,8 @@ COLLECTORS,Collecteurs,55432568
 COLOR,Couleur,e96df902
 COMMENTS,Commentaires,5a6f1269
 COMMON,Commun,69695656
+COMMON_INDICATOR,Indicateur commun,78d9c492
+COMMON_INDICATOR_SAVED,Indicateur commun enregistré,6e09bf56
 COMMON_NAME,Nom commun,d7db2e57
 COMMON_QUESTION,Commun ?,68715b60
 COMMUNITY,Communauté,a1e5aaf2
@@ -570,6 +572,8 @@ EDIT_ACCOUNT,Modifier le compte,b77ad44d
 EDIT_ACTIVITY,Modifier l’activité,5b6476f3
 EDIT_ANNOTATION,Modifier l’annotation,82bcb054
 EDIT_BATCH_DETAILS,Modifier les détails du lot,d2f2112a
+EDIT_COMMON_INDICATOR,Modifier l’indicateur commun,e14bc686
+EDIT_COMMON_INDICATOR_CONFIRMATION,Les modifications apportées à cet indicateur commun seront appliquées à TOUS les projets. Voulez-vous vraiment que ces mises à jour s’appliquent à tous les projets ?,8a103582
 EDIT_DOCUMENT_DETAILS,Modifier les détails du document,92155983
 EDIT_FEEDBACK,Modifier les commentaires,6b52e0e6
 EDIT_FUNDING_ENTITY,Modifier l'organisme de financement,f21be0e0
@@ -1493,6 +1497,8 @@ PROJECT_HIGHLIGHT_IMAGE,Image de mise en évidence du projet,a7d500cb
 PROJECT_IMPACT,Impact du projet,7daa6ba5
 PROJECT_IMPACT_INSTRUCTIONS,"Détaillez l'impact de votre projet au cours de la période couverte par le rapport, y compris les principales réalisations et les progrès accomplis en vue d'atteindre les objectifs fixés et les principales étapes. Outre les objectifs forestiers, veuillez indiquer les emplois créés (à temps plein, à temps partiel et saisonniers), en utilisant des chiffres spécifiques ventilés par sexe. (Environ une page.)",57149db5
 PROJECT_IMPACT_REQUIRED,Impact du projet *,d64d1635
+PROJECT_INDICATOR,Indicateur de projet,e893a286
+PROJECT_INDICATOR_SAVED,Indicateur de projet enregistré,a1be5605
 PROJECT_INFORMATION,Informations sur le projet,20e59559
 PROJECT_INTERNAL_USER_ROLE_CARBON_LEAD,Responsable carbone,894929ea
 PROJECT_INTERNAL_USER_ROLE_CLIMATE_IMPACT_LEAD,Responsable de l'impact climatique,b00dd731
