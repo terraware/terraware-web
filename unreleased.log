@@ -1,3 +1,5 @@
+f601ed5f07a4 Fix rtk query generation (#5342)
+aed6881a4fd6 SW-8101 Create new indicators table (#5337)
 8efbd0b601a0 Do not request all set data if planting site id is -1 (#5341)
 5eef418af4bd Fix multi select filter not clearing correctly (#5340)
 ab2fb760f922 SW-7930 Replace jest with rstest (#5281)
