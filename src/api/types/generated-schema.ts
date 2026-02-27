@@ -788,9 +788,77 @@ export interface paths {
         };
         /**
          * List project accelerator reports.
-         * @description By default, reports more than 30 days in the future, or marked as Not Needed will be omitted. Optionally query by year, or include metrics.
+         * @description By default, reports more than 30 days in the future, or marked as Not Needed will be omitted. Optionally query by year, or include indicators.
          */
         get: operations["listAcceleratorReports"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/accelerator/projects/{projectId}/reports/autoCalculatedIndicatorTarget": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Update auto calculated indicator target for a year. */
+        post: operations["updateAutoCalculatedIndicatorTarget"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/accelerator/projects/{projectId}/reports/autoCalculatedIndicatorTargets": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get all auto calculated indicator targets for a project. */
+        get: operations["getAutoCalculatedIndicatorTargets"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/accelerator/projects/{projectId}/reports/commonIndicatorTarget": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Update common indicator target for a year. */
+        post: operations["updateCommonIndicatorTarget"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/accelerator/projects/{projectId}/reports/commonIndicatorTargets": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get all common indicator targets for a project. */
+        get: operations["getCommonIndicatorTargets"];
         put?: never;
         post?: never;
         delete?: never;
@@ -838,6 +906,41 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/accelerator/projects/{projectId}/reports/indicators": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List all project indicators for one project. */
+        get: operations["listProjectIndicators"];
+        /** Insert project indicator, that the project will report on all future reports. */
+        put: operations["createProjectIndicator"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/accelerator/projects/{projectId}/reports/indicators/{indicatorId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Update one project indicator by ID. */
+        post: operations["updateProjectIndicator"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/accelerator/projects/{projectId}/reports/metrics": {
         parameters: {
             query?: never;
@@ -845,9 +948,15 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** List all project metrics for one project. */
+        /**
+         * Use /indicators instead
+         * @deprecated
+         */
         get: operations["listProjectMetrics"];
-        /** Insert project metric, that the project will report on all future reports. */
+        /**
+         * Use /indicators instead
+         * @deprecated
+         */
         put: operations["createProjectMetric"];
         post?: never;
         delete?: never;
@@ -865,8 +974,45 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Update one project metric by ID. */
+        /**
+         * Use /indicators/{indicatorId} instead
+         * @deprecated
+         */
         post: operations["updateProjectMetric"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/accelerator/projects/{projectId}/reports/projectIndicatorTarget": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Update project indicator target for a year. */
+        post: operations["updateProjectIndicatorTarget"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/accelerator/projects/{projectId}/reports/projectIndicatorTargets": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get all project indicator targets for a project. */
+        get: operations["getProjectIndicatorTargets"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -1002,8 +1148,42 @@ export interface paths {
         /** Get one report. */
         get: operations["getAcceleratorReport"];
         put?: never;
-        /** Update metric data and qualitative data for a report */
+        /** Update indicator data and qualitative data for a report */
         post: operations["updateAcceleratorReportValues"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/accelerator/projects/{projectId}/reports/{reportId}/indicators/refresh": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Refresh auto calculated indicator entries value for a report */
+        post: operations["refreshAcceleratorReportAutoCalculatedIndicators"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/accelerator/projects/{projectId}/reports/{reportId}/indicators/review": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Review indicator entries for a report */
+        post: operations["reviewAcceleratorReportIndicators"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1019,7 +1199,10 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Refresh system metric entries value for a report */
+        /**
+         * Use /{reportId}/indicators/refresh instead
+         * @deprecated
+         */
         post: operations["refreshAcceleratorReportSystemMetrics"];
         delete?: never;
         options?: never;
@@ -1036,7 +1219,10 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Review metric entries for a report */
+        /**
+         * Use /{reportId}/indicators/review instead
+         * @deprecated
+         */
         post: operations["reviewAcceleratorReportMetrics"];
         delete?: never;
         options?: never;
@@ -4919,7 +5105,9 @@ export interface components {
         AcceleratorReportPayload: {
             achievements: string[];
             additionalComments?: string;
+            autoCalculatedIndicators: components["schemas"]["ReportAutoCalculatedIndicatorPayload"][];
             challenges: components["schemas"]["ReportChallengePayload"][];
+            commonIndicators: components["schemas"]["ReportCommonIndicatorPayload"][];
             /** Format: date */
             endDate: string;
             feedback?: string;
@@ -4936,9 +5124,18 @@ export interface components {
             photos: components["schemas"]["ReportPhotoPayload"][];
             /** Format: int64 */
             projectId: number;
+            projectIndicators: components["schemas"]["ReportProjectIndicatorPayload"][];
+            /**
+             * @deprecated
+             * @description Use projectIndicators instead
+             */
             projectMetrics: components["schemas"]["ReportProjectMetricPayload"][];
             /** @enum {string} */
             quarter?: "Q1" | "Q2" | "Q3" | "Q4";
+            /**
+             * @deprecated
+             * @description Use commonIndicators instead
+             */
             standardMetrics: components["schemas"]["ReportStandardMetricPayload"][];
             /** Format: date */
             startDate: string;
@@ -4949,6 +5146,10 @@ export interface components {
             submittedByUser?: components["schemas"]["SimpleUserPayload"];
             /** Format: date-time */
             submittedTime?: string;
+            /**
+             * @deprecated
+             * @description Use autoCalculatedIndicators instead
+             */
             systemMetrics: components["schemas"]["ReportSystemMetricPayload"][];
         };
         AccessionHistoryEntryPayload: {
@@ -5381,15 +5582,24 @@ export interface components {
             substratumName: string;
         };
         AutoCalculatedIndicatorPayload: {
+            active: boolean;
             /** @enum {string} */
             category: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
+            /** @enum {string} */
+            classId?: "Cumulative" | "Level";
             description: string;
+            /** @enum {string} */
+            frequency?: "Annual" | "Bi-Annual" | "MRV Cycle";
             /** @enum {string} */
             indicator: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Hectares Planted" | "Survival Rate";
             /** @enum {string} */
             level: "Activity" | "Output" | "Outcome" | "Impact";
             name: string;
-            reference: string;
+            notes?: string;
+            primaryDataSource?: string;
+            refId: string;
+            tfOwner?: string;
+            unit?: string;
         };
         AutomationPayload: {
             /** @description Human-readable description of this automation. */
@@ -6327,6 +6537,13 @@ export interface components {
             id: number;
             status: components["schemas"]["SuccessOrError"];
         };
+        CreateProjectIndicatorRequestPayload: {
+            indicator: components["schemas"]["NewIndicatorPayload"];
+        };
+        /**
+         * @deprecated
+         * @description Use CreateProjectIndicatorRequestPayload instead
+         */
         CreateProjectMetricRequestPayload: {
             metric: components["schemas"]["NewMetricPayload"];
         };
@@ -6858,16 +7075,24 @@ export interface components {
             speciesName?: string;
         };
         ExistingCommonIndicatorPayload: {
+            active: boolean;
             /** @enum {string} */
             category: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
+            /** @enum {string} */
+            classId?: "Cumulative" | "Level";
             description?: string;
+            /** @enum {string} */
+            frequency?: "Annual" | "Bi-Annual" | "MRV Cycle";
             /** Format: int64 */
             id: number;
             isPublishable: boolean;
             /** @enum {string} */
             level: "Activity" | "Output" | "Outcome" | "Impact";
             name: string;
-            reference: string;
+            notes?: string;
+            primaryDataSource?: string;
+            refId: string;
+            tfOwner?: string;
             unit?: string;
         };
         ExistingDateValuePayload: Omit<WithRequired<components["schemas"]["ExistingValuePayload"], "id" | "listPosition" | "type">, "type"> & {
@@ -6926,6 +7151,29 @@ export interface components {
              * @enum {string}
              */
             type: "Number";
+        };
+        ExistingProjectIndicatorPayload: {
+            active: boolean;
+            /** @enum {string} */
+            category: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
+            /** @enum {string} */
+            classId?: "Cumulative" | "Level";
+            description?: string;
+            /** @enum {string} */
+            frequency?: "Annual" | "Bi-Annual" | "MRV Cycle";
+            /** Format: int64 */
+            id: number;
+            isPublishable: boolean;
+            /** @enum {string} */
+            level: "Activity" | "Output" | "Outcome" | "Impact";
+            name: string;
+            notes?: string;
+            primaryDataSource?: string;
+            /** Format: int64 */
+            projectId: number;
+            refId: string;
+            tfOwner?: string;
+            unit?: string;
         };
         ExistingProjectMetricPayload: {
             /** @enum {string} */
@@ -7242,7 +7490,7 @@ export interface components {
             type: "Point" | "LineString" | "Polygon" | "MultiPoint" | "MultiLineString" | "MultiPolygon" | "GeometryCollection";
         };
         GeometryCollection: Omit<WithRequired<components["schemas"]["Geometry"], "type">, "type"> & {
-            geometries: Record<string, never>[];
+            geometries: (components["schemas"]["GeometryCollection"] | components["schemas"]["LineString"] | components["schemas"]["MultiLineString"] | components["schemas"]["MultiPoint"] | components["schemas"]["MultiPolygon"] | components["schemas"]["Point"] | components["schemas"]["Polygon"])[];
             /** @enum {string} */
             type: "GeometryCollection";
         } & {
@@ -7294,6 +7542,10 @@ export interface components {
             application: components["schemas"]["ApplicationPayload"];
             status: components["schemas"]["SuccessOrError"];
         };
+        GetAutoCalculatedIndicatorTargetsResponsePayload: {
+            status: components["schemas"]["SuccessOrError"];
+            targets: components["schemas"]["ReportAutoCalculatedIndicatorTargetPayload"][];
+        };
         GetAutomationResponsePayload: {
             automation: components["schemas"]["AutomationPayload"];
             status: components["schemas"]["SuccessOrError"];
@@ -7301,6 +7553,10 @@ export interface components {
         GetBatchHistoryResponsePayload: {
             history: components["schemas"]["BatchHistoryPayload"][];
             status: components["schemas"]["SuccessOrError"];
+        };
+        GetCommonIndicatorTargetsResponsePayload: {
+            status: components["schemas"]["SuccessOrError"];
+            targets: components["schemas"]["ReportCommonIndicatorTargetPayload"][];
         };
         GetCountryBorderResponsePayload: {
             border: components["schemas"]["MultiPolygon"];
@@ -7503,6 +7759,14 @@ export interface components {
             details: components["schemas"]["ProjectAcceleratorDetailsPayload"];
             status: components["schemas"]["SuccessOrError"];
         };
+        GetProjectIndicatorTargetsResponsePayload: {
+            status: components["schemas"]["SuccessOrError"];
+            targets: components["schemas"]["ReportProjectIndicatorTargetPayload"][];
+        };
+        /**
+         * @deprecated
+         * @description Use GetProjectIndicatorTargetsResponsePayload instead
+         */
         GetProjectMetricTargetsResponsePayload: {
             status: components["schemas"]["SuccessOrError"];
             targets: components["schemas"]["ReportProjectMetricTargetPayload"][];
@@ -7648,6 +7912,10 @@ export interface components {
             status: components["schemas"]["SuccessOrError"];
             summary: components["schemas"]["SpeciesSummaryPayload"];
         };
+        /**
+         * @deprecated
+         * @description Use GetCommonIndicatorTargetsResponsePayload instead
+         */
         GetStandardMetricTargetsResponsePayload: {
             status: components["schemas"]["SuccessOrError"];
             targets: components["schemas"]["ReportStandardMetricTargetPayload"][];
@@ -7656,6 +7924,10 @@ export interface components {
             status: components["schemas"]["SuccessOrError"];
             subLocation: components["schemas"]["SubLocationPayload"];
         };
+        /**
+         * @deprecated
+         * @description Use GetAutoCalculatedIndicatorTargetsResponsePayload instead
+         */
         GetSystemMetricTargetsResponsePayload: {
             status: components["schemas"]["SuccessOrError"];
             targets: components["schemas"]["ReportSystemMetricTargetPayload"][];
@@ -8107,10 +8379,18 @@ export interface components {
             details: components["schemas"]["ProjectAcceleratorDetailsPayload"][];
             status: components["schemas"]["SuccessOrError"];
         };
+        ListProjectIndicatorsResponsePayload: {
+            indicators: components["schemas"]["ExistingProjectIndicatorPayload"][];
+            status: components["schemas"]["SuccessOrError"];
+        };
         ListProjectInternalUsersResponsePayload: {
             status: components["schemas"]["SuccessOrError"];
             users: components["schemas"]["ProjectInternalUserResponsePayload"][];
         };
+        /**
+         * @deprecated
+         * @description Use ListProjectIndicatorsResponsePayload instead
+         */
         ListProjectMetricsResponsePayload: {
             metrics: components["schemas"]["ExistingProjectMetricPayload"][];
             status: components["schemas"]["SuccessOrError"];
@@ -8504,12 +8784,19 @@ export interface components {
         NewIndicatorPayload: {
             /** @enum {string} */
             category: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
+            /** @enum {string} */
+            classId?: "Cumulative" | "Level";
             description?: string;
+            /** @enum {string} */
+            frequency?: "Annual" | "Bi-Annual" | "MRV Cycle";
             isPublishable: boolean;
             /** @enum {string} */
             level: "Activity" | "Output" | "Outcome" | "Impact";
             name: string;
-            reference: string;
+            notes?: string;
+            primaryDataSource?: string;
+            refId: string;
+            tfOwner?: string;
             unit?: string;
         };
         NewLinkValuePayload: Omit<components["schemas"]["NewValuePayload"], "type"> & {
@@ -9982,6 +10269,28 @@ export interface components {
             /** Format: int64 */
             projectId: number;
         };
+        PublishedReportIndicatorPayload: {
+            /** @enum {string} */
+            category: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
+            description?: string;
+            /** @enum {string} */
+            level: "Activity" | "Output" | "Outcome" | "Impact";
+            name: string;
+            progressNotes?: string;
+            projectsComments?: string;
+            refId: string;
+            /** @enum {string} */
+            status?: "Achieved" | "On-Track" | "Unlikely";
+            /** Format: int32 */
+            target?: number;
+            unit?: string;
+            /** Format: int32 */
+            value?: number;
+        };
+        /**
+         * @deprecated
+         * @description Use PublishedReportIndicatorPayload instead
+         */
         PublishedReportMetricPayload: {
             /** @enum {string} */
             component: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
@@ -10003,7 +10312,9 @@ export interface components {
         PublishedReportPayload: {
             achievements: string[];
             additionalComments?: string;
+            autoCalculatedIndicators: components["schemas"]["PublishedReportIndicatorPayload"][];
             challenges: components["schemas"]["ReportChallengePayload"][];
+            commonIndicators: components["schemas"]["PublishedReportIndicatorPayload"][];
             /** Format: date */
             endDate: string;
             financialSummaries?: string;
@@ -10011,6 +10322,11 @@ export interface components {
             photos: components["schemas"]["ReportPhotoPayload"][];
             /** Format: int64 */
             projectId: number;
+            projectIndicators: components["schemas"]["PublishedReportIndicatorPayload"][];
+            /**
+             * @deprecated
+             * @description Use projectIndicators instead
+             */
             projectMetrics: components["schemas"]["PublishedReportMetricPayload"][];
             projectName: string;
             /** Format: int64 */
@@ -10021,9 +10337,17 @@ export interface components {
             quarter?: "Q1" | "Q2" | "Q3" | "Q4";
             /** Format: int64 */
             reportId: number;
+            /**
+             * @deprecated
+             * @description Use commonIndicators instead
+             */
             standardMetrics: components["schemas"]["PublishedReportMetricPayload"][];
             /** Format: date */
             startDate: string;
+            /**
+             * @deprecated
+             * @description Use autoCalculatedIndicators instead
+             */
             systemMetrics: components["schemas"]["PublishedReportMetricPayload"][];
         };
         PutNurseryV1: {
@@ -10261,15 +10585,131 @@ export interface components {
              */
             operation: "Replace";
         };
+        ReportAutoCalculatedIndicatorEntriesPayload: {
+            /** @enum {string} */
+            indicator: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Hectares Planted" | "Survival Rate";
+            /** Format: int32 */
+            overrideValue?: number;
+            progressNotes?: string;
+            projectsComments?: string;
+            /** @enum {string} */
+            status?: "Achieved" | "On-Track" | "Unlikely";
+        };
+        ReportAutoCalculatedIndicatorPayload: {
+            /** @enum {string} */
+            category: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
+            description?: string;
+            /** @enum {string} */
+            indicator: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Hectares Planted" | "Survival Rate";
+            isPublishable: boolean;
+            /** @enum {string} */
+            level: "Activity" | "Output" | "Outcome" | "Impact";
+            /** Format: int32 */
+            overrideValue?: number;
+            progressNotes?: string;
+            projectsComments?: string;
+            refId: string;
+            /** @enum {string} */
+            status?: "Achieved" | "On-Track" | "Unlikely";
+            /** Format: date-time */
+            systemTime?: string;
+            /** Format: int32 */
+            systemValue?: number;
+            /** Format: int32 */
+            target?: number;
+        };
+        ReportAutoCalculatedIndicatorTargetPayload: {
+            /** @enum {string} */
+            indicator: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Hectares Planted" | "Survival Rate";
+            target?: number;
+            year: number;
+        };
         ReportChallengePayload: {
             challenge: string;
             mitigationPlan: string;
+        };
+        ReportCommonIndicatorEntriesPayload: {
+            /** Format: int64 */
+            id: number;
+            progressNotes?: string;
+            projectsComments?: string;
+            /** @enum {string} */
+            status?: "Achieved" | "On-Track" | "Unlikely";
+            /** Format: int32 */
+            value?: number;
+        };
+        ReportCommonIndicatorPayload: {
+            /** @enum {string} */
+            category: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
+            description?: string;
+            /** Format: int64 */
+            id: number;
+            isPublishable: boolean;
+            /** @enum {string} */
+            level: "Activity" | "Output" | "Outcome" | "Impact";
+            name: string;
+            progressNotes?: string;
+            projectsComments?: string;
+            refId: string;
+            /** @enum {string} */
+            status?: "Achieved" | "On-Track" | "Unlikely";
+            /** Format: int32 */
+            target?: number;
+            /** Format: int32 */
+            value?: number;
+        };
+        ReportCommonIndicatorTargetPayload: {
+            /** Format: int64 */
+            indicatorId: number;
+            target?: number;
+            year: number;
         };
         ReportPhotoPayload: {
             caption?: string;
             /** Format: int64 */
             fileId: number;
         };
+        ReportProjectIndicatorEntriesPayload: {
+            /** Format: int64 */
+            id: number;
+            progressNotes?: string;
+            projectsComments?: string;
+            /** @enum {string} */
+            status?: "Achieved" | "On-Track" | "Unlikely";
+            /** Format: int32 */
+            value?: number;
+        };
+        ReportProjectIndicatorPayload: {
+            /** @enum {string} */
+            category: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
+            description?: string;
+            /** Format: int64 */
+            id: number;
+            isPublishable: boolean;
+            /** @enum {string} */
+            level: "Activity" | "Output" | "Outcome" | "Impact";
+            name: string;
+            progressNotes?: string;
+            projectsComments?: string;
+            refId: string;
+            /** @enum {string} */
+            status?: "Achieved" | "On-Track" | "Unlikely";
+            /** Format: int32 */
+            target?: number;
+            unit?: string;
+            /** Format: int32 */
+            value?: number;
+        };
+        ReportProjectIndicatorTargetPayload: {
+            /** Format: int64 */
+            indicatorId: number;
+            target?: number;
+            year: number;
+        };
+        /**
+         * @deprecated
+         * @description Use ReportProjectIndicatorEntriesPayload instead
+         */
         ReportProjectMetricEntriesPayload: {
             /** Format: int64 */
             id: number;
@@ -10280,6 +10720,10 @@ export interface components {
             /** Format: int32 */
             value?: number;
         };
+        /**
+         * @deprecated
+         * @description Use ReportProjectIndicatorPayload instead
+         */
         ReportProjectMetricPayload: {
             /** @enum {string} */
             component: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
@@ -10301,6 +10745,10 @@ export interface components {
             /** Format: int32 */
             value?: number;
         };
+        /**
+         * @deprecated
+         * @description Use ReportProjectIndicatorTargetPayload instead
+         */
         ReportProjectMetricTargetPayload: {
             /** Format: int64 */
             metricId: number;
@@ -10321,6 +10769,10 @@ export interface components {
              */
             status: "Not Submitted" | "Submitted" | "Approved" | "Needs Update" | "Not Needed";
         };
+        /**
+         * @deprecated
+         * @description Use ReportCommonIndicatorEntriesPayload instead
+         */
         ReportStandardMetricEntriesPayload: {
             /** Format: int64 */
             id: number;
@@ -10331,6 +10783,10 @@ export interface components {
             /** Format: int32 */
             value?: number;
         };
+        /**
+         * @deprecated
+         * @description Use ReportCommonIndicatorPayload instead
+         */
         ReportStandardMetricPayload: {
             /** @enum {string} */
             component: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
@@ -10351,12 +10807,20 @@ export interface components {
             /** Format: int32 */
             value?: number;
         };
+        /**
+         * @deprecated
+         * @description Use ReportCommonIndicatorTargetPayload instead
+         */
         ReportStandardMetricTargetPayload: {
             /** Format: int64 */
             metricId: number;
             target?: number;
             year: number;
         };
+        /**
+         * @deprecated
+         * @description Use ReportAutoCalculatedIndicatorEntriesPayload instead
+         */
         ReportSystemMetricEntriesPayload: {
             /** @enum {string} */
             metric: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Hectares Planted" | "Survival Rate";
@@ -10367,6 +10831,10 @@ export interface components {
             /** @enum {string} */
             status?: "Achieved" | "On-Track" | "Unlikely";
         };
+        /**
+         * @deprecated
+         * @description Use ReportAutoCalculatedIndicatorPayload instead
+         */
         ReportSystemMetricPayload: {
             /** @enum {string} */
             component: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
@@ -10390,6 +10858,10 @@ export interface components {
             /** @enum {string} */
             type: "Activity" | "Output" | "Outcome" | "Impact";
         };
+        /**
+         * @deprecated
+         * @description Use ReportAutoCalculatedIndicatorTargetPayload instead
+         */
         ReportSystemMetricTargetPayload: {
             /** @enum {string} */
             metric: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Hectares Planted" | "Survival Rate";
@@ -10426,6 +10898,15 @@ export interface components {
             /** @description If true, the data for entries that already exist will be overwritten with the values in the uploaded file. If false, only entries that don't already exist will be imported. */
             overwriteExisting: boolean;
         };
+        ReviewAcceleratorReportIndicatorsRequestPayload: {
+            autoCalculatedIndicators: components["schemas"]["ReportAutoCalculatedIndicatorEntriesPayload"][];
+            commonIndicators: components["schemas"]["ReportCommonIndicatorEntriesPayload"][];
+            projectIndicators: components["schemas"]["ReportProjectIndicatorEntriesPayload"][];
+        };
+        /**
+         * @deprecated
+         * @description Use ReviewAcceleratorReportIndicatorsRequestPayload instead
+         */
         ReviewAcceleratorReportMetricsRequestPayload: {
             projectMetrics: components["schemas"]["ReportProjectMetricEntriesPayload"][];
             standardMetrics: components["schemas"]["ReportStandardMetricEntriesPayload"][];
@@ -11153,12 +11634,27 @@ export interface components {
         UpdateAcceleratorReportValuesRequestPayload: {
             achievements: string[];
             additionalComments?: string;
+            autoCalculatedIndicators?: components["schemas"]["ReportAutoCalculatedIndicatorEntriesPayload"][];
             challenges: components["schemas"]["ReportChallengePayload"][];
+            commonIndicators?: components["schemas"]["ReportCommonIndicatorEntriesPayload"][];
             financialSummaries?: string;
             highlights?: string;
-            projectMetrics: components["schemas"]["ReportProjectMetricEntriesPayload"][];
-            standardMetrics: components["schemas"]["ReportStandardMetricEntriesPayload"][];
-            systemMetrics: components["schemas"]["ReportSystemMetricEntriesPayload"][];
+            projectIndicators?: components["schemas"]["ReportProjectIndicatorEntriesPayload"][];
+            /**
+             * @deprecated
+             * @description Use projectIndicators instead
+             */
+            projectMetrics?: components["schemas"]["ReportProjectMetricEntriesPayload"][];
+            /**
+             * @deprecated
+             * @description Use commonIndicators instead
+             */
+            standardMetrics?: components["schemas"]["ReportStandardMetricEntriesPayload"][];
+            /**
+             * @deprecated
+             * @description Use autoCalculatedIndicators instead
+             */
+            systemMetrics?: components["schemas"]["ReportSystemMetricEntriesPayload"][];
         };
         UpdateAccessionRequestPayloadV2: {
             bagNumbers?: string[];
@@ -11228,6 +11724,14 @@ export interface components {
         UpdateApplicationBoundaryRequestPayload: {
             boundary: components["schemas"]["MultiPolygon"] | components["schemas"]["Polygon"];
         };
+        UpdateAutoCalculatedIndicatorTargetRequestPayload: {
+            /** @enum {string} */
+            indicator: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Hectares Planted" | "Survival Rate";
+            /** Format: int32 */
+            target?: number;
+            /** Format: int32 */
+            year: number;
+        };
         UpdateAutomationRequestPayload: {
             description?: string;
             /** Format: int64 */
@@ -11279,6 +11783,14 @@ export interface components {
         };
         UpdateCommonIndicatorRequestPayload: {
             indicator: components["schemas"]["ExistingCommonIndicatorPayload"];
+        };
+        UpdateCommonIndicatorTargetRequestPayload: {
+            /** Format: int64 */
+            indicatorId: number;
+            /** Format: int32 */
+            target?: number;
+            /** Format: int32 */
+            year: number;
         };
         UpdateDeviceRequestPayload: {
             /**
@@ -11562,12 +12074,31 @@ export interface components {
         UpdateProjectAcceleratorReportConfigRequestPayload: {
             config: components["schemas"]["UpdateAcceleratorReportConfigPayload"];
         };
+        UpdateProjectIndicatorRequestPayload: {
+            indicator: components["schemas"]["ExistingProjectIndicatorPayload"];
+        };
+        UpdateProjectIndicatorTargetRequestPayload: {
+            /** Format: int64 */
+            indicatorId: number;
+            /** Format: int32 */
+            target?: number;
+            /** Format: int32 */
+            year: number;
+        };
         UpdateProjectInternalUserRequestPayload: {
             internalUsers: components["schemas"]["InternalUserPayload"][];
         };
+        /**
+         * @deprecated
+         * @description Use UpdateProjectIndicatorRequestPayload instead
+         */
         UpdateProjectMetricRequestPayload: {
             metric: components["schemas"]["ExistingProjectMetricPayload"];
         };
+        /**
+         * @deprecated
+         * @description Use UpdateProjectIndicatorTargetRequestPayload instead
+         */
         UpdateProjectMetricTargetRequestPayload: {
             /** Format: int64 */
             metricId: number;
@@ -11618,6 +12149,10 @@ export interface components {
         UpdateStandardMetricRequestPayload: {
             metric: components["schemas"]["ExistingStandardMetricPayload"];
         };
+        /**
+         * @deprecated
+         * @description Use UpdateCommonIndicatorTargetRequestPayload instead
+         */
         UpdateStandardMetricTargetRequestPayload: {
             /** Format: int64 */
             metricId: number;
@@ -11638,6 +12173,10 @@ export interface components {
         UpdateSubstratumRequestPayload: {
             plantingCompleted: boolean;
         };
+        /**
+         * @deprecated
+         * @description Use UpdateAutoCalculatedIndicatorTargetRequestPayload instead
+         */
         UpdateSystemMetricTargetRequestPayload: {
             /** @enum {string} */
             metric: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Hectares Planted" | "Survival Rate";
@@ -13697,7 +14236,12 @@ export interface operations {
                 year?: number;
                 includeArchived?: boolean;
                 includeFuture?: boolean;
+                /**
+                 * @deprecated
+                 * @description Use includeIndicators instead
+                 */
                 includeMetrics?: boolean;
+                includeIndicators?: boolean;
             };
             header?: never;
             path: {
@@ -13714,6 +14258,120 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ListAcceleratorReportsResponsePayload"];
+                };
+            };
+        };
+    };
+    updateAutoCalculatedIndicatorTarget: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateAutoCalculatedIndicatorTargetRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+            /** @description The request was not valid. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    getAutoCalculatedIndicatorTargets: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetAutoCalculatedIndicatorTargetsResponsePayload"];
+                };
+            };
+        };
+    };
+    updateCommonIndicatorTarget: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateCommonIndicatorTargetRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+            /** @description The request was not valid. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    getCommonIndicatorTargets: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetCommonIndicatorTargetsResponsePayload"];
                 };
             };
         };
@@ -13891,6 +14549,90 @@ export interface operations {
             };
         };
     };
+    listProjectIndicators: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListProjectIndicatorsResponsePayload"];
+                };
+            };
+        };
+    };
+    createProjectIndicator: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateProjectIndicatorRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+        };
+    };
+    updateProjectIndicator: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                indicatorId: number;
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateProjectIndicatorRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+            /** @description The request was not valid. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
     listProjectMetrics: {
         parameters: {
             query?: never;
@@ -13971,6 +14713,63 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    updateProjectIndicatorTarget: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateProjectIndicatorTargetRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+            /** @description The request was not valid. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    getProjectIndicatorTargets: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetProjectIndicatorTargetsResponsePayload"];
                 };
             };
         };
@@ -14171,7 +14970,12 @@ export interface operations {
     getAcceleratorReport: {
         parameters: {
             query?: {
+                /**
+                 * @deprecated
+                 * @description Use includeIndicators instead
+                 */
                 includeMetrics?: boolean;
+                includeIndicators?: boolean;
             };
             header?: never;
             path: {
@@ -14206,6 +15010,94 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": components["schemas"]["UpdateAcceleratorReportValuesRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+            /** @description The request was not valid. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+            /** @description The requested resource was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    refreshAcceleratorReportAutoCalculatedIndicators: {
+        parameters: {
+            query: {
+                indicators: ("Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Hectares Planted" | "Survival Rate")[];
+            };
+            header?: never;
+            path: {
+                projectId: number;
+                reportId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+            /** @description The request was not valid. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+            /** @description The requested resource was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    reviewAcceleratorReportIndicators: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: number;
+                reportId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReviewAcceleratorReportIndicatorsRequestPayload"];
             };
         };
         responses: {

@@ -30,6 +30,19 @@ export type GetPublishedReportPhotoApiArg = {
   /** Maximum desired height in pixels. If neither this nor maxWidth is specified, the full-sized original image will be returned. If this is specified, an image no taller than this will be returned. The image may be shorter than this value if needed to preserve the aspect ratio of the original. */
   maxHeight?: number;
 };
+export type PublishedReportIndicatorPayload = {
+  category: 'Project Objectives' | 'Climate' | 'Community' | 'Biodiversity';
+  description?: string;
+  level: 'Activity' | 'Output' | 'Outcome' | 'Impact';
+  name: string;
+  progressNotes?: string;
+  projectsComments?: string;
+  refId: string;
+  status?: 'Achieved' | 'On-Track' | 'Unlikely';
+  target?: number;
+  unit?: string;
+  value?: number;
+};
 export type ReportChallengePayload = {
   challenge: string;
   mitigationPlan: string;
@@ -54,20 +67,26 @@ export type PublishedReportMetricPayload = {
 export type PublishedReportPayload = {
   achievements: string[];
   additionalComments?: string;
+  autoCalculatedIndicators: PublishedReportIndicatorPayload[];
   challenges: ReportChallengePayload[];
+  commonIndicators: PublishedReportIndicatorPayload[];
   endDate: string;
   financialSummaries?: string;
   highlights?: string;
   photos: ReportPhotoPayload[];
   projectId: number;
+  projectIndicators: PublishedReportIndicatorPayload[];
+  /** Use projectIndicators instead */
   projectMetrics: PublishedReportMetricPayload[];
   projectName: string;
   publishedBy: number;
   publishedTime: string;
   quarter?: 'Q1' | 'Q2' | 'Q3' | 'Q4';
   reportId: number;
+  /** Use commonIndicators instead */
   standardMetrics: PublishedReportMetricPayload[];
   startDate: string;
+  /** Use autoCalculatedIndicators instead */
   systemMetrics: PublishedReportMetricPayload[];
 };
 export type SuccessOrError = 'ok' | 'error';

@@ -62,6 +62,12 @@ const config: ConfigFile = {
         operation.path.startsWith('/api/v1/accelerator/reports/standardMetrics') ||
         operation.path.startsWith('/api/v1/accelerator/reports/systemMetrics'),
     },
+    './src/queries/generated/indicators.ts': {
+      filterEndpoints: (_, operation) =>
+        operation.path.startsWith('/api/v1/accelerator/projects/{projectId}/reports/indicators') ||
+        operation.path.startsWith('/api/v1/accelerator/reports/autoCalculatedIndicators') ||
+        operation.path.startsWith('/api/v1/accelerator/reports/commonIndicators'),
+    },
     './src/queries/generated/t0.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/tracking/t0'),
     },
