@@ -5,7 +5,7 @@ import { Box, Grid, Typography, useTheme } from '@mui/material';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import SpeciesSelector from 'src/components/common/SpeciesSelector';
 import Button from 'src/components/common/button/Button';
-import strings from 'src/strings';
+import { useLocalization } from 'src/providers';
 import { MergeOtherSpeciesPayload } from 'src/types/Species';
 import useForm from 'src/utils/useForm';
 
@@ -19,6 +19,7 @@ export interface MatchSpeciesModalProps {
 
 export default function MatchSpeciesModal(props: MatchSpeciesModalProps): JSX.Element {
   const { onClose, onSave, unrecognizedSpecies } = props;
+  const { strings } = useLocalization();
 
   const [records, setRecords] = useForm<MergeOtherSpeciesPayloadPartial[]>(
     unrecognizedSpecies.map((speciesName) => {

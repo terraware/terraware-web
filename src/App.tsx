@@ -27,7 +27,7 @@ import DisclaimerProvider from './providers/Disclaimer/Provider';
 import ApplicationPortalRouter from './scenes/ApplicationRouter/portal';
 
 // Mixpanel setup
-const MIXPANEL_TOKEN = process.env.REACT_APP_MIXPANEL_TOKEN;
+const MIXPANEL_TOKEN = import.meta.env.PUBLIC_MIXPANEL_TOKEN;
 const MIXPANEL_CONFIG = {
   opt_out_persistence_by_default: true,
   opt_out_tracking_by_default: true,

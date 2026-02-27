@@ -13,9 +13,9 @@ import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
-import MatchSpeciesModal from 'src/scenes/ObservationsRouter/common/MatchSpeciesModal';
-import UnrecognizedSpeciesPageMessage from 'src/scenes/ObservationsRouter/common/UnrecognizedSpeciesPageMessage';
 import ObservationMapWrapper from 'src/scenes/ObservationsRouterV2/Map';
+import MatchSpeciesModal from 'src/scenes/ObservationsRouterV2/SingleView/MatchSpeciesModal';
+import UnrecognizedSpeciesPageMessage from 'src/scenes/ObservationsRouterV2/SingleView/UnrecognizedSpeciesPageMessage';
 import { useOnSaveMergedSpeciesRtk } from 'src/scenes/ObservationsRouterV2/useOnSaveMergedSpeciesRtk';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
@@ -112,6 +112,22 @@ const SiteDetails = (): JSX.Element => {
     );
   }, [strings.MATCH_UNRECOGNIZED_SPECIES, unrecognizedSpecies?.length]);
 
+  const hasObservedPermanentPlots = useMemo(() => {
+    const permanentPlots =
+      results?.strata
+        .flatMap((stratum) => stratum.substrata)
+        .flatMap((substratum) => substratum.monitoringPlots)
+        .filter((plot) => plot.isPermanent) ?? [];
+
+    return permanentPlots.some((plot) => plot.status === 'Completed');
+  }, [results?.strata]);
+
+  useEffect(() => {
+    if (unrecognizedSpecies.length) {
+      setShowPageMessage(true);
+    }
+  }, [unrecognizedSpecies.length]);
+
   return (
     <Page crumbs={crumbs} title={title} rightComponent={matchedUnrecognizedSpeciesMenu}>
       {showPageMessage && (
@@ -131,6 +147,7 @@ const SiteDetails = (): JSX.Element => {
       <SurvivalRateMessageV2 selectedPlantingSiteId={results?.plantingSiteId} />
       <AggregatedPlantsStats
         completedTime={results?.completedTime}
+        hasObservedPermanentPlots={hasObservedPermanentPlots}
         totalSpecies={results?.totalSpecies}
         plantingDensity={results?.plantingDensity}
         survivalRate={results?.survivalRate}

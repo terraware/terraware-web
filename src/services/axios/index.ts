@@ -6,7 +6,7 @@ function delay(ms: number): Promise<void> {
 
 let handler = {};
 
-if (process.env.REACT_APP_DELAY_QUERIES === 'true') {
+if (import.meta.env.PUBLIC_DELAY_QUERIES === 'true') {
   handler = {
     get: (target: any, prop: any, receiver: any) => {
       if (!['get', 'post', 'put'].includes(prop)) {

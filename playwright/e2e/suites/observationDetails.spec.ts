@@ -29,14 +29,13 @@ test.describe('ObservationDetailsTests', () => {
 
     // charts
     await expect(page.getByText('Number of Live Plants per Species')).toBeVisible();
-    await expect(page.locator('#observationsTotalPlantsBySpecies')).toBeVisible();
+    await expect(page.locator('#observationSpeciesTotalChart')).toBeVisible();
     await expect(page.getByText('Survival Rate per Species')).toBeVisible();
-    await expect(page.locator('#observationsSurvivalRateBySpecies')).toBeVisible();
+    await expect(page.locator('#observationSurvivalRateChart')).toBeVisible();
 
     // table column headers
     await expect(page.getByRole('columnheader', { name: 'Stratum' })).toBeVisible();
     await expect(page.getByRole('columnheader', { name: 'Date' })).toBeVisible();
-    await expect(page.getByRole('columnheader', { name: 'Status' })).toBeVisible();
     await expect(page.getByRole('columnheader', { name: 'Live Plants' })).toBeVisible();
     await expect(page.getByRole('columnheader', { name: 'Total Plants' })).toBeVisible();
     await expect(page.getByRole('columnheader', { name: 'Species', exact: true })).toBeVisible();
@@ -46,7 +45,6 @@ test.describe('ObservationDetailsTests', () => {
     // table row values
     await expect(page.locator('#row1-stratumName a:has-text("Stratum 01")')).toBeVisible();
     await expect(page.locator('#row1-completedDate p:has-text("2025-05-29")')).toBeVisible();
-    await expect(page.locator('#row1-status p:has-text("Completed")')).toBeVisible();
     await expect(page.locator('#row1-totalPlants p:has-text("944")')).toBeVisible();
     await expect(page.locator('#row1-totalSpecies p:has-text("9")')).toBeVisible();
     await expect(page.locator('#row1-plantingDensity p:has-text("852")')).toBeVisible();
@@ -73,9 +71,9 @@ test.describe('ObservationDetailsTests', () => {
 
     // charts
     await expect(page.getByText('Number of Live Plants per Species')).toBeVisible();
-    await expect(page.locator('#observationsTotalPlantsBySpecies')).toBeVisible();
+    await expect(page.locator('#observationSpeciesTotalChart')).toBeVisible();
     await expect(page.getByText('Survival Rate per Species')).toBeVisible();
-    await expect(page.locator('#observationsSurvivalRateBySpecies')).toBeVisible();
+    await expect(page.locator('#observationSurvivalRateChart')).toBeVisible();
 
     // table column headers
     await expect(page.getByRole('columnheader', { name: 'Monitoring Plot', exact: true })).toBeVisible();
@@ -126,7 +124,7 @@ test.describe('ObservationDetailsTests', () => {
     await expect(page.getByText('Stratum: Stratum 01')).toBeVisible();
     await expect(page.getByText('Substratum: Substratum A')).toBeVisible();
     await expect(page.getByText('Plot Type: Permanent')).toBeVisible();
-    await expect(page.getByText('Location: 38.44150597, 15.6977629')).toBeVisible();
+    await expect(page.getByText('Location: 15.6977629, 38.44150597')).toBeVisible();
     await expect(page.locator('p:has-text("Total Plants")')).toBeVisible();
     await expect(page.getByText('85')).toBeVisible();
     await expect(page.locator('p').filter({ hasText: /^Species$/ })).toBeVisible();
@@ -150,9 +148,9 @@ test.describe('ObservationDetailsTests', () => {
 
     // charts
     await expect(page.getByText('Number of Live Plants per Species')).toBeVisible();
-    await expect(page.locator('#observationsTotalPlantsBySpecies')).toBeVisible();
+    await expect(page.locator('#plotSpeciesTotalChart')).toBeVisible();
     await expect(page.getByText('Survival Rate per Species')).toBeVisible();
-    await expect(page.locator('#observationsSurvivalRateBySpecies')).toBeVisible();
+    await expect(page.locator('#plotSpeciesSurvivalRate')).toBeVisible();
 
     // photos
     await expect(page.getByRole('tab', { name: 'Photos & Videos' })).toBeVisible();

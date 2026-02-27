@@ -90,7 +90,10 @@ const ObservationMap = ({
 
   const isVirtualPlotsEnabled = isEnabled('Virtual Monitoring Plots');
 
-  const { selectedLayer, plantingSiteLegendGroup } = usePlantingSiteMapLegend('sites', plantingSiteId === undefined);
+  const { selectedLayer, plantingSiteLegendGroup } = usePlantingSiteMapLegend(
+    'substrata',
+    plantingSiteId === undefined
+  );
   const {
     livePlantsVisible,
     deadPlantsVisible,
@@ -276,7 +279,7 @@ const ObservationMap = ({
   );
 
   useEffect(() => {
-    if (selectedHistory) {
+    if (plantingSiteId && selectedHistory) {
       const points = selectedHistory.boundary.coordinates
         .flat()
         .flat()
@@ -290,7 +293,24 @@ const ObservationMap = ({
       const bbox = getBoundingBoxFromPoints(points);
       fitBounds(bbox);
     }
-  }, [fitBounds, selectedHistory]);
+    if (!plantingSiteId && allPlantingSites) {
+      const points = allPlantingSites.flatMap(
+        (site) =>
+          site.boundary?.coordinates
+            .flat()
+            .flat()
+            .map(
+              ([lng, lat]): MapPoint => ({
+                lat,
+                lng,
+              })
+            ) ?? []
+      );
+
+      const bbox = getBoundingBoxFromPoints(points);
+      fitBounds(bbox);
+    }
+  }, [allPlantingSites, fitBounds, plantingSiteId, selectedHistory, selectedResults]);
 
   const selectFeature = useCallback(
     (_plantingSiteId: number) => (layerId: string, featureId: string) => () => {
@@ -485,53 +505,6 @@ const ObservationMap = ({
           visible: selectedLayer === 'sites',
         },
       ];
-    } else if (plantingSiteId !== undefined && plantingSite !== undefined) {
-      return [
-        {
-          features: [
-            {
-              featureId: `${plantingSite.id}`,
-              geometry: {
-                type: 'MultiPolygon',
-                coordinates: plantingSite.boundary?.coordinates ?? [],
-              },
-            },
-          ],
-          layerId: 'sites',
-          style: sitesLayerStyle,
-          visible: selectedLayer === 'sites',
-        },
-        {
-          features:
-            plantingSite.strata?.map((stratum) => ({
-              featureId: `${stratum.name}`,
-              geometry: {
-                type: 'MultiPolygon',
-                coordinates: stratum.boundary?.coordinates ?? [],
-              },
-              label: stratum.name,
-            })) ?? [],
-          layerId: 'strata',
-          style: strataLayerStyle,
-          visible: selectedLayer === 'strata',
-        },
-        {
-          features:
-            plantingSite.strata?.flatMap((stratum) =>
-              stratum.substrata.map((substratum) => ({
-                featureId: `${substratum.id}`,
-                geometry: {
-                  type: 'MultiPolygon',
-                  coordinates: substratum.boundary?.coordinates ?? [],
-                },
-                label: substratum.name,
-              }))
-            ) ?? [],
-          layerId: 'substrata',
-          style: substrataLayerStyle,
-          visible: selectedLayer === 'substrata',
-        },
-      ];
     }
     return [];
   }, [
@@ -542,7 +515,6 @@ const ObservationMap = ({
     monitoringPlots,
     permanentPlotsLayerStyle,
     permanentPlotsVisible,
-    plantingSite,
     plantingSiteId,
     selectClickableFeature,
     selectedFeature?.layerFeatureId.featureId,

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import { Dropdown, Icon, Separator } from '@terraware/web-components';
+import { Dropdown, Icon } from '@terraware/web-components';
 import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/utils';
 
 import ClientSideFilterTable from 'src/components/Tables/ClientSideFilterTable';
@@ -282,14 +282,13 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           (total, plantSpecies) => (total += plantSpecies.totalLive),
           0
         );
-        const strata = observationResult.strata.reduce((stratumNames, stratumResult) => {
-          const obsrvedStratum = plantingSite?.strata?.find((stratum) => stratum.id === stratumResult.stratumId);
-          if (obsrvedStratum) {
-            return stratumNames + `\r${obsrvedStratum.name}`;
-          } else {
-            return stratumNames;
-          }
-        }, '');
+
+        const strataNames = observationResult.strata
+          .map((stratumResult) => {
+            const observedStratum = plantingSite?.strata?.find((stratum) => stratum.id === stratumResult.stratumId);
+            return observedStratum?.name;
+          })
+          .filter((stratumName): stratumName is string => stratumName !== undefined);
 
         const completedDate = observationResult.completedTime
           ? getDateDisplayValue(observationResult.completedTime, plantingSite?.timeZone ?? defaultTimezone)
@@ -303,7 +302,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           observationState: observationResult.state,
           state: getStatus(observationResult.state),
           plantingSiteName: plantingSite?.name,
-          strata,
+          strata: strataNames.join('\r'),
           totalLive,
           totalPlants: observationResult.totalPlants,
           totalSpecies: observationResult.totalSpecies,
@@ -326,7 +325,6 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
   const rightComponent = useMemo(() => {
     return (
       <Box display={'flex'} flexDirection={'row'} flexGrow={1} alignItems={'center'} justifyContent={'start'}>
-        <Separator height={'40px'} />
         <Typography sx={{ paddingRight: 1 }} fontSize={'16px'} fontWeight={500}>
           {strings.PLOT_SELECTION}
         </Typography>
@@ -417,7 +415,6 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           id='assigned-plant-monitoring-table'
           Renderer={PlantMonitoringCellRenderer}
           rows={rows}
-          title={strings.PLANT_MONITORING}
           rightComponent={rightComponent}
         />
       )}
@@ -431,7 +428,6 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           id='ad-hoc-plant-monitoring-table'
           Renderer={PlantMonitoringCellRenderer}
           rows={rows}
-          title={strings.PLANT_MONITORING}
           rightComponent={rightComponent}
         />
       )}

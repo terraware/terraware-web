@@ -1,4 +1,5 @@
 import { baseApi as api } from '../baseApi';
+import { QueryTagTypes } from '../tags';
 
 const injectedRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
@@ -29,6 +30,10 @@ const injectedRtkApi = api.injectEndpoints({
           startDate: result.projectModules_startDate,
           endDate: result.projectModules_endDate,
         })),
+      providesTags: (results, _error, moduleId) => [
+        { type: QueryTagTypes.ProjectModules, id: moduleId },
+        ...(results ? results.map((result) => ({ type: QueryTagTypes.Projects, id: result.projectId })) : []),
+      ],
     }),
   }),
 });

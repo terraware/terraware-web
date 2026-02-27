@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 
 import { useLocalization } from 'src/providers';
 import { MergeOtherSpeciesRequestPayload, useMergeOtherSpeciesMutation } from 'src/queries/generated/observations';
-import { MergeOtherSpeciesPayloadPartial } from 'src/scenes/ObservationsRouter/common/MatchSpeciesModal';
+import { MergeOtherSpeciesPayloadPartial } from 'src/scenes/ObservationsRouterV2/SingleView/MatchSpeciesModal';
 import useSnackbar from 'src/utils/useSnackbar';
 
 type UseOnSaveMergedSpeciesProps = {

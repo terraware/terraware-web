@@ -1,16 +1,18 @@
 /**
  * Define mocked implementations for http service functions
  */
+import { Mocked, rstest } from '@rstest/core';
+
 import HttpService from '../HttpService';
 
-export type Get = jest.MockedFunction<typeof HttpService.get>;
-export type Get2 = jest.MockedFunction<typeof HttpService.get2>;
-export type Put = jest.MockedFunction<typeof HttpService.put>;
-export type Put2 = jest.MockedFunction<typeof HttpService.put2>;
-export type Post = jest.MockedFunction<typeof HttpService.post>;
-export type Post2 = jest.MockedFunction<typeof HttpService.post2>;
-export type Delete = jest.MockedFunction<typeof HttpService.delete>;
-export type Delete2 = jest.MockedFunction<typeof HttpService.delete2>;
+export type Get = Mocked<typeof HttpService.get>;
+export type Get2 = Mocked<typeof HttpService.get2>;
+export type Put = Mocked<typeof HttpService.put>;
+export type Put2 = Mocked<typeof HttpService.put2>;
+export type Post = Mocked<typeof HttpService.post>;
+export type Post2 = Mocked<typeof HttpService.post2>;
+export type Delete = Mocked<typeof HttpService.delete>;
+export type Delete2 = Mocked<typeof HttpService.delete2>;
 
 export type MockedImpls = {
   get?: Get;
@@ -32,8 +34,8 @@ const mockHttpService: Mocks = {};
 /**
  * Mock the service, fallback to actual implementation if not mocked
  */
-jest.mock('../HttpService', () => {
-  const actual = jest.requireActual('../HttpService');
+rstest.mock('../HttpService', () => {
+  const actual = rstest.requireActual<any>('../HttpService');
 
   const impls = {
     get: (...args: any[]) => (mockHttpService.mockedImpls?.get ?? actual.get)(args),
@@ -47,9 +49,10 @@ jest.mock('../HttpService', () => {
   };
 
   return {
-    __esModules: true,
-    root: () => impls,
-    ...impls,
+    default: {
+      root: () => impls,
+      ...impls,
+    },
   };
 });
 

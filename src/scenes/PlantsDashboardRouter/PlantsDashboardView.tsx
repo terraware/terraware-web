@@ -120,10 +120,7 @@ export default function PlantsDashboardView({
       ) : (
         <Link
           fontSize={'16px'}
-          to={APP_PATHS.OBSERVATION_DETAILS.replace(':plantingSiteId', plantingSite?.id.toString()).replace(
-            ':observationId',
-            plantingSite.latestObservationId.toString()
-          )}
+          to={APP_PATHS.OBSERVATION_DETAILS_V2.replace(':observationId', plantingSite.latestObservationId.toString())}
         >
           {strings.formatString(
             strings.DATE_OBSERVATION,

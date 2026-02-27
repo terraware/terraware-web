@@ -18,7 +18,7 @@ import {
   useUpdatePlotPhotoMutation,
   useUploadOtherPlotMediaMutation,
 } from 'src/queries/generated/observations';
-import MonitoringPlotPhotoPreview from 'src/scenes/ObservationsRouter/common/MonitoringPlotPhotoPreview';
+import MonitoringPlotPhotoPreview from 'src/scenes/ObservationsRouterV2/SingleView/MonitoringPlotPhotoPreview';
 import strings from 'src/strings';
 import { MonitoringPlotMediaItem, ObservationMonitoringPlotResultsPayload } from 'src/types/Observations';
 import useSnackbar from 'src/utils/useSnackbar';

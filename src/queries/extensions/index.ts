@@ -1,7 +1,2 @@
-const importAll = (r: __WebpackModuleApi.RequireContext) => {
-  r.keys()
-    .filter((key) => key !== './index.ts')
-    .forEach(r);
-};
-
-importAll(require.context('./', true, /\.ts$/));
+const ctx = require.context('./', true, /\.ts$/) as any;
+(ctx.keys() as string[]).filter((key) => key !== './index.ts').forEach(ctx);

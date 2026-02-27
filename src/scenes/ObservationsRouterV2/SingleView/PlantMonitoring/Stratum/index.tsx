@@ -71,11 +71,20 @@ const StratumDetails = (): JSX.Element => {
 
   const species = useObservationSpecies(stratumResult?.species ?? []);
 
+  const hasObservedPermanentPlots = useMemo(() => {
+    const permanentPlots =
+      stratumResult?.substrata.flatMap((substratum) => substratum.monitoringPlots).filter((plot) => plot.isPermanent) ??
+      [];
+
+    return permanentPlots.some((plot) => plot.status === 'Completed');
+  }, [stratumResult?.substrata]);
+
   return (
     <Page crumbs={crumbs} title={title}>
       <SurvivalRateMessageV2 selectedPlantingSiteId={results?.plantingSiteId} />
       <AggregatedPlantsStats
         completedTime={stratumResult?.completedTime}
+        hasObservedPermanentPlots={hasObservedPermanentPlots}
         totalSpecies={stratumResult?.totalSpecies}
         plantingDensity={stratumResult?.plantingDensity}
         survivalRate={stratumResult?.survivalRate}

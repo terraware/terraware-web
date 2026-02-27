@@ -7,7 +7,7 @@ import { Button, Icon } from '@terraware/web-components';
 import Card from 'src/components/common/Card';
 import { useLocalization } from 'src/providers';
 import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
-import EventLog from 'src/scenes/ObservationsRouter/common/EventLog';
+import EventLog from 'src/scenes/ObservationsRouterV2/SingleView/EventLog';
 
 import EditNotesModal from './EditNotesModal';
 import QuadratComponent from './QuadratComponent';

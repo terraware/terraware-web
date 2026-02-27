@@ -152,10 +152,9 @@ const useObservationExports = () => {
               [0, 0, 0]
             );
 
-            const pathPattern = APP_PATHS.OBSERVATION_MONITORING_PLOT_DETAILS;
+            const pathPattern = APP_PATHS.OBSERVATION_MONITORING_PLOT_DETAILS_V2;
             const detailsLink = new URL(
               pathPattern
-                .replace(':plantingSiteId', observationResults.plantingSiteId.toString())
                 .replace(':observationId', observationResults.observationId.toString())
                 .replace(':stratumName', encodeURIComponent(stratum.name))
                 .replace(':monitoringPlotId', monitoringPlot.monitoringPlotId.toString()),

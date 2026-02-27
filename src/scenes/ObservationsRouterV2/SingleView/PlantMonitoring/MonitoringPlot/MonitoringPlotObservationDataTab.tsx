@@ -10,11 +10,11 @@ import { useLocalization } from 'src/providers';
 import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import { getConditionString } from 'src/redux/features/observations/utils';
-import ExtraData from 'src/scenes/ObservationsRouter/adhoc/ExtraData';
-import ObservationDataNumbers from 'src/scenes/ObservationsRouter/adhoc/ObservationDataNumbers';
-import EventLog from 'src/scenes/ObservationsRouter/common/EventLog';
-import MatchSpeciesModal from 'src/scenes/ObservationsRouter/common/MatchSpeciesModal';
-import UnrecognizedSpeciesPageMessage from 'src/scenes/ObservationsRouter/common/UnrecognizedSpeciesPageMessage';
+import ObservationDataNumbers from 'src/scenes/ObservationsRouterV2/SingleView/BiomassMeasurements/ObservationDataNumbers';
+import EventLog from 'src/scenes/ObservationsRouterV2/SingleView/EventLog';
+import ExtraData from 'src/scenes/ObservationsRouterV2/SingleView/ExtraData';
+import MatchSpeciesModal from 'src/scenes/ObservationsRouterV2/SingleView/MatchSpeciesModal';
+import UnrecognizedSpeciesPageMessage from 'src/scenes/ObservationsRouterV2/SingleView/UnrecognizedSpeciesPageMessage';
 import useObservationExports from 'src/scenes/ObservationsRouterV2/useObservationExports';
 import { useOnSaveMergedSpeciesRtk } from 'src/scenes/ObservationsRouterV2/useOnSaveMergedSpeciesRtk';
 import { getShortTime } from 'src/utils/dateFormatter';
@@ -145,6 +145,12 @@ const MonitoringPlotObservationDataTab = () => {
     observationId,
     onComplete: () => setShowMatchSpeciesModal(false),
   });
+
+  useEffect(() => {
+    if (unrecognizedSpecies.length) {
+      setShowPageMessage(true);
+    }
+  }, [unrecognizedSpecies.length]);
 
   const extraItems = [
     {
