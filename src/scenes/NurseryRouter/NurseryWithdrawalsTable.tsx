@@ -468,83 +468,85 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
 
   // Convert MRT column filters to backend search format
   const columnFilterNodes: SearchNodePayload[] = useMemo(() => {
-    return columnFilters.map((filter) => {
-      const fieldName =
-        filter.id === 'project_names'
-          ? 'batchWithdrawals.batch_project_name'
-          : filter.id === 'speciesScientificNames'
-            ? 'batchWithdrawals.batch_species_scientificName'
-            : filter.id;
-      let filterValue = filter.value;
+    return columnFilters
+      .filter((filter) => !(Array.isArray(filter.value) && filter.value.length === 0))
+      .map((filter) => {
+        const fieldName =
+          filter.id === 'project_names'
+            ? 'batchWithdrawals.batch_project_name'
+            : filter.id === 'speciesScientificNames'
+              ? 'batchWithdrawals.batch_species_scientificName'
+              : filter.id;
+        let filterValue = filter.value;
 
-      // For purpose filter, convert label back to value
-      if (filter.id === 'purpose' && typeof filterValue === 'string') {
-        filterValue = purposeLabelToValue[filterValue] || filterValue;
-      }
+        // For purpose filter, convert label back to value
+        if (filter.id === 'purpose' && typeof filterValue === 'string') {
+          filterValue = purposeLabelToValue[filterValue] || filterValue;
+        }
 
-      // Find the column definition to check filter type
-      const column = columns.find((col) => col.id === filter.id);
-      const isSelectFilter = column?.filterVariant === 'select';
-      const isMultiSelectFilter = column?.filterVariant === 'multi-select';
+        // Find the column definition to check filter type
+        const column = columns.find((col) => col.id === filter.id);
+        const isSelectFilter = column?.filterVariant === 'select';
+        const isMultiSelectFilter = column?.filterVariant === 'multi-select';
 
-      // Handle different filter types
-      if (Array.isArray(filterValue)) {
-        // Multi-select filter: OR across selected values
-        if (isMultiSelectFilter && filterValue.length > 0) {
-          const selected = filterValue.filter((v) => v !== undefined && v !== '');
-          if (selected.length === 1) {
-            return { operation: 'field', field: fieldName, type: 'Exact', values: [selected[0]] };
+        // Handle different filter types
+        if (Array.isArray(filterValue)) {
+          // Multi-select filter: OR across selected values
+          if (isMultiSelectFilter && filterValue.length > 0) {
+            const selected = filterValue.filter((v) => v !== undefined && v !== '');
+            if (selected.length === 1) {
+              return { operation: 'field', field: fieldName, type: 'Exact', values: [selected[0]] };
+            }
+            return {
+              operation: 'or',
+              children: selected.map((v) => ({
+                operation: 'field',
+                field: fieldName,
+                type: 'Exact',
+                values: [v],
+              })),
+            } as OrNodePayload;
           }
+          // Range filter (e.g., numbers)
+          if (filterValue.length === 2) {
+            const children: SearchNodePayload[] = [];
+            if (filterValue[0] !== undefined && filterValue[0] !== '') {
+              children.push({
+                operation: 'field',
+                field: fieldName,
+                type: 'Range',
+                values: [String(filterValue[0]), '999999999'],
+              });
+            }
+            if (filterValue[1] !== undefined && filterValue[1] !== '') {
+              children.push({
+                operation: 'field',
+                field: fieldName,
+                type: 'Range',
+                values: ['0', String(filterValue[1])],
+              });
+            }
+            return children.length > 1
+              ? { operation: 'and', children }
+              : children[0] || { operation: 'field', field: fieldName, type: 'Exact', values: [] };
+          }
+        } else if (typeof filterValue === 'string') {
+          // Text or select filter
           return {
-            operation: 'or',
-            children: selected.map((v) => ({
-              operation: 'field',
-              field: fieldName,
-              type: 'Exact',
-              values: [v],
-            })),
-          } as OrNodePayload;
+            operation: 'field',
+            field: fieldName,
+            type: isSelectFilter ? 'Exact' : 'Fuzzy',
+            values: [filterValue],
+          };
         }
-        // Range filter (e.g., numbers)
-        if (filterValue.length === 2) {
-          const children: SearchNodePayload[] = [];
-          if (filterValue[0] !== undefined && filterValue[0] !== '') {
-            children.push({
-              operation: 'field',
-              field: fieldName,
-              type: 'Range',
-              values: [String(filterValue[0]), '999999999'],
-            });
-          }
-          if (filterValue[1] !== undefined && filterValue[1] !== '') {
-            children.push({
-              operation: 'field',
-              field: fieldName,
-              type: 'Range',
-              values: ['0', String(filterValue[1])],
-            });
-          }
-          return children.length > 1
-            ? { operation: 'and', children }
-            : children[0] || { operation: 'field', field: fieldName, type: 'Exact', values: [] };
-        }
-      } else if (typeof filterValue === 'string') {
-        // Text or select filter
+
         return {
           operation: 'field',
           field: fieldName,
-          type: isSelectFilter ? 'Exact' : 'Fuzzy',
-          values: [filterValue],
+          type: 'Exact',
+          values: [String(filterValue)],
         };
-      }
-
-      return {
-        operation: 'field',
-        field: fieldName,
-        type: 'Exact',
-        values: [String(filterValue)],
-      };
-    });
+      });
   }, [columnFilters, columns, purposeLabelToValue]);
 
   const searchChildren: SearchNodePayload[] = useMemo(() => {
