@@ -269,7 +269,7 @@ export default function ReportsSettings(): JSX.Element {
     }));
 
     return [...autoRows, ...commonRows, ...projectRows];
-  }, [projectIndicators, commonIndicators, autoCalculatedIndicators]);
+  }, [projectIndicators, commonIndicators, autoCalculatedIndicators, strings.TW_DATA]);
 
   const onClickIndicatorRow = useCallback(
     (row: IndicatorRow) => {
