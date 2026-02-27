@@ -863,6 +863,7 @@ INCLUDE_EMPTY_FIELDS,Inclure des champs vides,a4ba1236
 INCOMPLETE,Incomplet,5f524fdf
 INCORRECT_EMAIL_FORMAT,Format d'e-mail incorrect.,19f1a8c9
 INDICATOR_LEVEL,Niveau d’indicateur,b128c992
+INDICATOR_NAME,Nom de l’indicateur,0d8b0613
 INDICATORS,Indicateurs,ea71857f
 INFRASTRUCTURE,Infrastructure,c8fe126f
 INSTANCES,Instances,fcc19322

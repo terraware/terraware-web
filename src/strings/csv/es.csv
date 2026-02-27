@@ -864,6 +864,7 @@ INCLUDE_EMPTY_FIELDS,Incluir campos vacíos,a4ba1236
 INCOMPLETE,Incompleto,5f524fdf
 INCORRECT_EMAIL_FORMAT,Formato de correo electrónico incorrecto.,19f1a8c9
 INDICATOR_LEVEL,Nivel del indicador,b128c992
+INDICATOR_NAME,Nombre del indicador,0d8b0613
 INDICATORS,Indicadores,ea71857f
 INFRASTRUCTURE,Infraestructura,c8fe126f
 INSTANCES,Casos,fcc19322

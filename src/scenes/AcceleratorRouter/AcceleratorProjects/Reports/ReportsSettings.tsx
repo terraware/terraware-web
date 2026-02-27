@@ -261,7 +261,7 @@ export default function ReportsSettings(): JSX.Element {
       reference: ind.refId,
       category: ind.category,
       level: ind.level,
-      primaryDataSource: ind.primaryDataSource,
+      primaryDataSource: strings.TW_DATA,
       frequencyOfReporting: ind.frequency,
       tfOwnerReviewer: ind.tfOwner,
       notes: ind.notes,
@@ -371,7 +371,7 @@ export default function ReportsSettings(): JSX.Element {
     (): EditableTableColumn<IndicatorRow>[] => [
       {
         id: 'name',
-        header: strings.DEAL_NAME,
+        header: strings.INDICATOR_NAME,
         accessorKey: 'name',
         enableEditing: false,
         size: 240,
