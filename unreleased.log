@@ -1,2 +1,3 @@
+5eef418af4bd Fix multi select filter not clearing correctly (#5340)
 ab2fb760f922 SW-7930 Replace jest with rstest (#5281)
 9c5134b74989 SW-7930 Replace craco with rsbuild (#5280)
