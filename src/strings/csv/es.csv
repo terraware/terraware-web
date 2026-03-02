@@ -1,5 +1,4 @@
 Key,Text,Hash
-ABANDONED,Abandonado,59a598b0
 ACCELERATOR,Acelerador,05854ca8
 ACCELERATOR_ADMIN,Administración del acelerador,b60aa07a
 ACCELERATOR_CONSOLE,Consola del acelerador,4d54c8c9
@@ -45,7 +44,6 @@ AD_HOC,Ad hoc,2acaf742
 AD_HOC_NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP,El Número de Plantas Vivas por Especie muestra la cantidad de plantas observadas por especie registradas como vivas. No se incluyen las plantas registradas cuya especie es desconocida.,15817386
 AD_HOC_OBSERVATIONS_EMPTY_STATE_MESSAGE_1,Actualmente no hay observaciones ad hoc de parcelas.,9ae089fc
 AD_HOC_OBSERVATIONS_EMPTY_STATE_MESSAGE_2,Las observaciones utilizando parcelas ad hoc para el Monitoreo de Plantas pueden registrarse a través de Observaciones de Parcelas Ad Hoc en la aplicación móvil.,f0775160
-AD_HOC_PLANT_MONITORING,Monitoreo de plantas ad hoc,589a6d6c
 AD_HOC_PLOT_LIVE_PLANTS_TOOLTIP,Plantas vivas es el número de plantas observadas registradas como vivas.,b0ec7f7f
 AD_HOC_PLOT_PLANT_DENSITY_TOOLTIP,La densidad de plantas (plantas por hectárea) se calcula en función del número de plantas observadas.,142e44c5
 AD_HOC_PLOT_SPECIES_TOOLTIP,Especies es el número de especies representadas por todas las plantas observadas.,ed7c35b1
@@ -242,8 +240,6 @@ BEST_MONTHS_FOR_OBSERVATIONS_VALIDATION_ERROR,"Por favor, seleccionar al menos u
 BIODIVERSITY,Biodiversidad,fa436482
 BIOMASS_EMPTY_STATE_MESSAGE_1,En este momento no hay observaciones de parcelas ad hoc.,7dd9cdf0
 BIOMASS_EMPTY_STATE_MESSAGE_2,Las observaciones para el Monitoreo de Biomasa pueden registrarse a través de Observaciones de Parcelas Ad Hoc en la aplicación móvil.,e9184a63
-BIOMASS_MEASUREMENT,Medición de biomasa,cf846a13
-BIOMASS_MEASUREMENTS,Mediciones de biomasa,fab7d40f
 BIOMASS_MONITORING,Monitoreo de biomasa,c249c88e
 BIOMASS_NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP,El Número de Plantas Vivas por Especie muestra la cantidad de especies observadas de árboles y arbustos registradas como vivas.,cb7c376f
 BIOMASS_OBSERVATION_FILENAME_PREFIX,Observación-de-la-biomasa,15aec1fa
@@ -252,7 +248,6 @@ BIOMASS_PLOT_LIVE_PLANTS_TOOLTIP,Plantas vivas es el número de árboles y arbus
 BIOMASS_PLOT_LOCATION_TOOLTIP,Ubicación del lote muestra las coordenadas de la esquina suroeste del lote.,a60d1e6d
 BIOMASS_PLOT_SPECIES_TOOLTIP,Especies es el número de especies representadas por los árboles y arbustos observados. No incluye plantas registradas en los cuadrantes ni otras especies invasoras o amenazadas adicionales.,f520363a
 BIOMASS_PLOT_TOTAL_PLANTS_TOOLTIP,"Plantas totales es el número de todos los árboles y arbustos observados, incluyendo árboles y arbustos vivos y muertos. No incluye plantas registradas en los cuadrantes ni otras especies invasoras o amenazadas adicionales.",d020f12c
-BOOLEAN_FALSE,falso,7a03081c
 BOOLEAN_TRUE,verdadero,54415086
 BOUNDARIES,Límites,e40b0600
 BOUNDARIES_AND_STRATA,Límites y Estratos,87db24b5
@@ -331,8 +326,6 @@ CLIMATE,Clima,63ba44ee
 CLIMATE_IMPACT,Impacto climático,876c48a4
 CLOSE,Cerrar,e6e3f022
 CLOSE_AND_EDIT,Cerrar y editar,1c3ea202
-COHORT,Cohorte,81afe896
-COHORTS,Cohortes,b0aca6fa
 COLLECTED_DATE,Fecha de recolección,3f1515d8
 COLLECTED_FROM,Recolectado de,ffc6ad60
 COLLECTING_SITE,Lugar de recolección,7491b42b
@@ -1244,20 +1237,14 @@ OBSERVATION_EVENT,Incidencia de observación,03d0c031
 OBSERVATION_EVENT_SCHEDULED,El evento de observación está programado para el {0} para el(los) terreno(s) de plantación:,da489f7e
 OBSERVATION_EVENTS,Incidencias de observación,564648b0
 OBSERVATION_EVENTS_TOOLTIP,Observaciones previas se muestra con opacidad disminuida,03c6ea26
-OBSERVATION_IN_PROGRESS,Observación en progreso,d5071049
-OBSERVATION_OVERDUE,Observación con atraso,6a4b7931
 OBSERVATION_PERIOD_WARN,El periodo de observación no puede superar los dos meses.,364a36c6
 OBSERVATION_RESCHEDULED,Observación reprogramada,583d8d94
 OBSERVATION_SCHEDULED,Observación programada,2022ad09
 OBSERVATION_SMALL_SITE_WARNING,Está programando una Observación para un lugar que posiblemente sea demasiado pequeño para la asignación de zonas de seguimiento. Se le notificará si hay problemas con la asignación de las zonas de seguimiento y el inicio de la Observación. También puede realizar una Observación de zona ad hoc para este lugar.,5fa79765
 OBSERVATION_START_DATE,Fecha de inicio de la observación,b1807781
-OBSERVATION_STATUS,Estado de la observación,34c65fd0
 OBSERVATIONS,Observaciones,8169f17c
-OBSERVATIONS_COMPLETION_PERCENTAGE,Las observaciones para {0} de {1} parcelas de monitoreo ({2}%) se han completado.,72406de2
 OBSERVATIONS_EMPTY_STATE_MESSAGE_1,En este momento no hay observaciones de parcelas asignadas.,90adba3a
 OBSERVATIONS_EMPTY_STATE_MESSAGE_2,Las observaciones con parcelas asignadas pueden programarse para los sitios de plantación a los que se hayan destinado plantas a través de retiros de inventario.,535c7f37
-OBSERVATIONS_MAP_VIEW_PROMPT,"Para acceder a la vista del mapa, por favor selecciona un solo sitio de plantación.",958c6a9f
-OBSERVATIONS_REQUIRED_BY_DATE,Los parcelas de monitoreo de {0} requieren observación por {1}.,2b640681
 OBSERVATIONS_TERRAWARE_MOBILE_APP_DESCRIPTION,"Necesitará la aplicación móvil de Terraware para completar sus observaciones.
 
 Escanee los códigos QR con su dispositivo para descargarla en App Store o Google Play.",13be06be
@@ -1282,7 +1269,6 @@ OPPORTUNITIES_REQUIRED,Oportunidades *,8d418e65
 OPT_IN,Funciones Opt-In,cbb9300b
 OPTIONAL,Opcional,9f75363c
 OR,O,38d8953d
-OR_SHRUBS,O arbustos,a86cd003
 ORBIT,Orbitar,8e3af3cb
 ORG_NOTIFICATION_ACTION,"Para cambiar la preferencia, ve a [Ajustes > Organización]",5cbf22d7
 ORGANIZATION,Organización,b1115ab0
@@ -1454,7 +1440,6 @@ PLOT_TOTAL_PLANTS_TOOLTIP,"Plantas totales es el número de todas las plantas ob
 PLOT_TYPE,Tipo de parcela,4b579233
 PLOTS_AD_HOC,Parcelas ad hoc,104e30b2
 PLOTS_PERMANENT,Parcelas fijas,d06e9f3a
-PLOTS_SIZE_NOTE,*Datos recolectados con parcelas de 25 m x 25 m,1c6249f4
 PLOTS_TEMPORARY,Parcelas temporales,7d9bceab
 POM_M,MOP (m),279348dc
 POSITION,Posición,3eb30313
@@ -1770,7 +1755,6 @@ SDG_15,15. Vida en la tierra,773d6151
 SDG_16,"16. Paz, Justicia e Instituciones Sólidas.",e0e9a0ba
 SDG_17,17. Alianzas para los Objetivos,3b9b74f8
 SEARCH,Búsqueda,9f30c236
-SEARCH_BY_NAME_OR_FAMILY,Búsqueda por nombre o familia...,6930ec8d
 SEARCH_OR_SELECT,Busque o Seleccione,cbd7f4ed
 SECTION_OWNER_ASSIGNED,Sección asignada por el propietario,2756744b
 SECTIONS_USED,Secciones utilizadas,4e682124
@@ -1778,9 +1762,7 @@ SEE_ALL_ACCESSIONS,Ver todas las accesiones,2d1b160b
 SEE_IC_VOTES,Ver votos IC,a6e1094b
 SEE_LESS,Ver menos,519e0ef0
 SEE_MORE,Ver más,dfcb6964
-SEE_OBSERVATION_DETAILS,Ver detalles de la observación,5ad3ed38
 SEE_OBSERVATION_PLOT_DETAILS,Ver detalles de la parcela,923c4ac8
-SEE_OBSERVATION_STRATUM_DETAILS,Ver detalles del estrato,45fa4e0c
 SEE_PROJECT_DETAILS,Ver detalles del proyecto,93dbc5c4
 SEE_WITHDRAWAL_HISTORY,Ver historial de retirada,a925fc5e
 SEED,Semilla,aad75809
@@ -2110,7 +2092,6 @@ THIS_DELIVERABLE_HAS_BEEN_APPROVED_DOCUMENT,"Este entregable ha sido aprobado. S
 THIS_DELIVERABLE_HAS_BEEN_APPROVED_QUESTIONNAIRE,"Este entregable ha sido aprobado. Si el proyecto vuelve a enviar el cuestionario, el estado volverá a ""En revisión"".",89b908e0
 THIS_DELIVERABLE_HAS_BEEN_APPROVED_SPECIES,Este entregable ha sido aprobado. La lista de especies y su estado pueden cambiar a medida que se presenten nuevos entregables de listas de especies.,28fcdf43
 THIS_MODULE_CONTAINS,Este módulo contiene:,7982e848
-THIS_OBSERVATION_INCLUDES,Esta observación incluye los siguientes subestratos:,c48c888e
 THIS_PROJECT_HAS_NO_ACTIVITIES,Este proyecto no tiene actividades,cb693792
 THIS_REPORT_HAS_BEEN_APPROVED,Se aprobó este informe.,030064cb
 THREATENED,Amenazada,57ca76f3
@@ -2146,13 +2127,10 @@ TOOLTIP_GERMINATION_ESTABLISHMENT_QUANTITY,«Germinación/establecimiento» indi
 TOOLTIP_HARDENING_OFF_QUANTITY,Lo que determina que una planta esté en «Curación» puede variar y suele ser específico de cada especie. Ejemplo: tamaño de la planta o tiempo de aclimatación.,082384cb
 TOOLTIP_INVENTORY_ADD_ACCESSION_ID,El ID de la accesión utilizada para crear este lote. No disponible para especies que no tienen ninguna accesión.,a6a3a0af
 TOOLTIP_LIVE_PLANTS,Las plantas vivas observadas solo incluyen las plantas registradas como vivas; no incluyen las plantas registradas como preexistentes.,93092e08
-TOOLTIP_LIVE_PLANTS_ADHOC,Las plantas vivas observadas incluyen solo las plantas registradas como vivas.,8f4746d4
 TOOLTIP_READY_TO_PLANT_QUANTITY,Lo que determina que una planta esté «Lista para plantar» puede variar y suele ser específico de cada especie. Ejemplo: tamaño de la planta o tiempo de aclimatación.,c15993f4
 TOOLTIP_SCIENTIFIC_NAME,El nombre latino binomial (género + especie) aceptado en la actualidad en la bibliografía botánica.,be7a8ced
 TOOLTIP_SPECIES_CONSERVATION_CATEGORY,"Esta es la categoría de la Lista Roja de la UICN en la que se encuentra la especie. Para obtener más información sobre las categorías y abreviaturas de la Lista Roja de la UICN, visite iucnredlist.org.",15d491fd
-TOOLTIP_SPECIES_FAMILY,El nombre científico de la familia de la planta aceptado en la actualidad en la bibliografía botánica.,53f8846c
 TOOLTIP_SPECIES_GROWTH_FORM,Estas son las formas que describen la morfología o estructura general y básica de la especie.,b8ee5839
-TOOLTIP_SPECIES_RARE,"Especies de poblaciones en estado silvestre de tamaño limitado, con frecuencia encontradas en ubicaciones geográficas aisladas; pueden cumplir con los criterios de las clasificaciones ""en peligro"" o ""amenazada"", pero todavía no han sido agregadas o evaluadas legalmente.",c6526253
 TOOLTIP_SPECIES_SEED_STORAGE_BEHAVIOR,Esta es la capacidad de las semillas para sobrevivir a la desecación y a temperaturas hasta niveles necesarios para el almacenamiento ex situ (fuera del sitio).,779e40e3
 TOOLTIP_TIME_ZONE_MY_ACCOUNT,Usamos zonas horarias para mostrar las notificaciones en su hora local. Seleccione la zona horaria que le corresponda.,b02ac37d
 TOOLTIP_TIME_ZONE_NURSERY,Usamos zonas horarias para notificaciones y para determinar la fecha correcta para su región. Seleccione la zona horaria que corresponda a este vivero. Todo el trabajo realizado en este vivero usará esta zona horaria.,df52f6a7
@@ -2160,7 +2138,6 @@ TOOLTIP_TIME_ZONE_ORGANIZATION,"Usamos zonas horarias para notificaciones y para
 TOOLTIP_TIME_ZONE_PLANTING_SITE,Usamos zonas horarias para notificaciones y para determinar la fecha correcta para su región. Seleccione la zona horaria que corresponda a este sitio de plantación específico. Todo el trabajo realizado en este sitio de plantación usará esta zona horaria.,e474775a
 TOOLTIP_TIME_ZONE_SEEDBANK,Usamos zonas horarias para notificaciones y para determinar la fecha correcta para su región. Seleccione la zona horaria que corresponda a este banco de semillas. Todo el trabajo realizado en este banco de semillas usará esta zona horaria.,1b3db070
 TOOLTIP_TOTAL_PLANTS,"Las plantas en total observadas incluyen las plantas vivas y muertas de especies conocidas y desconocidas; no obstante, no incluyen las plantas registradas como preexistentes.",d21e64f0
-TOOLTIP_TOTAL_PLANTS_ADHOC,"El total de plantas observadas incluye todas las plantas vivas y muertas, tanto de especies conocidas como desconocidas.",947c9c88
 TOOLTIP_TOTAL_QUANTITY,La cantidad total es la suma de las cantidades no listas y listas.,4a6f0489
 TOOLTIP_TOTAL_WITHDRAWN,El número total de plantas extraídas para cualquier fin.,2de74db3
 TOOLTIP_VIABILITY_TEST_AGAR_PETRI_DISH,Plato que contiene un medio de cultivo de agar solidificado.,7391d8f5
