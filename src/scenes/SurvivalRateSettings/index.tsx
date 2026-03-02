@@ -2,7 +2,7 @@ import React, { useCallback, useMemo } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import { Button, Tabs } from '@terraware/web-components';
+import { Button, Tab, Tabs } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import { Crumb } from 'src/components/BreadCrumbs';
@@ -140,7 +140,7 @@ const SurvivalRateSettings = () => {
     return totalSet;
   }, [t0SiteData, withdrawnSpeciesPlots, strataWithObservations]);
 
-  const tabs = useMemo(
+  const tabs: Tab[] = useMemo(
     () => [
       {
         id: 'permanent',
@@ -165,7 +165,7 @@ const SurvivalRateSettings = () => {
             including={t0SiteData?.survivalRateIncludesTempPlots}
           />
         ),
-        disabled: (temporaryPlots?.length || 0) > 0,
+        disabled: (temporaryPlots?.length || 0) === 0,
         tooltip: (temporaryPlots?.length || 0) === 0 ? strings.NO_TEMPORARY_PLOTS_SURVIVAL_TOOLTIP : undefined,
       },
     ],
