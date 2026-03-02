@@ -502,7 +502,7 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
                             );
                             const value = isFunderRoute
                               ? (selMetric as PublishedReportPayload['systemMetrics'][0])?.value || 0
-                              : (selMetric as AcceleratorReport['systemMetrics'][0]).overrideValue ||
+                              : (selMetric as AcceleratorReport['systemMetrics'][0])?.overrideValue ||
                                 (selMetric as AcceleratorReport['systemMetrics'][0])?.systemValue ||
                                 0;
 
