@@ -1167,7 +1167,7 @@ NO_SPECIES_DESCRIPTION,"It looks like you haven’t added any species yet. Havin
 NO_SUB_LOCATIONS,Edit this seed bank to add sub-locations.,
 NO_SUB_LOCATIONS_NURSERY,Edit this nursery to add sub-locations.,
 NO_TEMPORARY_PLOTS_WITHIN_STRATA,There are no temporary plots within the Planting Site Strata. Only Temporary Plots within Strata can be used for Survival Rate calculations.,
-NO_TEMPORARY_PLOTS_SURVIVAL_TOOLTIP,There are no temporary plots within the Planting Site that are within a Substratum and have had a completed observation.,
+NO_TEMPORARY_PLOTS_SURVIVAL_TOOLTIP,There are no completed Observations that include temporary plots within a Planting Site substratum.,
 NO_VOTERS,No Voters,
 NO_VOTERS_FOR_PROJECT,There are no voters for this project. Contact an accelerator admin to add voters.,
 NO_WITHDRAWABLE_QUANTITIES_FOUND,No withdrawable quantities found,
