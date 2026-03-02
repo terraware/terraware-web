@@ -11,33 +11,23 @@ import { isSpeciesEmpty } from 'src/scenes/InventoryRouter/FilterUtils';
 import { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';
 import InventoryTable from 'src/scenes/InventoryRouter/InventoryTable';
 import { SpeciesFacilitiesInventoryResult, SpeciesInventoryResult } from 'src/scenes/InventoryRouter/InventoryV2View';
-import NurseryInventoryService, { BE_SORTED_FIELDS, SearchInventoryParams } from 'src/services/NurseryInventoryService';
-import { SearchResponseElement, SearchSortOrder } from 'src/types/Search';
+import NurseryInventoryService from 'src/services/NurseryInventoryService';
+import { SearchResponseElement } from 'src/types/Search';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDebounce from 'src/utils/useDebounce';
 import useForm from 'src/utils/useForm';
-import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
-type InventoryListBySpeciesProps = {
-  setReportData: (data: SearchInventoryParams) => void;
-};
-
-export default function InventoryListBySpecies({ setReportData }: InventoryListBySpeciesProps) {
+export default function InventoryListBySpecies() {
   const { strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
-  const numberFormatter = useNumberFormatter();
 
   const [filters, setFilters] = useForm<InventoryFiltersUnion>({});
   const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>(null);
   const [showResults, setShowResults] = useState(false);
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(temporalSearchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
-  const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder | undefined>({
-    field: 'scientificName',
-    direction: 'Ascending',
-  });
 
-  const columns = useMemo(
+  const columns: TableColumnType[] = useMemo(
     (): TableColumnType[] => [
       {
         key: 'scientificName',
@@ -86,14 +76,6 @@ export default function InventoryListBySpecies({ setReportData }: InventoryListB
     [strings]
   );
 
-  const onSearchSortOrder = useCallback(
-    (order: SearchSortOrder) => {
-      const isClientSorted = BE_SORTED_FIELDS.indexOf(order.field) === -1;
-      setSearchSortOrder(isClientSorted ? undefined : order);
-    },
-    [setSearchSortOrder]
-  );
-
   const onApplyFilters = useCallback(async () => {
     if (selectedOrganization) {
       const requestId = Math.random().toString();
@@ -101,18 +83,10 @@ export default function InventoryListBySpecies({ setReportData }: InventoryListB
 
       const showEmptySpecies = (filters.showEmptySpecies || [])[0] === 'true';
 
-      setReportData({
-        organizationId: selectedOrganization.id,
-        query: debouncedSearchTerm,
-        facilityIds: filters.facilityIds,
-        searchSortOrder,
-      });
-
       const apiSearchResults = await NurseryInventoryService.searchSpeciesInventory({
         organizationId: selectedOrganization.id,
         query: debouncedSearchTerm,
         facilityIds: filters.facilityIds,
-        searchSortOrder,
       });
 
       const specificFacilities = (filters.facilityIds?.length || 0) > 0;
@@ -139,7 +113,7 @@ export default function InventoryListBySpecies({ setReportData }: InventoryListB
                 totalQuantity: '0',
               };
             }
-            const aggregated = typedResult.facilityInventories.reduce(
+            return typedResult.facilityInventories.reduce(
               (acc, fi) => ({
                 germinatingQuantity: acc.germinatingQuantity + Number(fi['germinatingQuantity(raw)']),
                 hardeningOffQuantity: acc.hardeningOffQuantity + Number(fi['hardeningOffQuantity(raw)']),
@@ -155,31 +129,20 @@ export default function InventoryListBySpecies({ setReportData }: InventoryListB
                 totalQuantity: 0,
               }
             );
-            return {
-              germinatingQuantity: numberFormatter.format(aggregated.germinatingQuantity),
-              hardeningOffQuantity: numberFormatter.format(aggregated.hardeningOffQuantity),
-              activeGrowthQuantity: numberFormatter.format(aggregated.activeGrowthQuantity),
-              readyQuantity: numberFormatter.format(aggregated.readyQuantity),
-              totalQuantity: numberFormatter.format(aggregated.totalQuantity),
-            };
           } else {
             const typedResult = resultTyped as SpeciesInventoryResult;
             return {
               germinatingQuantity: typedResult.inventory
-                ? numberFormatter.format(Number(typedResult.inventory['germinatingQuantity(raw)']))
+                ? Number(typedResult.inventory['germinatingQuantity(raw)'])
                 : '0',
               hardeningOffQuantity: typedResult.inventory
-                ? numberFormatter.format(Number(typedResult.inventory['hardeningOffQuantity(raw)']))
+                ? Number(typedResult.inventory['hardeningOffQuantity(raw)'])
                 : '0',
               activeGrowthQuantity: typedResult.inventory
-                ? numberFormatter.format(Number(typedResult.inventory['activeGrowthQuantity(raw)']))
+                ? Number(typedResult.inventory['activeGrowthQuantity(raw)'])
                 : '0',
-              readyQuantity: typedResult.inventory
-                ? numberFormatter.format(Number(typedResult.inventory['readyQuantity(raw)']))
-                : '0',
-              totalQuantity: typedResult.inventory
-                ? numberFormatter.format(Number(typedResult.inventory['totalQuantity(raw)']))
-                : '0',
+              readyQuantity: typedResult.inventory ? Number(typedResult.inventory['readyQuantity(raw)']) : '0',
+              totalQuantity: typedResult.inventory ? Number(typedResult.inventory['totalQuantity(raw)']) : '0',
             };
           }
         };
@@ -219,7 +182,7 @@ export default function InventoryListBySpecies({ setReportData }: InventoryListB
         setSearchResults(filteredResult || []);
       }
     }
-  }, [filters, debouncedSearchTerm, selectedOrganization, searchSortOrder, numberFormatter, setReportData]);
+  }, [filters, debouncedSearchTerm, selectedOrganization]);
 
   const reloadData = useCallback(() => void onApplyFilters(), [onApplyFilters]);
 
@@ -236,8 +199,6 @@ export default function InventoryListBySpecies({ setReportData }: InventoryListB
           setTemporalSearchValue={setTemporalSearchValue}
           filters={filters}
           setFilters={setFilters}
-          setSearchSortOrder={onSearchSortOrder}
-          isPresorted={!!searchSortOrder}
           columns={columns}
           origin='Species'
           emptyTableMessage={

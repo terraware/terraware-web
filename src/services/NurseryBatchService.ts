@@ -77,10 +77,15 @@ export type NurseryBatchesReportSearchResponseElement = SearchResponseElement & 
   species_commonName: string;
   facility_name: string;
   germinatingQuantity: string;
+  'germinatingQuantity(raw)': number;
   hardeningOffQuantity: string;
+  'hardeningOffQuantity(raw)': number;
   activeGrowthQuantity: string;
+  'activeGrowthQuantity(raw)': number;
   readyQuantity: string;
+  'readyQuantity(raw)': number;
   totalQuantity: string;
+  'totalQuantity(raw)': number;
 };
 
 const EXPORT_BATCH_FIELDS = [
@@ -107,16 +112,16 @@ export type NurseryBatchesSearchResponseElement = SearchResponseElement & {
   batchNumber: string;
   facility_id: string;
   germinatingQuantity: string;
-  'germinatingQuantity(raw)': string;
+  'germinatingQuantity(raw)': number;
   germinationStartedDate: string;
   hardeningOffQuantity: string;
-  'hardeningOffQuantity(raw)': string;
+  'hardeningOffQuantity(raw)': number;
   id: string;
   notes: string;
   activeGrowthQuantity: string;
-  'activeGrowthQuantity(raw)': string;
+  'activeGrowthQuantity(raw)': number;
   readyQuantity: string;
-  'readyQuantity(raw)': string;
+  'readyQuantity(raw)': number;
   readyByDate: string;
   seedsSownDate: string;
   species_id: string;
@@ -124,7 +129,7 @@ export type NurseryBatchesSearchResponseElement = SearchResponseElement & {
   species_commonName: string;
   subLocations?: { subLocation_id: string; subLocation_name: string }[];
   totalQuantity: string;
-  'totalQuantity(raw)': string;
+  'totalQuantity(raw)': number;
   version: string;
   project_name?: string;
 };
@@ -161,26 +166,6 @@ type GetBatchListPhotosResponsePayload =
 const httpBatch = HttpService.root(BATCH_ID_ENDPOINT);
 const httpBatchHistory = HttpService.root(BATCH_HISTORY_ENDPOINT);
 const httpBatchPhoto = HttpService.root(BATCH_PHOTO_ENDPOINT);
-
-export const SEARCH_FIELDS_NON_EMPTY_BATCHES: SearchNodePayload[] = [
-  {
-    operation: 'or',
-    children: [
-      {
-        operation: 'field',
-        field: 'totalQuantity',
-        type: 'Range',
-        values: [1, null],
-      },
-      {
-        operation: 'field',
-        field: 'germinatingQuantity',
-        type: 'Range',
-        values: [1, null],
-      },
-    ],
-  },
-];
 
 /**
  * Create a batch

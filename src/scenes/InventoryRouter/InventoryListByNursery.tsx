@@ -12,37 +12,21 @@ import { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilte
 import InventoryTable from 'src/scenes/InventoryRouter/InventoryTable';
 import { FacilitySpeciesInventoryResult } from 'src/scenes/InventoryRouter/InventoryV2View';
 import { NurseryBatchService } from 'src/services';
-import NurseryInventoryService, { BE_SORTED_FIELDS, SearchInventoryParams } from 'src/services/NurseryInventoryService';
-import { SearchResponseElement, SearchSortOrder } from 'src/types/Search';
+import NurseryInventoryService from 'src/services/NurseryInventoryService';
+import { SearchResponseElement } from 'src/types/Search';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDebounce from 'src/utils/useDebounce';
 import useForm from 'src/utils/useForm';
 
-type InventoryListByNurseryProps = {
-  setReportData: (data: SearchInventoryParams) => void;
-};
-
-export default function InventoryListByNursery({ setReportData }: InventoryListByNurseryProps) {
+export default function InventoryListByNursery() {
   const { activeLocale, strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
 
   const [filters, setFilters] = useForm<InventoryFiltersUnion>({});
   const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>(null);
   const [showResults, setShowResults] = useState(false);
-  const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder | undefined>({
-    field: 'facility_name',
-    direction: 'Ascending',
-  });
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(temporalSearchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
-
-  const onSearchSortOrder = useCallback(
-    (order: SearchSortOrder) => {
-      const isClientSorted = BE_SORTED_FIELDS.indexOf(order.field) === -1;
-      setSearchSortOrder(isClientSorted ? undefined : order);
-    },
-    [setSearchSortOrder]
-  );
 
   const columns = useMemo(
     (): TableColumnType[] => [
@@ -54,33 +38,33 @@ export default function InventoryListByNursery({ setReportData }: InventoryListB
         tooltipTitle: strings.TOOLTIP_SCIENTIFIC_NAME,
       },
       {
-        key: 'germinatingQuantity',
+        key: 'germinatingQuantity(raw)',
         name: strings.GERMINATION_ESTABLISHMENT,
         type: 'number' as const,
         tooltipTitle: strings.TOOLTIP_GERMINATION_ESTABLISHMENT_QUANTITY,
       },
       {
-        key: 'activeGrowthQuantity',
+        key: 'activeGrowthQuantity(raw)',
         name: strings.ACTIVE_GROWTH,
         type: 'number' as const,
         tooltipTitle: strings.TOOLTIP_ACTIVE_GROWTH_QUANTITY,
       },
       {
-        key: 'hardeningOffQuantity',
+        key: 'hardeningOffQuantity(raw)',
         name: strings.HARDENING_OFF,
         type: 'number' as const,
         tooltipTitle: strings.TOOLTIP_HARDENING_OFF_QUANTITY,
       },
       {
-        key: 'readyQuantity',
+        key: 'readyQuantity(raw)',
         name: strings.READY_TO_PLANT,
         type: 'number' as const,
         tooltipTitle: strings.TOOLTIP_READY_TO_PLANT_QUANTITY,
       },
       {
-        key: 'totalQuantity',
+        key: 'totalQuantity(raw)',
         name: strings.TOTAL,
-        type: 'number',
+        type: 'number' as const,
         tooltipTitle: strings.TOOLTIP_TOTAL_QUANTITY,
       },
     ],
@@ -94,22 +78,13 @@ export default function InventoryListByNursery({ setReportData }: InventoryListB
 
       const showEmptyNurseries = (filters.showEmptyNurseries || [])[0] === 'true';
 
-      setReportData({
-        organizationId: selectedOrganization.id,
-        query: debouncedSearchTerm,
-        facilityIds: filters.facilityIds,
-        speciesIds: filters.speciesIds,
-        searchSortOrder,
-      });
-
-      const allBatchesResult = await NurseryBatchService.getAllBatches(selectedOrganization.id, searchSortOrder);
+      const allBatchesResult = await NurseryBatchService.getAllBatches(selectedOrganization.id);
 
       const apiSearchResults = await NurseryInventoryService.searchInventoryByNursery({
         organizationId: selectedOrganization.id,
         query: debouncedSearchTerm,
         facilityIds: filters.facilityIds,
         speciesIds: filters.speciesIds,
-        searchSortOrder,
       });
 
       const updatedResult = apiSearchResults?.map((result) => {
@@ -139,9 +114,7 @@ export default function InventoryListByNursery({ setReportData }: InventoryListB
     filters.facilityIds,
     filters.showEmptyNurseries,
     filters.speciesIds,
-    searchSortOrder,
     selectedOrganization,
-    setReportData,
   ]);
 
   const reloadData = useCallback(() => void onApplyFilters(), [onApplyFilters]);
@@ -159,8 +132,6 @@ export default function InventoryListByNursery({ setReportData }: InventoryListB
           setTemporalSearchValue={setTemporalSearchValue}
           filters={filters}
           setFilters={setFilters}
-          setSearchSortOrder={onSearchSortOrder}
-          isPresorted={!!searchSortOrder}
           columns={columns}
           origin='Nursery'
           emptyTableMessage={

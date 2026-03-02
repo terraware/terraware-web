@@ -2,7 +2,6 @@ import { paths } from 'src/api/types/generated-schema';
 import { GetUploadStatusResponsePayload, UploadFileResponse } from 'src/types/File';
 import { SpeciesInventorySummary } from 'src/types/Inventory';
 import {
-  AndNodePayload,
   FieldNodePayload,
   OrNodePayload,
   PrefixedSearch,
@@ -25,42 +24,6 @@ const INVENTORY_TEMPLATE_ENDPOINT = '/api/v1/nursery/batches/uploads/template';
 const INVENTORY_UPLOAD_STATUS_ENDPOINT = '/api/v1/nursery/batches/uploads/{uploadId}';
 const INVENTORY_UPLOADS_ENDPOINT = '/api/v1/nursery/batches/uploads';
 
-export const BE_SORTED_FIELDS = [
-  'species_id',
-  'species_scientificName',
-  'facilityInventories.facility_name',
-  'germinatingQuantity',
-  'hardeningOffQuantity',
-  'activeGrowthQuantity',
-  'readyQuantity',
-  'totalQuantity',
-];
-
-export const INVENTORY_FIELDS = [
-  ...BE_SORTED_FIELDS,
-  'germinatingQuantity(raw)',
-  'hardeningOffQuantity(raw)',
-  'species_commonName',
-  'totalQuantity(raw)',
-];
-
-export const FACILITY_SPECIFIC_FIELDS = [
-  'species_id',
-  'species_scientificName',
-  'species_commonName',
-  'facility_name',
-  'germinatingQuantity',
-  'hardeningOffQuantity',
-  'activeGrowthQuantity',
-  'readyQuantity',
-  'totalQuantity',
-  'germinatingQuantity(raw)',
-  'hardeningOffQuantity(raw)',
-  'readyQuantity(raw)',
-  'activeGrowthQuantity(raw)',
-  'totalQuantity(raw)',
-];
-
 /**
  * exported types
  */
@@ -75,9 +38,6 @@ export type InventoryUploadTemplate = {
 export type InventoryUploadStatusDetails = {
   uploadStatus?: GetUploadStatusResponsePayload;
 };
-
-export type UploadInventoryFileResponse =
-  paths[typeof INVENTORY_UPLOADS_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 
 export type SearchInventoryParams = {
   organizationId: number;
@@ -275,93 +235,6 @@ const searchSpeciesInventory = async ({
 
   return await SearchService.search(params);
 };
-/**
- * Search inventory
- */
-const searchInventory = async ({
-  organizationId,
-  searchSortOrder,
-  facilityIds,
-  query,
-}: SearchInventoryParams): Promise<SearchResponseElement[] | null> => {
-  const forSpecificFacilities = !!facilityIds && !!facilityIds.length;
-  const params: SearchRequestPayload = {
-    prefix: forSpecificFacilities ? 'facilityInventories' : 'inventories',
-    fields: forSpecificFacilities ? FACILITY_SPECIFIC_FIELDS : INVENTORY_FIELDS,
-    sortOrder: searchSortOrder ? [searchSortOrder] : undefined,
-    search: {
-      operation: 'and',
-      children: [
-        {
-          operation: 'field',
-          field: 'organization_id',
-          values: [organizationId],
-        },
-      ],
-    },
-    count: 0,
-  };
-
-  const searchValueChildren: FieldNodePayload[] = [];
-
-  if (query) {
-    const { type, values } = parseSearchTerm(query);
-    const scientificNameNode: FieldNodePayload = {
-      operation: 'field',
-      field: 'species_scientificName',
-      type,
-      values,
-    };
-    searchValueChildren.push(scientificNameNode);
-
-    const commonNameNode: FieldNodePayload = {
-      operation: 'field',
-      field: 'species_commonName',
-      type,
-      values,
-    };
-    searchValueChildren.push(commonNameNode);
-
-    const facilityNameNode: FieldNodePayload = {
-      operation: 'field',
-      field: forSpecificFacilities ? 'facility_name' : 'facilityInventories.facility_name',
-      type,
-      values,
-    };
-    searchValueChildren.push(facilityNameNode);
-  }
-
-  let nurseryFilter: FieldNodePayload | undefined;
-
-  if (forSpecificFacilities) {
-    nurseryFilter = {
-      operation: 'field',
-      field: 'facility_id',
-      type: 'Exact',
-      values: facilityIds.map((id) => id.toString()),
-    };
-  }
-
-  if (searchValueChildren.length) {
-    const searchValueNodes: OrNodePayload = {
-      operation: 'or',
-      children: searchValueChildren,
-    };
-
-    if (nurseryFilter) {
-      params.search.children.push({
-        operation: 'and',
-        children: [nurseryFilter, searchValueNodes],
-      } as AndNodePayload);
-    } else {
-      params.search.children.push(searchValueNodes);
-    }
-  } else if (nurseryFilter) {
-    params.search.children.push(nurseryFilter);
-  }
-
-  return await SearchService.search(params);
-};
 
 /**
  * Search inventory by nursery
@@ -461,96 +334,6 @@ const searchInventoryByNursery = async ({
 };
 
 /**
- * Search inventory
- */
-const downloadInventory = async ({
-  organizationId,
-  searchSortOrder,
-  facilityIds,
-  query,
-}: SearchInventoryParams): Promise<SearchResponseElement[] | null> => {
-  const forSpecificFacilities = !!facilityIds && !!facilityIds.length;
-  const params: SearchRequestPayload = {
-    prefix: forSpecificFacilities ? 'facilityInventories' : 'inventories',
-    fields: forSpecificFacilities
-      ? FACILITY_SPECIFIC_FIELDS.filter((field) => !field.includes('raw'))
-      : INVENTORY_FIELDS.filter((field) => !field.includes('raw')),
-    sortOrder: searchSortOrder ? [searchSortOrder] : undefined,
-    search: {
-      operation: 'and',
-      children: [
-        {
-          operation: 'field',
-          field: 'organization_id',
-          values: [organizationId],
-        },
-      ],
-    },
-    count: 1000,
-  };
-
-  const searchValueChildren: FieldNodePayload[] = [];
-
-  if (query) {
-    const { type, values } = parseSearchTerm(query);
-    const scientificNameNode: FieldNodePayload = {
-      operation: 'field',
-      field: 'species_scientificName',
-      type,
-      values,
-    };
-    searchValueChildren.push(scientificNameNode);
-
-    const commonNameNode: FieldNodePayload = {
-      operation: 'field',
-      field: 'species_commonName',
-      type,
-      values,
-    };
-    searchValueChildren.push(commonNameNode);
-
-    const facilityNameNode: FieldNodePayload = {
-      operation: 'field',
-      field: forSpecificFacilities ? 'facility_name' : 'facilityInventories.facility_name',
-      type,
-      values,
-    };
-    searchValueChildren.push(facilityNameNode);
-  }
-
-  let nurseryFilter: FieldNodePayload | undefined;
-
-  if (forSpecificFacilities) {
-    nurseryFilter = {
-      operation: 'field',
-      field: 'facility_id',
-      type: 'Exact',
-      values: facilityIds.map((id) => id.toString()),
-    };
-  }
-
-  if (searchValueChildren.length) {
-    const searchValueNodes: OrNodePayload = {
-      operation: 'or',
-      children: searchValueChildren,
-    };
-
-    if (nurseryFilter) {
-      params.search.children.push({
-        operation: 'and',
-        children: [nurseryFilter, searchValueNodes],
-      } as AndNodePayload);
-    } else {
-      params.search.children.push(searchValueNodes);
-    }
-  } else if (nurseryFilter) {
-    params.search.children.push(nurseryFilter);
-  }
-
-  return await SearchService.searchCsv(params);
-};
-
-/**
  * Exported functions
  */
 const NurseryInventoryService = {
@@ -559,8 +342,6 @@ const NurseryInventoryService = {
   getInventoryUploadStatus,
   uploadInventory,
   searchSpeciesInventory,
-  searchInventory,
-  downloadInventory,
   searchInventoryByNursery,
 };
 
