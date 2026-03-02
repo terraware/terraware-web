@@ -75,7 +75,7 @@
     "@rsbuild/plugin-type-check": "^1.3.3",
     "@rstest/core": "^0.8.5",
     "@rstest/coverage-istanbul": "^0.2.1",
-    "@terraware/web-components": "^4.1.3",
+    "@terraware/web-components": "^4.1.5",
     "@testing-library/jest-dom": "^6.0.0",
     "@testing-library/react": "^16.0.0",
     "@testing-library/user-event": "^14.4.3",

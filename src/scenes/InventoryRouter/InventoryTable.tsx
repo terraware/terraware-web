@@ -481,6 +481,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
       // Set filter variant based on column type
       if (col.type === 'number') {
         columnDef.filterVariant = 'range';
+        columnDef.sortingFn = 'alphanumeric';
       } else if (col.type === 'date') {
         columnDef.filterVariant = 'date-range';
       } else if (

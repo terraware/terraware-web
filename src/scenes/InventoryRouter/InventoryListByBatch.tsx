@@ -80,7 +80,7 @@ export default function InventoryListByBatch() {
       {
         key: 'totalQuantity(raw)',
         name: strings.TOTAL,
-        type: 'number',
+        type: 'number' as const,
         tooltipTitle: strings.TOOLTIP_TOTAL_QUANTITY,
       },
       { key: 'quantitiesMenu', name: '', type: 'string' },
