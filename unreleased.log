@@ -1,3 +1,4 @@
+0138f1c93718 SW-8129 Use raw enum field for observation count (#5351)
 659e65f6d442 Update dependency wrap-ansi to v10 (#5345)
 945db6f11781 Update Node.js to v24.14.0 (#5343)
 232c5eed6e0e Update dependency nyc to v18 (#5344)
