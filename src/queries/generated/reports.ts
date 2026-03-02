@@ -24,6 +24,16 @@ const injectedRtkApi = api.injectEndpoints({
         body: queryArg.updateAutoCalculatedIndicatorTargetRequestPayload,
       }),
     }),
+    updateAutoCalculatedIndicatorBaselineTarget: build.mutation<
+      UpdateAutoCalculatedIndicatorBaselineTargetApiResponse,
+      UpdateAutoCalculatedIndicatorBaselineTargetApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/api/v1/accelerator/projects/${queryArg.projectId}/reports/autoCalculatedIndicatorTarget/baseline`,
+        method: 'POST',
+        body: queryArg.updateAutoCalculatedIndicatorBaselineTargetRequestPayload,
+      }),
+    }),
     getAutoCalculatedIndicatorTargets: build.query<
       GetAutoCalculatedIndicatorTargetsApiResponse,
       GetAutoCalculatedIndicatorTargetsApiArg
@@ -38,6 +48,16 @@ const injectedRtkApi = api.injectEndpoints({
         url: `/api/v1/accelerator/projects/${queryArg.projectId}/reports/commonIndicatorTarget`,
         method: 'POST',
         body: queryArg.updateCommonIndicatorTargetRequestPayload,
+      }),
+    }),
+    updateCommonIndicatorBaselineTarget: build.mutation<
+      UpdateCommonIndicatorBaselineTargetApiResponse,
+      UpdateCommonIndicatorBaselineTargetApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/api/v1/accelerator/projects/${queryArg.projectId}/reports/commonIndicatorTarget/baseline`,
+        method: 'POST',
+        body: queryArg.updateCommonIndicatorBaselineTargetRequestPayload,
       }),
     }),
     getCommonIndicatorTargets: build.query<GetCommonIndicatorTargetsApiResponse, GetCommonIndicatorTargetsApiArg>({
@@ -120,6 +140,16 @@ const injectedRtkApi = api.injectEndpoints({
         url: `/api/v1/accelerator/projects/${queryArg.projectId}/reports/projectIndicatorTarget`,
         method: 'POST',
         body: queryArg.updateProjectIndicatorTargetRequestPayload,
+      }),
+    }),
+    updateProjectIndicatorBaselineTarget: build.mutation<
+      UpdateProjectIndicatorBaselineTargetApiResponse,
+      UpdateProjectIndicatorBaselineTargetApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/api/v1/accelerator/projects/${queryArg.projectId}/reports/projectIndicatorTarget/baseline`,
+        method: 'POST',
+        body: queryArg.updateProjectIndicatorBaselineTargetRequestPayload,
       }),
     }),
     getProjectIndicatorTargets: build.query<GetProjectIndicatorTargetsApiResponse, GetProjectIndicatorTargetsApiArg>({
@@ -302,6 +332,12 @@ export type UpdateAutoCalculatedIndicatorTargetApiArg = {
   projectId: number;
   updateAutoCalculatedIndicatorTargetRequestPayload: UpdateAutoCalculatedIndicatorTargetRequestPayload;
 };
+export type UpdateAutoCalculatedIndicatorBaselineTargetApiResponse =
+  /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
+export type UpdateAutoCalculatedIndicatorBaselineTargetApiArg = {
+  projectId: number;
+  updateAutoCalculatedIndicatorBaselineTargetRequestPayload: UpdateAutoCalculatedIndicatorBaselineTargetRequestPayload;
+};
 export type GetAutoCalculatedIndicatorTargetsApiResponse =
   /** status 200 The requested operation succeeded. */ GetAutoCalculatedIndicatorTargetsResponsePayload;
 export type GetAutoCalculatedIndicatorTargetsApiArg = number;
@@ -310,6 +346,12 @@ export type UpdateCommonIndicatorTargetApiResponse =
 export type UpdateCommonIndicatorTargetApiArg = {
   projectId: number;
   updateCommonIndicatorTargetRequestPayload: UpdateCommonIndicatorTargetRequestPayload;
+};
+export type UpdateCommonIndicatorBaselineTargetApiResponse =
+  /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
+export type UpdateCommonIndicatorBaselineTargetApiArg = {
+  projectId: number;
+  updateCommonIndicatorBaselineTargetRequestPayload: UpdateCommonIndicatorBaselineTargetRequestPayload;
 };
 export type GetCommonIndicatorTargetsApiResponse =
   /** status 200 The requested operation succeeded. */ GetCommonIndicatorTargetsResponsePayload;
@@ -373,6 +415,12 @@ export type UpdateProjectIndicatorTargetApiResponse =
 export type UpdateProjectIndicatorTargetApiArg = {
   projectId: number;
   updateProjectIndicatorTargetRequestPayload: UpdateProjectIndicatorTargetRequestPayload;
+};
+export type UpdateProjectIndicatorBaselineTargetApiResponse =
+  /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
+export type UpdateProjectIndicatorBaselineTargetApiArg = {
+  projectId: number;
+  updateProjectIndicatorBaselineTargetRequestPayload: UpdateProjectIndicatorBaselineTargetRequestPayload;
 };
 export type GetProjectIndicatorTargetsApiResponse =
   /** status 200 The requested operation succeeded. */ GetProjectIndicatorTargetsResponsePayload;
@@ -680,7 +728,9 @@ export type UpdateAutoCalculatedIndicatorTargetRequestPayload = {
   target?: number;
   year: number;
 };
-export type ReportAutoCalculatedIndicatorTargetPayload = {
+export type UpdateAutoCalculatedIndicatorBaselineTargetRequestPayload = {
+  baseline?: number;
+  endOfProjectTarget?: number;
   indicator:
     | 'Seeds Collected'
     | 'Seedlings'
@@ -688,26 +738,46 @@ export type ReportAutoCalculatedIndicatorTargetPayload = {
     | 'Species Planted'
     | 'Hectares Planted'
     | 'Survival Rate';
+};
+export type YearlyIndicatorTargetPayload = {
   target?: number;
   year: number;
 };
+export type AutoCalculatedIndicatorTargetsPayload = {
+  baseline?: number;
+  endOfProjectTarget?: number;
+  indicatorId:
+    | 'Seeds Collected'
+    | 'Seedlings'
+    | 'Trees Planted'
+    | 'Species Planted'
+    | 'Hectares Planted'
+    | 'Survival Rate';
+  yearlyTargets: YearlyIndicatorTargetPayload[];
+};
 export type GetAutoCalculatedIndicatorTargetsResponsePayload = {
   status: SuccessOrError;
-  targets: ReportAutoCalculatedIndicatorTargetPayload[];
+  targets: AutoCalculatedIndicatorTargetsPayload[];
 };
 export type UpdateCommonIndicatorTargetRequestPayload = {
   indicatorId: number;
   target?: number;
   year: number;
 };
-export type ReportCommonIndicatorTargetPayload = {
+export type UpdateCommonIndicatorBaselineTargetRequestPayload = {
+  baseline?: number;
+  endOfProjectTarget?: number;
   indicatorId: number;
-  target?: number;
-  year: number;
+};
+export type CommonIndicatorTargetsPayload = {
+  baseline?: number;
+  endOfProjectTarget?: number;
+  indicatorId: number;
+  yearlyTargets: YearlyIndicatorTargetPayload[];
 };
 export type GetCommonIndicatorTargetsResponsePayload = {
   status: SuccessOrError;
-  targets: ReportCommonIndicatorTargetPayload[];
+  targets: CommonIndicatorTargetsPayload[];
 };
 export type ExistingAcceleratorReportConfigPayload = {
   configId: number;
@@ -815,14 +885,20 @@ export type UpdateProjectIndicatorTargetRequestPayload = {
   target?: number;
   year: number;
 };
-export type ReportProjectIndicatorTargetPayload = {
+export type UpdateProjectIndicatorBaselineTargetRequestPayload = {
+  baseline?: number;
+  endOfProjectTarget?: number;
   indicatorId: number;
-  target?: number;
-  year: number;
+};
+export type ProjectIndicatorTargetsPayload = {
+  baseline?: number;
+  endOfProjectTarget?: number;
+  indicatorId: number;
+  yearlyTargets: YearlyIndicatorTargetPayload[];
 };
 export type GetProjectIndicatorTargetsResponsePayload = {
   status: SuccessOrError;
-  targets: ReportProjectIndicatorTargetPayload[];
+  targets: ProjectIndicatorTargetsPayload[];
 };
 export type UpdateProjectMetricTargetRequestPayload = {
   metricId: number;
@@ -977,9 +1053,11 @@ export const {
   useListAcceleratorReportsQuery,
   useLazyListAcceleratorReportsQuery,
   useUpdateAutoCalculatedIndicatorTargetMutation,
+  useUpdateAutoCalculatedIndicatorBaselineTargetMutation,
   useGetAutoCalculatedIndicatorTargetsQuery,
   useLazyGetAutoCalculatedIndicatorTargetsQuery,
   useUpdateCommonIndicatorTargetMutation,
+  useUpdateCommonIndicatorBaselineTargetMutation,
   useGetCommonIndicatorTargetsQuery,
   useLazyGetCommonIndicatorTargetsQuery,
   useListAcceleratorReportConfigQuery,
@@ -996,6 +1074,7 @@ export const {
   useCreateProjectMetricMutation,
   useUpdateProjectMetricMutation,
   useUpdateProjectIndicatorTargetMutation,
+  useUpdateProjectIndicatorBaselineTargetMutation,
   useGetProjectIndicatorTargetsQuery,
   useLazyGetProjectIndicatorTargetsQuery,
   useUpdateProjectMetricTargetMutation,

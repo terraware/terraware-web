@@ -6,19 +6,25 @@ import { EditableTable, EditableTableColumn } from '@terraware/web-components';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useOrganization, useUser } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
-import { useListStandardMetricQuery, useListSystemMetricsQuery } from 'src/queries/generated/reportMetrics';
+import {
+  AutoCalculatedIndicatorPayload,
+  useLazyListProjectIndicatorsQuery,
+  useListAutoCalculatedIndicatorsQuery,
+  useListCommonIndicatorsQuery,
+} from 'src/queries/generated/indicators';
 import {
   useLazyGetAcceleratorReportYearsQuery,
-  useLazyGetProjectMetricTargetsQuery,
-  useLazyGetStandardMetricTargetsQuery,
-  useLazyGetSystemMetricTargetsQuery,
-  useLazyListProjectMetricsQuery,
-  useUpdateProjectMetricTargetMutation,
-  useUpdateStandardMetricTargetMutation,
-  useUpdateSystemMetricTargetMutation,
+  useLazyGetAutoCalculatedIndicatorTargetsQuery,
+  useLazyGetCommonIndicatorTargetsQuery,
+  useLazyGetProjectIndicatorTargetsQuery,
+  useUpdateAutoCalculatedIndicatorBaselineTargetMutation,
+  useUpdateAutoCalculatedIndicatorTargetMutation,
+  useUpdateCommonIndicatorBaselineTargetMutation,
+  useUpdateCommonIndicatorTargetMutation,
+  useUpdateProjectIndicatorBaselineTargetMutation,
+  useUpdateProjectIndicatorTargetMutation,
 } from 'src/queries/generated/reports';
 import strings from 'src/strings';
-import { MetricType, SystemMetricName } from 'src/types/AcceleratorReport';
 import useSnackbar from 'src/utils/useSnackbar';
 
 export type RowMetric = {
@@ -27,7 +33,10 @@ export type RowMetric = {
   type: string;
   component: string;
   id: number;
-  metricType: MetricType;
+  metricType: 'projectIndicator' | 'commonIndicator' | 'autoCalculatedIndicator';
+  baseline?: number;
+  endOfProjectTarget?: number;
+  indicatorSystemName?: string;
   [key: string]: string | number | undefined;
 };
 
@@ -41,16 +50,21 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
   const snackbar = useSnackbar();
 
   const [getReportsYears, getReportsYearsResponse] = useLazyGetAcceleratorReportYearsQuery();
-  const [listProjectMetrics, listProjectMetricsResponse] = useLazyListProjectMetricsQuery();
-  const listStandardMetricsResponse = useListStandardMetricQuery();
-  const listSystemMetricsResponse = useListSystemMetricsQuery();
-  const [updateProjectMetricTarget] = useUpdateProjectMetricTargetMutation();
-  const [updateStandardMetricTarget] = useUpdateStandardMetricTargetMutation();
-  const [updateSystemMetricTarget] = useUpdateSystemMetricTargetMutation();
+  const [listProjectIndicators, listProjectIndicatorsResponse] = useLazyListProjectIndicatorsQuery();
+  const listAutoCalculatedIndicatorsResponse = useListAutoCalculatedIndicatorsQuery();
+  const listCommonIndicatorsResponse = useListCommonIndicatorsQuery();
 
-  const [listProjectMetricTargets, listProjectMetricTargetsResponse] = useLazyGetProjectMetricTargetsQuery();
-  const [listStandardMetricTargets, listStandardMetricTargetsResponse] = useLazyGetStandardMetricTargetsQuery();
-  const [listSystemMetricTargets, listSystemMetricTargetsResponse] = useLazyGetSystemMetricTargetsQuery();
+  const [updateProjectIndicatorTarget] = useUpdateProjectIndicatorTargetMutation();
+  const [updateCommonIndicatorTarget] = useUpdateCommonIndicatorTargetMutation();
+  const [updateAutoCalculatedIndicatorTarget] = useUpdateAutoCalculatedIndicatorTargetMutation();
+  const [updateProjectIndicatorBaselineTarget] = useUpdateProjectIndicatorBaselineTargetMutation();
+  const [updateCommonIndicatorBaselineTarget] = useUpdateCommonIndicatorBaselineTargetMutation();
+  const [updateAutoCalculatedIndicatorBaselineTarget] = useUpdateAutoCalculatedIndicatorBaselineTargetMutation();
+
+  const [listProjectIndicatorTargets, listProjectIndicatorTargetsResponse] = useLazyGetProjectIndicatorTargetsQuery();
+  const [listCommonIndicatorTargets, listCommonIndicatorTargetsResponse] = useLazyGetCommonIndicatorTargetsQuery();
+  const [listAutoCalculatedIndicatorTargets, listAutoCalculatedIndicatorTargetsResponse] =
+    useLazyGetAutoCalculatedIndicatorTargetsQuery();
 
   const isAllowedUpdateReportsTargets = useMemo(
     () => isAllowed('UPDATE_REPORTS_TARGETS', { organization: selectedOrganization }),
@@ -67,117 +81,115 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
     }
   }, [getReportsYearsResponse.data?.years]);
 
-  const projectMetrics = useMemo(
-    () => listProjectMetricsResponse.data?.metrics ?? [],
-    [listProjectMetricsResponse.data?.metrics]
+  const projectIndicators = useMemo(
+    () => listProjectIndicatorsResponse.data?.indicators ?? [],
+    [listProjectIndicatorsResponse.data?.indicators]
   );
-  const standardMetrics = useMemo(
-    () => listStandardMetricsResponse.data?.metrics ?? [],
-    [listStandardMetricsResponse.data?.metrics]
+  const autoCalculatedIndicators = useMemo(
+    () => listAutoCalculatedIndicatorsResponse.data?.indicators ?? [],
+    [listAutoCalculatedIndicatorsResponse.data?.indicators]
   );
-  const systemMetrics = useMemo(
-    () => listSystemMetricsResponse.data?.metrics ?? [],
-    [listSystemMetricsResponse.data?.metrics]
-  );
-
-  const projectMetricTargets = useMemo(
-    () => listProjectMetricTargetsResponse.data?.targets ?? [],
-    [listProjectMetricTargetsResponse.data?.targets]
-  );
-  const standardMetricTargets = useMemo(
-    () => listStandardMetricTargetsResponse.data?.targets ?? [],
-    [listStandardMetricTargetsResponse.data?.targets]
-  );
-  const systemMetricTargets = useMemo(
-    () => listSystemMetricTargetsResponse.data?.targets ?? [],
-    [listSystemMetricTargetsResponse.data?.targets]
+  const commonIndicators = useMemo(
+    () => listCommonIndicatorsResponse.data?.indicators ?? [],
+    [listCommonIndicatorsResponse.data?.indicators]
   );
 
-  const allMetricRows = useMemo((): RowMetric[] => {
-    const systemMetricRows = systemMetrics.map((sm): RowMetric => {
-      const metricTargets = systemMetricTargets.filter((metricTarget) => metricTarget.metric === sm.metric);
+  const projectIndicatorTargets = useMemo(
+    () => listProjectIndicatorTargetsResponse.data?.targets ?? [],
+    [listProjectIndicatorTargetsResponse.data?.targets]
+  );
+  const commonIndicatorTargets = useMemo(
+    () => listCommonIndicatorTargetsResponse.data?.targets ?? [],
+    [listCommonIndicatorTargetsResponse.data?.targets]
+  );
+  const autoCalculatedIndicatorTargets = useMemo(
+    () => listAutoCalculatedIndicatorTargetsResponse.data?.targets ?? [],
+    [listAutoCalculatedIndicatorTargetsResponse.data?.targets]
+  );
+
+  const allIndicatorRows = useMemo((): RowMetric[] => {
+    const projectIndicatorRows = projectIndicators.map((ind): RowMetric => {
+      const targets = projectIndicatorTargets.find((t) => t.indicatorId === ind.id);
       const targetByYear: { [yearKey: string]: number | undefined } = {};
-
-      metricTargets.forEach((metricTarget) => {
-        const yearKey = `year${metricTarget.year}`;
-        targetByYear[yearKey] = metricTarget.target;
+      targets?.yearlyTargets.forEach((yt) => {
+        targetByYear[`year${yt.year}`] = yt.target;
       });
-
       return {
-        name: sm.metric,
-        type: sm.type,
-        component: sm.component,
+        name: ind.name,
+        type: ind.level,
+        component: ind.category,
+        id: ind.id,
+        description: ind.description,
+        metricType: 'projectIndicator',
+        baseline: targets?.baseline,
+        endOfProjectTarget: targets?.endOfProjectTarget,
+        ...targetByYear,
+      };
+    });
+
+    const commonIndicatorRows = commonIndicators.map((ind): RowMetric => {
+      const targets = commonIndicatorTargets.find((t) => t.indicatorId === ind.id);
+      const targetByYear: { [yearKey: string]: number | undefined } = {};
+      targets?.yearlyTargets.forEach((yt) => {
+        targetByYear[`year${yt.year}`] = yt.target;
+      });
+      return {
+        name: ind.name,
+        type: ind.level,
+        component: ind.category,
+        id: ind.id,
+        description: ind.description,
+        metricType: 'commonIndicator',
+        baseline: targets?.baseline,
+        endOfProjectTarget: targets?.endOfProjectTarget,
+        ...targetByYear,
+      };
+    });
+
+    const autoCalculatedIndicatorRows = autoCalculatedIndicators.map((ind): RowMetric => {
+      const targets = autoCalculatedIndicatorTargets.find((t) => t.indicatorId === ind.indicator);
+      const targetByYear: { [yearKey: string]: number | undefined } = {};
+      targets?.yearlyTargets.forEach((yt) => {
+        targetByYear[`year${yt.year}`] = yt.target;
+      });
+      return {
+        name: ind.name,
+        type: ind.level,
+        component: ind.category,
         id: -1,
-        description: sm.description,
-        metricType: 'system',
+        description: ind.description,
+        metricType: 'autoCalculatedIndicator',
+        indicatorSystemName: ind.indicator,
+        baseline: targets?.baseline,
+        endOfProjectTarget: targets?.endOfProjectTarget,
         ...targetByYear,
       };
     });
 
-    const projectMetricRows = projectMetrics.map((pm): RowMetric => {
-      const metricTargets = projectMetricTargets.filter((metricTarget) => metricTarget.metricId === pm.id);
-      const targetByYear: { [yearKey: string]: number | undefined } = {};
-
-      metricTargets.forEach((metricTarget) => {
-        const yearKey = `year${metricTarget.year}`;
-        targetByYear[yearKey] = metricTarget.target;
-      });
-
-      return {
-        name: pm.name,
-        type: pm.type,
-        component: pm.component,
-        id: pm.id,
-        description: pm.description,
-        metricType: 'project',
-        ...targetByYear,
-      };
-    });
-
-    const standardMetricRows = standardMetrics.map((sm): RowMetric => {
-      const metricTargets = standardMetricTargets.filter((metricTarget) => metricTarget.metricId === sm.id);
-      const targetByYear: { [yearKey: string]: number | undefined } = {};
-
-      metricTargets.forEach((metricTarget) => {
-        const yearKey = `year${metricTarget.year}`;
-        targetByYear[yearKey] = metricTarget.target;
-      });
-
-      return {
-        name: sm.name,
-        type: sm.type,
-        component: sm.component,
-        id: sm.id,
-        description: sm.description,
-        metricType: 'standard',
-        ...targetByYear,
-      };
-    });
-
-    return [...systemMetricRows, ...standardMetricRows, ...projectMetricRows];
+    return [...projectIndicatorRows, ...commonIndicatorRows, ...autoCalculatedIndicatorRows];
   }, [
-    projectMetricTargets,
-    projectMetrics,
-    standardMetricTargets,
-    standardMetrics,
-    systemMetricTargets,
-    systemMetrics,
+    autoCalculatedIndicatorTargets,
+    autoCalculatedIndicators,
+    commonIndicatorTargets,
+    commonIndicators,
+    projectIndicatorTargets,
+    projectIndicators,
   ]);
 
   useEffect(() => {
     if (projectId) {
       void getReportsYears(projectId, true);
-      void listProjectMetrics(projectId, true);
-      void listProjectMetricTargets(projectId, true);
-      void listStandardMetricTargets(projectId, true);
-      void listSystemMetricTargets(projectId, true);
+      void listProjectIndicators(projectId, true);
+      void listProjectIndicatorTargets(projectId, true);
+      void listCommonIndicatorTargets(projectId, true);
+      void listAutoCalculatedIndicatorTargets(projectId, true);
     }
   }, [
     getReportsYears,
-    listProjectMetricTargets,
-    listProjectMetrics,
-    listStandardMetricTargets,
-    listSystemMetricTargets,
+    listAutoCalculatedIndicatorTargets,
+    listCommonIndicatorTargets,
+    listProjectIndicatorTargets,
+    listProjectIndicators,
     projectId,
   ]);
 
@@ -195,52 +207,191 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
 
       try {
         switch (row.metricType) {
-          case 'project':
-            await updateProjectMetricTarget({
+          case 'projectIndicator':
+            await updateProjectIndicatorTarget({
               projectId,
-              updateProjectMetricTargetRequestPayload: {
-                metricId: row.id,
+              updateProjectIndicatorTargetRequestPayload: {
+                indicatorId: row.id,
                 target: newTarget,
                 year,
               },
             }).unwrap();
             break;
-          case 'standard':
-            await updateStandardMetricTarget({
+          case 'commonIndicator':
+            await updateCommonIndicatorTarget({
               projectId,
-              updateStandardMetricTargetRequestPayload: {
-                metricId: row.id,
+              updateCommonIndicatorTargetRequestPayload: {
+                indicatorId: row.id,
                 target: newTarget,
                 year,
               },
             }).unwrap();
             break;
-          case 'system':
-            await updateSystemMetricTarget({
+          case 'autoCalculatedIndicator':
+            await updateAutoCalculatedIndicatorTarget({
               projectId,
-              updateSystemMetricTargetRequestPayload: {
-                metric: row.name as SystemMetricName,
+              updateAutoCalculatedIndicatorTargetRequestPayload: {
+                indicator: row.indicatorSystemName as AutoCalculatedIndicatorPayload['indicator'],
                 target: newTarget,
                 year,
               },
             }).unwrap();
+            break;
         }
         snackbar.toastSuccess(strings.CHANGES_SAVED);
       } catch (error) {
         snackbar.toastError();
       }
     },
-    [projectId, snackbar, updateProjectMetricTarget, updateStandardMetricTarget, updateSystemMetricTarget]
+    [
+      projectId,
+      snackbar,
+      updateAutoCalculatedIndicatorTarget,
+      updateCommonIndicatorTarget,
+      updateProjectIndicatorTarget,
+    ]
+  );
+
+  const onSaveBaseline = useCallback(
+    async (row: RowMetric, value: any) => {
+      if (!projectId) {
+        return;
+      }
+
+      const newBaseline = value === '' || value === null || value === undefined ? undefined : Number(value);
+      if (newBaseline !== undefined && isNaN(newBaseline)) {
+        snackbar.toastError();
+        return;
+      }
+
+      try {
+        switch (row.metricType) {
+          case 'projectIndicator':
+            await updateProjectIndicatorBaselineTarget({
+              projectId,
+              updateProjectIndicatorBaselineTargetRequestPayload: {
+                indicatorId: row.id,
+                baseline: newBaseline,
+                endOfProjectTarget: row.endOfProjectTarget,
+              },
+            }).unwrap();
+            break;
+          case 'commonIndicator':
+            await updateCommonIndicatorBaselineTarget({
+              projectId,
+              updateCommonIndicatorBaselineTargetRequestPayload: {
+                indicatorId: row.id,
+                baseline: newBaseline,
+                endOfProjectTarget: row.endOfProjectTarget,
+              },
+            }).unwrap();
+            break;
+          case 'autoCalculatedIndicator':
+            await updateAutoCalculatedIndicatorBaselineTarget({
+              projectId,
+              updateAutoCalculatedIndicatorBaselineTargetRequestPayload: {
+                indicator: row.indicatorSystemName as AutoCalculatedIndicatorPayload['indicator'],
+                baseline: newBaseline,
+                endOfProjectTarget: row.endOfProjectTarget,
+              },
+            }).unwrap();
+            break;
+          default:
+            return;
+        }
+        snackbar.toastSuccess(strings.CHANGES_SAVED);
+      } catch (error) {
+        snackbar.toastError();
+      }
+    },
+    [
+      projectId,
+      snackbar,
+      updateAutoCalculatedIndicatorBaselineTarget,
+      updateCommonIndicatorBaselineTarget,
+      updateProjectIndicatorBaselineTarget,
+    ]
+  );
+
+  const onSaveEndOfProjectTarget = useCallback(
+    async (row: RowMetric, value: any) => {
+      if (!projectId) {
+        return;
+      }
+
+      const newEndOfProjectTarget = value === '' || value === null || value === undefined ? undefined : Number(value);
+      if (newEndOfProjectTarget !== undefined && isNaN(newEndOfProjectTarget)) {
+        snackbar.toastError();
+        return;
+      }
+
+      try {
+        switch (row.metricType) {
+          case 'projectIndicator':
+            await updateProjectIndicatorBaselineTarget({
+              projectId,
+              updateProjectIndicatorBaselineTargetRequestPayload: {
+                indicatorId: row.id,
+                baseline: row.baseline,
+                endOfProjectTarget: newEndOfProjectTarget,
+              },
+            }).unwrap();
+            break;
+          case 'commonIndicator':
+            await updateCommonIndicatorBaselineTarget({
+              projectId,
+              updateCommonIndicatorBaselineTargetRequestPayload: {
+                indicatorId: row.id,
+                baseline: row.baseline,
+                endOfProjectTarget: newEndOfProjectTarget,
+              },
+            }).unwrap();
+            break;
+          case 'autoCalculatedIndicator':
+            await updateAutoCalculatedIndicatorBaselineTarget({
+              projectId,
+              updateAutoCalculatedIndicatorBaselineTargetRequestPayload: {
+                indicator: row.indicatorSystemName as AutoCalculatedIndicatorPayload['indicator'],
+                baseline: row.baseline,
+                endOfProjectTarget: newEndOfProjectTarget,
+              },
+            }).unwrap();
+            break;
+          default:
+            return;
+        }
+        snackbar.toastSuccess(strings.CHANGES_SAVED);
+      } catch (error) {
+        snackbar.toastError();
+      }
+    },
+    [
+      projectId,
+      snackbar,
+      updateAutoCalculatedIndicatorBaselineTarget,
+      updateCommonIndicatorBaselineTarget,
+      updateProjectIndicatorBaselineTarget,
+    ]
   );
 
   const tableColumns = useMemo(() => {
     const baseColumns: EditableTableColumn<RowMetric>[] = [
       {
         id: 'name',
-        header: strings.METRIC,
+        header: strings.INDICATOR_NAME,
         accessorKey: 'name',
         size: 300,
         enableEditing: false,
+      },
+      {
+        id: 'baseline',
+        header: strings.BASELINE,
+        accessorKey: 'baseline',
+        enableEditing: isAllowedUpdateReportsTargets,
+        editConfig: {
+          editVariant: 'text',
+          onSave: (row: RowMetric, value: any) => onSaveBaseline(row, value),
+        },
       },
     ];
 
@@ -268,20 +419,30 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
         accessorKey: 'component',
         enableEditing: false,
       },
+      {
+        id: 'endOfProjectTarget',
+        header: strings.END_OF_PROJECT_TARGET,
+        accessorKey: 'endOfProjectTarget',
+        enableEditing: isAllowedUpdateReportsTargets,
+        editConfig: {
+          editVariant: 'text',
+          onSave: (row: RowMetric, value: any) => onSaveEndOfProjectTarget(row, value),
+        },
+      },
     ];
 
     return [...baseColumns, ...yearColumns, ...lastColumns];
-  }, [yearRange, isAllowedUpdateReportsTargets, onSaveYearTarget]);
+  }, [yearRange, isAllowedUpdateReportsTargets, onSaveYearTarget, onSaveBaseline, onSaveEndOfProjectTarget]);
 
   const columnOrder = useMemo(() => {
     const yearIds = yearRange.map((year) => `year${year}`);
-    return ['name', ...yearIds, 'type', 'component'];
+    return ['name', 'baseline', ...yearIds, 'type', 'component', 'endOfProjectTarget'];
   }, [yearRange]);
 
   return (
     <EditableTable
       columns={tableColumns}
-      data={allMetricRows}
+      data={allIndicatorRows}
       enableEditing={true}
       enableSorting={true}
       enableGlobalFilter={true}
@@ -301,6 +462,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
         initialState: {
           columnPinning: {
             left: ['name'],
+            right: ['endOfProjectTarget'],
           },
         },
         muiTableContainerProps: {

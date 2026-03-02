@@ -217,6 +217,7 @@ AWAITING_PROCESSING,Pendiente procesamiento,802b73ca
 BACK,Atrás,2e8211b0
 BACK_TO_TERRAWARE,Volver a Terraware,a22174ad
 BAG_ID,ID de Bolsa,1eaa1440
+BASELINE,Línea base,332af00e
 BATCH,Lote,9fdfdd9b
 BATCH_DETAILS,Detalles del lote,9ebc8179
 BATCH_HISTORY_TYPE_DETAILS_EDITED,Detalles editados,4e7e4bd8
@@ -630,6 +631,7 @@ END_DRYING_REMINDER_OFF,Recordatorio de final de secado desactivado,dae3f806
 END_OBSERVATION,Finalizar observación,1492c01e
 END_OBSERVATION_MODAL_MESSAGE,Finalizar una observación cuando no hay parcelas observadas o parcialmente observadas dará lugar a datos de resumen sesgados.,393e8747
 END_OBSERVATION_MODAL_QUESTION,¿Estás seguro de que quieres terminar la observación {0} anticipadamente?,5b3a4dde
+END_OF_PROJECT_TARGET,Meta al final del proyecto,02dc9d31
 END_TIME,Hora de finalización,7c0eb9ca
 ENDANGERED,En peligro de extinción,1a1991aa
 ENDED,Finalizado,8291f981
