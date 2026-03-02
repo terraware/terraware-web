@@ -25,7 +25,7 @@ const injectedRtkApi = api.injectEndpoints({
         if (args.observationType) {
           searchChildren.push({
             operation: 'field',
-            field: 'type',
+            field: 'type(raw)',
             values: [`${args.observationType}`],
           });
         }
