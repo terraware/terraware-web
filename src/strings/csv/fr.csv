@@ -216,6 +216,7 @@ AWAITING_PROCESSING,En attente de traitement,802b73ca
 BACK,Retour,2e8211b0
 BACK_TO_TERRAWARE,Retour à Terraware,a22174ad
 BAG_ID,Identifiant du sac,1eaa1440
+BASELINE,Référence,332af00e
 BATCH,Lot,9fdfdd9b
 BATCH_DETAILS,Détails du lot,9ebc8179
 BATCH_HISTORY_TYPE_DETAILS_EDITED,Informations éditées,4e7e4bd8
@@ -629,6 +630,7 @@ END_DRYING_REMINDER_OFF,Rappel de fin de séchage désactivé,dae3f806
 END_OBSERVATION,Terminer l'observation,1492c01e
 END_OBSERVATION_MODAL_MESSAGE,Mettre fin à une observation lorsqu'il n'y a pas de parcelles observées ou partiellement observées entraînera une distorsion des données récapitulatives.,393e8747
 END_OBSERVATION_MODAL_QUESTION,Voulez-vous vraiment mettre fin prématurément à l'observation {0} ?,5b3a4dde
+END_OF_PROJECT_TARGET,Objectif de fin de projet,02dc9d31
 END_TIME,Heure de fin,7c0eb9ca
 ENDANGERED,En danger,1a1991aa
 ENDED,Terminé,8291f981
