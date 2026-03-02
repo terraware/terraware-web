@@ -230,7 +230,7 @@
   "resolutions": {
     "@babel/traverse": "7.29.0",
     "fork-ts-checker-webpack-plugin": "^9.0.0",
-    "wrap-ansi": "7.0.0",
+    "wrap-ansi": "10.0.0",
     "string-width": "8.2.0",
     "strip-ansi": "6.0.1"
   }
