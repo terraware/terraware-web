@@ -15,7 +15,6 @@ import { useGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import { useGetT0SiteDataQuery, useGetT0SpeciesForPlantingSiteQuery } from 'src/queries/generated/t0';
 import { useGetPlotsWithObservationsQuery } from 'src/queries/search/t0';
 import { PlotsWithObservationsSearchResult } from 'src/redux/features/tracking/trackingThunks';
-import strings from 'src/strings';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
 import PermanentPlotsTab from './PermanentPlotsTab';
@@ -24,7 +23,7 @@ import TemporaryPlotsTab from './TemporaryPlotsTab';
 
 const SurvivalRateSettings = () => {
   const navigate = useSyncNavigate();
-  const { activeLocale } = useLocalization();
+  const { strings } = useLocalization();
   const { isAllowed } = useUser();
   const { isMobile } = useDeviceInfo();
   const params = useParams<{ plantingSiteId: string }>();
@@ -141,12 +140,8 @@ const SurvivalRateSettings = () => {
     return totalSet;
   }, [t0SiteData, withdrawnSpeciesPlots, strataWithObservations]);
 
-  const tabs = useMemo(() => {
-    if (!activeLocale) {
-      return [];
-    }
-
-    const _tabs = [
+  const tabs = useMemo(
+    () => [
       {
         id: 'permanent',
         label: strings.PERMANENT_PLOTS,
@@ -159,10 +154,7 @@ const SurvivalRateSettings = () => {
           />
         ),
       },
-    ];
-
-    if ((temporaryPlots?.length || 0) > 0) {
-      _tabs.push({
+      {
         id: 'temporary',
         label: strings.TEMPORARY_PLOTS,
         children: (
@@ -173,19 +165,12 @@ const SurvivalRateSettings = () => {
             including={t0SiteData?.survivalRateIncludesTempPlots}
           />
         ),
-      });
-    }
-
-    return _tabs;
-  }, [
-    activeLocale,
-    permanentPlots,
-    plantingSiteId,
-    t0SiteData,
-    temporaryPlots,
-    withdrawnSpeciesPlots,
-    strataWithObservations,
-  ]);
+        disabled: (temporaryPlots?.length || 0) > 0,
+        tooltip: (temporaryPlots?.length || 0) === 0 ? strings.NO_TEMPORARY_PLOTS_SURVIVAL_TOOLTIP : undefined,
+      },
+    ],
+    [strings, permanentPlots, plantingSiteId, t0SiteData, temporaryPlots, withdrawnSpeciesPlots, strataWithObservations]
+  );
 
   const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'permanent',
@@ -203,11 +188,11 @@ const SurvivalRateSettings = () => {
   const crumbs: Crumb[] = useMemo(
     () => [
       {
-        name: activeLocale ? strings.OBSERVATIONS : '',
+        name: strings.OBSERVATIONS,
         to: APP_PATHS.OBSERVATIONS,
       },
     ],
-    [activeLocale]
+    [strings]
   );
 
   return (
