@@ -1,3 +1,7 @@
+659e65f6d442 Update dependency wrap-ansi to v10 (#5345)
+945db6f11781 Update Node.js to v24.14.0 (#5343)
+232c5eed6e0e Update dependency nyc to v18 (#5344)
+8ccce9d17174 Update actions/upload-artifact action to v7 (#5349)
 f601ed5f07a4 Fix rtk query generation (#5342)
 aed6881a4fd6 SW-8101 Create new indicators table (#5337)
 8efbd0b601a0 Do not request all set data if planting site id is -1 (#5341)
