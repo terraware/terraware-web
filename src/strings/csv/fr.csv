@@ -712,6 +712,7 @@ FILTER_BY_PROJECT,Filtrer par projet,cc5c10c0
 FILTER_SHOW_EMPTY_BATCHES,Afficher les lots vides,f5c7fca1
 FILTER_SHOW_EMPTY_NURSERIES,Afficher les pépinières sans inventaire,6d351b84
 FILTER_SHOW_EMPTY_SPECIES,Afficher les espèces sans inventaire,0de9ee0c
+FILTERED,filtré,4ab1a8a2
 FILTERS,Filtres,c3d13364
 FILTERS_APPLIED,Filtres appliqués,75d4dd7e
 FINAL_QTY,Qté finale,47530c05
@@ -888,6 +889,7 @@ INVENTORY_IMPORT_COMPLETE,Importation des données d'inventaire achevée !,760bb
 INVENTORY_ONBOARDING_NURSERIES_MSG,Définir les pépinières affectées à l'inventaire des semis,393e62d3
 INVENTORY_ONBOARDING_SPECIES_MSG,Définir une liste d'espèces utilisées dans votre inventaire des semis,bafd0703
 INVENTORY_PAGE_DESCRIPTION,Gérer votre Inventaire.,9e99a759
+INVENTORY_WITHDRAWALS,Retraits d'inventaire,cefda57f
 INVESTMENT_COMMITTEE_VOTES,Votes du comité d'investissement,a7c64c6c
 INVITATION_PENDING,Invitation en attente,6b64d319
 INVITE_FUNDER,Inviter le bailleur de fonds,d885523f
@@ -1225,7 +1227,6 @@ NURSERY_MORTALITY_RATE,Taux de mortalité de la pépinière,feb99b18
 NURSERY_REQUIRED,Pépinière *,809fa5b6
 NURSERY_TRANSFER,Transfert de pépinière,7b6b8d82
 NURSERY_TRANSFERS_REQUIRE_DESTINATIONS,Les transferts de pépinières nécessitent une pépinière d'origine et une pépinière de destination.,7fe70d84
-NURSERY_WITHDRAWALS,Retraits en pépinière,754c7946
 OBSERVATION,Observation,ac4f24f0
 OBSERVATION_DATA,Données d’observation,7e9f4079
 OBSERVATION_DATE,Date de l’observation,62a4f110

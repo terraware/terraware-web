@@ -1,3 +1,5 @@
+import { DateTime } from 'luxon';
+
 import { PlantingProgress } from 'src/redux/features/plantings/plantingsSelectors';
 import strings from 'src/strings';
 import { downloadCsv, makeCsv } from 'src/utils/csv';
@@ -98,12 +100,15 @@ const makeNurseryWithdrawalResultsCsv = ({
 };
 
 export const exportNurseryWithdrawalResults = async ({
+  isFiltered,
   nurseryWithdrawalResults,
 }: {
+  isFiltered: boolean;
   nurseryWithdrawalResults: NurseryWithdrawalResults;
 }) => {
-  const nurseryName = (nurseryWithdrawalResults?.[0]?.facility_name as string) || strings.UNKNOWN;
-  const filename = `${nurseryName}-${strings.NURSERY_WITHDRAWALS}`;
+  const today = DateTime.now().toFormat('yyyy-MM-dd');
+  const filteredSuffix = isFiltered ? `_${strings.FILTERED}` : '';
+  const filename = `${strings.INVENTORY_WITHDRAWALS}_${today}${filteredSuffix}`;
   const fileBlob = makeNurseryWithdrawalResultsCsv({ nurseryWithdrawalResults });
   const fileContent = await fileBlob.text();
 
