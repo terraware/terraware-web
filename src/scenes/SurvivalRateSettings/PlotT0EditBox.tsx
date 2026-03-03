@@ -495,7 +495,7 @@ const PlotT0EditBox = ({
                     <th style={{ textAlign: 'left', width: '40%' }}>
                       <Box display='flex'>
                         {strings.SPECIES}
-                        <IconTooltip title={strings.SPECIES_MANUAL_SURVIVAL_RATE_TOOLTIP} />
+                        <IconTooltip title={strings.SPECIES_MANUAL_PLOT_SURVIVAL_RATE_TOOLTIP} />
                       </Box>
                     </th>
                     <th style={{ textAlign: 'left', width: '10%' }}>
