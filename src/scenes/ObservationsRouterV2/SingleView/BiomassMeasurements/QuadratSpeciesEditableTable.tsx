@@ -17,7 +17,7 @@ import {
 import { QuadratPosition } from './QuadratNotesComponent';
 
 type SpeciesRow = {
-  abundancePercent?: number;
+  abundanceCount?: number;
   speciesId?: number;
   speciesName?: string;
   scientificName?: string;
@@ -89,7 +89,7 @@ export default function QuadratSpeciesEditableTable({
         enableEditing: false,
       },
       {
-        accessorKey: 'abundancePercent',
+        accessorKey: 'abundanceCount',
         header: strings.HERBACEOUS_ABUNDANCE_SQUARE_COUNT,
         muiEditTextFieldProps: ({ row, table: iTable }) => {
           return {
@@ -174,7 +174,7 @@ export default function QuadratSpeciesEditableTable({
       const foundSpecies = availableSpecies.find((avSpecies) => avSpecies.id === sp.speciesId);
       return {
         ...sp,
-        abundancePercentCalculated: sp.abundancePercent ? sp.abundancePercent * 4 : undefined,
+        abundancePercentCalculated: sp.abundanceCount ? sp.abundanceCount * 4 : undefined,
         speciesName: foundSpecies?.scientificName || sp.scientificName || sp.speciesName,
       };
     });

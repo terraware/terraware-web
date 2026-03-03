@@ -441,7 +441,9 @@ export type CompleteAdHocObservationResponsePayload = {
   status: SuccessOrError;
 };
 export type NewBiomassQuadratSpeciesPayload = {
-  abundancePercent: number;
+  abundanceCount?: number;
+  /** Use abundanceCount instead. */
+  abundancePercent?: number;
   speciesId?: number;
   speciesName?: string;
 };
@@ -674,6 +676,8 @@ export type ObservationMonitoringPlotResultsPayload = {
   unknownSpecies?: ObservationSpeciesResultsPayload;
 };
 export type ExistingBiomassQuadratSpeciesPayload = {
+  abundanceCount: number;
+  /** Use abundanceCount instead. */
   abundancePercent: number;
   isInvasive: boolean;
   isThreatened: boolean;
