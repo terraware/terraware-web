@@ -21,7 +21,6 @@ import { useLazyGetAllT0SiteDataSetQuery } from 'src/queries/generated/t0';
 import { useLazyGetPlotsWithObservationsQuery } from 'src/queries/search/t0';
 import { ObservationState, getStatus } from 'src/types/Observations';
 import { SearchSortOrder } from 'src/types/Search';
-import { getShortDate } from 'src/utils/dateFormatter';
 import { isAdmin } from 'src/utils/organization';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
@@ -53,7 +52,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
   const { selectedOrganization } = useOrganization();
   const defaultTimezone = useDefaultTimeZone().get().id;
   const scheduleObservationsEnabled = isAdmin(selectedOrganization);
-  const { activeLocale, strings } = useLocalization();
+  const { strings } = useLocalization();
   const { isMobile } = useDeviceInfo();
   const navigate = useSyncNavigate();
   const [selectedPlotSelection, setSelectedPlotSelection] = useState<PlotSelectionType>('assigned');
@@ -63,7 +62,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
       {
         key: 'observationDate',
         name: strings.DATE,
-        type: 'string',
+        type: 'date',
       },
       {
         key: 'state',
@@ -172,7 +171,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
   const defaultSearchOrder: SearchSortOrder = useMemo(() => {
     if (selectedPlotSelection === 'assigned') {
       return {
-        field: 'completedDate',
+        field: 'observationDate',
         direction: 'Descending',
       };
     } else {
@@ -293,7 +292,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
         const completedDate = observationResult.completedTime
           ? getDateDisplayValue(observationResult.completedTime, plantingSite?.timeZone ?? defaultTimezone)
           : undefined;
-        const observationDate = getShortDate(completedDate ?? observationResult.startDate, activeLocale);
+        const observationDate = completedDate ?? observationResult.startDate;
 
         return {
           adHocPlotNumber: observationResult.adHocPlot?.monitoringPlotNumber,
@@ -311,7 +310,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           completedDate: observationResult.completedTime,
         };
       }),
-    [activeLocale, defaultTimezone, observationResults, plantingSitesById]
+    [defaultTimezone, observationResults, plantingSitesById]
   );
 
   const navigateToSurvivalRateSettings = useCallback(() => {
@@ -416,6 +415,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           Renderer={PlantMonitoringCellRenderer}
           rows={rows}
           rightComponent={rightComponent}
+          clientSortedFields={['observationDate']}
         />
       )}
       {selectedPlotSelection === 'adHoc' && (
@@ -429,6 +429,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           Renderer={PlantMonitoringCellRenderer}
           rows={rows}
           rightComponent={rightComponent}
+          clientSortedFields={['observationDate']}
         />
       )}
     </Card>
