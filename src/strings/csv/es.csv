@@ -713,6 +713,7 @@ FILTER_BY_PROJECT,Filtrar por proyecto,cc5c10c0
 FILTER_SHOW_EMPTY_BATCHES,Mostrar lotes vacíos,f5c7fca1
 FILTER_SHOW_EMPTY_NURSERIES,Mostrar viveros sin inventario,6d351b84
 FILTER_SHOW_EMPTY_SPECIES,Mostrar especies sin inventario,0de9ee0c
+FILTERED,filtrado,4ab1a8a2
 FILTERS,Filtros,c3d13364
 FILTERS_APPLIED,Filtros aplicados,75d4dd7e
 FINAL_QTY,Cantidad final,47530c05
@@ -889,6 +890,7 @@ INVENTORY_IMPORT_COMPLETE,¡Importación de datos del inventario finalizada!,760
 INVENTORY_ONBOARDING_NURSERIES_MSG,Defina los viveros asignados al inventario de plántulas,393e62d3
 INVENTORY_ONBOARDING_SPECIES_MSG,Defina una lista de especies utilizadas en su inventario de plántulas,bafd0703
 INVENTORY_PAGE_DESCRIPTION,Gestione su inventario.,9e99a759
+INVENTORY_WITHDRAWALS,Retiros de Inventario,cefda57f
 INVESTMENT_COMMITTEE_VOTES,Votos del Comité de inversión,a7c64c6c
 INVITATION_PENDING,Invitación pendiente,6b64d319
 INVITE_FUNDER,Invitar financiador,d885523f
@@ -1226,7 +1228,6 @@ NURSERY_MORTALITY_RATE,Tasa de mortalidad en el vivero,feb99b18
 NURSERY_REQUIRED,Vivero *,809fa5b6
 NURSERY_TRANSFER,Traslado de vivero,7b6b8d82
 NURSERY_TRANSFERS_REQUIRE_DESTINATIONS,Las transferencias de vivero requieren de un vivero fuente y uno meta.,7fe70d84
-NURSERY_WITHDRAWALS,Retiros del vivero,754c7946
 OBSERVATION,Observación,ac4f24f0
 OBSERVATION_DATA,Datos de observación,7e9f4079
 OBSERVATION_DATE,Fecha de observación,62a4f110

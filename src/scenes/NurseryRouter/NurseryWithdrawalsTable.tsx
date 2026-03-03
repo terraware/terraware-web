@@ -698,9 +698,13 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
 
   const onExport = useCallback(() => {
     if (selectedOrganization && rows) {
-      void exportNurseryWithdrawalResults({ nurseryWithdrawalResults: rows });
+      const isFiltered = debouncedSearchTerm !== '' || columnFilterNodes.length > 0 || Object.keys(filters).length > 0;
+      void exportNurseryWithdrawalResults({
+        isFiltered,
+        nurseryWithdrawalResults: rows,
+      });
     }
-  }, [rows, selectedOrganization]);
+  }, [filters, debouncedSearchTerm, columnFilterNodes, rows, selectedOrganization]);
 
   // Request count for pagination
   useEffect(() => {
