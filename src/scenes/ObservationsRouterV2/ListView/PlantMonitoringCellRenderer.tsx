@@ -10,13 +10,14 @@ import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import { ObservationState } from 'src/types/Observations';
+import { getShortDate } from 'src/utils/dateFormatter';
 
 import { useAbandonObservationModal } from '../Abandon';
 import useObservationExports from '../useObservationExports';
 
 export default function PlantMonitoringCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const { column, row, value } = props;
-  const { strings } = useLocalization();
+  const { activeLocale, strings } = useLocalization();
   const { openAbandonObservationModal } = useAbandonObservationModal();
 
   const observationId = row.observationId as number;
@@ -36,7 +37,21 @@ export default function PlantMonitoringCellRenderer(props: RendererProps<TableRo
     return <TextTruncated fontSize={16} stringList={names} moreText={strings.TRUNCATED_TEXT_MORE_LINK} />;
   };
 
-  if (column.key === 'observationDate' || column.key === 'adHocPlotNumber') {
+  if (column.key === 'observationDate') {
+    const url = APP_PATHS.OBSERVATION_DETAILS_V2.replace(':observationId', observationId.toString());
+    return (
+      <CellRenderer
+        {...props}
+        value={
+          <Link fontSize='16px' to={url}>
+            {getShortDate(value as string, activeLocale)}
+          </Link>
+        }
+      />
+    );
+  }
+
+  if (column.key === 'adHocPlotNumber') {
     const url = APP_PATHS.OBSERVATION_DETAILS_V2.replace(':observationId', observationId.toString());
     return (
       <CellRenderer
