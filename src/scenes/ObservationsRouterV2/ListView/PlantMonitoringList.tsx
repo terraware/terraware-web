@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import { Dropdown, Icon } from '@terraware/web-components';
+import { Button, Dropdown, Icon, Tooltip } from '@terraware/web-components';
 import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/utils';
 
 import ClientSideFilterTable from 'src/components/Tables/ClientSideFilterTable';
@@ -20,11 +20,13 @@ import {
 import { PlantingSitePayload, useLazyListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
 import { useLazyGetAllT0SiteDataSetQuery } from 'src/queries/generated/t0';
 import { useLazyGetPlotsWithObservationsQuery } from 'src/queries/search/t0';
-import { ObservationState, getStatus } from 'src/types/Observations';
+import { AdHocObservationResults, ObservationState, getStatus } from 'src/types/Observations';
 import { SearchSortOrder } from 'src/types/Search';
+import { MultiPolygon } from 'src/types/Tracking';
 import { isAdmin } from 'src/utils/organization';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
+import { exportAdHocObservationsResults } from '../exportAdHocObservations';
 import PlantMonitoringCellRenderer from './PlantMonitoringCellRenderer';
 
 type PlotSelectionType = 'assigned' | 'adHoc';
@@ -395,6 +397,52 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
     theme,
   ]);
 
+  const onExportAdHocObservationResults = useCallback(() => {
+    if (!listAdHocObservationResultsResponse.isSuccess) {
+      return;
+    }
+
+    const adHocResults = listAdHocObservationResultsResponse.data.observations.filter(
+      (observation) => observation.type === 'Monitoring' && observation.state !== 'Upcoming' && observation.adHocPlot
+    );
+
+    if (adHocResults.length === 0) {
+      return;
+    }
+
+    const adHocObservationsResults: AdHocObservationResults[] = adHocResults.map((observation) => {
+      const adHocPlot = observation.adHocPlot!;
+      const site = plantingSitesById[observation.plantingSiteId];
+      const timeZone = site?.timeZone ?? defaultTimezone;
+
+      return {
+        ...observation,
+        adHocPlot,
+        boundary: adHocPlot.boundary as unknown as MultiPolygon,
+        plantingSiteName: site?.name ?? '',
+        strata: observation.strata as AdHocObservationResults['strata'],
+        timeZone,
+        totalLive: observation.species.reduce((total, s) => total + s.totalLive, 0),
+        totalPlants: observation.totalPlants,
+      };
+    });
+
+    const selectedSite = plantingSiteId ? plantingSitesById[plantingSiteId] : undefined;
+    void exportAdHocObservationsResults({ adHocObservationsResults, plantingSite: selectedSite });
+  }, [defaultTimezone, listAdHocObservationResultsResponse, plantingSiteId, plantingSitesById]);
+
+  const adHocExportComponent = useMemo(() => {
+    if (selectedPlotSelection !== 'adHoc' || observationResults.length === 0) {
+      return undefined;
+    }
+
+    return (
+      <Tooltip title={strings.EXPORT}>
+        <Button onClick={onExportAdHocObservationResults} icon='iconExport' type='passive' priority='ghost' />
+      </Tooltip>
+    );
+  }, [observationResults.length, onExportAdHocObservationResults, selectedPlotSelection, strings.EXPORT]);
+
   const emptyStateContent = useMemo(() => {
     return (
       <EmptyStateContent
@@ -437,6 +485,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           columns={adHocColumns}
           defaultSortOrder={defaultSearchOrder}
           emptyState={emptyStateContent}
+          extraComponent={adHocExportComponent}
           fuzzySearchColumns={fuzzySearchColumns}
           id='ad-hoc-plant-monitoring-table'
           Renderer={PlantMonitoringCellRenderer}
