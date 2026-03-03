@@ -7132,6 +7132,12 @@ export interface components {
         };
         ExistingBiomassQuadratSpeciesPayload: {
             /** Format: int32 */
+            abundanceCount: number;
+            /**
+             * Format: int32
+             * @deprecated
+             * @description Use abundanceCount instead.
+             */
             abundancePercent: number;
             isInvasive: boolean;
             isThreatened: boolean;
@@ -8809,7 +8815,13 @@ export interface components {
         };
         NewBiomassQuadratSpeciesPayload: {
             /** Format: int32 */
-            abundancePercent: number;
+            abundanceCount?: number;
+            /**
+             * Format: int32
+             * @deprecated
+             * @description Use abundanceCount instead.
+             */
+            abundancePercent?: number;
             /** Format: int64 */
             speciesId?: number;
             speciesName?: string;
