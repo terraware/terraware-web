@@ -7,6 +7,7 @@ import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/ut
 import ClientSideFilterTable from 'src/components/Tables/ClientSideFilterTable';
 import Card from 'src/components/common/Card';
 import Link from 'src/components/common/Link';
+import { FilterConfigWithValues } from 'src/components/common/SearchFiltersWrapperV2';
 import { TableColumnType } from 'src/components/common/table/types';
 import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
 import { APP_PATHS } from 'src/constants';
@@ -313,6 +314,17 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
     [defaultTimezone, observationResults, plantingSitesById]
   );
 
+  const featuredFilters: FilterConfigWithValues[] = useMemo(
+    () => [
+      {
+        field: 'state',
+        label: strings.STATUS,
+        options: [...new Set(rows.map((r) => r.state))].filter(Boolean),
+      },
+    ],
+    [rows, strings.STATUS]
+  );
+
   const navigateToSurvivalRateSettings = useCallback(() => {
     if (plantingSiteId) {
       navigate({
@@ -410,6 +422,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           columns={assignedColumns}
           defaultSortOrder={defaultSearchOrder}
           emptyState={emptyStateContent}
+          featuredFilters={featuredFilters}
           fuzzySearchColumns={fuzzySearchColumns}
           id='assigned-plant-monitoring-table'
           Renderer={PlantMonitoringCellRenderer}
