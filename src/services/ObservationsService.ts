@@ -167,6 +167,7 @@ const exportBiomassSpeciesCsv = async (observationId: number): Promise<any> => {
       'monitoringPlot_plotNumber',
       'name',
       'quadratSpecies_position',
+      'quadratSpecies_abundanceCount',
       'quadratSpecies_abundancePercent',
       'isInvasive',
       'isThreatened',

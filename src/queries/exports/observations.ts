@@ -125,6 +125,7 @@ const injectedRtkApi = api.injectEndpoints({
             'monitoringPlot_plotNumber',
             'name',
             'quadratSpecies_position',
+            'quadratSpecies_abundanceCount',
             'quadratSpecies_abundancePercent',
             'isInvasive',
             'isThreatened',
