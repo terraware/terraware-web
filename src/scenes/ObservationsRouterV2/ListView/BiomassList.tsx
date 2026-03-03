@@ -98,7 +98,12 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
   const adHocObservationsResults = useMemo(() => {
     if (adHocObservationsResultsResponse.isSuccess) {
       return adHocObservationsResultsResponse.data.observations
-        .filter((observation) => observation.type === 'Biomass Measurements' && observation.biomassMeasurements)
+        .filter(
+          (observation) =>
+            observation.type === 'Biomass Measurements' &&
+            observation.biomassMeasurements &&
+            observation.state !== 'Upcoming'
+        )
         .map((observation) => ({
           observationId: observation.observationId,
           monitoringPlotNumber: observation.adHocPlot?.monitoringPlotNumber,

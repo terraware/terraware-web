@@ -14,6 +14,14 @@ const injectedRtkApi = api.injectEndpoints({
           },
         ];
 
+        if (args.state) {
+          searchChildren.push({
+            operation: 'field',
+            field: 'state',
+            values: args.state,
+          });
+        }
+
         if (args.plantingSiteId) {
           searchChildren.push({
             operation: 'field',
@@ -64,6 +72,7 @@ export type CountObservationsApiArgs = {
   plantingSiteId?: number;
   observationType?: 'Monitoring' | 'Biomass Measurements';
   isAdHoc?: boolean;
+  state?: ('Upcoming' | 'InProgress' | 'Completed' | 'Overdue' | 'Abandoned')[];
 };
 
 export const { useCountObservationsQuery, useLazyCountObservationsQuery } = injectedRtkApi;
