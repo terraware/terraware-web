@@ -257,7 +257,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
     if (selectedPlotSelection === 'adHoc') {
       if (listAdHocObservationResultsResponse.isSuccess) {
         return listAdHocObservationResultsResponse.data.observations.filter(
-          (observation) => observation.type === 'Monitoring'
+          (observation) => observation.type === 'Monitoring' && observation.state !== 'Upcoming'
         );
       } else {
         return [];
@@ -265,7 +265,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
     } else {
       if (listObservationsResultsResponse.isSuccess) {
         return listObservationsResultsResponse.data.observations.filter(
-          (observation) => observation.type === 'Monitoring'
+          (observation) => observation.type === 'Monitoring' && observation.state !== 'Upcoming'
         );
       } else {
         return [];

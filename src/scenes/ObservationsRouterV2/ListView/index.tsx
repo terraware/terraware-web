@@ -135,6 +135,7 @@ const ObservationListView = (): JSX.Element => {
             organizationId: selectedOrganization.id,
             observationType: 'Biomass Measurements',
             plantingSiteId: siteId,
+            state: ['Abandoned', 'Completed', 'InProgress', 'Overdue'],
           },
           true
         );
@@ -144,6 +145,7 @@ const ObservationListView = (): JSX.Element => {
             organizationId: selectedOrganization.id,
             observationType: 'Monitoring',
             plantingSiteId: siteId,
+            state: ['Abandoned', 'Completed', 'InProgress', 'Overdue'],
           },
           true
         );
