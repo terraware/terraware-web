@@ -1,3 +1,5 @@
+6a5a21d83cf8 SW-8116 Table should not be showing for Scheduled (upcoming) Observations (#5357)
+aa7b44e28c3f SW-8111 Sorting ability and default sorting in Observations table is lost (#5358)
 0977cf756c73 SW-7949 Export square counts for biomass quadrat species (#5359)
 2a9e05e2e8ba SW-8119: Activity Highlights in Console showing error screen (#5355)
 d4cd4542f426 Remove unused strings (#5353)
