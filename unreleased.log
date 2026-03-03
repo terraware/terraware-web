@@ -1,3 +1,4 @@
+1aad8528bb3c SW-7949 Use abundanceCount in biomass API requests (#5360)
 6a5a21d83cf8 SW-8116 Table should not be showing for Scheduled (upcoming) Observations (#5357)
 aa7b44e28c3f SW-8111 Sorting ability and default sorting in Observations table is lost (#5358)
 0977cf756c73 SW-7949 Export square counts for biomass quadrat species (#5359)
