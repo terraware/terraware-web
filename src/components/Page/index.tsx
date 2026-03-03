@@ -33,6 +33,8 @@ export type PageProps = {
   title?: React.ReactNode;
   description?: string;
   descriptionStyle?: SxProps<Theme>;
+  leftComponentGridSize?: number;
+  rightComponentGridSize?: number;
 };
 
 /**
@@ -53,6 +55,8 @@ export default function Page({
   title,
   description,
   descriptionStyle,
+  leftComponentGridSize,
+  rightComponentGridSize,
 }: PageProps): JSX.Element {
   const contentRef = useRef(null);
   const theme = useTheme();
@@ -79,12 +83,27 @@ export default function Page({
           sx={titleContainerStyle}
         >
           {title && typeof title !== 'string' && (
-            <Grid item xs={8}>
+            <Grid
+              item
+              xs={leftComponentGridSize !== undefined && rightComponentGridSize !== undefined ? 12 : 8}
+              md={
+                leftComponentGridSize !== undefined && rightComponentGridSize !== undefined
+                  ? 12 - (leftComponentGridSize + rightComponentGridSize)
+                  : undefined
+              }
+            >
               {title}
             </Grid>
           )}
           {title && typeof title === 'string' && (
-            <Grid item>
+            <Grid
+              item
+              md={
+                leftComponentGridSize !== undefined && rightComponentGridSize !== undefined
+                  ? 12 - (leftComponentGridSize + rightComponentGridSize)
+                  : undefined
+              }
+            >
               <Typography
                 sx={{
                   paddingLeft: theme.spacing(3),
@@ -99,14 +118,19 @@ export default function Page({
             </Grid>
           )}
           {leftComponent && (
-            <Grid item md={4} xs={12} style={{ marginRight: 'auto', paddingLeft: isDesktop ? 0 : theme.spacing(3) }}>
+            <Grid
+              item
+              md={leftComponentGridSize ?? 4}
+              xs={12}
+              style={{ marginRight: 'auto', paddingLeft: isDesktop ? 0 : theme.spacing(3) }}
+            >
               {leftComponent}
             </Grid>
           )}
           {rightComponent && (
             <Grid
               item
-              md={4}
+              md={rightComponentGridSize ?? 4}
               xs={12}
               sx={{ paddingLeft: isDesktop ? 0 : theme.spacing(3), textAlign: isDesktop ? 'right' : 'left' }}
             >

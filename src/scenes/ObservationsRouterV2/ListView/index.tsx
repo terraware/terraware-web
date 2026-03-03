@@ -2,6 +2,7 @@ import React, { type JSX, useEffect, useMemo } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button, Dropdown, DropdownItem, Separator, Tabs } from '@terraware/web-components';
+import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Page from 'src/components/Page';
 import SurvivalRateMessageV2 from 'src/components/SurvivalRate/SurvivalRateMessageV2';
@@ -27,6 +28,7 @@ const ObservationListView = (): JSX.Element => {
   const { strings } = useLocalization();
   const navigate = useSyncNavigate();
   const theme = useTheme();
+  const { isMobile } = useDeviceInfo();
 
   const observableSites = useObservablePlantingSites();
   const [listPlantingSites, listPlantingSitesResult] = useLazyListPlantingSitesQuery();
@@ -65,7 +67,12 @@ const ObservationListView = (): JSX.Element => {
 
   const PageHeaderPlantingSiteDropdown = useMemo(
     () => (
-      <Box display={'flex'} flexDirection={'row'} width={'100%'}>
+      <Box sx={{ alignItems: 'center', display: 'flex', width: '100%' }}>
+        {!isMobile && (
+          <Typography fontSize='24px' fontWeight='600' paddingLeft={'24px'}>
+            {strings.OBSERVATIONS}
+          </Typography>
+        )}
         <Separator height={'40px'} />
         <Typography lineHeight={'40px'} marginRight={theme.spacing(1)} whiteSpace={'nowrap'}>
           {strings.PLANTING_SITE}
@@ -76,11 +83,11 @@ const ObservationListView = (): JSX.Element => {
           selectedValue={selectedPlantingSiteId}
           options={plantingSiteOptions}
           onChange={(value: any) => selectPlantingSite(Number(value))}
-          sx={{ minWidth: '400px' }}
+          sx={{ flex: 1, maxWidth: '400px' }}
         />
       </Box>
     ),
-    [selectPlantingSite, plantingSiteOptions, selectedPlantingSiteId, strings, theme]
+    [isMobile, strings, theme, selectedPlantingSiteId, plantingSiteOptions, selectPlantingSite]
   );
 
   const tabs = useMemo(() => {
@@ -153,9 +160,11 @@ const ObservationListView = (): JSX.Element => {
 
   return (
     <Page
-      title={strings.OBSERVATIONS}
-      leftComponent={PageHeaderPlantingSiteDropdown}
+      title={isMobile ? strings.OBSERVATIONS : PageHeaderPlantingSiteDropdown}
       rightComponent={scheduleObservationButton}
+      leftComponent={isMobile ? PageHeaderPlantingSiteDropdown : undefined}
+      leftComponentGridSize={isMobile ? 7 : 0}
+      rightComponentGridSize={4}
     >
       <ObservationsEventsNotification />
       {activeTab === 'plantMonitoring' && (
