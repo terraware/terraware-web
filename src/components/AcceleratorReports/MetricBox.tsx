@@ -189,7 +189,7 @@ const MetricBox = ({
     if (isStandardOrProjectMetric(record)) {
       return record.value;
     } else {
-      return record.overrideValue || record.systemValue;
+      return record.overrideValue ?? record.systemValue;
     }
   };
 
@@ -258,14 +258,14 @@ const MetricBox = ({
                 <Typography>
                   {getProgressValue() || 0} / {metric.target || 0} ({year} {strings.TARGET})
                 </Typography>
-                {!metric.overrideValue && (
+                {metric.overrideValue === undefined && (
                   <Box paddingTop={1} paddingLeft={1.5}>
                     <Tooltip title={strings.TERRAWARE_METRIC_MESSAGE}>
                       <Icon name='iconDataMigration' size='medium' fillColor={theme.palette.TwClrIcnSecondary} />
                     </Tooltip>
                   </Box>
                 )}
-                {isEditing && metric.overrideValue && (isConsoleView || type !== 'system') && (
+                {isEditing && metric.overrideValue !== undefined && (isConsoleView || type !== 'system') && (
                   <Button
                     icon='iconUndo'
                     onClick={openResetMetricModal}
@@ -293,7 +293,7 @@ const MetricBox = ({
                 )}
               </Box>
 
-              {metric.overrideValue && (
+              {metric.overrideValue !== undefined && (
                 <Typography fontSize={'14px'} color={theme.palette.TwClrTxtSecondary} paddingTop={1.5}>
                   {strings.formatString(strings.OVERWRITTEN_ORIGINAL_VALUE, metric.systemValue ?? '')}
                 </Typography>

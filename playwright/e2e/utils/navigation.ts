@@ -6,7 +6,7 @@ export const navigateToProjectProfile = async (projectDealName: string, page: Pa
   await page.goto('/');
   await waitFor(page, '#acceleratorConsoleButton');
   await page.getByRole('link', { name: 'Accelerator Console' }).click();
-  await page.waitForTimeout(1000);
+  await page.getByRole('link', { name: projectDealName }).waitFor({ state: 'visible' });
   await page.getByRole('link', { name: projectDealName }).click();
 };
 
