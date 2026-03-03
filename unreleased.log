@@ -1,3 +1,8 @@
+9fc495b6c4e9 SW-8134 Update survival rate settings header and tooltip for species (#5362)
+5048df4e42b2 SW-8028 Survival Rate override in reports not working (#5364)
+190e6eeab585 SW-8113 Ad Hoc Plant Monitoring Observations: Survival Rate card and chart messaging should not mention Temporary Plots (#5365)
+51a899ea5d9b SW-8078 Make observations header more responsive (#5363)
+3efa85841c80 SW-8121: Filter for Status of Observations is missing from Table (#5356)
 56c8ea9d1a5f SW-8017 Rename withdrawal history CSV (#5361)
 1aad8528bb3c SW-7949 Use abundanceCount in biomass API requests (#5360)
 6a5a21d83cf8 SW-8116 Table should not be showing for Scheduled (upcoming) Observations (#5357)
