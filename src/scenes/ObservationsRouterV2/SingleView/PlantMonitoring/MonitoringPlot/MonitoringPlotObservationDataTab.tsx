@@ -106,9 +106,11 @@ const MonitoringPlotObservationDataTab = () => {
     {
       label: strings.SURVIVAL_RATE,
       tooltip: strings.PLOT_SURVIVAL_RATE_TOOLTIP,
-      value: monitoringPlot?.isPermanent
-        ? `${monitoringPlot.survivalRate ?? '-'}%`
-        : strings.NOT_CALCULATED_FOR_TEMPORARY_PLOTS,
+      value: monitoringPlot?.isAdHoc
+        ? strings.NOT_APPLICABLE_FOR_AD_HOC_PLOTS
+        : monitoringPlot?.isPermanent
+          ? `${monitoringPlot.survivalRate ?? '-'}%`
+          : strings.NOT_CALCULATED_FOR_TEMPORARY_PLOTS,
     },
   ];
 
@@ -226,6 +228,7 @@ const MonitoringPlotObservationDataTab = () => {
               species={monitoringPlotSpecies}
               isNotCompleted={!monitoringPlot?.completedTime}
               isTemporary={!monitoringPlot?.isPermanent}
+              isAdHoc={monitoringPlot?.isAdHoc}
             />
           </Box>
         </Box>

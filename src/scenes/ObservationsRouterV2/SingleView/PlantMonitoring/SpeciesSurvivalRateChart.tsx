@@ -12,6 +12,7 @@ export type SpeciesSurvivalRateChartProps = {
   species?: ObservationSpeciesResults[];
   isNotCompleted?: boolean;
   isTemporary?: boolean;
+  isAdHoc?: boolean;
 };
 
 export default function SpeciesSurvivalRateChart({
@@ -20,6 +21,7 @@ export default function SpeciesSurvivalRateChart({
   species,
   isNotCompleted,
   isTemporary,
+  isAdHoc,
 }: SpeciesSurvivalRateChartProps): JSX.Element {
   type Data = {
     labels: string[];
@@ -70,7 +72,11 @@ export default function SpeciesSurvivalRateChart({
             whiteSpace: 'nowrap',
           }}
         >
-          {isTemporary ? strings.SURVIVAL_RATE_NOT_CALCULATED_FOR_TEMPORARY_PLOTS : strings.DATA_IS_NOT_YET_AVAILABLE}
+          {isAdHoc
+            ? strings.SURVIVAL_RATE_IS_NOT_APPLICABLE_FOR_AD_HOC_PLOTS
+            : isTemporary
+              ? strings.SURVIVAL_RATE_NOT_CALCULATED_FOR_TEMPORARY_PLOTS
+              : strings.DATA_IS_NOT_YET_AVAILABLE}
         </Box>
       )}
       <Box>

@@ -1177,6 +1177,7 @@ NORTHWEST_CORNER,Esquina noroeste,2c0842da
 NORTHWEST_CORNER_LATITUDE,Latitud de la esquina noroeste,bef5fb10
 NORTHWEST_CORNER_LONGITUDE,Longitud de la esquina noroeste,355e9d22
 NOT_ACCEPTED,No aceptado(a),c3102621
+NOT_APPLICABLE_FOR_AD_HOC_PLOTS,No aplica para parcelas ad hoc,3e9df420
 NOT_CALCULATED_FOR_TEMPORARY_PLOTS,No calculado para Parcelas Temporales.,ca983c30
 NOT_COMPLETE,Sin completar,a8606bc8
 NOT_ENOUGH_SEEDS_IN_ACCESSION,No hay suficientes semillas en la accesión.,1d7be036
@@ -2032,6 +2033,7 @@ SUMMARY_OF_PROGRESS_REQUIRED,Resumen de progresos *,35c72f75
 SUPPLEMENTAL_FILES,Archivos suplementarios,b655103c
 SURVIVAL_RATE,Tasa de supervivencia,b1a831cf
 SURVIVAL_RATE_COLUMN_TOOLTIP,"Las tasas de supervivencia se calculan en función de las densidades iniciales de plantas. Si no se establecen densidades iniciales de plantas para un Sitio de Plantación, la tasa de supervivencia no estará disponible.",426f186d
+SURVIVAL_RATE_IS_NOT_APPLICABLE_FOR_AD_HOC_PLOTS,La tasa de supervivencia no aplica para parcelas ad hoc,819c62f0
 SURVIVAL_RATE_NOT_CALCULATED_FOR_TEMPORARY_PLOTS,La tasa de supervivencia no se calcula para Parcelas Temporales.,2d32c87c
 SURVIVAL_RATE_PER_SPECIES,Tasa de supervivencia por especie,523afab7
 SURVIVAL_RATE_PER_SPECIES_AS_OF_THIS_OBSERVATION,Tasa de supervivencia por especie según esta observación,76a96a8d

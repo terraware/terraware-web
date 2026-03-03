@@ -17,8 +17,10 @@ const ObservationDataNumbers = ({ items, isCompleted }: ObservationDataNumbersPr
   return (
     <Box display='grid' paddingBottom={3} gridTemplateColumns={`repeat(${items.length}, 1fr)`} gap={2}>
       {items.map((item, index) => {
-        const isTemporarySurvivalRateItem =
-          item.label === strings.SURVIVAL_RATE && item.value === strings.NOT_CALCULATED_FOR_TEMPORARY_PLOTS;
+        const isTemporaryOrAdHocSurvivalRateItem =
+          item.label === strings.SURVIVAL_RATE &&
+          (item.value === strings.NOT_CALCULATED_FOR_TEMPORARY_PLOTS ||
+            item.value === strings.NOT_APPLICABLE_FOR_AD_HOC_PLOTS);
         return (
           <Box
             key={index}
@@ -36,10 +38,10 @@ const ObservationDataNumbers = ({ items, isCompleted }: ObservationDataNumbersPr
             </Box>
             <Box>
               <Typography
-                fontWeight={isTemporarySurvivalRateItem ? 400 : 600}
-                fontSize={isTemporarySurvivalRateItem ? '16px' : '24px'}
+                fontWeight={isTemporaryOrAdHocSurvivalRateItem ? 400 : 600}
+                fontSize={isTemporaryOrAdHocSurvivalRateItem ? '16px' : '24px'}
               >
-                {isCompleted || isTemporarySurvivalRateItem ? (
+                {isCompleted || isTemporaryOrAdHocSurvivalRateItem ? (
                   typeof item.value === 'number' ? (
                     <FormattedNumber value={item.value} />
                   ) : (

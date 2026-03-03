@@ -1176,6 +1176,7 @@ NORTHWEST_CORNER,Coin nord-ouest,2c0842da
 NORTHWEST_CORNER_LATITUDE,Latitude de l’angle nord-ouest,bef5fb10
 NORTHWEST_CORNER_LONGITUDE,Longitude de l’angle nord-ouest,355e9d22
 NOT_ACCEPTED,Non accepté,c3102621
+NOT_APPLICABLE_FOR_AD_HOC_PLOTS,Non applicable aux parcelles ad hoc,3e9df420
 NOT_CALCULATED_FOR_TEMPORARY_PLOTS,Non calculé pour les parcelles temporaires.,ca983c30
 NOT_COMPLETE,Pas terminé,a8606bc8
 NOT_ENOUGH_SEEDS_IN_ACCESSION,Pas assez de semences dans l'accession,1d7be036
@@ -2032,6 +2033,7 @@ SUMMARY_OF_PROGRESS_REQUIRED,Résumé des progrès accomplis *,35c72f75
 SUPPLEMENTAL_FILES,Fichiers supplémentaires,b655103c
 SURVIVAL_RATE,Taux de survie,b1a831cf
 SURVIVAL_RATE_COLUMN_TOOLTIP,"Les taux de survie sont calculés en fonction des densités initiales de plants. Si les densités initiales de plants ne sont pas définies pour un site de plantation, le taux de survie ne sera pas disponible.",426f186d
+SURVIVAL_RATE_IS_NOT_APPLICABLE_FOR_AD_HOC_PLOTS,Le taux de survie n'est pas applicable aux parcelles ad hoc,819c62f0
 SURVIVAL_RATE_NOT_CALCULATED_FOR_TEMPORARY_PLOTS,Le taux de survie n'est pas calculé pour les parcelles temporaires.,2d32c87c
 SURVIVAL_RATE_PER_SPECIES,Taux de survie par espèce,523afab7
 SURVIVAL_RATE_PER_SPECIES_AS_OF_THIS_OBSERVATION,Taux de survie par espèce à la date de cette observation,76a96a8d
