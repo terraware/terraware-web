@@ -30,11 +30,12 @@ import { OriginPage } from 'src/scenes/InventoryRouter/InventoryBatchView';
 import { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';
 import Search from 'src/scenes/InventoryRouter/Search';
 import { NurseryBatchService } from 'src/services';
-import { SearchNodePayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
+import { SearchNodePayload, SearchResponseElement } from 'src/types/Search';
 import { downloadCsv } from 'src/utils/csv';
 import { useSessionFilters } from 'src/utils/filterHooks/useSessionFilters';
 import { getAllNurseries } from 'src/utils/organization';
 import useForm from 'src/utils/useForm';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -46,12 +47,10 @@ interface InventoryTableProps {
   allowSelectionProjectAssign?: boolean;
   columns: TableColumnType[] | (() => TableColumnType[]);
   filters: InventoryFiltersUnion;
-  isPresorted: boolean;
   origin: OriginPage;
   reloadData?: () => void;
   results: SearchResponseElement[];
   setFilters: (f: InventoryFiltersUnion) => void;
-  setSearchSortOrder: (sortOrder: SearchSortOrder) => void;
   setTemporalSearchValue: React.Dispatch<React.SetStateAction<string>>;
   temporalSearchValue: string;
   emptyTableMessage?: string;
@@ -64,8 +63,6 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
     temporalSearchValue,
     filters,
     setFilters,
-    setSearchSortOrder,
-    isPresorted,
     columns,
     reloadData,
     origin,
@@ -82,6 +79,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
   const navigate = useSyncNavigate();
   const snackbar = useSnackbar();
   const query = useQuery();
+  const numberFormatter = useNumberFormatter();
 
   const theme = useTheme();
   const { sessionFilters, setSessionFilters } = useSessionFilters(origin.toLowerCase());
@@ -455,6 +453,13 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
     [getNamesList]
   );
 
+  const QuantityCell = useCallback(
+    ({ cell }: { cell: MRT_Cell<SearchResponseElement> }) => {
+      return <span>{numberFormatter.format(Number(cell.getValue()))}</span>;
+    },
+    [numberFormatter]
+  );
+
   const QuantitiesMenuCell = useCallback(
     ({ cell }: { cell: MRT_Cell<SearchResponseElement> }) => {
       return <QuantitiesMenu setModalValues={setModalValues} batch={cell.row.original} />;
@@ -476,6 +481,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
       // Set filter variant based on column type
       if (col.type === 'number') {
         columnDef.filterVariant = 'range';
+        columnDef.sortingFn = 'alphanumeric';
       } else if (col.type === 'date') {
         columnDef.filterVariant = 'date-range';
       } else if (
@@ -529,6 +535,8 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
         columnDef.Cell = BatchNumberCell;
       } else if (col.key === 'facilityInventories') {
         columnDef.Cell = FacilityInventoriesCell;
+      } else if (col.key.includes('Quantity')) {
+        columnDef.Cell = QuantityCell;
       } else if (col.key === 'quantitiesMenu') {
         columnDef.Cell = QuantitiesMenuCell;
         columnDef.header = '';
@@ -545,6 +553,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
     FacilityNameCell,
     BatchNumberCell,
     FacilityInventoriesCell,
+    QuantityCell,
     QuantitiesMenuCell,
   ]);
 
@@ -555,16 +564,6 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
       desc: false,
     },
   ]);
-
-  useEffect(() => {
-    if (sorting.length > 0) {
-      const sortField = sorting[0];
-      setSearchSortOrder({
-        field: sortField.id,
-        direction: sortField.desc ? 'Descending' : 'Ascending',
-      });
-    }
-  }, [sorting, setSearchSortOrder]);
 
   const [columnOrder, setColumnOrder] = useState<MRT_ColumnOrderState>(() => {
     try {
@@ -687,7 +686,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                 columns={editableColumns}
                 data={results}
                 enableEditing={false}
-                enableSorting={!isPresorted}
+                enableSorting={true}
                 enableGlobalFilter={true}
                 enableColumnFilters={true}
                 stickyFilters={true}
