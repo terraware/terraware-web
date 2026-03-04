@@ -2,6 +2,7 @@ import { DateTime } from 'luxon';
 
 import { PlantingProgress } from 'src/redux/features/plantings/plantingsSelectors';
 import strings from 'src/strings';
+import { purposeLabel } from 'src/types/Batch';
 import { downloadCsv, makeCsv } from 'src/utils/csv';
 
 const makePlantingProgressCsv = ({
@@ -88,7 +89,7 @@ const makeNurseryWithdrawalResultsCsv = ({
 
   const data = nurseryWithdrawalResults.map((withdrawal) => ({
     withdrawnDate: withdrawal.withdrawnDate,
-    purpose: withdrawal.purpose,
+    purpose: purposeLabel(withdrawal['purpose(raw)']),
     facility_name: withdrawal.facility_name,
     destinationName: withdrawal.destinationName,
     project_names: (withdrawal.project_names as string[] | undefined)?.filter((name: string) => !!name).join(', '),

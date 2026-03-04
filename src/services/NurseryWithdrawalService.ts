@@ -120,6 +120,7 @@ const listNurseryWithdrawals = async (
       'delivery_id',
       'withdrawnDate',
       'purpose',
+      'purpose(raw)',
       'facility_name',
       'destinationName',
       'substratumNames',
