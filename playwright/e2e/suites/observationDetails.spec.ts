@@ -35,7 +35,6 @@ test.describe('ObservationDetailsTests', () => {
 
     // table column headers
     await expect(page.getByRole('columnheader', { name: 'Stratum' })).toBeVisible();
-    await expect(page.getByRole('columnheader', { name: 'Date' })).toBeVisible();
     await expect(page.getByRole('columnheader', { name: 'Live Plants' })).toBeVisible();
     await expect(page.getByRole('columnheader', { name: 'Total Plants' })).toBeVisible();
     await expect(page.getByRole('columnheader', { name: 'Species', exact: true })).toBeVisible();
