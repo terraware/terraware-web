@@ -1,3 +1,4 @@
+b88cb973c4b1 SW-8108: When clicking in table to view monitoring plot, focus is at the bottom of Plot Details page instead of at top (#5375)
 050a70a3b522 SW-8139 Allow withdrawing seedlings in just one status (#5374)
 c44ce674dcb5 SW-7941 Don't label Undo withdrawals as active (#5373)
 94c16e538bbc SW-8067 Use other name for planting withdrawals in CSV (#5372)
