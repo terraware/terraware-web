@@ -6,16 +6,12 @@ import { EditableTable, EditableTableColumn, Icon } from '@terraware/web-compone
 import {
   MRT_Cell,
   MRT_ColumnFiltersState,
-  MRT_ColumnOrderState,
-  MRT_DensityState,
   MRT_ShowHideColumnsButton,
-  MRT_SortingState,
   MRT_TableInstance,
   MRT_ToggleDensePaddingButton,
   MRT_ToggleFiltersButton,
   MRT_ToggleFullScreenButton,
   MRT_ToggleGlobalFilterButton,
-  MRT_VisibilityState,
 } from 'material-react-table';
 
 import PageHeader from 'src/components/PageHeader';
@@ -31,6 +27,7 @@ import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
+import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { requestProjects } from 'src/redux/features/projects/projectsThunks';
@@ -112,96 +109,26 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const [selectSeedBankForImportModalOpen, setSelectSeedBankForImportModalOpen] = useState(false);
   const [openImportModal, setOpenImportModal] = useState(false);
 
-  const [columnOrder, setColumnOrder] = useState<MRT_ColumnOrderState>(() => {
-    try {
-      const saved = localStorage.getItem(`${STORAGE_KEY}-columnOrder`);
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
-    }
+  const {
+    columnFilters,
+    columnOrder,
+    columnVisibility,
+    density,
+    onDensityChange,
+    setColumnFilters,
+    setColumnOrder,
+    setColumnVisibility,
+    setShowColumnFilters,
+    setShowGlobalFilter,
+    setSorting,
+    showColumnFilters,
+    showGlobalFilter,
+    sorting,
+  } = useTableState(STORAGE_KEY, {
+    defaultSorting: [{ id: 'accessionNumber', desc: false }],
+    persistFilters: true,
+    persistSorting: true,
   });
-
-  const [columnVisibility, setColumnVisibility] = useState<MRT_VisibilityState>(() => {
-    try {
-      const saved = localStorage.getItem(`${STORAGE_KEY}-columnVisibility`);
-      return saved ? JSON.parse(saved) : {};
-    } catch {
-      return {};
-    }
-  });
-
-  const [density, setDensity] = useState<MRT_DensityState>(() => {
-    try {
-      return (localStorage.getItem(`${STORAGE_KEY}-density`) as MRT_DensityState) || 'comfortable';
-    } catch {
-      return 'comfortable';
-    }
-  });
-
-  const [columnFilters, setColumnFilters] = useState<MRT_ColumnFiltersState>(() => {
-    try {
-      const saved = localStorage.getItem(`${STORAGE_KEY}-columnFilters`);
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
-    }
-  });
-
-  const [showColumnFilters, setShowColumnFilters] = useState(() => {
-    try {
-      const saved = localStorage.getItem(`${STORAGE_KEY}-columnFilters`);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        return Array.isArray(parsed) && parsed.length > 0;
-      }
-    } catch {
-      // ignore
-    }
-    return false;
-  });
-
-  const [showGlobalFilter, setShowGlobalFilter] = useState(false);
-
-  const [sorting, setSorting] = useState<MRT_SortingState>(() => {
-    try {
-      const saved = localStorage.getItem(`${STORAGE_KEY}-sorting`);
-      return saved ? JSON.parse(saved) : [{ id: 'accessionNumber', desc: false }];
-    } catch {
-      return [{ id: 'accessionNumber', desc: false }];
-    }
-  });
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(`${STORAGE_KEY}-columnOrder`, JSON.stringify(columnOrder));
-    } catch {
-      // ignore
-    }
-  }, [columnOrder]);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(`${STORAGE_KEY}-columnVisibility`, JSON.stringify(columnVisibility));
-    } catch {
-      // ignore
-    }
-  }, [columnVisibility]);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(`${STORAGE_KEY}-columnFilters`, JSON.stringify(columnFilters));
-    } catch {
-      // ignore
-    }
-  }, [columnFilters]);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(`${STORAGE_KEY}-sorting`, JSON.stringify(sorting));
-    } catch {
-      // ignore
-    }
-  }, [sorting]);
 
   useEffect(() => {
     if (selectedOrganization) {
@@ -264,7 +191,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
       setShowColumnFilters(true);
       navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
     }
-  }, [location, navigate, query, selectedOrganization]);
+  }, [location, navigate, query, selectedOrganization, setColumnFilters, setShowColumnFilters]);
 
   const isOnboarded = hasSeedBanks && hasSpecies;
 
@@ -813,17 +740,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
                         onColumnFiltersChange: setColumnFilters,
                         onShowColumnFiltersChange: setShowColumnFilters,
                         onShowGlobalFilterChange: setShowGlobalFilter,
-                        onDensityChange: (updater) => {
-                          setDensity((prev) => {
-                            const next = typeof updater === 'function' ? updater(prev) : updater;
-                            try {
-                              localStorage.setItem(`${STORAGE_KEY}-density`, next);
-                            } catch {
-                              // ignore
-                            }
-                            return next;
-                          });
-                        },
+                        onDensityChange,
                         enableColumnPinning: true,
                         enableColumnActions: true,
                         enableHiding: true,

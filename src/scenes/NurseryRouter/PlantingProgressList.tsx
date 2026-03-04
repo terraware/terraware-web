@@ -5,19 +5,17 @@ import { BusySpinner, Button, EditableTable, EditableTableColumn } from '@terraw
 import { Icon } from '@terraware/web-components';
 import {
   MRT_Cell,
-  MRT_ColumnOrderState,
-  MRT_DensityState,
   MRT_ShowHideColumnsButton,
   MRT_ToggleDensePaddingButton,
   MRT_ToggleFiltersButton,
   MRT_ToggleFullScreenButton,
   MRT_ToggleGlobalFilterButton,
-  MRT_VisibilityState,
 } from 'material-react-table';
 
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
+import useTableState from 'src/hooks/useTableState';
 import { useOrganization } from 'src/providers';
 import { requestUpdatePlantingsCompleted } from 'src/redux/features/plantings/plantingsAsyncThunks';
 import {
@@ -58,110 +56,11 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
   const snackbar = useSnackbar();
   const [showWarningModal, setShowWarningModal] = useState(false);
   const [markingAsComplete, setMarkingAsComplete] = useState(false);
-  const [showColumnFilters, setShowColumnFilters] = useState(() => {
-    try {
-      for (const key of [
-        'plantings-progress-table-with-strata_columnFilters',
-        'plantings-progress-table-without-strata_columnFilters',
-      ]) {
-        const saved = localStorage.getItem(key);
-        if (saved) {
-          const parsed = JSON.parse(saved);
-          if (Array.isArray(parsed) && parsed.length > 0) {
-            return true;
-          }
-        }
-      }
-    } catch {
-      // ignore
-    }
-    return false;
-  });
-  const [showGlobalFilter, setShowGlobalFilter] = useState(false);
-  const [density, setDensity] = useState<MRT_DensityState>(() => {
-    try {
-      return (localStorage.getItem('plantings-progress-table-density') as MRT_DensityState) || 'comfortable';
-    } catch {
-      return 'comfortable';
-    }
-  });
-
-  const [columnOrderWithStrata, setColumnOrderWithStrata] = useState<MRT_ColumnOrderState>(() => {
-    try {
-      const saved = localStorage.getItem('plantings-progress-table-with-strata-columnOrder');
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
-    }
-  });
-
-  const [columnOrderWithoutStrata, setColumnOrderWithoutStrata] = useState<MRT_ColumnOrderState>(() => {
-    try {
-      const saved = localStorage.getItem('plantings-progress-table-without-strata-columnOrder');
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
-    }
-  });
-
-  useEffect(() => {
-    try {
-      localStorage.setItem('plantings-progress-table-with-strata-columnOrder', JSON.stringify(columnOrderWithStrata));
-    } catch {
-      // ignore
-    }
-  }, [columnOrderWithStrata]);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(
-        'plantings-progress-table-without-strata-columnOrder',
-        JSON.stringify(columnOrderWithoutStrata)
-      );
-    } catch {
-      // ignore
-    }
-  }, [columnOrderWithoutStrata]);
-
-  const [columnVisibilityWithStrata, setColumnVisibilityWithStrata] = useState<MRT_VisibilityState>(() => {
-    try {
-      const saved = localStorage.getItem('plantings-progress-table-with-strata-columnVisibility');
-      return saved ? JSON.parse(saved) : {};
-    } catch {
-      return {};
-    }
-  });
-
-  const [columnVisibilityWithoutStrata, setColumnVisibilityWithoutStrata] = useState<MRT_VisibilityState>(() => {
-    try {
-      const saved = localStorage.getItem('plantings-progress-table-without-strata-columnVisibility');
-      return saved ? JSON.parse(saved) : {};
-    } catch {
-      return {};
-    }
-  });
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(
-        'plantings-progress-table-with-strata-columnVisibility',
-        JSON.stringify(columnVisibilityWithStrata)
-      );
-    } catch {
-      // ignore
-    }
-  }, [columnVisibilityWithStrata]);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(
-        'plantings-progress-table-without-strata-columnVisibility',
-        JSON.stringify(columnVisibilityWithoutStrata)
-      );
-    } catch {
-      // ignore
-    }
-  }, [columnVisibilityWithoutStrata]);
+  const withStrataState = useTableState('plantings-progress-table-with-strata');
+  const withoutStrataState = useTableState('plantings-progress-table-without-strata');
+  const activeState = hasStrata !== false ? withStrataState : withoutStrataState;
+  const { density, onDensityChange, showColumnFilters, setShowColumnFilters, showGlobalFilter, setShowGlobalFilter } =
+    activeState;
 
   const selectedRows = useMemo(
     () =>
@@ -444,34 +343,18 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
         tableOptions={{
           state: {
             rowSelection,
-            columnVisibility: hasStrata ? columnVisibilityWithStrata : columnVisibilityWithoutStrata,
+            columnVisibility: activeState.columnVisibility,
             showColumnFilters,
             showGlobalFilter,
             density,
-            columnOrder: hasStrata ? columnOrderWithStrata : columnOrderWithoutStrata,
+            columnOrder: activeState.columnOrder,
           },
           onRowSelectionChange: setRowSelection,
-          onColumnVisibilityChange: (updater) => {
-            const setter = hasStrata ? setColumnVisibilityWithStrata : setColumnVisibilityWithoutStrata;
-            setter((prev) => (typeof updater === 'function' ? updater(prev) : updater));
-          },
+          onColumnVisibilityChange: activeState.setColumnVisibility,
           onShowColumnFiltersChange: setShowColumnFilters,
           onShowGlobalFilterChange: setShowGlobalFilter,
-          onColumnOrderChange: (updater) => {
-            const setter = hasStrata ? setColumnOrderWithStrata : setColumnOrderWithoutStrata;
-            setter((prev) => (typeof updater === 'function' ? updater(prev) : updater));
-          },
-          onDensityChange: (updater) => {
-            setDensity((prev) => {
-              const next = typeof updater === 'function' ? updater(prev) : updater;
-              try {
-                localStorage.setItem('plantings-progress-table-density', next);
-              } catch {
-                // ignore
-              }
-              return next;
-            });
-          },
+          onColumnOrderChange: activeState.setColumnOrder,
+          onDensityChange,
           enableRowSelection: true,
           enableColumnPinning: true,
           enableColumnActions: true,

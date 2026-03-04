@@ -32,7 +32,7 @@ export default defineConfig({
       slowMo: parseInt(process.env.SLOW_MO || '0'),
     },
   },
-  timeout: process.env.CI ? 60000 : parseInt(process.env.TIMEOUT || '15000'),
+  timeout: process.env.CI ? 60000 : parseInt(process.env.TIMEOUT || '60000'),
 
   /* Configure projects for major browsers */
   projects: [

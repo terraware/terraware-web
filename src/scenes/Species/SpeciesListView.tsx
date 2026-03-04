@@ -5,16 +5,12 @@ import { DropdownItem } from '@terraware/web-components';
 import { EditableTable, EditableTableColumn, Icon } from '@terraware/web-components';
 import {
   MRT_Cell,
-  MRT_ColumnOrderState,
-  MRT_DensityState,
   MRT_ShowHideColumnsButton,
-  MRT_SortingState,
   MRT_TableInstance,
   MRT_ToggleDensePaddingButton,
   MRT_ToggleFiltersButton,
   MRT_ToggleFullScreenButton,
   MRT_ToggleGlobalFilterButton,
-  MRT_VisibilityState,
 } from 'material-react-table';
 
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -28,6 +24,7 @@ import TfMain from 'src/components/common/TfMain';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
+import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import SearchService from 'src/services/SearchService';
 import strings from 'src/strings';
@@ -119,64 +116,22 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
   const userCanEdit = !isContributor(selectedOrganization);
   const { isMobile } = useDeviceInfo();
 
-  // localStorage-backed table state
-  const [columnOrder, setColumnOrder] = useState<MRT_ColumnOrderState>(() => {
-    try {
-      const saved = localStorage.getItem('species-list-table-columnOrder');
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
-    }
+  const {
+    columnOrder,
+    columnVisibility,
+    density,
+    onDensityChange,
+    setColumnOrder,
+    setColumnVisibility,
+    setShowColumnFilters,
+    setShowGlobalFilter,
+    setSorting,
+    showColumnFilters,
+    showGlobalFilter,
+    sorting,
+  } = useTableState('species-list-table', {
+    defaultSorting: [{ id: 'scientificName', desc: false }],
   });
-
-  const [columnVisibility, setColumnVisibility] = useState<MRT_VisibilityState>(() => {
-    try {
-      const saved = localStorage.getItem('species-list-table-columnVisibility');
-      return saved ? JSON.parse(saved) : {};
-    } catch {
-      return {};
-    }
-  });
-
-  const [density, setDensity] = useState<MRT_DensityState>(() => {
-    try {
-      return (localStorage.getItem('species-list-table-density') as MRT_DensityState) || 'comfortable';
-    } catch {
-      return 'comfortable';
-    }
-  });
-
-  const [showColumnFilters, setShowColumnFilters] = useState(() => {
-    try {
-      const saved = localStorage.getItem('species-list-table_columnFilters');
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        return Array.isArray(parsed) && parsed.length > 0;
-      }
-    } catch {
-      // ignore
-    }
-    return false;
-  });
-
-  const [showGlobalFilter, setShowGlobalFilter] = useState(false);
-  const [sorting, setSorting] = useState<MRT_SortingState>([{ id: 'scientificName', desc: false }]);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem('species-list-table-columnOrder', JSON.stringify(columnOrder));
-    } catch {
-      // ignore
-    }
-  }, [columnOrder]);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem('species-list-table-columnVisibility', JSON.stringify(columnVisibility));
-    } catch {
-      // ignore
-    }
-  }, [columnVisibility]);
 
   const getParams = useCallback((): SearchRequestPayload => {
     if (!selectedOrganization) {
@@ -649,17 +604,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
               onColumnVisibilityChange: setColumnVisibility,
               onShowColumnFiltersChange: setShowColumnFilters,
               onShowGlobalFilterChange: setShowGlobalFilter,
-              onDensityChange: (updater) => {
-                setDensity((prev) => {
-                  const next = typeof updater === 'function' ? updater(prev) : updater;
-                  try {
-                    localStorage.setItem('species-list-table-density', next);
-                  } catch {
-                    // ignore
-                  }
-                  return next;
-                });
-              },
+              onDensityChange,
               enableColumnPinning: true,
               enableColumnActions: true,
               enableHiding: true,
