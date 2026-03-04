@@ -2368,6 +2368,7 @@ WITHDRAW_QUANTITY_REQUIRED,Extraer cantidad *,be02aa0c
 WITHDRAW_SEEDS,Extraer semillas,02852ae6
 WITHDRAW_SINGLE_NURSERY,Solo puede realizar una retirada en bloque de una incubadora a la vez.,948ffd25
 WITHDRAWAL,Retirada,9845aaae
+WITHDRAWAL_ACTIVE,Retiro activo,13cf84d6
 WITHDRAWAL_BATCHES_MISSING_QUANTITY_ERROR,Ingresar una cantidad en al menos una hilera de lote de plantas de semillero.,99add6bc
 WITHDRAWAL_COUNT_GREATER_THAN_ZERO_ERROR,El conteo de extracción debe ser mayor a 0,e48b9963
 WITHDRAWAL_DETAILS,Detalles de extracción,5c86287a
