@@ -30,7 +30,7 @@ describe('Nursery withdrawals service', () => {
                 batch_species_scientificName: 'Abarema asplenifoliaasdfasdasdfa',
               },
             ],
-            project_names: [undefined],
+            project_names: [],
           },
         ])
       );
@@ -47,7 +47,7 @@ describe('Nursery withdrawals service', () => {
           totalWithdrawn: '1,005',
           hasReassignments: 'true',
           speciesScientificNames: ['Abarema asplenifoliaasdfasdasdfa', 'Abelia macrotera var. deutziaefolia'],
-          project_names: [undefined],
+          project_names: [],
         },
       ]);
     });
@@ -63,7 +63,7 @@ describe('Nursery withdrawals service', () => {
           totalWithdrawn: '1',
           hasReassignments: 'false',
           speciesScientificNames: ['Abarema asplenifoliaasdfasdasdfa'],
-          project_names: [undefined],
+          project_names: [],
         },
         {
           id: '56',
@@ -76,7 +76,7 @@ describe('Nursery withdrawals service', () => {
           totalWithdrawn: '1,005',
           hasReassignments: 'true',
           speciesScientificNames: ['Abarema asplenifoliaasdfasdasdfa', 'Abelia macrotera var. deutziaefolia'],
-          project_names: [undefined],
+          project_names: [],
         },
       ]);
     });

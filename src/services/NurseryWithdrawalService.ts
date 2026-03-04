@@ -87,9 +87,10 @@ export type NurseryWithdrawalsSearchResponseElement = {
   totalWithdrawn: string;
   hasReassignments: string;
   batchWithdrawals: {
-    batch_species_scientificName: string;
     batch_project_id: string;
     batch_project_name: string;
+    batch_species_scientificName: string;
+    destinationBatchProjectName: string;
   }[];
 };
 
@@ -122,12 +123,13 @@ const listNurseryWithdrawals = async (
       'facility_name',
       'destinationName',
       'substratumNames',
-      'batchWithdrawals.batch_species_scientificName',
       'totalWithdrawn',
       'totalWithdrawn(raw)',
       'hasReassignments',
       'batchWithdrawals.batch_project_id',
       'batchWithdrawals.batch_project_name',
+      'batchWithdrawals.batch_species_scientificName',
+      'batchWithdrawals.destinationBatchProjectName',
       'undoesWithdrawalId',
       'undoneByWithdrawalId',
       'undoesWithdrawalDate',
@@ -150,7 +152,16 @@ const listNurseryWithdrawals = async (
       );
 
       const projectNames = batchWithdrawals
-        ? Array.from(new Set(batchWithdrawals.map((batchWithdrawal) => batchWithdrawal.batch_project_name))).sort()
+        ? Array.from(
+            new Set(
+              batchWithdrawals
+                .flatMap((batchWithdrawal) => [
+                  batchWithdrawal.batch_project_name,
+                  batchWithdrawal.destinationBatchProjectName,
+                ])
+                .filter((name) => name !== undefined)
+            )
+          ).sort()
         : [];
 
       return {
