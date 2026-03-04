@@ -1,3 +1,4 @@
+050a70a3b522 SW-8139 Allow withdrawing seedlings in just one status (#5374)
 c44ce674dcb5 SW-7941 Don't label Undo withdrawals as active (#5373)
 94c16e538bbc SW-8067 Use other name for planting withdrawals in CSV (#5372)
 dffcb082f2ee SW-8033: Inventory: Update copy in warning for Deleting Batches to clarify that quantities are removed from inventory (#5368)
