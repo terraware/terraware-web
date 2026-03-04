@@ -124,9 +124,10 @@ test.describe('AccessionTests', () => {
 
     await page.getByRole('button', { name: 'Accessions' }).click();
     await page.getByText(accessionId).waitFor({ state: 'visible', timeout: 30000 });
-    const accessionRow = (
-      await page.getByText(accessionId).evaluate((el) => el.closest('td')?.id ?? '')
-    ).replace('-accessionNumber', '');
+    const accessionRow = (await page.getByText(accessionId).evaluate((el) => el.closest('td')?.id ?? '')).replace(
+      '-accessionNumber',
+      ''
+    );
 
     await expect(page.locator(`#${accessionRow}-accessionNumber`)).toContainText(accessionId);
     await page.getByText(accessionId).click();
@@ -139,9 +140,10 @@ test.describe('AccessionTests', () => {
       await page.getByRole('button', { name: 'Seeds' }).click();
       await page.getByRole('button', { name: 'Accessions' }).click();
 
-      const accessionRow = (
-        await page.getByText(accessionId).evaluate((el) => el.closest('td')?.id ?? '')
-      ).replace('-accessionNumber', '');
+      const accessionRow = (await page.getByText(accessionId).evaluate((el) => el.closest('td')?.id ?? '')).replace(
+        '-accessionNumber',
+        ''
+      );
       await page.locator(`#${accessionRow}-accessionNumber`).getByText(accessionId).click();
       await page.getByRole('button', { name: 'Withdraw' }).click();
       await page.locator('#destinationFacilityId').getByRole('textbox').click();
@@ -180,9 +182,10 @@ test.describe('AccessionTests', () => {
       await page.getByRole('button', { name: 'Seeds' }).click();
       await page.getByRole('button', { name: 'Accessions' }).click();
 
-      const accessionRow = (
-        await page.getByText(accessionId).evaluate((el) => el.closest('td')?.id ?? '')
-      ).replace('-accessionNumber', '');
+      const accessionRow = (await page.getByText(accessionId).evaluate((el) => el.closest('td')?.id ?? '')).replace(
+        '-accessionNumber',
+        ''
+      );
       await page.locator(`#${accessionRow}-accessionNumber`).getByText(accessionId).click();
       await page.getByRole('button', { name: 'Withdraw' }).waitFor({ state: 'visible' });
       await page.getByRole('button', { name: 'Withdraw' }).click();
@@ -200,9 +203,10 @@ test.describe('AccessionTests', () => {
       await page.getByRole('button', { name: 'Seeds' }).click();
       await page.getByRole('button', { name: 'Accessions' }).click();
 
-      const accessionRow = (
-        await page.getByText(accessionId).evaluate((el) => el.closest('td')?.id ?? '')
-      ).replace('-accessionNumber', '');
+      const accessionRow = (await page.getByText(accessionId).evaluate((el) => el.closest('td')?.id ?? '')).replace(
+        '-accessionNumber',
+        ''
+      );
       await page.locator(`#${accessionRow}-accessionNumber`).getByText(accessionId).click();
       await page.getByRole('button', { name: 'Withdraw' }).click();
       await page.locator('.textfield-value > .tw-icon > path').first().click();
