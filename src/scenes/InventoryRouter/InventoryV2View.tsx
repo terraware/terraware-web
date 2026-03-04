@@ -12,7 +12,7 @@ import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
-import NurseryInventoryService, { SearchInventoryParams } from 'src/services/NurseryInventoryService';
+import NurseryInventoryService from 'src/services/NurseryInventoryService';
 import { isAdmin } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useStickyTabs from 'src/utils/useStickyTabs';
@@ -49,6 +49,11 @@ export type InventoryResult = {
   activeGrowthQuantity: string;
   readyQuantity: string;
   totalQuantity: string;
+  'germinatingQuantity(raw)': number;
+  'hardeningOffQuantity(raw)': number;
+  'activeGrowthQuantity(raw)': number;
+  'readyQuantity(raw)': number;
+  'totalQuantity(raw)': number;
   facilityInventories: FacilityName[];
 };
 
@@ -57,11 +62,11 @@ export type SpeciesInventoryResult = {
   scientificName: string;
   commonName?: string;
   inventory?: {
-    'germinatingQuantity(raw)': string;
-    'hardeningOffQuantity(raw)': string;
-    'readyQuantity(raw)': string;
-    'activeGrowthQuantity(raw)': string;
-    'totalQuantity(raw)': string;
+    'germinatingQuantity(raw)': number;
+    'hardeningOffQuantity(raw)': number;
+    'readyQuantity(raw)': number;
+    'activeGrowthQuantity(raw)': number;
+    'totalQuantity(raw)': number;
     facilityInventories: FacilityName[];
   };
 };
@@ -71,11 +76,11 @@ export type SpeciesFacilitiesInventoryResult = {
   scientificName: string;
   commonName?: string;
   facilityInventories?: {
-    'germinatingQuantity(raw)': string;
-    'hardeningOffQuantity(raw)': string;
-    'readyQuantity(raw)': string;
-    'activeGrowthQuantity(raw)': string;
-    'totalQuantity(raw)': string;
+    'germinatingQuantity(raw)': number;
+    'hardeningOffQuantity(raw)': number;
+    'readyQuantity(raw)': number;
+    'activeGrowthQuantity(raw)': number;
+    'totalQuantity(raw)': number;
     facility_name: string;
   }[];
 };
@@ -84,15 +89,15 @@ export type FacilitySpeciesInventoryResult = {
   facility_id: string;
   facility_name: string;
   germinatingQuantity: string;
-  'germinatingQuantity(raw)': string;
+  'germinatingQuantity(raw)': number;
   hardeningOffQuantity: string;
-  'hardeningOffQuantity(raw)': string;
+  'hardeningOffQuantity(raw)': number;
   readyQuantity: string;
-  'readyQuantity(raw)': string;
+  'readyQuantity(raw)': number;
   activeGrowthQuantity: string;
-  'activeGrowthQuantity(raw)': string;
+  'activeGrowthQuantity(raw)': number;
   totalQuantity: string;
-  'totalQuantity(raw)': string;
+  'totalQuantity(raw)': number;
   facilityInventories?: {
     species_id: string;
     species_scientificName: string;
@@ -140,11 +145,11 @@ export type BatchInventoryResult = {
   readyQuantity: string;
   subLocations: string;
   totalQuantity: string;
-  'germinatingQuantity(raw)': string;
-  'hardeningOffQuantity(raw)': string;
-  'readyQuantity(raw)': string;
-  'activeGrowthQuantity(raw)': string;
-  'totalQuantity(raw)': string;
+  'germinatingQuantity(raw)': number;
+  'hardeningOffQuantity(raw)': number;
+  'readyQuantity(raw)': number;
+  'activeGrowthQuantity(raw)': number;
+  'totalQuantity(raw)': number;
 };
 
 type InventoryProps = {
@@ -161,7 +166,6 @@ export default function InventoryV2View(props: InventoryProps): JSX.Element {
   const { hasNurseries, hasSpecies } = props;
   const [importInventoryModalOpen, setImportInventoryModalOpen] = useState(false);
   const contentRef = useRef(null);
-  const [, setReportData] = useState<SearchInventoryParams>();
 
   const messageStyles = {
     margin: '0 auto',
@@ -234,20 +238,20 @@ export default function InventoryV2View(props: InventoryProps): JSX.Element {
       {
         id: InventoryListTypes.BATCHES_BY_SPECIES,
         label: strings.BY_SPECIES,
-        children: <InventoryListBySpecies setReportData={setReportData} />,
+        children: <InventoryListBySpecies />,
       },
       {
         id: InventoryListTypes.BATCHES_BY_NURSERY,
         label: strings.BY_NURSERY,
-        children: <InventoryListByNursery setReportData={setReportData} />,
+        children: <InventoryListByNursery />,
       },
       {
         id: InventoryListTypes.BATCHES_BY_BATCH,
         label: strings.BY_BATCH,
-        children: <InventoryListByBatch setReportData={setReportData} />,
+        children: <InventoryListByBatch />,
       },
     ];
-  }, [activeLocale, isOnboarded, strings, setReportData]);
+  }, [activeLocale, isOnboarded, strings]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: InventoryListTypes.BATCHES_BY_SPECIES,

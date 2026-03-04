@@ -44,6 +44,7 @@ AD_HOC,Ad Hoc,2acaf742
 AD_HOC_NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP,Le nombre de plants vivants par espèce indique le nombre de plants observés par espèce enregistrés comme vivants. Les plants dont l'espèce est inconnue ne sont pas inclus.,15817386
 AD_HOC_OBSERVATIONS_EMPTY_STATE_MESSAGE_1,Il n’y a actuellement aucune observation de parcelle ad hoc.,9ae089fc
 AD_HOC_OBSERVATIONS_EMPTY_STATE_MESSAGE_2,Les observations utilisant des parcelles ad hoc pour le suivi des plantes peuvent être enregistrées via les Observations de parcelles ad hoc dans l’application mobile.,f0775160
+AD_HOC_PLANT_MONITORING,Suivi ponctuel des plantes,589a6d6c
 AD_HOC_PLOT_LIVE_PLANTS_TOOLTIP,Plantes vivantes correspond au nombre de plantes observées enregistrées comme vivantes.,b0ec7f7f
 AD_HOC_PLOT_PLANT_DENSITY_TOOLTIP,La densité de plantes (plantes par hectare) est calculée en fonction du nombre de plantes observées.,142e44c5
 AD_HOC_PLOT_SPECIES_TOOLTIP,Espèces correspond au nombre d'espèces représentées par l'ensemble des plantes observées.,ed7c35b1
@@ -1162,6 +1163,7 @@ NO_SPECIES_CONTRIBUTOR_MSG,"Aucune espèce ne figure dans votre liste d'espèces
 NO_SPECIES_DESCRIPTION,"Il semble que vous n'ayez ajouté aucune espèce pour le moment. Le fait de disposer d'une liste principale des espèces permet de rationaliser la saisie des données relatives aux semences et aux plantes au sein de votre organisation. Vous pouvez ajouter des espèces manuellement et individuellement, ou importer des données à partir d'un fichier CSV.",048a81f6
 NO_SUB_LOCATIONS,Modifiez cette banque de semences pour ajouter des sous-emplacements.,963dba11
 NO_SUB_LOCATIONS_NURSERY,Modifier cette pépinière pour ajouter des sous-emplacements.,8a939067
+NO_TEMPORARY_PLOTS_SURVIVAL_TOOLTIP,Aucune Observation terminée n'inclut de placettes temporaires dans un substrat de site de plantation.,fdf09cc6
 NO_TEMPORARY_PLOTS_WITHIN_STRATA,Il n’y a pas de parcelles temporaires dans les strates du site de plantation. Seules les parcelles temporaires situées dans les strates peuvent être utilisées pour le calcul du taux de survie.,407bd30a
 NO_VOTERS,Pas de votants,7db4c3bf
 NO_VOTERS_FOR_PROJECT,Il n'y a pas de votants pour ce projet. Contactez un administrateur de l'accélérateur pour ajouter des votants.,6753a8bc
@@ -2366,6 +2368,7 @@ WITHDRAW_QUANTITY_REQUIRED,Quantité retirée *,be02aa0c
 WITHDRAW_SEEDS,Retirer des semences,02852ae6
 WITHDRAW_SINGLE_NURSERY,Vous ne pouvez effectuer des retraits en vrac qu'auprès d'une seule pépinière à la fois.,948ffd25
 WITHDRAWAL,Retrait,9845aaae
+WITHDRAWAL_ACTIVE,Retrait actif,13cf84d6
 WITHDRAWAL_BATCHES_MISSING_QUANTITY_ERROR,Saisissez une quantité dans au moins une ligne du lot de semis.,99add6bc
 WITHDRAWAL_COUNT_GREATER_THAN_ZERO_ERROR,Le nombre de retraits doit être supérieur à zéro,e48b9963
 WITHDRAWAL_DETAILS,Détails du retrait,5c86287a

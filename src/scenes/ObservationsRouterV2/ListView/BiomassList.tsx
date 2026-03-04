@@ -1,6 +1,7 @@
-import React, { type JSX, useEffect, useMemo } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo } from 'react';
 
-import { TableColumnType } from '@terraware/web-components';
+import { Button, TableColumnType, Tooltip } from '@terraware/web-components';
+import sanitize from 'sanitize-filename';
 
 import ClientSideFilterTable from 'src/components/Tables/ClientSideFilterTable';
 import Card from 'src/components/common/Card';
@@ -8,7 +9,9 @@ import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent'
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { useLazyListAdHocObservationResultsQuery } from 'src/queries/generated/observations';
 import { useLazyListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
+import { ObservationsService } from 'src/services';
 import { SearchSortOrder } from 'src/types/Search';
+import { downloadCsv } from 'src/utils/csv';
 
 import BiomassCellRenderer from './BiomassCellRenderer';
 
@@ -119,6 +122,44 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
     }
   }, [adHocObservationsResultsResponse, plantingSitesNames]);
 
+  const onExportBiomassObservations = useCallback(async () => {
+    if (!selectedOrganization) {
+      return;
+    }
+
+    const content = await ObservationsService.exportBiomassObservationsCsv(selectedOrganization.id, plantingSiteId);
+
+    if (content !== null) {
+      const siteName = plantingSiteId
+        ? plantingSitesNames[plantingSiteId] ?? strings.ALL_PLANTING_SITES
+        : strings.ALL_PLANTING_SITES;
+      const filename = sanitize(`${siteName}-${strings.BIOMASS_MONITORING}`);
+      downloadCsv(filename, content);
+    }
+  }, [
+    plantingSiteId,
+    plantingSitesNames,
+    selectedOrganization,
+    strings.ALL_PLANTING_SITES,
+    strings.BIOMASS_MONITORING,
+  ]);
+
+  const handleExportClick = useCallback(() => {
+    void onExportBiomassObservations();
+  }, [onExportBiomassObservations]);
+
+  const exportComponent = useMemo(() => {
+    if (adHocObservationsResults.length === 0) {
+      return undefined;
+    }
+
+    return (
+      <Tooltip title={strings.EXPORT}>
+        <Button onClick={handleExportClick} icon='iconExport' type='passive' priority='ghost' />
+      </Tooltip>
+    );
+  }, [adHocObservationsResults.length, handleExportClick, strings.EXPORT]);
+
   const isLoading = useMemo(
     () => adHocObservationsResultsResponse.isFetching || listPlantingSitesResult.isFetching,
     [adHocObservationsResultsResponse.isFetching, listPlantingSitesResult.isFetching]
@@ -136,6 +177,7 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
             subtitle={[strings.BIOMASS_EMPTY_STATE_MESSAGE_1, strings.BIOMASS_EMPTY_STATE_MESSAGE_2]}
           />
         }
+        extraComponent={exportComponent}
         fuzzySearchColumns={fuzzySearchColumns}
         id='biomass-measurement-table'
         Renderer={BiomassCellRenderer}

@@ -83,6 +83,7 @@ const makeNurseryWithdrawalResultsCsv = ({
     { key: 'substratumNames', displayLabel: strings.TO_SUBSTRATUM },
     { key: 'speciesScientificNames', displayLabel: strings.SPECIES },
     { key: 'totalWithdrawn', displayLabel: strings.TOTAL_QUANTITY },
+    { key: 'withdrawalActive', displayLabel: strings.WITHDRAWAL_ACTIVE },
   ];
 
   const data = nurseryWithdrawalResults.map((withdrawal) => ({
@@ -94,6 +95,7 @@ const makeNurseryWithdrawalResultsCsv = ({
     substratumNames: withdrawal.substratumNames,
     speciesScientificNames: (withdrawal.speciesScientificNames as string[] | undefined)?.join(', '),
     totalWithdrawn: withdrawal['totalWithdrawn(raw)'],
+    withdrawalActive: withdrawal.undoneByWithdrawalId ? strings.NO : strings.YES,
   }));
 
   return makeCsv(columnHeaders, data);

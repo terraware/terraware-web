@@ -12,38 +12,21 @@ import { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilte
 import InventoryTable from 'src/scenes/InventoryRouter/InventoryTable';
 import { BatchInventoryResult, InventoryResultWithBatchNumber } from 'src/scenes/InventoryRouter/InventoryV2View';
 import { NurseryBatchService } from 'src/services';
-import { BE_SORTED_FIELDS, SearchInventoryParams } from 'src/services/NurseryInventoryService';
 import { SearchNodePayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDebounce from 'src/utils/useDebounce';
 import useForm from 'src/utils/useForm';
 
-type InventoryListByBatchProps = {
-  setReportData: (data: SearchInventoryParams) => void;
-};
-
-export default function InventoryListByBatch({ setReportData }: InventoryListByBatchProps) {
+export default function InventoryListByBatch() {
   const { activeLocale, strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
 
   const [filters, setFilters] = useForm<InventoryFiltersUnion>({});
   const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>(null);
   const [showResults, setShowResults] = useState(false);
-  const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder | undefined>({
-    field: 'batchNumber',
-    direction: 'Ascending',
-  });
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
 
   const debouncedSearchTerm = useDebounce(temporalSearchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
-
-  const onSearchSortOrder = useCallback(
-    (order: SearchSortOrder) => {
-      const isClientSorted = BE_SORTED_FIELDS.indexOf(order.field) === -1;
-      setSearchSortOrder(isClientSorted ? undefined : order);
-    },
-    [setSearchSortOrder]
-  );
 
   const columns = useMemo(
     (): TableColumnType[] => [
@@ -71,33 +54,33 @@ export default function InventoryListByBatch({ setReportData }: InventoryListByB
         type: 'string',
       },
       {
-        key: 'germinatingQuantity',
+        key: 'germinatingQuantity(raw)',
         name: strings.GERMINATION_ESTABLISHMENT,
         type: 'number' as const,
         tooltipTitle: strings.TOOLTIP_GERMINATION_ESTABLISHMENT_QUANTITY,
       },
       {
-        key: 'activeGrowthQuantity',
+        key: 'activeGrowthQuantity(raw)',
         name: strings.ACTIVE_GROWTH,
         type: 'number' as const,
         tooltipTitle: strings.TOOLTIP_ACTIVE_GROWTH_QUANTITY,
       },
       {
-        key: 'hardeningOffQuantity',
+        key: 'hardeningOffQuantity(raw)',
         name: strings.HARDENING_OFF,
         type: 'number' as const,
         tooltipTitle: strings.TOOLTIP_HARDENING_OFF_QUANTITY,
       },
       {
-        key: 'readyQuantity',
+        key: 'readyQuantity(raw)',
         name: strings.READY_TO_PLANT,
         type: 'number' as const,
         tooltipTitle: strings.TOOLTIP_READY_TO_PLANT_QUANTITY,
       },
       {
-        key: 'totalQuantity',
+        key: 'totalQuantity(raw)',
         name: strings.TOTAL,
-        type: 'number',
+        type: 'number' as const,
         tooltipTitle: strings.TOOLTIP_TOTAL_QUANTITY,
       },
       { key: 'quantitiesMenu', name: '', type: 'string' },
@@ -112,15 +95,6 @@ export default function InventoryListByBatch({ setReportData }: InventoryListByB
 
       const showEmptyBatches = (filters.showEmptyBatches || [])[0] === 'true';
 
-      setReportData({
-        organizationId: selectedOrganization.id,
-        query: debouncedSearchTerm,
-        facilityIds: filters.facilityIds,
-        subLocationIds: filters.subLocationsIds,
-        searchSortOrder,
-        showEmptyBatches,
-      });
-
       const searchFields = [];
       if (filters.projectIds && filters.projectIds.length > 0) {
         searchFields.push({
@@ -133,7 +107,7 @@ export default function InventoryListByBatch({ setReportData }: InventoryListByB
 
       const apiSearchResults = await NurseryBatchService.getAllBatches(
         selectedOrganization.id,
-        searchSortOrder,
+        { field: 'batchNumber', direction: 'Ascending' } as SearchSortOrder,
         filters.facilityIds,
         filters.subLocationsIds,
         debouncedSearchTerm,
@@ -181,7 +155,7 @@ export default function InventoryListByBatch({ setReportData }: InventoryListByB
         }
       }
     }
-  }, [activeLocale, filters, debouncedSearchTerm, selectedOrganization, searchSortOrder, setReportData]);
+  }, [activeLocale, filters, debouncedSearchTerm, selectedOrganization]);
 
   const reloadData = useCallback(() => void onApplyFilters(), [onApplyFilters]);
 
@@ -198,8 +172,6 @@ export default function InventoryListByBatch({ setReportData }: InventoryListByB
           setTemporalSearchValue={setTemporalSearchValue}
           filters={filters}
           setFilters={setFilters}
-          setSearchSortOrder={onSearchSortOrder}
-          isPresorted={!!searchSortOrder}
           columns={columns}
           reloadData={reloadData}
           origin='Batches'
