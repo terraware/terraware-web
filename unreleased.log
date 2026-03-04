@@ -1,3 +1,4 @@
+b6feeebe04df SW-8132 Fix inventory sorting (#5354)
 a7c049a3dd0e SW-5441 Show destination project in withdrawal history (#5370)
 9fc495b6c4e9 SW-8134 Update survival rate settings header and tooltip for species (#5362)
 5048df4e42b2 SW-8028 Survival Rate override in reports not working (#5364)
