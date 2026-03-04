@@ -1,3 +1,4 @@
+dffcb082f2ee SW-8033: Inventory: Update copy in warning for Deleting Batches to clarify that quantities are removed from inventory (#5368)
 d41fdd6662d4 SW-7941 Include withdrawal undo status in CSV export (#5371)
 aae05a096d53 SW-8115: Remove now extraneous "date" column from Observation table (#5367)
 da9c5b5f0f52 SW-7986 Always show temp plots tab in survival rate settings (#5352)
