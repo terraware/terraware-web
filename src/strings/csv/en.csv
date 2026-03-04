@@ -1104,6 +1104,7 @@ MY_ACCOUNT_DESC,Manage your account information.,
 MY_ACCOUNT_NOTIFICATIONS_DESC,Notifications alert you when there are important updates about your organizations. You will receive them through email.,
 N_IMAGES,{0} image(s),
 N_ROWS,{0} row(s),
+NA,N/A,Abbreviation for Not Applicable
 NAME,Name,
 NAME_REQUIRED,Name *,
 NAME_UNKNOWN,(name unknown),
