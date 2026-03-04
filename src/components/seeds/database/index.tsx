@@ -711,84 +711,88 @@ export default function Database(props: DatabaseProps): JSX.Element {
               {isOnboarded ? (
                 <Card>
                   {searchResults !== undefined ? (
-                    <EditableTable
-                      columns={editableColumns}
-                      data={searchResults ?? []}
-                      enableEditing={false}
-                      enableSorting={true}
-                      enableGlobalFilter={true}
-                      enableColumnFilters={true}
-                      enableColumnOrdering={true}
-                      stickyFilters={true}
-                      storageKey={STORAGE_KEY}
-                      enablePagination={false}
-                      enableTopToolbar={true}
-                      enableBottomToolbar={false}
-                      tableOptions={{
-                        state: {
-                          sorting,
-                          columnOrder,
-                          columnVisibility,
-                          density,
-                          columnFilters,
-                          showColumnFilters,
-                          showGlobalFilter,
-                        },
-                        onSortingChange: setSorting,
-                        onColumnOrderChange: setColumnOrder,
-                        onColumnVisibilityChange: setColumnVisibility,
-                        onColumnFiltersChange: setColumnFilters,
-                        onShowColumnFiltersChange: setShowColumnFilters,
-                        onShowGlobalFilterChange: setShowGlobalFilter,
-                        onDensityChange,
-                        enableColumnPinning: true,
-                        enableColumnActions: true,
-                        enableHiding: true,
-                        enableColumnDragging: true,
-                        positionGlobalFilter: 'right',
-                        getRowId: (row) => String(row.id),
-                        renderToolbarInternalActions: ({ table }) => (
-                          <Box display='flex' gap={0.5}>
-                            <Tooltip title={strings.EXPORT}>
-                              <IconButton onClick={() => downloadReportHandler(table)}>
-                                <Icon name='iconExport' size='medium' />
-                              </IconButton>
-                            </Tooltip>
-                            <MRT_ToggleGlobalFilterButton table={table} />
-                            <MRT_ToggleFiltersButton table={table} />
-                            <MRT_ShowHideColumnsButton table={table} />
-                            <MRT_ToggleDensePaddingButton table={table} />
-                            <MRT_ToggleFullScreenButton table={table} />
-                          </Box>
-                        ),
-                        muiTableBodyCellProps: ({ row, column, table }) => {
-                          const visualIndex = table.getSortedRowModel().rows.findIndex((r) => r.id === row.id);
-                          return { id: `row${visualIndex + 1}-${column.id}` };
-                        },
-                        muiTableBodyProps: {
-                          sx: {
-                            '& tr:nth-of-type(odd) > td': {
-                              backgroundColor: theme.palette.TwClrBaseGray025,
+                    searchResults !== null ? (
+                      <EditableTable
+                        columns={editableColumns}
+                        data={searchResults ?? []}
+                        enableEditing={false}
+                        enableSorting={true}
+                        enableGlobalFilter={true}
+                        enableColumnFilters={true}
+                        enableColumnOrdering={true}
+                        stickyFilters={true}
+                        storageKey={STORAGE_KEY}
+                        enablePagination={false}
+                        enableTopToolbar={true}
+                        enableBottomToolbar={false}
+                        tableOptions={{
+                          state: {
+                            sorting,
+                            columnOrder,
+                            columnVisibility,
+                            density,
+                            columnFilters,
+                            showColumnFilters,
+                            showGlobalFilter,
+                          },
+                          onSortingChange: setSorting,
+                          onColumnOrderChange: setColumnOrder,
+                          onColumnVisibilityChange: setColumnVisibility,
+                          onColumnFiltersChange: setColumnFilters,
+                          onShowColumnFiltersChange: setShowColumnFilters,
+                          onShowGlobalFilterChange: setShowGlobalFilter,
+                          onDensityChange,
+                          enableColumnPinning: true,
+                          enableColumnActions: true,
+                          enableHiding: true,
+                          enableColumnDragging: true,
+                          positionGlobalFilter: 'right',
+                          getRowId: (row) => String(row.id),
+                          renderToolbarInternalActions: ({ table }) => (
+                            <Box display='flex' gap={0.5}>
+                              <Tooltip title={strings.EXPORT}>
+                                <IconButton onClick={() => downloadReportHandler(table)}>
+                                  <Icon name='iconExport' size='medium' />
+                                </IconButton>
+                              </Tooltip>
+                              <MRT_ToggleGlobalFilterButton table={table} />
+                              <MRT_ToggleFiltersButton table={table} />
+                              <MRT_ShowHideColumnsButton table={table} />
+                              <MRT_ToggleDensePaddingButton table={table} />
+                              <MRT_ToggleFullScreenButton table={table} />
+                            </Box>
+                          ),
+                          muiTableBodyCellProps: ({ row, column, table }) => {
+                            const visualIndex = table.getSortedRowModel().rows.findIndex((r) => r.id === row.id);
+                            return { id: `row${visualIndex + 1}-${column.id}` };
+                          },
+                          muiTableBodyProps: {
+                            sx: {
+                              '& tr:nth-of-type(odd) > td': {
+                                backgroundColor: theme.palette.TwClrBaseGray025,
+                              },
                             },
                           },
-                        },
-                        muiTablePaperProps: {
-                          elevation: 0,
-                        },
-                        muiTopToolbarProps: {
-                          sx: {
-                            position: 'relative',
-                            '& > .MuiBox-root': {
+                          muiTablePaperProps: {
+                            elevation: 0,
+                          },
+                          muiTopToolbarProps: {
+                            sx: {
                               position: 'relative',
-                            },
-                            '& .Mui-ToolbarDropZone': {
-                              display: 'none',
+                              '& > .MuiBox-root': {
+                                position: 'relative',
+                              },
+                              '& .Mui-ToolbarDropZone': {
+                                display: 'none',
+                              },
                             },
                           },
-                        },
-                      }}
-                      sx={{ padding: 0 }}
-                    />
+                        }}
+                        sx={{ padding: 0 }}
+                      />
+                    ) : (
+                      <Box sx={{ padding: '32px', textAlign: 'center' }}>{strings.GENERIC_ERROR}</Box>
+                    )
                   ) : (
                     <Box sx={{ display: 'flex', justifyContent: 'center', padding: '32px' }}>
                       <CircularProgress />
