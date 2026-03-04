@@ -1,6 +1,8 @@
 import React, { type JSX } from 'react';
 import { Route, Routes } from 'react-router';
 
+import ScrollToTop from 'src/components/common/ScrollToTop';
+
 import SurvivalRateSettings from '../SurvivalRateSettings';
 import EditSurvivalRateSettings from '../SurvivalRateSettings/EditSurvivalRateSettings';
 import AbandonObservationModalProvider from './Abandon';
@@ -13,6 +15,7 @@ const ObservationsRouterV2 = (): JSX.Element => {
   return (
     <AbandonObservationModalProvider>
       <ReassignPlotModalProvider>
+        <ScrollToTop />
         <Routes>
           <Route path={'/:observationId/*'} element={<ObservationSingleView />} />
           <Route path={'/schedule/*'} element={<ObservationScheduleRouter />} />
