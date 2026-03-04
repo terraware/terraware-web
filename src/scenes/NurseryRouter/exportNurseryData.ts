@@ -96,7 +96,11 @@ const makeNurseryWithdrawalResultsCsv = ({
     substratumNames: withdrawal.substratumNames,
     speciesScientificNames: (withdrawal.speciesScientificNames as string[] | undefined)?.join(', '),
     totalWithdrawn: withdrawal['totalWithdrawn(raw)'],
-    withdrawalActive: withdrawal.undoneByWithdrawalId ? strings.NO : strings.YES,
+    withdrawalActive: withdrawal.undoneByWithdrawalId
+      ? strings.NO
+      : withdrawal['purpose(raw)'] === 'Undo'
+        ? strings.NA
+        : strings.YES,
   }));
 
   return makeCsv(columnHeaders, data);

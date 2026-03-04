@@ -1104,6 +1104,7 @@ MY_ACCOUNT_DESC,Gestione la información de su cuenta.,4eff2dde
 MY_ACCOUNT_NOTIFICATIONS_DESC,Las notificaciones le avisan cuando hay actualizaciones importantes sobre sus organizaciones. Las recibirá por correo electrónico.,65644b47
 N_IMAGES,{0} imagen(es),098eae0e
 N_ROWS,{0} fila(s),2bb73684
+NA,No aplica,627f660e
 NAME,Nombre,e7c2678c
 NAME_REQUIRED,Nombre *,9a735f80
 NAME_UNKNOWN,(nombre desconocido),526f6e3c
