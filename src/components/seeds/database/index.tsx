@@ -1,156 +1,207 @@
-import React, { type JSX, useCallback, useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router';
+import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { Box, CircularProgress, Container, Grid, useTheme } from '@mui/material';
+import { Box, CircularProgress, Container, Grid, IconButton, Tooltip, useTheme } from '@mui/material';
 import { DropdownItem, Message } from '@terraware/web-components';
-import { DatabaseColumn } from '@terraware/web-components/components/table/types';
-import _ from 'lodash';
+import { EditableTable, EditableTableColumn, Icon } from '@terraware/web-components';
+import {
+  MRT_Cell,
+  MRT_ColumnFiltersState,
+  MRT_ColumnOrderState,
+  MRT_DensityState,
+  MRT_ShowHideColumnsButton,
+  MRT_SortingState,
+  MRT_TableInstance,
+  MRT_ToggleDensePaddingButton,
+  MRT_ToggleFiltersButton,
+  MRT_ToggleFullScreenButton,
+  MRT_ToggleGlobalFilterButton,
+  MRT_VisibilityState,
+} from 'material-react-table';
 
 import PageHeader from 'src/components/PageHeader';
-import ProjectAssignTopBarButton from 'src/components/ProjectAssignTopBarButton';
 import Card from 'src/components/common/Card';
 import EmptyMessage from 'src/components/common/EmptyMessage';
 import { downloadCsvTemplateHandler } from 'src/components/common/ImportModal';
+import Link from 'src/components/common/Link';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
+import TextTruncated from 'src/components/common/TextTruncated';
 import TfMain from 'src/components/common/TfMain';
 import Button from 'src/components/common/button/Button';
-import { BaseTable as Table } from 'src/components/common/table';
-import { SortOrder as Order } from 'src/components/common/table/sort';
 import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
-import { selectMessage } from 'src/redux/features/message/messageSelectors';
-import { sendMessage } from 'src/redux/features/message/messageSlice';
+import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { requestProjects } from 'src/redux/features/projects/projectsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { PreferencesService } from 'src/services';
-import SeedBankService, { DEFAULT_SEED_SEARCH_FILTERS, FieldValuesMap } from 'src/services/SeedBankService';
+import SeedBankService from 'src/services/SeedBankService';
 import strings from 'src/strings';
+import { ACCESSION_2_STATES } from 'src/types/Accession';
 import { Facility } from 'src/types/Facility';
 import { Project } from 'src/types/Project';
-import { SearchCriteria, SearchNodePayload, SearchResponseElementWithId, SearchSortOrder } from 'src/types/Search';
-import { useSessionFilters } from 'src/utils/filterHooks/useSessionFilters';
-import { getAllSeedBanks } from 'src/utils/organization';
-import { isAdmin } from 'src/utils/organization';
-import { getRequestId, setRequestId } from 'src/utils/requestsId';
+import { SearchResponseElementWithId } from 'src/types/Search';
+import { makeCsv } from 'src/utils/csv';
+import { getAllSeedBanks, isAdmin } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useQuery from 'src/utils/useQuery';
-import useSnackbar, { SNACKBAR_PAGE_CLOSE_KEY } from 'src/utils/useSnackbar';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 import SelectSeedBankModal from '../../../scenes/SeedBanksRouter/SelectSeedBankModal';
-import DownloadReportModal from './DownloadReportModal';
-import EditColumns from './EditColumns';
-import Filters from './Filters';
 import ImportAccessionsModal from './ImportAccessionsModal';
-import SearchCellRenderer from './TableCellRenderer';
-import { columnsIndexed } from './columns';
 
-const filterSelectFields = (fields: string[]): string[] => {
-  const columns = columnsIndexed();
+const STORAGE_KEY = 'accessions-database-table';
 
-  return fields.reduce((acum: string[], value) => {
-    const dbColumn: DatabaseColumn = columns[value];
-    if (['multiple_selection', 'single_selection'].includes(dbColumn.filter?.type ?? '')) {
-      acum.push(dbColumn.key);
-    }
-
-    return acum;
-  }, [] as string[]);
-};
+const ALL_ACCESSION_FIELDS = [
+  'id',
+  'accessionNumber',
+  'state',
+  'facility_name',
+  'subLocation_name',
+  'speciesName',
+  'project_name',
+  'species_commonName',
+  'species_familyName',
+  'collectedDate',
+  'collectionSiteName',
+  'collectionSiteLandowner',
+  'collectionSiteNotes',
+  'ageMonths',
+  'ageYears',
+  'totalWithdrawnCount',
+  'totalWithdrawnWeightMilligrams',
+  'totalWithdrawnWeightGrams',
+  'totalWithdrawnWeightKilograms',
+  'totalWithdrawnWeightOunces',
+  'totalWithdrawnWeightPounds',
+  'totalViabilityPercent',
+  'estimatedWeightMilligrams',
+  'estimatedWeightGrams',
+  'estimatedWeightKilograms',
+  'estimatedWeightOunces',
+  'estimatedWeightPounds',
+  'estimatedCount',
+  'geolocations.coordinates',
+  'plantId',
+];
 
 type DatabaseProps = {
-  searchCriteria: SearchCriteria;
-  setSearchCriteria: (criteria: SearchCriteria) => void;
-  searchSortOrder: SearchSortOrder;
-  setSearchSortOrder: (order: SearchSortOrder) => void;
-  searchColumns: string[];
-  setSearchColumns: (fields: string[]) => void;
-  displayColumnNames: string[];
-  setDisplayColumnNames: (fields: string[]) => void;
   hasSeedBanks: boolean;
   hasSpecies: boolean;
   reloadData?: () => void;
 };
 
 export default function Database(props: DatabaseProps): JSX.Element {
-  const {
-    searchCriteria,
-    setSearchCriteria,
-    searchSortOrder,
-    setSearchSortOrder,
-    searchColumns,
-    setSearchColumns,
-    displayColumnNames,
-    setDisplayColumnNames,
-    hasSeedBanks,
-    hasSpecies,
-    reloadData,
-  } = props;
+  const { hasSeedBanks, hasSpecies, reloadData } = props;
 
-  const { selectedOrganization, orgPreferences, reloadOrgPreferences } = useOrganization();
+  const { selectedOrganization } = useOrganization();
   const { activeLocale } = useLocalization();
-  const { reloadUserPreferences } = useUser();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const navigate = useSyncNavigate();
   const query = useQuery();
   const location = useStateLocation();
-  const { sessionFilters, setSessionFilters } = useSessionFilters('accessions');
   const { goToNewAccession } = useNavigateTo();
-
-  const messageStyles = {
-    margin: '0 auto',
-    maxWidth: '800px',
-    padding: '48px',
-    width: '800px',
-  };
-
+  const dispatch = useAppDispatch();
   const projects = useAppSelector(selectProjects);
+  const contentRef = useRef(null);
 
-  const columns = columnsIndexed();
-  const displayColumnDetails = displayColumnNames.map((name) => {
-    const detail = { ...columns[name] };
-
-    return detail;
-  });
-  const filterColumns = displayColumnDetails.filter((col) => !['state', 'project_name'].includes(col.key));
-  const searchTermColumns = [columns.accessionNumber, columns.speciesName, columns.collectionSiteName];
-  const preExpFilterColumns = [columns.state, columns.project_name];
-  const [editColumnsModalOpen, setEditColumnsModalOpen] = useState(false);
-  const [reportModalOpen, setReportModalOpen] = useState(false);
+  const [searchResults, setSearchResults] = useState<SearchResponseElementWithId[] | null>();
   const [pendingAccessions, setPendingAccessions] = useState<SearchResponseElementWithId[] | null>();
   const [selectedFacility, setSelectedFacility] = useState<Facility | undefined>();
-  const contentRef = useRef(null);
-  const searchedLocaleRef = useRef<string | null>(activeLocale);
+  const [selectSeedBankForImportModalOpen, setSelectSeedBankForImportModalOpen] = useState(false);
+  const [openImportModal, setOpenImportModal] = useState(false);
 
-  /*
-   * fieldOptions is a list of records
-   * keys: all single and multi select search fields.
-   * values: all the existing values that the field has in the database, for all accessions.
-   */
-  const [fieldOptions, setFieldOptions] = useState<FieldValuesMap | null>();
-  /*
-   * availableFieldOptions is a list of records
-   * keys: all single and multi select search fields.
-   * values: all the values that are associated with an accession in the current facility AND that aren't being
-   * filtered out by searchCriteria.
-   */
-  const [availableFieldOptions, setAvailableFieldOptions] = useState<FieldValuesMap | null>();
-  const [searchResults, setSearchResults] = useState<SearchResponseElementWithId[] | null>();
-  const [selectedRows, setSelectedRows] = useState<SearchResponseElementWithId[]>([]);
-  const [unfilteredResults, setUnfilteredResults] = useState<SearchResponseElementWithId[] | null>();
-  const [selectSeedBankForImportModalOpen, setSelectSeedBankForImportModalOpen] = useState<boolean>(false);
-  const [openImportModal, setOpenImportModal] = useState<boolean>(false);
-  const [showDefaultSystemSnackbar, setShowDefaultSystemSnackbar] = useState(false);
-  const { userPreferences } = useUser();
-  const snackbar = useSnackbar();
-  const dispatch = useAppDispatch();
+  const [columnOrder, setColumnOrder] = useState<MRT_ColumnOrderState>(() => {
+    try {
+      const saved = localStorage.getItem(`${STORAGE_KEY}-columnOrder`);
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
 
-  const closeMessageSelector = useAppSelector(selectMessage(`seeds.${SNACKBAR_PAGE_CLOSE_KEY}.ackWeightSystem`));
+  const [columnVisibility, setColumnVisibility] = useState<MRT_VisibilityState>(() => {
+    try {
+      const saved = localStorage.getItem(`${STORAGE_KEY}-columnVisibility`);
+      return saved ? JSON.parse(saved) : {};
+    } catch {
+      return {};
+    }
+  });
+
+  const [density, setDensity] = useState<MRT_DensityState>(() => {
+    try {
+      return (localStorage.getItem(`${STORAGE_KEY}-density`) as MRT_DensityState) || 'comfortable';
+    } catch {
+      return 'comfortable';
+    }
+  });
+
+  const [columnFilters, setColumnFilters] = useState<MRT_ColumnFiltersState>(() => {
+    try {
+      const saved = localStorage.getItem(`${STORAGE_KEY}-columnFilters`);
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  const [showColumnFilters, setShowColumnFilters] = useState(() => {
+    try {
+      const saved = localStorage.getItem(`${STORAGE_KEY}-columnFilters`);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        return Array.isArray(parsed) && parsed.length > 0;
+      }
+    } catch {
+      // ignore
+    }
+    return false;
+  });
+
+  const [showGlobalFilter, setShowGlobalFilter] = useState(false);
+
+  const [sorting, setSorting] = useState<MRT_SortingState>(() => {
+    try {
+      const saved = localStorage.getItem(`${STORAGE_KEY}-sorting`);
+      return saved ? JSON.parse(saved) : [{ id: 'accessionNumber', desc: false }];
+    } catch {
+      return [{ id: 'accessionNumber', desc: false }];
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(`${STORAGE_KEY}-columnOrder`, JSON.stringify(columnOrder));
+    } catch {
+      // ignore
+    }
+  }, [columnOrder]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(`${STORAGE_KEY}-columnVisibility`, JSON.stringify(columnVisibility));
+    } catch {
+      // ignore
+    }
+  }, [columnVisibility]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(`${STORAGE_KEY}-columnFilters`, JSON.stringify(columnFilters));
+    } catch {
+      // ignore
+    }
+  }, [columnFilters]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(`${STORAGE_KEY}-sorting`, JSON.stringify(sorting));
+    } catch {
+      // ignore
+    }
+  }, [sorting]);
 
   useEffect(() => {
     if (selectedOrganization) {
@@ -158,374 +209,67 @@ export default function Database(props: DatabaseProps): JSX.Element {
     }
   }, [activeLocale, dispatch, selectedOrganization]);
 
+  const fetchAccessions = useCallback(async () => {
+    if (!selectedOrganization) {
+      return;
+    }
+    const apiResponse = await SeedBankService.searchAccessions({
+      organizationId: selectedOrganization.id,
+      fields: ALL_ACCESSION_FIELDS,
+    });
+    setSearchResults(apiResponse as SearchResponseElementWithId[] | null);
+  }, [selectedOrganization]);
+
   useEffect(() => {
-    const updatePreferences = async () => {
-      await PreferencesService.updateUserPreferences({ defaultWeightSystemAcknowledgedOnMs: Date.now() });
-      reloadUserPreferences();
+    void fetchAccessions();
+  }, [fetchAccessions]);
+
+  useEffect(() => {
+    if (!selectedOrganization) {
+      return;
+    }
+    const populatePendingAccessions = async () => {
+      const data = await SeedBankService.getPendingAccessions(selectedOrganization.id);
+      setPendingAccessions(data);
     };
-    if (closeMessageSelector) {
-      dispatch(sendMessage({ key: `seeds.${SNACKBAR_PAGE_CLOSE_KEY}.dismissPageMessage`, data: undefined }));
-      void updatePreferences();
-    }
-  }, [closeMessageSelector, dispatch, reloadUserPreferences]);
+    void populatePendingAccessions();
+  }, [selectedOrganization]);
 
   useEffect(() => {
-    const showSnackbar = () => {
-      snackbar.pageInfo(
-        strings.formatString<any>(
-          strings.CHANGE_DEFAULT_WEIGHT_SYSTEM,
-          <Link to={APP_PATHS.MY_ACCOUNT}>{strings.MY_ACCOUNT}</Link>
-        ),
-        '',
-        {
-          label: strings.GOT_IT,
-          key: 'ackWeightSystem',
-          payload: Date.now(),
-        }
-      );
-    };
-    if (showDefaultSystemSnackbar) {
-      showSnackbar();
-    }
-  }, [showDefaultSystemSnackbar, snackbar, userPreferences.preferredWeightSystem, reloadUserPreferences]);
-
-  const updateSearchColumns = useCallback(
-    (columnNames?: string[]) => {
-      if (columnNames) {
-        const columnInfo = columnsIndexed();
-        const validColumns = columnNames.filter((name) => name in columnInfo);
-        const searchSelectedColumns = validColumns.reduce((acum, value) => {
-          acum.push(value);
-          const additionalColumns = columnInfo[value].additionalKeys;
-          if (additionalColumns) {
-            return acum.concat(additionalColumns);
-          }
-
-          return acum;
-        }, [] as string[]);
-
-        setSearchColumns(searchSelectedColumns);
-        setDisplayColumnNames(validColumns);
-      }
-    },
-    [setSearchColumns, setDisplayColumnNames]
-  );
-
-  const updateSearchColumnsBootstrap = useCallback(
-    (columnNames?: string[]) => {
-      if (columnNames) {
-        if (
-          !userPreferences.defaultWeightSystemAcknowledgedOnMs &&
-          userPreferences.preferredWeightSystem !== 'imperial' &&
-          columnNames.find((cn) => cn === 'estimatedWeightOunces' || cn === 'estimatedWeightPounds')
-        ) {
-          setShowDefaultSystemSnackbar(true);
-        }
-        updateSearchColumns(columnNames);
-      }
-    },
-    [userPreferences.preferredWeightSystem, userPreferences.defaultWeightSystemAcknowledgedOnMs, updateSearchColumns]
-  );
-
-  const saveSearchColumns = useCallback(
-    async (columnNames?: string[]) => {
-      if (selectedOrganization) {
-        await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, { accessionsColumns: columnNames });
-        reloadOrgPreferences();
-      }
-    },
-    [selectedOrganization, reloadOrgPreferences]
-  );
-
-  const saveUpdateSearchColumns = useCallback(
-    async (columnNames?: string[]) => {
-      updateSearchColumns(columnNames);
-      await saveSearchColumns(columnNames);
-    },
-    [updateSearchColumns, saveSearchColumns]
-  );
-
-  const reorderSearchColumns = async (columnNames: string[]) => {
-    setDisplayColumnNames(columnNames);
-    await saveSearchColumns(columnNames);
-  };
-
-  useEffect(() => {
-    if (orgPreferences?.accessionsColumns) {
-      if (!(orgPreferences.accessionsColumns as string[]).includes('project_name')) {
-        (orgPreferences.accessionsColumns as string[]).push('project_name');
-      }
-      updateSearchColumnsBootstrap(orgPreferences.accessionsColumns as string[]);
-    }
-  }, [orgPreferences, updateSearchColumnsBootstrap]);
-
-  useEffect(() => {
-    // if url has facilityId= or subLocationName=, apply each filter
     const facilityId = query.get('facilityId');
     const subLocationName = query.get('subLocationName');
-    let newSearchCriteria = searchCriteria || {};
 
-    if (subLocationName || query.has('subLocationName')) {
-      delete newSearchCriteria.subLocation_name;
-      if (subLocationName) {
-        newSearchCriteria = {
-          ...newSearchCriteria,
-          subLocation_name: {
-            field: 'subLocation_name',
-            values: [subLocationName],
-            type: 'Exact',
-            operation: 'field',
-          },
-        };
-      }
+    if (!facilityId && !subLocationName) {
+      return;
+    }
+
+    const urlFilters: MRT_ColumnFiltersState = [];
+
+    if (subLocationName) {
+      urlFilters.push({ id: 'subLocation_name', value: subLocationName });
       query.delete('subLocationName');
     }
 
-    if ((facilityId || query.has('facilityId')) && selectedOrganization) {
-      const seedBanks = selectedOrganization ? getAllSeedBanks(selectedOrganization) : [];
-      delete newSearchCriteria.facility_name;
-      if (seedBanks && facilityId) {
-        const facility = seedBanks.find((seedBank) => seedBank?.id === parseInt(facilityId, 10));
-        if (facility) {
-          newSearchCriteria = {
-            ...newSearchCriteria,
-            facility_name: {
-              field: 'facility_name',
-              values: [facility.name],
-              type: 'Exact',
-              operation: 'field',
-            },
-          };
-        }
+    if (facilityId && selectedOrganization) {
+      const seedBanks = getAllSeedBanks(selectedOrganization);
+      const facility = seedBanks.find((sb) => sb?.id === parseInt(facilityId, 10));
+      if (facility) {
+        urlFilters.push({ id: 'facility_name', value: facility.name });
       }
       query.delete('facilityId');
     }
 
-    if ((facilityId && selectedOrganization) || subLocationName) {
+    if (urlFilters.length > 0) {
+      setColumnFilters((prev) => [...prev, ...urlFilters]);
+      setShowColumnFilters(true);
       navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
-      setSearchCriteria(newSearchCriteria);
-
-      // add seed bank and sub-location columns to show the filtered values as needed
-      if (facilityId || subLocationName) {
-        const newColumns = displayColumnNames
-          .filter((name) => {
-            if (facilityId && name === 'facility_name') {
-              return false;
-            }
-            return name !== 'subLocation_name';
-          })
-          .concat(facilityId ? ['facility_name'] : [])
-          .concat(subLocationName ? ['subLocation_name'] : []);
-        void saveUpdateSearchColumns(newColumns);
-      }
     }
-  }, [
-    query,
-    location,
-    navigate,
-    setSearchCriteria,
-    selectedOrganization,
-    searchCriteria,
-    displayColumnNames,
-    saveUpdateSearchColumns,
-  ]);
+  }, [location, navigate, query, selectedOrganization]);
 
-  useEffect(() => {
-    if (selectedOrganization) {
-      const populateUnfilteredResults = async () => {
-        const apiResponse: SearchResponseElementWithId[] | null = await SeedBankService.searchAccessions({
-          organizationId: selectedOrganization.id,
-          fields: ['id'],
-        });
-
-        setUnfilteredResults(apiResponse);
-      };
-
-      const populatePendingAccessions = async () => {
-        const data: SearchResponseElementWithId[] | null = await SeedBankService.getPendingAccessions(
-          selectedOrganization.id
-        );
-        setPendingAccessions(data);
-      };
-
-      void populateUnfilteredResults();
-      void populatePendingAccessions();
-    }
-  }, [selectedOrganization]);
-
-  const initAccessions = useCallback(() => {
-    const getFieldsFromSearchColumns = () => {
-      let columnsNamesToSearch: string[];
-      if (searchColumns.includes('active')) {
-        columnsNamesToSearch = [...searchColumns, 'id'];
-      } else {
-        columnsNamesToSearch = [...searchColumns, 'active', 'id'];
-      }
-
-      return columnsNamesToSearch;
-    };
-
-    if (selectedOrganization) {
-      const requestId = setRequestId('accessions_search');
-
-      const populateSearchResults = async () => {
-        const apiResponse: SearchResponseElementWithId[] | null = await SeedBankService.searchAccessions({
-          organizationId: selectedOrganization.id,
-          fields: getFieldsFromSearchColumns(),
-          sortOrder: searchSortOrder,
-          searchCriteria,
-        });
-
-        if (requestId === getRequestId('accessions_search')) {
-          setSearchResults(apiResponse);
-        }
-      };
-
-      const populateAvailableFieldOptions = async () => {
-        const singleAndMultiChoiceFields = filterSelectFields(searchColumns);
-        const data = await SeedBankService.searchFieldValues(
-          singleAndMultiChoiceFields,
-          searchCriteria,
-          selectedOrganization.id
-        );
-
-        if (requestId === getRequestId('accessions_search')) {
-          setAvailableFieldOptions(data);
-        }
-      };
-
-      const populateFieldOptions = async () => {
-        // Since the seed bank service doesn't return values for project IDs, we need to merge the values in
-        const singleAndMultiChoiceFields = filterSelectFields(
-          searchColumns.filter((column) => column !== 'project_name')
-        );
-
-        const allValues =
-          (await SeedBankService.searchFieldValues(singleAndMultiChoiceFields, {}, selectedOrganization.id)) || {};
-
-        allValues.project_name = {
-          partial: false,
-          values: (projects || []).map((project: Project) => project.name),
-        };
-
-        if (requestId === getRequestId('accessions_search')) {
-          setFieldOptions(allValues);
-        }
-      };
-
-      if (searchCriteria) {
-        void populateSearchResults();
-      }
-
-      void populateAvailableFieldOptions();
-      void populateFieldOptions();
-    }
-  }, [projects, searchColumns, searchCriteria, searchSortOrder, selectedOrganization]);
-
-  useEffect(() => {
-    void initAccessions();
-  }, [initAccessions]);
-
-  useEffect(() => {
-    if (searchedLocaleRef.current && activeLocale && searchedLocaleRef.current !== activeLocale) {
-      // If we've already done a search with a different locale, throw away search criteria since
-      // they might contain localized values. Copy the default filters so React sees this as a
-      // modification even if the existing search was also using the default.
-      setSearchCriteria({ ...DEFAULT_SEED_SEARCH_FILTERS });
-    }
-
-    searchedLocaleRef.current = activeLocale;
-  }, [activeLocale, setSearchCriteria]);
-
-  useEffect(() => {
-    if (!sessionFilters || Object.keys(sessionFilters).length === 0) {
-      return;
-    }
-
-    const nextSearchCriteria = {
-      ...searchCriteria,
-      // These filters need to be converted into SearchNodePayload
-      ...Object.keys(sessionFilters).reduce(
-        (newSearchCriteria, sessionFilterKey) => ({
-          ...newSearchCriteria,
-          [sessionFilterKey]: {
-            field: sessionFilterKey,
-            operation: 'field',
-            type: 'Exact',
-            values: sessionFilters[sessionFilterKey],
-          },
-        }),
-        {} as SearchNodePayload
-      ),
-    };
-
-    if (!_.isEqual(searchCriteria, nextSearchCriteria)) {
-      setSearchCriteria(nextSearchCriteria);
-    }
-  }, [searchCriteria, sessionFilters, setSearchCriteria]);
-
-  const onSelect = (row: SearchResponseElementWithId) => {
-    if (row.id) {
-      const seedCollectionLocation = {
-        pathname: APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', row.id),
-        state: { from: location.pathname },
-      };
-      navigate(seedCollectionLocation);
-    }
-  };
-
-  const onSortChange = (order: Order, orderBy: string) => {
-    setSearchSortOrder({
-      field: orderBy,
-      direction: order === 'asc' ? 'Ascending' : 'Descending',
-    });
-  };
-
-  const onFilterChange = (newFilters: Record<string, SearchNodePayload>) => {
-    setSearchCriteria(newFilters);
-
-    // Since `state` is an obvious "in" filter, add to query and session, we can add other filters later
-    // as needed (they include ranges and other things that are not yet supported in the useSessionFilters hook)
-    if (newFilters.state) {
-      setSessionFilters({ state: newFilters.state.values });
-    } else {
-      setSessionFilters({});
-    }
-  };
-
-  const onOpenEditColumnsModal = () => {
-    setEditColumnsModalOpen(true);
-  };
-
-  const onDownloadReport = () => {
-    setReportModalOpen(true);
-  };
-
-  const onCloseEditColumnsModal = (columnNames?: string[]) => {
-    if (columnNames) {
-      void saveUpdateSearchColumns(columnNames);
-    }
-    setEditColumnsModalOpen(false);
-  };
-
-  const onCloseDownloadReportModal = () => {
-    setReportModalOpen(false);
-  };
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const isInactive = (row: SearchResponseElementWithId) => {
-    return false;
-  };
+  const isOnboarded = hasSeedBanks && hasSpecies;
 
   const handleViewCollections = () => {
     navigate(APP_PATHS.CHECKIN);
-  };
-
-  const goTo = (appPath: string) => {
-    const appPathLocation = {
-      pathname: appPath,
-    };
-    navigate(appPathLocation);
   };
 
   const onSeedBankForImportSelected = (selectedFacilityOnModal: Facility | undefined) => {
@@ -536,8 +280,14 @@ export default function Database(props: DatabaseProps): JSX.Element {
     }
   };
 
-  const importAccessions = () => {
-    setSelectSeedBankForImportModalOpen(true);
+  const goTo = (appPath: string) => {
+    navigate({ pathname: appPath });
+  };
+
+  const onOptionItemClick = (optionItem: DropdownItem) => {
+    if (optionItem.value === 'import') {
+      setSelectSeedBankForImportModalOpen(true);
+    }
   };
 
   const getEmptyState = () => {
@@ -565,7 +315,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
           linkText: strings.DOWNLOAD_THE_CSV_TEMPLATE,
           onLinkClick: () => downloadCsvTemplateHandler(SeedBankService.downloadAccessionsTemplate),
           buttonText: strings.IMPORT_ACCESSIONS,
-          onClick: () => importAccessions(),
+          onClick: () => setSelectSeedBankForImportModalOpen(true),
         },
       });
     }
@@ -573,34 +323,393 @@ export default function Database(props: DatabaseProps): JSX.Element {
     return emptyState;
   };
 
-  const isOnboarded = hasSeedBanks && hasSpecies;
+  const emptyStateSpacer = () => <Grid item xs={12} padding={theme.spacing(3)} />;
 
-  const onOptionItemClick = (optionItem: DropdownItem) => {
-    switch (optionItem.value) {
-      case 'import': {
-        setSelectSeedBankForImportModalOpen(true);
-        break;
-      }
-      case 'export': {
-        onDownloadReport();
-        break;
-      }
-    }
+  const messageStyles = {
+    margin: '0 auto',
+    maxWidth: '800px',
+    padding: '48px',
+    width: '800px',
   };
 
-  const emptyStateSpacer = () => {
-    return <Grid item xs={12} padding={theme.spacing(3)} />;
-  };
+  const uniqueStates = useMemo(() => ACCESSION_2_STATES as string[], []);
 
-  const selectAllRows = useCallback(() => {
-    if (searchResults) {
-      setSelectedRows(searchResults);
+  const uniqueFacilityNames = useMemo(
+    () => Array.from(new Set(searchResults?.map((r) => r.facility_name as string).filter(Boolean))).sort(),
+    [searchResults]
+  );
+
+  const uniqueSubLocationNames = useMemo(
+    () => Array.from(new Set(searchResults?.map((r) => r.subLocation_name as string).filter(Boolean))).sort(),
+    [searchResults]
+  );
+
+  const uniqueProjectNames = useMemo(
+    () =>
+      (projects || [])
+        .map((p: Project) => p.name)
+        .filter((name): name is string => !!name)
+        .sort(),
+    [projects]
+  );
+
+  const AccessionNumberCell = useCallback(({ cell }: { cell: MRT_Cell<SearchResponseElementWithId> }) => {
+    const row = cell.row.original;
+    const value = cell.getValue() as string;
+    return (
+      <Link fontSize='16px' to={APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', String(row.id))}>
+        {value}
+      </Link>
+    );
+  }, []);
+
+  const ViabilityCell = useCallback(({ cell }: { cell: MRT_Cell<SearchResponseElementWithId> }) => {
+    const value = cell.getValue();
+    return value !== undefined && value !== null ? <span>{`${value as number}%`}</span> : null;
+  }, []);
+
+  const GeolocationCell = useCallback(({ cell }: { cell: MRT_Cell<SearchResponseElementWithId> }) => {
+    const value = cell.getValue() as string;
+    const list = value ? value.split(', ') : [];
+    return list.length > 0 ? (
+      <TextTruncated
+        stringList={list}
+        listSeparator={strings.LIST_SEPARATOR_SECONDARY}
+        moreText={strings.TRUNCATED_TEXT_MORE_LINK}
+      />
+    ) : null;
+  }, []);
+
+  const editableColumns = useMemo<EditableTableColumn<SearchResponseElementWithId>[]>(() => {
+    if (!activeLocale) {
+      return [];
     }
-  }, [searchResults]);
 
-  const reloadAccessions = useCallback(() => {
-    void initAccessions();
-  }, [initAccessions]);
+    return [
+      {
+        id: 'accessionNumber',
+        header: strings.ACCESSION,
+        accessorKey: 'accessionNumber',
+        enableEditing: false,
+        filterVariant: 'text',
+        sortUndefined: 'last',
+        Cell: AccessionNumberCell,
+      },
+      {
+        id: 'state',
+        header: strings.STATUS,
+        accessorKey: 'state',
+        enableEditing: false,
+        filterVariant: 'multi-select',
+        filterSelectOptions: uniqueStates,
+        sortUndefined: 'last',
+      },
+      {
+        id: 'facility_name',
+        header: strings.SEED_BANKS,
+        accessorKey: 'facility_name',
+        enableEditing: false,
+        filterVariant: 'multi-select',
+        filterSelectOptions: uniqueFacilityNames,
+        sortUndefined: 'last',
+      },
+      {
+        id: 'subLocation_name',
+        header: strings.SUB_LOCATION,
+        accessorKey: 'subLocation_name',
+        enableEditing: false,
+        filterVariant: 'multi-select',
+        filterSelectOptions: uniqueSubLocationNames,
+        sortUndefined: 'last',
+      },
+      {
+        id: 'speciesName',
+        header: strings.SPECIES,
+        accessorKey: 'speciesName',
+        enableEditing: false,
+        filterVariant: 'text',
+        sortUndefined: 'last',
+      },
+      {
+        id: 'project_name',
+        header: strings.PROJECT,
+        accessorKey: 'project_name',
+        enableEditing: false,
+        filterVariant: 'multi-select',
+        filterSelectOptions: uniqueProjectNames,
+        sortUndefined: 'last',
+      },
+      {
+        id: 'species_commonName',
+        header: strings.COMMON_NAME,
+        accessorKey: 'species_commonName',
+        enableEditing: false,
+        filterVariant: 'text',
+        sortUndefined: 'last',
+      },
+      {
+        id: 'species_familyName',
+        header: strings.FAMILY,
+        accessorKey: 'species_familyName',
+        enableEditing: false,
+        filterVariant: 'text',
+        sortUndefined: 'last',
+      },
+      {
+        id: 'collectedDate',
+        header: strings.COLLECTION_DATE,
+        accessorKey: 'collectedDate',
+        enableEditing: false,
+        filterVariant: 'date-range',
+        sortUndefined: 'last',
+      },
+      {
+        id: 'collectionSiteName',
+        header: strings.COLLECTING_SITE,
+        accessorKey: 'collectionSiteName',
+        enableEditing: false,
+        filterVariant: 'text',
+        sortUndefined: 'last',
+      },
+      {
+        id: 'collectionSiteLandowner',
+        header: strings.LANDOWNER,
+        accessorKey: 'collectionSiteLandowner',
+        enableEditing: false,
+        filterVariant: 'text',
+        sortUndefined: 'last',
+      },
+      {
+        id: 'collectionSiteNotes',
+        header: strings.NOTES,
+        accessorKey: 'collectionSiteNotes',
+        enableEditing: false,
+        filterVariant: 'text',
+        sortUndefined: 'last',
+      },
+      {
+        id: 'ageMonths',
+        header: strings.AGE_MONTHS,
+        accessorFn: (row) => {
+          const val = row.ageMonths;
+          return val !== undefined && val !== null ? Number(val) : undefined;
+        },
+        enableEditing: false,
+        filterVariant: 'range',
+        sortUndefined: 'last',
+      },
+      {
+        id: 'ageYears',
+        header: strings.AGE_YEARS,
+        accessorFn: (row) => {
+          const val = row.ageYears;
+          return val !== undefined && val !== null ? Number(val) : undefined;
+        },
+        enableEditing: false,
+        filterVariant: 'range',
+        sortUndefined: 'last',
+      },
+      {
+        id: 'totalWithdrawnCount',
+        header: strings.TOTAL_WITHDRAWN_COUNT,
+        accessorFn: (row) => {
+          const val = row.totalWithdrawnCount;
+          return val !== undefined && val !== null ? Number(val) : undefined;
+        },
+        enableEditing: false,
+        filterVariant: 'range',
+        sortUndefined: 'last',
+      },
+      {
+        id: 'totalWithdrawnWeightMilligrams',
+        header: strings.TOTAL_WITHDRAWN_WEIGHT_MILLIGRAMS,
+        accessorFn: (row) => {
+          const val = row.totalWithdrawnWeightMilligrams;
+          return val !== undefined && val !== null ? Number(val) : undefined;
+        },
+        enableEditing: false,
+        filterVariant: 'range',
+        sortUndefined: 'last',
+      },
+      {
+        id: 'totalWithdrawnWeightGrams',
+        header: strings.TOTAL_WITHDRAWN_WEIGHT_GRAMS,
+        accessorFn: (row) => {
+          const val = row.totalWithdrawnWeightGrams;
+          return val !== undefined && val !== null ? Number(val) : undefined;
+        },
+        enableEditing: false,
+        filterVariant: 'range',
+        sortUndefined: 'last',
+      },
+      {
+        id: 'totalWithdrawnWeightKilograms',
+        header: strings.TOTAL_WITHDRAWN_WEIGHT_KILOGRAMS,
+        accessorFn: (row) => {
+          const val = row.totalWithdrawnWeightKilograms;
+          return val !== undefined && val !== null ? Number(val) : undefined;
+        },
+        enableEditing: false,
+        filterVariant: 'range',
+        sortUndefined: 'last',
+      },
+      {
+        id: 'totalWithdrawnWeightOunces',
+        header: strings.TOTAL_WITHDRAWN_WEIGHT_OUNCES,
+        accessorFn: (row) => {
+          const val = row.totalWithdrawnWeightOunces;
+          return val !== undefined && val !== null ? Number(val) : undefined;
+        },
+        enableEditing: false,
+        filterVariant: 'range',
+        sortUndefined: 'last',
+      },
+      {
+        id: 'totalWithdrawnWeightPounds',
+        header: strings.TOTAL_WITHDRAWN_WEIGHT_POUNDS,
+        accessorFn: (row) => {
+          const val = row.totalWithdrawnWeightPounds;
+          return val !== undefined && val !== null ? Number(val) : undefined;
+        },
+        enableEditing: false,
+        filterVariant: 'range',
+        sortUndefined: 'last',
+      },
+      {
+        id: 'totalViabilityPercent',
+        header: strings.VIABILITY,
+        accessorFn: (row) => {
+          const val = row.totalViabilityPercent;
+          return val !== undefined && val !== null ? Number(val) : undefined;
+        },
+        enableEditing: false,
+        filterVariant: 'range',
+        sortUndefined: 'last',
+        Cell: ViabilityCell,
+      },
+      {
+        id: 'estimatedWeightMilligrams',
+        header: strings.WEIGHT_MILLIGRAMS,
+        accessorFn: (row) => {
+          const val = row.estimatedWeightMilligrams;
+          return val !== undefined && val !== null ? Number(val) : undefined;
+        },
+        enableEditing: false,
+        filterVariant: 'range',
+        sortUndefined: 'last',
+      },
+      {
+        id: 'estimatedWeightGrams',
+        header: strings.WEIGHT_GRAMS,
+        accessorFn: (row) => {
+          const val = row.estimatedWeightGrams;
+          return val !== undefined && val !== null ? Number(val) : undefined;
+        },
+        enableEditing: false,
+        filterVariant: 'range',
+        sortUndefined: 'last',
+      },
+      {
+        id: 'estimatedWeightKilograms',
+        header: strings.WEIGHT_KILOGRAMS,
+        accessorFn: (row) => {
+          const val = row.estimatedWeightKilograms;
+          return val !== undefined && val !== null ? Number(val) : undefined;
+        },
+        enableEditing: false,
+        filterVariant: 'range',
+        sortUndefined: 'last',
+      },
+      {
+        id: 'estimatedWeightOunces',
+        header: strings.WEIGHT_OUNCES,
+        accessorFn: (row) => {
+          const val = row.estimatedWeightOunces;
+          return val !== undefined && val !== null ? Number(val) : undefined;
+        },
+        enableEditing: false,
+        filterVariant: 'range',
+        sortUndefined: 'last',
+      },
+      {
+        id: 'estimatedWeightPounds',
+        header: strings.WEIGHT_POUNDS,
+        accessorFn: (row) => {
+          const val = row.estimatedWeightPounds;
+          return val !== undefined && val !== null ? Number(val) : undefined;
+        },
+        enableEditing: false,
+        filterVariant: 'range',
+        sortUndefined: 'last',
+      },
+      {
+        id: 'estimatedCount',
+        header: strings.COUNT,
+        accessorFn: (row) => {
+          const val = row.estimatedCount;
+          return val !== undefined && val !== null ? Number(val) : undefined;
+        },
+        enableEditing: false,
+        filterVariant: 'range',
+        sortUndefined: 'last',
+      },
+      {
+        id: 'geolocations',
+        header: strings.LATITUDE_LONGITUDE,
+        accessorFn: (row) => {
+          const geolocations = (row.geolocations || []) as any[];
+          return geolocations.map((gl) => gl.coordinates as string).join(', ');
+        },
+        enableEditing: false,
+        filterVariant: 'text',
+        sortUndefined: 'last',
+        Cell: GeolocationCell,
+      },
+      {
+        id: 'plantId',
+        header: strings.PLANT_ID,
+        accessorKey: 'plantId',
+        enableEditing: false,
+        filterVariant: 'text',
+        sortUndefined: 'last',
+      },
+    ];
+  }, [
+    activeLocale,
+    uniqueStates,
+    uniqueFacilityNames,
+    uniqueSubLocationNames,
+    uniqueProjectNames,
+    AccessionNumberCell,
+    ViabilityCell,
+    GeolocationCell,
+  ]);
+
+  const downloadReportHandler = useCallback((table: MRT_TableInstance<SearchResponseElementWithId>) => {
+    const filteredRows = table.getSortedRowModel().rows;
+    const visibleColumns = table
+      .getVisibleLeafColumns()
+      .filter((col) => !col.id.startsWith('mrt-') && typeof col.columnDef.header === 'string');
+    const csvColumns = visibleColumns.map((col) => ({
+      key: col.id,
+      displayLabel: col.columnDef.header as string,
+    }));
+    const csvData = filteredRows.map((row) => {
+      const rowData: Record<string, string> = {};
+      visibleColumns.forEach((col) => {
+        const value = row.getValue(col.id);
+        rowData[col.id] = value !== null && value !== undefined ? String(value) : '';
+      });
+      return rowData;
+    });
+    const blob = makeCsv(csvColumns, csvData);
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'accessions.csv');
+    link.click();
+    URL.revokeObjectURL(url);
+  }, []);
 
   return (
     <>
@@ -613,21 +722,9 @@ export default function Database(props: DatabaseProps): JSX.Element {
         />
       )}
       {selectedOrganization && (
-        <>
-          <SelectSeedBankModal open={selectSeedBankForImportModalOpen} onClose={onSeedBankForImportSelected} />
-        </>
+        <SelectSeedBankModal open={selectSeedBankForImportModalOpen} onClose={onSeedBankForImportSelected} />
       )}
       <TfMain>
-        <EditColumns open={editColumnsModalOpen} value={displayColumnNames} onClose={onCloseEditColumnsModal} />
-        {selectedOrganization && (
-          <DownloadReportModal
-            searchCriteria={searchCriteria}
-            searchSortOrder={searchSortOrder}
-            searchColumns={searchColumns}
-            open={reportModalOpen}
-            onClose={onCloseDownloadReportModal}
-          />
-        )}
         <PageHeaderWrapper nextElement={contentRef.current}>
           <PageHeader
             title=''
@@ -652,16 +749,13 @@ export default function Database(props: DatabaseProps): JSX.Element {
                     ))}
                   <OptionsMenu
                     onOptionItemClick={onOptionItemClick}
-                    optionItems={[
-                      { label: strings.IMPORT, value: 'import' },
-                      { label: strings.EXPORT, value: 'export' },
-                    ]}
+                    optionItems={[{ label: strings.IMPORT, value: 'import' }]}
                   />
                 </>
               ) : undefined
             }
           >
-            {(fieldOptions === null || availableFieldOptions === null) && strings.GENERIC_ERROR}
+            {null}
             {pendingAccessions && pendingAccessions.length > 0 && (
               <Grid item xs={12}>
                 <Message
@@ -685,61 +779,104 @@ export default function Database(props: DatabaseProps): JSX.Element {
           </PageHeader>
         </PageHeaderWrapper>
         <Container ref={contentRef} maxWidth={false} sx={{ padding: 0 }}>
-          {selectedOrganization && unfilteredResults ? (
+          {selectedOrganization ? (
             <>
               {isOnboarded ? (
                 <Card>
-                  <Box
-                    sx={{
-                      backgroundColor: theme.palette.TwClrBg,
-                    }}
-                  >
-                    {isOnboarded && availableFieldOptions && fieldOptions && (
-                      <Filters
-                        filters={searchCriteria}
-                        availableValues={availableFieldOptions}
-                        allValues={fieldOptions}
-                        columns={filterColumns}
-                        searchColumns={searchTermColumns}
-                        preExpFilterColumns={preExpFilterColumns}
-                        onChange={onFilterChange}
-                        customizeColumns={onOpenEditColumnsModal}
-                      />
-                    )}
-
-                    {searchResults && (
-                      <Table
-                        columns={displayColumnDetails}
-                        rows={searchResults}
-                        orderBy={searchSortOrder.field}
-                        order={searchSortOrder.direction === 'Ascending' ? 'asc' : 'desc'}
-                        Renderer={SearchCellRenderer}
-                        onSelect={onSelect}
-                        sortHandler={onSortChange}
-                        isInactive={isInactive}
-                        onReorderEnd={(columnNames) => void reorderSearchColumns(columnNames)}
-                        isPresorted
-                        selectedRows={selectedRows}
-                        setSelectedRows={setSelectedRows}
-                        showCheckbox
-                        isClickable={() => false}
-                        showTopBar
-                        topBarButtons={[
-                          <ProjectAssignTopBarButton
-                            key={1}
-                            totalResultsCount={searchResults?.length}
-                            selectAllRows={selectAllRows}
-                            reloadData={reloadAccessions}
-                            projectAssignPayloadCreator={() => ({
-                              accessionIds: selectedRows.map((row) => Number(row.id)),
-                            })}
-                          />,
-                        ]}
-                      />
-                    )}
-                    {searchResults === undefined && <CircularProgress />}
-                    {searchResults === null && strings.GENERIC_ERROR}
-                  </Box>
+                  {searchResults !== undefined ? (
+                    <EditableTable
+                      columns={editableColumns}
+                      data={searchResults ?? []}
+                      enableEditing={false}
+                      enableSorting={true}
+                      enableGlobalFilter={true}
+                      enableColumnFilters={true}
+                      enableColumnOrdering={true}
+                      stickyFilters={true}
+                      storageKey={STORAGE_KEY}
+                      enablePagination={false}
+                      enableTopToolbar={true}
+                      enableBottomToolbar={false}
+                      tableOptions={{
+                        state: {
+                          sorting,
+                          columnOrder,
+                          columnVisibility,
+                          density,
+                          columnFilters,
+                          showColumnFilters,
+                          showGlobalFilter,
+                        },
+                        onSortingChange: setSorting,
+                        onColumnOrderChange: setColumnOrder,
+                        onColumnVisibilityChange: setColumnVisibility,
+                        onColumnFiltersChange: setColumnFilters,
+                        onShowColumnFiltersChange: setShowColumnFilters,
+                        onShowGlobalFilterChange: setShowGlobalFilter,
+                        onDensityChange: (updater) => {
+                          setDensity((prev) => {
+                            const next = typeof updater === 'function' ? updater(prev) : updater;
+                            try {
+                              localStorage.setItem(`${STORAGE_KEY}-density`, next);
+                            } catch {
+                              // ignore
+                            }
+                            return next;
+                          });
+                        },
+                        enableColumnPinning: true,
+                        enableColumnActions: true,
+                        enableHiding: true,
+                        enableColumnDragging: true,
+                        positionGlobalFilter: 'right',
+                        getRowId: (row) => String(row.id),
+                        renderToolbarInternalActions: ({ table }) => (
+                          <Box display='flex' gap={0.5}>
+                            <Tooltip title={strings.EXPORT}>
+                              <IconButton onClick={() => downloadReportHandler(table)}>
+                                <Icon name='iconExport' size='medium' />
+                              </IconButton>
+                            </Tooltip>
+                            <MRT_ToggleGlobalFilterButton table={table} />
+                            <MRT_ToggleFiltersButton table={table} />
+                            <MRT_ShowHideColumnsButton table={table} />
+                            <MRT_ToggleDensePaddingButton table={table} />
+                            <MRT_ToggleFullScreenButton table={table} />
+                          </Box>
+                        ),
+                        muiTableBodyCellProps: ({ row, column, table }) => {
+                          const visualIndex = table.getSortedRowModel().rows.findIndex((r) => r.id === row.id);
+                          return { id: `row${visualIndex + 1}-${column.id}` };
+                        },
+                        muiTableBodyProps: {
+                          sx: {
+                            '& tr:nth-of-type(odd) > td': {
+                              backgroundColor: theme.palette.TwClrBaseGray025,
+                            },
+                          },
+                        },
+                        muiTablePaperProps: {
+                          elevation: 0,
+                        },
+                        muiTopToolbarProps: {
+                          sx: {
+                            position: 'relative',
+                            '& > .MuiBox-root': {
+                              position: 'relative',
+                            },
+                            '& .Mui-ToolbarDropZone': {
+                              display: 'none',
+                            },
+                          },
+                        },
+                      }}
+                      sx={{ padding: 0 }}
+                    />
+                  ) : (
+                    <Box sx={{ display: 'flex', justifyContent: 'center', padding: '32px' }}>
+                      <CircularProgress />
+                    </Box>
+                  )}
                 </Card>
               ) : isAdmin(selectedOrganization) ? (
                 <Container maxWidth={false} sx={{ padding: '32px 0' }}>
