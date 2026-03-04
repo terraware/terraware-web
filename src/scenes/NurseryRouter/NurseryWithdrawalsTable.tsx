@@ -471,12 +471,12 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     return columnFilters
       .filter((filter) => !(Array.isArray(filter.value) && filter.value.length === 0))
       .map((filter) => {
-        const fieldName =
+        const fieldNames =
           filter.id === 'project_names'
-            ? 'batchWithdrawals.batch_project_name'
+            ? ['batchWithdrawals.batch_project_name', 'batchWithdrawals.destinationBatchProjectName']
             : filter.id === 'speciesScientificNames'
-              ? 'batchWithdrawals.batch_species_scientificName'
-              : filter.id;
+              ? ['batchWithdrawals.batch_species_scientificName']
+              : [filter.id];
         let filterValue = filter.value;
 
         // For purpose filter, convert label back to value
@@ -495,57 +495,84 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
           if (isMultiSelectFilter && filterValue.length > 0) {
             const selected = filterValue.filter((v) => v !== undefined && v !== '');
             if (selected.length === 1) {
-              return { operation: 'field', field: fieldName, type: 'Exact', values: [selected[0]] };
+              return {
+                operation: 'or',
+                children: fieldNames.map((fieldName) => ({
+                  operation: 'field',
+                  field: fieldName,
+                  type: 'Exact',
+                  values: [selected[0]],
+                })),
+              };
             }
             return {
               operation: 'or',
-              children: selected.map((v) => ({
-                operation: 'field',
-                field: fieldName,
-                type: 'Exact',
-                values: [v],
-              })),
+              children: selected.flatMap((v) =>
+                fieldNames.map((fieldName) => ({
+                  operation: 'field',
+                  field: fieldName,
+                  type: 'Exact',
+                  values: [v],
+                }))
+              ),
             } as OrNodePayload;
           }
           // Range filter (e.g., numbers)
           if (filterValue.length === 2) {
             const children: SearchNodePayload[] = [];
             if (filterValue[0] !== undefined && filterValue[0] !== '') {
-              children.push({
-                operation: 'field',
-                field: fieldName,
-                type: 'Range',
-                values: [String(filterValue[0]), '999999999'],
+              fieldNames.forEach((fieldName) => {
+                children.push({
+                  operation: 'field',
+                  field: fieldName,
+                  type: 'Range',
+                  values: [String(filterValue[0]), '999999999'],
+                });
               });
             }
             if (filterValue[1] !== undefined && filterValue[1] !== '') {
-              children.push({
-                operation: 'field',
-                field: fieldName,
-                type: 'Range',
-                values: ['0', String(filterValue[1])],
+              fieldNames.forEach((fieldName) => {
+                children.push({
+                  operation: 'field',
+                  field: fieldName,
+                  type: 'Range',
+                  values: ['0', String(filterValue[1])],
+                });
               });
             }
             return children.length > 1
               ? { operation: 'and', children }
-              : children[0] || { operation: 'field', field: fieldName, type: 'Exact', values: [] };
+              : children[0] || {
+                  operation: 'or',
+                  children: fieldNames.map((fieldName) => ({
+                    operation: 'field',
+                    field: fieldName,
+                    type: 'Exact',
+                    values: [],
+                  })),
+                };
           }
         } else if (typeof filterValue === 'string') {
           // Text or select filter
           return {
+            operation: 'or',
+            children: fieldNames.map((fieldName) => ({
+              operation: 'field',
+              field: fieldName,
+              type: isSelectFilter ? 'Exact' : 'Fuzzy',
+              values: [filterValue],
+            })),
+          } as OrNodePayload;
+        }
+        return {
+          operation: 'or',
+          children: fieldNames.map((fieldName) => ({
             operation: 'field',
             field: fieldName,
-            type: isSelectFilter ? 'Exact' : 'Fuzzy',
-            values: [filterValue],
-          };
-        }
-
-        return {
-          operation: 'field',
-          field: fieldName,
-          type: 'Exact',
-          values: [String(filterValue)],
-        };
+            type: 'Exact',
+            values: [String(filterValue)],
+          })),
+        } as OrNodePayload;
       });
   }, [columnFilters, columns, purposeLabelToValue]);
 
