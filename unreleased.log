@@ -1,3 +1,7 @@
+d41fdd6662d4 SW-7941 Include withdrawal undo status in CSV export (#5371)
+aae05a096d53 SW-8115: Remove now extraneous "date" column from Observation table (#5367)
+da9c5b5f0f52 SW-7986 Always show temp plots tab in survival rate settings (#5352)
+ac6f48dfbe6d SW-8135: Export feature missing for Ad Hoc Observations tables (#5366)
 b6feeebe04df SW-8132 Fix inventory sorting (#5354)
 a7c049a3dd0e SW-5441 Show destination project in withdrawal history (#5370)
 9fc495b6c4e9 SW-8134 Update survival rate settings header and tooltip for species (#5362)
