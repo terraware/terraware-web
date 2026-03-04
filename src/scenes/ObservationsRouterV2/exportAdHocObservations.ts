@@ -1,4 +1,5 @@
 import getDateDisplayValue from '@terraware/web-components/utils/date';
+import sanitize from 'sanitize-filename';
 
 import { getConditionString } from 'src/redux/features/observations/utils';
 import strings from 'src/strings';
@@ -136,7 +137,7 @@ export const exportAdHocObservationsResults = async ({
   plantingSite,
 }: ExportAdHocObservationsResultsParams) => {
   const plantingSiteName = plantingSite?.name || strings.ALL_PLANTING_SITES;
-  const filename = `${plantingSiteName}-${strings.AD_HOC_PLANT_MONITORING}`;
+  const filename = sanitize(`${plantingSiteName}-${strings.AD_HOC_PLANT_MONITORING}`);
 
   const fileBlob = makeAdHocObservationsCsv(adHocObservationsResults);
   const fileContent = await fileBlob.text();
