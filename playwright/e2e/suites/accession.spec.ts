@@ -209,7 +209,8 @@ test.describe('AccessionTests', () => {
         ''
       );
       await page.locator(`#${accessionRow}-accessionNumber`).getByText(accessionId).click();
-      await page.getByRole('button', { name: 'Withdraw' }).click();
+      await expect(page.getByRole('link', { name: 'Accessions' })).toBeVisible();
+      await page.getByRole('button', { name: 'Withdraw', ...exactOptions }).click();
       await page.locator('.textfield-value > .tw-icon > path').first().click();
       await page.getByText('Viability Testing').click();
       await page.getByPlaceholder('Select...').nth(1).click();
