@@ -306,7 +306,7 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
           unsetValues++;
         }
 
-        if (unsetValues === record.length * 3) {
+        if (unsetValues === record.length * 4) {
           setErrorPageMessage(strings.WITHDRAWAL_BATCHES_MISSING_QUANTITY_ERROR);
           noErrors = false;
         } else {
