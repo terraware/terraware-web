@@ -317,102 +317,78 @@ export default function Database(props: DatabaseProps): JSX.Element {
         id: 'accessionNumber',
         header: strings.ACCESSION,
         accessorKey: 'accessionNumber',
-        enableEditing: false,
         filterVariant: 'text',
-        sortUndefined: 'last',
         Cell: AccessionNumberCell,
       },
       {
         id: 'state',
         header: strings.STATUS,
         accessorKey: 'state',
-        enableEditing: false,
         filterVariant: 'multi-select',
         filterSelectOptions: uniqueStates,
-        sortUndefined: 'last',
       },
       {
         id: 'facility_name',
         header: strings.SEED_BANKS,
         accessorKey: 'facility_name',
-        enableEditing: false,
         filterVariant: 'multi-select',
         filterSelectOptions: uniqueFacilityNames,
-        sortUndefined: 'last',
       },
       {
         id: 'subLocation_name',
         header: strings.SUB_LOCATION,
         accessorKey: 'subLocation_name',
-        enableEditing: false,
         filterVariant: 'multi-select',
         filterSelectOptions: uniqueSubLocationNames,
-        sortUndefined: 'last',
       },
       {
         id: 'speciesName',
         header: strings.SPECIES,
         accessorKey: 'speciesName',
-        enableEditing: false,
         filterVariant: 'text',
-        sortUndefined: 'last',
       },
       {
         id: 'project_name',
         header: strings.PROJECT,
         accessorKey: 'project_name',
-        enableEditing: false,
         filterVariant: 'multi-select',
         filterSelectOptions: uniqueProjectNames,
-        sortUndefined: 'last',
       },
       {
         id: 'species_commonName',
         header: strings.COMMON_NAME,
         accessorKey: 'species_commonName',
-        enableEditing: false,
         filterVariant: 'text',
-        sortUndefined: 'last',
       },
       {
         id: 'species_familyName',
         header: strings.FAMILY,
         accessorKey: 'species_familyName',
-        enableEditing: false,
         filterVariant: 'text',
-        sortUndefined: 'last',
       },
       {
         id: 'collectedDate',
         header: strings.COLLECTION_DATE,
         accessorKey: 'collectedDate',
-        enableEditing: false,
         filterVariant: 'date-range',
-        sortUndefined: 'last',
       },
       {
         id: 'collectionSiteName',
         header: strings.COLLECTING_SITE,
         accessorKey: 'collectionSiteName',
-        enableEditing: false,
         filterVariant: 'text',
-        sortUndefined: 'last',
       },
       {
         id: 'collectionSiteLandowner',
         header: strings.LANDOWNER,
         accessorKey: 'collectionSiteLandowner',
-        enableEditing: false,
         filterVariant: 'text',
-        sortUndefined: 'last',
       },
       {
         id: 'collectionSiteNotes',
         header: strings.NOTES,
         accessorKey: 'collectionSiteNotes',
-        enableEditing: false,
         filterVariant: 'text',
-        sortUndefined: 'last',
       },
       {
         id: 'ageMonths',
@@ -421,9 +397,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
           const val = row.ageMonths;
           return val !== undefined && val !== null ? Number(val) : undefined;
         },
-        enableEditing: false,
         filterVariant: 'range',
-        sortUndefined: 'last',
       },
       {
         id: 'ageYears',
@@ -432,9 +406,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
           const val = row.ageYears;
           return val !== undefined && val !== null ? Number(val) : undefined;
         },
-        enableEditing: false,
         filterVariant: 'range',
-        sortUndefined: 'last',
       },
       {
         id: 'totalWithdrawnCount',
@@ -443,9 +415,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
           const val = row.totalWithdrawnCount;
           return val !== undefined && val !== null ? Number(val) : undefined;
         },
-        enableEditing: false,
         filterVariant: 'range',
-        sortUndefined: 'last',
       },
       {
         id: 'totalWithdrawnWeightMilligrams',
@@ -454,9 +424,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
           const val = row.totalWithdrawnWeightMilligrams;
           return val !== undefined && val !== null ? Number(val) : undefined;
         },
-        enableEditing: false,
         filterVariant: 'range',
-        sortUndefined: 'last',
       },
       {
         id: 'totalWithdrawnWeightGrams',
@@ -465,9 +433,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
           const val = row.totalWithdrawnWeightGrams;
           return val !== undefined && val !== null ? Number(val) : undefined;
         },
-        enableEditing: false,
         filterVariant: 'range',
-        sortUndefined: 'last',
       },
       {
         id: 'totalWithdrawnWeightKilograms',
@@ -476,9 +442,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
           const val = row.totalWithdrawnWeightKilograms;
           return val !== undefined && val !== null ? Number(val) : undefined;
         },
-        enableEditing: false,
         filterVariant: 'range',
-        sortUndefined: 'last',
       },
       {
         id: 'totalWithdrawnWeightOunces',
@@ -487,9 +451,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
           const val = row.totalWithdrawnWeightOunces;
           return val !== undefined && val !== null ? Number(val) : undefined;
         },
-        enableEditing: false,
         filterVariant: 'range',
-        sortUndefined: 'last',
       },
       {
         id: 'totalWithdrawnWeightPounds',
@@ -498,9 +460,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
           const val = row.totalWithdrawnWeightPounds;
           return val !== undefined && val !== null ? Number(val) : undefined;
         },
-        enableEditing: false,
         filterVariant: 'range',
-        sortUndefined: 'last',
       },
       {
         id: 'totalViabilityPercent',
@@ -509,9 +469,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
           const val = row.totalViabilityPercent;
           return val !== undefined && val !== null ? Number(val) : undefined;
         },
-        enableEditing: false,
         filterVariant: 'range',
-        sortUndefined: 'last',
         Cell: ViabilityCell,
       },
       {
@@ -521,9 +479,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
           const val = row.estimatedWeightMilligrams;
           return val !== undefined && val !== null ? Number(val) : undefined;
         },
-        enableEditing: false,
         filterVariant: 'range',
-        sortUndefined: 'last',
       },
       {
         id: 'estimatedWeightGrams',
@@ -532,9 +488,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
           const val = row.estimatedWeightGrams;
           return val !== undefined && val !== null ? Number(val) : undefined;
         },
-        enableEditing: false,
         filterVariant: 'range',
-        sortUndefined: 'last',
       },
       {
         id: 'estimatedWeightKilograms',
@@ -543,9 +497,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
           const val = row.estimatedWeightKilograms;
           return val !== undefined && val !== null ? Number(val) : undefined;
         },
-        enableEditing: false,
         filterVariant: 'range',
-        sortUndefined: 'last',
       },
       {
         id: 'estimatedWeightOunces',
@@ -554,9 +506,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
           const val = row.estimatedWeightOunces;
           return val !== undefined && val !== null ? Number(val) : undefined;
         },
-        enableEditing: false,
         filterVariant: 'range',
-        sortUndefined: 'last',
       },
       {
         id: 'estimatedWeightPounds',
@@ -565,9 +515,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
           const val = row.estimatedWeightPounds;
           return val !== undefined && val !== null ? Number(val) : undefined;
         },
-        enableEditing: false,
         filterVariant: 'range',
-        sortUndefined: 'last',
       },
       {
         id: 'estimatedCount',
@@ -576,9 +524,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
           const val = row.estimatedCount;
           return val !== undefined && val !== null ? Number(val) : undefined;
         },
-        enableEditing: false,
         filterVariant: 'range',
-        sortUndefined: 'last',
       },
       {
         id: 'geolocations',
@@ -587,18 +533,14 @@ export default function Database(props: DatabaseProps): JSX.Element {
           const geolocations = (row.geolocations || []) as any[];
           return geolocations.map((gl) => gl.coordinates as string).join(', ');
         },
-        enableEditing: false,
         filterVariant: 'text',
-        sortUndefined: 'last',
         Cell: GeolocationCell,
       },
       {
         id: 'plantId',
         header: strings.PLANT_ID,
         accessorKey: 'plantId',
-        enableEditing: false,
         filterVariant: 'text',
-        sortUndefined: 'last',
       },
     ];
   }, [
@@ -726,6 +668,11 @@ export default function Database(props: DatabaseProps): JSX.Element {
                         enableTopToolbar={true}
                         enableBottomToolbar={false}
                         tableOptions={{
+                          defaultColumn: {
+                            enableEditing: false,
+                            filterVariant: 'text',
+                            sortUndefined: 'last',
+                          },
                           state: {
                             sorting,
                             columnOrder,
