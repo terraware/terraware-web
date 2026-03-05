@@ -397,6 +397,8 @@ CTRL,Ctrl,f485607a
 CULTIVATED,Cultivé,f0d960a4
 CULTIVATED_EX_SITU,Cultivé (ex situ),db8d3394
 CULTIVATED_EX_SITU_DESCRIPTION,"Plantes qui ont été cultivées dans une pépinière, une zone de production de semences ou une autre installation de propagation.",9b096972
+CUMULATIVE_PROGRESS,Progrès cumulé,fd7ffcac
+CUMULATIVE_PROGRESS_TOOLTIP,Le total cumulé de tous les trimestres rapportés cette année,d8165ea0
 CURRENT_NEXT_OBSERVATION,Observation actuelle/prochaine,50735263
 CURRENT_TIMELINE,Étapes,2dcbaeeb
 CURRENT_VIEW,Vue actuelle,8b3a3d54

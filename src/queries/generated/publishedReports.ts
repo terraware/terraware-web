@@ -32,13 +32,14 @@ export type GetPublishedReportPhotoApiArg = {
 };
 export type PublishedReportIndicatorPayload = {
   category: 'Project Objectives' | 'Climate' | 'Community' | 'Biodiversity';
+  classId?: 'Cumulative' | 'Level';
   description?: string;
   level: 'Activity' | 'Output' | 'Outcome' | 'Impact';
   name: string;
   progressNotes?: string;
   projectsComments?: string;
   refId: string;
-  status?: 'Achieved' | 'On-Track' | 'Unlikely';
+  status?: 'Achieved' | 'On-Track' | 'Unlikely' | 'Off-Track';
   target?: number;
   unit?: string;
   value?: number;
@@ -58,7 +59,7 @@ export type PublishedReportMetricPayload = {
   progressNotes?: string;
   projectsComments?: string;
   reference: string;
-  status?: 'Achieved' | 'On-Track' | 'Unlikely';
+  status?: 'Achieved' | 'On-Track' | 'Unlikely' | 'Off-Track';
   target?: number;
   type: 'Activity' | 'Output' | 'Outcome' | 'Impact';
   unit?: string;

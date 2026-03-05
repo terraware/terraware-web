@@ -342,20 +342,13 @@ const ReportView = () => {
                   {strings.PROGRESS}
                 </Typography>
               )}
-              {['system', 'project', 'standard'].map((type) => {
-                const metrics =
-                  type === 'system'
-                    ? report?.systemMetrics
-                    : type === 'project'
-                      ? report?.projectMetrics
-                      : report?.standardMetrics;
-
-                return metrics?.map((metric, index) => {
-                  return improvedReportsEnabled ? (
+              {improvedReportsEnabled ? (
+                <>
+                  {report?.autoCalculatedIndicators?.map((indicator, index) => (
                     <MetricRow
-                      key={`${type}-${index}`}
-                      type={type as MetricType}
-                      metric={metric}
+                      key={`autoCalculated-${index}`}
+                      type='autoCalculated'
+                      metric={indicator}
                       reportLabel={report?.quarter}
                       year={yearToUse}
                       projectId={projectId}
@@ -363,7 +356,44 @@ const ReportView = () => {
                       canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
                       onEditChange={onEditChange}
                     />
-                  ) : (
+                  ))}
+                  {report?.commonIndicators?.map((indicator, index) => (
+                    <MetricRow
+                      key={`common-${index}`}
+                      type='common'
+                      metric={indicator}
+                      reportLabel={report?.quarter}
+                      year={yearToUse}
+                      projectId={projectId}
+                      reportId={Number(reportId)}
+                      canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
+                      onEditChange={onEditChange}
+                    />
+                  ))}
+                  {report?.projectIndicators?.map((indicator, index) => (
+                    <MetricRow
+                      key={`project-${index}`}
+                      type='project'
+                      metric={indicator}
+                      reportLabel={report?.quarter}
+                      year={yearToUse}
+                      projectId={projectId}
+                      reportId={Number(reportId)}
+                      canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
+                      onEditChange={onEditChange}
+                    />
+                  ))}
+                </>
+              ) : (
+                ['system', 'project', 'standard'].map((type) => {
+                  const metrics =
+                    type === 'system'
+                      ? report?.systemMetrics
+                      : type === 'project'
+                        ? report?.projectMetrics
+                        : report?.standardMetrics;
+
+                  return metrics?.map((metric, index) => (
                     <MetricBox
                       isConsoleView
                       key={`${type}-${index}`}
@@ -375,9 +405,9 @@ const ReportView = () => {
                       canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
                       year={yearToUse}
                     />
-                  );
-                });
-              })}
+                  ));
+                })
+              )}
               {!improvedReportsEnabled && (
                 <>
                   <AchievementsBox

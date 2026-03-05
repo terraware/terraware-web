@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useEffect, useState } from 'react';
 
-import { Box, Collapse, Divider, Grid, IconButton, Typography, useTheme } from '@mui/material';
+import { Box, Collapse, Divider, Grid, IconButton, Tooltip, Typography, useTheme } from '@mui/material';
 import { Dropdown, DropdownItem, Icon, Textfield } from '@terraware/web-components';
 
 import MetricStatusBadge from 'src/components/AcceleratorReports/MetricStatusBadge';
@@ -9,33 +9,32 @@ import Button from 'src/components/common/button/Button';
 import useBoolean from 'src/hooks/useBoolean';
 import { useLocalization } from 'src/providers';
 import {
-  ReportProjectMetricPayload,
-  ReportStandardMetricPayload,
-  ReportSystemMetricPayload,
-  useReviewAcceleratorReportMetricsMutation,
+  ReportAutoCalculatedIndicatorPayload,
+  ReportCommonIndicatorPayload,
+  ReportProjectIndicatorPayload,
+  useReviewAcceleratorReportIndicatorsMutation,
 } from 'src/queries/generated/reports';
-import { AcceleratorMetricStatuses, MetricType } from 'src/types/AcceleratorReport';
+import { IndicatorType } from 'src/types/AcceleratorReport';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
-export const isReportSystemMetric = (metric: any): metric is ReportSystemMetricPayload => {
-  return metric && typeof metric.metric === 'string';
-};
+const isAutoCalculatedIndicator = (m: any): m is ReportAutoCalculatedIndicatorPayload =>
+  m && typeof m.indicator === 'string';
 
-const isStandardOrProjectMetric = (metric: any): metric is ReportStandardMetricPayload | ReportProjectMetricPayload => {
-  return metric && typeof metric.id === 'number';
-};
+const isCommonOrProjectIndicator = (m: any): m is ReportCommonIndicatorPayload | ReportProjectIndicatorPayload =>
+  m && typeof m.id === 'number';
 
-const statusOptions: DropdownItem[] = AcceleratorMetricStatuses.map((status) => ({
-  label: status || '',
-  value: status || '',
-}));
+const indicatorStatusOptions: DropdownItem[] = (['Achieved', 'On-Track', 'Unlikely', 'Off-Track'] as const).map(
+  (status) => ({ label: status, value: status })
+);
 
 const textAreaStyles = { textarea: { height: '120px' } };
 
+type IndicatorMetric = ReportAutoCalculatedIndicatorPayload | ReportCommonIndicatorPayload | ReportProjectIndicatorPayload;
+
 type MetricRowProps = {
-  metric: ReportProjectMetricPayload | ReportSystemMetricPayload | ReportStandardMetricPayload;
-  type: MetricType;
+  metric: IndicatorMetric;
+  type: IndicatorType;
   reportLabel?: string;
   year?: number;
   projectId: number;
@@ -57,24 +56,28 @@ const MetricRow = ({
   const theme = useTheme();
   const { strings } = useLocalization();
   const [expanded, setExpanded] = useState(false);
-  const [record, setRecord, , onChangeCallback] = useForm<
-    ReportProjectMetricPayload | ReportSystemMetricPayload | ReportStandardMetricPayload
-  >(metric);
+  const [record, setRecord, , onChangeCallback] = useForm<IndicatorMetric>(metric);
   const [internalEditing, setInternalEditing, setInternalEditingTrue, setInternalEditingFalse] = useBoolean(false);
 
-  const [reviewReportMetrics, reviewReportMetricResponse] = useReviewAcceleratorReportMetricsMutation();
+  const [reviewReportIndicators, reviewReportIndicatorsResponse] = useReviewAcceleratorReportIndicatorsMutation();
   const snackbar = useSnackbar();
 
   useEffect(() => onEditChange?.(internalEditing), [internalEditing, onEditChange]);
 
   useEffect(() => {
-    if (reviewReportMetricResponse.isError) {
+    if (reviewReportIndicatorsResponse.isError) {
       snackbar.toastError();
-    } else if (reviewReportMetricResponse.isSuccess) {
+    } else if (reviewReportIndicatorsResponse.isSuccess) {
       setInternalEditing(false);
       snackbar.toastSuccess(strings.CHANGES_SAVED);
     }
-  }, [snackbar, setInternalEditing, strings, reviewReportMetricResponse.isError, reviewReportMetricResponse.isSuccess]);
+  }, [
+    snackbar,
+    setInternalEditing,
+    strings,
+    reviewReportIndicatorsResponse.isError,
+    reviewReportIndicatorsResponse.isSuccess,
+  ]);
 
   useEffect(() => {
     if (!internalEditing) {
@@ -83,39 +86,55 @@ const MetricRow = ({
   }, [internalEditing, metric, setRecord]);
 
   const getMetricName = () => {
-    if (isStandardOrProjectMetric(metric)) {
+    if (isAutoCalculatedIndicator(metric)) {
+      return metric.indicator;
+    }
+    if (isCommonOrProjectIndicator(metric)) {
       return metric.name;
-    } else {
-      return metric.metric;
-    }
-  };
-
-  const getActualValue = () => {
-    if (isStandardOrProjectMetric(record)) {
-      return record.value || 0;
-    } else {
-      return record.overrideValue || record.systemValue || 0;
-    }
-  };
-
-  const getUnit = () => {
-    if (isStandardOrProjectMetric(metric) && 'unit' in metric) {
-      return metric.unit;
     }
     return '';
   };
 
-  const targetValue = metric.target || 0;
+  const getActualValue = () => {
+    if (isAutoCalculatedIndicator(record)) {
+      return record.overrideValue ?? record.systemValue ?? 0;
+    }
+    if (isCommonOrProjectIndicator(record)) {
+      return record.value ?? 0;
+    }
+    return 0;
+  };
+
+  const getUnit = () => {
+    if (isCommonOrProjectIndicator(metric) && 'unit' in metric) {
+      return metric.unit ?? '';
+    }
+    return '';
+  };
+
+  const targetValue = metric.target ?? 0;
   const actualValue = getActualValue();
-  const percentComplete = targetValue > 0 ? Math.round((actualValue / targetValue) * 100) : 0;
+  const unit = getUnit();
+
+  const currentYearProgress = metric.currentYearProgress;
+  const isCumulative = metric.classId === 'Cumulative';
+  const cumulativeValue = isCumulative ? currentYearProgress?.reduce((sum, q) => sum + q.value, 0) ?? 0 : 0;
+  const baseline = metric.baseline ?? 0;
+  const hasPreviousYear = metric.previousYearCumulativeTotal !== undefined;
+  const previousYearDisplayValue = hasPreviousYear ? metric.previousYearCumulativeTotal : baseline;
+  const previousYearDisplayLabel = hasPreviousYear ? String((year ?? 0) - 1) : strings.BASELINE;
+  const displayValue = isCumulative ? cumulativeValue : actualValue;
+  const completionDenominator = targetValue - baseline;
+  const percentComplete = completionDenominator !== 0 ? Math.round(((displayValue - baseline) / completionDenominator) * 100) : 0;
 
   const hasComments = !!metric.projectsComments || !!metric.progressNotes;
+  const canExpand = hasComments || isCumulative;
 
   const onToggle = useCallback(() => {
-    if (!internalEditing && hasComments) {
+    if (!internalEditing && canExpand) {
       setExpanded((prev) => !prev);
     }
-  }, [hasComments, internalEditing]);
+  }, [canExpand, internalEditing]);
 
   const getUpdateBody = useCallback(() => {
     const baseMetric = {
@@ -123,35 +142,35 @@ const MetricRow = ({
       progressNotes: record.progressNotes,
       status: record.status,
     };
-    if (type === 'system' && isReportSystemMetric(record)) {
+    if (type === 'autoCalculated' && isAutoCalculatedIndicator(record)) {
       return {
-        systemMetrics: [{ ...record, metric: record.metric, overrideValue: record.overrideValue, ...baseMetric }],
-        projectMetrics: [],
-        standardMetrics: [],
+        autoCalculatedIndicators: [{ indicator: record.indicator, overrideValue: record.overrideValue, ...baseMetric }],
+        commonIndicators: [],
+        projectIndicators: [],
       };
-    } else if (type === 'standard' && isStandardOrProjectMetric(record)) {
+    } else if (type === 'common' && isCommonOrProjectIndicator(record)) {
       return {
-        standardMetrics: [{ ...record, id: record.id, value: record.value, ...baseMetric }],
-        systemMetrics: [],
-        projectMetrics: [],
+        commonIndicators: [{ id: record.id, value: record.value, ...baseMetric }],
+        autoCalculatedIndicators: [],
+        projectIndicators: [],
       };
-    } else if (type === 'project' && isStandardOrProjectMetric(record)) {
+    } else if (type === 'project' && isCommonOrProjectIndicator(record)) {
       return {
-        projectMetrics: [{ ...record, id: record.id, value: record.value, ...baseMetric }],
-        standardMetrics: [],
-        systemMetrics: [],
+        projectIndicators: [{ id: record.id, value: record.value, ...baseMetric }],
+        autoCalculatedIndicators: [],
+        commonIndicators: [],
       };
     }
-    return { systemMetrics: [], projectMetrics: [], standardMetrics: [] };
+    return { autoCalculatedIndicators: [], commonIndicators: [], projectIndicators: [] };
   }, [record, type]);
 
   const onSave = useCallback(() => {
-    void reviewReportMetrics({
+    void reviewReportIndicators({
       projectId,
       reportId,
-      reviewAcceleratorReportMetricsRequestPayload: getUpdateBody(),
+      reviewAcceleratorReportIndicatorsRequestPayload: getUpdateBody(),
     });
-  }, [getUpdateBody, projectId, reportId, reviewReportMetrics]);
+  }, [getUpdateBody, projectId, reportId, reviewReportIndicators]);
 
   const handleCancel = useCallback(() => {
     setRecord(metric);
@@ -162,11 +181,10 @@ const MetricRow = ({
     e.stopPropagation();
   }, []);
 
-  const unit = getUnit();
   const actualValueLabel = `${reportLabel} ${strings.ACTUAL}${unit ? ` (${unit})` : ''}`;
 
   const renderActualValueInput = () => {
-    if (isReportSystemMetric(record)) {
+    if (isAutoCalculatedIndicator(record)) {
       return (
         <Textfield
           type='number'
@@ -180,7 +198,7 @@ const MetricRow = ({
         />
       );
     }
-    if (isStandardOrProjectMetric(record)) {
+    if (isCommonOrProjectIndicator(record)) {
       return (
         <Textfield
           type='number'
@@ -205,7 +223,7 @@ const MetricRow = ({
           '&:hover': {
             background: internalEditing
               ? theme.palette.TwClrBgActive
-              : canEdit || hasComments
+              : canEdit || canExpand
                 ? theme.palette.TwClrBaseGray025
                 : 'none',
             '.actions': { visibility: canEdit && !internalEditing ? 'visible' : 'hidden' },
@@ -218,7 +236,7 @@ const MetricRow = ({
             display: 'flex',
             alignItems: 'center',
             padding: theme.spacing(2, 3),
-            cursor: !internalEditing && hasComments ? 'pointer' : 'default',
+            cursor: !internalEditing && canExpand ? 'pointer' : 'default',
           }}
           onClick={onToggle}
         >
@@ -227,23 +245,40 @@ const MetricRow = ({
               {getMetricName()}
             </Typography>
             {!internalEditing && (
-              <Box>
-                <Box display='flex' gap={1} marginBottom={0.5}>
-                  <Typography fontSize='12px' color={theme.palette.TwClrTxtSecondary}>
-                    {reportLabel}
-                  </Typography>
-                </Box>
-                {/* TODO: Show values from other quarters and annual target */}
-                <ProgressChart value={actualValue} target={targetValue} />
-              </Box>
+              <ProgressChart
+                value={actualValue}
+                target={targetValue}
+                quarterlyProgress={isCumulative ? currentYearProgress : undefined}
+                reportLabel={!isCumulative ? reportLabel : undefined}
+                previousYearValue={isCumulative ? previousYearDisplayValue : undefined}
+                previousYearLabel={isCumulative ? previousYearDisplayLabel : undefined}
+                yearLabel={isCumulative ? String(year) : undefined}
+                targetLabel={isCumulative ? strings.TARGET : undefined}
+              />
             )}
           </Box>
 
           <Divider orientation='vertical' flexItem sx={{ marginX: 2 }} />
 
           <Box flex={1} paddingX={2}>
-            {internalEditing ? (
+            {internalEditing && !isCumulative ? (
               renderActualValueInput()
+            ) : isCumulative ? (
+              <>
+                <Box display='flex' alignItems='center' gap={0.5} marginBottom={0.5}>
+                  <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxtSecondary}>
+                    {strings.CUMULATIVE_PROGRESS}
+                  </Typography>
+                  <Tooltip title={strings.CUMULATIVE_PROGRESS_TOOLTIP}>
+                    <Box display='flex' alignItems='center'>
+                      <Icon name='info' size='small' fillColor={theme.palette.TwClrTxtSecondary} />
+                    </Box>
+                  </Tooltip>
+                </Box>
+                <Typography fontSize='20px' fontWeight={600}>
+                  {cumulativeValue} {unit}
+                </Typography>
+              </>
             ) : (
               <>
                 <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxtSecondary} marginBottom={0.5}>
@@ -271,7 +306,7 @@ const MetricRow = ({
 
           <Box flex={1} paddingX={2}>
             <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxtSecondary} marginBottom={0.5}>
-              % {strings.COMPLETE}
+              {year} % {strings.COMPLETE}
             </Typography>
             <Typography fontSize='20px' fontWeight={600}>
               {percentComplete}%
@@ -285,7 +320,7 @@ const MetricRow = ({
               <Dropdown
                 label={strings.STATUS}
                 selectedValue={record.status}
-                options={statusOptions}
+                options={indicatorStatusOptions}
                 onChange={onChangeCallback('status')}
                 placeholder='No Status'
               />
@@ -315,7 +350,7 @@ const MetricRow = ({
           )}
 
           {!internalEditing && (
-            <IconButton size='small' sx={{ marginLeft: 1, visibility: hasComments ? 'visible' : 'hidden' }}>
+            <IconButton size='small' sx={{ marginLeft: 1, visibility: canExpand ? 'visible' : 'hidden' }}>
               <Icon
                 name={expanded ? 'chevronUp' : 'chevronDown'}
                 size='medium'
@@ -325,11 +360,17 @@ const MetricRow = ({
           )}
         </Box>
 
-        <Collapse in={internalEditing || (hasComments && expanded)} unmountOnExit>
+        <Collapse in={internalEditing || (canExpand && expanded)} unmountOnExit>
           <Box padding={theme.spacing(0, 3, 3, 3)}>
             {internalEditing ? (
               <Grid container spacing={3}>
-                <Grid item xs={6}>
+                {isCumulative && (
+                  <Grid item xs={4}>
+                    {renderActualValueInput()}
+                  </Grid>
+                )}
+
+                <Grid item xs={isCumulative ? 4 : 6}>
                   <Box sx={{ '.markdown a': { wordBreak: 'break-word' } }}>
                     <Textfield
                       type='textarea'
@@ -345,7 +386,7 @@ const MetricRow = ({
                   </Box>
                 </Grid>
 
-                <Grid item xs={6}>
+                <Grid item xs={isCumulative ? 4 : 6}>
                   <Box>
                     <Textfield
                       type='textarea'
@@ -377,22 +418,40 @@ const MetricRow = ({
               </Grid>
             ) : (
               <Grid container spacing={3}>
+                {isCumulative && (
+                  <Grid item xs={3}>
+                    <Typography fontSize='14px' fontWeight={600} marginBottom={0.5}>
+                      {reportLabel} {strings.ACTUAL}
+                    </Typography>
+                    <Typography fontSize='28px' fontWeight={600}>
+                      {actualValue} {unit}
+                    </Typography>
+                  </Grid>
+                )}
                 {metric.projectsComments && (
-                  <Grid item xs={6}>
+                  <Grid item xs={isCumulative ? 4 : 6}>
                     <Typography fontSize='16px' fontWeight={600} marginBottom={1}>
                       {strings.PROJECTS_COMMENTS}
                     </Typography>
-                    <Typography fontSize='14px' color={theme.palette.TwClrBaseBlack} sx={{ whiteSpace: 'pre-wrap' }}>
+                    <Typography
+                      fontSize='14px'
+                      color={theme.palette.TwClrBaseBlack}
+                      sx={{ whiteSpace: 'pre-wrap' }}
+                    >
                       {metric.projectsComments}
                     </Typography>
                   </Grid>
                 )}
                 {metric.progressNotes && (
-                  <Grid item xs={6}>
+                  <Grid item xs={isCumulative ? 5 : 6}>
                     <Typography fontSize='16px' fontWeight={600} marginBottom={1}>
                       {strings.PROGRESS_NOTES}
                     </Typography>
-                    <Typography fontSize='14px' color={theme.palette.TwClrBaseBlack} sx={{ whiteSpace: 'pre-wrap' }}>
+                    <Typography
+                      fontSize='14px'
+                      color={theme.palette.TwClrBaseBlack}
+                      sx={{ whiteSpace: 'pre-wrap' }}
+                    >
                       {metric.progressNotes}
                     </Typography>
                   </Grid>
@@ -408,4 +467,5 @@ const MetricRow = ({
   );
 };
 
+export { isAutoCalculatedIndicator };
 export default MetricRow;

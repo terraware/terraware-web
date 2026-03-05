@@ -565,9 +565,18 @@ export type SubmitAcceleratorReportApiArg = {
   projectId: number;
   reportId: number;
 };
+export type CumulativeIndicatorProgressPayload = {
+  quarter: 'Q1' | 'Q2' | 'Q3' | 'Q4';
+  value: number;
+};
 export type ReportAutoCalculatedIndicatorPayload = {
+  baseline?: number;
   category: 'Project Objectives' | 'Climate' | 'Community' | 'Biodiversity';
+  classId?: 'Cumulative' | 'Level';
+  /** If the indicator is cumulative, the list of actual values for all quarters in the report's year */
+  currentYearProgress?: CumulativeIndicatorProgressPayload[];
   description?: string;
+  endOfProjectTarget?: number;
   indicator:
     | 'Seeds Collected'
     | 'Seedlings'
@@ -578,10 +587,12 @@ export type ReportAutoCalculatedIndicatorPayload = {
   isPublishable: boolean;
   level: 'Activity' | 'Output' | 'Outcome' | 'Impact';
   overrideValue?: number;
+  /** If the indicator is cumulative, the cumulative total and the end of the previous year */
+  previousYearCumulativeTotal?: number;
   progressNotes?: string;
   projectsComments?: string;
   refId: string;
-  status?: 'Achieved' | 'On-Track' | 'Unlikely';
+  status?: 'Achieved' | 'On-Track' | 'Unlikely' | 'Off-Track';
   systemTime?: string;
   systemValue?: number;
   target?: number;
@@ -591,16 +602,23 @@ export type ReportChallengePayload = {
   mitigationPlan: string;
 };
 export type ReportCommonIndicatorPayload = {
+  baseline?: number;
   category: 'Project Objectives' | 'Climate' | 'Community' | 'Biodiversity';
+  classId?: 'Cumulative' | 'Level';
+  /** If the indicator is cumulative, the list of actual values for all quarters in the report's year */
+  currentYearProgress?: CumulativeIndicatorProgressPayload[];
   description?: string;
+  endOfProjectTarget?: number;
   id: number;
   isPublishable: boolean;
   level: 'Activity' | 'Output' | 'Outcome' | 'Impact';
   name: string;
+  /** If the indicator is cumulative, the cumulative total and the end of the previous year */
+  previousYearCumulativeTotal?: number;
   progressNotes?: string;
   projectsComments?: string;
   refId: string;
-  status?: 'Achieved' | 'On-Track' | 'Unlikely';
+  status?: 'Achieved' | 'On-Track' | 'Unlikely' | 'Off-Track';
   target?: number;
   value?: number;
 };
@@ -613,16 +631,23 @@ export type ReportPhotoPayload = {
   fileId: number;
 };
 export type ReportProjectIndicatorPayload = {
+  baseline?: number;
   category: 'Project Objectives' | 'Climate' | 'Community' | 'Biodiversity';
+  classId?: 'Cumulative' | 'Level';
+  /** If the indicator is cumulative, the list of actual values for all quarters in the report's year */
+  currentYearProgress?: CumulativeIndicatorProgressPayload[];
   description?: string;
+  endOfProjectTarget?: number;
   id: number;
   isPublishable: boolean;
   level: 'Activity' | 'Output' | 'Outcome' | 'Impact';
   name: string;
+  /** If the indicator is cumulative, the cumulative total and the end of the previous year */
+  previousYearCumulativeTotal?: number;
   progressNotes?: string;
   projectsComments?: string;
   refId: string;
-  status?: 'Achieved' | 'On-Track' | 'Unlikely';
+  status?: 'Achieved' | 'On-Track' | 'Unlikely' | 'Off-Track';
   target?: number;
   unit?: string;
   value?: number;
@@ -636,7 +661,7 @@ export type ReportProjectMetricPayload = {
   progressNotes?: string;
   projectsComments?: string;
   reference: string;
-  status?: 'Achieved' | 'On-Track' | 'Unlikely';
+  status?: 'Achieved' | 'On-Track' | 'Unlikely' | 'Off-Track';
   target?: number;
   type: 'Activity' | 'Output' | 'Outcome' | 'Impact';
   unit?: string;
@@ -651,7 +676,7 @@ export type ReportStandardMetricPayload = {
   progressNotes?: string;
   projectsComments?: string;
   reference: string;
-  status?: 'Achieved' | 'On-Track' | 'Unlikely';
+  status?: 'Achieved' | 'On-Track' | 'Unlikely' | 'Off-Track';
   target?: number;
   type: 'Activity' | 'Output' | 'Outcome' | 'Impact';
   value?: number;
@@ -665,7 +690,7 @@ export type ReportSystemMetricPayload = {
   progressNotes?: string;
   projectsComments?: string;
   reference: string;
-  status?: 'Achieved' | 'On-Track' | 'Unlikely';
+  status?: 'Achieved' | 'On-Track' | 'Unlikely' | 'Off-Track';
   systemTime?: string;
   systemValue?: number;
   target?: number;
@@ -965,34 +990,34 @@ export type ReportAutoCalculatedIndicatorEntriesPayload = {
   overrideValue?: number;
   progressNotes?: string;
   projectsComments?: string;
-  status?: 'Achieved' | 'On-Track' | 'Unlikely';
+  status?: 'Achieved' | 'On-Track' | 'Unlikely' | 'Off-Track';
 };
 export type ReportCommonIndicatorEntriesPayload = {
   id: number;
   progressNotes?: string;
   projectsComments?: string;
-  status?: 'Achieved' | 'On-Track' | 'Unlikely';
+  status?: 'Achieved' | 'On-Track' | 'Unlikely' | 'Off-Track';
   value?: number;
 };
 export type ReportProjectIndicatorEntriesPayload = {
   id: number;
   progressNotes?: string;
   projectsComments?: string;
-  status?: 'Achieved' | 'On-Track' | 'Unlikely';
+  status?: 'Achieved' | 'On-Track' | 'Unlikely' | 'Off-Track';
   value?: number;
 };
 export type ReportProjectMetricEntriesPayload = {
   id: number;
   progressNotes?: string;
   projectsComments?: string;
-  status?: 'Achieved' | 'On-Track' | 'Unlikely';
+  status?: 'Achieved' | 'On-Track' | 'Unlikely' | 'Off-Track';
   value?: number;
 };
 export type ReportStandardMetricEntriesPayload = {
   id: number;
   progressNotes?: string;
   projectsComments?: string;
-  status?: 'Achieved' | 'On-Track' | 'Unlikely';
+  status?: 'Achieved' | 'On-Track' | 'Unlikely' | 'Off-Track';
   value?: number;
 };
 export type ReportSystemMetricEntriesPayload = {
@@ -1000,7 +1025,7 @@ export type ReportSystemMetricEntriesPayload = {
   overrideValue?: number;
   progressNotes?: string;
   projectsComments?: string;
-  status?: 'Achieved' | 'On-Track' | 'Unlikely';
+  status?: 'Achieved' | 'On-Track' | 'Unlikely' | 'Off-Track';
 };
 export type UpdateAcceleratorReportValuesRequestPayload = {
   achievements: string[];

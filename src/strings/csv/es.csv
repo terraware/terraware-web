@@ -398,6 +398,8 @@ CTRL,Ctrl,f485607a
 CULTIVATED,Cultivado,f0d960a4
 CULTIVATED_EX_SITU,Cultivado (ex situ),db8d3394
 CULTIVATED_EX_SITU_DESCRIPTION,"Plantas que se han cultivado en un vivero, área de producción de semillas u otra instalación de propagación.",9b096972
+CUMULATIVE_PROGRESS,Progreso acumulado,fd7ffcac
+CUMULATIVE_PROGRESS_TOOLTIP,El total acumulado de todos los trimestres reportados este año,d8165ea0
 CURRENT_NEXT_OBSERVATION,Observación actual/siguiente,50735263
 CURRENT_TIMELINE,Cronología actual,2dcbaeeb
 CURRENT_VIEW,Vista actual,8b3a3d54

@@ -6720,6 +6720,13 @@ export interface components {
              */
             type: "Created";
         };
+        /** @description If the indicator is cumulative, the list of actual values for all quarters in the report's year */
+        CumulativeIndicatorProgressPayload: {
+            /** @enum {string} */
+            quarter: "Q1" | "Q2" | "Q3" | "Q4";
+            /** Format: int32 */
+            value: number;
+        };
         DateVariablePayload: Omit<WithRequired<components["schemas"]["VariablePayload"], "id" | "internalOnly" | "isList" | "isRequired" | "name" | "stableId" | "type">, "type"> & {
             /**
              * @description discriminator enum property added by openapi-typescript
@@ -10356,6 +10363,8 @@ export interface components {
         PublishedReportIndicatorPayload: {
             /** @enum {string} */
             category: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
+            /** @enum {string} */
+            classId?: "Cumulative" | "Level";
             description?: string;
             /** @enum {string} */
             level: "Activity" | "Output" | "Outcome" | "Impact";
@@ -10364,7 +10373,7 @@ export interface components {
             projectsComments?: string;
             refId: string;
             /** @enum {string} */
-            status?: "Achieved" | "On-Track" | "Unlikely";
+            status?: "Achieved" | "On-Track" | "Unlikely" | "Off-Track";
             /** Format: int32 */
             target?: number;
             unit?: string;
@@ -10384,7 +10393,7 @@ export interface components {
             projectsComments?: string;
             reference: string;
             /** @enum {string} */
-            status?: "Achieved" | "On-Track" | "Unlikely";
+            status?: "Achieved" | "On-Track" | "Unlikely" | "Off-Track";
             /** Format: int32 */
             target?: number;
             /** @enum {string} */
@@ -10677,12 +10686,18 @@ export interface components {
             progressNotes?: string;
             projectsComments?: string;
             /** @enum {string} */
-            status?: "Achieved" | "On-Track" | "Unlikely";
+            status?: "Achieved" | "On-Track" | "Unlikely" | "Off-Track";
         };
         ReportAutoCalculatedIndicatorPayload: {
+            baseline?: number;
             /** @enum {string} */
             category: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
+            /** @enum {string} */
+            classId?: "Cumulative" | "Level";
+            /** @description If the indicator is cumulative, the list of actual values for all quarters in the report's year */
+            currentYearProgress?: components["schemas"]["CumulativeIndicatorProgressPayload"][];
             description?: string;
+            endOfProjectTarget?: number;
             /** @enum {string} */
             indicator: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Hectares Planted" | "Survival Rate";
             isPublishable: boolean;
@@ -10690,11 +10705,13 @@ export interface components {
             level: "Activity" | "Output" | "Outcome" | "Impact";
             /** Format: int32 */
             overrideValue?: number;
+            /** @description If the indicator is cumulative, the cumulative total and the end of the previous year */
+            previousYearCumulativeTotal?: number;
             progressNotes?: string;
             projectsComments?: string;
             refId: string;
             /** @enum {string} */
-            status?: "Achieved" | "On-Track" | "Unlikely";
+            status?: "Achieved" | "On-Track" | "Unlikely" | "Off-Track";
             /** Format: date-time */
             systemTime?: string;
             /** Format: int32 */
@@ -10712,25 +10729,33 @@ export interface components {
             progressNotes?: string;
             projectsComments?: string;
             /** @enum {string} */
-            status?: "Achieved" | "On-Track" | "Unlikely";
+            status?: "Achieved" | "On-Track" | "Unlikely" | "Off-Track";
             /** Format: int32 */
             value?: number;
         };
         ReportCommonIndicatorPayload: {
+            baseline?: number;
             /** @enum {string} */
             category: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
+            /** @enum {string} */
+            classId?: "Cumulative" | "Level";
+            /** @description If the indicator is cumulative, the list of actual values for all quarters in the report's year */
+            currentYearProgress?: components["schemas"]["CumulativeIndicatorProgressPayload"][];
             description?: string;
+            endOfProjectTarget?: number;
             /** Format: int64 */
             id: number;
             isPublishable: boolean;
             /** @enum {string} */
             level: "Activity" | "Output" | "Outcome" | "Impact";
             name: string;
+            /** @description If the indicator is cumulative, the cumulative total and the end of the previous year */
+            previousYearCumulativeTotal?: number;
             progressNotes?: string;
             projectsComments?: string;
             refId: string;
             /** @enum {string} */
-            status?: "Achieved" | "On-Track" | "Unlikely";
+            status?: "Achieved" | "On-Track" | "Unlikely" | "Off-Track";
             /** Format: int32 */
             target?: number;
             /** Format: int32 */
@@ -10747,25 +10772,33 @@ export interface components {
             progressNotes?: string;
             projectsComments?: string;
             /** @enum {string} */
-            status?: "Achieved" | "On-Track" | "Unlikely";
+            status?: "Achieved" | "On-Track" | "Unlikely" | "Off-Track";
             /** Format: int32 */
             value?: number;
         };
         ReportProjectIndicatorPayload: {
+            baseline?: number;
             /** @enum {string} */
             category: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
+            /** @enum {string} */
+            classId?: "Cumulative" | "Level";
+            /** @description If the indicator is cumulative, the list of actual values for all quarters in the report's year */
+            currentYearProgress?: components["schemas"]["CumulativeIndicatorProgressPayload"][];
             description?: string;
+            endOfProjectTarget?: number;
             /** Format: int64 */
             id: number;
             isPublishable: boolean;
             /** @enum {string} */
             level: "Activity" | "Output" | "Outcome" | "Impact";
             name: string;
+            /** @description If the indicator is cumulative, the cumulative total and the end of the previous year */
+            previousYearCumulativeTotal?: number;
             progressNotes?: string;
             projectsComments?: string;
             refId: string;
             /** @enum {string} */
-            status?: "Achieved" | "On-Track" | "Unlikely";
+            status?: "Achieved" | "On-Track" | "Unlikely" | "Off-Track";
             /** Format: int32 */
             target?: number;
             unit?: string;
@@ -10782,7 +10815,7 @@ export interface components {
             progressNotes?: string;
             projectsComments?: string;
             /** @enum {string} */
-            status?: "Achieved" | "On-Track" | "Unlikely";
+            status?: "Achieved" | "On-Track" | "Unlikely" | "Off-Track";
             /** Format: int32 */
             value?: number;
         };
@@ -10802,7 +10835,7 @@ export interface components {
             projectsComments?: string;
             reference: string;
             /** @enum {string} */
-            status?: "Achieved" | "On-Track" | "Unlikely";
+            status?: "Achieved" | "On-Track" | "Unlikely" | "Off-Track";
             /** Format: int32 */
             target?: number;
             /** @enum {string} */
@@ -10845,7 +10878,7 @@ export interface components {
             progressNotes?: string;
             projectsComments?: string;
             /** @enum {string} */
-            status?: "Achieved" | "On-Track" | "Unlikely";
+            status?: "Achieved" | "On-Track" | "Unlikely" | "Off-Track";
             /** Format: int32 */
             value?: number;
         };
@@ -10865,7 +10898,7 @@ export interface components {
             projectsComments?: string;
             reference: string;
             /** @enum {string} */
-            status?: "Achieved" | "On-Track" | "Unlikely";
+            status?: "Achieved" | "On-Track" | "Unlikely" | "Off-Track";
             /** Format: int32 */
             target?: number;
             /** @enum {string} */
@@ -10895,7 +10928,7 @@ export interface components {
             progressNotes?: string;
             projectsComments?: string;
             /** @enum {string} */
-            status?: "Achieved" | "On-Track" | "Unlikely";
+            status?: "Achieved" | "On-Track" | "Unlikely" | "Off-Track";
         };
         /**
          * @deprecated
@@ -10914,7 +10947,7 @@ export interface components {
             projectsComments?: string;
             reference: string;
             /** @enum {string} */
-            status?: "Achieved" | "On-Track" | "Unlikely";
+            status?: "Achieved" | "On-Track" | "Unlikely" | "Off-Track";
             /** Format: date-time */
             systemTime?: string;
             /** Format: int32 */
