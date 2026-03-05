@@ -140,11 +140,15 @@ export default function Database(props: DatabaseProps): JSX.Element {
     if (!selectedOrganization) {
       return;
     }
-    const apiResponse = await SeedBankService.searchAccessions({
-      organizationId: selectedOrganization.id,
-      fields: ALL_ACCESSION_FIELDS,
-    });
-    setSearchResults(apiResponse as SearchResponseElementWithId[] | null);
+    try {
+      const apiResponse = await SeedBankService.searchAccessions({
+        organizationId: selectedOrganization.id,
+        fields: ALL_ACCESSION_FIELDS,
+      });
+      setSearchResults(apiResponse as SearchResponseElementWithId[] | null);
+    } catch (error) {
+      setSearchResults(null);
+    }
   }, [selectedOrganization]);
 
   useEffect(() => {
