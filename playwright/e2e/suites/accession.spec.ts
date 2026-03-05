@@ -145,7 +145,8 @@ test.describe('AccessionTests', () => {
         ''
       );
       await page.locator(`#${accessionRow}-accessionNumber`).getByText(accessionId).click();
-      await page.getByRole('button', { name: 'Withdraw' }).click();
+      await expect(page.getByRole('link', { name: 'Accessions' })).toBeVisible();
+      await page.getByRole('button', { name: 'Withdraw', ...exactOptions }).click();
       await page.locator('#destinationFacilityId').getByRole('textbox').click();
       await page.getByText('Nursery', exactOptions).nth(0).click();
       await page.getByLabel('Seed Count', exactOptions).check();

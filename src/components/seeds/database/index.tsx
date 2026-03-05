@@ -187,7 +187,11 @@ export default function Database(props: DatabaseProps): JSX.Element {
     }
 
     if (urlFilters.length > 0) {
-      setColumnFilters((prev) => [...prev, ...urlFilters]);
+      setColumnFilters((prev) => {
+        const existingIds = new Set(prev.map((f) => f.id));
+        const newFilters = urlFilters.filter((f) => !existingIds.has(f.id));
+        return [...prev, ...newFilters];
+      });
       setShowColumnFilters(true);
       navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
     }
