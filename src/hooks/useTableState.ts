@@ -48,7 +48,7 @@ const useTableState = (storageKey: string, options?: UseTableStateOptions) => {
       return [];
     }
     try {
-      const saved = localStorage.getItem(`${storageKey}-columnFilters`);
+      const saved = localStorage.getItem(`${storageKey}_columnFilters`);
       return saved ? (JSON.parse(saved) as MRT_ColumnFiltersState) : [];
     } catch {
       return [];
@@ -56,11 +56,8 @@ const useTableState = (storageKey: string, options?: UseTableStateOptions) => {
   });
 
   const [showColumnFilters, setShowColumnFilters] = useState<boolean>(() => {
-    if (!persistFilters) {
-      return false;
-    }
     try {
-      const saved = localStorage.getItem(`${storageKey}-columnFilters`);
+      const saved = localStorage.getItem(`${storageKey}_columnFilters`);
       if (saved) {
         const parsed = JSON.parse(saved) as MRT_ColumnFiltersState;
         return Array.isArray(parsed) && parsed.length > 0;
@@ -106,7 +103,7 @@ const useTableState = (storageKey: string, options?: UseTableStateOptions) => {
       return;
     }
     try {
-      localStorage.setItem(`${storageKey}-columnFilters`, JSON.stringify(columnFilters));
+      localStorage.setItem(`${storageKey}_columnFilters`, JSON.stringify(columnFilters));
     } catch {
       // ignore
     }
