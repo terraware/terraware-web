@@ -44,6 +44,9 @@ const useTableState = (storageKey: string, options?: UseTableStateOptions) => {
   });
 
   const [columnFilters, setColumnFilters] = useState<MRT_ColumnFiltersState>(() => {
+    if (!persistFilters) {
+      return [];
+    }
     try {
       const saved = localStorage.getItem(`${storageKey}-columnFilters`);
       return saved ? (JSON.parse(saved) as MRT_ColumnFiltersState) : [];
@@ -52,7 +55,10 @@ const useTableState = (storageKey: string, options?: UseTableStateOptions) => {
     }
   });
 
-  const [showColumnFilters, setShowColumnFilters] = useState(() => {
+  const [showColumnFilters, setShowColumnFilters] = useState<boolean>(() => {
+    if (!persistFilters) {
+      return false;
+    }
     try {
       const saved = localStorage.getItem(`${storageKey}-columnFilters`);
       if (saved) {
