@@ -1685,7 +1685,8 @@ REPORTS_SETTINGS_GENERATE_FOR_ORG,Générer un rapport pour {0},491ef6ab
 REPORTS_SETTINGS_GENERATE_FOR_PROJECT,Générer un rapport de projet pour,91439ec3
 REPORTS_SETUP_CTA,Configurer les rapports,389cb962
 REQUEST_REASSIGNMENT,Demander une réaffectation,9cc0038f
-REQUEST_REASSIGNMENT_JUSTIFICATION,Indiquer la raison de la demande de réaffectation de l'emplacement de cette parcelle.,cb51aae9
+REQUEST_REASSIGNMENT_DURATION_TOOLTIP,Sélectionnez « Temporaire » si la réaffectation doit concerner uniquement cette Observation. Sélectionnez « Long terme/Permanent » si la réaffectation doit s'appliquer à toutes les Observations futures ; la parcelle sera alors retirée du groupe de parcelles disponibles pour l'affectation.,9b42a97e
+REQUEST_REASSIGNMENT_REASON_TOOLTIP,Fournissez une justification pour la réaffectation de l'emplacement de cette parcelle.,0ecb1f62
 REQUEST_UPDATE,Demander une mise à jour,bce207eb
 REQUEST_UPDATE_ACTION,Demander une mise à jour...,790ef713
 REQUEST_UPDATE_REASON,Fournissez une raison pour demander la mise à jour.,52430788
