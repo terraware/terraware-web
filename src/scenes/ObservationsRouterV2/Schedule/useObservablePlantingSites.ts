@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { useOrganization } from 'src/providers';
 import { useLazyListObservationsQuery } from 'src/queries/generated/observations';
@@ -35,13 +35,14 @@ const useObservablePlantingSites = () => {
     }
   }, [listObservations, listPlantingSites, listSitesReportedPlants, selectedOrganization]);
 
+  const [now] = useState(() => Date.now());
+
   const upcomingObservations = useMemo(() => {
-    const now = Date.now();
     return allObservations?.filter((observation) => {
       const endTime = new Date(observation.endDate).getTime();
       return observation.state === 'Upcoming' && now <= endTime;
     });
-  }, [allObservations]);
+  }, [allObservations, now]);
 
   const plantingSitesWithStrataAndNoUpcomingObservations = useMemo(() => {
     if (!allPlantingSites || !allSitesReportedPlants) {

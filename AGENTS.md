@@ -7,7 +7,16 @@
 - Format code: `yarn format`
 - Run all unit tests: `yarn test`
 - Typescript check: `yarn ts`
-- Run linter: `yarn lint --rule "react/jsx-no-bind: 0"`
+- Run linter:
+
+```
+  yarn lint \
+    --rule 'react/jsx-no-bind: 0' \
+    --rule 'react-hooks/immutability: 0' \
+    --rule 'react-hooks/refs: 0' \
+    --rule 'react-hooks/set-state-in-effect: 0' \
+    --rule 'react-hooks/static-components: 0'
+```
 
 ## Code Style Guidelines
 

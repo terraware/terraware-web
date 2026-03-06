@@ -28,7 +28,7 @@ export default function InventoryForNurseryView(): JSX.Element {
   const contentRef = useRef(null);
   const theme = useTheme();
 
-  const [modified, setModified] = useState<number>(Date.now());
+  const [modified, setModified] = useState<number>(-1);
 
   const nurseryId = Number(pathParams.nurseryId);
   const openBatchNumber = (query.get('batch') || '').toLowerCase();

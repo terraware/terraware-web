@@ -1,4 +1,4 @@
-import React, { type JSX, useMemo } from 'react';
+import React, { type JSX, useEffect, useMemo } from 'react';
 
 import { Box, CircularProgress, useTheme } from '@mui/material';
 
@@ -56,16 +56,16 @@ const ObservationStatsDrawer = ({
   const [getHistory, { data: plantingSiteHistoryResponse, isLoading: plantingSiteHistoryLoading }] =
     useLazyGetPlantingSiteHistoryQuery();
 
-  const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);
-  const plantingSite = useMemo(() => plantingSiteResponse?.site, [plantingSiteResponse?.site]);
-  const siteHistory = useMemo(() => plantingSiteHistoryResponse?.site, [plantingSiteHistoryResponse?.site]);
+  const results = observationResultsResponse?.observation;
+  const plantingSite = plantingSiteResponse?.site;
+  const siteHistory = plantingSiteHistoryResponse?.site;
 
   const isLoading = useMemo(
     () => observationResultsLoading || plantingSiteLoading || plantingSiteHistoryLoading,
     [observationResultsLoading, plantingSiteHistoryLoading, plantingSiteLoading]
   );
 
-  useMemo(() => {
+  useEffect(() => {
     if (results?.plantingSiteHistoryId) {
       void getHistory({ id: plantingSiteId, historyId: results.plantingSiteHistoryId }, true);
     }
