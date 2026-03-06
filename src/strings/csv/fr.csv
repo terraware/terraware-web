@@ -1108,7 +1108,6 @@ MOVE,Déplacer,abe6be41
 MRV_CYCLE,Cycle MRV,ab7e636c
 MULTIPLE_FORMS,Formes multiples,abad8008
 MY_ACCOUNT,Mon compte,8e57f7ad
-MY_ACCOUNT_DESC,Gérez les informations de votre compte.,4eff2dde
 MY_ACCOUNT_NOTIFICATIONS_DESC,Les notifications vous informent des actualités importantes concernant votre organisation. Vous les recevrez par e-mail.,65644b47
 N_IMAGES,{0} image(s),098eae0e
 N_ROWS,{0} ligne(s),2bb73684
@@ -1290,7 +1289,6 @@ ORGANIZATION_CREATE_FAILED,Impossible de créer une organisation.,969a54ff
 ORGANIZATION_CREATED_MSG,Vous pouvez accéder aux organisations auxquelles vous appartenez en cliquant sur le menu du profil d'utilisateur dans le coin supérieur droit.,60a57d86
 ORGANIZATION_CREATED_MSG_DESKTOP,"Vous pouvez accéder aux organisations auxquelles vous appartenez en cliquant sur la flèche située dans le coin supérieur gauche, à côté du logo.",b843e803
 ORGANIZATION_CREATED_TITLE,Vous avez créé {0} !,816b8725
-ORGANIZATION_DESC,Gérez votre organisation.,b5ea60e9
 ORGANIZATION_NAME,Nom de l'organisation,fa3057ac
 ORGANIZATION_NAME_REQUIRED,Nom de l'organisation *,e4d74b24
 ORGANIZATION_TYPE,Type d'organisation,c4deacbd
@@ -1923,7 +1921,6 @@ SPECIES_CATEGORIES_TOOLTIP,Les catégories d'espèces indiquent le pourcentage d
 SPECIES_CLASSIFICATION,Classification des espèces,2e8b4fb1
 SPECIES_DENSITY_WARNING_MESSAGE,"Vous n'avez pas saisi de valeurs de densité de plantation pour toutes les espèces. Si vous ne saisissez pas de valeurs de densité de plantation pour toutes les espèces, les densités de plantation pour cette parcelle ne seront pas définies et aucun taux de survie ne sera calculé pour cette espèce. Saisissez 0 pour toute espèce qui n'a pas été plantée dans une parcelle.",5bcc0f2b
 SPECIES_DENSITY_WARNING_MESSAGE_TEMPORARY_PLOTS,"Vous n’avez pas saisi de valeurs de densité de plantation pour toutes les espèces dans toutes les strates. Si vous n’indiquez pas de densité de plantation pour toutes les espèces d’une strate, les densités de plantation de cette strate ne seront pas définies et aucun taux de survie ne sera calculé pour cette espèce. Saisissez 0 pour toute espèce qui n’a pas été plantée dans une strate.",685a0c64
-SPECIES_DESCRIPTION,"Gérez la liste des espèces de votre organisation pour la planification, les opérations et les rapports.",b1943eab
 SPECIES_EMPTY_MSG_BODY,Saisissez les espèces que vous collectez ou plantez actuellement pour simplifier votre expérience lorsque vous êtes sur le terrain.,20250069
 SPECIES_FROM_T0_OBSERVATION,Espèces de l'observation t0,08a77070
 SPECIES_FROM_T0_OBSERVATION_TOOLTIP,Les espèces de l'observation t0 ont été observées dans l'observation sélectionnée pour être utilisée comme données t0.,ee679aa8
