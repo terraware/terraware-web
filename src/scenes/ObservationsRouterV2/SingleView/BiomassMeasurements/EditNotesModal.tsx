@@ -42,33 +42,36 @@ const EditNotesModal = ({ onClose }: EditNotesModalProps) => {
     setRecord(biomassMeasurements);
   }, [biomassMeasurements, setRecord]);
 
+  const recordQuadrats = record?.quadrats;
+  const observationResultsAdHocPlot = observationResults?.adHocPlot;
+
   const onSubmit = useCallback(() => {
     void (async () => {
       const northeastQuadratPayload: QuadratUpdateOperationPayload = {
         type: 'Quadrat',
         position: 'NortheastCorner',
-        description: record?.quadrats.find((q) => q.position === 'NortheastCorner')?.description,
+        description: recordQuadrats?.find((q) => q.position === 'NortheastCorner')?.description,
       };
 
       const northwestQuadratPayload: QuadratUpdateOperationPayload = {
         type: 'Quadrat',
         position: 'NorthwestCorner',
-        description: record?.quadrats.find((q) => q.position === 'NorthwestCorner')?.description,
+        description: recordQuadrats?.find((q) => q.position === 'NorthwestCorner')?.description,
       };
 
       const southeastQuadratPayload: QuadratUpdateOperationPayload = {
         type: 'Quadrat',
         position: 'SoutheastCorner',
-        description: record?.quadrats.find((q) => q.position === 'SoutheastCorner')?.description,
+        description: recordQuadrats?.find((q) => q.position === 'SoutheastCorner')?.description,
       };
 
       const southwestQuadratPayload: QuadratUpdateOperationPayload = {
         type: 'Quadrat',
         position: 'SouthwestCorner',
-        description: record?.quadrats.find((q) => q.position === 'SouthwestCorner')?.description,
+        description: recordQuadrats?.find((q) => q.position === 'SouthwestCorner')?.description,
       };
 
-      if (observationResults?.adHocPlot) {
+      if (observationResultsAdHocPlot) {
         const payloads: QuadratUpdateOperationPayload[] = [
           northeastQuadratPayload,
           northwestQuadratPayload,
@@ -78,7 +81,7 @@ const EditNotesModal = ({ onClose }: EditNotesModalProps) => {
 
         const result = await update({
           observationId,
-          plotId: observationResults.adHocPlot.monitoringPlotId,
+          plotId: observationResultsAdHocPlot.monitoringPlotId,
           updateObservationRequestPayload: {
             updates: payloads,
           },
@@ -91,7 +94,7 @@ const EditNotesModal = ({ onClose }: EditNotesModalProps) => {
       }
       onClose();
     })();
-  }, [record?.quadrats, observationResults?.adHocPlot, onClose, update, observationId, snackbar]);
+  }, [recordQuadrats, observationResultsAdHocPlot, onClose, update, observationId, snackbar]);
 
   const showModal = useCallback(() => {
     setShowWarning(true);

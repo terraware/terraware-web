@@ -72,13 +72,15 @@ const ProjectView = ({ projectDetails, includeCrumbs, goToAllProjects, published
     }
   }, [location, navigate, query, publishedReports, selectedReport]);
 
+  const projectDetailsDealName = projectDetails?.dealName;
+
   const strippedDealName = useMemo(() => {
-    if (projectDetails?.dealName?.match(DEAL_NAME_COUNTRY_CODE_REGEX)) {
-      return projectDetails?.dealName?.replace(DEAL_NAME_COUNTRY_CODE_REGEX, '');
+    if (projectDetailsDealName?.match(DEAL_NAME_COUNTRY_CODE_REGEX)) {
+      return projectDetailsDealName?.replace(DEAL_NAME_COUNTRY_CODE_REGEX, '');
     } else {
-      return projectDetails?.dealName;
+      return projectDetailsDealName;
     }
-  }, [projectDetails?.dealName]);
+  }, [projectDetailsDealName]);
 
   const tabs = useMemo(() => {
     return [

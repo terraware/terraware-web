@@ -140,17 +140,19 @@ const PrescreenView = () => {
     }
   }, [activeLocale, selectedApplication]);
 
+  const selectedApplicationId = selectedApplication?.id;
+
   const crumbs: Crumb[] = useMemo(
     () =>
-      activeLocale && selectedApplication?.id
+      activeLocale && selectedApplicationId
         ? [
             {
               name: strings.ALL_SECTIONS,
-              to: APP_PATHS.APPLICATION_OVERVIEW.replace(':applicationId', `${selectedApplication.id}`),
+              to: APP_PATHS.APPLICATION_OVERVIEW.replace(':applicationId', `${selectedApplicationId}`),
             },
           ]
         : [],
-    [activeLocale, selectedApplication?.id]
+    [activeLocale, selectedApplicationId]
   );
 
   return (
