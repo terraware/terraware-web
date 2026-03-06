@@ -94,7 +94,10 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
   const accessionId = accession?.id;
 
   const photoUrls = useMemo(
-    () => accessionPhotoFilenames?.map((file) => `/api/v1/seedbank/accessions/${accessionId}/photos/${file}`) ?? [],
+    () =>
+      accessionId && accessionPhotoFilenames
+        ? accessionPhotoFilenames.map((file) => `/api/v1/seedbank/accessions/${accessionId}/photos/${file}`)
+        : [],
     [accessionPhotoFilenames, accessionId]
   );
 
