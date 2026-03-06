@@ -32,11 +32,6 @@ const StratumT0EditBox = ({
   const { species } = useSpeciesData();
   const { isMobile } = useDeviceInfo();
 
-  const onAddNewSpecies = useCallback(() => {
-    const newRowId = `new-species-${crypto.randomUUID()}`;
-    setNewSpeciesRows((prev) => [...prev, { id: newRowId, density: '' }]);
-  }, []);
-
   const [selectedWithdrawalCheckboxes, setSelectedWithdrawalCheckboxes] = useState<Set<number>>(new Set());
 
   const allWithdrawnSpecies = React.useMemo(() => {
@@ -69,6 +64,11 @@ const StratumT0EditBox = ({
   }, [allWithdrawnSpecies, stratumData]);
 
   const [newSpeciesRows, setNewSpeciesRows] = useState<AddedSpecies[]>(initialNewSpecies);
+
+  const onAddNewSpecies = useCallback(() => {
+    const newRowId = `new-species-${crypto.randomUUID()}`;
+    setNewSpeciesRows((prev) => [...prev, { id: newRowId, density: '' }]);
+  }, []);
 
   const availableSpecies = useMemo(() => {
     const withdrawnSpeciesIds = allWithdrawnSpecies?.map((ws) => ws.speciesId) || [];

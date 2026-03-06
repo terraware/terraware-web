@@ -29,7 +29,7 @@ export default function InventoryForSpeciesView(props: InventoryForSpeciesViewPr
   const { species } = props;
   const { speciesId } = useParams<{ speciesId: string }>();
   const [inventorySpecies, setInventorySpecies] = useState<Species>();
-  const [modified, setModified] = useState<number>(Date.now());
+  const [modified, setModified] = useState<number>(-1);
   const contentRef = useRef(null);
   const theme = useTheme();
 

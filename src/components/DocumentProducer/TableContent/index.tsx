@@ -1,4 +1,4 @@
-import React, { type JSX } from 'react';
+import React, { type JSX, useId } from 'react';
 
 import { Box, Grid } from '@mui/material';
 import { SortOrder, TableColumnType, TableRowType } from '@terraware/web-components';
@@ -49,7 +49,7 @@ const TableContent = <T extends TableRowType>({ searchProps, tableProps }: Table
 
   const tableOrder = tableProps.tableOrder || 'asc';
 
-  const tableId = `table-content-${Date.now()}`;
+  const tableId = `table-content-${useId()}`;
 
   return (
     <Grid container>

@@ -21,6 +21,10 @@ const compat = new FlatCompat({
   allConfig: js.configs.all,
 });
 
+// For errors that we have a lot of in the code base and intend to clean up in the future, we
+// want to continue flagging them in IDEs and manual `yarn lint` runs, but not cause CI failures.
+const errorInDev = process.env.NODE_ENV === 'development' ? 'off' : 'error';
+
 export default fixupConfigRules([
   ...compat
     .extends(
@@ -36,7 +40,16 @@ export default fixupConfigRules([
       files: ['**/*.ts', '**/*.tsx'],
       ignores: ['**/generated-schema.ts', 'src/queries/generated/*'],
     })),
-  reactHooks.configs['recommended-latest'],
+  reactPlugin.configs.flat.recommended,
+  reactPlugin.configs.flat['jsx-runtime'],
+  {
+    settings: {
+      react: {
+        version: 'detect',
+      },
+    },
+  },
+  reactHooks.configs.flat['recommended-latest'],
   {
     files: ['**/*.ts', '**/*.tsx'],
 
@@ -46,6 +59,7 @@ export default fixupConfigRules([
       jsdoc,
       n: nodePlugin,
       react: reactPlugin,
+      reactHooks,
       'prefer-arrow': preferArrow,
       '@stylistic/js': stylisticJs,
       '@typescript-eslint/tslint': typescriptEslintTslint,
@@ -347,7 +361,7 @@ export default fixupConfigRules([
       'react/display-name': 'error',
       'react/jsx-boolean-value': 'off',
       'react/jsx-key': 'error',
-      'react/jsx-no-bind': process.env.NODE_ENV === 'development' ? 'off' : 'error',
+      'react/jsx-no-bind': errorInDev,
       'react/jsx-no-comment-textnodes': 'error',
       'react/jsx-no-duplicate-props': 'error',
       'react/jsx-no-target-blank': 'error',
@@ -382,6 +396,10 @@ export default fixupConfigRules([
 
       // react-hooks
       'react-hooks/exhaustive-deps': 'error',
+      'react-hooks/immutability': errorInDev,
+      'react-hooks/refs': errorInDev,
+      'react-hooks/set-state-in-effect': errorInDev,
+      'react-hooks/static-components': errorInDev,
 
       'require-await': 'off',
       'require-yield': 'error',

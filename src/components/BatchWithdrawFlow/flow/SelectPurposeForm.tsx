@@ -444,15 +444,16 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
         return acc;
       }, {});
 
-    const options: DropdownItem[] = Object.values(nurseries).sort((a, b) =>
+    return Object.values(nurseries).sort((a, b) =>
       `${a.label}`.toLowerCase().localeCompare(`${b.label}`.toLowerCase())
     );
+  }, [batches, isOutplant, selectedOrganization]);
 
-    if (options.length === 1 && !selectedNursery) {
-      setSelectedNursery(getNurseryById(selectedOrganization, Number(options[0].value)));
+  useEffect(() => {
+    if (nurseriesOptions.length === 1 && !selectedNursery && selectedOrganization) {
+      setSelectedNursery(getNurseryById(selectedOrganization, Number(nurseriesOptions[0].value)));
     }
-    return options;
-  }, [batches, isOutplant, selectedNursery, selectedOrganization]);
+  }, [nurseriesOptions, selectedNursery, selectedOrganization]);
 
   const getPlantingSitesOptions = () => {
     if (!allPlantingSites) {
@@ -531,6 +532,14 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     return batchesFromNursery.reduce((acc, batch) => acc + (Number(batch['readyQuantity(raw)']) || 0), 0);
   }, [batchesFromNursery]);
 
+  const outplantDisabled = useMemo(() => {
+    if (!allPlantingSites?.length || noReadySeedlings) {
+      return true;
+    }
+
+    return false;
+  }, [allPlantingSites, noReadySeedlings]);
+
   const getOutplantLabel = () => {
     return (
       <>
@@ -543,6 +552,13 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     );
   };
 
+  const nurseryTransferDisabled = useMemo(() => {
+    if (!destinationNurseriesOptions) {
+      return false;
+    }
+    return destinationNurseriesOptions.length === 0;
+  }, [destinationNurseriesOptions]);
+
   const getNurseryTransferLabel = () => {
     return (
       <>
@@ -553,21 +569,6 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
       </>
     );
   };
-
-  const outplantDisabled = useMemo(() => {
-    if (!allPlantingSites?.length || noReadySeedlings) {
-      return true;
-    }
-
-    return false;
-  }, [allPlantingSites, noReadySeedlings]);
-
-  const nurseryTransferDisabled = useMemo(() => {
-    if (!destinationNurseriesOptions) {
-      return false;
-    }
-    return destinationNurseriesOptions.length === 0;
-  }, [destinationNurseriesOptions]);
 
   useEffect(() => {
     if (localRecord.purpose === OUTPLANT && outplantDisabled) {
