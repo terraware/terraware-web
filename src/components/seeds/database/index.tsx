@@ -655,7 +655,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
         <PageHeaderWrapper nextElement={contentRef.current}>
           <PageHeader
             title=''
-            subtitle={strings.ACCESSIONS_DATABASE_DESCRIPTION}
             page={strings.ACCESSIONS}
             parentPage={strings.SEEDS}
             snackbarPageKey={'seeds'}
