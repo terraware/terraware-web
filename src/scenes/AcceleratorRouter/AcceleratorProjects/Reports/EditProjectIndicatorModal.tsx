@@ -12,7 +12,8 @@ import { ExistingProjectIndicatorPayload, useUpdateProjectIndicatorMutation } fr
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
-import { metricComponentOptions, metricTypeOptions } from './NewProjectSpecificMetric';
+import { classIdOptions, frequencyOptions, indicatorTypeOptions } from './EditCommonIndicatorModal';
+import { metricComponentOptions } from './NewProjectSpecificMetric';
 
 export interface EditProjectIndicatorModalProps {
   onClose: () => void;
@@ -72,6 +73,7 @@ export default function EditProjectIndicatorModal(props: EditProjectIndicatorMod
         />,
         <Button id='save' onClick={save} label={strings.SAVE} key='button-2' />,
       ]}
+      scrolled
     >
       <Grid container textAlign={'left'} spacing={2}>
         <Grid item xs={12}>
@@ -99,7 +101,7 @@ export default function EditProjectIndicatorModal(props: EditProjectIndicatorMod
             id='level'
             label={strings.INDICATOR_LEVEL}
             onChange={onChangeCallback('level')}
-            options={metricTypeOptions()}
+            options={indicatorTypeOptions()}
             selectedValue={record.level}
             fullWidth
           />
@@ -121,8 +123,6 @@ export default function EditProjectIndicatorModal(props: EditProjectIndicatorMod
             type='text'
             onChange={onChangeCallback('refId')}
             value={record.refId}
-            required
-            errorText={validate && !record.refId ? strings.REQUIRED_FIELD : ''}
           />
         </Grid>
         <Grid item xs={12}>
@@ -137,13 +137,60 @@ export default function EditProjectIndicatorModal(props: EditProjectIndicatorMod
           />
         </Grid>
         <Grid item xs={12}>
+          <TextField
+            id='primaryDataSource'
+            label={strings.PRIMARY_DATA_SOURCE}
+            type='text'
+            onChange={onChangeCallback('primaryDataSource')}
+            value={record.primaryDataSource}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            id='tfOwner'
+            label={strings.TF_OWNER_REVIEWER}
+            type='text'
+            onChange={onChangeCallback('tfOwner')}
+            value={record.tfOwner}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <Dropdown
+            id='classId'
+            label={strings.CUMULATIVE_OR_LEVEL}
+            onChange={onChangeCallback('classId')}
+            options={classIdOptions()}
+            selectedValue={record.classId}
+            fullWidth
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            id='notes'
+            label={strings.NOTES}
+            type='textarea'
+            onChange={onChangeCallback('notes')}
+            value={record.notes}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <Dropdown
+            id='frequency'
+            label={strings.FREQUENCY_OF_REPORTING}
+            onChange={onChangeCallback('frequency')}
+            options={frequencyOptions()}
+            selectedValue={record.frequency}
+            fullWidth
+          />
+        </Grid>
+        <Grid item xs={12}>
           <Checkbox
             disabled={false}
-            id={'isPublishable'}
-            name={'isPublishable'}
-            label={strings.PUBLISH_TO_FUNDER_PORTAL}
-            value={record.isPublishable}
-            onChange={onChangeCallback('isPublishable')}
+            id='active'
+            name='active'
+            label={strings.ACTIVE}
+            value={record.active}
+            onChange={onChangeCallback('active')}
           />
         </Grid>
       </Grid>
