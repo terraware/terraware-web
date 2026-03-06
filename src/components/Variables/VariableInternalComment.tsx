@@ -32,16 +32,18 @@ function VariableInternalComment({ variable, update, editing, sx }: VariableInte
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [internalComment, setInternalComment] = useState(variableValue?.internalComment || '');
 
+  const variableValueInternalComment = variableValue?.internalComment;
+
   useEffect(() => {
-    if (variableValue?.internalComment) {
-      setInternalComment(variableValue?.internalComment);
+    if (variableValueInternalComment) {
+      setInternalComment(variableValueInternalComment);
     }
-  }, [variableValue?.internalComment]);
+  }, [variableValueInternalComment]);
 
   const toggleDialog = useCallback(() => {
     setIsDialogOpen((prev) => !prev);
-    setInternalComment(variableValue?.internalComment || '');
-  }, [variableValue?.internalComment]);
+    setInternalComment(variableValueInternalComment || '');
+  }, [variableValueInternalComment]);
 
   const handleUpdate = () => {
     update(internalComment);

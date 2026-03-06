@@ -44,6 +44,8 @@ export default function PlantingSiteDraftStratumView(): JSX.Element | undefined 
     [search]
   );
 
+  const siteName = site?.name;
+
   const crumbs: Crumb[] = useMemo(
     () => [
       {
@@ -51,11 +53,11 @@ export default function PlantingSiteDraftStratumView(): JSX.Element | undefined 
         to: APP_PATHS.PLANTING_SITES,
       },
       {
-        name: activeLocale && site?.name ? `${site.name} (${strings.DRAFT})` : '',
+        name: activeLocale && siteName ? `${siteName} (${strings.DRAFT})` : '',
         to: `/draft/${plantingSiteId}`,
       },
     ],
-    [activeLocale, site?.name, plantingSiteId]
+    [activeLocale, siteName, plantingSiteId]
   );
 
   useEffect(() => {

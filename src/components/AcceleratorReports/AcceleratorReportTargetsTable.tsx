@@ -71,15 +71,17 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
     [isAllowed, selectedOrganization]
   );
 
+  const years = getReportsYearsResponse.data?.years;
+
   const yearRange = useMemo(() => {
-    if (getReportsYearsResponse.data?.years) {
-      const endYear = getReportsYearsResponse.data.years.endYear;
-      const startYear = getReportsYearsResponse.data.years.startYear;
+    if (years) {
+      const endYear = years.endYear;
+      const startYear = years.startYear;
       return Array.from({ length: endYear - startYear + 1 }, (_, i) => startYear + i);
     } else {
       return [];
     }
-  }, [getReportsYearsResponse.data?.years]);
+  }, [years]);
 
   const projectIndicators = useMemo(
     () => listProjectIndicatorsResponse.data?.indicators ?? [],

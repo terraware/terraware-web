@@ -62,9 +62,11 @@ const MonitoringPlotObservationDataTab = () => {
   const monitoringPlotSpecies = useObservationSpecies(monitoringPlot?.species ?? [], monitoringPlot?.unknownSpecies);
   const { downloadObservationResults } = useObservationExports();
 
+  const monitoringPlotSpeciesData = monitoringPlot?.species;
+
   const unrecognizedSpecies = useMemo(() => {
-    if (monitoringPlot?.species) {
-      const speciesWithNoIds = monitoringPlot.species.filter((plotSpecies) => plotSpecies.speciesId === undefined);
+    if (monitoringPlotSpeciesData) {
+      const speciesWithNoIds = monitoringPlotSpeciesData.filter((plotSpecies) => plotSpecies.speciesId === undefined);
       const combinedNames = Array.from(
         new Set(
           speciesWithNoIds.map((plotSpecies) => plotSpecies.speciesName).filter((s): s is string => s !== undefined)
@@ -75,7 +77,7 @@ const MonitoringPlotObservationDataTab = () => {
     } else {
       return [];
     }
-  }, [monitoringPlot?.species]);
+  }, [monitoringPlotSpeciesData]);
 
   const items = [
     {
