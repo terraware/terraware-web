@@ -102,6 +102,8 @@ export default function ScheduleObservationForm({
     }
   }, [activeLocale, plantingSite, observableSites]);
 
+  const selectedSiteAreaHa = selectedSite?.areaHa;
+
   const findErrors = useCallback(() => {
     let _startDateError: string = '';
     let _endDateError: string = '';
@@ -133,7 +135,7 @@ export default function ScheduleObservationForm({
       }
 
       const _showSmallSiteWarning =
-        selectedSite?.areaHa !== undefined && selectedSite.areaHa < WARN_IF_SITE_LESS_THAN_HECTARES;
+        selectedSiteAreaHa !== undefined && selectedSiteAreaHa < WARN_IF_SITE_LESS_THAN_HECTARES;
 
       setStartDateError(_startDateError);
       setEndDateError(_endDateError);
@@ -151,7 +153,7 @@ export default function ScheduleObservationForm({
     strings.INVALID_DATE,
     strings.SELECT_AT_LEAST_ONE_SUBSTRATUM,
     requestedSubstratumIds,
-    selectedSite?.areaHa,
+    selectedSiteAreaHa,
   ]);
 
   const doSave = useCallback(() => {

@@ -73,17 +73,20 @@ const ProjectMap = ({ application, countryCode, md, includeLabel, projectId }: P
     return getMapOptions(countryBoundaryResult.data.coordinates, 'countryBoundary', 'countryBoundary', 1);
   }, [countryBoundaryResult, getMapOptions]);
 
+  const applicationBoundary = application?.boundary;
+  const applicationId = application?.id;
+
   const appBoundaryMapOptions = useMemo<MapOptions | undefined>(() => {
-    if (!application?.boundary) {
+    if (!applicationBoundary) {
       return undefined;
     }
 
-    return getMapOptions(application.boundary.coordinates, 'boundary', 'site', application.id);
-  }, [application?.boundary, application?.id, getMapOptions]);
+    return getMapOptions(applicationBoundary.coordinates, 'boundary', 'site', applicationId!);
+  }, [applicationBoundary, applicationId, getMapOptions]);
 
   const mapElement = useMemo(() => {
     const style = { height: '100%', width: '100%', borderRadius: theme.spacing(1) };
-    if (application?.boundary) {
+    if (applicationBoundary) {
       return (
         <GenericMap
           options={appBoundaryMapOptions}
@@ -105,7 +108,7 @@ const ProjectMap = ({ application, countryCode, md, includeLabel, projectId }: P
         />
       );
     }
-  }, [appBoundaryMapOptions, application?.boundary, countryCode, countryMapOptions, includeLabel, theme]);
+  }, [appBoundaryMapOptions, applicationBoundary, countryCode, countryMapOptions, includeLabel, theme]);
 
   const goToGisMapsView = useCallback(() => {
     if (projectId) {

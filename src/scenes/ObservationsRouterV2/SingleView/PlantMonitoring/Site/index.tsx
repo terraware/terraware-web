@@ -78,9 +78,11 @@ const SiteDetails = (): JSX.Element => {
 
   const species = useObservationSpecies(results?.species ?? []);
 
+  const resultsSpecies = results?.species;
+
   const unrecognizedSpecies = useMemo(() => {
-    if (results?.species) {
-      const speciesWithNoIds = results.species.filter(
+    if (resultsSpecies) {
+      const speciesWithNoIds = resultsSpecies.filter(
         (observationSpecies) => observationSpecies.speciesId === undefined
       );
       const combinedNames = Array.from(
@@ -95,7 +97,9 @@ const SiteDetails = (): JSX.Element => {
     } else {
       return [];
     }
-  }, [results?.species]);
+  }, [resultsSpecies]);
+
+  const unrecognizedSpeciesLength = unrecognizedSpecies?.length;
 
   const matchedUnrecognizedSpeciesMenu = useMemo(() => {
     return (
@@ -105,12 +109,12 @@ const SiteDetails = (): JSX.Element => {
           {
             label: strings.MATCH_UNRECOGNIZED_SPECIES,
             value: 'match',
-            disabled: (unrecognizedSpecies?.length || 0) === 0,
+            disabled: (unrecognizedSpeciesLength || 0) === 0,
           },
         ]}
       />
     );
-  }, [strings.MATCH_UNRECOGNIZED_SPECIES, unrecognizedSpecies?.length]);
+  }, [strings.MATCH_UNRECOGNIZED_SPECIES, unrecognizedSpeciesLength]);
 
   const hasObservedPermanentPlots = useMemo(() => {
     const permanentPlots =

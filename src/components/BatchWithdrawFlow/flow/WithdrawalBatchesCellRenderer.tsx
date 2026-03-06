@@ -17,6 +17,11 @@ export default function WithdrawalBatchesCellRenderer(props: RendererProps<Table
     '& label': {
       whiteSpace: 'break-spaces',
       textAlign: 'left',
+      flexShrink: 0,
+    },
+    '& .textfield-value': {
+      flexShrink: 0,
+      minWidth: '80px',
     },
   };
 

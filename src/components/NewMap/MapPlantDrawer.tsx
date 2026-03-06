@@ -35,17 +35,22 @@ const MapPlantDrawer = ({ monitoringPlotId, observationId, plant }: MapPlantDraw
     }
   }, [result]);
 
+  const resultAdHocPlot = result?.adHocPlot;
+  const resultStrata = result?.strata;
+
   const monitoringPlot = useMemo(() => {
     const monitoringPlots =
-      result?.strata.flatMap((stratum) => stratum.substrata).flatMap((substratum) => substratum.monitoringPlots) ?? [];
-    const adHocPlots = result?.adHocPlot ? [result.adHocPlot] : [];
+      resultStrata?.flatMap((stratum) => stratum.substrata).flatMap((substratum) => substratum.monitoringPlots) ?? [];
+    const adHocPlots = resultAdHocPlot ? [resultAdHocPlot] : [];
 
     return [...monitoringPlots, ...adHocPlots].find((plot) => plot.monitoringPlotId === monitoringPlotId);
-  }, [monitoringPlotId, result?.adHocPlot, result?.strata]);
+  }, [monitoringPlotId, resultAdHocPlot, resultStrata]);
+
+  const monitoringPlotClaimedByName = monitoringPlot?.claimedByName;
 
   const observer = useMemo(() => {
-    return monitoringPlot?.claimedByName;
-  }, [monitoringPlot?.claimedByName]);
+    return monitoringPlotClaimedByName;
+  }, [monitoringPlotClaimedByName]);
 
   const formatGPS = useCallback(
     (lon: number, lat: number): string => {
