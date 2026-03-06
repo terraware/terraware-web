@@ -7,6 +7,7 @@ import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
 import useBoolean from 'src/hooks/useBoolean';
+import { useLocalization } from 'src/providers';
 import { ExistingCommonIndicatorPayload, useUpdateCommonIndicatorMutation } from 'src/queries/generated/indicators';
 import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
@@ -52,17 +53,18 @@ export default function EditCommonIndicatorModal({
   const [record, , , onChangeCallback] = useForm<ExistingCommonIndicatorPayload>(commonIndicator);
   const [validate, setValidate] = useState(false);
   const [confirmDialogOpen, , openConfirmDialog, closeConfirmDialog] = useBoolean(false);
+  const { activeLocale } = useLocalization();
 
   const [updateCommonIndicator, updateCommonIndicatorResponse] = useUpdateCommonIndicatorMutation();
 
   useEffect(() => {
-    if (updateCommonIndicatorResponse.isError) {
+    if (updateCommonIndicatorResponse.isError && activeLocale) {
       snackbar.toastError();
     } else if (updateCommonIndicatorResponse.isSuccess) {
       onClose();
       snackbar.toastSuccess(strings.COMMON_INDICATOR_SAVED);
     }
-  }, [updateCommonIndicatorResponse, snackbar, onClose]);
+  }, [updateCommonIndicatorResponse, snackbar, onClose, activeLocale]);
 
   const save = useCallback(() => {
     if (!record.name || !record.refId) {
