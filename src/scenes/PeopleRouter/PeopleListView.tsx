@@ -429,7 +429,6 @@ export default function PeopleListView(): JSX.Element {
               flexDirection: 'column',
               justifyContent: 'center',
               alignItems: 'flex-end',
-              marginBottom: '32px',
             }}
           >
             {isAdmin(selectedOrganization) &&

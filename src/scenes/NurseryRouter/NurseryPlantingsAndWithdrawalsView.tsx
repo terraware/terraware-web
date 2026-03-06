@@ -70,10 +70,8 @@ export default function NurseryPlantingsAndWithdrawalsView(): JSX.Element {
                 </Typography>
               </Grid>
             </Grid>
-          </PageHeaderWrapper>
-          <Grid item xs={12}>
             <PageSnackbar />
-          </Grid>
+          </PageHeaderWrapper>
           <Box
             ref={contentRef}
             display='flex'
