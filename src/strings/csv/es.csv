@@ -1686,7 +1686,8 @@ REPORTS_SETTINGS_GENERATE_FOR_ORG,Generar informes para {0},491ef6ab
 REPORTS_SETTINGS_GENERATE_FOR_PROJECT,Generar informe de proyecto para,91439ec3
 REPORTS_SETUP_CTA,Configure los informes.,389cb962
 REQUEST_REASSIGNMENT,Solicitud de reasignación,9cc0038f
-REQUEST_REASSIGNMENT_JUSTIFICATION,Indique el motivo por el que solicita la reasignación de la ubicación de esta parcela.,cb51aae9
+REQUEST_REASSIGNMENT_DURATION_TOOLTIP,Seleccione “Temporal” si la reasignación debe aplicarse solo a esta Observación. Seleccione “A largo plazo/permanente” si la reasignación debe aplicarse a todas las Observaciones futuras; la parcela será eliminada del grupo de parcelas disponibles para asignación.,9b42a97e
+REQUEST_REASSIGNMENT_REASON_TOOLTIP,Proporcione una justificación para la reasignación de la ubicación de esta parcela.,0ecb1f62
 REQUEST_UPDATE,Solicitar actualización,bce207eb
 REQUEST_UPDATE_ACTION,Solicitar actualización...,790ef713
 REQUEST_UPDATE_REASON,Indique el motivo por el que solicita la actualización.,52430788
