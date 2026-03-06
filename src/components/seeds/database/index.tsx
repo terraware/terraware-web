@@ -49,6 +49,54 @@ import ImportAccessionsModal from './ImportAccessionsModal';
 
 const STORAGE_KEY = 'accessions-database-table';
 
+const DEFAULT_VISIBLE_COLUMNS = [
+  'accessionNumber',
+  'speciesName',
+  'project_name',
+  'state',
+  'collectionSiteName',
+  'collectedDate',
+  'ageMonths',
+  'estimatedWeightGrams',
+  'estimatedCount',
+];
+
+const DEFAULT_COLUMN_ORDER = [
+  'accessionNumber',
+  'speciesName',
+  'project_name',
+  'state',
+  'collectionSiteName',
+  'collectedDate',
+  'ageMonths',
+  'estimatedWeightGrams',
+  'estimatedCount',
+  'facility_name',
+  'subLocation_name',
+  'species_commonName',
+  'species_familyName',
+  'collectionSiteLandowner',
+  'collectionSiteNotes',
+  'ageYears',
+  'totalWithdrawnCount',
+  'totalWithdrawnWeightMilligrams',
+  'totalWithdrawnWeightGrams',
+  'totalWithdrawnWeightKilograms',
+  'totalWithdrawnWeightOunces',
+  'totalWithdrawnWeightPounds',
+  'totalViabilityPercent',
+  'estimatedWeightMilligrams',
+  'estimatedWeightKilograms',
+  'estimatedWeightOunces',
+  'estimatedWeightPounds',
+  'geolocations',
+  'plantId',
+];
+
+const DEFAULT_COLUMN_VISIBILITY = Object.fromEntries(
+  DEFAULT_COLUMN_ORDER.filter((col) => !DEFAULT_VISIBLE_COLUMNS.includes(col)).map((col) => [col, false])
+);
+
 const ALL_ACCESSION_FIELDS = [
   'id',
   'accessionNumber',
@@ -125,6 +173,8 @@ export default function Database(props: DatabaseProps): JSX.Element {
     showGlobalFilter,
     sorting,
   } = useTableState(STORAGE_KEY, {
+    defaultColumnOrder: DEFAULT_COLUMN_ORDER,
+    defaultColumnVisibility: DEFAULT_COLUMN_VISIBILITY,
     defaultSorting: [{ id: 'accessionNumber', desc: false }],
     persistFilters: true,
     persistSorting: true,

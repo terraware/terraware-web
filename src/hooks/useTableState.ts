@@ -9,29 +9,37 @@ import {
 } from 'material-react-table';
 
 type UseTableStateOptions = {
+  defaultColumnOrder?: MRT_ColumnOrderState;
+  defaultColumnVisibility?: MRT_VisibilityState;
   defaultSorting?: MRT_SortingState;
   persistFilters?: boolean;
   persistSorting?: boolean;
 };
 
 const useTableState = (storageKey: string, options?: UseTableStateOptions) => {
-  const { defaultSorting = [], persistFilters = false, persistSorting = false } = options ?? {};
+  const {
+    defaultColumnOrder = [],
+    defaultColumnVisibility = {},
+    defaultSorting = [],
+    persistFilters = false,
+    persistSorting = false,
+  } = options ?? {};
 
   const [columnOrder, setColumnOrder] = useState<MRT_ColumnOrderState>(() => {
     try {
       const saved = localStorage.getItem(`${storageKey}-columnOrder`);
-      return saved ? (JSON.parse(saved) as MRT_ColumnOrderState) : [];
+      return saved ? (JSON.parse(saved) as MRT_ColumnOrderState) : defaultColumnOrder;
     } catch {
-      return [];
+      return defaultColumnOrder;
     }
   });
 
   const [columnVisibility, setColumnVisibility] = useState<MRT_VisibilityState>(() => {
     try {
       const saved = localStorage.getItem(`${storageKey}-columnVisibility`);
-      return saved ? (JSON.parse(saved) as MRT_VisibilityState) : {};
+      return saved ? (JSON.parse(saved) as MRT_VisibilityState) : defaultColumnVisibility;
     } catch {
-      return {};
+      return defaultColumnVisibility;
     }
   });
 
