@@ -344,45 +344,28 @@ const ReportView = () => {
               )}
               {improvedReportsEnabled ? (
                 <>
-                  {report?.autoCalculatedIndicators?.map((indicator, index) => (
-                    <MetricRow
-                      key={`autoCalculated-${index}`}
-                      type='autoCalculated'
-                      metric={indicator}
-                      reportLabel={report?.quarter}
-                      year={yearToUse}
-                      projectId={projectId}
-                      reportId={Number(reportId)}
-                      canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
-                      onEditChange={onEditChange}
-                    />
-                  ))}
-                  {report?.commonIndicators?.map((indicator, index) => (
-                    <MetricRow
-                      key={`common-${index}`}
-                      type='common'
-                      metric={indicator}
-                      reportLabel={report?.quarter}
-                      year={yearToUse}
-                      projectId={projectId}
-                      reportId={Number(reportId)}
-                      canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
-                      onEditChange={onEditChange}
-                    />
-                  ))}
-                  {report?.projectIndicators?.map((indicator, index) => (
-                    <MetricRow
-                      key={`project-${index}`}
-                      type='project'
-                      metric={indicator}
-                      reportLabel={report?.quarter}
-                      year={yearToUse}
-                      projectId={projectId}
-                      reportId={Number(reportId)}
-                      canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
-                      onEditChange={onEditChange}
-                    />
-                  ))}
+                  {(['autoCalculated', 'common', 'project'] as const).map((type) => {
+                    const indicators =
+                      type === 'autoCalculated'
+                        ? report?.autoCalculatedIndicators
+                        : type === 'common'
+                          ? report?.commonIndicators
+                          : report?.projectIndicators;
+
+                    return indicators?.map((indicator, index) => (
+                      <MetricRow
+                        key={`${type}-${index}`}
+                        type={type}
+                        metric={indicator}
+                        reportLabel={report?.quarter}
+                        year={yearToUse}
+                        projectId={projectId}
+                        reportId={Number(reportId)}
+                        canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
+                        onEditChange={onEditChange}
+                      />
+                    ));
+                  })}
                 </>
               ) : (
                 ['system', 'project', 'standard'].map((type) => {
