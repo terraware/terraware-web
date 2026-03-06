@@ -30,7 +30,10 @@ const indicatorStatusOptions: DropdownItem[] = (['Achieved', 'On-Track', 'Unlike
 
 const textAreaStyles = { textarea: { height: '120px' } };
 
-type IndicatorMetric = ReportAutoCalculatedIndicatorPayload | ReportCommonIndicatorPayload | ReportProjectIndicatorPayload;
+type IndicatorMetric =
+  | ReportAutoCalculatedIndicatorPayload
+  | ReportCommonIndicatorPayload
+  | ReportProjectIndicatorPayload;
 
 type MetricRowProps = {
   metric: IndicatorMetric;
@@ -125,7 +128,8 @@ const MetricRow = ({
   const previousYearDisplayLabel = hasPreviousYear ? String((year ?? 0) - 1) : strings.BASELINE;
   const displayValue = isCumulative ? cumulativeValue : actualValue;
   const completionDenominator = targetValue - baseline;
-  const percentComplete = completionDenominator !== 0 ? Math.round(((displayValue - baseline) / completionDenominator) * 100) : 0;
+  const percentComplete =
+    completionDenominator !== 0 ? Math.round(((displayValue - baseline) / completionDenominator) * 100) : 0;
 
   const hasComments = !!metric.projectsComments || !!metric.progressNotes;
   const canExpand = hasComments || isCumulative;
@@ -433,11 +437,7 @@ const MetricRow = ({
                     <Typography fontSize='16px' fontWeight={600} marginBottom={1}>
                       {strings.PROJECTS_COMMENTS}
                     </Typography>
-                    <Typography
-                      fontSize='14px'
-                      color={theme.palette.TwClrBaseBlack}
-                      sx={{ whiteSpace: 'pre-wrap' }}
-                    >
+                    <Typography fontSize='14px' color={theme.palette.TwClrBaseBlack} sx={{ whiteSpace: 'pre-wrap' }}>
                       {metric.projectsComments}
                     </Typography>
                   </Grid>
@@ -447,11 +447,7 @@ const MetricRow = ({
                     <Typography fontSize='16px' fontWeight={600} marginBottom={1}>
                       {strings.PROGRESS_NOTES}
                     </Typography>
-                    <Typography
-                      fontSize='14px'
-                      color={theme.palette.TwClrBaseBlack}
-                      sx={{ whiteSpace: 'pre-wrap' }}
-                    >
+                    <Typography fontSize='14px' color={theme.palette.TwClrBaseBlack} sx={{ whiteSpace: 'pre-wrap' }}>
                       {metric.progressNotes}
                     </Typography>
                   </Grid>
