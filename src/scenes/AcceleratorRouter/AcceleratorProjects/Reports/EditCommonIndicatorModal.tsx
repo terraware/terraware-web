@@ -7,8 +7,8 @@ import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
 import useBoolean from 'src/hooks/useBoolean';
-import { useLocalization } from 'src/providers';
 import { ExistingCommonIndicatorPayload, useUpdateCommonIndicatorMutation } from 'src/queries/generated/indicators';
+import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -19,12 +19,35 @@ export interface EditCommonIndicatorModalProps {
   commonIndicator: ExistingCommonIndicatorPayload;
 }
 
+export const indicatorTypeOptions = () => {
+  return [
+    { label: strings.INDICATOR_TYPE_PROCESS, value: 'Process' },
+    { label: strings.METRIC_TYPE_OUTPUT, value: 'Output' },
+    { label: strings.METRIC_TYPE_OUTCOME, value: 'Outcome' },
+    { label: strings.INDICATOR_TYPE_GOAL, value: 'Goal' },
+  ];
+};
+
+export const classIdOptions = () => {
+  return [
+    { label: strings.CUMULATIVE, value: 'Cumulative' },
+    { label: strings.LEVEL, value: 'Level' },
+  ];
+};
+
+export const frequencyOptions = () => {
+  return [
+    { label: strings.ANNUAL, value: 'Annual' },
+    { label: strings.BI_ANNUAL, value: 'Bi-Annual' },
+    { label: strings.MRV_CYCLE, value: 'MRV Cycle' },
+  ];
+};
+
 export default function EditCommonIndicatorModal({
   onClose,
   commonIndicator,
 }: EditCommonIndicatorModalProps): JSX.Element {
   const snackbar = useSnackbar();
-  const { strings } = useLocalization();
 
   const [record, , , onChangeCallback] = useForm<ExistingCommonIndicatorPayload>(commonIndicator);
   const [validate, setValidate] = useState(false);
@@ -39,7 +62,7 @@ export default function EditCommonIndicatorModal({
       onClose();
       snackbar.toastSuccess(strings.COMMON_INDICATOR_SAVED);
     }
-  }, [updateCommonIndicatorResponse, snackbar, onClose, strings.COMMON_INDICATOR_SAVED]);
+  }, [updateCommonIndicatorResponse, snackbar, onClose]);
 
   const save = useCallback(() => {
     if (!record.name || !record.refId) {
@@ -76,6 +99,7 @@ export default function EditCommonIndicatorModal({
       open={true}
       size='medium'
       title={strings.COMMON_INDICATOR}
+      scrolled
     >
       <Confirm
         closeButtonText={strings.CANCEL}
@@ -151,13 +175,60 @@ export default function EditCommonIndicatorModal({
           />
         </Grid>
         <Grid item xs={12}>
+          <TextField
+            id='primaryDataSource'
+            label={strings.PRIMARY_DATA_SOURCE}
+            onChange={onChangeCallback('primaryDataSource')}
+            type='text'
+            value={record.primaryDataSource}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            id='tfOwner'
+            label={strings.TF_OWNER_REVIEWER}
+            onChange={onChangeCallback('tfOwner')}
+            type='text'
+            value={record.tfOwner}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <Dropdown
+            fullWidth
+            id='classId'
+            label={strings.CUMULATIVE_OR_LEVEL}
+            onChange={onChangeCallback('classId')}
+            options={classIdOptions()}
+            selectedValue={record.classId}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            id='notes'
+            label={strings.NOTES}
+            onChange={onChangeCallback('notes')}
+            type='textarea'
+            value={record.notes}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <Dropdown
+            fullWidth
+            id='frequency'
+            label={strings.FREQUENCY_OF_REPORTING}
+            onChange={onChangeCallback('frequency')}
+            options={frequencyOptions()}
+            selectedValue={record.frequency}
+          />
+        </Grid>
+        <Grid item xs={12}>
           <Checkbox
             disabled={false}
-            id='isPublishable'
-            label={strings.PUBLISH_TO_FUNDER_PORTAL}
-            name='isPublishable'
-            onChange={onChangeCallback('isPublishable')}
-            value={record.isPublishable}
+            id='active'
+            label={strings.ACTIVE}
+            name='active'
+            onChange={onChangeCallback('active')}
+            value={record.active}
           />
         </Grid>
       </Grid>
