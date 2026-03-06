@@ -105,7 +105,6 @@ export default function ProjectsList(): JSX.Element {
               flexDirection: 'column',
               justifyContent: 'center',
               alignItems: 'flex-end',
-              marginBottom: '32px',
             }}
           >
             {isMobile ? (
