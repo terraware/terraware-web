@@ -39,10 +39,17 @@ const MetricStatusBadge = (props: MetricStatusBadgeProps): JSX.Element => {
         };
       case 'On-Track':
         return {
+          backgroundColor: theme.palette.TwClrBgSuccessTertiary,
+          borderColor: theme.palette.TwClrBrdrSuccess,
+          labelColor: theme.palette.TwClrTxtSuccess,
+          label: strings.ON_TRACK,
+        };
+      case 'Off-Track':
+        return {
           backgroundColor: theme.palette.TwClrBgWarningTertiary,
           borderColor: theme.palette.TwClrBrdrWarning,
           labelColor: theme.palette.TwClrTxtWarning,
-          label: strings.ON_TRACK,
+          label: strings.OFF_TRACK,
         };
       default:
         return undefined;

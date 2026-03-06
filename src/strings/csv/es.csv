@@ -403,6 +403,8 @@ CULTIVATED_EX_SITU,Cultivado (ex situ),db8d3394
 CULTIVATED_EX_SITU_DESCRIPTION,"Plantas que se han cultivado en un vivero, área de producción de semillas u otra instalación de propagación.",9b096972
 CUMULATIVE,Acumulativo,51c21c57
 CUMULATIVE_OR_LEVEL,Acumulativo o Nivel,0a0f2515
+CUMULATIVE_PROGRESS,Progreso acumulado,fd7ffcac
+CUMULATIVE_PROGRESS_TOOLTIP,El total acumulado de todos los trimestres reportados este año,d8165ea0
 CURRENT_NEXT_OBSERVATION,Observación actual/siguiente,50735263
 CURRENT_TIMELINE,Cronología actual,2dcbaeeb
 CURRENT_VIEW,Vista actual,8b3a3d54
@@ -1270,6 +1272,7 @@ OBSERVED_PLANTS,Plantas observadas,375e69c3
 OBSERVED_SPECIES,Especies observadas,922020f2
 OBSERVER,Observador,89ceb806
 OBSERVER_NAME,Nombre del observador,fc477ae5
+OFF_TRACK,Fuera de curso,86d5bca1
 OK,Aceptar,6cdf9103
 ON_TRACK,Encaminado,e2f4a4aa
 ONBOARDING_ADMIN_TITLE,"Un momento, vamos a completar la configuración en primer lugar",34c89e4a

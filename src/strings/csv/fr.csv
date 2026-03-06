@@ -402,6 +402,8 @@ CULTIVATED_EX_SITU,Cultivé (ex situ),db8d3394
 CULTIVATED_EX_SITU_DESCRIPTION,"Plantes qui ont été cultivées dans une pépinière, une zone de production de semences ou une autre installation de propagation.",9b096972
 CUMULATIVE,Cumulatif,51c21c57
 CUMULATIVE_OR_LEVEL,Cumulatif ou Niveau,0a0f2515
+CUMULATIVE_PROGRESS,Progrès cumulé,fd7ffcac
+CUMULATIVE_PROGRESS_TOOLTIP,Le total cumulé de tous les trimestres rapportés cette année,d8165ea0
 CURRENT_NEXT_OBSERVATION,Observation actuelle/prochaine,50735263
 CURRENT_TIMELINE,Étapes,2dcbaeeb
 CURRENT_VIEW,Vue actuelle,8b3a3d54
@@ -1269,6 +1271,7 @@ OBSERVED_PLANTS,Plantes observées,375e69c3
 OBSERVED_SPECIES,Espèces observées,922020f2
 OBSERVER,Observateur,89ceb806
 OBSERVER_NAME,Nom de l'observateur,fc477ae5
+OFF_TRACK,Hors trajectoire,86d5bca1
 OK,Ok,6cdf9103
 ON_TRACK,Sur la bonne voie,e2f4a4aa
 ONBOARDING_ADMIN_TITLE,"Un instant, finalisons d'abord la configuration",34c89e4a
