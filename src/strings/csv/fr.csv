@@ -27,6 +27,7 @@ ACCUMULATION_RATE,Taux d'accumulation,2d9ec0ee
 ACCUMULATION_RATE_UNITS,Taux d'accumulation (tCO2/ha/an),400d7f2a
 ACHIEVED,Atteint,845a66be
 ACHIEVEMENTS,Réalisations,e1e95bcf
+ACTIVE,Actif,514d5311
 ACTIVE_ACCESSIONS,Accessions actives,4d901ef3
 ACTIVE_GROWTH,Croissance active,b160aa44
 ACTIVE_GROWTH_QUANTITY,Quantité de croissance active,0429b4c4
@@ -154,6 +155,7 @@ ANNOTATION_DESCRIPTION_TOOLTIP,Détails ou contexte supplémentaires concernant 
 ANNOTATION_LABEL_TOOLTIP,Identifiant court affiché sur le point d’annotation,adbb02a1
 ANNOTATION_TITLE_TOOLTIP,Titre principal de l’annotation,b3f5b753
 ANNOTATIONS,Annotations,c15a3aa4
+ANNUAL,Annuel,772b555a
 ANSWER_APPROVED,Réponse approuvée,8a11d452
 ANSWERS_UPDATE_NEEDED,Mises à jour des réponses nécessaires,5faf2563
 APPLICANTS,Candidats,7cb94d31
@@ -237,6 +239,7 @@ BATCHES_SINGULAR,lot,a3a42fdb
 BEST_MONTHS_FOR_OBSERVATIONS,Les meilleurs mois pour les observations,99083629
 BEST_MONTHS_FOR_OBSERVATIONS_INSTRUCTIONS,Il s'agit des saisons où cela a le plus de sens du point de vue de la capacité de votre équipe et prend également en compte des facteurs environnementaux tels que l'absence de neige et la possibilité d'identifier facilement la survie des plantations. Veuillez sélectionner tous les mois qui s'appliquent.,efb1c93a
 BEST_MONTHS_FOR_OBSERVATIONS_VALIDATION_ERROR,Veuillez sélectionner au moins un mois.,999b9492
+BI_ANNUAL,Semestriel,76d69272
 BIODIVERSITY,Biodiversité,fa436482
 BIOMASS_EMPTY_STATE_MESSAGE_1,Il n'y a pas d'Observations ad hoc de parcelles pour le moment.,7dd9cdf0
 BIOMASS_EMPTY_STATE_MESSAGE_2,Les observations pour la surveillance de la biomasse peuvent être enregistrées par le biais d'observations ad hoc sur les parcelles dans l'application mobile.,e9184a63
@@ -397,6 +400,8 @@ CTRL,Ctrl,f485607a
 CULTIVATED,Cultivé,f0d960a4
 CULTIVATED_EX_SITU,Cultivé (ex situ),db8d3394
 CULTIVATED_EX_SITU_DESCRIPTION,"Plantes qui ont été cultivées dans une pépinière, une zone de production de semences ou une autre installation de propagation.",9b096972
+CUMULATIVE,Cumulatif,51c21c57
+CUMULATIVE_OR_LEVEL,Cumulatif ou Niveau,0a0f2515
 CUMULATIVE_PROGRESS,Progrès cumulé,fd7ffcac
 CUMULATIVE_PROGRESS_TOOLTIP,Le total cumulé de tous les trimestres rapportés cette année,d8165ea0
 CURRENT_NEXT_OBSERVATION,Observation actuelle/prochaine,50735263
@@ -867,6 +872,8 @@ INCOMPLETE,Incomplet,5f524fdf
 INCORRECT_EMAIL_FORMAT,Format d'e-mail incorrect.,19f1a8c9
 INDICATOR_LEVEL,Niveau d’indicateur,b128c992
 INDICATOR_NAME,Nom de l’indicateur,0d8b0613
+INDICATOR_TYPE_GOAL,Objectif,cb34c06e
+INDICATOR_TYPE_PROCESS,Processus,0bee5739
 INDICATORS,Indicateurs,ea71857f
 INFRASTRUCTURE,Infrastructure,c8fe126f
 INSTANCES,Instances,fcc19322
@@ -968,6 +975,7 @@ LEFT_MOUSE,Bouton gauche de la souris,b034e4dc
 LEGAL,Juridique,dc8b5907
 LEGEND,Légende,d312e5fb
 LESS_THAN_FIFTY_PERCENT,< 50 %,d26d7627
+LEVEL,Niveau,353f7559
 LIANA,Liane,812e082e
 LICHEN,Lichen,4f8de0bf
 LIGHT,Lumière,2bf7f442
@@ -1099,6 +1107,7 @@ MOSS,Mousse,5b67a19f
 MOST_RECENT_OBSERVATION,Observation la plus récente,a614018e
 MOUSE_WHEEL,Molette de la souris,8e3d3d78
 MOVE,Déplacer,abe6be41
+MRV_CYCLE,Cycle MRV,ab7e636c
 MULTIPLE_FORMS,Formes multiples,abad8008
 MY_ACCOUNT,Mon compte,8e57f7ad
 MY_ACCOUNT_DESC,Gérez les informations de votre compte.,4eff2dde
