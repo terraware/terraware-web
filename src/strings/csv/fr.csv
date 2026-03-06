@@ -17,7 +17,6 @@ ACCESSION_ID,Identifiant de l'accesion,a87726c0
 ACCESSION_NUMBER_CHECKED_IN,L'accesion {0} a été enregistrée avec succès !,b78da03c
 ACCESSIONS,Accessions,5f4f92e5
 ACCESSIONS_CARD_DESCRIPTION,"Collectez des semences, puis enregistrez et visualisez vos accessions. Les accessions de semences peuvent être visualisées et analisées par banque de semences.",04e1a86a
-ACCESSIONS_DATABASE_DESCRIPTION,Gérez vos adhésions.,2d18fc42
 ACCESSIONS_IMPORT_COMPLETE,L'importation des données d'accessions est terminée !,445187fe
 ACCESSIONS_ONBOARDING_SEEDBANKS_MSG,Définissez les emplacements de conservation assignés aux accessions de semences,0a48e95f
 ACCESSIONS_ONBOARDING_SPECIES_MSG,Définissez une liste d'espèces utilisées dans votre inventaire de semences.,215ac54e
@@ -898,7 +897,6 @@ INVENTORY,Inventaire,001c6bdb
 INVENTORY_IMPORT_COMPLETE,Importation des données d'inventaire achevée !,760bba82
 INVENTORY_ONBOARDING_NURSERIES_MSG,Définir les pépinières affectées à l'inventaire des semis,393e62d3
 INVENTORY_ONBOARDING_SPECIES_MSG,Définir une liste d'espèces utilisées dans votre inventaire des semis,bafd0703
-INVENTORY_PAGE_DESCRIPTION,Gérer votre Inventaire.,9e99a759
 INVENTORY_WITHDRAWALS,Retraits d'inventaire,cefda57f
 INVESTMENT_COMMITTEE_VOTES,Votes du comité d'investissement,a7c64c6c
 INVITATION_PENDING,Invitation en attente,6b64d319
