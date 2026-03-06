@@ -1,3 +1,6 @@
+18878f15e1b6 SW-8103 Add cumulative progress to each metric on Report (#5377)
+396e3fa3e69e SW-7638 Don't use ?. in hook dependencies (#5381)
+4f938225a8f0 SW-8101 New fields on edit indicator modal (#5378)
 8f20417d0cbf SW-8063 Accessions table - Default columns (#5379)
 40559a643552 SW-8140 Input fields in withdrawal pages shrinks with increasing remaining quantity (#5380)
 5c6f243c3dda SW-8063 Accessions: Update table to new table component (#5369)
