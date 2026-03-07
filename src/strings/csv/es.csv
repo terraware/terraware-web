@@ -1109,7 +1109,6 @@ MOVE,Mover,abe6be41
 MRV_CYCLE,Ciclo MRV,ab7e636c
 MULTIPLE_FORMS,Múltiples formas,abad8008
 MY_ACCOUNT,Mi cuenta,8e57f7ad
-MY_ACCOUNT_DESC,Gestione la información de su cuenta.,4eff2dde
 MY_ACCOUNT_NOTIFICATIONS_DESC,Las notificaciones le avisan cuando hay actualizaciones importantes sobre sus organizaciones. Las recibirá por correo electrónico.,65644b47
 N_IMAGES,{0} imagen(es),098eae0e
 N_ROWS,{0} fila(s),2bb73684
@@ -1291,7 +1290,6 @@ ORGANIZATION_CREATE_FAILED,No se puede crear la organización.,969a54ff
 ORGANIZATION_CREATED_MSG,Puede acceder a las organizaciones en las que se encuentra dando clic en el menú de perfil de usuario en la esquina superior derecha.,60a57d86
 ORGANIZATION_CREATED_MSG_DESKTOP,"Puede acceder a las organizaciones en las que está dando clic en la flecha en la esquina superior izquierda, a un lado del logo.",b843e803
 ORGANIZATION_CREATED_TITLE,¡Ha creado {0}!,816b8725
-ORGANIZATION_DESC,Gestione su organización.,b5ea60e9
 ORGANIZATION_NAME,Nombre de la organización,fa3057ac
 ORGANIZATION_NAME_REQUIRED,Nombre de la organización *,e4d74b24
 ORGANIZATION_TYPE,Tipo de organización,c4deacbd
@@ -1924,7 +1922,6 @@ SPECIES_CATEGORIES_TOOLTIP,"Categorías de especies muestra el porcentaje del to
 SPECIES_CLASSIFICATION,Clasificación de especies,2e8b4fb1
 SPECIES_DENSITY_WARNING_MESSAGE,"No ha ingresado valores de densidad de plantas para todas las especies. Si no ingresa valores de densidad de plantas para todas las especies, las densidades de plantas para esta parcela no se establecerán y no se calculará la tasa de supervivencia para esa especie. Ingrese 0 para cualquier especie que no haya sido plantada en una parcela.",5bcc0f2b
 SPECIES_DENSITY_WARNING_MESSAGE_TEMPORARY_PLOTS,"No ha ingresado valores de densidad de plantas para todas las especies en todas las estratas. Si no ingresa valores de densidad de plantas para todas las especies en una estrata, no se establecerán las densidades de plantas para esa estrata y no se calculará la tasa de supervivencia para esa especie. Ingrese 0 para cualquier especie que no haya sido plantada en una estrata.",685a0c64
-SPECIES_DESCRIPTION,"Gestione la lista de especies de su organización para fines de planificación, operación y elaboración de informes.",b1943eab
 SPECIES_EMPTY_MSG_BODY,Ingrese ahora la especie que recolecta o planta para simplificar su experiencia cuando esté en campo.,20250069
 SPECIES_FROM_T0_OBSERVATION,Especies de la Observación t0,08a77070
 SPECIES_FROM_T0_OBSERVATION_TOOLTIP,Las especies de la Observación t0 fueron observadas en la Observación seleccionada para usar como datos t0.,ee679aa8

@@ -86,9 +86,6 @@ export default function OrganizationView(): JSX.Element {
             onClick={goToEditOrganization}
           />
         </Box>
-        <Typography margin={0} fontSize='14px' fontWeight={400}>
-          {strings.ORGANIZATION_DESC}
-        </Typography>
         <PageSnackbar />
       </Box>
       <Grid
