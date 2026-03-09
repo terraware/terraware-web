@@ -30,11 +30,14 @@ import {
   useUpdateAcceleratorReportValuesMutation,
 } from 'src/queries/generated/reports';
 import { useBatchReportPhotosMutation } from 'src/queries/reports/photos';
-import { AcceleratorReportPhoto, IndicatorType, MetricType, NewAcceleratorReportPhoto } from 'src/types/AcceleratorReport';
+import {
+  AcceleratorReportPhoto,
+  IndicatorType,
+  MetricType,
+  NewAcceleratorReportPhoto,
+} from 'src/types/AcceleratorReport';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
-
-
 
 type AcceleratorReportPhotoActions = {
   toAdd: NewAcceleratorReportPhoto[];
@@ -171,7 +174,10 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
 
   const onChangeIndicator = useCallback(
     (
-      updatedIndicator: ReportAutoCalculatedIndicatorPayload | ReportCommonIndicatorPayload | ReportProjectIndicatorPayload,
+      updatedIndicator:
+        | ReportAutoCalculatedIndicatorPayload
+        | ReportCommonIndicatorPayload
+        | ReportProjectIndicatorPayload,
       type: IndicatorType
     ) => {
       switch (type) {

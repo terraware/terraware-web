@@ -18,7 +18,12 @@ const AcceleratorReportEditView = (): JSX.Element | null => {
   const reportId = Number(pathParams.reportId);
   const projectId = Number(pathParams.projectId);
 
-  const getReportResults = useGetAcceleratorReportQuery({ reportId, projectId, includeMetrics: true, includeIndicators: true });
+  const getReportResults = useGetAcceleratorReportQuery({
+    reportId,
+    projectId,
+    includeMetrics: true,
+    includeIndicators: true,
+  });
   const snackbar = useSnackbar();
 
   useEffect(() => {

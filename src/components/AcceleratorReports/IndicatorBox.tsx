@@ -14,7 +14,10 @@ import useForm from 'src/utils/useForm';
 
 import EditableReportBox from './EditableReportBox';
 
-type IndicatorMetric = ReportAutoCalculatedIndicatorPayload | ReportCommonIndicatorPayload | ReportProjectIndicatorPayload;
+type IndicatorMetric =
+  | ReportAutoCalculatedIndicatorPayload
+  | ReportCommonIndicatorPayload
+  | ReportProjectIndicatorPayload;
 
 const isAutoCalculated = (m: IndicatorMetric): m is ReportAutoCalculatedIndicatorPayload =>
   'indicator' in m && typeof m.indicator === 'string';
