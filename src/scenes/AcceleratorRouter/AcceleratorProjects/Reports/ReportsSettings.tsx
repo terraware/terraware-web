@@ -373,6 +373,14 @@ export default function ReportsSettings(): JSX.Element {
     [theme, strings.TW_DATA]
   );
 
+  const ClassIdCell = useCallback(
+    ({ cell }: { cell: MRT_Cell<IndicatorRow> }) => {
+      const classId = cell.getValue<string>();
+      return <>{classId === 'Cumulative' ? strings.CUMULATIVE : strings.LEVEL}</>;
+    },
+    [strings]
+  );
+
   const ActiveCell = useCallback(
     ({ cell }: { cell: MRT_Cell<IndicatorRow> }) => {
       const isActive = cell.getValue<boolean>();
@@ -434,6 +442,7 @@ export default function ReportsSettings(): JSX.Element {
         accessorKey: 'classId',
         enableEditing: false,
         size: 160,
+        Cell: ClassIdCell,
       },
       {
         id: 'level',
@@ -480,7 +489,7 @@ export default function ReportsSettings(): JSX.Element {
         size: 200,
       },
     ],
-    [strings, NameCell, CommonCell, CategoryCell, PrimaryDataSourceCell, ActiveCell]
+    [strings, NameCell, CommonCell, CategoryCell, PrimaryDataSourceCell, ActiveCell, ClassIdCell]
   );
 
   return (
