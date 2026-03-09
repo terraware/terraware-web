@@ -67,6 +67,7 @@ ADD_BATCH,Añadir lote,0d9f7a4a
 ADD_DOCUMENT,Añadir documento,af87beed
 ADD_FUNDING_ENTITY,Agregar entidad financiadora,47c0142d
 ADD_GPS_COORDINATES,Añadir coordenadas GPS,d87d2fa2
+ADD_INDICATOR,Agregar indicador,d8469587
 ADD_INVENTORY,Añadir inventario,73cde1f5
 ADD_INVENTORY_DESCRIPTION,"Añadir inventario de una nueva fuente. Para añadir inventario de una accesión de semillas existente, vaya a Accesiones y retire de una entrada de accesión.",8ccf6455
 ADD_INVENTORY_MANUALLY_DESCRIPTION,"Introduzca especies, cantidades y otra información relevante utilizando nuestro formulario de inventario.",5ab2a2a5
@@ -872,6 +873,7 @@ INCOMPLETE,Incompleto,5f524fdf
 INCORRECT_EMAIL_FORMAT,Formato de correo electrónico incorrecto.,19f1a8c9
 INDICATOR_LEVEL,Nivel del indicador,b128c992
 INDICATOR_NAME,Nombre del indicador,0d8b0613
+INDICATOR_TYPE,Tipo de indicador,d5e75bf1
 INDICATOR_TYPE_GOAL,Meta,cb34c06e
 INDICATOR_TYPE_PROCESS,Proceso,0bee5739
 INDICATORS,Indicadores,ea71857f
@@ -1527,6 +1529,7 @@ PROJECT_PHASE_PLAN_AND_SCALE,Fase 2 - Planificar y Escalar,a51c9fc2
 PROJECT_PHOTOS,Fotos del proyecto (máx. 30),25c80ed0
 PROJECT_PROFILE,Perfil del proyecto,cc49d0dc
 PROJECT_PROFILE_PUBLISHED,Publicado el perfil del proyecto,9f75ca71
+PROJECT_SPECIFIC,Específico del proyecto,6f4b5ae3
 PROJECT_SPECIFIC_METRIC,Métrica específica del proyecto,4585c861
 PROJECT_SPECIFIC_METRIC_SAVED,Métrica específica del proyecto guardada,15157e04
 PROJECT_SPECIFIC_METRICS,Métricas específicas del proyecto,56e54f89

@@ -361,6 +361,9 @@ export default function useNavigateTo() {
 
       goToNewStandardMetric: (projectId: string) =>
         navigate(APP_PATHS.ACCELERATOR_PROJECT_REPORTS_STANDARD_METRICS_NEW.replace(':projectId', projectId)),
+
+      goToNewIndicator: (projectId: string) =>
+        navigate(APP_PATHS.ACCELERATOR_PROJECT_REPORTS_INDICATORS_NEW.replace(':projectId', projectId)),
     }),
     [navigate]
   );
