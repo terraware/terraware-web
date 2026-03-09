@@ -11,10 +11,13 @@ import HighlightsBox from 'src/components/AcceleratorReports/HighlightsBox';
 import MetricStatusBadge from 'src/components/AcceleratorReports/MetricStatusBadge';
 import PhotosBox from 'src/components/AcceleratorReports/PhotosBox';
 import Card from 'src/components/common/Card';
+import isEnabled from 'src/features';
 import { useLocalization } from 'src/providers';
-import { PublishedReportPayload } from 'src/queries/generated/publishedReports';
+import { PublishedReportIndicatorPayload, PublishedReportPayload } from 'src/queries/generated/publishedReports';
+import { ReportCommonIndicatorPayload } from 'src/queries/generated/reports';
 import { PublishedReportMetric } from 'src/types/AcceleratorReport';
 
+import MetricRow from '../AcceleratorRouter/AcceleratorProjects/Reports/MetricRow';
 import MetricBox from './MetricBox';
 
 type FunderReportViewProps = {
@@ -26,6 +29,8 @@ const FunderReportView = ({ selectedProjectId, selectedReport }: FunderReportVie
   const theme = useTheme();
   const { isDesktop } = useDeviceInfo();
   const { strings } = useLocalization();
+
+  const improvedReportsEnabled = isEnabled('Improved Reports');
 
   const year = useMemo(() => {
     return selectedReport?.startDate?.split('-')[0];
@@ -48,6 +53,26 @@ const FunderReportView = ({ selectedProjectId, selectedReport }: FunderReportVie
   const climateMetrics = allMetrics.filter((m) => m.component === 'Climate');
   const biodiversityMetrics = allMetrics.filter((m) => m.component === 'Biodiversity');
   const communityMetrics = allMetrics.filter((m) => m.component === 'Community');
+
+  const allIndicators = useMemo((): ReportCommonIndicatorPayload[] => {
+    if (!improvedReportsEnabled) {
+      return [];
+    }
+    let id = 0;
+    const result: ReportCommonIndicatorPayload[] = [];
+    (['autoCalculatedIndicators', 'commonIndicators', 'projectIndicators'] as const).forEach((key) => {
+      const indicators: PublishedReportIndicatorPayload[] = selectedReport?.[key] ?? [];
+      indicators.forEach((ind) => {
+        result.push({ ...ind, id: id++, isPublishable: true } as ReportCommonIndicatorPayload);
+      });
+    });
+    return result;
+  }, [improvedReportsEnabled, selectedReport]);
+
+  const climateIndicators = allIndicators.filter((m) => m.category === 'Climate');
+  const biodiversityIndicators = allIndicators.filter((m) => m.category === 'Biodiversity');
+  const communityIndicators = allIndicators.filter((m) => m.category === 'Community');
+  const projectObjectivesIndicators = allIndicators.filter((m) => m.category === 'Project Objectives');
 
   const metricBoxStyle = { borderRadius: '8px', paddingTop: 0 };
 
@@ -103,71 +128,108 @@ const FunderReportView = ({ selectedProjectId, selectedReport }: FunderReportVie
       </Box>
       {year && (
         <>
-          {climateMetrics.length > 0 && (
-            <Box width='100%'>
-              <Typography fontSize={'20px'} fontWeight={600} margin={theme.spacing(3, 0)}>
-                {strings.CLIMATE}
-              </Typography>
+          {improvedReportsEnabled ? (
+            <>
+              {(
+                [
+                  { label: strings.CLIMATE, indicators: climateIndicators },
+                  { label: strings.BIODIVERSITY, indicators: biodiversityIndicators },
+                  { label: strings.COMMUNITY, indicators: communityIndicators },
+                  { label: strings.PROJECT_OBJECTIVES, indicators: projectObjectivesIndicators },
+                ] as const
+              ).map(({ label, indicators }) =>
+                indicators.length > 0 ? (
+                  <Box key={label} width='100%'>
+                    <Typography fontSize={'20px'} fontWeight={600} margin={theme.spacing(3, 0)}>
+                      {label}
+                    </Typography>
+                    <Card style={metricBoxStyle}>
+                      {indicators.map((indicator, index) => (
+                        <MetricRow
+                          key={index}
+                          type='common'
+                          metric={indicator}
+                          reportLabel={selectedReport?.quarter}
+                          year={Number(year)}
+                          projectId={selectedProjectId}
+                          reportId={selectedReport.reportId}
+                          canEdit={false}
+                        />
+                      ))}
+                    </Card>
+                  </Box>
+                ) : null
+              )}
+            </>
+          ) : (
+            <>
+              {climateMetrics.length > 0 && (
+                <Box width='100%'>
+                  <Typography fontSize={'20px'} fontWeight={600} margin={theme.spacing(3, 0)}>
+                    {strings.CLIMATE}
+                  </Typography>
 
-              <Card style={metricBoxStyle}>
-                <Box display={isDesktop ? 'flex' : 'block'} flexWrap='wrap' overflow='hidden'>
-                  {climateMetrics?.map((metric, index) => (
-                    <MetricBox
-                      metric={metric}
-                      index={index}
-                      year={year}
-                      quarter={selectedReport?.quarter}
-                      key={index}
-                      length={climateMetrics.length}
-                    />
-                  ))}
+                  <Card style={metricBoxStyle}>
+                    <Box display={isDesktop ? 'flex' : 'block'} flexWrap='wrap' overflow='hidden'>
+                      {climateMetrics?.map((metric, index) => (
+                        <MetricBox
+                          metric={metric}
+                          index={index}
+                          year={year}
+                          quarter={selectedReport?.quarter}
+                          key={index}
+                          length={climateMetrics.length}
+                        />
+                      ))}
+                    </Box>
+                  </Card>
                 </Box>
-              </Card>
-            </Box>
-          )}
-          {biodiversityMetrics.length > 0 && (
-            <Box width='100%'>
-              <Typography fontSize={'20px'} fontWeight={600} margin={theme.spacing(3, 0)}>
-                {strings.BIODIVERSITY}
-              </Typography>
+              )}
+              {biodiversityMetrics.length > 0 && (
+                <Box width='100%'>
+                  <Typography fontSize={'20px'} fontWeight={600} margin={theme.spacing(3, 0)}>
+                    {strings.BIODIVERSITY}
+                  </Typography>
 
-              <Card style={metricBoxStyle}>
-                <Box display={isDesktop ? 'flex' : 'block'} flexWrap='wrap' overflow='hidden'>
-                  {biodiversityMetrics?.map((metric, index) => (
-                    <MetricBox
-                      metric={metric}
-                      index={index}
-                      year={year}
-                      quarter={selectedReport?.quarter}
-                      key={index}
-                      length={biodiversityMetrics.length}
-                    />
-                  ))}
+                  <Card style={metricBoxStyle}>
+                    <Box display={isDesktop ? 'flex' : 'block'} flexWrap='wrap' overflow='hidden'>
+                      {biodiversityMetrics?.map((metric, index) => (
+                        <MetricBox
+                          metric={metric}
+                          index={index}
+                          year={year}
+                          quarter={selectedReport?.quarter}
+                          key={index}
+                          length={biodiversityMetrics.length}
+                        />
+                      ))}
+                    </Box>
+                  </Card>
                 </Box>
-              </Card>
-            </Box>
-          )}
-          {communityMetrics.length > 0 && (
-            <Box width='100%'>
-              <Typography fontSize={'20px'} fontWeight={600} margin={theme.spacing(3, 0)}>
-                {strings.COMMUNITY}
-              </Typography>
+              )}
+              {communityMetrics.length > 0 && (
+                <Box width='100%'>
+                  <Typography fontSize={'20px'} fontWeight={600} margin={theme.spacing(3, 0)}>
+                    {strings.COMMUNITY}
+                  </Typography>
 
-              <Card style={metricBoxStyle}>
-                <Box display={isDesktop ? 'flex' : 'block'} flexWrap='wrap' overflow='hidden'>
-                  {communityMetrics?.map((metric, index) => (
-                    <MetricBox
-                      metric={metric}
-                      index={index}
-                      year={year}
-                      quarter={selectedReport?.quarter}
-                      key={index}
-                      length={communityMetrics.length}
-                    />
-                  ))}
+                  <Card style={metricBoxStyle}>
+                    <Box display={isDesktop ? 'flex' : 'block'} flexWrap='wrap' overflow='hidden'>
+                      {communityMetrics?.map((metric, index) => (
+                        <MetricBox
+                          metric={metric}
+                          index={index}
+                          year={year}
+                          quarter={selectedReport?.quarter}
+                          key={index}
+                          length={communityMetrics.length}
+                        />
+                      ))}
+                    </Box>
+                  </Card>
                 </Box>
-              </Card>
-            </Box>
+              )}
+            </>
           )}
         </>
       )}
