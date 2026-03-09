@@ -44,6 +44,7 @@ export type MapComponentProps = {
   mapRef: MutableRefObject<MapRef | null>;
   nameTags?: MapNameTag[];
   onClickCanvas?: (event: MapMouseEvent) => void;
+  onMapLoad?: () => void;
   onMapMove?: (view: ViewStateChangeEvent) => void;
   onMouseMove?: (event: MapMouseEvent) => void;
   onTokenExpired?: () => void;
@@ -85,6 +86,7 @@ const MapComponent = (props: MapComponentProps) => {
     mapRef,
     nameTags,
     onClickCanvas,
+    onMapLoad,
     onMapMove,
     onMouseMove,
     onTokenExpired,
@@ -163,6 +165,7 @@ const MapComponent = (props: MapComponentProps) => {
         markerGroups={mapMarkers}
         nameTags={nameTags}
         onClickCanvas={onClickCanvas}
+        onMapLoad={onMapLoad}
         onMapMove={onMapMove}
         onMouseMove={onMouseMove}
         onTokenExpired={onTokenExpired}
@@ -196,6 +199,7 @@ const MapComponent = (props: MapComponentProps) => {
     mapMarkers,
     nameTags,
     onClickCanvas,
+    onMapLoad,
     onMapMove,
     onMouseMove,
     onTokenExpired,

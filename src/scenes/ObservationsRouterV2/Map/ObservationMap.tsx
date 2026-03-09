@@ -85,6 +85,7 @@ const ObservationMap = ({
   const { mapId, token } = useMapboxToken();
   const { selectedOrganization } = useOrganization();
   const { fitBounds } = useMapUtils(mapRef);
+  const [mapLoaded, setMapLoaded] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
   const [searchParams] = useSearchParams();
 
@@ -310,7 +311,7 @@ const ObservationMap = ({
       const bbox = getBoundingBoxFromPoints(points);
       fitBounds(bbox);
     }
-  }, [allPlantingSites, fitBounds, plantingSiteId, selectedHistory, selectedResults]);
+  }, [allPlantingSites, fitBounds, mapLoaded, plantingSiteId, selectedHistory, selectedResults]);
 
   const selectFeature = useCallback(
     (_plantingSiteId: number) => (layerId: string, featureId: string) => () => {
@@ -1293,6 +1294,7 @@ const ObservationMap = ({
       mapLayers={layers}
       mapRef={mapRef}
       nameTags={nameTags}
+      onMapLoad={() => setMapLoaded(true)}
       onMouseMove={onHover}
       token={token ?? ''}
       setDrawerOpen={setDrawerOpenCallback}

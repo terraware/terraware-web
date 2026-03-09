@@ -63,6 +63,7 @@ export type MapBoxProps = {
   markerGroups?: MapMarkerGroup[];
   nameTags?: MapNameTag[];
   onClickCanvas?: (event: MapMouseEvent) => void;
+  onMapLoad?: () => void;
   onMapMove?: (view: ViewStateChangeEvent) => void;
   onMouseMove?: (event: MapMouseEvent) => void;
   onTokenExpired?: () => void;
@@ -97,6 +98,7 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
     markerGroups,
     nameTags,
     onClickCanvas,
+    onMapLoad,
     onMapMove,
     onMouseMove,
     onTokenExpired,
@@ -131,9 +133,10 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
         mapRef.current = map;
         setZoom(map.getZoom());
         loadImages(map);
+        onMapLoad?.();
       }
     },
-    [loadImages, mapRef]
+    [loadImages, mapRef, onMapLoad]
   );
 
   const onMove = useCallback(
