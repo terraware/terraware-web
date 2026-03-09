@@ -44,6 +44,10 @@ const MapTreeDrawer = ({ observationId, tree }: MapTreeDrawerProps): JSX.Element
     if (result) {
       return [
         {
+          key: strings.ID,
+          value: tree.id.toString(),
+        },
+        {
           key: strings.SPECIES,
           value: treeSpecies,
         },
@@ -92,6 +96,7 @@ const MapTreeDrawer = ({ observationId, tree }: MapTreeDrawerProps): JSX.Element
     tree.pointOfMeasurement,
     tree.height,
     tree.shrubDiameter,
+    tree.id,
     tree.isInvasive,
     tree.isThreatened,
     tree.isDead,
