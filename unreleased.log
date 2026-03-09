@@ -1,3 +1,4 @@
+0c7ba7a40377 SW-8101 Add indicator page (#5397)
 1a9474e82dd1 SW-8144 Add "See Monitoring Plots" link to Strata drawers (#5399)
 dc8984e14a49 SW-8150 Clicking into a zone in the observation detail view resets the map (#5396)
 db99e241176a Bump svgo from 3.3.2 to 3.3.3 (#5376)
