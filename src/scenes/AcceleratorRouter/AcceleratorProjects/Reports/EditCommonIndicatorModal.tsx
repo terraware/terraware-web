@@ -13,7 +13,7 @@ import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
-import { metricComponentOptions, metricTypeOptions } from './NewProjectSpecificMetric';
+import { metricComponentOptions } from './NewProjectSpecificMetric';
 
 export interface EditCommonIndicatorModalProps {
   onClose: () => void;
@@ -41,6 +41,7 @@ export const frequencyOptions = () => {
     { label: strings.ANNUAL, value: 'Annual' },
     { label: strings.BI_ANNUAL, value: 'Bi-Annual' },
     { label: strings.MRV_CYCLE, value: 'MRV Cycle' },
+    { label: strings.QUARTERLY, value: 'Quarterly' },
   ];
 };
 
@@ -140,7 +141,7 @@ export default function EditCommonIndicatorModal({
             id='level'
             label={strings.INDICATOR_LEVEL}
             onChange={onChangeCallback('level')}
-            options={metricTypeOptions()}
+            options={indicatorTypeOptions()}
             selectedValue={record.level}
           />
         </Grid>
@@ -231,6 +232,16 @@ export default function EditCommonIndicatorModal({
             name='active'
             onChange={onChangeCallback('active')}
             value={record.active}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <Checkbox
+            disabled={false}
+            id='isPublishable'
+            label={strings.PUBLISH_TO_FUNDER_PORTAL}
+            name='isPublishable'
+            onChange={onChangeCallback('isPublishable')}
+            value={record.isPublishable}
           />
         </Grid>
       </Grid>

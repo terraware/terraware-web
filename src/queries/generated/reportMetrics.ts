@@ -44,7 +44,7 @@ export type ExistingStandardMetricPayload = {
   isPublishable: boolean;
   name: string;
   reference: string;
-  type: 'Activity' | 'Output' | 'Outcome' | 'Impact';
+  type: 'Process' | 'Output' | 'Outcome' | 'Goal';
   unit?: string;
 };
 export type SuccessOrError = 'ok' | 'error';
@@ -61,7 +61,7 @@ export type NewMetricPayload = {
   isPublishable: boolean;
   name: string;
   reference: string;
-  type: 'Activity' | 'Output' | 'Outcome' | 'Impact';
+  type: 'Process' | 'Output' | 'Outcome' | 'Goal';
   unit?: string;
 };
 export type CreateStandardMetricRequestPayload = {
@@ -76,7 +76,7 @@ export type SystemMetricPayload = {
   metric: 'Seeds Collected' | 'Seedlings' | 'Trees Planted' | 'Species Planted' | 'Hectares Planted' | 'Survival Rate';
   name: string;
   reference: string;
-  type: 'Activity' | 'Output' | 'Outcome' | 'Impact';
+  type: 'Process' | 'Output' | 'Outcome' | 'Goal';
 };
 export type ListSystemMetricsResponsePayload = {
   metrics: SystemMetricPayload[];

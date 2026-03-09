@@ -60,7 +60,7 @@ export default function NewProjectSpecificMetric(): JSX.Element {
     component: 'Biodiversity',
     name: '',
     reference: '',
-    type: 'Activity',
+    type: 'Process',
     isPublishable: true,
   });
 
