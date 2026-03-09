@@ -4,7 +4,10 @@ import { Grid } from '@mui/material';
 import { BusySpinner, Button, DialogBox, Dropdown, Textfield } from '@terraware/web-components';
 
 import { useLocalization, useOrganization } from 'src/providers';
-import { useReplaceObservationPlotMutation } from 'src/queries/generated/observations';
+import {
+  ReplaceObservationPlotRequestPayload,
+  useReplaceObservationPlotMutation,
+} from 'src/queries/generated/observations';
 import {
   MonitoringPlotSearchResult,
   useLazySearchMonitoringPlotsQuery,
@@ -16,7 +19,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import { useReassignPlotModal } from '.';
 
 export default function ReplaceObservationPlotModal(): JSX.Element {
-  const { open, monitoringPlotId, observationId, closeReassignPlotModal } = useReassignPlotModal();
+  const { open, monitoringPlotId, observationId, isPermanent, closeReassignPlotModal } = useReassignPlotModal();
 
   const { strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
@@ -24,6 +27,7 @@ export default function ReplaceObservationPlotModal(): JSX.Element {
   const [justification, setJustification] = useState<string>();
   const [duration, setDuration] = useState<ReplaceObservationPlotDuration | undefined>();
   const [validate, setValidate] = useState<boolean>(false);
+  const [replaceRequest, setReplaceRequest] = useState<ReplaceObservationPlotRequestPayload | undefined>();
 
   const { data: monitoringPlots } = useSearchMonitoringPlotsQuery(monitoringPlotId ? [monitoringPlotId] : [], {
     skip: !monitoringPlotId,
@@ -40,16 +44,15 @@ export default function ReplaceObservationPlotModal(): JSX.Element {
   const replaceObservationPlot = useCallback(() => {
     setValidate(true);
     if (observationId && monitoringPlotId && justification && duration) {
+      const requestPayload = { justification, duration };
+      setReplaceRequest(requestPayload);
       void replacePlot({
         observationId,
         plotId: monitoringPlotId,
-        replaceObservationPlotRequestPayload: {
-          justification,
-          duration,
-        },
+        replaceObservationPlotRequestPayload: requestPayload,
       });
     }
-  }, [duration, justification, monitoringPlotId, observationId, replacePlot]);
+  }, [duration, justification, monitoringPlotId, observationId, replacePlot, setReplaceRequest]);
 
   const durations = useMemo(() => {
     return [
@@ -85,32 +88,70 @@ export default function ReplaceObservationPlotModal(): JSX.Element {
       // we don't add new plots for a permanent plot if the site has completed observations
       const noReplacedPlotsFound = !addedPlotIds.length;
 
+      const lineItems: (string | JSX.Element)[] = [];
+      if (isPermanent) {
+        if (replaceRequest?.duration === 'LongTerm') {
+          lineItems.push(
+            strings.formatString(
+              strings.REASSIGNMENT_REQUEST_PERMANENT_PLOT_REMOVED_LONG_TERM,
+              removedPlotNumbers
+            ) as string
+          );
+        } else {
+          lineItems.push(
+            strings.formatString(
+              strings.REASSIGNMENT_REQUEST_PERMANENT_PLOT_REMOVED_TEMPORARY,
+              removedPlotNumbers
+            ) as string
+          );
+        }
+      } else {
+        if (replaceRequest?.duration === 'LongTerm') {
+          lineItems.push(
+            strings.formatString(
+              strings.REASSIGNMENT_REQUEST_TEMPORARY_PLOT_REMOVED_LONG_TERM,
+              removedPlotNumbers
+            ) as string
+          );
+        } else {
+          lineItems.push(
+            strings.formatString(
+              strings.REASSIGNMENT_REQUEST_TEMPORARY_PLOT_REMOVED_TEMPORARY,
+              removedPlotNumbers
+            ) as string
+          );
+        }
+      }
+
       if (noReplacedPlotsFound) {
         snackbar.pageWarning(
-          [
-            strings.formatString(strings.REASSIGNMENT_REQUEST_PLOTS_REMOVED, removedPlotNumbers) as string,
-            <br key='warn' />,
-            strings.REASSIGNMENT_REQUEST_NO_PLOTS_ADDED_WARNING,
-          ],
+          lineItems.concat([<br key='warn' />, strings.REASSIGNMENT_REQUEST_NO_PLOTS_ADDED_WARNING]),
           strings.REASSIGNMENT_REQUEST_STATUS,
           { label: strings.CLOSE }
         );
       } else {
-        snackbar.pageInfo(
-          [
-            strings.formatString(strings.REASSIGNMENT_REQUEST_PLOTS_REMOVED, removedPlotNumbers) as string,
-            <br key='info' />,
-            addedPlotIds.length
-              ? (strings.formatString(strings.REASSIGNMENT_REQUEST_PLOTS_ADDED, addedPlotNumbers) as string)
-              : strings.REASSIGNMENT_REQUEST_NO_PLOTS_ADDED,
-          ],
-          strings.REASSIGNMENT_REQUEST_STATUS,
-          { label: strings.CLOSE }
-        );
+        lineItems.push(<br key='info' />);
+
+        if (addedPlotIds.length) {
+          if (isPermanent && replaceRequest?.duration === 'LongTerm') {
+            // Replacing a permanent plot long-term will cause a new permanent plot to be added.
+            lineItems.push(
+              strings.formatString(strings.REASSIGNMENT_REQUEST_PERMANENT_PLOT_ADDED, addedPlotNumbers) as string
+            );
+          } else {
+            lineItems.push(
+              strings.formatString(strings.REASSIGNMENT_REQUEST_TEMPORARY_PLOT_ADDED, addedPlotNumbers) as string
+            );
+          }
+        } else {
+          lineItems.push(strings.REASSIGNMENT_REQUEST_NO_PLOTS_ADDED);
+        }
+
+        snackbar.pageInfo(lineItems, strings.REASSIGNMENT_REQUEST_STATUS, { label: strings.CLOSE });
       }
       onClose();
     },
-    [searchMonitoringPlots, onClose, snackbar, strings]
+    [isPermanent, onClose, replaceRequest, searchMonitoringPlots, snackbar, strings]
   );
 
   useEffect(() => {

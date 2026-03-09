@@ -6,7 +6,8 @@ interface ReassignPlotModalContextType {
   open: boolean;
   monitoringPlotId?: number;
   observationId?: number;
-  openReassignPlotModal: (observationId: number, monitoringPlotId: number) => void;
+  isPermanent?: boolean;
+  openReassignPlotModal: (observationId: number, monitoringPlotId: number, isPermanent: boolean) => void;
   closeReassignPlotModal: () => void;
 }
 
@@ -22,12 +23,17 @@ const ReassignPlotModalProvider = ({ children }: { children: React.ReactNode }) 
   const [open, setOpen] = useState(false);
   const [monitoringPlotId, setMonitoringPlotId] = useState<number>();
   const [observationId, setObservationId] = useState<number>();
+  const [isPermanent, setIsPermanent] = useState<boolean>();
 
-  const openReassignPlotModal = useCallback((nextObservationId: number, nextMonitoringPlotId: number) => {
-    setOpen(true);
-    setMonitoringPlotId(nextMonitoringPlotId);
-    setObservationId(nextObservationId);
-  }, []);
+  const openReassignPlotModal = useCallback(
+    (nextObservationId: number, nextMonitoringPlotId: number, nextPermanent: boolean) => {
+      setOpen(true);
+      setMonitoringPlotId(nextMonitoringPlotId);
+      setObservationId(nextObservationId);
+      setIsPermanent(nextPermanent);
+    },
+    []
+  );
 
   const closeReassignPlotModal = useCallback(() => {
     setOpen(false);
@@ -37,7 +43,7 @@ const ReassignPlotModalProvider = ({ children }: { children: React.ReactNode }) 
 
   return (
     <ReassignPlotModalContext.Provider
-      value={{ open, monitoringPlotId, observationId, openReassignPlotModal, closeReassignPlotModal }}
+      value={{ open, monitoringPlotId, observationId, isPermanent, openReassignPlotModal, closeReassignPlotModal }}
     >
       {children}
       <ReplaceObservationPlotModal />

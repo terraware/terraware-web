@@ -319,6 +319,7 @@ const ObservationStatsDrawer = ({
   const actionButton = useMemo(() => {
     if (layerFeatureId.layerId === 'permanentPlots' || layerFeatureId.layerId === 'temporaryPlots') {
       const monitoringPlotId = Number(layerFeatureId.featureId);
+      const isPermanent = layerFeatureId.layerId === 'permanentPlots';
       const allplotResults =
         results?.strata
           ?.flatMap((_stratum) => _stratum.substrata)
@@ -336,7 +337,7 @@ const ObservationStatsDrawer = ({
             id='reassignPlot'
             label={`${strings.REQUEST_REASSIGNMENT}...`}
             type='passive'
-            onClick={() => openReassignPlotModal(observationId, monitoringPlotId)}
+            onClick={() => openReassignPlotModal(observationId, monitoringPlotId, isPermanent)}
             priority='secondary'
           />
         );

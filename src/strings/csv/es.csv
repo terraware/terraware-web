@@ -1588,10 +1588,16 @@ REASSIGNMENT,Reasignación,79a8c3fe
 REASSIGNMENT_DURATION,Duración de la reasignación,3dec5f19
 REASSIGNMENT_REQUEST_NO_PLOTS_ADDED,No se añadirán parcelas.,ebf0fa62
 REASSIGNMENT_REQUEST_NO_PLOTS_ADDED_WARNING,No se añadirán parcelas: no hay parcelas disponibles para reasignación.,4f5db53d
+REASSIGNMENT_REQUEST_PERMANENT_PLOT_ADDED,La parcela permanente {0} se agregó de forma permanente.,1ff9fe21
+REASSIGNMENT_REQUEST_PERMANENT_PLOT_REMOVED_LONG_TERM,La parcela permanente {0} fue eliminada de forma permanente.,d83a86a5
+REASSIGNMENT_REQUEST_PERMANENT_PLOT_REMOVED_TEMPORARY,La parcela permanente {0} fue eliminada solo para esta observación.,5fe6197f
 REASSIGNMENT_REQUEST_PLOTS_ADDED,Se añadirán las siguientes parcelas: {0}.,320264b6
 REASSIGNMENT_REQUEST_PLOTS_REMOVED,Se eliminarán las siguientes parcelas: {0}.,6751069f
 REASSIGNMENT_REQUEST_SENT,Solicitud de reasignación enviada,df60a044
 REASSIGNMENT_REQUEST_STATUS,Estado de la solicitud de reasignación,f56ec4a5
+REASSIGNMENT_REQUEST_TEMPORARY_PLOT_ADDED,La parcela temporal {0} se agregó solo para esta observación.,87cebad7
+REASSIGNMENT_REQUEST_TEMPORARY_PLOT_REMOVED_LONG_TERM,La parcela temporal {0} fue eliminada de forma permanente.,449a68b6
+REASSIGNMENT_REQUEST_TEMPORARY_PLOT_REMOVED_TEMPORARY,La parcela temporal {0} fue eliminada solo para esta observación.,f247edc2
 RECALCITRANT,Recalcitrante,f95e16a4
 RECEIVE_EMAIL_NOTIFICATIONS,Recibir notificaciones por correo electrónico,378f118d
 RECEIVED_DATE,Fecha de recepción,9814318f
