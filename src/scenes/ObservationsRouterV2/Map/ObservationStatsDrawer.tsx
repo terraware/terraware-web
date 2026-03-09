@@ -266,8 +266,19 @@ const ObservationStatsDrawer = ({
     return drawerRows;
   }, [properties, strings]);
 
+  const stratumHasMonitoringPlots = useMemo(() => {
+    if (layerFeatureId.layerId !== 'strata') {
+      return false;
+    }
+    const stratumResults = results?.strata?.find((_stratum) => _stratum.name === layerFeatureId.featureId);
+    const plots = stratumResults?.substrata?.flatMap((substratum) => substratum.monitoringPlots) ?? [];
+    return plots.length > 0;
+  }, [layerFeatureId, results]);
+
   const subheader = useMemo(() => {
-    if (
+    if (layerFeatureId.layerId === 'strata') {
+      return stratumHasMonitoringPlots ? strings.SEE_MONITORING_PLOTS : undefined;
+    } else if (
       layerFeatureId.layerId === 'permanentPlots' ||
       layerFeatureId.layerId === 'temporaryPlots' ||
       layerFeatureId.layerId === 'adHocPlots'
@@ -276,10 +287,17 @@ const ObservationStatsDrawer = ({
     } else {
       return undefined;
     }
-  }, [layerFeatureId.layerId, strings]);
+  }, [layerFeatureId.layerId, stratumHasMonitoringPlots, strings]);
 
   const subheaderUrl = useMemo(() => {
-    if (layerFeatureId.layerId === 'adHocPlots') {
+    if (layerFeatureId.layerId === 'strata') {
+      return stratumHasMonitoringPlots
+        ? APP_PATHS.OBSERVATION_STRATUM_DETAILS_V2.replace(':observationId', `${observationId}`).replace(
+            ':stratumName',
+            layerFeatureId.featureId
+          )
+        : undefined;
+    } else if (layerFeatureId.layerId === 'adHocPlots') {
       return APP_PATHS.OBSERVATION_DETAILS_V2.replace(':observationId', `${observationId}`);
     } else if (layerFeatureId.layerId === 'permanentPlots' || layerFeatureId.layerId === 'temporaryPlots') {
       if (results) {
@@ -296,7 +314,7 @@ const ObservationStatsDrawer = ({
       }
     }
     return undefined;
-  }, [layerFeatureId, observationId, results]);
+  }, [layerFeatureId, observationId, results, stratumHasMonitoringPlots]);
 
   const actionButton = useMemo(() => {
     if (layerFeatureId.layerId === 'permanentPlots' || layerFeatureId.layerId === 'temporaryPlots') {
