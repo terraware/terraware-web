@@ -10656,12 +10656,6 @@ COPY accelerator.submissions (id, project_id, deliverable_id, submission_status_
 --
 
 COPY accelerator.system_metrics (id, name, type_id, component_id, description, reference, is_publishable) FROM stdin;
-1	Seeds Collected	2	2	Total seed count checked-into accessions.	1.1	f
-2	Seedlings	2	2	Plants in the nursery, including those provided by partners, where available. Not applicable for mangrove projects (input 0).	1.2	t
-3	Trees Planted	2	2	Total trees (and plants) planted in the field.	1.3	t
-4	Species Planted	2	2	Total species of the plants/trees planted.	1.4	t
-6	Hectares Planted	2	2	This is the hectares marked as “Planting Complete” within the Project Area.	1.1.1.1	t
-7	Survival Rate	3	2	Survival rate of plantings.	2	t
 \.
 
 
