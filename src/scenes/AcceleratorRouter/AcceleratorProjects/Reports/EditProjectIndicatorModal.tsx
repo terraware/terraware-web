@@ -193,6 +193,16 @@ export default function EditProjectIndicatorModal(props: EditProjectIndicatorMod
             onChange={onChangeCallback('active')}
           />
         </Grid>
+        <Grid item xs={12}>
+          <Checkbox
+            disabled={false}
+            id='isPublishable'
+            name='isPublishable'
+            label={strings.PUBLISH_TO_FUNDER_PORTAL}
+            value={record.isPublishable}
+            onChange={onChangeCallback('isPublishable')}
+          />
+        </Grid>
       </Grid>
     </DialogBox>
   );

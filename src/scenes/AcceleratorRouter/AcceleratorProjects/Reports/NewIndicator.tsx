@@ -21,8 +21,8 @@ import {
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
-import { classIdOptions, frequencyOptions } from './EditCommonIndicatorModal';
-import { metricComponentOptions, metricTypeOptions } from './NewProjectSpecificMetric';
+import { classIdOptions, frequencyOptions, indicatorTypeOptions } from './EditCommonIndicatorModal';
+import { metricComponentOptions } from './NewProjectSpecificMetric';
 
 type IndicatorKind = 'common' | 'project';
 
@@ -66,9 +66,10 @@ export default function NewIndicator(): JSX.Element {
   ]);
 
   const [newIndicator, , , onChangeCallback] = useForm<NewIndicatorPayload>({
+    active: true,
     category: 'Biodiversity',
     isPublishable: true,
-    level: 'Activity',
+    level: 'Goal',
     name: '',
     refId: '',
   });
@@ -150,7 +151,7 @@ export default function NewIndicator(): JSX.Element {
                   id='level'
                   label={strings.INDICATOR_LEVEL}
                   onChange={onChangeCallback('level')}
-                  options={metricTypeOptions()}
+                  options={indicatorTypeOptions()}
                   selectedValue={newIndicator.level}
                 />
               </Grid>
@@ -241,6 +242,16 @@ export default function NewIndicator(): JSX.Element {
                   name='isPublishable'
                   onChange={onChangeCallback('isPublishable')}
                   value={newIndicator.isPublishable}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Checkbox
+                  disabled={false}
+                  id='active'
+                  label={strings.ACTIVE}
+                  name='active'
+                  onChange={onChangeCallback('active')}
+                  value={newIndicator.active}
                 />
               </Grid>
             </Grid>
