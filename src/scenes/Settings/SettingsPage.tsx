@@ -133,7 +133,6 @@ const SettingsPage = () => {
           <Box display='flex' justifyContent='space-between'>
             <TitleDescription
               title={strings.SETTINGS}
-              description={strings.MY_ACCOUNT_DESC}
               style={{
                 padding: 0,
                 marginLeft: theme.spacing(4),

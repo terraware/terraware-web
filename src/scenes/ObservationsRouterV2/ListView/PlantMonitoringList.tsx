@@ -327,6 +327,8 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
     [rows, strings.STATUS]
   );
 
+  const observationResultsLength = observationResults?.length;
+
   const navigateToSurvivalRateSettings = useCallback(() => {
     if (plantingSiteId) {
       navigate({
@@ -355,7 +357,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           }}
           fullWidth
         />
-        {plantingSiteId && selectedPlotSelection === 'assigned' && !!observationResults.length && (
+        {plantingSiteId && selectedPlotSelection === 'assigned' && !!observationResultsLength && (
           <Box display={'flex'} alignItems={'center'} flexBasis={isMobile ? '100%' : 'content'}>
             <Link
               onClick={navigateToSurvivalRateSettings}
@@ -385,7 +387,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
   }, [
     isMobile,
     navigateToSurvivalRateSettings,
-    observationResults?.length,
+    observationResultsLength,
     plantingSiteId,
     plotsWithObservations.length,
     selectedPlotSelection,

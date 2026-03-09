@@ -90,9 +90,15 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
 
   const spaceFiller = () => <Box sx={{ marginLeft: 1, height: '24px', width: 2 }} />;
 
+  const accessionPhotoFilenames = accession?.photoFilenames;
+  const accessionId = accession?.id;
+
   const photoUrls = useMemo(
-    () => accession?.photoFilenames?.map((file) => `/api/v1/seedbank/accessions/${accession.id}/photos/${file}`) ?? [],
-    [accession?.photoFilenames, accession?.id]
+    () =>
+      accessionId && accessionPhotoFilenames
+        ? accessionPhotoFilenames.map((file) => `/api/v1/seedbank/accessions/${accessionId}/photos/${file}`)
+        : [],
+    [accessionPhotoFilenames, accessionId]
   );
 
   return accession ? (

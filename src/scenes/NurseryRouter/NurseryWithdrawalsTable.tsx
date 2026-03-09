@@ -5,9 +5,6 @@ import { Box, IconButton, Tooltip, useTheme } from '@mui/material';
 import { EditableTable, EditableTableColumn, Icon } from '@terraware/web-components';
 import {
   MRT_Cell,
-  MRT_ColumnFiltersState,
-  MRT_ColumnOrderState,
-  MRT_DensityState,
   MRT_PaginationState,
   MRT_ShowHideColumnsButton,
   MRT_SortingState,
@@ -15,12 +12,12 @@ import {
   MRT_ToggleFiltersButton,
   MRT_ToggleFullScreenButton,
   MRT_ToggleGlobalFilterButton,
-  MRT_VisibilityState,
 } from 'material-react-table';
 
 import TextTruncated from 'src/components/common/TextTruncated';
 import { APP_PATHS, DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
+import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useOrganization } from 'src/providers';
 import {
   selectNurseryWithdrawalsCount,
@@ -112,43 +109,22 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   const debouncedSearchTerm = useDebounce(searchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
   const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder>(DEFAULT_SORT_ORDER);
 
-  const [showColumnFilters, setShowColumnFilters] = useState(() => {
-    try {
-      const saved = localStorage.getItem('nursery-withdrawals-table-columnFilters');
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        return Array.isArray(parsed) && parsed.length > 0;
-      }
-    } catch {
-      // ignore
-    }
-    return false;
+  const {
+    columnFilters,
+    columnOrder,
+    columnVisibility,
+    density,
+    onDensityChange,
+    setColumnFilters,
+    setColumnOrder,
+    setColumnVisibility,
+    setShowColumnFilters,
+    setShowGlobalFilter,
+    showColumnFilters,
+    showGlobalFilter,
+  } = useTableState('nursery-withdrawals-table', {
+    persistFilters: true,
   });
-  const [showGlobalFilter, setShowGlobalFilter] = useState(false);
-  const [density, setDensity] = useState<MRT_DensityState>(() => {
-    try {
-      return (localStorage.getItem('nursery-withdrawals-table-density') as MRT_DensityState) || 'comfortable';
-    } catch {
-      return 'comfortable';
-    }
-  });
-
-  const [columnVisibility, setColumnVisibility] = useState<MRT_VisibilityState>(() => {
-    try {
-      const saved = localStorage.getItem('nursery-withdrawals-table-columnVisibility');
-      return saved ? JSON.parse(saved) : {};
-    } catch {
-      return {};
-    }
-  });
-
-  useEffect(() => {
-    try {
-      localStorage.setItem('nursery-withdrawals-table-columnVisibility', JSON.stringify(columnVisibility));
-    } catch {
-      // ignore
-    }
-  }, [columnVisibility]);
 
   // Material React Table state
   const [pagination, setPagination] = useState<MRT_PaginationState>({
@@ -161,45 +137,6 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
       desc: true,
     },
   ]);
-  // Load initial column filters from localStorage
-  const [columnFilters, setColumnFilters] = useState<MRT_ColumnFiltersState>(() => {
-    try {
-      const stored = localStorage.getItem('nursery-withdrawals-table-columnFilters');
-      return stored ? JSON.parse(stored) : [];
-    } catch {
-      return [];
-    }
-  });
-
-  // Save column filters to localStorage whenever they change
-  useEffect(() => {
-    try {
-      localStorage.setItem('nursery-withdrawals-table-columnFilters', JSON.stringify(columnFilters));
-    } catch {
-      // Silently fail if localStorage is not available
-    }
-  }, [columnFilters]);
-
-  const [columnOrder, setColumnOrder] = useState<MRT_ColumnOrderState>(() => {
-    try {
-      const saved = localStorage.getItem('nursery-withdrawals-table-columnOrder');
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
-    }
-  });
-
-  useEffect(() => {
-    try {
-      localStorage.setItem('nursery-withdrawals-table-columnOrder', JSON.stringify(columnOrder));
-    } catch {
-      // ignore
-    }
-  }, [columnOrder]);
-
-  const handleColumnFiltersChange = useCallback((updater: any) => {
-    setColumnFilters(updater);
-  }, []);
 
   const numberFormatter = useNumberFormatter();
   const [reloadTrigger, setReloadTrigger] = useState(0);
@@ -787,22 +724,12 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         },
         onPaginationChange: setPagination,
         onSortingChange: setSorting,
-        onColumnFiltersChange: handleColumnFiltersChange,
+        onColumnFiltersChange: setColumnFilters,
         onColumnVisibilityChange: setColumnVisibility,
         onShowColumnFiltersChange: setShowColumnFilters,
         onShowGlobalFilterChange: setShowGlobalFilter,
         onColumnOrderChange: setColumnOrder,
-        onDensityChange: (updater) => {
-          setDensity((prev) => {
-            const next = typeof updater === 'function' ? updater(prev) : updater;
-            try {
-              localStorage.setItem('nursery-withdrawals-table-density', next);
-            } catch {
-              // ignore
-            }
-            return next;
-          });
-        },
+        onDensityChange,
         manualPagination: true,
         manualSorting: true,
         manualFiltering: true,

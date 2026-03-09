@@ -48,17 +48,19 @@ const MapViewWrapper = () => {
     [selectedApplication, goToApplicationMapUpdate, goToApplicationSectionDeliverable]
   );
 
+  const selectedApplicationId = selectedApplication?.id;
+
   const crumbs: Crumb[] = useMemo(
     () =>
-      activeLocale && selectedApplication?.id
+      activeLocale && selectedApplicationId
         ? [
             {
               name: strings.PRESCREEN,
-              to: APP_PATHS.APPLICATION_PRESCREEN.replace(':applicationId', `${selectedApplication.id}`),
+              to: APP_PATHS.APPLICATION_PRESCREEN.replace(':applicationId', `${selectedApplicationId}`),
             },
           ]
         : [],
-    [activeLocale, selectedApplication?.id]
+    [activeLocale, selectedApplicationId]
   );
 
   return (

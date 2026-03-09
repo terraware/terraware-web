@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Grid, Typography, useTheme } from '@mui/material';
+import { Grid } from '@mui/material';
 import { BusySpinner, Button, DialogBox, Dropdown, Textfield } from '@terraware/web-components';
 
 import { useLocalization, useOrganization } from 'src/providers';
@@ -21,7 +21,6 @@ export default function ReplaceObservationPlotModal(): JSX.Element {
   const { strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const snackbar = useSnackbar();
-  const theme = useTheme();
   const [justification, setJustification] = useState<string>();
   const [duration, setDuration] = useState<ReplaceObservationPlotDuration | undefined>();
   const [validate, setValidate] = useState<boolean>(false);
@@ -158,17 +157,6 @@ export default function ReplaceObservationPlotModal(): JSX.Element {
           scrolled={false}
         >
           <Grid container item xs={12} spacing={2} textAlign='left'>
-            <Grid item xs={12}>
-              <Typography
-                fontSize='16px'
-                lineHeight='24px'
-                fontWeight={400}
-                color={theme.palette.TwClrTxt}
-                textAlign='center'
-              >
-                {strings.REQUEST_REASSIGNMENT_JUSTIFICATION}
-              </Typography>
-            </Grid>
             {monitoringPlot && (
               <Grid item xs={12}>
                 <Textfield
@@ -190,6 +178,7 @@ export default function ReplaceObservationPlotModal(): JSX.Element {
                   setJustification(value as string);
                 }}
                 errorText={validate && !justification ? strings.REQUIRED_FIELD : ''}
+                tooltipTitle={strings.REQUEST_REASSIGNMENT_REASON_TOOLTIP}
                 required
               />
             </Grid>
@@ -201,6 +190,7 @@ export default function ReplaceObservationPlotModal(): JSX.Element {
                 options={durations}
                 selectedValue={duration}
                 errorText={validate && !duration ? strings.REQUIRED_FIELD : ''}
+                tooltipTitle={strings.REQUEST_REASSIGNMENT_DURATION_TOOLTIP}
                 fullWidth
                 required
               />

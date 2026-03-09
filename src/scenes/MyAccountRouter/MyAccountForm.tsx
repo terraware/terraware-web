@@ -383,7 +383,7 @@ const MyAccountForm = ({
             padding={hasNav === false ? theme.spacing(0, 5) : theme.spacing(0, 0, 0, 3)}
             marginTop={organizations && organizations.length > 0 ? 0 : theme.spacing(12)}
           >
-            <TitleDescription title={strings.MY_ACCOUNT} description={strings.MY_ACCOUNT_DESC} style={{ padding: 0 }} />
+            <TitleDescription title={strings.MY_ACCOUNT} style={{ padding: 0 }} />
             {!edit && (
               <Box display='flex' height='fit-content'>
                 <Button

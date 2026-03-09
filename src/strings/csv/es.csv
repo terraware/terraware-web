@@ -17,7 +17,6 @@ ACCESSION_ID,ID de accesión,a87726c0
 ACCESSION_NUMBER_CHECKED_IN,¡La accesión {0} se ha ingresado correctamente!,b78da03c
 ACCESSIONS,Accesiones,5f4f92e5
 ACCESSIONS_CARD_DESCRIPTION,"Después de recolectar sus semillas, registre y visualice sus accesiones. Las accesiones de semillas se pueden ver y analizar por banco de semillas.",04e1a86a
-ACCESSIONS_DATABASE_DESCRIPTION,Gestione sus accesiones.,2d18fc42
 ACCESSIONS_IMPORT_COMPLETE,¡Se ha completado la importación de datos de accesiones!,445187fe
 ACCESSIONS_ONBOARDING_SEEDBANKS_MSG,Definir los lugares de almacenamiento asignados a las accesiones de semillas,0a48e95f
 ACCESSIONS_ONBOARDING_SPECIES_MSG,Defina una lista de especies utilizadas en su inventario de semillas,215ac54e
@@ -27,6 +26,7 @@ ACCUMULATION_RATE,Tasa de acumulación,2d9ec0ee
 ACCUMULATION_RATE_UNITS,Tasa de acumulación (tCO2/ha/año),400d7f2a
 ACHIEVED,Logrado,845a66be
 ACHIEVEMENTS,Logros,e1e95bcf
+ACTIVE,Activo,514d5311
 ACTIVE_ACCESSIONS,Accesiones activas,4d901ef3
 ACTIVE_GROWTH,Crecimiento activo,b160aa44
 ACTIVE_GROWTH_QUANTITY,Cantidad de crecimiento activo,0429b4c4
@@ -154,6 +154,7 @@ ANNOTATION_DESCRIPTION_TOOLTIP,Detalles o contexto adicional sobre esta anotaci�
 ANNOTATION_LABEL_TOOLTIP,Identificador breve que se muestra en el punto destacado de la anotación,adbb02a1
 ANNOTATION_TITLE_TOOLTIP,Título principal de la anotación,b3f5b753
 ANNOTATIONS,Anotaciones,c15a3aa4
+ANNUAL,Anual,772b555a
 ANSWER_APPROVED,Respuesta aprobada,8a11d452
 ANSWERS_UPDATE_NEEDED,Se necesita actualizar las respuestas,5faf2563
 APPLICANTS,Solicitantes,7cb94d31
@@ -238,6 +239,7 @@ BATCHES_SINGULAR,lote,a3a42fdb
 BEST_MONTHS_FOR_OBSERVATIONS,Mejores meses para las observaciones,99083629
 BEST_MONTHS_FOR_OBSERVATIONS_INSTRUCTIONS,Estás serían las estaciones en las que tiene más sentido desde el punto de vista de la capacidad del equipo y también toma en cuenta factores medioambientales como la ausencia de nieve y la habilidad para identificar con facilidad la supervivencia de los plantado. Seleccionar todos los meses que correspondan.,efb1c93a
 BEST_MONTHS_FOR_OBSERVATIONS_VALIDATION_ERROR,"Por favor, seleccionar al menos un mes.",999b9492
+BI_ANNUAL,Bianual,76d69272
 BIODIVERSITY,Biodiversidad,fa436482
 BIOMASS_EMPTY_STATE_MESSAGE_1,En este momento no hay observaciones de parcelas ad hoc.,7dd9cdf0
 BIOMASS_EMPTY_STATE_MESSAGE_2,Las observaciones para el Monitoreo de Biomasa pueden registrarse a través de Observaciones de Parcelas Ad Hoc en la aplicación móvil.,e9184a63
@@ -398,6 +400,10 @@ CTRL,Ctrl,f485607a
 CULTIVATED,Cultivado,f0d960a4
 CULTIVATED_EX_SITU,Cultivado (ex situ),db8d3394
 CULTIVATED_EX_SITU_DESCRIPTION,"Plantas que se han cultivado en un vivero, área de producción de semillas u otra instalación de propagación.",9b096972
+CUMULATIVE,Acumulativo,51c21c57
+CUMULATIVE_OR_LEVEL,Acumulativo o Nivel,0a0f2515
+CUMULATIVE_PROGRESS,Progreso acumulado,fd7ffcac
+CUMULATIVE_PROGRESS_TOOLTIP,El total acumulado de todos los trimestres reportados este año,d8165ea0
 CURRENT_NEXT_OBSERVATION,Observación actual/siguiente,50735263
 CURRENT_TIMELINE,Cronología actual,2dcbaeeb
 CURRENT_VIEW,Vista actual,8b3a3d54
@@ -866,6 +872,8 @@ INCOMPLETE,Incompleto,5f524fdf
 INCORRECT_EMAIL_FORMAT,Formato de correo electrónico incorrecto.,19f1a8c9
 INDICATOR_LEVEL,Nivel del indicador,b128c992
 INDICATOR_NAME,Nombre del indicador,0d8b0613
+INDICATOR_TYPE_GOAL,Meta,cb34c06e
+INDICATOR_TYPE_PROCESS,Proceso,0bee5739
 INDICATORS,Indicadores,ea71857f
 INFRASTRUCTURE,Infraestructura,c8fe126f
 INSTANCES,Casos,fcc19322
@@ -890,7 +898,6 @@ INVENTORY,Inventario,001c6bdb
 INVENTORY_IMPORT_COMPLETE,¡Importación de datos del inventario finalizada!,760bba82
 INVENTORY_ONBOARDING_NURSERIES_MSG,Defina los viveros asignados al inventario de plántulas,393e62d3
 INVENTORY_ONBOARDING_SPECIES_MSG,Defina una lista de especies utilizadas en su inventario de plántulas,bafd0703
-INVENTORY_PAGE_DESCRIPTION,Gestione su inventario.,9e99a759
 INVENTORY_WITHDRAWALS,Retiros de Inventario,cefda57f
 INVESTMENT_COMMITTEE_VOTES,Votos del Comité de inversión,a7c64c6c
 INVITATION_PENDING,Invitación pendiente,6b64d319
@@ -967,6 +974,7 @@ LEFT_MOUSE,Botón izquierdo del ratón,b034e4dc
 LEGAL,Legal,dc8b5907
 LEGEND,Leyenda,d312e5fb
 LESS_THAN_FIFTY_PERCENT,< 50%,d26d7627
+LEVEL,Nivel,353f7559
 LIANA,Liana,812e082e
 LICHEN,Liquen,4f8de0bf
 LIGHT,Luz,2bf7f442
@@ -1098,9 +1106,9 @@ MOSS,Musgo,5b67a19f
 MOST_RECENT_OBSERVATION,Observación más reciente,a614018e
 MOUSE_WHEEL,Rueda del ratón,8e3d3d78
 MOVE,Mover,abe6be41
+MRV_CYCLE,Ciclo MRV,ab7e636c
 MULTIPLE_FORMS,Múltiples formas,abad8008
 MY_ACCOUNT,Mi cuenta,8e57f7ad
-MY_ACCOUNT_DESC,Gestione la información de su cuenta.,4eff2dde
 MY_ACCOUNT_NOTIFICATIONS_DESC,Las notificaciones le avisan cuando hay actualizaciones importantes sobre sus organizaciones. Las recibirá por correo electrónico.,65644b47
 N_IMAGES,{0} imagen(es),098eae0e
 N_ROWS,{0} fila(s),2bb73684
@@ -1261,6 +1269,7 @@ OBSERVED_PLANTS,Plantas observadas,375e69c3
 OBSERVED_SPECIES,Especies observadas,922020f2
 OBSERVER,Observador,89ceb806
 OBSERVER_NAME,Nombre del observador,fc477ae5
+OFF_TRACK,Fuera de curso,86d5bca1
 OK,Aceptar,6cdf9103
 ON_TRACK,Encaminado,e2f4a4aa
 ONBOARDING_ADMIN_TITLE,"Un momento, vamos a completar la configuración en primer lugar",34c89e4a
@@ -1281,7 +1290,6 @@ ORGANIZATION_CREATE_FAILED,No se puede crear la organización.,969a54ff
 ORGANIZATION_CREATED_MSG,Puede acceder a las organizaciones en las que se encuentra dando clic en el menú de perfil de usuario en la esquina superior derecha.,60a57d86
 ORGANIZATION_CREATED_MSG_DESKTOP,"Puede acceder a las organizaciones en las que está dando clic en la flecha en la esquina superior izquierda, a un lado del logo.",b843e803
 ORGANIZATION_CREATED_TITLE,¡Ha creado {0}!,816b8725
-ORGANIZATION_DESC,Gestione su organización.,b5ea60e9
 ORGANIZATION_NAME,Nombre de la organización,fa3057ac
 ORGANIZATION_NAME_REQUIRED,Nombre de la organización *,e4d74b24
 ORGANIZATION_TYPE,Tipo de organización,c4deacbd
@@ -1674,7 +1682,8 @@ REPORTS_SETTINGS_GENERATE_FOR_ORG,Generar informes para {0},491ef6ab
 REPORTS_SETTINGS_GENERATE_FOR_PROJECT,Generar informe de proyecto para,91439ec3
 REPORTS_SETUP_CTA,Configure los informes.,389cb962
 REQUEST_REASSIGNMENT,Solicitud de reasignación,9cc0038f
-REQUEST_REASSIGNMENT_JUSTIFICATION,Indique el motivo por el que solicita la reasignación de la ubicación de esta parcela.,cb51aae9
+REQUEST_REASSIGNMENT_DURATION_TOOLTIP,Seleccione “Temporal” si la reasignación debe aplicarse solo a esta Observación. Seleccione “A largo plazo/permanente” si la reasignación debe aplicarse a todas las Observaciones futuras; la parcela será eliminada del grupo de parcelas disponibles para asignación.,9b42a97e
+REQUEST_REASSIGNMENT_REASON_TOOLTIP,Proporcione una justificación para la reasignación de la ubicación de esta parcela.,0ecb1f62
 REQUEST_UPDATE,Solicitar actualización,bce207eb
 REQUEST_UPDATE_ACTION,Solicitar actualización...,790ef713
 REQUEST_UPDATE_REASON,Indique el motivo por el que solicita la actualización.,52430788
@@ -1913,7 +1922,6 @@ SPECIES_CATEGORIES_TOOLTIP,"Categorías de especies muestra el porcentaje del to
 SPECIES_CLASSIFICATION,Clasificación de especies,2e8b4fb1
 SPECIES_DENSITY_WARNING_MESSAGE,"No ha ingresado valores de densidad de plantas para todas las especies. Si no ingresa valores de densidad de plantas para todas las especies, las densidades de plantas para esta parcela no se establecerán y no se calculará la tasa de supervivencia para esa especie. Ingrese 0 para cualquier especie que no haya sido plantada en una parcela.",5bcc0f2b
 SPECIES_DENSITY_WARNING_MESSAGE_TEMPORARY_PLOTS,"No ha ingresado valores de densidad de plantas para todas las especies en todas las estratas. Si no ingresa valores de densidad de plantas para todas las especies en una estrata, no se establecerán las densidades de plantas para esa estrata y no se calculará la tasa de supervivencia para esa especie. Ingrese 0 para cualquier especie que no haya sido plantada en una estrata.",685a0c64
-SPECIES_DESCRIPTION,"Gestione la lista de especies de su organización para fines de planificación, operación y elaboración de informes.",b1943eab
 SPECIES_EMPTY_MSG_BODY,Ingrese ahora la especie que recolecta o planta para simplificar su experiencia cuando esté en campo.,20250069
 SPECIES_FROM_T0_OBSERVATION,Especies de la Observación t0,08a77070
 SPECIES_FROM_T0_OBSERVATION_TOOLTIP,Las especies de la Observación t0 fueron observadas en la Observación seleccionada para usar como datos t0.,ee679aa8

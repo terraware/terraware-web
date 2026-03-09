@@ -5,8 +5,6 @@ import { Button, EditableTable, EditableTableColumn, Icon, TableColumnType } fro
 import _, { isArray } from 'lodash';
 import {
   MRT_Cell,
-  MRT_ColumnOrderState,
-  MRT_DensityState,
   MRT_RowSelectionState,
   MRT_ShowHideColumnsButton,
   MRT_SortingState,
@@ -15,7 +13,6 @@ import {
   MRT_ToggleFiltersButton,
   MRT_ToggleFullScreenButton,
   MRT_ToggleGlobalFilterButton,
-  MRT_VisibilityState,
 } from 'material-react-table';
 
 import ProjectAssignTopBarButton from 'src/components/ProjectAssignTopBarButton';
@@ -24,6 +21,7 @@ import Link from 'src/components/common/Link';
 import TextTruncated from 'src/components/common/TextTruncated';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
+import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useOrganization } from 'src/providers';
 import { convertFilterGroupToMap } from 'src/scenes/InventoryRouter/FilterUtils';
 import { OriginPage } from 'src/scenes/InventoryRouter/InventoryBatchView';
@@ -565,64 +563,18 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
     },
   ]);
 
-  const [columnOrder, setColumnOrder] = useState<MRT_ColumnOrderState>(() => {
-    try {
-      const saved = localStorage.getItem(`inventoryTable_${origin.toLowerCase()}_columnOrder`);
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
-    }
-  });
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(`inventoryTable_${origin.toLowerCase()}_columnOrder`, JSON.stringify(columnOrder));
-    } catch {
-      // ignore
-    }
-  }, [columnOrder, origin]);
-
-  const [density, setDensity] = useState<MRT_DensityState>(() => {
-    try {
-      return (
-        (localStorage.getItem(`inventoryTable_${origin.toLowerCase()}_density`) as MRT_DensityState) || 'comfortable'
-      );
-    } catch {
-      return 'comfortable';
-    }
-  });
-
-  const [showGlobalFilter, setShowGlobalFilter] = useState(false);
-
-  const [columnVisibility, setColumnVisibility] = useState<MRT_VisibilityState>(() => {
-    try {
-      const saved = localStorage.getItem(`inventoryTable_${origin.toLowerCase()}_columnVisibility`);
-      return saved ? JSON.parse(saved) : {};
-    } catch {
-      return {};
-    }
-  });
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(`inventoryTable_${origin.toLowerCase()}_columnVisibility`, JSON.stringify(columnVisibility));
-    } catch {
-      // ignore
-    }
-  }, [columnVisibility, origin]);
-
-  const [showColumnFilters, setShowColumnFilters] = useState(() => {
-    try {
-      const saved = localStorage.getItem(`inventoryTable_${origin.toLowerCase()}_columnFilters`);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        return Array.isArray(parsed) && parsed.length > 0;
-      }
-    } catch {
-      // ignore
-    }
-    return false;
-  });
+  const {
+    columnOrder,
+    columnVisibility,
+    density,
+    onDensityChange,
+    setColumnOrder,
+    setColumnVisibility,
+    setShowColumnFilters,
+    setShowGlobalFilter,
+    showColumnFilters,
+    showGlobalFilter,
+  } = useTableState(`inventoryTable_${origin.toLowerCase()}`);
 
   const handleExport = useCallback(
     (table: MRT_TableInstance<SearchResponseElement>) => {
@@ -710,17 +662,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                   onColumnVisibilityChange: setColumnVisibility,
                   onShowColumnFiltersChange: setShowColumnFilters,
                   onShowGlobalFilterChange: setShowGlobalFilter,
-                  onDensityChange: (updater) => {
-                    setDensity((prev) => {
-                      const next = typeof updater === 'function' ? updater(prev) : updater;
-                      try {
-                        localStorage.setItem(`inventoryTable_${origin.toLowerCase()}_density`, next);
-                      } catch {
-                        // ignore
-                      }
-                      return next;
-                    });
-                  },
+                  onDensityChange,
                   enableRowSelection: true,
                   enableColumnPinning: true,
                   enableColumnActions: true,

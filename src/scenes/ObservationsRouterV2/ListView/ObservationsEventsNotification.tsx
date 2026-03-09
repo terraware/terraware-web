@@ -1,4 +1,4 @@
-import React, { type JSX, useEffect, useMemo } from 'react';
+import React, { type JSX, useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography } from '@mui/material';
 import { Message } from '@terraware/web-components';
@@ -21,15 +21,16 @@ export default function ObservationsEventsNotification(): JSX.Element | undefine
     }
   }, [listObservations, selectedOrganization]);
 
+  const [now] = useState(() => Date.now());
+
   const upcomingObservations = useMemo(() => {
-    const now = Date.now();
     return (
       listObservationsResponse.data?.observations?.filter((observation) => {
         const endTime = new Date(observation.endDate).getTime();
         return observation.state === 'Upcoming' && now <= endTime;
       }) ?? []
     );
-  }, [listObservationsResponse.data?.observations]);
+  }, [listObservationsResponse.data?.observations, now]);
 
   const observationsInfo = useMemo<
     {

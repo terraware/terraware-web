@@ -38,17 +38,19 @@ const ApplicationMap = () => {
     );
   }, [selectedApplication, activeLocale]);
 
+  const selectedApplicationId = selectedApplication?.id;
+
   const crumbs: Crumb[] = useMemo(
     () =>
-      activeLocale && selectedApplication?.id
+      activeLocale && selectedApplicationId
         ? [
             {
               name: strings.PRESCREEN,
-              to: APP_PATHS.ACCELERATOR_APPLICATION.replace(':applicationId', `${selectedApplication.id}`),
+              to: APP_PATHS.ACCELERATOR_APPLICATION.replace(':applicationId', `${selectedApplicationId}`),
             },
           ]
         : [],
-    [activeLocale, selectedApplication?.id]
+    [activeLocale, selectedApplicationId]
   );
 
   const onExport = useCallback(async () => {
