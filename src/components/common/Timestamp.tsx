@@ -1,4 +1,4 @@
-import React, { type JSX, useEffect, useState } from 'react';
+import React, { type JSX, useMemo } from 'react';
 
 import { Box, SxProps } from '@mui/material';
 
@@ -26,11 +26,10 @@ function newDateTimeFormat(locale?: string, timeZone?: string) {
 export default function Timestamp({ className, isoString, sx }: TimestampProps): JSX.Element | null {
   const timeZone = useUserTimeZone()?.id;
   const { selectedLocale } = useLocalization();
-  const [formattedDate, setFormattedDate] = useState<string | null>(null);
-
-  useEffect(() => {
-    setFormattedDate(newDateTimeFormat(selectedLocale, timeZone).format(new Date(isoString)));
-  }, [isoString, selectedLocale, timeZone, setFormattedDate]);
+  const formattedDate = useMemo(
+    () => newDateTimeFormat(selectedLocale, timeZone).format(new Date(isoString)),
+    [isoString, selectedLocale, timeZone]
+  );
 
   return (
     <Box component='span' className={className} sx={sx}>

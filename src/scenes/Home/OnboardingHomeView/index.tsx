@@ -33,7 +33,7 @@ const OnboardingHomeView = () => {
   const navigate = useSyncNavigate();
   const dispatch = useAppDispatch();
   const [people, setPeople] = useState<OrganizationUser[]>();
-  const [showAcceleratorCard, setShowAcceleratorCard] = useState(true);
+  const showAcceleratorCard = orgPreferences.showAcceleratorCard !== false;
   const snackbar = useSnackbar();
   const query = useQuery();
 
@@ -47,12 +47,6 @@ const OnboardingHomeView = () => {
       );
     }
   }, [snackbar, selectedOrganization, isDesktop, query]);
-
-  useEffect(() => {
-    if (orgPreferences.showAcceleratorCard === false && showAcceleratorCard) {
-      setShowAcceleratorCard(false);
-    }
-  }, [orgPreferences, showAcceleratorCard]);
 
   useEffect(() => {
     const populatePeople = async () => {

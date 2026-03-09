@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useState } from 'react';
+import React, { type JSX, useCallback, useMemo, useState } from 'react';
 
 import { Box, Grid, useTheme } from '@mui/material';
 import { PillList, PillListItem, TableColumnType, Textfield } from '@terraware/web-components';
@@ -61,7 +61,6 @@ export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.
   const projects = useAppSelector(selectProjects);
 
   const [isPresorted, setIsPresorted] = useState<boolean>(true);
-  const [filterPillData, setFilterPillData] = useState<PillListItemWithEmptyValue[]>([]);
 
   const onSortChange = useCallback(
     (order: SortOrder, orderBy: string) => {
@@ -77,7 +76,7 @@ export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.
     [setSearchSortOrder]
   );
 
-  useEffect(() => {
+  const filterPillData = useMemo<PillListItemWithEmptyValue[]>(() => {
     const data: PillListItemWithEmptyValue[] = [];
     if (filters.projectIds?.length) {
       data.push({
@@ -87,8 +86,7 @@ export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.
         emptyValue: [],
       });
     }
-
-    setFilterPillData(data);
+    return data;
   }, [projects, filters.projectIds]);
 
   const onRemovePillList = useCallback(

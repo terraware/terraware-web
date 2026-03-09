@@ -87,15 +87,26 @@ const ApplicationProvider = ({ children }: Props) => {
     [allApplications]
   );
 
-  const [applicationData, setApplicationData] = useState<ApplicationData>({
-    allApplications,
-    applicationDeliverables,
-    applicationSections,
-    getApplicationByProjectId: _getApplicationByProjectId,
-    selectedApplication,
-    setSelectedApplication: _setSelectedApplication,
-    reload: _reload,
-  });
+  const applicationData = useMemo<ApplicationData>(
+    () => ({
+      allApplications,
+      applicationDeliverables,
+      applicationSections,
+      getApplicationByProjectId: _getApplicationByProjectId,
+      selectedApplication,
+      setSelectedApplication: _setSelectedApplication,
+      reload: _reload,
+    }),
+    [
+      allApplications,
+      applicationDeliverables,
+      applicationSections,
+      _getApplicationByProjectId,
+      selectedApplication,
+      _setSelectedApplication,
+      _reload,
+    ]
+  );
 
   useEffect(() => {
     if (selectedOrganization || isAcceleratorRoute) {
@@ -134,26 +145,6 @@ const ApplicationProvider = ({ children }: Props) => {
       setApplicationSections(listApplicationModulesResult.data);
     }
   }, [listApplicationModulesResult, setApplicationSections]);
-
-  useEffect(() => {
-    setApplicationData({
-      allApplications,
-      applicationDeliverables,
-      applicationSections,
-      getApplicationByProjectId: _getApplicationByProjectId,
-      selectedApplication,
-      setSelectedApplication: _setSelectedApplication,
-      reload: _reload,
-    });
-  }, [
-    allApplications,
-    applicationDeliverables,
-    applicationSections,
-    _getApplicationByProjectId,
-    selectedApplication,
-    _setSelectedApplication,
-    _reload,
-  ]);
 
   return <ApplicationContext.Provider value={applicationData}>{children}</ApplicationContext.Provider>;
 };

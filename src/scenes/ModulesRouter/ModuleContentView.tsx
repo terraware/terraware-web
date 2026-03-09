@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Card, Grid, Typography, useTheme } from '@mui/material';
@@ -54,8 +54,6 @@ const ModuleContentView = ({ contentType }: ModuleContentViewProps) => {
     }
   }, [currentAcceleratorProject, moduleId, getProjectModule]);
 
-  const [content, setContent] = useState('');
-
   const crumbs: Crumb[] = useMemo(
     () => [
       {
@@ -83,11 +81,12 @@ const ModuleContentView = ({ contentType }: ModuleContentViewProps) => {
     return container.innerHTML;
   };
 
-  useEffect(() => {
+  const content = useMemo(() => {
     const nextContent = (projectModule || {})[contentType];
     if (projectModule && nextContent) {
-      setContent(addBlankTargetToHtmlAHref(nextContent));
+      return addBlankTargetToHtmlAHref(nextContent);
     }
+    return '';
   }, [projectModule, contentType]);
 
   if (!projectModule) {

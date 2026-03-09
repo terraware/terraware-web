@@ -90,12 +90,11 @@ export default function Search(props: SearchProps): JSX.Element | null {
 
   const { species } = useSpeciesData();
   const projects = useAppSelector(selectProjects);
-  const [nurseries, setNurseries] = useState<Facility[]>([]);
+  const nurseries = useMemo<Facility[]>(
+    () => (selectedOrganization ? getAllNurseries(selectedOrganization) : []),
+    [selectedOrganization]
+  );
   const [availableSpecies, setAvailableSpecies] = useState<Species[]>([]);
-
-  useEffect(() => {
-    setNurseries(selectedOrganization ? getAllNurseries(selectedOrganization) : []);
-  }, [selectedOrganization]);
 
   useEffect(() => {
     void dispatch(requestSubLocations(filters.facilityIds ?? []));
@@ -123,8 +122,6 @@ export default function Search(props: SearchProps): JSX.Element | null {
   }, [getResultsSpeciesNames, origin, species]);
 
   const subLocations = useAppSelector(selectSubLocations);
-
-  const [filterPillData, setFilterPillData] = useState<PillListItemWithEmptyValue[]>([]);
 
   const [filterAnchorEl, setFilterAnchorEl] = useState<null | HTMLElement>(null);
   const handleFilterClick = (event: React.MouseEvent<HTMLElement>) => setFilterAnchorEl(event.currentTarget);
@@ -212,7 +209,7 @@ export default function Search(props: SearchProps): JSX.Element | null {
     [projects]
   );
 
-  useEffect(() => {
+  const filterPillData = useMemo<PillListItemWithEmptyValue[]>(() => {
     const data: PillListItemWithEmptyValue[] = [];
 
     if (['Batches', 'Species'].includes(origin)) {
@@ -280,7 +277,7 @@ export default function Search(props: SearchProps): JSX.Element | null {
       });
     }
 
-    setFilterPillData(data);
+    return data;
   }, [
     selectedOrganization,
     filters.facilityIds,

@@ -121,25 +121,8 @@ const DocumentProducerProvider = ({ children }: Props) => {
     [documentSectionVariables]
   );
 
-  const [documentProducerData, setDocumentProducerData] = useState<DocumentProducerData>({
-    allVariables,
-    document,
-    documentId,
-    documentTemplate,
-    documentVariables,
-    getUsedSections,
-    isLoading: true,
-    projectId,
-    variablesOwners,
-    /* eslint-disable @typescript-eslint/no-empty-function */
-    reload: () => {},
-    reloadVariables: () => {},
-    reloadDocument: () => {},
-    /* eslint-enable @typescript-eslint/no-empty-function */
-  });
-
-  useEffect(() => {
-    setDocumentProducerData({
+  const documentProducerData = useMemo<DocumentProducerData>(
+    () => ({
       allVariables,
       document,
       documentId,
@@ -153,22 +136,23 @@ const DocumentProducerProvider = ({ children }: Props) => {
       variablesOwners,
       reloadVariables,
       reloadDocument,
-    });
-  }, [
-    allVariables,
-    document,
-    documentId,
-    documentSectionVariables,
-    documentTemplate,
-    documentVariables,
-    getUsedSections,
-    isLoading,
-    projectId,
-    reload,
-    variablesOwners,
-    reloadVariables,
-    reloadDocument,
-  ]);
+    }),
+    [
+      allVariables,
+      document,
+      documentId,
+      documentSectionVariables,
+      documentTemplate,
+      documentVariables,
+      getUsedSections,
+      isLoading,
+      projectId,
+      reload,
+      variablesOwners,
+      reloadVariables,
+      reloadDocument,
+    ]
+  );
 
   if (isLoading) {
     return <BusySpinner withSkrim />;

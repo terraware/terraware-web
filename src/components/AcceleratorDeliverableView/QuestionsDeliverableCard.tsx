@@ -434,7 +434,6 @@ const QuestionsDeliverableCard = (props: EditProps): JSX.Element => {
 
   const [editingId, setEditingId] = useState<number | undefined>();
   const [updatePendingId, setUpdatePendingId] = useState<number | undefined>();
-  const [dependentVariableStableIds, setDependentVariableStableIds] = useState<string[]>([]);
 
   const reload = () => {
     void dispatch(requestListDeliverableVariables(deliverable.id));
@@ -454,6 +453,15 @@ const QuestionsDeliverableCard = (props: EditProps): JSX.Element => {
     );
   }, [deliverable, dispatch]);
 
+  const variablesWithValues: VariableWithValues[] = useAppSelector((state) =>
+    selectDeliverableVariablesWithValues(state, deliverable.id, deliverable.projectId)
+  );
+
+  const dependentVariableStableIds = useMemo(
+    () => getDependingVariablesStableIdsFromOtherDeliverable(variablesWithValues),
+    [variablesWithValues]
+  );
+
   useEffect(() => {
     if (!(deliverable && dependentVariableStableIds && dependentVariableStableIds.length > 0)) {
       return;
@@ -467,10 +475,6 @@ const QuestionsDeliverableCard = (props: EditProps): JSX.Element => {
       })
     );
   }, [deliverable, dependentVariableStableIds, dispatch]);
-
-  const variablesWithValues: VariableWithValues[] = useAppSelector((state) =>
-    selectDeliverableVariablesWithValues(state, deliverable.id, deliverable.projectId)
-  );
 
   useEffect(() => {
     if (variablesWithValues.length && updatePendingId) {
@@ -491,11 +495,6 @@ const QuestionsDeliverableCard = (props: EditProps): JSX.Element => {
       dependentVariablesWithValues ? [...dependentVariablesWithValues, ...variablesWithValues] : variablesWithValues,
     [variablesWithValues, dependentVariablesWithValues]
   );
-
-  useEffect(() => {
-    const ids = getDependingVariablesStableIdsFromOtherDeliverable(variablesWithValues);
-    setDependentVariableStableIds(ids);
-  }, [variablesWithValues]);
 
   return (
     <Card

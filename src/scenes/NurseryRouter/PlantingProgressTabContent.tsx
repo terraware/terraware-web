@@ -38,7 +38,6 @@ export default function PlantingProgress(): JSX.Element {
 
   const [filters, setFilters] = useState<Record<string, SearchNodePayload>>({});
   const [search, setSearch] = useState<string>('');
-  const [filterOptions, setFilterOptions] = useState<FieldOptionsMap>({});
   const [activeView, setActiveView] = useState<View>(initialView);
   const [selectedPlantingSiteId, setSelectedPlantingSiteId] = useState<number>(-1);
   const rows = useAppSelector((state: any) => searchPlantingProgress(state, search.trim(), filters));
@@ -87,6 +86,8 @@ export default function PlantingProgress(): JSX.Element {
     }
   }, [dispatch, selectedOrganization]);
 
+  const plantingSitesNames = useAppSelector((state) => selectPlantingSitesNames(state));
+
   const filterColumns = useMemo<FilterField[]>(
     () =>
       activeLocale
@@ -96,6 +97,20 @@ export default function PlantingProgress(): JSX.Element {
           ]
         : [],
     [activeLocale]
+  );
+
+  const filterOptions = useMemo<FieldOptionsMap>(
+    () => ({
+      plantingCompleted: {
+        partial: false,
+        values: [strings.YES, strings.NO],
+      },
+      siteName: {
+        partial: false,
+        values: plantingSitesNames ? plantingSitesNames : [],
+      },
+    }),
+    [plantingSitesNames]
   );
 
   const searchProps = useMemo<SearchProps>(
@@ -119,21 +134,6 @@ export default function PlantingProgress(): JSX.Element {
       void dispatch(requestPlantings(selectedOrganization.id));
     }
   }, [selectedOrganization, dispatch]);
-
-  const plantingSitesNames = useAppSelector((state) => selectPlantingSitesNames(state));
-
-  useEffect(() => {
-    setFilterOptions({
-      plantingCompleted: {
-        partial: false,
-        values: [strings.YES, strings.NO],
-      },
-      siteName: {
-        partial: false,
-        values: plantingSitesNames ? plantingSitesNames : [],
-      },
-    });
-  }, [activeLocale, plantingSitesNames]);
 
   const onExport = useCallback(() => {
     void exportNurseryPlantingProgress({ plantingProgress: rows || [] });

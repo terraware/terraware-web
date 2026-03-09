@@ -1,4 +1,4 @@
-import React, { type JSX, useEffect, useState } from 'react';
+import React, { type JSX, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router';
 
 import { Grid, Typography, useTheme } from '@mui/material';
@@ -11,7 +11,7 @@ import { useOrganization } from 'src/providers/hooks';
 import SeedBankSubLocations from 'src/scenes/SeedBanksRouter/SeedBankSubLocations';
 import { FacilityService } from 'src/services';
 import strings from 'src/strings';
-import { Facility } from 'src/types/Facility';
+import type { Facility } from 'src/types/Facility';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 
@@ -23,24 +23,26 @@ export default function SeedBankDetailsView(): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const { seedBankId } = useParams<{ seedBankId: string }>();
-  const [seedBank, setSeedBank] = useState<Facility>();
   const navigate = useSyncNavigate();
-  const tz = useLocationTimeZone().get(seedBank);
 
-  useEffect(() => {
+  const seedBank = useMemo<Facility | undefined>(() => {
     if (selectedOrganization && seedBankId) {
-      const selectedSeedBank = FacilityService.getFacility({
+      return FacilityService.getFacility({
         organization: selectedOrganization,
         facilityId: seedBankId,
         type: 'Seed Bank',
       });
-      if (selectedSeedBank) {
-        setSeedBank(selectedSeedBank);
-      } else {
-        navigate(APP_PATHS.SEED_BANKS);
-      }
     }
-  }, [seedBankId, selectedOrganization, navigate]);
+    return undefined;
+  }, [seedBankId, selectedOrganization]);
+
+  const tz = useLocationTimeZone().get(seedBank);
+
+  useEffect(() => {
+    if (selectedOrganization && seedBankId && !seedBank) {
+      navigate(APP_PATHS.SEED_BANKS);
+    }
+  }, [seedBank, seedBankId, selectedOrganization, navigate]);
 
   const goToEditSeedBank = () => {
     if (seedBankId) {

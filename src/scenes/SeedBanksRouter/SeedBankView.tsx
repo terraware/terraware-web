@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
@@ -50,7 +50,6 @@ export default function SeedBankView(): JSX.Element {
     connectionState: 'Not Connected',
   });
   const { seedBankId } = useParams<{ seedBankId: string }>();
-  const [selectedSeedBank, setSelectedSeedBank] = useState<Facility | null>();
   const navigate = useSyncNavigate();
   const { isMobile } = useDeviceInfo();
   const gridSize = () => {
@@ -76,11 +75,12 @@ export default function SeedBankView(): JSX.Element {
     }
   }, [goToSeedBank, navigateToSeedBank, selectedOrganization]);
 
-  useEffect(() => {
+  const selectedSeedBank = useMemo<Facility | undefined>(() => {
     if (seedBankId) {
       const seedBanks = selectedOrganization ? getAllSeedBanks(selectedOrganization) : [];
-      setSelectedSeedBank(seedBanks?.find((sb) => sb?.id === parseInt(seedBankId, 10)));
+      return seedBanks?.find((sb) => sb?.id === parseInt(seedBankId, 10));
     }
+    return undefined;
   }, [seedBankId, selectedOrganization]);
 
   useEffect(() => {

@@ -1,4 +1,4 @@
-import React, { type JSX, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useMemo } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
@@ -11,43 +11,38 @@ export default function HighestAndLowestSurvivalRateStrataCard(): JSX.Element {
   const theme = useTheme();
   const { observationSummaries, plantingSite } = usePlantingSiteData();
 
-  const [highestSurvivalRate, setHighestSurvivalRate] = useState<number>();
-  const [lowestSurvivalRate, setLowestSurvivalRate] = useState<number>();
-  const [highestStratumId, setHighestStratumId] = useState<number>();
-  const [lowestStratumId, setLowestStratumId] = useState<number>();
-
-  useEffect(() => {
-    let _highestSurvivalRate = 0;
-    let _lowestSurvivalRate = Infinity;
-    let _highestStratumId: number | undefined;
-    let _lowestStratumId: number | undefined;
-    observationSummaries?.[0]?.strata.forEach((stratum: StratumObservationSummary) => {
-      if (stratum.survivalRate !== undefined) {
-        if (stratum.survivalRate >= _highestSurvivalRate) {
-          _highestSurvivalRate = stratum.survivalRate;
-          _highestStratumId = stratum.stratumId;
-        }
-        if (stratum.survivalRate < _lowestSurvivalRate) {
-          _lowestSurvivalRate = stratum.survivalRate;
-          _lowestStratumId = stratum.stratumId;
-        }
+  const survivalRateData = useMemo(() => {
+    type Acc = {
+      highestRate: number;
+      lowestRate: number;
+      highestId: number | undefined;
+      lowestId: number | undefined;
+    };
+    const initial: Acc = { highestRate: 0, lowestRate: Infinity, highestId: undefined, lowestId: undefined };
+    const result = (observationSummaries?.[0]?.strata ?? []).reduce((acc: Acc, stratum: StratumObservationSummary) => {
+      if (stratum.survivalRate === undefined) {
+        return acc;
       }
-    });
+      return {
+        highestRate: stratum.survivalRate >= acc.highestRate ? stratum.survivalRate : acc.highestRate,
+        highestId: stratum.survivalRate >= acc.highestRate ? stratum.stratumId : acc.highestId,
+        lowestRate: stratum.survivalRate < acc.lowestRate ? stratum.survivalRate : acc.lowestRate,
+        lowestId: stratum.survivalRate < acc.lowestRate ? stratum.stratumId : acc.lowestId,
+      };
+    }, initial);
 
-    setLowestSurvivalRate(_lowestStratumId ? _lowestSurvivalRate : undefined);
-    setLowestStratumId(_lowestStratumId);
+    return {
+      lowestSurvivalRate: result.lowestId !== undefined ? result.lowestRate : undefined,
+      highestSurvivalRate: result.highestId !== undefined ? result.highestRate : undefined,
+      highestStratum: plantingSite?.strata?.find((s) => s.id === result.highestId),
+      lowestStratum: plantingSite?.strata?.find((s) => s.id === result.lowestId),
+    };
+  }, [observationSummaries, plantingSite]);
 
-    setHighestSurvivalRate(_highestStratumId ? _highestSurvivalRate : undefined);
-    setHighestStratumId(_highestStratumId);
-  }, [observationSummaries]);
-
-  const highestStratum = useMemo(() => {
-    return plantingSite?.strata?.find((stratum) => stratum.id === highestStratumId);
-  }, [plantingSite, highestStratumId]);
-
-  const lowestStratum = useMemo(() => {
-    return plantingSite?.strata?.find((stratum) => stratum.id === lowestStratumId);
-  }, [plantingSite, lowestStratumId]);
+  const highestSurvivalRate = survivalRateData.highestSurvivalRate;
+  const lowestSurvivalRate = survivalRateData.lowestSurvivalRate;
+  const highestStratum = survivalRateData.highestStratum;
+  const lowestStratum = survivalRateData.lowestStratum;
 
   return (
     <Box>

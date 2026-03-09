@@ -43,13 +43,21 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
 
   const [record, setRecord, onChange, onChangeCallback] = useForm(batch);
   const [validateFields, setValidateFields] = useState<boolean>(false);
-  const [totalQuantity, setTotalQuantity] = useState(0);
+  const totalQuantity = useMemo(() => {
+    if (record) {
+      const activeGrowthQuantity = record?.activeGrowthQuantity ?? 0;
+      const hardeningOffQuantity = record?.hardeningOffQuantity ?? 0;
+      const readyQuantity = record?.readyQuantity ?? 0;
+      return +activeGrowthQuantity + +hardeningOffQuantity + +readyQuantity;
+    }
+    return 0;
+  }, [record]);
   const [photos, setPhotos] = useState<BatchPhotoWithUrl[]>([]);
   const [newPhotos, setNewPhotos] = useState<File[]>([]);
   const [photoIdsToRemove, setPhotoIdsToRemove] = useState<number[]>([]);
   const [facility, setFacility] = useState<Facility>();
   const tz = useLocationTimeZone().get(facility);
-  const [timeZone, setTimeZone] = useState(tz.id);
+  const timeZone = tz.id;
 
   const onPhotosChanged = useCallback(
     (photosList: File[]) => {
@@ -102,15 +110,6 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
   }, [batch, snackbar]);
 
   useEffect(() => {
-    if (record) {
-      const activeGrowthQuantity = record?.activeGrowthQuantity ?? 0;
-      const hardeningOffQuantity = record?.hardeningOffQuantity ?? 0;
-      const readyQuantity = record?.readyQuantity ?? 0;
-      setTotalQuantity(+activeGrowthQuantity + +hardeningOffQuantity + +readyQuantity);
-    }
-  }, [record, selectedOrganization]);
-
-  useEffect(() => {
     if (record?.facilityId && selectedOrganization) {
       const newFacility = getNurseryById(selectedOrganization, record.facilityId);
       if (newFacility.id.toString() !== facility?.id.toString()) {
@@ -118,12 +117,6 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
       }
     }
   }, [record?.facilityId, selectedOrganization, facility?.id]);
-
-  useEffect(() => {
-    if (timeZone !== tz.id) {
-      setTimeZone(tz.id);
-    }
-  }, [tz.id, timeZone]);
 
   useEffect(() => {
     if (selectedOrganization) {

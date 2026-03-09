@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useMemo } from 'react';
 import { useParams } from 'react-router';
 
 import useFetchDeliverable from 'src/components/DeliverableView/useFetchDeliverable';
-import { DeliverableWithOverdue } from 'src/types/Deliverables';
 
 import { DeliverableContext, DeliverableData } from './DeliverableContext';
 
@@ -20,23 +19,14 @@ const DeliverableProvider = ({ children }: Props) => {
 
   const { deliverable } = useFetchDeliverable({ deliverableId, projectId });
 
-  const [currentDeliverable, setCurrentDeliverable] = useState<DeliverableWithOverdue>();
-
-  const [deliverableData, setDeliverableData] = useState<DeliverableData>({ deliverableId, projectId });
-
-  useEffect(() => {
-    if (deliverable) {
-      setCurrentDeliverable(deliverable);
-    }
-  }, [deliverable]);
-
-  useEffect(() => {
-    setDeliverableData({
-      currentDeliverable,
+  const deliverableData = useMemo<DeliverableData>(
+    () => ({
+      currentDeliverable: deliverable,
       deliverableId,
       projectId,
-    });
-  }, [currentDeliverable, deliverableId, projectId]);
+    }),
+    [deliverable, deliverableId, projectId]
+  );
 
   return <DeliverableContext.Provider value={deliverableData}>{children}</DeliverableContext.Provider>;
 };

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Container, Grid } from '@mui/material';
 import { SortOrder, TableColumnType, TableRowType } from '@terraware/web-components';
@@ -141,7 +141,9 @@ const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
   }, [activeLocale, dispatchSearchRequest, getSearchPayload, searchSortOrder]);
 
   // reset filters when extraTableFilters change
-  useEffect(() => {
+  const prevExtraTableFiltersRef = useRef(extraTableFilters);
+  if (extraTableFilters !== prevExtraTableFiltersRef.current) {
+    prevExtraTableFiltersRef.current = extraTableFilters;
     setFilters((_filters) => {
       const newFilters = { ..._filters };
       Object.keys(newFilters)?.forEach((key) => {
@@ -153,7 +155,7 @@ const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
       });
       return newFilters;
     });
-  }, [extraTableFilters]);
+  }
 
   // set current filters if any featuredFilters has initial value, but not if we have sticky filters
   useEffect(() => {

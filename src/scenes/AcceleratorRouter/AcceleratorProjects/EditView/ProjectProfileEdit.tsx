@@ -115,7 +115,16 @@ const ProjectProfileEdit = () => {
   const variableValues = useAppSelector((state) =>
     selectSpecificVariablesWithValues(state, variableStableIds, projectId)
   );
-  const [stableToVariable, setStableToVariable] = useState<Record<string, VariableWithValues>>();
+  const stableToVariable = useMemo<Record<string, VariableWithValues> | undefined>(
+    () =>
+      variableValues.length > 0
+        ? variableValues.reduce<Record<string, VariableWithValues>>((map, variableWithValues) => {
+            map[variableWithValues.stableId] = variableWithValues;
+            return map;
+          }, {})
+        : undefined,
+    [variableValues]
+  );
   const { activeLocale, strings } = useLocalization();
   const [globalUsersOptions, setGlobalUsersOptions] = useState<DropdownItem[]>();
   const [organizationUsers, setOrganizationUsers] = useState<OrganizationUser[]>();
@@ -155,17 +164,6 @@ const ProjectProfileEdit = () => {
       ].sort((a, b) => a.label.localeCompare(b.label, activeLocale || undefined)),
     [activeLocale, customUserRoles, strings]
   );
-
-  useEffect(() => {
-    if (variableValues.length > 0) {
-      setStableToVariable(
-        variableValues.reduce<Record<string, VariableWithValues>>((map, variableWithValues) => {
-          map[variableWithValues.stableId] = variableWithValues;
-          return map;
-        }, {})
-      );
-    }
-  }, [variableValues]);
 
   useEffect(() => {
     if (!requestsInProgress) {

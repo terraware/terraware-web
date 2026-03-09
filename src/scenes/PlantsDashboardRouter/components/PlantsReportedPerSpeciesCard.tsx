@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useMemo } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Icon, Tooltip } from '@terraware/web-components';
@@ -86,10 +86,6 @@ const calculateSpeciesQuantities = (plantings: { plants: number; scientificName:
 };
 
 const RolledUpCard = ({ projectId }: { projectId?: number }): JSX.Element => {
-  const [labels, setLabels] = useState<string[]>();
-  const [values, setValues] = useState<number[]>();
-  const [tooltipTitles, setTooltipTitles] = useState<string[]>();
-
   const { reportedPlants } = useProjectPlantings(projectId);
   const { species: orgSpecies } = useSpeciesData();
 
@@ -103,11 +99,12 @@ const RolledUpCard = ({ projectId }: { projectId?: number }): JSX.Element => {
     return calculateSpeciesQuantities(transformedPlantings, true);
   }, [reportedPlants, orgSpecies]);
 
-  useEffect(() => {
-    setLabels(Object.keys(speciesQuantities).map((name) => truncate(name, MAX_SPECIES_NAME_LENGTH)));
-    setValues(Object.values(speciesQuantities));
-    setTooltipTitles(Object.keys(speciesQuantities));
-  }, [speciesQuantities]);
+  const labels = useMemo(
+    () => Object.keys(speciesQuantities).map((name) => truncate(name, MAX_SPECIES_NAME_LENGTH)),
+    [speciesQuantities]
+  );
+  const values = useMemo(() => Object.values(speciesQuantities), [speciesQuantities]);
+  const tooltipTitles = useMemo(() => Object.keys(speciesQuantities), [speciesQuantities]);
 
   return (
     <ChartData plantingSiteId={-1} tooltipTitles={tooltipTitles} labels={labels} values={values} newVersion={true} />
@@ -121,10 +118,6 @@ const SiteWithoutStrataCard = ({
   plantingSiteId: number;
   newVersion?: boolean;
 }): JSX.Element => {
-  const [labels, setLabels] = useState<string[]>();
-  const [values, setValues] = useState<number[]>();
-  const [tooltipTitles, setTooltipTitles] = useState<string[]>();
-
   const plantings = useAppSelector((state) => selectPlantingsForSite(state, plantingSiteId));
 
   const speciesQuantities = useMemo(() => {
@@ -135,11 +128,12 @@ const SiteWithoutStrataCard = ({
     return calculateSpeciesQuantities(transformedPlantings, newVersion);
   }, [plantings, newVersion]);
 
-  useEffect(() => {
-    setLabels(Object.keys(speciesQuantities).map((name) => truncate(name, MAX_SPECIES_NAME_LENGTH)));
-    setValues(Object.values(speciesQuantities));
-    setTooltipTitles(Object.keys(speciesQuantities));
-  }, [speciesQuantities]);
+  const labels = useMemo(
+    () => Object.keys(speciesQuantities).map((name) => truncate(name, MAX_SPECIES_NAME_LENGTH)),
+    [speciesQuantities]
+  );
+  const values = useMemo(() => Object.values(speciesQuantities), [speciesQuantities]);
+  const tooltipTitles = useMemo(() => Object.keys(speciesQuantities), [speciesQuantities]);
 
   return (
     <ChartData
@@ -163,10 +157,6 @@ const SiteWithStrataCard = ({
   const { plantingSiteReportedPlants } = usePlantingSiteData();
   const { species: orgSpecies } = useSpeciesData();
 
-  const [labels, setLabels] = useState<string[]>();
-  const [values, setValues] = useState<number[]>();
-  const [tooltipTitles, setTooltipTitles] = useState<string[]>();
-
   const speciesQuantities = useMemo(() => {
     if (plantingSiteReportedPlants && orgSpecies) {
       const transformedPlantings = plantingSiteReportedPlants.species
@@ -184,11 +174,12 @@ const SiteWithStrataCard = ({
     }
   }, [plantingSiteReportedPlants, orgSpecies, newVersion]);
 
-  useEffect(() => {
-    setLabels(Object.keys(speciesQuantities).map((name) => truncate(name, MAX_SPECIES_NAME_LENGTH)));
-    setValues(Object.values(speciesQuantities));
-    setTooltipTitles(Object.keys(speciesQuantities));
-  }, [speciesQuantities]);
+  const labels = useMemo(
+    () => Object.keys(speciesQuantities).map((name) => truncate(name, MAX_SPECIES_NAME_LENGTH)),
+    [speciesQuantities]
+  );
+  const values = useMemo(() => Object.values(speciesQuantities), [speciesQuantities]);
+  const tooltipTitles = useMemo(() => Object.keys(speciesQuantities), [speciesQuantities]);
 
   return (
     <ChartData

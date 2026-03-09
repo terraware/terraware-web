@@ -1,15 +1,13 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import { requestGetEvent } from 'src/redux/features/events/eventsAsyncThunks';
 import { selectEventRequest } from 'src/redux/features/events/eventsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { ModuleEvent } from 'src/types/Module';
 
 const useGetEvent = () => {
   const dispatch = useAppDispatch();
 
   const [requestId, setRequestId] = useState<string>('');
-  const [event, setEvent] = useState<ModuleEvent>();
   const getEventResponse = useAppSelector(selectEventRequest(requestId));
 
   const getEvent = useCallback(
@@ -20,11 +18,10 @@ const useGetEvent = () => {
     [dispatch, setRequestId]
   );
 
-  useEffect(() => {
-    if (getEventResponse && getEventResponse.status === 'success') {
-      setEvent(getEventResponse.data);
-    }
-  }, [getEventResponse, setEvent]);
+  const event = useMemo(
+    () => (getEventResponse?.status === 'success' ? getEventResponse.data : undefined),
+    [getEventResponse]
+  );
 
   return useMemo(
     () => ({

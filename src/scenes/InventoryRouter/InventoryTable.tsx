@@ -83,7 +83,6 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
   const { sessionFilters, setSessionFilters } = useSessionFilters(origin.toLowerCase());
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
   const [pillListPortalEl, setPillListPortalEl] = useState<HTMLElement | null>(null);
-  const [withdrawTooltip, setWithdrawTooltip] = useState<string>();
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const [modalValues, setModalValues] = useState<{ type: string; openChangeQuantityModal: boolean; batch?: any }>({
     type: 'germinating',
@@ -323,14 +322,14 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
     [selectedRows]
   );
 
-  useEffect(() => {
+  const withdrawTooltip = useMemo<string | undefined>(() => {
     const nurseriesSet = new Set(selectedRows.map((row) => row.facility_id));
     if ((origin === 'Nursery' && selectedRows.length > 1) || (origin === 'Batches' && nurseriesSet.size > 1)) {
-      setWithdrawTooltip(strings.WITHDRAW_SINGLE_NURSERY);
+      return strings.WITHDRAW_SINGLE_NURSERY;
     } else if (totalSelectedQuantity === 0) {
-      setWithdrawTooltip(strings.NO_WITHDRAWABLE_QUANTITIES_FOUND);
+      return strings.NO_WITHDRAWABLE_QUANTITIES_FOUND;
     } else {
-      setWithdrawTooltip(undefined);
+      return undefined;
     }
   }, [origin, selectedRows, strings, totalSelectedQuantity]);
 

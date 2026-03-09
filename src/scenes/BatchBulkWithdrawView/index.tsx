@@ -1,4 +1,4 @@
-import React, { type JSX, useEffect, useState } from 'react';
+import React, { type JSX, useEffect, useMemo } from 'react';
 
 import BatchWithdrawFlow from 'src/components/BatchWithdrawFlow';
 import { APP_PATHS } from 'src/constants';
@@ -10,20 +10,19 @@ type BatchBulkWithdrawViewProps = {
 };
 export default function BatchBulkWithdrawView(props: BatchBulkWithdrawViewProps): JSX.Element | null {
   const { withdrawalCreatedCallback } = props;
-  const [batchIds, setBatchIds] = useState<string[]>();
-  const [source, setSource] = useState<string | null>();
   const query = useQuery();
   const navigate = useSyncNavigate();
 
+  const batchIds = useMemo(() => (query.getAll('batchId').length > 0 ? query.getAll('batchId') : undefined), [query]);
+
+  const source = useMemo(() => (batchIds ? query.get('source') : undefined), [batchIds, query]);
+
   useEffect(() => {
-    if (query.getAll('batchId').length > 0) {
-      setBatchIds(query.getAll('batchId'));
-      setSource(query.get('source'));
-    } else {
+    if (!batchIds) {
       // invalid url params
       navigate({ pathname: APP_PATHS.INVENTORY });
     }
-  }, [query, navigate]);
+  }, [batchIds, navigate]);
 
   return batchIds ? (
     <BatchWithdrawFlow

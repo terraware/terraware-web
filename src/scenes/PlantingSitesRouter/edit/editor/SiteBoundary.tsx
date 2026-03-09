@@ -58,7 +58,6 @@ type Stack = {
 };
 
 export default function SiteBoundary({ onValidate, site }: SiteBoundaryProps): JSX.Element {
-  const [description, setDescription] = useState<Description[]>([]);
   const [siteBoundaryData, setSiteBoundaryData, undo, redo] = useUndoRedoState<Stack>({
     siteBoundary: featureSiteBoundary(site.id, site.boundary),
   });
@@ -113,9 +112,9 @@ export default function SiteBoundary({ onValidate, site }: SiteBoundaryProps): J
     }
   }, [boundary, errorAnnotations, onValidate, site.id, snackbar]);
 
-  useEffect(() => {
+  const description = useMemo<Description[]>(() => {
     if (!activeLocale) {
-      return;
+      return [];
     }
     const data: Description[] = [
       {
@@ -143,7 +142,7 @@ export default function SiteBoundary({ onValidate, site }: SiteBoundaryProps): J
       });
     }
 
-    setDescription(data);
+    return data;
   }, [activeLocale, mode, site.siteType]);
 
   const tutorialDescription = useMemo(() => {

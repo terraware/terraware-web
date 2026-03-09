@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
@@ -31,28 +31,28 @@ const PersonProvider = ({ children }: Props) => {
     }
   }, [dispatch, userId]);
 
-  const [personData, setPersonData] = useState<PersonData>({ setUserId, userId });
+  const personData = useMemo<PersonData>(() => {
+    if (
+      getUserRequest?.status === 'success' &&
+      getInternalInterestsRequest?.status === 'success' &&
+      getUserRequest.data?.user
+    ) {
+      const user = getUserRequest.data.user;
+      const internalInterests = getInternalInterestsRequest.data?.internalInterests || [];
+      return {
+        setUserId,
+        user: { ...user, internalInterests },
+        userId,
+      };
+    }
+    return { setUserId, userId };
+  }, [getInternalInterestsRequest, getUserRequest, userId, setUserId]);
 
   useEffect(() => {
-    if (!getUserRequest || !getInternalInterestsRequest) {
-      return;
-    }
-
-    if (getUserRequest.status === 'success' && getInternalInterestsRequest.status === 'success') {
-      const user = getUserRequest.data?.user;
-      const internalInterests = getInternalInterestsRequest.data?.internalInterests || [];
-
-      if (user) {
-        setPersonData({
-          setUserId,
-          user: { ...user, internalInterests },
-          userId,
-        });
-      }
-    } else if (getUserRequest.status === 'error' || getInternalInterestsRequest.status === 'error') {
+    if (getUserRequest?.status === 'error' || getInternalInterestsRequest?.status === 'error') {
       snackbar.toastError(strings.GENERIC_ERROR);
     }
-  }, [getInternalInterestsRequest, getUserRequest, userId, snackbar]);
+  }, [getInternalInterestsRequest?.status, getUserRequest?.status, snackbar]);
 
   return <PersonContext.Provider value={personData}>{children}</PersonContext.Provider>;
 };

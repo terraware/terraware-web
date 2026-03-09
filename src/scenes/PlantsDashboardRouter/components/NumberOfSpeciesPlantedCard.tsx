@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useMemo } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Icon, Tooltip } from '@terraware/web-components';
@@ -90,10 +90,6 @@ const RolledUpCard = ({ projectId }: { projectId?: number }): JSX.Element => {
     return allSpeciesIds.size;
   }, [reportedPlants]);
 
-  const [labels, setLabels] = useState<string[]>();
-  const [values, setValues] = useState<number[]>();
-  const [rareSpecies, setRareSpecies] = useState<number>();
-
   const projectSpecies = useMemo(() => {
     const speciesMap = new Map();
     for (const site of reportedPlants) {
@@ -107,7 +103,7 @@ const RolledUpCard = ({ projectId }: { projectId?: number }): JSX.Element => {
     return Array.from(speciesMap.values());
   }, [reportedPlants]);
 
-  useEffect(() => {
+  const { labels, values, rareSpecies } = useMemo(() => {
     const categoryTotals: Record<string, number> = {};
     let totalRare = 0;
     projectSpecies.forEach((reportedSpecies) => {
@@ -135,9 +131,11 @@ const RolledUpCard = ({ projectId }: { projectId?: number }): JSX.Element => {
       rareSpeciesPercentage,
     } = processConservationCategories(categoryTotals, totalRare, projectTotalSpecies);
 
-    setRareSpecies(rareSpeciesPercentage);
-    setLabels(processedLabels);
-    setValues(processedValues);
+    return {
+      rareSpecies: rareSpeciesPercentage,
+      labels: processedLabels,
+      values: processedValues,
+    };
   }, [orgSpecies, projectTotalSpecies, projectSpecies]);
 
   return <ChartData labels={labels} values={values} rareSpecies={rareSpecies} />;
@@ -146,13 +144,9 @@ const RolledUpCard = ({ projectId }: { projectId?: number }): JSX.Element => {
 const SiteWithoutStrataCard = ({
   plantingSiteId,
 }: NumberOfSpeciesPlantedCardProps & { plantingSiteId: number }): JSX.Element | undefined => {
-  const [labels, setLabels] = useState<string[]>();
-  const [values, setValues] = useState<number[]>();
-  const [rareSpecies, setRareSpecies] = useState<number>();
-
   const plantings = useAppSelector((state) => selectPlantingsForSite(state, plantingSiteId));
 
-  useEffect(() => {
+  const { labels, values, rareSpecies } = useMemo(() => {
     const speciesNames: Set<string> = new Set();
     const categoryTotals: Record<string, number> = {};
     let totalRare = 0;
@@ -180,9 +174,11 @@ const SiteWithoutStrataCard = ({
       rareSpeciesPercentage,
     } = processConservationCategories(categoryTotals, totalRare, speciesCount);
 
-    setRareSpecies(rareSpeciesPercentage);
-    setLabels(processedLabels);
-    setValues(processedValues);
+    return {
+      rareSpecies: rareSpeciesPercentage,
+      labels: processedLabels,
+      values: processedValues,
+    };
   }, [plantings]);
 
   return <ChartData labels={labels} values={values} rareSpecies={rareSpecies} />;
@@ -193,11 +189,8 @@ const SiteWithStrataCard = (): JSX.Element => {
   const { species: orgSpecies } = useSpeciesData();
 
   const totalSpecies = useMemo(() => plantingSiteReportedPlants?.species.length ?? 0, [plantingSiteReportedPlants]);
-  const [rareSpecies, setRareSpecies] = useState<number>();
-  const [labels, setLabels] = useState<string[]>();
-  const [values, setValues] = useState<number[]>();
 
-  useEffect(() => {
+  const { labels, values, rareSpecies } = useMemo(() => {
     if (plantingSiteReportedPlants?.species && orgSpecies) {
       const categoryTotals: Record<string, number> = {};
       let totalRare = 0;
@@ -227,10 +220,13 @@ const SiteWithStrataCard = (): JSX.Element => {
         rareSpeciesPercentage,
       } = processConservationCategories(categoryTotals, totalRare, totalSpecies);
 
-      setRareSpecies(rareSpeciesPercentage);
-      setLabels(processedLabels);
-      setValues(processedValues);
+      return {
+        rareSpecies: rareSpeciesPercentage,
+        labels: processedLabels,
+        values: processedValues,
+      };
     }
+    return { labels: undefined, values: undefined, rareSpecies: undefined };
   }, [plantingSiteReportedPlants, orgSpecies, totalSpecies]);
 
   return <ChartData labels={labels} values={values} rareSpecies={rareSpecies} />;

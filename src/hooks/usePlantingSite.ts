@@ -11,21 +11,14 @@ import {
 import { selectOnePlantingSite, selectPlantingSiteReportedPlants } from 'src/redux/features/tracking/trackingSelectors';
 import { requestOnePlantingSite, requestPlantingSiteReportedPlants } from 'src/redux/features/tracking/trackingThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { Observation, ObservationResultsPayload } from 'src/types/Observations';
-import { PlantingSite, PlantingSiteReportedPlants } from 'src/types/Tracking';
 
 const usePlantingSite = (plantingSiteId: number) => {
   const dispatch = useAppDispatch();
-  const [plantingSite, setPlantingSite] = useState<PlantingSite>();
 
   const [siteRequestId, setSiteRequestId] = useState<string>('');
   const [observationsRequestId, setObservationsRequestId] = useState<string>('');
   const [resultsRequestId, setResultsRequestId] = useState<string>('');
   const [reportedPlantsRequestId, setReportedPlantsRequestId] = useState<string>('');
-
-  const [observations, setObservations] = useState<Observation[]>();
-  const [observationResults, setObservationResults] = useState<ObservationResultsPayload[]>();
-  const [reportedPlants, setReportedPlants] = useState<PlantingSiteReportedPlants>();
 
   const siteResponse = useAppSelector(selectOnePlantingSite(siteRequestId));
   const observationsResponse = useAppSelector(selectPlantingSiteObservationsRequest(observationsRequestId));
@@ -41,6 +34,11 @@ const usePlantingSite = (plantingSiteId: number) => {
     reload();
   }, [reload]);
 
+  const plantingSite = useMemo(
+    () => (siteResponse?.status === 'success' ? siteResponse.data : undefined),
+    [siteResponse]
+  );
+
   useEffect(() => {
     if (plantingSite && plantingSite.id !== -1) {
       const observationsRequest = dispatch(requestPlantingSiteObservations({ plantingSiteId: plantingSite.id }));
@@ -52,29 +50,20 @@ const usePlantingSite = (plantingSiteId: number) => {
     }
   }, [dispatch, plantingSite]);
 
-  useEffect(() => {
-    if (siteResponse?.status === 'success') {
-      setPlantingSite(siteResponse.data);
-    }
-  }, [siteResponse]);
+  const observations = useMemo(
+    () => (observationsResponse?.status === 'success' ? observationsResponse.data ?? [] : undefined),
+    [observationsResponse]
+  );
 
-  useEffect(() => {
-    if (observationsResponse?.status === 'success') {
-      setObservations(observationsResponse.data ?? []);
-    }
-  }, [observationsResponse]);
+  const observationResults = useMemo(
+    () => (resultsResponse?.status === 'success' ? resultsResponse.data ?? [] : undefined),
+    [resultsResponse]
+  );
 
-  useEffect(() => {
-    if (resultsResponse?.status === 'success') {
-      setObservationResults(resultsResponse.data ?? []);
-    }
-  }, [resultsResponse]);
-
-  useEffect(() => {
-    if (reportedPlantsResponse?.status === 'success') {
-      setReportedPlants(reportedPlantsResponse.data);
-    }
-  }, [reportedPlantsResponse]);
+  const reportedPlants = useMemo(
+    () => (reportedPlantsResponse?.status === 'success' ? reportedPlantsResponse.data : undefined),
+    [reportedPlantsResponse]
+  );
 
   const isLoading = useMemo(() => {
     return (

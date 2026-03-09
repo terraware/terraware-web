@@ -103,11 +103,8 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   const filterOptionsResult = useAppSelector(selectNurseryWithdrawalsFilterOptions(filterOptionsRequestId));
 
   const [filters, setFilters] = useState<Record<string, SearchNodePayload>>({});
-  const [rows, setRows] = useState<SearchResponseElement[] | null>();
   const [searchValue] = useState('');
-  const [totalRowCount, setTotalRowCount] = useState<number>();
   const debouncedSearchTerm = useDebounce(searchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
-  const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder>(DEFAULT_SORT_ORDER);
 
   const {
     columnFilters,
@@ -145,11 +142,6 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     setReloadTrigger((prev) => prev + 1);
   }, []);
 
-  const [nurseryNames, setNurseryNames] = useState<string[]>([]);
-  const [destinationNames, setDestinationNames] = useState<string[]>([]);
-  const [substratumOptions, setSubstratumOptions] = useState<string[]>([]);
-  const [speciesOptions, setSpeciesOptions] = useState<string[]>([]);
-
   useEffect(() => {
     if (selectedOrganization) {
       const request = dispatch(requestNurseryWithdrawalsFilterOptions({ organizationId: selectedOrganization.id }));
@@ -157,17 +149,20 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     }
   }, [dispatch, selectedOrganization]);
 
-  useEffect(() => {
+  const { nurseryNames, destinationNames, substratumOptions, speciesOptions } = useMemo(() => {
     if (filterOptionsResult?.status === 'success' && filterOptionsResult.data) {
       const toStrings = (key: string) =>
         (filterOptionsResult.data![key]?.values ?? [])
           .filter((v): v is string => typeof v === 'string' && v !== '')
           .sort();
-      setNurseryNames(toStrings('facility_name'));
-      setDestinationNames(toStrings('destinationName'));
-      setSubstratumOptions(toStrings('substratumNames'));
-      setSpeciesOptions(toStrings('batchWithdrawals.batch_species_scientificName'));
+      return {
+        nurseryNames: toStrings('facility_name'),
+        destinationNames: toStrings('destinationName'),
+        substratumOptions: toStrings('substratumNames'),
+        speciesOptions: toStrings('batchWithdrawals.batch_species_scientificName'),
+      };
     }
+    return { nurseryNames: [], destinationNames: [], substratumOptions: [], speciesOptions: [] };
   }, [filterOptionsResult]);
 
   // Get all project names for filter (from all available projects, not just current results)
@@ -595,21 +590,10 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     setPagination((prev) => ({ ...prev, pageIndex: 0 }));
   }, [columnFilters]);
 
-  useEffect(() => {
-    if (countResult?.status === 'success' && countResult?.data) {
-      if (countResult?.data) {
-        setTotalRowCount(countResult.data);
-      }
-    }
-  }, [countResult]);
+  const totalRowCount = countResult?.status === 'success' && countResult?.data ? countResult.data : undefined;
 
-  useEffect(() => {
-    if (withdrawalsListResult?.status === 'success' && withdrawalsListResult?.data) {
-      if (withdrawalsListResult?.data) {
-        setRows(withdrawalsListResult.data);
-      }
-    }
-  }, [withdrawalsListResult]);
+  const rows =
+    withdrawalsListResult?.status === 'success' && withdrawalsListResult?.data ? withdrawalsListResult.data : undefined;
 
   useEffect(() => {
     if (siteParam) {
@@ -643,8 +627,8 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     }
   }, [substratumParam, query, location, navigate]);
 
-  // Sync sorting state with search sort order
-  useEffect(() => {
+  // Derive search sort order from sorting state
+  const searchSortOrder = useMemo((): SearchSortOrder => {
     if (sorting.length > 0) {
       const sortField = sorting[0];
       const orderByStr =
@@ -653,11 +637,12 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
           : sortField.id === 'project_names'
             ? 'batchWithdrawals.batch_project_name'
             : sortField.id;
-      setSearchSortOrder({
+      return {
         field: orderByStr,
         direction: sortField.desc ? 'Descending' : 'Ascending',
-      });
+      };
     }
+    return DEFAULT_SORT_ORDER;
   }, [sorting]);
 
   const onExport = useCallback(() => {

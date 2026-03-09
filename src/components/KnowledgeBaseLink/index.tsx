@@ -1,5 +1,4 @@
-import React, { type JSX } from 'react';
-import { useEffect, useState } from 'react';
+import React, { type JSX, useMemo } from 'react';
 import { useLocation } from 'react-router';
 
 import { IconButton, useTheme } from '@mui/material';
@@ -11,21 +10,21 @@ import strings from 'src/strings';
 export default function KnowledgeBaseLink(): JSX.Element {
   const theme = useTheme();
   const knowledgeBaseLinks = useKnowledgeBaseLinks();
-  const [currentLink, setCurrentLink] = useState(knowledgeBaseLinks['/home']);
   const location = useLocation();
+
+  const currentLink = useMemo(() => {
+    let link = knowledgeBaseLinks['/home'];
+    for (const key in knowledgeBaseLinks) {
+      if ((location.pathname + location.search).match(key)) {
+        link = knowledgeBaseLinks[key as keyof typeof KnowledgeBaseLink];
+      }
+    }
+    return link;
+  }, [knowledgeBaseLinks, location]);
 
   const onClick = () => {
     window.open(currentLink, '_blank');
   };
-
-  useEffect(() => {
-    setCurrentLink(knowledgeBaseLinks['/home']);
-    for (const key in knowledgeBaseLinks) {
-      if ((location.pathname + location.search).match(key)) {
-        setCurrentLink(knowledgeBaseLinks[key as keyof typeof KnowledgeBaseLink]);
-      }
-    }
-  }, [knowledgeBaseLinks, location]);
 
   return (
     <Tooltip title={strings.KNOWLEDGE_BASE}>

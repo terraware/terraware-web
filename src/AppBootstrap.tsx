@@ -1,4 +1,4 @@
-import React, { type JSX, useEffect, useState } from 'react';
+import React, { type JSX, useRef, useState } from 'react';
 
 import { LocalizationProvider as MuiLocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -21,28 +21,21 @@ type BlockingBootstrapProps = {
 };
 
 function BlockingBootstrap({ children }: BlockingBootstrapProps): JSX.Element {
-  const [bootstrapped, setBootstrapped] = useState<boolean>(false);
+  const bootstrappedRef = useRef<boolean>(false);
   const { bootstrapped: userBootstrapped } = useUser();
   const { bootstrapped: organizationBootstrapped } = useOrganization();
   const { bootstrapped: localizationBootstrapped } = useLocalization();
   const { bootstrapped: userFundingEntityBootstrapped } = useUserFundingEntity();
   const { isAcceleratorRoute } = useAcceleratorConsole();
 
-  useEffect(() => {
-    setBootstrapped(
-      bootstrapped ||
-        (userBootstrapped &&
-          (organizationBootstrapped || isAcceleratorRoute || userFundingEntityBootstrapped) &&
-          localizationBootstrapped)
-    );
-  }, [
-    bootstrapped,
-    userBootstrapped,
-    userFundingEntityBootstrapped,
-    organizationBootstrapped,
-    isAcceleratorRoute,
-    localizationBootstrapped,
-  ]);
+  if (!bootstrappedRef.current) {
+    bootstrappedRef.current =
+      userBootstrapped &&
+      (organizationBootstrapped || isAcceleratorRoute || userFundingEntityBootstrapped) &&
+      localizationBootstrapped;
+  }
+
+  const bootstrapped = bootstrappedRef.current;
 
   if (!bootstrapped) {
     return <BlockingSpinner />;

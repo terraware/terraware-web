@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import strings from 'src/strings';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -11,7 +11,17 @@ export const useSubLocations = (nurseryId?: number, record?: { subLocationIds?: 
   const snackbar = useSnackbar();
 
   const [availableSubLocations, setAvailableSubLocations] = useState<SubLocation[]>();
-  const [selectedSubLocations, setSelectedSubLocations] = useState<SubLocation[]>();
+
+  const subLocationIds = record?.subLocationIds;
+  const selectedSubLocations = useMemo<SubLocation[] | undefined>(
+    () =>
+      availableSubLocations && subLocationIds
+        ? availableSubLocations.filter((subLocation) =>
+            (subLocationIds || []).find((subLocationId) => subLocation.id === subLocationId)
+          )
+        : undefined,
+    [availableSubLocations, subLocationIds]
+  );
 
   const initSubLocations = useCallback(async () => {
     const facilityId = nurseryId || record?.facilityId;
@@ -27,16 +37,6 @@ export const useSubLocations = (nurseryId?: number, record?: { subLocationIds?: 
 
     setAvailableSubLocations(result.subLocations);
   }, [nurseryId, record?.facilityId, snackbar]);
-
-  useEffect(() => {
-    if (availableSubLocations && record?.subLocationIds) {
-      setSelectedSubLocations(
-        availableSubLocations.filter((subLocation) =>
-          (record.subLocationIds || []).find((subLocationId) => subLocation.id === subLocationId)
-        )
-      );
-    }
-  }, [availableSubLocations, record?.subLocationIds]);
 
   useEffect(() => {
     void initSubLocations();

@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useState } from 'react';
+import React, { type JSX, useCallback, useMemo } from 'react';
 
 import { Typography } from '@mui/material';
 import { BusySpinner, Button, DialogBox } from '@terraware/web-components';
@@ -16,18 +16,14 @@ export interface DeleteSpeciesDialogProps {
 
 export default function DeleteSpeciesDialog(props: DeleteSpeciesDialogProps): JSX.Element | null {
   const { onClose, open, onSubmit, speciesToDelete } = props;
-  const [cannotDelete, setCannotDelete] = useState<boolean>();
 
   const { inUseSpecies } = useSpeciesData();
 
-  useEffect(() => {
+  const cannotDelete = useMemo<boolean | undefined>(() => {
     if (inUseSpecies) {
-      if (inUseSpecies.find((_species) => _species.id === speciesToDelete.id)) {
-        setCannotDelete(true);
-      } else {
-        setCannotDelete(false);
-      }
+      return !!inUseSpecies.find((_species) => _species.id === speciesToDelete.id);
     }
+    return undefined;
   }, [inUseSpecies, speciesToDelete]);
 
   const deleteSpecies = useCallback(() => {

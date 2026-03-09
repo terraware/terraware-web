@@ -1,11 +1,10 @@
-import React, { CSSProperties, type JSX, useEffect, useMemo, useState } from 'react';
+import React, { CSSProperties, type JSX, useMemo } from 'react';
 
 import { Box, CircularProgress, Typography, useTheme } from '@mui/material';
 
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import strings from 'src/strings';
-import { PlantingSite } from 'src/types/Tracking';
 
 import PlantDashboardMap from './PlantDashboardMap';
 
@@ -18,19 +17,16 @@ type MultiplePlantingSiteMapProps = {
 
 export default function MultiplePlantingSiteMap({
   projectId,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   organizationId,
 }: MultiplePlantingSiteMapProps): JSX.Element {
   const { allPlantingSites } = usePlantingSiteData();
-  const [plantingSites, setPlantingSites] = useState<PlantingSite[]>();
   const theme = useTheme();
 
-  useEffect(() => {
-    if (allPlantingSites) {
-      const plantingSitesList = allPlantingSites.filter((ps) => ps.projectId === projectId);
-
-      setPlantingSites(plantingSitesList);
-    }
-  }, [projectId, organizationId, allPlantingSites]);
+  const plantingSites = useMemo(
+    () => allPlantingSites?.filter((ps) => ps.projectId === projectId),
+    [projectId, allPlantingSites]
+  );
 
   const totalArea = useMemo(() => {
     return plantingSites?.reduce((sum, site) => sum + (site?.areaHa ?? 0), 0) || 0;

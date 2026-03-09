@@ -1,4 +1,4 @@
-import React, { type JSX, useEffect, useState } from 'react';
+import React, { type JSX, useMemo } from 'react';
 
 import { Box, Snackbar as SnackbarUI } from '@mui/material';
 import { Message } from '@terraware/web-components';
@@ -6,14 +6,13 @@ import { Message } from '@terraware/web-components';
 import { selectSnackbar } from 'src/redux/features/snackbar/snackbarSelectors';
 import { clearSnackbar } from 'src/redux/features/snackbar/snackbarSlice';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { Snackbar } from 'src/types/Snackbar';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 export default function ToastSnackbar(): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const dispatch = useAppDispatch();
-  const [snackbar, setSnackbar] = useState<Snackbar | null>();
   const snackbarData = useAppSelector(selectSnackbar('toast'));
+  const snackbar = useMemo(() => (snackbarData ? { ...snackbarData } : null), [snackbarData]);
 
   const mainSnackbarStyles = {
     '&.MuiSnackbar-anchorOriginTopCenter': {
@@ -29,10 +28,6 @@ export default function ToastSnackbar(): JSX.Element {
   const handleClose = () => {
     dispatch(clearSnackbar({ type: 'toast' }));
   };
-
-  useEffect(() => {
-    setSnackbar(snackbarData ? { ...snackbarData } : null);
-  }, [snackbarData]);
 
   return (
     <SnackbarUI

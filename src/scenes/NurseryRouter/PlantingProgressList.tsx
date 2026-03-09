@@ -43,7 +43,6 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
   const defaultTimeZone = useDefaultTimeZone();
   const { selectedOrganization } = useOrganization();
   const [requestId, setRequestId] = useState<string>('');
-  const [selectedStratumIdsBySiteId, setSelectedStratumIdsBySiteId] = useState<Record<number, Set<number>>>();
   const updatePlantingResult = useAppSelector((state) => selectUpdatePlantingsCompleted(state, requestId));
   const substrataStatisticsResult = useAppSelector((state) =>
     selectStrataHaveStatistics(
@@ -76,19 +75,19 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
     }
   }, [rows, hasStrata]);
 
-  useEffect(() => {
+  const selectedStratumIdsBySiteId = useMemo((): Record<number, Set<number>> | undefined => {
     if (selectedRows.length > 0) {
-      const stratumIds = selectedRows.reduce((selectedStratumIdsBySiteIdObj: Record<number, Set<number>>, row: any) => {
+      return selectedRows.reduce((acc: Record<number, Set<number>>, row: any) => {
         const siteId = row.siteId;
-        if (selectedStratumIdsBySiteIdObj[siteId]) {
-          selectedStratumIdsBySiteIdObj[siteId].add(row.stratumId);
+        if (acc[siteId]) {
+          acc[siteId].add(row.stratumId);
         } else {
-          selectedStratumIdsBySiteIdObj[siteId] = new Set([row.stratumId]);
+          acc[siteId] = new Set([row.stratumId]);
         }
-        return selectedStratumIdsBySiteIdObj;
+        return acc;
       }, {});
-      setSelectedStratumIdsBySiteId(stratumIds);
     }
+    return undefined;
   }, [selectedRows]);
 
   useEffect(() => {

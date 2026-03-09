@@ -46,9 +46,21 @@ export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps
   const theme = useTheme();
   const [search, setSearch] = useState<string>('');
   const [filters, setFilters] = useState<Record<string, any>>({});
-  const [filterOptions, setFilterOptions] = useState<FieldOptionsMap>({});
   const [results, setResults] = useState<BatchHistoryItemForTable[] | null>();
   const [users, setUsers] = useState<Record<number, OrganizationUser> | undefined>({});
+  const filterOptions = useMemo<FieldOptionsMap>(
+    () => ({
+      type: {
+        partial: false,
+        values: getBatchHistoryTypesEnum(),
+      },
+      editedByName: {
+        partial: false,
+        values: users ? Object.values(users).map((user) => getUserDisplayName(user)) : [],
+      },
+    }),
+    [users]
+  );
   const { selectedOrganization } = useOrganization();
   const [selectedEvent, setSelectedEvent] = useState<any>();
   const [openEventDetailsModal, setOpenEventDetailsModal] = useState<boolean>(false);
@@ -59,19 +71,6 @@ export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps
       { name: 'editedByName', label: strings.EDITED_BY, type: 'multiple_selection' },
     ];
   }, []);
-
-  useEffect(() => {
-    setFilterOptions({
-      type: {
-        partial: false,
-        values: getBatchHistoryTypesEnum(),
-      },
-      editedByName: {
-        partial: false,
-        values: users ? Object.values(users).map((user) => getUserDisplayName(user)) : [],
-      },
-    });
-  }, [setFilterOptions, users]);
 
   const searchProps = useMemo<SearchProps>(
     () => ({

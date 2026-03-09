@@ -1,17 +1,15 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import { useLocalization } from 'src/providers/hooks';
 import { requestListDeliverables } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
 import { selectDeliverablesSearchRequest } from 'src/redux/features/deliverables/deliverablesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { ListDeliverablesElementWithOverdue } from 'src/types/Deliverables';
 
 const useProjectModuleDeliverables = () => {
   const { activeLocale } = useLocalization();
   const dispatch = useAppDispatch();
 
   const [deliverablesRequestId, setDeliverablesRequestId] = useState<string>('');
-  const [deliverables, setDeliverables] = useState<ListDeliverablesElementWithOverdue[]>();
 
   const listModuleDeliverablesResponse = useAppSelector(selectDeliverablesSearchRequest(deliverablesRequestId));
 
@@ -32,11 +30,10 @@ const useProjectModuleDeliverables = () => {
     [dispatch, setDeliverablesRequestId, activeLocale]
   );
 
-  useEffect(() => {
-    if (listModuleDeliverablesResponse && listModuleDeliverablesResponse.status === 'success') {
-      setDeliverables(listModuleDeliverablesResponse.data);
-    }
-  }, [listModuleDeliverablesResponse, setDeliverables]);
+  const deliverables = useMemo(
+    () => (listModuleDeliverablesResponse?.status === 'success' ? listModuleDeliverablesResponse.data : undefined),
+    [listModuleDeliverablesResponse]
+  );
 
   return useMemo(
     () => ({

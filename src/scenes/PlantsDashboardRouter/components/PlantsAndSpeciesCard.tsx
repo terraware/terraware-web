@@ -1,4 +1,4 @@
-import React, { type JSX, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useMemo } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Icon, Tooltip } from '@terraware/web-components';
@@ -22,7 +22,6 @@ export default function PlantsAndSpeciesCard({ projectId }: { projectId?: number
   const { plantingSiteReportedPlants } = usePlantingSiteData();
   const { plantingSite, allPlantingSites } = usePlantingSiteData();
   const { reportedPlants } = useProjectPlantings(projectId);
-  const [plantingSites, setPlantingSites] = useState<PlantingSite[]>();
   const separatorStyles = {
     width: '1px',
     height: 'auto',
@@ -41,9 +40,10 @@ export default function PlantsAndSpeciesCard({ projectId }: { projectId?: number
     return allSpeciesIds.size;
   }, [reportedPlants]);
 
-  useEffect(() => {
-    setPlantingSites(allPlantingSites?.filter((ps) => ps.projectId === projectId));
-  }, [allPlantingSites, projectId]);
+  const plantingSites = useMemo(
+    () => allPlantingSites?.filter((ps) => ps.projectId === projectId),
+    [allPlantingSites, projectId]
+  );
 
   const totalAreaRolledUp = useMemo(() => {
     return plantingSites?.reduce((sum, site) => sum + (site?.areaHa ?? 0), 0) || 0;

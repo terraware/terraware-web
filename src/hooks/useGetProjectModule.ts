@@ -1,12 +1,9 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import { useLazyGetProjectModuleQuery } from 'src/queries/generated/projectModules';
-import { ProjectModule } from 'src/types/Module';
 
 const useGetProjectModule = () => {
   const [getProjectModuleQuery, projectModuleResult] = useLazyGetProjectModuleQuery();
-
-  const [projectModule, setProjectModule] = useState<ProjectModule>();
 
   const getProjectModule = useCallback(
     (request: { projectId: number; moduleId: number }) => {
@@ -15,11 +12,10 @@ const useGetProjectModule = () => {
     [getProjectModuleQuery]
   );
 
-  useEffect(() => {
-    if (projectModuleResult.isSuccess) {
-      setProjectModule(projectModuleResult.data.module);
-    }
-  }, [projectModuleResult, setProjectModule]);
+  const projectModule = useMemo(
+    () => (projectModuleResult.isSuccess ? projectModuleResult.data.module : undefined),
+    [projectModuleResult.isSuccess, projectModuleResult.data]
+  );
 
   return useMemo(
     () => ({

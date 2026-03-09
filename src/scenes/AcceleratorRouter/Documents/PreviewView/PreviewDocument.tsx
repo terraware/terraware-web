@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect, useState } from 'react';
+import React, { ReactElement, useMemo } from 'react';
 
 import { useDocumentProducerData } from 'src/providers/DocumentProducer/Context';
 import strings from 'src/strings';
@@ -15,22 +15,18 @@ type PreviewDocumentProps = {
 export default function PreviewDocument({ projectName }: PreviewDocumentProps): ReactElement<any> | null {
   const { allVariables, document, documentId, documentVariables, projectId } = useDocumentProducerData();
 
-  const [sectionVariables, setSectionVariables] = useState<SectionVariableWithValues[]>([]);
-  const [titleSection, setTitleSection] = useState<SectionVariableWithValues>();
-
-  useEffect(() => {
+  const { sectionVariables, titleSection } = useMemo(() => {
     if (!documentVariables) {
-      return;
+      return { sectionVariables: [] as SectionVariableWithValues[], titleSection: undefined };
     }
 
     const documentSectionVariables = documentVariables.filter(
       isSectionVariableWithValues
     ) as SectionVariableWithValues[];
 
-    const firstSection = documentSectionVariables.shift();
+    const [firstSection, ...rest] = documentSectionVariables;
 
-    setSectionVariables(documentSectionVariables);
-    setTitleSection(firstSection);
+    return { sectionVariables: rest, titleSection: firstSection };
   }, [documentVariables]);
 
   // TODO remove this, things in state should not be mutated

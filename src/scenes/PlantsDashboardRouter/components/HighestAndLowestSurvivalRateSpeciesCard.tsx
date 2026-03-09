@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useState } from 'react';
+import React, { type JSX, useCallback, useMemo } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
@@ -13,11 +13,6 @@ export default function HighestAndLowestSurvivalRateSpeciesCard(): JSX.Element {
   const { observationSummaries } = usePlantingSiteData();
   const { species } = useSpeciesData();
 
-  const [highestSurvivalRate, setHighestSurvivalRate] = useState<number>();
-  const [lowestSurvivalRate, setLowestSurvivalRate] = useState<number>();
-  const [highestSpeciesName, setHighestSpeciesName] = useState<string>();
-  const [lowestSpeciesName, setLowestSpeciesName] = useState<string>();
-
   const getSpeciesName = useCallback(
     (observationSpecies: ObservationSpeciesResultsPayload) => {
       if (observationSpecies.speciesId) {
@@ -30,31 +25,44 @@ export default function HighestAndLowestSurvivalRateSpeciesCard(): JSX.Element {
     [species]
   );
 
-  useEffect(() => {
-    let _highestSurvivalRate = 0;
-    let _lowestSurvivalRate = Infinity;
-    let _highestSpeciesName: string | undefined;
-    let _lowestSpeciesName: string | undefined;
-    observationSummaries?.[0]?.species.forEach((observationSpecies: ObservationSpeciesResultsPayload) => {
-      const speciesName = getSpeciesName(observationSpecies);
-      if (observationSpecies.survivalRate !== undefined && speciesName !== undefined) {
-        if (observationSpecies.survivalRate >= _highestSurvivalRate) {
-          _highestSurvivalRate = observationSpecies.survivalRate;
-          _highestSpeciesName = speciesName;
+  const survivalRateData = useMemo(() => {
+    type Acc = {
+      highestRate: number;
+      lowestRate: number;
+      highestName: string | undefined;
+      lowestName: string | undefined;
+    };
+    const initial: Acc = { highestRate: 0, lowestRate: Infinity, highestName: undefined, lowestName: undefined };
+    const result = (observationSummaries?.[0]?.species ?? []).reduce(
+      (acc: Acc, observationSpecies: ObservationSpeciesResultsPayload) => {
+        const speciesName = getSpeciesName(observationSpecies);
+        if (observationSpecies.survivalRate === undefined || speciesName === undefined) {
+          return acc;
         }
-        if (observationSpecies.survivalRate < _lowestSurvivalRate) {
-          _lowestSurvivalRate = observationSpecies.survivalRate;
-          _lowestSpeciesName = speciesName;
-        }
-      }
-    });
+        return {
+          highestRate:
+            observationSpecies.survivalRate >= acc.highestRate ? observationSpecies.survivalRate : acc.highestRate,
+          highestName: observationSpecies.survivalRate >= acc.highestRate ? speciesName : acc.highestName,
+          lowestRate:
+            observationSpecies.survivalRate < acc.lowestRate ? observationSpecies.survivalRate : acc.lowestRate,
+          lowestName: observationSpecies.survivalRate < acc.lowestRate ? speciesName : acc.lowestName,
+        };
+      },
+      initial
+    );
 
-    setLowestSurvivalRate(_lowestSpeciesName ? _lowestSurvivalRate : undefined);
-    setLowestSpeciesName(_lowestSpeciesName);
-
-    setHighestSurvivalRate(_highestSpeciesName ? _highestSurvivalRate : undefined);
-    setHighestSpeciesName(_highestSpeciesName);
+    return {
+      lowestSurvivalRate: result.lowestName ? result.lowestRate : undefined,
+      lowestSpeciesName: result.lowestName,
+      highestSurvivalRate: result.highestName ? result.highestRate : undefined,
+      highestSpeciesName: result.highestName,
+    };
   }, [observationSummaries, getSpeciesName]);
+
+  const highestSurvivalRate = survivalRateData.highestSurvivalRate;
+  const lowestSurvivalRate = survivalRateData.lowestSurvivalRate;
+  const highestSpeciesName = survivalRateData.highestSpeciesName;
+  const lowestSpeciesName = survivalRateData.lowestSpeciesName;
 
   return (
     <Box>

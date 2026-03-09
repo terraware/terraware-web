@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import { MapViewStyle, MapViewStyles } from './types';
 
@@ -24,7 +24,13 @@ const writeStyleToSession = (key: string, style: MapViewStyle): void => {
 };
 
 const useStickyMapViewStyle = ({ defaultStyle, key }: StickyMapViewStyleProps) => {
-  const [mapViewStyle, setMapViewStyle] = useState(defaultStyle);
+  const [mapViewStyle, setMapViewStyle] = useState<MapViewStyle>(() => {
+    const sessionStyle = getStyleFromSession(key);
+    if (sessionStyle && (MapViewStyles as string[]).includes(sessionStyle)) {
+      return sessionStyle as MapViewStyle;
+    }
+    return defaultStyle;
+  });
 
   const updateMapViewStyle = useCallback(
     (newStyle: MapViewStyle) => {
@@ -33,15 +39,6 @@ const useStickyMapViewStyle = ({ defaultStyle, key }: StickyMapViewStyleProps) =
     },
     [key]
   );
-
-  useEffect(() => {
-    // If there is a "last viewed" tab in the session, use that, otherwise send to default
-    const sessionStyle = getStyleFromSession(key);
-    if (sessionStyle && (MapViewStyles as string[]).includes(sessionStyle)) {
-      setMapViewStyle(sessionStyle as MapViewStyle);
-      return;
-    }
-  }, [key]);
 
   return {
     mapViewStyle,

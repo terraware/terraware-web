@@ -1,4 +1,4 @@
-import React, { type JSX, useEffect, useState } from 'react';
+import React, { type JSX, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button, MultiSelect } from '@terraware/web-components';
@@ -43,15 +43,13 @@ export default function FilterMultiSelect<T>(props: FilterMultiSelectProps<T>): 
   const theme = useTheme();
 
   const [selection, setSelection] = useState(initialSelection);
-  const [multiSelectOptions, setMultiSelectOptions] = useState<Map<T | null, string>>(new Map());
+  const multiSelectOptions = useMemo(
+    () => new Map<T, string>(options.map((option) => [option, renderOption(option)])),
+    [options, renderOption]
+  );
   const [isNotPresentFilterSelected, setIsNotPresentFilterSelected] = useState<boolean>(selection[0] === null);
 
   const buttonStyles = { width: isMobile ? '100%' : 'auto' };
-
-  useEffect(() => {
-    const optionsMap = new Map<T, string>(options.map((option) => [option, renderOption(option)]));
-    setMultiSelectOptions(optionsMap);
-  }, [options, renderOption]);
 
   const onAdd = (item: T | null) => {
     setSelection([...selection, item]);

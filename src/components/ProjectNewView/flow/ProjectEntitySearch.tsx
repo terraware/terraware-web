@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo } from 'react';
 
 import { Box, Grid, useTheme } from '@mui/material';
 import { PillListItem, Textfield } from '@terraware/web-components';
@@ -33,16 +33,6 @@ export default function ProjectEntitySearch(props: ProjectEntitySearchProps): JS
   const { activeLocale } = useLocalization();
 
   const projects = useAppSelector(selectProjects);
-
-  const [filterPillData, setFilterPillData] = useState<PillListItemWithEmptyValue[]>([]);
-
-  const onRemovePillList = useCallback(
-    (filterId: string) => {
-      const filter = filterPillData?.find((filterPillDatum) => filterPillDatum.id === filterId);
-      setFilters({ [filterId]: filter?.emptyValue || null });
-    },
-    [filterPillData, setFilters]
-  );
 
   const projectEntityFilterConfig: EntitySpecificFilterConfig | undefined = useMemo(
     () =>
@@ -80,14 +70,21 @@ export default function ProjectEntitySearch(props: ProjectEntitySearchProps): JS
     [filters.projectIds, projects]
   );
 
-  useEffect(() => {
-    const data: PillListItemWithEmptyValue[] = [
+  const filterPillData = useMemo<PillListItemWithEmptyValue[]>(
+    () => [
       ...(projectEntityFilterConfig ? projectEntityFilterConfig.pillModifier(filters) : []),
       ...entitySpecificFilterConfigs.map((config) => config.pillModifier(filters)).flat(),
-    ];
+    ],
+    [entitySpecificFilterConfigs, filters, projectEntityFilterConfig]
+  );
 
-    setFilterPillData(data);
-  }, [entitySpecificFilterConfigs, filters, projectEntityFilterConfig]);
+  const onRemovePillList = useCallback(
+    (filterId: string) => {
+      const filter = filterPillData?.find((filterPillDatum) => filterPillDatum.id === filterId);
+      setFilters({ [filterId]: filter?.emptyValue || null });
+    },
+    [filterPillData, setFilters]
+  );
 
   useEffect(() => {
     if (selectedOrganization) {

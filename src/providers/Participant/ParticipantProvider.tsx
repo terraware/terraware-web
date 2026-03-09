@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import useListProjectModules from 'src/hooks/useListProjectModules';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
@@ -40,15 +40,29 @@ const ParticipantProvider = ({ children }: Props) => {
     [acceleratorProjects]
   );
 
-  const [participantData, setParticipantData] = useState<ParticipantData>({
-    isLoading: true,
-    projectsWithModules: moduleProjects,
-    modules: projectModules,
-    orgHasModules,
-    orgHasParticipants,
-    allAcceleratorProjects: acceleratorProjects,
-    setCurrentAcceleratorProject: _setCurrentAcceleratorProject,
-  });
+  const participantData = useMemo<ParticipantData>(
+    () => ({
+      currentAcceleratorProject,
+      isLoading: moduleProjectsListRequest?.status === 'pending' || listModulesIsLoading,
+      projectsWithModules: moduleProjects,
+      modules: projectModules,
+      allAcceleratorProjects: acceleratorProjects,
+      orgHasModules,
+      orgHasParticipants,
+      setCurrentAcceleratorProject: _setCurrentAcceleratorProject,
+    }),
+    [
+      currentAcceleratorProject,
+      listModulesIsLoading,
+      projectModules,
+      moduleProjects,
+      moduleProjectsListRequest,
+      orgHasModules,
+      orgHasParticipants,
+      acceleratorProjects,
+      _setCurrentAcceleratorProject,
+    ]
+  );
 
   useEffect(() => {
     if (selectedOrganization && activeLocale) {
@@ -96,29 +110,6 @@ const ParticipantProvider = ({ children }: Props) => {
       }
     }
   }, [moduleProjectsListRequest, currentAcceleratorProject, acceleratorProjects]);
-
-  useEffect(() => {
-    setParticipantData({
-      currentAcceleratorProject,
-      isLoading: moduleProjectsListRequest?.status === 'pending' || listModulesIsLoading,
-      projectsWithModules: moduleProjects,
-      modules: projectModules,
-      allAcceleratorProjects: acceleratorProjects,
-      orgHasModules,
-      orgHasParticipants,
-      setCurrentAcceleratorProject: _setCurrentAcceleratorProject,
-    });
-  }, [
-    currentAcceleratorProject,
-    listModulesIsLoading,
-    projectModules,
-    moduleProjects,
-    moduleProjectsListRequest,
-    orgHasModules,
-    orgHasParticipants,
-    acceleratorProjects,
-    _setCurrentAcceleratorProject,
-  ]);
 
   return <ParticipantContext.Provider value={participantData}>{children}</ParticipantContext.Provider>;
 };

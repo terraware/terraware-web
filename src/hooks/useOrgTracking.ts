@@ -22,20 +22,10 @@ import {
   requestOrganizationReportedPlants,
 } from 'src/redux/features/tracking/trackingThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { Observation, ObservationResultsPayload } from 'src/types/Observations';
-import { PlantingSiteReportedPlants } from 'src/types/PlantingSite';
-import { PlantingSite } from 'src/types/Tracking';
 
 export const useOrgTracking = () => {
   const dispatch = useAppDispatch();
   const { selectedOrganization } = useOrganization();
-
-  const [plantingSites, setPlantingSites] = useState<PlantingSite[]>([]);
-  const [observations, setObservations] = useState<Observation[]>([]);
-  const [observationResults, setObservationResults] = useState<ObservationResultsPayload[]>([]);
-  const [adHocObservations, setAdHocObservations] = useState<Observation[]>([]);
-  const [adHocObservationResults, setAdHocObservationResults] = useState<ObservationResultsPayload[]>([]);
-  const [reportedPlants, setReportedPlants] = useState<PlantingSiteReportedPlants[]>([]);
 
   const [plantingSitesRequestId, setPlantingSitesRequestId] = useState<string>('');
   const [adHocObservationsRequestId, setAdHocObservationsRequestId] = useState<string>('');
@@ -81,41 +71,35 @@ export const useOrgTracking = () => {
     reload();
   }, [reload]);
 
-  useEffect(() => {
-    if (plantingSitesResponse?.status === 'success') {
-      setPlantingSites(plantingSitesResponse.data ?? []);
-    }
-  }, [plantingSitesResponse]);
+  const plantingSites = useMemo(
+    () => (plantingSitesResponse?.status === 'success' ? plantingSitesResponse.data ?? [] : []),
+    [plantingSitesResponse]
+  );
 
-  useEffect(() => {
-    if (adHocObservationsResponse?.status === 'success') {
-      setAdHocObservations(adHocObservationsResponse.data ?? []);
-    }
-  }, [adHocObservationsResponse]);
+  const adHocObservations = useMemo(
+    () => (adHocObservationsResponse?.status === 'success' ? adHocObservationsResponse.data ?? [] : []),
+    [adHocObservationsResponse]
+  );
 
-  useEffect(() => {
-    if (adHocResultsResponse?.status === 'success') {
-      setAdHocObservationResults(adHocResultsResponse.data ?? []);
-    }
-  }, [adHocResultsResponse]);
+  const adHocObservationResults = useMemo(
+    () => (adHocResultsResponse?.status === 'success' ? adHocResultsResponse.data ?? [] : []),
+    [adHocResultsResponse]
+  );
 
-  useEffect(() => {
-    if (observationsResponse?.status === 'success') {
-      setObservations(observationsResponse.data ?? []);
-    }
-  }, [observationsResponse]);
+  const observations = useMemo(
+    () => (observationsResponse?.status === 'success' ? observationsResponse.data ?? [] : []),
+    [observationsResponse]
+  );
 
-  useEffect(() => {
-    if (resultsResponse?.status === 'success') {
-      setObservationResults(resultsResponse.data ?? []);
-    }
-  }, [resultsResponse]);
+  const observationResults = useMemo(
+    () => (resultsResponse?.status === 'success' ? resultsResponse.data ?? [] : []),
+    [resultsResponse]
+  );
 
-  useEffect(() => {
-    if (reportedPlantsResponse?.status === 'success') {
-      setReportedPlants(reportedPlantsResponse.data ?? []);
-    }
-  }, [reportedPlantsResponse]);
+  const reportedPlants = useMemo(
+    () => (reportedPlantsResponse?.status === 'success' ? reportedPlantsResponse.data ?? [] : []),
+    [reportedPlantsResponse]
+  );
 
   return useMemo(
     () => ({

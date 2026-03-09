@@ -13,8 +13,6 @@ const useProjectScore = (projectId: number) => {
   const projectScoreRequest = useAppSelector(selectScore(projectId));
   const updateRequest = useAppSelector(selectScoreUpdateRequest(updateRequestId));
 
-  const [projectScore, setProjectScore] = useState<Score>();
-
   const getProjectScore = useCallback(() => {
     void dispatch(requestProjectScore(projectId));
   }, [dispatch, projectId]);
@@ -31,11 +29,10 @@ const useProjectScore = (projectId: number) => {
     getProjectScore();
   }, [getProjectScore]);
 
-  useEffect(() => {
-    if (projectScoreRequest && projectScoreRequest.status === 'success') {
-      setProjectScore(projectScoreRequest.data);
-    }
-  }, [projectScoreRequest, setProjectScore]);
+  const projectScore = useMemo(
+    () => (projectScoreRequest?.status === 'success' ? projectScoreRequest.data : undefined),
+    [projectScoreRequest]
+  );
 
   useEffect(() => {
     if (updateRequest && updateRequest.status === 'success') {

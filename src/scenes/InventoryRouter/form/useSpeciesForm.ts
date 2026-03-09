@@ -1,18 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { Species } from 'src/types/Species';
 
 export const useSpeciesForm = (record?: { speciesId?: number }) => {
-  const [selectedSpecies, setSelectedSpecies] = useState<Species>();
-
   const { species } = useSpeciesData();
 
-  useEffect(() => {
-    if (species && record?.speciesId) {
-      setSelectedSpecies(species.find((singleSpecies) => singleSpecies.id === record.speciesId));
-    }
-  }, [species, record?.speciesId]);
+  const speciesId = record?.speciesId;
+  const selectedSpecies = useMemo<Species | undefined>(
+    () => (species && speciesId ? species.find((singleSpecies) => singleSpecies.id === speciesId) : undefined),
+    [species, speciesId]
+  );
 
   return { selectedSpecies };
 };

@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo } from 'react';
 import { useLocation } from 'react-router';
 
 import { Box, Snackbar as SnackbarUI } from '@mui/material';
@@ -20,16 +20,12 @@ export type PageSnackbarProps = {
 export default function PageSnackbar({ pageKey }: PageSnackbarProps): JSX.Element {
   const { pathname } = useLocation();
   const dispatch = useAppDispatch();
-  const [snackbar, setSnackbar] = useState<Snackbar | null>();
   const snackbarData = useAppSelector(selectSnackbar('page'));
+  const snackbar = useMemo(() => (snackbarData ? { ...snackbarData } : null), [snackbarData]);
 
   const handleClose = useCallback(() => {
     dispatch(clearSnackbar({ type: 'page' }));
   }, [dispatch]);
-
-  useEffect(() => {
-    setSnackbar(snackbarData ? { ...snackbarData } : null);
-  }, [snackbarData]);
 
   useEffect(() => {
     if (pathname) {

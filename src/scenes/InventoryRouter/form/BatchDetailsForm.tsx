@@ -76,27 +76,112 @@ export default function BatchDetailsForm({
   const { availableNurseries } = useNurseries(record);
   const { availableProjects } = useProjects(record);
 
-  const [totalQuantity, setTotalQuantity] = useState(0);
+  const totalQuantity = useMemo(() => {
+    if (record) {
+      const activeGrowthQuantity = record?.activeGrowthQuantity ?? 0;
+      const hardeningOffQuantity = record?.hardeningOffQuantity ?? 0;
+      const readyQuantity = record?.readyQuantity ?? 0;
+      return +activeGrowthQuantity + +hardeningOffQuantity + +readyQuantity;
+    }
+    return 0;
+  }, [record]);
   const [validateFields, setValidateFields] = useState<boolean>(false);
-  const [timeZone, setTimeZone] = useState('');
+  const timeZone = useMemo(() => {
+    if (!facilityId || !selectedOrganization) {
+      return '';
+    }
 
-  const [invalidFields, setInvalidFields] = useState<
-    Record<'germinating' | 'activeGrowth' | 'hardeningOff' | 'ready', string>
-  >({
-    germinating: '',
-    activeGrowth: '',
-    hardeningOff: '',
-    ready: '',
-  });
+    const facility = FacilityService.getFacility({
+      organization: selectedOrganization,
+      facilityId,
+      type: 'Nursery',
+    });
+
+    const tz = locationTimezone.get(facility);
+    return tz.id;
+  }, [facilityId, locationTimezone, selectedOrganization]);
+
+  const accessionQuantity = useMemo<{ value: number; display?: string } | undefined>(() => {
+    if (!selectedAccession || selectedAccession.remainingQuantity === undefined) {
+      return undefined;
+    }
+
+    if (selectedAccession.remainingUnits === 'Seeds') {
+      return {
+        value: Number(selectedAccession['remainingQuantity(raw)']),
+        display: selectedAccession.remainingQuantity,
+      };
+    }
+
+    return {
+      value: Number(selectedAccession['estimatedCount(raw)']),
+      display: selectedAccession.estimatedCount,
+    };
+  }, [selectedAccession]);
+
+  const invalidFields = useMemo<Record<'germinating' | 'activeGrowth' | 'hardeningOff' | 'ready', string>>(() => {
+    const invalid = { germinating: '', activeGrowth: '', hardeningOff: '', ready: '' };
+    const germinatingQuantity = Number(record?.germinatingQuantity ?? 0);
+    const activeGrowthQuantity = Number(record?.activeGrowthQuantity ?? 0);
+    const hardeningOffQuantity = Number(record?.hardeningOffQuantity ?? 0);
+    const readyQuantity = Number(record?.readyQuantity ?? 0);
+
+    if (germinatingQuantity < 0) {
+      invalid.germinating = strings.QUANTITY_MUST_BE_GREATER_THAN_OR_EQUAL_TO_ZERO;
+    }
+    if (activeGrowthQuantity < 0) {
+      invalid.activeGrowth = strings.QUANTITY_MUST_BE_GREATER_THAN_OR_EQUAL_TO_ZERO;
+    }
+    if (hardeningOffQuantity < 0) {
+      invalid.hardeningOff = strings.QUANTITY_MUST_BE_GREATER_THAN_OR_EQUAL_TO_ZERO;
+    }
+    if (readyQuantity < 0) {
+      invalid.ready = strings.QUANTITY_MUST_BE_GREATER_THAN_OR_EQUAL_TO_ZERO;
+    }
+
+    if (selectedAccession) {
+      const remainingSeeds = accessionQuantity?.value ?? 0;
+
+      if (germinatingQuantity + totalQuantity > remainingSeeds) {
+        if (germinatingQuantity && germinatingQuantity > remainingSeeds) {
+          invalid.germinating = strings.NOT_ENOUGH_SEEDS_IN_ACCESSION;
+        }
+        if (activeGrowthQuantity && germinatingQuantity + activeGrowthQuantity > remainingSeeds) {
+          invalid.activeGrowth = strings.NOT_ENOUGH_SEEDS_IN_ACCESSION;
+        }
+        if (
+          hardeningOffQuantity &&
+          germinatingQuantity + activeGrowthQuantity + hardeningOffQuantity > remainingSeeds
+        ) {
+          invalid.hardeningOff = strings.NOT_ENOUGH_SEEDS_IN_ACCESSION;
+        }
+        if (
+          readyQuantity &&
+          germinatingQuantity + activeGrowthQuantity + hardeningOffQuantity + readyQuantity > remainingSeeds
+        ) {
+          invalid.ready = strings.NOT_ENOUGH_SEEDS_IN_ACCESSION;
+        }
+      }
+    }
+
+    return invalid;
+  }, [
+    accessionQuantity,
+    record?.germinatingQuantity,
+    record?.hardeningOffQuantity,
+    record?.activeGrowthQuantity,
+    record?.readyQuantity,
+    selectedAccession,
+    strings,
+    totalQuantity,
+  ]);
 
   const hasErrors = useCallback(() => {
     if (record) {
-      // if we have a pre-determined error
       if (Object.values(invalidFields).some((val: string) => val !== '')) {
         return true;
       }
 
-      // There must be at least 1 seed in the batch
       const seedCount = QUANTITY_FIELDS.reduce(
         (acc: number, field: QuantityField): number => acc + (record[field] ? Number(record[field]) : 0),
         0
@@ -131,48 +216,6 @@ export default function BatchDetailsForm({
     },
     [hasErrors, onBatchValidated, selectedOrganization, timeZone]
   );
-
-  const accessionQuantity = useMemo<{ value: number; display?: string } | undefined>(() => {
-    if (!selectedAccession || selectedAccession.remainingQuantity === undefined) {
-      return undefined;
-    }
-
-    if (selectedAccession.remainingUnits === 'Seeds') {
-      return {
-        value: Number(selectedAccession['remainingQuantity(raw)']),
-        display: selectedAccession.remainingQuantity,
-      };
-    }
-
-    return {
-      value: Number(selectedAccession['estimatedCount(raw)']),
-      display: selectedAccession.estimatedCount,
-    };
-  }, [selectedAccession]);
-
-  useEffect(() => {
-    if (!facilityId || !selectedOrganization) {
-      return;
-    }
-
-    const facility = FacilityService.getFacility({
-      organization: selectedOrganization,
-      facilityId,
-      type: 'Nursery',
-    });
-
-    const tz = locationTimezone.get(facility);
-    setTimeZone(tz.id);
-  }, [facilityId, record?.facilityId, locationTimezone, selectedOrganization]);
-
-  useEffect(() => {
-    if (record) {
-      const activeGrowthQuantity = record?.activeGrowthQuantity ?? 0;
-      const hardeningOffQuantity = record?.hardeningOffQuantity ?? 0;
-      const readyQuantity = record?.readyQuantity ?? 0;
-      setTotalQuantity(+activeGrowthQuantity + +hardeningOffQuantity + +readyQuantity);
-    }
-  }, [record]);
 
   useEffect(() => {
     setRecord((previousRecord: FormRecord): FormRecord => {
@@ -266,64 +309,6 @@ export default function BatchDetailsForm({
       };
     });
   }, [availableSubLocations, record?.id, setRecord]);
-
-  useEffect(() => {
-    const invalid = { germinating: '', activeGrowth: '', hardeningOff: '', ready: '' };
-    const germinatingQuantity = Number(record?.germinatingQuantity ?? 0);
-    const activeGrowthQuantity = Number(record?.activeGrowthQuantity ?? 0);
-    const hardeningOffQuantity = Number(record?.hardeningOffQuantity ?? 0);
-    const readyQuantity = Number(record?.readyQuantity ?? 0);
-
-    if (germinatingQuantity < 0) {
-      invalid.germinating = strings.QUANTITY_MUST_BE_GREATER_THAN_OR_EQUAL_TO_ZERO;
-    }
-    if (activeGrowthQuantity < 0) {
-      invalid.activeGrowth = strings.QUANTITY_MUST_BE_GREATER_THAN_OR_EQUAL_TO_ZERO;
-    }
-    if (hardeningOffQuantity < 0) {
-      invalid.hardeningOff = strings.QUANTITY_MUST_BE_GREATER_THAN_OR_EQUAL_TO_ZERO;
-    }
-    if (readyQuantity < 0) {
-      invalid.ready = strings.QUANTITY_MUST_BE_GREATER_THAN_OR_EQUAL_TO_ZERO;
-    }
-
-    if (selectedAccession) {
-      const remainingSeeds = accessionQuantity?.value ?? 0;
-
-      if (germinatingQuantity + totalQuantity > remainingSeeds) {
-        // a L -> R analysis of which inputs to mark as invalid
-        if (germinatingQuantity && germinatingQuantity > remainingSeeds) {
-          invalid.germinating = strings.NOT_ENOUGH_SEEDS_IN_ACCESSION;
-        }
-        if (activeGrowthQuantity && germinatingQuantity + activeGrowthQuantity > remainingSeeds) {
-          invalid.activeGrowth = strings.NOT_ENOUGH_SEEDS_IN_ACCESSION;
-        }
-        if (
-          hardeningOffQuantity &&
-          germinatingQuantity + activeGrowthQuantity + hardeningOffQuantity > remainingSeeds
-        ) {
-          invalid.hardeningOff = strings.NOT_ENOUGH_SEEDS_IN_ACCESSION;
-        }
-        if (
-          readyQuantity &&
-          germinatingQuantity + activeGrowthQuantity + hardeningOffQuantity + readyQuantity > remainingSeeds
-        ) {
-          invalid.ready = strings.NOT_ENOUGH_SEEDS_IN_ACCESSION;
-        }
-      }
-    }
-
-    setInvalidFields(invalid);
-  }, [
-    accessionQuantity,
-    record?.germinatingQuantity,
-    record?.hardeningOffQuantity,
-    record?.activeGrowthQuantity,
-    record?.readyQuantity,
-    selectedAccession,
-    strings,
-    totalQuantity,
-  ]);
 
   return (
     <>

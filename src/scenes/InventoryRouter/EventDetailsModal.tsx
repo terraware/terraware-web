@@ -34,7 +34,16 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
   const paddingSeparator = useMemo(() => (isMobile ? 0 : 1.5), [isMobile]);
 
   const [relatedBatch, setRelatedBatch] = useState<Batch | null>();
-  const [photoUrl, setPhotoUrl] = useState<string>();
+  const photoUrl = useMemo(
+    () =>
+      selectedEvent.type === 'PhotoCreated' && selectedEvent.fileId
+        ? BATCH_PHOTO_ENDPOINT.replace('{batchId}', batchId.toString()).replace(
+            '{photoId}',
+            selectedEvent.fileId.toString()
+          )
+        : undefined,
+    [selectedEvent, batchId]
+  );
 
   useEffect(() => {
     const fetchRelatedBatch = async () => {
@@ -49,17 +58,6 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
       void fetchRelatedBatch();
     }
   }, [selectedEvent, relatedBatch]);
-
-  useEffect(() => {
-    if (selectedEvent.type === 'PhotoCreated' && selectedEvent.fileId) {
-      setPhotoUrl(
-        BATCH_PHOTO_ENDPOINT.replace('{batchId}', batchId.toString()).replace(
-          '{photoId}',
-          selectedEvent.fileId.toString()
-        )
-      );
-    }
-  }, [selectedEvent, batchId]);
 
   return (
     <DialogBox

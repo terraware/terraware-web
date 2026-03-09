@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useState } from 'react';
+import React, { type JSX, useCallback, useMemo } from 'react';
 
 import { Box, SxProps, Typography, useTheme } from '@mui/material';
 import { useDeviceInfo } from '@terraware/web-components/utils';
@@ -32,18 +32,12 @@ const MobileAppCard = ({
   const { isDesktop, isMobile } = useDeviceInfo();
   const theme = useTheme();
   const { updateUserPreferences, userPreferences, reloadUserPreferences } = useUser();
-  const [showCard, setShowCard] = useState(true);
 
-  useEffect(() => {
-    if (!allowDismiss) {
-      setShowCard(true);
-    }
-    if (allowDismiss && dismissPreferenceId && !userPreferences[dismissPreferenceId]) {
-      setShowCard(true);
-    }
+  const showCard = useMemo(() => {
     if (allowDismiss && dismissPreferenceId && userPreferences[dismissPreferenceId]) {
-      setShowCard(false);
+      return false;
     }
+    return true;
   }, [allowDismiss, dismissPreferenceId, userPreferences]);
 
   const dismissMobileAppCard = useCallback(async () => {

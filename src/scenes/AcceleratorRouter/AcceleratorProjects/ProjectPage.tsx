@@ -50,13 +50,11 @@ const ProjectPage = () => {
   const isAllowedPublish = isAllowed('PUBLISH_PROJECT_DETAILS');
   const isAllowedCreateActivities = isAllowed('CREATE_ACTIVITIES');
 
-  const [activityId, setActivityId] = useState<number>();
-  const [highlightsModalOpen, setHighlightsModalOpen] = useState(false);
-
-  useEffect(() => {
+  const activityId = useMemo(() => {
     const _activityId = query.get('activityId');
-    setActivityId(_activityId ? Number(_activityId) : undefined);
+    return _activityId ? Number(_activityId) : undefined;
   }, [query]);
+  const [highlightsModalOpen, setHighlightsModalOpen] = useState(false);
 
   const projectApplication = useMemo(
     () => getApplicationByProjectId(projectData.projectId),

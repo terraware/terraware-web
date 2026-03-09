@@ -13,9 +13,6 @@ const useGetModule = (moduleId: number) => {
   const [moduleRequestId, setModuleRequestId] = useState<string>('');
   const [evenstRequestId, setEventsRequestId] = useState<string>('');
 
-  const [module, setModule] = useState<Module>();
-  const [events, setEvents] = useState<ModuleEvent[]>();
-
   const getModuleResponse = useAppSelector(selectModuleRequest(moduleRequestId));
   const listModuleEventsResponse = useAppSelector(selectEventList(evenstRequestId));
 
@@ -27,20 +24,18 @@ const useGetModule = (moduleId: number) => {
   }, [dispatch, moduleId, setEventsRequestId, setModuleRequestId]);
 
   useEffect(() => {
-    if (getModuleResponse && getModuleResponse.status === 'success') {
-      setModule(getModuleResponse.data);
-    }
-  }, [getModuleResponse, setModule]);
-
-  useEffect(() => {
-    if (listModuleEventsResponse && listModuleEventsResponse.status === 'success') {
-      setEvents(listModuleEventsResponse.data);
-    }
-  }, [listModuleEventsResponse, setEvents]);
-
-  useEffect(() => {
     getModule();
   }, [getModule]);
+
+  const module = useMemo<Module | undefined>(
+    () => (getModuleResponse?.status === 'success' ? getModuleResponse.data : undefined),
+    [getModuleResponse]
+  );
+
+  const events = useMemo<ModuleEvent[] | undefined>(
+    () => (listModuleEventsResponse?.status === 'success' ? listModuleEventsResponse.data : undefined),
+    [listModuleEventsResponse]
+  );
 
   return useMemo(
     () => ({

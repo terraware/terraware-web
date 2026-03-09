@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router';
 
 import { BusySpinner } from '@terraware/web-components';
@@ -20,14 +20,8 @@ const ProjectProvider = ({ children }: Props) => {
   const pathProjectId = Number(pathParams.projectId);
   const { goToAcceleratorProjectList } = useNavigateTo();
 
-  const [projectId, setProjectId] = useState<number>(-1);
+  const projectId = !isNaN(pathProjectId) ? pathProjectId : -1;
   const project = useAppSelector(selectProject(projectId));
-
-  const [projectData, setProjectData] = useState<ProjectData>({
-    projectId,
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    reload: () => {},
-  });
 
   const reload = useCallback(() => {
     if (projectId !== -1) {
@@ -35,22 +29,22 @@ const ProjectProvider = ({ children }: Props) => {
     }
   }, [dispatch, projectId]);
 
+  const projectData = useMemo<ProjectData>(
+    () => ({
+      project,
+      projectId,
+      reload,
+    }),
+    [project, projectId, reload]
+  );
+
   useEffect(() => {
     if (pathProjectId === -1) {
       goToAcceleratorProjectList();
     } else if (!isNaN(pathProjectId)) {
-      setProjectId(pathProjectId);
       reload();
     }
   }, [dispatch, goToAcceleratorProjectList, pathProjectId, reload]);
-
-  useEffect(() => {
-    setProjectData({
-      project,
-      projectId,
-      reload,
-    });
-  }, [project, projectId, reload]);
 
   if (projectData.projectId === -1) {
     return <BusySpinner withSkrim />;
