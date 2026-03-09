@@ -43,6 +43,7 @@ type MetricRowProps = {
   projectId: number;
   reportId: number;
   canEdit?: boolean;
+  hideProgressNotes?: boolean;
   onEditChange?: (editing: boolean) => void;
 };
 
@@ -54,6 +55,7 @@ const MetricRow = ({
   projectId,
   reportId,
   canEdit,
+  hideProgressNotes = false,
   onEditChange,
 }: MetricRowProps): JSX.Element => {
   const theme = useTheme();
@@ -131,7 +133,7 @@ const MetricRow = ({
   const percentComplete =
     completionDenominator !== 0 ? Math.round(((displayValue - baseline) / completionDenominator) * 100) : 0;
 
-  const hasComments = !!metric.projectsComments || !!metric.progressNotes;
+  const hasComments = !!metric.projectsComments || (!hideProgressNotes && !!metric.progressNotes);
   const canExpand = hasComments || isCumulative;
 
   const onToggle = useCallback(() => {
@@ -390,21 +392,23 @@ const MetricRow = ({
                   </Box>
                 </Grid>
 
-                <Grid item xs={isCumulative ? 4 : 6}>
-                  <Box>
-                    <Textfield
-                      type='textarea'
-                      label={strings.PROGRESS_NOTES}
-                      value={record.progressNotes}
-                      id='progressNotes'
-                      onChange={onChangeCallback('progressNotes')}
-                      display={false}
-                      styles={textAreaStyles}
-                      preserveNewlines
-                      markdown
-                    />
-                  </Box>
-                </Grid>
+                {!hideProgressNotes && (
+                  <Grid item xs={isCumulative ? 4 : 6}>
+                    <Box>
+                      <Textfield
+                        type='textarea'
+                        label={strings.PROGRESS_NOTES}
+                        value={record.progressNotes}
+                        id='progressNotes'
+                        onChange={onChangeCallback('progressNotes')}
+                        display={false}
+                        styles={textAreaStyles}
+                        preserveNewlines
+                        markdown
+                      />
+                    </Box>
+                  </Grid>
+                )}
 
                 <Grid item xs={12}>
                   <Box display='flex' justifyContent='flex-end'>
@@ -442,7 +446,7 @@ const MetricRow = ({
                     </Typography>
                   </Grid>
                 )}
-                {metric.progressNotes && (
+                {!hideProgressNotes && metric.progressNotes && (
                   <Grid item xs={isCumulative ? 5 : 6}>
                     <Typography fontSize='16px' fontWeight={600} marginBottom={1}>
                       {strings.PROGRESS_NOTES}

@@ -189,6 +189,7 @@ const AcceleratorReportView = () => {
                       projectId={projectId}
                       reportId={reportId}
                       canEdit={false}
+                      hideProgressNotes
                     />
                   ));
                 })
