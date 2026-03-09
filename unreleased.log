@@ -1,3 +1,6 @@
+f7f893c5f137 Update dependency @rstest/coverage-istanbul to ^0.3.0 (#5389)
+3f120a7df9f5 Update dependency @rstest/core to ^0.9.0 (#5388)
+33cceb620a75 Update dependency react-test-renderer to v19 (#5390)
 bf30e1d06007 Update docker/login-action action to v4 (#5391)
 c5b801daa128 Update docker/setup-buildx-action action to v4 (#5394)
 d09a01685eeb Update docker/build-push-action action to v7 (#5395)
