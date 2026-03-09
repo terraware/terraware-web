@@ -34,7 +34,7 @@ type IndicatorBoxProps = {
 
 const IndicatorBox = ({ editing = false, metric, type, year, onChangeIndicator }: IndicatorBoxProps): JSX.Element => {
   const theme = useTheme();
-  const [record, , onChange, onChangeCallback] = useForm<IndicatorMetric>(metric);
+  const [record, , , onChangeCallback] = useForm<IndicatorMetric>(metric);
 
   useEffect(() => {
     if (JSON.stringify(record) !== JSON.stringify(metric)) {
@@ -75,7 +75,7 @@ const IndicatorBox = ({ editing = false, metric, type, year, onChangeIndicator }
               label={strings.PROGRESS}
               value={record.overrideValue ?? record.systemValue}
               id='overrideValue'
-              onChange={(val) => onChange('overrideValue', val)}
+              onChange={onChangeCallback('overrideValue')}
               display={!editing}
               required={true}
               min={0}
