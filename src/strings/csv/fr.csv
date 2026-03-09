@@ -67,6 +67,7 @@ ADD_BATCH,Ajouter un lot,0d9f7a4a
 ADD_DOCUMENT,Ajouter un document,af87beed
 ADD_FUNDING_ENTITY,Ajouter une entité de financement,47c0142d
 ADD_GPS_COORDINATES,Ajouter des coordonnées GPS,d87d2fa2
+ADD_INDICATOR,Ajouter un indicateur,d8469587
 ADD_INVENTORY,Ajouter un inventaire,73cde1f5
 ADD_INVENTORY_DESCRIPTION,"Ajouter un inventaire à partir d'une nouvelle source. Pour ajouter des stocks à partir d'un lot de semences existant, accédez à la rubrique « lots de semences » et retirez-les d'un lot.",8ccf6455
 ADD_INVENTORY_MANUALLY_DESCRIPTION,"Saisissez les espèces, les quantités et d'autres informations pertinentes à l'aide de notre formulaire d'inventaire.",5ab2a2a5
@@ -871,6 +872,7 @@ INCOMPLETE,Incomplet,5f524fdf
 INCORRECT_EMAIL_FORMAT,Format d'e-mail incorrect.,19f1a8c9
 INDICATOR_LEVEL,Niveau d’indicateur,b128c992
 INDICATOR_NAME,Nom de l’indicateur,0d8b0613
+INDICATOR_TYPE,Type d’indicateur,d5e75bf1
 INDICATOR_TYPE_GOAL,Objectif,cb34c06e
 INDICATOR_TYPE_PROCESS,Processus,0bee5739
 INDICATORS,Indicateurs,ea71857f
@@ -1526,6 +1528,7 @@ PROJECT_PHASE_PLAN_AND_SCALE,Phase 2 - Planification et mise à l’échelle,a51
 PROJECT_PHOTOS,Photos du projet (max. 30),25c80ed0
 PROJECT_PROFILE,Profil du projet,cc49d0dc
 PROJECT_PROFILE_PUBLISHED,Profil du projet publié,9f75ca71
+PROJECT_SPECIFIC,Spécifique au projet,6f4b5ae3
 PROJECT_SPECIFIC_METRIC,Indicateur spécifique au projet,4585c861
 PROJECT_SPECIFIC_METRIC_SAVED,Indicateur spécifique au projet enregistré,15157e04
 PROJECT_SPECIFIC_METRICS,Indicateurs spécifiques au projet,56e54f89

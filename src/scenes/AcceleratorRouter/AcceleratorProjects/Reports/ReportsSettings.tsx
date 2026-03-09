@@ -214,7 +214,9 @@ export default function ReportsSettings(): JSX.Element {
     isCommon: boolean;
     reference: string;
     category: string;
+    classId?: string;
     level: string;
+    active: boolean;
     primaryDataSource?: string;
     frequencyOfReporting?: string;
     tfOwnerReviewer?: string;
@@ -233,7 +235,9 @@ export default function ReportsSettings(): JSX.Element {
       isCommon: false,
       reference: ind.refId,
       category: ind.category,
+      classId: ind.classId,
       level: ind.level,
+      active: ind.active,
       primaryDataSource: ind.primaryDataSource,
       frequencyOfReporting: ind.frequency,
       tfOwnerReviewer: ind.tfOwner,
@@ -250,7 +254,9 @@ export default function ReportsSettings(): JSX.Element {
       isCommon: true,
       reference: ind.refId,
       category: ind.category,
+      classId: ind.classId,
       level: ind.level,
+      active: ind.active,
       primaryDataSource: ind.primaryDataSource,
       frequencyOfReporting: ind.frequency,
       tfOwnerReviewer: ind.tfOwner,
@@ -267,7 +273,9 @@ export default function ReportsSettings(): JSX.Element {
       isCommon: true,
       reference: ind.refId,
       category: ind.category,
+      classId: ind.classId,
       level: ind.level,
+      active: ind.active,
       primaryDataSource: strings.TW_DATA,
       frequencyOfReporting: ind.frequency,
       tfOwnerReviewer: ind.tfOwner,
@@ -365,6 +373,14 @@ export default function ReportsSettings(): JSX.Element {
     [theme, strings.TW_DATA]
   );
 
+  const ActiveCell = useCallback(
+    ({ cell }: { cell: MRT_Cell<IndicatorRow> }) => {
+      const isActive = cell.getValue<boolean>();
+      return <>{isActive ? strings.YES : strings.NO}</>;
+    },
+    [strings]
+  );
+
   const indicatorColumns = useMemo(
     (): EditableTableColumn<IndicatorRow>[] => [
       {
@@ -413,11 +429,26 @@ export default function ReportsSettings(): JSX.Element {
         Cell: CategoryCell,
       },
       {
+        id: 'classId',
+        header: strings.CUMULATIVE_OR_LEVEL,
+        accessorKey: 'classId',
+        enableEditing: false,
+        size: 160,
+      },
+      {
         id: 'level',
         header: strings.INDICATOR_LEVEL,
         accessorKey: 'level',
         enableEditing: false,
         size: 140,
+      },
+      {
+        id: 'active',
+        header: strings.ACTIVE,
+        accessorKey: 'active',
+        enableEditing: false,
+        size: 120,
+        Cell: ActiveCell,
       },
       {
         id: 'primaryDataSource',
@@ -449,7 +480,7 @@ export default function ReportsSettings(): JSX.Element {
         size: 200,
       },
     ],
-    [strings, NameCell, CommonCell, CategoryCell, PrimaryDataSourceCell]
+    [strings, NameCell, CommonCell, CategoryCell, PrimaryDataSourceCell, ActiveCell]
   );
 
   return (
