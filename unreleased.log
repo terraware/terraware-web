@@ -1,3 +1,6 @@
+bf30e1d06007 Update docker/login-action action to v4 (#5391)
+c5b801daa128 Update docker/setup-buildx-action action to v4 (#5394)
+d09a01685eeb Update docker/build-push-action action to v7 (#5395)
 0d28dd88e996 SW-8072: Remove copy under page titles in Accessions and Inventory (Follow-up) (#5386)
 5a4d9fa1bdd0 SW-7638 Upgrade React hooks eslint plugin; fix errors (#5385)
 9ee42f0f2d71 SW-8073: Header Spacing: remove empty space below page titles and above table area (#5384)
