@@ -1,3 +1,4 @@
+dc8984e14a49 SW-8150 Clicking into a zone in the observation detail view resets the map (#5396)
 db99e241176a Bump svgo from 3.3.2 to 3.3.3 (#5376)
 f7f893c5f137 Update dependency @rstest/coverage-istanbul to ^0.3.0 (#5389)
 3f120a7df9f5 Update dependency @rstest/core to ^0.9.0 (#5388)
