@@ -164,6 +164,7 @@
     "@babel/core": "^7.28.5",
     "@babel/preset-env": "^7.28.5",
     "@babel/preset-typescript": "^7.28.5",
+    "@datadog/datadog-ci": "^5.9.0",
     "@eslint/compat": "^2.0.0",
     "@eslint/js": "^9.0.0",
     "@playwright/test": "^1.45.0",
