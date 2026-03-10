@@ -1272,7 +1272,7 @@ const ObservationMap = ({
             fontSize={'12px'}
             fontWeight={400}
             lineHeight={'20px'}
-            color={theme.palette.TwClrBaseWhite}
+            color={theme.palette.TwClrBaseBlack}
             whiteSpace={'nowrap'}
           >
             {strings.AREA_NOT_OBSERVED}
