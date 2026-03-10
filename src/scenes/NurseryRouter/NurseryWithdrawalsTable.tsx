@@ -460,35 +460,16 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
             const isDateRange = column?.filterVariant === 'date-range';
 
             if (isDateRange) {
-              // Date-range: single Range node with [startDate | null, endDate | null]
-              // MRT stores date-range values as JS Date objects
+              // Date-range: single Range node with YYYY-MM-DD values.
+              // MRT uses dayjs as its date adapter, so filter values are dayjs objects.
               const toDateStr = (val: unknown): string | null => {
-                if (val === null || val === '') {
+                if (val === null || val === undefined) {
                   return null;
                 }
-                // Native Date
-                if (val instanceof Date && !isNaN(val.getTime())) {
-                  const y = val.getFullYear();
-                  const m = String(val.getMonth() + 1).padStart(2, '0');
-                  const d = String(val.getDate()).padStart(2, '0');
-                  return `${y}-${m}-${d}`;
-                }
                 if (typeof val === 'object') {
-                  // dayjs object (MRT's default date adapter) - has toDate()
-                  const asDateLike = val as { toDate?: () => Date; toISODate?: () => string | null };
-                  if (typeof asDateLike.toDate === 'function') {
-                    const d = asDateLike.toDate();
-                    if (d instanceof Date && !isNaN(d.getTime())) {
-                      const y = d.getFullYear();
-                      const m = String(d.getMonth() + 1).padStart(2, '0');
-                      const day = String(d.getDate()).padStart(2, '0');
-                      return `${y}-${m}-${day}`;
-                    }
-                    return null;
-                  }
-                  // Luxon DateTime - has toISODate()
-                  if (typeof asDateLike.toISODate === 'function') {
-                    return asDateLike.toISODate();
+                  const dayjsLike = val as { format?: (f: string) => string; isValid?: () => boolean };
+                  if (typeof dayjsLike.format === 'function' && typeof dayjsLike.isValid === 'function') {
+                    return dayjsLike.isValid() ? dayjsLike.format('YYYY-MM-DD') : null;
                   }
                 }
                 return null;
