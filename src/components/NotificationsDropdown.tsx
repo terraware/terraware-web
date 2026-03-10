@@ -152,14 +152,11 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
   const syncReloadOrganizationDate = useCallback(() => void reloadOrganizationData(), [reloadOrganizationData]);
 
   const menuHeaderItems = useMemo(() => {
+    const items = [{ text: strings.MARK_ALL_AS_READ, callback: markAllServerNotificationsRead }];
     if (organizationId) {
-      return [
-        { text: strings.MARK_ALL_AS_READ, callback: markAllServerNotificationsRead },
-        { text: strings.SETTINGS, callback: goToSettings },
-      ];
-    } else {
-      return [{ text: strings.MARK_ALL_AS_READ, callback: markAllServerNotificationsRead }];
+      items.push({ text: strings.SETTINGS, callback: goToSettings });
     }
+    return items;
   }, [goToSettings, markAllServerNotificationsRead, organizationId, strings.MARK_ALL_AS_READ, strings.SETTINGS]);
 
   return (
