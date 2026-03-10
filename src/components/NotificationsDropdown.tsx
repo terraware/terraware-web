@@ -26,7 +26,7 @@ import preventDefault from 'src/utils/preventDefaultEvent';
 import stopPropagation from 'src/utils/stopPropagationEvent';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
-import useClientNotifications from './ClientNotification';
+import useClientNotifications from 'src/hooks/useClientNotifications';
 import DivotPopover from './common/DivotPopover';
 import ErrorBox from './common/ErrorBox/ErrorBox';
 import Timestamp from './common/Timestamp';
