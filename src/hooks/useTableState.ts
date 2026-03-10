@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 
 import {
@@ -57,7 +58,23 @@ const useTableState = (storageKey: string, options?: UseTableStateOptions) => {
     }
     try {
       const saved = localStorage.getItem(`${storageKey}_columnFilters`);
-      return saved ? (JSON.parse(saved) as MRT_ColumnFiltersState) : [];
+      if (!saved) {
+        return [];
+      }
+      const parsed = JSON.parse(saved) as MRT_ColumnFiltersState;
+      // Date-range filters store dayjs objects which serialize to ISO strings.
+      // Reconstruct dayjs objects so the date pickers restore correctly.
+      const isISODateTimeString = (v: unknown) =>
+        typeof v === 'string' && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/.test(v);
+      return parsed.map((f) => {
+        if (Array.isArray(f.value) && (f.value as unknown[]).some(isISODateTimeString)) {
+          return {
+            ...f,
+            value: (f.value as unknown[]).map((v) => (isISODateTimeString(v) ? dayjs(v as string) : v)),
+          };
+        }
+        return f;
+      });
     } catch {
       return [];
     }

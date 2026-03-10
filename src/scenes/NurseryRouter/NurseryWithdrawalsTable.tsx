@@ -454,26 +454,78 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
               ),
             } as OrNodePayload;
           }
-          // Range filter (e.g., numbers)
+          // Range filter (e.g., numbers or dates)
           if (filterValue.length === 2) {
             const children: SearchNodePayload[] = [];
-            if (filterValue[0] !== undefined && filterValue[0] !== '') {
+            const isDateRange = column?.filterVariant === 'date-range';
+
+            if (isDateRange) {
+              // Date-range: single Range node with [startDate | null, endDate | null]
+              // MRT stores date-range values as JS Date objects
+              const toDateStr = (val: unknown): string | null => {
+                if (val === null || val === '') {
+                  return null;
+                }
+                // Native Date
+                if (val instanceof Date && !isNaN(val.getTime())) {
+                  const y = val.getFullYear();
+                  const m = String(val.getMonth() + 1).padStart(2, '0');
+                  const d = String(val.getDate()).padStart(2, '0');
+                  return `${y}-${m}-${d}`;
+                }
+                if (typeof val === 'object') {
+                  // dayjs object (MRT's default date adapter) - has toDate()
+                  const asDateLike = val as { toDate?: () => Date; toISODate?: () => string | null };
+                  if (typeof asDateLike.toDate === 'function') {
+                    const d = asDateLike.toDate();
+                    if (d instanceof Date && !isNaN(d.getTime())) {
+                      const y = d.getFullYear();
+                      const m = String(d.getMonth() + 1).padStart(2, '0');
+                      const day = String(d.getDate()).padStart(2, '0');
+                      return `${y}-${m}-${day}`;
+                    }
+                    return null;
+                  }
+                  // Luxon DateTime - has toISODate()
+                  if (typeof asDateLike.toISODate === 'function') {
+                    return asDateLike.toISODate();
+                  }
+                }
+                return null;
+              };
+              const minDate = toDateStr(filterValue[0]);
+              const maxDate = toDateStr(filterValue[1]);
+              if (!minDate && !maxDate) {
+                return { operation: 'or', children: [] } as OrNodePayload;
+              }
+              return {
+                operation: 'field',
+                field: fieldNames[0],
+                type: 'Range',
+                values: [minDate ?? '1900-01-01', maxDate ?? '9999-12-31'],
+              } as FieldNodePayload;
+            }
+
+            const minStr = filterValue[0] !== undefined && filterValue[0] !== '' ? String(filterValue[0]) : undefined;
+            const maxStr = filterValue[1] !== undefined && filterValue[1] !== '' ? String(filterValue[1]) : undefined;
+
+            if (minStr !== undefined) {
               fieldNames.forEach((fieldName) => {
                 children.push({
                   operation: 'field',
                   field: fieldName,
                   type: 'Range',
-                  values: [String(filterValue[0]), '999999999'],
+                  values: [minStr, '999999999'],
                 });
               });
             }
-            if (filterValue[1] !== undefined && filterValue[1] !== '') {
+            if (maxStr !== undefined) {
               fieldNames.forEach((fieldName) => {
                 children.push({
                   operation: 'field',
                   field: fieldName,
                   type: 'Range',
-                  values: ['0', String(filterValue[1])],
+                  values: ['0', maxStr],
                 });
               });
             }
