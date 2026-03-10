@@ -1,3 +1,4 @@
+0cce0b2aaa60 Add lint:dev script to package.json (#5407)
 335a4baaa6c7 SW-8091: Map: Show Tree/Shrub ID in plant drawer in Biomass Monitoring Observations (#5404)
 1ec2b985be6b Fix dump file for migration (#5405)
 06f8bfebd2de SW-8143: Remove map from Monitoring Plots page (#5403)
