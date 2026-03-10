@@ -427,8 +427,54 @@ export default function Database(props: DatabaseProps): JSX.Element {
       {
         id: 'collectedDate',
         header: strings.COLLECTION_DATE,
-        accessorKey: 'collectedDate',
+        accessorFn: (row) => {
+          const dateStr = (row as Record<string, unknown>).collectedDate as string | null;
+          if (!dateStr) {
+            return null;
+          }
+          const [y, m, d] = dateStr.split('-').map(Number);
+          return new Date(y, m - 1, d);
+        },
         filterVariant: 'date-range',
+        filterFn: (row: SearchResponseElementWithId, _columnId: string, filterValue: unknown[]) => {
+          const toDayStr = (val: unknown): string | null => {
+            if (val === null || val === undefined) {
+              return null;
+            }
+            if (typeof val === 'object') {
+              const dayjsLike = val as { format?: (f: string) => string; isValid?: () => boolean };
+              if (typeof dayjsLike.format === 'function' && typeof dayjsLike.isValid === 'function') {
+                return dayjsLike.isValid() ? dayjsLike.format('YYYY-MM-DD') : null;
+              }
+            }
+            if (typeof val === 'string' && /^\d{4}-\d{2}-\d{2}/.test(val)) {
+              return val.substring(0, 10);
+            }
+            return null;
+          };
+          const minStr = toDayStr(filterValue[0]);
+          const maxStr = toDayStr(filterValue[1]);
+          if (!minStr && !maxStr) {
+            return true;
+          }
+          // row is an MRT Row wrapper at runtime; access original data via .original
+          const original = (row as unknown as { original: Record<string, unknown> }).original;
+          const dateStr = original.collectedDate as string | null;
+          if (!dateStr) {
+            return false;
+          }
+          if (minStr && dateStr < minStr) {
+            return false;
+          }
+          if (maxStr && dateStr > maxStr) {
+            return false;
+          }
+          return true;
+        },
+        Cell: ({ cell }: { cell: MRT_Cell<SearchResponseElementWithId> }) => {
+          const dateStr = (cell.row.original as Record<string, unknown>).collectedDate as string | null;
+          return dateStr ? <span>{dateStr}</span> : null;
+        },
       },
       {
         id: 'collectionSiteName',
@@ -719,7 +765,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
                         enableGlobalFilter={true}
                         enableColumnFilters={true}
                         enableColumnOrdering={true}
-                        stickyFilters={true}
                         storageKey={STORAGE_KEY}
                         enablePagination={false}
                         enableTopToolbar={true}
