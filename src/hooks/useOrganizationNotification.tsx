@@ -13,7 +13,7 @@ import { InitializedTimeZone, TimeZoneDescription } from 'src/types/TimeZones';
 import { featureNotificationExpired } from 'src/utils/featureNotifications';
 import { getTimeZone, getUTC } from 'src/utils/useTimeZoneUtils';
 
-export default function OrganizationNotification(): ClientNotification | null {
+export default function useOrganizationNotification(): ClientNotification | null {
   const { selectedOrganization, reloadOrganizations } = useOrganization();
 
   const [timeZoneOrgNotification, setTimeZoneOrgNotification] = useState(false);

@@ -361,7 +361,7 @@ export default fixupConfigRules([
       'react/display-name': 'error',
       'react/jsx-boolean-value': 'off',
       'react/jsx-key': 'error',
-      'react/jsx-no-bind': errorInDev,
+      'react/jsx-no-bind': 'off', // React Compiler allows arrow functions in JSX properties
       'react/jsx-no-comment-textnodes': 'error',
       'react/jsx-no-duplicate-props': 'error',
       'react/jsx-no-target-blank': 'error',
