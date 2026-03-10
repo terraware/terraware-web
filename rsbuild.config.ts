@@ -48,6 +48,8 @@ export default defineConfig({
     cleanDistPath: true,
     // Asset prefix (equivalent to PUBLIC_URL)
     assetPrefix: process.env.PUBLIC_URL || '/',
+    // Generate source maps for easier debugging
+    sourceMap: true,
   },
 
   server: {
