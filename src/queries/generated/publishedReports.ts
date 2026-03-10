@@ -37,7 +37,7 @@ export type PublishedCumulativeIndicatorProgressPayload = {
 export type PublishedReportIndicatorPayload = {
   baseline?: number;
   category: 'Project Objectives' | 'Climate' | 'Community' | 'Biodiversity';
-  classId?: 'Cumulative' | 'Level';
+  classId: 'Cumulative' | 'Level';
   /** If the indicator is cumulative, the list of actual values for all quarters in the report's year. Note that only the report's quarter will be a published value, the rest will be current values whether or not they are the same as their published counterparts. */
   currentYearProgress?: PublishedCumulativeIndicatorProgressPayload[];
   description?: string;

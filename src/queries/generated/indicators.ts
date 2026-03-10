@@ -76,7 +76,7 @@ export type UpdateCommonIndicatorApiArg = {
 export type ExistingProjectIndicatorPayload = {
   active: boolean;
   category: 'Project Objectives' | 'Climate' | 'Community' | 'Biodiversity';
-  classId?: 'Cumulative' | 'Level';
+  classId: 'Cumulative' | 'Level';
   description?: string;
   frequency?: 'Annual' | 'Bi-Annual' | 'MRV Cycle' | 'Quarterly';
   id: number;
@@ -84,6 +84,7 @@ export type ExistingProjectIndicatorPayload = {
   level: 'Process' | 'Output' | 'Outcome' | 'Goal';
   name: string;
   notes?: string;
+  precision: number;
   primaryDataSource?: string;
   projectId: number;
   refId: string;
@@ -101,13 +102,14 @@ export type SimpleSuccessResponsePayload = {
 export type NewIndicatorPayload = {
   active: boolean;
   category: 'Project Objectives' | 'Climate' | 'Community' | 'Biodiversity';
-  classId?: 'Cumulative' | 'Level';
+  classId: 'Cumulative' | 'Level';
   description?: string;
   frequency?: 'Annual' | 'Bi-Annual' | 'MRV Cycle' | 'Quarterly';
   isPublishable: boolean;
   level: 'Process' | 'Output' | 'Outcome' | 'Goal';
   name: string;
   notes?: string;
+  precision: number;
   primaryDataSource?: string;
   refId: string;
   tfOwner?: string;
@@ -129,7 +131,7 @@ export type UpdateProjectIndicatorRequestPayload = {
 export type AutoCalculatedIndicatorPayload = {
   active: boolean;
   category: 'Project Objectives' | 'Climate' | 'Community' | 'Biodiversity';
-  classId?: 'Cumulative' | 'Level';
+  classId: 'Cumulative' | 'Level';
   description: string;
   frequency?: 'Annual' | 'Bi-Annual' | 'MRV Cycle' | 'Quarterly';
   indicator:
@@ -142,6 +144,7 @@ export type AutoCalculatedIndicatorPayload = {
   level: 'Process' | 'Output' | 'Outcome' | 'Goal';
   name: string;
   notes?: string;
+  precision: number;
   primaryDataSource?: string;
   refId: string;
   tfOwner?: string;
@@ -154,7 +157,7 @@ export type ListAutoCalculatedIndicatorsResponsePayload = {
 export type ExistingCommonIndicatorPayload = {
   active: boolean;
   category: 'Project Objectives' | 'Climate' | 'Community' | 'Biodiversity';
-  classId?: 'Cumulative' | 'Level';
+  classId: 'Cumulative' | 'Level';
   description?: string;
   frequency?: 'Annual' | 'Bi-Annual' | 'MRV Cycle' | 'Quarterly';
   id: number;
@@ -162,6 +165,7 @@ export type ExistingCommonIndicatorPayload = {
   level: 'Process' | 'Output' | 'Outcome' | 'Goal';
   name: string;
   notes?: string;
+  precision: number;
   primaryDataSource?: string;
   refId: string;
   tfOwner?: string;
