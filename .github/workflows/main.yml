@@ -152,10 +152,10 @@ jobs:
           npx @datadog/datadog-ci sourcemaps upload ./dist/static/js \
             --service=terraware-web \
             --release-version=${{ env.APP_VERSION }} \
-            --minified-path-prefix=/static/js/ \
-            --site=us3.datadoghq.com
+            --minified-path-prefix=/static/js/
         env:
           DATADOG_API_KEY: ${{ secrets.DATADOG_API_KEY }}
+          DATADOG_SITE: us3.datadoghq.com
 
       - name: Remove source maps
         if: env.IS_CD == 'true'
