@@ -78,10 +78,10 @@ export type ExistingProjectIndicatorPayload = {
   category: 'Project Objectives' | 'Climate' | 'Community' | 'Biodiversity';
   classId?: 'Cumulative' | 'Level';
   description?: string;
-  frequency?: 'Annual' | 'Bi-Annual' | 'MRV Cycle';
+  frequency?: 'Annual' | 'Bi-Annual' | 'MRV Cycle' | 'Quarterly';
   id: number;
   isPublishable: boolean;
-  level: 'Activity' | 'Output' | 'Outcome' | 'Impact';
+  level: 'Process' | 'Output' | 'Outcome' | 'Goal';
   name: string;
   notes?: string;
   primaryDataSource?: string;
@@ -99,12 +99,13 @@ export type SimpleSuccessResponsePayload = {
   status: SuccessOrError;
 };
 export type NewIndicatorPayload = {
+  active: boolean;
   category: 'Project Objectives' | 'Climate' | 'Community' | 'Biodiversity';
   classId?: 'Cumulative' | 'Level';
   description?: string;
-  frequency?: 'Annual' | 'Bi-Annual' | 'MRV Cycle';
+  frequency?: 'Annual' | 'Bi-Annual' | 'MRV Cycle' | 'Quarterly';
   isPublishable: boolean;
-  level: 'Activity' | 'Output' | 'Outcome' | 'Impact';
+  level: 'Process' | 'Output' | 'Outcome' | 'Goal';
   name: string;
   notes?: string;
   primaryDataSource?: string;
@@ -130,7 +131,7 @@ export type AutoCalculatedIndicatorPayload = {
   category: 'Project Objectives' | 'Climate' | 'Community' | 'Biodiversity';
   classId?: 'Cumulative' | 'Level';
   description: string;
-  frequency?: 'Annual' | 'Bi-Annual' | 'MRV Cycle';
+  frequency?: 'Annual' | 'Bi-Annual' | 'MRV Cycle' | 'Quarterly';
   indicator:
     | 'Seeds Collected'
     | 'Seedlings'
@@ -138,7 +139,7 @@ export type AutoCalculatedIndicatorPayload = {
     | 'Species Planted'
     | 'Hectares Planted'
     | 'Survival Rate';
-  level: 'Activity' | 'Output' | 'Outcome' | 'Impact';
+  level: 'Process' | 'Output' | 'Outcome' | 'Goal';
   name: string;
   notes?: string;
   primaryDataSource?: string;
@@ -155,10 +156,10 @@ export type ExistingCommonIndicatorPayload = {
   category: 'Project Objectives' | 'Climate' | 'Community' | 'Biodiversity';
   classId?: 'Cumulative' | 'Level';
   description?: string;
-  frequency?: 'Annual' | 'Bi-Annual' | 'MRV Cycle';
+  frequency?: 'Annual' | 'Bi-Annual' | 'MRV Cycle' | 'Quarterly';
   id: number;
   isPublishable: boolean;
-  level: 'Activity' | 'Output' | 'Outcome' | 'Impact';
+  level: 'Process' | 'Output' | 'Outcome' | 'Goal';
   name: string;
   notes?: string;
   primaryDataSource?: string;

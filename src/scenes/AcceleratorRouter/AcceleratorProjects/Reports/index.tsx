@@ -4,6 +4,7 @@ import { Navigate, Route, Routes, useParams } from 'react-router';
 import { APP_PATHS } from 'src/constants';
 
 import EditSettings from './EditSettings';
+import NewIndicator from './NewIndicator';
 import NewProjectSpecificMetric from './NewProjectSpecificMetric';
 import NewStandardMetric from './NewStandardMetric';
 import ReportView from './ReportView';
@@ -20,6 +21,7 @@ const ReportsRouter = () => {
       <Route path='/edit' element={<EditSettings />} />
       <Route path='/metrics/new' element={<NewProjectSpecificMetric />} />
       <Route path='/standard-metrics/new' element={<NewStandardMetric />} />
+      <Route path='/indicators/new' element={<NewIndicator />} />
       <Route
         path='*'
         element={<Navigate to={APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', `${projectId}`)} />}

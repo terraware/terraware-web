@@ -1,6 +1,8 @@
 import React, { useMemo } from 'react';
+import { useParams } from 'react-router';
 
 import { Box } from '@mui/material';
+import { Button } from '@terraware/web-components';
 import Tabs from '@terraware/web-components/components/Tabs';
 
 import AcceleratorReportTargetsTable from 'src/components/AcceleratorReports/AcceleratorReportTargetsTable';
@@ -8,6 +10,7 @@ import AcceleratorReportsTable from 'src/components/AcceleratorReports/Accelerat
 import Page from 'src/components/Page';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
+import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
@@ -18,6 +21,8 @@ const ReportsView = () => {
   const { crumbs, acceleratorProject, project } = useAcceleratorProjectData();
   const { strings } = useLocalization();
   const improvedReportsEnabled = isEnabled('Improved Reports');
+  const { goToNewIndicator } = useNavigateTo();
+  const pathParams = useParams<{ projectId: string }>();
 
   const tabs = useMemo(() => {
     return [
@@ -57,6 +62,16 @@ const ReportsView = () => {
       ]}
       title={strings.REPORTS}
       titleStyle={{ paddingTop: '16px' }}
+      rightComponent={
+        improvedReportsEnabled && activeTab === 'settings' ? (
+          <Button
+            label={strings.ADD_INDICATOR}
+            icon='plus'
+            size='medium'
+            onClick={() => goToNewIndicator(pathParams.projectId ?? '')}
+          />
+        ) : undefined
+      }
     >
       <Box display='flex' flexDirection='column' flexGrow={1} width={'100%'}>
         <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />

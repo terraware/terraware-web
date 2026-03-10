@@ -53,7 +53,7 @@ export default function NewStandardMetric(): JSX.Element {
     isPublishable: true,
     name: '',
     reference: '',
-    type: 'Activity',
+    type: 'Process',
   });
 
   const saveNewMetric = useCallback(() => {
