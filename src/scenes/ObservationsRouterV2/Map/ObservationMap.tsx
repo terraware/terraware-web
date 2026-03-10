@@ -1230,24 +1230,29 @@ const ObservationMap = ({
   ]);
 
   const [showHoverLocation, setShowHoverTextLocation] = useState<Point>();
-  const onHover = useCallback((event: MapMouseEvent) => {
-    const features = event.features;
-    if (features && features.length) {
-      const properties = features
-        .map((feature) => feature.properties)
-        .filter(
-          (featureProperties): featureProperties is MapProperties =>
-            !!featureProperties && featureProperties.id !== undefined && featureProperties.priority !== undefined
-        );
+  const onHover = useCallback(
+    (event: MapMouseEvent) => {
+      const features = event.features;
+      if (features && features.length) {
+        const properties = features
+          .map((feature) => feature.properties)
+          .filter(
+            (featureProperties): featureProperties is MapProperties =>
+              !!featureProperties && featureProperties.id !== undefined && featureProperties.priority !== undefined
+          );
 
-      if (properties.length && properties.every((featureProperties) => !featureProperties.clickable)) {
-        setShowHoverTextLocation(event.point);
-        return;
+        if (properties.length && properties.every((featureProperties) => !featureProperties.clickable)) {
+          if (!showHoverLocation) {
+            setShowHoverTextLocation(event.point);
+          }
+          return;
+        }
       }
-    }
 
-    setShowHoverTextLocation(undefined);
-  }, []);
+      setShowHoverTextLocation(undefined);
+    },
+    [showHoverLocation]
+  );
 
   const unclickableHoverTag = useMemo(() => {
     if (showHoverLocation) {
@@ -1277,7 +1282,7 @@ const ObservationMap = ({
     } else {
       return undefined;
     }
-  }, [showHoverLocation, strings.AREA_NOT_OBSERVED, theme.palette.TwClrBaseWhite]);
+  }, [showHoverLocation, strings.AREA_NOT_OBSERVED, theme.palette.TwClrBaseBlack]);
 
   return (
     <MapComponent
