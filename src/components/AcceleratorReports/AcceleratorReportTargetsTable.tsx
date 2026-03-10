@@ -407,16 +407,13 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
     [theme]
   );
 
-  const ClassIdCell = useCallback(
-    ({ cell }: { cell: MRT_Cell<RowMetric> }) => {
-      const classId = cell.getValue<string | undefined>();
-      if (!classId) {
-        return null;
-      }
-      return <>{classId === 'Cumulative' ? strings.CUMULATIVE : strings.LEVEL}</>;
-    },
-    []
-  );
+  const ClassIdCell = useCallback(({ cell }: { cell: MRT_Cell<RowMetric> }) => {
+    const classId = cell.getValue<string | undefined>();
+    if (!classId) {
+      return null;
+    }
+    return <>{classId === 'Cumulative' ? strings.CUMULATIVE : strings.LEVEL}</>;
+  }, []);
 
   const tableColumns = useMemo(() => {
     const baseColumns: EditableTableColumn<RowMetric>[] = [
