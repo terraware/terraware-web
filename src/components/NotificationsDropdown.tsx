@@ -18,6 +18,7 @@ import { Button, Tooltip } from '@terraware/web-components';
 import { DateTime } from 'luxon';
 
 import { API_PULL_INTERVAL, APP_PATHS } from 'src/constants';
+import useClientNotifications from 'src/hooks/useClientNotifications';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import { useMarkAllReadMutation, useMarkReadMutation, useReadAllQuery } from 'src/queries/generated/notifications';
@@ -26,7 +27,6 @@ import preventDefault from 'src/utils/preventDefaultEvent';
 import stopPropagation from 'src/utils/stopPropagationEvent';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
-import useClientNotifications from 'src/hooks/useClientNotifications';
 import DivotPopover from './common/DivotPopover';
 import ErrorBox from './common/ErrorBox/ErrorBox';
 import Timestamp from './common/Timestamp';
