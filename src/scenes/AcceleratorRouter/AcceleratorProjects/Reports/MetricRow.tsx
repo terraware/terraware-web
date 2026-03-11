@@ -3,8 +3,10 @@ import React, { type JSX, useCallback, useEffect, useState } from 'react';
 import { Box, Collapse, Divider, Grid, IconButton, Tooltip, Typography, useTheme } from '@mui/material';
 import { Dropdown, DropdownItem, Icon, Textfield } from '@terraware/web-components';
 
+import EditProgressModal from 'src/components/AcceleratorReports/EditProgressModal';
 import MetricStatusBadge from 'src/components/AcceleratorReports/MetricStatusBadge';
 import ProgressChart from 'src/components/common/Chart/ProgressChart';
+import ResetMetricModal from 'src/components/AcceleratorReports/ResetMetricModal';
 import Button from 'src/components/common/button/Button';
 import useBoolean from 'src/hooks/useBoolean';
 import { useLocalization } from 'src/providers';
@@ -61,8 +63,10 @@ const MetricRow = ({
   const theme = useTheme();
   const { strings } = useLocalization();
   const [expanded, setExpanded] = useState(false);
-  const [record, setRecord, , onChangeCallback] = useForm<IndicatorMetric>(metric);
+  const [record, setRecord, onChange, onChangeCallback] = useForm<IndicatorMetric>(metric);
   const [internalEditing, setInternalEditing, setInternalEditingTrue, setInternalEditingFalse] = useBoolean(false);
+  const [progressModalOpened, , openProgressModal, closeProgressModal] = useBoolean(false);
+  const [resetMetricModalOpened, , openResetMetricModal, closeResetMetricModal] = useBoolean(false);
 
   const [reviewReportIndicators, reviewReportIndicatorsResponse] = useReviewAcceleratorReportIndicatorsMutation();
   const snackbar = useSnackbar();
@@ -187,21 +191,50 @@ const MetricRow = ({
     e.stopPropagation();
   }, []);
 
+  const onChangeProgress = useCallback(
+    (newValue: string | undefined) => {
+      onChange('overrideValue', newValue);
+    },
+    [onChange]
+  );
+
+  const onResetIndicator = useCallback(() => {
+    onChange('overrideValue', undefined);
+    closeResetMetricModal();
+  }, [onChange, closeResetMetricModal]);
+
   const actualValueLabel = `${reportLabel} ${strings.ACTUAL}${unit ? ` (${unit})` : ''}`;
 
   const renderActualValueInput = () => {
     if (isAutoCalculatedIndicator(record)) {
+      const displayVal = record.overrideValue ?? record.systemValue ?? 0;
       return (
-        <Textfield
-          type='number'
-          label={actualValueLabel}
-          value={record.overrideValue ?? record.systemValue}
-          id='overrideValue'
-          onChange={onChangeCallback('overrideValue')}
-          display={false}
-          required={true}
-          min={0}
-        />
+        <Box>
+          <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxtSecondary} marginBottom={0.5}>
+            {actualValueLabel}
+          </Typography>
+          <Box display='flex' alignItems='center'>
+            <Typography fontSize='20px' fontWeight={600}>
+              {displayVal} {unit}
+            </Typography>
+            {record.overrideValue === undefined && (
+              <Tooltip title={strings.TERRAWARE_METRIC_MESSAGE}>
+                <Box display='flex' alignItems='center' paddingLeft={1}>
+                  <Icon name='iconDataMigration' size='medium' fillColor={theme.palette.TwClrIcnSecondary} />
+                </Box>
+              </Tooltip>
+            )}
+            {record.overrideValue !== undefined && (
+              <Button icon='iconUndo' onClick={openResetMetricModal} priority='ghost' size='small' type='passive' />
+            )}
+            <Button icon='iconEdit' onClick={openProgressModal} priority='ghost' size='small' type='passive' />
+          </Box>
+          {record.overrideValue !== undefined && (
+            <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary} paddingTop={0.5}>
+              {String(strings.OVERWRITTEN_ORIGINAL_VALUE).replace('{0}', String(record.systemValue ?? ''))}
+            </Typography>
+          )}
+        </Box>
       );
     }
     if (isCommonOrProjectIndicator(record)) {
@@ -222,7 +255,18 @@ const MetricRow = ({
   };
 
   return (
-    <Box>
+    <>
+      {progressModalOpened && isAutoCalculatedIndicator(record) && (
+        <EditProgressModal
+          metricName={getMetricName()}
+          target={targetValue}
+          onChange={onChangeProgress}
+          value={record.overrideValue ?? record.systemValue ?? 0}
+          onClose={closeProgressModal}
+        />
+      )}
+      {resetMetricModalOpened && <ResetMetricModal onClose={closeResetMetricModal} onSubmit={onResetIndicator} />}
+      <Box>
       <Box
         sx={{
           background: internalEditing ? theme.palette.TwClrBgActive : 'none',
@@ -281,18 +325,41 @@ const MetricRow = ({
                     </Box>
                   </Tooltip>
                 </Box>
-                <Typography fontSize='20px' fontWeight={600}>
-                  {cumulativeValue} {unit}
-                </Typography>
+                <Box display='flex' alignItems='center'>
+                  <Typography fontSize='20px' fontWeight={600}>
+                    {cumulativeValue} {unit}
+                  </Typography>
+                  {isAutoCalculatedIndicator(metric) && metric.overrideValue === undefined && (
+                    <Tooltip title={strings.TERRAWARE_METRIC_MESSAGE}>
+                      <Box display='flex' alignItems='center' paddingLeft={1}>
+                        <Icon name='iconDataMigration' size='medium' fillColor={theme.palette.TwClrIcnSecondary} />
+                      </Box>
+                    </Tooltip>
+                  )}
+                </Box>
               </>
             ) : (
               <>
                 <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxtSecondary} marginBottom={0.5}>
                   {reportLabel} {strings.ACTUAL}
                 </Typography>
-                <Typography fontSize='20px' fontWeight={600}>
-                  {actualValue} {unit}
-                </Typography>
+                <Box display='flex' alignItems='center'>
+                  <Typography fontSize='20px' fontWeight={600}>
+                    {actualValue} {unit}
+                  </Typography>
+                  {isAutoCalculatedIndicator(metric) && metric.overrideValue === undefined && (
+                    <Tooltip title={strings.TERRAWARE_METRIC_MESSAGE}>
+                      <Box display='flex' alignItems='center' paddingLeft={1}>
+                        <Icon name='iconDataMigration' size='medium' fillColor={theme.palette.TwClrIcnSecondary} />
+                      </Box>
+                    </Tooltip>
+                  )}
+                </Box>
+                {isAutoCalculatedIndicator(metric) && metric.overrideValue !== undefined && (
+                  <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary} paddingTop={0.5}>
+                    {String(strings.OVERWRITTEN_ORIGINAL_VALUE).replace('{0}', String(metric.systemValue ?? ''))}
+                  </Typography>
+                )}
               </>
             )}
           </Box>
@@ -431,9 +498,23 @@ const MetricRow = ({
                     <Typography fontSize='14px' fontWeight={600} marginBottom={0.5}>
                       {reportLabel} {strings.ACTUAL}
                     </Typography>
-                    <Typography fontSize='28px' fontWeight={600}>
-                      {actualValue} {unit}
-                    </Typography>
+                    <Box display='flex' alignItems='center'>
+                      <Typography fontSize='28px' fontWeight={600}>
+                        {actualValue} {unit}
+                      </Typography>
+                      {isAutoCalculatedIndicator(metric) && metric.overrideValue === undefined && (
+                        <Tooltip title={strings.TERRAWARE_METRIC_MESSAGE}>
+                          <Box display='flex' alignItems='center' paddingLeft={1}>
+                            <Icon name='iconDataMigration' size='medium' fillColor={theme.palette.TwClrIcnSecondary} />
+                          </Box>
+                        </Tooltip>
+                      )}
+                    </Box>
+                    {isAutoCalculatedIndicator(metric) && metric.overrideValue !== undefined && (
+                      <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary} paddingTop={0.5}>
+                        {String(strings.OVERWRITTEN_ORIGINAL_VALUE).replace('{0}', String(metric.systemValue ?? ''))}
+                      </Typography>
+                    )}
                   </Grid>
                 )}
                 {metric.projectsComments && (
@@ -464,6 +545,7 @@ const MetricRow = ({
 
       <Divider />
     </Box>
+    </>
   );
 };
 
