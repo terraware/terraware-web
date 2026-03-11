@@ -338,7 +338,7 @@ const ReportView = () => {
                 canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
               />
               {improvedReportsEnabled && (
-                <Typography fontSize={'20px'} fontWeight={600}>
+                <Typography fontSize={'20px'} fontWeight={600} paddingTop={'16px'} paddingLeft={'16px'}>
                   {strings.PROGRESS}
                 </Typography>
               )}
