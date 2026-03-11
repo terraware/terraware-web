@@ -75,8 +75,7 @@ const IndicatorBox = ({ editing = false, metric, type, year, onChangeIndicator }
             </Typography>
             <Box display={'flex'} alignItems={'center'} paddingTop={1.5} paddingBottom={theme.spacing(2)}>
               <Typography>
-                {record.overrideValue ?? record.systemValue ?? '--'} / {metric.target ?? '--'} ({year}{' '}
-                {strings.TARGET})
+                {record.overrideValue ?? record.systemValue ?? '--'} / {metric.target ?? '--'} ({year} {strings.TARGET})
               </Typography>
               {record.overrideValue === undefined && (
                 <Box paddingTop={1} paddingLeft={1.5}>

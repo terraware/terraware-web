@@ -341,13 +341,15 @@ const MetricRow = ({
                     <Typography fontSize='20px' fontWeight={600}>
                       {hasCumulativeEntries ? `${cumulativeValue}${unit ? ` ${unit}` : ''}` : '--'}
                     </Typography>
-                    {hasCumulativeEntries && isAutoCalculatedIndicator(metric) && metric.overrideValue === undefined && (
-                      <Tooltip title={strings.TERRAWARE_METRIC_MESSAGE}>
-                        <Box display='flex' alignItems='center' paddingLeft={1}>
-                          <Icon name='iconDataMigration' size='medium' fillColor={theme.palette.TwClrIcnSecondary} />
-                        </Box>
-                      </Tooltip>
-                    )}
+                    {hasCumulativeEntries &&
+                      isAutoCalculatedIndicator(metric) &&
+                      metric.overrideValue === undefined && (
+                        <Tooltip title={strings.TERRAWARE_METRIC_MESSAGE}>
+                          <Box display='flex' alignItems='center' paddingLeft={1}>
+                            <Icon name='iconDataMigration' size='medium' fillColor={theme.palette.TwClrIcnSecondary} />
+                          </Box>
+                        </Tooltip>
+                      )}
                   </Box>
                 </>
               ) : (
