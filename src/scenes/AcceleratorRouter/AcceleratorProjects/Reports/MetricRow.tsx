@@ -125,9 +125,17 @@ const MetricRow = ({
   const actualValue = getActualValue();
   const unit = getUnit();
 
+  const hasActualValue = isAutoCalculatedIndicator(record)
+    ? record.overrideValue !== undefined || record.systemValue !== undefined
+    : isCommonOrProjectIndicator(record)
+      ? record.value !== undefined && record.value !== null
+      : false;
+  const hasTargetValue = metric.target !== undefined && metric.target !== null;
+
   const currentYearProgress = metric.currentYearProgress;
   const isCumulative = metric.classId === 'Cumulative';
   const previousYearCumulativeTotal = metric.previousYearCumulativeTotal ?? 0;
+  const hasCumulativeEntries = (currentYearProgress?.length ?? 0) > 0 || previousYearCumulativeTotal !== 0;
   const cumulativeValue = isCumulative
     ? (currentYearProgress?.reduce((sum, q) => sum + q.value, 0) ?? 0) + previousYearCumulativeTotal
     : 0;
@@ -139,6 +147,7 @@ const MetricRow = ({
   const completionDenominator = targetValue - baseline;
   const percentComplete =
     completionDenominator !== 0 ? Math.round(((displayValue - baseline) / completionDenominator) * 100) : 0;
+  const showPercentComplete = hasActualValue && hasTargetValue;
 
   const hasComments = !!metric.projectsComments || (!hideProgressNotes && !!metric.progressNotes);
   const canExpand = hasComments || isCumulative;
@@ -210,7 +219,7 @@ const MetricRow = ({
 
   const renderActualValueInput = () => {
     if (isAutoCalculatedIndicator(record)) {
-      const displayVal = record.overrideValue ?? record.systemValue ?? 0;
+      const displayVal = record.overrideValue ?? record.systemValue;
       return (
         <Box>
           <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxtSecondary} marginBottom={0.5}>
@@ -218,7 +227,7 @@ const MetricRow = ({
           </Typography>
           <Box display='flex' alignItems='center'>
             <Typography fontSize='20px' fontWeight={600}>
-              {displayVal} {unit}
+              {displayVal !== undefined ? `${displayVal}${unit ? ` ${unit}` : ''}` : '--'}
             </Typography>
             {record.overrideValue === undefined && (
               <Tooltip title={strings.TERRAWARE_METRIC_MESSAGE}>
@@ -330,15 +339,17 @@ const MetricRow = ({
                   </Box>
                   <Box display='flex' alignItems='center'>
                     <Typography fontSize='20px' fontWeight={600}>
-                      {cumulativeValue} {unit}
+                      {hasCumulativeEntries ? `${cumulativeValue}${unit ? ` ${unit}` : ''}` : '--'}
                     </Typography>
-                    {isAutoCalculatedIndicator(metric) && metric.overrideValue === undefined && (
-                      <Tooltip title={strings.TERRAWARE_METRIC_MESSAGE}>
-                        <Box display='flex' alignItems='center' paddingLeft={1}>
-                          <Icon name='iconDataMigration' size='medium' fillColor={theme.palette.TwClrIcnSecondary} />
-                        </Box>
-                      </Tooltip>
-                    )}
+                    {hasCumulativeEntries &&
+                      isAutoCalculatedIndicator(metric) &&
+                      metric.overrideValue === undefined && (
+                        <Tooltip title={strings.TERRAWARE_METRIC_MESSAGE}>
+                          <Box display='flex' alignItems='center' paddingLeft={1}>
+                            <Icon name='iconDataMigration' size='medium' fillColor={theme.palette.TwClrIcnSecondary} />
+                          </Box>
+                        </Tooltip>
+                      )}
                   </Box>
                 </>
               ) : (
@@ -353,9 +364,9 @@ const MetricRow = ({
                   </Typography>
                   <Box display='flex' alignItems='center'>
                     <Typography fontSize='20px' fontWeight={600}>
-                      {actualValue} {unit}
+                      {hasActualValue ? `${actualValue}${unit ? ` ${unit}` : ''}` : '--'}
                     </Typography>
-                    {isAutoCalculatedIndicator(metric) && metric.overrideValue === undefined && (
+                    {hasActualValue && isAutoCalculatedIndicator(metric) && metric.overrideValue === undefined && (
                       <Tooltip title={strings.TERRAWARE_METRIC_MESSAGE}>
                         <Box display='flex' alignItems='center' paddingLeft={1}>
                           <Icon name='iconDataMigration' size='medium' fillColor={theme.palette.TwClrIcnSecondary} />
@@ -379,7 +390,7 @@ const MetricRow = ({
                 {year} {strings.TARGET}
               </Typography>
               <Typography fontSize='20px' fontWeight={600}>
-                {targetValue} {unit}
+                {hasTargetValue ? `${targetValue}${unit ? ` ${unit}` : ''}` : '--'}
               </Typography>
             </Box>
 
@@ -390,7 +401,7 @@ const MetricRow = ({
                 {year} % {strings.COMPLETE}
               </Typography>
               <Typography fontSize='20px' fontWeight={600}>
-                {percentComplete}%
+                {showPercentComplete ? `${percentComplete}%` : '--'}
               </Typography>
             </Box>
 
@@ -515,9 +526,9 @@ const MetricRow = ({
                       </Typography>
                       <Box display='flex' alignItems='center'>
                         <Typography fontSize='28px' fontWeight={600}>
-                          {actualValue} {unit}
+                          {hasActualValue ? `${actualValue}${unit ? ` ${unit}` : ''}` : '--'}
                         </Typography>
-                        {isAutoCalculatedIndicator(metric) && metric.overrideValue === undefined && (
+                        {hasActualValue && isAutoCalculatedIndicator(metric) && metric.overrideValue === undefined && (
                           <Tooltip title={strings.TERRAWARE_METRIC_MESSAGE}>
                             <Box display='flex' alignItems='center' paddingLeft={1}>
                               <Icon
