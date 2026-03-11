@@ -1,3 +1,4 @@
+e82372d0acb4 SW-8174 Display "--" instead of 0 if there is no value (#5423)
 8d810473af42 SW-8166 Update alignment for comments/notes in report to align with sections above (#5422)
 9b1271b5f48d SW-8164 Remove pagination for indicator table (#5421)
 6597ef47227e SW-8172 Reload every report when updating values (#5420)
