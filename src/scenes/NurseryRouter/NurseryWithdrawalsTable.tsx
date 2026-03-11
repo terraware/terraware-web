@@ -543,7 +543,11 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
             values: [String(filterValue)],
           })),
         } as OrNodePayload;
-      });
+      })
+      .filter(
+        (node): node is SearchNodePayload =>
+          !(node.operation === 'or' && (node as OrNodePayload).children?.length === 0)
+      );
   }, [columnFilters, columns, purposeLabelToValue]);
 
   const searchChildren: SearchNodePayload[] = useMemo(() => {
