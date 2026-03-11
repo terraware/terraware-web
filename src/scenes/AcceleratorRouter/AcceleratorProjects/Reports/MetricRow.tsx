@@ -135,7 +135,7 @@ const MetricRow = ({
   const currentYearProgress = metric.currentYearProgress;
   const isCumulative = metric.classId === 'Cumulative';
   const previousYearCumulativeTotal = metric.previousYearCumulativeTotal ?? 0;
-  const hasCumulativeEntries = (currentYearProgress?.length ?? 0) > 0;
+  const hasCumulativeEntries = (currentYearProgress?.length ?? 0) > 0 || previousYearCumulativeTotal !== 0;
   const cumulativeValue = isCumulative
     ? (currentYearProgress?.reduce((sum, q) => sum + q.value, 0) ?? 0) + previousYearCumulativeTotal
     : 0;
