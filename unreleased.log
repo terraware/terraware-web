@@ -1,3 +1,5 @@
+47c50489af85 SW-8163 Some indicator names are not left aligned in indicator table (#5419)
+270be8545bf2 SW-8165 Fix placement of "Progress" section title in report (#5418)
 c828e81335f7 SW-8167 Fields at the end of reports should still show up in reports (#5416)
 27577bf19b1e SW-8172 Cumulative Progress should show cumulative total not just for the year (#5415)
 e22e44802353 SW-8159 Fix clearing date filter in Nursery Withdrawals table (#5414)
