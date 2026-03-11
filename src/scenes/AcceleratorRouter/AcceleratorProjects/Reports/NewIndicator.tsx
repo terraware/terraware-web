@@ -68,9 +68,11 @@ export default function NewIndicator(): JSX.Element {
   const [newIndicator, , , onChangeCallback] = useForm<NewIndicatorPayload>({
     active: true,
     category: 'Biodiversity',
+    classId: 'Level',
     isPublishable: true,
     level: 'Goal',
     name: '',
+    precision: 0,
     refId: '',
   });
 

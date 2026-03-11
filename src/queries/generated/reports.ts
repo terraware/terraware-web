@@ -572,7 +572,7 @@ export type CumulativeIndicatorProgressPayload = {
 export type ReportAutoCalculatedIndicatorPayload = {
   baseline?: number;
   category: 'Project Objectives' | 'Climate' | 'Community' | 'Biodiversity';
-  classId?: 'Cumulative' | 'Level';
+  classId: 'Cumulative' | 'Level';
   /** If the indicator is cumulative, the list of actual values for all quarters in the report's year */
   currentYearProgress?: CumulativeIndicatorProgressPayload[];
   description?: string;
@@ -604,7 +604,7 @@ export type ReportChallengePayload = {
 export type ReportCommonIndicatorPayload = {
   baseline?: number;
   category: 'Project Objectives' | 'Climate' | 'Community' | 'Biodiversity';
-  classId?: 'Cumulative' | 'Level';
+  classId: 'Cumulative' | 'Level';
   /** If the indicator is cumulative, the list of actual values for all quarters in the report's year */
   currentYearProgress?: CumulativeIndicatorProgressPayload[];
   description?: string;
@@ -633,7 +633,7 @@ export type ReportPhotoPayload = {
 export type ReportProjectIndicatorPayload = {
   baseline?: number;
   category: 'Project Objectives' | 'Climate' | 'Community' | 'Biodiversity';
-  classId?: 'Cumulative' | 'Level';
+  classId: 'Cumulative' | 'Level';
   /** If the indicator is cumulative, the list of actual values for all quarters in the report's year */
   currentYearProgress?: CumulativeIndicatorProgressPayload[];
   description?: string;
@@ -837,7 +837,7 @@ export type UpdateAcceleratorReportConfigRequestPayload = {
 export type ExistingProjectIndicatorPayload = {
   active: boolean;
   category: 'Project Objectives' | 'Climate' | 'Community' | 'Biodiversity';
-  classId?: 'Cumulative' | 'Level';
+  classId: 'Cumulative' | 'Level';
   description?: string;
   frequency?: 'Annual' | 'Bi-Annual' | 'MRV Cycle' | 'Quarterly';
   id: number;
@@ -845,6 +845,7 @@ export type ExistingProjectIndicatorPayload = {
   level: 'Process' | 'Output' | 'Outcome' | 'Goal';
   name: string;
   notes?: string;
+  precision: number;
   primaryDataSource?: string;
   projectId: number;
   refId: string;
@@ -858,13 +859,14 @@ export type ListProjectIndicatorsResponsePayload = {
 export type NewIndicatorPayload = {
   active: boolean;
   category: 'Project Objectives' | 'Climate' | 'Community' | 'Biodiversity';
-  classId?: 'Cumulative' | 'Level';
+  classId: 'Cumulative' | 'Level';
   description?: string;
   frequency?: 'Annual' | 'Bi-Annual' | 'MRV Cycle' | 'Quarterly';
   isPublishable: boolean;
   level: 'Process' | 'Output' | 'Outcome' | 'Goal';
   name: string;
   notes?: string;
+  precision: number;
   primaryDataSource?: string;
   refId: string;
   tfOwner?: string;
