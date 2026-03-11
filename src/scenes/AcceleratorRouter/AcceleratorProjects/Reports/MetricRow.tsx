@@ -5,8 +5,8 @@ import { Dropdown, DropdownItem, Icon, Textfield } from '@terraware/web-componen
 
 import EditProgressModal from 'src/components/AcceleratorReports/EditProgressModal';
 import MetricStatusBadge from 'src/components/AcceleratorReports/MetricStatusBadge';
-import ProgressChart from 'src/components/common/Chart/ProgressChart';
 import ResetMetricModal from 'src/components/AcceleratorReports/ResetMetricModal';
+import ProgressChart from 'src/components/common/Chart/ProgressChart';
 import Button from 'src/components/common/button/Button';
 import useBoolean from 'src/hooks/useBoolean';
 import { useLocalization } from 'src/providers';
@@ -267,207 +267,200 @@ const MetricRow = ({
       )}
       {resetMetricModalOpened && <ResetMetricModal onClose={closeResetMetricModal} onSubmit={onResetIndicator} />}
       <Box>
-      <Box
-        sx={{
-          background: internalEditing ? theme.palette.TwClrBgActive : 'none',
-          '&:hover': {
-            background: internalEditing
-              ? theme.palette.TwClrBgActive
-              : canEdit || canExpand
-                ? theme.palette.TwClrBaseGray025
-                : 'none',
-            '.actions': { visibility: canEdit && !internalEditing ? 'visible' : 'hidden' },
-          },
-          '& .actions': { visibility: 'hidden' },
-        }}
-      >
         <Box
           sx={{
-            display: 'flex',
-            alignItems: 'center',
-            padding: theme.spacing(2, 3),
-            cursor: !internalEditing && canExpand ? 'pointer' : 'default',
+            background: internalEditing ? theme.palette.TwClrBgActive : 'none',
+            '&:hover': {
+              background: internalEditing
+                ? theme.palette.TwClrBgActive
+                : canEdit || canExpand
+                  ? theme.palette.TwClrBaseGray025
+                  : 'none',
+              '.actions': { visibility: canEdit && !internalEditing ? 'visible' : 'hidden' },
+            },
+            '& .actions': { visibility: 'hidden' },
           }}
-          onClick={onToggle}
         >
-          <Box flex={3} paddingRight={2}>
-            <Typography fontSize='16px' fontWeight={600} marginBottom={internalEditing ? 0 : 1}>
-              {getMetricName()}
-            </Typography>
-            {!internalEditing && (
-              <ProgressChart
-                value={actualValue}
-                target={targetValue}
-                quarterlyProgress={isCumulative ? currentYearProgress : undefined}
-                reportLabel={!isCumulative ? reportLabel : undefined}
-                previousYearValue={isCumulative ? previousYearDisplayValue : undefined}
-                previousYearLabel={isCumulative ? previousYearDisplayLabel : undefined}
-                yearLabel={isCumulative ? String(year) : undefined}
-                targetLabel={isCumulative ? strings.TARGET : undefined}
-              />
-            )}
-          </Box>
-
-          <Divider orientation='vertical' flexItem sx={{ marginX: 2 }} />
-
-          <Box flex={1} paddingX={2}>
-            {internalEditing && !isCumulative ? (
-              renderActualValueInput()
-            ) : isCumulative ? (
-              <>
-                <Box display='flex' alignItems='center' gap={0.5} marginBottom={0.5}>
-                  <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxtSecondary}>
-                    {strings.CUMULATIVE_PROGRESS}
-                  </Typography>
-                  <Tooltip title={strings.CUMULATIVE_PROGRESS_TOOLTIP}>
-                    <Box display='flex' alignItems='center'>
-                      <Icon name='info' size='small' fillColor={theme.palette.TwClrTxtSecondary} />
-                    </Box>
-                  </Tooltip>
-                </Box>
-                <Box display='flex' alignItems='center'>
-                  <Typography fontSize='20px' fontWeight={600}>
-                    {cumulativeValue} {unit}
-                  </Typography>
-                  {isAutoCalculatedIndicator(metric) && metric.overrideValue === undefined && (
-                    <Tooltip title={strings.TERRAWARE_METRIC_MESSAGE}>
-                      <Box display='flex' alignItems='center' paddingLeft={1}>
-                        <Icon name='iconDataMigration' size='medium' fillColor={theme.palette.TwClrIcnSecondary} />
-                      </Box>
-                    </Tooltip>
-                  )}
-                </Box>
-              </>
-            ) : (
-              <>
-                <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxtSecondary} marginBottom={0.5}>
-                  {reportLabel} {strings.ACTUAL}
-                </Typography>
-                <Box display='flex' alignItems='center'>
-                  <Typography fontSize='20px' fontWeight={600}>
-                    {actualValue} {unit}
-                  </Typography>
-                  {isAutoCalculatedIndicator(metric) && metric.overrideValue === undefined && (
-                    <Tooltip title={strings.TERRAWARE_METRIC_MESSAGE}>
-                      <Box display='flex' alignItems='center' paddingLeft={1}>
-                        <Icon name='iconDataMigration' size='medium' fillColor={theme.palette.TwClrIcnSecondary} />
-                      </Box>
-                    </Tooltip>
-                  )}
-                </Box>
-                {isAutoCalculatedIndicator(metric) && metric.overrideValue !== undefined && (
-                  <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary} paddingTop={0.5}>
-                    {String(strings.OVERWRITTEN_ORIGINAL_VALUE).replace('{0}', String(metric.systemValue ?? ''))}
-                  </Typography>
-                )}
-              </>
-            )}
-          </Box>
-
-          <Divider orientation='vertical' flexItem sx={{ marginX: 2 }} />
-
-          <Box flex={1} paddingX={2}>
-            <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxtSecondary} marginBottom={0.5}>
-              {year} {strings.TARGET}
-            </Typography>
-            <Typography fontSize='20px' fontWeight={600}>
-              {targetValue} {unit}
-            </Typography>
-          </Box>
-
-          <Divider orientation='vertical' flexItem sx={{ marginX: 2 }} />
-
-          <Box flex={1} paddingX={2}>
-            <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxtSecondary} marginBottom={0.5}>
-              {year} % {strings.COMPLETE}
-            </Typography>
-            <Typography fontSize='20px' fontWeight={600}>
-              {percentComplete}%
-            </Typography>
-          </Box>
-
-          <Divider orientation='vertical' flexItem sx={{ marginX: 2 }} />
-
-          <Box flex={1} paddingX={2}>
-            {internalEditing ? (
-              <Dropdown
-                label={strings.STATUS}
-                selectedValue={record.status}
-                options={indicatorStatusOptions}
-                onChange={onChangeCallback('status')}
-                placeholder='No Status'
-              />
-            ) : (
-              <>
-                <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxtSecondary} marginBottom={0.5}>
-                  {strings.STATUS}
-                </Typography>
-                {metric.status && <MetricStatusBadge status={metric.status} />}
-              </>
-            )}
-          </Box>
-
-          {!internalEditing && (
-            <Box className='actions' alignItems='center' onClick={handleEditClick} sx={{ marginLeft: 1 }}>
-              <Button
-                id='edit'
-                label={strings.EDIT}
-                onClick={setInternalEditingTrue}
-                icon='iconEdit'
-                priority='secondary'
-                size='small'
-                type='passive'
-                sx={{ '&.button': { margin: '4px' } }}
-              />
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              padding: theme.spacing(2, 3),
+              cursor: !internalEditing && canExpand ? 'pointer' : 'default',
+            }}
+            onClick={onToggle}
+          >
+            <Box flex={3} paddingRight={2}>
+              <Typography fontSize='16px' fontWeight={600} marginBottom={internalEditing ? 0 : 1}>
+                {getMetricName()}
+              </Typography>
+              {!internalEditing && (
+                <ProgressChart
+                  value={actualValue}
+                  target={targetValue}
+                  quarterlyProgress={isCumulative ? currentYearProgress : undefined}
+                  reportLabel={!isCumulative ? reportLabel : undefined}
+                  previousYearValue={isCumulative ? previousYearDisplayValue : undefined}
+                  previousYearLabel={isCumulative ? previousYearDisplayLabel : undefined}
+                  yearLabel={isCumulative ? String(year) : undefined}
+                  targetLabel={isCumulative ? strings.TARGET : undefined}
+                />
+              )}
             </Box>
-          )}
 
-          {!internalEditing && (
-            <IconButton size='small' sx={{ marginLeft: 1, visibility: canExpand ? 'visible' : 'hidden' }}>
-              <Icon
-                name={expanded ? 'chevronUp' : 'chevronDown'}
-                size='medium'
-                fillColor={theme.palette.TwClrIcnSecondary}
-              />
-            </IconButton>
-          )}
-        </Box>
+            <Divider orientation='vertical' flexItem sx={{ marginX: 2 }} />
 
-        <Collapse in={internalEditing || (canExpand && expanded)} unmountOnExit>
-          <Box padding={theme.spacing(0, 3, 3, 3)}>
-            {internalEditing ? (
-              <Grid container spacing={3}>
-                {isCumulative && (
-                  <Grid item xs={4}>
-                    {renderActualValueInput()}
-                  </Grid>
-                )}
-
-                <Grid item xs={isCumulative ? 4 : 6}>
-                  <Box sx={{ '.markdown a': { wordBreak: 'break-word' } }}>
-                    <Textfield
-                      type='textarea'
-                      label={strings.PROJECTS_COMMENTS}
-                      value={record.projectsComments}
-                      id='projectsComments'
-                      onChange={onChangeCallback('projectsComments')}
-                      display={false}
-                      styles={textAreaStyles}
-                      preserveNewlines
-                      markdown
-                    />
+            <Box flex={1} paddingX={2}>
+              {internalEditing && !isCumulative ? (
+                renderActualValueInput()
+              ) : isCumulative ? (
+                <>
+                  <Box display='flex' alignItems='center' gap={0.5} marginBottom={0.5}>
+                    <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxtSecondary}>
+                      {strings.CUMULATIVE_PROGRESS}
+                    </Typography>
+                    <Tooltip title={strings.CUMULATIVE_PROGRESS_TOOLTIP}>
+                      <Box display='flex' alignItems='center'>
+                        <Icon name='info' size='small' fillColor={theme.palette.TwClrTxtSecondary} />
+                      </Box>
+                    </Tooltip>
                   </Box>
-                </Grid>
+                  <Box display='flex' alignItems='center'>
+                    <Typography fontSize='20px' fontWeight={600}>
+                      {cumulativeValue} {unit}
+                    </Typography>
+                    {isAutoCalculatedIndicator(metric) && metric.overrideValue === undefined && (
+                      <Tooltip title={strings.TERRAWARE_METRIC_MESSAGE}>
+                        <Box display='flex' alignItems='center' paddingLeft={1}>
+                          <Icon name='iconDataMigration' size='medium' fillColor={theme.palette.TwClrIcnSecondary} />
+                        </Box>
+                      </Tooltip>
+                    )}
+                  </Box>
+                </>
+              ) : (
+                <>
+                  <Typography
+                    fontSize='14px'
+                    fontWeight={400}
+                    color={theme.palette.TwClrTxtSecondary}
+                    marginBottom={0.5}
+                  >
+                    {reportLabel} {strings.ACTUAL}
+                  </Typography>
+                  <Box display='flex' alignItems='center'>
+                    <Typography fontSize='20px' fontWeight={600}>
+                      {actualValue} {unit}
+                    </Typography>
+                    {isAutoCalculatedIndicator(metric) && metric.overrideValue === undefined && (
+                      <Tooltip title={strings.TERRAWARE_METRIC_MESSAGE}>
+                        <Box display='flex' alignItems='center' paddingLeft={1}>
+                          <Icon name='iconDataMigration' size='medium' fillColor={theme.palette.TwClrIcnSecondary} />
+                        </Box>
+                      </Tooltip>
+                    )}
+                  </Box>
+                  {isAutoCalculatedIndicator(metric) && metric.overrideValue !== undefined && (
+                    <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary} paddingTop={0.5}>
+                      {String(strings.OVERWRITTEN_ORIGINAL_VALUE).replace('{0}', String(metric.systemValue ?? ''))}
+                    </Typography>
+                  )}
+                </>
+              )}
+            </Box>
 
-                {!hideProgressNotes && (
+            <Divider orientation='vertical' flexItem sx={{ marginX: 2 }} />
+
+            <Box flex={1} paddingX={2}>
+              <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxtSecondary} marginBottom={0.5}>
+                {year} {strings.TARGET}
+              </Typography>
+              <Typography fontSize='20px' fontWeight={600}>
+                {targetValue} {unit}
+              </Typography>
+            </Box>
+
+            <Divider orientation='vertical' flexItem sx={{ marginX: 2 }} />
+
+            <Box flex={1} paddingX={2}>
+              <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxtSecondary} marginBottom={0.5}>
+                {year} % {strings.COMPLETE}
+              </Typography>
+              <Typography fontSize='20px' fontWeight={600}>
+                {percentComplete}%
+              </Typography>
+            </Box>
+
+            <Divider orientation='vertical' flexItem sx={{ marginX: 2 }} />
+
+            <Box flex={1} paddingX={2}>
+              {internalEditing ? (
+                <Dropdown
+                  label={strings.STATUS}
+                  selectedValue={record.status}
+                  options={indicatorStatusOptions}
+                  onChange={onChangeCallback('status')}
+                  placeholder='No Status'
+                />
+              ) : (
+                <>
+                  <Typography
+                    fontSize='14px'
+                    fontWeight={400}
+                    color={theme.palette.TwClrTxtSecondary}
+                    marginBottom={0.5}
+                  >
+                    {strings.STATUS}
+                  </Typography>
+                  {metric.status && <MetricStatusBadge status={metric.status} />}
+                </>
+              )}
+            </Box>
+
+            {!internalEditing && (
+              <Box className='actions' alignItems='center' onClick={handleEditClick} sx={{ marginLeft: 1 }}>
+                <Button
+                  id='edit'
+                  label={strings.EDIT}
+                  onClick={setInternalEditingTrue}
+                  icon='iconEdit'
+                  priority='secondary'
+                  size='small'
+                  type='passive'
+                  sx={{ '&.button': { margin: '4px' } }}
+                />
+              </Box>
+            )}
+
+            {!internalEditing && (
+              <IconButton size='small' sx={{ marginLeft: 1, visibility: canExpand ? 'visible' : 'hidden' }}>
+                <Icon
+                  name={expanded ? 'chevronUp' : 'chevronDown'}
+                  size='medium'
+                  fillColor={theme.palette.TwClrIcnSecondary}
+                />
+              </IconButton>
+            )}
+          </Box>
+
+          <Collapse in={internalEditing || (canExpand && expanded)} unmountOnExit>
+            <Box padding={theme.spacing(0, 3, 3, 3)}>
+              {internalEditing ? (
+                <Grid container spacing={3}>
+                  {isCumulative && (
+                    <Grid item xs={4}>
+                      {renderActualValueInput()}
+                    </Grid>
+                  )}
+
                   <Grid item xs={isCumulative ? 4 : 6}>
-                    <Box>
+                    <Box sx={{ '.markdown a': { wordBreak: 'break-word' } }}>
                       <Textfield
                         type='textarea'
-                        label={strings.PROGRESS_NOTES}
-                        value={record.progressNotes}
-                        id='progressNotes'
-                        onChange={onChangeCallback('progressNotes')}
+                        label={strings.PROJECTS_COMMENTS}
+                        value={record.projectsComments}
+                        id='projectsComments'
+                        onChange={onChangeCallback('projectsComments')}
                         display={false}
                         styles={textAreaStyles}
                         preserveNewlines
@@ -475,76 +468,97 @@ const MetricRow = ({
                       />
                     </Box>
                   </Grid>
-                )}
 
-                <Grid item xs={12}>
-                  <Box display='flex' justifyContent='flex-end'>
-                    <Button
-                      id='cancel'
-                      label={strings.CANCEL}
-                      type='passive'
-                      onClick={handleCancel}
-                      priority='secondary'
-                      key='button-1'
-                    />
-                    <Button id='save' onClick={onSave} label={strings.SAVE} key='button-2' priority='secondary' />
-                  </Box>
-                </Grid>
-              </Grid>
-            ) : (
-              <Grid container spacing={3}>
-                {isCumulative && (
-                  <Grid item xs={3}>
-                    <Typography fontSize='14px' fontWeight={600} marginBottom={0.5}>
-                      {reportLabel} {strings.ACTUAL}
-                    </Typography>
-                    <Box display='flex' alignItems='center'>
-                      <Typography fontSize='28px' fontWeight={600}>
-                        {actualValue} {unit}
-                      </Typography>
-                      {isAutoCalculatedIndicator(metric) && metric.overrideValue === undefined && (
-                        <Tooltip title={strings.TERRAWARE_METRIC_MESSAGE}>
-                          <Box display='flex' alignItems='center' paddingLeft={1}>
-                            <Icon name='iconDataMigration' size='medium' fillColor={theme.palette.TwClrIcnSecondary} />
-                          </Box>
-                        </Tooltip>
-                      )}
+                  {!hideProgressNotes && (
+                    <Grid item xs={isCumulative ? 4 : 6}>
+                      <Box>
+                        <Textfield
+                          type='textarea'
+                          label={strings.PROGRESS_NOTES}
+                          value={record.progressNotes}
+                          id='progressNotes'
+                          onChange={onChangeCallback('progressNotes')}
+                          display={false}
+                          styles={textAreaStyles}
+                          preserveNewlines
+                          markdown
+                        />
+                      </Box>
+                    </Grid>
+                  )}
+
+                  <Grid item xs={12}>
+                    <Box display='flex' justifyContent='flex-end'>
+                      <Button
+                        id='cancel'
+                        label={strings.CANCEL}
+                        type='passive'
+                        onClick={handleCancel}
+                        priority='secondary'
+                        key='button-1'
+                      />
+                      <Button id='save' onClick={onSave} label={strings.SAVE} key='button-2' priority='secondary' />
                     </Box>
-                    {isAutoCalculatedIndicator(metric) && metric.overrideValue !== undefined && (
-                      <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary} paddingTop={0.5}>
-                        {String(strings.OVERWRITTEN_ORIGINAL_VALUE).replace('{0}', String(metric.systemValue ?? ''))}
+                  </Grid>
+                </Grid>
+              ) : (
+                <Grid container spacing={3}>
+                  {isCumulative && (
+                    <Grid item xs={3}>
+                      <Typography fontSize='14px' fontWeight={600} marginBottom={0.5}>
+                        {reportLabel} {strings.ACTUAL}
                       </Typography>
-                    )}
-                  </Grid>
-                )}
-                {metric.projectsComments && (
-                  <Grid item xs={isCumulative ? 4 : 6}>
-                    <Typography fontSize='16px' fontWeight={600} marginBottom={1}>
-                      {strings.PROJECTS_COMMENTS}
-                    </Typography>
-                    <Typography fontSize='14px' color={theme.palette.TwClrBaseBlack} sx={{ whiteSpace: 'pre-wrap' }}>
-                      {metric.projectsComments}
-                    </Typography>
-                  </Grid>
-                )}
-                {!hideProgressNotes && metric.progressNotes && (
-                  <Grid item xs={isCumulative ? 5 : 6}>
-                    <Typography fontSize='16px' fontWeight={600} marginBottom={1}>
-                      {strings.PROGRESS_NOTES}
-                    </Typography>
-                    <Typography fontSize='14px' color={theme.palette.TwClrBaseBlack} sx={{ whiteSpace: 'pre-wrap' }}>
-                      {metric.progressNotes}
-                    </Typography>
-                  </Grid>
-                )}
-              </Grid>
-            )}
-          </Box>
-        </Collapse>
-      </Box>
+                      <Box display='flex' alignItems='center'>
+                        <Typography fontSize='28px' fontWeight={600}>
+                          {actualValue} {unit}
+                        </Typography>
+                        {isAutoCalculatedIndicator(metric) && metric.overrideValue === undefined && (
+                          <Tooltip title={strings.TERRAWARE_METRIC_MESSAGE}>
+                            <Box display='flex' alignItems='center' paddingLeft={1}>
+                              <Icon
+                                name='iconDataMigration'
+                                size='medium'
+                                fillColor={theme.palette.TwClrIcnSecondary}
+                              />
+                            </Box>
+                          </Tooltip>
+                        )}
+                      </Box>
+                      {isAutoCalculatedIndicator(metric) && metric.overrideValue !== undefined && (
+                        <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary} paddingTop={0.5}>
+                          {String(strings.OVERWRITTEN_ORIGINAL_VALUE).replace('{0}', String(metric.systemValue ?? ''))}
+                        </Typography>
+                      )}
+                    </Grid>
+                  )}
+                  {metric.projectsComments && (
+                    <Grid item xs={isCumulative ? 4 : 6}>
+                      <Typography fontSize='16px' fontWeight={600} marginBottom={1}>
+                        {strings.PROJECTS_COMMENTS}
+                      </Typography>
+                      <Typography fontSize='14px' color={theme.palette.TwClrBaseBlack} sx={{ whiteSpace: 'pre-wrap' }}>
+                        {metric.projectsComments}
+                      </Typography>
+                    </Grid>
+                  )}
+                  {!hideProgressNotes && metric.progressNotes && (
+                    <Grid item xs={isCumulative ? 5 : 6}>
+                      <Typography fontSize='16px' fontWeight={600} marginBottom={1}>
+                        {strings.PROGRESS_NOTES}
+                      </Typography>
+                      <Typography fontSize='14px' color={theme.palette.TwClrBaseBlack} sx={{ whiteSpace: 'pre-wrap' }}>
+                        {metric.progressNotes}
+                      </Typography>
+                    </Grid>
+                  )}
+                </Grid>
+              )}
+            </Box>
+          </Collapse>
+        </Box>
 
-      <Divider />
-    </Box>
+        <Divider />
+      </Box>
     </>
   );
 };
