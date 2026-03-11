@@ -456,7 +456,9 @@ const MetricRow = ({
                     </Grid>
                   )}
 
-                  <Grid item xs={isCumulative ? 4 : 6}>
+                  {!isCumulative && <Grid item xs={4} />}
+
+                  <Grid item xs={4}>
                     <Box sx={{ '.markdown a': { wordBreak: 'break-word' } }}>
                       <Textfield
                         type='textarea'
@@ -473,7 +475,7 @@ const MetricRow = ({
                   </Grid>
 
                   {!hideProgressNotes && (
-                    <Grid item xs={isCumulative ? 4 : 6}>
+                    <Grid item xs={4}>
                       <Box>
                         <Textfield
                           type='textarea'
@@ -507,7 +509,7 @@ const MetricRow = ({
               ) : (
                 <Grid container spacing={3}>
                   {isCumulative && (
-                    <Grid item xs={3}>
+                    <Grid item xs={4}>
                       <Typography fontSize='14px' fontWeight={600} marginBottom={0.5}>
                         {reportLabel} {strings.ACTUAL}
                       </Typography>
@@ -534,8 +536,11 @@ const MetricRow = ({
                       )}
                     </Grid>
                   )}
-                  {metric.projectsComments && (
-                    <Grid item xs={isCumulative ? 4 : 6}>
+                  {!isCumulative && (metric.projectsComments || (!hideProgressNotes && metric.progressNotes)) && (
+                    <Grid item xs={4} />
+                  )}
+                  {metric.projectsComments ? (
+                    <Grid item xs={4}>
                       <Typography fontSize='16px' fontWeight={600} marginBottom={1}>
                         {strings.PROJECTS_COMMENTS}
                       </Typography>
@@ -543,9 +548,11 @@ const MetricRow = ({
                         {metric.projectsComments}
                       </Typography>
                     </Grid>
+                  ) : (
+                    !hideProgressNotes && metric.progressNotes && <Grid item xs={4} />
                   )}
                   {!hideProgressNotes && metric.progressNotes && (
-                    <Grid item xs={isCumulative ? 5 : 6}>
+                    <Grid item xs={4}>
                       <Typography fontSize='16px' fontWeight={600} marginBottom={1}>
                         {strings.PROGRESS_NOTES}
                       </Typography>
