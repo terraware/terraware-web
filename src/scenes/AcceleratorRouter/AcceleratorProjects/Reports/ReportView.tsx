@@ -391,45 +391,41 @@ const ReportView = () => {
                   ));
                 })
               )}
-              {!improvedReportsEnabled && (
-                <>
-                  <AchievementsBox
-                    report={report}
-                    projectId={projectId}
-                    isConsoleView={true}
-                    onEditChange={onEditChange}
-                    canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
-                  />
-                  <ChallengesMitigationBox
-                    report={report}
-                    projectId={projectId}
-                    isConsoleView={true}
-                    onEditChange={onEditChange}
-                    canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
-                  />
-                  <FinancialSummariesBox
-                    report={report}
-                    projectId={projectId}
-                    isConsoleView={true}
-                    onEditChange={onEditChange}
-                    canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
-                  />
-                  <AdditionalCommentsBox
-                    report={report}
-                    projectId={projectId}
-                    isConsoleView={true}
-                    onEditChange={onEditChange}
-                    canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
-                  />
-                  <PhotosBox
-                    report={report}
-                    projectId={projectId}
-                    isConsoleView={true}
-                    onEditChange={onEditChange}
-                    canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
-                  />
-                </>
-              )}
+              <AchievementsBox
+                report={report}
+                projectId={projectId}
+                isConsoleView={true}
+                onEditChange={onEditChange}
+                canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
+              />
+              <ChallengesMitigationBox
+                report={report}
+                projectId={projectId}
+                isConsoleView={true}
+                onEditChange={onEditChange}
+                canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
+              />
+              <FinancialSummariesBox
+                report={report}
+                projectId={projectId}
+                isConsoleView={true}
+                onEditChange={onEditChange}
+                canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
+              />
+              <AdditionalCommentsBox
+                report={report}
+                projectId={projectId}
+                isConsoleView={true}
+                onEditChange={onEditChange}
+                canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
+              />
+              <PhotosBox
+                report={report}
+                projectId={projectId}
+                isConsoleView={true}
+                onEditChange={onEditChange}
+                canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
+              />
             </Card>
           </Box>
         )}
