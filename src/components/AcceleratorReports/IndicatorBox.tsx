@@ -1,7 +1,7 @@
 import React, { type JSX, useEffect } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { Textfield } from '@terraware/web-components';
+import { Icon, Textfield, Tooltip } from '@terraware/web-components';
 
 import {
   ReportAutoCalculatedIndicatorPayload,
@@ -69,20 +69,27 @@ const IndicatorBox = ({ editing = false, metric, type, year, onChangeIndicator }
     >
       <Grid item xs={6}>
         {isAutoCalculated(record) ? (
-          <Box display='flex' alignItems='center' paddingBottom={theme.spacing(2)}>
-            <Textfield
-              type='number'
-              label={strings.PROGRESS}
-              value={record.overrideValue ?? record.systemValue}
-              id='overrideValue'
-              onChange={onChangeCallback('overrideValue')}
-              display={!editing}
-              required={true}
-              min={0}
-            />
-            <Typography paddingTop={3} paddingLeft={0.5}>
-              / {metric.target || 0} ({year} {strings.TARGET})
+          <Box paddingBottom={theme.spacing(2)}>
+            <Typography fontSize={'14px'} color={theme.palette.TwClrTxtSecondary}>
+              {strings.PROGRESS}
             </Typography>
+            <Box display={'flex'} alignItems={'center'} paddingTop={1.5} paddingBottom={theme.spacing(2)}>
+              <Typography>
+                {(record.overrideValue ?? record.systemValue) || 0} / {metric.target || 0} ({year} {strings.TARGET})
+              </Typography>
+              {record.overrideValue === undefined && (
+                <Box paddingTop={1} paddingLeft={1.5}>
+                  <Tooltip title={strings.TERRAWARE_METRIC_MESSAGE}>
+                    <Icon name='iconDataMigration' size='medium' fillColor={theme.palette.TwClrIcnSecondary} />
+                  </Tooltip>
+                </Box>
+              )}
+            </Box>
+            {record.overrideValue !== undefined && (
+              <Typography fontSize={'14px'} color={theme.palette.TwClrTxtSecondary} paddingTop={1.5}>
+                {strings.formatString(strings.OVERWRITTEN_ORIGINAL_VALUE, record.systemValue ?? '')}
+              </Typography>
+            )}
           </Box>
         ) : (
           <Box display='flex' alignItems='center' paddingBottom={theme.spacing(2)}>
