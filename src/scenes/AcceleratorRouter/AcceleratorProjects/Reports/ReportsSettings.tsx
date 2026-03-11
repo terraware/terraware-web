@@ -555,7 +555,7 @@ export default function ReportsSettings(): JSX.Element {
             enableSorting={true}
             enableGlobalFilter={true}
             enableColumnFilters={false}
-            enablePagination={true}
+            enablePagination={false}
             enableColumnPinning={true}
             enableTopToolbar={false}
             initialSorting={[{ id: 'name', desc: false }]}
