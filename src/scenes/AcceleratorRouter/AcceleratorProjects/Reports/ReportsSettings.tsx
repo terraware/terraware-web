@@ -549,6 +549,7 @@ export default function ReportsSettings(): JSX.Element {
         </Grid>
         {improvedReportsEnabled && (
           <EditableTable
+            clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
             columns={indicatorColumns}
             data={allIndicatorRows}
             enableEditing={false}

@@ -47,7 +47,7 @@ import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import SelectSeedBankModal from '../../../scenes/SeedBanksRouter/SelectSeedBankModal';
 import ImportAccessionsModal from './ImportAccessionsModal';
 
-const STORAGE_KEY = 'accessions-database-table';
+const TABLE_STATE_STORAGE_KEY = 'accessions-database-table';
 
 const DEFAULT_VISIBLE_COLUMNS = [
   'accessionNumber',
@@ -172,7 +172,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
     showColumnFilters,
     showGlobalFilter,
     sorting,
-  } = useTableState(STORAGE_KEY, {
+  } = useTableState(TABLE_STATE_STORAGE_KEY, {
     defaultColumnOrder: DEFAULT_COLUMN_ORDER,
     defaultColumnVisibility: DEFAULT_COLUMN_VISIBILITY,
     defaultSorting: [{ id: 'accessionNumber', desc: false }],
@@ -758,6 +758,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
                   {searchResults !== undefined ? (
                     searchResults !== null ? (
                       <EditableTable
+                        clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
                         columns={editableColumns}
                         data={searchResults ?? []}
                         enableEditing={false}
@@ -765,7 +766,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
                         enableGlobalFilter={true}
                         enableColumnFilters={true}
                         enableColumnOrdering={true}
-                        storageKey={STORAGE_KEY}
+                        storageKey={TABLE_STATE_STORAGE_KEY}
                         enablePagination={false}
                         enableTopToolbar={true}
                         enableBottomToolbar={false}
