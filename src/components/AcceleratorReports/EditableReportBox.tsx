@@ -3,6 +3,7 @@ import React, { type JSX, ReactNode } from 'react';
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 
 import Button from 'src/components/common/button/Button';
+import isEnabled from 'src/features';
 import strings from 'src/strings';
 
 export type EditableReportBoxProps = {
@@ -35,6 +36,8 @@ const EditableReportBox = ({
   includeBorder = true,
 }: EditableReportBoxProps): JSX.Element => {
   const theme = useTheme();
+
+  const isImprovedReportsEnabled = isEnabled('Improved Reports');
 
   return (
     <>
@@ -84,7 +87,9 @@ const EditableReportBox = ({
                   marginBottom: theme.spacing(2),
                 }}
               >
-                <Typography fontWeight={600}>{name}</Typography>
+                <Typography fontWeight={600} fontSize={isImprovedReportsEnabled ? '20px' : '16px'}>
+                  {name}
+                </Typography>
                 {visibleToFunder !== undefined && (
                   <Typography
                     fontWeight={500}
