@@ -404,7 +404,7 @@ CULTIVATED_EX_SITU_DESCRIPTION,"Plants that have been grown in a nursery, seed p
 CUMULATIVE,Cumulative,
 CUMULATIVE_OR_LEVEL,Cumulative or Level,
 CUMULATIVE_PROGRESS,Cumulative Progress,
-CUMULATIVE_PROGRESS_TOOLTIP,The cumulative total of all quarters reported this year,
+CUMULATIVE_PROGRESS_TOOLTIP,The cumulative total of all quarters since the start,
 CURRENT_NEXT_OBSERVATION,Current/Next Observation,
 CURRENT_TIMELINE,Current Timeline,
 CURRENT_VIEW,Current View,
