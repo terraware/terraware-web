@@ -1,3 +1,4 @@
+95d7cfcff04c SW-8096 Add precision and classId to NewIndicatorPayload for BE updates (#5408)
 194953914354 SW-8168 Auto-calculated indicators should still have edit/reset mechanism (#5417)
 47c50489af85 SW-8163 Some indicator names are not left aligned in indicator table (#5419)
 270be8545bf2 SW-8165 Fix placement of "Progress" section title in report (#5418)
