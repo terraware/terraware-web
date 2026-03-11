@@ -1,3 +1,6 @@
+8d810473af42 SW-8166 Update alignment for comments/notes in report to align with sections above (#5422)
+9b1271b5f48d SW-8164 Remove pagination for indicator table (#5421)
+6597ef47227e SW-8172 Reload every report when updating values (#5420)
 95d7cfcff04c SW-8096 Add precision and classId to NewIndicatorPayload for BE updates (#5408)
 194953914354 SW-8168 Auto-calculated indicators should still have edit/reset mechanism (#5417)
 47c50489af85 SW-8163 Some indicator names are not left aligned in indicator table (#5419)
