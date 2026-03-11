@@ -304,7 +304,7 @@ export default function ReportsSettings(): JSX.Element {
       const row = cell.row.original;
       if (row.indicatorType !== 'autoCalculated' && isAllowed('UPDATE_REPORTS_SETTINGS')) {
         return (
-          <Link fontSize='16px' onClick={() => onClickIndicatorRow(row)}>
+          <Link fontSize='16px' onClick={() => onClickIndicatorRow(row)} style={{ textAlign: 'left' }}>
             {row.name}
           </Link>
         );
