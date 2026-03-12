@@ -37,10 +37,11 @@ export default function ProgressChart({
     const currentYearTotal = quarterlyProgress.reduce((sum, q) => sum + q.value, 0);
     const totalProgress = prevYear + currentYearTotal;
     const barMax = Math.max(totalProgress, target > 0 ? target : totalProgress);
+    const barMin = prevYear;
+    const barRange = barMax - barMin;
 
-    const toPercent = (v: number) => (barMax > 0 ? (v / barMax) * 100 : 0);
+    const toPercent = (v: number) => (barRange > 0 ? ((v - barMin) / barRange) * 100 : 0);
 
-    const previousYearEndPct = toPercent(prevYear);
     const targetPct = toPercent(target);
 
     let cumulative = prevYear;
@@ -61,7 +62,7 @@ export default function ProgressChart({
       <Box>
         <Box position='relative' height='18px'>
           {previousYearLabel && (
-            <Box position='absolute' sx={{ left: `${previousYearEndPct}%`, transform: 'translateX(-50%)' }}>
+            <Box position='absolute' sx={{ left: 0 }}>
               <Typography fontSize='10px' color={theme.palette.TwClrTxtSecondary}>
                 {previousYearLabel}
               </Typography>
@@ -93,17 +94,6 @@ export default function ProgressChart({
               overflow: 'hidden',
             }}
           >
-            {prevYear > 0 && (
-              <Box
-                sx={{
-                  position: 'absolute',
-                  left: 0,
-                  width: `${previousYearEndPct}%`,
-                  height: '100%',
-                  backgroundColor: theme.palette.TwClrBgBrand,
-                }}
-              />
-            )}
             {segments.map(({ quarter, startPct, widthPct, isLast }) => (
               <Box
                 key={quarter}

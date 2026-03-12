@@ -11,11 +11,17 @@ api.enhanceEndpoints({
       ],
     },
     createProjectIndicator: {
-      invalidatesTags: () => [{ type: QueryTagTypes.ProjectIndicators, id: 'LIST' }],
+      invalidatesTags: (_results, _error, args) => [
+        { type: QueryTagTypes.ProjectIndicators, id: 'LIST' },
+        { type: QueryTagTypes.Reports, id: `project-${args.projectId}` },
+        { type: QueryTagTypes.PublishedReports },
+      ],
     },
     updateProjectIndicator: {
       invalidatesTags: (_results, _error, payload) => [
         { type: QueryTagTypes.ProjectIndicators, id: payload.indicatorId },
+        { type: QueryTagTypes.Reports, id: `project-${payload.projectId}` },
+        { type: QueryTagTypes.PublishedReports },
       ],
     },
     listCommonIndicators: {
@@ -25,11 +31,17 @@ api.enhanceEndpoints({
       ],
     },
     createCommonIndicator: {
-      invalidatesTags: () => [{ type: QueryTagTypes.CommonIndicators, id: 'LIST' }],
+      invalidatesTags: () => [
+        { type: QueryTagTypes.CommonIndicators, id: 'LIST' },
+        { type: QueryTagTypes.Reports },
+        { type: QueryTagTypes.PublishedReports },
+      ],
     },
     updateCommonIndicator: {
       invalidatesTags: (_results, _error, payload) => [
         { type: QueryTagTypes.CommonIndicators, id: payload.indicatorId },
+        { type: QueryTagTypes.Reports },
+        { type: QueryTagTypes.PublishedReports },
       ],
     },
   },

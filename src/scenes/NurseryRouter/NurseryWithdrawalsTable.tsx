@@ -63,7 +63,17 @@ const DEFAULT_SORT_ORDER: SearchSortOrder = {
 // Menu cell component that can use hooks
 const MenuCellComponent = ({ row, reloadData }: { row: SearchResponseElement; reloadData: () => void }) => {
   const [undoModalOpened, setUndoModalOpened] = useState(false);
+  const navigate = useSyncNavigate();
   const { NURSERY_TRANSFER } = NurseryWithdrawalPurposes;
+
+  const handleReassign = useCallback(() => {
+    if (row.delivery_id) {
+      navigate({
+        pathname: APP_PATHS.NURSERY_REASSIGNMENT.replace(':deliveryId', String(row.delivery_id)),
+        search: '?fromWithdrawal',
+      });
+    }
+  }, [navigate, row.delivery_id]);
 
   if (row.purpose !== NURSERY_TRANSFER && !row.undoesWithdrawalId && !row.undoneByWithdrawalId) {
     return (
@@ -71,13 +81,7 @@ const MenuCellComponent = ({ row, reloadData }: { row: SearchResponseElement; re
         {undoModalOpened && (
           <UndoWithdrawalModal onClose={() => setUndoModalOpened(false)} row={row} reload={reloadData} />
         )}
-        <WithdrawalHistoryMenu
-          reassign={() => {
-            /* onWithdrawalClicked callback removed */
-          }}
-          withdrawal={row}
-          undo={() => setUndoModalOpened(true)}
-        />
+        <WithdrawalHistoryMenu reassign={handleReassign} withdrawal={row} undo={() => setUndoModalOpened(true)} />
       </>
     );
   }
