@@ -149,6 +149,30 @@ api.enhanceEndpoints({
         },
       ],
     },
+    updateProjectIndicatorTarget: {
+      invalidatesTags: (_result, _error, args) => [
+        {
+          type: QueryTagTypes.Reports,
+          id: `project-${args.projectId}`,
+        },
+      ],
+    },
+    updateCommonIndicatorTarget: {
+      invalidatesTags: (_result, _error, args) => [
+        {
+          type: QueryTagTypes.Reports,
+          id: `project-${args.projectId}`,
+        },
+      ],
+    },
+    updateAutoCalculatedIndicatorTarget: {
+      invalidatesTags: (_result, _error, args) => [
+        {
+          type: QueryTagTypes.Reports,
+          id: `project-${args.projectId}`,
+        },
+      ],
+    },
     getAcceleratorReport: {
       providesTags: (_results, _error, args) => [
         {
