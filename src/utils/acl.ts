@@ -294,7 +294,7 @@ const ACL: Record<GlobalRolePermission, UserGlobalRoles | PermissionCheckFn> = {
   DELETE_ACTIVITIES_NON_PUBLISHED: isAllowedDeleteNonPublishedActivities,
   DELETE_ACTIVITIES_PUBLISHED: AcceleratorAdminPlus,
   EDIT_ACTIVITIES: isAllowedEditActivities,
-  EDIT_REPORTS: AcceleratorAdminPlus,
+  EDIT_REPORTS: TFExpertPlus,
   EDIT_SURVIVAL_RATE_SETTINGS: isAllowedEditSurvivalRateSettings,
   EXPORT_ACCELERATOR_PROJECT: ReadOnlyPlus,
   INVITE_FUNDER: isAllowedInviteFunders,
