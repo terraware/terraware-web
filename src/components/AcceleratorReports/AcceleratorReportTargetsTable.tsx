@@ -525,6 +525,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
 
   return (
     <EditableTable
+      clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
       columns={tableColumns}
       data={allIndicatorRows}
       enableEditing={true}

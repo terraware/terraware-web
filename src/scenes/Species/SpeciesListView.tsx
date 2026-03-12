@@ -41,6 +41,8 @@ import ImportSpeciesModal from './ImportSpeciesModal';
 import ProblemTooltip from './ProblemTooltip';
 import { SpeciesSearchResultRow } from './types';
 
+const TABLE_STATE_STORAGE_KEY = 'species-list-table';
+
 type ProblemsCellProps = {
   row: SpeciesSearchResultRow;
   reloadData: () => Promise<void>;
@@ -129,7 +131,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
     showColumnFilters,
     showGlobalFilter,
     sorting,
-  } = useTableState('species-list-table', {
+  } = useTableState(TABLE_STATE_STORAGE_KEY, {
     defaultSorting: [{ id: 'scientificName', desc: false }],
   });
 
@@ -578,6 +580,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
       <Card flushMobile>
         {species && species.length ? (
           <EditableTable
+            clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
             columns={editableColumns}
             data={results ?? []}
             enableEditing={false}
@@ -586,7 +589,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
             enableColumnFilters={true}
             enableColumnOrdering={true}
             stickyFilters={true}
-            storageKey='species-list-table'
+            storageKey={TABLE_STATE_STORAGE_KEY}
             enablePagination={false}
             enableTopToolbar={true}
             enableBottomToolbar={false}

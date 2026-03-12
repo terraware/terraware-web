@@ -51,6 +51,8 @@ import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
+const TABLE_STATE_STORAGE_KEY = 'nursery-withdrawals-table';
+
 const ITEMS_PER_PAGE = 100;
 
 const DEFAULT_SORT_ORDER: SearchSortOrder = {
@@ -126,7 +128,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     setShowGlobalFilter,
     showColumnFilters,
     showGlobalFilter,
-  } = useTableState('nursery-withdrawals-table', {
+  } = useTableState(TABLE_STATE_STORAGE_KEY, {
     persistFilters: true,
   });
 
@@ -740,6 +742,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   return (
     <EditableTable
       key='nursery-withdrawals-table'
+      clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
       columns={columns}
       data={rows || []}
       enableEditing={false}
@@ -747,7 +750,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
       enableGlobalFilter={true}
       enableColumnFilters={true}
       enableColumnOrdering={true}
-      storageKey='nursery-withdrawals-table'
+      storageKey={TABLE_STATE_STORAGE_KEY}
       enablePagination={true}
       enableTopToolbar={true}
       enableBottomToolbar={true}

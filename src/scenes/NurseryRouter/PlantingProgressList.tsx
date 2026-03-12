@@ -62,6 +62,10 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
   const { density, onDensityChange, showColumnFilters, setShowColumnFilters, showGlobalFilter, setShowGlobalFilter } =
     activeState;
 
+  const tableStateStorageKey = hasStrata
+    ? 'plantings-progress-table-with-strata'
+    : 'plantings-progress-table-without-strata';
+
   const selectedRows = useMemo(
     () =>
       Object.keys(rowSelection)
@@ -327,6 +331,7 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
       <Box>{updatePlantingResult?.status === 'pending' && <BusySpinner withSkrim={true} />}</Box>
       <EditableTable
         key={hasStrata ? 'plantings-progress-table-with-strata' : 'plantings-progress-table-without-strata'}
+        clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
         columns={hasStrata ? columnsWithStrata : columnsWithoutStrata}
         data={rows}
         enableEditing={false}
@@ -335,7 +340,7 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
         enableColumnFilters={true}
         enableColumnOrdering={true}
         stickyFilters={true}
-        storageKey={hasStrata ? 'plantings-progress-table-with-strata' : 'plantings-progress-table-without-strata'}
+        storageKey={tableStateStorageKey}
         enablePagination={false}
         enableTopToolbar={true}
         enableBottomToolbar={false}
