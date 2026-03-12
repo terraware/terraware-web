@@ -403,7 +403,7 @@ CULTIVATED_EX_SITU_DESCRIPTION,"Plantes qui ont été cultivées dans une pépin
 CUMULATIVE,Cumulatif,51c21c57
 CUMULATIVE_OR_LEVEL,Cumulatif ou Niveau,0a0f2515
 CUMULATIVE_PROGRESS,Progrès cumulé,fd7ffcac
-CUMULATIVE_PROGRESS_TOOLTIP,Le total cumulé de tous les trimestres depuis le début,2166d833
+CUMULATIVE_PROGRESS_TOOLTIP,"Pour les indicateurs cumulatifs, le progrès total depuis le début du projet est affiché. Pour consulter le progrès trimestriel (réalisé trimestriel), développez cette section.",df7927bd
 CURRENT_NEXT_OBSERVATION,Observation actuelle/prochaine,50735263
 CURRENT_TIMELINE,Étapes,2dcbaeeb
 CURRENT_VIEW,Vue actuelle,8b3a3d54

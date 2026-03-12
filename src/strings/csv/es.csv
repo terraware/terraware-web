@@ -404,7 +404,7 @@ CULTIVATED_EX_SITU_DESCRIPTION,"Plantas que se han cultivado en un vivero, área
 CUMULATIVE,Acumulativo,51c21c57
 CUMULATIVE_OR_LEVEL,Acumulativo o Nivel,0a0f2515
 CUMULATIVE_PROGRESS,Progreso acumulado,fd7ffcac
-CUMULATIVE_PROGRESS_TOOLTIP,El total acumulado de todos los trimestres desde el inicio,2166d833
+CUMULATIVE_PROGRESS_TOOLTIP,"Para los indicadores acumulativos, se muestra el progreso total desde el inicio del proyecto. Para ver el progreso trimestral (real trimestral), expanda esta sección.",df7927bd
 CURRENT_NEXT_OBSERVATION,Observación actual/siguiente,50735263
 CURRENT_TIMELINE,Cronología actual,2dcbaeeb
 CURRENT_VIEW,Vista actual,8b3a3d54
