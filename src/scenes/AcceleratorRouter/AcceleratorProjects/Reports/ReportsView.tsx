@@ -11,7 +11,7 @@ import Page from 'src/components/Page';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { useLocalization } from 'src/providers';
+import { useLocalization, useUser } from 'src/providers';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
 import { useAcceleratorProjectData } from '../AcceleratorProjectContext';
@@ -23,6 +23,7 @@ const ReportsView = () => {
   const improvedReportsEnabled = isEnabled('Improved Reports');
   const { goToNewIndicator } = useNavigateTo();
   const pathParams = useParams<{ projectId: string }>();
+  const { isAllowed } = useUser();
 
   const tabs = useMemo(() => {
     return [
@@ -63,7 +64,7 @@ const ReportsView = () => {
       title={strings.REPORTS}
       titleStyle={{ paddingTop: '16px' }}
       rightComponent={
-        improvedReportsEnabled && activeTab === 'settings' ? (
+        improvedReportsEnabled && activeTab === 'settings' && isAllowed('UPDATE_REPORTS_SETTINGS') ? (
           <Button
             label={strings.ADD_INDICATOR}
             icon='plus'
