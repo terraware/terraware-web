@@ -180,10 +180,9 @@ api.enhanceEndpoints({
       ],
     },
     reviewAcceleratorReportIndicators: {
-      invalidatesTags: (_results, _error, args) => [
+      invalidatesTags: () => [
         {
           type: QueryTagTypes.Reports,
-          id: args.reportId,
         },
       ],
     },
