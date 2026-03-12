@@ -1,3 +1,6 @@
+8bb000447436 SW-8177 TF Expert should be able to edit report (#5429)
+4024d5d9bcff SW-8176 View Only & TF Expert users should not be able to Add Indicator (#5428)
+c0e275f9e5c3 SW-8172 Refetch all reports after updating a report id (#5427)
 4b62972a97be SW-8175 progress bar: bar should start at the previous year’s cumulative progress (#5424)
 e82372d0acb4 SW-8174 Display "--" instead of 0 if there is no value (#5423)
 8d810473af42 SW-8166 Update alignment for comments/notes in report to align with sections above (#5422)
