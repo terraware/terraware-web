@@ -310,6 +310,7 @@ const MetricRow = ({
                 <ProgressChart
                   value={actualValue}
                   target={targetValue}
+                  status={metric.status}
                   quarterlyProgress={isCumulative ? currentYearProgress : undefined}
                   reportLabel={!isCumulative ? reportLabel : undefined}
                   previousYearValue={isCumulative ? previousYearDisplayValue : undefined}
