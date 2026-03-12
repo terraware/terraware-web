@@ -1,3 +1,4 @@
+4225c7ea1efe SW-8076: UI/UX and styling changes (FOLLOW-UP) (#5426)
 afe509ff71e3 SW-8173 Withdrawal History: Reassign feature in table not working (#5432)
 b18135262a50 SW-8181 Modifying indicators should invalidate cache for all reports (#5431)
 c842e0fd8ea1 SW-8178 Text below Progress Notes should still be there (#5430)
