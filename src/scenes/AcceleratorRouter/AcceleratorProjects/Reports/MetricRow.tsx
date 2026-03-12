@@ -499,6 +499,11 @@ const MetricRow = ({
                           preserveNewlines
                           markdown
                         />
+                        {internalEditing && (
+                          <Typography fontSize={14} color={theme.palette.TwClrTxtSecondary}>
+                            {strings.PROGRESS_NOTES_DESCRIPTION}
+                          </Typography>
+                        )}
                       </Box>
                     </Grid>
                   )}
