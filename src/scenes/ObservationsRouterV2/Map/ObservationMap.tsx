@@ -1230,6 +1230,8 @@ const ObservationMap = ({
   ]);
 
   const [showHoverLocation, setShowHoverTextLocation] = useState<Point>();
+  const [hoveredLayerFeatureId, setHoveredLayerFeatureId] = useState<string | null>(null);
+
   const onHover = useCallback(
     (event: MapMouseEvent) => {
       const features = event.features;
@@ -1241,17 +1243,16 @@ const ObservationMap = ({
               !!featureProperties && featureProperties.id !== undefined && featureProperties.priority !== undefined
           );
 
-        if (properties.length && properties.every((featureProperties) => !featureProperties.clickable)) {
-          if (!showHoverLocation) {
-            setShowHoverTextLocation(event.point);
-          }
-          return;
+        if (properties.length && (!showHoverLocation || hoveredLayerFeatureId !== properties[0].layerFeatureId)) {
+          setHoveredLayerFeatureId(properties[0].layerFeatureId);
+          setShowHoverTextLocation(event.point);
         }
+        return;
       }
 
       setShowHoverTextLocation(undefined);
     },
-    [showHoverLocation]
+    [hoveredLayerFeatureId, showHoverLocation]
   );
 
   const unclickableHoverTag = useMemo(() => {
