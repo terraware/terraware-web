@@ -24,6 +24,11 @@ api.enhanceEndpoints({
             type: QueryTagTypes.Reports,
             id: 'LIST',
           },
+
+          {
+            type: QueryTagTypes.Reports,
+            id: `project-${projectId}`,
+          },
         ];
       },
     },
@@ -153,6 +158,10 @@ api.enhanceEndpoints({
         {
           type: QueryTagTypes.ProjectReportConfigs,
           id: args.projectId,
+        },
+        {
+          type: QueryTagTypes.Reports,
+          id: `project-${args.projectId}`,
         },
       ],
     },
