@@ -259,6 +259,35 @@ const ReportView = () => {
   );
   const improvedReportsEnabled = isEnabled('Improved Reports');
 
+  const unpublishedChangesBody = useMemo(() => {
+    if (!improvedReportsEnabled || !report?.unpublishedProperties?.length) {
+      return null;
+    }
+    const propertyLabels: Record<string, string> = {
+      achievements: strings.ACHIEVEMENTS,
+      additionalComments: strings.ADDITIONAL_COMMENTS,
+      autoCalculatedIndicators: strings.AUTO_CALCULATED_INDICATORS,
+      challenges: strings.CHALLENGES,
+      commonIndicators: strings.COMMON_INDICATORS,
+      financialSummaries: strings.FINANCIAL_SUMMARIES,
+      highlights: strings.HIGHLIGHTS,
+      photos: strings.PHOTOS,
+      projectIndicators: strings.PROJECT_INDICATORS,
+    };
+    const propertyList = report.unpublishedProperties.map((p) => propertyLabels[p] ?? p).join(', ');
+    return (
+      <Box display='flex' flexDirection='column' gap={1}>
+        <Typography fontSize='14px'>{strings.UNPUBLISHED_CHANGES_WARNING}</Typography>
+        <Typography fontSize='14px'>1. {strings.UNPUBLISHED_CHANGES_WARNING_REASON_1}</Typography>
+        <Typography fontSize='14px'>2. {strings.UNPUBLISHED_CHANGES_WARNING_REASON_2}</Typography>
+        <Typography fontSize='14px'>{strings.UNPUBLISHED_CHANGES_WARNING_RESOLUTION}</Typography>
+        <Typography fontSize='14px'>
+          {strings.UNPUBLISHED_CHANGES_WARNING_SECTION} {propertyList}
+        </Typography>
+      </Box>
+    );
+  }, [improvedReportsEnabled, report, strings]);
+
   return (
     <>
       {showPublishModal && <PublishModal onClose={closePublishModal} onSubmit={publishReportCallback} />}
@@ -311,6 +340,16 @@ const ReportView = () => {
           <Box display='flex' flexDirection='column' flexGrow={1} overflow={'auto'}>
             {report && <ApprovedReportMessage report={report} />}
             {report && <RejectedReportMessage report={report} showRejectDialog={openRejectDialog} />}
+            {unpublishedChangesBody && (
+              <Box marginBottom={2}>
+                <Message
+                  type='page'
+                  priority='warning'
+                  title={strings.UNPUBLISHED_CHANGES}
+                  body={unpublishedChangesBody}
+                />
+              </Box>
+            )}
             <Card
               style={{
                 display: 'flex',
