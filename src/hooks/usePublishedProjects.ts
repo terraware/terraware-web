@@ -1,28 +1,30 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { requestListPublishedProjects } from '../redux/features/funder/projects/funderProjectsAsyncThunks';
 import { selectPublishedProjects } from '../redux/features/funder/projects/funderProjectsSelectors';
 import { useAppDispatch, useAppSelector } from '../redux/store';
-import { PublishedProject } from '../types/FunderProject';
 
 export const usePublishedProjects = () => {
   const dispatch = useAppDispatch();
-  const [publishedProjects, setPublishedProjects] = useState<PublishedProject[] | null>(null);
   const [requestId, setRequestId] = useState<string>('');
+  const hasFetched = useRef(false);
   const result = useAppSelector(selectPublishedProjects(requestId));
 
   useEffect(() => {
-    if (publishedProjects === null) {
+    if (!hasFetched.current) {
+      hasFetched.current = true;
       const request = dispatch(requestListPublishedProjects());
       setRequestId(request.requestId);
     }
-  }, [dispatch, publishedProjects]);
+  }, [dispatch]);
 
-  useEffect(() => {
-    if (result?.status === 'success' && result.data) {
-      setPublishedProjects(result.data.toSorted((a, b) => (a.dealName || '').localeCompare(b.dealName || '')));
-    }
-  }, [result]);
+  const publishedProjects = useMemo(
+    () =>
+      result?.status === 'success' && result.data
+        ? result.data.toSorted((a, b) => (a.dealName || '').localeCompare(b.dealName || ''))
+        : null,
+    [result]
+  );
 
   return { publishedProjects };
 };

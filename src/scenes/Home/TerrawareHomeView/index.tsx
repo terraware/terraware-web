@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useMixpanel } from 'react-mixpanel-browser';
 
 import { Box, Container, Grid, Typography } from '@mui/material';
@@ -40,16 +40,10 @@ const TerrawareHomeView = () => {
   const { species } = useSpeciesData();
   const seedBankSummary = useSeedBankSummary();
   const orgNurserySummary = useOrgNurserySummary();
-  const [showAcceleratorCard, setShowAcceleratorCard] = useState(true);
+  const showAcceleratorCard = orgPreferences.showAcceleratorCard !== false;
 
   const [isNewApplicationModalOpen, setIsNewApplicationModalOpen] = useState<boolean>(false);
   const { allPlantingSites } = usePlantingSiteData();
-
-  useEffect(() => {
-    if (orgPreferences.showAcceleratorCard === false && showAcceleratorCard) {
-      setShowAcceleratorCard(false);
-    }
-  }, [orgPreferences, showAcceleratorCard]);
 
   const isLoadingInitialData = useMemo(
     () => orgNurserySummary?.requestSucceeded === undefined || seedBankSummary?.requestSucceeded === undefined,

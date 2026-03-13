@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Grid } from '@mui/material';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
@@ -43,13 +43,18 @@ export default function DetailsInputForm<T extends MinimalPlantingSite>({
   const [effectiveTimeZone, setEffectiveTimeZone] = useState<TimeZoneDescription | undefined>();
   const [plantingSeasonsValid, setPlantingSeasonsValid] = useState(true);
   const [showSaveValidationErrors, setShowSaveValidationErrors] = useState(false);
-  const [usedNames, setUsedNames] = useState<Set<string>>();
   const { availableProjects } = useProjects(record);
   const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const dispatch = useAppDispatch();
   const plantingSites = useAppSelector(selectPlantingSites);
   const draftSites = useAppSelector(selectDraftPlantingSites(selectedOrganization?.id || -1));
+
+  const usedNames = useMemo(() => {
+    const allSites = [...(plantingSites || []), ...(draftSites?.data || [])];
+    const otherSiteNames = allSites.filter((site) => Number(site.id) !== record.id).map((site) => site.name);
+    return new Set(otherSiteNames);
+  }, [draftSites, plantingSites, record.id]);
 
   const checkErrors = useCallback(() => {
     let hasNameError = true;
@@ -85,12 +90,6 @@ export default function DetailsInputForm<T extends MinimalPlantingSite>({
       void dispatch(requestSearchDrafts(selectedOrganization.id));
     }
   }, [dispatch, selectedOrganization]);
-
-  useEffect(() => {
-    const allSites = [...(plantingSites || []), ...(draftSites?.data || [])];
-    const otherSiteNames = allSites.filter((site) => Number(site.id) !== record.id).map((site) => site.name);
-    setUsedNames(new Set(otherSiteNames));
-  }, [draftSites, plantingSites, record.id]);
 
   useEffect(() => {
     if (!onValidate) {

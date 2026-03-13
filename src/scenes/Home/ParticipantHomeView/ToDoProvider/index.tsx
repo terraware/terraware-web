@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Outlet } from 'react-router';
 
 import { useLocalization } from 'src/providers';
@@ -35,11 +35,14 @@ const ToDoProvider = ({ children }: Props) => {
   const toDoDeliverablesRequest = useAppSelector(selectProjectToDoDeliverables(deliverablesRequestId));
   const toDoEventsRequest = useAppSelector(selectProjectToDoEvents(eventsRequestId));
 
-  const [toDoData, setToDoData] = useState<ToDoData>({
-    projectId,
-    toDoItems,
-    upcomingItems,
-  });
+  const toDoData = useMemo<ToDoData>(
+    () => ({
+      projectId,
+      toDoItems,
+      upcomingItems,
+    }),
+    [projectId, toDoItems, upcomingItems]
+  );
 
   useEffect(() => {
     if (currentAcceleratorProject && !isNaN(currentAcceleratorProject.id) && currentAcceleratorProject.id > 0) {
@@ -93,14 +96,6 @@ const ToDoProvider = ({ children }: Props) => {
       setUpcomingItems(nextUpcomingItems);
     }
   }, [toDoDeliverablesRequest, toDoEventsRequest]);
-
-  useEffect(() => {
-    setToDoData({
-      projectId,
-      toDoItems,
-      upcomingItems,
-    });
-  }, [projectId, toDoItems, upcomingItems]);
 
   return (
     <ToDoContext.Provider value={toDoData}>

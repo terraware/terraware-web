@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useMemo } from 'react';
 
 import { Box, useTheme } from '@mui/material';
 import { ChartTypeRegistry, TooltipItem } from 'chart.js';
@@ -16,10 +16,6 @@ export default function PlantingDensityPerStratumCard(): JSX.Element {
   const theme = useTheme();
   const numberFormatter = useNumberFormatter();
   const { plantingSite, observationSummaries } = usePlantingSiteData();
-  const [labels, setLabels] = useState<string[]>();
-  const [targets, setTargets] = useState<(number | null)[]>();
-  const [actuals, setActuals] = useState<(number | null)[]>();
-  const [tooltipTitles, setTooltipTitles] = useState<string[]>();
 
   const tooltipRenderer = useCallback(
     (tooltipItem: TooltipItem<keyof ChartTypeRegistry>) => {
@@ -38,7 +34,7 @@ export default function PlantingDensityPerStratumCard(): JSX.Element {
     [numberFormatter]
   );
 
-  useEffect(() => {
+  const { labels, targets, actuals, tooltipTitles } = useMemo(() => {
     if (plantingSite) {
       const stratumDensities: Record<string, (number | null)[]> = {};
       plantingSite.strata?.forEach((stratum) => {
@@ -51,15 +47,19 @@ export default function PlantingDensityPerStratumCard(): JSX.Element {
           stratumDensities[stratum.name].push(stratumFromObs?.plantingDensity ?? null);
         }
       });
-      setLabels(Object.keys(stratumDensities).map((name) => truncate(name, MAX_STRATUM_NAME_LENGTH)));
-      setTargets(Object.values(stratumDensities).map((t) => t[0]));
-      setActuals(Object.values(stratumDensities).map((t) => t[1]));
-      setTooltipTitles(Object.keys(stratumDensities));
+      return {
+        labels: Object.keys(stratumDensities).map((name) => truncate(name, MAX_STRATUM_NAME_LENGTH)),
+        targets: Object.values(stratumDensities).map((t) => t[0]),
+        actuals: Object.values(stratumDensities).map((t) => t[1]),
+        tooltipTitles: Object.keys(stratumDensities),
+      };
     } else {
-      setLabels([]);
-      setTargets([]);
-      setActuals([]);
-      setTooltipTitles([]);
+      return {
+        labels: [] as string[],
+        targets: [] as (number | null)[],
+        actuals: [] as (number | null)[],
+        tooltipTitles: [] as string[],
+      };
     }
   }, [plantingSite, observationSummaries]);
 

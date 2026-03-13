@@ -31,7 +31,9 @@ export default function ChangeQuantityModal({
   const snackbar = useSnackbar();
   const numberFormatter = useNumberFormatter();
 
-  const [nextPhase, setNextPhase] = useState<ChangeBatchStatusesRequestPayload['newPhase']>();
+  const [nextPhase, setNextPhase] = useState<ChangeBatchStatusesRequestPayload['newPhase']>(
+    type === 'germinating' ? 'ActiveGrowth' : type === 'active-growth' ? 'HardeningOff' : 'Ready'
+  );
   const [saving, setSaving] = useState<boolean>(false);
   const [movedValue, setMovedValue] = useState<number | undefined>();
   const [errorText, setErrorText] = useState<string>('');
@@ -261,10 +263,6 @@ export default function ChangeQuantityModal({
     },
     [setNextPhase]
   );
-
-  useEffect(() => {
-    setNextPhase(growthPhaseDropdownOptions[0].value as ChangeBatchStatusesRequestPayload['newPhase']);
-  }, [growthPhaseDropdownOptions, setNextPhase]);
 
   useEffect(() => {
     calculateQuantities();

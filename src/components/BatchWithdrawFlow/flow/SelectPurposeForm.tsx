@@ -91,7 +91,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   }, [species]);
 
   const tz = useLocationTimeZone().get(selectedNursery);
-  const [timeZone, setTimeZone] = useState(tz.id);
+  const timeZone = tz.id;
 
   const availableProjects = useMemo(
     () =>
@@ -107,12 +107,6 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
       ),
     [projects, batches, selectedNursery, isOutplant]
   );
-
-  useEffect(() => {
-    if (timeZone !== tz.id) {
-      setTimeZone(tz.id);
-    }
-  }, [tz.id, timeZone]);
 
   useEffect(() => {
     setLocalRecord((previousRecord: NurseryWithdrawalRequest): NurseryWithdrawalRequest => {

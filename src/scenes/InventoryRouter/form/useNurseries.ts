@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useMemo } from 'react';
 
 import { useOrganization } from 'src/providers';
 import { Facility } from 'src/types/Facility';
@@ -7,24 +7,17 @@ import { getAllNurseries } from 'src/utils/organization';
 export const useNurseries = (record?: { facilityId?: number }) => {
   const { selectedOrganization } = useOrganization();
 
-  const [availableNurseries, setAvailableNurseries] = useState<Facility[]>();
-  const [selectedNursery, setSelectedNursery] = useState<Facility>();
+  const availableNurseries = useMemo<Facility[]>(
+    () => (selectedOrganization ? getAllNurseries(selectedOrganization) : []),
+    [selectedOrganization]
+  );
 
-  const initNurseries = useCallback(() => {
-    setAvailableNurseries(selectedOrganization ? getAllNurseries(selectedOrganization) : []);
-  }, [selectedOrganization]);
-
-  useEffect(() => {
-    if (availableNurseries && record?.facilityId) {
-      setSelectedNursery(availableNurseries.find((nursery) => nursery.id === record.facilityId));
-    }
-  }, [availableNurseries, record?.facilityId]);
-
-  useEffect(() => {
-    if (!availableNurseries) {
-      initNurseries();
-    }
-  }, [availableNurseries, initNurseries]);
+  const facilityId = record?.facilityId;
+  const selectedNursery = useMemo<Facility | undefined>(
+    () =>
+      availableNurseries && facilityId ? availableNurseries.find((nursery) => nursery.id === facilityId) : undefined,
+    [availableNurseries, facilityId]
+  );
 
   return { availableNurseries, selectedNursery };
 };

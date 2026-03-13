@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import { useOrganization } from 'src/providers';
 import { selectAccessions } from 'src/redux/features/accessions/accessionsSelectors';
@@ -23,17 +23,14 @@ export const useAccessions = (record?: { accessionId?: number }, speciesId?: num
       [],
     [accessionsResponseData]
   );
-  const [selectedAccession, setSelectedAccession] = useState<SearchResponseAccession>();
-
-  useEffect(() => {
-    if (availableAccessions && record?.accessionId) {
-      setSelectedAccession(
-        availableAccessions.find((accession: SearchResponseAccession) => accession.id === `${record.accessionId}`)
-      );
-    } else {
-      setSelectedAccession(undefined);
-    }
-  }, [availableAccessions, record?.accessionId]);
+  const accessionId = record?.accessionId;
+  const selectedAccession = useMemo<SearchResponseAccession | undefined>(
+    () =>
+      availableAccessions && accessionId
+        ? availableAccessions.find((accession: SearchResponseAccession) => accession.id === `${accessionId}`)
+        : undefined,
+    [availableAccessions, accessionId]
+  );
 
   useEffect(() => {
     if (selectedOrganization) {

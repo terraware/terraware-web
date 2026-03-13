@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import _ from 'lodash';
@@ -131,12 +131,25 @@ const AcceleratorProjectSpeciesProvider = ({ children }: Props) => {
     [currentDeliverable, currentAcceleratorProjectSpecies, currentSpecies, dispatch, goToAcceleratorProjectSpecies]
   );
 
-  const [acceleratorProjectSpeciesData, setAcceleratorProjectSpeciesData] = useState<AcceleratorProjectSpeciesData>({
-    isBusy: updatePPSResponse?.status === 'pending' || updateSpeciesResponse?.status === 'pending',
-    acceleratorProjectSpeciesId,
-    reload,
-    update,
-  });
+  const acceleratorProjectSpeciesData = useMemo<AcceleratorProjectSpeciesData>(
+    () => ({
+      currentAcceleratorProjectSpecies,
+      currentSpecies,
+      isBusy: updatePPSResponse?.status === 'pending' || updateSpeciesResponse?.status === 'pending',
+      acceleratorProjectSpeciesId,
+      reload,
+      update,
+    }),
+    [
+      currentAcceleratorProjectSpecies,
+      currentSpecies,
+      acceleratorProjectSpeciesId,
+      reload,
+      update,
+      updatePPSResponse,
+      updateSpeciesResponse,
+    ]
+  );
 
   useEffect(() => {
     if (!updatePPSResponse) {
@@ -222,30 +235,6 @@ const AcceleratorProjectSpeciesProvider = ({ children }: Props) => {
       reloadSpecies();
     }
   }, [currentAcceleratorProjectSpecies, reloadSpecies]);
-
-  useEffect(() => {
-    // This way we only update consumers when we have both
-    if (!(currentAcceleratorProjectSpecies && currentSpecies)) {
-      return;
-    }
-
-    setAcceleratorProjectSpeciesData({
-      currentAcceleratorProjectSpecies,
-      currentSpecies,
-      isBusy: updatePPSResponse?.status === 'pending' || updateSpeciesResponse?.status === 'pending',
-      acceleratorProjectSpeciesId,
-      reload,
-      update,
-    });
-  }, [
-    currentAcceleratorProjectSpecies,
-    currentSpecies,
-    acceleratorProjectSpeciesId,
-    reload,
-    update,
-    updatePPSResponse,
-    updateSpeciesResponse,
-  ]);
 
   return (
     <AcceleratorProjectSpeciesContext.Provider value={acceleratorProjectSpeciesData}>

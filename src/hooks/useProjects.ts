@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 
 import { useOrganization } from 'src/providers';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
@@ -15,20 +15,19 @@ export const useProjects = (record?: { projectId?: number }) => {
 
   const availableProjects = useAppSelector(selectProjects);
 
-  const [selectedProject, setSelectedProject] = useState<Project>();
-
   const getProjectName = useCallback(
     (projectId: number) => (availableProjects?.find((project: Project) => project.id === projectId) || {}).name || '',
     [availableProjects]
   );
 
-  useEffect(() => {
-    if (availableProjects && record?.projectId) {
-      setSelectedProject(availableProjects.find((project) => project.id === record.projectId));
-    } else {
-      setSelectedProject(undefined);
-    }
-  }, [availableProjects, record?.projectId]);
+  const recordProjectId = record?.projectId;
+  const selectedProject = useMemo(
+    () =>
+      availableProjects && recordProjectId
+        ? availableProjects.find((project) => project.id === recordProjectId)
+        : undefined,
+    [availableProjects, recordProjectId]
+  );
 
   useEffect(() => {
     if (!availableProjects && selectedOrganization) {

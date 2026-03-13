@@ -14,7 +14,11 @@ export default function FunderHome() {
   const dispatch = useAppDispatch();
   const { userFundingEntity } = useUserFundingEntity();
 
-  const [fundingEntityProjectIds, setFundingEntityProjectIds] = useState<number[]>([]);
+  const fundingEntityProjects = userFundingEntity?.projects;
+  const fundingEntityProjectIds = useMemo(
+    () => (fundingEntityProjects ? fundingEntityProjects.map((p) => p.projectId) : []),
+    [fundingEntityProjects]
+  );
   const [selectedProjectId, setSelectedProjectId] = useState<number>();
   const funderProjects: Record<number, FunderProjectDetails> = useAppSelector(
     selectFunderProjects(fundingEntityProjectIds)
@@ -25,12 +29,6 @@ export default function FunderHome() {
     () => listPublihsedReportsResponse.data?.reports ?? [],
     [listPublihsedReportsResponse.data?.reports]
   );
-
-  useEffect(() => {
-    if (userFundingEntity?.projects) {
-      setFundingEntityProjectIds(userFundingEntity.projects.map((p) => p.projectId));
-    }
-  }, [userFundingEntity?.projects]);
 
   useEffect(() => {
     if (!selectedProjectId && Object.keys(funderProjects).length === 1) {

@@ -6,13 +6,9 @@ import {
 } from 'src/redux/features/observations/observationsSelectors';
 import { requestOneObservation, requestOneObservationResult } from 'src/redux/features/observations/observationsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { Observation, ObservationResultsPayload } from 'src/types/Observations';
 
 const useObservation = (observationId?: number) => {
   const dispatch = useAppDispatch();
-
-  const [observation, setObservation] = useState<Observation>();
-  const [observationResults, setObservationResults] = useState<ObservationResultsPayload>();
 
   const [observationRequestId, setObservationRequestId] = useState('');
   const [observationResultsRequestId, setObservationResultsRequestId] = useState('');
@@ -30,20 +26,22 @@ const useObservation = (observationId?: number) => {
   }, [dispatch, observationId]);
 
   useEffect(() => {
-    if (observationResponse?.status === 'success' && observationResponse.data) {
-      setObservation(observationResponse.data);
-    }
-  }, [observationResponse]);
-
-  useEffect(() => {
-    if (observationResultsResponse?.status === 'success' && observationResultsResponse.data) {
-      setObservationResults(observationResultsResponse.data);
-    }
-  }, [observationResultsResponse]);
-
-  useEffect(() => {
     reload();
   }, [reload]);
+
+  const observation = useMemo(
+    () =>
+      observationResponse?.status === 'success' && observationResponse.data ? observationResponse.data : undefined,
+    [observationResponse]
+  );
+
+  const observationResults = useMemo(
+    () =>
+      observationResultsResponse?.status === 'success' && observationResultsResponse.data
+        ? observationResultsResponse.data
+        : undefined,
+    [observationResultsResponse]
+  );
 
   return useMemo(
     () => ({

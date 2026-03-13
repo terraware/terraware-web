@@ -1,14 +1,12 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { selectProjectPlantingSiteList } from 'src/redux/features/tracking/trackingSelectors';
 import { requestListProjectPlantingSites } from 'src/redux/features/tracking/trackingThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { PlantingSite } from 'src/types/Tracking';
 
 export const useProjectPlantingSites = (projectId: number) => {
   const dispatch = useAppDispatch();
 
-  const [plantingSites, setPlantingSites] = useState<PlantingSite[]>();
   const [requestId, setRequestId] = useState<string>('');
 
   const result = useAppSelector(selectProjectPlantingSiteList(requestId));
@@ -22,11 +20,10 @@ export const useProjectPlantingSites = (projectId: number) => {
     reload();
   }, [dispatch, reload]);
 
-  useEffect(() => {
-    if (result && result.status === 'success' && result.data) {
-      setPlantingSites(result.data);
-    }
-  }, [result]);
+  const plantingSites = useMemo(
+    () => (result?.status === 'success' && result.data ? result.data : undefined),
+    [result]
+  );
 
   return { plantingSites, reload };
 };

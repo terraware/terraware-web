@@ -141,19 +141,17 @@ const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
   }, [activeLocale, dispatchSearchRequest, getSearchPayload, searchSortOrder]);
 
   // reset filters when extraTableFilters change
-  useEffect(() => {
-    setFilters((_filters) => {
-      const newFilters = { ..._filters };
-      Object.keys(newFilters)?.forEach((key) => {
-        const filter = {
-          ...newFilters[key],
-          values: [],
-        };
-        newFilters[key] = filter;
+  const [prevExtraTableFilters, setPrevExtraTableFilters] = useState(extraTableFilters);
+  if (extraTableFilters !== prevExtraTableFilters) {
+    setPrevExtraTableFilters(extraTableFilters);
+    setFilters((prevFilters) => {
+      const newFilters = { ...prevFilters };
+      Object.keys(newFilters).forEach((key) => {
+        newFilters[key] = { ...newFilters[key], values: [] };
       });
       return newFilters;
     });
-  }, [extraTableFilters]);
+  }
 
   // set current filters if any featuredFilters has initial value, but not if we have sticky filters
   useEffect(() => {

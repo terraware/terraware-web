@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Outlet } from 'react-router';
 
 import { requestListSupportRequestTypes } from 'src/redux/features/support/supportAsyncThunks';
@@ -22,9 +22,12 @@ const SupportProvider = ({ children }: Props) => {
 
   const [supportRequestTypes, setSupportRequestTypes] = useState<SupportRequestType[]>();
 
-  const [supportData, setSupportData] = useState<SupportData>({
-    types: supportRequestTypes,
-  });
+  const supportData = useMemo<SupportData>(
+    () => ({
+      types: supportRequestTypes,
+    }),
+    [supportRequestTypes]
+  );
 
   useEffect(() => {
     if (supportRequestTypes === undefined) {
@@ -42,12 +45,6 @@ const SupportProvider = ({ children }: Props) => {
       setSupportRequestTypes(listSupportRequestTypesRequest.data);
     }
   }, [listSupportRequestTypesRequest]);
-
-  useEffect(() => {
-    setSupportData({
-      types: supportRequestTypes,
-    });
-  }, [supportRequestTypes]);
 
   return (
     <SupportContext.Provider value={supportData}>

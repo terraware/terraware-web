@@ -43,8 +43,31 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
   const defaultTimeZone = useDefaultTimeZone();
   const { selectedOrganization } = useOrganization();
   const [requestId, setRequestId] = useState<string>('');
-  const [selectedStratumIdsBySiteId, setSelectedStratumIdsBySiteId] = useState<Record<number, Set<number>>>();
   const updatePlantingResult = useAppSelector((state) => selectUpdatePlantingsCompleted(state, requestId));
+
+  const selectedRows = useMemo(
+    () =>
+      Object.keys(rowSelection)
+        .map((index) => (rows || [])[Number(index)])
+        .filter(Boolean),
+    [rowSelection, rows]
+  );
+
+  const selectedStratumIdsBySiteId = useMemo((): Record<number, Set<number>> | undefined => {
+    if (selectedRows.length > 0) {
+      return selectedRows.reduce((acc: Record<number, Set<number>>, row: any) => {
+        const siteId = row.siteId;
+        if (acc[siteId]) {
+          acc[siteId].add(row.stratumId);
+        } else {
+          acc[siteId] = new Set([row.stratumId]);
+        }
+        return acc;
+      }, {});
+    }
+    return undefined;
+  }, [selectedRows]);
+
   const substrataStatisticsResult = useAppSelector((state) =>
     selectStrataHaveStatistics(
       state,
@@ -66,34 +89,11 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
     ? 'plantings-progress-table-with-strata'
     : 'plantings-progress-table-without-strata';
 
-  const selectedRows = useMemo(
-    () =>
-      Object.keys(rowSelection)
-        .map((index) => (rows || [])[Number(index)])
-        .filter(Boolean),
-    [rowSelection, rows]
-  );
-
   useEffect(() => {
     if (rows && hasStrata === undefined) {
       setHasStrata(rows.some((d) => d.substratumName));
     }
   }, [rows, hasStrata]);
-
-  useEffect(() => {
-    if (selectedRows.length > 0) {
-      const stratumIds = selectedRows.reduce((selectedStratumIdsBySiteIdObj: Record<number, Set<number>>, row: any) => {
-        const siteId = row.siteId;
-        if (selectedStratumIdsBySiteIdObj[siteId]) {
-          selectedStratumIdsBySiteIdObj[siteId].add(row.stratumId);
-        } else {
-          selectedStratumIdsBySiteIdObj[siteId] = new Set([row.stratumId]);
-        }
-        return selectedStratumIdsBySiteIdObj;
-      }, {});
-      setSelectedStratumIdsBySiteId(stratumIds);
-    }
-  }, [selectedRows]);
 
   useEffect(() => {
     reloadTracking();

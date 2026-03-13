@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { APP_PATHS } from 'src/constants';
@@ -32,7 +32,14 @@ const VotingProvider = ({ children }: Props): JSX.Element => {
   const votes = useAppSelector((state) => selectProjectVotes(state, projectId));
 
   const [phaseVotes, setPhaseVotes] = useState<PhaseVotes>();
-  const [votingData, setVotingData] = useState<VotingData>({ project });
+  const votingData = useMemo<VotingData>(
+    () => ({
+      phaseVotes,
+      project,
+      status: votes?.status ?? 'pending',
+    }),
+    [phaseVotes, project, votes?.status]
+  );
 
   const goToProjects = useCallback(() => navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECTS }), [navigate]);
 
@@ -57,15 +64,6 @@ const VotingProvider = ({ children }: Props): JSX.Element => {
       }
     }
   }, [phase, snackbar, votes]);
-
-  // update votes data in context
-  useEffect(() => {
-    setVotingData({
-      phaseVotes,
-      project,
-      status: votes?.status ?? 'pending',
-    });
-  }, [phaseVotes, project, votes?.status]);
 
   return <VotingContext.Provider value={votingData}>{children}</VotingContext.Provider>;
 };

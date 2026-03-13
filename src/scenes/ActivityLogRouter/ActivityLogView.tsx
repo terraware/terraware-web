@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useMemo, useState } from 'react';
 
 import { Box, useTheme } from '@mui/material';
 import { Button, Message } from '@terraware/web-components';
@@ -29,10 +29,14 @@ export default function ActivityLogView(): JSX.Element {
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const { acceleratorProjects, isLoading: acceleratorProjectsLoading } = useAcceleratorProjects();
 
-  const [activityId, setActivityId] = useState<number>();
   const [projectFilter, setProjectFilter] = useState<{ projectId?: number | string }>({});
   const [highlightsModalOpen, setHighlightsModalOpen] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState<TypedActivity>();
+
+  const activityId = useMemo(() => {
+    const _activityId = query.get('activityId');
+    return _activityId ? Number(_activityId) : undefined;
+  }, [query]);
 
   const organization = useMemo(
     () => (isAcceleratorRoute ? undefined : selectedOrganization),
@@ -78,11 +82,6 @@ export default function ActivityLogView(): JSX.Element {
   const openActivityHighlightsPreview = useCallback(() => {
     setHighlightsModalOpen(true);
   }, []);
-
-  useEffect(() => {
-    const _activityId = query.get('activityId');
-    setActivityId(_activityId ? Number(_activityId) : undefined);
-  }, [query]);
 
   const PageHeaderLeftComponent = useMemo(
     () => (

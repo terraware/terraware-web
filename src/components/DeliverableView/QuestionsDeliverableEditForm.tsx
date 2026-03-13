@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Message } from '@terraware/web-components';
@@ -158,7 +158,6 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
   const theme = useTheme();
   const query = useQuery();
   const { isApplicationPortal } = useApplicationPortal();
-  const [dependentVariableStableIds, setDependentVariableStableIds] = useState<string[]>([]);
 
   const { deliverable, exit, hideStatusBadge } = props;
 
@@ -171,6 +170,11 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
 
   const variablesWithValues: VariableWithValues[] = useAppSelector((state) =>
     selectDeliverableVariablesWithValues(state, deliverable.id, deliverable.projectId)
+  );
+
+  const dependentVariableStableIds = useMemo(
+    () => getDependingVariablesStableIdsFromOtherDeliverable(variablesWithValues),
+    [variablesWithValues]
   );
 
   const dependentVariablesWithValues = useAppSelector((state) =>
@@ -248,11 +252,6 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
       })
     );
   }, [deliverable, dependentVariableStableIds, dispatch]);
-
-  useEffect(() => {
-    const ids = getDependingVariablesStableIdsFromOtherDeliverable(variablesWithValues);
-    setDependentVariableStableIds(ids);
-  }, [variablesWithValues]);
 
   useEffect(() => {
     if (updateSuccess && uploadSuccess) {

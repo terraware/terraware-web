@@ -123,7 +123,6 @@ type PlantingSiteMapViewProps = {
 function PlantingSiteMapView({ search }: PlantingSiteMapViewProps): JSX.Element | null {
   const numberFormatter = useNumberFormatter();
   const { isDesktop } = useDeviceInfo();
-  const [searchStratumEntities, setSearchStratumEntities] = useState<MapEntityId[]>([]);
   const [includedLayers, setIncludedLayers] = useState<MapLayer[]>(['Planting Site', 'Strata', 'Monitoring Plots']);
   const defaultTimeZone = useDefaultTimeZone();
 
@@ -196,15 +195,14 @@ function PlantingSiteMapView({ search }: PlantingSiteMapViewProps): JSX.Element 
     }
   }, [plantingSite, selectedHistory]);
 
-  useEffect(() => {
+  const searchStratumEntities = useMemo<MapEntityId[]>(() => {
     if (!search) {
-      setSearchStratumEntities([]);
-    } else {
-      const entities = plantingSite?.strata
-        ?.filter((stratum) => regexMatch(stratum.name, search))
-        .map((stratum) => ({ sourceId: 'strata', id: stratum.id }));
-      setSearchStratumEntities(entities ?? []);
+      return [];
     }
+    const entities = plantingSite?.strata
+      ?.filter((stratum) => regexMatch(stratum.name, search))
+      .map((stratum) => ({ sourceId: 'strata', id: stratum.id }));
+    return entities ?? [];
   }, [plantingSite, search]);
 
   const layerOptions: MapLayer[] = useMemo(() => {

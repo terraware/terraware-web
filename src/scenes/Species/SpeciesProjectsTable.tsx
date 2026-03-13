@@ -65,12 +65,10 @@ export default function SpeciesProjectsTable({
   const projectsForSpeciesRequest = useAppSelector(selectProjectsForSpeciesRequest(requestId));
 
   const [searchResults, setSearchResults] = useState<AcceleratorProjectForSpecies[] | null>();
-  const [filteredResults, setFilteredResults] = useState<AcceleratorProjectForSpecies[] | null>();
   const [selectedRows, setSelectedRows] = useState<TableRowType[]>([]);
   const [showRemoveDialog, setShowRemoveDialog] = useState(false);
   const [reload, setReload] = useState(false);
   const [openedAddToProjectModal, setOpenedAddToProjectModal] = useState(false);
-  const [selectableProjects, setSelectableProjects] = useState<Project[]>([]);
 
   useEffect(() => {
     if (selectedOrganization) {
@@ -91,15 +89,7 @@ export default function SpeciesProjectsTable({
     }
   }, [projectsForSpeciesRequest, snackbar]);
 
-  useEffect(() => {
-    const assignedProjectsIds = filteredResults?.map((fr) => Number(fr.projectId));
-    const pendingProjects = allProjects?.filter((project) => {
-      return project.phase && !assignedProjectsIds?.includes(project.id);
-    });
-    setSelectableProjects(pendingProjects || []);
-  }, [filteredResults, allProjects]);
-
-  useEffect(() => {
+  const filteredResults = useMemo<AcceleratorProjectForSpecies[]>(() => {
     let updatedResults = searchResults ?? [];
 
     if (removedProjectsIds) {
@@ -123,8 +113,16 @@ export default function SpeciesProjectsTable({
       updatedResults = [...updatedResults, ...newProjects];
     }
 
-    setFilteredResults(updatedResults);
+    return updatedResults;
   }, [addedProjectsSpecies, allProjects, removedProjectsIds, searchResults, speciesId]);
+
+  const selectableProjects = useMemo<Project[]>(() => {
+    const assignedProjectsIds = filteredResults?.map((fr) => Number(fr.projectId));
+    const pendingProjects = allProjects?.filter((project) => {
+      return project.phase && !assignedProjectsIds?.includes(project.id);
+    });
+    return pendingProjects || [];
+  }, [filteredResults, allProjects]);
 
   const onAddHandler = (projectsSpeciesAdded: ProjectSpecies[]) => {
     // only add new project if it's not already added

@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { selectUserAnalytics } from 'src/redux/features/user/userAnalyticsSelectors';
 import { updateGtmInstrumented } from 'src/redux/features/user/userAnalyticsSlice';
@@ -89,15 +89,27 @@ export default function UserProvider({ children }: UserProviderProps): JSX.Eleme
     [user, userPreferences]
   );
 
-  const [userData, setUserData] = useState<ProvidedUserData>({
-    reloadUser,
-    bootstrapped: false,
-    userPreferences: {},
-    reloadUserPreferences,
-    updateUserCookieConsent,
-    updateUserPreferences,
-    isAllowed,
-  });
+  const userData = useMemo<ProvidedUserData>(
+    () => ({
+      reloadUser,
+      bootstrapped: Boolean(userPreferences && user),
+      user,
+      userPreferences: userPreferences ?? {},
+      reloadUserPreferences,
+      updateUserCookieConsent,
+      updateUserPreferences,
+      isAllowed,
+    }),
+    [
+      reloadUser,
+      user,
+      userPreferences,
+      reloadUserPreferences,
+      updateUserCookieConsent,
+      updateUserPreferences,
+      isAllowed,
+    ]
+  );
 
   useEffect(() => {
     reloadUserPreferences();
@@ -108,17 +120,6 @@ export default function UserProvider({ children }: UserProviderProps): JSX.Eleme
       reloadUser();
     }
   }, [user, reloadUser]);
-
-  useEffect(() => {
-    setUserData((prev) => ({
-      ...prev,
-      user,
-      userPreferences: userPreferences ?? {},
-      reloadUserPreferences,
-      bootstrapped: Boolean(userPreferences && user),
-      isAllowed,
-    }));
-  }, [isAllowed, user, userPreferences, reloadUserPreferences]);
 
   return <UserContext.Provider value={userData}>{children}</UserContext.Provider>;
 }

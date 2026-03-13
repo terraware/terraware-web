@@ -1,4 +1,4 @@
-import React, { type JSX, useEffect, useMemo, useRef, useState } from 'react';
+import React, { type JSX, useEffect, useMemo, useRef } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Message } from '@terraware/web-components';
@@ -97,10 +97,14 @@ const QuestionsDeliverableCard = (props: EditProps): JSX.Element | null => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const { deliverable, hideId, hideStatusBadge } = props;
-  const [dependentVariableStableIds, setDependentVariableStableIds] = useState<string[]>([]);
 
   const variablesWithValues: VariableWithValues[] = useAppSelector((state) =>
     selectDeliverableVariablesWithValues(state, deliverable.id, deliverable.projectId)
+  );
+
+  const dependentVariableStableIds = useMemo(
+    () => getDependingVariablesStableIdsFromOtherDeliverable(variablesWithValues),
+    [variablesWithValues]
   );
 
   const dependentVariablesWithValues = useAppSelector((state) =>
@@ -119,11 +123,6 @@ const QuestionsDeliverableCard = (props: EditProps): JSX.Element | null => {
         : filteredVariablesWithValues,
     [filteredVariablesWithValues, dependentVariablesWithValues]
   );
-
-  useEffect(() => {
-    const ids = getDependingVariablesStableIdsFromOtherDeliverable(variablesWithValues);
-    setDependentVariableStableIds(ids);
-  }, [variablesWithValues]);
 
   useEffect(() => {
     void dispatch(requestListDeliverableVariables(deliverable.id));

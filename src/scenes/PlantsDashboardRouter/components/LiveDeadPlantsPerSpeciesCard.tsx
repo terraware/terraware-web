@@ -11,7 +11,6 @@ import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext'
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 export default function LiveDeadPlantsPerSpeciesCard(): JSX.Element {
-  const [values, setValues] = useState<number[]>();
   const [selectedSpecies, setSelectedSpecies] = useState<string>();
   const { species: availableSpecies } = useSpeciesData();
   const [allSpecies, setAllSpecies] = useState<
@@ -51,29 +50,24 @@ export default function LiveDeadPlantsPerSpeciesCard(): JSX.Element {
     }
   }, [observationSummaries, availableSpecies, activeLocale]);
 
-  useEffect(() => {
+  const values = useMemo<number[] | undefined>(() => {
     if (selectedSpecies) {
       const selectedObservationSpecies = observationSummaries?.[0]?.species.find(
         (sp) => sp.speciesId?.toString() === selectedSpecies
       );
 
       if (selectedObservationSpecies) {
-        let live = 0;
-        let dead = 0;
         if (selectedObservationSpecies.survivalRate !== undefined && selectedObservationSpecies.survivalRate !== null) {
-          live = selectedObservationSpecies.survivalRate;
-          if (live < 100) {
-            dead = 100 - live;
-          } else {
-            dead = 0;
-          }
-          setValues([live, dead]);
+          const live = selectedObservationSpecies.survivalRate;
+          const dead = live < 100 ? 100 - live : 0;
+          return [live, dead];
         }
       }
+      return undefined;
     } else {
-      setValues([]);
+      return [];
     }
-  }, [selectedSpecies, observationSummaries, LIVE_DEAD_LABELS]);
+  }, [selectedSpecies, observationSummaries]);
 
   const tooltipRenderer = useCallback(
     (tooltipItem: TooltipItem<keyof ChartTypeRegistry>) => {

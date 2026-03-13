@@ -1,4 +1,4 @@
-import React, { type JSX, useEffect, useState } from 'react';
+import React, { type JSX, useMemo } from 'react';
 
 import { Grid, List, ListItem, useTheme } from '@mui/material';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
@@ -18,7 +18,6 @@ export default function PlantingSiteDetailsCard({ plantingSite }: PlantingSiteDe
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const tz = useLocationTimeZone().get(plantingSite);
-  const [plantingSeasons, setPlantingSeasons] = useState<PlantingSeason[]>([]);
   const { selectedProject } = useProjects(plantingSite);
 
   const gridSize = () => {
@@ -28,17 +27,14 @@ export default function PlantingSiteDetailsCard({ plantingSite }: PlantingSiteDe
     return 4;
   };
 
-  useEffect(() => {
+  const plantingSeasons = useMemo<PlantingSeason[]>(() => {
     if (plantingSite.plantingSeasons) {
-      // Only show upcoming planting seasons.
       const today = DateTime.fromJSDate(new Date(), { zone: tz.id }).toISODate();
       if (today) {
-        const upcomingSeasons = plantingSite.plantingSeasons.filter(
-          (plantingSeason) => plantingSeason.endDate >= today
-        );
-        setPlantingSeasons(upcomingSeasons);
+        return plantingSite.plantingSeasons.filter((plantingSeason) => plantingSeason.endDate >= today);
       }
     }
+    return [];
   }, [plantingSite, tz.id]);
 
   return (

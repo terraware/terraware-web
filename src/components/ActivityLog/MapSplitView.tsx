@@ -53,7 +53,7 @@ export default function MapSplitView({
   const { fitBounds } = useMapUtils(mapRef);
   const { plantingSites } = useProjectPlantingSites(projectId);
   const [searchParams, setSearchParams] = useSearchParams();
-  const [currentProjectId, setCurrentProjectId] = useState(projectId);
+  const [previousProjectId, setPreviousProjectId] = useState(projectId);
 
   const onActivityMarkerClickCallback = useCallback(
     (activityId: number, fileId: number) => () => onActivityMarkerClick?.(activityId, fileId),
@@ -174,12 +174,10 @@ export default function MapSplitView({
       .filter((nameTag): nameTag is MapNameTag => nameTag !== undefined);
   }, [fitBounds, plantingSites]);
 
-  useEffect(() => {
-    if (projectId !== currentProjectId) {
-      setInitialMapViewState(undefined);
-      setCurrentProjectId(projectId);
-    }
-  }, [currentProjectId, projectId, setSearchParams]);
+  if (projectId !== previousProjectId) {
+    setPreviousProjectId(projectId);
+    setInitialMapViewState(undefined);
+  }
 
   useEffect(() => {
     if (!initialMapViewState && siteFeatures.length > 0) {

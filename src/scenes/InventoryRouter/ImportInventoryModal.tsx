@@ -1,4 +1,4 @@
-import React, { type JSX, useEffect, useState } from 'react';
+import React, { type JSX, useMemo, useState } from 'react';
 
 import { useOrganization } from 'src/providers/hooks';
 import { NurseryInventoryService, SpeciesService } from 'src/services';
@@ -27,15 +27,15 @@ export default function ImportInventoryModal(props: ImportInventoryModalProps): 
   const { selectedOrganization } = useOrganization();
   const { open, onClose, reloadData } = props;
   const [record, setRecord] = useForm({ facilityId: -1 });
-  const [selectedFacility, setSelectedFacility] = useState<Facility>();
   const [validate, setValidate] = useState<boolean>(false);
 
-  useEffect(() => {
-    if (record && record.facilityId && selectedOrganization) {
-      const found = selectedOrganization.facilities?.find((fac) => fac.id.toString() === record.facilityId.toString());
-      setSelectedFacility(found);
-    }
-  }, [record, selectedOrganization]);
+  const selectedFacility = useMemo<Facility | undefined>(
+    () =>
+      record && record.facilityId && selectedOrganization
+        ? selectedOrganization.facilities?.find((fac) => fac.id.toString() === record.facilityId.toString())
+        : undefined,
+    [record, selectedOrganization]
+  );
 
   const isValid = () => {
     setValidate(true);

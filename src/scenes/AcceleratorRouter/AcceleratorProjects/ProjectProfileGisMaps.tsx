@@ -34,8 +34,20 @@ const ProjectProfileGisMaps = () => {
   const gisPlantingSitesResponse = useAppSelector(selectGisRequest(plantingSitesRequestId));
   const gisBoundariesResponse = useAppSelector(selectGisRequest(boundariesRequestId));
   const dispatch = useAppDispatch();
-  const [plantingSitesData, setPlantingSitesData] = useState<FeatureCollection<MultiPolygon>>();
-  const [boundariesData, setBoundariesData] = useState<FeatureCollection<MultiPolygon>>();
+  const plantingSitesData = useMemo(
+    () =>
+      gisPlantingSitesResponse?.data
+        ? (gisPlantingSitesResponse.data as unknown as FeatureCollection<MultiPolygon>)
+        : undefined,
+    [gisPlantingSitesResponse]
+  );
+  const boundariesData = useMemo(
+    () =>
+      gisBoundariesResponse?.data
+        ? (gisBoundariesResponse.data as unknown as FeatureCollection<MultiPolygon>)
+        : undefined,
+    [gisBoundariesResponse]
+  );
   const { activeLocale } = useLocalization();
   const numberFormatter = useNumberFormatter();
   const [stratumOrSite, setStratumOrSite] = useState<StratumOrSiteOption>();
@@ -71,18 +83,6 @@ const ProjectProfileGisMaps = () => {
       setPlantingSitesRequestId(requestPlantingSites.requestId);
     }
   }, [dispatch, projectData]);
-
-  useEffect(() => {
-    if (gisPlantingSitesResponse?.data) {
-      setPlantingSitesData(gisPlantingSitesResponse?.data as unknown as FeatureCollection<MultiPolygon>);
-    }
-  }, [gisPlantingSitesResponse]);
-
-  useEffect(() => {
-    if (gisBoundariesResponse?.data) {
-      setBoundariesData(gisBoundariesResponse?.data as unknown as FeatureCollection<MultiPolygon>);
-    }
-  }, [gisBoundariesResponse]);
 
   const mapsNotUploaded = useMemo(() => {
     return !projectData.acceleratorProject?.projectBoundariesCql && !projectData.acceleratorProject?.plantingSitesCql;
