@@ -10,6 +10,7 @@ import {
 } from 'src/queries/generated/reports';
 import strings from 'src/strings';
 import { IndicatorType } from 'src/types/AcceleratorReport';
+import { formatPrecision } from 'src/utils/numbers';
 import useForm from 'src/utils/useForm';
 
 import EditableReportBox from './EditableReportBox';
@@ -41,6 +42,8 @@ const IndicatorBox = ({ editing = false, metric, type, year, onChangeIndicator }
       onChangeIndicator?.(record, type);
     }
   }, [metric, onChangeIndicator, record, type]);
+
+  const precision = metric.precision ?? 0;
 
   const getName = () => {
     if (isAutoCalculated(metric)) {
@@ -75,7 +78,13 @@ const IndicatorBox = ({ editing = false, metric, type, year, onChangeIndicator }
             </Typography>
             <Box display={'flex'} alignItems={'center'} paddingTop={1.5} paddingBottom={theme.spacing(2)}>
               <Typography>
-                {record.overrideValue ?? record.systemValue ?? '--'} / {metric.target ?? '--'} ({year} {strings.TARGET})
+                {record.overrideValue !== undefined
+                  ? formatPrecision(record.overrideValue, precision)
+                  : record.systemValue !== undefined
+                    ? formatPrecision(record.systemValue, precision)
+                    : '--'}{' '}
+                / {metric.target !== undefined && metric.target !== null ? formatPrecision(metric.target, precision) : '--'} (
+                {year} {strings.TARGET})
               </Typography>
               {record.overrideValue === undefined && (
                 <Box paddingTop={1} paddingLeft={1.5}>
@@ -87,7 +96,10 @@ const IndicatorBox = ({ editing = false, metric, type, year, onChangeIndicator }
             </Box>
             {record.overrideValue !== undefined && (
               <Typography fontSize={'14px'} color={theme.palette.TwClrTxtSecondary} paddingTop={1.5}>
-                {strings.formatString(strings.OVERWRITTEN_ORIGINAL_VALUE, record.systemValue ?? '')}
+                {strings.formatString(
+                  strings.OVERWRITTEN_ORIGINAL_VALUE,
+                  record.systemValue !== undefined ? formatPrecision(record.systemValue, precision) : ''
+                )}
               </Typography>
             )}
           </Box>
@@ -104,7 +116,8 @@ const IndicatorBox = ({ editing = false, metric, type, year, onChangeIndicator }
               min={0}
             />
             <Typography paddingTop={3} paddingLeft={0.5}>
-              / {metric.target ?? '--'} ({year} {strings.TARGET})
+              / {metric.target !== undefined && metric.target !== null ? formatPrecision(metric.target, precision) : '--'} (
+              {year} {strings.TARGET})
             </Typography>
             {'unit' in record && record.unit && (
               <Box paddingLeft={theme.spacing(3)}>

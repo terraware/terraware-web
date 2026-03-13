@@ -587,6 +587,7 @@ export type ReportAutoCalculatedIndicatorPayload = {
   isPublishable: boolean;
   level: 'Process' | 'Output' | 'Outcome' | 'Goal';
   overrideValue?: number;
+  precision: number;
   /** If the indicator is cumulative, the cumulative total at the end of the previous year */
   previousYearCumulativeTotal?: number;
   progressNotes?: string;
@@ -613,6 +614,7 @@ export type ReportCommonIndicatorPayload = {
   isPublishable: boolean;
   level: 'Process' | 'Output' | 'Outcome' | 'Goal';
   name: string;
+  precision: number;
   /** If the indicator is cumulative, the cumulative total at the end of the previous year */
   previousYearCumulativeTotal?: number;
   progressNotes?: string;
@@ -642,6 +644,7 @@ export type ReportProjectIndicatorPayload = {
   isPublishable: boolean;
   level: 'Process' | 'Output' | 'Outcome' | 'Goal';
   name: string;
+  precision: number;
   /** If the indicator is cumulative, the cumulative total at the end of the previous year */
   previousYearCumulativeTotal?: number;
   progressNotes?: string;
@@ -726,6 +729,17 @@ export type AcceleratorReportPayload = {
   submittedTime?: string;
   /** Use autoCalculatedIndicators instead */
   systemMetrics: ReportSystemMetricPayload[];
+  unpublishedProperties: (
+    | 'achievements'
+    | 'additionalComments'
+    | 'autoCalculatedIndicators'
+    | 'challenges'
+    | 'commonIndicators'
+    | 'financialSummaries'
+    | 'highlights'
+    | 'photos'
+    | 'projectIndicators'
+  )[];
 };
 export type SuccessOrError = 'ok' | 'error';
 export type ListAcceleratorReportsResponsePayload = {

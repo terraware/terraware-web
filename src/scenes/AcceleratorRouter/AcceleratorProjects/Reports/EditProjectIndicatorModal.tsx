@@ -203,6 +203,16 @@ export default function EditProjectIndicatorModal(props: EditProjectIndicatorMod
             onChange={onChangeCallback('isPublishable')}
           />
         </Grid>
+        <Grid item xs={12}>
+          <Checkbox
+            disabled={false}
+            id='isDecimal'
+            name='isDecimal'
+            label={strings.IS_DECIMAL}
+            value={record.precision === 2}
+            onChange={(value) => onChangeCallback('precision')(value ? 2 : 0)}
+          />
+        </Grid>
       </Grid>
     </DialogBox>
   );

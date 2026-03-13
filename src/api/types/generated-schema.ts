@@ -5202,6 +5202,7 @@ export interface components {
              * @description Use autoCalculatedIndicators instead
              */
             systemMetrics: components["schemas"]["ReportSystemMetricPayload"][];
+            unpublishedProperties: ("achievements" | "additionalComments" | "autoCalculatedIndicators" | "challenges" | "commonIndicators" | "financialSummaries" | "highlights" | "photos" | "projectIndicators")[];
         };
         AccessionHistoryEntryPayload: {
             /** Format: int64 */
@@ -7573,7 +7574,7 @@ export interface components {
             type: "Point" | "LineString" | "Polygon" | "MultiPoint" | "MultiLineString" | "MultiPolygon" | "GeometryCollection";
         };
         GeometryCollection: Omit<WithRequired<components["schemas"]["Geometry"], "type">, "type"> & {
-            geometries: Record<string, never>[];
+            geometries: (components["schemas"]["GeometryCollection"] | components["schemas"]["LineString"] | components["schemas"]["MultiLineString"] | components["schemas"]["MultiPoint"] | components["schemas"]["MultiPolygon"] | components["schemas"]["Point"] | components["schemas"]["Polygon"])[];
             /** @enum {string} */
             type: "GeometryCollection";
         } & {
@@ -10720,6 +10721,8 @@ export interface components {
             /** @enum {string} */
             level: "Process" | "Output" | "Outcome" | "Goal";
             overrideValue?: number;
+            /** Format: int32 */
+            precision: number;
             /** @description If the indicator is cumulative, the cumulative total at the end of the previous year */
             previousYearCumulativeTotal?: number;
             progressNotes?: string;
@@ -10761,6 +10764,8 @@ export interface components {
             /** @enum {string} */
             level: "Process" | "Output" | "Outcome" | "Goal";
             name: string;
+            /** Format: int32 */
+            precision: number;
             /** @description If the indicator is cumulative, the cumulative total at the end of the previous year */
             previousYearCumulativeTotal?: number;
             progressNotes?: string;
@@ -10801,6 +10806,8 @@ export interface components {
             /** @enum {string} */
             level: "Process" | "Output" | "Outcome" | "Goal";
             name: string;
+            /** Format: int32 */
+            precision: number;
             /** @description If the indicator is cumulative, the cumulative total at the end of the previous year */
             previousYearCumulativeTotal?: number;
             progressNotes?: string;

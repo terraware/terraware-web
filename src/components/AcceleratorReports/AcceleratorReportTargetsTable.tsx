@@ -28,6 +28,7 @@ import {
   useUpdateProjectIndicatorTargetMutation,
 } from 'src/queries/generated/reports';
 import strings from 'src/strings';
+import { formatPrecision } from 'src/utils/numbers';
 import useSnackbar from 'src/utils/useSnackbar';
 
 export type RowMetric = {
@@ -42,6 +43,7 @@ export type RowMetric = {
   indicatorSystemName?: string;
   classId?: string;
   notes?: string;
+  precision: number;
   [key: string]: string | number | undefined;
 };
 
@@ -134,6 +136,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
         endOfProjectTarget: targets?.endOfProjectTarget,
         classId: ind.classId,
         notes: ind.notes,
+        precision: ind.precision,
         ...targetByYear,
       };
     });
@@ -155,6 +158,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
         endOfProjectTarget: targets?.endOfProjectTarget,
         classId: ind.classId,
         notes: ind.notes,
+        precision: ind.precision,
         ...targetByYear,
       };
     });
@@ -177,6 +181,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
         endOfProjectTarget: targets?.endOfProjectTarget,
         classId: ind.classId,
         notes: ind.notes,
+        precision: ind.precision,
         ...targetByYear,
       };
     });
@@ -415,6 +420,15 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
     return <>{classId === 'Cumulative' ? strings.CUMULATIVE : strings.LEVEL}</>;
   }, []);
 
+  const NumericCell = useCallback(({ cell }: { cell: MRT_Cell<RowMetric> }) => {
+    const value = cell.getValue<number | undefined>();
+    if (value === undefined || value === null) {
+      return null;
+    }
+    const precision = cell.row.original.precision ?? 0;
+    return <>{formatPrecision(value, precision)}</>;
+  }, []);
+
   const tableColumns = useMemo(() => {
     const baseColumns: EditableTableColumn<RowMetric>[] = [
       {
@@ -429,6 +443,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
         header: strings.BASELINE,
         accessorKey: 'baseline',
         enableEditing: isAllowedUpdateReportsTargets,
+        Cell: NumericCell,
         editConfig: {
           editVariant: 'text',
           onSave: (row: RowMetric, value: any) => onSaveBaseline(row, value),
@@ -441,6 +456,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
       header: year.toString(),
       accessorKey: `year${year}` as keyof RowMetric,
       enableEditing: isAllowedUpdateReportsTargets,
+      Cell: NumericCell,
       editConfig: {
         editVariant: 'text',
         onSave: (row: RowMetric, value: any) => onSaveYearTarget(row, value, year),
@@ -496,6 +512,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
         header: strings.END_OF_PROJECT_TARGET,
         accessorKey: 'endOfProjectTarget',
         enableEditing: isAllowedUpdateReportsTargets,
+        Cell: NumericCell,
         editConfig: {
           editVariant: 'text',
           onSave: (row: RowMetric, value: any) => onSaveEndOfProjectTarget(row, value),
@@ -513,6 +530,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
     improvedReportsEnabled,
     CategoryCell,
     ClassIdCell,
+    NumericCell,
   ]);
 
   const columnOrder = useMemo(() => {
