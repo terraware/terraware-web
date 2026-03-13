@@ -44,7 +44,7 @@ export default function MonitoringPlotList(): JSX.Element {
 
   const columns: TableColumnType[] = useMemo(() => {
     const defaultColumns: TableColumnType[] = [
-      { key: 'monitoringPlotNumber', name: strings.MONITORING_PLOT, type: 'string' },
+      { key: 'monitoringPlotNumber', name: strings.MONITORING_PLOT, type: 'number', alignment: 'left' },
       { key: 'substratumName', name: strings.SUBSTRATUM, type: 'string' },
       { key: 'completedDate', name: strings.DATE, type: 'string' },
       { key: 'status', name: strings.STATUS, type: 'string' },

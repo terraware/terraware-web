@@ -62,7 +62,7 @@ export function BaseTable<T extends TableRowType>(props: TableProps<T>): JSX.Ele
 
   const addAlignment = useMemo(() => {
     return props.columns.map((col) => {
-      if (col.type === 'number') {
+      if (col.type === 'number' && !col.alignment) {
         return { ...col, alignment: 'right' as TextAlignment };
       } else {
         return col;
