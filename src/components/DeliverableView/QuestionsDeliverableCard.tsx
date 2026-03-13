@@ -102,13 +102,13 @@ const QuestionsDeliverableCard = (props: EditProps): JSX.Element | null => {
     selectDeliverableVariablesWithValues(state, deliverable.id, deliverable.projectId)
   );
 
-  const dependentVariablesWithValues = useAppSelector((state) =>
-    selectSpecificVariablesWithValues(state, dependentVariableStableIds, deliverable.projectId)
-  );
-
   const dependentVariableStableIds = useMemo(
     () => getDependingVariablesStableIdsFromOtherDeliverable(variablesWithValues),
     [variablesWithValues]
+  );
+
+  const dependentVariablesWithValues = useAppSelector((state) =>
+    selectSpecificVariablesWithValues(state, dependentVariableStableIds, deliverable.projectId)
   );
 
   const filteredVariablesWithValues = useMemo(
