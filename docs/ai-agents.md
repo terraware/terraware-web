@@ -10,7 +10,7 @@ Agent definitions live in `ai/agents/`. Each agent is a Markdown file with instr
 - `security-agent.md` — Frontend security reviewer
 - `test-agent.md` — Unit and E2E test engineer
 
-Edit agents here only. Do not edit files directly in `.github/agents/` or `.claude/agents/` — those are generated and will be overwritten by the sync script.
+Edit agents here only. Do not edit files directly in `.claude/agents/` or `.github/agents/` — those are generated and will be overwritten by the sync script.
 
 ## Sync script
 
