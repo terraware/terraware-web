@@ -48,6 +48,13 @@ export const roundToDecimal = (value: number, decimals: number): number => {
   return Math.round(value * multiplier) / multiplier;
 };
 
+/**
+ * Formats a number to a fixed number of decimal places, stripping trailing zeros.
+ * e.g. formatPrecision(5, 2) => "5", formatPrecision(5.25, 2) => "5.25"
+ */
+export const formatPrecision = (value: number, precision: number): string =>
+  parseFloat(value.toFixed(precision)).toString();
+
 export const allowOneDecimal = (e: React.KeyboardEvent<HTMLInputElement>) => {
   const input = e.currentTarget.querySelector('input');
   if (!input) {

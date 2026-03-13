@@ -244,6 +244,16 @@ export default function EditCommonIndicatorModal({
             value={record.isPublishable}
           />
         </Grid>
+        <Grid item xs={12}>
+          <Checkbox
+            disabled={false}
+            id='isDecimal'
+            label={strings.IS_DECIMAL}
+            name='isDecimal'
+            onChange={(value) => onChangeCallback('precision')(value ? 2 : 0)}
+            value={record.precision === 2}
+          />
+        </Grid>
       </Grid>
     </DialogBox>
   );

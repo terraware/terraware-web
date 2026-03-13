@@ -17,6 +17,7 @@ import {
   useReviewAcceleratorReportIndicatorsMutation,
 } from 'src/queries/generated/reports';
 import { IndicatorType } from 'src/types/AcceleratorReport';
+import { formatPrecision } from 'src/utils/numbers';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -140,6 +141,7 @@ const MetricRow = ({
     ? (currentYearProgress?.reduce((sum, q) => sum + q.value, 0) ?? 0) + previousYearCumulativeTotal
     : 0;
   const baseline = metric.baseline ?? 0;
+  const precision = metric.precision ?? 0;
   const hasPreviousYear = metric.previousYearCumulativeTotal !== undefined;
   const previousYearDisplayValue = hasPreviousYear ? metric.previousYearCumulativeTotal : baseline;
   const previousYearDisplayLabel = hasPreviousYear ? String((year ?? 0) - 1) : strings.BASELINE;
@@ -227,7 +229,7 @@ const MetricRow = ({
           </Typography>
           <Box display='flex' alignItems='center'>
             <Typography fontSize='20px' fontWeight={600}>
-              {displayVal !== undefined ? `${displayVal}${unit ? ` ${unit}` : ''}` : '--'}
+              {displayVal !== undefined ? `${formatPrecision(displayVal, precision)}${unit ? ` ${unit}` : ''}` : '--'}
             </Typography>
             {record.overrideValue === undefined && (
               <Tooltip title={strings.TERRAWARE_METRIC_MESSAGE}>
@@ -243,7 +245,10 @@ const MetricRow = ({
           </Box>
           {record.overrideValue !== undefined && (
             <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary} paddingTop={0.5}>
-              {String(strings.OVERWRITTEN_ORIGINAL_VALUE).replace('{0}', String(record.systemValue ?? ''))}
+              {strings.formatString(
+                strings.OVERWRITTEN_ORIGINAL_VALUE,
+                record.systemValue !== undefined ? formatPrecision(record.systemValue, precision) : ''
+              )}
             </Typography>
           )}
         </Box>
@@ -340,7 +345,9 @@ const MetricRow = ({
                   </Box>
                   <Box display='flex' alignItems='center'>
                     <Typography fontSize='20px' fontWeight={600}>
-                      {hasCumulativeEntries ? `${cumulativeValue}${unit ? ` ${unit}` : ''}` : '--'}
+                      {hasCumulativeEntries
+                        ? `${formatPrecision(cumulativeValue, precision)}${unit ? ` ${unit}` : ''}`
+                        : '--'}
                     </Typography>
                     {hasCumulativeEntries &&
                       isAutoCalculatedIndicator(metric) &&
@@ -365,7 +372,7 @@ const MetricRow = ({
                   </Typography>
                   <Box display='flex' alignItems='center'>
                     <Typography fontSize='20px' fontWeight={600}>
-                      {hasActualValue ? `${actualValue}${unit ? ` ${unit}` : ''}` : '--'}
+                      {hasActualValue ? `${formatPrecision(actualValue, precision)}${unit ? ` ${unit}` : ''}` : '--'}
                     </Typography>
                     {hasActualValue && isAutoCalculatedIndicator(metric) && metric.overrideValue === undefined && (
                       <Tooltip title={strings.TERRAWARE_METRIC_MESSAGE}>
@@ -377,7 +384,10 @@ const MetricRow = ({
                   </Box>
                   {isAutoCalculatedIndicator(metric) && metric.overrideValue !== undefined && (
                     <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary} paddingTop={0.5}>
-                      {String(strings.OVERWRITTEN_ORIGINAL_VALUE).replace('{0}', String(metric.systemValue ?? ''))}
+                      {strings.formatString(
+                        strings.OVERWRITTEN_ORIGINAL_VALUE,
+                        metric.systemValue !== undefined ? formatPrecision(metric.systemValue, precision) : ''
+                      )}
                     </Typography>
                   )}
                 </>
@@ -391,7 +401,7 @@ const MetricRow = ({
                 {year} {strings.TARGET}
               </Typography>
               <Typography fontSize='20px' fontWeight={600}>
-                {hasTargetValue ? `${targetValue}${unit ? ` ${unit}` : ''}` : '--'}
+                {hasTargetValue ? `${formatPrecision(targetValue, precision)}${unit ? ` ${unit}` : ''}` : '--'}
               </Typography>
             </Box>
 
@@ -532,7 +542,9 @@ const MetricRow = ({
                       </Typography>
                       <Box display='flex' alignItems='center'>
                         <Typography fontSize='28px' fontWeight={600}>
-                          {hasActualValue ? `${actualValue}${unit ? ` ${unit}` : ''}` : '--'}
+                          {hasActualValue
+                            ? `${formatPrecision(actualValue, precision)}${unit ? ` ${unit}` : ''}`
+                            : '--'}
                         </Typography>
                         {hasActualValue && isAutoCalculatedIndicator(metric) && metric.overrideValue === undefined && (
                           <Tooltip title={strings.TERRAWARE_METRIC_MESSAGE}>
@@ -548,7 +560,10 @@ const MetricRow = ({
                       </Box>
                       {isAutoCalculatedIndicator(metric) && metric.overrideValue !== undefined && (
                         <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary} paddingTop={0.5}>
-                          {String(strings.OVERWRITTEN_ORIGINAL_VALUE).replace('{0}', String(metric.systemValue ?? ''))}
+                          {strings.formatString(
+                            strings.OVERWRITTEN_ORIGINAL_VALUE,
+                            metric.systemValue !== undefined ? formatPrecision(metric.systemValue, precision) : ''
+                          )}
                         </Typography>
                       )}
                     </Grid>

@@ -907,6 +907,7 @@ INVITATION_PENDING,Invitación pendiente,6b64d319
 INVITE_FUNDER,Invitar financiador,d885523f
 INVITE_FUNDER_DESCRIPTION,Ingrese un correo electrónico para invitar a un financiador al Portal de Financiación bajo esta entidad. Se enviará un correo de invitación para crear una cuenta. El nombre y el apellido serán ingresados por el titular de la cuenta.,306732c9
 INVITED,Invitado,d40f4749
+IS_DECIMAL,Es decimal,c18644f0
 ISSUE,Problema,5468a635
 IUCN_CRITICALLY_ENDANGERED,En peligro crítico (CR),424daaa8
 IUCN_DATA_DEFICIENT,Datos insuficientes (DD),445f6cd0

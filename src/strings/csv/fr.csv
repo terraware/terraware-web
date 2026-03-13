@@ -906,6 +906,7 @@ INVITATION_PENDING,Invitation en attente,6b64d319
 INVITE_FUNDER,Inviter le bailleur de fonds,d885523f
 INVITE_FUNDER_DESCRIPTION,Fournissez une adresse e-mail pour inviter un bailleur de fonds à accéder au portail des bailleurs de fonds sous cette entité de financement. Un e-mail d'invitation à créer un compte sera envoyé à l'adresse e-mail. Le prénom et le nom de famille seront fournis par le titulaire du compte.,306732c9
 INVITED,Invité·e,d40f4749
+IS_DECIMAL,Est décimal,c18644f0
 ISSUE,Sujet,5468a635
 IUCN_CRITICALLY_ENDANGERED,En danger critique d'extinction (CR),424daaa8
 IUCN_DATA_DEFICIENT,Données insuffisantes (DD),445f6cd0
