@@ -18,6 +18,36 @@ yarn lint \
   --rule 'react-hooks/static-components: 0'
 ```
 
+## Tech Stack
+
+- Core: React 19, TypeScript
+- State and data: Redux Toolkit, RTK Query
+- Routing: React Router 7
+- UI: MUI 6
+- Build: Rsbuild
+- Key libraries: Axios, Luxon, Slate, Chart.js, Mapbox, Turf.js, PlayCanvas, Mux
+- Testing: Rstest, Playwright
+- Development: Storybook
+
+## Preferred Patterns
+
+- Use Redux Toolkit for application state and RTK Query for API requests
+- Use MUI components for UI when possible
+- Prefer existing utilities and helpers instead of introducing new ones
+
+## Do Not Introduce
+
+- New state management, routing, or styling libraries
+- Large dependencies when an existing solution already exists
+
+## Where to Place New Code
+
+- New React components should live near the feature that uses them
+- Shared components should go in existing shared component directories
+- Shared utilities should go in existing utility/helper directories
+- Prefer modifying existing files rather than introducing new abstractions unless necessary
+- Avoid creating new top-level directories unless necessary
+
 ## Code Style Guidelines
 
 - Follow the conventions defined in `.prettierrc`
