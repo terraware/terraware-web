@@ -53,7 +53,7 @@ const AcceleratorReportsView = () => {
 
   return (
     <Page hierarchicalCrumbs={false} leftComponent={PageHeaderLeftComponent} title={strings.REPORTS}>
-      <Box display='flex' flexDirection='column' flexGrow={1}>
+      <Box display='flex' flexDirection='column' flexGrow={1} width={'100%'}>
         <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />
       </Box>
     </Page>
