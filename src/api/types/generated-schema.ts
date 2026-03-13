@@ -5637,16 +5637,18 @@ export interface components {
             /** @enum {string} */
             category: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
             /** @enum {string} */
-            classId?: "Cumulative" | "Level";
+            classId: "Cumulative" | "Level";
             description: string;
             /** @enum {string} */
-            frequency?: "Annual" | "Bi-Annual" | "MRV Cycle";
+            frequency?: "Annual" | "Bi-Annual" | "MRV Cycle" | "Quarterly";
             /** @enum {string} */
             indicator: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Hectares Planted" | "Survival Rate";
             /** @enum {string} */
-            level: "Activity" | "Output" | "Outcome" | "Impact";
+            level: "Process" | "Output" | "Outcome" | "Goal";
             name: string;
             notes?: string;
+            /** Format: int32 */
+            precision: number;
             primaryDataSource?: string;
             refId: string;
             tfOwner?: string;
@@ -6724,7 +6726,6 @@ export interface components {
         CumulativeIndicatorProgressPayload: {
             /** @enum {string} */
             quarter: "Q1" | "Q2" | "Q3" | "Q4";
-            /** Format: int32 */
             value: number;
         };
         DateVariablePayload: Omit<WithRequired<components["schemas"]["VariablePayload"], "id" | "internalOnly" | "isList" | "isRequired" | "name" | "stableId" | "type">, "type"> & {
@@ -7157,17 +7158,19 @@ export interface components {
             /** @enum {string} */
             category: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
             /** @enum {string} */
-            classId?: "Cumulative" | "Level";
+            classId: "Cumulative" | "Level";
             description?: string;
             /** @enum {string} */
-            frequency?: "Annual" | "Bi-Annual" | "MRV Cycle";
+            frequency?: "Annual" | "Bi-Annual" | "MRV Cycle" | "Quarterly";
             /** Format: int64 */
             id: number;
             isPublishable: boolean;
             /** @enum {string} */
-            level: "Activity" | "Output" | "Outcome" | "Impact";
+            level: "Process" | "Output" | "Outcome" | "Goal";
             name: string;
             notes?: string;
+            /** Format: int32 */
+            precision: number;
             primaryDataSource?: string;
             refId: string;
             tfOwner?: string;
@@ -7235,17 +7238,19 @@ export interface components {
             /** @enum {string} */
             category: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
             /** @enum {string} */
-            classId?: "Cumulative" | "Level";
+            classId: "Cumulative" | "Level";
             description?: string;
             /** @enum {string} */
-            frequency?: "Annual" | "Bi-Annual" | "MRV Cycle";
+            frequency?: "Annual" | "Bi-Annual" | "MRV Cycle" | "Quarterly";
             /** Format: int64 */
             id: number;
             isPublishable: boolean;
             /** @enum {string} */
-            level: "Activity" | "Output" | "Outcome" | "Impact";
+            level: "Process" | "Output" | "Outcome" | "Goal";
             name: string;
             notes?: string;
+            /** Format: int32 */
+            precision: number;
             primaryDataSource?: string;
             /** Format: int64 */
             projectId: number;
@@ -7265,7 +7270,7 @@ export interface components {
             projectId: number;
             reference: string;
             /** @enum {string} */
-            type: "Activity" | "Output" | "Outcome" | "Impact";
+            type: "Process" | "Output" | "Outcome" | "Goal";
             unit?: string;
         };
         ExistingSectionTextValuePayload: Omit<WithRequired<components["schemas"]["ExistingValuePayload"], "id" | "listPosition" | "type">, "type"> & {
@@ -7314,7 +7319,7 @@ export interface components {
             name: string;
             reference: string;
             /** @enum {string} */
-            type: "Activity" | "Output" | "Outcome" | "Impact";
+            type: "Process" | "Output" | "Outcome" | "Goal";
             unit?: string;
         };
         /** @description A row in a table. Each row has its own value ID. ExistingVariableValuesPayload includes this ID for values of variables that are defined as columns of a table. */
@@ -7568,7 +7573,7 @@ export interface components {
             type: "Point" | "LineString" | "Polygon" | "MultiPoint" | "MultiLineString" | "MultiPolygon" | "GeometryCollection";
         };
         GeometryCollection: Omit<WithRequired<components["schemas"]["Geometry"], "type">, "type"> & {
-            geometries: (components["schemas"]["GeometryCollection"] | components["schemas"]["LineString"] | components["schemas"]["MultiLineString"] | components["schemas"]["MultiPoint"] | components["schemas"]["MultiPolygon"] | components["schemas"]["Point"] | components["schemas"]["Polygon"])[];
+            geometries: Record<string, never>[];
             /** @enum {string} */
             type: "GeometryCollection";
         } & {
@@ -8173,7 +8178,6 @@ export interface components {
         IndicatorProgressPayload: {
             /** @enum {string} */
             indicator: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Hectares Planted" | "Survival Rate";
-            /** Format: int32 */
             progress: number;
         };
         InternalTagPayload: {
@@ -8866,18 +8870,21 @@ export interface components {
             type: "Image";
         };
         NewIndicatorPayload: {
+            active: boolean;
             /** @enum {string} */
             category: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
             /** @enum {string} */
-            classId?: "Cumulative" | "Level";
+            classId: "Cumulative" | "Level";
             description?: string;
             /** @enum {string} */
-            frequency?: "Annual" | "Bi-Annual" | "MRV Cycle";
+            frequency?: "Annual" | "Bi-Annual" | "MRV Cycle" | "Quarterly";
             isPublishable: boolean;
             /** @enum {string} */
-            level: "Activity" | "Output" | "Outcome" | "Impact";
+            level: "Process" | "Output" | "Outcome" | "Goal";
             name: string;
             notes?: string;
+            /** Format: int32 */
+            precision: number;
             primaryDataSource?: string;
             refId: string;
             tfOwner?: string;
@@ -8907,7 +8914,7 @@ export interface components {
             name: string;
             reference: string;
             /** @enum {string} */
-            type: "Activity" | "Output" | "Outcome" | "Impact";
+            type: "Process" | "Output" | "Outcome" | "Goal";
             unit?: string;
         };
         NewNumberValuePayload: Omit<components["schemas"]["NewValuePayload"], "type"> & {
@@ -10355,29 +10362,39 @@ export interface components {
         PublishProjectProfileRequestPayload: {
             details: components["schemas"]["FunderProjectDetailsPayload"];
         };
+        /** @description If the indicator is cumulative, the list of actual values for all quarters in the report's year. Note that only the report's quarter will be a published value, the rest will be current values whether or not they are the same as their published counterparts. */
+        PublishedCumulativeIndicatorProgressPayload: {
+            /** @enum {string} */
+            quarter: "Q1" | "Q2" | "Q3" | "Q4";
+            value: number;
+        };
         PublishedProjectPayload: {
             dealName?: string;
             /** Format: int64 */
             projectId: number;
         };
         PublishedReportIndicatorPayload: {
+            baseline?: number;
             /** @enum {string} */
             category: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
             /** @enum {string} */
-            classId?: "Cumulative" | "Level";
+            classId: "Cumulative" | "Level";
+            /** @description If the indicator is cumulative, the list of actual values for all quarters in the report's year. Note that only the report's quarter will be a published value, the rest will be current values whether or not they are the same as their published counterparts. */
+            currentYearProgress?: components["schemas"]["PublishedCumulativeIndicatorProgressPayload"][];
             description?: string;
+            endOfProjectTarget?: number;
             /** @enum {string} */
-            level: "Activity" | "Output" | "Outcome" | "Impact";
+            level: "Process" | "Output" | "Outcome" | "Goal";
             name: string;
+            /** @description If the indicator is cumulative, the cumulative total at the end of the previous year */
+            previousYearCumulativeTotal?: number;
             progressNotes?: string;
             projectsComments?: string;
             refId: string;
             /** @enum {string} */
             status?: "Achieved" | "On-Track" | "Unlikely" | "Off-Track";
-            /** Format: int32 */
             target?: number;
             unit?: string;
-            /** Format: int32 */
             value?: number;
         };
         /**
@@ -10397,7 +10414,7 @@ export interface components {
             /** Format: int32 */
             target?: number;
             /** @enum {string} */
-            type: "Activity" | "Output" | "Outcome" | "Impact";
+            type: "Process" | "Output" | "Outcome" | "Goal";
             unit?: string;
             /** Format: int32 */
             value?: number;
@@ -10681,7 +10698,6 @@ export interface components {
         ReportAutoCalculatedIndicatorEntriesPayload: {
             /** @enum {string} */
             indicator: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Hectares Planted" | "Survival Rate";
-            /** Format: int32 */
             overrideValue?: number;
             progressNotes?: string;
             projectsComments?: string;
@@ -10693,7 +10709,7 @@ export interface components {
             /** @enum {string} */
             category: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
             /** @enum {string} */
-            classId?: "Cumulative" | "Level";
+            classId: "Cumulative" | "Level";
             /** @description If the indicator is cumulative, the list of actual values for all quarters in the report's year */
             currentYearProgress?: components["schemas"]["CumulativeIndicatorProgressPayload"][];
             description?: string;
@@ -10702,10 +10718,9 @@ export interface components {
             indicator: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Hectares Planted" | "Survival Rate";
             isPublishable: boolean;
             /** @enum {string} */
-            level: "Activity" | "Output" | "Outcome" | "Impact";
-            /** Format: int32 */
+            level: "Process" | "Output" | "Outcome" | "Goal";
             overrideValue?: number;
-            /** @description If the indicator is cumulative, the cumulative total and the end of the previous year */
+            /** @description If the indicator is cumulative, the cumulative total at the end of the previous year */
             previousYearCumulativeTotal?: number;
             progressNotes?: string;
             projectsComments?: string;
@@ -10714,9 +10729,7 @@ export interface components {
             status?: "Achieved" | "On-Track" | "Unlikely" | "Off-Track";
             /** Format: date-time */
             systemTime?: string;
-            /** Format: int32 */
             systemValue?: number;
-            /** Format: int32 */
             target?: number;
         };
         ReportChallengePayload: {
@@ -10730,7 +10743,6 @@ export interface components {
             projectsComments?: string;
             /** @enum {string} */
             status?: "Achieved" | "On-Track" | "Unlikely" | "Off-Track";
-            /** Format: int32 */
             value?: number;
         };
         ReportCommonIndicatorPayload: {
@@ -10738,7 +10750,7 @@ export interface components {
             /** @enum {string} */
             category: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
             /** @enum {string} */
-            classId?: "Cumulative" | "Level";
+            classId: "Cumulative" | "Level";
             /** @description If the indicator is cumulative, the list of actual values for all quarters in the report's year */
             currentYearProgress?: components["schemas"]["CumulativeIndicatorProgressPayload"][];
             description?: string;
@@ -10747,18 +10759,16 @@ export interface components {
             id: number;
             isPublishable: boolean;
             /** @enum {string} */
-            level: "Activity" | "Output" | "Outcome" | "Impact";
+            level: "Process" | "Output" | "Outcome" | "Goal";
             name: string;
-            /** @description If the indicator is cumulative, the cumulative total and the end of the previous year */
+            /** @description If the indicator is cumulative, the cumulative total at the end of the previous year */
             previousYearCumulativeTotal?: number;
             progressNotes?: string;
             projectsComments?: string;
             refId: string;
             /** @enum {string} */
             status?: "Achieved" | "On-Track" | "Unlikely" | "Off-Track";
-            /** Format: int32 */
             target?: number;
-            /** Format: int32 */
             value?: number;
         };
         ReportPhotoPayload: {
@@ -10773,7 +10783,6 @@ export interface components {
             projectsComments?: string;
             /** @enum {string} */
             status?: "Achieved" | "On-Track" | "Unlikely" | "Off-Track";
-            /** Format: int32 */
             value?: number;
         };
         ReportProjectIndicatorPayload: {
@@ -10781,7 +10790,7 @@ export interface components {
             /** @enum {string} */
             category: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
             /** @enum {string} */
-            classId?: "Cumulative" | "Level";
+            classId: "Cumulative" | "Level";
             /** @description If the indicator is cumulative, the list of actual values for all quarters in the report's year */
             currentYearProgress?: components["schemas"]["CumulativeIndicatorProgressPayload"][];
             description?: string;
@@ -10790,19 +10799,17 @@ export interface components {
             id: number;
             isPublishable: boolean;
             /** @enum {string} */
-            level: "Activity" | "Output" | "Outcome" | "Impact";
+            level: "Process" | "Output" | "Outcome" | "Goal";
             name: string;
-            /** @description If the indicator is cumulative, the cumulative total and the end of the previous year */
+            /** @description If the indicator is cumulative, the cumulative total at the end of the previous year */
             previousYearCumulativeTotal?: number;
             progressNotes?: string;
             projectsComments?: string;
             refId: string;
             /** @enum {string} */
             status?: "Achieved" | "On-Track" | "Unlikely" | "Off-Track";
-            /** Format: int32 */
             target?: number;
             unit?: string;
-            /** Format: int32 */
             value?: number;
         };
         /**
@@ -10839,7 +10846,7 @@ export interface components {
             /** Format: int32 */
             target?: number;
             /** @enum {string} */
-            type: "Activity" | "Output" | "Outcome" | "Impact";
+            type: "Process" | "Output" | "Outcome" | "Goal";
             unit?: string;
             /** Format: int32 */
             value?: number;
@@ -10902,7 +10909,7 @@ export interface components {
             /** Format: int32 */
             target?: number;
             /** @enum {string} */
-            type: "Activity" | "Output" | "Outcome" | "Impact";
+            type: "Process" | "Output" | "Outcome" | "Goal";
             /** Format: int32 */
             value?: number;
         };
@@ -10955,7 +10962,7 @@ export interface components {
             /** Format: int32 */
             target?: number;
             /** @enum {string} */
-            type: "Activity" | "Output" | "Outcome" | "Impact";
+            type: "Process" | "Output" | "Outcome" | "Goal";
         };
         /**
          * @deprecated
@@ -11615,7 +11622,7 @@ export interface components {
             name: string;
             reference: string;
             /** @enum {string} */
-            type: "Activity" | "Output" | "Outcome" | "Impact";
+            type: "Process" | "Output" | "Outcome" | "Goal";
         };
         TableColumnPayload: {
             isHeader: boolean;
@@ -11832,7 +11839,6 @@ export interface components {
         UpdateAutoCalculatedIndicatorTargetRequestPayload: {
             /** @enum {string} */
             indicator: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Hectares Planted" | "Survival Rate";
-            /** Format: int32 */
             target?: number;
             /** Format: int32 */
             year: number;
@@ -11898,7 +11904,6 @@ export interface components {
         UpdateCommonIndicatorTargetRequestPayload: {
             /** Format: int64 */
             indicatorId: number;
-            /** Format: int32 */
             target?: number;
             /** Format: int32 */
             year: number;
@@ -12197,7 +12202,6 @@ export interface components {
         UpdateProjectIndicatorTargetRequestPayload: {
             /** Format: int64 */
             indicatorId: number;
-            /** Format: int32 */
             target?: number;
             /** Format: int32 */
             year: number;

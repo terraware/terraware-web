@@ -51,6 +51,8 @@ import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
+const TABLE_STATE_STORAGE_KEY = 'nursery-withdrawals-table';
+
 const ITEMS_PER_PAGE = 100;
 
 const DEFAULT_SORT_ORDER: SearchSortOrder = {
@@ -61,7 +63,17 @@ const DEFAULT_SORT_ORDER: SearchSortOrder = {
 // Menu cell component that can use hooks
 const MenuCellComponent = ({ row, reloadData }: { row: SearchResponseElement; reloadData: () => void }) => {
   const [undoModalOpened, setUndoModalOpened] = useState(false);
+  const navigate = useSyncNavigate();
   const { NURSERY_TRANSFER } = NurseryWithdrawalPurposes;
+
+  const handleReassign = useCallback(() => {
+    if (row.delivery_id) {
+      navigate({
+        pathname: APP_PATHS.NURSERY_REASSIGNMENT.replace(':deliveryId', String(row.delivery_id)),
+        search: '?fromWithdrawal',
+      });
+    }
+  }, [navigate, row.delivery_id]);
 
   if (row.purpose !== NURSERY_TRANSFER && !row.undoesWithdrawalId && !row.undoneByWithdrawalId) {
     return (
@@ -69,13 +81,7 @@ const MenuCellComponent = ({ row, reloadData }: { row: SearchResponseElement; re
         {undoModalOpened && (
           <UndoWithdrawalModal onClose={() => setUndoModalOpened(false)} row={row} reload={reloadData} />
         )}
-        <WithdrawalHistoryMenu
-          reassign={() => {
-            /* onWithdrawalClicked callback removed */
-          }}
-          withdrawal={row}
-          undo={() => setUndoModalOpened(true)}
-        />
+        <WithdrawalHistoryMenu reassign={handleReassign} withdrawal={row} undo={() => setUndoModalOpened(true)} />
       </>
     );
   }
@@ -119,7 +125,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     setShowGlobalFilter,
     showColumnFilters,
     showGlobalFilter,
-  } = useTableState('nursery-withdrawals-table', {
+  } = useTableState(TABLE_STATE_STORAGE_KEY, {
     persistFilters: true,
   });
 
@@ -449,26 +455,59 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
               ),
             } as OrNodePayload;
           }
-          // Range filter (e.g., numbers)
+          // Range filter (e.g., numbers or dates)
           if (filterValue.length === 2) {
             const children: SearchNodePayload[] = [];
-            if (filterValue[0] !== undefined && filterValue[0] !== '') {
+            const isDateRange = column?.filterVariant === 'date-range';
+
+            if (isDateRange) {
+              // Date-range: single Range node with YYYY-MM-DD values.
+              // MRT uses dayjs as its date adapter, so filter values are dayjs objects.
+              const toDateStr = (val: unknown): string | null => {
+                if (val === null || val === undefined) {
+                  return null;
+                }
+                if (typeof val === 'object') {
+                  const dayjsLike = val as { format?: (f: string) => string; isValid?: () => boolean };
+                  if (typeof dayjsLike.format === 'function' && typeof dayjsLike.isValid === 'function') {
+                    return dayjsLike.isValid() ? dayjsLike.format('YYYY-MM-DD') : null;
+                  }
+                }
+                return null;
+              };
+              const minDate = toDateStr(filterValue[0]);
+              const maxDate = toDateStr(filterValue[1]);
+              if (!minDate && !maxDate) {
+                return { operation: 'or', children: [] } as OrNodePayload;
+              }
+              return {
+                operation: 'field',
+                field: fieldNames[0],
+                type: 'Range',
+                values: [minDate ?? '1900-01-01', maxDate ?? '9999-12-31'],
+              } as FieldNodePayload;
+            }
+
+            const minStr = filterValue[0] !== undefined && filterValue[0] !== '' ? String(filterValue[0]) : undefined;
+            const maxStr = filterValue[1] !== undefined && filterValue[1] !== '' ? String(filterValue[1]) : undefined;
+
+            if (minStr !== undefined) {
               fieldNames.forEach((fieldName) => {
                 children.push({
                   operation: 'field',
                   field: fieldName,
                   type: 'Range',
-                  values: [String(filterValue[0]), '999999999'],
+                  values: [minStr, '999999999'],
                 });
               });
             }
-            if (filterValue[1] !== undefined && filterValue[1] !== '') {
+            if (maxStr !== undefined) {
               fieldNames.forEach((fieldName) => {
                 children.push({
                   operation: 'field',
                   field: fieldName,
                   type: 'Range',
-                  values: ['0', String(filterValue[1])],
+                  values: ['0', maxStr],
                 });
               });
             }
@@ -505,7 +544,11 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
             values: [String(filterValue)],
           })),
         } as OrNodePayload;
-      });
+      })
+      .filter(
+        (node): node is SearchNodePayload =>
+          !(node.operation === 'or' && (node as OrNodePayload).children?.length === 0)
+      );
   }, [columnFilters, columns, purposeLabelToValue]);
 
   const searchChildren: SearchNodePayload[] = useMemo(() => {
@@ -684,6 +727,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   return (
     <EditableTable
       key='nursery-withdrawals-table'
+      clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
       columns={columns}
       data={rows || []}
       enableEditing={false}
@@ -691,7 +735,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
       enableGlobalFilter={true}
       enableColumnFilters={true}
       enableColumnOrdering={true}
-      storageKey='nursery-withdrawals-table'
+      storageKey={TABLE_STATE_STORAGE_KEY}
       enablePagination={true}
       enableTopToolbar={true}
       enableBottomToolbar={true}

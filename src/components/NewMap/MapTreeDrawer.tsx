@@ -22,6 +22,11 @@ const MapTreeDrawer = ({ observationId, tree }: MapTreeDrawerProps): JSX.Element
     return data?.observation;
   }, [data?.observation]);
 
+  const treeNumber = useMemo(
+    () => (tree.treeGrowthForm === 'Trunk' ? `${tree.treeNumber}_${tree.trunkNumber}` : `${tree.treeNumber}`),
+    [tree.treeGrowthForm, tree.treeNumber, tree.trunkNumber]
+  );
+
   const treeGrowthForm = useMemo(() => {
     switch (tree.treeGrowthForm) {
       case 'Tree':
@@ -43,6 +48,10 @@ const MapTreeDrawer = ({ observationId, tree }: MapTreeDrawerProps): JSX.Element
   const rows = useMemo((): MapDrawerTableRow[] => {
     if (result) {
       return [
+        {
+          key: strings.ID,
+          value: treeNumber,
+        },
         {
           key: strings.SPECIES,
           value: treeSpecies,
@@ -86,6 +95,7 @@ const MapTreeDrawer = ({ observationId, tree }: MapTreeDrawerProps): JSX.Element
   }, [
     result,
     strings,
+    treeNumber,
     treeSpecies,
     treeGrowthForm,
     tree.diameterAtBreastHeight,

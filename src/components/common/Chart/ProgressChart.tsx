@@ -2,6 +2,8 @@ import React, { type JSX } from 'react';
 
 import { Box, LinearProgress, Typography, useTheme } from '@mui/material';
 
+import { MetricStatus } from 'src/types/AcceleratorReport';
+
 export type QuarterlyProgressItem = {
   quarter: string;
   value: number;
@@ -10,6 +12,7 @@ export type QuarterlyProgressItem = {
 export type ProgressChartProps = {
   value: number;
   target: number;
+  status?: MetricStatus;
   quarterlyProgress?: QuarterlyProgressItem[];
   reportLabel?: string;
   previousYearValue?: number;
@@ -21,6 +24,7 @@ export type ProgressChartProps = {
 export default function ProgressChart({
   value,
   target,
+  status,
   quarterlyProgress,
   reportLabel,
   previousYearValue,
@@ -30,6 +34,13 @@ export default function ProgressChart({
 }: ProgressChartProps): JSX.Element {
   const theme = useTheme();
 
+  const fillColor =
+    status === 'Unlikely'
+      ? theme.palette.TwClrTxtDanger
+      : status === 'Off-Track'
+        ? theme.palette.TwClrTxtWarning
+        : theme.palette.TwClrBgBrand;
+
   const hasLabels = reportLabel || (quarterlyProgress && quarterlyProgress.length > 0);
 
   if (quarterlyProgress && quarterlyProgress.length > 0) {
@@ -37,10 +48,11 @@ export default function ProgressChart({
     const currentYearTotal = quarterlyProgress.reduce((sum, q) => sum + q.value, 0);
     const totalProgress = prevYear + currentYearTotal;
     const barMax = Math.max(totalProgress, target > 0 ? target : totalProgress);
+    const barMin = prevYear;
+    const barRange = barMax - barMin;
 
-    const toPercent = (v: number) => (barMax > 0 ? (v / barMax) * 100 : 0);
+    const toPercent = (v: number) => (barRange > 0 ? ((v - barMin) / barRange) * 100 : 0);
 
-    const previousYearEndPct = toPercent(prevYear);
     const targetPct = toPercent(target);
 
     let cumulative = prevYear;
@@ -61,7 +73,7 @@ export default function ProgressChart({
       <Box>
         <Box position='relative' height='18px'>
           {previousYearLabel && (
-            <Box position='absolute' sx={{ left: `${previousYearEndPct}%`, transform: 'translateX(-50%)' }}>
+            <Box position='absolute' sx={{ left: 0 }}>
               <Typography fontSize='10px' color={theme.palette.TwClrTxtSecondary}>
                 {previousYearLabel}
               </Typography>
@@ -93,18 +105,7 @@ export default function ProgressChart({
               overflow: 'hidden',
             }}
           >
-            {prevYear > 0 && (
-              <Box
-                sx={{
-                  position: 'absolute',
-                  left: 0,
-                  width: `${previousYearEndPct}%`,
-                  height: '100%',
-                  backgroundColor: theme.palette.TwClrBgBrand,
-                }}
-              />
-            )}
-            {segments.map(({ quarter, startPct, widthPct, isLast }) => (
+            {segments.map(({ quarter, startPct, widthPct }) => (
               <Box
                 key={quarter}
                 sx={{
@@ -112,22 +113,36 @@ export default function ProgressChart({
                   left: `${startPct}%`,
                   width: `${widthPct}%`,
                   height: '100%',
-                  backgroundColor: theme.palette.TwClrBgBrand,
-                  opacity: isLast ? 0.6 : 1,
+                  backgroundColor: fillColor,
                 }}
               />
             ))}
           </Box>
 
+          {segments.map(({ quarter, endPct }) => (
+            <Box
+              key={`divider-${quarter}`}
+              sx={{
+                position: 'absolute',
+                left: `${endPct}%`,
+                width: '1px',
+                height: '18px',
+                top: '-3px',
+                backgroundColor: theme.palette.TwClrTxtSecondary,
+                transform: 'translateX(-50%)',
+              }}
+            />
+          ))}
+
           {target > 0 && (
             <Box
               sx={{
                 position: 'absolute',
-                top: 0,
+                top: '-3px',
                 left: `${targetPct}%`,
-                width: '2px',
-                height: '12px',
-                backgroundColor: theme.palette.TwClrBaseGray300,
+                width: '1px',
+                height: '18px',
+                backgroundColor: theme.palette.TwClrTxtSecondary,
                 transform: 'translateX(-50%)',
               }}
             />
@@ -171,7 +186,7 @@ export default function ProgressChart({
           height: '12px',
           borderRadius: '4px',
           backgroundColor: theme.palette.TwClrBaseGray100,
-          '& span': { backgroundColor: theme.palette.TwClrBgBrand },
+          '& span': { backgroundColor: fillColor },
         }}
       />
     </Box>

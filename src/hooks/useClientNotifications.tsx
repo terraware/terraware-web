@@ -2,12 +2,12 @@ import { useMemo } from 'react';
 
 import { ClientNotification } from 'src/types/Notifications';
 
-import OrganizationNotification from './OrganizationNotification';
-import UserNotification from './UserNotification';
+import useOrganizationNotification from './useOrganizationNotification';
+import useUserNotification from './useUserNotification';
 
 export default function useClientNotifications(): ClientNotification[] {
-  const userNotification = UserNotification();
-  const orgNotification = OrganizationNotification();
+  const userNotification = useUserNotification();
+  const orgNotification = useOrganizationNotification();
 
   return useMemo(
     () =>

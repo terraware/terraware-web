@@ -214,7 +214,9 @@ export default function ReportsSettings(): JSX.Element {
     isCommon: boolean;
     reference: string;
     category: string;
+    classId?: string;
     level: string;
+    active: boolean;
     primaryDataSource?: string;
     frequencyOfReporting?: string;
     tfOwnerReviewer?: string;
@@ -233,7 +235,9 @@ export default function ReportsSettings(): JSX.Element {
       isCommon: false,
       reference: ind.refId,
       category: ind.category,
+      classId: ind.classId,
       level: ind.level,
+      active: ind.active,
       primaryDataSource: ind.primaryDataSource,
       frequencyOfReporting: ind.frequency,
       tfOwnerReviewer: ind.tfOwner,
@@ -250,7 +254,9 @@ export default function ReportsSettings(): JSX.Element {
       isCommon: true,
       reference: ind.refId,
       category: ind.category,
+      classId: ind.classId,
       level: ind.level,
+      active: ind.active,
       primaryDataSource: ind.primaryDataSource,
       frequencyOfReporting: ind.frequency,
       tfOwnerReviewer: ind.tfOwner,
@@ -267,7 +273,9 @@ export default function ReportsSettings(): JSX.Element {
       isCommon: true,
       reference: ind.refId,
       category: ind.category,
+      classId: ind.classId,
       level: ind.level,
+      active: ind.active,
       primaryDataSource: strings.TW_DATA,
       frequencyOfReporting: ind.frequency,
       tfOwnerReviewer: ind.tfOwner,
@@ -296,7 +304,7 @@ export default function ReportsSettings(): JSX.Element {
       const row = cell.row.original;
       if (row.indicatorType !== 'autoCalculated' && isAllowed('UPDATE_REPORTS_SETTINGS')) {
         return (
-          <Link fontSize='16px' onClick={() => onClickIndicatorRow(row)}>
+          <Link fontSize='16px' onClick={() => onClickIndicatorRow(row)} style={{ textAlign: 'left' }}>
             {row.name}
           </Link>
         );
@@ -365,6 +373,22 @@ export default function ReportsSettings(): JSX.Element {
     [theme, strings.TW_DATA]
   );
 
+  const ClassIdCell = useCallback(
+    ({ cell }: { cell: MRT_Cell<IndicatorRow> }) => {
+      const classId = cell.getValue<string>();
+      return <>{classId === 'Cumulative' ? strings.CUMULATIVE : strings.LEVEL}</>;
+    },
+    [strings]
+  );
+
+  const ActiveCell = useCallback(
+    ({ cell }: { cell: MRT_Cell<IndicatorRow> }) => {
+      const isActive = cell.getValue<boolean>();
+      return <>{isActive ? strings.YES : strings.NO}</>;
+    },
+    [strings]
+  );
+
   const indicatorColumns = useMemo(
     (): EditableTableColumn<IndicatorRow>[] => [
       {
@@ -413,11 +437,27 @@ export default function ReportsSettings(): JSX.Element {
         Cell: CategoryCell,
       },
       {
+        id: 'classId',
+        header: strings.CUMULATIVE_OR_LEVEL,
+        accessorKey: 'classId',
+        enableEditing: false,
+        size: 160,
+        Cell: ClassIdCell,
+      },
+      {
         id: 'level',
         header: strings.INDICATOR_LEVEL,
         accessorKey: 'level',
         enableEditing: false,
         size: 140,
+      },
+      {
+        id: 'active',
+        header: strings.ACTIVE,
+        accessorKey: 'active',
+        enableEditing: false,
+        size: 120,
+        Cell: ActiveCell,
       },
       {
         id: 'primaryDataSource',
@@ -449,7 +489,7 @@ export default function ReportsSettings(): JSX.Element {
         size: 200,
       },
     ],
-    [strings, NameCell, CommonCell, CategoryCell, PrimaryDataSourceCell]
+    [strings, NameCell, CommonCell, CategoryCell, PrimaryDataSourceCell, ActiveCell, ClassIdCell]
   );
 
   return (
@@ -509,13 +549,14 @@ export default function ReportsSettings(): JSX.Element {
         </Grid>
         {improvedReportsEnabled && (
           <EditableTable
+            clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
             columns={indicatorColumns}
             data={allIndicatorRows}
             enableEditing={false}
             enableSorting={true}
             enableGlobalFilter={true}
             enableColumnFilters={false}
-            enablePagination={true}
+            enablePagination={false}
             enableColumnPinning={true}
             enableTopToolbar={false}
             initialSorting={[{ id: 'name', desc: false }]}

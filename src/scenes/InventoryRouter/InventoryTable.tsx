@@ -89,6 +89,8 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
     openChangeQuantityModal: false,
   });
 
+  const tableStateStorageKey = `inventoryTable_${origin.toLowerCase()}`;
+
   // Filter-related state
   const initialFilters: Record<string, SearchNodePayload> = useMemo(() => {
     const baseFilters: Record<string, SearchNodePayload> = {};
@@ -573,7 +575,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
     setShowGlobalFilter,
     showColumnFilters,
     showGlobalFilter,
-  } = useTableState(`inventoryTable_${origin.toLowerCase()}`);
+  } = useTableState(tableStateStorageKey);
 
   const handleExport = useCallback(
     (table: MRT_TableInstance<SearchResponseElement>) => {
@@ -634,6 +636,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
           <Grid container spacing={0} marginTop={0}>
             <Grid item xs={12}>
               <EditableTable
+                clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
                 columns={editableColumns}
                 data={results}
                 enableEditing={false}
@@ -641,7 +644,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                 enableGlobalFilter={true}
                 enableColumnFilters={true}
                 stickyFilters={true}
-                storageKey={`inventoryTable_${origin.toLowerCase()}`}
+                storageKey={tableStateStorageKey}
                 enablePagination={false}
                 enableTopToolbar={true}
                 enableBottomToolbar={false}

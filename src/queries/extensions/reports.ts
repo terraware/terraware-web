@@ -24,6 +24,11 @@ api.enhanceEndpoints({
             type: QueryTagTypes.Reports,
             id: 'LIST',
           },
+
+          {
+            type: QueryTagTypes.Reports,
+            id: `project-${projectId}`,
+          },
         ];
       },
     },
@@ -144,6 +149,30 @@ api.enhanceEndpoints({
         },
       ],
     },
+    updateProjectIndicatorTarget: {
+      invalidatesTags: (_result, _error, args) => [
+        {
+          type: QueryTagTypes.Reports,
+          id: `project-${args.projectId}`,
+        },
+      ],
+    },
+    updateCommonIndicatorTarget: {
+      invalidatesTags: (_result, _error, args) => [
+        {
+          type: QueryTagTypes.Reports,
+          id: `project-${args.projectId}`,
+        },
+      ],
+    },
+    updateAutoCalculatedIndicatorTarget: {
+      invalidatesTags: (_result, _error, args) => [
+        {
+          type: QueryTagTypes.Reports,
+          id: `project-${args.projectId}`,
+        },
+      ],
+    },
     getAcceleratorReport: {
       providesTags: (_results, _error, args) => [
         {
@@ -153,6 +182,10 @@ api.enhanceEndpoints({
         {
           type: QueryTagTypes.ProjectReportConfigs,
           id: args.projectId,
+        },
+        {
+          type: QueryTagTypes.Reports,
+          id: `project-${args.projectId}`,
         },
       ],
     },
@@ -173,18 +206,16 @@ api.enhanceEndpoints({
       ],
     },
     reviewAcceleratorReportMetrics: {
-      invalidatesTags: (_results, _error, args) => [
+      invalidatesTags: () => [
         {
           type: QueryTagTypes.Reports,
-          id: args.reportId,
         },
       ],
     },
     reviewAcceleratorReportIndicators: {
-      invalidatesTags: (_results, _error, args) => [
+      invalidatesTags: () => [
         {
           type: QueryTagTypes.Reports,
-          id: args.reportId,
         },
       ],
     },

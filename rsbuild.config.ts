@@ -1,4 +1,5 @@
 import { defineConfig, rspack } from '@rsbuild/core';
+import { pluginBabel } from '@rsbuild/plugin-babel';
 import { pluginEslint } from '@rsbuild/plugin-eslint';
 import { pluginReact } from '@rsbuild/plugin-react';
 import { pluginSass } from '@rsbuild/plugin-sass';
@@ -20,6 +21,12 @@ const isDev = process.env.NODE_ENV === 'development';
 export default defineConfig({
   plugins: [
     pluginReact(),
+    pluginBabel({
+      include: /\.(?:jsx|tsx)$/,
+      babelLoaderOptions(opts) {
+        opts.plugins?.unshift('babel-plugin-react-compiler');
+      },
+    }),
     pluginSass(),
     pluginSvgr({
       mixedImport: true, // Support both default and named imports for SVGs
@@ -48,6 +55,8 @@ export default defineConfig({
     cleanDistPath: true,
     // Asset prefix (equivalent to PUBLIC_URL)
     assetPrefix: process.env.PUBLIC_URL || '/',
+    // Generate source maps for easier debugging
+    sourceMap: true,
   },
 
   server: {

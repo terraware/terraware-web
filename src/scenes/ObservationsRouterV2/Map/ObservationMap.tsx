@@ -85,6 +85,7 @@ const ObservationMap = ({
   const { mapId, token } = useMapboxToken();
   const { selectedOrganization } = useOrganization();
   const { fitBounds } = useMapUtils(mapRef);
+  const [mapLoaded, setMapLoaded] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
   const [searchParams] = useSearchParams();
 
@@ -310,7 +311,7 @@ const ObservationMap = ({
       const bbox = getBoundingBoxFromPoints(points);
       fitBounds(bbox);
     }
-  }, [allPlantingSites, fitBounds, plantingSiteId, selectedHistory, selectedResults]);
+  }, [allPlantingSites, fitBounds, mapLoaded, plantingSiteId, selectedHistory, selectedResults]);
 
   const selectFeature = useCallback(
     (_plantingSiteId: number) => (layerId: string, featureId: string) => () => {
@@ -1229,24 +1230,30 @@ const ObservationMap = ({
   ]);
 
   const [showHoverLocation, setShowHoverTextLocation] = useState<Point>();
-  const onHover = useCallback((event: MapMouseEvent) => {
-    const features = event.features;
-    if (features && features.length) {
-      const properties = features
-        .map((feature) => feature.properties)
-        .filter(
-          (featureProperties): featureProperties is MapProperties =>
-            !!featureProperties && featureProperties.id !== undefined && featureProperties.priority !== undefined
-        );
+  const [hoveredLayerFeatureId, setHoveredLayerFeatureId] = useState<string | null>(null);
 
-      if (properties.length && properties.every((featureProperties) => !featureProperties.clickable)) {
-        setShowHoverTextLocation(event.point);
+  const onHover = useCallback(
+    (event: MapMouseEvent) => {
+      const features = event.features;
+      if (features && features.length) {
+        const properties = features
+          .map((feature) => feature.properties)
+          .filter(
+            (featureProperties): featureProperties is MapProperties =>
+              !!featureProperties && featureProperties.id !== undefined && featureProperties.priority !== undefined
+          );
+
+        if (properties.length && (!showHoverLocation || hoveredLayerFeatureId !== properties[0].layerFeatureId)) {
+          setHoveredLayerFeatureId(properties[0].layerFeatureId);
+          setShowHoverTextLocation(event.point);
+        }
         return;
       }
-    }
 
-    setShowHoverTextLocation(undefined);
-  }, []);
+      setShowHoverTextLocation(undefined);
+    },
+    [hoveredLayerFeatureId, showHoverLocation]
+  );
 
   const unclickableHoverTag = useMemo(() => {
     if (showHoverLocation) {
@@ -1266,7 +1273,7 @@ const ObservationMap = ({
             fontSize={'12px'}
             fontWeight={400}
             lineHeight={'20px'}
-            color={theme.palette.TwClrBaseWhite}
+            color={theme.palette.TwClrBaseBlack}
             whiteSpace={'nowrap'}
           >
             {strings.AREA_NOT_OBSERVED}
@@ -1276,7 +1283,7 @@ const ObservationMap = ({
     } else {
       return undefined;
     }
-  }, [showHoverLocation, strings.AREA_NOT_OBSERVED, theme.palette.TwClrBaseWhite]);
+  }, [showHoverLocation, strings.AREA_NOT_OBSERVED, theme.palette.TwClrBaseBlack]);
 
   return (
     <MapComponent
@@ -1293,6 +1300,7 @@ const ObservationMap = ({
       mapLayers={layers}
       mapRef={mapRef}
       nameTags={nameTags}
+      onMapLoad={() => setMapLoaded(true)}
       onMouseMove={onHover}
       token={token ?? ''}
       setDrawerOpen={setDrawerOpenCallback}

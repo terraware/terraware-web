@@ -146,6 +146,21 @@ jobs:
           path: ~/.cache/ms-playwright
           key: ${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
 
+      - name: Upload source maps to Datadog
+        if: env.IS_CD == 'true'
+        run: |
+          npx @datadog/datadog-ci sourcemaps upload ./dist/static/js \
+            --service=terraware-web \
+            --release-version=${{ env.APP_VERSION }} \
+            --minified-path-prefix=/static/js/
+        env:
+          DATADOG_API_KEY: ${{ secrets.DATADOG_API_KEY }}
+          DATADOG_SITE: us3.datadoghq.com
+
+      - name: Remove source maps
+        if: env.IS_CD == 'true'
+        run: find dist -name '*.map' -delete
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v4
 

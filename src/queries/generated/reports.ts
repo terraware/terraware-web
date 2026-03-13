@@ -572,7 +572,7 @@ export type CumulativeIndicatorProgressPayload = {
 export type ReportAutoCalculatedIndicatorPayload = {
   baseline?: number;
   category: 'Project Objectives' | 'Climate' | 'Community' | 'Biodiversity';
-  classId?: 'Cumulative' | 'Level';
+  classId: 'Cumulative' | 'Level';
   /** If the indicator is cumulative, the list of actual values for all quarters in the report's year */
   currentYearProgress?: CumulativeIndicatorProgressPayload[];
   description?: string;
@@ -585,9 +585,9 @@ export type ReportAutoCalculatedIndicatorPayload = {
     | 'Hectares Planted'
     | 'Survival Rate';
   isPublishable: boolean;
-  level: 'Activity' | 'Output' | 'Outcome' | 'Impact';
+  level: 'Process' | 'Output' | 'Outcome' | 'Goal';
   overrideValue?: number;
-  /** If the indicator is cumulative, the cumulative total and the end of the previous year */
+  /** If the indicator is cumulative, the cumulative total at the end of the previous year */
   previousYearCumulativeTotal?: number;
   progressNotes?: string;
   projectsComments?: string;
@@ -604,16 +604,16 @@ export type ReportChallengePayload = {
 export type ReportCommonIndicatorPayload = {
   baseline?: number;
   category: 'Project Objectives' | 'Climate' | 'Community' | 'Biodiversity';
-  classId?: 'Cumulative' | 'Level';
+  classId: 'Cumulative' | 'Level';
   /** If the indicator is cumulative, the list of actual values for all quarters in the report's year */
   currentYearProgress?: CumulativeIndicatorProgressPayload[];
   description?: string;
   endOfProjectTarget?: number;
   id: number;
   isPublishable: boolean;
-  level: 'Activity' | 'Output' | 'Outcome' | 'Impact';
+  level: 'Process' | 'Output' | 'Outcome' | 'Goal';
   name: string;
-  /** If the indicator is cumulative, the cumulative total and the end of the previous year */
+  /** If the indicator is cumulative, the cumulative total at the end of the previous year */
   previousYearCumulativeTotal?: number;
   progressNotes?: string;
   projectsComments?: string;
@@ -633,16 +633,16 @@ export type ReportPhotoPayload = {
 export type ReportProjectIndicatorPayload = {
   baseline?: number;
   category: 'Project Objectives' | 'Climate' | 'Community' | 'Biodiversity';
-  classId?: 'Cumulative' | 'Level';
+  classId: 'Cumulative' | 'Level';
   /** If the indicator is cumulative, the list of actual values for all quarters in the report's year */
   currentYearProgress?: CumulativeIndicatorProgressPayload[];
   description?: string;
   endOfProjectTarget?: number;
   id: number;
   isPublishable: boolean;
-  level: 'Activity' | 'Output' | 'Outcome' | 'Impact';
+  level: 'Process' | 'Output' | 'Outcome' | 'Goal';
   name: string;
-  /** If the indicator is cumulative, the cumulative total and the end of the previous year */
+  /** If the indicator is cumulative, the cumulative total at the end of the previous year */
   previousYearCumulativeTotal?: number;
   progressNotes?: string;
   projectsComments?: string;
@@ -663,7 +663,7 @@ export type ReportProjectMetricPayload = {
   reference: string;
   status?: 'Achieved' | 'On-Track' | 'Unlikely' | 'Off-Track';
   target?: number;
-  type: 'Activity' | 'Output' | 'Outcome' | 'Impact';
+  type: 'Process' | 'Output' | 'Outcome' | 'Goal';
   unit?: string;
   value?: number;
 };
@@ -678,7 +678,7 @@ export type ReportStandardMetricPayload = {
   reference: string;
   status?: 'Achieved' | 'On-Track' | 'Unlikely' | 'Off-Track';
   target?: number;
-  type: 'Activity' | 'Output' | 'Outcome' | 'Impact';
+  type: 'Process' | 'Output' | 'Outcome' | 'Goal';
   value?: number;
 };
 export type ReportSystemMetricPayload = {
@@ -694,7 +694,7 @@ export type ReportSystemMetricPayload = {
   systemTime?: string;
   systemValue?: number;
   target?: number;
-  type: 'Activity' | 'Output' | 'Outcome' | 'Impact';
+  type: 'Process' | 'Output' | 'Outcome' | 'Goal';
 };
 export type AcceleratorReportPayload = {
   achievements: string[];
@@ -837,14 +837,15 @@ export type UpdateAcceleratorReportConfigRequestPayload = {
 export type ExistingProjectIndicatorPayload = {
   active: boolean;
   category: 'Project Objectives' | 'Climate' | 'Community' | 'Biodiversity';
-  classId?: 'Cumulative' | 'Level';
+  classId: 'Cumulative' | 'Level';
   description?: string;
-  frequency?: 'Annual' | 'Bi-Annual' | 'MRV Cycle';
+  frequency?: 'Annual' | 'Bi-Annual' | 'MRV Cycle' | 'Quarterly';
   id: number;
   isPublishable: boolean;
-  level: 'Activity' | 'Output' | 'Outcome' | 'Impact';
+  level: 'Process' | 'Output' | 'Outcome' | 'Goal';
   name: string;
   notes?: string;
+  precision: number;
   primaryDataSource?: string;
   projectId: number;
   refId: string;
@@ -856,14 +857,16 @@ export type ListProjectIndicatorsResponsePayload = {
   status: SuccessOrError;
 };
 export type NewIndicatorPayload = {
+  active: boolean;
   category: 'Project Objectives' | 'Climate' | 'Community' | 'Biodiversity';
-  classId?: 'Cumulative' | 'Level';
+  classId: 'Cumulative' | 'Level';
   description?: string;
-  frequency?: 'Annual' | 'Bi-Annual' | 'MRV Cycle';
+  frequency?: 'Annual' | 'Bi-Annual' | 'MRV Cycle' | 'Quarterly';
   isPublishable: boolean;
-  level: 'Activity' | 'Output' | 'Outcome' | 'Impact';
+  level: 'Process' | 'Output' | 'Outcome' | 'Goal';
   name: string;
   notes?: string;
+  precision: number;
   primaryDataSource?: string;
   refId: string;
   tfOwner?: string;
@@ -883,7 +886,7 @@ export type ExistingProjectMetricPayload = {
   name: string;
   projectId: number;
   reference: string;
-  type: 'Activity' | 'Output' | 'Outcome' | 'Impact';
+  type: 'Process' | 'Output' | 'Outcome' | 'Goal';
   unit?: string;
 };
 export type ListProjectMetricsResponsePayload = {
@@ -896,7 +899,7 @@ export type NewMetricPayload = {
   isPublishable: boolean;
   name: string;
   reference: string;
-  type: 'Activity' | 'Output' | 'Outcome' | 'Impact';
+  type: 'Process' | 'Output' | 'Outcome' | 'Goal';
   unit?: string;
 };
 export type CreateProjectMetricRequestPayload = {

@@ -147,6 +147,7 @@ const MapLegend = ({ legends }: MapLegendProps): JSX.Element => {
           ) : (
             legend.items.map((item, itemIndex) => {
               const itemOnClck = onClick(legend, item);
+              const itemIsLast = itemIndex === legend.items.length - 1;
 
               const disabled =
                 legend.disabled ||
@@ -243,6 +244,7 @@ const MapLegend = ({ legends }: MapLegendProps): JSX.Element => {
                     borderRadius: theme.spacing(1),
                     padding: theme.spacing(1, 1),
                     opacity: disabled ? '0.5' : 1,
+                    marginBottom: itemIsLast ? 0 : '3px',
                   }}
                   justifyContent={'space-between'}
                   key={`${index}-${itemIndex}`}

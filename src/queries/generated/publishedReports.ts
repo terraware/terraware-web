@@ -30,12 +30,22 @@ export type GetPublishedReportPhotoApiArg = {
   /** Maximum desired height in pixels. If neither this nor maxWidth is specified, the full-sized original image will be returned. If this is specified, an image no taller than this will be returned. The image may be shorter than this value if needed to preserve the aspect ratio of the original. */
   maxHeight?: number;
 };
+export type PublishedCumulativeIndicatorProgressPayload = {
+  quarter: 'Q1' | 'Q2' | 'Q3' | 'Q4';
+  value: number;
+};
 export type PublishedReportIndicatorPayload = {
+  baseline?: number;
   category: 'Project Objectives' | 'Climate' | 'Community' | 'Biodiversity';
-  classId?: 'Cumulative' | 'Level';
+  classId: 'Cumulative' | 'Level';
+  /** If the indicator is cumulative, the list of actual values for all quarters in the report's year. Note that only the report's quarter will be a published value, the rest will be current values whether or not they are the same as their published counterparts. */
+  currentYearProgress?: PublishedCumulativeIndicatorProgressPayload[];
   description?: string;
-  level: 'Activity' | 'Output' | 'Outcome' | 'Impact';
+  endOfProjectTarget?: number;
+  level: 'Process' | 'Output' | 'Outcome' | 'Goal';
   name: string;
+  /** If the indicator is cumulative, the cumulative total at the end of the previous year */
+  previousYearCumulativeTotal?: number;
   progressNotes?: string;
   projectsComments?: string;
   refId: string;
@@ -61,7 +71,7 @@ export type PublishedReportMetricPayload = {
   reference: string;
   status?: 'Achieved' | 'On-Track' | 'Unlikely' | 'Off-Track';
   target?: number;
-  type: 'Activity' | 'Output' | 'Outcome' | 'Impact';
+  type: 'Process' | 'Output' | 'Outcome' | 'Goal';
   unit?: string;
   value?: number;
 };

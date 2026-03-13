@@ -7,12 +7,10 @@ import { getDateDisplayValue } from '@terraware/web-components/utils';
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
 import SurvivalRateMessageV2 from 'src/components/SurvivalRate/SurvivalRateMessageV2';
-import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
-import ObservationMapWrapper from 'src/scenes/ObservationsRouterV2/Map';
 import { getShortDate } from 'src/utils/dateFormatter';
 
 import AggregatedPlantsStats from '../AggregatedPlantsStats';
@@ -90,9 +88,6 @@ const StratumDetails = (): JSX.Element => {
         survivalRate={stratumResult?.survivalRate}
         species={species}
       />
-      <Card radius={'8px'} style={{ marginBottom: theme.spacing(3), width: '100%' }}>
-        <ObservationMapWrapper observationId={observationId} plantingSiteId={results?.plantingSiteId} />
-      </Card>
       <MonitoringPlotList />
     </Page>
   );

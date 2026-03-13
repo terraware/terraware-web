@@ -1,8 +1,11 @@
 import React, { type JSX, useCallback, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router';
 
-import { EditableTable, EditableTableColumn } from '@terraware/web-components';
+import { useTheme } from '@mui/material';
+import { Badge, EditableTable, EditableTableColumn } from '@terraware/web-components';
+import { MRT_Cell } from 'material-react-table';
 
+import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useOrganization, useUser } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
@@ -37,6 +40,8 @@ export type RowMetric = {
   baseline?: number;
   endOfProjectTarget?: number;
   indicatorSystemName?: string;
+  classId?: string;
+  notes?: string;
   [key: string]: string | number | undefined;
 };
 
@@ -70,6 +75,8 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
     () => isAllowed('UPDATE_REPORTS_TARGETS', { organization: selectedOrganization }),
     [isAllowed, selectedOrganization]
   );
+
+  const improvedReportsEnabled = isEnabled('Improved Reports');
 
   const years = getReportsYearsResponse.data?.years;
 
@@ -125,6 +132,8 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
         metricType: 'projectIndicator',
         baseline: targets?.baseline,
         endOfProjectTarget: targets?.endOfProjectTarget,
+        classId: ind.classId,
+        notes: ind.notes,
         ...targetByYear,
       };
     });
@@ -144,6 +153,8 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
         metricType: 'commonIndicator',
         baseline: targets?.baseline,
         endOfProjectTarget: targets?.endOfProjectTarget,
+        classId: ind.classId,
+        notes: ind.notes,
         ...targetByYear,
       };
     });
@@ -164,6 +175,8 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
         indicatorSystemName: ind.indicator,
         baseline: targets?.baseline,
         endOfProjectTarget: targets?.endOfProjectTarget,
+        classId: ind.classId,
+        notes: ind.notes,
         ...targetByYear,
       };
     });
@@ -376,6 +389,32 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
     ]
   );
 
+  const theme = useTheme();
+
+  const CategoryCell = useCallback(
+    ({ cell }: { cell: MRT_Cell<RowMetric> }) => {
+      const category = cell.getValue<string>();
+      const isGreen = category === 'Biodiversity' || category === 'Climate' || category === 'Project Objectives';
+      return (
+        <Badge
+          label={category}
+          backgroundColor={isGreen ? theme.palette.TwClrBgSuccessTertiary : theme.palette.TwClrBgWarningTertiary}
+          borderColor={isGreen ? theme.palette.TwClrBrdrSuccess : theme.palette.TwClrBrdrWarning}
+          labelColor={isGreen ? theme.palette.TwClrTxtSuccess : theme.palette.TwClrTxtWarning}
+        />
+      );
+    },
+    [theme]
+  );
+
+  const ClassIdCell = useCallback(({ cell }: { cell: MRT_Cell<RowMetric> }) => {
+    const classId = cell.getValue<string | undefined>();
+    if (!classId) {
+      return null;
+    }
+    return <>{classId === 'Cumulative' ? strings.CUMULATIVE : strings.LEVEL}</>;
+  }, []);
+
   const tableColumns = useMemo(() => {
     const baseColumns: EditableTableColumn<RowMetric>[] = [
       {
@@ -409,18 +448,49 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
     }));
 
     const lastColumns: EditableTableColumn<RowMetric>[] = [
-      {
-        id: 'type',
-        header: strings.TYPE,
-        accessorKey: 'type',
-        enableEditing: false,
-      },
-      {
-        id: 'component',
-        header: strings.COMPONENT,
-        accessorKey: 'component',
-        enableEditing: false,
-      },
+      ...(improvedReportsEnabled
+        ? [
+            {
+              id: 'category',
+              header: strings.CATEGORY,
+              accessorKey: 'component' as keyof RowMetric,
+              enableEditing: false,
+              Cell: CategoryCell,
+            },
+            {
+              id: 'indicatorLevel',
+              header: strings.INDICATOR_LEVEL,
+              accessorKey: 'type' as keyof RowMetric,
+              enableEditing: false,
+            },
+            {
+              id: 'cumulativeOrLevel',
+              header: strings.CUMULATIVE_OR_LEVEL,
+              accessorKey: 'classId' as keyof RowMetric,
+              enableEditing: false,
+              Cell: ClassIdCell,
+            },
+            {
+              id: 'notes',
+              header: strings.NOTES,
+              accessorKey: 'notes' as keyof RowMetric,
+              enableEditing: false,
+            },
+          ]
+        : [
+            {
+              id: 'type',
+              header: strings.TYPE,
+              accessorKey: 'type' as keyof RowMetric,
+              enableEditing: false,
+            },
+            {
+              id: 'component',
+              header: strings.COMPONENT,
+              accessorKey: 'component' as keyof RowMetric,
+              enableEditing: false,
+            },
+          ]),
       {
         id: 'endOfProjectTarget',
         header: strings.END_OF_PROJECT_TARGET,
@@ -434,15 +504,28 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
     ];
 
     return [...baseColumns, ...yearColumns, ...lastColumns];
-  }, [yearRange, isAllowedUpdateReportsTargets, onSaveYearTarget, onSaveBaseline, onSaveEndOfProjectTarget]);
+  }, [
+    yearRange,
+    isAllowedUpdateReportsTargets,
+    onSaveYearTarget,
+    onSaveBaseline,
+    onSaveEndOfProjectTarget,
+    improvedReportsEnabled,
+    CategoryCell,
+    ClassIdCell,
+  ]);
 
   const columnOrder = useMemo(() => {
     const yearIds = yearRange.map((year) => `year${year}`);
-    return ['name', 'baseline', ...yearIds, 'type', 'component', 'endOfProjectTarget'];
-  }, [yearRange]);
+    const metaColumns = improvedReportsEnabled
+      ? ['category', 'indicatorLevel', 'cumulativeOrLevel', 'notes']
+      : ['type', 'component'];
+    return ['name', 'baseline', ...yearIds, ...metaColumns, 'endOfProjectTarget'];
+  }, [yearRange, improvedReportsEnabled]);
 
   return (
     <EditableTable
+      clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
       columns={tableColumns}
       data={allIndicatorRows}
       enableEditing={true}

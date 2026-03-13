@@ -67,6 +67,7 @@ ADD_BATCH,Ajouter un lot,0d9f7a4a
 ADD_DOCUMENT,Ajouter un document,af87beed
 ADD_FUNDING_ENTITY,Ajouter une entité de financement,47c0142d
 ADD_GPS_COORDINATES,Ajouter des coordonnées GPS,d87d2fa2
+ADD_INDICATOR,Ajouter un indicateur,d8469587
 ADD_INVENTORY,Ajouter un inventaire,73cde1f5
 ADD_INVENTORY_DESCRIPTION,"Ajouter un inventaire à partir d'une nouvelle source. Pour ajouter des stocks à partir d'un lot de semences existant, accédez à la rubrique « lots de semences » et retirez-les d'un lot.",8ccf6455
 ADD_INVENTORY_MANUALLY_DESCRIPTION,"Saisissez les espèces, les quantités et d'autres informations pertinentes à l'aide de notre formulaire d'inventaire.",5ab2a2a5
@@ -191,7 +192,7 @@ APPROX_SYMBOL,~,acb59e95
 AR,RA,25a8e55a
 ARE_YOU_SURE,Êtes-vous sûr ?,d4536b91
 AREA_HA,Superficie (ha),8ab5d500
-AREA_NOT_OBSERVED,Zone non observée,2c3a3737
+AREA_NOT_OBSERVED,Zone non observée,9eeddab4
 ARROW_KEYS,Touches fléchées,5cefb475
 AS_OF_X,à partir de {0},6d77dc0f
 ASSIGN,Attribuer,d1afb440
@@ -322,6 +323,7 @@ CHOOSE_FILES,Choisir des fichiers...,c5167691
 CITATION,Citation,772afe77
 CITY,Ville,27557cbb
 CLAIMED,Réclamé,5813de3e
+CLEAR_ALL_FILTERS,Effacer tous les filtres,72298dbd
 CLICK_UP,ClickUp,1ea256c3
 CLICK_UP_LINK,Lien ClickUp,787363a6
 CLIMATE,Climat,63ba44ee
@@ -402,7 +404,7 @@ CULTIVATED_EX_SITU_DESCRIPTION,"Plantes qui ont été cultivées dans une pépin
 CUMULATIVE,Cumulatif,51c21c57
 CUMULATIVE_OR_LEVEL,Cumulatif ou Niveau,0a0f2515
 CUMULATIVE_PROGRESS,Progrès cumulé,fd7ffcac
-CUMULATIVE_PROGRESS_TOOLTIP,Le total cumulé de tous les trimestres rapportés cette année,d8165ea0
+CUMULATIVE_PROGRESS_TOOLTIP,"Pour les indicateurs cumulatifs, le progrès total depuis le début du projet est affiché. Pour consulter le progrès trimestriel (réalisé trimestriel), développez cette section.",df7927bd
 CURRENT_NEXT_OBSERVATION,Observation actuelle/prochaine,50735263
 CURRENT_TIMELINE,Étapes,2dcbaeeb
 CURRENT_VIEW,Vue actuelle,8b3a3d54
@@ -871,6 +873,7 @@ INCOMPLETE,Incomplet,5f524fdf
 INCORRECT_EMAIL_FORMAT,Format d'e-mail incorrect.,19f1a8c9
 INDICATOR_LEVEL,Niveau d’indicateur,b128c992
 INDICATOR_NAME,Nom de l’indicateur,0d8b0613
+INDICATOR_TYPE,Type d’indicateur,d5e75bf1
 INDICATOR_TYPE_GOAL,Objectif,cb34c06e
 INDICATOR_TYPE_PROCESS,Processus,0bee5739
 INDICATORS,Indicateurs,ea71857f
@@ -1526,6 +1529,7 @@ PROJECT_PHASE_PLAN_AND_SCALE,Phase 2 - Planification et mise à l’échelle,a51
 PROJECT_PHOTOS,Photos du projet (max. 30),25c80ed0
 PROJECT_PROFILE,Profil du projet,cc49d0dc
 PROJECT_PROFILE_PUBLISHED,Profil du projet publié,9f75ca71
+PROJECT_SPECIFIC,Spécifique au projet,6f4b5ae3
 PROJECT_SPECIFIC_METRIC,Indicateur spécifique au projet,4585c861
 PROJECT_SPECIFIC_METRIC_SAVED,Indicateur spécifique au projet enregistré,15157e04
 PROJECT_SPECIFIC_METRICS,Indicateurs spécifiques au projet,56e54f89
@@ -1557,6 +1561,7 @@ QUADRAT_PHOTOS_CANNOT_BE_DELETED,Les photos de quadrats ne peuvent pas être sup
 QUANTITY,Quantité,5130efc1
 QUANTITY_MUST_BE_GREATER_THAN_OR_EQUAL_TO_ZERO,La quantité doit être supérieure ou égale à 0,5a55f459
 QUARTER_YEAR,T{0} {1},637ce0a5
+QUARTERLY,Trimestriel,f69e32e0
 QUARTERLY_HIGHLIGHTS,Faits saillants trimestriels,863a818b
 QUESTION,Question,84cf257d
 RARE,Rare,c114e991
@@ -1774,6 +1779,7 @@ SECTIONS_USED,Sections utilisées,4e682124
 SEE_ALL_ACCESSIONS,Voir toutes les accessions,2d1b160b
 SEE_IC_VOTES,Voir les votes IC,a6e1094b
 SEE_LESS,Voir moins,519e0ef0
+SEE_MONITORING_PLOTS,Voir les parcelles de suivi,398e1420
 SEE_MORE,Voir plus,dfcb6964
 SEE_OBSERVATION_PLOT_DETAILS,Voir les détails de la parcelle,923c4ac8
 SEE_PROJECT_DETAILS,Voir les détails du projet,93dbc5c4

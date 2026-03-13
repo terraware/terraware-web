@@ -16,7 +16,7 @@ import { InitializedUnits } from 'src/units';
 import { featureNotificationExpired } from 'src/utils/featureNotifications';
 import { getTimeZone, getUTC } from 'src/utils/useTimeZoneUtils';
 
-export default function UserNotification(): ClientNotification | null {
+export default function useUserNotification(): ClientNotification | null {
   const supportedLocales = useSupportedLocales();
   const [unitNotification, setUnitNotification] = useState(false);
   const [unitNotificationRead, setUnitNotificationRead] = useState(false);
