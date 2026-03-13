@@ -1,3 +1,6 @@
+8e0ba17280ca SW-8184 Project view targets table overflows instead of being fixed width (#5436)
+251df4182acd SW-8153 Sorting in Monitoring Plot table does not seem to be working (#5437)
+f6f48abef7e9 SW-8186 Suport for precision/decimals on create/view reports values and targets (#5438)
 da98c0515df6 Fix some "setState called in effect" lint errors (#5398)
 492ed4c90822 Improve progress chart styles (#5435)
 db0e2cfa301a SW-8185 Need to refresh page for targets to update in reports (#5433)
