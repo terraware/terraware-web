@@ -398,12 +398,7 @@ export default function PlantsDashboardView({
               gap: theme.spacing(3),
             }}
           >
-            {(organizationId || selectedOrganization?.id) && (
-              <MultiplePlantingSiteMap
-                projectId={projectId!}
-                organizationId={organizationId ?? selectedOrganization?.id ?? -1}
-              />
-            )}
+            {(organizationId || selectedOrganization?.id) && <MultiplePlantingSiteMap projectId={projectId!} />}
           </Box>
         </Grid>
       </>

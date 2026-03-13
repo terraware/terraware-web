@@ -1,4 +1,4 @@
-import React, { type JSX, MutableRefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { type JSX, MutableRefObject, useCallback, useEffect, useMemo, useState } from 'react';
 import { MapRef, ViewStateChangeEvent } from 'react-map-gl/mapbox';
 import { useSearchParams } from 'react-router';
 
@@ -53,7 +53,7 @@ export default function MapSplitView({
   const { fitBounds } = useMapUtils(mapRef);
   const { plantingSites } = useProjectPlantingSites(projectId);
   const [searchParams, setSearchParams] = useSearchParams();
-  const previousProjectIdRef = useRef(projectId);
+  const [previousProjectId, setPreviousProjectId] = useState(projectId);
 
   const onActivityMarkerClickCallback = useCallback(
     (activityId: number, fileId: number) => () => onActivityMarkerClick?.(activityId, fileId),
@@ -174,8 +174,8 @@ export default function MapSplitView({
       .filter((nameTag): nameTag is MapNameTag => nameTag !== undefined);
   }, [fitBounds, plantingSites]);
 
-  if (projectId !== previousProjectIdRef.current) {
-    previousProjectIdRef.current = projectId;
+  if (projectId !== previousProjectId) {
+    setPreviousProjectId(projectId);
     setInitialMapViewState(undefined);
   }
 

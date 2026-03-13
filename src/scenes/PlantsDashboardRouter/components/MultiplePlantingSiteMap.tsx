@@ -10,16 +10,11 @@ import PlantDashboardMap from './PlantDashboardMap';
 
 type MultiplePlantingSiteMapProps = {
   projectId: number;
-  organizationId: number;
   hideAllControls?: boolean;
   style?: CSSProperties;
 };
 
-export default function MultiplePlantingSiteMap({
-  projectId,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  organizationId,
-}: MultiplePlantingSiteMapProps): JSX.Element {
+export default function MultiplePlantingSiteMap({ projectId }: MultiplePlantingSiteMapProps): JSX.Element {
   const { allPlantingSites } = usePlantingSiteData();
   const theme = useTheme();
 
