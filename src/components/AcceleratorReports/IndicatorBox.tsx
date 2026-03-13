@@ -83,8 +83,11 @@ const IndicatorBox = ({ editing = false, metric, type, year, onChangeIndicator }
                   : record.systemValue !== undefined
                     ? formatPrecision(record.systemValue, precision)
                     : '--'}{' '}
-                / {metric.target !== undefined && metric.target !== null ? formatPrecision(metric.target, precision) : '--'} (
-                {year} {strings.TARGET})
+                /{' '}
+                {metric.target !== undefined && metric.target !== null
+                  ? formatPrecision(metric.target, precision)
+                  : '--'}{' '}
+                ({year} {strings.TARGET})
               </Typography>
               {record.overrideValue === undefined && (
                 <Box paddingTop={1} paddingLeft={1.5}>
@@ -116,8 +119,9 @@ const IndicatorBox = ({ editing = false, metric, type, year, onChangeIndicator }
               min={0}
             />
             <Typography paddingTop={3} paddingLeft={0.5}>
-              / {metric.target !== undefined && metric.target !== null ? formatPrecision(metric.target, precision) : '--'} (
-              {year} {strings.TARGET})
+              /{' '}
+              {metric.target !== undefined && metric.target !== null ? formatPrecision(metric.target, precision) : '--'}{' '}
+              ({year} {strings.TARGET})
             </Typography>
             {'unit' in record && record.unit && (
               <Box paddingLeft={theme.spacing(3)}>
