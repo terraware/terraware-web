@@ -210,6 +210,7 @@ ATTACHMENT_DESCRIPTION,Adjunte hasta {0} archivos. Cada archivo tiene un tamaño
 ATTACHMENT_LIMIT_REACHED,Se alcanzó el límite de archivos adjuntos,9f9323bc
 ATTACHMENT_LIMIT_REACHED_MESSAGE,Solo puede subir {0} archivos adjuntos.,cc438d34
 ATTACHMENTS,Archivos adjuntos,e7695404
+AUTO_CALCULATED_INDICATORS,Indicadores calculados automáticamente,3b7057e0
 AUTO_ROTATE,Rotación automática,15ce1a40
 AVAILABLE,disponible,716e496f
 AVERAGE_WOOD_DENSITY,Densidad promedio de la madera (kb/m3),b413c9a9
@@ -345,6 +346,7 @@ COMMENTS,Comentarios,5a6f1269
 COMMON,Común,69695656
 COMMON_INDICATOR,Indicador Común,78d9c492
 COMMON_INDICATOR_SAVED,Indicador Común Guardado,6e09bf56
+COMMON_INDICATORS,Indicadores comunes,892fa739
 COMMON_NAME,Nombre común,d7db2e57
 COMMON_QUESTION,¿Común?,68715b60
 COMMUNITY,Comunidad,a1e5aaf2
@@ -1504,6 +1506,7 @@ PROJECT_IMPACT_INSTRUCTIONS,"Proporcione los detalles de su impacto durante el p
 PROJECT_IMPACT_REQUIRED,Impacto del proyecto *,d64d1635
 PROJECT_INDICATOR,Indicador de Proyecto,e893a286
 PROJECT_INDICATOR_SAVED,Indicador de Proyecto Guardado,a1be5605
+PROJECT_INDICATORS,Indicadores del proyecto,2075f3c5
 PROJECT_INFORMATION,Información sobre el proyecto,20e59559
 PROJECT_INTERNAL_USER_ROLE_CARBON_LEAD,Responsable de carbono,894929ea
 PROJECT_INTERNAL_USER_ROLE_CLIMATE_IMPACT_LEAD,Responsable de impacto climático,b00dd731
@@ -2265,6 +2268,11 @@ UNKNOWN,Desconocido,97ccc176
 UNLIKELY,Poco probable,961eba8d
 UNPIN_ALL,Desanclar todas,97a06369
 UNPUBLISHED_CHANGES,Cambios no publicados,44cc10b0
+UNPUBLISHED_CHANGES_WARNING,Este informe NO coincide con el informe publicado. Esto puede deberse a lo siguiente:,da034975
+UNPUBLISHED_CHANGES_WARNING_REASON_1,Cambios no publicados en este informe,573bc3a3
+UNPUBLISHED_CHANGES_WARNING_REASON_2,Cambios no publicados en informes anteriores que afectarían los totales acumulados,9560e7b3
+UNPUBLISHED_CHANGES_WARNING_RESOLUTION,"Para resolver este problema, vuelva a publicar cualquier informe actualizado para que los informes del financiador reflejen los datos más recientes.",b2104255
+UNPUBLISHED_CHANGES_WARNING_SECTION,Cambios no publicados:,c2b6b281
 UNRECOGNIZED_SPECIES,Especies no reconocidas,74b081bb
 UNRECOGNIZED_SPECIES_MESSAGE,Asociar los siguientes datos con especies existentes en Terraware:,d9fc89e5
 UNSPECIFIED,No especificado,be62b890

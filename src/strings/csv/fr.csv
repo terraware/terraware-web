@@ -209,6 +209,7 @@ ATTACHMENT_DESCRIPTION,Joindre jusqu'à {0} fichiers. Chaque fichier a une taill
 ATTACHMENT_LIMIT_REACHED,Limite de pièces jointes atteinte,9f9323bc
 ATTACHMENT_LIMIT_REACHED_MESSAGE,Vous ne pouvez télécharger que {0} pièces jointes.,cc438d34
 ATTACHMENTS,Annexes,e7695404
+AUTO_CALCULATED_INDICATORS,Indicateurs calculés automatiquement,3b7057e0
 AUTO_ROTATE,Rotation automatique,15ce1a40
 AVAILABLE,disponible,716e496f
 AVERAGE_WOOD_DENSITY,Densité moyenne du bois (kb/m3),b413c9a9
@@ -344,6 +345,7 @@ COMMENTS,Commentaires,5a6f1269
 COMMON,Commun,69695656
 COMMON_INDICATOR,Indicateur commun,78d9c492
 COMMON_INDICATOR_SAVED,Indicateur commun enregistré,6e09bf56
+COMMON_INDICATORS,Indicateurs communs,892fa739
 COMMON_NAME,Nom commun,d7db2e57
 COMMON_QUESTION,Commun ?,68715b60
 COMMUNITY,Communauté,a1e5aaf2
@@ -1503,6 +1505,7 @@ PROJECT_IMPACT_INSTRUCTIONS,"Détaillez l'impact de votre projet au cours de la 
 PROJECT_IMPACT_REQUIRED,Impact du projet *,d64d1635
 PROJECT_INDICATOR,Indicateur de projet,e893a286
 PROJECT_INDICATOR_SAVED,Indicateur de projet enregistré,a1be5605
+PROJECT_INDICATORS,Indicateurs du projet,2075f3c5
 PROJECT_INFORMATION,Informations sur le projet,20e59559
 PROJECT_INTERNAL_USER_ROLE_CARBON_LEAD,Responsable carbone,894929ea
 PROJECT_INTERNAL_USER_ROLE_CLIMATE_IMPACT_LEAD,Responsable de l'impact climatique,b00dd731
@@ -2265,6 +2268,11 @@ UNKNOWN,Inconnu,97ccc176
 UNLIKELY,Peu probable,961eba8d
 UNPIN_ALL,Désépingler tout,97a06369
 UNPUBLISHED_CHANGES,Modifications non publiées,44cc10b0
+UNPUBLISHED_CHANGES_WARNING,Ce rapport NE correspond PAS au rapport publié. Cela peut être dû à :,da034975
+UNPUBLISHED_CHANGES_WARNING_REASON_1,Modifications non publiées dans ce rapport,573bc3a3
+UNPUBLISHED_CHANGES_WARNING_REASON_2,Modifications non publiées dans les rapports précédents qui affecteraient les totaux cumulatifs,9560e7b3
+UNPUBLISHED_CHANGES_WARNING_RESOLUTION,"Pour résoudre ce problème, republiez tous les rapports mis à jour afin que les rapports destinés au bailleur de fonds reflètent les dernières données.",b2104255
+UNPUBLISHED_CHANGES_WARNING_SECTION,Modifications non publiées :,c2b6b281
 UNRECOGNIZED_SPECIES,Espèces non reconnues,74b081bb
 UNRECOGNIZED_SPECIES_MESSAGE,Associez les entrées suivantes aux espèces déjà présentes dans Terraware :,d9fc89e5
 UNSPECIFIED,Non spécifié,be62b890
