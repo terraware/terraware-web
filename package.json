@@ -22,7 +22,6 @@
     "license-report": "license-report --only=prod --department.value=terraware --relatedTo.value=terraware-web --output=html > docs/license-report.html",
     "lint": "eslint src",
     "lint:dev": "yarn lint --rule 'react/jsx-no-bind: 0' --rule 'react-hooks/immutability: 0' --rule 'react-hooks/refs: 0' --rule 'react-hooks/set-state-in-effect: 0' --rule 'react-hooks/static-components: 0'",
-    "sync-agents": "node scripts/sync-agents.js",
     "ts": "tsc --project ./tsconfig.json",
     "format": "prettier --write .",
     "format:changed": "git diff -z --name-only --diff-filter=ACMR main -- '**.js' '**.ts' '**.tsx' '**.json' '**.css' '**.scss' '**.md' | xargs -0r prettier --write",
