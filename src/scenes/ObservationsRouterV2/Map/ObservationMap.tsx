@@ -1229,6 +1229,7 @@ const ObservationMap = ({
     treeDrawerSize,
   ]);
 
+  const [showHoverLocation, setShowHoverLocation] = useState<Point>();
   const [hoverGeoCenter, setHoverGeoCenter] = useState<MapPoint>();
   const [hoveredLayerFeatureId, setHoveredLayerFeatureId] = useState<string | null>(null);
 
@@ -1277,8 +1278,6 @@ const ObservationMap = ({
     },
     [hoveredLayerFeatureId, hoverGeoCenter]
   );
-
-  const [showHoverLocation, setShowHoverLocation] = useState<Point>();
 
   useEffect(() => {
     const map = mapRef.current;
