@@ -62,7 +62,6 @@ type PlantMonitoringRow = {
 const ASSIGNED_STORAGE_KEY = 'plant-monitoring-assigned-table';
 const ADHOC_STORAGE_KEY = 'plant-monitoring-adhoc-table';
 
-
 const PlantMonitoringActionsMenuContent = ({ row }: { row: PlantMonitoringRow }) => {
   const { strings } = useLocalization();
   const { openAbandonObservationModal } = useAbandonObservationModal();
