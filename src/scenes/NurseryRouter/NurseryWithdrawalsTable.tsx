@@ -126,6 +126,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     showColumnFilters,
     showGlobalFilter,
   } = useTableState(TABLE_STATE_STORAGE_KEY, {
+    persistedMultiSelectColumnIds: ['destinationName', 'project_names', 'speciesScientificNames', 'substratumNames'],
     persistFilters: true,
   });
 

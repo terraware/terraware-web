@@ -177,6 +177,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
     defaultColumnOrder: DEFAULT_COLUMN_ORDER,
     defaultColumnVisibility: DEFAULT_COLUMN_VISIBILITY,
     defaultSorting: [{ id: 'accessionNumber', desc: false }],
+    persistedMultiSelectColumnIds: ['facility_name', 'project_name', 'state', 'subLocation_name'],
     persistFilters: true,
     persistSorting: true,
   });
