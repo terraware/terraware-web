@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1773689510044" clover="3.2.0">
-  <project timestamp="1773689510044" name="All files">
-    <metrics statements="1961" coveredstatements="1196" conditionals="957" coveredconditionals="378" methods="511" coveredmethods="201" elements="3429" coveredelements="1775" complexity="0" loc="1961" ncloc="1961" packages="17" files="41" classes="41"/>
+<coverage generated="1773690720844" clover="3.2.0">
+  <project timestamp="1773690720844" name="All files">
+    <metrics statements="1987" coveredstatements="1221" conditionals="987" coveredconditionals="406" methods="514" coveredmethods="204" elements="3488" coveredelements="1831" complexity="0" loc="1987" ncloc="1987" packages="17" files="42" classes="42"/>
     <package name="src">
       <metrics statements="163" coveredstatements="163" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
       <file name="constants.ts" path="/home/runner/work/terraware-web/terraware-web/src/constants.ts">
@@ -1589,7 +1589,7 @@
       </file>
     </package>
     <package name="src.utils">
-      <metrics statements="353" coveredstatements="225" conditionals="232" coveredconditionals="82" methods="94" coveredmethods="39"/>
+      <metrics statements="379" coveredstatements="250" conditionals="262" coveredconditionals="110" methods="97" coveredmethods="42"/>
       <file name="acl.ts" path="/home/runner/work/terraware-web/terraware-web/src/utils/acl.ts">
         <metrics statements="58" coveredstatements="41" conditionals="38" coveredconditionals="11" methods="24" coveredmethods="6"/>
         <line num="83" count="1" type="stmt"/>
@@ -1953,6 +1953,35 @@
         <line num="346" count="3" type="stmt"/>
         <line num="348" count="3" type="stmt"/>
         <line num="352" count="0" type="stmt"/>
+      </file>
+      <file name="tableFilters.ts" path="/home/runner/work/terraware-web/terraware-web/src/utils/tableFilters.ts">
+        <metrics statements="26" coveredstatements="25" conditionals="30" coveredconditionals="28" methods="3" coveredmethods="3"/>
+        <line num="10" count="1" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
+        <line num="12" count="20" type="stmt"/>
+        <line num="13" count="40" type="cond" truecount="4" falsecount="0"/>
+        <line num="14" count="16" type="stmt"/>
+        <line num="16" count="24" type="cond" truecount="2" falsecount="0"/>
+        <line num="17" count="20" type="stmt"/>
+        <line num="18" count="20" type="cond" truecount="3" falsecount="1"/>
+        <line num="19" count="20" type="cond" truecount="2" falsecount="0"/>
+        <line num="22" count="4" type="cond" truecount="3" falsecount="1"/>
+        <line num="23" count="4" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="28" count="20" type="stmt"/>
+        <line num="29" count="20" type="stmt"/>
+        <line num="30" count="20" type="cond" truecount="4" falsecount="0"/>
+        <line num="31" count="5" type="stmt"/>
+        <line num="35" count="15" type="stmt"/>
+        <line num="36" count="15" type="stmt"/>
+        <line num="37" count="15" type="cond" truecount="2" falsecount="0"/>
+        <line num="38" count="2" type="stmt"/>
+        <line num="41" count="13" type="stmt"/>
+        <line num="42" count="13" type="cond" truecount="4" falsecount="0"/>
+        <line num="43" count="2" type="stmt"/>
+        <line num="45" count="11" type="cond" truecount="4" falsecount="0"/>
+        <line num="46" count="4" type="stmt"/>
+        <line num="48" count="7" type="stmt"/>
       </file>
       <file name="user.ts" path="/home/runner/work/terraware-web/terraware-web/src/utils/user.ts">
         <metrics statements="10" coveredstatements="3" conditionals="12" coveredconditionals="1" methods="2" coveredmethods="1"/>
