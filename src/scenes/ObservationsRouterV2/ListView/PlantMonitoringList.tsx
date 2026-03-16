@@ -5,6 +5,7 @@ import { Dropdown, EditableTable, EditableTableColumn, Icon } from '@terraware/w
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import {
   MRT_Cell,
+  MRT_Row,
   MRT_ShowHideColumnsButton,
   MRT_ToggleDensePaddingButton,
   MRT_ToggleFiltersButton,
@@ -33,6 +34,7 @@ import { AdHocObservationResults, ObservationState, getStatus } from 'src/types/
 import { MultiPolygon } from 'src/types/Tracking';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { isAdmin } from 'src/utils/organization';
+import { makeDateRangeFilterFn } from 'src/utils/tableFilters';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import { useAbandonObservationModal } from '../Abandon';
@@ -60,44 +62,6 @@ type PlantMonitoringRow = {
 const ASSIGNED_STORAGE_KEY = 'plant-monitoring-assigned-table';
 const ADHOC_STORAGE_KEY = 'plant-monitoring-adhoc-table';
 
-const makeDateFilterFn =
-  (field: keyof PlantMonitoringRow) =>
-  (row: PlantMonitoringRow, _columnId: string, filterValue: unknown[]): boolean => {
-    const toDayStr = (val: unknown): string | null => {
-      if (val === null || val === undefined) {
-        return null;
-      }
-      if (typeof val === 'object') {
-        const dayjsLike = val as { format?: (f: string) => string; isValid?: () => boolean };
-        if (typeof dayjsLike.format === 'function' && typeof dayjsLike.isValid === 'function') {
-          return dayjsLike.isValid() ? dayjsLike.format('YYYY-MM-DD') : null;
-        }
-      }
-      if (typeof val === 'string' && /^\d{4}-\d{2}-\d{2}/.test(val)) {
-        return val.substring(0, 10);
-      }
-      return null;
-    };
-    const minStr = toDayStr(filterValue[0]);
-    const maxStr = toDayStr(filterValue[1]);
-    if (!minStr && !maxStr) {
-      return true;
-    }
-    // row is an MRT Row wrapper at runtime; access original data via .original
-    const original = (row as unknown as { original: PlantMonitoringRow }).original;
-    const dateStr = original[field] as string | undefined;
-    if (!dateStr) {
-      return false;
-    }
-    const rowDateStr = dateStr.substring(0, 10);
-    if (minStr && rowDateStr < minStr) {
-      return false;
-    }
-    if (maxStr && rowDateStr > maxStr) {
-      return false;
-    }
-    return true;
-  };
 
 const PlantMonitoringActionsMenuContent = ({ row }: { row: PlantMonitoringRow }) => {
   const { strings } = useLocalization();
@@ -386,16 +350,14 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           }
           return new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
         },
-        enableEditing: false,
         filterVariant: 'date-range',
-        filterFn: makeDateFilterFn('observationDate'),
+        filterFn: makeDateRangeFilterFn<PlantMonitoringRow>('observationDate'),
         Cell: ObservationDateCell,
       },
       {
         id: 'state',
         header: strings.STATUS,
         accessorKey: 'state',
-        enableEditing: false,
         filterVariant: 'select',
         filterSelectOptions: uniqueStatuses,
       },
@@ -403,7 +365,6 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
         id: 'plantingSiteName',
         header: strings.PLANTING_SITE,
         accessorKey: 'plantingSiteName',
-        enableEditing: false,
         filterVariant: 'select',
         filterSelectOptions: uniquePlantingSiteNames,
       },
@@ -411,7 +372,6 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
         id: 'strata',
         header: strings.STRATA,
         accessorKey: 'strata',
-        enableEditing: false,
         filterVariant: 'text',
         Cell: StrataCell,
       },
@@ -419,7 +379,6 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
         id: 'totalLive',
         header: strings.LIVE_PLANTS,
         accessorKey: 'totalLive',
-        enableEditing: false,
         filterVariant: 'range',
         Cell: NumberCell,
       },
@@ -427,7 +386,6 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
         id: 'totalPlants',
         header: strings.TOTAL_PLANTS,
         accessorKey: 'totalPlants',
-        enableEditing: false,
         filterVariant: 'range',
         Cell: NumberCell,
       },
@@ -435,7 +393,6 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
         id: 'totalSpecies',
         header: strings.SPECIES,
         accessorKey: 'totalSpecies',
-        enableEditing: false,
         filterVariant: 'range',
         Cell: NumberCell,
       },
@@ -443,7 +400,6 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
         id: 'plantingDensity',
         header: strings.PLANT_DENSITY,
         accessorKey: 'plantingDensity',
-        enableEditing: false,
         filterVariant: 'range',
         Cell: NumberCell,
       },
@@ -451,7 +407,6 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
         id: 'survivalRate',
         header: strings.SURVIVAL_RATE,
         accessorKey: 'survivalRate',
-        enableEditing: false,
         filterVariant: 'range',
       },
       {
@@ -468,9 +423,8 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           }
           return new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
         },
-        enableEditing: false,
         filterVariant: 'date-range',
-        filterFn: makeDateFilterFn('completedDate'),
+        filterFn: makeDateRangeFilterFn<PlantMonitoringRow>('completedDate'),
         Cell: CompletedDateCell,
       },
     ];
@@ -482,7 +436,6 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           id: 'actionsMenu',
           header: '',
           accessorFn: () => null,
-          enableEditing: false,
           enableHiding: false,
           Cell: ActionsMenuCell,
         },
@@ -507,7 +460,6 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
         id: 'adHocPlotNumber',
         header: strings.PLOT,
         accessorKey: 'adHocPlotNumber',
-        enableEditing: false,
         filterVariant: 'range',
         Cell: AdHocPlotNumberCell,
       },
@@ -515,7 +467,6 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
         id: 'plantingSiteName',
         header: strings.PLANTING_SITE,
         accessorKey: 'plantingSiteName',
-        enableEditing: false,
         filterVariant: 'select',
         filterSelectOptions: uniquePlantingSiteNames,
       },
@@ -533,16 +484,14 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           }
           return new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
         },
-        enableEditing: false,
         filterVariant: 'date-range',
-        filterFn: makeDateFilterFn('completedDate'),
+        filterFn: makeDateRangeFilterFn<PlantMonitoringRow>('completedDate'),
         Cell: CompletedDateCell,
       },
       {
         id: 'totalLive',
         header: strings.LIVE_PLANTS,
         accessorKey: 'totalLive',
-        enableEditing: false,
         filterVariant: 'range',
         Cell: NumberCell,
       },
@@ -550,7 +499,6 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
         id: 'totalPlants',
         header: strings.TOTAL_PLANTS,
         accessorKey: 'totalPlants',
-        enableEditing: false,
         filterVariant: 'range',
         Cell: NumberCell,
       },
@@ -558,7 +506,6 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
         id: 'totalSpecies',
         header: strings.SPECIES,
         accessorKey: 'totalSpecies',
-        enableEditing: false,
         filterVariant: 'range',
         Cell: NumberCell,
       },
@@ -685,6 +632,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
 
   const commonTableOptions = useMemo(
     () => ({
+      defaultColumn: { enableEditing: false },
       enableColumnPinning: true,
       enableColumnActions: true,
       enableHiding: true,
@@ -715,13 +663,14 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
       },
       muiTableHeadCellProps: ({ column }: { column: { id: string } }) =>
         column.id === 'actionsMenu' ? { sx: { '& .Mui-TableHeadCell-Content': { display: 'none' } } } : {},
-      muiTableBodyRowProps: {
+      muiTableBodyRowProps: ({ row }: { row: MRT_Row<PlantMonitoringRow> }) => ({
+        id: `row${row.index + 1}`,
         sx: {
           '& td': {
             borderBottom: 'none',
           },
         },
-      },
+      }),
     }),
     [emptyStateContent, theme]
   );
@@ -739,7 +688,6 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           enableGlobalFilter={true}
           enableColumnFilters={true}
           enableColumnOrdering={true}
-          stickyFilters={true}
           storageKey={ASSIGNED_STORAGE_KEY}
           enablePagination={false}
           enableTopToolbar={true}
@@ -787,7 +735,6 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           enableGlobalFilter={true}
           enableColumnFilters={true}
           enableColumnOrdering={true}
-          stickyFilters={true}
           storageKey={ADHOC_STORAGE_KEY}
           enablePagination={false}
           enableTopToolbar={true}

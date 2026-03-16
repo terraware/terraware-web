@@ -24,6 +24,7 @@ import { useLazyListAdHocObservationResultsQuery } from 'src/queries/generated/o
 import { useLazyListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
 import { ObservationsService } from 'src/services';
 import { downloadCsv } from 'src/utils/csv';
+import { makeDateRangeFilterFn } from 'src/utils/tableFilters';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import useObservationExports from '../useObservationExports';
@@ -167,7 +168,6 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
         id: 'monitoringPlotNumber',
         header: strings.PLOT,
         accessorKey: 'monitoringPlotNumber',
-        enableEditing: false,
         filterVariant: 'range',
         Cell: PlotNumberCell,
       },
@@ -175,14 +175,12 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
         id: 'monitoringPlotDescription',
         header: strings.PLOT_DESCRIPTION,
         accessorKey: 'monitoringPlotDescription',
-        enableEditing: false,
         filterVariant: 'text',
       },
       {
         id: 'plantingSiteName',
         header: strings.PLANTING_SITE,
         accessorKey: 'plantingSiteName',
-        enableEditing: false,
         filterVariant: 'select',
         filterSelectOptions: uniquePlantingSiteNames,
       },
@@ -200,65 +198,26 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
           }
           return new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
         },
-        enableEditing: false,
         filterVariant: 'date-range',
-        filterFn: (row: BiomassRow, _columnId: string, filterValue: unknown[]) => {
-          const toDayStr = (val: unknown): string | null => {
-            if (val === null || val === undefined) {
-              return null;
-            }
-            if (typeof val === 'object') {
-              const dayjsLike = val as { format?: (f: string) => string; isValid?: () => boolean };
-              if (typeof dayjsLike.format === 'function' && typeof dayjsLike.isValid === 'function') {
-                return dayjsLike.isValid() ? dayjsLike.format('YYYY-MM-DD') : null;
-              }
-            }
-            if (typeof val === 'string' && /^\d{4}-\d{2}-\d{2}/.test(val)) {
-              return val.substring(0, 10);
-            }
-            return null;
-          };
-          const minStr = toDayStr(filterValue[0]);
-          const maxStr = toDayStr(filterValue[1]);
-          if (!minStr && !maxStr) {
-            return true;
-          }
-          // row is an MRT Row wrapper at runtime; access original data via .original
-          const original = (row as unknown as { original: BiomassRow }).original;
-          const dateStr = original.completedDate;
-          if (!dateStr) {
-            return false;
-          }
-          const rowDateStr = dateStr.substring(0, 10);
-          if (minStr && rowDateStr < minStr) {
-            return false;
-          }
-          if (maxStr && rowDateStr > maxStr) {
-            return false;
-          }
-          return true;
-        },
+        filterFn: makeDateRangeFilterFn<BiomassRow>('completedDate'),
         Cell: CompletedDateCell,
       },
       {
         id: 'totalPlants',
         header: strings.TOTAL_PLANTS,
         accessorKey: 'totalPlants',
-        enableEditing: false,
         filterVariant: 'range',
       },
       {
         id: 'totalSpecies',
         header: strings.SPECIES,
         accessorKey: 'totalSpecies',
-        enableEditing: false,
         filterVariant: 'range',
       },
       {
         id: 'actionsMenu',
         header: '',
         accessorFn: () => null,
-        enableEditing: false,
         enableHiding: false,
         Cell: ActionsMenuCell,
       },
@@ -307,7 +266,6 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
         enableGlobalFilter={true}
         enableColumnFilters={true}
         enableColumnOrdering={true}
-        stickyFilters={true}
         storageKey={STORAGE_KEY}
         enablePagination={false}
         enableTopToolbar={true}
@@ -329,6 +287,7 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
           onDensityChange,
           onShowColumnFiltersChange: setShowColumnFilters,
           onShowGlobalFilterChange: setShowGlobalFilter,
+          defaultColumn: { enableEditing: false },
           enableColumnPinning: true,
           enableColumnActions: true,
           enableHiding: true,
@@ -380,13 +339,14 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
           },
           muiTableHeadCellProps: ({ column }) =>
             column.id === 'actionsMenu' ? { sx: { '& .Mui-TableHeadCell-Content': { display: 'none' } } } : {},
-          muiTableBodyRowProps: {
+          muiTableBodyRowProps: ({ row }) => ({
+            id: `row${row.index + 1}`,
             sx: {
               '& td': {
                 borderBottom: 'none',
               },
             },
-          },
+          }),
         }}
         sx={{ padding: 0 }}
       />
