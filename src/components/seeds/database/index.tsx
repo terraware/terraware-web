@@ -228,7 +228,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
     const urlFilters: MRT_ColumnFiltersState = [];
 
     if (subLocationName) {
-      urlFilters.push({ id: 'subLocation_name', value: subLocationName });
+      urlFilters.push({ id: 'subLocation_name', value: [subLocationName] });
       query.delete('subLocationName');
     }
 
@@ -236,7 +236,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
       const seedBanks = getAllSeedBanks(selectedOrganization);
       const facility = seedBanks.find((sb) => sb?.id === parseInt(facilityId, 10));
       if (facility) {
-        urlFilters.push({ id: 'facility_name', value: facility.name });
+        urlFilters.push({ id: 'facility_name', value: [facility.name] });
       }
       query.delete('facilityId');
     }
