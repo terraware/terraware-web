@@ -2268,9 +2268,7 @@ UNKNOWN,Inconnu,97ccc176
 UNLIKELY,Peu probable,961eba8d
 UNPIN_ALL,Désépingler tout,97a06369
 UNPUBLISHED_CHANGES,Modifications non publiées,44cc10b0
-UNPUBLISHED_CHANGES_WARNING,Ce rapport NE correspond PAS au rapport publié. Cela peut être dû à :,da034975
-UNPUBLISHED_CHANGES_WARNING_REASON_1,Modifications non publiées dans ce rapport,573bc3a3
-UNPUBLISHED_CHANGES_WARNING_REASON_2,Modifications non publiées dans les rapports précédents qui affecteraient les totaux cumulatifs,9560e7b3
+UNPUBLISHED_CHANGES_WARNING,Ce rapport ne correspond PAS au rapport publié. Cela peut être dû à des modifications non publiées dans ce rapport.,f7c6bf21
 UNPUBLISHED_CHANGES_WARNING_RESOLUTION,"Pour résoudre ce problème, republiez tous les rapports mis à jour afin que les rapports destinés au bailleur de fonds reflètent les dernières données.",b2104255
 UNPUBLISHED_CHANGES_WARNING_SECTION,Modifications non publiées :,c2b6b281
 UNRECOGNIZED_SPECIES,Espèces non reconnues,74b081bb
