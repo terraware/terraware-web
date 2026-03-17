@@ -1,3 +1,6 @@
+5b066b50749d SW-8196 Error when saving indicator on Console on Staging (#5449)
+0ee8382ba397 SW-8188 Update unpublished changes text (#5448)
+8a9acc61cf74 SW-8131 Update Assigned Plot Plant Monitoring Observation and Monitoring Plot tables to new table component (#5445)
 23c4c2ae80ba SW-8195: "Something went wrong" page when trying to access the Seeds -> Accessions (#5446)
 cbd8a8194fa9 SW-8130 Observations: Update Planting Site Observations tables to new table component (#5444)
 dcca85e9f3f9 SW-8076: UI/UX and styling changes (FOLLOW-UP #2) (#5443)
