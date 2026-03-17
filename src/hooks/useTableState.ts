@@ -13,6 +13,7 @@ type UseTableStateOptions = {
   defaultColumnOrder?: MRT_ColumnOrderState;
   defaultColumnVisibility?: MRT_VisibilityState;
   defaultSorting?: MRT_SortingState;
+  persistedMultiSelectColumnIds?: string[];
   persistFilters?: boolean;
   persistSorting?: boolean;
 };
@@ -22,9 +23,12 @@ const useTableState = (storageKey: string, options?: UseTableStateOptions) => {
     defaultColumnOrder = [],
     defaultColumnVisibility = {},
     defaultSorting = [],
+    persistedMultiSelectColumnIds = [],
     persistFilters = false,
     persistSorting = false,
   } = options ?? {};
+
+  const persistedMultiSelectIds = new Set(persistedMultiSelectColumnIds);
 
   const [columnOrder, setColumnOrder] = useState<MRT_ColumnOrderState>(() => {
     try {
@@ -72,6 +76,11 @@ const useTableState = (storageKey: string, options?: UseTableStateOptions) => {
             ...f,
             value: (f.value as unknown[]).map((v) => (isISODateTimeString(v) ? dayjs(v as string) : v)),
           };
+        }
+        // Coerce non-array values to arrays for multi-select columns so
+        // arrIncludesSome (which calls filterValue.some()) doesn't crash.
+        if (persistedMultiSelectIds.has(f.id) && !Array.isArray(f.value) && f.value !== null) {
+          return { ...f, value: [f.value] };
         }
         return f;
       });

@@ -1229,7 +1229,8 @@ const ObservationMap = ({
     treeDrawerSize,
   ]);
 
-  const [showHoverLocation, setShowHoverTextLocation] = useState<Point>();
+  const [showHoverLocation, setShowHoverLocation] = useState<Point>();
+  const [hoverGeoCenter, setHoverGeoCenter] = useState<MapPoint>();
   const [hoveredLayerFeatureId, setHoveredLayerFeatureId] = useState<string | null>(null);
 
   const onHover = useCallback(
@@ -1240,20 +1241,63 @@ const ObservationMap = ({
           .map((feature) => feature.properties)
           .filter(
             (featureProperties): featureProperties is MapProperties =>
-              !!featureProperties && featureProperties.id !== undefined && featureProperties.priority !== undefined
+              !!featureProperties &&
+              featureProperties.id !== undefined &&
+              featureProperties.priority !== undefined &&
+              !featureProperties.clickable
           );
 
-        if (properties.length && (!showHoverLocation || hoveredLayerFeatureId !== properties[0].layerFeatureId)) {
+        if (!properties.length) {
+          setHoverGeoCenter(undefined);
+          setHoveredLayerFeatureId(null);
+          return;
+        }
+
+        if (!hoverGeoCenter || hoveredLayerFeatureId !== properties[0].layerFeatureId) {
           setHoveredLayerFeatureId(properties[0].layerFeatureId);
-          setShowHoverTextLocation(event.point);
+
+          const matchingFeature = features.find((f) => f.properties?.layerFeatureId === properties[0].layerFeatureId);
+          const geometry = matchingFeature?.geometry;
+          if (geometry && (geometry.type === 'Polygon' || geometry.type === 'MultiPolygon')) {
+            const coords =
+              geometry.type === 'MultiPolygon' ? geometry.coordinates.flat().flat() : geometry.coordinates.flat();
+            const points = coords.map(([lng, lat]): MapPoint => ({ lat, lng }));
+            const bbox = getBoundingBoxFromPoints(points);
+            setHoverGeoCenter({
+              lng: (bbox.maxLng + bbox.minLng) / 2,
+              lat: (bbox.maxLat + bbox.minLat) / 2,
+            });
+          } else {
+            setHoverGeoCenter(undefined);
+          }
         }
         return;
       }
 
-      setShowHoverTextLocation(undefined);
+      setHoverGeoCenter(undefined);
     },
-    [hoveredLayerFeatureId, showHoverLocation]
+    [hoveredLayerFeatureId, hoverGeoCenter]
   );
+
+  useEffect(() => {
+    const map = mapRef.current;
+
+    const updateProjection = () => {
+      if (!hoverGeoCenter || !map) {
+        setShowHoverLocation(undefined);
+        return;
+      }
+      const projected = map.project([hoverGeoCenter.lng, hoverGeoCenter.lat]);
+      setShowHoverLocation({ x: projected.x, y: projected.y - 24 } as Point);
+    };
+
+    updateProjection();
+
+    map?.on('move', updateProjection);
+    return () => {
+      map?.off('move', updateProjection);
+    };
+  }, [hoverGeoCenter, mapRef]);
 
   const unclickableHoverTag = useMemo(() => {
     if (showHoverLocation) {
@@ -1266,6 +1310,7 @@ const ObservationMap = ({
             position: 'absolute',
             left: showHoverLocation.x,
             top: showHoverLocation.y,
+            transform: 'translate(-50%, -100%)',
             pointerEvents: 'none',
           }}
         >
