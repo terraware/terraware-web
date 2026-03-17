@@ -2268,9 +2268,7 @@ UNKNOWN,Desconocido,97ccc176
 UNLIKELY,Poco probable,961eba8d
 UNPIN_ALL,Desanclar todas,97a06369
 UNPUBLISHED_CHANGES,Cambios no publicados,44cc10b0
-UNPUBLISHED_CHANGES_WARNING,Este informe NO coincide con el informe publicado. Esto puede deberse a lo siguiente:,da034975
-UNPUBLISHED_CHANGES_WARNING_REASON_1,Cambios no publicados en este informe,573bc3a3
-UNPUBLISHED_CHANGES_WARNING_REASON_2,Cambios no publicados en informes anteriores que afectarían los totales acumulados,9560e7b3
+UNPUBLISHED_CHANGES_WARNING,Este informe NO coincide con el informe publicado. Esto puede deberse a cambios no publicados en este informe.,f7c6bf21
 UNPUBLISHED_CHANGES_WARNING_RESOLUTION,"Para resolver este problema, vuelva a publicar cualquier informe actualizado para que los informes del financiador reflejen los datos más recientes.",b2104255
 UNPUBLISHED_CHANGES_WARNING_SECTION,Cambios no publicados:,c2b6b281
 UNRECOGNIZED_SPECIES,Especies no reconocidas,74b081bb

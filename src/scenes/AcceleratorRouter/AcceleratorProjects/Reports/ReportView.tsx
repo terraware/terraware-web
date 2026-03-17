@@ -278,8 +278,6 @@ const ReportView = () => {
     return (
       <Box display='flex' flexDirection='column' gap={1}>
         <Typography fontSize='14px'>{strings.UNPUBLISHED_CHANGES_WARNING}</Typography>
-        <Typography fontSize='14px'>1. {strings.UNPUBLISHED_CHANGES_WARNING_REASON_1}</Typography>
-        <Typography fontSize='14px'>2. {strings.UNPUBLISHED_CHANGES_WARNING_REASON_2}</Typography>
         <Typography fontSize='14px'>{strings.UNPUBLISHED_CHANGES_WARNING_RESOLUTION}</Typography>
         <Typography fontSize='14px'>
           {strings.UNPUBLISHED_CHANGES_WARNING_SECTION} {propertyList}
