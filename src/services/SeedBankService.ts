@@ -127,7 +127,7 @@ const searchAccessions = async <T extends SearchResponseElement>({
     prefix: 'accessions',
     fields,
     search: SearchService.convertToSearchNodePayload(searchCriteria ?? {}, organizationId),
-    count: 1000,
+    count: 0,
   };
 
   if (sortOrder) {
