@@ -110,6 +110,16 @@ const PhotosBox = (props: ReportBoxProps) => {
   const [internalEditing, setInternalEditing, setInternalEditingTrue] = useBoolean(false);
   const [photos, setPhotos] = useState<AcceleratorReportPhoto[]>(report?.photos || []);
   const [newPhotos, setNewPhotos] = useState<NewAcceleratorReportPhoto[]>([]);
+  const currentReportId = report ? (isAcceleratorReport(report) ? report.id : report.reportId) : undefined;
+  const [prevReportId, setPrevReportId] = useState(currentReportId);
+
+  // reset photos synchronously during render when report changes, so we never
+  // render stale photo fileIds with a new projectId/reportId (which causes 404s)
+  if (currentReportId !== prevReportId) {
+    setPrevReportId(currentReportId);
+    setPhotos(report?.photos || []);
+    setNewPhotos([]);
+  }
 
   const [batchReportPhotos, { isLoading }] = useBatchReportPhotosMutation();
   const snackbar = useSnackbar();
