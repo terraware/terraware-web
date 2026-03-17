@@ -123,6 +123,7 @@ const listNurseryWithdrawals = async (
       'purpose(raw)',
       'facility_name',
       'destinationName',
+      'stratumNames',
       'substratumNames',
       'totalWithdrawn',
       'totalWithdrawn(raw)',
@@ -261,6 +262,7 @@ const getFilterOptions = async (organizationId: number): Promise<FieldOptionsMap
       'purpose',
       'facility_name',
       'destinationName',
+      'stratumNames',
       'substratumNames',
       'batchWithdrawals.batch_species_scientificName',
     ],
@@ -274,7 +276,7 @@ const getFilterOptions = async (organizationId: number): Promise<FieldOptionsMap
   return (data ?? []).reduce((acc, d) => {
     return Object.keys(d).reduce((innerAcc, k) => {
       const isBatchWithdrawals = k === 'batchWithdrawals';
-      const isSubstrata = k === 'substratumNames';
+      const isStrata = k === 'stratumNames' || k === 'substratumNames';
       const newKey = isBatchWithdrawals ? 'batchWithdrawals.batch_species_scientificName' : k;
       if (!innerAcc[newKey]) {
         innerAcc[newKey] = { partial: false, values: [] };
@@ -282,7 +284,7 @@ const getFilterOptions = async (organizationId: number): Promise<FieldOptionsMap
       let value;
       if (isBatchWithdrawals) {
         value = (d[k] as any[]).map((batchWithdrawal) => batchWithdrawal.batch_species_scientificName);
-      } else if (isSubstrata) {
+      } else if (isStrata) {
         value = parseSubstrata(d[k] as string);
       } else {
         value = d[k];
@@ -303,7 +305,7 @@ const getFilterOptions = async (organizationId: number): Promise<FieldOptionsMap
 };
 
 /**
- * Parse substrata from following patterns:
+ * Parse strata or substrata from the following patterns:
  * 'substratum'
  * 'substratum (substratum)'
  * 'substratum (substratum1, substratum2)' [basically (substratum1, substratum2..., substratumN)]

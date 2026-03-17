@@ -259,8 +259,8 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
 
   const StratumNamesCell = useCallback(
     ({ cell }: { cell: MRT_Cell<SearchResponseElement> }) => {
-      const value = cell.getValue() as string[] | undefined;
-      return value ? <TextTruncated stringList={value} moreText={strings.TRUNCATED_TEXT_MORE_LINK} /> : null;
+      const value = cell.getValue() as string | undefined;
+      return value ? <TextTruncated stringList={[value]} moreText={strings.TRUNCATED_TEXT_MORE_LINK} /> : null;
     },
     [strings]
   );
