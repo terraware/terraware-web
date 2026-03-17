@@ -182,7 +182,11 @@ const MetricRow = ({
     } else if (type === 'common' && isCommonOrProjectIndicator(record)) {
       return {
         commonIndicators: [
-          { id: record.id, value: record.value !== undefined ? Number(record.value) : undefined, ...baseMetric },
+          {
+            id: record.id,
+            value: record.value !== undefined && record.value !== null ? Number(record.value) : undefined,
+            ...baseMetric,
+          },
         ],
         autoCalculatedIndicators: [],
         projectIndicators: [],
@@ -190,7 +194,11 @@ const MetricRow = ({
     } else if (type === 'project' && isCommonOrProjectIndicator(record)) {
       return {
         projectIndicators: [
-          { id: record.id, value: record.value !== undefined ? Number(record.value) : undefined, ...baseMetric },
+          {
+            id: record.id,
+            value: record.value !== undefined && record.value !== null ? Number(record.value) : undefined,
+            ...baseMetric,
+          },
         ],
         autoCalculatedIndicators: [],
         commonIndicators: [],
