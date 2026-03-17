@@ -181,13 +181,17 @@ const MetricRow = ({
       };
     } else if (type === 'common' && isCommonOrProjectIndicator(record)) {
       return {
-        commonIndicators: [{ id: record.id, value: record.value !== undefined ? Number(record.value) : undefined, ...baseMetric }],
+        commonIndicators: [
+          { id: record.id, value: record.value !== undefined ? Number(record.value) : undefined, ...baseMetric },
+        ],
         autoCalculatedIndicators: [],
         projectIndicators: [],
       };
     } else if (type === 'project' && isCommonOrProjectIndicator(record)) {
       return {
-        projectIndicators: [{ id: record.id, value: record.value !== undefined ? Number(record.value) : undefined, ...baseMetric }],
+        projectIndicators: [
+          { id: record.id, value: record.value !== undefined ? Number(record.value) : undefined, ...baseMetric },
+        ],
         autoCalculatedIndicators: [],
         commonIndicators: [],
       };
