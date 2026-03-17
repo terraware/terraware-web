@@ -42,6 +42,7 @@ import { makeCsv } from 'src/utils/csv';
 import { getAllSeedBanks, isAdmin } from 'src/utils/organization';
 import { makeDateRangeFilterFn } from 'src/utils/tableFilters';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
@@ -112,21 +113,21 @@ const ALL_ACCESSION_FIELDS = [
   'collectionSiteName',
   'collectionSiteLandowner',
   'collectionSiteNotes',
-  'ageMonths',
-  'ageYears',
-  'totalWithdrawnCount',
-  'totalWithdrawnWeightMilligrams',
-  'totalWithdrawnWeightGrams',
-  'totalWithdrawnWeightKilograms',
-  'totalWithdrawnWeightOunces',
-  'totalWithdrawnWeightPounds',
-  'totalViabilityPercent',
-  'estimatedWeightMilligrams',
-  'estimatedWeightGrams',
-  'estimatedWeightKilograms',
-  'estimatedWeightOunces',
-  'estimatedWeightPounds',
-  'estimatedCount',
+  'ageMonths(raw)',
+  'ageYears(raw)',
+  'totalWithdrawnCount(raw)',
+  'totalWithdrawnWeightMilligrams(raw)',
+  'totalWithdrawnWeightGrams(raw)',
+  'totalWithdrawnWeightKilograms(raw)',
+  'totalWithdrawnWeightOunces(raw)',
+  'totalWithdrawnWeightPounds(raw)',
+  'totalViabilityPercent(raw)',
+  'estimatedWeightMilligrams(raw)',
+  'estimatedWeightGrams(raw)',
+  'estimatedWeightKilograms(raw)',
+  'estimatedWeightOunces(raw)',
+  'estimatedWeightPounds(raw)',
+  'estimatedCount(raw)',
   'geolocations.coordinates',
   'plantId',
 ];
@@ -142,6 +143,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
   const { selectedOrganization } = useOrganization();
   const { activeLocale } = useLocalization();
+  const numberFormatter = useNumberFormatter();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const navigate = useSyncNavigate();
@@ -350,10 +352,21 @@ export default function Database(props: DatabaseProps): JSX.Element {
     );
   }, []);
 
-  const ViabilityCell = useCallback(({ cell }: { cell: MRT_Cell<SearchResponseElementWithId> }) => {
-    const value = cell.getValue();
-    return value !== undefined && value !== null ? <span>{`${value as number}%`}</span> : null;
-  }, []);
+  const ViabilityCell = useCallback(
+    ({ cell }: { cell: MRT_Cell<SearchResponseElementWithId> }) => {
+      const value = cell.getValue() as number | undefined | null;
+      return value !== undefined && value !== null ? <span>{`${numberFormatter.format(value)}%`}</span> : null;
+    },
+    [numberFormatter]
+  );
+
+  const NumericCell = useCallback(
+    ({ cell }: { cell: MRT_Cell<SearchResponseElementWithId> }) => {
+      const value = cell.getValue() as number | undefined | null;
+      return value !== undefined && value !== null ? <span>{numberFormatter.format(value)}</span> : null;
+    },
+    [numberFormatter]
+  );
 
   const GeolocationCell = useCallback(({ cell }: { cell: MRT_Cell<SearchResponseElementWithId> }) => {
     const value = cell.getValue() as string;
@@ -465,138 +478,107 @@ export default function Database(props: DatabaseProps): JSX.Element {
       {
         id: 'ageMonths',
         header: strings.AGE_MONTHS,
-        accessorFn: (row) => {
-          const val = row.ageMonths;
-          return val !== undefined && val !== null ? Number(val) : undefined;
-        },
+        accessorFn: (row) => row['ageMonths(raw)'] as number | undefined,
         filterVariant: 'range',
+        Cell: NumericCell,
       },
       {
         id: 'ageYears',
         header: strings.AGE_YEARS,
-        accessorFn: (row) => {
-          const val = row.ageYears;
-          return val !== undefined && val !== null ? Number(val) : undefined;
-        },
+        accessorFn: (row) => row['ageYears(raw)'] as number | undefined,
         filterVariant: 'range',
+        Cell: NumericCell,
       },
       {
         id: 'totalWithdrawnCount',
         header: strings.TOTAL_WITHDRAWN_COUNT,
-        accessorFn: (row) => {
-          const val = row.totalWithdrawnCount;
-          return val !== undefined && val !== null ? Number(val) : undefined;
-        },
+        accessorFn: (row) => row['totalWithdrawnCount(raw)'] as number | undefined,
         filterVariant: 'range',
+        Cell: NumericCell,
       },
       {
         id: 'totalWithdrawnWeightMilligrams',
         header: strings.TOTAL_WITHDRAWN_WEIGHT_MILLIGRAMS,
-        accessorFn: (row) => {
-          const val = row.totalWithdrawnWeightMilligrams;
-          return val !== undefined && val !== null ? Number(val) : undefined;
-        },
+        accessorFn: (row) => row['totalWithdrawnWeightMilligrams(raw)'] as number | undefined,
         filterVariant: 'range',
+        Cell: NumericCell,
       },
       {
         id: 'totalWithdrawnWeightGrams',
         header: strings.TOTAL_WITHDRAWN_WEIGHT_GRAMS,
-        accessorFn: (row) => {
-          const val = row.totalWithdrawnWeightGrams;
-          return val !== undefined && val !== null ? Number(val) : undefined;
-        },
+        accessorFn: (row) => row['totalWithdrawnWeightGrams(raw)'] as number | undefined,
         filterVariant: 'range',
+        Cell: NumericCell,
       },
       {
         id: 'totalWithdrawnWeightKilograms',
         header: strings.TOTAL_WITHDRAWN_WEIGHT_KILOGRAMS,
-        accessorFn: (row) => {
-          const val = row.totalWithdrawnWeightKilograms;
-          return val !== undefined && val !== null ? Number(val) : undefined;
-        },
+        accessorFn: (row) => row['totalWithdrawnWeightKilograms(raw)'] as number | undefined,
         filterVariant: 'range',
+        Cell: NumericCell,
       },
       {
         id: 'totalWithdrawnWeightOunces',
         header: strings.TOTAL_WITHDRAWN_WEIGHT_OUNCES,
-        accessorFn: (row) => {
-          const val = row.totalWithdrawnWeightOunces;
-          return val !== undefined && val !== null ? Number(val) : undefined;
-        },
+        accessorFn: (row) => row['totalWithdrawnWeightOunces(raw)'] as number | undefined,
         filterVariant: 'range',
+        Cell: NumericCell,
       },
       {
         id: 'totalWithdrawnWeightPounds',
         header: strings.TOTAL_WITHDRAWN_WEIGHT_POUNDS,
-        accessorFn: (row) => {
-          const val = row.totalWithdrawnWeightPounds;
-          return val !== undefined && val !== null ? Number(val) : undefined;
-        },
+        accessorFn: (row) => row['totalWithdrawnWeightPounds(raw)'] as number | undefined,
         filterVariant: 'range',
+        Cell: NumericCell,
       },
       {
         id: 'totalViabilityPercent',
         header: strings.VIABILITY,
-        accessorFn: (row) => {
-          const val = row.totalViabilityPercent;
-          return val !== undefined && val !== null ? Number(val) : undefined;
-        },
+        accessorFn: (row) => row['totalViabilityPercent(raw)'] as number | undefined,
         filterVariant: 'range',
         Cell: ViabilityCell,
       },
       {
         id: 'estimatedWeightMilligrams',
         header: strings.WEIGHT_MILLIGRAMS,
-        accessorFn: (row) => {
-          const val = row.estimatedWeightMilligrams;
-          return val !== undefined && val !== null ? Number(val) : undefined;
-        },
+        accessorFn: (row) => row['estimatedWeightMilligrams(raw)'] as number | undefined,
         filterVariant: 'range',
+        Cell: NumericCell,
       },
       {
         id: 'estimatedWeightGrams',
         header: strings.WEIGHT_GRAMS,
-        accessorFn: (row) => {
-          const val = row.estimatedWeightGrams;
-          return val !== undefined && val !== null ? Number(val) : undefined;
-        },
+        accessorFn: (row) => row['estimatedWeightGrams(raw)'] as number | undefined,
         filterVariant: 'range',
+        Cell: NumericCell,
       },
       {
         id: 'estimatedWeightKilograms',
         header: strings.WEIGHT_KILOGRAMS,
-        accessorFn: (row) => {
-          const val = row.estimatedWeightKilograms;
-          return val !== undefined && val !== null ? Number(val) : undefined;
-        },
+        accessorFn: (row) => row['estimatedWeightKilograms(raw)'] as number | undefined,
         filterVariant: 'range',
+        Cell: NumericCell,
       },
       {
         id: 'estimatedWeightOunces',
         header: strings.WEIGHT_OUNCES,
-        accessorFn: (row) => {
-          const val = row.estimatedWeightOunces;
-          return val !== undefined && val !== null ? Number(val) : undefined;
-        },
+        accessorFn: (row) => row['estimatedWeightOunces(raw)'] as number | undefined,
         filterVariant: 'range',
+        Cell: NumericCell,
       },
       {
         id: 'estimatedWeightPounds',
         header: strings.WEIGHT_POUNDS,
-        accessorFn: (row) => {
-          const val = row.estimatedWeightPounds;
-          return val !== undefined && val !== null ? Number(val) : undefined;
-        },
+        accessorFn: (row) => row['estimatedWeightPounds(raw)'] as number | undefined,
         filterVariant: 'range',
+        Cell: NumericCell,
       },
       {
         id: 'estimatedCount',
         header: strings.COUNT,
-        accessorFn: (row) => {
-          const val = row.estimatedCount;
-          return val !== undefined && val !== null ? Number(val) : undefined;
-        },
+        accessorFn: (row) => row['estimatedCount(raw)'] as number | undefined,
         filterVariant: 'range',
+        Cell: NumericCell,
       },
       {
         id: 'geolocations',
@@ -623,6 +605,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
     uniqueProjectNames,
     AccessionNumberCell,
     ViabilityCell,
+    NumericCell,
     GeolocationCell,
   ]);
 
