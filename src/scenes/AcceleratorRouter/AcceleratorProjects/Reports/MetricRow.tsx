@@ -207,7 +207,9 @@ const MetricRow = ({
 
   const onChangeProgress = useCallback(
     (newValue: string | undefined) => {
-      onChange('overrideValue', newValue);
+      console.log('onChangeProgress called with:', newValue, typeof newValue);
+      const numericValue = newValue !== undefined && newValue !== '' ? Number(newValue) : undefined;
+      onChange('overrideValue', numericValue);
     },
     [onChange]
   );
