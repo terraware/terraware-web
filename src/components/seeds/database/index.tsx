@@ -29,7 +29,6 @@ import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
-import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { requestProjects } from 'src/redux/features/projects/projectsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -43,6 +42,7 @@ import { makeCsv } from 'src/utils/csv';
 import { getAllSeedBanks, isAdmin } from 'src/utils/organization';
 import { makeDateRangeFilterFn } from 'src/utils/tableFilters';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
