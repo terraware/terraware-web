@@ -107,10 +107,11 @@ const MetricRow = ({
 
   const getActualValue = () => {
     if (isAutoCalculatedIndicator(record)) {
-      return record.overrideValue ?? record.systemValue ?? 0;
+      const val = record.overrideValue ?? record.systemValue;
+      return val !== undefined ? Number(val) : 0;
     }
     if (isCommonOrProjectIndicator(record)) {
-      return record.value ?? 0;
+      return record.value !== undefined && record.value !== null ? Number(record.value) : 0;
     }
     return 0;
   };
@@ -168,19 +169,37 @@ const MetricRow = ({
     };
     if (type === 'autoCalculated' && isAutoCalculatedIndicator(record)) {
       return {
-        autoCalculatedIndicators: [{ indicator: record.indicator, overrideValue: record.overrideValue, ...baseMetric }],
+        autoCalculatedIndicators: [
+          {
+            indicator: record.indicator,
+            overrideValue: record.overrideValue !== undefined ? Number(record.overrideValue) : undefined,
+            ...baseMetric,
+          },
+        ],
         commonIndicators: [],
         projectIndicators: [],
       };
     } else if (type === 'common' && isCommonOrProjectIndicator(record)) {
       return {
-        commonIndicators: [{ id: record.id, value: record.value, ...baseMetric }],
+        commonIndicators: [
+          {
+            id: record.id,
+            value: record.value !== undefined && record.value !== null ? Number(record.value) : undefined,
+            ...baseMetric,
+          },
+        ],
         autoCalculatedIndicators: [],
         projectIndicators: [],
       };
     } else if (type === 'project' && isCommonOrProjectIndicator(record)) {
       return {
-        projectIndicators: [{ id: record.id, value: record.value, ...baseMetric }],
+        projectIndicators: [
+          {
+            id: record.id,
+            value: record.value !== undefined && record.value !== null ? Number(record.value) : undefined,
+            ...baseMetric,
+          },
+        ],
         autoCalculatedIndicators: [],
         commonIndicators: [],
       };
@@ -207,7 +226,7 @@ const MetricRow = ({
 
   const onChangeProgress = useCallback(
     (newValue: string | undefined) => {
-      onChange('overrideValue', newValue);
+      onChange('overrideValue', newValue !== undefined && newValue !== '' ? Number(newValue) : undefined);
     },
     [onChange]
   );
