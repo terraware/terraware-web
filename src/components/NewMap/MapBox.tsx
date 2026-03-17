@@ -10,7 +10,7 @@ import Map, {
   ViewStateChangeEvent,
 } from 'react-map-gl/mapbox';
 
-import { Box, Typography, useTheme } from '@mui/material';
+import { Box, CircularProgress, Typography, useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';
 import { Feature, FeatureCollection } from 'geojson';
 import { FilterSpecification, MapMouseEvent, Point } from 'mapbox-gl';
@@ -71,7 +71,7 @@ export type MapBoxProps = {
   token: string;
 };
 
-const MapBox = (props: MapBoxProps): JSX.Element => {
+const MapBox = (props: MapBoxProps): JSX.Element | null => {
   const {
     additionalComponent,
     clusterMaxZoom,
@@ -753,6 +753,14 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
   }, [borderLayers, fillLayers, highlightLayers, textLayers]);
 
   useMaintainLayerOrder(mapRef, orderedLayerIds);
+
+  if (!token) {
+    return (
+      <Box sx={{ display: 'flex', flexGrow: 1, height: '100%', margin: 'auto' }}>
+        <CircularProgress sx={{ margin: 'auto' }} />
+      </Box>
+    );
+  }
 
   return (
     <Map
