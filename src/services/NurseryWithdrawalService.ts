@@ -254,20 +254,39 @@ const getWithdrawalPhotosList = async (withdrawalId: number): Promise<Response &
  * Get Filter Options
  */
 const getFilterOptions = async (organizationId: number): Promise<FieldOptionsMap> => {
-  const searchParams: SearchRequestPayload = {
-    prefix: NURSERY_WITHDRAWALS_PREFIX,
-    fields: [
-      'purpose',
-      'facility_name',
-      'destinationName',
-      'substratumNames',
-      'batchWithdrawals.batch_species_scientificName',
-    ],
-    search: SearchService.convertToSearchNodePayload({}, organizationId),
-    count: 0,
-  };
+  const search = SearchService.convertToSearchNodePayload({}, organizationId);
 
-  return ((await SearchService.searchValues(searchParams)) ?? {}) as FieldOptionsMap;
+  const [valuesResult, speciesResult] = await Promise.all([
+    SearchService.searchValues({
+      prefix: NURSERY_WITHDRAWALS_PREFIX,
+      fields: ['purpose', 'facility_name', 'destinationName', 'substratumNames'],
+      search,
+      count: 0,
+    }),
+    SearchService.search({
+      prefix: NURSERY_WITHDRAWALS_PREFIX,
+      fields: ['batchWithdrawals.batch_species_scientificName'],
+      search,
+      count: 0,
+    }),
+  ]);
+
+  const speciesValues = Array.from(
+    new Set(
+      (speciesResult ?? []).flatMap((d) =>
+        ((d.batchWithdrawals as { batch_species_scientificName: string }[]) ?? []).map(
+          (bw) => bw.batch_species_scientificName
+        )
+      )
+    )
+  )
+    .filter(Boolean)
+    .sort((a, b) => a.localeCompare(b));
+
+  return {
+    ...((valuesResult ?? {}) as FieldOptionsMap),
+    'batchWithdrawals.batch_species_scientificName': { partial: false, values: speciesValues },
+  };
 };
 
 const undoNurseryWithdrawal = async (withdrawalId: number): Promise<Response> => {
