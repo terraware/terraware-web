@@ -497,8 +497,8 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
               } as FieldNodePayload;
             }
 
-            const minStr = filterValue[0] !== undefined && filterValue[0] !== '' ? String(filterValue[0]) : undefined;
-            const maxStr = filterValue[1] !== undefined && filterValue[1] !== '' ? String(filterValue[1]) : undefined;
+            const minStr = filterValue[0] != null && filterValue[0] !== '' ? String(filterValue[0]) : undefined;
+            const maxStr = filterValue[1] != null && filterValue[1] !== '' ? String(filterValue[1]) : undefined;
 
             if (minStr !== undefined) {
               fieldNames.forEach((fieldName) => {
