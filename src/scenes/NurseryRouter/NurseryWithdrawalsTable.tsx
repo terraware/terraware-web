@@ -707,7 +707,16 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
       isFiltered,
       nurseryWithdrawalResults: allRows,
     });
-  }, [columnFilterNodes, debouncedSearchTerm, dispatch, filters, searchChildren, searchSortOrder, selectedOrganization, totalRowCount]);
+  }, [
+    columnFilterNodes,
+    debouncedSearchTerm,
+    dispatch,
+    filters,
+    searchChildren,
+    searchSortOrder,
+    selectedOrganization,
+    totalRowCount,
+  ]);
 
   // Request count for pagination
   useEffect(() => {
