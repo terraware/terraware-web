@@ -338,6 +338,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
       {
         id: 'observationDate',
         header: strings.DATE,
+        size: 180,
         accessorFn: (row) => {
           const dateStr = row.observationDate;
           if (!dateStr) {
