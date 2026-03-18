@@ -1,3 +1,6 @@
+ede6218a8ade SW-7921: Inventory Withdrawals: Add column for Stratum name to Withdrawals tables (#5454)
+7fedaef5da2c SW-8030: Species: Show full names of IUCN Red List categories in table filter dropdown (#5455)
+9eda777aa90e SW-8171: Custom AI Agents (#5440)
 fa1101e92767 SW-8155 Observation: Map should not be shown by default (#5461)
 c72bf8dc323c SW-8210 Updating targets leads to "something wrong" page on staging (#5460)
 fb0017a93ac6 Bump fast-xml-parser from 5.4.2 to 5.5.6 (#5453)
