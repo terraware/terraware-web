@@ -609,26 +609,6 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
     ]
   );
 
-  const emptyStateContent = useMemo(
-    () => (
-      <EmptyStateContent
-        title={''}
-        subtitle={
-          selectedPlotSelection === 'assigned'
-            ? [strings.OBSERVATIONS_EMPTY_STATE_MESSAGE_1, strings.OBSERVATIONS_EMPTY_STATE_MESSAGE_2]
-            : [strings.AD_HOC_OBSERVATIONS_EMPTY_STATE_MESSAGE_1, strings.AD_HOC_OBSERVATIONS_EMPTY_STATE_MESSAGE_2]
-        }
-      />
-    ),
-    [
-      selectedPlotSelection,
-      strings.AD_HOC_OBSERVATIONS_EMPTY_STATE_MESSAGE_1,
-      strings.AD_HOC_OBSERVATIONS_EMPTY_STATE_MESSAGE_2,
-      strings.OBSERVATIONS_EMPTY_STATE_MESSAGE_1,
-      strings.OBSERVATIONS_EMPTY_STATE_MESSAGE_2,
-    ]
-  );
-
   const commonTableOptions = useMemo(
     () => ({
       defaultColumn: { enableEditing: false },
@@ -638,7 +618,6 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
       enableGrouping: false,
       enableColumnDragging: true,
       positionGlobalFilter: 'right' as const,
-      renderEmptyRowsFallback: () => emptyStateContent,
       muiTableBodyProps: {
         sx: {
           '& tr:nth-of-type(odd) > td': {
@@ -671,8 +650,24 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
         },
       }),
     }),
-    [emptyStateContent, theme]
+    [theme]
   );
+
+  if (!isLoading && rows.length === 0) {
+    return (
+      <Card radius={'8px'} style={{ width: '100%' }}>
+        {plotSelectionToolbar}
+        <EmptyStateContent
+          title={''}
+          subtitle={
+            selectedPlotSelection === 'assigned'
+              ? [strings.OBSERVATIONS_EMPTY_STATE_MESSAGE_1, strings.OBSERVATIONS_EMPTY_STATE_MESSAGE_2]
+              : [strings.AD_HOC_OBSERVATIONS_EMPTY_STATE_MESSAGE_1, strings.AD_HOC_OBSERVATIONS_EMPTY_STATE_MESSAGE_2]
+          }
+        />
+      </Card>
+    );
+  }
 
   return (
     <Card radius={'8px'} style={{ width: '100%' }}>
