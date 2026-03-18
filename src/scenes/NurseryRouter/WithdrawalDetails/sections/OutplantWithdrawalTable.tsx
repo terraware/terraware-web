@@ -121,17 +121,17 @@ export default function OutplantWithdrawalTable({
           const ready = readyQuantityWithdrawn || 0;
           const total = activeGrowth + hardeningOff + ready;
           const name = species.find((sp) => sp.id === speciesId)?.scientificName;
-          const substratumMap = speciesSubstratumMap[speciesId];
-          const substratumIds = Object.keys(substratumMap);
-          const toSubstratum = substratumIds.map((_subId) => substratumNames[Number(_subId)]).join(',');
           const stratumMap = speciesStratumMap[speciesId];
           const stratumIds = Object.keys(stratumMap);
           const toStratum = stratumIds.map((_id) => stratumNames[Number(_id)]).join(',');
+          const substratumMap = speciesSubstratumMap[speciesId];
+          const substratumIds = Object.keys(substratumMap);
+          const toSubstratum = substratumIds.map((_subId) => substratumNames[Number(_subId)]).join(',');
 
           batchesMap.push({
-            name,
-            batchNumber,
             batchId,
+            batchNumber,
+            name,
             speciesId,
             toStratum,
             toSubstratum,
