@@ -29,7 +29,7 @@ import { useLocalization, useOrganization } from 'src/providers/hooks';
 import SearchService from 'src/services/SearchService';
 import strings from 'src/strings';
 import { SearchRequestPayload } from 'src/types/Search';
-import { Species, SpeciesProblemElement } from 'src/types/Species';
+import { Species, SpeciesProblemElement, conservationCategories } from 'src/types/Species';
 import { makeCsv } from 'src/utils/csv';
 import { isContributor } from 'src/utils/organization';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
@@ -226,11 +226,10 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
   }, [onApplyFilters]);
 
   // Unique filter option values derived from results (client-side)
-  const uniqueConservationCategories = useMemo(
-    () =>
-      Array.from(new Set(results?.map((r) => r.conservationCategory).filter((v): v is string => Boolean(v)))).sort(),
-    [results]
-  );
+  const uniqueConservationCategories = useMemo(() => {
+    const values = new Set(results?.map((r) => r.conservationCategory).filter((v): v is string => Boolean(v)));
+    return conservationCategories().filter((c) => values.has(c.value));
+  }, [results]);
 
   const uniqueGrowthForms = useMemo(
     () =>
