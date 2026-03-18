@@ -37,7 +37,7 @@ You write and maintain tests for this project.
 
 - `yarn test` for unit tests
 - `yarn playwright:run` for Playwright E2E
-- `yarn server:reset` to reset test data when needed
+- `yarn server:reset` to reset E2E test data (execute before each run of the E2E tests)
 - `yarn format` after changes
 
 ## Boundaries
