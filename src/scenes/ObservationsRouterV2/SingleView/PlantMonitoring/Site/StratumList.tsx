@@ -14,7 +14,6 @@ import {
   MRT_ToggleGlobalFilterButton,
 } from 'material-react-table';
 
-import Card from 'src/components/common/Card';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import useTableState from 'src/hooks/useTableState';
@@ -172,8 +171,7 @@ export default function StratumList(): JSX.Element {
   );
 
   return (
-    <Card radius={'8px'} style={{ width: '100%' }}>
-      <EditableTable
+    <EditableTable
         key='observation-site-stratum-table'
         clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
         columns={columns}
@@ -246,6 +244,5 @@ export default function StratumList(): JSX.Element {
         }}
         sx={{ padding: 0 }}
       />
-    </Card>
   );
 }
