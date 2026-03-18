@@ -257,7 +257,6 @@ const getFilterOptions = async (organizationId: number): Promise<FieldOptionsMap
   const searchParams: SearchRequestPayload = {
     prefix: NURSERY_WITHDRAWALS_PREFIX,
     fields: [
-      'id',
       'purpose',
       'facility_name',
       'destinationName',
@@ -265,81 +264,10 @@ const getFilterOptions = async (organizationId: number): Promise<FieldOptionsMap
       'batchWithdrawals.batch_species_scientificName',
     ],
     search: SearchService.convertToSearchNodePayload({}, organizationId),
-    sortOrder: [{ field: 'id', direction: 'Ascending' }],
     count: 0,
   };
 
-  // eventually convert this to utilize `SearchService.searchValues`
-  const data = await SearchService.search(searchParams);
-  return (data ?? []).reduce((acc, d) => {
-    return Object.keys(d).reduce((innerAcc, k) => {
-      const isBatchWithdrawals = k === 'batchWithdrawals';
-      const isSubstrata = k === 'substratumNames';
-      const newKey = isBatchWithdrawals ? 'batchWithdrawals.batch_species_scientificName' : k;
-      if (!innerAcc[newKey]) {
-        innerAcc[newKey] = { partial: false, values: [] };
-      }
-      let value;
-      if (isBatchWithdrawals) {
-        value = (d[k] as any[]).map((batchWithdrawal) => batchWithdrawal.batch_species_scientificName);
-      } else if (isSubstrata) {
-        value = parseSubstrata(d[k] as string);
-      } else {
-        value = d[k];
-      }
-      const record = innerAcc[newKey] as Record<string, any>;
-      const currentValues = record.values;
-      if (Array.isArray(value)) {
-        currentValues.push(...value);
-      } else {
-        currentValues.push(value);
-      }
-      // sort the values (uniquification in set is not necessary but helps with sort perf)
-      const newValues = Array.from(new Set([...currentValues])).sort((a, b) => a.localeCompare(b));
-      record.values = newValues;
-      return innerAcc;
-    }, acc);
-  }, {}) as FieldOptionsMap;
-};
-
-/**
- * Parse substrata from following patterns:
- * 'substratum'
- * 'substratum (substratum)'
- * 'substratum (substratum1, substratum2)' [basically (substratum1, substratum2..., substratumN)]
- */
-const parseSubstrata = (value: string): string[] => {
-  if (!value) {
-    return [];
-  }
-
-  const parenIndex = value.indexOf('(');
-
-  if (parenIndex === -1) {
-    // No parentheses, return the whole value as a single substratum
-    return [value.trim()].filter((x) => x);
-  }
-
-  const result: string[] = [];
-
-  // Add the part before the parentheses if it exists
-  const beforeParen = value.substring(0, parenIndex).trim();
-  if (beforeParen) {
-    result.push(beforeParen);
-  }
-
-  // Extract and split the part inside parentheses by commas
-  const closingParenIndex = value.indexOf(')');
-  if (closingParenIndex > parenIndex) {
-    const insideParen = value.substring(parenIndex + 1, closingParenIndex);
-    const substrata = insideParen
-      .split(',')
-      .map((s) => s.trim())
-      .filter((x) => x);
-    result.push(...substrata);
-  }
-
-  return result;
+  return ((await SearchService.searchValues(searchParams)) ?? {}) as FieldOptionsMap;
 };
 
 const undoNurseryWithdrawal = async (withdrawalId: number): Promise<Response> => {
