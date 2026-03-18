@@ -689,15 +689,34 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     return DEFAULT_SORT_ORDER;
   }, [sorting]);
 
-  const onExport = useCallback(() => {
-    if (selectedOrganization && rows) {
-      const isFiltered = debouncedSearchTerm !== '' || columnFilterNodes.length > 0 || Object.keys(filters).length > 0;
-      void exportNurseryWithdrawalResults({
-        isFiltered,
-        nurseryWithdrawalResults: rows,
-      });
+  const onExport = useCallback(async () => {
+    if (!selectedOrganization) {
+      return;
     }
-  }, [filters, debouncedSearchTerm, columnFilterNodes, rows, selectedOrganization]);
+    const isFiltered = debouncedSearchTerm !== '' || columnFilterNodes.length > 0 || Object.keys(filters).length > 0;
+    const allRows = await dispatch(
+      requestListNurseryWithdrawals({
+        organizationId: selectedOrganization.id,
+        searchCriteria: searchChildren,
+        sortOrder: searchSortOrder,
+        limit: totalRowCount || 10000,
+        offset: 0,
+      })
+    ).unwrap();
+    void exportNurseryWithdrawalResults({
+      isFiltered,
+      nurseryWithdrawalResults: allRows,
+    });
+  }, [
+    columnFilterNodes,
+    debouncedSearchTerm,
+    dispatch,
+    filters,
+    searchChildren,
+    searchSortOrder,
+    selectedOrganization,
+    totalRowCount,
+  ]);
 
   // Request count for pagination
   useEffect(() => {
@@ -773,7 +792,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         renderToolbarInternalActions: ({ table }) => (
           <Box display='flex' gap={0.5}>
             <Tooltip title={strings.EXPORT}>
-              <IconButton onClick={onExport}>
+              <IconButton onClick={() => void onExport()}>
                 <Icon name='iconExport' size='medium' />
               </IconButton>
             </Tooltip>

@@ -254,6 +254,17 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
     [adHocObservationsResultsResponse.isFetching, listPlantingSitesResult.isFetching]
   );
 
+  if (!isLoading && rows.length === 0) {
+    return (
+      <Card radius={'8px'} style={{ width: '100%' }}>
+        <EmptyStateContent
+          title={''}
+          subtitle={[strings.BIOMASS_EMPTY_STATE_MESSAGE_1, strings.BIOMASS_EMPTY_STATE_MESSAGE_2]}
+        />
+      </Card>
+    );
+  }
+
   return (
     <Card radius={'8px'} style={{ width: '100%' }}>
       <EditableTable
@@ -294,12 +305,6 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
           enableGrouping: false,
           enableColumnDragging: true,
           positionGlobalFilter: 'right',
-          renderEmptyRowsFallback: () => (
-            <EmptyStateContent
-              title={''}
-              subtitle={[strings.BIOMASS_EMPTY_STATE_MESSAGE_1, strings.BIOMASS_EMPTY_STATE_MESSAGE_2]}
-            />
-          ),
           renderToolbarInternalActions: ({ table }) => (
             <Box display='flex' gap={0.5}>
               {rows.length > 0 && (
