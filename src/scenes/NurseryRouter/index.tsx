@@ -11,6 +11,17 @@ const NurseryRouter = () => {
   const { species } = useSpeciesData();
   const { allPlantingSites } = usePlantingSiteData();
 
+  const stratumNames = useMemo(() => {
+    const strata: Record<number, string> = {};
+    for (const plantingSite of allPlantingSites ?? []) {
+      for (const stratum of plantingSite.strata ?? []) {
+        strata[stratum.id] = stratum.name;
+      }
+    }
+
+    return strata;
+  }, [allPlantingSites]);
+
   const substratumNames = useMemo(() => {
     const substrata: Record<number, string> = {};
     for (const plantingSite of allPlantingSites ?? []) {
@@ -29,7 +40,13 @@ const NurseryRouter = () => {
       <Route path={'/withdrawals'} element={<NurseryPlantingsAndWithdrawalsView />} />
       <Route
         path={'/withdrawals/:withdrawalId'}
-        element={<NurseryWithdrawalsDetailsView species={species} substratumNames={substratumNames} />}
+        element={
+          <NurseryWithdrawalsDetailsView
+            species={species}
+            stratumNames={stratumNames}
+            substratumNames={substratumNames}
+          />
+        }
       />
       <Route path={'/reassignment/:deliveryId'} element={<NurseryReassignmentView />} />
     </Routes>

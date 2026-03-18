@@ -45,11 +45,13 @@ export interface WithdrawalSummary {
 
 type NurseryWithdrawalsDetailsViewProps = {
   species: Species[];
+  stratumNames: Record<number, string>;
   substratumNames: Record<number, string>;
 };
 
 export default function NurseryWithdrawalsDetailsView({
   species,
+  stratumNames,
   substratumNames,
 }: NurseryWithdrawalsDetailsViewProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
@@ -157,6 +159,7 @@ export default function NurseryWithdrawalsDetailsView({
           >
             <WithdrawalTabPanelContent
               species={species}
+              stratumNames={stratumNames}
               substratumNames={substratumNames}
               withdrawal={withdrawal}
               withdrawalSummary={withdrawalSummary}
@@ -188,7 +191,18 @@ export default function NurseryWithdrawalsDetailsView({
         ),
       },
     ];
-  }, [species, substratumNames, withdrawal, withdrawalSummary, delivery, batches, activeLocale, isMobile, theme]);
+  }, [
+    activeLocale,
+    batches,
+    delivery,
+    isMobile,
+    species,
+    stratumNames,
+    substratumNames,
+    theme,
+    withdrawal,
+    withdrawalSummary,
+  ]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'withdrawal',
@@ -271,6 +285,7 @@ export default function NurseryWithdrawalsDetailsView({
           <Box sx={contentPanelProps}>
             <WithdrawalTabPanelContent
               species={species}
+              stratumNames={stratumNames}
               substratumNames={substratumNames}
               withdrawal={withdrawal}
               withdrawalSummary={withdrawalSummary}
