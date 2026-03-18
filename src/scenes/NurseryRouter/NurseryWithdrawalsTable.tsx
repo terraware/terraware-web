@@ -412,7 +412,8 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         if (Array.isArray(filter.value) && filter.value.length === 0) return false;
         if (Array.isArray(filter.value) && filter.value.length === 2) {
           const [min, max] = filter.value;
-          if ((min === undefined || min === '') && (max === undefined || max === '')) return false;
+          const isEmpty = (v: unknown) => v === undefined || v === null || v === '';
+          if (isEmpty(min) && isEmpty(max)) return false;
         }
         return true;
       })
