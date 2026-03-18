@@ -1,3 +1,4 @@
+fa1101e92767 SW-8155 Observation: Map should not be shown by default (#5461)
 c72bf8dc323c SW-8210 Updating targets leads to "something wrong" page on staging (#5460)
 fb0017a93ac6 Bump fast-xml-parser from 5.4.2 to 5.5.6 (#5453)
 39432e290d32 SW-8205 Withdrawals History export only includes data from the current page (#5459)
