@@ -563,6 +563,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
             inputContainer: { maxWidth: '160px' },
             optionsContainer: { maxWidth: '160px' },
           }}
+          fixedMenu
           fullWidth
         />
         {plantingSiteId && selectedPlotSelection === 'assigned' && rows.length > 0 && (
