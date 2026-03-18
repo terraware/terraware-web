@@ -2132,6 +2132,7 @@ TO,À,0ec3d25a
 TO_NURSERY,Vers : pépinière,ef613421
 TO_NURSERY_REQUIRED,Vers : Pépinière *,e9bd2c95
 TO_PLANTING_SITE_REQUIRED,Vers : Site de plantation *,b92a92f0
+TO_STRATUM,À : Strate,31a7e652
 TO_SUBSTRATUM,À : Substrat,f8e40ecb
 TODO,À faire,4d251a21
 TOOLTIP_ACCESSIONS_ADD_COLLECTING_SITE,L'endroit où les semences ont été récoltées. Il est recommandé de les nommer en se référant à des points de repère stables ou à des caractéristiques qui ne changent pas.,c4d2ea0e
