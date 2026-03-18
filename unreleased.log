@@ -1,3 +1,4 @@
+39432e290d32 SW-8205 Withdrawals History export only includes data from the current page (#5459)
 620bc95d374f SW-8209 Fix plot selection dropdown (#5457)
 277eef72bcef SW-8130 Move empty state content out of the table (#5458)
 dcbf3201a22a SW-8199 Fetch all accessions (#5452)
