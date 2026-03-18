@@ -34,7 +34,8 @@ See `package.json` for the latest list of dependencies and versions.
 ## Preferred Patterns
 
 - Use Redux Toolkit for application state and RTK Query for API requests
-- Use MUI components for UI when possible
+- Prefer using existing components from `@terraware/web-components`
+- Use MUI components for UI only when no suitable `@terraware/web-components` option exists
 - Prefer existing utilities and helpers instead of introducing new ones
 
 ## Do Not Introduce
