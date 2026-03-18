@@ -1,3 +1,5 @@
+620bc95d374f SW-8209 Fix plot selection dropdown (#5457)
+277eef72bcef SW-8130 Move empty state content out of the table (#5458)
 dcbf3201a22a SW-8199 Fetch all accessions (#5452)
 569dbcf053a9 SW-8194: Server error: funder portal file not found exception (#5447)
 b677a1c6b668 SW-8197 - If we don't yet have a valid token, don't draw map (#5451)
