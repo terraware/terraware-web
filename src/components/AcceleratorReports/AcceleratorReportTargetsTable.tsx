@@ -421,8 +421,12 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
   }, []);
 
   const NumericCell = useCallback(({ cell }: { cell: MRT_Cell<RowMetric> }) => {
-    const value = cell.getValue<number | undefined>();
-    if (value === undefined || value === null) {
+    const raw = cell.getValue<number | string | undefined>();
+    if (raw === undefined || raw === null || raw === '') {
+      return null;
+    }
+    const value = Number(raw);
+    if (isNaN(value)) {
       return null;
     }
     const precision = cell.row.original.precision ?? 0;
