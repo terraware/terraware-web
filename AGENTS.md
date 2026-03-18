@@ -20,14 +20,16 @@ yarn lint \
 
 ## Tech Stack
 
-- Core: React 19, TypeScript
+- Core: React, TypeScript
 - State and data: Redux Toolkit, RTK Query
-- Routing: React Router 7
-- UI: MUI 6
+- Routing: React Router
+- UI: MUI
 - Build: Rsbuild
 - Key libraries: Axios, Luxon, Slate, Chart.js, Mapbox, Turf.js, PlayCanvas, Mux
 - Testing: Rstest, Playwright
 - Development: Storybook
+
+See `package.json` for the latest list of dependencies and versions.
 
 ## Preferred Patterns
 
