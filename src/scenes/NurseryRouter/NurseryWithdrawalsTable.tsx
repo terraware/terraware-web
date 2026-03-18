@@ -408,7 +408,14 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   // Convert MRT column filters to backend search format
   const columnFilterNodes: SearchNodePayload[] = useMemo(() => {
     return columnFilters
-      .filter((filter) => !(Array.isArray(filter.value) && filter.value.length === 0))
+      .filter((filter) => {
+        if (Array.isArray(filter.value) && filter.value.length === 0) return false;
+        if (Array.isArray(filter.value) && filter.value.length === 2) {
+          const [min, max] = filter.value;
+          if ((min === undefined || min === '') && (max === undefined || max === '')) return false;
+        }
+        return true;
+      })
       .map((filter) => {
         const fieldNames =
           filter.id === 'project_names'
