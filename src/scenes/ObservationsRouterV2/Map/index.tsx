@@ -19,6 +19,7 @@ import ObservationTimeline from './ObservationTimeline';
 
 type ObservationMapWrapperProps = {
   isBiomass?: boolean;
+  isMapVisible?: boolean;
   observationId?: number;
   plantingSiteId?: number;
   selectPlantingSiteId?: (siteId: number) => void;
@@ -26,6 +27,7 @@ type ObservationMapWrapperProps = {
 
 const ObservationMapWrapper = ({
   isBiomass,
+  isMapVisible,
   observationId,
   plantingSiteId,
   selectPlantingSiteId,
@@ -35,6 +37,15 @@ const ObservationMapWrapper = ({
   const theme = useTheme();
   const defaultTimezone = useDefaultTimeZone().get().id;
   const mapRef = useRef<MapRef | null>(null);
+
+  useEffect(() => {
+    if (isMapVisible) {
+      const raf = requestAnimationFrame(() => {
+        mapRef.current?.resize();
+      });
+      return () => cancelAnimationFrame(raf);
+    }
+  }, [isMapVisible]);
 
   const [getPlantingSite, getPlantingSiteResult] = useLazyGetPlantingSiteQuery();
   const [getObservationResult, getObservationResultResponse] = useLazyGetObservationResultsQuery();

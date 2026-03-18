@@ -14,7 +14,6 @@ import {
   MRT_ToggleGlobalFilterButton,
 } from 'material-react-table';
 
-import Card from 'src/components/common/Card';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import useTableState from 'src/hooks/useTableState';
@@ -172,80 +171,78 @@ export default function StratumList(): JSX.Element {
   );
 
   return (
-    <Card radius={'8px'} style={{ width: '100%' }}>
-      <EditableTable
-        key='observation-site-stratum-table'
-        clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
-        columns={columns}
-        data={rows}
-        enableSorting={true}
-        enableGlobalFilter={true}
-        enableColumnFilters={true}
-        enableColumnOrdering={true}
-        storageKey={STORAGE_KEY}
-        enablePagination={false}
-        enableTopToolbar={true}
-        enableBottomToolbar={false}
-        initialSorting={[{ id: 'stratumName', desc: false }]}
-        renderToolbarInternalActions={({ table }) => (
-          <Box display='flex' gap={0.5}>
-            <MRT_ToggleGlobalFilterButton table={table} />
-            <MRT_ToggleFiltersButton table={table} />
-            <MRT_ShowHideColumnsButton table={table} />
-            <MRT_ToggleDensePaddingButton table={table} />
-            <MRT_ToggleFullScreenButton table={table} />
-          </Box>
-        )}
-        tableOptions={{
-          defaultColumn: { enableEditing: false },
-          state: {
-            columnFilters,
-            columnOrder,
-            columnVisibility,
-            density,
-            showColumnFilters,
-            showGlobalFilter,
-            isLoading,
+    <EditableTable
+      key='observation-site-stratum-table'
+      clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
+      columns={columns}
+      data={rows}
+      enableSorting={true}
+      enableGlobalFilter={true}
+      enableColumnFilters={true}
+      enableColumnOrdering={true}
+      storageKey={STORAGE_KEY}
+      enablePagination={false}
+      enableTopToolbar={true}
+      enableBottomToolbar={false}
+      initialSorting={[{ id: 'stratumName', desc: false }]}
+      renderToolbarInternalActions={({ table }) => (
+        <Box display='flex' gap={0.5}>
+          <MRT_ToggleGlobalFilterButton table={table} />
+          <MRT_ToggleFiltersButton table={table} />
+          <MRT_ShowHideColumnsButton table={table} />
+          <MRT_ToggleDensePaddingButton table={table} />
+          <MRT_ToggleFullScreenButton table={table} />
+        </Box>
+      )}
+      tableOptions={{
+        defaultColumn: { enableEditing: false },
+        state: {
+          columnFilters,
+          columnOrder,
+          columnVisibility,
+          density,
+          showColumnFilters,
+          showGlobalFilter,
+          isLoading,
+        },
+        onColumnFiltersChange: setColumnFilters,
+        onColumnOrderChange: setColumnOrder,
+        onColumnVisibilityChange: setColumnVisibility,
+        onDensityChange,
+        onShowColumnFiltersChange: setShowColumnFilters,
+        onShowGlobalFilterChange: setShowGlobalFilter,
+        enableColumnPinning: true,
+        enableColumnActions: true,
+        enableHiding: true,
+        enableGrouping: false,
+        enableColumnDragging: true,
+        positionGlobalFilter: 'right',
+        muiTableBodyRowProps: ({ row }: { row: MRT_Row<StratumRow> }) => ({
+          id: `row${row.index + 1}`,
+          sx: {
+            '& td': { borderBottom: 'none' },
           },
-          onColumnFiltersChange: setColumnFilters,
-          onColumnOrderChange: setColumnOrder,
-          onColumnVisibilityChange: setColumnVisibility,
-          onDensityChange,
-          onShowColumnFiltersChange: setShowColumnFilters,
-          onShowGlobalFilterChange: setShowGlobalFilter,
-          enableColumnPinning: true,
-          enableColumnActions: true,
-          enableHiding: true,
-          enableGrouping: false,
-          enableColumnDragging: true,
-          positionGlobalFilter: 'right',
-          muiTableBodyRowProps: ({ row }: { row: MRT_Row<StratumRow> }) => ({
-            id: `row${row.index + 1}`,
-            sx: {
-              '& td': { borderBottom: 'none' },
-            },
-          }),
-          muiTableBodyCellProps: ({ row, column }) => ({
-            id: `row${row.index + 1}-${column.id}`,
-          }),
-          muiTableBodyProps: {
-            sx: {
-              '& tr:nth-of-type(odd) > td': {
-                backgroundColor: theme.palette.TwClrBaseGray025,
-              },
+        }),
+        muiTableBodyCellProps: ({ row, column }) => ({
+          id: `row${row.index + 1}-${column.id}`,
+        }),
+        muiTableBodyProps: {
+          sx: {
+            '& tr:nth-of-type(odd) > td': {
+              backgroundColor: theme.palette.TwClrBaseGray025,
             },
           },
-          muiTablePaperProps: { elevation: 0 },
-          muiTopToolbarProps: {
-            sx: {
-              position: 'relative',
-              '& > .MuiBox-root': { position: 'relative' },
-              '& .Mui-ToolbarDropZone': { display: 'none' },
-            },
+        },
+        muiTablePaperProps: { elevation: 0 },
+        muiTopToolbarProps: {
+          sx: {
+            position: 'relative',
+            '& > .MuiBox-root': { position: 'relative' },
+            '& .Mui-ToolbarDropZone': { display: 'none' },
           },
-        }}
-        sx={{ padding: 0 }}
-      />
-    </Card>
+        },
+      }}
+      sx={{ padding: 0 }}
+    />
   );
 }

@@ -1,13 +1,13 @@
-import React, { type JSX, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Typography, useTheme } from '@mui/material';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import { Crumb } from 'src/components/BreadCrumbs';
+import ListMapView from 'src/components/ListMapView';
 import Page from 'src/components/Page';
 import SurvivalRateMessageV2 from 'src/components/SurvivalRate/SurvivalRateMessageV2';
-import Card from 'src/components/common/Card';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
@@ -32,6 +32,8 @@ const SiteDetails = (): JSX.Element => {
   const observationId = Number(params.observationId);
   const [showPageMessage, setShowPageMessage] = useState(false);
   const [showMatchSpeciesModal, setShowMatchSpeciesModal] = useState(false);
+  const [isMapVisible, setIsMapVisible] = useState(false);
+  const onView = useCallback((view: string) => setIsMapVisible(view === 'map'), []);
   const onSaveMergedSpecies = useOnSaveMergedSpeciesRtk({
     observationId,
     onComplete: () => setShowMatchSpeciesModal(false),
@@ -157,10 +159,20 @@ const SiteDetails = (): JSX.Element => {
         survivalRate={results?.survivalRate}
         species={species}
       />
-      <Card radius={'8px'} style={{ marginBottom: theme.spacing(3), width: '100%' }}>
-        <ObservationMapWrapper observationId={observationId} plantingSiteId={results?.plantingSiteId} />
-      </Card>
-      <StratumList />
+      <ListMapView
+        search={null}
+        initialView='list'
+        onView={onView}
+        style={{ width: '100%' }}
+        list={<StratumList />}
+        map={
+          <ObservationMapWrapper
+            observationId={observationId}
+            plantingSiteId={results?.plantingSiteId}
+            isMapVisible={isMapVisible}
+          />
+        }
+      />
     </Page>
   );
 };
