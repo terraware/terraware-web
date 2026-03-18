@@ -2132,6 +2132,7 @@ TO,A,0ec3d25a
 TO_NURSERY,Para: vivero,ef613421
 TO_NURSERY_REQUIRED,Para: Guardería *,e9bd2c95
 TO_PLANTING_SITE_REQUIRED,Para: Sitio de plantación *,b92a92f0
+TO_STRATUM,A: Estrato,31a7e652
 TO_SUBSTRATUM,A: Subestrato,f8e40ecb
 TODO,Tareas pendientes,4d251a21
 TOOLTIP_ACCESSIONS_ADD_COLLECTING_SITE,El lugar donde las semillas fueron recolectadas. Se recomienda nombrarlos mediante puntos de referencia estables o características que no varíen.,c4d2ea0e

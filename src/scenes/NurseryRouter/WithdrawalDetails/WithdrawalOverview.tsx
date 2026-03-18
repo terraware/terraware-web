@@ -43,6 +43,10 @@ export default function WithdrawalOverview({ withdrawal, withdrawalSummary }: Wi
       data: withdrawalSummary?.destinationName ?? '',
     },
     {
+      title: strings.TO_STRATUM,
+      data: withdrawalSummary?.stratumNames ?? '',
+    },
+    {
       title: strings.TO_SUBSTRATUM,
       data: withdrawalSummary?.substratumNames ?? '',
     },

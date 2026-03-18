@@ -156,7 +156,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     }
   }, [dispatch, selectedOrganization]);
 
-  const { nurseryNames, destinationNames, substratumOptions, speciesOptions } = useMemo(() => {
+  const { nurseryNames, destinationNames, stratumOptions, substratumOptions, speciesOptions } = useMemo(() => {
     if (filterOptionsResult?.status === 'success' && filterOptionsResult.data) {
       const toStrings = (key: string) =>
         (filterOptionsResult.data![key]?.values ?? [])
@@ -165,11 +165,12 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
       return {
         nurseryNames: toStrings('facility_name'),
         destinationNames: toStrings('destinationName'),
+        stratumOptions: toStrings('stratumNames'),
         substratumOptions: toStrings('substratumNames'),
         speciesOptions: toStrings('batchWithdrawals.batch_species_scientificName'),
       };
     }
-    return { nurseryNames: [], destinationNames: [], substratumOptions: [], speciesOptions: [] };
+    return { nurseryNames: [], destinationNames: [], stratumOptions: [], substratumOptions: [], speciesOptions: [] };
   }, [filterOptionsResult]);
 
   // Get all project names for filter (from all available projects, not just current results)
@@ -252,6 +253,14 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     ({ cell }: { cell: MRT_Cell<SearchResponseElement> }) => {
       const value = cell.getValue() as string[] | undefined;
       return value ? <TextTruncated stringList={value} moreText={strings.TRUNCATED_TEXT_MORE_LINK} /> : null;
+    },
+    [strings]
+  );
+
+  const StratumNamesCell = useCallback(
+    ({ cell }: { cell: MRT_Cell<SearchResponseElement> }) => {
+      const value = cell.getValue() as string | undefined;
+      return value ? <TextTruncated stringList={[value]} moreText={strings.TRUNCATED_TEXT_MORE_LINK} /> : null;
     },
     [strings]
   );
@@ -343,6 +352,18 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         },
       },
       {
+        id: 'stratumNames',
+        header: strings.TO_STRATUM,
+        accessorKey: 'stratumNames',
+        enableEditing: false,
+        filterVariant: 'multi-select',
+        filterSelectOptions: stratumOptions,
+        enableColumnFilterModes: false,
+        sortUndefined: 'last',
+        filterFn: () => true,
+        Cell: StratumNamesCell,
+      },
+      {
         id: 'substratumNames',
         header: strings.TO_SUBSTRATUM,
         accessorKey: 'substratumNames',
@@ -398,6 +419,8 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
       purposeOptions,
       WithdrawnDateCell,
       PurposeCell,
+      StratumNamesCell,
+      stratumOptions,
       SubstratumNamesCell,
       SpeciesScientificNamesCell,
       TotalWithdrawnCell,
