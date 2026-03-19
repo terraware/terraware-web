@@ -1,3 +1,4 @@
+59b062a01d26 SW-8131 Monitoring Plot Type column filter (#5467)
 30ba9473a167 SW-8215 Seeds dashboard links no longer take you to the filtered view (#5468)
 209fc68c6421 SW-8219 Plots that were 25x25m no longer have the asterisks (#5470)
 ed78048b0b35 SW-8216 Withdrawal history table - Restore server-side search (#5469)
