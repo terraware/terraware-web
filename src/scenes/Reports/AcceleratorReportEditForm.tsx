@@ -11,11 +11,9 @@ import ChallengesMitigationBox from 'src/components/AcceleratorReports/Challenge
 import FinancialSummariesBox from 'src/components/AcceleratorReports/FinancialSummaryBox';
 import HighlightsBox from 'src/components/AcceleratorReports/HighlightsBox';
 import IndicatorBox from 'src/components/AcceleratorReports/IndicatorBox';
-import MetricBox from 'src/components/AcceleratorReports/MetricBox';
 import PhotosBox from 'src/components/AcceleratorReports/PhotosBox';
 import Card from 'src/components/common/Card';
 import WrappedPageForm from 'src/components/common/PageForm';
-import isEnabled from 'src/features';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
@@ -24,18 +22,10 @@ import {
   ReportAutoCalculatedIndicatorPayload,
   ReportCommonIndicatorPayload,
   ReportProjectIndicatorPayload,
-  ReportProjectMetricPayload,
-  ReportStandardMetricPayload,
-  ReportSystemMetricPayload,
   useUpdateAcceleratorReportValuesMutation,
 } from 'src/queries/generated/reports';
 import { useBatchReportPhotosMutation } from 'src/queries/reports/photos';
-import {
-  AcceleratorReportPhoto,
-  IndicatorType,
-  MetricType,
-  NewAcceleratorReportPhoto,
-} from 'src/types/AcceleratorReport';
+import { AcceleratorReportPhoto, IndicatorType, NewAcceleratorReportPhoto } from 'src/types/AcceleratorReport';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -53,7 +43,6 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
   const { currentAcceleratorProject, setCurrentAcceleratorProject } = useParticipantData();
   const theme = useTheme();
   const { strings } = useLocalization();
-  const improvedReportsEnabled = isEnabled('Improved Reports');
   const { goToAcceleratorReport } = useNavigateTo();
 
   const pathParams = useParams<{ projectId: string; reportId: string }>();
@@ -136,41 +125,6 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
       setCurrentAcceleratorProject(projectId);
     }
   }, [currentAcceleratorProject?.id, projectId, setCurrentAcceleratorProject]);
-
-  const onChangeMetric = useCallback(
-    (
-      updatedMetric: ReportProjectMetricPayload | ReportSystemMetricPayload | ReportStandardMetricPayload,
-      type: MetricType
-    ) => {
-      switch (type) {
-        case 'project': {
-          const updatedProjectMetric = updatedMetric as ReportProjectMetricPayload;
-          const projectMetrics = record.projectMetrics.map((projectMetric) =>
-            projectMetric.id === updatedProjectMetric.id ? updatedProjectMetric : projectMetric
-          );
-          onChange('projectMetrics', projectMetrics);
-          return;
-        }
-        case 'standard': {
-          const updatedStandardMetric = updatedMetric as ReportStandardMetricPayload;
-          const standardMetrics = record.standardMetrics.map((standardMetric) =>
-            standardMetric.id === updatedStandardMetric.id ? updatedStandardMetric : standardMetric
-          );
-          onChange('standardMetrics', standardMetrics);
-          return;
-        }
-        case 'system': {
-          const updatedSystemMetric = updatedMetric as ReportSystemMetricPayload;
-          const systemMetrics = record.systemMetrics.map((systemMetric) =>
-            systemMetric.metric === updatedSystemMetric.metric ? updatedSystemMetric : systemMetric
-          );
-          onChange('systemMetrics', systemMetrics);
-          return;
-        }
-      }
-    },
-    [onChange, record]
-  );
 
   const onChangeIndicator = useCallback(
     (
@@ -257,47 +211,25 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
             editing={true}
             onChange={onChangeCallback('highlights')}
           />
-          {improvedReportsEnabled
-            ? (['autoCalculated', 'common', 'project'] as const).map((type) => {
-                const indicators =
-                  type === 'autoCalculated'
-                    ? record.autoCalculatedIndicators
-                    : type === 'common'
-                      ? record.commonIndicators
-                      : record.projectIndicators;
+          {(['autoCalculated', 'common', 'project'] as const).map((type) => {
+            const indicators =
+              type === 'autoCalculated'
+                ? record.autoCalculatedIndicators
+                : type === 'common'
+                  ? record.commonIndicators
+                  : record.projectIndicators;
 
-                return indicators?.map((indicator, index) => (
-                  <IndicatorBox
-                    key={`${type}-${index}`}
-                    editing={true}
-                    metric={indicator}
-                    type={type}
-                    year={year}
-                    onChangeIndicator={onChangeIndicator}
-                  />
-                ));
-              })
-            : (['system', 'project', 'standard'] as const).map((type) => {
-                const metrics =
-                  type === 'system'
-                    ? record.systemMetrics
-                    : type === 'project'
-                      ? record.projectMetrics
-                      : record.standardMetrics;
-
-                return metrics.map((metric, index) => (
-                  <MetricBox
-                    editing={true}
-                    key={`${type}-${index}`}
-                    metric={metric}
-                    onChangeMetric={onChangeMetric}
-                    projectId={projectId}
-                    reportId={reportId}
-                    type={type as MetricType}
-                    year={year}
-                  />
-                ));
-              })}
+            return indicators?.map((indicator, index) => (
+              <IndicatorBox
+                key={`${type}-${index}`}
+                editing={true}
+                metric={indicator}
+                type={type}
+                year={year}
+                onChangeIndicator={onChangeIndicator}
+              />
+            ));
+          })}
           <AchievementsBox
             report={record}
             projectId={projectId}

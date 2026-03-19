@@ -9,7 +9,6 @@ import AcceleratorReportTargetsTable from 'src/components/AcceleratorReports/Acc
 import AcceleratorReportsTable from 'src/components/AcceleratorReports/AcceleratorReportsTable';
 import Page from 'src/components/Page';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization, useUser } from 'src/providers';
 import useStickyTabs from 'src/utils/useStickyTabs';
@@ -20,7 +19,6 @@ import ReportsSettings from './ReportsSettings';
 const ReportsView = () => {
   const { crumbs, acceleratorProject, project } = useAcceleratorProjectData();
   const { strings } = useLocalization();
-  const improvedReportsEnabled = isEnabled('Improved Reports');
   const { goToNewIndicator } = useNavigateTo();
   const pathParams = useParams<{ projectId: string }>();
   const { isAllowed } = useUser();
@@ -39,11 +37,11 @@ const ReportsView = () => {
       },
       {
         id: 'settings',
-        label: improvedReportsEnabled ? strings.INDICATORS : strings.SETTINGS,
+        label: strings.INDICATORS,
         children: <ReportsSettings />,
       },
     ];
-  }, [strings, improvedReportsEnabled]);
+  }, [strings]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'reports',
@@ -64,7 +62,7 @@ const ReportsView = () => {
       title={strings.REPORTS}
       titleStyle={{ paddingTop: '16px' }}
       rightComponent={
-        improvedReportsEnabled && activeTab === 'settings' && isAllowed('UPDATE_REPORTS_SETTINGS') ? (
+        activeTab === 'settings' && isAllowed('UPDATE_REPORTS_SETTINGS') ? (
           <Button
             label={strings.ADD_INDICATOR}
             icon='plus'

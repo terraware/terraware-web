@@ -12,7 +12,6 @@ import ApprovedReportMessage from 'src/components/AcceleratorReports/ApprovedRep
 import ChallengesMitigationBox from 'src/components/AcceleratorReports/ChallengesMitigationBox';
 import FinancialSummariesBox from 'src/components/AcceleratorReports/FinancialSummaryBox';
 import HighlightsBox from 'src/components/AcceleratorReports/HighlightsBox';
-import MetricBox from 'src/components/AcceleratorReports/MetricBox';
 import PhotosBox from 'src/components/AcceleratorReports/PhotosBox';
 import RejectedReportMessage from 'src/components/AcceleratorReports/RejectedReportMessage';
 import { getReportName } from 'src/components/AcceleratorReports/utils';
@@ -23,7 +22,6 @@ import Link from 'src/components/common/Link';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import TitleBar from 'src/components/common/TitleBar';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useBoolean from 'src/hooks/useBoolean';
 import { useLocalization, useUser } from 'src/providers';
@@ -34,7 +32,6 @@ import {
   useReviewAcceleratorReportMutation,
 } from 'src/queries/generated/reports';
 import FunderReportView from 'src/scenes/FunderReport/FunderReportView';
-import { MetricType } from 'src/types/AcceleratorReport';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import { useAcceleratorProjectData } from '../AcceleratorProjectContext';
@@ -257,10 +254,9 @@ const ReportView = () => {
     () => (year ? Number(report?.startDate.split('-')[0]) : DateTime.now().year),
     [report?.startDate, year]
   );
-  const improvedReportsEnabled = isEnabled('Improved Reports');
 
   const unpublishedChangesBody = useMemo(() => {
-    if (!improvedReportsEnabled || !report?.unpublishedProperties?.length) {
+    if (!report?.unpublishedProperties?.length) {
       return null;
     }
     const propertyLabels: Record<string, string> = {
@@ -284,7 +280,7 @@ const ReportView = () => {
         </Typography>
       </Box>
     );
-  }, [improvedReportsEnabled, report, strings]);
+  }, [report, strings]);
 
   return (
     <>
@@ -356,17 +352,6 @@ const ReportView = () => {
               }}
             >
               {report && <Metadata report={report} projectId={projectId} />}
-              {report?.startDate && report?.endDate && !improvedReportsEnabled && (
-                <Box
-                  borderBottom={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
-                  padding={theme.spacing(3, 0)}
-                  marginBottom={3}
-                >
-                  <Typography fontSize={14} fontStyle={'italic'}>
-                    {strings.formatString(strings.REPORT_PERIOD, report?.startDate, report?.endDate)}
-                  </Typography>
-                </Box>
-              )}
               <HighlightsBox
                 report={report}
                 projectId={projectId}
@@ -374,60 +359,31 @@ const ReportView = () => {
                 onEditChange={onEditChange}
                 canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
               />
-              {improvedReportsEnabled && (
-                <Typography fontSize={'20px'} fontWeight={600} paddingTop={'16px'} paddingLeft={'16px'}>
-                  {strings.PROGRESS}
-                </Typography>
-              )}
-              {improvedReportsEnabled ? (
-                <>
-                  {(['autoCalculated', 'common', 'project'] as const).map((type) => {
-                    const indicators =
-                      type === 'autoCalculated'
-                        ? report?.autoCalculatedIndicators
-                        : type === 'common'
-                          ? report?.commonIndicators
-                          : report?.projectIndicators;
+              <Typography fontSize={'20px'} fontWeight={600} paddingTop={'16px'} paddingLeft={'16px'}>
+                {strings.PROGRESS}
+              </Typography>
+              {(['autoCalculated', 'common', 'project'] as const).map((type) => {
+                const indicators =
+                  type === 'autoCalculated'
+                    ? report?.autoCalculatedIndicators
+                    : type === 'common'
+                      ? report?.commonIndicators
+                      : report?.projectIndicators;
 
-                    return indicators?.map((indicator, index) => (
-                      <MetricRow
-                        key={`${type}-${index}`}
-                        type={type}
-                        metric={indicator}
-                        reportLabel={report?.quarter}
-                        year={yearToUse}
-                        projectId={projectId}
-                        reportId={Number(reportId)}
-                        canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
-                        onEditChange={onEditChange}
-                      />
-                    ));
-                  })}
-                </>
-              ) : (
-                ['system', 'project', 'standard'].map((type) => {
-                  const metrics =
-                    type === 'system'
-                      ? report?.systemMetrics
-                      : type === 'project'
-                        ? report?.projectMetrics
-                        : report?.standardMetrics;
-
-                  return metrics?.map((metric, index) => (
-                    <MetricBox
-                      isConsoleView
-                      key={`${type}-${index}`}
-                      metric={metric}
-                      projectId={projectId}
-                      reportId={Number(reportId)}
-                      type={type as MetricType}
-                      onEditChange={onEditChange}
-                      canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
-                      year={yearToUse}
-                    />
-                  ));
-                })
-              )}
+                return indicators?.map((indicator, index) => (
+                  <MetricRow
+                    key={`${type}-${index}`}
+                    type={type}
+                    metric={indicator}
+                    reportLabel={report?.quarter}
+                    year={yearToUse}
+                    projectId={projectId}
+                    reportId={Number(reportId)}
+                    canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
+                    onEditChange={onEditChange}
+                  />
+                ));
+              })}
               <AchievementsBox
                 report={report}
                 projectId={projectId}
