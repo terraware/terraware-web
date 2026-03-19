@@ -51,6 +51,8 @@ export default function ScheduleObservationForm({
 
   const observableSites = useObservablePlantingSites();
 
+  const todayISO = useMemo(() => DateTime.now().startOf('day').toISODate(), []);
+
   const targetObservation = useMemo(
     () => getObservationResponse.data?.observation,
     [getObservationResponse.data?.observation]
@@ -209,7 +211,7 @@ export default function ScheduleObservationForm({
                 options={siteOptions}
                 selectedValue={plantingSite?.id ?? selectedPlantingSiteId}
                 disabled={!!plantingSite}
-                errorText={validate && !observationId ? strings.REQUIRED_FIELD : ''}
+                errorText={validate && !(plantingSite?.id ?? selectedPlantingSiteId) ? strings.REQUIRED_FIELD : ''}
                 fullWidth
               />
             </Grid>
@@ -236,6 +238,7 @@ export default function ScheduleObservationForm({
                 onDateChange={setStartDateCallback}
                 aria-label='date-picker'
                 errorText={validate ? startDateError : ''}
+                minDate={todayISO}
               />
             </Grid>
 
