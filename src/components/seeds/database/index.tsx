@@ -223,8 +223,9 @@ export default function Database(props: DatabaseProps): JSX.Element {
   useEffect(() => {
     const facilityId = query.get('facilityId');
     const subLocationName = query.get('subLocationName');
+    const filterState = query.get('accessions_filter_state');
 
-    if (!facilityId && !subLocationName) {
+    if (!facilityId && !subLocationName && !filterState) {
       return;
     }
 
@@ -244,11 +245,15 @@ export default function Database(props: DatabaseProps): JSX.Element {
       query.delete('facilityId');
     }
 
+    if (filterState) {
+      urlFilters.push({ id: 'state', value: [filterState] });
+      query.delete('accessions_filter_state');
+    }
+
     if (urlFilters.length > 0) {
       setColumnFilters((prev) => {
-        const existingIds = new Set(prev.map((f) => f.id));
-        const newFilters = urlFilters.filter((f) => !existingIds.has(f.id));
-        return [...prev, ...newFilters];
+        const newIds = new Set(urlFilters.map((f) => f.id));
+        return [...prev.filter((f) => !newIds.has(f.id)), ...urlFilters];
       });
       setShowColumnFilters(true);
       navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
@@ -399,6 +404,12 @@ export default function Database(props: DatabaseProps): JSX.Element {
         accessorKey: 'state',
         filterVariant: 'multi-select',
         filterSelectOptions: uniqueStates,
+        filterFn: (row: SearchResponseElementWithId, columnId, filterValue: string[]) => {
+          if (!filterValue.length) {
+            return true;
+          }
+          return filterValue.includes((row as unknown as { getValue: (id: string) => unknown }).getValue(columnId) as string);
+        },
       },
       {
         id: 'facility_name',
