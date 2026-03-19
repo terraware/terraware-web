@@ -5,7 +5,6 @@ import { useTheme } from '@mui/material';
 import { Badge, EditableTable, EditableTableColumn } from '@terraware/web-components';
 import { MRT_Cell } from 'material-react-table';
 
-import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useOrganization, useUser } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
@@ -77,8 +76,6 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
     () => isAllowed('UPDATE_REPORTS_TARGETS', { organization: selectedOrganization }),
     [isAllowed, selectedOrganization]
   );
-
-  const improvedReportsEnabled = isEnabled('Improved Reports');
 
   const years = getReportsYearsResponse.data?.years;
 
@@ -468,49 +465,32 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
     }));
 
     const lastColumns: EditableTableColumn<RowMetric>[] = [
-      ...(improvedReportsEnabled
-        ? [
-            {
-              id: 'category',
-              header: strings.CATEGORY,
-              accessorKey: 'component' as keyof RowMetric,
-              enableEditing: false,
-              Cell: CategoryCell,
-            },
-            {
-              id: 'indicatorLevel',
-              header: strings.INDICATOR_LEVEL,
-              accessorKey: 'type' as keyof RowMetric,
-              enableEditing: false,
-            },
-            {
-              id: 'cumulativeOrLevel',
-              header: strings.CUMULATIVE_OR_LEVEL,
-              accessorKey: 'classId' as keyof RowMetric,
-              enableEditing: false,
-              Cell: ClassIdCell,
-            },
-            {
-              id: 'notes',
-              header: strings.NOTES,
-              accessorKey: 'notes' as keyof RowMetric,
-              enableEditing: false,
-            },
-          ]
-        : [
-            {
-              id: 'type',
-              header: strings.TYPE,
-              accessorKey: 'type' as keyof RowMetric,
-              enableEditing: false,
-            },
-            {
-              id: 'component',
-              header: strings.COMPONENT,
-              accessorKey: 'component' as keyof RowMetric,
-              enableEditing: false,
-            },
-          ]),
+      {
+        id: 'category',
+        header: strings.CATEGORY,
+        accessorKey: 'component' as keyof RowMetric,
+        enableEditing: false,
+        Cell: CategoryCell,
+      },
+      {
+        id: 'indicatorLevel',
+        header: strings.INDICATOR_LEVEL,
+        accessorKey: 'type' as keyof RowMetric,
+        enableEditing: false,
+      },
+      {
+        id: 'cumulativeOrLevel',
+        header: strings.CUMULATIVE_OR_LEVEL,
+        accessorKey: 'classId' as keyof RowMetric,
+        enableEditing: false,
+        Cell: ClassIdCell,
+      },
+      {
+        id: 'notes',
+        header: strings.NOTES,
+        accessorKey: 'notes' as keyof RowMetric,
+        enableEditing: false,
+      },
       {
         id: 'endOfProjectTarget',
         header: strings.END_OF_PROJECT_TARGET,
@@ -531,7 +511,6 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
     onSaveYearTarget,
     onSaveBaseline,
     onSaveEndOfProjectTarget,
-    improvedReportsEnabled,
     CategoryCell,
     ClassIdCell,
     NumericCell,
@@ -539,11 +518,9 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
 
   const columnOrder = useMemo(() => {
     const yearIds = yearRange.map((year) => `year${year}`);
-    const metaColumns = improvedReportsEnabled
-      ? ['category', 'indicatorLevel', 'cumulativeOrLevel', 'notes']
-      : ['type', 'component'];
+    const metaColumns = ['category', 'indicatorLevel', 'cumulativeOrLevel', 'notes'];
     return ['name', 'baseline', ...yearIds, ...metaColumns, 'endOfProjectTarget'];
-  }, [yearRange, improvedReportsEnabled]);
+  }, [yearRange]);
 
   return (
     <EditableTable
