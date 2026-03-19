@@ -1459,6 +1459,7 @@ PLOT_TOTAL_PLANTS_TOOLTIP,"Total Plants is the number of all observed plants, in
 PLOT_TYPE,Plot Type,
 PLOTS_AD_HOC,Ad Hoc Plots,
 PLOTS_PERMANENT,Permanent Plots,
+PLOTS_SIZE_NOTE,*Data collected with 25x25m plots,
 PLOTS_TEMPORARY,Temporary Plots,
 POM_M,POM (m),
 POSITION,Position,

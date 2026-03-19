@@ -1459,6 +1459,7 @@ PLOT_TOTAL_PLANTS_TOOLTIP,"Plantas totales es el número de todas las plantas ob
 PLOT_TYPE,Tipo de parcela,4b579233
 PLOTS_AD_HOC,Parcelas ad hoc,104e30b2
 PLOTS_PERMANENT,Parcelas fijas,d06e9f3a
+PLOTS_SIZE_NOTE,*Datos recopilados con parcelas de 25x25 m,1c6249f4
 PLOTS_TEMPORARY,Parcelas temporales,7d9bceab
 POM_M,MOP (m),279348dc
 POSITION,Posición,3eb30313
