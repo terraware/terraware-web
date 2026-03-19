@@ -408,7 +408,9 @@ export default function Database(props: DatabaseProps): JSX.Element {
           if (!filterValue.length) {
             return true;
           }
-          return filterValue.includes((row as unknown as { getValue: (id: string) => unknown }).getValue(columnId) as string);
+          return filterValue.includes(
+            (row as unknown as { getValue: (id: string) => unknown }).getValue(columnId) as string
+          );
         },
       },
       {
