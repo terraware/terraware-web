@@ -188,13 +188,10 @@ export default function MonitoringPlotList(): JSX.Element {
     );
   }, []);
 
-  const IsPermanentCell = useCallback(
-    ({ cell }: { cell: MRT_Cell<MonitoringPlotRow> }) => {
-      const value = cell.getValue() as boolean | undefined;
-      return <p style={{ margin: 0 }}>{value === true ? strings.PERMANENT : strings.TEMPORARY}</p>;
-    },
-    [strings]
-  );
+  const IsPermanentCell = useCallback(({ cell }: { cell: MRT_Cell<MonitoringPlotRow> }) => {
+    const value = cell.getValue() as string;
+    return <p style={{ margin: 0 }}>{value}</p>;
+  }, []);
 
   const ActionsMenuCell = useCallback(
     ({ cell }: { cell: MRT_Cell<MonitoringPlotRow> }) => <MonitoringPlotActionsMenuContent row={cell.row.original} />,
@@ -248,7 +245,7 @@ export default function MonitoringPlotList(): JSX.Element {
       {
         id: 'isPermanent',
         header: strings.MONITORING_PLOT_TYPE,
-        accessorFn: (row) => row.isPermanent,
+        accessorFn: (row) => (row.isPermanent === true ? strings.PERMANENT : strings.TEMPORARY),
         filterVariant: 'select',
         filterSelectOptions: [strings.PERMANENT, strings.TEMPORARY],
         Cell: IsPermanentCell,
