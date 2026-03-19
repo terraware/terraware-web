@@ -109,7 +109,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   const filterOptionsResult = useAppSelector(selectNurseryWithdrawalsFilterOptions(filterOptionsRequestId));
 
   const [filters, setFilters] = useState<Record<string, SearchNodePayload>>({});
-  const [searchValue] = useState('');
+  const [searchValue, setSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(searchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
 
   const {
@@ -791,6 +791,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
           columnVisibility,
           showColumnFilters,
           showGlobalFilter,
+          globalFilter: searchValue,
           density,
           columnOrder,
         },
@@ -800,6 +801,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         onColumnVisibilityChange: setColumnVisibility,
         onShowColumnFiltersChange: setShowColumnFilters,
         onShowGlobalFilterChange: setShowGlobalFilter,
+        onGlobalFilterChange: setSearchValue,
         onColumnOrderChange: setColumnOrder,
         onDensityChange,
         manualPagination: true,

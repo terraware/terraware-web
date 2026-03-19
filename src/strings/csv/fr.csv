@@ -1458,6 +1458,7 @@ PLOT_TOTAL_PLANTS_TOOLTIP,"Plantes totales correspond au nombre total de plantes
 PLOT_TYPE,Type de parcelle,4b579233
 PLOTS_AD_HOC,Parcelles ad hoc,104e30b2
 PLOTS_PERMANENT,Placettes permanentes,d06e9f3a
+PLOTS_SIZE_NOTE,*Données collectées avec des parcelles de 25x25 m,1c6249f4
 PLOTS_TEMPORARY,Placettes temporaires,7d9bceab
 POM_M,PDM (m),279348dc
 POSITION,Position,3eb30313

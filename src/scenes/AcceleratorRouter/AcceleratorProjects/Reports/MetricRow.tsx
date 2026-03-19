@@ -47,6 +47,7 @@ type MetricRowProps = {
   reportId: number;
   canEdit?: boolean;
   hideProgressNotes?: boolean;
+  hideProjectsComments?: boolean;
   onEditChange?: (editing: boolean) => void;
 };
 
@@ -59,6 +60,7 @@ const MetricRow = ({
   reportId,
   canEdit,
   hideProgressNotes = false,
+  hideProjectsComments = false,
   onEditChange,
 }: MetricRowProps): JSX.Element => {
   const theme = useTheme();
@@ -152,7 +154,8 @@ const MetricRow = ({
     completionDenominator !== 0 ? Math.round(((displayValue - baseline) / completionDenominator) * 100) : 0;
   const showPercentComplete = hasActualValue && hasTargetValue;
 
-  const hasComments = !!metric.projectsComments || (!hideProgressNotes && !!metric.progressNotes);
+  const hasComments =
+    (!hideProjectsComments && !!metric.projectsComments) || (!hideProgressNotes && !!metric.progressNotes);
   const canExpand = hasComments || isCumulative;
 
   const onToggle = useCallback(() => {
@@ -587,10 +590,10 @@ const MetricRow = ({
                       )}
                     </Grid>
                   )}
-                  {!isCumulative && (metric.projectsComments || (!hideProgressNotes && metric.progressNotes)) && (
-                    <Grid item xs={4} />
-                  )}
-                  {metric.projectsComments ? (
+                  {!isCumulative &&
+                    ((!hideProjectsComments && metric.projectsComments) ||
+                      (!hideProgressNotes && metric.progressNotes)) && <Grid item xs={4} />}
+                  {!hideProjectsComments && metric.projectsComments ? (
                     <Grid item xs={4}>
                       <Typography fontSize='16px' fontWeight={600} marginBottom={1}>
                         {strings.PROJECTS_COMMENTS}
