@@ -1,7 +1,7 @@
 import React, { type JSX, useCallback, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router';
 
-import { Box, useTheme } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
 import { EditableTable, EditableTableColumn } from '@terraware/web-components';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 import {
@@ -40,6 +40,7 @@ type MonitoringPlotRow = {
   completedDate?: string;
   status: string;
   isPermanent?: boolean;
+  sizeMeters?: number;
   totalLive?: number;
   totalPlants?: number;
   totalSpecies?: number;
@@ -130,6 +131,7 @@ export default function MonitoringPlotList(): JSX.Element {
             completedDate: plot.completedTime,
             status: getPlotStatus(plot.status),
             isPermanent: plot.isPermanent,
+            sizeMeters: plot.sizeMeters,
             totalLive,
             totalPlants: plot.totalPlants,
             totalSpecies: plot.totalSpecies,
@@ -143,6 +145,8 @@ export default function MonitoringPlotList(): JSX.Element {
     }
   }, [observationId, observationResult, stratumResult]);
 
+  const hasSmallPlots = useMemo(() => rows.some((row) => row.sizeMeters === 25), [rows]);
+
   const PlotNumberCell = useCallback(({ cell }: { cell: MRT_Cell<MonitoringPlotRow> }) => {
     const row = cell.row.original;
     const url = APP_PATHS.OBSERVATION_MONITORING_PLOT_DETAILS_V2.replace(':observationId', row.observationId.toString())
@@ -151,6 +155,7 @@ export default function MonitoringPlotList(): JSX.Element {
     return (
       <Link fontSize='16px' to={url}>
         {row.monitoringPlotNumber}
+        {row.sizeMeters === 25 ? '*' : ''}
       </Link>
     );
   }, []);
@@ -394,6 +399,11 @@ export default function MonitoringPlotList(): JSX.Element {
         }}
         sx={{ padding: 0 }}
       />
+      {hasSmallPlots && (
+        <Typography fontSize='14px' padding='8px 16px'>
+          {strings.PLOTS_SIZE_NOTE}
+        </Typography>
+      )}
     </Card>
   );
 }
