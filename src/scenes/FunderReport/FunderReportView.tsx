@@ -141,6 +141,7 @@ const FunderReportView = ({ selectedProjectId, selectedReport }: FunderReportVie
                       projectId={selectedProjectId}
                       reportId={selectedReport.reportId}
                       canEdit={false}
+                      hideProjectsComments
                     />
                   ))}
                 </Card>
