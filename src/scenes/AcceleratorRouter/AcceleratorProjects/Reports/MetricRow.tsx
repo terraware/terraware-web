@@ -154,7 +154,8 @@ const MetricRow = ({
     completionDenominator !== 0 ? Math.round(((displayValue - baseline) / completionDenominator) * 100) : 0;
   const showPercentComplete = hasActualValue && hasTargetValue;
 
-  const hasComments = (!hideProjectsComments && !!metric.projectsComments) || (!hideProgressNotes && !!metric.progressNotes);
+  const hasComments =
+    (!hideProjectsComments && !!metric.projectsComments) || (!hideProgressNotes && !!metric.progressNotes);
   const canExpand = hasComments || isCumulative;
 
   const onToggle = useCallback(() => {
@@ -589,9 +590,9 @@ const MetricRow = ({
                       )}
                     </Grid>
                   )}
-                  {!isCumulative && ((!hideProjectsComments && metric.projectsComments) || (!hideProgressNotes && metric.progressNotes)) && (
-                    <Grid item xs={4} />
-                  )}
+                  {!isCumulative &&
+                    ((!hideProjectsComments && metric.projectsComments) ||
+                      (!hideProgressNotes && metric.progressNotes)) && <Grid item xs={4} />}
                   {!hideProjectsComments && metric.projectsComments ? (
                     <Grid item xs={4}>
                       <Typography fontSize='16px' fontWeight={600} marginBottom={1}>
