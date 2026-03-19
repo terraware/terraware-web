@@ -5420,10 +5420,10 @@
   resolved "https://registry.yarnpkg.com/@tanstack/virtual-core/-/virtual-core-3.11.2.tgz#00409e743ac4eea9afe5b7708594d5fcebb00212"
   integrity sha512-vTtpNt7mKCiZ1pwU9hfKPhpdVO2sVzFQsxoVBGtOSHxlrRRzYr8iQ2TlwbAcRYCcEiZ9ECAM8kBzH0v2+VzfKw==
 
-"@terraware/web-components@^v4.2.2-rc.2":
-  version "4.2.2-rc.2"
-  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-4.2.2-rc.2.tgz#7839b1e5d5c70bc00f40f8e8b08654c50a92be5f"
-  integrity sha512-LdWxLk5mU3WP7nKw8MySHjvy35AnNG2EVOrYzX70aIpvHF3ls7DIx7SAGinl9Sn5pl2nRECYydbP0TpMKwyUtQ==
+"@terraware/web-components@^v4.2.2-rc.3":
+  version "4.2.2-rc.3"
+  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-4.2.2-rc.3.tgz#9183a8f324d8d7d4c1831fa7d1fde757a83eb7f4"
+  integrity sha512-gwL8J5/tasEPn8fuq4V9t/hK4J9UcB7ZrF9aQRrClNhZzJuoO9KjZhsA56GsFjoY7w/vH12iJJ8cATlt61QXBQ==
   dependencies:
     "@dnd-kit/core" "^6.0.7"
     "@dnd-kit/sortable" "^10.0.0"
