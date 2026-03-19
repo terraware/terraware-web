@@ -1,3 +1,5 @@
+484811d99d0a Set `packageManager` in `package.json` (#5464)
+1b7614410b7f SW-8204: Schedule Observation should disallow selection of historical dates (#5465)
 6ef5adf60d04 Hide project comments on Funder Portal report view (#5471)
 59b062a01d26 SW-8131 Monitoring Plot Type column filter (#5467)
 30ba9473a167 SW-8215 Seeds dashboard links no longer take you to the filtered view (#5468)
