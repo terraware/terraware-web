@@ -1,3 +1,4 @@
+9511b3652a1a SW-8223: Improve performance of plants dashboard (#5477)
 5512d5a59378 SW-8223: Improve performance of plants dashboard (#5474)
 fb553deda913 SW-8016 Plants Dashboard: Add date of latest geometry change to banner (#5476)
 d32df48f8e1c SW-8206 Update FE to stop using old metrics endpoints and payloads/properties (#5475)
