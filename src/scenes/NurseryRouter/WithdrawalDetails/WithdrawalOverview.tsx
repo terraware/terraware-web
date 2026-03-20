@@ -48,7 +48,7 @@ export default function WithdrawalOverview({ withdrawal, withdrawalSummary }: Wi
     },
     {
       title: strings.TO_SUBSTRATUM,
-      data: withdrawalSummary?.substratumNames ?? '',
+      data: withdrawalSummary?.substratumShortNames ?? '',
     },
     {
       title: strings.NOTES,

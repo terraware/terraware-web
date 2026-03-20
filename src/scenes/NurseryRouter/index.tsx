@@ -27,7 +27,7 @@ const NurseryRouter = () => {
     for (const plantingSite of allPlantingSites ?? []) {
       for (const stratum of plantingSite.strata ?? []) {
         for (const substratum of stratum.substrata ?? []) {
-          substrata[substratum.id] = stratum.name + '-' + substratum.name;
+          substrata[substratum.id] = substratum.name;
         }
       }
     }
