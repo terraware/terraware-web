@@ -8,6 +8,7 @@ import { MapTooltip, TooltipProperty } from 'src/components/Map/MapRenderUtils';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import MapLegend, { MapLegendGroup } from 'src/components/common/MapLegend';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
+import { useLazyGetPlantingSiteHistoryQuery } from 'src/queries/generated/plantingSites';
 import { MapService } from 'src/services';
 import strings from 'src/strings';
 import { MapData, MapSourceProperties } from 'src/types/Map';
@@ -23,8 +24,8 @@ export default function StratumLevelDataMap({ plantingSiteId }: StratumLevelData
   const numberFormatter = useNumberFormatter();
   const theme = useTheme();
   const { isDesktop } = useDeviceInfo();
-  const { plantingSite, plantingSiteHistories, plantingSiteReportedPlants, observationSummaries, latestResult } =
-    usePlantingSiteData();
+  const { plantingSite, plantingSiteReportedPlants, observationSummaries, latestResult } = usePlantingSiteData();
+  const [getPlantingSiteHistory, { data: plantingSiteHistoryData }] = useLazyGetPlantingSiteHistoryQuery();
   const defaultTimeZone = useDefaultTimeZone();
   const timeZone = plantingSite?.timeZone ?? defaultTimeZone.get().id;
   const strataProgress = useMemo(() => {
@@ -135,9 +136,13 @@ export default function StratumLevelDataMap({ plantingSiteId }: StratumLevelData
     setLegends(result);
   }, [latestResult, theme]);
 
-  const latestResultSiteHistory = useMemo(() => {
-    return plantingSiteHistories?.find((history) => history.id === latestResult?.plantingSiteHistoryId);
-  }, [plantingSiteHistories, latestResult]);
+  useEffect(() => {
+    if (latestResult?.plantingSiteHistoryId) {
+      void getPlantingSiteHistory({ historyId: latestResult.plantingSiteHistoryId, id: plantingSiteId }, true);
+    }
+  }, [getPlantingSiteHistory, latestResult?.plantingSiteHistoryId, plantingSiteId]);
+
+  const latestResultSiteHistory = useMemo(() => plantingSiteHistoryData?.site, [plantingSiteHistoryData]);
 
   const mapData = useMemo((): MapData | undefined => {
     if (!plantingSite?.boundary) {
