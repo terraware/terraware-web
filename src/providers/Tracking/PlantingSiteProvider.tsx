@@ -59,6 +59,7 @@ const PlantingSiteProvider = ({ children }: Props) => {
   const [adHocObservations, setAdHocObservations] = useState<Observation[]>();
   const [adHocObservationResults, setAdHocObservationResults] = useState<ObservationResultsPayload[]>();
   const [reportedPlants, setReportedPlants] = useState<PlantingSiteReportedPlants>();
+  const [previousOrgId, setPreviousOrgId] = useState<number>(-1);
 
   const plantingSitesResponse = useAppSelector(selectPlantingSiteList(plantingSitesRequestId));
   const observationsResponse = useAppSelector(selectPlantingSiteObservationsRequest(observationsRequestId));
@@ -70,8 +71,9 @@ const PlantingSiteProvider = ({ children }: Props) => {
   const summariesResponse = useAppSelector(selectPlantingSiteObservationSummaries(summariesRequestId));
   const reportedPlantsResponse = useAppSelector(selectPlantingSiteReportedPlants(reportedPlantsRequestId));
 
+  const orgId = isAcceleratorRoute ? acceleratorOrganizationId : selectedOrganization?.id;
+
   const allSitesOption = useMemo(() => {
-    const orgId = isAcceleratorRoute ? acceleratorOrganizationId : selectedOrganization?.id;
     if (activeLocale && orgId) {
       return {
         name: strings.ALL_PLANTING_SITES,
@@ -81,15 +83,15 @@ const PlantingSiteProvider = ({ children }: Props) => {
         plantingSeasons: [],
       };
     }
-  }, [activeLocale, isAcceleratorRoute, acceleratorOrganizationId, selectedOrganization]);
+  }, [activeLocale, orgId]);
 
   const reload = useCallback(() => {
-    const orgId = isAcceleratorRoute ? acceleratorOrganizationId : selectedOrganization?.id;
-    if (orgId) {
+    if (orgId && orgId !== previousOrgId) {
       const request = dispatch(requestListPlantingSites(orgId));
       setPlantingSitesRequestId(request.requestId);
+      setPreviousOrgId(orgId);
     }
-  }, [acceleratorOrganizationId, dispatch, isAcceleratorRoute, selectedOrganization?.id]);
+  }, [dispatch, orgId, previousOrgId]);
 
   useEffect(() => {
     reload();
