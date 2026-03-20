@@ -59,7 +59,7 @@ const ReportView = () => {
   const { reload: reloadProject } = useAcceleratorProjectData();
   const [publishedFunderView, setPublishedFunderView] = useState(false);
 
-  const getReportResponse = useGetAcceleratorReportQuery({ reportId, projectId, includeMetrics: true });
+  const getReportResponse = useGetAcceleratorReportQuery({ reportId, projectId, includeIndicators: true });
   const listPublishedReportResponse = useListPublishedReportsQuery(projectId);
 
   const [reviewReport, reviewReportResponse] = useReviewAcceleratorReportMutation();

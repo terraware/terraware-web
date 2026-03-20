@@ -41,7 +41,6 @@ const AcceleratorReportView = () => {
   const reportResponse = useGetAcceleratorReportQuery({
     projectId,
     reportId,
-    includeMetrics: true,
     includeIndicators: true,
   });
 

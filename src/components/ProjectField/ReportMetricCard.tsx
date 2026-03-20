@@ -4,13 +4,12 @@ import { useTheme } from '@mui/material';
 
 import strings from 'src/strings';
 import { MetricProgress } from 'src/types/AcceleratorProject';
-import { SystemMetricName } from 'src/types/AcceleratorReport';
 
 import InvertedCard from './InvertedCard';
 
 type ReportMetricCardProps = {
   metricProgress: MetricProgress[];
-  metricName: SystemMetricName;
+  metricName: MetricProgress['metric'];
   label: string;
   units?: string;
   formatter?: (value: number | undefined) => string;

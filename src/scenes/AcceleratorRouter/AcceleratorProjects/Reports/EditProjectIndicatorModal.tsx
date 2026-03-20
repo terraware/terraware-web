@@ -12,8 +12,12 @@ import { ExistingProjectIndicatorPayload, useUpdateProjectIndicatorMutation } fr
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
-import { classIdOptions, frequencyOptions, indicatorTypeOptions } from './EditCommonIndicatorModal';
-import { metricComponentOptions } from './NewProjectSpecificMetric';
+import {
+  classIdOptions,
+  frequencyOptions,
+  indicatorTypeOptions,
+  metricComponentOptions,
+} from './EditCommonIndicatorModal';
 
 export interface EditProjectIndicatorModalProps {
   onClose: () => void;
