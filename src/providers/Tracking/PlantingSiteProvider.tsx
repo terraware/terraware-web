@@ -16,19 +16,17 @@ import {
   requestPlantingSiteObservations,
 } from 'src/redux/features/observations/observationsThunks';
 import {
-  selectPlantingSiteHistories,
   selectPlantingSiteList,
   selectPlantingSiteReportedPlants,
 } from 'src/redux/features/tracking/trackingSelectors';
 import {
-  requestListPlantingSiteHistories,
   requestListPlantingSites,
   requestPlantingSiteReportedPlants,
 } from 'src/redux/features/tracking/trackingThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { Observation, ObservationResultsPayload, ObservationSummary } from 'src/types/Observations';
-import { PlantingSite, PlantingSiteHistory, PlantingSiteReportedPlants } from 'src/types/Tracking';
+import { PlantingSite, PlantingSiteReportedPlants } from 'src/types/Tracking';
 
 import { useLocalization, useOrganization } from '../hooks';
 import { PlantingSiteContext, PlantingSiteData } from './PlantingSiteContext';
@@ -52,7 +50,6 @@ const PlantingSiteProvider = ({ children }: Props) => {
   const [adHocObservationsRequestId, setAdHocObservationsRequestId] = useState<string>('');
   const [adHocResultsRequestId, setAdHocResultsRequestId] = useState<string>('');
   const [summariesRequestId, setSummariesRequestId] = useState<string>('');
-  const [historiesRequestId, setHistoriesRequestId] = useState<string>('');
   const [reportedPlantsRequestId, setReportedPlantsRequestId] = useState<string>('');
 
   const [plantingSites, setPlantingSites] = useState<PlantingSite[]>();
@@ -61,7 +58,6 @@ const PlantingSiteProvider = ({ children }: Props) => {
   const [observationSummaries, setObservationSummaries] = useState<ObservationSummary[]>();
   const [adHocObservations, setAdHocObservations] = useState<Observation[]>();
   const [adHocObservationResults, setAdHocObservationResults] = useState<ObservationResultsPayload[]>();
-  const [histories, setHistories] = useState<PlantingSiteHistory[]>();
   const [reportedPlants, setReportedPlants] = useState<PlantingSiteReportedPlants>();
 
   const plantingSitesResponse = useAppSelector(selectPlantingSiteList(plantingSitesRequestId));
@@ -72,7 +68,6 @@ const PlantingSiteProvider = ({ children }: Props) => {
   );
   const adHocResultsResponse = useAppSelector(selectPlantingSiteAdHocObservationResultsRequest(adHocResultsRequestId));
   const summariesResponse = useAppSelector(selectPlantingSiteObservationSummaries(summariesRequestId));
-  const historiesResponse = useAppSelector(selectPlantingSiteHistories(historiesRequestId));
   const reportedPlantsResponse = useAppSelector(selectPlantingSiteReportedPlants(reportedPlantsRequestId));
 
   const allSitesOption = useMemo(() => {
@@ -114,7 +109,6 @@ const PlantingSiteProvider = ({ children }: Props) => {
         setObservationSummaries(undefined);
         setAdHocObservations(undefined);
         setAdHocObservationResults(undefined);
-        setHistories(undefined);
         setReportedPlants(undefined);
       }
     },
@@ -132,14 +126,12 @@ const PlantingSiteProvider = ({ children }: Props) => {
         requestPlantingSiteAdHocObservationResults({ plantingSiteId: plantingSite.id })
       );
       const summariesRequest = dispatch(requestPlantingSiteObservationSummaries(plantingSite.id));
-      const historiesRequest = dispatch(requestListPlantingSiteHistories(plantingSite.id));
       const reportedPlantsRequest = dispatch(requestPlantingSiteReportedPlants(plantingSite.id));
       setObservationsRequestId(observationsRequest.requestId);
       setResultsRequestId(resultsRequest.requestId);
       setAdHocObservationsRequestId(adHocObservationsRequest.requestId);
       setAdHocResultsRequestId(adHocResultsRequest.requestId);
       setSummariesRequestId(summariesRequest.requestId);
-      setHistoriesRequestId(historiesRequest.requestId);
       setReportedPlantsRequestId(reportedPlantsRequest.requestId);
     }
   }, [dispatch, plantingSite]);
@@ -186,12 +178,6 @@ const PlantingSiteProvider = ({ children }: Props) => {
   }, [summariesResponse]);
 
   useEffect(() => {
-    if (historiesResponse?.status === 'success') {
-      setHistories(historiesResponse.data ?? []);
-    }
-  }, [historiesResponse]);
-
-  useEffect(() => {
     if (reportedPlantsResponse?.status === 'success') {
       setReportedPlants(reportedPlantsResponse.data);
     }
@@ -213,13 +199,11 @@ const PlantingSiteProvider = ({ children }: Props) => {
       adHocObservationsResponse?.status === 'pending' ||
       adHocResultsResponse?.status === 'pending' ||
       summariesResponse?.status === 'pending' ||
-      historiesResponse?.status === 'pending' ||
       reportedPlantsResponse?.status === 'pending'
     );
   }, [
     adHocObservationsResponse?.status,
     adHocResultsResponse?.status,
-    historiesResponse?.status,
     observationsResponse?.status,
     plantingSitesResponse?.status,
     reportedPlantsResponse?.status,
@@ -266,7 +250,6 @@ const PlantingSiteProvider = ({ children }: Props) => {
       allPlantingSites,
       plantingSite,
       plantingSiteReportedPlants: reportedPlants,
-      plantingSiteHistories: histories,
       adHocObservations,
       adHocObservationResults,
       observations,
@@ -286,7 +269,6 @@ const PlantingSiteProvider = ({ children }: Props) => {
       allPlantingSites,
       plantingSite,
       reportedPlants,
-      histories,
       adHocObservations,
       adHocObservationResults,
       observations,
