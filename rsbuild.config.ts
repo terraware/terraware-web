@@ -32,10 +32,6 @@ export default defineConfig({
       mixedImport: true, // Support both default and named imports for SVGs
     }),
     pluginTypeCheck({ enable: isDev }),
-    pluginEslint({
-      enable: isDev,
-      eslintPluginOptions: { configType: 'flat' },
-    }),
   ],
 
   source: {
