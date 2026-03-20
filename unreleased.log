@@ -1,3 +1,4 @@
+d32df48f8e1c SW-8206 Update FE to stop using old metrics endpoints and payloads/properties (#5475)
 0aa121db7ac2 Bump flatted from 3.3.1 to 3.4.2 (#5473)
 396b9a483ebd Bump fast-xml-parser from 5.5.6 to 5.5.7 (#5472)
 e982fcd749b5 SW-8109: New Tables: Add "Clear All" feature to Filters (FOLLOW-UP) (#5463)
