@@ -14,7 +14,6 @@ import Card from 'src/components/common/Card';
 import { useLocalization } from 'src/providers';
 import { PublishedReportIndicatorPayload, PublishedReportPayload } from 'src/queries/generated/publishedReports';
 import { ReportCommonIndicatorPayload } from 'src/queries/generated/reports';
-import { PublishedReportMetric } from 'src/types/AcceleratorReport';
 
 import MetricRow from '../AcceleratorRouter/AcceleratorProjects/Reports/MetricRow';
 
@@ -31,20 +30,6 @@ const FunderReportView = ({ selectedProjectId, selectedReport }: FunderReportVie
   const year = useMemo(() => {
     return selectedReport?.startDate?.split('-')[0];
   }, [selectedReport]);
-
-  const allMetrics: PublishedReportMetric[] = [];
-
-  ['system', 'project', 'standard'].map((type) => {
-    const metrics =
-      type === 'system'
-        ? selectedReport?.systemMetrics
-        : type === 'project'
-          ? selectedReport?.projectMetrics
-          : selectedReport?.standardMetrics;
-    if (metrics) {
-      allMetrics.push(...metrics);
-    }
-  });
 
   const allIndicators = useMemo((): ReportCommonIndicatorPayload[] => {
     let id = 0;

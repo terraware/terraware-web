@@ -13,7 +13,14 @@ import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
-import { metricComponentOptions } from './NewProjectSpecificMetric';
+export const metricComponentOptions = () => {
+  return [
+    { label: strings.COMMUNITY, value: 'Community' },
+    { label: strings.PROJECT_OBJECTIVES, value: 'Project Objectives' },
+    { label: strings.CLIMATE, value: 'Climate' },
+    { label: strings.BIODIVERSITY, value: 'Biodiversity' },
+  ];
+};
 
 export interface EditCommonIndicatorModalProps {
   onClose: () => void;

@@ -96,13 +96,13 @@ const HEIGHT_OFFSET_PX = 204;
 
 const HEIGHT_OFFSET_MOBILE_PX = 240;
 
-const getReportMetrics = (strings: any) => [
+const getReportIndicators = (strings: any) => [
   {
-    metric: strings.HECTARES_PLANTED,
+    indicator: 'Hectares Planted',
     formatter: (value: number) => strings.formatString(strings.X_HA, value),
   },
-  { metric: strings.SPECIES_PLANTED, formatter: (value: number) => value },
-  { metric: strings.TREES_PLANTED, formatter: (value: number) => value },
+  { indicator: 'Species Planted', formatter: (value: number) => value },
+  { indicator: 'Trees Planted', formatter: (value: number) => value },
 ];
 
 type ActivityHighlightsViewProps = {
@@ -494,21 +494,24 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
                             flexWrap: 'wrap',
                           }}
                         >
-                          {getReportMetrics(strings).map(({ metric, formatter }) => {
-                            const selMetric = slide.report?.systemMetrics.find((sm) =>
+                          {getReportIndicators(strings).map(({ indicator, formatter }) => {
+                            const selIndicator = slide.report?.autoCalculatedIndicators?.find((ind) =>
                               isFunderRoute
-                                ? (sm as PublishedReportPayload['systemMetrics'][0]).name === metric
-                                : (sm as AcceleratorReport['systemMetrics'][0]).metric === metric
+                                ? (ind as PublishedReportPayload['autoCalculatedIndicators'][0]).name === indicator
+                                : (ind as AcceleratorReportPayload['autoCalculatedIndicators'][0]).indicator ===
+                                  indicator
                             );
                             const value = isFunderRoute
-                              ? (selMetric as PublishedReportPayload['systemMetrics'][0])?.value || 0
-                              : (selMetric as AcceleratorReport['systemMetrics'][0])?.overrideValue ||
-                                (selMetric as AcceleratorReport['systemMetrics'][0])?.systemValue ||
+                              ? (selIndicator as PublishedReportPayload['autoCalculatedIndicators'][0])?.value || 0
+                              : (selIndicator as AcceleratorReportPayload['autoCalculatedIndicators'][0])
+                                  ?.overrideValue ||
+                                (selIndicator as AcceleratorReportPayload['autoCalculatedIndicators'][0])
+                                  ?.systemValue ||
                                 0;
 
                             return (
-                              <Box key={metric}>
-                                <Typography fontWeight={600}>{metric}</Typography>
+                              <Box key={indicator}>
+                                <Typography fontWeight={600}>{indicator}</Typography>
                                 <Typography fontSize='24px' fontWeight={600}>
                                   {formatter(value)}
                                 </Typography>
