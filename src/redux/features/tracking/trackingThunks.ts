@@ -142,19 +142,6 @@ export const requestGetPlantingSiteHistory = createAsyncThunk(
   }
 );
 
-export const requestListPlantingSiteHistories = createAsyncThunk(
-  'tracking/siteHistories',
-  async (plantingSiteId: number, { rejectWithValue }) => {
-    const response = await TrackingService.listPlantingSiteHistories(plantingSiteId);
-
-    if (response !== null && response.requestSucceeded && response?.data?.histories !== undefined) {
-      return response.data.histories;
-    }
-
-    return rejectWithValue(strings.GENERIC_ERROR);
-  }
-);
-
 export const requestListPlantingSites = createAsyncThunk(
   'tracking/plantingSites',
   async (organizationId: number, { rejectWithValue }) => {
