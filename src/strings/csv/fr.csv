@@ -779,7 +779,7 @@ GDRIVE_LINK,Lien GDrive,0ad2a483
 GENERAL,Général,989aa26d
 GENERIC_ERROR,Une erreur s’est produite,e1abd8bd
 GENUS,Genre,893239a9
-GEOMETRY_CHANGED_WARNING_MESSAGE,La géométrie de ce site {0}. Les données affichées ici peuvent ne pas être représentatives de l’état actuel des strates du site de plantation.,5b1b7d6e
+GEOMETRY_CHANGED_WARNING_MESSAGE,La géométrie de ce site a changé le {0}. Les données affichées ici représentent les dernières observations du {1} et peuvent ne plus être représentatives du site de plantation.,28fe6009
 GERMINATED,Germiné,452ce9c6
 GERMINATION_ESTABLISHMENT,Germination/établissement,0da62fe0
 GERMINATION_ESTABLISHMENT_QUANTITY,Quantité de germination/établissement,630be8de
