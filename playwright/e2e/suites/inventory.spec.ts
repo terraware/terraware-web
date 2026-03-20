@@ -258,11 +258,13 @@ test.describe('InventoryTests', () => {
     await expect(page.getByRole('cell', { name: '60' })).toBeVisible();
     await page.getByRole('link', { name: '60' }).click();
     await expect(page.locator('thead').getByText('Planting Site')).toBeVisible();
-    await expect(page.getByText('East-North')).toBeVisible();
+    await expect(page.getByText('East')).toBeVisible();
+    await expect(page.getByText('North')).toBeVisible();
     await expect(page.locator('#row1-purpose')).toContainText('Planting');
     await expect(page.locator('#row1-facility_name')).toContainText('Nursery');
     await expect(page.locator('#row1-destinationName')).toContainText('Planting Site');
-    await expect(page.locator('#row1-substratumNames')).toContainText('East-North');
+    await expect(page.locator('#row1-stratumNames')).toContainText('East');
+    await expect(page.locator('#row1-substratumShortNames')).toContainText('North');
     await expect(page.locator('#row1-speciesScientificNames')).toContainText('Kousa Dogwood');
     await expect(page.locator('#row1-totalWithdrawn\\(raw\\)')).toContainText('60');
   });
@@ -304,7 +306,8 @@ test.describe('InventoryTests', () => {
     await expect(page.getByText('Kousa Dogwood')).toBeVisible();
     await page.getByRole('link', { name: 'See Withdrawal History' }).click();
     await expect(page.locator('thead').getByText('Planting Site')).toBeVisible();
-    await expect(page.getByText('East-North')).toBeVisible();
+    await expect(page.getByText('East')).toBeVisible();
+    await expect(page.getByText('North')).toBeVisible();
   });
 });
 
