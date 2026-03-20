@@ -26,14 +26,6 @@ const injectedRtkApi = api.injectEndpoints({
         url: `/api/v1/tracking/observations/${queryArg.observationId}/splats/${queryArg.fileId}`,
       }),
     }),
-    listObservationSplatAnnotations: build.query<
-      ListObservationSplatAnnotationsApiResponse,
-      ListObservationSplatAnnotationsApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/api/v1/tracking/observations/${queryArg.observationId}/splats/${queryArg.fileId}/annotations`,
-      }),
-    }),
     setObservationSplatAnnotations: build.mutation<
       SetObservationSplatAnnotationsApiResponse,
       SetObservationSplatAnnotationsApiArg
@@ -72,12 +64,6 @@ export type GetObservationSplatFileApiResponse = /** status 200 The requested op
   | object
   | /** status 202 The video is still being processed and the model is not ready yet. */ object;
 export type GetObservationSplatFileApiArg = {
-  observationId: number;
-  fileId: number;
-};
-export type ListObservationSplatAnnotationsApiResponse =
-  /** status 200 The requested operation succeeded. */ ListObservationSplatAnnotationsResponsePayload;
-export type ListObservationSplatAnnotationsApiArg = {
   observationId: number;
   fileId: number;
 };
@@ -122,19 +108,6 @@ export type CoordinatePayload = {
   y: number;
   z: number;
 };
-export type SplatAnnotationPayload = {
-  bodyText?: string;
-  cameraPosition?: CoordinatePayload;
-  fileId: number;
-  id: number;
-  label?: string;
-  position: CoordinatePayload;
-  title: string;
-};
-export type ListObservationSplatAnnotationsResponsePayload = {
-  annotations: SplatAnnotationPayload[];
-  status: SuccessOrError;
-};
 export type SetSplatAnnotationRequestPayload = {
   bodyText?: string;
   cameraPosition?: CoordinatePayload;
@@ -145,6 +118,15 @@ export type SetSplatAnnotationRequestPayload = {
 };
 export type SetSplatAnnotationsRequestPayload = {
   annotations: SetSplatAnnotationRequestPayload[];
+};
+export type SplatAnnotationPayload = {
+  bodyText?: string;
+  cameraPosition?: CoordinatePayload;
+  fileId: number;
+  id: number;
+  label?: string;
+  position: CoordinatePayload;
+  title: string;
 };
 export type GetObservationSplatInfoResponsePayload = {
   annotations: SplatAnnotationPayload[];
@@ -158,8 +140,6 @@ export const {
   useGenerateObservationSplatFileMutation,
   useGetObservationSplatFileQuery,
   useLazyGetObservationSplatFileQuery,
-  useListObservationSplatAnnotationsQuery,
-  useLazyListObservationSplatAnnotationsQuery,
   useSetObservationSplatAnnotationsMutation,
   useListSplatDetailsQuery,
   useLazyListSplatDetailsQuery,
