@@ -26,7 +26,7 @@ import {
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { Observation, ObservationResultsPayload, ObservationSummary } from 'src/types/Observations';
-import { PlantingSite, PlantingSiteReportedPlants } from 'src/types/Tracking';
+import { PlantingSite, PlantingSiteHistory, PlantingSiteReportedPlants } from 'src/types/Tracking';
 
 import { useLocalization, useOrganization } from '../hooks';
 import { PlantingSiteContext, PlantingSiteData } from './PlantingSiteContext';
@@ -58,6 +58,7 @@ const PlantingSiteProvider = ({ children }: Props) => {
   const [observationSummaries, setObservationSummaries] = useState<ObservationSummary[]>();
   const [adHocObservations, setAdHocObservations] = useState<Observation[]>();
   const [adHocObservationResults, setAdHocObservationResults] = useState<ObservationResultsPayload[]>();
+  const [histories, setHistories] = useState<PlantingSiteHistory[]>();
   const [reportedPlants, setReportedPlants] = useState<PlantingSiteReportedPlants>();
 
   const plantingSitesResponse = useAppSelector(selectPlantingSiteList(plantingSitesRequestId));
@@ -109,6 +110,7 @@ const PlantingSiteProvider = ({ children }: Props) => {
         setObservationSummaries(undefined);
         setAdHocObservations(undefined);
         setAdHocObservationResults(undefined);
+        setHistories(undefined);
         setReportedPlants(undefined);
       }
     },
@@ -250,6 +252,7 @@ const PlantingSiteProvider = ({ children }: Props) => {
       allPlantingSites,
       plantingSite,
       plantingSiteReportedPlants: reportedPlants,
+      plantingSiteHistories: histories,
       adHocObservations,
       adHocObservationResults,
       observations,
@@ -269,6 +272,7 @@ const PlantingSiteProvider = ({ children }: Props) => {
       allPlantingSites,
       plantingSite,
       reportedPlants,
+      histories,
       adHocObservations,
       adHocObservationResults,
       observations,
