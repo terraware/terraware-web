@@ -42,6 +42,8 @@ export type PlantsPrimaryPageViewProps = {
   showGeometryNote?: boolean;
   showSurvivalRateMessage?: boolean;
   latestObservationId?: number;
+  geometryChangedDate?: string;
+  latestObservationDate?: string;
   projectId?: number;
   onSelectProjectId?: (projectId: number) => void;
   allowAllAsSiteSelection?: boolean;
@@ -57,6 +59,8 @@ export default function PlantsPrimaryPageView({
   showGeometryNote,
   showSurvivalRateMessage,
   latestObservationId,
+  geometryChangedDate,
+  latestObservationDate,
   projectId,
   onSelectProjectId,
   newHeader,
@@ -176,6 +180,7 @@ export default function PlantsPrimaryPageView({
                     <b>{strings.PLEASE_NOTE}</b>{' '}
                     {strings.formatString(
                       strings.GEOMETRY_CHANGED_WARNING_MESSAGE,
+                      <span>{geometryChangedDate ?? ''}</span>,
                       !isAcceleratorRoute ? (
                         <Link
                           fontSize={'16px'}
@@ -185,11 +190,11 @@ export default function PlantsPrimaryPageView({
                           )}
                           target='_blank'
                         >
-                          {strings.HAS_CHANGED}
+                          {latestObservationDate ?? ''}
                         </Link>
                       ) : (
                         <Typography fontSize={'16px'} display={'inline'}>
-                          {strings.HAS_CHANGED}
+                          {latestObservationDate ?? ''}
                         </Typography>
                       )
                     )}

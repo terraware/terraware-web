@@ -26,6 +26,8 @@ export type PlantsPrimaryPageProps = {
   showGeometryNote?: boolean;
   showSurvivalRateMessage?: boolean;
   latestObservationId?: number;
+  geometryChangedDate?: string;
+  latestObservationDate?: string;
   projectId?: number;
   organizationId?: number;
   onSelect: (plantingSiteId: number) => void;
@@ -48,6 +50,8 @@ export default function PlantsPrimaryPage({
   showGeometryNote,
   showSurvivalRateMessage,
   latestObservationId,
+  geometryChangedDate,
+  latestObservationDate,
   projectId,
   organizationId,
   onSelect,
@@ -171,6 +175,8 @@ export default function PlantsPrimaryPage({
       showGeometryNote={showGeometryNote}
       showSurvivalRateMessage={showSurvivalRateMessage}
       latestObservationId={latestObservationId}
+      geometryChangedDate={geometryChangedDate}
+      latestObservationDate={latestObservationDate}
       projectId={projectId}
       onSelectProjectId={onSelectProjectId}
       allowAllAsSiteSelection={allowAllAsSiteSelection}

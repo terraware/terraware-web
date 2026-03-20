@@ -64,17 +64,33 @@ export default function PlantsDashboardView({
 
   const { observationResults } = useObservation(latestResultId);
 
-  const geometryChangedNote = useMemo(() => {
-    if (latestResult?.completedTime && plantingSite?.strata?.length) {
-      const siteBoundaryModifiedTime = plantingSite.strata.reduce(
+  const siteBoundaryModifiedTime = useMemo(() => {
+    if (plantingSite?.strata?.length) {
+      return plantingSite.strata.reduce(
         (maxTime, stratum) => (isAfter(stratum.boundaryModifiedTime, maxTime) ? stratum.boundaryModifiedTime : maxTime),
         plantingSite.strata[0].boundaryModifiedTime
       );
+    }
+    return undefined;
+  }, [plantingSite]);
+
+  const geometryChangedNote = useMemo(() => {
+    if (latestResult?.completedTime && siteBoundaryModifiedTime) {
       return isAfter(siteBoundaryModifiedTime, latestResult.completedTime);
     } else {
       return false;
     }
-  }, [latestResult, plantingSite]);
+  }, [latestResult, siteBoundaryModifiedTime]);
+
+  const geometryChangedDate = useMemo(() => {
+    const dt = siteBoundaryModifiedTime ? DateTime.fromISO(siteBoundaryModifiedTime) : undefined;
+    return dt?.isValid ? dt.toFormat('LLLL d, yyyy') : undefined;
+  }, [siteBoundaryModifiedTime]);
+
+  const latestObservationDate = useMemo(() => {
+    const dt = latestResult?.completedTime ? DateTime.fromISO(latestResult.completedTime) : undefined;
+    return dt?.isValid ? dt.toFormat('LLLL d, yyyy') : undefined;
+  }, [latestResult]);
 
   useEffect(() => {
     if (organizationId) {
@@ -430,6 +446,8 @@ export default function PlantsDashboardView({
       showGeometryNote={geometryChangedNote}
       showSurvivalRateMessage={showSurvivalRateMessage}
       latestObservationId={latestResultId}
+      geometryChangedDate={geometryChangedDate}
+      latestObservationDate={latestObservationDate}
       projectId={projectId}
       onSelectProjectId={onSelectProject}
       organizationId={organizationId}
