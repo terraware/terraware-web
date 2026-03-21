@@ -126,7 +126,12 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     showColumnFilters,
     showGlobalFilter,
   } = useTableState(TABLE_STATE_STORAGE_KEY, {
-    persistedMultiSelectColumnIds: ['destinationName', 'project_names', 'speciesScientificNames', 'substratumNames'],
+    persistedMultiSelectColumnIds: [
+      'destinationName',
+      'project_names',
+      'speciesScientificNames',
+      'substratumShortNames',
+    ],
     persistFilters: true,
   });
 
@@ -166,7 +171,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         nurseryNames: toStrings('facility_name'),
         destinationNames: toStrings('destinationName'),
         stratumOptions: toStrings('stratumNames'),
-        substratumOptions: toStrings('substratumNames'),
+        substratumOptions: toStrings('substratumShortNames'),
         speciesOptions: toStrings('batchWithdrawals.batch_species_scientificName'),
       };
     }
@@ -364,9 +369,9 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         Cell: StratumNamesCell,
       },
       {
-        id: 'substratumNames',
+        id: 'substratumShortNames',
         header: strings.TO_SUBSTRATUM,
-        accessorKey: 'substratumNames',
+        accessorKey: 'substratumShortNames',
         enableEditing: false,
         filterVariant: 'multi-select',
         filterSelectOptions: substratumOptions,
@@ -684,8 +689,8 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
       navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
       setFilters((curr) => ({
         ...curr,
-        substratumNames: {
-          field: 'substratumNames',
+        substratumShortNames: {
+          field: 'substratumShortNames',
           operation: 'field',
           type: 'Exact',
           values: [substratumParam],

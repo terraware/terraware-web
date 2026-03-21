@@ -11,7 +11,6 @@ import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext'
 import strings from 'src/strings';
 
 type PlantingProgressMapDialogProps = {
-  stratumName: string;
   substratumId: number;
   substratumName: string;
   substratumAreaHa: number;
@@ -22,7 +21,6 @@ type PlantingProgressMapDialogProps = {
 };
 
 export default function PlantingProgressMapDialog({
-  stratumName,
   substratumId,
   substratumName,
   substratumAreaHa,
@@ -59,7 +57,7 @@ export default function PlantingProgressMapDialog({
   );
 
   const getWithdrawalHistoryLink = () => {
-    const filterParam = `substratumName=${encodeURIComponent(stratumName)}-${encodeURIComponent(substratumName)}&siteName=${encodeURIComponent(siteName)}`;
+    const filterParam = `substratumName=${encodeURIComponent(substratumName)}&siteName=${encodeURIComponent(siteName)}`;
     const url = `${APP_PATHS.NURSERY_WITHDRAWALS}?tab=withdrawal_history&${filterParam}`;
     return (
       <Link

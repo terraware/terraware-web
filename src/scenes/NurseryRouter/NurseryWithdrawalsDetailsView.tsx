@@ -37,7 +37,7 @@ export interface WithdrawalSummary {
   facilityName: string;
   destinationName: string;
   stratumNames: string;
-  substratumNames: string;
+  substratumShortNames: string;
   scientificNames: string[];
   totalWithdrawn: string;
   hasReassignments: boolean;
@@ -109,7 +109,7 @@ export default function NurseryWithdrawalsDetailsView({
             facilityName: withdrawalSummaryRecord.facilityName as string,
             destinationName: withdrawalSummaryRecord.destinationName as string,
             stratumNames: withdrawalSummaryRecord.stratumNames as string,
-            substratumNames: withdrawalSummaryRecord.substratumNames as string,
+            substratumShortNames: withdrawalSummaryRecord.substratumShortNames as string,
             scientificNames: withdrawalSummaryRecord.speciesScientificNames as string[],
             totalWithdrawn: numberFormatter.format((withdrawalSummaryRecord['totalWithdrawn(raw)'] || 0) as number),
             hasReassignments: isTrue(withdrawalSummaryRecord.hasReassignments),

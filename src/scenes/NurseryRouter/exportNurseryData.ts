@@ -82,7 +82,7 @@ const makeNurseryWithdrawalResultsCsv = ({
     { key: 'destinationName', displayLabel: strings.PLANTING_SITE },
     { key: 'project_names', displayLabel: strings.PROJECTS },
     { key: 'stratumNames', displayLabel: strings.TO_STRATUM },
-    { key: 'substratumNames', displayLabel: strings.TO_SUBSTRATUM },
+    { key: 'substratumShortNames', displayLabel: strings.TO_SUBSTRATUM },
     { key: 'speciesScientificNames', displayLabel: strings.SPECIES },
     { key: 'totalWithdrawn', displayLabel: strings.TOTAL_QUANTITY },
     { key: 'withdrawalActive', displayLabel: strings.WITHDRAWAL_ACTIVE },
@@ -95,7 +95,7 @@ const makeNurseryWithdrawalResultsCsv = ({
     destinationName: withdrawal.destinationName,
     project_names: (withdrawal.project_names as string[] | undefined)?.filter((name: string) => !!name).join(', '),
     stratumNames: withdrawal.stratumNames,
-    substratumNames: withdrawal.substratumNames,
+    substratumShortNames: withdrawal.substratumShortNames,
     speciesScientificNames: (withdrawal.speciesScientificNames as string[] | undefined)?.join(', '),
     totalWithdrawn: withdrawal['totalWithdrawn(raw)'],
     withdrawalActive: withdrawal.undoneByWithdrawalId

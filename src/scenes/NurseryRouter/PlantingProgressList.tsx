@@ -146,7 +146,7 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
   const TotalSeedlingsSentCell = useCallback(({ cell }: { cell: MRT_Cell<Partial<PlantingProgress>> }) => {
     const row = cell.row.original;
     const filterParam = row.substratumName
-      ? `substratumName=${encodeURIComponent(row.stratumName || '')}-${encodeURIComponent(row.substratumName)}&siteName=${encodeURIComponent(row.siteName || '')}`
+      ? `substratumName=${encodeURIComponent(row.substratumName)}&siteName=${encodeURIComponent(row.siteName || '')}`
       : `siteName=${encodeURIComponent(row.siteName || '')}`;
     const url = `${APP_PATHS.NURSERY_WITHDRAWALS}?tab=withdrawal_history&${filterParam}`;
     return (
