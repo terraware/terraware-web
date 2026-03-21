@@ -4376,11 +4376,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /**
-         * Use /info instead
-         * @deprecated
-         */
-        get: operations["listObservationSplatAnnotations"];
+        get?: never;
         put?: never;
         /**
          * Sets the list of annotations for a splat model.
@@ -8384,10 +8380,6 @@ export interface components {
         };
         ListObservationResultsResponsePayload: {
             observations: components["schemas"]["ObservationResultsPayload"][];
-            status: components["schemas"]["SuccessOrError"];
-        };
-        ListObservationSplatAnnotationsResponsePayload: {
-            annotations: components["schemas"]["SplatAnnotationPayload"][];
             status: components["schemas"]["SuccessOrError"];
         };
         ListObservationSplatsResponsePayload: {
@@ -22186,38 +22178,6 @@ export interface operations {
             };
             /** @description The system was unable to generate a splat from the requested file. */
             422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-                };
-            };
-        };
-    };
-    listObservationSplatAnnotations: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                observationId: number;
-                fileId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description The requested operation succeeded. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ListObservationSplatAnnotationsResponsePayload"];
-                };
-            };
-            /** @description The plot observation does not exist, or does not have a splat for the requested file ID. */
-            404: {
                 headers: {
                     [name: string]: unknown;
                 };
