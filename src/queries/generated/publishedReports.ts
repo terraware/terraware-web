@@ -62,19 +62,6 @@ export type ReportPhotoPayload = {
   caption?: string;
   fileId: number;
 };
-export type PublishedReportMetricPayload = {
-  component: 'Project Objectives' | 'Climate' | 'Community' | 'Biodiversity';
-  description?: string;
-  name: string;
-  progressNotes?: string;
-  projectsComments?: string;
-  reference: string;
-  status?: 'Achieved' | 'On-Track' | 'Unlikely' | 'Off-Track';
-  target?: number;
-  type: 'Process' | 'Output' | 'Outcome' | 'Goal';
-  unit?: string;
-  value?: number;
-};
 export type PublishedReportPayload = {
   achievements: string[];
   additionalComments?: string;
@@ -87,18 +74,12 @@ export type PublishedReportPayload = {
   photos: ReportPhotoPayload[];
   projectId: number;
   projectIndicators: PublishedReportIndicatorPayload[];
-  /** Use projectIndicators instead */
-  projectMetrics: PublishedReportMetricPayload[];
   projectName: string;
   publishedBy: number;
   publishedTime: string;
   quarter?: 'Q1' | 'Q2' | 'Q3' | 'Q4';
   reportId: number;
-  /** Use commonIndicators instead */
-  standardMetrics: PublishedReportMetricPayload[];
   startDate: string;
-  /** Use autoCalculatedIndicators instead */
-  systemMetrics: PublishedReportMetricPayload[];
 };
 export type SuccessOrError = 'ok' | 'error';
 export type ListPublishedReportsResponsePayload = {

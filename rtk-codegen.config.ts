@@ -57,11 +57,6 @@ const config: ConfigFile = {
     './src/queries/generated/reports.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/accelerator/projects/{projectId}/reports'),
     },
-    './src/queries/generated/reportMetrics.ts': {
-      filterEndpoints: (_, operation) =>
-        operation.path.startsWith('/api/v1/accelerator/reports/standardMetrics') ||
-        operation.path.startsWith('/api/v1/accelerator/reports/systemMetrics'),
-    },
     './src/queries/generated/indicators.ts': {
       filterEndpoints: (_, operation) =>
         operation.path.startsWith('/api/v1/accelerator/projects/{projectId}/reports/indicators') ||

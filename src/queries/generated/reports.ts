@@ -9,7 +9,6 @@ const injectedRtkApi = api.injectEndpoints({
           year: queryArg.year,
           includeArchived: queryArg.includeArchived,
           includeFuture: queryArg.includeFuture,
-          includeMetrics: queryArg.includeMetrics,
           includeIndicators: queryArg.includeIndicators,
         },
       }),
@@ -115,23 +114,6 @@ const injectedRtkApi = api.injectEndpoints({
         body: queryArg.updateProjectIndicatorRequestPayload,
       }),
     }),
-    listProjectMetrics: build.query<ListProjectMetricsApiResponse, ListProjectMetricsApiArg>({
-      query: (queryArg) => ({ url: `/api/v1/accelerator/projects/${queryArg}/reports/metrics` }),
-    }),
-    createProjectMetric: build.mutation<CreateProjectMetricApiResponse, CreateProjectMetricApiArg>({
-      query: (queryArg) => ({
-        url: `/api/v1/accelerator/projects/${queryArg.projectId}/reports/metrics`,
-        method: 'PUT',
-        body: queryArg.createProjectMetricRequestPayload,
-      }),
-    }),
-    updateProjectMetric: build.mutation<UpdateProjectMetricApiResponse, UpdateProjectMetricApiArg>({
-      query: (queryArg) => ({
-        url: `/api/v1/accelerator/projects/${queryArg.projectId}/reports/metrics/${queryArg.metricId}`,
-        method: 'POST',
-        body: queryArg.updateProjectMetricRequestPayload,
-      }),
-    }),
     updateProjectIndicatorTarget: build.mutation<
       UpdateProjectIndicatorTargetApiResponse,
       UpdateProjectIndicatorTargetApiArg
@@ -155,38 +137,6 @@ const injectedRtkApi = api.injectEndpoints({
     getProjectIndicatorTargets: build.query<GetProjectIndicatorTargetsApiResponse, GetProjectIndicatorTargetsApiArg>({
       query: (queryArg) => ({ url: `/api/v1/accelerator/projects/${queryArg}/reports/projectIndicatorTargets` }),
     }),
-    updateProjectMetricTarget: build.mutation<UpdateProjectMetricTargetApiResponse, UpdateProjectMetricTargetApiArg>({
-      query: (queryArg) => ({
-        url: `/api/v1/accelerator/projects/${queryArg.projectId}/reports/projectMetricTarget`,
-        method: 'POST',
-        body: queryArg.updateProjectMetricTargetRequestPayload,
-      }),
-    }),
-    getProjectMetricTargets: build.query<GetProjectMetricTargetsApiResponse, GetProjectMetricTargetsApiArg>({
-      query: (queryArg) => ({ url: `/api/v1/accelerator/projects/${queryArg}/reports/projectMetricTargets` }),
-    }),
-    updateStandardMetricTarget: build.mutation<UpdateStandardMetricTargetApiResponse, UpdateStandardMetricTargetApiArg>(
-      {
-        query: (queryArg) => ({
-          url: `/api/v1/accelerator/projects/${queryArg.projectId}/reports/standardMetricTarget`,
-          method: 'POST',
-          body: queryArg.updateStandardMetricTargetRequestPayload,
-        }),
-      }
-    ),
-    getStandardMetricTargets: build.query<GetStandardMetricTargetsApiResponse, GetStandardMetricTargetsApiArg>({
-      query: (queryArg) => ({ url: `/api/v1/accelerator/projects/${queryArg}/reports/standardMetricTargets` }),
-    }),
-    updateSystemMetricTarget: build.mutation<UpdateSystemMetricTargetApiResponse, UpdateSystemMetricTargetApiArg>({
-      query: (queryArg) => ({
-        url: `/api/v1/accelerator/projects/${queryArg.projectId}/reports/systemMetricTarget`,
-        method: 'POST',
-        body: queryArg.updateSystemMetricTargetRequestPayload,
-      }),
-    }),
-    getSystemMetricTargets: build.query<GetSystemMetricTargetsApiResponse, GetSystemMetricTargetsApiArg>({
-      query: (queryArg) => ({ url: `/api/v1/accelerator/projects/${queryArg}/reports/systemMetricTargets` }),
-    }),
     getAcceleratorReportYears: build.query<GetAcceleratorReportYearsApiResponse, GetAcceleratorReportYearsApiArg>({
       query: (queryArg) => ({ url: `/api/v1/accelerator/projects/${queryArg}/reports/years` }),
     }),
@@ -194,7 +144,6 @@ const injectedRtkApi = api.injectEndpoints({
       query: (queryArg) => ({
         url: `/api/v1/accelerator/projects/${queryArg.projectId}/reports/${queryArg.reportId}`,
         params: {
-          includeMetrics: queryArg.includeMetrics,
           includeIndicators: queryArg.includeIndicators,
         },
       }),
@@ -229,28 +178,6 @@ const injectedRtkApi = api.injectEndpoints({
         url: `/api/v1/accelerator/projects/${queryArg.projectId}/reports/${queryArg.reportId}/indicators/review`,
         method: 'POST',
         body: queryArg.reviewAcceleratorReportIndicatorsRequestPayload,
-      }),
-    }),
-    refreshAcceleratorReportSystemMetrics: build.mutation<
-      RefreshAcceleratorReportSystemMetricsApiResponse,
-      RefreshAcceleratorReportSystemMetricsApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/api/v1/accelerator/projects/${queryArg.projectId}/reports/${queryArg.reportId}/metrics/refresh`,
-        method: 'POST',
-        params: {
-          metrics: queryArg.metrics,
-        },
-      }),
-    }),
-    reviewAcceleratorReportMetrics: build.mutation<
-      ReviewAcceleratorReportMetricsApiResponse,
-      ReviewAcceleratorReportMetricsApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/api/v1/accelerator/projects/${queryArg.projectId}/reports/${queryArg.reportId}/metrics/review`,
-        method: 'POST',
-        body: queryArg.reviewAcceleratorReportMetricsRequestPayload,
       }),
     }),
     uploadAcceleratorReportPhoto: build.mutation<
@@ -322,8 +249,6 @@ export type ListAcceleratorReportsApiArg = {
   year?: number;
   includeArchived?: boolean;
   includeFuture?: boolean;
-  /** Use includeIndicators instead */
-  includeMetrics?: boolean;
   includeIndicators?: boolean;
 };
 export type UpdateAutoCalculatedIndicatorTargetApiResponse =
@@ -394,22 +319,6 @@ export type UpdateProjectIndicatorApiArg = {
   projectId: number;
   updateProjectIndicatorRequestPayload: UpdateProjectIndicatorRequestPayload;
 };
-export type ListProjectMetricsApiResponse =
-  /** status 200 The requested operation succeeded. */ ListProjectMetricsResponsePayload;
-export type ListProjectMetricsApiArg = number;
-export type CreateProjectMetricApiResponse =
-  /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
-export type CreateProjectMetricApiArg = {
-  projectId: number;
-  createProjectMetricRequestPayload: CreateProjectMetricRequestPayload;
-};
-export type UpdateProjectMetricApiResponse =
-  /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
-export type UpdateProjectMetricApiArg = {
-  metricId: number;
-  projectId: number;
-  updateProjectMetricRequestPayload: UpdateProjectMetricRequestPayload;
-};
 export type UpdateProjectIndicatorTargetApiResponse =
   /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
 export type UpdateProjectIndicatorTargetApiArg = {
@@ -425,33 +334,6 @@ export type UpdateProjectIndicatorBaselineTargetApiArg = {
 export type GetProjectIndicatorTargetsApiResponse =
   /** status 200 The requested operation succeeded. */ GetProjectIndicatorTargetsResponsePayload;
 export type GetProjectIndicatorTargetsApiArg = number;
-export type UpdateProjectMetricTargetApiResponse =
-  /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
-export type UpdateProjectMetricTargetApiArg = {
-  projectId: number;
-  updateProjectMetricTargetRequestPayload: UpdateProjectMetricTargetRequestPayload;
-};
-export type GetProjectMetricTargetsApiResponse =
-  /** status 200 The requested operation succeeded. */ GetProjectMetricTargetsResponsePayload;
-export type GetProjectMetricTargetsApiArg = number;
-export type UpdateStandardMetricTargetApiResponse =
-  /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
-export type UpdateStandardMetricTargetApiArg = {
-  projectId: number;
-  updateStandardMetricTargetRequestPayload: UpdateStandardMetricTargetRequestPayload;
-};
-export type GetStandardMetricTargetsApiResponse =
-  /** status 200 The requested operation succeeded. */ GetStandardMetricTargetsResponsePayload;
-export type GetStandardMetricTargetsApiArg = number;
-export type UpdateSystemMetricTargetApiResponse =
-  /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
-export type UpdateSystemMetricTargetApiArg = {
-  projectId: number;
-  updateSystemMetricTargetRequestPayload: UpdateSystemMetricTargetRequestPayload;
-};
-export type GetSystemMetricTargetsApiResponse =
-  /** status 200 The requested operation succeeded. */ GetSystemMetricTargetsResponsePayload;
-export type GetSystemMetricTargetsApiArg = number;
 export type GetAcceleratorReportYearsApiResponse =
   /** status 200 The requested operation succeeded. */ GetAcceleratorReportYearsResponsePayload;
 export type GetAcceleratorReportYearsApiArg = number;
@@ -460,8 +342,6 @@ export type GetAcceleratorReportApiResponse =
 export type GetAcceleratorReportApiArg = {
   projectId: number;
   reportId: number;
-  /** Use includeIndicators instead */
-  includeMetrics?: boolean;
   includeIndicators?: boolean;
 };
 export type UpdateAcceleratorReportValuesApiResponse =
@@ -491,27 +371,6 @@ export type ReviewAcceleratorReportIndicatorsApiArg = {
   projectId: number;
   reportId: number;
   reviewAcceleratorReportIndicatorsRequestPayload: ReviewAcceleratorReportIndicatorsRequestPayload;
-};
-export type RefreshAcceleratorReportSystemMetricsApiResponse =
-  /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
-export type RefreshAcceleratorReportSystemMetricsApiArg = {
-  projectId: number;
-  reportId: number;
-  metrics: (
-    | 'Seeds Collected'
-    | 'Seedlings'
-    | 'Trees Planted'
-    | 'Species Planted'
-    | 'Hectares Planted'
-    | 'Survival Rate'
-  )[];
-};
-export type ReviewAcceleratorReportMetricsApiResponse =
-  /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
-export type ReviewAcceleratorReportMetricsApiArg = {
-  projectId: number;
-  reportId: number;
-  reviewAcceleratorReportMetricsRequestPayload: ReviewAcceleratorReportMetricsRequestPayload;
 };
 export type UploadAcceleratorReportPhotoApiResponse = /** status 200 OK */ UploadAcceleratorReportPhotoResponsePayload;
 export type UploadAcceleratorReportPhotoApiArg = {
@@ -655,50 +514,6 @@ export type ReportProjectIndicatorPayload = {
   unit?: string;
   value?: number;
 };
-export type ReportProjectMetricPayload = {
-  component: 'Project Objectives' | 'Climate' | 'Community' | 'Biodiversity';
-  description?: string;
-  id: number;
-  isPublishable: boolean;
-  name: string;
-  progressNotes?: string;
-  projectsComments?: string;
-  reference: string;
-  status?: 'Achieved' | 'On-Track' | 'Unlikely' | 'Off-Track';
-  target?: number;
-  type: 'Process' | 'Output' | 'Outcome' | 'Goal';
-  unit?: string;
-  value?: number;
-};
-export type ReportStandardMetricPayload = {
-  component: 'Project Objectives' | 'Climate' | 'Community' | 'Biodiversity';
-  description?: string;
-  id: number;
-  isPublishable: boolean;
-  name: string;
-  progressNotes?: string;
-  projectsComments?: string;
-  reference: string;
-  status?: 'Achieved' | 'On-Track' | 'Unlikely' | 'Off-Track';
-  target?: number;
-  type: 'Process' | 'Output' | 'Outcome' | 'Goal';
-  value?: number;
-};
-export type ReportSystemMetricPayload = {
-  component: 'Project Objectives' | 'Climate' | 'Community' | 'Biodiversity';
-  description?: string;
-  isPublishable: boolean;
-  metric: 'Seeds Collected' | 'Seedlings' | 'Trees Planted' | 'Species Planted' | 'Hectares Planted' | 'Survival Rate';
-  overrideValue?: number;
-  progressNotes?: string;
-  projectsComments?: string;
-  reference: string;
-  status?: 'Achieved' | 'On-Track' | 'Unlikely' | 'Off-Track';
-  systemTime?: string;
-  systemValue?: number;
-  target?: number;
-  type: 'Process' | 'Output' | 'Outcome' | 'Goal';
-};
 export type AcceleratorReportPayload = {
   achievements: string[];
   additionalComments?: string;
@@ -717,18 +532,12 @@ export type AcceleratorReportPayload = {
   photos: ReportPhotoPayload[];
   projectId: number;
   projectIndicators: ReportProjectIndicatorPayload[];
-  /** Use projectIndicators instead */
-  projectMetrics: ReportProjectMetricPayload[];
   quarter?: 'Q1' | 'Q2' | 'Q3' | 'Q4';
-  /** Use commonIndicators instead */
-  standardMetrics: ReportStandardMetricPayload[];
   startDate: string;
   status: 'Not Submitted' | 'Submitted' | 'Approved' | 'Needs Update' | 'Not Needed';
   submittedBy?: number;
   submittedByUser?: SimpleUserPayload;
   submittedTime?: string;
-  /** Use autoCalculatedIndicators instead */
-  systemMetrics: ReportSystemMetricPayload[];
   unpublishedProperties: (
     | 'achievements'
     | 'additionalComments'
@@ -892,36 +701,6 @@ export type CreateProjectIndicatorRequestPayload = {
 export type UpdateProjectIndicatorRequestPayload = {
   indicator: ExistingProjectIndicatorPayload;
 };
-export type ExistingProjectMetricPayload = {
-  component: 'Project Objectives' | 'Climate' | 'Community' | 'Biodiversity';
-  description?: string;
-  id: number;
-  isPublishable: boolean;
-  name: string;
-  projectId: number;
-  reference: string;
-  type: 'Process' | 'Output' | 'Outcome' | 'Goal';
-  unit?: string;
-};
-export type ListProjectMetricsResponsePayload = {
-  metrics: ExistingProjectMetricPayload[];
-  status: SuccessOrError;
-};
-export type NewMetricPayload = {
-  component: 'Project Objectives' | 'Climate' | 'Community' | 'Biodiversity';
-  description?: string;
-  isPublishable: boolean;
-  name: string;
-  reference: string;
-  type: 'Process' | 'Output' | 'Outcome' | 'Goal';
-  unit?: string;
-};
-export type CreateProjectMetricRequestPayload = {
-  metric: NewMetricPayload;
-};
-export type UpdateProjectMetricRequestPayload = {
-  metric: ExistingProjectMetricPayload;
-};
 export type UpdateProjectIndicatorTargetRequestPayload = {
   indicatorId: number;
   target?: number;
@@ -941,48 +720,6 @@ export type ProjectIndicatorTargetsPayload = {
 export type GetProjectIndicatorTargetsResponsePayload = {
   status: SuccessOrError;
   targets: ProjectIndicatorTargetsPayload[];
-};
-export type UpdateProjectMetricTargetRequestPayload = {
-  metricId: number;
-  target?: number;
-  year: number;
-};
-export type ReportProjectMetricTargetPayload = {
-  metricId: number;
-  target?: number;
-  year: number;
-};
-export type GetProjectMetricTargetsResponsePayload = {
-  status: SuccessOrError;
-  targets: ReportProjectMetricTargetPayload[];
-};
-export type UpdateStandardMetricTargetRequestPayload = {
-  metricId: number;
-  target?: number;
-  year: number;
-};
-export type ReportStandardMetricTargetPayload = {
-  metricId: number;
-  target?: number;
-  year: number;
-};
-export type GetStandardMetricTargetsResponsePayload = {
-  status: SuccessOrError;
-  targets: ReportStandardMetricTargetPayload[];
-};
-export type UpdateSystemMetricTargetRequestPayload = {
-  metric: 'Seeds Collected' | 'Seedlings' | 'Trees Planted' | 'Species Planted' | 'Hectares Planted' | 'Survival Rate';
-  target?: number;
-  year: number;
-};
-export type ReportSystemMetricTargetPayload = {
-  metric: 'Seeds Collected' | 'Seedlings' | 'Trees Planted' | 'Species Planted' | 'Hectares Planted' | 'Survival Rate';
-  target?: number;
-  year: number;
-};
-export type GetSystemMetricTargetsResponsePayload = {
-  status: SuccessOrError;
-  targets: ReportSystemMetricTargetPayload[];
 };
 export type ReportYearsPayload = {
   endYear: number;
@@ -1023,27 +760,6 @@ export type ReportProjectIndicatorEntriesPayload = {
   status?: 'Achieved' | 'On-Track' | 'Unlikely' | 'Off-Track';
   value?: number;
 };
-export type ReportProjectMetricEntriesPayload = {
-  id: number;
-  progressNotes?: string;
-  projectsComments?: string;
-  status?: 'Achieved' | 'On-Track' | 'Unlikely' | 'Off-Track';
-  value?: number;
-};
-export type ReportStandardMetricEntriesPayload = {
-  id: number;
-  progressNotes?: string;
-  projectsComments?: string;
-  status?: 'Achieved' | 'On-Track' | 'Unlikely' | 'Off-Track';
-  value?: number;
-};
-export type ReportSystemMetricEntriesPayload = {
-  metric: 'Seeds Collected' | 'Seedlings' | 'Trees Planted' | 'Species Planted' | 'Hectares Planted' | 'Survival Rate';
-  overrideValue?: number;
-  progressNotes?: string;
-  projectsComments?: string;
-  status?: 'Achieved' | 'On-Track' | 'Unlikely' | 'Off-Track';
-};
 export type UpdateAcceleratorReportValuesRequestPayload = {
   achievements: string[];
   additionalComments?: string;
@@ -1053,22 +769,11 @@ export type UpdateAcceleratorReportValuesRequestPayload = {
   financialSummaries?: string;
   highlights?: string;
   projectIndicators?: ReportProjectIndicatorEntriesPayload[];
-  /** Use projectIndicators instead */
-  projectMetrics?: ReportProjectMetricEntriesPayload[];
-  /** Use commonIndicators instead */
-  standardMetrics?: ReportStandardMetricEntriesPayload[];
-  /** Use autoCalculatedIndicators instead */
-  systemMetrics?: ReportSystemMetricEntriesPayload[];
 };
 export type ReviewAcceleratorReportIndicatorsRequestPayload = {
   autoCalculatedIndicators: ReportAutoCalculatedIndicatorEntriesPayload[];
   commonIndicators: ReportCommonIndicatorEntriesPayload[];
   projectIndicators: ReportProjectIndicatorEntriesPayload[];
-};
-export type ReviewAcceleratorReportMetricsRequestPayload = {
-  projectMetrics: ReportProjectMetricEntriesPayload[];
-  standardMetrics: ReportStandardMetricEntriesPayload[];
-  systemMetrics: ReportSystemMetricEntriesPayload[];
 };
 export type UploadAcceleratorReportPhotoResponsePayload = {
   fileId: number;
@@ -1111,23 +816,10 @@ export const {
   useLazyListProjectIndicatorsQuery,
   useCreateProjectIndicatorMutation,
   useUpdateProjectIndicatorMutation,
-  useListProjectMetricsQuery,
-  useLazyListProjectMetricsQuery,
-  useCreateProjectMetricMutation,
-  useUpdateProjectMetricMutation,
   useUpdateProjectIndicatorTargetMutation,
   useUpdateProjectIndicatorBaselineTargetMutation,
   useGetProjectIndicatorTargetsQuery,
   useLazyGetProjectIndicatorTargetsQuery,
-  useUpdateProjectMetricTargetMutation,
-  useGetProjectMetricTargetsQuery,
-  useLazyGetProjectMetricTargetsQuery,
-  useUpdateStandardMetricTargetMutation,
-  useGetStandardMetricTargetsQuery,
-  useLazyGetStandardMetricTargetsQuery,
-  useUpdateSystemMetricTargetMutation,
-  useGetSystemMetricTargetsQuery,
-  useLazyGetSystemMetricTargetsQuery,
   useGetAcceleratorReportYearsQuery,
   useLazyGetAcceleratorReportYearsQuery,
   useGetAcceleratorReportQuery,
@@ -1135,8 +827,6 @@ export const {
   useUpdateAcceleratorReportValuesMutation,
   useRefreshAcceleratorReportAutoCalculatedIndicatorsMutation,
   useReviewAcceleratorReportIndicatorsMutation,
-  useRefreshAcceleratorReportSystemMetricsMutation,
-  useReviewAcceleratorReportMetricsMutation,
   useUploadAcceleratorReportPhotoMutation,
   useDeleteAcceleratorReportPhotoMutation,
   useGetAcceleratorReportPhotoQuery,
