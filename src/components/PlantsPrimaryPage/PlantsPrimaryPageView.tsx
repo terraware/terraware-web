@@ -10,11 +10,9 @@ import Link from 'src/components/common/Link';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
-import { useLocalization, useOrganization } from 'src/providers';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
-import { requestProjects } from 'src/redux/features/projects/projectsThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
 
@@ -72,10 +70,7 @@ export default function PlantsPrimaryPageView({
   const { isDesktop, isMobile } = useDeviceInfo();
   const contentRef = useRef(null);
   const { isAcceleratorRoute } = useAcceleratorConsole();
-  const { selectedOrganization } = useOrganization();
-  const { activeLocale } = useLocalization();
   const projects = useAppSelector(selectProjects);
-  const dispatch = useAppDispatch();
   const { allPlantingSites, isLoading, isInitiated, plantingSite } = usePlantingSiteData();
   const [delayedIsPlantingSiteSet, setDelayedIsPlantingSiteSet] = useState(false);
 
@@ -93,12 +88,6 @@ export default function PlantsPrimaryPageView({
   const isPlantingSiteSet = useMemo(() => {
     return isInitiated && ((hasSites && plantingSiteSelected) || (!hasSites && !plantingSiteSelected));
   }, [isInitiated, hasSites, plantingSiteSelected]);
-
-  useEffect(() => {
-    if (selectedOrganization) {
-      void dispatch(requestProjects(selectedOrganization.id, activeLocale || undefined));
-    }
-  }, [activeLocale, dispatch, selectedOrganization]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
