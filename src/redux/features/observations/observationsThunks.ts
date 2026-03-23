@@ -135,7 +135,7 @@ export const requestPlantingSiteAdHocObservations = createAsyncThunk(
 export const requestPlantingSiteAdHocObservationResults = createAsyncThunk(
   'observations/siteAdHocResults',
   async (request: { plantingSiteId: number }, { rejectWithValue }) => {
-    const response = await ObservationsService.listPlantingSiteObservationResults(request.plantingSiteId);
+    const response = await ObservationsService.listPlantingSiteAdHocObservationResults(request.plantingSiteId);
 
     if (response !== null && response.requestSucceeded && response?.data?.observations !== undefined) {
       return response.data.observations;
