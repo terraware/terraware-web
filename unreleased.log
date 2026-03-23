@@ -1,3 +1,4 @@
+25e705a5f5f8 SW-8223: Improve performance of plants dashboard (#5488)
 83321cf32f72 SW-8120 Remove remaining metric payload usages (#5487)
 8223f1130666 Bump web-components version to fix sass warnings in build (#5482)
 3ddc84c16b9a SW-8223: Improve performance of plants dashboard (#5485)
