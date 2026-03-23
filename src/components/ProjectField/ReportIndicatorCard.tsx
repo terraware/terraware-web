@@ -3,24 +3,30 @@ import React, { useMemo } from 'react';
 import { useTheme } from '@mui/material';
 
 import strings from 'src/strings';
-import { MetricProgress } from 'src/types/AcceleratorProject';
+import { IndicatorProgress } from 'src/types/AcceleratorProject';
 
 import InvertedCard from './InvertedCard';
 
-type ReportMetricCardProps = {
-  metricProgress: MetricProgress[];
-  metricName: MetricProgress['metric'];
+type ReportIndicatorCardProps = {
+  indicatorProgress: IndicatorProgress[];
+  indicatorName: IndicatorProgress['indicator'];
   label: string;
   units?: string;
   formatter?: (value: number | undefined) => string;
 };
 
-const ReportMetricCard = ({ label, metricProgress, metricName, units, formatter }: ReportMetricCardProps) => {
+const ReportIndicatorCard = ({
+  label,
+  indicatorProgress,
+  indicatorName,
+  units,
+  formatter,
+}: ReportIndicatorCardProps) => {
   const theme = useTheme();
 
   const value = useMemo(() => {
-    return metricProgress.find(({ metric }) => metric === metricName)?.progress ?? 0;
-  }, [metricName, metricProgress]);
+    return indicatorProgress.find(({ indicator }) => indicator === indicatorName)?.progress ?? 0;
+  }, [indicatorName, indicatorProgress]);
 
   return (
     <InvertedCard
@@ -34,4 +40,4 @@ const ReportMetricCard = ({ label, metricProgress, metricName, units, formatter 
   );
 };
 
-export default ReportMetricCard;
+export default ReportIndicatorCard;

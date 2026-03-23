@@ -8,7 +8,7 @@ export type CarbonCertifications = AcceleratorProject['carbonCertifications'];
 
 export type LandUseModelType = AcceleratorProject['landUseModelTypes'][0];
 
-export type MetricProgress = AcceleratorProject['metricProgress'][0];
+export type IndicatorProgress = AcceleratorProject['indicatorProgress'][0];
 
 // Types are in the preferred sorting order:
 export const LAND_USE_MODEL_TYPES: LandUseModelType[] = [

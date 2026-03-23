@@ -50,10 +50,6 @@ export type IndicatorProgressPayload = {
     | 'Survival Rate';
   progress: number;
 };
-export type MetricProgressPayload = {
-  metric: 'Seeds Collected' | 'Seedlings' | 'Trees Planted' | 'Species Planted' | 'Hectares Planted' | 'Survival Rate';
-  progress: number;
-};
 export type ProjectAcceleratorDetailsPayload = {
   accumulationRate?: number;
   annualCarbon?: number;
@@ -106,8 +102,6 @@ export type ProjectAcceleratorDetailsPayload = {
   )[];
   maxCarbonAccumulation?: number;
   methodologyNumber?: string;
-  /** Use indicatorProgress instead */
-  metricProgress: MetricProgressPayload[];
   minCarbonAccumulation?: number;
   minProjectArea?: number;
   numCommunities?: number;

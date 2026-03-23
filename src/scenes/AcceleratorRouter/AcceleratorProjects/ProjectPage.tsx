@@ -161,7 +161,7 @@ const ProjectPage = () => {
       carbonCertifications: projectData.acceleratorProject?.carbonCertifications || [],
       landUseModelTypes: projectData.acceleratorProject?.landUseModelTypes || [],
       landUseModelHectares: projectData.acceleratorProject?.landUseModelHectares || {},
-      metricProgress: projectData.acceleratorProject?.metricProgress ?? [],
+      indicatorProgress: projectData.acceleratorProject?.indicatorProgress ?? [],
       sdgList: projectData.acceleratorProject?.sdgList || [],
     };
     const request = dispatch(requestPublishFunderProject(funderProjectDetails));

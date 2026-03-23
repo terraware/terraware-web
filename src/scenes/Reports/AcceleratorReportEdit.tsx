@@ -21,7 +21,6 @@ const AcceleratorReportEditView = (): JSX.Element | null => {
   const getReportResults = useGetAcceleratorReportQuery({
     reportId,
     projectId,
-    includeMetrics: true,
     includeIndicators: true,
   });
   const snackbar = useSnackbar();

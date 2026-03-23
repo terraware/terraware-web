@@ -18,7 +18,7 @@ import ProjectOverviewCard from 'src/components/ProjectField/ProjectOverviewCard
 import ProjectProfileImage from 'src/components/ProjectField/ProjectProfileImage';
 import ProjectScoreLink from 'src/components/ProjectField/ProjectScoreLink';
 import ProjectSdgDisplay from 'src/components/ProjectField/ProjectSdgDisplay';
-import ReportMetricCard from 'src/components/ProjectField/ReportMetricCard';
+import ReportIndicatorCard from 'src/components/ProjectField/ReportIndicatorCard';
 import VotingDecisionLink from 'src/components/ProjectField/VotingDecisionLink';
 import Co2HectareYear from 'src/components/Units/Co2HectareYear';
 import Card from 'src/components/common/Card';
@@ -189,7 +189,7 @@ const ProjectProfileView = ({
     }
   }, [publishedReports]);
 
-  const reportMetricCardFormatter = useCallback(
+  const reportIndicatorCardFormatter = useCallback(
     (value: number | undefined) => (value ? formatNumberScale(value, value < 999 ? 0 : 1) : '0'),
     []
   );
@@ -339,26 +339,26 @@ const ProjectProfileView = ({
           backgroundColor={theme.palette.TwClrBaseGray050}
         />
       </Grid>
-      {projectDetails && (projectDetails.metricProgress || []).length > 0 && (
+      {projectDetails && (projectDetails.indicatorProgress || []).length > 0 && (
         <>
           <Grid container>
-            <ReportMetricCard
+            <ReportIndicatorCard
               label={strings.TOTAL_PLANTED}
-              metricProgress={projectDetails.metricProgress || []}
-              metricName={'Hectares Planted'}
+              indicatorProgress={projectDetails.indicatorProgress || []}
+              indicatorName={'Hectares Planted'}
               units={'ha'}
             />
-            <ReportMetricCard
+            <ReportIndicatorCard
               label={strings.TOTAL_PLANTED}
-              metricProgress={projectDetails.metricProgress || []}
-              metricName={'Trees Planted'}
+              indicatorProgress={projectDetails.indicatorProgress || []}
+              indicatorName={'Trees Planted'}
               units={strings.PLANTS}
-              formatter={reportMetricCardFormatter}
+              formatter={reportIndicatorCardFormatter}
             />
-            <ReportMetricCard
+            <ReportIndicatorCard
               label={strings.TOTAL_PLANTED}
-              metricProgress={projectDetails.metricProgress || []}
-              metricName={'Species Planted'}
+              indicatorProgress={projectDetails.indicatorProgress || []}
+              indicatorName={'Species Planted'}
               units={strings.SPECIES}
             />
           </Grid>
