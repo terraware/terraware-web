@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react';
 
-import { Observation, ObservationResultsPayload, ObservationSummary } from 'src/types/Observations';
+import { ObservationResultsPayload, ObservationSummary } from 'src/types/Observations';
 import { PlantingSite, PlantingSiteReportedPlants } from 'src/types/Tracking';
 
 export type PlantingSiteData = {
@@ -13,15 +13,7 @@ export type PlantingSiteData = {
   plantingSiteReportedPlants?: PlantingSiteReportedPlants;
   setSelectedPlantingSite: (plantingSiteId?: number) => void;
 
-  adHocObservations?: Observation[];
-  adHocObservationResults?: ObservationResultsPayload[];
-  observations?: Observation[];
-  observationResults?: ObservationResultsPayload[];
   observationSummaries?: ObservationSummary[];
-
-  currentObservation?: Observation;
-  latestObservation?: Observation;
-  nextObservation?: Observation;
 
   latestResult?: ObservationResultsPayload;
 

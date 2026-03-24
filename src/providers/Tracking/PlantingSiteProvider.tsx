@@ -2,18 +2,12 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import {
-  selectPlantingSiteAdHocObservationResultsRequest,
-  selectPlantingSiteAdHocObservationsRequest,
   selectPlantingSiteObservationResultsRequest,
   selectPlantingSiteObservationSummaries,
-  selectPlantingSiteObservationsRequest,
 } from 'src/redux/features/observations/observationsSelectors';
 import {
-  requestPlantingSiteAdHocObservationResults,
-  requestPlantingSiteAdHocObservations,
   requestPlantingSiteObservationResults,
   requestPlantingSiteObservationSummaries,
-  requestPlantingSiteObservations,
 } from 'src/redux/features/observations/observationsThunks';
 import {
   selectPlantingSiteList,
@@ -25,7 +19,7 @@ import {
 } from 'src/redux/features/tracking/trackingThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { Observation, ObservationResultsPayload, ObservationSummary } from 'src/types/Observations';
+import { ObservationResultsPayload, ObservationSummary } from 'src/types/Observations';
 import { PlantingSite, PlantingSiteReportedPlants } from 'src/types/Tracking';
 
 import { useLocalization, useOrganization } from '../hooks';
@@ -45,29 +39,18 @@ const PlantingSiteProvider = ({ children }: Props) => {
   const [plantingSite, setPlantingSite] = useState<PlantingSite>();
 
   const [plantingSitesRequestId, setPlantingSitesRequestId] = useState<string>('');
-  const [observationsRequestId, setObservationsRequestId] = useState<string>('');
   const [resultsRequestId, setResultsRequestId] = useState<string>('');
-  const [adHocObservationsRequestId, setAdHocObservationsRequestId] = useState<string>('');
-  const [adHocResultsRequestId, setAdHocResultsRequestId] = useState<string>('');
   const [summariesRequestId, setSummariesRequestId] = useState<string>('');
   const [reportedPlantsRequestId, setReportedPlantsRequestId] = useState<string>('');
 
   const [plantingSites, setPlantingSites] = useState<PlantingSite[]>();
-  const [observations, setObservations] = useState<Observation[]>();
   const [observationResults, setObservationResults] = useState<ObservationResultsPayload[]>();
   const [observationSummaries, setObservationSummaries] = useState<ObservationSummary[]>();
-  const [adHocObservations, setAdHocObservations] = useState<Observation[]>();
-  const [adHocObservationResults, setAdHocObservationResults] = useState<ObservationResultsPayload[]>();
   const [reportedPlants, setReportedPlants] = useState<PlantingSiteReportedPlants>();
   const [previousOrgId, setPreviousOrgId] = useState<number>(-1);
 
   const plantingSitesResponse = useAppSelector(selectPlantingSiteList(plantingSitesRequestId));
-  const observationsResponse = useAppSelector(selectPlantingSiteObservationsRequest(observationsRequestId));
   const resultsResponse = useAppSelector(selectPlantingSiteObservationResultsRequest(resultsRequestId));
-  const adHocObservationsResponse = useAppSelector(
-    selectPlantingSiteAdHocObservationsRequest(adHocObservationsRequestId)
-  );
-  const adHocResultsResponse = useAppSelector(selectPlantingSiteAdHocObservationResultsRequest(adHocResultsRequestId));
   const summariesResponse = useAppSelector(selectPlantingSiteObservationSummaries(summariesRequestId));
   const reportedPlantsResponse = useAppSelector(selectPlantingSiteReportedPlants(reportedPlantsRequestId));
 
@@ -106,11 +89,8 @@ const PlantingSiteProvider = ({ children }: Props) => {
       }
       if (plantingSite !== foundSite) {
         setPlantingSite(foundSite);
-        setObservations(undefined);
         setObservationResults(undefined);
         setObservationSummaries(undefined);
-        setAdHocObservations(undefined);
-        setAdHocObservationResults(undefined);
         setReportedPlants(undefined);
       }
     },
@@ -119,20 +99,10 @@ const PlantingSiteProvider = ({ children }: Props) => {
 
   useEffect(() => {
     if (plantingSite && plantingSite.id !== -1) {
-      const observationsRequest = dispatch(requestPlantingSiteObservations({ plantingSiteId: plantingSite.id }));
       const resultsRequest = dispatch(requestPlantingSiteObservationResults({ plantingSiteId: plantingSite.id }));
-      const adHocObservationsRequest = dispatch(
-        requestPlantingSiteAdHocObservations({ plantingSiteId: plantingSite.id })
-      );
-      const adHocResultsRequest = dispatch(
-        requestPlantingSiteAdHocObservationResults({ plantingSiteId: plantingSite.id })
-      );
       const summariesRequest = dispatch(requestPlantingSiteObservationSummaries(plantingSite.id));
       const reportedPlantsRequest = dispatch(requestPlantingSiteReportedPlants(plantingSite.id));
-      setObservationsRequestId(observationsRequest.requestId);
       setResultsRequestId(resultsRequest.requestId);
-      setAdHocObservationsRequestId(adHocObservationsRequest.requestId);
-      setAdHocResultsRequestId(adHocResultsRequest.requestId);
       setSummariesRequestId(summariesRequest.requestId);
       setReportedPlantsRequestId(reportedPlantsRequest.requestId);
     }
@@ -150,28 +120,10 @@ const PlantingSiteProvider = ({ children }: Props) => {
   }, [plantingSite, plantingSitesResponse, setSelectedPlantingSite]);
 
   useEffect(() => {
-    if (observationsResponse?.status === 'success') {
-      setObservations(observationsResponse.data ?? []);
-    }
-  }, [observationsResponse]);
-
-  useEffect(() => {
     if (resultsResponse?.status === 'success') {
       setObservationResults(resultsResponse.data ?? []);
     }
   }, [resultsResponse]);
-
-  useEffect(() => {
-    if (adHocObservationsResponse?.status === 'success') {
-      setAdHocObservations(adHocObservationsResponse.data ?? []);
-    }
-  }, [adHocObservationsResponse]);
-
-  useEffect(() => {
-    if (adHocResultsResponse?.status === 'success') {
-      setAdHocObservationResults(adHocResultsResponse.data ?? []);
-    }
-  }, [adHocResultsResponse]);
 
   useEffect(() => {
     if (summariesResponse?.status === 'success') {
@@ -196,17 +148,11 @@ const PlantingSiteProvider = ({ children }: Props) => {
   const isLoading = useMemo(() => {
     return (
       plantingSitesResponse?.status === 'pending' ||
-      observationsResponse?.status === 'pending' ||
       resultsResponse?.status === 'pending' ||
-      adHocObservationsResponse?.status === 'pending' ||
-      adHocResultsResponse?.status === 'pending' ||
       summariesResponse?.status === 'pending' ||
       reportedPlantsResponse?.status === 'pending'
     );
   }, [
-    adHocObservationsResponse?.status,
-    adHocResultsResponse?.status,
-    observationsResponse?.status,
     plantingSitesResponse?.status,
     reportedPlantsResponse?.status,
     resultsResponse?.status,
@@ -222,29 +168,6 @@ const PlantingSiteProvider = ({ children }: Props) => {
     );
   }, [observationResults]);
 
-  const latestObservation = useMemo(() => {
-    return observations?.find(
-      (observation) =>
-        (observation.state === 'Completed' || observation.state === 'Abandoned') &&
-        observation.isAdHoc === false &&
-        observation.type === 'Monitoring'
-    );
-  }, [observations]);
-
-  const currentObservation = useMemo(() => {
-    return observations?.find(
-      (observation) =>
-        observation.state === 'InProgress' && observation.isAdHoc === false && observation.type === 'Monitoring'
-    );
-  }, [observations]);
-
-  const nextObservation = useMemo(() => {
-    return observations?.find(
-      (observation) =>
-        observation.state === 'Upcoming' && observation.isAdHoc === false && observation.type === 'Monitoring'
-    );
-  }, [observations]);
-
   const value = useMemo(
     (): PlantingSiteData => ({
       acceleratorOrganizationId,
@@ -252,15 +175,8 @@ const PlantingSiteProvider = ({ children }: Props) => {
       allPlantingSites,
       plantingSite,
       plantingSiteReportedPlants: reportedPlants,
-      adHocObservations,
-      adHocObservationResults,
-      observations,
-      observationResults,
       observationSummaries,
       setSelectedPlantingSite,
-      currentObservation,
-      latestObservation,
-      nextObservation,
       latestResult,
       isLoading,
       isInitiated: plantingSitesResponse?.status === 'success',
@@ -271,15 +187,8 @@ const PlantingSiteProvider = ({ children }: Props) => {
       allPlantingSites,
       plantingSite,
       reportedPlants,
-      adHocObservations,
-      adHocObservationResults,
-      observations,
-      observationResults,
       observationSummaries,
       setSelectedPlantingSite,
-      currentObservation,
-      latestObservation,
-      nextObservation,
       latestResult,
       isLoading,
       plantingSitesResponse,
