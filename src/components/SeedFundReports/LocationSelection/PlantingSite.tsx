@@ -12,6 +12,9 @@ import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import Table from 'src/components/common/table';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
+import { selectPlantingSiteObservationsRequest } from 'src/redux/features/observations/observationsSelectors';
+import { requestPlantingSiteObservations } from 'src/redux/features/observations/observationsThunks';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { ReportPlantingSite } from 'src/types/Report';
 import { GrowthForm } from 'src/types/Species';
@@ -49,15 +52,35 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
   const { editable, location, onUpdateLocation, validate } = props;
 
   const { isMobile } = useDeviceInfo();
+  const dispatch = useAppDispatch();
 
-  const {
-    plantingSite,
-    setSelectedPlantingSite,
-    plantingSiteReportedPlants,
-    currentObservation,
-    latestResult,
-    nextObservation,
-  } = usePlantingSiteData();
+  const { plantingSite, setSelectedPlantingSite, plantingSiteReportedPlants, latestResult } = usePlantingSiteData();
+
+  const [observationsRequestId, setObservationsRequestId] = useState('');
+  const observationsResponse = useAppSelector(selectPlantingSiteObservationsRequest(observationsRequestId));
+
+  useEffect(() => {
+    if (plantingSite && plantingSite.id !== -1) {
+      const request = dispatch(requestPlantingSiteObservations({ plantingSiteId: plantingSite.id }));
+      setObservationsRequestId(request.requestId);
+    }
+  }, [dispatch, plantingSite]);
+
+  const currentObservation = useMemo(() => {
+    const observations = observationsResponse?.status === 'success' ? observationsResponse.data : undefined;
+    return observations?.find(
+      (observation) =>
+        observation.state === 'InProgress' && observation.isAdHoc === false && observation.type === 'Monitoring'
+    );
+  }, [observationsResponse]);
+
+  const nextObservation = useMemo(() => {
+    const observations = observationsResponse?.status === 'success' ? observationsResponse.data : undefined;
+    return observations?.find(
+      (observation) =>
+        observation.state === 'Upcoming' && observation.isAdHoc === false && observation.type === 'Monitoring'
+    );
+  }, [observationsResponse]);
 
   useEffect(() => {
     if (!plantingSite) {
