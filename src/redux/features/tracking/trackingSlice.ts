@@ -8,7 +8,6 @@ import {
   requestListPlantingSites,
   requestListProjectPlantingSites,
   requestOnePlantingSite,
-  requestOrganizationReportedPlants,
   requestPlantingSiteReportedPlants,
 } from './trackingThunks';
 
@@ -162,16 +161,6 @@ export const plantingSiteReportedPlantsSlice = createSlice({
   },
 });
 
-const initialStateOrganizationReportedPlants: { [key: string]: StatusT<PlantingSiteReportedPlants[]> } = {};
-export const organizationReportedPlantsSlice = createSlice({
-  name: 'organizationReportedPlantsSlice',
-  initialState: initialStateOrganizationReportedPlants,
-  reducers: {},
-  extraReducers: (builder) => {
-    buildReducers(requestOrganizationReportedPlants)(builder);
-  },
-});
-
 const trackingReducers = {
   tracking: trackingSlice.reducer,
   plantingSitesSearchResults: plantingSitesSearchResultsSlice.reducer,
@@ -180,7 +169,6 @@ const trackingReducers = {
   plantingSite: plantingSiteSlice.reducer,
   plantingSiteList: plantingSiteListSlice.reducer,
   plantingSiteReportedPlants: plantingSiteReportedPlantsSlice.reducer,
-  organizationReportedPlants: organizationReportedPlantsSlice.reducer,
   projectPlantingSites: projectPlantingSiteListSlice.reducer,
 };
 

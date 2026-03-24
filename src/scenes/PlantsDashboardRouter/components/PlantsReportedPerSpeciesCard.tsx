@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useMemo } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Icon, Tooltip } from '@terraware/web-components';
@@ -7,11 +7,12 @@ import { ChartTypeRegistry, TooltipItem } from 'chart.js';
 import BarChart from 'src/components/common/Chart/BarChart';
 import PieChart from 'src/components/common/Chart/PieChart';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
-import { useProjectPlantings } from 'src/hooks/useProjectPlantings';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
-import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
-import { selectPlantingsForSite } from 'src/redux/features/plantings/plantingsSelectors';
-import { useAppSelector } from 'src/redux/store';
+import {
+  useGetPlantingSiteReportedPlantsQuery,
+  useLazyGetPlantingSiteQuery,
+  useListPlantingSiteReportedPlantsQuery,
+} from 'src/queries/generated/plantingSites';
 import strings from 'src/strings';
 import { truncate } from 'src/utils/text';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
@@ -20,24 +21,29 @@ const MAX_SPECIES_NAME_LENGTH = 20;
 
 type PlantsReportedPerSpeciesCardProps = {
   newVersion?: boolean;
+  plantingSiteId?: number;
   projectId?: number;
 };
 
 export default function PlantsReportedPerSpeciesCard({
   newVersion,
+  plantingSiteId,
   projectId,
 }: PlantsReportedPerSpeciesCardProps): JSX.Element | undefined {
-  const { plantingSite } = usePlantingSiteData();
+  const [getPlantingSite, getPlantingSiteResponse] = useLazyGetPlantingSiteQuery();
+  const plantingSite = useMemo(() => getPlantingSiteResponse.data?.site, [getPlantingSiteResponse]);
 
-  if (projectId && plantingSite?.id === -1) {
-    return <RolledUpCard projectId={projectId} />;
-  }
+  useEffect(() => {
+    if (plantingSiteId) {
+      void getPlantingSite(plantingSiteId, true);
+    }
+  }, [getPlantingSite, plantingSiteId]);
 
-  if (!plantingSite) {
+  if (projectId && plantingSiteId === undefined) {
     return <RolledUpCard projectId={projectId} />;
-  } else if (!plantingSite.strata?.length) {
+  } else if (plantingSite && !plantingSite?.strata?.length) {
     return <SiteWithoutStrataCard plantingSiteId={plantingSite.id} newVersion={newVersion} />;
-  } else {
+  } else if (plantingSite && plantingSite?.strata?.length) {
     return <SiteWithStrataCard plantingSiteId={plantingSite.id} newVersion={newVersion} />;
   }
 }
@@ -85,9 +91,11 @@ const calculateSpeciesQuantities = (plantings: { plants: number; scientificName:
   return speciesQuantities;
 };
 
-const RolledUpCard = ({ projectId }: { projectId?: number }): JSX.Element => {
-  const { reportedPlants } = useProjectPlantings(projectId);
+const RolledUpCard = ({ projectId }: { projectId: number }): JSX.Element => {
   const { species: orgSpecies } = useSpeciesData();
+
+  const listReportedPlantsResponse = useListPlantingSiteReportedPlantsQuery({ projectId });
+  const reportedPlants = useMemo(() => listReportedPlantsResponse.data?.sites ?? [], [listReportedPlantsResponse]);
 
   const speciesQuantities = useMemo(() => {
     const transformedPlantings = reportedPlants
@@ -118,15 +126,17 @@ const SiteWithoutStrataCard = ({
   plantingSiteId: number;
   newVersion?: boolean;
 }): JSX.Element => {
-  const plantings = useAppSelector((state) => selectPlantingsForSite(state, plantingSiteId));
+  const plantingsResponse = useGetPlantingSiteReportedPlantsQuery(plantingSiteId);
+  const speciesPlantings = useMemo(() => plantingsResponse.data?.site?.species ?? [], [plantingsResponse.data?.site]);
+  const { species: orgSpecies } = useSpeciesData();
 
   const speciesQuantities = useMemo(() => {
-    const transformedPlantings = plantings?.map((planting) => ({
-      plants: Number(planting['numPlants(raw)']),
-      scientificName: planting.species.scientificName,
+    const transformedPlantings = speciesPlantings?.map((planting) => ({
+      plants: planting.totalPlants,
+      scientificName: orgSpecies.find((species) => planting.id === species.id)?.scientificName ?? '',
     }));
     return calculateSpeciesQuantities(transformedPlantings, newVersion);
-  }, [plantings, newVersion]);
+  }, [speciesPlantings, newVersion, orgSpecies]);
 
   const labels = useMemo(
     () => Object.keys(speciesQuantities).map((name) => truncate(name, MAX_SPECIES_NAME_LENGTH)),
@@ -154,7 +164,11 @@ const SiteWithStrataCard = ({
   newVersion?: boolean;
   organizationId?: number;
 }): JSX.Element => {
-  const { plantingSiteReportedPlants } = usePlantingSiteData();
+  const plantingSiteReportedPlantsResponse = useGetPlantingSiteReportedPlantsQuery(plantingSiteId);
+  const plantingSiteReportedPlants = useMemo(
+    () => plantingSiteReportedPlantsResponse.data?.site,
+    [plantingSiteReportedPlantsResponse]
+  );
   const { species: orgSpecies } = useSpeciesData();
 
   const speciesQuantities = useMemo(() => {

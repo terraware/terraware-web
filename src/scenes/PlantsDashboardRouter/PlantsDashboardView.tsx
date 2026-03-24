@@ -13,7 +13,6 @@ import useObservation from 'src/hooks/useObservation';
 import { useOrganization } from 'src/providers';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { useListObservationSummariesQuery } from 'src/queries/generated/observations';
-import { useAppDispatch } from 'src/redux/store';
 import SimplePlantingSiteMap from 'src/scenes/PlantsDashboardRouter/components/SimplePlantingSiteMap';
 import strings from 'src/strings';
 import { isAfter } from 'src/utils/dateUtils';
@@ -36,7 +35,6 @@ export default function PlantsDashboardView({
 }: PlantsDashboardViewProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { isMobile } = useDeviceInfo();
-  const dispatch = useAppDispatch();
   const [plantsDashboardPreferences, setPlantsDashboardPreferences] = useState<Record<string, unknown>>();
   const theme = useTheme();
   const { isAcceleratorRoute } = useAcceleratorConsole();
@@ -107,7 +105,6 @@ export default function PlantsDashboardView({
     }
   }, [
     acceleratorOrganizationId,
-    dispatch,
     isAcceleratorRoute,
     organizationId,
     selectedOrganization?.id,
@@ -201,7 +198,7 @@ export default function PlantsDashboardView({
         </Box>
       </Grid>
       <Grid item xs={12}>
-        <PlantsAndSpeciesCard projectId={projectId} />
+        <PlantsAndSpeciesCard plantingSiteId={plantingSite?.id} projectId={projectId} />
       </Grid>
     </>
   );

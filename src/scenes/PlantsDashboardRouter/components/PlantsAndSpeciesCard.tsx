@@ -1,4 +1,4 @@
-import React, { type JSX, useMemo } from 'react';
+import React, { type JSX, useEffect, useMemo } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Icon, Tooltip } from '@terraware/web-components';
@@ -7,47 +7,83 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import Card from 'src/components/common/Card';
 import ProgressChart from 'src/components/common/Chart/ProgressChart';
 import FormattedNumber from 'src/components/common/FormattedNumber';
-import { useProjectPlantings } from 'src/hooks/useProjectPlantings';
-import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
-import strings from 'src/strings';
+import { useLocalization } from 'src/providers';
+import {
+  useLazyGetPlantingSiteQuery,
+  useLazyGetPlantingSiteReportedPlantsQuery,
+  useLazyListPlantingSiteReportedPlantsQuery,
+  useLazyListPlantingSitesQuery,
+} from 'src/queries/generated/plantingSites';
 import { PlantingSite } from 'src/types/Tracking';
 
 import NumberOfSpeciesPlantedCard from './NumberOfSpeciesPlantedCard';
 import PlantsReportedPerSpeciesCard from './PlantsReportedPerSpeciesCard';
 
-export default function PlantsAndSpeciesCard({ projectId }: { projectId?: number }): JSX.Element {
+export default function PlantsAndSpeciesCard({
+  plantingSiteId,
+  projectId,
+}: {
+  plantingSiteId?: number;
+  projectId?: number;
+}): JSX.Element {
   const theme = useTheme();
+  const { strings } = useLocalization();
   const { isDesktop } = useDeviceInfo();
 
-  const { plantingSiteReportedPlants } = usePlantingSiteData();
-  const { plantingSite, allPlantingSites } = usePlantingSiteData();
-  const { reportedPlants } = useProjectPlantings(projectId);
-  const separatorStyles = {
-    width: '1px',
-    height: 'auto',
-    backgroundColor: theme.palette.TwClrBrdrTertiary,
-    marginRight: '16px',
-    marginLeft: '16px',
-  };
+  const [listPlantingSites, listPlantingSitesResponse] = useLazyListPlantingSitesQuery();
+  const [getPlantingSite, getPlantingSiteResponse] = useLazyGetPlantingSiteQuery();
+  const [listPlantingSiteReportedPlants, listPlantingSiteReportedPlantsResponse] =
+    useLazyListPlantingSiteReportedPlantsQuery();
+  const [getPlantingSiteReportedPlants, getPlantingSiteReportedPlantsResponse] =
+    useLazyGetPlantingSiteReportedPlantsQuery();
+
+  useEffect(() => {
+    if (plantingSiteId) {
+      void getPlantingSite(plantingSiteId, true);
+      void getPlantingSiteReportedPlants(plantingSiteId, true);
+    } else if (projectId) {
+      void listPlantingSites({ projectId }, true);
+      void listPlantingSiteReportedPlants({ projectId }, true);
+    }
+  }, [
+    getPlantingSite,
+    getPlantingSiteReportedPlants,
+    listPlantingSiteReportedPlants,
+    listPlantingSites,
+    plantingSiteId,
+    projectId,
+  ]);
+
+  const plantingSite = useMemo(() => getPlantingSiteResponse.data?.site, [getPlantingSiteResponse]);
+
+  const projectPlantingSites = useMemo(
+    () => listPlantingSitesResponse.data?.sites ?? [],
+    [listPlantingSitesResponse.data?.sites]
+  );
+
+  const plantingSiteReportedPlants = useMemo(
+    () => getPlantingSiteReportedPlantsResponse.data?.site,
+    [getPlantingSiteReportedPlantsResponse]
+  );
+
+  const projectReportedPlants = useMemo(
+    () => listPlantingSiteReportedPlantsResponse.data?.sites ?? [],
+    [listPlantingSiteReportedPlantsResponse]
+  );
 
   const projectTotalSpecies = useMemo(() => {
     const allSpeciesIds = new Set();
-    for (const site of reportedPlants) {
+    for (const site of projectReportedPlants) {
       for (const species of site.species) {
         allSpeciesIds.add(species.id);
       }
     }
     return allSpeciesIds.size;
-  }, [reportedPlants]);
-
-  const plantingSites = useMemo(
-    () => allPlantingSites?.filter((ps) => ps.projectId === projectId),
-    [allPlantingSites, projectId]
-  );
+  }, [projectReportedPlants]);
 
   const totalAreaRolledUp = useMemo(() => {
-    return plantingSites?.reduce((sum, site) => sum + (site?.areaHa ?? 0), 0) || 0;
-  }, [plantingSites]);
+    return projectPlantingSites?.reduce((sum, site) => sum + (site?.areaHa ?? 0), 0) || 0;
+  }, [projectPlantingSites]);
 
   const totalArea = useMemo(() => {
     return plantingSite && plantingSite?.id === -1 ? totalAreaRolledUp : plantingSite?.areaHa ?? 0;
@@ -62,18 +98,16 @@ export default function PlantsAndSpeciesCard({ projectId }: { projectId?: number
   };
 
   const projectTotalPlanted =
-    plantingSites?.reduce((total, pPlantingSite) => {
+    projectPlantingSites?.reduce((total, pPlantingSite) => {
       return total + calculatePlantingSitePlantedArea(pPlantingSite);
     }, 0) || 0;
 
   const totalPlantedArea = useMemo(() => {
-    if (plantingSite && plantingSite.id !== -1) {
+    if (plantingSite) {
       return calculatePlantingSitePlantedArea(plantingSite);
-    }
-    if (plantingSite?.id === -1) {
+    } else {
       return projectTotalPlanted;
     }
-    return 0;
   }, [plantingSite, projectTotalPlanted]);
 
   const percentagePlanted = useMemo(() => {
@@ -91,9 +125,9 @@ export default function PlantsAndSpeciesCard({ projectId }: { projectId?: number
               </Typography>
               <Tooltip
                 title={
-                  plantingSite?.id === -1
-                    ? strings.PLANTING_COMPLETE_ROLLED_UP_DASHBOARD_TOOLTIP
-                    : strings.PLANTING_COMPLETE_DASHBOARD_TOOLTIP
+                  plantingSiteId
+                    ? strings.PLANTING_COMPLETE_DASHBOARD_TOOLTIP
+                    : strings.PLANTING_COMPLETE_ROLLED_UP_DASHBOARD_TOOLTIP
                 }
               >
                 <Box display='flex'>
@@ -133,7 +167,7 @@ export default function PlantsAndSpeciesCard({ projectId }: { projectId?: number
           <Box flexBasis='100%'>
             <Box display={'flex'} alignItems={'center'}>
               <Typography fontSize={'24px'} fontWeight={600} paddingRight={1}>
-                {plantingSite && plantingSite?.id !== -1 ? (
+                {plantingSite ? (
                   plantingSiteReportedPlants ? (
                     <FormattedNumber value={plantingSiteReportedPlants.totalPlants} />
                   ) : (
@@ -141,16 +175,14 @@ export default function PlantsAndSpeciesCard({ projectId }: { projectId?: number
                   )
                 ) : (
                   <FormattedNumber
-                    value={reportedPlants.reduce((sum, sitePlants) => sum + sitePlants.totalPlants, 0)}
+                    value={projectReportedPlants.reduce((sum, sitePlants) => sum + sitePlants.totalPlants, 0)}
                   />
                 )}{' '}
                 {strings.PLANTS}
               </Typography>
               <Tooltip
                 title={
-                  plantingSite?.id === -1
-                    ? strings.TOTAL_PLANTS_PLANTED_ROLLED_UP_TOOLTIP
-                    : strings.TOTAL_PLANTS_PLANTED_TOOLTIP
+                  plantingSiteId ? strings.TOTAL_PLANTS_PLANTED_TOOLTIP : strings.TOTAL_PLANTS_PLANTED_ROLLED_UP_TOOLTIP
                 }
               >
                 <Box display='flex'>
@@ -169,7 +201,7 @@ export default function PlantsAndSpeciesCard({ projectId }: { projectId?: number
           <Box>
             <Box display={'flex'} alignItems={'center'}>
               <Typography fontSize={'24px'} fontWeight={600} paddingRight={1}>
-                {plantingSite && plantingSite?.id !== -1 ? (
+                {plantingSite ? (
                   <FormattedNumber value={plantingSiteReportedPlants?.species?.length ?? 0} />
                 ) : (
                   <FormattedNumber value={projectTotalSpecies} />
@@ -178,9 +210,9 @@ export default function PlantsAndSpeciesCard({ projectId }: { projectId?: number
               </Typography>
               <Tooltip
                 title={
-                  plantingSite?.id === -1
-                    ? strings.TOTAL_SPECIES_PLANTED_ROLLED_UP_TOOLTIP
-                    : strings.TOTAL_SPECIES_PLANTED_TOOLTIP
+                  plantingSiteId
+                    ? strings.TOTAL_SPECIES_PLANTED_TOOLTIP
+                    : strings.TOTAL_SPECIES_PLANTED_ROLLED_UP_TOOLTIP
                 }
               >
                 <Box display='flex'>
@@ -199,11 +231,19 @@ export default function PlantsAndSpeciesCard({ projectId }: { projectId?: number
       <Grid item xs={12}>
         <Card radius='8px' style={{ display: 'flex', flexDirection: isDesktop ? 'row' : 'column' }}>
           <Box flexBasis='100%'>
-            <PlantsReportedPerSpeciesCard newVersion projectId={projectId} />
+            <PlantsReportedPerSpeciesCard newVersion plantingSiteId={plantingSite?.id} projectId={projectId} />
           </Box>
-          <div style={separatorStyles} />
+          <div
+            style={{
+              width: '1px',
+              height: 'auto',
+              backgroundColor: theme.palette.TwClrBrdrTertiary,
+              marginRight: '16px',
+              marginLeft: '16px',
+            }}
+          />
           <Box flexBasis='100%'>
-            <NumberOfSpeciesPlantedCard projectId={projectId} />
+            <NumberOfSpeciesPlantedCard plantingSiteId={plantingSite?.id} projectId={projectId} />
           </Box>
         </Card>
       </Grid>

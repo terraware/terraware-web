@@ -1,16 +1,17 @@
-import React, { type JSX, useCallback, useMemo } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Icon, Tooltip } from '@terraware/web-components';
 import { ChartTypeRegistry, TooltipItem } from 'chart.js';
 
 import PieChart from 'src/components/common/Chart/PieChart';
-import { useProjectPlantings } from 'src/hooks/useProjectPlantings';
+import { useLocalization } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
-import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
-import { selectPlantingsForSite } from 'src/redux/features/plantings/plantingsSelectors';
-import { useAppSelector } from 'src/redux/store';
-import strings from 'src/strings';
+import {
+  useGetPlantingSiteReportedPlantsQuery,
+  useLazyGetPlantingSiteQuery,
+  useListPlantingSiteReportedPlantsQuery,
+} from 'src/queries/generated/plantingSites';
 import { conservationCategories } from 'src/types/Species';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
@@ -23,7 +24,8 @@ type CategoryData = {
 const processConservationCategories = (
   categoryTotals: Record<string, number>,
   totalRare: number,
-  totalSpecies: number
+  totalSpecies: number,
+  otherLabel: string
 ): CategoryData => {
   const sortedTopFourCategories = Object.entries(categoryTotals)
     .sort(([, a], [, b]) => b - a)
@@ -42,7 +44,7 @@ const processConservationCategories = (
 
   const rareSpeciesPercentage = totalSpecies > 0 ? Number(((totalRare * 100) / totalSpecies).toFixed(2)) : 0;
   const labels = Object.keys(finalCategoryTotals).map(
-    (ctId) => conservationCategories().find((c) => c.value === ctId)?.label || strings.OTHER
+    (ctId) => conservationCategories().find((c) => c.value === ctId)?.label || otherLabel
   );
   const values = Object.values(finalCategoryTotals).map((cat) =>
     totalSpecies > 0 ? Number(((cat * 100) / totalSpecies).toFixed(2)) : 0
@@ -56,29 +58,38 @@ const processConservationCategories = (
 };
 
 type NumberOfSpeciesPlantedCardProps = {
+  plantingSiteId?: number;
   projectId?: number;
 };
 
 export default function NumberOfSpeciesPlantedCard({
+  plantingSiteId,
   projectId,
 }: NumberOfSpeciesPlantedCardProps): JSX.Element | undefined {
-  const { plantingSite } = usePlantingSiteData();
+  const [getPlantingSite, getPlantingSiteResponse] = useLazyGetPlantingSiteQuery();
+  const plantingSite = useMemo(() => getPlantingSiteResponse.data?.site, [getPlantingSiteResponse]);
 
-  if (projectId && plantingSite?.id === -1) {
-    return <RolledUpCard projectId={projectId} />;
-  }
+  useEffect(() => {
+    if (plantingSiteId) {
+      void getPlantingSite(plantingSiteId, true);
+    }
+  }, [getPlantingSite, plantingSiteId]);
 
-  if (!plantingSite) {
+  if (projectId && plantingSiteId === undefined) {
     return <RolledUpCard projectId={projectId} />;
-  } else if (!plantingSite.strata?.length) {
+  } else if (plantingSite && !plantingSite?.strata?.length) {
     return <SiteWithoutStrataCard plantingSiteId={plantingSite.id} />;
-  } else {
-    return <SiteWithStrataCard />;
+  } else if (plantingSite && plantingSite?.strata?.length) {
+    return <SiteWithStrataCard plantingSiteId={plantingSite.id} />;
   }
 }
+
 const RolledUpCard = ({ projectId }: { projectId?: number }): JSX.Element => {
-  const { reportedPlants } = useProjectPlantings(projectId);
+  const { strings } = useLocalization();
   const { species: orgSpecies } = useSpeciesData();
+
+  const listReportedPlantsResponse = useListPlantingSiteReportedPlantsQuery({ projectId });
+  const reportedPlants = useMemo(() => listReportedPlantsResponse.data?.sites ?? [], [listReportedPlantsResponse]);
 
   const projectTotalSpecies = useMemo(() => {
     const allSpeciesIds = new Set();
@@ -129,40 +140,44 @@ const RolledUpCard = ({ projectId }: { projectId?: number }): JSX.Element => {
       labels: processedLabels,
       values: processedValues,
       rareSpeciesPercentage,
-    } = processConservationCategories(categoryTotals, totalRare, projectTotalSpecies);
+    } = processConservationCategories(categoryTotals, totalRare, projectTotalSpecies, strings.OTHER);
 
     return {
       rareSpecies: rareSpeciesPercentage,
       labels: processedLabels,
       values: processedValues,
     };
-  }, [orgSpecies, projectTotalSpecies, projectSpecies]);
+  }, [orgSpecies, projectSpecies, projectTotalSpecies, strings]);
 
   return <ChartData labels={labels} values={values} rareSpecies={rareSpecies} />;
 };
 
-const SiteWithoutStrataCard = ({
-  plantingSiteId,
-}: NumberOfSpeciesPlantedCardProps & { plantingSiteId: number }): JSX.Element | undefined => {
-  const plantings = useAppSelector((state) => selectPlantingsForSite(state, plantingSiteId));
+const SiteWithoutStrataCard = ({ plantingSiteId }: { plantingSiteId: number }): JSX.Element | undefined => {
+  const { strings } = useLocalization();
+  const plantingsResponse = useGetPlantingSiteReportedPlantsQuery(plantingSiteId);
+  const speciesPlantings = useMemo(() => plantingsResponse.data?.site?.species ?? [], [plantingsResponse.data?.site]);
+  const { species: orgSpecies } = useSpeciesData();
 
   const { labels, values, rareSpecies } = useMemo(() => {
     const speciesNames: Set<string> = new Set();
     const categoryTotals: Record<string, number> = {};
     let totalRare = 0;
 
-    plantings.forEach((planting) => {
-      const { rare, conservationCategory } = planting.species;
+    speciesPlantings.forEach((planting) => {
+      const plantingSpecies = orgSpecies.find((species) => planting.id === species.id);
+      if (plantingSpecies) {
+        const { rare, conservationCategory } = plantingSpecies;
 
-      if (rare === 'true') {
-        totalRare += 1;
-      }
+        if (rare) {
+          totalRare += 1;
+        }
 
-      if (conservationCategory) {
-        if (categoryTotals[conservationCategory]) {
-          categoryTotals[conservationCategory] += 1;
-        } else {
-          categoryTotals[conservationCategory] = 1;
+        if (conservationCategory) {
+          if (categoryTotals[conservationCategory]) {
+            categoryTotals[conservationCategory] += 1;
+          } else {
+            categoryTotals[conservationCategory] = 1;
+          }
         }
       }
     });
@@ -172,20 +187,22 @@ const SiteWithoutStrataCard = ({
       labels: processedLabels,
       values: processedValues,
       rareSpeciesPercentage,
-    } = processConservationCategories(categoryTotals, totalRare, speciesCount);
+    } = processConservationCategories(categoryTotals, totalRare, speciesCount, strings.OTHER);
 
     return {
       rareSpecies: rareSpeciesPercentage,
       labels: processedLabels,
       values: processedValues,
     };
-  }, [plantings]);
+  }, [orgSpecies, speciesPlantings, strings]);
 
   return <ChartData labels={labels} values={values} rareSpecies={rareSpecies} />;
 };
 
-const SiteWithStrataCard = (): JSX.Element => {
-  const { plantingSiteReportedPlants } = usePlantingSiteData();
+const SiteWithStrataCard = ({ plantingSiteId }: { plantingSiteId: number }): JSX.Element => {
+  const { strings } = useLocalization();
+  const plantingsResponse = useGetPlantingSiteReportedPlantsQuery(plantingSiteId);
+  const plantingSiteReportedPlants = useMemo(() => plantingsResponse.data?.site, [plantingsResponse.data?.site]);
   const { species: orgSpecies } = useSpeciesData();
 
   const totalSpecies = useMemo(() => plantingSiteReportedPlants?.species.length ?? 0, [plantingSiteReportedPlants]);
@@ -218,7 +235,7 @@ const SiteWithStrataCard = (): JSX.Element => {
         labels: processedLabels,
         values: processedValues,
         rareSpeciesPercentage,
-      } = processConservationCategories(categoryTotals, totalRare, totalSpecies);
+      } = processConservationCategories(categoryTotals, totalRare, totalSpecies, strings.OTHER);
 
       return {
         rareSpecies: rareSpeciesPercentage,
@@ -227,7 +244,7 @@ const SiteWithStrataCard = (): JSX.Element => {
       };
     }
     return { labels: undefined, values: undefined, rareSpecies: undefined };
-  }, [plantingSiteReportedPlants, orgSpecies, totalSpecies]);
+  }, [plantingSiteReportedPlants, orgSpecies, totalSpecies, strings]);
 
   return <ChartData labels={labels} values={values} rareSpecies={rareSpecies} />;
 };
@@ -239,6 +256,7 @@ type ChartDataProps = {
 };
 
 const ChartData = ({ labels, values, rareSpecies }: ChartDataProps): JSX.Element | undefined => {
+  const { strings } = useLocalization();
   const theme = useTheme();
   const numberFormatter = useNumberFormatter();
 
