@@ -1,8 +1,8 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';
-import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/utils';
+import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import AddLink from 'src/components/common/AddLink';
 import Link from 'src/components/common/Link';
@@ -10,7 +10,12 @@ import PlantingSiteSelector from 'src/components/common/PlantingSiteSelector';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
-import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
+import { useLazyGetObservationResultsQuery } from 'src/queries/generated/observations';
+import {
+  useLazyGetPlantingSiteQuery,
+  useLazyGetPlantingSiteReportedPlantsQuery,
+} from 'src/queries/generated/plantingSites';
+import { useLazySearchPlantingSitesQuery } from 'src/queries/search/plantingSites';
 import SimplePlantingSiteMap from 'src/scenes/PlantsDashboardRouter/components/SimplePlantingSiteMap';
 import strings from 'src/strings';
 import { isAdmin } from 'src/utils/organization';
@@ -26,12 +31,57 @@ export const PlantingSiteStats = () => {
   const navigate = useSyncNavigate();
   const { selectedOrganization } = useOrganization();
   const { token } = useMapboxToken();
-
-  const { allPlantingSites, plantingSite, setSelectedPlantingSite, latestResult, plantingSiteReportedPlants } =
-    usePlantingSiteData();
   const { countries } = useLocalization();
-
   const primaryGridSize = useMemo(() => (isDesktop ? 6 : 12), [isDesktop]);
+
+  const [selectedPlantingSiteId, setSelectedPlantingSiteId] = useState<number>();
+
+  const [search, { data: plantingSites }] = useLazySearchPlantingSitesQuery();
+  const [getPlantingSite, getPlantingSiteResponse] = useLazyGetPlantingSiteQuery();
+  const [getSiteReportedPlants, getSiteReportedPlantsResponse] = useLazyGetPlantingSiteReportedPlantsQuery();
+  const [getObservationResults, getObservationResultsResponse] = useLazyGetObservationResultsQuery();
+
+  const allPlantingSites = useMemo(() => plantingSites ?? [], [plantingSites]);
+  const plantingSite = useMemo(() => getPlantingSiteResponse.data?.site, [getPlantingSiteResponse]);
+  const plantingSiteReportedPlants = useMemo(
+    () => getSiteReportedPlantsResponse.data?.site,
+    [getSiteReportedPlantsResponse]
+  );
+  const latestResult = useMemo(
+    () => getObservationResultsResponse.data?.observation,
+    [getObservationResultsResponse.data?.observation]
+  );
+
+  useEffect(() => {
+    if (selectedOrganization) {
+      void search(
+        {
+          organizationId: selectedOrganization.id,
+        },
+        true
+      );
+    }
+  }, [search, selectedOrganization]);
+
+  useEffect(() => {
+    if (selectedPlantingSiteId) {
+      void getPlantingSite(selectedPlantingSiteId, true);
+      void getSiteReportedPlants(selectedPlantingSiteId, true);
+    }
+  }, [getPlantingSite, getSiteReportedPlants, selectedPlantingSiteId]);
+
+  useEffect(() => {
+    if (plantingSite && plantingSite.latestObservationId) {
+      void getObservationResults({ observationId: plantingSite.latestObservationId }, true);
+    }
+  }, [getObservationResults, plantingSite]);
+
+  useEffect(() => {
+    if (allPlantingSites.length && selectedPlantingSiteId === undefined) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setSelectedPlantingSiteId(allPlantingSites[0].id);
+    }
+  }, [allPlantingSites, selectedPlantingSiteId]);
 
   const plantingCompleteArea = useMemo(() => {
     let total = 0;
@@ -47,13 +97,7 @@ export const PlantingSiteStats = () => {
     return total;
   }, [plantingSite]);
 
-  const latestObservationCompletedTime = useMemo(() => {
-    if (latestResult?.completedTime && plantingSite) {
-      return getDateDisplayValue(latestResult.completedTime, plantingSite.timeZone);
-    } else {
-      return '';
-    }
-  }, [latestResult, plantingSite]);
+  const latestObservationCompletedTime = useMemo(() => plantingSite?.latestObservationCompletedTime, [plantingSite]);
 
   const totalPlants = useMemo(() => plantingSiteReportedPlants?.totalPlants ?? 0, [plantingSiteReportedPlants]);
   const totalSpecies = useMemo(() => plantingSiteReportedPlants?.species?.length ?? 0, [plantingSiteReportedPlants]);
@@ -127,7 +171,7 @@ export const PlantingSiteStats = () => {
             </Typography>
             <PlantingSiteSelector
               onChange={(plantingSiteId) => {
-                setSelectedPlantingSite(plantingSiteId);
+                setSelectedPlantingSiteId(plantingSiteId);
               }}
               hideNoBoundary
             />

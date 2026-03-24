@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useMixpanel } from 'react-mixpanel-browser';
 
 import { Box, Container, Grid, Typography } from '@mui/material';
@@ -17,7 +17,7 @@ import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
-import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
+import { useLazySearchPlantingSitesQuery } from 'src/queries/search/plantingSites';
 import NewApplicationModal from 'src/scenes/ApplicationRouter/NewApplicationModal';
 import CTACard from 'src/scenes/Home/CTACard';
 import MobileAppCard from 'src/scenes/Home/MobileAppCard';
@@ -43,7 +43,9 @@ const TerrawareHomeView = () => {
   const showAcceleratorCard = orgPreferences.showAcceleratorCard !== false;
 
   const [isNewApplicationModalOpen, setIsNewApplicationModalOpen] = useState<boolean>(false);
-  const { allPlantingSites } = usePlantingSiteData();
+  const [search, { data: plantingSites }] = useLazySearchPlantingSitesQuery();
+
+  const allPlantingSites = useMemo(() => plantingSites ?? [], [plantingSites]);
 
   const isLoadingInitialData = useMemo(
     () => orgNurserySummary?.requestSucceeded === undefined || seedBankSummary?.requestSucceeded === undefined,
@@ -84,6 +86,17 @@ const TerrawareHomeView = () => {
       reloadOrgPreferences();
     }
   };
+
+  useEffect(() => {
+    if (selectedOrganization) {
+      void search(
+        {
+          organizationId: selectedOrganization.id,
+        },
+        true
+      );
+    }
+  }, [search, selectedOrganization]);
 
   const organizationStatsCardRows: OrganizationStatsCardRow[] = useMemo(() => {
     if (!activeLocale) {
