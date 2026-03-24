@@ -62,7 +62,7 @@ export default function PlantsDashboardView({
     return latestResult?.observationId;
   }, [latestResult]);
 
-  const { observationResults } = useObservation(latestResultId);
+  const { observationResults } = useObservation(latestResultId, { resultsOnly: true });
 
   const siteBoundaryModifiedTime = useMemo(() => {
     if (plantingSite?.strata?.length) {

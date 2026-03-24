@@ -7,8 +7,13 @@ import {
 import { requestOneObservation, requestOneObservationResult } from 'src/redux/features/observations/observationsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 
-const useObservation = (observationId?: number) => {
+type UseObservationOptions = {
+  resultsOnly?: boolean;
+};
+
+const useObservation = (observationId?: number, options?: UseObservationOptions) => {
   const dispatch = useAppDispatch();
+  const { resultsOnly } = options ?? {};
 
   const [observationRequestId, setObservationRequestId] = useState('');
   const [observationResultsRequestId, setObservationResultsRequestId] = useState('');
@@ -18,12 +23,14 @@ const useObservation = (observationId?: number) => {
 
   const reload = useCallback(() => {
     if (observationId !== undefined) {
-      const observationRequest = dispatch(requestOneObservation({ observationId }));
+      if (!resultsOnly) {
+        const observationRequest = dispatch(requestOneObservation({ observationId }));
+        setObservationRequestId(observationRequest.requestId);
+      }
       const observationResultRequest = dispatch(requestOneObservationResult({ observationId, includePlants: true }));
-      setObservationRequestId(observationRequest.requestId);
       setObservationResultsRequestId(observationResultRequest.requestId);
     }
-  }, [dispatch, observationId]);
+  }, [dispatch, observationId, resultsOnly]);
 
   useEffect(() => {
     reload();
