@@ -27,8 +27,6 @@ export const selectMonitoringPlots = (state: RootState, requestId: string) => st
 
 export const selectPlantingSiteList = (requestId: string) => (state: RootState) => state.plantingSiteList[requestId];
 
-export const selectPlantingSiteHistory = (state: RootState, requestId: string) => state.plantingSiteHistory[requestId];
-
 export const selectPlantingSiteReportedPlants = (requestId: string) => (state: RootState) =>
   state.plantingSiteReportedPlants[requestId];
 
