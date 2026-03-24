@@ -8,12 +8,12 @@ import { requestOneObservation, requestOneObservationResult } from 'src/redux/fe
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 
 type UseObservationOptions = {
-  skipObservation?: boolean;
+  resultsOnly?: boolean;
 };
 
 const useObservation = (observationId?: number, options?: UseObservationOptions) => {
   const dispatch = useAppDispatch();
-  const { skipObservation } = options ?? {};
+  const { resultsOnly } = options ?? {};
 
   const [observationRequestId, setObservationRequestId] = useState('');
   const [observationResultsRequestId, setObservationResultsRequestId] = useState('');
@@ -23,14 +23,14 @@ const useObservation = (observationId?: number, options?: UseObservationOptions)
 
   const reload = useCallback(() => {
     if (observationId !== undefined) {
-      if (!skipObservation) {
+      if (!resultsOnly) {
         const observationRequest = dispatch(requestOneObservation({ observationId }));
         setObservationRequestId(observationRequest.requestId);
       }
       const observationResultRequest = dispatch(requestOneObservationResult({ observationId, includePlants: true }));
       setObservationResultsRequestId(observationResultRequest.requestId);
     }
-  }, [dispatch, observationId, skipObservation]);
+  }, [dispatch, observationId, resultsOnly]);
 
   useEffect(() => {
     reload();
