@@ -1,19 +1,24 @@
 import React, { type JSX, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router';
 
-import { Typography, useTheme } from '@mui/material';
-import { getDateDisplayValue } from '@terraware/web-components/utils';
+import { Box, Typography, useTheme } from '@mui/material';
+import { IconTooltip } from '@terraware/web-components';
+import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/utils';
 
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
+import Card from 'src/components/common/Card';
 import SurvivalRateMessageV2 from 'src/components/SurvivalRate/SurvivalRateMessageV2';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import { getShortDate } from 'src/utils/dateFormatter';
+import { getObservationSpeciesDeadPlantsCount, getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
 
-import AggregatedPlantsStats from '../AggregatedPlantsStats';
+import ObservationDataNumbers from '../../BiomassMeasurements/ObservationDataNumbers';
+import SpeciesSurvivalRateChart from '../SpeciesSurvivalRateChart';
+import SpeciesTotalPlantsChart from '../SpeciesTotalPlantsChart';
 import useObservationSpecies from '../useObservationSpecies';
 import MonitoringPlotList from './MonitoringPlotList';
 
@@ -68,6 +73,9 @@ const StratumDetails = (): JSX.Element => {
   );
 
   const species = useObservationSpecies(stratumResult?.species ?? []);
+  const { isDesktop } = useDeviceInfo();
+  const livePlants = useMemo(() => getObservationSpeciesLivePlantsCount(species), [species]);
+  const deadPlants = useMemo(() => getObservationSpeciesDeadPlantsCount(species), [species]);
 
   const hasObservedPermanentPlots = useMemo(() => {
     const permanentPlots =
@@ -77,18 +85,60 @@ const StratumDetails = (): JSX.Element => {
     return permanentPlots.some((plot) => plot.status === 'Completed');
   }, [stratumResult?.substrata]);
 
+  const items = [
+    { label: strings.TOTAL_PLANTS, tooltip: strings.TOOLTIP_TOTAL_PLANTS, value: stratumResult?.totalPlants },
+    { label: strings.LIVE_PLANTS, tooltip: strings.TOOLTIP_LIVE_PLANTS, value: livePlants },
+    { label: strings.DEAD_PLANTS, tooltip: strings.PLOT_DEAD_PLANTS_TOOLTIP, value: deadPlants },
+    { label: strings.SPECIES, tooltip: strings.PLOT_SPECIES_TOOLTIP, value: stratumResult?.totalSpecies },
+    { label: strings.PLANT_DENSITY, tooltip: strings.PLANT_DENSITY_MISSING_TOOLTIP, value: stratumResult?.plantingDensity },
+    {
+      label: strings.SURVIVAL_RATE,
+      tooltip: strings.SURVIVAL_RATE_COLUMN_TOOLTIP,
+      value: hasObservedPermanentPlots ? `${stratumResult?.survivalRate ?? '-'}%` : '',
+    },
+  ];
+
   return (
     <Page crumbs={crumbs} title={title}>
       <SurvivalRateMessageV2 selectedPlantingSiteId={results?.plantingSiteId} />
-      <AggregatedPlantsStats
-        completedTime={stratumResult?.completedTime}
-        hasObservedPermanentPlots={hasObservedPermanentPlots}
-        totalSpecies={stratumResult?.totalSpecies}
-        plantingDensity={stratumResult?.plantingDensity}
-        survivalRate={stratumResult?.survivalRate}
-        species={species}
-      />
-      <MonitoringPlotList />
+      <Card radius='24px' style={{ width: '100%' }}>
+        <ObservationDataNumbers items={items} isCompleted={!!stratumResult?.completedTime} />
+        <Box display='flex' gap={3} flexDirection={isDesktop ? 'row' : 'column'} flexWrap='wrap' marginBottom={3}>
+          <Box flex={1} minWidth='500px'>
+            <Box display='flex' alignItems='center'>
+              <Typography fontSize='20px' fontWeight={600}>
+                {strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES}
+              </Typography>
+              <IconTooltip title={strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP} />
+            </Box>
+            <Box height='245px'>
+              <SpeciesTotalPlantsChart
+                chartId='observationSpeciesTotalChart'
+                minHeight='245px'
+                species={species}
+                isNotCompleted={!stratumResult?.completedTime}
+              />
+            </Box>
+          </Box>
+          <Box flex={1} minWidth='500px'>
+            <Box display='flex' alignItems='center'>
+              <Typography fontSize='20px' fontWeight={600}>
+                {strings.SURVIVAL_RATE_PER_SPECIES_AS_OF_THIS_OBSERVATION}
+              </Typography>
+              <IconTooltip title={strings.SURVIVAL_RATE_PER_SPECIES_AS_OF_THIS_OBSERVATION_TOOLTIP} />
+            </Box>
+            <Box height='245px'>
+              <SpeciesSurvivalRateChart
+                chartId='observationSurvivalRateChart'
+                species={hasObservedPermanentPlots ? species : []}
+                minHeight='245px'
+                isNotCompleted={!stratumResult?.completedTime}
+              />
+            </Box>
+          </Box>
+        </Box>
+        <MonitoringPlotList />
+      </Card>
     </Page>
   );
 };
