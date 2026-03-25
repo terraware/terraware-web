@@ -82,11 +82,11 @@ export default function PlantsAndSpeciesCard({
   }, [projectReportedPlants]);
 
   const totalAreaRolledUp = useMemo(() => {
-    return projectPlantingSites?.reduce((sum, site) => sum + (site?.areaHa ?? 0), 0) || 0;
+    return projectPlantingSites?.reduce((sum, site) => sum + (site?.areaHa ?? 0), 0) ?? 0;
   }, [projectPlantingSites]);
 
   const totalArea = useMemo(() => {
-    return plantingSite ? plantingSite?.areaHa : totalAreaRolledUp;
+    return (plantingSite ? plantingSite.areaHa : totalAreaRolledUp) ?? 0;
   }, [plantingSite, totalAreaRolledUp]);
 
   const calculatePlantingSitePlantedArea = (iPlantingSite: PlantingSite) => {
