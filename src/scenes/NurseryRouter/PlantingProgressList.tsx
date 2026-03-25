@@ -341,9 +341,9 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
         enableColumnOrdering={true}
         stickyFilters={true}
         storageKey={tableStateStorageKey}
-        enablePagination={false}
+        enablePagination={true}
         enableTopToolbar={true}
-        enableBottomToolbar={false}
+        enableBottomToolbar={true}
         initialSorting={[{ id: hasStrata ? 'substratumName' : 'siteName', desc: false }]}
         tableOptions={{
           state: {

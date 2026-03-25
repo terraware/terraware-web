@@ -589,9 +589,9 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
             enableColumnOrdering={true}
             stickyFilters={true}
             storageKey={TABLE_STATE_STORAGE_KEY}
-            enablePagination={false}
+            enablePagination={true}
             enableTopToolbar={true}
-            enableBottomToolbar={false}
+            enableBottomToolbar={true}
             tableOptions={{
               state: {
                 sorting,

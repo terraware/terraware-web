@@ -645,9 +645,9 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                 enableColumnFilters={true}
                 stickyFilters={true}
                 storageKey={tableStateStorageKey}
-                enablePagination={false}
+                enablePagination={true}
                 enableTopToolbar={true}
-                enableBottomToolbar={false}
+                enableBottomToolbar={true}
                 tableOptions={{
                   state: {
                     rowSelection,
