@@ -198,7 +198,10 @@ export default function PlantsDashboardView({
         </Box>
       </Grid>
       <Grid item xs={12}>
-        <PlantsAndSpeciesCard plantingSiteId={plantingSite?.id} projectId={projectId} />
+        <PlantsAndSpeciesCard
+          plantingSiteId={plantingSite?.id !== -1 ? plantingSite?.id : undefined}
+          projectId={projectId}
+        />
       </Grid>
     </>
   );

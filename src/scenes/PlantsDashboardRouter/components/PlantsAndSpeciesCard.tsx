@@ -86,29 +86,35 @@ export default function PlantsAndSpeciesCard({
   }, [projectPlantingSites]);
 
   const totalArea = useMemo(() => {
-    return (plantingSite ? plantingSite.areaHa : totalAreaRolledUp) ?? 0;
-  }, [plantingSite, totalAreaRolledUp]);
+    if (projectId) {
+      return totalAreaRolledUp;
+    } else {
+      return plantingSite?.areaHa ?? 0;
+    }
+  }, [plantingSite, projectId, totalAreaRolledUp]);
 
-  const calculatePlantingSitePlantedArea = (iPlantingSite: PlantingSite) => {
+  const calculatePlantingSitePlantedArea = (site: PlantingSite) => {
     return (
-      iPlantingSite?.strata
+      site?.strata
         ?.flatMap((stratum) => stratum.substrata)
         ?.reduce((prev, curr) => (curr.plantingCompleted ? +curr.areaHa + prev : prev), 0) ?? 0
     );
   };
 
   const projectTotalPlanted =
-    projectPlantingSites?.reduce((total, pPlantingSite) => {
-      return total + calculatePlantingSitePlantedArea(pPlantingSite);
+    projectPlantingSites?.reduce((total, site) => {
+      return total + calculatePlantingSitePlantedArea(site);
     }, 0) || 0;
 
   const totalPlantedArea = useMemo(() => {
-    if (plantingSite) {
+    if (projectId) {
+      return projectTotalPlanted;
+    } else if (plantingSiteId && plantingSite) {
       return calculatePlantingSitePlantedArea(plantingSite);
     } else {
-      return projectTotalPlanted;
+      return 0;
     }
-  }, [plantingSite, projectTotalPlanted]);
+  }, [plantingSite, plantingSiteId, projectId, projectTotalPlanted]);
 
   const percentagePlanted = useMemo(() => {
     return totalArea > 0 ? Math.round(((totalPlantedArea || 0) / totalArea) * 100) : 0;
@@ -167,16 +173,14 @@ export default function PlantsAndSpeciesCard({
           <Box flexBasis='100%'>
             <Box display={'flex'} alignItems={'center'}>
               <Typography fontSize={'24px'} fontWeight={600} paddingRight={1}>
-                {plantingSite ? (
-                  plantingSiteReportedPlants ? (
-                    <FormattedNumber value={plantingSiteReportedPlants.totalPlants} />
-                  ) : (
-                    ''
-                  )
-                ) : (
+                {projectId ? (
                   <FormattedNumber
                     value={projectReportedPlants.reduce((sum, sitePlants) => sum + sitePlants.totalPlants, 0)}
                   />
+                ) : plantingSiteReportedPlants ? (
+                  <FormattedNumber value={plantingSiteReportedPlants.totalPlants} />
+                ) : (
+                  ''
                 )}{' '}
                 {strings.PLANTS}
               </Typography>
@@ -201,10 +205,10 @@ export default function PlantsAndSpeciesCard({
           <Box>
             <Box display={'flex'} alignItems={'center'}>
               <Typography fontSize={'24px'} fontWeight={600} paddingRight={1}>
-                {plantingSite ? (
-                  <FormattedNumber value={plantingSiteReportedPlants?.species?.length ?? 0} />
-                ) : (
+                {projectId ? (
                   <FormattedNumber value={projectTotalSpecies} />
+                ) : (
+                  <FormattedNumber value={plantingSiteReportedPlants?.species?.length ?? 0} />
                 )}{' '}
                 {strings.SPECIES}
               </Typography>
@@ -231,7 +235,7 @@ export default function PlantsAndSpeciesCard({
       <Grid item xs={12}>
         <Card radius='8px' style={{ display: 'flex', flexDirection: isDesktop ? 'row' : 'column' }}>
           <Box flexBasis='100%'>
-            <PlantsReportedPerSpeciesCard newVersion plantingSiteId={plantingSite?.id} projectId={projectId} />
+            <PlantsReportedPerSpeciesCard newVersion plantingSiteId={plantingSiteId} projectId={projectId} />
           </Box>
           <div
             style={{
@@ -243,7 +247,7 @@ export default function PlantsAndSpeciesCard({
             }}
           />
           <Box flexBasis='100%'>
-            <NumberOfSpeciesPlantedCard plantingSiteId={plantingSite?.id} projectId={projectId} />
+            <NumberOfSpeciesPlantedCard plantingSiteId={plantingSiteId} projectId={projectId} />
           </Box>
         </Card>
       </Grid>
