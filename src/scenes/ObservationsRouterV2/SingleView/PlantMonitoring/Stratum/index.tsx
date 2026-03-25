@@ -7,8 +7,8 @@ import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/ut
 
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
-import Card from 'src/components/common/Card';
 import SurvivalRateMessageV2 from 'src/components/SurvivalRate/SurvivalRateMessageV2';
+import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
@@ -90,7 +90,11 @@ const StratumDetails = (): JSX.Element => {
     { label: strings.LIVE_PLANTS, tooltip: strings.TOOLTIP_LIVE_PLANTS, value: livePlants },
     { label: strings.DEAD_PLANTS, tooltip: strings.PLOT_DEAD_PLANTS_TOOLTIP, value: deadPlants },
     { label: strings.SPECIES, tooltip: strings.PLOT_SPECIES_TOOLTIP, value: stratumResult?.totalSpecies },
-    { label: strings.PLANT_DENSITY, tooltip: strings.PLANT_DENSITY_MISSING_TOOLTIP, value: stratumResult?.plantingDensity },
+    {
+      label: strings.PLANT_DENSITY,
+      tooltip: strings.PLANT_DENSITY_MISSING_TOOLTIP,
+      value: stratumResult?.plantingDensity,
+    },
     {
       label: strings.SURVIVAL_RATE,
       tooltip: strings.SURVIVAL_RATE_COLUMN_TOOLTIP,
