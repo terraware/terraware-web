@@ -8,6 +8,7 @@ import PieChart from 'src/components/common/Chart/PieChart';
 import { useLocalization } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
+import { useListObservationSummariesQuery } from 'src/queries/generated/observations';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 export default function LiveDeadPlantsPerSpeciesCard(): JSX.Element {
@@ -19,8 +20,15 @@ export default function LiveDeadPlantsPerSpeciesCard(): JSX.Element {
       value: string;
     }[]
   >();
-  const { observationSummaries } = usePlantingSiteData();
+  const { plantingSite } = usePlantingSiteData();
   const theme = useTheme();
+
+  const plantingSiteId = plantingSite?.id;
+  const observationSummariesQuery = useListObservationSummariesQuery(
+    { plantingSiteId: plantingSiteId ?? -1 },
+    { skip: !plantingSiteId || plantingSiteId === -1 }
+  );
+  const observationSummaries = observationSummariesQuery.data?.summaries;
   const { strings, activeLocale } = useLocalization();
   const numberFormatter = useNumberFormatter();
 

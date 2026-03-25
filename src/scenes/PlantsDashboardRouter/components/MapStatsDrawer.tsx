@@ -6,7 +6,7 @@ import MapDrawerTable, { MapDrawerTableRow } from 'src/components/MapDrawerTable
 import { MapLayerFeatureId } from 'src/components/NewMap/types';
 import usePlantingSite from 'src/hooks/usePlantingSite';
 import { useLocalization } from 'src/providers';
-import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
+import { useListObservationSummariesQuery } from 'src/queries/generated/observations';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 type MapStatsProperties = {
@@ -32,13 +32,20 @@ const MapStatsDrawer = ({ layerFeatureId, plantingSiteId }: MapStatsDrawerProps)
   const { strings } = useLocalization();
   const numberFormatter = useNumberFormatter();
   const { isLoading, plantingSite, plantingSiteReportedPlants } = usePlantingSite(plantingSiteId);
-  const { observationSummaries } = usePlantingSiteData();
-  const [delayedLoading, setDelayedLoading] = useState(isLoading);
+
+  const observationSummariesQuery = useListObservationSummariesQuery(
+    { plantingSiteId: plantingSiteId ?? -1 },
+    { skip: !plantingSiteId || plantingSiteId === -1 }
+  );
+  const observationSummaries = observationSummariesQuery.data?.summaries;
+
+  const combinedLoading = isLoading || observationSummariesQuery.isFetching;
+  const [delayedLoading, setDelayedLoading] = useState(combinedLoading);
 
   useEffect(() => {
     let timeout: NodeJS.Timeout;
 
-    if (isLoading) {
+    if (combinedLoading) {
       // immediately set to loading
       setDelayedLoading(true);
     } else {
@@ -49,7 +56,7 @@ const MapStatsDrawer = ({ layerFeatureId, plantingSiteId }: MapStatsDrawerProps)
     }
 
     return () => clearTimeout(timeout);
-  }, [isLoading]);
+  }, [combinedLoading]);
 
   const latestSummary = useMemo(
     () => (observationSummaries && observationSummaries.length > 0 ? observationSummaries[0] : undefined),

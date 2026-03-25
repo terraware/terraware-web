@@ -8,6 +8,7 @@ import { MapTooltip, TooltipProperty } from 'src/components/Map/MapRenderUtils';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import MapLegend, { MapLegendGroup } from 'src/components/common/MapLegend';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
+import { useListObservationSummariesQuery } from 'src/queries/generated/observations';
 import { useLazyGetPlantingSiteHistoryQuery } from 'src/queries/generated/plantingSites';
 import { MapService } from 'src/services';
 import strings from 'src/strings';
@@ -24,7 +25,13 @@ export default function StratumLevelDataMap({ plantingSiteId }: StratumLevelData
   const numberFormatter = useNumberFormatter();
   const theme = useTheme();
   const { isDesktop } = useDeviceInfo();
-  const { plantingSite, plantingSiteReportedPlants, observationSummaries, latestResult } = usePlantingSiteData();
+  const { plantingSite, plantingSiteReportedPlants, latestResult } = usePlantingSiteData();
+
+  const observationSummariesQuery = useListObservationSummariesQuery(
+    { plantingSiteId: plantingSiteId ?? -1 },
+    { skip: !plantingSiteId || plantingSiteId === -1 }
+  );
+  const observationSummaries = observationSummariesQuery.data?.summaries;
   const [getPlantingSiteHistory, { data: plantingSiteHistoryData }] = useLazyGetPlantingSiteHistoryQuery();
   const defaultTimeZone = useDefaultTimeZone();
   const timeZone = plantingSite?.timeZone ?? defaultTimeZone.get().id;

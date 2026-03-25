@@ -5,13 +5,21 @@ import { Box, Typography, useTheme } from '@mui/material';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
+import { useListObservationSummariesQuery } from 'src/queries/generated/observations';
 import strings from 'src/strings';
 import { ObservationSpeciesResultsPayload } from 'src/types/Observations';
 
 export default function HighestAndLowestSurvivalRateSpeciesCard(): JSX.Element {
   const theme = useTheme();
-  const { observationSummaries } = usePlantingSiteData();
+  const { plantingSite } = usePlantingSiteData();
   const { species } = useSpeciesData();
+
+  const plantingSiteId = plantingSite?.id;
+  const observationSummariesQuery = useListObservationSummariesQuery(
+    { plantingSiteId: plantingSiteId ?? -1 },
+    { skip: !plantingSiteId || plantingSiteId === -1 }
+  );
+  const observationSummaries = observationSummariesQuery.data?.summaries;
 
   const getSpeciesName = useCallback(
     (observationSpecies: ObservationSpeciesResultsPayload) => {

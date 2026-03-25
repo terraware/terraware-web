@@ -4,12 +4,20 @@ import { Box, Typography, useTheme } from '@mui/material';
 
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
+import { useListObservationSummariesQuery } from 'src/queries/generated/observations';
 import strings from 'src/strings';
 import { StratumObservationSummary } from 'src/types/Observations';
 
 export default function HighestAndLowestSurvivalRateStrataCard(): JSX.Element {
   const theme = useTheme();
-  const { observationSummaries, plantingSite } = usePlantingSiteData();
+  const { plantingSite } = usePlantingSiteData();
+
+  const plantingSiteId = plantingSite?.id;
+  const observationSummariesQuery = useListObservationSummariesQuery(
+    { plantingSiteId: plantingSiteId ?? -1 },
+    { skip: !plantingSiteId || plantingSiteId === -1 }
+  );
+  const observationSummaries = observationSummariesQuery.data?.summaries;
 
   const survivalRateData = useMemo(() => {
     type Acc = {

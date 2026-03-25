@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react';
 
-import { ObservationResultsPayload, ObservationSummary } from 'src/types/Observations';
+import { ObservationResultsPayload } from 'src/types/Observations';
 import { PlantingSite, PlantingSiteReportedPlants } from 'src/types/Tracking';
 
 export type PlantingSiteData = {
@@ -12,8 +12,6 @@ export type PlantingSiteData = {
   plantingSite?: PlantingSite;
   plantingSiteReportedPlants?: PlantingSiteReportedPlants;
   setSelectedPlantingSite: (plantingSiteId?: number) => void;
-
-  observationSummaries?: ObservationSummary[];
 
   latestResult?: ObservationResultsPayload;
 

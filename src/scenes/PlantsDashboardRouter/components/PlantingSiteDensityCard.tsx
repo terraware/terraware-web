@@ -1,15 +1,23 @@
 import React, { type JSX, useMemo } from 'react';
 
-import { Box, Typography, useTheme } from '@mui/material';
+import { Box, CircularProgress, Typography, useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';
 
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
+import { useListObservationSummariesQuery } from 'src/queries/generated/observations';
 import strings from 'src/strings';
 
 export default function PlantingSiteDensityCard(): JSX.Element {
   const theme = useTheme();
-  const { plantingSite, observationSummaries } = usePlantingSiteData();
+  const { plantingSite } = usePlantingSiteData();
+
+  const plantingSiteId = plantingSite?.id;
+  const observationSummariesQuery = useListObservationSummariesQuery(
+    { plantingSiteId: plantingSiteId ?? -1 },
+    { skip: !plantingSiteId || plantingSiteId === -1 }
+  );
+  const observationSummaries = observationSummariesQuery.data?.summaries;
 
   const everySubstratumHasObservation = useMemo(() => {
     if (!observationSummaries || observationSummaries.length === 0 || !plantingSite) {
@@ -24,6 +32,14 @@ export default function PlantingSiteDensityCard(): JSX.Element {
       )
     );
   }, [observationSummaries, plantingSite]);
+
+  if (observationSummariesQuery.isFetching) {
+    return (
+      <Box display='flex' justifyContent='center'>
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <Box>
