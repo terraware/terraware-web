@@ -72,7 +72,7 @@ export default function ScheduleObservationForm({
 
   useEffect(() => {
     if (targetObservation) {
-      void getPlantingSite(targetObservation.plantingSiteId, true);
+      void getPlantingSite({ id: targetObservation.plantingSiteId, includeZones: false }, true);
     }
   });
 

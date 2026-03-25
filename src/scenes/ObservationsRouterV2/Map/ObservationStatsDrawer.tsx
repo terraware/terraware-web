@@ -52,7 +52,10 @@ const ObservationStatsDrawer = ({
   const { data: observationResultsResponse, isLoading: observationResultsLoading } = useGetObservationResultsQuery({
     observationId,
   });
-  const { data: plantingSiteResponse, isLoading: plantingSiteLoading } = useGetPlantingSiteQuery(plantingSiteId);
+  const { data: plantingSiteResponse, isLoading: plantingSiteLoading } = useGetPlantingSiteQuery({
+    id: plantingSiteId,
+    includeZones: false,
+  });
   const [getHistory, { data: plantingSiteHistoryResponse, isLoading: plantingSiteHistoryLoading }] =
     useLazyGetPlantingSiteHistoryQuery();
 

@@ -109,7 +109,7 @@ export default function MonitoringPlotList(): JSX.Element {
 
   useEffect(() => {
     if (observationResult) {
-      void getPlantingSite(observationResult.plantingSiteId, true);
+      void getPlantingSite({ id: observationResult.plantingSiteId, includeZones: false }, true);
     }
   }, [getPlantingSite, observationResult]);
 

@@ -9,6 +9,7 @@ const injectedRtkApi = api.injectEndpoints({
           organizationId: queryArg.organizationId,
           projectId: queryArg.projectId,
           full: queryArg.full,
+          includeZones: queryArg.includeZones,
         },
       }),
     }),
@@ -34,7 +35,12 @@ const injectedRtkApi = api.injectEndpoints({
       query: (queryArg) => ({ url: `/api/v1/tracking/sites/${queryArg}`, method: 'DELETE' }),
     }),
     getPlantingSite: build.query<GetPlantingSiteApiResponse, GetPlantingSiteApiArg>({
-      query: (queryArg) => ({ url: `/api/v1/tracking/sites/${queryArg}` }),
+      query: (queryArg) => ({
+        url: `/api/v1/tracking/sites/${queryArg.id}`,
+        params: {
+          includeZones: queryArg.includeZones,
+        },
+      }),
     }),
     updatePlantingSite: build.mutation<UpdatePlantingSiteApiResponse, UpdatePlantingSiteApiArg>({
       query: (queryArg) => ({
@@ -42,9 +48,6 @@ const injectedRtkApi = api.injectEndpoints({
         method: 'PUT',
         body: queryArg.updatePlantingSiteRequestPayload,
       }),
-    }),
-    listPlantingSiteHistories: build.query<ListPlantingSiteHistoriesApiResponse, ListPlantingSiteHistoriesApiArg>({
-      query: (queryArg) => ({ url: `/api/v1/tracking/sites/${queryArg}/history` }),
     }),
     getPlantingSiteHistory: build.query<GetPlantingSiteHistoryApiResponse, GetPlantingSiteHistoryApiArg>({
       query: (queryArg) => ({ url: `/api/v1/tracking/sites/${queryArg.id}/history/${queryArg.historyId}` }),
@@ -65,6 +68,7 @@ export type ListPlantingSitesApiArg = {
   projectId?: number;
   /** If true, include strata and substrata for each site. */
   full?: boolean;
+  includeZones?: boolean;
 };
 export type CreatePlantingSiteApiResponse = /** status 200 OK */ CreatePlantingSiteResponsePayload;
 export type CreatePlantingSiteApiArg = CreatePlantingSiteRequestPayload;
@@ -80,14 +84,15 @@ export type DeletePlantingSiteApiResponse =
   /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
 export type DeletePlantingSiteApiArg = number;
 export type GetPlantingSiteApiResponse = /** status 200 OK */ GetPlantingSiteResponsePayload;
-export type GetPlantingSiteApiArg = number;
+export type GetPlantingSiteApiArg = {
+  id: number;
+  includeZones?: boolean;
+};
 export type UpdatePlantingSiteApiResponse = /** status 200 OK */ SimpleSuccessResponsePayload;
 export type UpdatePlantingSiteApiArg = {
   id: number;
   updatePlantingSiteRequestPayload: UpdatePlantingSiteRequestPayload;
 };
-export type ListPlantingSiteHistoriesApiResponse = /** status 200 OK */ ListPlantingSiteHistoriesResponsePayload;
-export type ListPlantingSiteHistoriesApiArg = number;
 export type GetPlantingSiteHistoryApiResponse = /** status 200 OK */ GetPlantingSiteHistoryResponsePayload;
 export type GetPlantingSiteHistoryApiArg = {
   id: number;
@@ -226,16 +231,6 @@ export type NewPlantingSeasonPayload = {
   endDate: string;
   startDate: string;
 };
-export type NewPlantingSubzonePayload = {
-  boundary: MultiPolygon | Polygon;
-  name: string;
-};
-export type NewPlantingZonePayload = {
-  boundary: MultiPolygon | Polygon;
-  name: string;
-  plantingSubzones?: NewPlantingSubzonePayload[];
-  targetPlantingDensity?: number;
-};
 export type NewSubstratumPayload = {
   boundary: MultiPolygon | Polygon;
   /** Name of this substratum. Two substrata in the same stratum may not have the same name, but using the same substratum name in different strata is valid. */
@@ -255,8 +250,6 @@ export type CreatePlantingSiteRequestPayload = {
   name: string;
   organizationId: number;
   plantingSeasons?: NewPlantingSeasonPayload[];
-  /** Use strata instead */
-  plantingZones?: NewPlantingZonePayload[];
   projectId?: number;
   /** List of strata to create. If present and not empty, "boundary" must also be specified. */
   strata?: NewStratumPayload[];
@@ -267,22 +260,6 @@ export type ReportedSpeciesPayload = {
   id: number;
   plantsSinceLastObservation: number;
   totalPlants: number;
-};
-export type PlantingSubzoneReportedPlantsPayload = {
-  id: number;
-  plantsSinceLastObservation: number;
-  species: ReportedSpeciesPayload[];
-  totalPlants: number;
-  totalSpecies: number;
-};
-export type PlantingZoneReportedPlantsPayload = {
-  id: number;
-  plantingSubzones: PlantingSubzoneReportedPlantsPayload[];
-  plantsSinceLastObservation: number;
-  progressPercent: number;
-  species: ReportedSpeciesPayload[];
-  totalPlants: number;
-  totalSpecies: number;
 };
 export type SubstratumReportedPlantsResponsePayload = {
   id: number;
@@ -302,8 +279,6 @@ export type StratumReportedPlantsResponsePayload = {
 };
 export type PlantingSiteReportedPlantsPayload = {
   id: number;
-  /** Use strata instead */
-  plantingZones: PlantingZoneReportedPlantsPayload[];
   plantsSinceLastObservation: number;
   progressPercent?: number;
   species: ReportedSpeciesPayload[];
@@ -317,10 +292,6 @@ export type ListPlantingSiteReportedPlantsResponsePayload = {
 export type PlantingSiteValidationProblemPayload = {
   /** If the problem is a conflict between two strata or two substrata, the list of the conflicting stratum or substratum names. */
   conflictsWith?: string[];
-  /** Use substratum instead */
-  plantingSubzone?: string;
-  /** Use stratum instead */
-  plantingZone?: string;
   problemType:
     | 'DuplicateSubstratumName'
     | 'DuplicateStratumName'
@@ -383,23 +354,6 @@ export type MonitoringPlotHistoryPayload = {
   monitoringPlotId: number;
   sizeMeters: number;
 };
-export type PlantingSubzoneHistoryPayload = {
-  areaHa: number;
-  boundary: MultiPolygon;
-  fullName: string;
-  id: number;
-  monitoringPlots: MonitoringPlotHistoryPayload[];
-  name: string;
-  plantingSubzoneId?: number;
-};
-export type PlantingZoneHistoryPayload = {
-  areaHa: number;
-  boundary: MultiPolygon;
-  id: number;
-  name: string;
-  plantingSubzones: PlantingSubzoneHistoryPayload[];
-  plantingZoneId?: number;
-};
 export type SubstratumHistoryResponsePayload = {
   areaHa: number;
   boundary: MultiPolygon;
@@ -426,13 +380,7 @@ export type PlantingSiteHistoryPayload = {
   exclusion?: MultiPolygon;
   id: number;
   plantingSiteId: number;
-  /** Use strata instead */
-  plantingZones: PlantingZoneHistoryPayload[];
   strata: StratumHistoryResponsePayload[];
-};
-export type ListPlantingSiteHistoriesResponsePayload = {
-  histories: PlantingSiteHistoryPayload[];
-  status: SuccessOrError;
 };
 export type GetPlantingSiteHistoryResponsePayload = {
   site: PlantingSiteHistoryPayload;
@@ -453,8 +401,6 @@ export const {
   useGetPlantingSiteQuery,
   useLazyGetPlantingSiteQuery,
   useUpdatePlantingSiteMutation,
-  useListPlantingSiteHistoriesQuery,
-  useLazyListPlantingSiteHistoriesQuery,
   useGetPlantingSiteHistoryQuery,
   useLazyGetPlantingSiteHistoryQuery,
   useGetPlantingSiteReportedPlantsQuery,

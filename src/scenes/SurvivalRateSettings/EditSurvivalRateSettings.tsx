@@ -28,7 +28,10 @@ const EditSurvivalRateSettings = () => {
     () => plantingSiteId === undefined || isNaN(plantingSiteId) || plantingSiteId === -1,
     [plantingSiteId]
   );
-  const { data: plantingSite } = useGetPlantingSiteQuery(plantingSiteId, { skip: skipPlantingSite });
+  const { data: plantingSite } = useGetPlantingSiteQuery(
+    { id: plantingSiteId, includeZones: false },
+    { skip: skipPlantingSite }
+  );
   const { data: t0SiteResponse } = useGetT0SiteDataQuery(plantingSiteId, { skip: skipPlantingSite });
   const t0SiteData = useMemo(() => t0SiteResponse?.data, [t0SiteResponse]);
   const { data: withdrawnSpeciesResponse } = useGetT0SpeciesForPlantingSiteQuery(plantingSiteId, {

@@ -58,7 +58,7 @@ const ObservationMapWrapper = ({
 
   useEffect(() => {
     if (plantingSiteId !== undefined) {
-      void getPlantingSite(plantingSiteId, true);
+      void getPlantingSite({ id: plantingSiteId, includeZones: false }, true);
     }
   }, [getPlantingSite, isBiomass, plantingSiteId, selectedOrganization]);
 

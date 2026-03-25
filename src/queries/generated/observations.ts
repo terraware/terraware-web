@@ -730,36 +730,6 @@ export type ExistingBiomassMeasurementPayload = {
   /** Measured in centimeters. */
   waterDepth?: number;
 };
-export type ObservationPlantingSubzoneResultsPayload = {
-  areaHa: number;
-  completedTime?: string;
-  estimatedPlants?: number;
-  monitoringPlots: ObservationMonitoringPlotResultsPayload[];
-  name: string;
-  plantingDensity: number;
-  plantingDensityStdDev?: number;
-  plantingSubzoneId?: number;
-  species: ObservationSpeciesResultsPayload[];
-  survivalRate?: number;
-  survivalRateStdDev?: number;
-  totalPlants: number;
-  totalSpecies: number;
-};
-export type ObservationPlantingZoneResultsPayload = {
-  areaHa: number;
-  completedTime?: string;
-  estimatedPlants?: number;
-  name: string;
-  plantingDensity: number;
-  plantingDensityStdDev?: number;
-  plantingSubzones: ObservationPlantingSubzoneResultsPayload[];
-  plantingZoneId?: number;
-  species: ObservationSpeciesResultsPayload[];
-  survivalRate?: number;
-  survivalRateStdDev?: number;
-  totalPlants: number;
-  totalSpecies: number;
-};
 export type ObservationSubstratumResultsPayload = {
   /** Area of this substratum in hectares. */
   areaHa: number;
@@ -819,8 +789,6 @@ export type ObservationResultsPayload = {
   plantingDensityStdDev?: number;
   plantingSiteHistoryId?: number;
   plantingSiteId: number;
-  /** Use strata instead */
-  plantingZones: ObservationPlantingZoneResultsPayload[];
   species: ObservationSpeciesResultsPayload[];
   startDate: string;
   state: 'Upcoming' | 'InProgress' | 'Completed' | 'Overdue' | 'Abandoned';
@@ -838,22 +806,6 @@ export type ListAdHocObservationResultsResponsePayload = {
 export type ListObservationResultsResponsePayload = {
   observations: ObservationResultsPayload[];
   status: SuccessOrError;
-};
-export type PlantingZoneObservationSummaryPayload = {
-  areaHa: number;
-  earliestObservationTime: string;
-  estimatedPlants?: number;
-  latestObservationTime: string;
-  plantingDensity: number;
-  plantingDensityStdDev?: number;
-  plantingSubzones: ObservationPlantingSubzoneResultsPayload[];
-  plantingZoneId: number;
-  species: ObservationSpeciesResultsPayload[];
-  substrata: ObservationSubstratumResultsPayload[];
-  survivalRate?: number;
-  survivalRateStdDev?: number;
-  totalPlants: number;
-  totalSpecies: number;
 };
 export type StratumObservationSummaryPayload = {
   /** Area of this stratum in hectares. */
@@ -891,8 +843,6 @@ export type PlantingSiteObservationSummaryPayload = {
   plantingDensity: number;
   plantingDensityStdDev?: number;
   plantingSiteId: number;
-  /** Use strata instead */
-  plantingZones: PlantingZoneObservationSummaryPayload[];
   /** Combined list of observed species and their statuses from the latest observation of each substratum within each stratum. */
   species: ObservationSpeciesResultsPayload[];
   strata: StratumObservationSummaryPayload[];

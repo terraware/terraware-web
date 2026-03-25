@@ -10,7 +10,7 @@ export default function PlantingSiteStratumView(): JSX.Element | undefined {
   const stratumId = Number(params.stratumId);
   const plantingSiteId = Number(params.plantingSiteId);
 
-  const { data: plantingSite } = useGetPlantingSiteQuery(plantingSiteId);
+  const { data: plantingSite } = useGetPlantingSiteQuery({ id: plantingSiteId, includeZones: false });
 
   const stratum = useMemo(() => {
     return plantingSite?.site?.strata?.find((_stratum) => _stratum.id === stratumId);

@@ -134,15 +134,9 @@ const ObservationMap = ({
 
   useEffect(() => {
     if (selectedOrganization && plantingSiteId === undefined) {
-      void listPlantingSites(
-        {
-          organizationId: selectedOrganization.id,
-          full: false,
-        },
-        true
-      );
+      void listPlantingSites({ organizationId: selectedOrganization.id, full: false, includeZones: false }, true);
     } else if (selectedOrganization && plantingSiteId !== undefined) {
-      void getPlantingSite(plantingSiteId, true);
+      void getPlantingSite({ id: plantingSiteId, includeZones: false }, true);
     }
   }, [getPlantingSite, listPlantingSites, plantingSiteId, selectedOrganization]);
 

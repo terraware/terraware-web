@@ -43,7 +43,7 @@ const EditTemporaryPlotsTab = ({
   const theme = useTheme();
   const [updatePlantingSite] = useUpdatePlantingSiteMutation();
   const [updateT0, updateT0Result] = useAssignT0TempSiteDataMutation();
-  const { data: plantingSiteData } = useGetPlantingSiteQuery(plantingSiteId);
+  const { data: plantingSiteData } = useGetPlantingSiteQuery({ id: plantingSiteId, includeZones: false });
   const plantingSite = useMemo(() => plantingSiteData?.site, [plantingSiteData]);
 
   const [record, setRecord] = useForm<AssignSiteT0TempData>({

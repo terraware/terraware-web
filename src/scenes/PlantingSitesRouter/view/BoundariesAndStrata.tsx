@@ -43,7 +43,7 @@ export default function BoundariesAndStrata({
 
   const params = useParams<{ plantingSiteId: string }>();
   const plantingSiteId = Number(params.plantingSiteId);
-  const { data: plantingSiteData } = useGetPlantingSiteQuery(plantingSiteId);
+  const { data: plantingSiteData } = useGetPlantingSiteQuery({ id: plantingSiteId, includeZones: false });
 
   const plantingSite = useMemo(() => plantingSiteData?.site, [plantingSiteData]);
 
@@ -130,7 +130,7 @@ function PlantingSiteMapView({ search }: PlantingSiteMapViewProps): JSX.Element 
 
   const params = useParams<{ plantingSiteId: string }>();
   const plantingSiteId = Number(params.plantingSiteId);
-  const { data: plantingSiteData } = useGetPlantingSiteQuery(plantingSiteId);
+  const { data: plantingSiteData } = useGetPlantingSiteQuery({ id: plantingSiteId, includeZones: false });
   const { data: plantingSiteHistoryIds } = useListPlantingSiteHistoryIdsQuery(plantingSiteId);
 
   const [getPlantingSiteHistory, { data: plantingSiteHistoryData }] = useLazyGetPlantingSiteHistoryQuery();
