@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
-import { useListObservationResultsQuery, useListObservationSummariesQuery } from 'src/queries/generated/observations';
+import { useListObservationResultsQuery } from 'src/queries/generated/observations';
 import { useGetPlantingSiteReportedPlantsQuery, useListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
@@ -28,10 +28,6 @@ const PlantingSiteProvider = ({ children }: Props) => {
   const skipPlantingSiteQueries = !plantingSite || plantingSite.id === -1;
   const observationResultsQuery = useListObservationResultsQuery(
     { plantingSiteId: plantingSite?.id },
-    { skip: skipPlantingSiteQueries }
-  );
-  const observationSummariesQuery = useListObservationSummariesQuery(
-    { plantingSiteId: plantingSite?.id ?? -1 },
     { skip: skipPlantingSiteQueries }
   );
   const reportedPlantsQuery = useGetPlantingSiteReportedPlantsQuery(plantingSite?.id ?? -1, {
@@ -72,14 +68,10 @@ const PlantingSiteProvider = ({ children }: Props) => {
   );
 
   const observationResults = observationResultsQuery.currentData?.observations;
-  const observationSummaries = observationSummariesQuery.currentData?.summaries;
   const reportedPlants = reportedPlantsQuery.currentData?.site;
 
   const isLoading =
-    plantingSitesQuery.isFetching ||
-    observationResultsQuery.isFetching ||
-    observationSummariesQuery.isFetching ||
-    reportedPlantsQuery.isFetching;
+    plantingSitesQuery.isFetching || observationResultsQuery.isFetching || reportedPlantsQuery.isFetching;
 
   const latestResult = useMemo(() => {
     return observationResults?.find(
@@ -103,7 +95,6 @@ const PlantingSiteProvider = ({ children }: Props) => {
       allPlantingSites,
       plantingSite,
       plantingSiteReportedPlants: reportedPlants,
-      observationSummaries,
       setSelectedPlantingSite,
       latestResult,
       isLoading,
@@ -115,7 +106,6 @@ const PlantingSiteProvider = ({ children }: Props) => {
       allPlantingSites,
       plantingSite,
       reportedPlants,
-      observationSummaries,
       setSelectedPlantingSite,
       latestResult,
       isLoading,

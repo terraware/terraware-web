@@ -12,6 +12,7 @@ import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useObservation from 'src/hooks/useObservation';
 import { useOrganization } from 'src/providers';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
+import { useListObservationSummariesQuery } from 'src/queries/generated/observations';
 import { useAppDispatch } from 'src/redux/store';
 import SimplePlantingSiteMap from 'src/scenes/PlantsDashboardRouter/components/SimplePlantingSiteMap';
 import strings from 'src/strings';
@@ -47,9 +48,15 @@ export default function PlantsDashboardView({
     allPlantingSites,
     plantingSite,
     latestResult,
-    observationSummaries,
     acceleratorOrganizationId,
   } = usePlantingSiteData();
+
+  const plantingSiteId = plantingSite?.id;
+  const observationSummariesQuery = useListObservationSummariesQuery(
+    { plantingSiteId: plantingSiteId ?? -1 },
+    { skip: !plantingSiteId || plantingSiteId === -1 }
+  );
+  const observationSummaries = observationSummariesQuery.data?.summaries;
 
   const hasObservations = useMemo(() => !!latestResult, [latestResult]);
 
@@ -391,8 +398,8 @@ export default function PlantsDashboardView({
   }, [plantingSite, observationSummaries, observationHectares, renderLatestObservationLink, summariesHectares]);
 
   const onSelect = useCallback(
-    (plantingSiteId: number) => {
-      setSelectedPlantingSite(plantingSiteId);
+    (selectedPlantingSiteId: number) => {
+      setSelectedPlantingSite(selectedPlantingSiteId);
     },
     [setSelectedPlantingSite]
   );

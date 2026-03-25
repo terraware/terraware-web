@@ -9,6 +9,7 @@ import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
+import { useListObservationSummariesQuery } from 'src/queries/generated/observations';
 import strings from 'src/strings';
 
 import HighestAndLowestSurvivalRateSpeciesCard from './HighestAndLowestSurvivalRateSpeciesCard';
@@ -17,8 +18,15 @@ import LiveDeadPlantsPerSpeciesCard from './LiveDeadPlantsPerSpeciesCard';
 
 export default function SurvivalRateCard(): JSX.Element {
   const theme = useTheme();
-  const { observationSummaries, plantingSite } = usePlantingSiteData();
+  const { plantingSite } = usePlantingSiteData();
   const { isDesktop } = useDeviceInfo();
+
+  const plantingSiteId = plantingSite?.id;
+  const observationSummariesQuery = useListObservationSummariesQuery(
+    { plantingSiteId: plantingSiteId ?? -1 },
+    { skip: !plantingSiteId || plantingSiteId === -1 }
+  );
+  const observationSummaries = observationSummariesQuery.data?.summaries;
 
   const separatorStyles = {
     width: '1px',
@@ -35,6 +43,7 @@ export default function SurvivalRateCard(): JSX.Element {
 
   return (
     <Card
+      busy={observationSummariesQuery.isFetching}
       radius='8px'
       style={{ display: 'flex', 'justify-content': 'space-between', flexDirection: isDesktop ? 'row' : 'column' }}
     >

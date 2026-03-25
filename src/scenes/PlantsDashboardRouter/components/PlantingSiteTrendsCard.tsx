@@ -7,6 +7,7 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import Card from 'src/components/common/Card';
 import Chart, { ChartData } from 'src/components/common/Chart/Chart';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
+import { useListObservationSummariesQuery } from 'src/queries/generated/observations';
 import strings from 'src/strings';
 
 export default function PlantingSiteTrendsCard(): JSX.Element {
@@ -14,8 +15,15 @@ export default function PlantingSiteTrendsCard(): JSX.Element {
   const [strataOptions, setStrataOptions] = useState<DropdownItem[]>();
   const [selectedPlantsPerHaStratum, setSelectedPlantsPerHaStratum] = useState<number>();
   const [selectedSurvivalStratum, setSelectedSurvivalStratum] = useState<number>();
-  const { plantingSite, observationSummaries } = usePlantingSiteData();
+  const { plantingSite } = usePlantingSiteData();
   const { isDesktop, isMobile } = useDeviceInfo();
+
+  const plantingSiteId = plantingSite?.id;
+  const observationSummariesQuery = useListObservationSummariesQuery(
+    { plantingSiteId: plantingSiteId ?? -1 },
+    { skip: !plantingSiteId || plantingSiteId === -1 }
+  );
+  const observationSummaries = observationSummariesQuery.data?.summaries;
 
   useEffect(() => {
     const stratumOpts = plantingSite?.strata?.map((_stratum) => ({ label: _stratum.name, value: _stratum.id }));
@@ -105,6 +113,7 @@ export default function PlantingSiteTrendsCard(): JSX.Element {
 
   return (
     <Card
+      busy={observationSummariesQuery.isFetching}
       radius='8px'
       style={{ display: 'flex', 'justify-content': 'space-between', flexDirection: isDesktop ? 'row' : 'column' }}
     >
