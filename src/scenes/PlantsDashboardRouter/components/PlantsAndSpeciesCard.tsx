@@ -9,7 +9,6 @@ import ProgressChart from 'src/components/common/Chart/ProgressChart';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import { useProjectPlantings } from 'src/hooks/useProjectPlantings';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
-import { useGetPlantingSiteReportedPlantsQuery } from 'src/queries/generated/plantingSites';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
 
@@ -20,13 +19,8 @@ export default function PlantsAndSpeciesCard({ projectId }: { projectId?: number
   const theme = useTheme();
   const { isDesktop } = useDeviceInfo();
 
+  const { plantingSiteReportedPlants } = usePlantingSiteData();
   const { plantingSite, allPlantingSites } = usePlantingSiteData();
-
-  const plantingSiteId = plantingSite?.id;
-  const plantingSiteReportedPlantsQuery = useGetPlantingSiteReportedPlantsQuery(plantingSiteId ?? -1, {
-    skip: !plantingSiteId || plantingSiteId === -1,
-  });
-  const plantingSiteReportedPlants = plantingSiteReportedPlantsQuery.data?.site;
   const { reportedPlants } = useProjectPlantings(projectId);
   const separatorStyles = {
     width: '1px',
