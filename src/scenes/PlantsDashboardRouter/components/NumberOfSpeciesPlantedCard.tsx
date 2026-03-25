@@ -8,6 +8,7 @@ import PieChart from 'src/components/common/Chart/PieChart';
 import { useProjectPlantings } from 'src/hooks/useProjectPlantings';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
+import { useGetPlantingSiteReportedPlantsQuery } from 'src/queries/generated/plantingSites';
 import { selectPlantingsForSite } from 'src/redux/features/plantings/plantingsSelectors';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
@@ -73,7 +74,7 @@ export default function NumberOfSpeciesPlantedCard({
   } else if (!plantingSite.strata?.length) {
     return <SiteWithoutStrataCard plantingSiteId={plantingSite.id} />;
   } else {
-    return <SiteWithStrataCard />;
+    return <SiteWithStrataCard plantingSiteId={plantingSite.id} />;
   }
 }
 const RolledUpCard = ({ projectId }: { projectId?: number }): JSX.Element => {
@@ -184,8 +185,9 @@ const SiteWithoutStrataCard = ({
   return <ChartData labels={labels} values={values} rareSpecies={rareSpecies} />;
 };
 
-const SiteWithStrataCard = (): JSX.Element => {
-  const { plantingSiteReportedPlants } = usePlantingSiteData();
+const SiteWithStrataCard = ({ plantingSiteId }: { plantingSiteId: number }): JSX.Element => {
+  const plantingSiteReportedPlantsQuery = useGetPlantingSiteReportedPlantsQuery(plantingSiteId);
+  const plantingSiteReportedPlants = plantingSiteReportedPlantsQuery.data?.site;
   const { species: orgSpecies } = useSpeciesData();
 
   const totalSpecies = useMemo(() => plantingSiteReportedPlants?.species.length ?? 0, [plantingSiteReportedPlants]);

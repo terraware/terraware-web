@@ -9,7 +9,10 @@ import FormattedNumber from 'src/components/common/FormattedNumber';
 import MapLegend, { MapLegendGroup } from 'src/components/common/MapLegend';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { useListObservationSummariesQuery } from 'src/queries/generated/observations';
-import { useLazyGetPlantingSiteHistoryQuery } from 'src/queries/generated/plantingSites';
+import {
+  useGetPlantingSiteReportedPlantsQuery,
+  useLazyGetPlantingSiteHistoryQuery,
+} from 'src/queries/generated/plantingSites';
 import { MapService } from 'src/services';
 import strings from 'src/strings';
 import { MapData, MapSourceProperties } from 'src/types/Map';
@@ -25,13 +28,19 @@ export default function StratumLevelDataMap({ plantingSiteId }: StratumLevelData
   const numberFormatter = useNumberFormatter();
   const theme = useTheme();
   const { isDesktop } = useDeviceInfo();
-  const { plantingSite, plantingSiteReportedPlants, latestResult } = usePlantingSiteData();
+  const { plantingSite, latestResult } = usePlantingSiteData();
 
+  const skipPlantingSiteQuery = !plantingSiteId || plantingSiteId === -1;
   const observationSummariesQuery = useListObservationSummariesQuery(
     { plantingSiteId: plantingSiteId ?? -1 },
-    { skip: !plantingSiteId || plantingSiteId === -1 }
+    { skip: skipPlantingSiteQuery }
   );
   const observationSummaries = observationSummariesQuery.data?.summaries;
+
+  const plantingSiteReportedPlantsQuery = useGetPlantingSiteReportedPlantsQuery(plantingSiteId ?? -1, {
+    skip: skipPlantingSiteQuery,
+  });
+  const plantingSiteReportedPlants = plantingSiteReportedPlantsQuery.data?.site;
   const [getPlantingSiteHistory, { data: plantingSiteHistoryData }] = useLazyGetPlantingSiteHistoryQuery();
   const defaultTimeZone = useDefaultTimeZone();
   const timeZone = plantingSite?.timeZone ?? defaultTimeZone.get().id;

@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useListObservationResultsQuery } from 'src/queries/generated/observations';
-import { useGetPlantingSiteReportedPlantsQuery, useListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
+import { useListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
 
@@ -25,14 +25,10 @@ const PlantingSiteProvider = ({ children }: Props) => {
 
   const plantingSitesQuery = useListPlantingSitesQuery({ organizationId: orgId!, full: true }, { skip: !orgId });
   const plantingSites = plantingSitesQuery.data?.sites;
-  const skipPlantingSiteQueries = !plantingSite || plantingSite.id === -1;
   const observationResultsQuery = useListObservationResultsQuery(
     { plantingSiteId: plantingSite?.id },
-    { skip: skipPlantingSiteQueries }
+    { skip: !plantingSite || plantingSite.id === -1 }
   );
-  const reportedPlantsQuery = useGetPlantingSiteReportedPlantsQuery(plantingSite?.id ?? -1, {
-    skip: skipPlantingSiteQueries,
-  });
 
   const allSitesOption = useMemo(() => {
     if (activeLocale && orgId) {
@@ -68,10 +64,8 @@ const PlantingSiteProvider = ({ children }: Props) => {
   );
 
   const observationResults = observationResultsQuery.currentData?.observations;
-  const reportedPlants = reportedPlantsQuery.currentData?.site;
 
-  const isLoading =
-    plantingSitesQuery.isFetching || observationResultsQuery.isFetching || reportedPlantsQuery.isFetching;
+  const isLoading = plantingSitesQuery.isFetching || observationResultsQuery.isFetching;
 
   const latestResult = useMemo(() => {
     return observationResults?.find(
@@ -94,7 +88,6 @@ const PlantingSiteProvider = ({ children }: Props) => {
       setAcceleratorOrganizationId,
       allPlantingSites,
       plantingSite,
-      plantingSiteReportedPlants: reportedPlants,
       setSelectedPlantingSite,
       latestResult,
       isLoading,
@@ -105,7 +98,6 @@ const PlantingSiteProvider = ({ children }: Props) => {
       acceleratorOrganizationId,
       allPlantingSites,
       plantingSite,
-      reportedPlants,
       setSelectedPlantingSite,
       latestResult,
       isLoading,

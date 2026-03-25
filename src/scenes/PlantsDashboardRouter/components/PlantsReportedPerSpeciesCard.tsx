@@ -10,6 +10,7 @@ import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import { useProjectPlantings } from 'src/hooks/useProjectPlantings';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
+import { useGetPlantingSiteReportedPlantsQuery } from 'src/queries/generated/plantingSites';
 import { selectPlantingsForSite } from 'src/redux/features/plantings/plantingsSelectors';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
@@ -154,7 +155,8 @@ const SiteWithStrataCard = ({
   newVersion?: boolean;
   organizationId?: number;
 }): JSX.Element => {
-  const { plantingSiteReportedPlants } = usePlantingSiteData();
+  const plantingSiteReportedPlantsQuery = useGetPlantingSiteReportedPlantsQuery(plantingSiteId);
+  const plantingSiteReportedPlants = plantingSiteReportedPlantsQuery.data?.site;
   const { species: orgSpecies } = useSpeciesData();
 
   const speciesQuantities = useMemo(() => {
