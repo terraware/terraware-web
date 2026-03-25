@@ -13,7 +13,13 @@ const SurvivalRateInstructions = () => {
         <Icon name='info' fillColor={theme.palette.TwClrIcnSecondary} size='medium' />
       </Box>
       <Typography fontSize={'14px'}>
-        {strings.formatString(strings.SURVIVAL_RATE_SETTINGS_INFO, <b>{strings.INSTRUCTIONS}</b>)}
+        {strings.formatString(
+          strings.SURVIVAL_RATE_SETTINGS_INFO,
+          <b>{strings.INSTRUCTIONS}</b>,
+          <Typography color={theme.palette.TwClrTxtDanger} fontSize={'14px'} display={'inline'}>
+            {strings.SURVIVAL_RATE_SETTINGS_MESSAGING}
+          </Typography>
+        )}
       </Typography>
     </Box>
   );
