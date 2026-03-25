@@ -1,3 +1,4 @@
+3cfb125ff0c7 SW-7951 Specify includeZones: false for get/list planting sites (#5500)
 5b061a28a6b5 SW-8224 Update Observation and Monitoring Plot cards and charts to latest UI/UX (#5499)
 4a6644367c8a SW-8223: Improve performance of plants dashboard (#5495)
 31cf0bc02a7d SW-8022 Update plot replacement success messages (#5498)
