@@ -21,6 +21,7 @@ export default function MonitoringPlotCellRenderer(props: RendererProps<TableRow
   const observationState = row.observationState as ObservationState;
   const stratumName = row.stratumName as string;
   const monitoringPlotId = row.monitoringPlotId as number;
+  const isPermanent = row.isPermanent as boolean;
 
   const textStyles = {
     fontSize: '16px',
@@ -70,7 +71,7 @@ export default function MonitoringPlotCellRenderer(props: RendererProps<TableRow
             disabled: !replaceObservationPlotEnabled || row.completedDate || observationState === 'Abandoned', // cannot replace observation plots that are completed
             label: strings.REQUEST_REASSIGNMENT,
             onClick: () => {
-              openReassignPlotModal(observationId, monitoringPlotId);
+              openReassignPlotModal(observationId, monitoringPlotId, isPermanent);
             },
           },
         ]}

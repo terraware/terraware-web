@@ -1587,10 +1587,16 @@ REASSIGNMENT,Réaffectation,79a8c3fe
 REASSIGNMENT_DURATION,Durée de la réaffectation,3dec5f19
 REASSIGNMENT_REQUEST_NO_PLOTS_ADDED,Aucune parcelle ne sera ajoutée.,ebf0fa62
 REASSIGNMENT_REQUEST_NO_PLOTS_ADDED_WARNING,Aucune parcelle ne sera ajoutée : aucune parcelle disponible pour la réaffectation.,4f5db53d
+REASSIGNMENT_REQUEST_PERMANENT_PLOT_ADDED,La parcelle permanente {0} a été ajoutée de façon permanente.,1ff9fe21
+REASSIGNMENT_REQUEST_PERMANENT_PLOT_REMOVED_LONG_TERM,La parcelle permanente {0} a été supprimée de façon permanente.,d83a86a5
+REASSIGNMENT_REQUEST_PERMANENT_PLOT_REMOVED_TEMPORARY,La parcelle permanente {0} a été supprimée uniquement pour cette observation.,5fe6197f
 REASSIGNMENT_REQUEST_PLOTS_ADDED,Les parcelles suivantes seront ajoutées : {0}.,320264b6
 REASSIGNMENT_REQUEST_PLOTS_REMOVED,Les parcelles suivantes seront supprimées : {0}.,6751069f
 REASSIGNMENT_REQUEST_SENT,Demande de réaffectation envoyée,df60a044
 REASSIGNMENT_REQUEST_STATUS,Statut de la demande de réaffectation,f56ec4a5
+REASSIGNMENT_REQUEST_TEMPORARY_PLOT_ADDED,La parcelle temporaire {0} a été ajoutée uniquement pour cette observation.,87cebad7
+REASSIGNMENT_REQUEST_TEMPORARY_PLOT_REMOVED_LONG_TERM,La parcelle temporaire {0} a été supprimée de façon permanente.,449a68b6
+REASSIGNMENT_REQUEST_TEMPORARY_PLOT_REMOVED_TEMPORARY,La parcelle temporaire {0} a été supprimée uniquement pour cette observation.,f247edc2
 RECALCITRANT,Récalcitrant,f95e16a4
 RECEIVE_EMAIL_NOTIFICATIONS,Recevoir des notifications par e-mail,378f118d
 RECEIVED_DATE,Date de réception,9814318f
