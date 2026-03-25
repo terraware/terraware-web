@@ -39,7 +39,7 @@ const ObservationListView = (): JSX.Element => {
 
   useEffect(() => {
     if (selectedOrganization) {
-      void listPlantingSites({ organizationId: selectedOrganization.id, full: false }, true);
+      void listPlantingSites({ organizationId: selectedOrganization.id, full: false, includeZones: false }, true);
     }
   }, [listPlantingSites, selectedOrganization]);
 

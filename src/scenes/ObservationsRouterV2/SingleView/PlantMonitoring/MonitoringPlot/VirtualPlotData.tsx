@@ -16,7 +16,7 @@ interface VirtualPlotDataProps {
 const VirtualPlotData = ({ monitoringPlot, plantingSiteId }: VirtualPlotDataProps) => {
   const { strings } = useLocalization();
   const defaultTimeZone = useDefaultTimeZone().get().id;
-  const { data } = useGetPlantingSiteQuery(plantingSiteId);
+  const { data } = useGetPlantingSiteQuery({ id: plantingSiteId, includeZones: false });
   const plantingSite = useMemo(() => data?.site, [data?.site]);
   const timeZone = useMemo(() => plantingSite?.timeZone ?? defaultTimeZone, [defaultTimeZone, plantingSite?.timeZone]);
 

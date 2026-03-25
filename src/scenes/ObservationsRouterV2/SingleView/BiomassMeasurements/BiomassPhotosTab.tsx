@@ -30,7 +30,7 @@ const BiomassPhotosTab = () => {
 
   useEffect(() => {
     if (results) {
-      void getPlantingSite(results.plantingSiteId, true);
+      void getPlantingSite({ id: results.plantingSiteId, includeZones: false }, true);
     }
   }, [getPlantingSite, results]);
 

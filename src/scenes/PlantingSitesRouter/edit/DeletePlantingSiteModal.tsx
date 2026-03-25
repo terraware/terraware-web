@@ -21,7 +21,7 @@ export default function DeletePlantingSiteModal(props: DeletePlantingSiteModalPr
   const navigate = useSyncNavigate();
   const snackbar = useSnackbar();
 
-  const { data: plantingSiteData } = useGetPlantingSiteQuery(plantingSiteId);
+  const { data: plantingSiteData } = useGetPlantingSiteQuery({ id: plantingSiteId, includeZones: false });
   const [deleteSite, deleteResult] = useDeletePlantingSiteMutation();
   const { data: plantings } = useSearchPlantingsForSiteQuery(plantingSiteId);
 

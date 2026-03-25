@@ -26,7 +26,7 @@ export default function PlantingSiteView(): JSX.Element {
 
   const params = useParams<{ plantingSiteId: string }>();
   const plantingSiteId = Number(params.plantingSiteId);
-  const { data: plantingSiteData, isLoading } = useGetPlantingSiteQuery(plantingSiteId);
+  const { data: plantingSiteData, isLoading } = useGetPlantingSiteQuery({ id: plantingSiteId, includeZones: false });
   const plantingSite = useMemo(() => plantingSiteData?.site, [plantingSiteData?.site]);
 
   const goToEditPlantingSite = useCallback(() => {

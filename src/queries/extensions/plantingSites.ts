@@ -28,16 +28,13 @@ api.enhanceEndpoints({
       ],
     },
     getPlantingSite: {
-      providesTags: (_result, _error, plantingSiteId) => [{ type: QueryTagTypes.PlantingSites, id: plantingSiteId }],
+      providesTags: (_result, _error, siteApiArg) => [{ type: QueryTagTypes.PlantingSites, id: siteApiArg.id }],
     },
     updatePlantingSite: {
       invalidatesTags: (_result, _error, plantingSiteId) => [
         { type: QueryTagTypes.PlantingSites, id: plantingSiteId.id },
         { type: QueryTagTypes.PlantingSites, id: 'LIST' },
       ],
-    },
-    listPlantingSiteHistories: {
-      providesTags: (_result, _error, plantingSiteId) => [{ type: QueryTagTypes.PlantingSites, id: plantingSiteId }],
     },
     getPlantingSiteHistory: {
       providesTags: (_result, _error, payload) => [{ type: QueryTagTypes.PlantingSites, id: payload.id }],

@@ -35,7 +35,7 @@ const StratumDetails = (): JSX.Element => {
 
   useEffect(() => {
     if (results) {
-      void getPlantingSite(results.plantingSiteId);
+      void getPlantingSite({ id: results.plantingSiteId, includeZones: false });
     }
   }, [getPlantingSite, results]);
 

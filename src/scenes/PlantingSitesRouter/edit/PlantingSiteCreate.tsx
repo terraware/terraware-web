@@ -41,7 +41,7 @@ export default function CreatePlantingSite({ plantingSiteId }: CreatePlantingSit
 
   useEffect(() => {
     if (plantingSiteId && plantingSiteId > 0) {
-      void getPlantingSite(plantingSiteId);
+      void getPlantingSite({ id: plantingSiteId, includeZones: false });
     }
   }, [getPlantingSite, plantingSiteId]);
 

@@ -58,7 +58,7 @@ const SiteDetails = (): JSX.Element => {
 
   useEffect(() => {
     if (results?.plantingSiteId) {
-      void getPlantingSite(results.plantingSiteId);
+      void getPlantingSite({ id: results.plantingSiteId, includeZones: false });
     }
   }, [getPlantingSite, results?.plantingSiteId]);
 

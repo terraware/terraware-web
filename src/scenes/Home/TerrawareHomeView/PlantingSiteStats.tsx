@@ -65,7 +65,7 @@ export const PlantingSiteStats = () => {
 
   useEffect(() => {
     if (selectedPlantingSiteId) {
-      void getPlantingSite(selectedPlantingSiteId, true);
+      void getPlantingSite({ id: selectedPlantingSiteId, includeZones: false }, true);
       void getSiteReportedPlants(selectedPlantingSiteId, true);
     }
   }, [getPlantingSite, getSiteReportedPlants, selectedPlantingSiteId]);

@@ -27,7 +27,7 @@ const ObservationSubstratumSelector = ({
   const theme = useTheme();
   const [selectAll, setSelectAll] = useState<boolean>(false);
 
-  const getPlantingSiteResponse = useGetPlantingSiteQuery(plantingSiteId);
+  const getPlantingSiteResponse = useGetPlantingSiteQuery({ id: plantingSiteId, includeZones: false });
   const [selectedSubstrata, setSelectedSubstrata] = useState<number[]>([]);
 
   const plantingSite = useMemo(() => getPlantingSiteResponse.data?.site, [getPlantingSiteResponse.data?.site]);

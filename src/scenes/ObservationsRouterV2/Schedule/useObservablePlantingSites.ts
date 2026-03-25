@@ -29,7 +29,7 @@ const useObservablePlantingSites = () => {
   );
   useEffect(() => {
     if (selectedOrganization) {
-      void listPlantingSites({ organizationId: selectedOrganization.id, full: true }, true);
+      void listPlantingSites({ organizationId: selectedOrganization.id, full: true, includeZones: false }, true);
       void listSitesReportedPlants({ organizationId: selectedOrganization.id }, true);
       void listObservations({ organizationId: selectedOrganization.id }, true);
     }

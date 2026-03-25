@@ -100,7 +100,7 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
 
   useEffect(() => {
     if (selectedOrganization) {
-      void listPlantingSites({ organizationId: selectedOrganization.id }, true);
+      void listPlantingSites({ organizationId: selectedOrganization.id, includeZones: false }, true);
       void listAdHocObservationResults(
         { plantingSiteId, organizationId: selectedOrganization.id, includePlants: true },
         true

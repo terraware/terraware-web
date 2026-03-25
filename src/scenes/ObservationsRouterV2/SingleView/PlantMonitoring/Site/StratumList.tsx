@@ -62,7 +62,7 @@ export default function StratumList(): JSX.Element {
 
   useEffect(() => {
     if (observationResultsResponse) {
-      void getPlantingSite(observationResultsResponse.observation.plantingSiteId, true);
+      void getPlantingSite({ id: observationResultsResponse.observation.plantingSiteId, includeZones: false }, true);
     }
   }, [getPlantingSite, observationResultsResponse]);
 

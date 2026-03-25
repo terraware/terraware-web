@@ -295,7 +295,10 @@ const useObservationExports = () => {
       const results = await getObservationResults({ observationId, includePlants: true }, true).unwrap();
       const observationResults = results.observation;
 
-      const siteResults = await getPlantingSite(observationResults.plantingSiteId, true).unwrap();
+      const siteResults = await getPlantingSite(
+        { id: observationResults.plantingSiteId, includeZones: false },
+        true
+      ).unwrap();
       const site = siteResults.site;
 
       const completedDate = observationResults.completedTime
@@ -338,7 +341,10 @@ const useObservationExports = () => {
       const results = await getObservationResults({ observationId, includePlants: true }, true).unwrap();
       const observationResults = results.observation;
 
-      const siteResults = await getPlantingSite(observationResults.plantingSiteId, true).unwrap();
+      const siteResults = await getPlantingSite(
+        { id: observationResults.plantingSiteId, includeZones: false },
+        true
+      ).unwrap();
       const site = siteResults.site;
 
       const completedDate = observationResults.completedTime
@@ -363,7 +369,10 @@ const useObservationExports = () => {
       const results = await getObservationResults({ observationId, includePlants: true }, true).unwrap();
       const observationResults = results.observation;
 
-      const siteResults = await getPlantingSite(observationResults.plantingSiteId, true).unwrap();
+      const siteResults = await getPlantingSite(
+        { id: observationResults.plantingSiteId, includeZones: false },
+        true
+      ).unwrap();
       const site = siteResults.site;
 
       const completedDate = observationResults.completedTime
@@ -387,7 +396,10 @@ const useObservationExports = () => {
       const results = await getObservationResults({ observationId, includePlants: true }, true).unwrap();
       const observationResults = results.observation;
 
-      const siteResults = await getPlantingSite(observationResults.plantingSiteId, true).unwrap();
+      const siteResults = await getPlantingSite(
+        { id: observationResults.plantingSiteId, includeZones: false },
+        true
+      ).unwrap();
       const site = siteResults.site;
 
       const fileNamePrefix = `${site.name}-${observationResults.startDate}-${strings.BIOMASS_OBSERVATION_FILENAME_PREFIX}`;

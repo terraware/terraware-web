@@ -15,7 +15,7 @@ type BiomassObservationStatsProperties = {
   numTrees: number;
   numShrubs: number;
   numSpecies: number;
-  observaionDate: string;
+  observationDate: string;
 };
 
 type BiomassObservationStatsDrawerProps = {
@@ -33,7 +33,10 @@ const BiomassObservationStatsDrawer = ({
   const { data: observationResultsResponse, isLoading: observationResultsLoading } = useGetObservationResultsQuery({
     observationId,
   });
-  const { data: plantingSiteResponse, isLoading: plantingSiteLoading } = useGetPlantingSiteQuery(plantingSiteId);
+  const { data: plantingSiteResponse, isLoading: plantingSiteLoading } = useGetPlantingSiteQuery({
+    id: plantingSiteId,
+    includeZones: false,
+  });
 
   const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);
   const plantingSite = useMemo(() => plantingSiteResponse?.site, [plantingSiteResponse?.site]);
@@ -53,7 +56,7 @@ const BiomassObservationStatsDrawer = ({
         numTrees: results.biomassMeasurements.trees.filter((tree) => tree.treeGrowthForm !== 'Shrub').length,
         numShrubs: results.biomassMeasurements.trees.filter((tree) => tree.treeGrowthForm === 'Shrub').length,
         numSpecies: results.biomassMeasurements.treeSpeciesCount,
-        observaionDate: completedDate ? getShortDate(completedDate, activeLocale) : '',
+        observationDate: completedDate ? getShortDate(completedDate, activeLocale) : '',
       };
     } else {
       return undefined;

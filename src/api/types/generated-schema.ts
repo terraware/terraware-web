@@ -4239,23 +4239,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/tracking/sites/{id}/history": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Lists all older versions of a planting site. */
-        get: operations["listPlantingSiteHistories"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/v1/tracking/sites/{id}/history/{historyId}": {
         parameters: {
             query?: never;
@@ -6316,11 +6299,6 @@ export interface components {
             /** Format: int64 */
             organizationId: number;
             plantingSeasons?: components["schemas"]["NewPlantingSeasonPayload"][];
-            /**
-             * @deprecated
-             * @description Use strata instead
-             */
-            plantingZones?: components["schemas"]["NewPlantingZonePayload"][];
             /** Format: int64 */
             projectId?: number;
             /** @description List of strata to create. If present and not empty, "boundary" must also be specified. */
@@ -8098,10 +8076,6 @@ export interface components {
             photos: components["schemas"]["ListPhotosResponseElement"][];
             status: components["schemas"]["SuccessOrError"];
         };
-        ListPlantingSiteHistoriesResponsePayload: {
-            histories: components["schemas"]["PlantingSiteHistoryPayload"][];
-            status: components["schemas"]["SuccessOrError"];
-        };
         ListPlantingSiteReportedPlantsResponsePayload: {
             sites: components["schemas"]["PlantingSiteReportedPlantsPayload"][];
             status: components["schemas"]["SuccessOrError"];
@@ -8537,24 +8511,6 @@ export interface components {
             /** Format: date */
             startDate: string;
         };
-        /**
-         * @deprecated
-         * @description Use NewSubstratumPayload
-         */
-        NewPlantingSubzonePayload: {
-            boundary: components["schemas"]["MultiPolygon"] | components["schemas"]["Polygon"];
-            name: string;
-        };
-        /**
-         * @deprecated
-         * @description Use NewStratumPayload
-         */
-        NewPlantingZonePayload: {
-            boundary: components["schemas"]["MultiPolygon"] | components["schemas"]["Polygon"];
-            name: string;
-            plantingSubzones?: components["schemas"]["NewPlantingSubzonePayload"][];
-            targetPlantingDensity?: number;
-        };
         NewSectionTextValuePayload: Omit<components["schemas"]["NewValuePayload"], "type"> & {
             /** @description Citation for this chunk of text. If you want text with multiple citations at different positions, you can split it into multiple text values and put a citation on each of them. */
             citation?: string;
@@ -8929,62 +8885,6 @@ export interface components {
             /** @enum {string} */
             type: "Monitoring" | "Biomass Measurements";
         };
-        /**
-         * @deprecated
-         * @description Use ObservationSubstratumResultsPayload instead
-         */
-        ObservationPlantingSubzoneResultsPayload: {
-            areaHa: number;
-            /** Format: date-time */
-            completedTime?: string;
-            /** Format: int32 */
-            estimatedPlants?: number;
-            monitoringPlots: components["schemas"]["ObservationMonitoringPlotResultsPayload"][];
-            name: string;
-            /** Format: int32 */
-            plantingDensity: number;
-            /** Format: int32 */
-            plantingDensityStdDev?: number;
-            /** Format: int64 */
-            plantingSubzoneId?: number;
-            species: components["schemas"]["ObservationSpeciesResultsPayload"][];
-            /** Format: int32 */
-            survivalRate?: number;
-            /** Format: int32 */
-            survivalRateStdDev?: number;
-            /** Format: int32 */
-            totalPlants: number;
-            /** Format: int32 */
-            totalSpecies: number;
-        };
-        /**
-         * @deprecated
-         * @description Use ObservationStratumResultsPayload instead
-         */
-        ObservationPlantingZoneResultsPayload: {
-            areaHa: number;
-            /** Format: date-time */
-            completedTime?: string;
-            /** Format: int32 */
-            estimatedPlants?: number;
-            name: string;
-            /** Format: int32 */
-            plantingDensity: number;
-            /** Format: int32 */
-            plantingDensityStdDev?: number;
-            plantingSubzones: components["schemas"]["ObservationPlantingSubzoneResultsPayload"][];
-            /** Format: int64 */
-            plantingZoneId?: number;
-            species: components["schemas"]["ObservationSpeciesResultsPayload"][];
-            /** Format: int32 */
-            survivalRate?: number;
-            /** Format: int32 */
-            survivalRateStdDev?: number;
-            /** Format: int32 */
-            totalPlants: number;
-            /** Format: int32 */
-            totalSpecies: number;
-        };
         ObservationPlotMediaSubjectPayload: Omit<WithRequired<components["schemas"]["EventSubjectPayload"], "fullText" | "shortText">, "type"> & {
             /** Format: int64 */
             fileId: number;
@@ -9055,11 +8955,6 @@ export interface components {
             plantingSiteHistoryId?: number;
             /** Format: int64 */
             plantingSiteId: number;
-            /**
-             * @deprecated
-             * @description Use strata instead
-             */
-            plantingZones: components["schemas"]["ObservationPlantingZoneResultsPayload"][];
             species: components["schemas"]["ObservationSpeciesResultsPayload"][];
             /** Format: date */
             startDate: string;
@@ -9452,11 +9347,6 @@ export interface components {
             id: number;
             /** Format: int64 */
             plantingSiteId: number;
-            /**
-             * @deprecated
-             * @description Use strata instead
-             */
-            plantingZones: components["schemas"]["PlantingZoneHistoryPayload"][];
             strata: components["schemas"]["StratumHistoryResponsePayload"][];
         };
         /** @description History of rollup summaries of planting site observations in order of observation time, latest first.  */
@@ -9485,11 +9375,6 @@ export interface components {
             plantingDensityStdDev?: number;
             /** Format: int64 */
             plantingSiteId: number;
-            /**
-             * @deprecated
-             * @description Use strata instead
-             */
-            plantingZones: components["schemas"]["PlantingZoneObservationSummaryPayload"][];
             /** @description Combined list of observed species and their statuses from the latest observation of each substratum within each stratum. */
             species: components["schemas"]["ObservationSpeciesResultsPayload"][];
             strata: components["schemas"]["StratumObservationSummaryPayload"][];
@@ -9547,11 +9432,6 @@ export interface components {
         PlantingSiteReportedPlantsPayload: {
             /** Format: int64 */
             id: number;
-            /**
-             * @deprecated
-             * @description Use strata instead
-             */
-            plantingZones: components["schemas"]["PlantingZoneReportedPlantsPayload"][];
             /** Format: int32 */
             plantsSinceLastObservation: number;
             /** Format: int32 */
@@ -9564,37 +9444,12 @@ export interface components {
         PlantingSiteValidationProblemPayload: {
             /** @description If the problem is a conflict between two strata or two substrata, the list of the conflicting stratum or substratum names. */
             conflictsWith?: string[];
-            /**
-             * @deprecated
-             * @description Use substratum instead
-             */
-            plantingSubzone?: string;
-            /**
-             * @deprecated
-             * @description Use stratum instead
-             */
-            plantingZone?: string;
             /** @enum {string} */
             problemType: "DuplicateSubstratumName" | "DuplicateStratumName" | "ExclusionWithoutBoundary" | "SiteTooLarge" | "SubstratumBoundaryOverlaps" | "SubstratumInExclusionArea" | "SubstratumNotInStratum" | "StratumBoundaryOverlaps" | "StratumHasNoSubstrata" | "StratumNotInSite" | "StratumTooSmall" | "StrataWithoutSiteBoundary";
             /** @description If the problem relates to a particular stratum, its name. */
             stratum?: string;
             /** @description If the problem relates to a particular substratum, its name. If this is present, stratum will also be present and will be the name of the stratum that contains this substratum. */
             substratum?: string;
-        };
-        /**
-         * @deprecated
-         * @description Use SubstratumHistoryResponsePayload instead
-         */
-        PlantingSubzoneHistoryPayload: {
-            areaHa: number;
-            boundary: components["schemas"]["MultiPolygon"];
-            fullName: string;
-            /** Format: int64 */
-            id: number;
-            monitoringPlots: components["schemas"]["MonitoringPlotHistoryPayload"][];
-            name: string;
-            /** Format: int64 */
-            plantingSubzoneId?: number;
         };
         /**
          * @deprecated
@@ -9620,21 +9475,6 @@ export interface components {
         };
         /**
          * @deprecated
-         * @description Use SubstratumReportedPlantsResponsePayload instead
-         */
-        PlantingSubzoneReportedPlantsPayload: {
-            /** Format: int64 */
-            id: number;
-            /** Format: int32 */
-            plantsSinceLastObservation: number;
-            species: components["schemas"]["ReportedSpeciesPayload"][];
-            /** Format: int32 */
-            totalPlants: number;
-            /** Format: int32 */
-            totalSpecies: number;
-        };
-        /**
-         * @deprecated
          * @description Use SubstratumSpeciesPayload instead
          */
         PlantingSubzoneSpeciesPayload: components["schemas"]["SpeciesPayload"] & {
@@ -9642,50 +9482,6 @@ export interface components {
             /** Format: int64 */
             id: number;
             scientificName: string;
-        };
-        /**
-         * @deprecated
-         * @description Use StratumHistoryResponsePayload instead
-         */
-        PlantingZoneHistoryPayload: {
-            areaHa: number;
-            boundary: components["schemas"]["MultiPolygon"];
-            /** Format: int64 */
-            id: number;
-            name: string;
-            plantingSubzones: components["schemas"]["PlantingSubzoneHistoryPayload"][];
-            /** Format: int64 */
-            plantingZoneId?: number;
-        };
-        /**
-         * @deprecated
-         * @description Use StratumObservationSummaryPayload instead
-         */
-        PlantingZoneObservationSummaryPayload: {
-            areaHa: number;
-            /** Format: date-time */
-            earliestObservationTime: string;
-            /** Format: int32 */
-            estimatedPlants?: number;
-            /** Format: date-time */
-            latestObservationTime: string;
-            /** Format: int32 */
-            plantingDensity: number;
-            /** Format: int32 */
-            plantingDensityStdDev?: number;
-            plantingSubzones: components["schemas"]["ObservationPlantingSubzoneResultsPayload"][];
-            /** Format: int64 */
-            plantingZoneId: number;
-            species: components["schemas"]["ObservationSpeciesResultsPayload"][];
-            substrata: components["schemas"]["ObservationSubstratumResultsPayload"][];
-            /** Format: int32 */
-            survivalRate?: number;
-            /** Format: int32 */
-            survivalRateStdDev?: number;
-            /** Format: int32 */
-            totalPlants: number;
-            /** Format: int32 */
-            totalSpecies: number;
         };
         /**
          * @deprecated
@@ -9709,24 +9505,6 @@ export interface components {
             numTemporaryPlots: number;
             plantingSubzones: components["schemas"]["PlantingSubzonePayload"][];
             targetPlantingDensity: number;
-        };
-        /**
-         * @deprecated
-         * @description Use StratumReportedPlantsResponsePayload instead
-         */
-        PlantingZoneReportedPlantsPayload: {
-            /** Format: int64 */
-            id: number;
-            plantingSubzones: components["schemas"]["PlantingSubzoneReportedPlantsPayload"][];
-            /** Format: int32 */
-            plantsSinceLastObservation: number;
-            /** Format: int32 */
-            progressPercent: number;
-            species: components["schemas"]["ReportedSpeciesPayload"][];
-            /** Format: int32 */
-            totalPlants: number;
-            /** Format: int32 */
-            totalSpecies: number;
         };
         PlotObservationSpeciesDensityPayload: {
             /** Format: int64 */
@@ -21151,6 +20929,7 @@ export interface operations {
                 projectId?: number;
                 /** @description If true, include strata and substrata for each site. */
                 full?: boolean;
+                includeZones?: boolean;
             };
             header?: never;
             path?: never;
@@ -21242,7 +21021,9 @@ export interface operations {
     };
     getPlantingSite: {
         parameters: {
-            query?: never;
+            query?: {
+                includeZones?: boolean;
+            };
             header?: never;
             path: {
                 id: number;
@@ -21315,28 +21096,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-                };
-            };
-        };
-    };
-    listPlantingSiteHistories: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ListPlantingSiteHistoriesResponsePayload"];
                 };
             };
         };
