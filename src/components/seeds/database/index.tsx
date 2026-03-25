@@ -731,9 +731,9 @@ export default function Database(props: DatabaseProps): JSX.Element {
                         enableColumnFilters={true}
                         enableColumnOrdering={true}
                         storageKey={TABLE_STATE_STORAGE_KEY}
-                        enablePagination={false}
+                        enablePagination={true}
                         enableTopToolbar={true}
-                        enableBottomToolbar={false}
+                        enableBottomToolbar={true}
                         tableOptions={{
                           defaultColumn: {
                             enableEditing: false,
