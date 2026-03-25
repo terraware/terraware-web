@@ -253,7 +253,7 @@ const getAllBatches = async (
         field: 'batchNumber',
       },
     ],
-    count: 1000,
+    count: 0,
   };
 
   if (facilityIds && facilityIds.length > 0) {
