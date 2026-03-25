@@ -54,20 +54,20 @@ export default function PlantsAndSpeciesCard({
     projectId,
   ]);
 
-  const plantingSite = useMemo(() => getPlantingSiteResponse.data?.site, [getPlantingSiteResponse]);
+  const plantingSite = useMemo(() => getPlantingSiteResponse.currentData?.site, [getPlantingSiteResponse]);
 
   const projectPlantingSites = useMemo(
-    () => listPlantingSitesResponse.data?.sites ?? [],
-    [listPlantingSitesResponse.data?.sites]
+    () => listPlantingSitesResponse.currentData?.sites ?? [],
+    [listPlantingSitesResponse]
   );
 
   const plantingSiteReportedPlants = useMemo(
-    () => getPlantingSiteReportedPlantsResponse.data?.site,
+    () => getPlantingSiteReportedPlantsResponse.currentData?.site,
     [getPlantingSiteReportedPlantsResponse]
   );
 
   const projectReportedPlants = useMemo(
-    () => listPlantingSiteReportedPlantsResponse.data?.sites ?? [],
+    () => listPlantingSiteReportedPlantsResponse.currentData?.sites ?? [],
     [listPlantingSiteReportedPlantsResponse]
   );
 
@@ -86,12 +86,12 @@ export default function PlantsAndSpeciesCard({
   }, [projectPlantingSites]);
 
   const totalArea = useMemo(() => {
-    if (projectId) {
+    if (projectId && plantingSiteId === undefined) {
       return totalAreaRolledUp;
     } else {
       return plantingSite?.areaHa ?? 0;
     }
-  }, [plantingSite, projectId, totalAreaRolledUp]);
+  }, [plantingSite, plantingSiteId, projectId, totalAreaRolledUp]);
 
   const calculatePlantingSitePlantedArea = (site: PlantingSite) => {
     return (
@@ -107,7 +107,7 @@ export default function PlantsAndSpeciesCard({
     }, 0) || 0;
 
   const totalPlantedArea = useMemo(() => {
-    if (projectId) {
+    if (projectId && plantingSiteId === undefined) {
       return projectTotalPlanted;
     } else if (plantingSiteId && plantingSite) {
       return calculatePlantingSitePlantedArea(plantingSite);
@@ -173,14 +173,12 @@ export default function PlantsAndSpeciesCard({
           <Box flexBasis='100%'>
             <Box display={'flex'} alignItems={'center'}>
               <Typography fontSize={'24px'} fontWeight={600} paddingRight={1}>
-                {projectId ? (
+                {projectId && plantingSiteId === undefined ? (
                   <FormattedNumber
                     value={projectReportedPlants.reduce((sum, sitePlants) => sum + sitePlants.totalPlants, 0)}
                   />
-                ) : plantingSiteReportedPlants ? (
-                  <FormattedNumber value={plantingSiteReportedPlants.totalPlants} />
                 ) : (
-                  ''
+                  <FormattedNumber value={plantingSiteReportedPlants?.totalPlants ?? 0} />
                 )}{' '}
                 {strings.PLANTS}
               </Typography>
@@ -205,7 +203,7 @@ export default function PlantsAndSpeciesCard({
           <Box>
             <Box display={'flex'} alignItems={'center'}>
               <Typography fontSize={'24px'} fontWeight={600} paddingRight={1}>
-                {projectId ? (
+                {projectId && plantingSiteId === undefined ? (
                   <FormattedNumber value={projectTotalSpecies} />
                 ) : (
                   <FormattedNumber value={plantingSiteReportedPlants?.species?.length ?? 0} />
