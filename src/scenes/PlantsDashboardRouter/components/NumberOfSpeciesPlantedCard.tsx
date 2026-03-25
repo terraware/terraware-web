@@ -81,6 +81,8 @@ export default function NumberOfSpeciesPlantedCard({
     return <SiteWithoutStrataCard plantingSiteId={plantingSite.id} />;
   } else if (plantingSite && plantingSite?.strata?.length) {
     return <SiteWithStrataCard plantingSiteId={plantingSite.id} />;
+  } else {
+    return <ChartData labels={[]} values={[]} />;
   }
 }
 

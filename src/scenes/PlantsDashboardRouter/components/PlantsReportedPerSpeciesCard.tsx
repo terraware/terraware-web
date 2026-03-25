@@ -45,6 +45,10 @@ export default function PlantsReportedPerSpeciesCard({
     return <SiteWithoutStrataCard plantingSiteId={plantingSite.id} newVersion={newVersion} />;
   } else if (plantingSite && plantingSite?.strata?.length) {
     return <SiteWithStrataCard plantingSiteId={plantingSite.id} newVersion={newVersion} />;
+  } else {
+    return (
+      <ChartData plantingSiteId={plantingSiteId} tooltipTitles={[]} labels={[]} values={[]} newVersion={newVersion} />
+    );
   }
 }
 
@@ -207,7 +211,7 @@ const SiteWithStrataCard = ({
 };
 
 type ChartDataProps = {
-  plantingSiteId: number;
+  plantingSiteId?: number;
   tooltipTitles?: string[];
   labels?: string[];
   values?: number[];
@@ -262,7 +266,7 @@ const ChartData = ({
       </Box>
       <Box height={'250px'} marginTop={3} marginBottom={6}>
         <PieChart
-          key={`${plantingSiteId}_${values?.length}`}
+          key={`${plantingSiteId ?? 'project'}_${values?.length}`}
           chartId='plantsBySpecies'
           chartData={chartData}
           customTooltipLabel={tooltipRenderer}
