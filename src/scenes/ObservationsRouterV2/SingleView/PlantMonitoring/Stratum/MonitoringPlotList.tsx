@@ -61,7 +61,7 @@ const MonitoringPlotActionsMenuContent = ({ row }: { row: MonitoringPlotRow }): 
           disabled: !replaceObservationPlotEnabled || !!row.completedDate || row.observationState === 'Abandoned',
           label: strings.REQUEST_REASSIGNMENT,
           onClick: () => {
-            openReassignPlotModal(row.observationId, row.monitoringPlotId);
+            openReassignPlotModal(row.observationId, row.monitoringPlotId, row.isPermanent === true);
           },
         },
       ]}
