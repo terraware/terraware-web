@@ -1,3 +1,4 @@
+dc55f05d14d8 Replaced reported plants usage with RTK Query (#5494)
 3cfb125ff0c7 SW-7951 Specify includeZones: false for get/list planting sites (#5500)
 5b061a28a6b5 SW-8224 Update Observation and Monitoring Plot cards and charts to latest UI/UX (#5499)
 4a6644367c8a SW-8223: Improve performance of plants dashboard (#5495)
