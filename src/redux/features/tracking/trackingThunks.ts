@@ -150,14 +150,3 @@ export const requestListProjectPlantingSites = createAsyncThunk(
     return rejectWithValue(strings.GENERIC_ERROR);
   }
 );
-
-export const requestOrganizationReportedPlants = createAsyncThunk(
-  'tracking/organizationReportedPlants',
-  async (organizationId: number, { rejectWithValue }) => {
-    const response = await TrackingService.listOrganizationReportedPlants(organizationId);
-    if (response !== null && response.requestSucceeded && response?.data?.sites !== undefined) {
-      return response.data.sites;
-    }
-    return rejectWithValue(strings.GENERIC_ERROR);
-  }
-);
