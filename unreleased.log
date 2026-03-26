@@ -1,3 +1,4 @@
+82dfcff99390 SW-8243 - Fetch all nursery batches (#5501)
 dc55f05d14d8 Replaced reported plants usage with RTK Query (#5494)
 3cfb125ff0c7 SW-7951 Specify includeZones: false for get/list planting sites (#5500)
 5b061a28a6b5 SW-8224 Update Observation and Monitoring Plot cards and charts to latest UI/UX (#5499)
