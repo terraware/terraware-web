@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';
-import { useDeviceInfo } from '@terraware/web-components/utils';
+import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/utils';
 
 import AddLink from 'src/components/common/AddLink';
 import Link from 'src/components/common/Link';
@@ -97,7 +97,13 @@ export const PlantingSiteStats = () => {
     return total;
   }, [plantingSite]);
 
-  const latestObservationCompletedTime = useMemo(() => plantingSite?.latestObservationCompletedTime, [plantingSite]);
+  const latestObservationCompletedTime = useMemo(() => {
+    if (plantingSite?.latestObservationCompletedTime) {
+      return getDateDisplayValue(plantingSite.latestObservationCompletedTime);
+    } else {
+      return '';
+    }
+  }, [plantingSite]);
 
   const totalPlants = useMemo(() => plantingSiteReportedPlants?.totalPlants ?? 0, [plantingSiteReportedPlants]);
   const totalSpecies = useMemo(() => plantingSiteReportedPlants?.species?.length ?? 0, [plantingSiteReportedPlants]);
