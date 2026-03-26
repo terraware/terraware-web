@@ -71,7 +71,7 @@ export default function NumberOfSpeciesPlantedCard({
 
   useEffect(() => {
     if (plantingSiteId) {
-      void getPlantingSite(plantingSiteId, true);
+      void getPlantingSite({ id: plantingSiteId });
     }
   }, [getPlantingSite, plantingSiteId]);
 
