@@ -152,6 +152,7 @@ export default function PlantingProgressMap({ plantingSiteId, reloadTracking }: 
               substratumAreaHa={substrataAreaHa[properties.id]}
               siteName={plantingSite?.name || ''}
               plantingComplete={substrataComplete[properties.id]}
+              plantingSiteId={plantingSiteId}
               onUpdatePlantingComplete={updatePlantingComplete}
               busy={updateStatus?.status === 'pending'}
             />
