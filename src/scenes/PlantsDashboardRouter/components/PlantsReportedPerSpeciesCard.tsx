@@ -35,7 +35,7 @@ export default function PlantsReportedPerSpeciesCard({
 
   useEffect(() => {
     if (plantingSiteId) {
-      void getPlantingSite(plantingSiteId, true);
+      void getPlantingSite({ id: plantingSiteId });
     }
   }, [getPlantingSite, plantingSiteId]);
 
