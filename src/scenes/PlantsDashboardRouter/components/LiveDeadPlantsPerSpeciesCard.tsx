@@ -87,7 +87,7 @@ export default function LiveDeadPlantsPerSpeciesCard(): JSX.Element {
   );
 
   const allSpeciesNoValues = useMemo(() => {
-    return observationSummaries?.[0].species.every((sp) => {
+    return observationSummaries?.[0]?.species.every((sp) => {
       return !sp.survivalRate;
     });
   }, [observationSummaries]);
