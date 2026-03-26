@@ -108,7 +108,11 @@ const useTableState = (storageKey: string, options?: UseTableStateOptions) => {
   const [pagination, setPagination] = useState<MRT_PaginationState>(() => {
     try {
       const savedPageSize = localStorage.getItem(`${storageKey}-pageSize`);
-      return { pageIndex: 0, pageSize: savedPageSize ? Number(savedPageSize) : 10 };
+      const parsedSize = savedPageSize ? Number(savedPageSize) : null;
+      return {
+        pageIndex: 0,
+        pageSize: parsedSize && !isNaN(parsedSize) && parsedSize > 0 ? parsedSize : 10,
+      };
     } catch {
       return { pageIndex: 0, pageSize: 10 };
     }
