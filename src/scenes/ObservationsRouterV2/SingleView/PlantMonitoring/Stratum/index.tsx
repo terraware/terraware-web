@@ -98,7 +98,7 @@ const StratumDetails = (): JSX.Element => {
     {
       label: strings.SURVIVAL_RATE,
       tooltip: strings.SURVIVAL_RATE_COLUMN_TOOLTIP,
-      value: hasObservedPermanentPlots ? `${stratumResult?.survivalRate ?? '-'}%` : '',
+      value: hasObservedPermanentPlots ? `${stratumResult?.survivalRate ?? '-'}%` : '-',
     },
   ];
 
@@ -136,7 +136,7 @@ const StratumDetails = (): JSX.Element => {
                 chartId='observationSurvivalRateChart'
                 species={hasObservedPermanentPlots ? species : []}
                 minHeight='245px'
-                isNotCompleted={!stratumResult?.completedTime}
+                isNotCompleted={!stratumResult?.completedTime || !hasObservedPermanentPlots}
               />
             </Box>
           </Box>

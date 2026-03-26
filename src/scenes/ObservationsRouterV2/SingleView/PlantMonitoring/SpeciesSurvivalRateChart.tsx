@@ -55,7 +55,7 @@ export default function SpeciesSurvivalRateChart({
   }, [species, isNotCompleted, isTemporary]);
 
   return (
-    <Box position='relative'>
+    <Box position='relative' height='100%'>
       {(isTemporary || isNotCompleted) && (
         <Box
           sx={{
