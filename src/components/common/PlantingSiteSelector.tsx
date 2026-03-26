@@ -3,9 +3,8 @@ import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'reac
 import { Dropdown } from '@terraware/web-components';
 
 import { useLocalization, useOrganization } from 'src/providers';
-import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
+import { useLazyListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
 import { PreferencesService } from 'src/services';
-import strings from 'src/strings';
 
 type PlantingSiteSelectorProps = {
   onChange: (plantingSiteId: number) => void;
@@ -15,9 +14,20 @@ type PlantingSiteSelectorProps = {
 export default function PlantingSiteSelector({ onChange, hideNoBoundary }: PlantingSiteSelectorProps): JSX.Element {
   // assume `requestPlantingSites` thunk has been dispatched by consumer
   const [selectedPlantingSiteId, setSelectedPlantingSiteId] = useState<number | undefined>();
-  const { activeLocale } = useLocalization();
+  const { activeLocale, strings } = useLocalization();
   const { selectedOrganization, orgPreferences, reloadOrgPreferences } = useOrganization();
-  const { allPlantingSites } = usePlantingSiteData();
+
+  const [listPlantingSites, listPlantingSitesResponse] = useLazyListPlantingSitesQuery();
+  const allPlantingSites = useMemo(
+    () => listPlantingSitesResponse.currentData?.sites ?? [],
+    [listPlantingSitesResponse]
+  );
+
+  useEffect(() => {
+    if (selectedOrganization) {
+      void listPlantingSites({ organizationId: selectedOrganization.id, includeZones: false }, true);
+    }
+  }, [listPlantingSites, selectedOrganization]);
 
   const filteredPlantingSites = useMemo(() => {
     return allPlantingSites?.filter((ps) => (hideNoBoundary ? !!ps.boundary : true));

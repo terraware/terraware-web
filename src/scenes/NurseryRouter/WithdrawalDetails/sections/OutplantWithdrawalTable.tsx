@@ -1,9 +1,10 @@
-import React, { type JSX, useMemo } from 'react';
+import React, { type JSX, useEffect, useMemo } from 'react';
 
 import { TableColumnType } from '@terraware/web-components';
 
 import Table from 'src/components/common/table';
-import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
+import { useOrganization } from 'src/providers';
+import { useLazyListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
 import strings from 'src/strings';
 import { Batch, NurseryWithdrawal } from 'src/types/Batch';
 import { Species } from 'src/types/Species';
@@ -39,7 +40,19 @@ export default function OutplantWithdrawalTable({
   withdrawal,
 }: OutplantWithdrawalTableProps): JSX.Element {
   const numberFormatter = useNumberFormatter();
-  const { allPlantingSites } = usePlantingSiteData();
+  const { selectedOrganization } = useOrganization();
+
+  const [listPlantingSites, listPlantingSitesResponse] = useLazyListPlantingSitesQuery();
+  const allPlantingSites = useMemo(
+    () => listPlantingSitesResponse.currentData?.sites ?? [],
+    [listPlantingSitesResponse]
+  );
+
+  useEffect(() => {
+    if (selectedOrganization) {
+      void listPlantingSites({ organizationId: selectedOrganization.id, includeZones: false }, true);
+    }
+  }, [listPlantingSites, selectedOrganization]);
 
   type BatchesRow = {
     name?: string;
