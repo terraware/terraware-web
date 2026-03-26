@@ -5,6 +5,7 @@ import {
   MRT_ColumnFiltersState,
   MRT_ColumnOrderState,
   MRT_DensityState,
+  MRT_PaginationState,
   MRT_SortingState,
   MRT_VisibilityState,
 } from 'material-react-table';
@@ -104,6 +105,27 @@ const useTableState = (storageKey: string, options?: UseTableStateOptions) => {
 
   const [showGlobalFilter, setShowGlobalFilter] = useState(false);
 
+  const [pagination, setPagination] = useState<MRT_PaginationState>(() => {
+    try {
+      const savedPageSize = localStorage.getItem(`${storageKey}-pageSize`);
+      return { pageIndex: 0, pageSize: savedPageSize ? Number(savedPageSize) : 10 };
+    } catch {
+      return { pageIndex: 0, pageSize: 10 };
+    }
+  });
+
+  const onPaginationChange = (updater: MRT_PaginationState | ((prev: MRT_PaginationState) => MRT_PaginationState)) => {
+    setPagination((prev) => {
+      const next = typeof updater === 'function' ? updater(prev) : updater;
+      try {
+        localStorage.setItem(`${storageKey}-pageSize`, String(next.pageSize));
+      } catch {
+        // ignore
+      }
+      return next;
+    });
+  };
+
   const [sorting, setSorting] = useState<MRT_SortingState>(() => {
     if (persistSorting) {
       try {
@@ -172,6 +194,8 @@ const useTableState = (storageKey: string, options?: UseTableStateOptions) => {
     columnVisibility,
     density,
     onDensityChange,
+    onPaginationChange,
+    pagination,
     setColumnFilters,
     setColumnOrder,
     setColumnVisibility,

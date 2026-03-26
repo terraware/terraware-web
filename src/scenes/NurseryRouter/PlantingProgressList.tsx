@@ -82,8 +82,16 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
   const withStrataState = useTableState('plantings-progress-table-with-strata');
   const withoutStrataState = useTableState('plantings-progress-table-without-strata');
   const activeState = hasStrata !== false ? withStrataState : withoutStrataState;
-  const { density, onDensityChange, showColumnFilters, setShowColumnFilters, showGlobalFilter, setShowGlobalFilter } =
-    activeState;
+  const {
+    density,
+    onDensityChange,
+    onPaginationChange,
+    pagination,
+    showColumnFilters,
+    setShowColumnFilters,
+    showGlobalFilter,
+    setShowGlobalFilter,
+  } = activeState;
 
   const tableStateStorageKey = hasStrata
     ? 'plantings-progress-table-with-strata'
@@ -349,12 +357,14 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
           state: {
             rowSelection,
             columnVisibility: activeState.columnVisibility,
+            density,
+            pagination,
             showColumnFilters,
             showGlobalFilter,
-            density,
             columnOrder: activeState.columnOrder,
           },
           onRowSelectionChange: setRowSelection,
+          onPaginationChange,
           onColumnVisibilityChange: activeState.setColumnVisibility,
           onShowColumnFiltersChange: setShowColumnFilters,
           onShowGlobalFilterChange: setShowGlobalFilter,
