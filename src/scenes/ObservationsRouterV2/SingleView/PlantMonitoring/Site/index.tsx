@@ -145,7 +145,7 @@ const SiteDetails = (): JSX.Element => {
     {
       label: strings.SURVIVAL_RATE,
       tooltip: strings.SURVIVAL_RATE_COLUMN_TOOLTIP,
-      value: hasObservedPermanentPlots ? `${results?.survivalRate ?? '-'}%` : '',
+      value: hasObservedPermanentPlots ? `${results?.survivalRate ?? '-'}%` : '-',
     },
   ];
 
@@ -203,7 +203,7 @@ const SiteDetails = (): JSX.Element => {
                 chartId='observationSurvivalRateChart'
                 species={hasObservedPermanentPlots ? species : []}
                 minHeight='245px'
-                isNotCompleted={!results?.completedTime}
+                isNotCompleted={!results?.completedTime || !hasObservedPermanentPlots}
               />
             </Box>
           </Box>
