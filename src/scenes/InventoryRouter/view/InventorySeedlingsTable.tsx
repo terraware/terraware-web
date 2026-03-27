@@ -15,7 +15,6 @@ import {
 import ProjectAssignTopBarButton from 'src/components/ProjectAssignTopBarButton';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
-import { DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useOrganization } from 'src/providers';
@@ -24,12 +23,9 @@ import { requestProjects } from 'src/redux/features/projects/projectsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { isBatchEmpty } from 'src/scenes/InventoryRouter/FilterUtils';
 import { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';
-import Search from 'src/scenes/InventoryRouter/Search';
 import { NurseryBatchService } from 'src/services';
-import strings from 'src/strings';
 import { FieldNodePayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
-import useDebounce from 'src/utils/useDebounce';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useForm from 'src/utils/useForm';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
@@ -77,7 +73,6 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
     origin,
     columns,
     isSelectionBulkWithdrawable,
-    getFuzzySearchFields,
     getBatchesSearch,
     getBatchesExport,
   } = props;
@@ -95,9 +90,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
   const tableStorageKey = `inventorySeedlingsTable_${origin.toLowerCase()}`;
 
   const [openExportModal, setOpenExportModal] = useState<boolean>(false);
-  const [temporalSearchValue, setTemporalSearchValue] = useState<string>('');
   const [batches, setBatches] = useState<SearchResponseElement[]>([]);
-  const [speciesUnfilteredBatches, setSpeciesUnfilteredBatches] = useState<SearchResponseElement[]>([]);
   const [filteredBatches, setFilteredBatches] = useState<SearchResponseElement[]>([]);
   const [filters, setFilters] = useForm<InventoryFiltersUnion>({});
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
@@ -108,13 +101,11 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
     openChangeQuantityModal: false,
   });
 
-  const debouncedSearchTerm = useDebounce(temporalSearchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
-
   const selectedRows = useMemo(
     () =>
       Object.keys(rowSelection)
-        .map((index) => filteredBatches[Number(index)])
-        .filter(Boolean),
+        .map((id) => filteredBatches.find((batch) => String(batch.id) === id))
+        .filter((row): row is SearchResponseElement => row !== undefined),
     [rowSelection, filteredBatches]
   );
 
@@ -143,7 +134,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
   );
 
   const getNonSpeciesSearchFields = useCallback(() => {
-    const fields: FieldNodePayload[] = debouncedSearchTerm ? getFuzzySearchFields(debouncedSearchTerm) : [];
+    const fields: FieldNodePayload[] = [];
 
     if (filters.facilityIds && filters.facilityIds.length > 0) {
       fields.push({
@@ -164,7 +155,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
     }
 
     return fields;
-  }, [getFuzzySearchFields, debouncedSearchTerm, filters.facilityIds, filters.projectIds]);
+  }, [filters.facilityIds, filters.projectIds]);
 
   const getSearchFields = useCallback(() => {
     const fields: FieldNodePayload[] = getNonSpeciesSearchFields();
@@ -203,32 +194,6 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
   }, [activeLocale, filters.facilityIds, getBatchesSearch, getSearchFields, modified, originId, selectedOrganization]);
 
   useEffect(() => {
-    const requestId = setRequestId('inventory-seedlings-species-unfiltered');
-
-    const populateSpeciesUnfilteredResults = async () => {
-      if (!originId || !selectedOrganization) {
-        return;
-      }
-
-      const searchFields = getNonSpeciesSearchFields();
-      const speciesUnfilteredBatchesResults = await getBatchesSearch(
-        selectedOrganization.id,
-        originId,
-        searchFields,
-        undefined
-      );
-
-      if (requestId === getRequestId('inventory-seedlings-species-unfiltered')) {
-        setSpeciesUnfilteredBatches(filterEmptyBatches(speciesUnfilteredBatchesResults || []));
-      }
-    };
-
-    if (!originId || !isNaN(originId)) {
-      void populateSpeciesUnfilteredResults();
-    }
-  }, [filterEmptyBatches, getBatchesSearch, getNonSpeciesSearchFields, originId, selectedOrganization]);
-
-  useEffect(() => {
     const batch = batches.find((b) => b.batchNumber === openBatchNumber);
     if (batch) {
       const batchId = batch.id as number | string;
@@ -254,9 +219,9 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
     setFilteredBatches(filterEmptyBatches(batches));
   }, [batches, filterEmptyBatches]);
 
-  const reloadData = () => {
+  const reloadData = useCallback(() => {
     setModified(Date.now());
-  };
+  }, [setModified]);
 
   const addBatch = () => {
     setOpenNewBatchModal(true);
@@ -272,7 +237,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
       reloadData();
       setOpenDeleteModal(false);
     });
-  }, [selectedRows, snackbar]);
+  }, [reloadData, selectedRows, snackbar]);
 
   const selectAllRows = useCallback(() => {
     const newSelection: MRT_RowSelectionState = {};
@@ -283,7 +248,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
   }, [filteredBatches]);
 
   const getSelectedRowsAsQueryParams = useCallback(() => {
-    const batchIds = selectedRows.map((row) => `batchId=${row.id}`);
+    const batchIds = selectedRows.map((row) => `batchId=${row.id as string | number}`);
     return `?${batchIds.join('&')}&source=${window.location.pathname}`;
   }, [selectedRows]);
 
@@ -318,11 +283,6 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
     }
     return getBatchesExport(selectedOrganization.id, originId, getSearchFields(), undefined);
   }, [activeLocale, originId, getBatchesExport, selectedOrganization, getSearchFields]);
-
-  const getResultsSpeciesNames = useCallback(
-    (): string[] => speciesUnfilteredBatches.map((s) => s.species_scientificName as string),
-    [speciesUnfilteredBatches]
-  );
 
   // Cell renderers
   const BatchNumberCell = useCallback(
@@ -361,7 +321,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
           onClick={() =>
             navigate({
               pathname: APP_PATHS.BATCH_WITHDRAW,
-              search: `?batchId=${batch.id}&source=${window.location.pathname}`,
+              search: `?batchId=${batch.id as string | number}&source=${window.location.pathname}`,
             })
           }
           size='small'
@@ -375,7 +335,9 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
 
   const QuantityCell = useCallback(
     ({ cell }: { cell: MRT_Cell<SearchResponseElement> }) => {
-      return <span>{numberFormatter.format(Number(cell.getValue()))}</span>;
+      const value = cell.getValue();
+      const num = Number(value);
+      return <span>{isNaN(num) ? String(value ?? '') : numberFormatter.format(num)}</span>;
     },
     [numberFormatter]
   );
