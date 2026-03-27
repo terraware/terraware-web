@@ -80,12 +80,6 @@ export default function PlantingProgress(): JSX.Element {
     [activeLocale, getProjectName, projects]
   );
 
-  useEffect(() => {
-    if (selectedOrganization) {
-      void dispatch(requestObservationsResults(selectedOrganization.id));
-    }
-  }, [dispatch, selectedOrganization]);
-
   const plantingSitesNames = useAppSelector((state) => selectPlantingSitesNames(state));
 
   const filterColumns = useMemo<FilterField[]>(
@@ -134,6 +128,10 @@ export default function PlantingProgress(): JSX.Element {
       void dispatch(requestPlantings(selectedOrganization.id));
     }
   }, [selectedOrganization, dispatch]);
+
+  useEffect(() => {
+    reloadTrackingAndObservations();
+  }, [dispatch, reloadTrackingAndObservations, selectedOrganization]);
 
   const onExport = useCallback(() => {
     void exportNurseryPlantingProgress({ plantingProgress: rows || [] });
