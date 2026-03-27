@@ -1,28 +1,16 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { Route, Routes } from 'react-router';
 
-import { useOrganization } from 'src/providers';
+import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
-import { useLazyListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
 import NurseryPlantingsAndWithdrawalsView from 'src/scenes/NurseryRouter/NurseryPlantingsAndWithdrawalsView';
 import NurseryReassignmentView from 'src/scenes/NurseryRouter/NurseryReassignmentView';
 import NurseryWithdrawalsDetailsView from 'src/scenes/NurseryRouter/NurseryWithdrawalsDetailsView';
 
 const NurseryRouter = () => {
   const { species } = useSpeciesData();
-  const { selectedOrganization } = useOrganization();
 
-  const [listPlantingSites, listPlantingSitesResponse] = useLazyListPlantingSitesQuery();
-  const allPlantingSites = useMemo(
-    () => listPlantingSitesResponse.currentData?.sites ?? [],
-    [listPlantingSitesResponse]
-  );
-
-  useEffect(() => {
-    if (selectedOrganization) {
-      void listPlantingSites({ organizationId: selectedOrganization.id, includeZones: false }, true);
-    }
-  }, [listPlantingSites, selectedOrganization]);
+  const allPlantingSites = useOrganizationPlantingSites();
 
   const stratumNames = useMemo(() => {
     const strata: Record<number, string> = {};

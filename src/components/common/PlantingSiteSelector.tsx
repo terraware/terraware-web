@@ -2,8 +2,8 @@ import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'reac
 
 import { Dropdown } from '@terraware/web-components';
 
+import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import { useLocalization, useOrganization } from 'src/providers';
-import { useLazyListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
 import { PreferencesService } from 'src/services';
 
 type PlantingSiteSelectorProps = {
@@ -17,17 +17,7 @@ export default function PlantingSiteSelector({ onChange, hideNoBoundary }: Plant
   const { activeLocale, strings } = useLocalization();
   const { selectedOrganization, orgPreferences, reloadOrgPreferences } = useOrganization();
 
-  const [listPlantingSites, listPlantingSitesResponse] = useLazyListPlantingSitesQuery();
-  const allPlantingSites = useMemo(
-    () => listPlantingSitesResponse.currentData?.sites ?? [],
-    [listPlantingSitesResponse]
-  );
-
-  useEffect(() => {
-    if (selectedOrganization) {
-      void listPlantingSites({ organizationId: selectedOrganization.id, includeZones: false }, true);
-    }
-  }, [listPlantingSites, selectedOrganization]);
+  const allPlantingSites = useOrganizationPlantingSites();
 
   const filteredPlantingSites = useMemo(() => {
     return allPlantingSites?.filter((ps) => (hideNoBoundary ? !!ps.boundary : true));

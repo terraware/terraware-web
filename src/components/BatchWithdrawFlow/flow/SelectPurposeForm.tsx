@@ -20,9 +20,9 @@ import DatePicker from 'src/components/common/DatePicker';
 import Divisor from 'src/components/common/Divisor';
 import PageForm from 'src/components/common/PageForm';
 import { APP_PATHS } from 'src/constants';
+import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { useOrganization } from 'src/providers/hooks';
-import { useLazyListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
@@ -57,17 +57,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
 
-  const [listPlantingSites, listPlantingSitesResponse] = useLazyListPlantingSitesQuery();
-  const allPlantingSites = useMemo(
-    () => listPlantingSitesResponse.currentData?.sites ?? [],
-    [listPlantingSitesResponse]
-  );
-
-  useEffect(() => {
-    if (selectedOrganization) {
-      void listPlantingSites({ organizationId: selectedOrganization.id, includeZones: false }, true);
-    }
-  }, [listPlantingSites, selectedOrganization]);
+  const allPlantingSites = useOrganizationPlantingSites();
 
   const { species } = useSpeciesData();
   const projects = useAppSelector(selectProjects);
