@@ -241,7 +241,7 @@ const ActivitiesListView = ({
       const request = dispatch(requestListFunderActivities(projectId));
       setRequestId(request.requestId);
     } else {
-      const request = dispatch(requestListActivities({ includeMedia: true, projectId }));
+      const request = dispatch(requestListActivities({ depth: 'All', projectId }));
       setRequestId(request.requestId);
     }
   }, [dispatch, isAcceleratorRoute, isFunderRoute, projectId]);

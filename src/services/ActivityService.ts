@@ -52,11 +52,11 @@ type PublishActivityResponse =
  */
 const listActivities = async (
   projectId: number,
-  includeMedia?: boolean | undefined
+  depth?: 'None' | 'Cover Photos' | 'All'
 ): Promise<Response2<ListActivitiesResponse>> => {
   const queryParams = {
     projectId: projectId.toString(),
-    ...(includeMedia !== undefined && { includeMedia: includeMedia.toString() }),
+    ...(depth !== undefined && { depth }),
   };
 
   return await HttpService.root(ACTIVITIES_ENDPOINT).get2<ListActivitiesResponse>({ params: queryParams });
