@@ -3,7 +3,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Box, useTheme } from '@mui/material';
 
 import PageForm from 'src/components/common/PageForm';
-
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
