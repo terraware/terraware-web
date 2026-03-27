@@ -57,7 +57,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
 
-  const { allPlantingSites, isLoading } = useOrganizationPlantingSites();
+  const { allPlantingSites, isLoading } = useOrganizationPlantingSites(true);
 
   const { species } = useSpeciesData();
   const projects = useAppSelector(selectProjects);
