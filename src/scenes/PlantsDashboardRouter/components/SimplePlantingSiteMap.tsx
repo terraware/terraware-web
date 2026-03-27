@@ -3,7 +3,7 @@ import React, { CSSProperties, type JSX, useMemo } from 'react';
 import { Box, CircularProgress } from '@mui/material';
 
 import { PlantingSiteMap } from 'src/components/Map';
-import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
+import { useGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import { MapService } from 'src/services';
 
 type SimplePlantingSiteMapProps = {
@@ -12,8 +12,13 @@ type SimplePlantingSiteMapProps = {
   style?: CSSProperties;
 };
 
-export default function SimplePlantingSiteMap({ hideAllControls, style }: SimplePlantingSiteMapProps): JSX.Element {
-  const { plantingSite } = usePlantingSiteData();
+export default function SimplePlantingSiteMap({
+  plantingSiteId,
+  hideAllControls,
+  style,
+}: SimplePlantingSiteMapProps): JSX.Element {
+  const plantingSiteResponse = useGetPlantingSiteQuery({ id: plantingSiteId, includeZones: false });
+  const plantingSite = useMemo(() => plantingSiteResponse.currentData?.site, [plantingSiteResponse]);
 
   const mapData = useMemo(() => {
     if (!plantingSite?.boundary) {
