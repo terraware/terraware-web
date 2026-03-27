@@ -10,9 +10,9 @@ import Link from 'src/components/common/Link';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import { useOrganization } from 'src/providers';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
-import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
-import { useAppSelector } from 'src/redux/store';
+import { useListProjectsQuery } from 'src/queries/generated/projects';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
 
@@ -70,7 +70,11 @@ export default function PlantsPrimaryPageView({
   const { isDesktop, isMobile } = useDeviceInfo();
   const contentRef = useRef(null);
   const { isAcceleratorRoute } = useAcceleratorConsole();
-  const projects = useAppSelector(selectProjects);
+  const { selectedOrganization } = useOrganization();
+  const { data: projectsData } = useListProjectsQuery(selectedOrganization?.id, {
+    skip: !selectedOrganization,
+  });
+  const projects = projectsData?.projects;
   const { allPlantingSites, isLoading, isInitiated, plantingSite } = usePlantingSiteData();
   const [delayedIsPlantingSiteSet, setDelayedIsPlantingSiteSet] = useState(false);
 
