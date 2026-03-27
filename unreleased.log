@@ -1,3 +1,4 @@
+14aabdc8962b SW-8244 Invalidate site t0 cache when updating planting sites (#5518)
 e94ffa468d58 SW-8244 Display indicator when saving survival rates (#5516)
 d39a45a1407e Updated simple planting site to use RTK Query (#5515)
 881291e27fd2 Fix useProjects (#5512)
