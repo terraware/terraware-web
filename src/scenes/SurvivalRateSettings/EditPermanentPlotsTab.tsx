@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { Box, useTheme } from '@mui/material';
-import { PageForm } from '@terraware/web-components';
 
+import PageForm from 'src/components/common/PageForm';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
@@ -132,6 +132,7 @@ const EditPermanentPlotsTab = ({
       saveButtonText={strings.SAVE}
       cancelButtonText={strings.CANCEL}
       desktopOffset={'266px'}
+      busy={updateT0Result.isLoading}
     >
       {showSpeciesDensityWarningMessage && (
         <SpeciesDensityWarningMessage onClose={cancelWarningHandler} onSave={saveWithDefaultDensity} />

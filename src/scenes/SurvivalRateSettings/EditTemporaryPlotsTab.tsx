@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, useTheme } from '@mui/material';
-import { Checkbox, Icon, PageForm, Tooltip } from '@terraware/web-components';
+import { Checkbox, Icon, Tooltip } from '@terraware/web-components';
 
+import PageForm from 'src/components/common/PageForm';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
@@ -208,6 +209,7 @@ const EditTemporaryPlotsTab = ({
       saveButtonText={strings.SAVE}
       cancelButtonText={strings.CANCEL}
       desktopOffset={'266px'}
+      busy={updateT0Result.isLoading}
     >
       {showSpeciesDensityWarningMessage && (
         <SpeciesDensityWarningMessage onClose={cancelWarningHandler} onSave={saveWithDefaultDensity} type='temporary' />
