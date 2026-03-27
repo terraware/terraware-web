@@ -57,7 +57,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
 
-  const allPlantingSites = useOrganizationPlantingSites();
+  const { allPlantingSites, isLoading } = useOrganizationPlantingSites();
 
   const { species } = useSpeciesData();
   const projects = useAppSelector(selectProjects);
@@ -521,12 +521,12 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   }, [batchesFromNursery]);
 
   const outplantDisabled = useMemo(() => {
-    if (!allPlantingSites.length || noReadySeedlings) {
+    if ((!isLoading && !allPlantingSites.length) || noReadySeedlings) {
       return true;
     }
 
     return false;
-  }, [allPlantingSites, noReadySeedlings]);
+  }, [allPlantingSites, isLoading, noReadySeedlings]);
 
   const getOutplantLabel = () => {
     return (

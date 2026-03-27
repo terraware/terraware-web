@@ -83,19 +83,19 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
     showGlobalFilter,
   } = useTableState(STORAGE_KEY, { persistFilters: true });
 
-  const allPLantingSites = useOrganizationPlantingSites();
+  const { allPlantingSites } = useOrganizationPlantingSites();
   const [listAdHocObservationResults, adHocObservationsResultsResponse] = useLazyListAdHocObservationResultsQuery();
 
   const plantingSitesNames = useMemo(
     () =>
-      allPLantingSites.reduce(
+      allPlantingSites.reduce(
         (siteNames, site) => {
           siteNames[site.id] = site.name;
           return siteNames;
         },
         {} as { [siteId: number]: string }
       ),
-    [allPLantingSites]
+    [allPlantingSites]
   );
 
   useEffect(() => {

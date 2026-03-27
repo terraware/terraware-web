@@ -124,7 +124,7 @@ const ObservationMap = ({
   const { plantDrawerContent, plantDrawerHeader, plantDrawerSize, selectedPlants, selectPlants } = useMapPlantDrawer();
   const { photoDrawerContent, photoDrawerHeader, photoDrawerSize, selectedPhotos, selectPhotos } = useMapPhotoDrawer();
 
-  const allPlantingSites = useOrganizationPlantingSites(true);
+  const { allPlantingSites } = useOrganizationPlantingSites(true);
   const [getPlantingSite, getPlantingSiteResult] = useLazyGetPlantingSiteQuery();
   const [getPlantingSiteHistory, getPlantingSiteHistoryResult] = useLazyGetPlantingSiteHistoryQuery();
   const [listObservationSplats, listObservationSplatsResult] = useLazyListObservationSplatsQuery();

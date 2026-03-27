@@ -17,7 +17,7 @@ export default function PlantingSiteSelector({ onChange, hideNoBoundary }: Plant
   const { activeLocale, strings } = useLocalization();
   const { selectedOrganization, orgPreferences, reloadOrgPreferences } = useOrganization();
 
-  const allPlantingSites = useOrganizationPlantingSites();
+  const { allPlantingSites } = useOrganizationPlantingSites();
 
   const filteredPlantingSites = useMemo(() => {
     return allPlantingSites?.filter((ps) => (hideNoBoundary ? !!ps.boundary : true));

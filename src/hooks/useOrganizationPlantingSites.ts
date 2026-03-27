@@ -17,7 +17,10 @@ const useOrganizationPlantingSites = (full?: boolean) => {
     }
   }, [full, listPlantingSites, selectedOrganization]);
 
-  return allPlantingSites;
+  return {
+    allPlantingSites,
+    isLoading: listPlantingSitesResponse.isFetching,
+  };
 };
 
 export default useOrganizationPlantingSites;
