@@ -31,9 +31,11 @@ api.enhanceEndpoints({
       providesTags: (_result, _error, siteApiArg) => [{ type: QueryTagTypes.PlantingSites, id: siteApiArg.id }],
     },
     updatePlantingSite: {
-      invalidatesTags: (_result, _error, plantingSiteId) => [
-        { type: QueryTagTypes.PlantingSites, id: plantingSiteId.id },
+      invalidatesTags: (_result, _error, siteApiArg) => [
+        { type: QueryTagTypes.PlantingSites, id: siteApiArg.id },
         { type: QueryTagTypes.PlantingSites, id: 'LIST' },
+        // this mutation is called to change the survivalRateIncludesTempPlots, which is included in the T0 response for a site
+        { type: QueryTagTypes.T0, id: siteApiArg.id },
       ],
     },
     getPlantingSiteHistory: {
