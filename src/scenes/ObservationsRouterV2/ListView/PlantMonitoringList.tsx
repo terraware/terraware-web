@@ -20,6 +20,7 @@ import TextTruncated from 'src/components/common/TextTruncated';
 import TableRowPopupMenu from 'src/components/common/table/TableRowPopupMenu';
 import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
 import { APP_PATHS } from 'src/constants';
+import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useOrganization } from 'src/providers';
@@ -27,7 +28,7 @@ import {
   useLazyListAdHocObservationResultsQuery,
   useLazyListObservationResultsQuery,
 } from 'src/queries/generated/observations';
-import { PlantingSitePayload, useLazyListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
+import { PlantingSitePayload } from 'src/queries/generated/plantingSites';
 import { useLazyGetAllT0SiteDataSetQuery } from 'src/queries/generated/t0';
 import { useLazyGetPlotsWithObservationsQuery } from 'src/queries/search/t0';
 import { AdHocObservationResults, ObservationState, getStatus } from 'src/types/Observations';
@@ -134,9 +135,9 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
   const assignedTableState = useTableState(ASSIGNED_STORAGE_KEY, { persistFilters: true });
   const adHocTableState = useTableState(ADHOC_STORAGE_KEY, { persistFilters: true });
 
+  const plantingSites = useOrganizationPlantingSites(true);
   const [listObservationResults, listObservationsResultsResponse] = useLazyListObservationResultsQuery();
   const [listAdHocObservationResults, listAdHocObservationResultsResponse] = useLazyListAdHocObservationResultsQuery();
-  const [listPlantingSites, listPlantingSitesResponse] = useLazyListPlantingSitesQuery();
   const [getT0SiteDataSet, getT0SiteDataSetResponse] = useLazyGetAllT0SiteDataSetQuery();
   const [getPlotsWithObservations, getPlotsWithObservationsResponse] = useLazyGetPlotsWithObservationsQuery();
 
@@ -153,19 +154,18 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
 
   const plantingSitesById = useMemo(
     () =>
-      (listPlantingSitesResponse.data?.sites ?? []).reduce(
+      plantingSites.reduce(
         (sites, site) => {
           sites[site.id] = site;
           return sites;
         },
         {} as { [siteId: number]: PlantingSitePayload }
       ),
-    [listPlantingSitesResponse.data]
+    [plantingSites]
   );
 
   useEffect(() => {
     if (selectedOrganization) {
-      void listPlantingSites({ organizationId: selectedOrganization.id, full: true, includeZones: false }, true);
       if (selectedPlotSelection === 'adHoc') {
         void listAdHocObservationResults(
           {
@@ -189,7 +189,6 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
   }, [
     listAdHocObservationResults,
     listObservationResults,
-    listPlantingSites,
     selectedPlotSelection,
     selectedOrganization,
     plantingSiteId,

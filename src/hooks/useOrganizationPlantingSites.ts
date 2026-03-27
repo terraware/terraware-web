@@ -3,7 +3,7 @@ import { useEffect, useMemo } from 'react';
 import { useOrganization } from 'src/providers';
 import { useLazyListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
 
-const useOrganizationPlantingSites = () => {
+const useOrganizationPlantingSites = (full?: boolean) => {
   const { selectedOrganization } = useOrganization();
   const [listPlantingSites, listPlantingSitesResponse] = useLazyListPlantingSitesQuery();
   const allPlantingSites = useMemo(
@@ -13,9 +13,9 @@ const useOrganizationPlantingSites = () => {
 
   useEffect(() => {
     if (selectedOrganization) {
-      void listPlantingSites({ organizationId: selectedOrganization.id, includeZones: false }, true);
+      void listPlantingSites({ organizationId: selectedOrganization.id, full, includeZones: false }, true);
     }
-  }, [listPlantingSites, selectedOrganization]);
+  }, [full, listPlantingSites, selectedOrganization]);
 
   return allPlantingSites;
 };

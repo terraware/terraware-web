@@ -30,6 +30,7 @@ import usePlotPhotosMapLegend from 'src/components/NewMap/usePlotPhotosMapLegend
 import useSurvivalRateMapLegend from 'src/components/NewMap/useSurvivalRateMapLegend';
 import { getBoundingBoxFromPoints } from 'src/components/NewMap/utils';
 import isEnabled from 'src/features';
+import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import { useLocalization, useOrganization } from 'src/providers';
 import { ObservationSplatPayload, useLazyListObservationSplatsQuery } from 'src/queries/generated/observationSplats';
 import {
@@ -37,11 +38,7 @@ import {
   ObservationMonitoringPlotResultsPayload,
   ObservationResultsPayload,
 } from 'src/queries/generated/observations';
-import {
-  useLazyGetPlantingSiteHistoryQuery,
-  useLazyGetPlantingSiteQuery,
-  useLazyListPlantingSitesQuery,
-} from 'src/queries/generated/plantingSites';
+import { useLazyGetPlantingSiteHistoryQuery, useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import {
   ObservationMonitoringPlotPhoto,
   ObservationMonitoringPlotPhotoWithGps,
@@ -127,23 +124,16 @@ const ObservationMap = ({
   const { plantDrawerContent, plantDrawerHeader, plantDrawerSize, selectedPlants, selectPlants } = useMapPlantDrawer();
   const { photoDrawerContent, photoDrawerHeader, photoDrawerSize, selectedPhotos, selectPhotos } = useMapPhotoDrawer();
 
-  const [listPlantingSites, listPlantingSitesResult] = useLazyListPlantingSitesQuery();
+  const allPlantingSites = useOrganizationPlantingSites(true);
   const [getPlantingSite, getPlantingSiteResult] = useLazyGetPlantingSiteQuery();
   const [getPlantingSiteHistory, getPlantingSiteHistoryResult] = useLazyGetPlantingSiteHistoryQuery();
   const [listObservationSplats, listObservationSplatsResult] = useLazyListObservationSplatsQuery();
 
   useEffect(() => {
-    if (selectedOrganization && plantingSiteId === undefined) {
-      void listPlantingSites({ organizationId: selectedOrganization.id, full: false, includeZones: false }, true);
-    } else if (selectedOrganization && plantingSiteId !== undefined) {
+    if (selectedOrganization && plantingSiteId !== undefined) {
       void getPlantingSite({ id: plantingSiteId, includeZones: false }, true);
     }
-  }, [getPlantingSite, listPlantingSites, plantingSiteId, selectedOrganization]);
-
-  const allPlantingSites = useMemo(
-    () => listPlantingSitesResult.data?.sites ?? [],
-    [listPlantingSitesResult.data?.sites]
-  );
+  }, [getPlantingSite, plantingSiteId, selectedOrganization]);
 
   const plantingSite = useMemo(() => getPlantingSiteResult.data?.site, [getPlantingSiteResult.data?.site]);
 

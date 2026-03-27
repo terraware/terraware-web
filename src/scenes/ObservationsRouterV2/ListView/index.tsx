@@ -8,10 +8,10 @@ import Page from 'src/components/Page';
 import SurvivalRateMessageV2 from 'src/components/SurvivalRate/SurvivalRateMessageV2';
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
+import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import useStickyPlantingSiteId from 'src/hooks/useStickyPlantingSiteId';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
-import { useLazyListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
 import { useLazyCountObservationsQuery } from 'src/queries/search/observations';
 import MobileAppCard from 'src/scenes/Home/MobileAppCard';
 import { isAdmin } from 'src/utils/organization';
@@ -31,19 +31,12 @@ const ObservationListView = (): JSX.Element => {
   const { isMobile } = useDeviceInfo();
 
   const observableSites = useObservablePlantingSites();
-  const [listPlantingSites, listPlantingSitesResult] = useLazyListPlantingSitesQuery();
+  const plantingSites = useOrganizationPlantingSites(false);
   const { selectPlantingSite, selectedPlantingSiteId } = useStickyPlantingSiteId('observations-list', -1);
 
   const [countObservations, countObservationsResult] = useLazyCountObservationsQuery();
   const hasObservationsResults = useMemo(() => !!countObservationsResult.data, [countObservationsResult]);
 
-  useEffect(() => {
-    if (selectedOrganization) {
-      void listPlantingSites({ organizationId: selectedOrganization.id, full: false, includeZones: false }, true);
-    }
-  }, [listPlantingSites, selectedOrganization]);
-
-  const plantingSites = useMemo(() => listPlantingSitesResult.data?.sites ?? [], [listPlantingSitesResult.data]);
   const plantingSiteOptions = useMemo((): DropdownItem[] => {
     const sitesOptions = plantingSites
       .map((site) => ({
