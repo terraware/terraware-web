@@ -64,7 +64,7 @@ export const PlantingSiteStats = () => {
   }, [search, selectedOrganization]);
 
   useEffect(() => {
-    if (selectedPlantingSiteId) {
+    if (selectedPlantingSiteId && selectedPlantingSiteId > 0) {
       void getPlantingSite({ id: selectedPlantingSiteId, includeZones: false }, true);
       void getSiteReportedPlants(selectedPlantingSiteId, true);
     }
