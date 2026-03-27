@@ -15,7 +15,6 @@ import EventLog from 'src/scenes/ObservationsRouterV2/SingleView/EventLog';
 import ExtraData from 'src/scenes/ObservationsRouterV2/SingleView/ExtraData';
 import MatchSpeciesModal from 'src/scenes/ObservationsRouterV2/SingleView/MatchSpeciesModal';
 import UnrecognizedSpeciesPageMessage from 'src/scenes/ObservationsRouterV2/SingleView/UnrecognizedSpeciesPageMessage';
-import useObservationExports from 'src/scenes/ObservationsRouterV2/useObservationExports';
 import { useOnSaveMergedSpeciesRtk } from 'src/scenes/ObservationsRouterV2/useOnSaveMergedSpeciesRtk';
 import { getShortTime } from 'src/utils/dateFormatter';
 import { getObservationSpeciesDeadPlantsCount, getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
@@ -60,7 +59,6 @@ const MonitoringPlotObservationDataTab = () => {
   );
 
   const monitoringPlotSpecies = useObservationSpecies(monitoringPlot?.species ?? [], monitoringPlot?.unknownSpecies);
-  const { downloadObservationResults } = useObservationExports();
 
   const monitoringPlotSpeciesData = monitoringPlot?.species;
 
@@ -235,28 +233,7 @@ const MonitoringPlotObservationDataTab = () => {
           </Box>
         </Box>
       </Box>
-      <Box
-        display={'flex'}
-        justifyContent={'end'}
-        borderBottom={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
-        paddingBottom={1.5}
-      >
-        <Button
-          priority='ghost'
-          label={strings.MATCH_UNRECOGNIZED_SPECIES}
-          icon='iconSynced'
-          onClick={() => setShowMatchSpeciesModal(true)}
-          disabled={!unrecognizedSpecies || unrecognizedSpecies.length === 0}
-          sx={{ fontWeight: '400 !important' }}
-        />
-        <Button
-          priority='ghost'
-          label={strings.EXPORT_DATA}
-          icon='iconImport'
-          onClick={() => void downloadObservationResults(observationId)}
-          sx={{ fontWeight: '400 !important' }}
-        />
-      </Box>
+
       <Box paddingY={2} display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
         {monitoringPlot?.claimedByName && monitoringPlot?.completedTime && (
           <Typography fontSize={'14px'}>

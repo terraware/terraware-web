@@ -2,7 +2,7 @@ import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'reac
 import { useParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import { IconTooltip } from '@terraware/web-components';
+import { Button, IconTooltip } from '@terraware/web-components';
 import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/utils';
 
 import { Crumb } from 'src/components/BreadCrumbs';
@@ -18,6 +18,7 @@ import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites
 import ObservationMapWrapper from 'src/scenes/ObservationsRouterV2/Map';
 import MatchSpeciesModal from 'src/scenes/ObservationsRouterV2/SingleView/MatchSpeciesModal';
 import UnrecognizedSpeciesPageMessage from 'src/scenes/ObservationsRouterV2/SingleView/UnrecognizedSpeciesPageMessage';
+import useObservationExports from 'src/scenes/ObservationsRouterV2/useObservationExports';
 import { useOnSaveMergedSpeciesRtk } from 'src/scenes/ObservationsRouterV2/useOnSaveMergedSpeciesRtk';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { getObservationSpeciesDeadPlantsCount, getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
@@ -39,6 +40,7 @@ const SiteDetails = (): JSX.Element => {
   const [showMatchSpeciesModal, setShowMatchSpeciesModal] = useState(false);
   const [isMapVisible, setIsMapVisible] = useState(false);
   const onView = useCallback((view: string) => setIsMapVisible(view === 'map'), []);
+  const { downloadObservationResults } = useObservationExports();
   const onSaveMergedSpecies = useOnSaveMergedSpeciesRtk({
     observationId,
     onComplete: () => setShowMatchSpeciesModal(false),
@@ -207,6 +209,28 @@ const SiteDetails = (): JSX.Element => {
               />
             </Box>
           </Box>
+        </Box>
+        <Box
+          display={'flex'}
+          justifyContent={'end'}
+          borderBottom={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
+          paddingBottom={1.5}
+        >
+          <Button
+            priority='ghost'
+            label={strings.MATCH_UNRECOGNIZED_SPECIES}
+            icon='iconSynced'
+            onClick={() => setShowMatchSpeciesModal(true)}
+            disabled={!unrecognizedSpecies || unrecognizedSpecies.length === 0}
+            sx={{ fontWeight: '400 !important' }}
+          />
+          <Button
+            priority='ghost'
+            label={strings.EXPORT_DATA}
+            icon='iconImport'
+            onClick={() => void downloadObservationResults(observationId)}
+            sx={{ fontWeight: '400 !important' }}
+          />
         </Box>
         <ListMapView
           search={null}
