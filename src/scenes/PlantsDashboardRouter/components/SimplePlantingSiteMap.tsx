@@ -17,7 +17,7 @@ export default function SimplePlantingSiteMap({
   hideAllControls,
   style,
 }: SimplePlantingSiteMapProps): JSX.Element {
-  const plantingSiteResponse = useGetPlantingSiteQuery({ id: plantingSiteId, includeZones: true });
+  const plantingSiteResponse = useGetPlantingSiteQuery({ id: plantingSiteId, includeZones: false });
   const plantingSite = useMemo(() => plantingSiteResponse.currentData?.site, [plantingSiteResponse]);
 
   const mapData = useMemo(() => {
