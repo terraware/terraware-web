@@ -6082,18 +6082,6 @@ export interface components {
             name: string;
             /**
              * Format: int32
-             * @deprecated
-             * @description Use numSubstrata instead
-             */
-            numPlantingSubzones?: number;
-            /**
-             * Format: int32
-             * @deprecated
-             * @description Use numStrata instead
-             */
-            numPlantingZones?: number;
-            /**
-             * Format: int32
              * @description If the user has started defining strata, the number of strata defined so far.
              */
             numStrata?: number;
@@ -6709,18 +6697,6 @@ export interface components {
             /** Format: date-time */
             modifiedTime: string;
             name: string;
-            /**
-             * Format: int32
-             * @deprecated
-             * @description Use numSubstrata instead.
-             */
-            numPlantingSubzones?: number;
-            /**
-             * Format: int32
-             * @deprecated
-             * @description Use numStrata instead.
-             */
-            numPlantingZones?: number;
             /**
              * Format: int32
              * @description If the user has started defining strata, the number of strata defined so far.
@@ -11136,18 +11112,6 @@ export interface components {
             name: string;
             /**
              * Format: int32
-             * @deprecated
-             * @description Use numSubstrata instead
-             */
-            numPlantingSubzones?: number;
-            /**
-             * Format: int32
-             * @deprecated
-             * @description Use numStrata instead
-             */
-            numPlantingZones?: number;
-            /**
-             * Format: int32
              * @description If the user has started defining strata, the number of strata defined so far.
              */
             numStrata?: number;
@@ -11830,8 +11794,8 @@ export interface operations {
         parameters: {
             query: {
                 projectId: number;
-                /** @description If true, include a list of media files for each activity. */
-                includeMedia?: boolean;
+                /** @description The media files to include for each activity. */
+                depth?: "None" | "Cover Photos" | "All";
             };
             header?: never;
             path?: never;

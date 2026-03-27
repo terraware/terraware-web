@@ -32,13 +32,13 @@ export const requestListActivities = createAsyncThunk(
   async (
     request: {
       projectId: number;
-      includeMedia?: boolean;
+      depth?: 'None' | 'Cover Photos' | 'All';
     },
     { rejectWithValue }
   ) => {
-    const { projectId, includeMedia } = request;
+    const { projectId, depth } = request;
 
-    const response = await ActivityService.listActivities(projectId, includeMedia);
+    const response = await ActivityService.listActivities(projectId, depth);
 
     if (response?.requestSucceeded && response?.data) {
       return response.data.activities ?? [];
