@@ -10,7 +10,6 @@ import ListMapView from 'src/components/ListMapView';
 import Page from 'src/components/Page';
 import SurvivalRateMessageV2 from 'src/components/SurvivalRate/SurvivalRateMessageV2';
 import Card from 'src/components/common/Card';
-import OptionsMenu from 'src/components/common/OptionsMenu';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
@@ -36,7 +35,7 @@ const SiteDetails = (): JSX.Element => {
   const { activeLocale, strings } = useLocalization();
   const params = useParams<{ observationId: string }>();
   const observationId = Number(params.observationId);
-  const [showPageMessage, setShowPageMessage] = useState(false);
+  const [pageMessageDismissed, setPageMessageDismissed] = useState(false);
   const [showMatchSpeciesModal, setShowMatchSpeciesModal] = useState(false);
   const [isMapVisible, setIsMapVisible] = useState(false);
   const onView = useCallback((view: string) => setIsMapVisible(view === 'map'), []);
@@ -111,23 +110,6 @@ const SiteDetails = (): JSX.Element => {
     }
   }, [resultsSpecies]);
 
-  const unrecognizedSpeciesLength = unrecognizedSpecies?.length;
-
-  const matchedUnrecognizedSpeciesMenu = useMemo(() => {
-    return (
-      <OptionsMenu
-        onOptionItemClick={() => setShowMatchSpeciesModal(true)}
-        optionItems={[
-          {
-            label: strings.MATCH_UNRECOGNIZED_SPECIES,
-            value: 'match',
-            disabled: (unrecognizedSpeciesLength || 0) === 0,
-          },
-        ]}
-      />
-    );
-  }, [strings.MATCH_UNRECOGNIZED_SPECIES, unrecognizedSpeciesLength]);
-
   const hasObservedPermanentPlots = useMemo(() => {
     const permanentPlots =
       results?.strata
@@ -151,18 +133,14 @@ const SiteDetails = (): JSX.Element => {
     },
   ];
 
-  useEffect(() => {
-    if (unrecognizedSpecies.length) {
-      setShowPageMessage(true);
-    }
-  }, [unrecognizedSpecies.length]);
+  const showPageMessage = unrecognizedSpecies.length > 0 && !pageMessageDismissed;
 
   return (
-    <Page crumbs={crumbs} title={title} rightComponent={matchedUnrecognizedSpeciesMenu}>
+    <Page crumbs={crumbs} title={title}>
       {showPageMessage && (
         <UnrecognizedSpeciesPageMessage
           setShowMatchSpeciesModal={setShowMatchSpeciesModal}
-          setShowPageMessage={setShowPageMessage}
+          setShowPageMessage={(show) => setPageMessageDismissed(!show)}
           unrecognizedSpecies={unrecognizedSpecies}
         />
       )}
