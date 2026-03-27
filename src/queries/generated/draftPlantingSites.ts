@@ -45,10 +45,6 @@ export type CreateDraftPlantingSiteRequestPayload = {
   };
   description?: string;
   name: string;
-  /** Use numSubstrata instead */
-  numPlantingSubzones?: number;
-  /** Use numStrata instead */
-  numPlantingZones?: number;
   /** If the user has started defining strata, the number of strata defined so far. */
   numStrata?: number;
   /** If the user has started defining substrata, the number of substrata defined so far. */
@@ -74,10 +70,6 @@ export type DraftPlantingSitePayload = {
   id: number;
   modifiedTime: string;
   name: string;
-  /** Use numSubstrata instead. */
-  numPlantingSubzones?: number;
-  /** Use numStrata instead. */
-  numPlantingZones?: number;
   /** If the user has started defining strata, the number of strata defined so far. */
   numStrata?: number;
   /** If the user has started defining substrata, the number of substrata defined so far. */
@@ -99,10 +91,6 @@ export type UpdateDraftPlantingSiteRequestPayload = {
   };
   description?: string;
   name: string;
-  /** Use numSubstrata instead */
-  numPlantingSubzones?: number;
-  /** Use numStrata instead */
-  numPlantingZones?: number;
   /** If the user has started defining strata, the number of strata defined so far. */
   numStrata?: number;
   /** If the user has started defining substrata, the number of substrata defined so far. */

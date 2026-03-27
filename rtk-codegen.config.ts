@@ -29,6 +29,9 @@ const config: ConfigFile = {
     './src/queries/generated/notifications.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/notifications'),
     },
+    './src/queries/generated/nurseryWithdrawals.ts': {
+      filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/nursery/withdrawals'),
+    },
     './src/queries/generated/observations.ts': {
       filterEndpoints: (_, operation) =>
         operation.path.startsWith('/api/v1/tracking/observations') &&

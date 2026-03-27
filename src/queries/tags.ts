@@ -7,6 +7,8 @@ export enum QueryTagTypes {
   FundingEntities = 'FundingEntities',
   Modules = 'Modules',
   Notifications = 'Notifications',
+  NurseryWithdrawalPhotos = 'NurseryWithdrawalPhotos',
+  NurseryWithdrawals = 'NurseryWithdrawals',
   Observation = 'Observation',
   ObservationMedia = 'ObservationMedia',
   ObservationSplats = 'ObservationSplats',
