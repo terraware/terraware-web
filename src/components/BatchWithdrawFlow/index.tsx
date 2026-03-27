@@ -251,7 +251,7 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
       )}
       {flowState === 'photos' && <AddPhotos onNext={withdraw} onCancel={goToInventory} saveText={strings.WITHDRAW} />}
       <EmptyBatchesInfoModal
-        open={showEmptyBatchesModalFor !== null}
+        open={showEmptyBatchesModalFor !== undefined}
         onClose={() => onWithdrawSuccess(showEmptyBatchesModalFor)}
       />
     </TfMain>
