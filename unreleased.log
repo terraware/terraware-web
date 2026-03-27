@@ -1,3 +1,4 @@
+8a1ccba79acd SW-8227 Remove kebab on observations page (#5514)
 e2db74e54101 Bump handlebars from 4.7.8 to 4.7.9 (#5510)
 e3eb0de16596 SW-8227 Add Match Unrecognized Species and Export Data links in the Observation page (#5509)
 54cd77395dc1 Add includeZones: false to getPlantingSite queries (#5508)
