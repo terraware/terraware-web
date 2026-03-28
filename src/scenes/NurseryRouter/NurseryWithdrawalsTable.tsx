@@ -129,6 +129,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     persistedMultiSelectColumnIds: [
       'destinationName',
       'project_names',
+      'purpose',
       'speciesScientificNames',
       'substratumShortNames',
     ],
@@ -312,7 +313,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         header: strings.PURPOSE,
         accessorKey: 'purpose',
         enableEditing: false,
-        filterVariant: 'select',
+        filterVariant: 'multi-select',
         filterSelectOptions: purposeOptions,
         enableColumnFilterModes: false,
         sortUndefined: 'last',
@@ -447,8 +448,12 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         let filterValue = filter.value;
 
         // For purpose filter, convert label back to value
-        if (filter.id === 'purpose' && typeof filterValue === 'string') {
-          filterValue = purposeLabelToValue[filterValue] || filterValue;
+        if (filter.id === 'purpose') {
+          if (typeof filterValue === 'string') {
+            filterValue = purposeLabelToValue[filterValue] || filterValue;
+          } else if (Array.isArray(filterValue)) {
+            filterValue = filterValue.map((v) => (typeof v === 'string' ? purposeLabelToValue[v] || v : v));
+          }
         }
 
         // Find the column definition to check filter type
