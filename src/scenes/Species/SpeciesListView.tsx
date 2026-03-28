@@ -29,7 +29,12 @@ import { useLocalization, useOrganization } from 'src/providers/hooks';
 import SearchService from 'src/services/SearchService';
 import strings from 'src/strings';
 import { SearchRequestPayload } from 'src/types/Search';
-import { Species, SpeciesProblemElement, conservationCategories } from 'src/types/Species';
+import {
+  Species,
+  SpeciesProblemElement,
+  conservationCategories,
+  getConservationCategoryString,
+} from 'src/types/Species';
 import { makeCsv } from 'src/utils/csv';
 import { isContributor } from 'src/utils/organization';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
@@ -463,7 +468,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
       {
         id: 'conservationCategory',
         header: strings.CONSERVATION_CATEGORY,
-        accessorKey: 'conservationCategory',
+        accessorFn: (row: SpeciesSearchResultRow) => getConservationCategoryString(row.conservationCategory),
         enableEditing: false,
         filterVariant: 'select',
         filterSelectOptions: uniqueConservationCategories,
