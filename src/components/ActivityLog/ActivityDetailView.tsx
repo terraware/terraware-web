@@ -308,7 +308,6 @@ type ActivityDetailViewProps = {
   onClickMediaItem: (fileId: number) => () => void;
   projectId: number;
   setHoverFileCallback: (fileId: number, hover: boolean) => () => void;
-  reload?: () => void;
 };
 
 const ActivityDetailView = ({
@@ -318,7 +317,6 @@ const ActivityDetailView = ({
   onClickMediaItem,
   projectId,
   setHoverFileCallback,
-  reload,
 }: ActivityDetailViewProps): JSX.Element => {
   const { strings } = useLocalization();
   const { isAllowed } = useUser();
@@ -459,13 +457,10 @@ const ActivityDetailView = ({
       await publishActivityMutation(activity.payload.id).unwrap();
       snackbar.toastSuccess(strings.ACTIVITY_PUBLISHED);
       setPublishActivityModalOpened(false);
-      if (reload) {
-        reload();
-      }
     } catch {
       snackbar.toastError();
     }
-  }, [activity.payload.id, publishActivityMutation, reload, snackbar, strings.ACTIVITY_PUBLISHED]);
+  }, [activity.payload.id, publishActivityMutation, snackbar, strings.ACTIVITY_PUBLISHED]);
 
   return (
     <Grid container paddingY={theme.spacing(2)} spacing={2} textAlign='left'>

@@ -187,34 +187,31 @@ const ActivitiesListView = ({
   }, [query]);
 
   const {
-    data: listActivitiesData,
+    currentData: listActivitiesData,
     isFetching: listActivitiesFetching,
     isLoading: listActivitiesLoading,
     isError: listActivitiesError,
-    refetch: refetchListActivities,
   } = useListActivitiesQuery({ projectId, depth: 'Cover Photos' }, { skip: isAcceleratorRoute || isFunderRoute });
 
   const {
-    data: adminListActivitiesData,
+    currentData: adminListActivitiesData,
     isFetching: adminListActivitiesFetching,
     isLoading: adminListActivitiesLoading,
     isError: adminListActivitiesError,
-    refetch: refetchAdminListActivities,
   } = useAdminListActivitiesQuery({ projectId, includeMedia: true }, { skip: !isAcceleratorRoute || isFunderRoute });
 
   const {
-    data: funderListActivitiesData,
+    currentData: funderListActivitiesData,
     isFetching: funderListActivitiesFetching,
     isLoading: funderListActivitiesLoading,
     isError: funderListActivitiesError,
-    refetch: refetchFunderListActivities,
   } = useFunderListActivitiesQuery({ projectId, includeMedia: true }, { skip: !isFunderRoute });
 
-  const { data: activityDetailData } = useGetActivityQuery(showActivityId!, {
+  const { currentData: activityDetailData } = useGetActivityQuery(showActivityId!, {
     skip: isAcceleratorRoute || isFunderRoute || !showActivityId,
   });
 
-  const { data: adminActivityDetailData } = useAdminGetActivityQuery(showActivityId!, {
+  const { currentData: adminActivityDetailData } = useAdminGetActivityQuery(showActivityId!, {
     skip: !isAcceleratorRoute || isFunderRoute || !showActivityId,
   });
 
@@ -296,22 +293,6 @@ const ActivitiesListView = ({
     funderListActivitiesFetching,
     adminListActivitiesFetching,
     listActivitiesFetching,
-  ]);
-
-  const reload = useCallback(() => {
-    if (isFunderRoute) {
-      void refetchFunderListActivities();
-    } else if (isAcceleratorRoute) {
-      void refetchAdminListActivities();
-    } else {
-      void refetchListActivities();
-    }
-  }, [
-    isFunderRoute,
-    isAcceleratorRoute,
-    refetchFunderListActivities,
-    refetchAdminListActivities,
-    refetchListActivities,
   ]);
 
   useEffect(() => {
@@ -684,7 +665,6 @@ const ActivitiesListView = ({
               onClickMediaItem={onClickMediaItem}
               projectId={projectId}
               setHoverFileCallback={setHoverFileCallback}
-              reload={reload}
             />
           ) : activities.length === 0 && initialized && !busy ? (
             <ActivitiesEmptyState projectId={projectId} />
