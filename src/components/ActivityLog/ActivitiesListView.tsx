@@ -24,11 +24,13 @@ import useClientSideFilter from 'src/hooks/useClientSideFiltering';
 import useFunderPortal from 'src/hooks/useFunderPortal';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
-import { requestAdminListActivities, requestListActivities } from 'src/redux/features/activities/activitiesAsyncThunks';
-import { selectActivityList, selectAdminActivityList } from 'src/redux/features/activities/activitiesSelectors';
-import { requestListFunderActivities } from 'src/redux/features/funder/activities/funderActivitiesAsyncThunks';
-import { selectListFunderActivitiesRequest } from 'src/redux/features/funder/activities/funderActivitiesSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import {
+  useAdminGetActivityQuery,
+  useAdminListActivitiesQuery,
+  useGetActivityQuery,
+  useListActivitiesQuery,
+} from 'src/queries/generated/activities';
+import { useFunderListActivitiesQuery } from 'src/queries/generated/funderActivities';
 import { ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/ActivityService';
 import { FUNDER_ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/funder/FunderActivityService';
 import {
@@ -165,17 +167,13 @@ const ActivitiesListView = ({
   const { scrollToElementById, scrollToTop } = useMapDrawer(mapDrawerRef);
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const { isFunderRoute } = useFunderPortal();
-  const dispatch = useAppDispatch();
   const navigate = useSyncNavigate();
   const query = useQuery();
   const location = useStateLocation();
   const snackbar = useSnackbar();
   const theme = useTheme();
 
-  const [initialized, setInitialized] = useState(false);
   const [filters, setFilters] = useState<Record<string, SearchNodePayload>>({});
-  const [requestId, setRequestId] = useState('');
-  const [activities, setActivities] = useState<TypedActivity[]>([]);
   const [focusedActivityId, setFocusedActivityId] = useState<number | undefined>(undefined);
   const [focusedFileId, setFocusedFileId] = useState<number | undefined>(undefined);
   const [hoveredActivityId, setHoveredActivityId] = useState<number | undefined>(undefined);
@@ -183,9 +181,68 @@ const ActivitiesListView = ({
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  const listActivitiesRequest = useAppSelector(selectActivityList(requestId));
-  const adminListActivitiesRequest = useAppSelector(selectAdminActivityList(requestId));
-  const funderListActivitiesRequest = useAppSelector(selectListFunderActivitiesRequest(requestId));
+  const showActivityId = useMemo(() => {
+    const activityIdParam = query.get('activityId');
+    return activityIdParam ? Number(activityIdParam) : undefined;
+  }, [query]);
+
+  const {
+    data: listActivitiesData,
+    isFetching: listActivitiesFetching,
+    isLoading: listActivitiesLoading,
+    isError: listActivitiesError,
+    refetch: refetchListActivities,
+  } = useListActivitiesQuery({ projectId, depth: 'Cover Photos' }, { skip: isAcceleratorRoute || isFunderRoute });
+
+  const {
+    data: adminListActivitiesData,
+    isFetching: adminListActivitiesFetching,
+    isLoading: adminListActivitiesLoading,
+    isError: adminListActivitiesError,
+    refetch: refetchAdminListActivities,
+  } = useAdminListActivitiesQuery({ projectId, includeMedia: true }, { skip: !isAcceleratorRoute || isFunderRoute });
+
+  const {
+    data: funderListActivitiesData,
+    isFetching: funderListActivitiesFetching,
+    isLoading: funderListActivitiesLoading,
+    isError: funderListActivitiesError,
+    refetch: refetchFunderListActivities,
+  } = useFunderListActivitiesQuery({ projectId, includeMedia: true }, { skip: !isFunderRoute });
+
+  const { data: activityDetailData } = useGetActivityQuery(showActivityId!, {
+    skip: isAcceleratorRoute || isFunderRoute || !showActivityId,
+  });
+
+  const { data: adminActivityDetailData } = useAdminGetActivityQuery(showActivityId!, {
+    skip: !isAcceleratorRoute || isFunderRoute || !showActivityId,
+  });
+
+  const activities = useMemo<TypedActivity[]>(() => {
+    if (isFunderRoute) {
+      return funderListActivitiesData?.activities?.map((payload) => ({ type: 'funder' as const, payload })) ?? [];
+    }
+    if (isAcceleratorRoute) {
+      return adminListActivitiesData?.activities?.map((payload) => ({ type: 'admin' as const, payload })) ?? [];
+    }
+    return listActivitiesData?.activities?.map((payload) => ({ type: 'base' as const, payload })) ?? [];
+  }, [isFunderRoute, isAcceleratorRoute, funderListActivitiesData, adminListActivitiesData, listActivitiesData]);
+
+  const initialized = useMemo(() => {
+    if (isFunderRoute) {
+      return !funderListActivitiesLoading;
+    }
+    if (isAcceleratorRoute) {
+      return !adminListActivitiesLoading;
+    }
+    return !listActivitiesLoading;
+  }, [
+    isFunderRoute,
+    isAcceleratorRoute,
+    funderListActivitiesLoading,
+    adminListActivitiesLoading,
+    listActivitiesLoading,
+  ]);
 
   const activityFilterOptions: FieldOptionsMap = useMemo(
     () => ({
@@ -226,77 +283,60 @@ const ActivitiesListView = ({
   }, [filteredActivitiesUnsorted]);
 
   const busy = useMemo(() => {
-    return (
-      listActivitiesRequest?.status === 'pending' ||
-      adminListActivitiesRequest?.status === 'pending' ||
-      funderListActivitiesRequest?.status === 'pending'
-    );
-  }, [listActivitiesRequest?.status, adminListActivitiesRequest?.status, funderListActivitiesRequest?.status]);
-
-  const reload = useCallback(() => {
+    if (isFunderRoute) {
+      return funderListActivitiesFetching;
+    }
     if (isAcceleratorRoute) {
-      const request = dispatch(requestAdminListActivities({ includeMedia: true, projectId }));
-      setRequestId(request.requestId);
-    } else if (isFunderRoute) {
-      const request = dispatch(requestListFunderActivities(projectId));
-      setRequestId(request.requestId);
-    } else {
-      const request = dispatch(requestListActivities({ depth: 'All', projectId }));
-      setRequestId(request.requestId);
+      return adminListActivitiesFetching;
     }
-  }, [dispatch, isAcceleratorRoute, isFunderRoute, projectId]);
-
-  useEffect(() => {
-    reload();
-  }, [reload]);
-
-  useEffect(() => {
-    if (listActivitiesRequest?.status === 'error' || adminListActivitiesRequest?.status === 'error') {
-      snackbar.toastError(strings.GENERIC_ERROR);
-      setInitialized(true);
-    } else if (listActivitiesRequest?.status === 'success') {
-      setActivities(listActivitiesRequest?.data?.map((payload) => ({ type: 'base', payload })) ?? []);
-      setInitialized(true);
-    } else if (adminListActivitiesRequest?.status === 'success') {
-      setActivities(adminListActivitiesRequest?.data?.map((payload) => ({ type: 'admin', payload })) ?? []);
-      setInitialized(true);
-    } else if (funderListActivitiesRequest?.status === 'success') {
-      setActivities(funderListActivitiesRequest?.data?.map((payload) => ({ type: 'funder', payload })) ?? []);
-      setInitialized(true);
-    }
+    return listActivitiesFetching;
   }, [
-    adminListActivitiesRequest?.data,
-    adminListActivitiesRequest?.status,
-    funderListActivitiesRequest?.data,
-    funderListActivitiesRequest?.status,
-    listActivitiesRequest?.data,
-    listActivitiesRequest?.status,
-    snackbar,
-    strings.GENERIC_ERROR,
+    isFunderRoute,
+    isAcceleratorRoute,
+    funderListActivitiesFetching,
+    adminListActivitiesFetching,
+    listActivitiesFetching,
   ]);
 
-  const showActivityId = useMemo(() => {
-    const activityIdParam = query.get('activityId');
-    return activityIdParam ? Number(activityIdParam) : undefined;
-  }, [query]);
+  const reload = useCallback(() => {
+    if (isFunderRoute) {
+      void refetchFunderListActivities();
+    } else if (isAcceleratorRoute) {
+      void refetchAdminListActivities();
+    } else {
+      void refetchListActivities();
+    }
+  }, [
+    isFunderRoute,
+    isAcceleratorRoute,
+    refetchFunderListActivities,
+    refetchAdminListActivities,
+    refetchListActivities,
+  ]);
 
   useEffect(() => {
-    if (showActivityId !== undefined) {
-      // Entering one activity details, set focus to the selected activity
-      setFocusedActivityId(showActivityId);
-    } else {
-      // Exiting one activity detailed view, clear focused & hovered states
-      setFocusedActivityId(undefined);
-      setFocusedFileId(undefined);
-      setHoveredActivityId(undefined);
-      setHoveredFileId(undefined);
+    if (listActivitiesError || adminListActivitiesError || funderListActivitiesError) {
+      snackbar.toastError(strings.GENERIC_ERROR);
     }
-  }, [showActivityId]);
+  }, [listActivitiesError, adminListActivitiesError, funderListActivitiesError, snackbar, strings.GENERIC_ERROR]);
 
-  const shownActivity = useMemo(
-    () => activities.find((activity) => activity.payload.id === showActivityId),
-    [activities, showActivityId]
-  );
+  const shownActivity = useMemo((): TypedActivity | undefined => {
+    if (!showActivityId) {
+      return undefined;
+    }
+    if (isFunderRoute) {
+      // No single-activity endpoint for funder; use list data (always has full media)
+      return activities.find((activity) => activity.payload.id === showActivityId);
+    }
+    if (isAcceleratorRoute && adminActivityDetailData?.activity) {
+      return { type: 'admin', payload: adminActivityDetailData.activity };
+    }
+    if (!isAcceleratorRoute && activityDetailData?.activity) {
+      return { type: 'base', payload: activityDetailData.activity };
+    }
+    // Fallback to list data while detail is loading
+    return activities.find((activity) => activity.payload.id === showActivityId);
+  }, [showActivityId, isFunderRoute, isAcceleratorRoute, adminActivityDetailData, activityDetailData, activities]);
 
   useEffect(() => {
     if (setSelectedActivity) {
@@ -340,6 +380,7 @@ const ActivitiesListView = ({
       const newFilters = { ...filters };
       delete newFilters[key];
       setFilters(newFilters);
+      setCurrentPage(1);
     },
     [filters, setFilters]
   );
@@ -348,6 +389,7 @@ const ActivitiesListView = ({
     (key: string, filter: SearchNodePayload) => {
       if (filter.values.length) {
         setFilters({ ...filters, [key]: filter });
+        setCurrentPage(1);
       } else {
         onDeleteFilter(key);
       }
@@ -377,11 +419,6 @@ const ActivitiesListView = ({
   const handlePageChange = useCallback((_event: React.ChangeEvent<unknown>, page: number) => {
     setCurrentPage(page);
   }, []);
-
-  // Reset to page 1 when filters change
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [filters]);
 
   const activityMarkerHighlighted = useCallback(
     (activityId: number, fileId: number) => {
