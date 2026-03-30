@@ -86,7 +86,6 @@ export const selectPlantingProgress = createSelector(
 // selector to search plantings
 export type PlantingProgress = {
   plantingCompleted: boolean;
-  plantingSize: string;
   projectName: string;
   siteId: number;
   siteName: string;

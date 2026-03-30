@@ -15,35 +15,95 @@ import {
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
+import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import useTableState from 'src/hooks/useTableState';
 import { useOrganization } from 'src/providers';
-import { requestUpdatePlantingsCompleted } from 'src/redux/features/plantings/plantingsAsyncThunks';
+import { useLazyListPlantingSiteReportedPlantsQuery } from 'src/queries/generated/plantingSites';
+import { useUpdateSubstrataMutation } from 'src/queries/generated/substrata';
 import {
-  PlantingProgress,
+  PlantingProgress as PlantingProgressType,
   selectStrataHaveStatistics,
-  selectUpdatePlantingsCompleted,
 } from 'src/redux/features/plantings/plantingsSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
+import { useAppSelector } from 'src/redux/store';
 import StatsWarningDialog from 'src/scenes/NurseryRouter/StatsWarningModal';
 import { exportNurseryPlantingProgress } from 'src/scenes/NurseryRouter/exportNurseryData';
 import strings from 'src/strings';
 import useSnackbar from 'src/utils/useSnackbar';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
-export type PlantingProgressListProps = {
-  rows: Partial<PlantingProgress>[] | undefined;
-  reloadTracking: () => void;
-};
-
-export default function PlantingProgressList({ rows, reloadTracking }: PlantingProgressListProps): JSX.Element {
+export default function PlantingProgressList(): JSX.Element {
   const theme = useTheme();
-  const [hasStrata, setHasStrata] = useState<boolean | undefined>();
+  const snackbar = useSnackbar();
+  const [showWarningModal, setShowWarningModal] = useState(false);
   const [rowSelection, setRowSelection] = useState({});
-  const dispatch = useAppDispatch();
   const defaultTimeZone = useDefaultTimeZone();
   const { selectedOrganization } = useOrganization();
-  const [requestId, setRequestId] = useState<string>('');
-  const updatePlantingResult = useAppSelector((state) => selectUpdatePlantingsCompleted(state, requestId));
+
+  const projects = useAppSelector(selectProjects);
+  const { allPlantingSites } = useOrganizationPlantingSites(true);
+  const [listReportedPlants, listReportedPlantsResponse] = useLazyListPlantingSiteReportedPlantsQuery();
+  const [updateSubstratum, { isLoading }] = useUpdateSubstrataMutation();
+
+  useEffect(() => {
+    if (selectedOrganization) {
+      void listReportedPlants({ organizationId: selectedOrganization.id }, true);
+    }
+  }, [listReportedPlants, selectedOrganization]);
+
+  const rows = useMemo((): Partial<PlantingProgressType>[] => {
+    if (listReportedPlantsResponse.currentData) {
+      return listReportedPlantsResponse.currentData.sites
+        .filter((siteReportedPlants) => siteReportedPlants.totalPlants > 0)
+        .flatMap((siteReportedPlants) => {
+          if (siteReportedPlants.strata.length) {
+            return siteReportedPlants.strata
+              .filter((stratumReportedPlants) => stratumReportedPlants.totalPlants > 0)
+              .flatMap((stratumReportedPlants) =>
+                stratumReportedPlants.substrata
+                  .filter((substratumReportedPlants) => substratumReportedPlants.totalPlants > 0)
+                  .map((substratumReportedPlants) => {
+                    const site = allPlantingSites.find((thisSite) => thisSite.id === siteReportedPlants.id);
+                    const stratum = site?.strata?.find((thisStratum) => thisStratum.id === stratumReportedPlants.id);
+                    const substratum = stratum?.substrata.find(
+                      (thisSubstratum) => thisSubstratum.id === substratumReportedPlants.id
+                    );
+                    return {
+                      plantingCompleted: substratum?.plantingCompleted,
+                      projectName: site?.projectId
+                        ? projects?.find((project) => project.id === site.projectId)?.name ?? ''
+                        : '',
+                      siteId: site?.id,
+                      siteName: site?.name,
+                      stratumId: stratum?.id,
+                      stratumName: stratum?.name,
+                      substratumId: substratum?.id,
+                      substratumName: substratum?.name,
+                      targetPlantingDensity: stratum?.targetPlantingDensity,
+                      totalPlants: substratumReportedPlants.totalPlants,
+                      totalSeedlingsSent: substratumReportedPlants.totalPlants,
+                    };
+                  })
+              );
+          } else {
+            const site = allPlantingSites.find((thisSite) => thisSite.id === siteReportedPlants.id);
+            return [
+              {
+                projectName: site?.projectId
+                  ? projects?.find((project) => project.id === site.projectId)?.name ?? ''
+                  : '',
+                siteId: site?.id,
+                siteName: site?.name,
+                totalPlants: siteReportedPlants.totalPlants,
+                totalSeedlingsSent: siteReportedPlants.totalPlants,
+              },
+            ];
+          }
+        });
+    } else {
+      return [];
+    }
+  }, [allPlantingSites, listReportedPlantsResponse.currentData, projects]);
 
   const selectedRows = useMemo(
     () =>
@@ -76,9 +136,15 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
       defaultTimeZone.get().id
     )
   );
-  const snackbar = useSnackbar();
-  const [showWarningModal, setShowWarningModal] = useState(false);
-  const [markingAsComplete, setMarkingAsComplete] = useState(false);
+
+  const hasStrata = useMemo(() => {
+    if (!rows) {
+      return undefined;
+    }
+
+    return rows.some((d) => d.substratumName);
+  }, [rows]);
+
   const withStrataState = useTableState('plantings-progress-table-with-strata');
   const withoutStrataState = useTableState('plantings-progress-table-without-strata');
   const activeState = hasStrata !== false ? withStrataState : withoutStrataState;
@@ -97,48 +163,33 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
     ? 'plantings-progress-table-with-strata'
     : 'plantings-progress-table-without-strata';
 
-  useEffect(() => {
-    if (rows && hasStrata === undefined) {
-      setHasStrata(rows.some((d) => d.substratumName));
-    }
-  }, [rows, hasStrata]);
-
-  useEffect(() => {
-    reloadTracking();
-  }, [reloadTracking]);
-
-  useEffect(() => {
-    if (updatePlantingResult?.status === 'success') {
-      reloadTracking();
-      setRequestId('');
-      if (markingAsComplete) {
-        snackbar.toastSuccess(strings.SUBSTRATUM_PLANTING_COMPLETED_SUCCESS, strings.SAVED);
-      } else {
-        snackbar.toastSuccess(strings.SUBSTRATUM_PLANTING_UNCOMPLETED_SUCCESS, strings.SAVED);
-      }
-    } else if (updatePlantingResult?.status === 'error') {
-      snackbar.toastError(strings.GENERIC_ERROR);
-      setRequestId('');
-    }
-  }, [updatePlantingResult, reloadTracking, snackbar, markingAsComplete]);
-
   const setPlantingCompleted = useCallback(
-    (complete: boolean) => {
+    async (complete: boolean) => {
       const substratumIds = selectedRows
         .map((row: any) => row.substratumId)
         .filter((id): id is number => id !== undefined);
-      const request = dispatch(
-        requestUpdatePlantingsCompleted({ substratumIds, planting: { plantingCompleted: complete } })
+
+      const promises = substratumIds.map((substratumId) =>
+        updateSubstratum({ id: substratumId, updateSubstratumRequestPayload: { plantingCompleted: complete } })
       );
-      setMarkingAsComplete(complete);
-      setRequestId(request.requestId);
+
+      try {
+        await Promise.allSettled(promises);
+        if (complete) {
+          snackbar.toastSuccess(strings.SUBSTRATUM_PLANTING_COMPLETED_SUCCESS, strings.SAVED);
+        } else {
+          snackbar.toastSuccess(strings.SUBSTRATUM_PLANTING_UNCOMPLETED_SUCCESS, strings.SAVED);
+        }
+      } catch {
+        snackbar.toastError(strings.GENERIC_ERROR);
+      }
     },
-    [dispatch, selectedRows]
+    [selectedRows, snackbar, updateSubstratum]
   );
 
   const onModalSubmit = useCallback(() => {
     setShowWarningModal(false);
-    setPlantingCompleted(false);
+    void setPlantingCompleted(false);
   }, [setPlantingCompleted]);
 
   const onCloseStatsWarningModal = useCallback(() => {
@@ -146,12 +197,12 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
   }, []);
 
   // Cell renderer components
-  const TargetPlantingDensityCell = useCallback(({ cell }: { cell: MRT_Cell<Partial<PlantingProgress>> }) => {
+  const TargetPlantingDensityCell = useCallback(({ cell }: { cell: MRT_Cell<Partial<PlantingProgressType>> }) => {
     const value = cell.row.original.targetPlantingDensity;
     return value ? <FormattedNumber value={value} /> : null;
   }, []);
 
-  const TotalSeedlingsSentCell = useCallback(({ cell }: { cell: MRT_Cell<Partial<PlantingProgress>> }) => {
+  const TotalSeedlingsSentCell = useCallback(({ cell }: { cell: MRT_Cell<Partial<PlantingProgressType>> }) => {
     const row = cell.row.original;
     const filterParam = row.substratumName
       ? `substratumName=${encodeURIComponent(row.substratumName)}&siteName=${encodeURIComponent(row.siteName || '')}`
@@ -181,7 +232,7 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
     return Array.from(new Set(projectNames)).sort();
   }, [rows]);
 
-  const columnsWithoutStrata = useMemo<EditableTableColumn<Partial<PlantingProgress>>[]>(
+  const columnsWithoutStrata = useMemo<EditableTableColumn<Partial<PlantingProgressType>>[]>(
     () => [
       {
         id: 'siteName',
@@ -229,7 +280,7 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
     []
   );
 
-  const columnsWithStrata = useMemo<EditableTableColumn<Partial<PlantingProgress>>[]>(
+  const columnsWithStrata = useMemo<EditableTableColumn<Partial<PlantingProgressType>>[]>(
     () => [
       {
         id: 'siteName',
@@ -314,7 +365,7 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
       setShowWarningModal(true);
       return;
     }
-    setPlantingCompleted(false);
+    void setPlantingCompleted(false);
   }, [substrataStatisticsResult, setPlantingCompleted]);
 
   const areAllIncompleted = useMemo(
@@ -327,7 +378,7 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
     [selectedRows]
   );
 
-  if (!rows || hasStrata === undefined) {
+  if (!rows) {
     return <CircularProgress sx={{ margin: 'auto' }} />;
   }
 
@@ -336,7 +387,7 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
       {showWarningModal && (
         <StatsWarningDialog open={showWarningModal} onClose={onCloseStatsWarningModal} onSubmit={onModalSubmit} />
       )}
-      <Box>{updatePlantingResult?.status === 'pending' && <BusySpinner withSkrim={true} />}</Box>
+      <Box>{isLoading && <BusySpinner withSkrim={true} />}</Box>
       <EditableTable
         key={hasStrata ? 'plantings-progress-table-with-strata' : 'plantings-progress-table-without-strata'}
         clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
@@ -391,7 +442,7 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
                 />
                 <Button
                   type='passive'
-                  onClick={() => setPlantingCompleted(true)}
+                  onClick={() => void setPlantingCompleted(true)}
                   disabled={!areAllIncompleted}
                   label={strings.SET_PLANTING_COMPLETE}
                   priority='secondary'

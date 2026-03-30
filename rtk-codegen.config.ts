@@ -60,6 +60,9 @@ const config: ConfigFile = {
     './src/queries/generated/reports.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/accelerator/projects/{projectId}/reports'),
     },
+    './src/queries/generated/substrata.ts': {
+      filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/tracking/substrata'),
+    },
     './src/queries/generated/indicators.ts': {
       filterEndpoints: (_, operation) =>
         operation.path.startsWith('/api/v1/accelerator/projects/{projectId}/reports/indicators') ||
