@@ -15874,10 +15874,10 @@ slate-react@^0.123.0:
     scroll-into-view-if-needed "^3.1.0"
     tiny-invariant "1.3.1"
 
-slate@^0.123.0:
-  version "0.123.0"
-  resolved "https://registry.yarnpkg.com/slate/-/slate-0.123.0.tgz#383e64e0ffdce5876c93861115750d277288b2af"
-  integrity sha512-Oon3HR/QzJQBjuOUJT1jGGlp8Ff7t3Bkr/rJ2lDqxNT4H+cBnXpEVQ/si6hn1ZCHhD2xY/2N91PQoH/rD7kxTg==
+slate@^0.124.0:
+  version "0.124.0"
+  resolved "https://registry.yarnpkg.com/slate/-/slate-0.124.0.tgz#83fe8cef72b78d40440634f207aebf671f9abc4f"
+  integrity sha512-yhtJ0MSV+Z63UTaZtGZDp1goO9XZb5VGER9bmwX+38yJUb7nijPkYEcxD5mpezsSLqL6NedUb4wyvoZa+HDWuQ==
 
 smart-buffer@^4.2.0:
   version "4.2.0"
