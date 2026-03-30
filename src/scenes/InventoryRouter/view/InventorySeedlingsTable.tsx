@@ -1,34 +1,42 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { Button, DropdownItem, TableColumnType } from '@terraware/web-components';
-import { TopBarButton } from '@terraware/web-components/components/table';
+import { Box, Grid, IconButton, Tooltip, Typography, useTheme } from '@mui/material';
+import { Button, EditableTable, EditableTableColumn, Icon, TableColumnType } from '@terraware/web-components';
+import {
+  MRT_Cell,
+  MRT_RowSelectionState,
+  MRT_ShowHideColumnsButton,
+  MRT_ToggleDensePaddingButton,
+  MRT_ToggleFiltersButton,
+  MRT_ToggleFullScreenButton,
+  MRT_ToggleGlobalFilterButton,
+} from 'material-react-table';
 
 import ProjectAssignTopBarButton from 'src/components/ProjectAssignTopBarButton';
-import OptionsMenu from 'src/components/common/OptionsMenu';
-import Table from 'src/components/common/table';
-import { SortOrder } from 'src/components/common/table/sort';
+import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
-import { DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
+import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useOrganization } from 'src/providers';
+import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
+import { requestProjects } from 'src/redux/features/projects/projectsThunks';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { isBatchEmpty } from 'src/scenes/InventoryRouter/FilterUtils';
 import { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';
-import Search from 'src/scenes/InventoryRouter/Search';
 import { NurseryBatchService } from 'src/services';
-import strings from 'src/strings';
 import { FieldNodePayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
-import useDebounce from 'src/utils/useDebounce';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useForm from 'src/utils/useForm';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import { OriginPage } from '../InventoryBatchView';
 import BatchDetailsModal from './BatchDetailsModal';
-import BatchesCellRenderer from './BatchesCellRenderer';
 import BatchesExportModal from './BatchesExportModal';
+import ChangeQuantityModal from './ChangeQuantityModal';
 import DeleteBatchesModal from './DeleteBatchesModal';
+import QuantitiesMenu from './QuantitiesMenu';
 
 export interface InventorySeedlingsTableProps {
   speciesId?: number;
@@ -65,34 +73,47 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
     origin,
     columns,
     isSelectionBulkWithdrawable,
-    getFuzzySearchFields,
     getBatchesSearch,
     getBatchesExport,
   } = props;
   const originId: number | undefined = props.facilityId || props.speciesId;
 
-  const { activeLocale } = useLocalization();
+  const { activeLocale, strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
-  const { isMobile, isDesktop } = useDeviceInfo();
+  const dispatch = useAppDispatch();
+  const projects = useAppSelector(selectProjects);
+  const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const snackbar = useSnackbar();
   const navigate = useSyncNavigate();
+  const numberFormatter = useNumberFormatter();
+  const tableStorageKey = `inventorySeedlingsTable_${origin.toLowerCase()}`;
 
   const [openExportModal, setOpenExportModal] = useState<boolean>(false);
-  const [temporalSearchValue, setTemporalSearchValue] = useState<string>('');
   const [batches, setBatches] = useState<SearchResponseElement[]>([]);
-  // search results without species filtering, needed to populate values for the species filter dropdown
-  const [speciesUnfilteredBatches, setSpeciesUnfilteredBatches] = useState<SearchResponseElement[]>([]);
-  // The main distinction here is that the filtered batches are filtered in the view, whereas `batches` is
-  // the filtered-by-search batches list that comes back from the API
-  const [filteredBatches, setFilteredBatches] = useState<any[]>([]);
+  const [filteredBatches, setFilteredBatches] = useState<SearchResponseElement[]>([]);
   const [filters, setFilters] = useForm<InventoryFiltersUnion>({});
-  const [selectedRows, setSelectedRows] = useState<any[]>([]);
+  const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const [openNewBatchModal, setOpenNewBatchModal] = useState<boolean>(false);
-  const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder>();
+  const [modalValues, setModalValues] = useState<{ type: string; openChangeQuantityModal: boolean; batch?: any }>({
+    type: 'germinating',
+    openChangeQuantityModal: false,
+  });
 
-  const debouncedSearchTerm = useDebounce(temporalSearchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
+  const selectedRows = useMemo(
+    () =>
+      Object.keys(rowSelection)
+        .map((id) => filteredBatches.find((batch) => String(batch.id) === id))
+        .filter((row): row is SearchResponseElement => row !== undefined),
+    [rowSelection, filteredBatches]
+  );
+
+  useEffect(() => {
+    if (selectedOrganization) {
+      void dispatch(requestProjects(selectedOrganization.id, activeLocale || undefined));
+    }
+  }, [dispatch, selectedOrganization, activeLocale]);
 
   useEffect(() => {
     if (
@@ -106,20 +127,14 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
 
   const filterEmptyBatches = useCallback(
     (unfiltered: SearchResponseElement[]) => {
-      // Because the field group filters have their values
-      // set as SearchNodePayload['values'] (which is (string | null[]), we gotta boolean-ify it
-      // If there is no value set (initial form state), this defaults to false
       const showEmptyBatches = (filters.showEmptyBatches || [])[0] === 'true';
-
       return unfiltered.filter((batch: SearchResponseElement) => (showEmptyBatches ? true : !isBatchEmpty(batch)));
     },
     [filters.showEmptyBatches]
   );
 
   const getNonSpeciesSearchFields = useCallback(() => {
-    // Skip fuzzy search on empty strings since the query will be
-    // expensive and results will be the same as not adding the fuzzy search
-    const fields: FieldNodePayload[] = debouncedSearchTerm ? getFuzzySearchFields(debouncedSearchTerm) : [];
+    const fields: FieldNodePayload[] = [];
 
     if (filters.facilityIds && filters.facilityIds.length > 0) {
       fields.push({
@@ -140,7 +155,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
     }
 
     return fields;
-  }, [getFuzzySearchFields, debouncedSearchTerm, filters.facilityIds, filters.projectIds]);
+  }, [filters.facilityIds, filters.projectIds]);
 
   const getSearchFields = useCallback(() => {
     const fields: FieldNodePayload[] = getNonSpeciesSearchFields();
@@ -166,7 +181,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
       }
 
       const searchFields = getSearchFields();
-      const batchesResults = await getBatchesSearch(selectedOrganization.id, originId, searchFields, searchSortOrder);
+      const batchesResults = await getBatchesSearch(selectedOrganization.id, originId, searchFields, undefined);
 
       if (requestId === getRequestId('inventory-seedlings')) {
         setBatches(batchesResults || []);
@@ -176,50 +191,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
     if (!originId || !isNaN(originId)) {
       void populateResults();
     }
-  }, [
-    activeLocale,
-    filters.facilityIds,
-    getBatchesSearch,
-    getSearchFields,
-    modified,
-    originId,
-    searchSortOrder,
-    selectedOrganization,
-  ]);
-
-  useEffect(() => {
-    const requestId = setRequestId('inventory-seedlings-species-unfiltered');
-
-    const populateSpeciesUnfilteredResults = async () => {
-      if (!originId || !selectedOrganization) {
-        return;
-      }
-
-      const searchFields = getNonSpeciesSearchFields();
-      const speciesUnfilteredBatchesResults = await getBatchesSearch(
-        selectedOrganization.id,
-        originId,
-        searchFields,
-        searchSortOrder
-      );
-
-      if (requestId === getRequestId('inventory-seedlings-species-unfiltered')) {
-        // keep state of results without species filtering, to populate species_id filter values
-        setSpeciesUnfilteredBatches(filterEmptyBatches(speciesUnfilteredBatchesResults || []));
-      }
-    };
-
-    if (!originId || !isNaN(originId)) {
-      void populateSpeciesUnfilteredResults();
-    }
-  }, [
-    filterEmptyBatches,
-    getBatchesSearch,
-    getNonSpeciesSearchFields,
-    originId,
-    searchSortOrder,
-    selectedOrganization,
-  ]);
+  }, [activeLocale, filters.facilityIds, getBatchesSearch, getSearchFields, modified, originId, selectedOrganization]);
 
   useEffect(() => {
     const batch = batches.find((b) => b.batchNumber === openBatchNumber);
@@ -247,7 +219,16 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
     setFilteredBatches(filterEmptyBatches(batches));
   }, [batches, filterEmptyBatches]);
 
-  const deleteSelectedBatches = () => {
+  const reloadData = useCallback(() => {
+    setModified(Date.now());
+  }, [setModified]);
+
+  const addBatch = () => {
+    setOpenNewBatchModal(true);
+    reloadData();
+  };
+
+  const deleteSelectedBatches = useCallback(() => {
     const promises = selectedRows.map((r) => NurseryBatchService.deleteBatch(r.id as number));
     void Promise.allSettled(promises).then((results) => {
       if (results.some((result) => result.status === 'rejected' || result?.value?.requestSucceeded === false)) {
@@ -256,55 +237,27 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
       reloadData();
       setOpenDeleteModal(false);
     });
-  };
-
-  const addBatch = () => {
-    setOpenNewBatchModal(true);
-    reloadData();
-    return;
-  };
-
-  const reloadData = () => {
-    setModified(Date.now());
-    return;
-  };
+  }, [reloadData, selectedRows, snackbar]);
 
   const selectAllRows = useCallback(() => {
-    setSelectedRows(batches);
-  }, [batches]);
+    const newSelection: MRT_RowSelectionState = {};
+    filteredBatches.forEach((_row, index) => {
+      newSelection[index] = true;
+    });
+    setRowSelection(newSelection);
+  }, [filteredBatches]);
 
-  const onBatchSelected = (batch: any, fromColumn?: string) => {
-    if (fromColumn === 'withdraw') {
-      navigate({
-        pathname: APP_PATHS.BATCH_WITHDRAW,
-        search: `?batchId=${batch.id.toString()}&source=${window.location.pathname}`,
-      });
-    } else if (fromColumn === 'quantitiesMenu') {
-      reloadData();
-    } else {
-      let to: string = APP_PATHS.INVENTORY_BATCH;
-
-      if (origin === 'Nursery') {
-        to = APP_PATHS.INVENTORY_BATCH_FOR_NURSERY.replace(':nurseryId', `${originId}`);
-      } else if (origin === 'Species') {
-        to = APP_PATHS.INVENTORY_BATCH_FOR_SPECIES.replace(':speciesId', `${originId}`);
-      }
-
-      navigate(to.replace(':batchId', batch.id));
-    }
-  };
-
-  const getSelectedRowsAsQueryParams = () => {
-    const batchIds = selectedRows.map((row) => `batchId=${row.id}`);
+  const getSelectedRowsAsQueryParams = useCallback(() => {
+    const batchIds = selectedRows.map((row) => `batchId=${row.id as string | number}`);
     return `?${batchIds.join('&')}&source=${window.location.pathname}`;
-  };
+  }, [selectedRows]);
 
-  const bulkWithdrawSelectedRows = () => {
+  const bulkWithdrawSelectedRows = useCallback(() => {
     navigate({
       pathname: APP_PATHS.BATCH_WITHDRAW,
       search: getSelectedRowsAsQueryParams(),
     });
-  };
+  }, [navigate, getSelectedRowsAsQueryParams]);
 
   const totalSelectedQuantity = useMemo<number>(
     () =>
@@ -315,70 +268,146 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
     [selectedRows]
   );
 
-  const getTopBarButtons = () => {
-    const topBarButtons: (TopBarButton | JSX.Element)[] = [];
-    topBarButtons.push({
-      buttonType: 'destructive',
-      buttonText: strings.DELETE,
-      onButtonClick: () => setOpenDeleteModal(true),
-    });
-
-    const bulkWithdrawable = isSelectionBulkWithdrawable(selectedRows);
-
-    let withdrawTooltip;
-
-    if (!bulkWithdrawable) {
-      withdrawTooltip = strings.WITHDRAW_SINGLE_NURSERY;
+  const withdrawTooltip = useMemo<string | undefined>(() => {
+    if (!isSelectionBulkWithdrawable(selectedRows)) {
+      return strings.WITHDRAW_SINGLE_NURSERY;
     } else if (totalSelectedQuantity === 0) {
-      withdrawTooltip = strings.NO_WITHDRAWABLE_QUANTITIES_FOUND;
+      return strings.NO_WITHDRAWABLE_QUANTITIES_FOUND;
     }
-
-    topBarButtons.push(
-      <ProjectAssignTopBarButton
-        key={1}
-        totalResultsCount={batches?.length}
-        selectAllRows={selectAllRows}
-        reloadData={reloadData}
-        projectAssignPayloadCreator={() => ({ batchIds: selectedRows.map((row) => Number(row.id)) })}
-      />
-    );
-
-    topBarButtons.push({
-      buttonType: 'passive',
-      buttonText: strings.WITHDRAW,
-      onButtonClick: () => bulkWithdrawSelectedRows(),
-      disabled: !bulkWithdrawable || !totalSelectedQuantity,
-      tooltipTitle: withdrawTooltip,
-    });
-
-    return topBarButtons;
-  };
-
-  const onSortChange = (order: SortOrder, orderBy: string) => {
-    setSearchSortOrder({
-      field: orderBy,
-      direction: order === 'asc' ? 'Ascending' : 'Descending',
-    });
-  };
-
-  const onOptionItemClick = (optionItem: DropdownItem) => {
-    if (optionItem.value === 'export') {
-      setOpenExportModal(true);
-    }
-  };
+    return undefined;
+  }, [isSelectionBulkWithdrawable, selectedRows, strings, totalSelectedQuantity]);
 
   const batchesExport = useCallback(() => {
     if (!originId || !getBatchesExport || !selectedOrganization || !activeLocale) {
       return Promise.resolve([] as SearchResponseElement[]);
     }
+    return getBatchesExport(selectedOrganization.id, originId, getSearchFields(), undefined);
+  }, [activeLocale, originId, getBatchesExport, selectedOrganization, getSearchFields]);
 
-    return getBatchesExport(selectedOrganization.id, originId, getSearchFields(), searchSortOrder);
-  }, [activeLocale, originId, getBatchesExport, selectedOrganization, getSearchFields, searchSortOrder]);
-
-  const getResultsSpeciesNames = useCallback(
-    (): string[] => speciesUnfilteredBatches.map((s) => s.species_scientificName as string),
-    [speciesUnfilteredBatches]
+  // Cell renderers
+  const BatchNumberCell = useCallback(
+    ({ cell }: { cell: MRT_Cell<SearchResponseElement> }) => {
+      const batchId = cell.row.original.id as number;
+      const value = cell.row.original.batchNumber as string;
+      let to = APP_PATHS.INVENTORY_BATCH.replace(':batchId', String(batchId));
+      if (origin === 'Nursery') {
+        to = APP_PATHS.INVENTORY_BATCH_FOR_NURSERY.replace(':nurseryId', `${originId}`).replace(
+          ':batchId',
+          String(batchId)
+        );
+      } else if (origin === 'Species') {
+        to = APP_PATHS.INVENTORY_BATCH_FOR_SPECIES.replace(':speciesId', `${originId}`).replace(
+          ':batchId',
+          String(batchId)
+        );
+      }
+      return (
+        <Link fontSize='16px' to={to}>
+          {value}
+        </Link>
+      );
+    },
+    [origin, originId]
   );
+
+  const WithdrawCell = useCallback(
+    ({ cell }: { cell: MRT_Cell<SearchResponseElement> }) => {
+      const batch = cell.row.original;
+      const totalQuantity = Number(batch.totalQuantity) + Number(batch.germinatingQuantity);
+      return (
+        <Button
+          id='withdraw-batch'
+          label={strings.WITHDRAW}
+          onClick={() =>
+            navigate({
+              pathname: APP_PATHS.BATCH_WITHDRAW,
+              search: `?batchId=${batch.id as string | number}&source=${window.location.pathname}`,
+            })
+          }
+          size='small'
+          priority='secondary'
+          disabled={totalQuantity === 0}
+        />
+      );
+    },
+    [navigate, strings]
+  );
+
+  const QuantityCell = useCallback(
+    ({ cell }: { cell: MRT_Cell<SearchResponseElement> }) => {
+      const value = cell.getValue();
+      const num = Number(value);
+      return <span>{isNaN(num) ? String(value ?? '') : numberFormatter.format(num)}</span>;
+    },
+    [numberFormatter]
+  );
+
+  const QuantitiesMenuCell = useCallback(
+    ({ cell }: { cell: MRT_Cell<SearchResponseElement> }) => {
+      return <QuantitiesMenu setModalValues={setModalValues} batch={cell.row.original} />;
+    },
+    [setModalValues]
+  );
+
+  const editableColumns = useMemo<EditableTableColumn<SearchResponseElement>[]>(() => {
+    const cols = typeof columns === 'function' ? columns() : columns;
+    return cols.map((col: TableColumnType) => {
+      const columnDef: EditableTableColumn<SearchResponseElement> = {
+        id: col.key,
+        header: typeof col.name === 'string' ? col.name : '',
+        accessorKey: col.key as keyof SearchResponseElement,
+        enableEditing: false,
+      };
+
+      if (col.type === 'number') {
+        columnDef.filterVariant = 'range';
+        columnDef.sortingFn = 'alphanumeric';
+      } else if (col.type === 'date') {
+        columnDef.filterVariant = 'date-range';
+      } else if (col.key === 'project_name') {
+        columnDef.filterVariant = 'multi-select';
+        columnDef.filterSelectOptions = (projects || [])
+          .map((project) => project.name)
+          .filter((name): name is string => !!name)
+          .sort();
+      } else {
+        columnDef.filterVariant = 'text';
+      }
+
+      if (col.key === 'batchNumber') {
+        columnDef.Cell = BatchNumberCell;
+      } else if (col.key === 'withdraw') {
+        columnDef.Cell = WithdrawCell;
+        columnDef.header = '';
+        (columnDef as any).enableColumnFilter = false;
+        (columnDef as any).enableSorting = false;
+      } else if (col.key.includes('Quantity')) {
+        columnDef.Cell = QuantityCell;
+      } else if (col.key === 'quantitiesMenu') {
+        columnDef.Cell = QuantitiesMenuCell;
+        columnDef.header = '';
+        (columnDef as any).enableColumnFilter = false;
+        (columnDef as any).enableSorting = false;
+      }
+
+      return columnDef;
+    });
+  }, [columns, projects, BatchNumberCell, WithdrawCell, QuantityCell, QuantitiesMenuCell]);
+
+  const {
+    columnOrder,
+    columnVisibility,
+    density,
+    onDensityChange,
+    onPaginationChange,
+    pagination,
+    setColumnOrder,
+    setColumnVisibility,
+    setShowColumnFilters,
+    setShowGlobalFilter,
+    showColumnFilters,
+    showGlobalFilter,
+  } = useTableState(tableStorageKey);
 
   return (
     <>
@@ -408,25 +437,23 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
           onClose={() => setOpenDeleteModal(false)}
           onSubmit={deleteSelectedBatches}
         />
+        {modalValues.openChangeQuantityModal && modalValues.batch && (
+          <ChangeQuantityModal
+            onClose={() => setModalValues({ openChangeQuantityModal: false, type: 'germinating' })}
+            modalValues={modalValues}
+            row={modalValues.batch}
+            reload={reloadData}
+          />
+        )}
         <Grid item xs={12} sx={{ marginTop: theme.spacing(1) }}>
           <Box
             sx={{
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
-              marginBottom: theme.spacing(4),
-              width: isDesktop ? 'calc(100vw - 300px)' : 'calc(100vw - 76px)',
-              maxWidth: '100%',
             }}
           >
-            <Typography
-              sx={{
-                fontSize: '20px',
-                fontWeight: 600,
-              }}
-            >
-              {strings.SEEDLINGS_BATCHES}
-            </Typography>
+            <Typography sx={{ fontSize: '20px', fontWeight: 600 }}>{strings.SEEDLINGS_BATCHES}</Typography>
             <Box display='flex' alignItems='center'>
               <Button
                 id='new-batch'
@@ -435,49 +462,146 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
                 onClick={addBatch}
                 size='small'
               />
-              {getBatchesExport && (
-                <OptionsMenu
-                  onOptionItemClick={onOptionItemClick}
-                  optionItems={[{ label: strings.EXPORT, value: 'export' }]}
-                  size='small'
-                />
-              )}
             </Box>
           </Box>
 
-          <Box>
-            <Search
-              filters={filters}
-              getResultsSpeciesNames={getResultsSpeciesNames}
-              onSearch={(val) => setTemporalSearchValue(val)}
-              origin={origin}
-              searchValue={temporalSearchValue}
-              setFilters={setFilters}
-              showEmptyBatchesFilter
-              showProjectsFilter
-            />
-          </Box>
-
-          <Box marginTop={theme.spacing(2)}>
-            <Table
-              id={`inventory-seedlings-table-${origin.toLowerCase()}`}
-              columns={columns}
-              rows={filteredBatches}
-              orderBy='batchNumber'
-              Renderer={BatchesCellRenderer}
-              reloadData={reloadData}
-              selectedRows={selectedRows}
-              setSelectedRows={setSelectedRows}
-              showCheckbox={true}
-              isClickable={() => false}
-              showTopBar={true}
-              topBarButtons={getTopBarButtons()}
-              onSelect={onBatchSelected}
-              controlledOnSelect={true}
-              sortHandler={onSortChange}
-              isPresorted={!!searchSortOrder}
-            />
-          </Box>
+          <EditableTable
+            clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
+            columns={editableColumns}
+            data={filteredBatches}
+            enableEditing={false}
+            enableSorting={true}
+            enableGlobalFilter={true}
+            enableColumnFilters={true}
+            stickyFilters={true}
+            storageKey={tableStorageKey}
+            enablePagination={true}
+            enableTopToolbar={true}
+            enableBottomToolbar={true}
+            tableOptions={{
+              state: {
+                rowSelection,
+                columnOrder,
+                columnVisibility,
+                density,
+                pagination,
+                showColumnFilters,
+                showGlobalFilter,
+              },
+              onRowSelectionChange: setRowSelection,
+              onPaginationChange,
+              onColumnOrderChange: setColumnOrder,
+              onColumnVisibilityChange: setColumnVisibility,
+              onShowColumnFiltersChange: setShowColumnFilters,
+              onShowGlobalFilterChange: setShowGlobalFilter,
+              onDensityChange,
+              enableRowSelection: true,
+              enableColumnPinning: true,
+              enableColumnActions: true,
+              enableHiding: true,
+              enableColumnDragging: true,
+              enableColumnOrdering: true,
+              positionGlobalFilter: 'right',
+              getRowId: (_row, index) => String(index),
+              renderToolbarAlertBannerContent: ({ selectedAlert }) => (
+                <Box display='flex' gap={1} alignItems='center' justifyContent='space-between' width='100%'>
+                  {selectedAlert}
+                  <Box display='flex' gap={1} alignItems='center'>
+                    <Button
+                      type='destructive'
+                      onClick={() => setOpenDeleteModal(true)}
+                      label={strings.DELETE}
+                      priority='secondary'
+                    />
+                    <ProjectAssignTopBarButton
+                      totalResultsCount={filteredBatches?.length}
+                      selectAllRows={selectAllRows}
+                      reloadData={reloadData}
+                      projectAssignPayloadCreator={() => ({ batchIds: selectedRows.map((row) => Number(row.id)) })}
+                    />
+                    <Tooltip title={withdrawTooltip || ''}>
+                      <span>
+                        <Button
+                          type='passive'
+                          onClick={bulkWithdrawSelectedRows}
+                          disabled={!isSelectionBulkWithdrawable(selectedRows) || !totalSelectedQuantity}
+                          label={strings.WITHDRAW}
+                          priority='secondary'
+                        />
+                      </span>
+                    </Tooltip>
+                  </Box>
+                </Box>
+              ),
+              renderToolbarInternalActions: ({ table }) => (
+                <Box display='flex' gap={0.5}>
+                  {getBatchesExport && (
+                    <Tooltip title={strings.EXPORT}>
+                      <IconButton onClick={() => setOpenExportModal(true)}>
+                        <Icon name='iconExport' size='medium' />
+                      </IconButton>
+                    </Tooltip>
+                  )}
+                  <MRT_ToggleGlobalFilterButton table={table} />
+                  <MRT_ToggleFiltersButton table={table} />
+                  <MRT_ShowHideColumnsButton table={table} />
+                  <MRT_ToggleDensePaddingButton table={table} />
+                  <MRT_ToggleFullScreenButton table={table} />
+                </Box>
+              ),
+              muiTableBodyCellProps: ({ row, column }) => ({ id: `row${row.index + 1}-${column.id}` }),
+              muiTableBodyProps: {
+                sx: {
+                  '& tr:nth-of-type(odd) > td': {
+                    backgroundColor: theme.palette.TwClrBaseGray025,
+                  },
+                },
+              },
+              muiTablePaperProps: {
+                elevation: 0,
+              },
+              muiTableHeadCellProps: ({ column }) => ({
+                sx:
+                  column.id === 'quantitiesMenu' || column.id === 'withdraw'
+                    ? {
+                        '& > *': {
+                          display: 'none !important',
+                        },
+                        padding: '8px',
+                      }
+                    : {},
+              }),
+              muiTopToolbarProps: {
+                sx: {
+                  position: 'relative',
+                  '& > .MuiBox-root': {
+                    position: 'relative',
+                  },
+                  '& .Mui-ToolbarDropZone': {
+                    display: 'none',
+                  },
+                },
+              },
+              muiToolbarAlertBannerProps: {
+                sx: {
+                  backgroundColor: theme.palette.TwClrBaseGray050,
+                  '.MuiPaper-root': {
+                    padding: theme.spacing(1, 3),
+                  },
+                  '.MuiAlert-message': {
+                    padding: theme.spacing(1, 3),
+                  },
+                },
+              },
+              muiTableBodyRowProps: {
+                sx: {
+                  '& td': {
+                    borderBottom: 'none',
+                  },
+                },
+              },
+            }}
+          />
         </Grid>
       </Grid>
     </>

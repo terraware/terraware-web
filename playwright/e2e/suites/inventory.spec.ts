@@ -214,7 +214,7 @@ test.describe('InventoryTests', () => {
     await expect(page.getByText('Batches at Other Nursery')).toBeVisible();
     await expect(page.getByText('Species Banana')).toBeVisible();
     const newBatchNumber = await getBatchNumberBySpecies(page.locator('.MuiTable-root'), 'Banana');
-    await page.getByRole('button', { name: newBatchNumber }).click();
+    await page.getByRole('link', { name: newBatchNumber }).click();
     await page.getByRole('tab', { name: 'History' }).waitFor({ state: 'visible' });
     await page.getByRole('tab', { name: 'History' }).click();
     await expect(page.getByRole('cell', { name: 'Nursery Transfer' })).toBeVisible();
@@ -331,8 +331,7 @@ const getBatchNumberBySpecies = async (parent: Page | Locator, species: string) 
     await parent
       .getByText(species)
       .first()
-      .locator('../..')
-      .evaluate((el) => el.id)
+      .evaluate((el) => (el.closest('td') ?? el).id)
   )
     .replace('-species_scientificName', '')
     .replace('-scientificName', '')
