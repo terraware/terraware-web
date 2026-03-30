@@ -27,6 +27,7 @@ const injectedRtkApi = api.injectEndpoints({
             'observationPlots_monitoringPlot_southeastLongitude',
             'observationPlots_monitoringPlot_northeastLatitude',
             'observationPlots_monitoringPlot_northeastLongitude',
+            'notes',
           ],
           sortOrder: [{ field: 'observationPlots_monitoringPlot_id' }],
           search: {
