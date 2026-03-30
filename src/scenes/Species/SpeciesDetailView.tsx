@@ -17,6 +17,7 @@ import { SpeciesService } from 'src/services';
 import strings from 'src/strings';
 import {
   Species,
+  getConservationCategoryString,
   getEcosystemTypesString,
   getGrowthFormsString,
   getPlantMaterialSourcingMethodsString,
@@ -185,7 +186,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
             <TextField
               id={'conservationCategory'}
               label={strings.CONSERVATION_CATEGORY}
-              value={species?.conservationCategory}
+              value={getConservationCategoryString(species?.conservationCategory)}
               tooltipTitle={strings.TOOLTIP_SPECIES_CONSERVATION_CATEGORY}
               type='text'
               display={true}

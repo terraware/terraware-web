@@ -182,6 +182,13 @@ export function successionalGroups(): { label: string; value: SuccessionalGroup 
   ];
 }
 
+export function getConservationCategoryString(code?: string): string {
+  if (!code) {
+    return '';
+  }
+  return conservationCategories().find((c) => c.value === code)?.label ?? '';
+}
+
 export function getEcosystemTypesString(species?: Species): string {
   return (species?.ecosystemTypes || [])
     .map((ecosystemType) => {

@@ -17,6 +17,7 @@ import { useAcceleratorProjectSpeciesData } from 'src/providers/AcceleratorProje
 import { useDeliverableData } from 'src/providers/Deliverable/DeliverableContext';
 import { useLocalization, useProject } from 'src/providers/hooks';
 import strings from 'src/strings';
+import { getConservationCategoryString } from 'src/types/Species';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import ApproveDeliverableDialog from '../Deliverables/ApproveDeliverableDialog';
@@ -280,7 +281,7 @@ export default function SpeciesDetailView(): JSX.Element {
                 <TextField
                   id={'conservationCategory'}
                   label={strings.CONSERVATION_CATEGORY}
-                  value={currentSpecies.conservationCategory}
+                  value={getConservationCategoryString(currentSpecies.conservationCategory)}
                   type='text'
                   display={true}
                 />
