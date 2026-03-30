@@ -1,3 +1,5 @@
+76761934a6ca Removed dependencies on PlantingSiteProvider for nursery router and withdrawal flow (#5507)
+381b4e29ea83 SW-8148 Seedling Batches tables in By Species and By Nursery pages: Update to new table component (#5513)
 e6ccba610342 SW-8217: Species: Show full names of IUCN Red List categories in Detail and List Views (#5523)
 b8d39875f9e2 SW-7477: Inventory Withdrawals: In Withdrawal History table, change Purpose filter from single select to multiselect (#5522)
 68de47690fba SW-8245 Don't allow Accelerator Admins who are not members of the Org to edit survival rate settings (#5531)
