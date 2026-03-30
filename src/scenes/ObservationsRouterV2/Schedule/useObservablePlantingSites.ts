@@ -1,23 +1,16 @@
 import { useEffect, useMemo, useState } from 'react';
 
+import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import { useOrganization } from 'src/providers';
 import { useLazyListObservationsQuery } from 'src/queries/generated/observations';
-import {
-  useLazyListPlantingSiteReportedPlantsQuery,
-  useLazyListPlantingSitesQuery,
-} from 'src/queries/generated/plantingSites';
+import { useLazyListPlantingSiteReportedPlantsQuery } from 'src/queries/generated/plantingSites';
 
 const useObservablePlantingSites = () => {
   const { selectedOrganization } = useOrganization();
-  const [listPlantingSites, listPlantingSitesRepsonse] = useLazyListPlantingSitesQuery();
   const [listObservations, listObservationsResponse] = useLazyListObservationsQuery();
   const [listSitesReportedPlants, listSitesReportedPlantsResponse] = useLazyListPlantingSiteReportedPlantsQuery();
 
-  const allPlantingSites = useMemo(
-    () => listPlantingSitesRepsonse.data?.sites ?? [],
-    [listPlantingSitesRepsonse.data?.sites]
-  );
-
+  const { allPlantingSites } = useOrganizationPlantingSites(true);
   const allObservations = useMemo(
     () => listObservationsResponse.data?.observations ?? [],
     [listObservationsResponse.data?.observations]
@@ -29,11 +22,10 @@ const useObservablePlantingSites = () => {
   );
   useEffect(() => {
     if (selectedOrganization) {
-      void listPlantingSites({ organizationId: selectedOrganization.id, full: true, includeZones: false }, true);
       void listSitesReportedPlants({ organizationId: selectedOrganization.id }, true);
       void listObservations({ organizationId: selectedOrganization.id }, true);
     }
-  }, [listObservations, listPlantingSites, listSitesReportedPlants, selectedOrganization]);
+  }, [listObservations, listSitesReportedPlants, selectedOrganization]);
 
   const [now] = useState(() => Date.now());
 

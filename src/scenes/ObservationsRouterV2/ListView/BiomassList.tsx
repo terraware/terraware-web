@@ -18,10 +18,10 @@ import Link from 'src/components/common/Link';
 import TableRowPopupMenu from 'src/components/common/table/TableRowPopupMenu';
 import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
 import { APP_PATHS } from 'src/constants';
+import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { useLazyListAdHocObservationResultsQuery } from 'src/queries/generated/observations';
-import { useLazyListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
 import { ObservationsService } from 'src/services';
 import { downloadCsv } from 'src/utils/csv';
 import { makeDateRangeFilterFn } from 'src/utils/tableFilters';
@@ -83,30 +83,29 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
     showGlobalFilter,
   } = useTableState(STORAGE_KEY, { persistFilters: true });
 
-  const [listPlantingSites, listPlantingSitesResult] = useLazyListPlantingSitesQuery();
+  const { allPlantingSites } = useOrganizationPlantingSites();
   const [listAdHocObservationResults, adHocObservationsResultsResponse] = useLazyListAdHocObservationResultsQuery();
 
   const plantingSitesNames = useMemo(
     () =>
-      (listPlantingSitesResult.data?.sites ?? []).reduce(
+      allPlantingSites.reduce(
         (siteNames, site) => {
           siteNames[site.id] = site.name;
           return siteNames;
         },
         {} as { [siteId: number]: string }
       ),
-    [listPlantingSitesResult.data]
+    [allPlantingSites]
   );
 
   useEffect(() => {
     if (selectedOrganization) {
-      void listPlantingSites({ organizationId: selectedOrganization.id, includeZones: false }, true);
       void listAdHocObservationResults(
         { plantingSiteId, organizationId: selectedOrganization.id, includePlants: true },
         true
       );
     }
-  }, [listAdHocObservationResults, listPlantingSites, selectedOrganization, plantingSiteId]);
+  }, [listAdHocObservationResults, selectedOrganization, plantingSiteId]);
 
   const rows = useMemo((): BiomassRow[] => {
     if (adHocObservationsResultsResponse.isSuccess) {
@@ -250,8 +249,8 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
   }, [onExportBiomassObservations]);
 
   const isLoading = useMemo(
-    () => adHocObservationsResultsResponse.isFetching || listPlantingSitesResult.isFetching,
-    [adHocObservationsResultsResponse.isFetching, listPlantingSitesResult.isFetching]
+    () => adHocObservationsResultsResponse.isFetching,
+    [adHocObservationsResultsResponse.isFetching]
   );
 
   if (!isLoading && rows.length === 0) {

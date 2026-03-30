@@ -272,6 +272,8 @@ test.describe('InventoryTests', () => {
   test('Plants dashboard after outplanting', async ({ page }, testInfo) => {
     await page.getByRole('button', { name: 'Plants' }).click();
     await page.getByRole('button', { name: 'Dashboard', ...exactOptions }).click();
+    await page.getByPlaceholder('Select...').click();
+    await page.getByText('Planting Site', { exact: true }).click();
     await expect(page.getByText('60')).toBeVisible();
     await expect(page.getByText('1 Species', exactOptions)).toBeVisible();
     await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));

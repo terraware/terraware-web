@@ -1,7 +1,7 @@
 /**
  * Nursery plantings and withdrawals
  */
-import React, { type JSX, useEffect, useMemo, useRef } from 'react';
+import React, { type JSX, useMemo, useRef } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Tabs } from '@terraware/web-components';
@@ -9,10 +9,7 @@ import { Tabs } from '@terraware/web-components';
 import PageSnackbar from 'src/components/PageSnackbar';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
-import { useLocalization, useOrganization } from 'src/providers';
-import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
-import { requestPlantingSitesSearchResults } from 'src/redux/features/tracking/trackingThunks';
-import { useAppDispatch } from 'src/redux/store';
+import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
@@ -21,10 +18,8 @@ import PlantingProgress from './PlantingProgressTabContent';
 
 export default function NurseryPlantingsAndWithdrawalsView(): JSX.Element {
   const { activeLocale } = useLocalization();
-  const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const contentRef = useRef(null);
-  const dispatch = useAppDispatch();
 
   const tabs = useMemo(() => {
     if (!activeLocale) {
@@ -50,13 +45,6 @@ export default function NurseryPlantingsAndWithdrawalsView(): JSX.Element {
     tabs,
     viewIdentifier: 'nursery-plantings-and-withdrawals',
   });
-
-  useEffect(() => {
-    if (selectedOrganization) {
-      void dispatch(requestPlantings(selectedOrganization.id));
-      void dispatch(requestPlantingSitesSearchResults(selectedOrganization.id));
-    }
-  }, [dispatch, selectedOrganization]);
 
   return (
     <TfMain>

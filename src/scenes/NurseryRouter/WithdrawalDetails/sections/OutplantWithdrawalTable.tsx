@@ -3,7 +3,7 @@ import React, { type JSX, useMemo } from 'react';
 import { TableColumnType } from '@terraware/web-components';
 
 import Table from 'src/components/common/table';
-import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
+import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import strings from 'src/strings';
 import { Batch, NurseryWithdrawal } from 'src/types/Batch';
 import { Species } from 'src/types/Species';
@@ -39,7 +39,8 @@ export default function OutplantWithdrawalTable({
   withdrawal,
 }: OutplantWithdrawalTableProps): JSX.Element {
   const numberFormatter = useNumberFormatter();
-  const { allPlantingSites } = usePlantingSiteData();
+
+  const { allPlantingSites } = useOrganizationPlantingSites();
 
   type BatchesRow = {
     name?: string;

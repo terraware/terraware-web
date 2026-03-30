@@ -29,6 +29,9 @@ const config: ConfigFile = {
     './src/queries/generated/notifications.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/notifications'),
     },
+    './src/queries/generated/nurseryWithdrawals.ts': {
+      filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/nursery/withdrawals'),
+    },
     './src/queries/generated/observations.ts': {
       filterEndpoints: (_, operation) =>
         operation.path.startsWith('/api/v1/tracking/observations') &&
@@ -56,6 +59,9 @@ const config: ConfigFile = {
     },
     './src/queries/generated/reports.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/accelerator/projects/{projectId}/reports'),
+    },
+    './src/queries/generated/substrata.ts': {
+      filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/tracking/substrata'),
     },
     './src/queries/generated/indicators.ts': {
       filterEndpoints: (_, operation) =>

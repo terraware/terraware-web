@@ -7,7 +7,7 @@ import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
-import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
+import { useGetPlantingSiteReportedPlantsQuery } from 'src/queries/generated/plantingSites';
 import strings from 'src/strings';
 
 type PlantingProgressMapDialogProps = {
@@ -16,6 +16,7 @@ type PlantingProgressMapDialogProps = {
   substratumAreaHa: number;
   siteName: string;
   plantingComplete: boolean;
+  plantingSiteId: number;
   onUpdatePlantingComplete: (id: number, val: boolean) => void;
   busy: boolean;
 };
@@ -26,11 +27,18 @@ export default function PlantingProgressMapDialog({
   substratumAreaHa,
   siteName,
   plantingComplete,
+  plantingSiteId,
   onUpdatePlantingComplete,
   busy,
 }: PlantingProgressMapDialogProps): JSX.Element {
   const theme = useTheme();
-  const { plantingSiteReportedPlants } = usePlantingSiteData();
+
+  const plantingSiteReportedPlantsResponse = useGetPlantingSiteReportedPlantsQuery(plantingSiteId);
+  const plantingSiteReportedPlants = useMemo(
+    () => plantingSiteReportedPlantsResponse.currentData?.site,
+    [plantingSiteReportedPlantsResponse.currentData?.site]
+  );
+
   const { species } = useSpeciesData();
 
   const substratumReportedPlants = useMemo(() => {

@@ -20,8 +20,8 @@ import DatePicker from 'src/components/common/DatePicker';
 import Divisor from 'src/components/common/Divisor';
 import PageForm from 'src/components/common/PageForm';
 import { APP_PATHS } from 'src/constants';
+import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
-import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { useOrganization } from 'src/providers/hooks';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { useAppSelector } from 'src/redux/store';
@@ -57,7 +57,8 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
 
-  const { allPlantingSites } = usePlantingSiteData();
+  const { allPlantingSites, isLoading } = useOrganizationPlantingSites(true);
+
   const { species } = useSpeciesData();
   const projects = useAppSelector(selectProjects);
 
@@ -450,17 +451,10 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   }, [nurseriesOptions, selectedNursery, selectedOrganization]);
 
   const getPlantingSitesOptions = () => {
-    if (!allPlantingSites) {
-      return [];
-    }
-    return allPlantingSites
-      .filter((plantingSite) => {
-        return plantingSite.id !== -1;
-      })
-      .map((plantingSite) => ({
-        label: plantingSite.name,
-        value: plantingSite.id.toString(),
-      }));
+    return allPlantingSites.map((plantingSite) => ({
+      label: plantingSite.name,
+      value: plantingSite.id.toString(),
+    }));
   };
 
   const gridSize = () => (isMobile ? 12 : 6);
@@ -527,12 +521,12 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   }, [batchesFromNursery]);
 
   const outplantDisabled = useMemo(() => {
-    if (!allPlantingSites?.length || noReadySeedlings) {
+    if ((!isLoading && !allPlantingSites.length) || noReadySeedlings) {
       return true;
     }
 
     return false;
-  }, [allPlantingSites, noReadySeedlings]);
+  }, [allPlantingSites, isLoading, noReadySeedlings]);
 
   const getOutplantLabel = () => {
     return (

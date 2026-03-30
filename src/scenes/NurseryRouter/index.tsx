@@ -1,15 +1,16 @@
 import React, { useMemo } from 'react';
 import { Route, Routes } from 'react-router';
 
+import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
-import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import NurseryPlantingsAndWithdrawalsView from 'src/scenes/NurseryRouter/NurseryPlantingsAndWithdrawalsView';
 import NurseryReassignmentView from 'src/scenes/NurseryRouter/NurseryReassignmentView';
 import NurseryWithdrawalsDetailsView from 'src/scenes/NurseryRouter/NurseryWithdrawalsDetailsView';
 
 const NurseryRouter = () => {
   const { species } = useSpeciesData();
-  const { allPlantingSites } = usePlantingSiteData();
+
+  const { allPlantingSites } = useOrganizationPlantingSites();
 
   const stratumNames = useMemo(() => {
     const strata: Record<number, string> = {};
