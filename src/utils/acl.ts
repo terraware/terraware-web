@@ -145,7 +145,7 @@ const isAllowedEditSurvivalRateSettings: PermissionCheckFn<EditSurvivalRateSetti
   _: GlobalRolePermission,
   metadata?: CreateSubmissionMetadata
 ): boolean => {
-  return isAcceleratorAdmin(user) || isManagerOrHigher(metadata?.organization);
+  return isManagerOrHigher(metadata?.organization);
 };
 
 /**
