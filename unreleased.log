@@ -1,3 +1,4 @@
+c2cc38f55993 Update dependency slate-dom to ^0.124.0 (#5524)
 f9d274940547 Update nick-fields/retry action to v4 (#5529)
 cd0fa9566d84 Update dependency webpack-dev-middleware to v8 (#5527)
 98146bd3f5b0 Update dependency slate-react to ^0.124.0 (#5525)
