@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1774874247888" clover="3.2.0">
-  <project timestamp="1774874247889" name="All files">
-    <metrics statements="1985" coveredstatements="1219" conditionals="989" coveredconditionals="406" methods="514" coveredmethods="204" elements="3488" coveredelements="1829" complexity="0" loc="1985" ncloc="1985" packages="17" files="42" classes="42"/>
+<coverage generated="1774894293153" clover="3.2.0">
+  <project timestamp="1774894293153" name="All files">
+    <metrics statements="1985" coveredstatements="1219" conditionals="987" coveredconditionals="406" methods="514" coveredmethods="204" elements="3486" coveredelements="1829" complexity="0" loc="1985" ncloc="1985" packages="17" files="42" classes="42"/>
     <package name="src">
       <metrics statements="161" coveredstatements="161" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
       <file name="constants.ts" path="/home/runner/work/terraware-web/terraware-web/src/constants.ts">
@@ -1587,9 +1587,9 @@
       </file>
     </package>
     <package name="src.utils">
-      <metrics statements="379" coveredstatements="250" conditionals="262" coveredconditionals="110" methods="97" coveredmethods="42"/>
+      <metrics statements="379" coveredstatements="250" conditionals="260" coveredconditionals="110" methods="97" coveredmethods="42"/>
       <file name="acl.ts" path="/home/runner/work/terraware-web/terraware-web/src/utils/acl.ts">
-        <metrics statements="58" coveredstatements="41" conditionals="38" coveredconditionals="11" methods="24" coveredmethods="6"/>
+        <metrics statements="58" coveredstatements="41" conditionals="36" coveredconditionals="11" methods="24" coveredmethods="6"/>
         <line num="83" count="1" type="stmt"/>
         <line num="84" count="1" type="stmt"/>
         <line num="85" count="1" type="stmt"/>
@@ -1615,7 +1615,7 @@
         <line num="130" count="1" type="stmt"/>
         <line num="135" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="143" count="1" type="stmt"/>
-        <line num="148" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="148" count="0" type="stmt"/>
         <line num="156" count="1" type="stmt"/>
         <line num="161" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="169" count="1" type="stmt"/>
