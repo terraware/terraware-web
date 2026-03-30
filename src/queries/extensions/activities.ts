@@ -31,6 +31,8 @@ api.enhanceEndpoints({
       invalidatesTags: (_result, _error, activityId) => [
         { type: QueryTagTypes.Activities, id: activityId },
         { type: QueryTagTypes.Activities, id: 'LIST' },
+        { type: QueryTagTypes.FunderActivities, id: activityId },
+        { type: QueryTagTypes.FunderActivities, id: 'LIST' },
       ],
     },
     adminUpdateActivity: {

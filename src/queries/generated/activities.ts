@@ -19,7 +19,7 @@ const injectedRtkApi = api.injectEndpoints({
         url: `/api/v1/accelerator/activities/admin`,
         params: {
           projectId: queryArg.projectId,
-          includeMedia: queryArg.includeMedia,
+          depth: queryArg.depth,
         },
       }),
     }),
@@ -95,7 +95,7 @@ export type ListActivitiesApiResponse = /** status 200 OK */ ListActivitiesRespo
 export type ListActivitiesApiArg = {
   projectId: number;
   /** The media files to include for each activity. */
-  depth?: 'None' | 'Cover Photos' | 'All';
+  depth?: 'None' | 'CoverPhotos' | 'All';
 };
 export type CreateActivityApiResponse = /** status 200 OK */ GetActivityResponsePayload;
 export type CreateActivityApiArg = CreateActivityRequestPayload;
@@ -103,7 +103,7 @@ export type AdminListActivitiesApiResponse = /** status 200 OK */ AdminListActiv
 export type AdminListActivitiesApiArg = {
   projectId: number;
   /** If true, include a list of media files for each activity. */
-  includeMedia?: boolean;
+  depth?: 'None' | 'CoverPhotos' | 'All';
 };
 export type AdminCreateActivityApiResponse = /** status 200 OK */ AdminGetActivityResponsePayload;
 export type AdminCreateActivityApiArg = AdminCreateActivityRequestPayload;
