@@ -1813,8 +1813,8 @@ SEED_STORAGE_BEHAVIOR,Ver comportamiento en almacenamiento,778debfc
 SEED_TYPE,Tipo de semilla,3f69d203
 SEED_WEIGHT,Peso de semillas,ff04e812
 SEEDLING_BATCH,Lote de plántula,3e860688
+SEEDLING_BATCHES,Lotes de plántulas,040a561e
 SEEDLINGS,Plántulas,c87d3813
-SEEDLINGS_BATCHES,Lotes de plántulas,b3b86153
 SEEDLINGS_PLURAL,plántulas,8c6852cb
 SEEDLINGS_SENT,Plántulas enviadas,60a58d4a
 SEEDLINGS_SINGULAR,plántula,16e3be66
