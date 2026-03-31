@@ -7,6 +7,7 @@ import { PlantingSiteMap } from 'src/components/Map';
 import { MapTooltip, TooltipProperty } from 'src/components/Map/MapRenderUtils';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import MapLegend, { MapLegendGroup } from 'src/components/common/MapLegend';
+import usePlantingSite from 'src/hooks/usePlantingSite';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { useListObservationSummariesQuery } from 'src/queries/generated/observations';
 import { useLazyGetPlantingSiteHistoryQuery } from 'src/queries/generated/plantingSites';
@@ -25,7 +26,8 @@ export default function StratumLevelDataMap({ plantingSiteId }: StratumLevelData
   const numberFormatter = useNumberFormatter();
   const theme = useTheme();
   const { isDesktop } = useDeviceInfo();
-  const { plantingSite, plantingSiteReportedPlants, latestResult } = usePlantingSiteData();
+  const { latestResult, plantingSiteReportedPlants } = usePlantingSiteData();
+  const { plantingSite } = usePlantingSite(plantingSiteId);
 
   const observationSummariesQuery = useListObservationSummariesQuery(
     { plantingSiteId: plantingSiteId ?? -1 },

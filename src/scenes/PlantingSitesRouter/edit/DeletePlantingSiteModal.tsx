@@ -5,8 +5,9 @@ import { BusySpinner, Button, DialogBox } from '@terraware/web-components';
 
 import TextWithLink from 'src/components/common/TextWithLink';
 import { APP_PATHS } from 'src/constants';
+import usePlantingSite from 'src/hooks/usePlantingSite';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { useDeletePlantingSiteMutation, useGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
+import { useDeletePlantingSiteMutation } from 'src/queries/generated/plantingSites';
 import { useSearchPlantingsForSiteQuery } from 'src/queries/search/plantings';
 import strings from 'src/strings';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -21,7 +22,7 @@ export default function DeletePlantingSiteModal(props: DeletePlantingSiteModalPr
   const navigate = useSyncNavigate();
   const snackbar = useSnackbar();
 
-  const { data: plantingSiteData } = useGetPlantingSiteQuery({ id: plantingSiteId, includeZones: false });
+  const { plantingSite } = usePlantingSite(plantingSiteId);
   const [deleteSite, deleteResult] = useDeletePlantingSiteMutation();
   const { data: plantings } = useSearchPlantingsForSiteQuery(plantingSiteId);
 
@@ -70,7 +71,7 @@ export default function DeletePlantingSiteModal(props: DeletePlantingSiteModalPr
         ]}
         message={strings.formatString(
           hasPlantings ? strings.DELETE_PLANTING_SITE_IN_USE_MESSAGE : strings.DELETE_PLANTING_SITE_MESSAGE,
-          plantingSiteData?.site.name ?? ''
+          plantingSite?.name ?? ''
         )}
         skrim={true}
       >

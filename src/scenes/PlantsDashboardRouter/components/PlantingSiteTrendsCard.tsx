@@ -6,19 +6,23 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Card from 'src/components/common/Card';
 import Chart, { ChartData } from 'src/components/common/Chart/Chart';
-import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
+import usePlantingSite from 'src/hooks/usePlantingSite';
 import { useListObservationSummariesQuery } from 'src/queries/generated/observations';
 import strings from 'src/strings';
 
-export default function PlantingSiteTrendsCard(): JSX.Element {
+type PlantingSiteTrendsCardProps = {
+  plantingSiteId: number;
+};
+
+export default function PlantingSiteTrendsCard({ plantingSiteId }: PlantingSiteTrendsCardProps): JSX.Element {
   const theme = useTheme();
   const [strataOptions, setStrataOptions] = useState<DropdownItem[]>();
   const [selectedPlantsPerHaStratum, setSelectedPlantsPerHaStratum] = useState<number>();
   const [selectedSurvivalStratum, setSelectedSurvivalStratum] = useState<number>();
-  const { plantingSite } = usePlantingSiteData();
   const { isDesktop, isMobile } = useDeviceInfo();
 
-  const plantingSiteId = plantingSite?.id;
+  const { plantingSite } = usePlantingSite(plantingSiteId);
+
   const observationSummariesQuery = useListObservationSummariesQuery(
     { plantingSiteId: plantingSiteId ?? -1 },
     { skip: !plantingSiteId || plantingSiteId === -1 }

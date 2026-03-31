@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Checkbox, Icon } from '@terraware/web-components';
@@ -7,8 +7,8 @@ import { DateTime } from 'luxon';
 
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
+import usePlantingSite from 'src/hooks/usePlantingSite';
 import { useLocalization } from 'src/providers';
-import { useGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import { Stratum } from 'src/types/Tracking';
 import { isAfter } from 'src/utils/dateUtils';
 
@@ -25,12 +25,10 @@ const ObservationSubstratumSelector = ({
 }: ObservationSubstratumSelectorProps) => {
   const { strings } = useLocalization();
   const theme = useTheme();
+  const { plantingSite } = usePlantingSite(plantingSiteId);
+
   const [selectAll, setSelectAll] = useState<boolean>(false);
-
-  const getPlantingSiteResponse = useGetPlantingSiteQuery({ id: plantingSiteId, includeZones: false });
   const [selectedSubstrata, setSelectedSubstrata] = useState<number[]>([]);
-
-  const plantingSite = useMemo(() => getPlantingSiteResponse.data?.site, [getPlantingSiteResponse.data?.site]);
 
   const onChangeSubstratumCheckbox = useCallback(
     (substratumId: number) => (value: boolean) => {

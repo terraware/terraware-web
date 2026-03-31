@@ -3,8 +3,8 @@ import React, { useMemo } from 'react';
 import { Grid } from '@mui/material';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 
+import usePlantingSite from 'src/hooks/usePlantingSite';
 import { useLocalization } from 'src/providers';
-import { useGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import { ObservationMonitoringPlotResultsPayload } from 'src/types/Observations';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
@@ -16,8 +16,7 @@ interface VirtualPlotDataProps {
 const VirtualPlotData = ({ monitoringPlot, plantingSiteId }: VirtualPlotDataProps) => {
   const { strings } = useLocalization();
   const defaultTimeZone = useDefaultTimeZone().get().id;
-  const { data } = useGetPlantingSiteQuery({ id: plantingSiteId, includeZones: false });
-  const plantingSite = useMemo(() => data?.site, [data?.site]);
+  const { plantingSite } = usePlantingSite(plantingSiteId);
   const timeZone = useMemo(() => plantingSite?.timeZone ?? defaultTimeZone, [defaultTimeZone, plantingSite?.timeZone]);
 
   return (

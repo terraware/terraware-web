@@ -174,7 +174,7 @@ export default function PlantsDashboardView({
             </Box>
           </Grid>
           <Grid item xs={12}>
-            <SurvivalRateCard />
+            <SurvivalRateCard plantingSiteId={plantingSite?.id} />
           </Grid>
         </>
       ) : undefined,
@@ -228,7 +228,7 @@ export default function PlantsDashboardView({
             </Box>
           </Grid>
           <Grid item xs={12}>
-            <PlantingDensityCard hasObservations={hasObservations} />
+            <PlantingDensityCard hasObservations={hasObservations} plantingSiteId={plantingSite?.id} />
           </Grid>
         </>
       ) : undefined,
@@ -249,7 +249,7 @@ export default function PlantsDashboardView({
             </Box>
           </Grid>
           <Grid item xs={12}>
-            <PlantingSiteTrendsCard />
+            <PlantingSiteTrendsCard plantingSiteId={plantingSite?.id} />
           </Grid>
         </>
       ) : undefined,

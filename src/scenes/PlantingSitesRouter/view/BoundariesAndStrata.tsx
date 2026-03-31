@@ -12,7 +12,8 @@ import MapDateSelect from 'src/components/common/MapDateSelect';
 import MapLayerSelect, { MapLayer } from 'src/components/common/MapLayerSelect';
 import PlantingSiteMapLegend from 'src/components/common/PlantingSiteMapLegend';
 import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
-import { useGetPlantingSiteQuery, useLazyGetPlantingSiteHistoryQuery } from 'src/queries/generated/plantingSites';
+import usePlantingSite from 'src/hooks/usePlantingSite';
+import { useLazyGetPlantingSiteHistoryQuery } from 'src/queries/generated/plantingSites';
 import { useListPlantingSiteHistoryIdsQuery } from 'src/queries/search/plantingSiteHistories';
 import { MapService } from 'src/services';
 import strings from 'src/strings';
@@ -43,9 +44,8 @@ export default function BoundariesAndStrata({
 
   const params = useParams<{ plantingSiteId: string }>();
   const plantingSiteId = Number(params.plantingSiteId);
-  const { data: plantingSiteData } = useGetPlantingSiteQuery({ id: plantingSiteId, includeZones: false });
 
-  const plantingSite = useMemo(() => plantingSiteData?.site, [plantingSiteData]);
+  const { plantingSite } = usePlantingSite(plantingSiteId);
 
   const searchProps = useMemo<SearchProps>(
     () => ({
@@ -130,13 +130,11 @@ function PlantingSiteMapView({ search }: PlantingSiteMapViewProps): JSX.Element 
 
   const params = useParams<{ plantingSiteId: string }>();
   const plantingSiteId = Number(params.plantingSiteId);
-  const { data: plantingSiteData } = useGetPlantingSiteQuery({ id: plantingSiteId, includeZones: false });
+
+  const { plantingSite } = usePlantingSite(plantingSiteId);
+
   const { data: plantingSiteHistoryIds } = useListPlantingSiteHistoryIdsQuery(plantingSiteId);
-
   const [getPlantingSiteHistory, { data: plantingSiteHistoryData }] = useLazyGetPlantingSiteHistoryQuery();
-
-  const plantingSite = useMemo(() => plantingSiteData?.site, [plantingSiteData]);
-
   const selectedHistory = useMemo(() => plantingSiteHistoryData?.site, [plantingSiteHistoryData]);
 
   useEffect(() => {

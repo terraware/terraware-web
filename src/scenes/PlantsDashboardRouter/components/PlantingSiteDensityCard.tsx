@@ -4,15 +4,18 @@ import { Box, CircularProgress, Typography, useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';
 
 import FormattedNumber from 'src/components/common/FormattedNumber';
-import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
+import usePlantingSite from 'src/hooks/usePlantingSite';
 import { useListObservationSummariesQuery } from 'src/queries/generated/observations';
 import strings from 'src/strings';
 
-export default function PlantingSiteDensityCard(): JSX.Element {
-  const theme = useTheme();
-  const { plantingSite } = usePlantingSiteData();
+type PlantingDensityCardProps = {
+  plantingSiteId: number;
+};
 
-  const plantingSiteId = plantingSite?.id;
+export default function PlantingSiteDensityCard({ plantingSiteId }: PlantingDensityCardProps): JSX.Element {
+  const theme = useTheme();
+  const { plantingSite } = usePlantingSite(plantingSiteId);
+
   const observationSummariesQuery = useListObservationSummariesQuery(
     { plantingSiteId: plantingSiteId ?? -1 },
     { skip: !plantingSiteId || plantingSiteId === -1 }
