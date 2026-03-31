@@ -31,14 +31,14 @@ const ObservationListView = (): JSX.Element => {
   const { isMobile } = useDeviceInfo();
 
   const observableSites = useObservablePlantingSites();
-  const { allPlantingSites } = useOrganizationPlantingSites(false);
+  const { plantingSites } = useOrganizationPlantingSites(false);
   const { selectPlantingSite, selectedPlantingSiteId } = useStickyPlantingSiteId('observations-list', -1);
 
   const [countObservations, countObservationsResult] = useLazyCountObservationsQuery();
   const hasObservationsResults = useMemo(() => !!countObservationsResult.data, [countObservationsResult]);
 
   const plantingSiteOptions = useMemo((): DropdownItem[] => {
-    const sitesOptions = allPlantingSites
+    const sitesOptions = plantingSites
       .map((site) => ({
         label: site.name,
         value: site.id,
@@ -46,7 +46,7 @@ const ObservationListView = (): JSX.Element => {
       .sort((a, b) => a.label.localeCompare(b.label));
 
     const allSiteOptions =
-      allPlantingSites.length > 1
+      plantingSites.length > 1
         ? [
             {
               label: strings.ALL_PLANTING_SITES,
@@ -56,7 +56,7 @@ const ObservationListView = (): JSX.Element => {
         : [];
 
     return [...allSiteOptions, ...sitesOptions];
-  }, [allPlantingSites, strings]);
+  }, [plantingSites, strings]);
 
   const PageHeaderPlantingSiteDropdown = useMemo(
     () => (

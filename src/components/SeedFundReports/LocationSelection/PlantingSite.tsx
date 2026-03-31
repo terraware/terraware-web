@@ -10,7 +10,9 @@ import PlantingSiteSpeciesCellRenderer from 'src/components/SeedFundReports/Loca
 import { transformNumericValue } from 'src/components/SeedFundReports/LocationSelection/util';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import Table from 'src/components/common/table';
+import useObservationResults from 'src/hooks/useObservationResults';
 import usePlantingSite from 'src/hooks/usePlantingSite';
+import usePlantingSiteReportedPlants from 'src/hooks/usePlantingSiteReportedPlants';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { selectPlantingSiteObservationsRequest } from 'src/redux/features/observations/observationsSelectors';
@@ -55,14 +57,10 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
   const { isMobile } = useDeviceInfo();
   const dispatch = useAppDispatch();
 
-  const {
-    latestResult,
-    plantingSite: shallowPlantingSite,
-    plantingSiteReportedPlants,
-    setSelectedPlantingSite,
-  } = usePlantingSiteData();
-
-  const { plantingSite } = usePlantingSite(shallowPlantingSite?.id);
+  const { selectedPlantingSiteId, setSelectedPlantingSite } = usePlantingSiteData();
+  const { plantingSiteReportedPlants } = usePlantingSiteReportedPlants(selectedPlantingSiteId);
+  const { latestObservationResult } = useObservationResults({ plantingSiteId: selectedPlantingSiteId });
+  const { plantingSite } = usePlantingSite(selectedPlantingSiteId);
 
   const [observationsRequestId, setObservationsRequestId] = useState('');
   const observationsResponse = useAppSelector(selectPlantingSiteObservationsRequest(observationsRequestId));
@@ -106,14 +104,16 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
     if (plantingSite) {
       const stratumDensities: Record<string, number | string> = {};
       plantingSite.strata?.forEach((stratum) => {
-        if (latestResult) {
-          const stratumFromObs = latestResult.strata.find((obsStratum) => obsStratum.stratumId === stratum.id);
+        if (latestObservationResult) {
+          const stratumFromObs = latestObservationResult.strata.find(
+            (obsStratum) => obsStratum.stratumId === stratum.id
+          );
           stratumDensities[stratum.name] = stratumFromObs?.plantingDensity ?? '';
         }
       });
       setPlantingDensity(stratumDensities);
     }
-  }, [plantingSite, latestResult]);
+  }, [plantingSite, latestObservationResult]);
 
   useEffect(() => {
     if (allSpecies) {
@@ -154,22 +154,22 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
   };
 
   const estimatedPlants = useMemo(() => {
-    return latestResult?.estimatedPlants?.toString();
-  }, [latestResult?.estimatedPlants]);
+    return latestObservationResult?.estimatedPlants?.toString();
+  }, [latestObservationResult?.estimatedPlants]);
 
   const livePlants = useMemo(() => {
-    return latestResult?.species.reduce((acc, sp) => (acc = acc + sp.permanentLive), 0);
-  }, [latestResult]);
+    return latestObservationResult?.species.reduce((acc, sp) => (acc = acc + sp.permanentLive), 0);
+  }, [latestObservationResult]);
 
   const deadPlants = useMemo(() => {
-    return latestResult?.species.reduce((acc, sp) => (acc = acc + sp.totalDead), 0);
-  }, [latestResult]);
+    return latestObservationResult?.species.reduce((acc, sp) => (acc = acc + sp.totalDead), 0);
+  }, [latestObservationResult]);
 
   const numberOfPlots = useMemo(() => {
-    return latestResult?.strata.flatMap((_stratum) =>
+    return latestObservationResult?.strata.flatMap((_stratum) =>
       _stratum.substrata.flatMap((substratum) => substratum.monitoringPlots)
     ).length;
-  }, [latestResult]);
+  }, [latestObservationResult]);
 
   const markedAsComplete = useMemo(() => {
     if (plantingSite) {
@@ -218,11 +218,11 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
   }, [currentObservation, nextObservation]);
 
   const latestObservationDateString = useMemo(() => {
-    if (latestResult?.completedTime && plantingSite) {
-      const completedDate = getDateDisplayValue(latestResult.completedTime, plantingSite.timeZone);
-      return `${latestResult.startDate} - ${completedDate}`;
+    if (latestObservationResult?.completedTime && plantingSite) {
+      const completedDate = getDateDisplayValue(latestObservationResult.completedTime, plantingSite.timeZone);
+      return `${latestObservationResult.startDate} - ${completedDate}`;
     }
-  }, [latestResult, plantingSite]);
+  }, [latestObservationResult, plantingSite]);
 
   return (
     <>
@@ -329,7 +329,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
         </Grid>
       )}
 
-      {latestResult && (
+      {latestObservationResult && (
         <>
           <Grid item xs={smallItemGridWidth()}>
             <OverviewItemCard
@@ -359,7 +359,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
             <OverviewItemCard
               isEditable={false}
               title={strings.TOTAL_PLANTS_OBSERVED}
-              contents={latestResult?.totalPlants}
+              contents={latestObservationResult?.totalPlants}
               sx={infoCardStyles}
             />
           </Grid>
@@ -383,7 +383,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
             <OverviewItemCard
               isEditable={false}
               title={strings.SPECIES_OBSERVED}
-              contents={latestResult?.totalSpecies}
+              contents={latestObservationResult?.totalSpecies}
               sx={infoCardStyles}
             />
           </Grid>
@@ -399,7 +399,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
             <OverviewItemCard
               isEditable={false}
               title={strings.SURVIVAL_RATE}
-              contents={latestResult.survivalRate}
+              contents={latestObservationResult.survivalRate}
               sx={infoCardStyles}
             />
           </Grid>

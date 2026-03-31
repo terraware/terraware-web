@@ -25,9 +25,6 @@ export type ReportFormProps = {
   draftReport: Report;
   onChange?: (report: Report) => void;
   onUpdateReport?: (field: string, value: any) => void;
-  allSeedbanks?: ReportSeedBank[];
-  allNurseries?: ReportNursery[];
-  allPlantingSites?: ReportPlantingSite[];
   onUpdateLocation?: (
     index: number,
     field: string,
@@ -42,6 +39,9 @@ export type ReportFormProps = {
   ) => void;
   onPhotosChanged?: (photos: File[]) => void;
   onPhotoRemove?: (id: number) => void;
+  reportNurseries?: ReportNursery[];
+  reportPlantingSites?: ReportPlantingSite[];
+  reportSeedBanks?: ReportSeedBank[];
   validate?: boolean;
 };
 
@@ -50,13 +50,13 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
     editable,
     draftReport,
     onUpdateReport,
-    allSeedbanks,
-    allNurseries,
-    allPlantingSites,
     onUpdateLocation,
     onUpdateWorkers,
     onPhotosChanged,
     onPhotoRemove,
+    reportNurseries,
+    reportPlantingSites,
+    reportSeedBanks,
     validate,
   } = props;
 
@@ -272,8 +272,8 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
         </Typography>
       </Grid>
       <Grid container>
-        {allSeedbanks ? (
-          allSeedbanks.map((seedbank, index) => (
+        {reportSeedBanks ? (
+          reportSeedBanks.map((seedbank, index) => (
             <Grid key={index} container spacing={theme.spacing(3)} margin={0}>
               {index !== 0 && <Grid item xs={12} sx={sectionStyles} />}
               <Grid item xs={12}>
@@ -306,8 +306,8 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
         </Typography>
       </Grid>
       <Grid container>
-        {allNurseries ? (
-          allNurseries.map((nursery, index) => (
+        {reportNurseries ? (
+          reportNurseries.map((nursery, index) => (
             <Grid key={index} container spacing={theme.spacing(3)} margin={0}>
               {index !== 0 && <Grid item xs={12} sx={sectionStyles} />}
               <Grid item xs={12}>
@@ -341,8 +341,8 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
         </Typography>
       </Grid>
       <Grid container>
-        {allPlantingSites ? (
-          allPlantingSites.map((plantingSite, index) => (
+        {reportPlantingSites ? (
+          reportPlantingSites.map((plantingSite, index) => (
             <Grid key={index} container spacing={theme.spacing(3)} margin={0}>
               {index !== 0 && <Grid item xs={12} sx={sectionStyles} />}
               <Grid item xs={12}>

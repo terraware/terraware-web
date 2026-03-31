@@ -24,6 +24,7 @@ const usePlantingSite = (plantingSiteId: number | undefined) => {
   return {
     plantingSite,
     isLoading: getPlantingSiteResponse.isFetching,
+    isSuccess: getPlantingSiteResponse.isSuccess,
   };
 };
 

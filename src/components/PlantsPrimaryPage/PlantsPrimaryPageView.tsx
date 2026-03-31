@@ -10,8 +10,9 @@ import Link from 'src/components/common/Link';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
+import usePlantingSite from 'src/hooks/usePlantingSite';
 import { useOrganization } from 'src/providers';
-import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { useListProjectsQuery } from 'src/queries/generated/projects';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
@@ -75,23 +76,36 @@ export default function PlantsPrimaryPageView({
     skip: !selectedOrganization,
   });
   const projects = projectsData?.projects;
-  const { allPlantingSites, isLoading, isInitiated, plantingSite } = usePlantingSiteData();
+  const {
+    plantingSitesWithAllSitesOption,
+    isLoading: isLoadingPlantingSites,
+    isSuccess: isSuccessPlantingSites,
+  } = useOrganizationPlantingSites();
+  const {
+    plantingSite,
+    isLoading: isLoadingPlantingSite,
+    isSuccess: isSuccessPlantingSite,
+  } = usePlantingSite(selectedPlantingSiteId);
+
+  const isLoading = isLoadingPlantingSites || isLoadingPlantingSite;
+  const isSuccess = isSuccessPlantingSites && isSuccessPlantingSite;
+
   const [delayedIsPlantingSiteSet, setDelayedIsPlantingSiteSet] = useState(false);
 
   const hasSites = useMemo(() => {
     return (
-      (!isAcceleratorRoute && (allPlantingSites?.length ?? 0) > 1) ||
+      (!isAcceleratorRoute && (plantingSitesWithAllSitesOption?.length ?? 0) > 1) ||
       (isAcceleratorRoute && (plantingSites?.length ?? 0) > 0)
     );
-  }, [allPlantingSites, isAcceleratorRoute, plantingSites]);
+  }, [plantingSitesWithAllSitesOption, isAcceleratorRoute, plantingSites]);
 
   const plantingSiteSelected = useMemo(() => {
     return plantingSite !== undefined;
   }, [plantingSite]);
 
   const isPlantingSiteSet = useMemo(() => {
-    return isInitiated && ((hasSites && plantingSiteSelected) || (!hasSites && !plantingSiteSelected));
-  }, [isInitiated, hasSites, plantingSiteSelected]);
+    return isSuccess && ((hasSites && plantingSiteSelected) || (!hasSites && !plantingSiteSelected));
+  }, [isSuccess, hasSites, plantingSiteSelected]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -102,15 +116,15 @@ export default function PlantsPrimaryPageView({
   }, [isPlantingSiteSet]);
 
   const projectsWithPlantingSites = useMemo(() => {
-    if (!allPlantingSites) {
+    if (!plantingSitesWithAllSitesOption) {
       return [];
     }
 
-    const projectIds = allPlantingSites.map((ps) => ps.projectId);
+    const projectIds = plantingSitesWithAllSitesOption.map((ps) => ps.projectId);
     const uniqueProjectIds = Array.from(new Set(projectIds));
 
     return uniqueProjectIds;
-  }, [allPlantingSites]);
+  }, [plantingSitesWithAllSitesOption]);
 
   const projectsOptions = useMemo(() => {
     const iOptions = projects
@@ -145,7 +159,7 @@ export default function PlantsPrimaryPageView({
 
   if (
     !plantingSites ||
-    (!isAcceleratorRoute && (allPlantingSites?.length ?? 0) > 1 && !selectedPlantingSiteId) ||
+    (!isAcceleratorRoute && (plantingSitesWithAllSitesOption?.length ?? 0) > 1 && !selectedPlantingSiteId) ||
     (isAcceleratorRoute && (plantingSites?.length ?? 0) > 0 && !selectedPlantingSiteId)
   ) {
     return (

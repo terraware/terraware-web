@@ -1,10 +1,8 @@
 import React, { useCallback, useMemo, useState } from 'react';
 
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
-import { useListObservationResultsQuery } from 'src/queries/generated/observations';
-import { useGetPlantingSiteReportedPlantsQuery, useListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
+import { useListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
 import strings from 'src/strings';
-import { PlantingSite } from 'src/types/Tracking';
 
 import { useLocalization, useOrganization } from '../hooks';
 import { PlantingSiteContext, PlantingSiteData } from './PlantingSiteContext';
@@ -16,10 +14,10 @@ export type Props = {
 const PlantingSiteProvider = ({ children }: Props) => {
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const { activeLocale } = useLocalization();
-
   const { selectedOrganization } = useOrganization();
+
   const [acceleratorOrganizationId, setAcceleratorOrganizationId] = useState<number>();
-  const [plantingSite, setPlantingSite] = useState<PlantingSite>();
+  const [selectedPlantingSiteId, setSelectedPlantingSiteId] = useState<number>();
 
   const orgId = isAcceleratorRoute ? acceleratorOrganizationId : selectedOrganization?.id;
 
@@ -28,14 +26,6 @@ const PlantingSiteProvider = ({ children }: Props) => {
     { skip: !orgId }
   );
   const plantingSites = plantingSitesQuery.data?.sites;
-  const skipPlantingSiteQueries = !plantingSite || plantingSite.id === -1;
-  const observationResultsQuery = useListObservationResultsQuery(
-    { plantingSiteId: plantingSite?.id },
-    { skip: skipPlantingSiteQueries }
-  );
-  const reportedPlantsQuery = useGetPlantingSiteReportedPlantsQuery(plantingSite?.id ?? -1, {
-    skip: skipPlantingSiteQueries,
-  });
 
   const allSitesOption = useMemo(() => {
     if (activeLocale && orgId) {
@@ -55,35 +45,12 @@ const PlantingSiteProvider = ({ children }: Props) => {
       if (plantingSiteId === -1 && (plantingSites?.length || 0) > 0) {
         foundSite = allSitesOption;
       }
-      if (plantingSite !== foundSite) {
-        setPlantingSite(foundSite);
+      if (plantingSiteId !== foundSite?.id) {
+        setSelectedPlantingSiteId(plantingSiteId);
       }
     },
-    [plantingSites, plantingSite, allSitesOption]
+    [plantingSites, allSitesOption]
   );
-
-  const allPlantingSites = useMemo(
-    () =>
-      plantingSites && allSitesOption
-        ? [...plantingSites, allSitesOption].toSorted((a, b) => a.name.localeCompare(b.name, activeLocale || undefined))
-        : [],
-    [activeLocale, allSitesOption, plantingSites]
-  );
-
-  const observationResults = observationResultsQuery.currentData?.observations;
-  const reportedPlants = reportedPlantsQuery.currentData?.site;
-
-  const isLoading =
-    plantingSitesQuery.isFetching || observationResultsQuery.isFetching || reportedPlantsQuery.isFetching;
-
-  const latestResult = useMemo(() => {
-    return observationResults?.find(
-      (result) =>
-        (result.state === 'Completed' || result.state === 'Abandoned') &&
-        result.isAdHoc === false &&
-        result.type === 'Monitoring'
-    );
-  }, [observationResults]);
 
   const { refetch: refetchSites } = plantingSitesQuery;
 
@@ -94,27 +61,12 @@ const PlantingSiteProvider = ({ children }: Props) => {
   const value = useMemo(
     (): PlantingSiteData => ({
       acceleratorOrganizationId,
+      selectedPlantingSiteId,
       setAcceleratorOrganizationId,
-      allPlantingSites,
-      plantingSite,
-      plantingSiteReportedPlants: reportedPlants,
       setSelectedPlantingSite,
-      latestResult,
-      isLoading,
-      isInitiated: plantingSitesQuery.isSuccess,
       reload,
     }),
-    [
-      acceleratorOrganizationId,
-      allPlantingSites,
-      plantingSite,
-      reportedPlants,
-      setSelectedPlantingSite,
-      latestResult,
-      isLoading,
-      plantingSitesQuery.isSuccess,
-      reload,
-    ]
+    [acceleratorOrganizationId, selectedPlantingSiteId, setAcceleratorOrganizationId, setSelectedPlantingSite, reload]
   );
 
   return <PlantingSiteContext.Provider value={value}>{children}</PlantingSiteContext.Provider>;
