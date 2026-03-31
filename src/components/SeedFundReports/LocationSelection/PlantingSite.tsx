@@ -12,6 +12,7 @@ import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import Table from 'src/components/common/table';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
+import { useGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import { selectPlantingSiteObservationsRequest } from 'src/redux/features/observations/observationsSelectors';
 import { requestPlantingSiteObservations } from 'src/redux/features/observations/observationsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -54,7 +55,18 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
   const { isMobile } = useDeviceInfo();
   const dispatch = useAppDispatch();
 
-  const { plantingSite, setSelectedPlantingSite, plantingSiteReportedPlants, latestResult } = usePlantingSiteData();
+  const {
+    latestResult,
+    plantingSite: shallowPlantingSite,
+    plantingSiteReportedPlants,
+    setSelectedPlantingSite,
+  } = usePlantingSiteData();
+
+  const plantingSiteQuery = useGetPlantingSiteQuery(
+    { id: shallowPlantingSite?.id ?? -1, includeZones: false },
+    { skip: !shallowPlantingSite || shallowPlantingSite.id === -1 }
+  );
+  const plantingSite = plantingSiteQuery.currentData?.site ?? shallowPlantingSite;
 
   const [observationsRequestId, setObservationsRequestId] = useState('');
   const observationsResponse = useAppSelector(selectPlantingSiteObservationsRequest(observationsRequestId));

@@ -9,7 +9,7 @@ import FormattedNumber from 'src/components/common/FormattedNumber';
 import MapLegend, { MapLegendGroup } from 'src/components/common/MapLegend';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { useListObservationSummariesQuery } from 'src/queries/generated/observations';
-import { useLazyGetPlantingSiteHistoryQuery } from 'src/queries/generated/plantingSites';
+import { useGetPlantingSiteQuery, useLazyGetPlantingSiteHistoryQuery } from 'src/queries/generated/plantingSites';
 import { MapService } from 'src/services';
 import strings from 'src/strings';
 import { MapData, MapSourceProperties } from 'src/types/Map';
@@ -25,7 +25,13 @@ export default function StratumLevelDataMap({ plantingSiteId }: StratumLevelData
   const numberFormatter = useNumberFormatter();
   const theme = useTheme();
   const { isDesktop } = useDeviceInfo();
-  const { plantingSite, plantingSiteReportedPlants, latestResult } = usePlantingSiteData();
+  const { latestResult, plantingSite: shallowPlantingSite, plantingSiteReportedPlants } = usePlantingSiteData();
+
+  const plantingSiteQuery = useGetPlantingSiteQuery(
+    { id: plantingSiteId, includeZones: false },
+    { skip: !plantingSiteId || plantingSiteId === -1 }
+  );
+  const plantingSite = plantingSiteQuery.currentData?.site ?? shallowPlantingSite;
 
   const observationSummariesQuery = useListObservationSummariesQuery(
     { plantingSiteId: plantingSiteId ?? -1 },
