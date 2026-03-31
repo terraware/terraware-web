@@ -6,9 +6,10 @@ import MapDrawerTable, { MapDrawerTableRow } from 'src/components/MapDrawerTable
 import { MapLayerFeatureId } from 'src/components/NewMap/types';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
+import usePlantingSite from 'src/hooks/usePlantingSite';
 import { useLocalization, useOrganization } from 'src/providers';
 import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
-import { useGetPlantingSiteQuery, useLazyGetPlantingSiteHistoryQuery } from 'src/queries/generated/plantingSites';
+import { useLazyGetPlantingSiteHistoryQuery } from 'src/queries/generated/plantingSites';
 import { MonitoringPlotStatus, ObservationState } from 'src/types/Observations';
 import { isManagerOrHigher } from 'src/utils/organization';
 
@@ -52,15 +53,11 @@ const ObservationStatsDrawer = ({
   const { data: observationResultsResponse, isLoading: observationResultsLoading } = useGetObservationResultsQuery({
     observationId,
   });
-  const { data: plantingSiteResponse, isLoading: plantingSiteLoading } = useGetPlantingSiteQuery({
-    id: plantingSiteId,
-    includeZones: false,
-  });
+  const { plantingSite, isLoading: plantingSiteLoading } = usePlantingSite(plantingSiteId);
   const [getHistory, { data: plantingSiteHistoryResponse, isLoading: plantingSiteHistoryLoading }] =
     useLazyGetPlantingSiteHistoryQuery();
 
   const results = observationResultsResponse?.observation;
-  const plantingSite = plantingSiteResponse?.site;
   const siteHistory = plantingSiteHistoryResponse?.site;
 
   const isLoading = useMemo(

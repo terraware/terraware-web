@@ -5,7 +5,6 @@ import { Icon, Tooltip } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Card from 'src/components/common/Card';
-import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import strings from 'src/strings';
 
 import PlantingDensityPerStratumCard from './PlantingDensityPerStratumCard';
@@ -13,12 +12,15 @@ import PlantingSiteDensityCard from './PlantingSiteDensityCard';
 
 type PlantingDensityCardProps = {
   hasObservations: boolean;
+  plantingSiteId: number;
 };
 
-export default function PlantingDensityCard({ hasObservations }: PlantingDensityCardProps): JSX.Element {
+export default function PlantingDensityCard({
+  hasObservations,
+  plantingSiteId,
+}: PlantingDensityCardProps): JSX.Element {
   const theme = useTheme();
   const { isDesktop } = useDeviceInfo();
-  const { plantingSite } = usePlantingSiteData();
 
   const separatorStyles = {
     width: '1px',
@@ -33,7 +35,7 @@ export default function PlantingDensityCard({ hasObservations }: PlantingDensity
       radius='8px'
       style={{ display: 'flex', 'justify-content': 'space-between', flexDirection: isDesktop ? 'row' : 'column' }}
     >
-      {plantingSite && plantingSite.id !== -1 && (
+      {plantingSiteId !== -1 && (
         <>
           {hasObservations && (
             <>
@@ -49,7 +51,7 @@ export default function PlantingDensityCard({ hasObservations }: PlantingDensity
                   </Tooltip>
                 </Box>
                 <Box paddingTop={2}>
-                  <PlantingSiteDensityCard />
+                  <PlantingSiteDensityCard plantingSiteId={plantingSiteId} />
                 </Box>
               </Box>
               <div style={separatorStyles} />
@@ -67,7 +69,7 @@ export default function PlantingDensityCard({ hasObservations }: PlantingDensity
               </Tooltip>
             </Box>
             <Box paddingTop={1}>
-              <PlantingDensityPerStratumCard />
+              <PlantingDensityPerStratumCard plantingSiteId={plantingSiteId} />
             </Box>
           </Box>
         </>

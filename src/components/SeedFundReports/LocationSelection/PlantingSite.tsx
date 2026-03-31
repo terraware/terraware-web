@@ -10,6 +10,7 @@ import PlantingSiteSpeciesCellRenderer from 'src/components/SeedFundReports/Loca
 import { transformNumericValue } from 'src/components/SeedFundReports/LocationSelection/util';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import Table from 'src/components/common/table';
+import usePlantingSite from 'src/hooks/usePlantingSite';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { selectPlantingSiteObservationsRequest } from 'src/redux/features/observations/observationsSelectors';
@@ -54,7 +55,14 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
   const { isMobile } = useDeviceInfo();
   const dispatch = useAppDispatch();
 
-  const { plantingSite, setSelectedPlantingSite, plantingSiteReportedPlants, latestResult } = usePlantingSiteData();
+  const {
+    latestResult,
+    plantingSite: shallowPlantingSite,
+    plantingSiteReportedPlants,
+    setSelectedPlantingSite,
+  } = usePlantingSiteData();
+
+  const { plantingSite } = usePlantingSite(shallowPlantingSite?.id);
 
   const [observationsRequestId, setObservationsRequestId] = useState('');
   const observationsResponse = useAppSelector(selectPlantingSiteObservationsRequest(observationsRequestId));

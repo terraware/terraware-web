@@ -8,8 +8,8 @@ import PageSnackbar from 'src/components/PageSnackbar';
 import Card from 'src/components/common/Card';
 import { View } from 'src/components/common/ListMapSelector';
 import { APP_PATHS } from 'src/constants';
+import usePlantingSite from 'src/hooks/usePlantingSite';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { useGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 
 import DeletePlantingSiteModal from '../edit/DeletePlantingSiteModal';
 import BoundariesAndStrata from './BoundariesAndStrata';
@@ -26,8 +26,7 @@ export default function PlantingSiteView(): JSX.Element {
 
   const params = useParams<{ plantingSiteId: string }>();
   const plantingSiteId = Number(params.plantingSiteId);
-  const { data: plantingSiteData, isLoading } = useGetPlantingSiteQuery({ id: plantingSiteId, includeZones: false });
-  const plantingSite = useMemo(() => plantingSiteData?.site, [plantingSiteData?.site]);
+  const { plantingSite, isLoading } = usePlantingSite(plantingSiteId);
 
   const goToEditPlantingSite = useCallback(() => {
     if (plantingSite) {
