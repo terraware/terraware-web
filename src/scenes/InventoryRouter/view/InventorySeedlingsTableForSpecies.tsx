@@ -13,7 +13,7 @@ import { parseSearchTerm } from 'src/utils/search';
 interface InventorySeedlingsTableForSpeciesProps
   extends Omit<
     InventorySeedlingsTableProps,
-    'columns' | 'isSelectionBulkWithdrawable' | 'getFuzzySearchFields' | 'getBatchesSearch' | 'getBatchesExport'
+    'columns' | 'isSelectionBulkWithdrawable' | 'getFuzzySearchFields' | 'getBatchesSearch'
   > {
   speciesId: number;
 }
@@ -26,6 +26,8 @@ export default function InventorySeedlingsTableForSpecies(props: InventorySeedli
     (): TableColumnType[] => [
       { key: 'batchNumber', name: strings.SEEDLING_BATCH, type: 'string' },
       { key: 'project_name', name: strings.PROJECT, type: 'string' },
+      { key: 'species_scientificName', name: strings.SPECIES, type: 'string' },
+      { key: 'species_commonName', name: strings.COMMON_NAME, type: 'string' },
       {
         key: 'germinatingQuantity',
         name: strings.GERMINATION_ESTABLISHMENT,
@@ -104,17 +106,6 @@ export default function InventorySeedlingsTableForSpecies(props: InventorySeedli
     [speciesId]
   );
 
-  const getBatchesExport = useCallback(
-    (
-      orgId: number,
-      originId: number,
-      searchFields: FieldNodePayload[],
-      searchSortOrder: SearchSortOrder | undefined
-    ): Promise<SearchResponseElement[] | null> =>
-      NurseryBatchService.exportBatchesForSpeciesById(orgId, originId, searchFields, searchSortOrder),
-    []
-  );
-
   const areAllFromSameNursery = (selectedRows: SearchResponseElement[]) => {
     if (!selectedRows.length) {
       return false;
@@ -137,7 +128,6 @@ export default function InventorySeedlingsTableForSpecies(props: InventorySeedli
       isSelectionBulkWithdrawable={isSelectionBulkWithdrawable}
       getFuzzySearchFields={getFuzzySearchFields}
       getBatchesSearch={getBatchesSearch}
-      getBatchesExport={getBatchesExport}
     />
   );
 }

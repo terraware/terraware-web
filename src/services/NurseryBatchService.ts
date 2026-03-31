@@ -50,6 +50,8 @@ const DEFAULT_BATCH_FIELDS = [
   'readyQuantity',
   'readyQuantity(raw)',
   'seedsSownDate',
+  'species_scientificName',
+  'species_commonName',
   'subLocations.subLocation_id',
   'subLocations.subLocation_name',
   'totalQuantity',
