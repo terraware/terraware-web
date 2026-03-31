@@ -25,13 +25,13 @@ export default function StratumLevelDataMap({ plantingSiteId }: StratumLevelData
   const numberFormatter = useNumberFormatter();
   const theme = useTheme();
   const { isDesktop } = useDeviceInfo();
-  const { latestResult, plantingSite: shallowPlantingSite, plantingSiteReportedPlants } = usePlantingSiteData();
+  const { latestResult, plantingSiteReportedPlants } = usePlantingSiteData();
 
   const plantingSiteQuery = useGetPlantingSiteQuery(
     { id: plantingSiteId, includeZones: false },
-    { skip: !plantingSiteId || plantingSiteId === -1 }
+    { skip: plantingSiteId === -1 }
   );
-  const plantingSite = plantingSiteQuery.currentData?.site ?? shallowPlantingSite;
+  const plantingSite = plantingSiteQuery.currentData?.site;
 
   const observationSummariesQuery = useListObservationSummariesQuery(
     { plantingSiteId: plantingSiteId ?? -1 },
