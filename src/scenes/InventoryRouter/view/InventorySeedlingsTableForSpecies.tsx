@@ -25,9 +25,9 @@ export default function InventorySeedlingsTableForSpecies(props: InventorySeedli
   const columns = useMemo(
     (): TableColumnType[] => [
       { key: 'batchNumber', name: strings.SEEDLING_BATCH, type: 'string' },
-      { key: 'project_name', name: strings.PROJECT, type: 'string' },
       { key: 'species_scientificName', name: strings.SPECIES, type: 'string' },
       { key: 'species_commonName', name: strings.COMMON_NAME, type: 'string' },
+      { key: 'project_name', name: strings.PROJECT, type: 'string' },
       {
         key: 'germinatingQuantity',
         name: strings.GERMINATION_ESTABLISHMENT,
