@@ -1,3 +1,6 @@
+65dd36038d4f SW-8148 Change default Project column position (#5541)
+d0e48daf9e00 SW-8032 Edit Observation Data dialog window does not fit Plot Conditions selector (#5539)
+b31344ae9133 SW-8161 Notes for first input Quantity are not showing up anywhere (#5538)
 6b22fdaf2129 SW-8208 Improve activity log slow performance (#5532)
 72dd413582ee SW-8182: Improve /home view load time (FOLLOW-UP #2) (#5535)
 1e388e908186 SW-8226 Export observation plot field notes (#5533)
