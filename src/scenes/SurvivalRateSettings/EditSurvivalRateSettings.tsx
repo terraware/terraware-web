@@ -7,9 +7,9 @@ import { Tabs } from '@terraware/web-components';
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
+import usePlantingSite from 'src/hooks/usePlantingSite';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
-import { useGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import { useGetT0SiteDataQuery, useGetT0SpeciesForPlantingSiteQuery } from 'src/queries/generated/t0';
 import { useGetPlotsWithObservationsQuery } from 'src/queries/search/t0';
 import useStickyTabs from 'src/utils/useStickyTabs';
@@ -28,10 +28,7 @@ const EditSurvivalRateSettings = () => {
     () => plantingSiteId === undefined || isNaN(plantingSiteId) || plantingSiteId === -1,
     [plantingSiteId]
   );
-  const { data: plantingSite } = useGetPlantingSiteQuery(
-    { id: plantingSiteId, includeZones: false },
-    { skip: skipPlantingSite }
-  );
+  const { plantingSite } = usePlantingSite(plantingSiteId);
   const { data: t0SiteResponse } = useGetT0SiteDataQuery(plantingSiteId, { skip: skipPlantingSite });
   const t0SiteData = useMemo(() => t0SiteResponse?.data, [t0SiteResponse]);
   const { data: withdrawnSpeciesResponse } = useGetT0SpeciesForPlantingSiteQuery(plantingSiteId, {
@@ -137,7 +134,7 @@ const EditSurvivalRateSettings = () => {
   }, []);
 
   return (
-    <Page title={strings.formatString(strings.EDIT_SURVIVAL_RATE_SETTINGS_FOR, plantingSite?.site?.name || '')}>
+    <Page title={strings.formatString(strings.EDIT_SURVIVAL_RATE_SETTINGS_FOR, plantingSite?.name || '')}>
       {showChangeTabWarning && (
         <ChangeTabWarningModal
           onClose={closeChangeTabWarning}

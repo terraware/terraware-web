@@ -9,23 +9,22 @@ import NurseryWithdrawalsDetailsView from 'src/scenes/NurseryRouter/NurseryWithd
 
 const NurseryRouter = () => {
   const { species } = useSpeciesData();
-
-  const { allPlantingSites } = useOrganizationPlantingSites(true);
+  const { plantingSites } = useOrganizationPlantingSites(true);
 
   const stratumNames = useMemo(() => {
     const strata: Record<number, string> = {};
-    for (const plantingSite of allPlantingSites ?? []) {
+    for (const plantingSite of plantingSites ?? []) {
       for (const stratum of plantingSite.strata ?? []) {
         strata[stratum.id] = stratum.name;
       }
     }
 
     return strata;
-  }, [allPlantingSites]);
+  }, [plantingSites]);
 
   const substratumNames = useMemo(() => {
     const substrata: Record<number, string> = {};
-    for (const plantingSite of allPlantingSites ?? []) {
+    for (const plantingSite of plantingSites ?? []) {
       for (const stratum of plantingSite.strata ?? []) {
         for (const substratum of stratum.substrata ?? []) {
           substrata[substratum.id] = substratum.name;
@@ -34,7 +33,7 @@ const NurseryRouter = () => {
     }
 
     return substrata;
-  }, [allPlantingSites]);
+  }, [plantingSites]);
 
   return (
     <Routes>

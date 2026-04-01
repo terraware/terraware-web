@@ -1,112 +1,31 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 
-import {
-  selectPlantingSiteObservationResultsRequest,
-  selectPlantingSiteObservationsRequest,
-} from 'src/redux/features/observations/observationsSelectors';
-import {
-  requestPlantingSiteObservationResults,
-  requestPlantingSiteObservations,
-} from 'src/redux/features/observations/observationsThunks';
-import { selectOnePlantingSite, selectPlantingSiteReportedPlants } from 'src/redux/features/tracking/trackingSelectors';
-import { requestOnePlantingSite, requestPlantingSiteReportedPlants } from 'src/redux/features/tracking/trackingThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 
-const usePlantingSite = (plantingSiteId: number) => {
-  const dispatch = useAppDispatch();
+const usePlantingSite = (plantingSiteId: number | undefined) => {
+  const [getPlantingSite, getPlantingSiteResponse] = useLazyGetPlantingSiteQuery();
 
-  const [siteRequestId, setSiteRequestId] = useState<string>('');
-  const [observationsRequestId, setObservationsRequestId] = useState<string>('');
-  const [resultsRequestId, setResultsRequestId] = useState<string>('');
-  const [reportedPlantsRequestId, setReportedPlantsRequestId] = useState<string>('');
-
-  const siteResponse = useAppSelector(selectOnePlantingSite(siteRequestId));
-  const observationsResponse = useAppSelector(selectPlantingSiteObservationsRequest(observationsRequestId));
-  const resultsResponse = useAppSelector(selectPlantingSiteObservationResultsRequest(resultsRequestId));
-  const reportedPlantsResponse = useAppSelector(selectPlantingSiteReportedPlants(reportedPlantsRequestId));
-
-  const reload = useCallback(() => {
-    const request = dispatch(requestOnePlantingSite(plantingSiteId));
-    setSiteRequestId(request.requestId);
-  }, [dispatch, plantingSiteId]);
-
-  useEffect(() => {
-    reload();
-  }, [reload]);
+  const plantingSiteIdIsValid = useMemo(
+    () => plantingSiteId !== undefined && !isNaN(plantingSiteId) && plantingSiteId !== -1,
+    [plantingSiteId]
+  );
 
   const plantingSite = useMemo(
-    () => (siteResponse?.status === 'success' ? siteResponse.data : undefined),
-    [siteResponse]
+    () => (plantingSiteIdIsValid ? getPlantingSiteResponse.currentData?.site : undefined),
+    [getPlantingSiteResponse, plantingSiteIdIsValid]
   );
 
   useEffect(() => {
-    if (plantingSite && plantingSite.id !== -1) {
-      const observationsRequest = dispatch(requestPlantingSiteObservations({ plantingSiteId: plantingSite.id }));
-      const resultsRequest = dispatch(requestPlantingSiteObservationResults({ plantingSiteId: plantingSite.id }));
-      const reportedPlantsRequest = dispatch(requestPlantingSiteReportedPlants(plantingSite.id));
-      setObservationsRequestId(observationsRequest.requestId);
-      setResultsRequestId(resultsRequest.requestId);
-      setReportedPlantsRequestId(reportedPlantsRequest.requestId);
+    if (plantingSiteId && plantingSiteIdIsValid) {
+      void getPlantingSite({ id: plantingSiteId, includeZones: false }, true);
     }
-  }, [dispatch, plantingSite]);
+  }, [getPlantingSite, plantingSiteId, plantingSiteIdIsValid]);
 
-  const observations = useMemo(
-    () => (observationsResponse?.status === 'success' ? observationsResponse.data ?? [] : undefined),
-    [observationsResponse]
-  );
-
-  const observationResults = useMemo(
-    () => (resultsResponse?.status === 'success' ? resultsResponse.data ?? [] : undefined),
-    [resultsResponse]
-  );
-
-  const reportedPlants = useMemo(
-    () => (reportedPlantsResponse?.status === 'success' ? reportedPlantsResponse.data : undefined),
-    [reportedPlantsResponse]
-  );
-
-  const isLoading = useMemo(() => {
-    return (
-      siteResponse?.status === 'pending' ||
-      observationsResponse?.status === 'pending' ||
-      resultsResponse?.status === 'pending' ||
-      reportedPlantsResponse?.status === 'pending'
-    );
-  }, [observationsResponse?.status, reportedPlantsResponse?.status, resultsResponse?.status, siteResponse?.status]);
-
-  const latestResult = useMemo(() => {
-    return observationResults?.find(
-      (result) =>
-        (result.state === 'Completed' || result.state === 'Abandoned') &&
-        result.isAdHoc === false &&
-        result.type === 'Monitoring'
-    );
-  }, [observationResults]);
-
-  const latestObservation = useMemo(() => {
-    return observations?.find(
-      (observation) =>
-        (observation.state === 'Completed' || observation.state === 'Abandoned') &&
-        observation.isAdHoc === false &&
-        observation.type === 'Monitoring'
-    );
-  }, [observations]);
-
-  const value = useMemo(
-    () => ({
-      plantingSite,
-      plantingSiteReportedPlants: reportedPlants,
-      observations,
-      observationResults,
-      latestObservation,
-      latestResult,
-      isLoading,
-      reload,
-    }),
-    [plantingSite, reportedPlants, observations, observationResults, latestObservation, latestResult, isLoading, reload]
-  );
-
-  return value;
+  return {
+    plantingSite,
+    isLoading: getPlantingSiteResponse.isFetching,
+    isSuccess: getPlantingSiteResponse.isSuccess,
+  };
 };
 
 export default usePlantingSite;

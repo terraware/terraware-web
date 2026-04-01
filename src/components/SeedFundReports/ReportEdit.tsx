@@ -544,13 +544,13 @@ export default function ReportEdit(): JSX.Element {
                 editable={true}
                 draftReport={report}
                 onUpdateReport={updateReport}
-                allSeedbanks={report.seedBanks ?? []}
-                allNurseries={report.nurseries ?? []}
-                allPlantingSites={report.plantingSites ?? []}
                 onUpdateLocation={updateLocation}
                 onUpdateWorkers={updateWorkers}
                 onPhotosChanged={onPhotosChanged}
                 onPhotoRemove={onRemovePhoto}
+                reportNurseries={report.nurseries ?? []}
+                reportPlantingSites={report.plantingSites ?? []}
+                reportSeedBanks={report.seedBanks ?? []}
                 validate={validateFields}
               />
             ))}

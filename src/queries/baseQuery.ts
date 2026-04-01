@@ -7,6 +7,11 @@ function delay(ms: number): Promise<void> {
 const rawBaseQuery = fetchBaseQuery({
   baseUrl: '',
   credentials: 'include',
+  paramsSerializer: (params: Record<string, unknown>) =>
+    Object.entries(params)
+      .filter(([, value]) => value !== undefined)
+      .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`)
+      .join('&'),
 });
 
 const baseQueryWithInterceptors: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (

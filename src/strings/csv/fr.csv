@@ -1812,8 +1812,8 @@ SEED_STORAGE_BEHAVIOR,Comportement de Conservation des Semences,778debfc
 SEED_TYPE,Type de semence,3f69d203
 SEED_WEIGHT,Poids des semences,ff04e812
 SEEDLING_BATCH,Lot de semis,3e860688
+SEEDLING_BATCHES,Lots de semis,040a561e
 SEEDLINGS,Semis,c87d3813
-SEEDLINGS_BATCHES,Lots de semis,b3b86153
 SEEDLINGS_PLURAL,semis,8c6852cb
 SEEDLINGS_SENT,Plantules envoyées,60a58d4a
 SEEDLINGS_SINGULAR,semis,16e3be66

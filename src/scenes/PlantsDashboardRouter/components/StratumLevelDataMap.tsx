@@ -7,9 +7,12 @@ import { PlantingSiteMap } from 'src/components/Map';
 import { MapTooltip, TooltipProperty } from 'src/components/Map/MapRenderUtils';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import MapLegend, { MapLegendGroup } from 'src/components/common/MapLegend';
+import useObservationResults from 'src/hooks/useObservationResults';
+import usePlantingSite from 'src/hooks/usePlantingSite';
+import usePlantingSiteReportedPlants from 'src/hooks/usePlantingSiteReportedPlants';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { useListObservationSummariesQuery } from 'src/queries/generated/observations';
-import { useGetPlantingSiteQuery, useLazyGetPlantingSiteHistoryQuery } from 'src/queries/generated/plantingSites';
+import { useLazyGetPlantingSiteHistoryQuery } from 'src/queries/generated/plantingSites';
 import { MapService } from 'src/services';
 import strings from 'src/strings';
 import { MapData, MapSourceProperties } from 'src/types/Map';
@@ -25,13 +28,10 @@ export default function StratumLevelDataMap({ plantingSiteId }: StratumLevelData
   const numberFormatter = useNumberFormatter();
   const theme = useTheme();
   const { isDesktop } = useDeviceInfo();
-  const { latestResult, plantingSiteReportedPlants } = usePlantingSiteData();
-
-  const plantingSiteQuery = useGetPlantingSiteQuery(
-    { id: plantingSiteId, includeZones: false },
-    { skip: plantingSiteId === -1 }
-  );
-  const plantingSite = plantingSiteQuery.currentData?.site;
+  const { selectedPlantingSiteId } = usePlantingSiteData();
+  const { plantingSite } = usePlantingSite(plantingSiteId);
+  const { plantingSiteReportedPlants } = usePlantingSiteReportedPlants(selectedPlantingSiteId);
+  const { latestObservationResult } = useObservationResults({ plantingSiteId: selectedPlantingSiteId });
 
   const observationSummariesQuery = useListObservationSummariesQuery(
     { plantingSiteId: plantingSiteId ?? -1 },
@@ -115,7 +115,7 @@ export default function StratumLevelDataMap({ plantingSiteId }: StratumLevelData
         },
       ],
       switch: true,
-      disabled: !latestResult,
+      disabled: !latestObservationResult,
       checked: true,
     });
 
@@ -142,20 +142,23 @@ export default function StratumLevelDataMap({ plantingSiteId }: StratumLevelData
         },
       ],
       switch: true,
-      disabled: !latestResult,
+      disabled: !latestObservationResult,
       checked: true,
     });
 
     setLegends(result);
-  }, [latestResult, theme]);
+  }, [latestObservationResult, theme]);
 
   useEffect(() => {
-    if (latestResult?.plantingSiteHistoryId) {
-      void getPlantingSiteHistory({ historyId: latestResult.plantingSiteHistoryId, id: plantingSiteId }, true);
+    if (latestObservationResult?.plantingSiteHistoryId) {
+      void getPlantingSiteHistory(
+        { historyId: latestObservationResult.plantingSiteHistoryId, id: plantingSiteId },
+        true
+      );
     }
-  }, [getPlantingSiteHistory, latestResult?.plantingSiteHistoryId, plantingSiteId]);
+  }, [getPlantingSiteHistory, latestObservationResult?.plantingSiteHistoryId, plantingSiteId]);
 
-  const latestResultSiteHistory = useMemo(() => plantingSiteHistoryData?.site, [plantingSiteHistoryData]);
+  const latestPlantingSiteHistoryResult = useMemo(() => plantingSiteHistoryData?.site, [plantingSiteHistoryData]);
 
   const mapData = useMemo((): MapData | undefined => {
     if (!plantingSite?.boundary) {
@@ -164,20 +167,20 @@ export default function StratumLevelDataMap({ plantingSiteId }: StratumLevelData
 
     const baseMap = MapService.getMapDataFromPlantingSite(plantingSite);
 
-    if (!latestResultSiteHistory) {
+    if (!latestPlantingSiteHistoryResult) {
       return baseMap;
     }
 
     if (!latestSummary) {
-      return MapService.getMapDataFromPlantingSiteHistory(plantingSite, latestResultSiteHistory);
+      return MapService.getMapDataFromPlantingSiteHistory(plantingSite, latestPlantingSiteHistoryResult);
     } else {
       return MapService.getMapDataFromPlantingSiteFromHistoryAndResults(
         plantingSite,
-        latestResultSiteHistory,
+        latestPlantingSiteHistoryResult,
         latestSummary
       );
     }
-  }, [latestResultSiteHistory, latestSummary, plantingSite]);
+  }, [latestPlantingSiteHistoryResult, latestSummary, plantingSite]);
 
   const focusEntities = useMemo(() => {
     return [{ sourceId: 'sites', id: plantingSiteId }];
@@ -197,13 +200,13 @@ export default function StratumLevelDataMap({ plantingSiteId }: StratumLevelData
       (entity: MapSourceProperties): JSX.Element => {
         let properties: TooltipProperty[] = [];
 
-        const stratumHistory = latestResultSiteHistory?.strata.find(
+        const stratumHistory = latestPlantingSiteHistoryResult?.strata.find(
           (_stratumHistory) => _stratumHistory.id === entity.id
         );
 
         // If stratum history is not found, the id in the base map uses current stratum ID instead.
         const stratumId = stratumHistory?.stratumId ?? entity.id;
-        const stratumObservation = latestResult?.strata.find(
+        const stratumObservation = latestObservationResult?.strata.find(
           (stratumResult) => stratumResult.stratumId === stratumHistory?.stratumId
         );
         const stratumStat = stratumId !== undefined ? strataStats[stratumId] : undefined;
@@ -301,8 +304,8 @@ export default function StratumLevelDataMap({ plantingSiteId }: StratumLevelData
         );
       },
     [
-      latestResultSiteHistory?.strata,
-      latestResult?.strata,
+      latestPlantingSiteHistoryResult?.strata,
+      latestObservationResult?.strata,
       strataStats,
       strataProgress,
       findStratumArea,
@@ -338,7 +341,9 @@ export default function StratumLevelDataMap({ plantingSiteId }: StratumLevelData
             mapData={mapData}
             style={{ borderRadius: '8px' }}
             layers={['Planting Site', 'Strata', 'Sub-Strata']}
-            showSurvivalRateFill={!!latestResult && legends.find((l) => l.title === strings.SURVIVAL_RATE)?.checked}
+            showSurvivalRateFill={
+              !!latestObservationResult && legends.find((l) => l.title === strings.SURVIVAL_RATE)?.checked
+            }
             showRecencyFill={legends.find((l) => l.title === strings.OBSERVATION_EVENTS)?.checked}
             focusEntities={focusEntities}
             contextRenderer={{

@@ -124,7 +124,7 @@ const ObservationMap = ({
   const { plantDrawerContent, plantDrawerHeader, plantDrawerSize, selectedPlants, selectPlants } = useMapPlantDrawer();
   const { photoDrawerContent, photoDrawerHeader, photoDrawerSize, selectedPhotos, selectPhotos } = useMapPhotoDrawer();
 
-  const { allPlantingSites } = useOrganizationPlantingSites(true);
+  const { plantingSites } = useOrganizationPlantingSites(true);
   const [getPlantingSite, getPlantingSiteResult] = useLazyGetPlantingSiteQuery();
   const [getPlantingSiteHistory, getPlantingSiteHistoryResult] = useLazyGetPlantingSiteHistoryQuery();
   const [listObservationSplats, listObservationSplatsResult] = useLazyListObservationSplatsQuery();
@@ -278,8 +278,8 @@ const ObservationMap = ({
       const bbox = getBoundingBoxFromPoints(points);
       fitBounds(bbox);
     }
-    if (!plantingSiteId && allPlantingSites) {
-      const points = allPlantingSites.flatMap(
+    if (!plantingSiteId && plantingSites) {
+      const points = plantingSites.flatMap(
         (site) =>
           site.boundary?.coordinates
             .flat()
@@ -295,7 +295,7 @@ const ObservationMap = ({
       const bbox = getBoundingBoxFromPoints(points);
       fitBounds(bbox);
     }
-  }, [allPlantingSites, fitBounds, mapLoaded, plantingSiteId, selectedHistory, selectedResults]);
+  }, [plantingSites, fitBounds, mapLoaded, plantingSiteId, selectedHistory, selectedResults]);
 
   const selectFeature = useCallback(
     (_plantingSiteId: number) => (layerId: string, featureId: string) => () => {
@@ -352,7 +352,7 @@ const ObservationMap = ({
       // Show only sites if no layers selected.
       return [
         {
-          features: allPlantingSites.map((site) => ({
+          features: plantingSites.map((site) => ({
             featureId: `${site.id}`,
             geometry: {
               type: 'MultiPolygon',
@@ -496,7 +496,7 @@ const ObservationMap = ({
     adHocPlots,
     adHocPlotsLayerStyle,
     adHocPlotsVisible,
-    allPlantingSites,
+    plantingSites,
     monitoringPlots,
     permanentPlotsLayerStyle,
     permanentPlotsVisible,
@@ -515,7 +515,7 @@ const ObservationMap = ({
 
   const nameTags = useMemo((): MapNameTag[] | undefined => {
     if (plantingSiteId === undefined) {
-      return allPlantingSites
+      return plantingSites
         .map((site): MapNameTag | undefined => {
           if (site.boundary) {
             const points = site.boundary.coordinates
@@ -569,7 +569,7 @@ const ObservationMap = ({
         },
       ];
     }
-  }, [allPlantingSites, fitBounds, plantingSite, plantingSiteId, selectPlantingSiteId]);
+  }, [plantingSites, fitBounds, plantingSite, plantingSiteId, selectPlantingSiteId]);
 
   const survivalRateHighlights = useMemo(() => {
     const lessThanFifty: MapLayerFeatureId[] = [];

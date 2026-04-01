@@ -144,9 +144,9 @@ export default function ReportView(): JSX.Element {
           <ReportForm
             editable={false}
             draftReport={report}
-            allSeedbanks={report.seedBanks}
-            allNurseries={report.nurseries}
-            allPlantingSites={report.plantingSites}
+            reportSeedBanks={report.seedBanks}
+            reportNurseries={report.nurseries}
+            reportPlantingSites={report.plantingSites}
           />
         ))}
       <Box

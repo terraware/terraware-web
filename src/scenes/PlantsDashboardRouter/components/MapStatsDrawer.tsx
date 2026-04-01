@@ -5,7 +5,9 @@ import { Box, CircularProgress } from '@mui/material';
 import MapDrawerTable, { MapDrawerTableRow } from 'src/components/MapDrawerTable';
 import { MapLayerFeatureId } from 'src/components/NewMap/types';
 import usePlantingSite from 'src/hooks/usePlantingSite';
+import usePlantingSiteReportedPlants from 'src/hooks/usePlantingSiteReportedPlants';
 import { useLocalization } from 'src/providers';
+import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { useListObservationSummariesQuery } from 'src/queries/generated/observations';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
@@ -31,7 +33,12 @@ type MapStatsDrawerProps = {
 const MapStatsDrawer = ({ layerFeatureId, plantingSiteId }: MapStatsDrawerProps): JSX.Element | undefined => {
   const { strings } = useLocalization();
   const numberFormatter = useNumberFormatter();
-  const { isLoading, plantingSite, plantingSiteReportedPlants } = usePlantingSite(plantingSiteId);
+  const { selectedPlantingSiteId } = usePlantingSiteData();
+  const { plantingSiteReportedPlants, isLoading: isLoadingPlantingSiteReportedPlants } =
+    usePlantingSiteReportedPlants(selectedPlantingSiteId);
+  const { plantingSite, isLoading: isLoadingPlantingSite } = usePlantingSite(selectedPlantingSiteId);
+
+  const isLoading = isLoadingPlantingSiteReportedPlants || isLoadingPlantingSite;
 
   const observationSummariesQuery = useListObservationSummariesQuery(
     { plantingSiteId: plantingSiteId ?? -1 },

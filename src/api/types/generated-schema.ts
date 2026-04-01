@@ -11795,7 +11795,7 @@ export interface operations {
             query: {
                 projectId: number;
                 /** @description The media files to include for each activity. */
-                depth?: "None" | "Cover Photos" | "All";
+                depth?: "None" | "CoverPhotos" | "All";
             };
             header?: never;
             path?: never;
@@ -11843,7 +11843,7 @@ export interface operations {
             query: {
                 projectId: number;
                 /** @description If true, include a list of media files for each activity. */
-                includeMedia?: boolean;
+                depth?: "None" | "CoverPhotos" | "All";
             };
             header?: never;
             path?: never;

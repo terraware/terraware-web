@@ -43,9 +43,9 @@ const TerrawareHomeView = () => {
   const showAcceleratorCard = orgPreferences.showAcceleratorCard !== false;
 
   const [isNewApplicationModalOpen, setIsNewApplicationModalOpen] = useState<boolean>(false);
-  const [search, { data: plantingSites }] = useLazySearchPlantingSitesQuery();
 
-  const allPlantingSites = useMemo(() => plantingSites ?? [], [plantingSites]);
+  const [search, { data: plantingSiteSummariesData }] = useLazySearchPlantingSitesQuery();
+  const plantingSiteSummaries = useMemo(() => plantingSiteSummariesData ?? [], [plantingSiteSummariesData]);
 
   const isLoadingInitialData = useMemo(
     () => orgNurserySummary?.requestSucceeded === undefined || seedBankSummary?.requestSucceeded === undefined,
@@ -202,7 +202,7 @@ const TerrawareHomeView = () => {
       },
     ];
 
-    if (!allPlantingSites?.length && isAdmin(selectedOrganization)) {
+    if (!plantingSiteSummaries?.length && isAdmin(selectedOrganization)) {
       rows.push({
         buttonProps: {
           label: strings.ADD_PLANTING_SITE,
@@ -227,7 +227,7 @@ const TerrawareHomeView = () => {
     speciesLastModifiedDate,
     seedBankSummary,
     orgNurserySummary,
-    allPlantingSites,
+    plantingSiteSummaries,
   ]);
 
   return (

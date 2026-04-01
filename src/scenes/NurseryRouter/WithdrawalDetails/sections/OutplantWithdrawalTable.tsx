@@ -39,8 +39,7 @@ export default function OutplantWithdrawalTable({
   withdrawal,
 }: OutplantWithdrawalTableProps): JSX.Element {
   const numberFormatter = useNumberFormatter();
-
-  const { allPlantingSites } = useOrganizationPlantingSites(true);
+  const { plantingSites } = useOrganizationPlantingSites(true);
 
   type BatchesRow = {
     name?: string;
@@ -53,7 +52,7 @@ export default function OutplantWithdrawalTable({
   };
 
   const plantingSiteId = delivery?.plantingSiteId;
-  const plantingSite = allPlantingSites?.find((site) => site.id === plantingSiteId);
+  const plantingSite = plantingSites?.find((site) => site.id === plantingSiteId);
 
   const substratumToStratumMap = useMemo(() => {
     const map: Record<number, number> = {};

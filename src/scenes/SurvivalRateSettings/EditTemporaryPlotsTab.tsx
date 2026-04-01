@@ -5,13 +5,10 @@ import { Checkbox, Icon, Tooltip } from '@terraware/web-components';
 
 import PageForm from 'src/components/common/PageForm';
 import { APP_PATHS } from 'src/constants';
+import usePlantingSite from 'src/hooks/usePlantingSite';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
-import {
-  UpdatePlantingSiteApiArg,
-  useGetPlantingSiteQuery,
-  useUpdatePlantingSiteMutation,
-} from 'src/queries/generated/plantingSites';
+import { UpdatePlantingSiteApiArg, useUpdatePlantingSiteMutation } from 'src/queries/generated/plantingSites';
 import { useAssignT0TempSiteDataMutation } from 'src/queries/generated/t0';
 import { PlotsWithObservationsSearchResult } from 'src/redux/features/tracking/trackingThunks';
 import { AssignSiteT0TempData, SpeciesPlot, StratumT0Data } from 'src/types/Tracking';
@@ -42,10 +39,10 @@ const EditTemporaryPlotsTab = ({
   const navigate = useSyncNavigate();
   const snackbar = useSnackbar();
   const theme = useTheme();
+
   const [updatePlantingSite] = useUpdatePlantingSiteMutation();
   const [updateT0, updateT0Result] = useAssignT0TempSiteDataMutation();
-  const { data: plantingSiteData } = useGetPlantingSiteQuery({ id: plantingSiteId, includeZones: false });
-  const plantingSite = useMemo(() => plantingSiteData?.site, [plantingSiteData]);
+  const { plantingSite } = usePlantingSite(plantingSiteId);
 
   const [record, setRecord] = useForm<AssignSiteT0TempData>({
     plantingSiteId,

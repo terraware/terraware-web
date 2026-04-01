@@ -7,11 +7,16 @@ import { ChartTypeRegistry, TooltipItem } from 'chart.js';
 import PieChart from 'src/components/common/Chart/PieChart';
 import { useLocalization } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
-import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { useListObservationSummariesQuery } from 'src/queries/generated/observations';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
-export default function LiveDeadPlantsPerSpeciesCard(): JSX.Element {
+type LiveDeadPlantsPerSpeciesCardProps = {
+  plantingSiteId: number;
+};
+
+export default function LiveDeadPlantsPerSpeciesCard({
+  plantingSiteId,
+}: LiveDeadPlantsPerSpeciesCardProps): JSX.Element {
   const [selectedSpecies, setSelectedSpecies] = useState<string>();
   const { species: availableSpecies } = useSpeciesData();
   const [allSpecies, setAllSpecies] = useState<
@@ -20,13 +25,11 @@ export default function LiveDeadPlantsPerSpeciesCard(): JSX.Element {
       value: string;
     }[]
   >();
-  const { plantingSite } = usePlantingSiteData();
   const theme = useTheme();
 
-  const plantingSiteId = plantingSite?.id;
   const observationSummariesQuery = useListObservationSummariesQuery(
-    { plantingSiteId: plantingSiteId ?? -1 },
-    { skip: !plantingSiteId || plantingSiteId === -1 }
+    { plantingSiteId },
+    { skip: plantingSiteId === -1 }
   );
   const observationSummaries = observationSummariesQuery.data?.summaries;
   const { strings, activeLocale } = useLocalization();

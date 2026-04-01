@@ -8,7 +8,6 @@ import Card from 'src/components/common/Card';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
-import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { useListObservationSummariesQuery } from 'src/queries/generated/observations';
 import strings from 'src/strings';
 
@@ -16,15 +15,17 @@ import HighestAndLowestSurvivalRateSpeciesCard from './HighestAndLowestSurvivalR
 import HighestAndLowestSurvivalRateStrataCard from './HighestAndLowestSurvivalRateStrataCard';
 import LiveDeadPlantsPerSpeciesCard from './LiveDeadPlantsPerSpeciesCard';
 
-export default function SurvivalRateCard(): JSX.Element {
+type SurvivalRateCardProps = {
+  plantingSiteId: number;
+};
+
+export default function SurvivalRateCard({ plantingSiteId }: SurvivalRateCardProps): JSX.Element {
   const theme = useTheme();
-  const { plantingSite } = usePlantingSiteData();
   const { isDesktop } = useDeviceInfo();
 
-  const plantingSiteId = plantingSite?.id;
   const observationSummariesQuery = useListObservationSummariesQuery(
-    { plantingSiteId: plantingSiteId ?? -1 },
-    { skip: !plantingSiteId || plantingSiteId === -1 }
+    { plantingSiteId },
+    { skip: plantingSiteId === -1 }
   );
   const observationSummaries = observationSummariesQuery.data?.summaries;
 
@@ -77,13 +78,13 @@ export default function SurvivalRateCard(): JSX.Element {
 
         {latestSummary?.survivalRate === undefined && (
           <Box>
-            {plantingSite?.id && (
+            {plantingSiteId && (
               <Typography>
                 {strings.formatString(
                   strings.SET_T0_DATA_IN_THE,
                   <Link
                     fontSize='16px'
-                    to={APP_PATHS.SURVIVAL_RATE_SETTINGS_V2.replace(':plantingSiteId', plantingSite.id.toString())}
+                    to={APP_PATHS.SURVIVAL_RATE_SETTINGS_V2.replace(':plantingSiteId', plantingSiteId.toString())}
                   >
                     {strings.SURVIVAL_RATE_SETTINGS}
                   </Link>
@@ -106,7 +107,7 @@ export default function SurvivalRateCard(): JSX.Element {
           </Tooltip>
         </Box>
         <Box paddingTop={2}>
-          <HighestAndLowestSurvivalRateStrataCard />
+          <HighestAndLowestSurvivalRateStrataCard plantingSiteId={plantingSiteId} />
         </Box>
       </Box>
       <div style={separatorStyles} />
@@ -122,7 +123,7 @@ export default function SurvivalRateCard(): JSX.Element {
           </Tooltip>
         </Box>
         <Box paddingTop={2}>
-          <HighestAndLowestSurvivalRateSpeciesCard />
+          <HighestAndLowestSurvivalRateSpeciesCard plantingSiteId={plantingSiteId} />
         </Box>
       </Box>
       <div style={separatorStyles} />
@@ -138,7 +139,7 @@ export default function SurvivalRateCard(): JSX.Element {
           </Tooltip>
         </Box>
         <Box paddingTop={2}>
-          <LiveDeadPlantsPerSpeciesCard />
+          <LiveDeadPlantsPerSpeciesCard plantingSiteId={plantingSiteId} />
         </Box>
       </Box>
     </Card>

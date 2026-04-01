@@ -1,22 +1,10 @@
 import { createContext, useContext } from 'react';
 
-import { ObservationResultsPayload } from 'src/types/Observations';
-import { PlantingSite, PlantingSiteReportedPlants } from 'src/types/Tracking';
-
 export type PlantingSiteData = {
   acceleratorOrganizationId?: number;
   setAcceleratorOrganizationId: (organizationId: number) => void;
-
-  allPlantingSites?: PlantingSite[];
-
-  plantingSite?: PlantingSite;
-  plantingSiteReportedPlants?: PlantingSiteReportedPlants;
+  selectedPlantingSiteId?: number;
   setSelectedPlantingSite: (plantingSiteId?: number) => void;
-
-  latestResult?: ObservationResultsPayload;
-
-  isLoading: boolean;
-  isInitiated: boolean;
   reload: () => void;
 };
 
@@ -26,8 +14,6 @@ export const PlantingSiteContext = createContext<PlantingSiteData>({
   setAcceleratorOrganizationId: () => {},
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   setSelectedPlantingSite: () => {},
-  isLoading: true,
-  isInitiated: false,
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   reload: () => {},
 });

@@ -7,10 +7,10 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import Card from 'src/components/common/Card';
 import ProgressChart from 'src/components/common/Chart/ProgressChart';
 import FormattedNumber from 'src/components/common/FormattedNumber';
+import usePlantingSiteReportedPlants from 'src/hooks/usePlantingSiteReportedPlants';
 import { useLocalization } from 'src/providers';
 import {
   useLazyGetPlantingSiteQuery,
-  useLazyGetPlantingSiteReportedPlantsQuery,
   useLazyListPlantingSiteReportedPlantsQuery,
   useLazyListPlantingSitesQuery,
 } from 'src/queries/generated/plantingSites';
@@ -30,40 +30,27 @@ export default function PlantsAndSpeciesCard({
   const { strings } = useLocalization();
   const { isDesktop } = useDeviceInfo();
 
+  const { plantingSiteReportedPlants } = usePlantingSiteReportedPlants(plantingSiteId);
+
   const [listPlantingSites, listPlantingSitesResponse] = useLazyListPlantingSitesQuery();
   const [getPlantingSite, getPlantingSiteResponse] = useLazyGetPlantingSiteQuery();
   const [listPlantingSiteReportedPlants, listPlantingSiteReportedPlantsResponse] =
     useLazyListPlantingSiteReportedPlantsQuery();
-  const [getPlantingSiteReportedPlants, getPlantingSiteReportedPlantsResponse] =
-    useLazyGetPlantingSiteReportedPlantsQuery();
 
   useEffect(() => {
     if (plantingSiteId) {
       void getPlantingSite({ id: plantingSiteId, includeZones: false });
-      void getPlantingSiteReportedPlants(plantingSiteId, true);
     } else if (projectId) {
       void listPlantingSites({ projectId, includeZones: false }, true);
       void listPlantingSiteReportedPlants({ projectId }, true);
     }
-  }, [
-    getPlantingSite,
-    getPlantingSiteReportedPlants,
-    listPlantingSiteReportedPlants,
-    listPlantingSites,
-    plantingSiteId,
-    projectId,
-  ]);
+  }, [getPlantingSite, listPlantingSiteReportedPlants, listPlantingSites, plantingSiteId, projectId]);
 
   const plantingSite = useMemo(() => getPlantingSiteResponse.currentData?.site, [getPlantingSiteResponse]);
 
   const projectPlantingSites = useMemo(
     () => listPlantingSitesResponse.currentData?.sites ?? [],
     [listPlantingSitesResponse]
-  );
-
-  const plantingSiteReportedPlants = useMemo(
-    () => getPlantingSiteReportedPlantsResponse.currentData?.site,
-    [getPlantingSiteReportedPlantsResponse]
   );
 
   const projectReportedPlants = useMemo(

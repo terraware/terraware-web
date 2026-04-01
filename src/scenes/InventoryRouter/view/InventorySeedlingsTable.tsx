@@ -6,6 +6,7 @@ import {
   MRT_Cell,
   MRT_RowSelectionState,
   MRT_ShowHideColumnsButton,
+  MRT_TableInstance,
   MRT_ToggleDensePaddingButton,
   MRT_ToggleFiltersButton,
   MRT_ToggleFullScreenButton,
@@ -25,6 +26,7 @@ import { isBatchEmpty } from 'src/scenes/InventoryRouter/FilterUtils';
 import { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';
 import { NurseryBatchService } from 'src/services';
 import { FieldNodePayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
+import { downloadCsv } from 'src/utils/csv';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useForm from 'src/utils/useForm';
@@ -33,7 +35,6 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 import { OriginPage } from '../InventoryBatchView';
 import BatchDetailsModal from './BatchDetailsModal';
-import BatchesExportModal from './BatchesExportModal';
 import ChangeQuantityModal from './ChangeQuantityModal';
 import DeleteBatchesModal from './DeleteBatchesModal';
 import QuantitiesMenu from './QuantitiesMenu';
@@ -56,12 +57,6 @@ export interface InventorySeedlingsTableProps {
     searchFields: FieldNodePayload[],
     searchSortOrder: SearchSortOrder | undefined
   ) => Promise<SearchResponseElement[] | null>;
-  getBatchesExport?: (
-    orgId: number,
-    originId: number,
-    searchFields: FieldNodePayload[],
-    searchSortOrder: SearchSortOrder | undefined
-  ) => Promise<SearchResponseElement[] | null>;
 }
 
 export default function InventorySeedlingsTable(props: InventorySeedlingsTableProps): JSX.Element {
@@ -74,7 +69,6 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
     columns,
     isSelectionBulkWithdrawable,
     getBatchesSearch,
-    getBatchesExport,
   } = props;
   const originId: number | undefined = props.facilityId || props.speciesId;
 
@@ -89,7 +83,6 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
   const numberFormatter = useNumberFormatter();
   const tableStorageKey = `inventorySeedlingsTable_${origin.toLowerCase()}`;
 
-  const [openExportModal, setOpenExportModal] = useState<boolean>(false);
   const [batches, setBatches] = useState<SearchResponseElement[]>([]);
   const [filteredBatches, setFilteredBatches] = useState<SearchResponseElement[]>([]);
   const [filters, setFilters] = useForm<InventoryFiltersUnion>({});
@@ -277,12 +270,29 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
     return undefined;
   }, [isSelectionBulkWithdrawable, selectedRows, strings, totalSelectedQuantity]);
 
-  const batchesExport = useCallback(() => {
-    if (!originId || !getBatchesExport || !selectedOrganization || !activeLocale) {
-      return Promise.resolve([] as SearchResponseElement[]);
-    }
-    return getBatchesExport(selectedOrganization.id, originId, getSearchFields(), undefined);
-  }, [activeLocale, originId, getBatchesExport, selectedOrganization, getSearchFields]);
+  const handleExport = useCallback((table: MRT_TableInstance<SearchResponseElement>) => {
+    const visibleColumns = table
+      .getVisibleLeafColumns()
+      .filter((col) => !col.id.startsWith('mrt-') && col.id !== 'quantitiesMenu' && col.id !== 'withdraw');
+    const filteredRows = table.getSortedRowModel().rows;
+
+    const escape = (val: unknown): string => {
+      const s = val === null || val === undefined ? '' : String(val).replace(/\r/g, ', ');
+      return `"${s.replace(/"/g, '""')}"`;
+    };
+
+    const headers = visibleColumns.map((col) => {
+      const h = col.columnDef.header;
+      return escape(typeof h === 'string' ? h : col.id);
+    });
+
+    const csvLines = [
+      headers.join(','),
+      ...filteredRows.map((row) => visibleColumns.map((col) => escape(row.getValue(col.id))).join(',')),
+    ];
+
+    downloadCsv('inventory-species', csvLines.join('\n'));
+  }, []);
 
   // Cell renderers
   const BatchNumberCell = useCallback(
@@ -411,9 +421,6 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
 
   return (
     <>
-      {openExportModal && (
-        <BatchesExportModal batchesExport={batchesExport} onClose={() => setOpenExportModal(false)} />
-      )}
       <Grid
         item
         xs={12}
@@ -453,7 +460,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
               alignItems: 'center',
             }}
           >
-            <Typography sx={{ fontSize: '20px', fontWeight: 600 }}>{strings.SEEDLINGS_BATCHES}</Typography>
+            <Typography sx={{ fontSize: '20px', fontWeight: 600 }}>{strings.SEEDLING_BATCHES}</Typography>
             <Box display='flex' alignItems='center'>
               <Button
                 id='new-batch'
@@ -535,13 +542,11 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
               ),
               renderToolbarInternalActions: ({ table }) => (
                 <Box display='flex' gap={0.5}>
-                  {getBatchesExport && (
-                    <Tooltip title={strings.EXPORT}>
-                      <IconButton onClick={() => setOpenExportModal(true)}>
-                        <Icon name='iconExport' size='medium' />
-                      </IconButton>
-                    </Tooltip>
-                  )}
+                  <Tooltip title={strings.EXPORT}>
+                    <IconButton onClick={() => handleExport(table)}>
+                      <Icon name='iconExport' size='medium' />
+                    </IconButton>
+                  </Tooltip>
                   <MRT_ToggleGlobalFilterButton table={table} />
                   <MRT_ToggleFiltersButton table={table} />
                   <MRT_ShowHideColumnsButton table={table} />

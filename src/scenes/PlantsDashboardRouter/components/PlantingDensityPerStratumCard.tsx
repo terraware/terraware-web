@@ -5,7 +5,7 @@ import { ChartTypeRegistry, TooltipItem } from 'chart.js';
 
 import BarChart from 'src/components/common/Chart/BarChart';
 import { ChartDataset } from 'src/components/common/Chart/Chart';
-import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
+import usePlantingSite from 'src/hooks/usePlantingSite';
 import { useListObservationSummariesQuery } from 'src/queries/generated/observations';
 import strings from 'src/strings';
 import { truncate } from 'src/utils/text';
@@ -13,12 +13,17 @@ import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 const MAX_STRATUM_NAME_LENGTH = 20;
 
-export default function PlantingDensityPerStratumCard(): JSX.Element {
+type PlantingDensityPerStratumCardProps = {
+  plantingSiteId: number;
+};
+
+export default function PlantingDensityPerStratumCard({
+  plantingSiteId,
+}: PlantingDensityPerStratumCardProps): JSX.Element {
   const theme = useTheme();
   const numberFormatter = useNumberFormatter();
-  const { plantingSite } = usePlantingSiteData();
+  const { plantingSite } = usePlantingSite(plantingSiteId);
 
-  const plantingSiteId = plantingSite?.id;
   const observationSummariesQuery = useListObservationSummariesQuery(
     { plantingSiteId: plantingSiteId ?? -1 },
     { skip: !plantingSiteId || plantingSiteId === -1 }
