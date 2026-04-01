@@ -71,6 +71,7 @@ export default function NavBar({
   const isBatchWithdrawRoute = useMatch({ path: APP_PATHS.BATCH_WITHDRAW + '/', end: false });
   const isPlantingSitesRoute = useMatch({ path: APP_PATHS.PLANTING_SITES + '/', end: false });
   const isPlantsDashboardRoute = useMatch({ path: APP_PATHS.PLANTS_DASHBOARD + '/', end: false });
+  const isPlantingProgressRoute = useMatch({ path: APP_PATHS.PLANTING_PROGRESS + '/', end: false });
   const isWithdrawalLogRoute = useMatch({ path: APP_PATHS.NURSERY_WITHDRAWALS + '/', end: false });
   const isReassignmentRoute = useMatch({ path: APP_PATHS.NURSERY_REASSIGNMENT + '/', end: false });
   const isReportsRoute = useMatch({ path: APP_PATHS.REPORTS + '/', end: false });
@@ -390,7 +391,7 @@ export default function NavBar({
       <NavItem label={strings.SEEDLINGS} icon='iconSeedling' id='seedlings'>
         <SubNavbar>{getSeedlingsMenuItems()}</SubNavbar>
       </NavItem>
-      <NavItem label={strings.PLANTS} icon='iconRestorationSite' id='plants'>
+      <NavItem label={strings.PLANTINGS} icon='iconRestorationSite' id='plants'>
         <SubNavbar>
           <NavItem
             label={strings.DASHBOARD}
@@ -399,6 +400,14 @@ export default function NavBar({
               closeAndNavigateTo(APP_PATHS.PLANTS_DASHBOARD);
             }}
             id='plants-dashboard'
+          />
+          <NavItem
+            label={strings.PLANTING_PROGRESS}
+            selected={!!isPlantingProgressRoute}
+            onClick={() => {
+              closeAndNavigateTo(APP_PATHS.PLANTING_PROGRESS);
+            }}
+            id='planting-progress'
           />
           {hasPlantingSites === true ? (
             <NavItem
