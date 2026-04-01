@@ -20,6 +20,12 @@ const config: ConfigFile = {
     './src/queries/generated/events.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/events/'),
     },
+    './src/queries/generated/activities.ts': {
+      filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/accelerator/activities'),
+    },
+    './src/queries/generated/funderActivities.ts': {
+      filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/funder/activities'),
+    },
     './src/queries/generated/fundingEntities.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/funder/entities'),
     },

@@ -12,15 +12,14 @@ import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
 import {
-  requestGetActivityMedia,
-  requestGetActivityMediaStream,
-  requestPublishActivity,
-} from 'src/redux/features/activities/activitiesAsyncThunks';
+  useAdminPublishActivityMutation,
+  useLazyGetActivityMediaQuery,
+  useLazyGetActivityMediaStream1Query,
+} from 'src/queries/generated/activities';
 import {
-  selectActivityMediaGet,
-  selectActivityMediaStreamGet,
-  selectPublishActivity,
-} from 'src/redux/features/activities/activitiesSelectors';
+  useLazyGetActivityMedia1Query,
+  useLazyGetActivityMediaStreamQuery,
+} from 'src/queries/generated/funderActivities';
 import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
 import { selectUser } from 'src/redux/features/user/usersSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -55,12 +54,11 @@ const ActivityMediaItem = ({
 }: ActivityMediaItemProps): JSX.Element => {
   const { strings } = useLocalization();
   const theme = useTheme();
-  const dispatch = useAppDispatch();
 
   const [isPreconditionFailedError, setIsPreconditionFailedError] = useState<boolean>(false);
-  const [getActivityMediaRequestId, setGetActivityMediaRequestId] = useState<string>('');
 
-  const getActivityMediaRequest = useAppSelector(selectActivityMediaGet(getActivityMediaRequestId));
+  const [getActivityMedia] = useLazyGetActivityMediaQuery();
+  const [getFunderActivityMedia] = useLazyGetActivityMedia1Query();
 
   const imageStyles: CSSProperties = useMemo(
     () => ({
@@ -202,41 +200,32 @@ const ActivityMediaItem = ({
     [mediaFile.fileId, setLightboxImageId]
   );
 
-  const handleImageError = useCallback(() => {
+  const handleImageError = useCallback(async () => {
     // only check for 412 error if this is a video
     if (mediaFile.type === 'Video') {
       // request a small version of the image to check the error status code
-      const request = dispatch(
-        requestGetActivityMedia({
-          activityId: activity.payload.id,
-          fileId: mediaFile.fileId,
-          maxHeight: 1,
-          maxWidth: 1,
-        })
-      );
-      setGetActivityMediaRequestId(request.requestId);
-    }
-  }, [activity.payload.id, dispatch, mediaFile.fileId, mediaFile.type]);
+      const result =
+        activity.type === 'funder'
+          ? await getFunderActivityMedia({
+              activityId: activity.payload.id,
+              fileId: mediaFile.fileId,
+              maxHeight: 1,
+              maxWidth: 1,
+            })
+          : await getActivityMedia({
+              activityId: activity.payload.id,
+              fileId: mediaFile.fileId,
+              maxHeight: 1,
+              maxWidth: 1,
+            });
 
-  useEffect(() => {
-    if (getActivityMediaRequest?.status === 'error' && getActivityMediaRequest?.data) {
       // check if the error is a 412 (Precondition Failed) - video is still processing
-      const errorData = getActivityMediaRequest.data as { error?: string; statusCode?: number };
-      if (errorData.statusCode === 412) {
+      if ((result.error as { status?: number })?.status === 412) {
         setIsPreconditionFailedError(true);
-
-        // retry after one minute
-        const timeoutId = setTimeout(() => {
-          setIsPreconditionFailedError(false);
-          setGetActivityMediaRequestId('');
-        }, 60000);
-
-        return () => {
-          clearTimeout(timeoutId);
-        };
+        setTimeout(() => setIsPreconditionFailedError(false), 60000);
       }
     }
-  }, [getActivityMediaRequest]);
+  }, [activity.payload.id, activity.type, getActivityMedia, getFunderActivityMedia, mediaFile.fileId, mediaFile.type]);
 
   // only show processing fallback if this is a video with a 412 error
   if (mediaFile.type === 'Video' && isPreconditionFailedError) {
@@ -266,7 +255,9 @@ const ActivityMediaItem = ({
       <img
         alt={mediaFile?.caption}
         onClick={onClickMediaItem(mediaFile.fileId)}
-        onError={handleImageError}
+        onError={() => {
+          void handleImageError();
+        }}
         onMouseEnter={mediaItemHoverCallback(true)}
         onMouseLeave={mediaItemHoverCallback(false)}
         src={imageSrc}
@@ -317,7 +308,6 @@ type ActivityDetailViewProps = {
   onClickMediaItem: (fileId: number) => () => void;
   projectId: number;
   setHoverFileCallback: (fileId: number, hover: boolean) => () => void;
-  reload?: () => void;
 };
 
 const ActivityDetailView = ({
@@ -327,7 +317,6 @@ const ActivityDetailView = ({
   onClickMediaItem,
   projectId,
   setHoverFileCallback,
-  reload,
 }: ActivityDetailViewProps): JSX.Element => {
   const { strings } = useLocalization();
   const { isAllowed } = useUser();
@@ -349,34 +338,18 @@ const ActivityDetailView = ({
     : isAllowed('EDIT_ACTIVITIES', { organization: selectedOrganization });
 
   const [lightboxMediaFileId, setLightboxMediaFileId] = useState<number | undefined>(undefined);
-  const [getActivityMediaStreamRequestId, setGetActivityMediaStreamRequestId] = useState<string>('');
-  const [mediaStream, setMediaStream] = useState<{ playbackId: string; playbackToken: string } | undefined>();
-
-  const getActivityMediaStreamRequest = useAppSelector(selectActivityMediaStreamGet(getActivityMediaStreamRequestId));
-
   const [publishActivityModalOpened, setPublishActivityModalOpened] = useState(false);
-  const [requestId, setRequestId] = useState('');
-  const publishActivityResponse = useAppSelector(selectPublishActivity(requestId));
   const snackbar = useSnackbar();
+
+  const [getActivityMediaStream, { data: mediaStreamData }] = useLazyGetActivityMediaStream1Query();
+  const [getFunderActivityMediaStream, { data: funderMediaStreamData }] = useLazyGetActivityMediaStreamQuery();
+  const [publishActivityMutation] = useAdminPublishActivityMutation();
 
   useEffect(() => {
     if (activity.type === 'admin' && activity?.payload?.verifiedBy && !verifiedByUser) {
       void dispatch(requestGetUser(activity?.payload?.verifiedBy));
     }
   }, [activity, dispatch, verifiedByUser]);
-
-  useEffect(() => {
-    if (publishActivityResponse?.status === 'success') {
-      snackbar.toastSuccess(strings.ACTIVITY_PUBLISHED);
-      setPublishActivityModalOpened(false);
-      if (reload) {
-        reload();
-      }
-    }
-    if (publishActivityResponse?.status === 'error') {
-      snackbar.toastError();
-    }
-  }, [publishActivityResponse, reload, snackbar, strings]);
 
   const verifiedByLabel = useMemo(() => {
     const verifiedByName = verifiedByUser
@@ -419,7 +392,6 @@ const ActivityDetailView = ({
 
   const handleCloseLightbox = useCallback(() => {
     setLightboxMediaFileId(undefined);
-    setMediaStream(undefined);
   }, []);
 
   const lightboxMediaFile = useMemo(
@@ -438,23 +410,24 @@ const ActivityDetailView = ({
 
   useEffect(() => {
     if (activity && lightboxMediaFile?.type === 'Video') {
-      const request = dispatch(
-        requestGetActivityMediaStream({
-          activityId: activity.payload.id,
-          fileId: lightboxMediaFile.fileId,
-          funder: activity.type === 'funder',
-        })
-      );
-      setGetActivityMediaStreamRequestId(request.requestId);
+      if (activity.type === 'funder') {
+        void getFunderActivityMediaStream({ activityId: activity.payload.id, fileId: lightboxMediaFile.fileId });
+      } else {
+        void getActivityMediaStream({ activityId: activity.payload.id, fileId: lightboxMediaFile.fileId });
+      }
     }
-  }, [activity, dispatch, lightboxMediaFile]);
+  }, [activity, lightboxMediaFile, getActivityMediaStream, getFunderActivityMediaStream]);
 
-  useEffect(() => {
-    if (getActivityMediaStreamRequest?.status === 'success' && getActivityMediaStreamRequest?.data) {
-      const { playbackId, playbackToken } = getActivityMediaStreamRequest.data;
-      setMediaStream({ playbackId, playbackToken });
+  const mediaStream = useMemo(() => {
+    if (!lightboxMediaFileId) {
+      return undefined;
     }
-  }, [getActivityMediaStreamRequest]);
+    const activeStreamData = activity.type === 'funder' ? funderMediaStreamData : mediaStreamData;
+    if (activeStreamData?.playbackId && activeStreamData?.playbackToken) {
+      return { playbackId: activeStreamData.playbackId, playbackToken: activeStreamData.playbackToken };
+    }
+    return undefined;
+  }, [lightboxMediaFileId, activity.type, funderMediaStreamData, mediaStreamData]);
 
   const highlightActivityId = useMemo(() => {
     const activityIdParam = query.get('highlightActivityId');
@@ -479,10 +452,15 @@ const ActivityDetailView = ({
     setPublishActivityModalOpened(false);
   }, []);
 
-  const publishActivity = useCallback(() => {
-    const request = dispatch(requestPublishActivity(activity.payload.id.toString()));
-    setRequestId(request.requestId);
-  }, [activity.payload.id, dispatch]);
+  const publishActivity = useCallback(async () => {
+    try {
+      await publishActivityMutation(activity.payload.id).unwrap();
+      snackbar.toastSuccess(strings.ACTIVITY_PUBLISHED);
+      setPublishActivityModalOpened(false);
+    } catch {
+      snackbar.toastError();
+    }
+  }, [activity.payload.id, publishActivityMutation, snackbar, strings.ACTIVITY_PUBLISHED]);
 
   return (
     <Grid container paddingY={theme.spacing(2)} spacing={2} textAlign='left'>
@@ -504,7 +482,9 @@ const ActivityDetailView = ({
             <Button
               id='publishActivity'
               label={strings.PUBLISH}
-              onClick={publishActivity}
+              onClick={() => {
+                void publishActivity();
+              }}
               key='button-2'
               type='destructive'
             />,
