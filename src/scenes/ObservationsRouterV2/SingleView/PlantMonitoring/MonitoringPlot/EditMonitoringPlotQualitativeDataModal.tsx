@@ -175,7 +175,6 @@ const EditMonitoringPlotQualitativeDataModal = ({ initialFormData, open, setOpen
               />,
             ]}
             skrim={true}
-            scrolled
           >
             <Box sx={{ textAlign: 'left' }}>
               <MultiSelect
