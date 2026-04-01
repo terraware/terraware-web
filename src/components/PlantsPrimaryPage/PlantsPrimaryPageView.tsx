@@ -11,7 +11,6 @@ import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
-import usePlantingSite from 'src/hooks/usePlantingSite';
 import { useOrganization } from 'src/providers';
 import { useListProjectsQuery } from 'src/queries/generated/projects';
 import strings from 'src/strings';
@@ -76,19 +75,7 @@ export default function PlantsPrimaryPageView({
     skip: !selectedOrganization,
   });
   const projects = projectsData?.projects;
-  const {
-    plantingSitesWithAllSitesOption,
-    isLoading: isLoadingPlantingSites,
-    isSuccess: isSuccessPlantingSites,
-  } = useOrganizationPlantingSites();
-  const {
-    plantingSite,
-    isLoading: isLoadingPlantingSite,
-    isSuccess: isSuccessPlantingSite,
-  } = usePlantingSite(selectedPlantingSiteId);
-
-  const isLoading = isLoadingPlantingSites || isLoadingPlantingSite;
-  const isSuccess = isSuccessPlantingSites && isSuccessPlantingSite;
+  const { plantingSitesWithAllSitesOption, isLoading, isSuccess } = useOrganizationPlantingSites();
 
   const [delayedIsPlantingSiteSet, setDelayedIsPlantingSiteSet] = useState(false);
 
@@ -99,9 +86,7 @@ export default function PlantsPrimaryPageView({
     );
   }, [plantingSitesWithAllSitesOption, isAcceleratorRoute, plantingSites]);
 
-  const plantingSiteSelected = useMemo(() => {
-    return plantingSite !== undefined;
-  }, [plantingSite]);
+  const plantingSiteSelected = useMemo(() => selectedPlantingSiteId !== undefined, [selectedPlantingSiteId]);
 
   const isPlantingSiteSet = useMemo(() => {
     return isSuccess && ((hasSites && plantingSiteSelected) || (!hasSites && !plantingSiteSelected));

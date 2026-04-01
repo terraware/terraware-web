@@ -2,9 +2,8 @@ import React, { useCallback, useMemo, useState } from 'react';
 
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
-import strings from 'src/strings';
 
-import { useLocalization, useOrganization } from '../hooks';
+import { useOrganization } from '../hooks';
 import { PlantingSiteContext, PlantingSiteData } from './PlantingSiteContext';
 
 export type Props = {
@@ -13,7 +12,6 @@ export type Props = {
 
 const PlantingSiteProvider = ({ children }: Props) => {
   const { isAcceleratorRoute } = useAcceleratorConsole();
-  const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
 
   const [acceleratorOrganizationId, setAcceleratorOrganizationId] = useState<number>();
@@ -25,32 +23,9 @@ const PlantingSiteProvider = ({ children }: Props) => {
     { organizationId: orgId!, full: true, includeZones: false },
     { skip: !orgId }
   );
-  const plantingSites = plantingSitesQuery.data?.sites;
-
-  const allSitesOption = useMemo(() => {
-    if (activeLocale && orgId) {
-      return {
-        name: strings.ALL_PLANTING_SITES,
-        id: -1,
-        adHocPlots: [],
-        organizationId: orgId,
-        plantingSeasons: [],
-      };
-    }
-  }, [activeLocale, orgId]);
-
-  const setSelectedPlantingSite = useCallback(
-    (plantingSiteId?: number) => {
-      let foundSite = plantingSites?.find((site) => site.id === plantingSiteId);
-      if (plantingSiteId === -1 && (plantingSites?.length || 0) > 0) {
-        foundSite = allSitesOption;
-      }
-      if (plantingSiteId !== foundSite?.id) {
-        setSelectedPlantingSiteId(plantingSiteId);
-      }
-    },
-    [plantingSites, allSitesOption]
-  );
+  const setSelectedPlantingSite = useCallback((plantingSiteId?: number) => {
+    setSelectedPlantingSiteId((prev) => (prev !== plantingSiteId ? plantingSiteId : prev));
+  }, []);
 
   const { refetch: refetchSites } = plantingSitesQuery;
 
