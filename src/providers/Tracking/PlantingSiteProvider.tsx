@@ -20,7 +20,7 @@ const PlantingSiteProvider = ({ children }: Props) => {
   const orgId = isAcceleratorRoute ? acceleratorOrganizationId : selectedOrganization?.id;
 
   const plantingSitesQuery = useListPlantingSitesQuery(
-    { organizationId: orgId!, full: true, includeZones: false },
+    { organizationId: orgId!, full: false, includeZones: false },
     { skip: !orgId }
   );
   const setSelectedPlantingSite = useCallback((plantingSiteId?: number) => {
