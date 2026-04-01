@@ -9,7 +9,7 @@ test.describe('ObservationDetailsTests', () => {
     await page.goto('/');
     await waitFor(page, '#home');
     await selectOrg(page, 'Terraformation (staging)');
-    await page.getByRole('button', { name: 'Plants' }).click();
+    await page.getByRole('button', { name: 'Plantings' }).click();
     await page.getByRole('button', { name: 'Observations' }).click();
 
     // wait for table rows to load

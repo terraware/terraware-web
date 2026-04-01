@@ -172,7 +172,6 @@ test.describe('InventoryTests', () => {
     await page.getByRole('button', { name: 'Withdraw', ...exactOptions }).click();
     await expect(page.getByText('1 batch for a total of 150')).toBeVisible();
     await page.getByRole('button', { name: 'Withdrawals' }).click();
-    await page.getByRole('tab', { name: 'Withdrawal History' }).click();
     await page.getByRole('row', { name: 'Nursery Transfer' }).locator('[id$="-withdrawnDate"]').click();
     await expect(page.getByText('Purpose Nursery Transfer')).toBeVisible();
     await expect(page.getByText('Quantity 150')).toBeVisible();
@@ -253,7 +252,8 @@ test.describe('InventoryTests', () => {
     await expect(page.getByText('1 batch for a total of 60')).toBeVisible();
     await page.getByRole('tab', { name: 'History' }).click();
     await expect(page.getByRole('cell', { name: 'Withdrawal - Planting' }).nth(0)).toBeVisible();
-    await page.getByRole('button', { name: 'Withdrawals' }).click();
+    await page.getByRole('button', { name: 'Plantings' }).click();
+    await page.getByRole('button', { name: 'Planting Progress' }).click();
     await expect(page.getByRole('cell', { name: 'Planting Site' })).toBeVisible();
     await expect(page.getByRole('cell', { name: '60' })).toBeVisible();
     await page.getByRole('link', { name: '60' }).click();
@@ -270,7 +270,7 @@ test.describe('InventoryTests', () => {
   });
 
   test('Plants dashboard after outplanting', async ({ page }, testInfo) => {
-    await page.getByRole('button', { name: 'Plants' }).click();
+    await page.getByRole('button', { name: 'Plantings' }).click();
     await page.getByRole('button', { name: 'Dashboard', ...exactOptions }).click();
     await page.getByPlaceholder('Select...').click();
     await page.getByText('Planting Site', { exact: true }).click();
@@ -281,8 +281,8 @@ test.describe('InventoryTests', () => {
   });
 
   test('Withdrawals after outplanting', async ({ page }, testInfo) => {
-    await page.getByRole('button', { name: 'Seedlings' }).click();
-    await page.getByRole('button', { name: 'Withdrawals' }).click();
+    await page.getByRole('button', { name: 'Plantings' }).click();
+    await page.getByRole('button', { name: 'Planting Progress' }).click();
     const mapTab = page.locator('p.MuiTypography-root').filter({ hasText: 'Map', hasNotText: 'show for this' });
     await mapTab.click();
 

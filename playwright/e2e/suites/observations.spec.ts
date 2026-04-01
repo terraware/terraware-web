@@ -12,7 +12,7 @@ test.describe('ObservationsTests', () => {
   });
 
   test('Schedule Observation', async ({ page }, testInfo) => {
-    await page.getByRole('button', { name: 'Plants' }).click();
+    await page.getByRole('button', { name: 'Plantings' }).click();
     await page.getByRole('button', { name: 'Observations' }).click();
 
     await page.getByRole('button', { name: 'Schedule Observation' }).click();
@@ -42,7 +42,7 @@ test.describe('ObservationsTests', () => {
   });
 
   test('Reschedule Observation', async ({ page }, testInfo) => {
-    await page.getByRole('button', { name: 'Plants' }).click();
+    await page.getByRole('button', { name: 'Plantings' }).click();
     await page.getByRole('button', { name: 'Observations' }).click();
 
     // wait for table rows to load
@@ -81,7 +81,7 @@ test.describe('ObservationsTests', () => {
   });
 
   test('End Observation', async ({ page }, testInfo) => {
-    await page.getByRole('button', { name: 'Plants' }).click();
+    await page.getByRole('button', { name: 'Plantings' }).click();
     await page.getByRole('button', { name: 'Observations' }).click();
 
     // wait for table rows to load

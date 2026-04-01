@@ -13,7 +13,7 @@ test.describe('ParticipantPlantsDashboardTests', () => {
   test('Rolled-up dashboard for selected project', async ({ page }, testInfo) => {
     await selectOrg(page, 'Terraformation (staging)');
 
-    await page.getByRole('button', { name: 'Plants' }).click();
+    await page.getByRole('button', { name: 'Plantings' }).click();
     await page.getByRole('button', { name: 'Dashboard', ...exactOptions }).click();
 
     await page.getByPlaceholder('No Project Selected').click();
@@ -60,7 +60,7 @@ test.describe('ParticipantPlantsDashboardTests', () => {
   test('Planting site dashboard no observations', async ({ page }, testInfo) => {
     await selectOrg(page, 'Terraformation (staging)');
 
-    await page.getByRole('button', { name: 'Plants' }).click();
+    await page.getByRole('button', { name: 'Plantings' }).click();
     await page.getByRole('button', { name: 'Dashboard', ...exactOptions }).click();
 
     await page.getByPlaceholder('Select...').click();
@@ -107,7 +107,7 @@ test.describe('ParticipantPlantsDashboardTests', () => {
   test('Planting site dashboard observations', async ({ page }, testInfo) => {
     await selectOrg(page, 'Terraformation (staging)');
 
-    await page.getByRole('button', { name: 'Plants' }).click();
+    await page.getByRole('button', { name: 'Plantings' }).click();
     await page.getByRole('button', { name: 'Dashboard', ...exactOptions }).click();
 
     await page.getByPlaceholder('Select...').click();
@@ -203,7 +203,7 @@ test.describe('ParticipantPlantsDashboardTests', () => {
     await page.reload();
 
     await waitFor(page, '#home');
-    await page.getByRole('button', { name: 'Plants' }).click();
+    await page.getByRole('button', { name: 'Plantings' }).click();
     await page.getByRole('button', { name: 'Dashboard', ...exactOptions }).click();
 
     await expect(page.getByText('To view data in this dashboard, add a planting site', { exact: true })).toBeVisible({
