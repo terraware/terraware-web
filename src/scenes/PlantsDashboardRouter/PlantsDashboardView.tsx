@@ -195,13 +195,13 @@ export default function PlantsDashboardView({
           }}
         >
           <Typography fontWeight={600} fontSize={'20px'} paddingRight={1}>
-            {plantingSite?.id === -1 ? strings.PROJECT_AREA_TOTALS : strings.PLANTING_SITE_TOTALS}
+            {selectedPlantingSiteId === -1 ? strings.PROJECT_AREA_TOTALS : strings.PLANTING_SITE_TOTALS}
           </Typography>
         </Box>
       </Grid>
       <Grid item xs={12}>
         <PlantsAndSpeciesCard
-          plantingSiteId={plantingSite?.id !== -1 ? plantingSite?.id : undefined}
+          plantingSiteId={selectedPlantingSiteId !== -1 ? plantingSite?.id : undefined}
           projectId={projectId}
         />
       </Grid>
@@ -442,7 +442,7 @@ export default function PlantsDashboardView({
     <PlantsPrimaryPage
       title={isAcceleratorRoute ? '' : strings.PLANTS_DASHBOARD}
       text={
-        plantingSite?.id !== -1
+        selectedPlantingSiteId !== -1
           ? plantingSite
             ? latestObservationResultId
               ? getDashboardSubhead()
@@ -473,12 +473,12 @@ export default function PlantsDashboardView({
     >
       <Grid container spacing={3} alignItems='flex-start' height='fit-content'>
         {renderTotalPlantsAndSpecies()}
-        {hasObservationResults && plantingSite?.id !== -1 && renderPlantingSiteTrends()}
-        {plantingSite?.id !== -1 && hasObservationResults && renderPlantingProgressAndDensity()}
-        {hasObservationResults && plantingSite?.id !== -1 && renderSurvivalRate()}
-        {plantingSite?.id !== -1 && hasStrata && renderStratumLevelData()}
-        {plantingSite?.id !== -1 && hasPolygons && !hasStrata && renderSimpleSiteMap()}
-        {(plantingSite?.id === -1 || !plantingSite) && renderMapWithSites()}
+        {hasObservationResults && selectedPlantingSiteId !== -1 && renderPlantingSiteTrends()}
+        {selectedPlantingSiteId !== -1 && hasObservationResults && renderPlantingProgressAndDensity()}
+        {hasObservationResults && selectedPlantingSiteId !== -1 && renderSurvivalRate()}
+        {selectedPlantingSiteId !== -1 && hasStrata && renderStratumLevelData()}
+        {selectedPlantingSiteId !== -1 && hasPolygons && !hasStrata && renderSimpleSiteMap()}
+        {(selectedPlantingSiteId === -1 || !plantingSite) && renderMapWithSites()}
       </Grid>
     </PlantsPrimaryPage>
   );
