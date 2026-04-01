@@ -3,7 +3,7 @@ import React, { CSSProperties, type JSX, useMemo } from 'react';
 import { Box, CircularProgress, Typography, useTheme } from '@mui/material';
 
 import FormattedNumber from 'src/components/common/FormattedNumber';
-import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
+import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import strings from 'src/strings';
 
 import PlantDashboardMap from './PlantDashboardMap';
@@ -15,12 +15,12 @@ type MultiplePlantingSiteMapProps = {
 };
 
 export default function MultiplePlantingSiteMap({ projectId }: MultiplePlantingSiteMapProps): JSX.Element {
-  const { allPlantingSites } = usePlantingSiteData();
+  const { plantingSitesWithAllSitesOption } = useOrganizationPlantingSites();
   const theme = useTheme();
 
   const plantingSites = useMemo(
-    () => allPlantingSites?.filter((ps) => ps.projectId === projectId),
-    [projectId, allPlantingSites]
+    () => plantingSitesWithAllSitesOption?.filter((ps) => ps.projectId === projectId),
+    [projectId, plantingSitesWithAllSitesOption]
   );
 
   const totalArea = useMemo(() => {

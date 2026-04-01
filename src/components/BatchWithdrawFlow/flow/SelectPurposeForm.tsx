@@ -57,7 +57,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
 
-  const { allPlantingSites, isLoading } = useOrganizationPlantingSites(true);
+  const { plantingSites, isLoading } = useOrganizationPlantingSites(true);
 
   const { species } = useSpeciesData();
   const projects = useAppSelector(selectProjects);
@@ -146,9 +146,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     updateField('plantingSiteId', value);
     setSelectedStratum(undefined);
     setSelectedSubstratum(undefined);
-    const plantingSite = allPlantingSites
-      ? allPlantingSites.find((site) => site.id.toString() === value.toString())
-      : null;
+    const plantingSite = plantingSites ? plantingSites.find((site) => site.id.toString() === value.toString()) : null;
     setStrata(plantingSite?.strata || []);
     setStratumId(undefined);
   };
@@ -451,7 +449,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   }, [nurseriesOptions, selectedNursery, selectedOrganization]);
 
   const getPlantingSitesOptions = () => {
-    return allPlantingSites.map((plantingSite) => ({
+    return plantingSites.map((plantingSite) => ({
       label: plantingSite.name,
       value: plantingSite.id.toString(),
     }));
@@ -521,12 +519,12 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   }, [batchesFromNursery]);
 
   const outplantDisabled = useMemo(() => {
-    if ((!isLoading && !allPlantingSites.length) || noReadySeedlings) {
+    if ((!isLoading && !plantingSites.length) || noReadySeedlings) {
       return true;
     }
 
     return false;
-  }, [allPlantingSites, isLoading, noReadySeedlings]);
+  }, [plantingSites, isLoading, noReadySeedlings]);
 
   const getOutplantLabel = () => {
     return (

@@ -41,7 +41,7 @@ export default function PlantingProgressList(): JSX.Element {
   const { selectedOrganization } = useOrganization();
 
   const projects = useAppSelector(selectProjects);
-  const { allPlantingSites } = useOrganizationPlantingSites(true);
+  const { plantingSites } = useOrganizationPlantingSites(true);
   const [listReportedPlants, listReportedPlantsResponse] = useLazyListPlantingSiteReportedPlantsQuery();
   const [updateSubstratum, { isLoading }] = useUpdateSubstrataMutation();
 
@@ -63,7 +63,7 @@ export default function PlantingProgressList(): JSX.Element {
                 stratumReportedPlants.substrata
                   .filter((substratumReportedPlants) => substratumReportedPlants.totalPlants > 0)
                   .map((substratumReportedPlants) => {
-                    const site = allPlantingSites.find((thisSite) => thisSite.id === siteReportedPlants.id);
+                    const site = plantingSites.find((thisSite) => thisSite.id === siteReportedPlants.id);
                     const stratum = site?.strata?.find((thisStratum) => thisStratum.id === stratumReportedPlants.id);
                     const substratum = stratum?.substrata.find(
                       (thisSubstratum) => thisSubstratum.id === substratumReportedPlants.id
@@ -86,7 +86,7 @@ export default function PlantingProgressList(): JSX.Element {
                   })
               );
           } else {
-            const site = allPlantingSites.find((thisSite) => thisSite.id === siteReportedPlants.id);
+            const site = plantingSites.find((thisSite) => thisSite.id === siteReportedPlants.id);
             return [
               {
                 projectName: site?.projectId
@@ -103,7 +103,7 @@ export default function PlantingProgressList(): JSX.Element {
     } else {
       return [];
     }
-  }, [allPlantingSites, listReportedPlantsResponse.currentData, projects]);
+  }, [plantingSites, listReportedPlantsResponse.currentData, projects]);
 
   const selectedRows = useMemo(
     () =>

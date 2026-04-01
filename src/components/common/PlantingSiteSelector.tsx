@@ -17,11 +17,11 @@ export default function PlantingSiteSelector({ onChange, hideNoBoundary }: Plant
   const { activeLocale, strings } = useLocalization();
   const { selectedOrganization, orgPreferences, reloadOrgPreferences } = useOrganization();
 
-  const { allPlantingSites } = useOrganizationPlantingSites();
+  const { plantingSites } = useOrganizationPlantingSites();
 
   const filteredPlantingSites = useMemo(() => {
-    return allPlantingSites?.filter((ps) => (hideNoBoundary ? !!ps.boundary : true));
-  }, [allPlantingSites, hideNoBoundary]);
+    return plantingSites?.filter((ps) => (hideNoBoundary ? !!ps.boundary : true));
+  }, [plantingSites, hideNoBoundary]);
 
   const options = useMemo(() => {
     return (
@@ -54,14 +54,14 @@ export default function PlantingSiteSelector({ onChange, hideNoBoundary }: Plant
   );
 
   useEffect(() => {
-    if (allPlantingSites && (selectedPlantingSiteId === undefined || selectedPlantingSiteId === -1)) {
+    if (plantingSites && (selectedPlantingSiteId === undefined || selectedPlantingSiteId === -1)) {
       if (orgPreferences.lastPlantingSiteSelected) {
         updateSelection(orgPreferences.lastPlantingSiteSelected);
       } else {
-        updateSelection(allPlantingSites[0]?.id);
+        updateSelection(plantingSites[0]?.id);
       }
     }
-  }, [selectedPlantingSiteId, updateSelection, orgPreferences.lastPlantingSiteSelected, allPlantingSites]);
+  }, [selectedPlantingSiteId, updateSelection, orgPreferences.lastPlantingSiteSelected, plantingSites]);
 
   return (
     <Dropdown

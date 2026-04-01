@@ -8,13 +8,11 @@ import AddLink from 'src/components/common/AddLink';
 import Link from 'src/components/common/Link';
 import PlantingSiteSelector from 'src/components/common/PlantingSiteSelector';
 import { APP_PATHS } from 'src/constants';
+import usePlantingSite from 'src/hooks/usePlantingSite';
+import usePlantingSiteReportedPlants from 'src/hooks/usePlantingSiteReportedPlants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
 import { useLazyGetObservationResultsQuery } from 'src/queries/generated/observations';
-import {
-  useLazyGetPlantingSiteQuery,
-  useLazyGetPlantingSiteReportedPlantsQuery,
-} from 'src/queries/generated/plantingSites';
 import { useLazySearchPlantingSitesQuery } from 'src/queries/search/plantingSites';
 import SimplePlantingSiteMap from 'src/scenes/PlantsDashboardRouter/components/SimplePlantingSiteMap';
 import strings from 'src/strings';
@@ -36,18 +34,13 @@ export const PlantingSiteStats = () => {
 
   const [selectedPlantingSiteId, setSelectedPlantingSiteId] = useState<number>();
 
-  const [search, { data: plantingSites }] = useLazySearchPlantingSitesQuery();
-  const [getPlantingSite, getPlantingSiteResponse] = useLazyGetPlantingSiteQuery();
-  const [getSiteReportedPlants, getSiteReportedPlantsResponse] = useLazyGetPlantingSiteReportedPlantsQuery();
+  const { plantingSite } = usePlantingSite(selectedPlantingSiteId);
+  const { plantingSiteReportedPlants } = usePlantingSiteReportedPlants(selectedPlantingSiteId);
+  const [search, { data: plantingSiteSummariesData }] = useLazySearchPlantingSitesQuery();
   const [getObservationResults, getObservationResultsResponse] = useLazyGetObservationResultsQuery();
 
-  const allPlantingSites = useMemo(() => plantingSites ?? [], [plantingSites]);
-  const plantingSite = useMemo(() => getPlantingSiteResponse.data?.site, [getPlantingSiteResponse]);
-  const plantingSiteReportedPlants = useMemo(
-    () => getSiteReportedPlantsResponse.data?.site,
-    [getSiteReportedPlantsResponse]
-  );
-  const latestResult = useMemo(
+  const plantingSiteSummaries = useMemo(() => plantingSiteSummariesData ?? [], [plantingSiteSummariesData]);
+  const latestObservationResult = useMemo(
     () => getObservationResultsResponse.data?.observation,
     [getObservationResultsResponse.data?.observation]
   );
@@ -64,24 +57,17 @@ export const PlantingSiteStats = () => {
   }, [search, selectedOrganization]);
 
   useEffect(() => {
-    if (selectedPlantingSiteId && selectedPlantingSiteId > 0) {
-      void getPlantingSite({ id: selectedPlantingSiteId, includeZones: false }, true);
-      void getSiteReportedPlants(selectedPlantingSiteId, true);
-    }
-  }, [getPlantingSite, getSiteReportedPlants, selectedPlantingSiteId]);
-
-  useEffect(() => {
     if (plantingSite && plantingSite.latestObservationId) {
       void getObservationResults({ observationId: plantingSite.latestObservationId }, true);
     }
   }, [getObservationResults, plantingSite]);
 
   useEffect(() => {
-    if (allPlantingSites.length && selectedPlantingSiteId === undefined) {
+    if (plantingSiteSummaries.length && selectedPlantingSiteId === undefined) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
-      setSelectedPlantingSiteId(allPlantingSites[0].id);
+      setSelectedPlantingSiteId(plantingSiteSummaries[0].id);
     }
-  }, [allPlantingSites, selectedPlantingSiteId]);
+  }, [plantingSiteSummaries, selectedPlantingSiteId]);
 
   const plantingCompleteArea = useMemo(() => {
     let total = 0;
@@ -108,7 +94,7 @@ export const PlantingSiteStats = () => {
   const totalPlants = useMemo(() => plantingSiteReportedPlants?.totalPlants ?? 0, [plantingSiteReportedPlants]);
   const totalSpecies = useMemo(() => plantingSiteReportedPlants?.species?.length ?? 0, [plantingSiteReportedPlants]);
 
-  if (!allPlantingSites?.length) {
+  if (!plantingSiteSummaries?.length) {
     return <></>;
   }
 
@@ -217,7 +203,7 @@ export const PlantingSiteStats = () => {
               label={strings.SURVIVAL_RATE}
               showBorder={!isDesktop}
               showLink={false}
-              value={latestResult?.survivalRate ? `${latestResult.survivalRate}%` : ''}
+              value={latestObservationResult?.survivalRate ? `${latestObservationResult.survivalRate}%` : ''}
             />
           </Grid>
 

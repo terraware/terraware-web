@@ -135,7 +135,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
   const assignedTableState = useTableState(ASSIGNED_STORAGE_KEY, { persistFilters: true });
   const adHocTableState = useTableState(ADHOC_STORAGE_KEY, { persistFilters: true });
 
-  const { allPlantingSites } = useOrganizationPlantingSites(true);
+  const { plantingSites } = useOrganizationPlantingSites(true);
   const [listObservationResults, listObservationsResultsResponse] = useLazyListObservationResultsQuery();
   const [listAdHocObservationResults, listAdHocObservationResultsResponse] = useLazyListAdHocObservationResultsQuery();
   const [getT0SiteDataSet, getT0SiteDataSetResponse] = useLazyGetAllT0SiteDataSetQuery();
@@ -152,16 +152,16 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
     [listAdHocObservationResultsResponse.isLoading, listObservationsResultsResponse.isLoading]
   );
 
-  const allPlantingSitesById = useMemo(
+  const plantingSitesById = useMemo(
     () =>
-      allPlantingSites.reduce(
+      plantingSites.reduce(
         (sites, site) => {
           sites[site.id] = site;
           return sites;
         },
         {} as { [siteId: number]: PlantingSitePayload }
       ),
-    [allPlantingSites]
+    [plantingSites]
   );
 
   useEffect(() => {
@@ -224,7 +224,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
   const rows = useMemo(
     () =>
       observationResults.map((observationResult): PlantMonitoringRow => {
-        const plantingSite = allPlantingSitesById[observationResult.plantingSiteId];
+        const plantingSite = plantingSitesById[observationResult.plantingSiteId];
 
         const totalLive = observationResult.species.reduce(
           (total, plantSpecies) => (total += plantSpecies.totalLive),
@@ -257,7 +257,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           completedDate,
         };
       }),
-    [observationResults, allPlantingSitesById]
+    [observationResults, plantingSitesById]
   );
 
   const uniqueStatuses = useMemo(
@@ -526,7 +526,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
 
     const adHocObservationsResults: AdHocObservationResults[] = adHocResults.map((observation) => {
       const adHocPlot = observation.adHocPlot!;
-      const site = allPlantingSitesById[observation.plantingSiteId];
+      const site = plantingSitesById[observation.plantingSiteId];
       const timeZone = site?.timeZone ?? defaultTimezone;
 
       return {
@@ -541,9 +541,9 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
       };
     });
 
-    const selectedSite = plantingSiteId ? allPlantingSitesById[plantingSiteId] : undefined;
+    const selectedSite = plantingSiteId ? plantingSitesById[plantingSiteId] : undefined;
     void exportAdHocObservationsResults({ adHocObservationsResults, plantingSite: selectedSite });
-  }, [defaultTimezone, listAdHocObservationResultsResponse, plantingSiteId, allPlantingSitesById]);
+  }, [defaultTimezone, listAdHocObservationResultsResponse, plantingSiteId, plantingSitesById]);
 
   const plotSelectionToolbar = useMemo(
     () => (

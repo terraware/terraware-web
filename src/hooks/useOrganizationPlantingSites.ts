@@ -1,14 +1,19 @@
 import { useEffect, useMemo } from 'react';
 
-import { useOrganization } from 'src/providers';
-import { useLazyListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
+import { useLocalization, useOrganization } from 'src/providers';
+import { PlantingSitePayload, useLazyListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
 
 const useOrganizationPlantingSites = (full?: boolean) => {
+  const { activeLocale, strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const [listPlantingSites, listPlantingSitesResponse] = useLazyListPlantingSitesQuery();
-  const allPlantingSites = useMemo(
-    () => listPlantingSitesResponse.currentData?.sites ?? [],
-    [listPlantingSitesResponse]
+
+  const plantingSites = useMemo(
+    () =>
+      (listPlantingSitesResponse.currentData?.sites ?? []).toSorted((a, b) =>
+        a.name.localeCompare(b.name, activeLocale || undefined)
+      ),
+    [activeLocale, listPlantingSitesResponse]
   );
 
   useEffect(() => {
@@ -17,9 +22,25 @@ const useOrganizationPlantingSites = (full?: boolean) => {
     }
   }, [full, listPlantingSites, selectedOrganization]);
 
+  const plantingSitesWithAllSitesOption = useMemo(() => {
+    if (selectedOrganization) {
+      const allOption: PlantingSitePayload = {
+        adHocPlots: [],
+        id: -1,
+        name: strings.ALL_PLANTING_SITES,
+        organizationId: selectedOrganization.id,
+        plantingSeasons: [],
+      };
+      return [allOption, ...plantingSites];
+    }
+    return plantingSites;
+  }, [plantingSites, selectedOrganization, strings.ALL_PLANTING_SITES]);
+
   return {
-    allPlantingSites,
     isLoading: listPlantingSitesResponse.isFetching,
+    isSuccess: listPlantingSitesResponse.isSuccess,
+    plantingSites,
+    plantingSitesWithAllSitesOption,
   };
 };
 
