@@ -123,6 +123,7 @@ export enum APP_PATHS {
   PEOPLE_NEW = '/people/new',
   PEOPLE_VIEW = '/people/:personId',
   PLANTS_DASHBOARD = '/plants/dashboard',
+  PLANTING_PROGRESS = '/plants/planting-progress',
   PLANTING_SITE_DASHBOARD = '/plants/dashboard/:plantingSiteId',
   PLANTING_SITES = '/planting-sites',
   PLANTING_SITES_DRAFT_EDIT = '/planting-sites/draft/:plantingSiteId/edit',
