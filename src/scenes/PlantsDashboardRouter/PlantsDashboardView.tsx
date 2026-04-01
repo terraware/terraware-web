@@ -408,8 +408,8 @@ export default function PlantsDashboardView({
   }, [plantingSite, observationSummaries, observationHectares, renderLatestObservationLink, summariesHectares]);
 
   const onSelect = useCallback(
-    (selectedPlantingSiteId: number) => {
-      setSelectedPlantingSite(selectedPlantingSiteId);
+    (nextPlantingSiteId: number) => {
+      setSelectedPlantingSite(nextPlantingSiteId);
     },
     [setSelectedPlantingSite]
   );
