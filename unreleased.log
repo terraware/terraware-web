@@ -1,3 +1,4 @@
+d655d2efc7a1 SW-8182: Improve /home view load time (#5534)
 7e938242a7bf SW-8064 Separate table out of Withdrawals page and move under Plants in nav (#5540)
 bd5e176a0c7d SW-8223: Improve performance of plants dashboard (#10) (#5537)
 65dd36038d4f SW-8148 Change default Project column position (#5541)
