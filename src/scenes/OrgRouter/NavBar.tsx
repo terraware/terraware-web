@@ -401,23 +401,26 @@ export default function NavBar({
             }}
             id='plants-dashboard'
           />
-          <NavItem
-            label={strings.PLANTING_PROGRESS}
-            selected={!!isPlantingProgressRoute}
-            onClick={() => {
-              closeAndNavigateTo(APP_PATHS.PLANTING_PROGRESS);
-            }}
-            id='planting-progress'
-          />
+
           {hasPlantingSites === true ? (
-            <NavItem
-              label={strings.OBSERVATIONS}
-              selected={!!isObservationsRoute}
-              onClick={() => {
-                closeAndNavigateTo(APP_PATHS.OBSERVATIONS);
-              }}
-              id='observations'
-            />
+            <>
+              <NavItem
+                label={strings.PLANTING_PROGRESS}
+                selected={!!isPlantingProgressRoute}
+                onClick={() => {
+                  closeAndNavigateTo(APP_PATHS.PLANTING_PROGRESS);
+                }}
+                id='planting-progress'
+              />
+              <NavItem
+                label={strings.OBSERVATIONS}
+                selected={!!isObservationsRoute}
+                onClick={() => {
+                  closeAndNavigateTo(APP_PATHS.OBSERVATIONS);
+                }}
+                id='observations'
+              />
+            </>
           ) : (
             <></>
           )}
