@@ -132,11 +132,7 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
     if (!validate()) {
       return;
     }
-    const response = await AccessionService.updateAccession(
-      record,
-      false,
-      quantityChanged ? remainingQuantityNotes : undefined
-    );
+    const response = await AccessionService.updateAccession(record, false, remainingQuantityNotes);
     if (response.requestSucceeded) {
       reload();
       onCloseHandler();
