@@ -7,12 +7,16 @@ type UseObservationsProps = {
   plantingSiteId?: number | undefined;
 };
 
+const isValidParam = (value: number | undefined): value is number => typeof value === 'number' && value !== -1;
+
 const useObservationResults = ({ organizationId, plantingSiteId }: UseObservationsProps) => {
   const [listObservations, listObservationsResponse] = useLazyListObservationResultsQuery();
 
+  const hasValidParam = isValidParam(organizationId) || isValidParam(plantingSiteId);
+
   const observationResults = useMemo(
-    () => listObservationsResponse.currentData?.observations,
-    [listObservationsResponse]
+    () => (hasValidParam ? listObservationsResponse.currentData?.observations : undefined),
+    [hasValidParam, listObservationsResponse]
   );
 
   const latestObservationResult = useMemo(
@@ -27,13 +31,19 @@ const useObservationResults = ({ organizationId, plantingSiteId }: UseObservatio
   );
 
   useEffect(() => {
-    if (organizationId || plantingSiteId) {
-      void listObservations({ organizationId, plantingSiteId }, true);
+    if (hasValidParam) {
+      void listObservations(
+        {
+          organizationId: isValidParam(organizationId) ? organizationId : undefined,
+          plantingSiteId: isValidParam(plantingSiteId) ? plantingSiteId : undefined,
+        },
+        true
+      );
     }
-  }, [listObservations, organizationId, plantingSiteId]);
+  }, [listObservations, hasValidParam, organizationId, plantingSiteId]);
 
   return {
-    isLoading: listObservationsResponse.isFetching,
+    isLoading: hasValidParam ? listObservationsResponse.isFetching : false,
     latestObservationResult,
     observationResults,
   };
