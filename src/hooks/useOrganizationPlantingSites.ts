@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 
 import { useLocalization, useOrganization } from 'src/providers';
 import { PlantingSitePayload, useLazyListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
@@ -16,11 +16,21 @@ const useOrganizationPlantingSites = (full?: boolean) => {
     [activeLocale, listPlantingSitesResponse]
   );
 
+  const reload = useCallback(
+    (preferCacheValue?: boolean) => {
+      if (selectedOrganization) {
+        void listPlantingSites(
+          { organizationId: selectedOrganization.id, full, includeZones: false },
+          preferCacheValue
+        );
+      }
+    },
+    [full, listPlantingSites, selectedOrganization]
+  );
+
   useEffect(() => {
-    if (selectedOrganization) {
-      void listPlantingSites({ organizationId: selectedOrganization.id, full, includeZones: false }, true);
-    }
-  }, [full, listPlantingSites, selectedOrganization]);
+    reload(true);
+  }, [reload]);
 
   const plantingSitesWithAllSitesOption = useMemo(() => {
     if (selectedOrganization) {
@@ -41,6 +51,7 @@ const useOrganizationPlantingSites = (full?: boolean) => {
     isSuccess: listPlantingSitesResponse.isSuccess,
     plantingSites,
     plantingSitesWithAllSitesOption,
+    reload,
   };
 };
 
