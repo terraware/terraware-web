@@ -130,7 +130,28 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
   const { activeLocale, strings } = useLocalization();
   const { isMobile } = useDeviceInfo();
   const navigate = useSyncNavigate();
-  const [selectedPlotSelection, setSelectedPlotSelection] = useState<PlotSelectionType>('assigned');
+
+  const getPlotSelectionFromSession = (): PlotSelectionType => {
+    try {
+      return (sessionStorage.getItem('plot-selection') || 'assigned') as PlotSelectionType;
+    } catch (e) {
+      return 'assigned';
+    }
+  };
+
+  const writePlotSelectionToSession = (selection: PlotSelectionType): void => {
+    try {
+      sessionStorage.setItem('plot-selection', selection);
+    } catch (e) {
+      /* empty */
+    }
+  };
+
+  const [selectedPlotSelection, setSelectedPlotSelection] = useState<PlotSelectionType>(getPlotSelectionFromSession);
+  const makePlotSelection = useCallback((selection: PlotSelectionType) => {
+    setSelectedPlotSelection(selection);
+    writePlotSelectionToSession(selection);
+  }, []);
 
   const assignedTableState = useTableState(ASSIGNED_STORAGE_KEY, { persistFilters: true });
   const adHocTableState = useTableState(ADHOC_STORAGE_KEY, { persistFilters: true });
@@ -226,11 +247,6 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
       observationResults.map((observationResult): PlantMonitoringRow => {
         const plantingSite = plantingSitesById[observationResult.plantingSiteId];
 
-        const totalLive = observationResult.species.reduce(
-          (total, plantSpecies) => (total += plantSpecies.totalLive),
-          0
-        );
-
         const strataNames = observationResult.strata
           .map((stratumResult) => {
             const observedStratum = plantingSite?.strata?.find((stratum) => stratum.id === stratumResult.stratumId);
@@ -240,6 +256,14 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
 
         const completedDate = observationResult.completedTime ?? undefined;
         const observationDate = completedDate ?? observationResult.startDate;
+        const adHocPlot = observationResult.adHocPlot;
+        const species = selectedPlotSelection === 'adHoc' ? adHocPlot?.species ?? [] : observationResult.species;
+        const totalLive = species.reduce((total, plantSpecies) => (total += plantSpecies.totalLive), 0);
+
+        const totalPlants =
+          selectedPlotSelection === 'adHoc' ? adHocPlot?.totalPlants ?? 0 : observationResult.totalPlants;
+        const totalSpecies =
+          selectedPlotSelection === 'adHoc' ? adHocPlot?.totalSpecies ?? 0 : observationResult.totalSpecies;
 
         return {
           adHocPlotNumber: observationResult.adHocPlot?.monitoringPlotNumber,
@@ -250,14 +274,14 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           plantingSiteName: plantingSite?.name,
           strata: strataNames.join('\r'),
           totalLive,
-          totalPlants: observationResult.totalPlants,
-          totalSpecies: observationResult.totalSpecies,
+          totalPlants,
+          totalSpecies,
           plantingDensity: observationResult.plantingDensity,
           survivalRate: observationResult.survivalRate,
           completedDate,
         };
       }),
-    [observationResults, plantingSitesById]
+    [observationResults, plantingSitesById, selectedPlotSelection]
   );
 
   const uniqueStatuses = useMemo(
@@ -553,7 +577,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
         </Typography>
         <Dropdown
           id='plot-selection-selector'
-          onChange={(newValue) => setSelectedPlotSelection(newValue as PlotSelectionType)}
+          onChange={(newValue) => makePlotSelection(newValue as PlotSelectionType)}
           options={[
             { label: strings.ASSIGNED, value: 'assigned' },
             { label: strings.AD_HOC, value: 'adHoc' },
@@ -600,7 +624,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
       plotsWithObservations.length,
       rows.length,
       selectedPlotSelection,
-      setSelectedPlotSelection,
+      makePlotSelection,
       strings.AD_HOC,
       strings.ASSIGNED,
       strings.PLOT_SELECTION,
