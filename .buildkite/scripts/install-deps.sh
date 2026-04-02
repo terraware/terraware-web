@@ -71,7 +71,7 @@ for arg in "$@"; do
     case "$arg" in
         --node)             install_node ;;
         --tools)            install_jq && install_yq && install_rsync ;;
-        --playwright-deps)  install_playwright_system_deps ;;
+        --playwright)       install_playwright_system_deps ;;
         *)
             echo "Unknown argument: $arg"
             exit 1

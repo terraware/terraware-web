@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-.buildkite/scripts/install-deps.sh --node --playwright-deps
+.buildkite/scripts/install-deps.sh --node --playwright
 
 echo "--- :docker: Download and start backend"
 yarn server:reset

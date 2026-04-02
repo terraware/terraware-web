@@ -9,6 +9,7 @@ common:
   - &cache-node-modules-args
     <<: *cache-common-args
     path: 'node_modules'
+    manifest: 'yarn.lock'
 
   - &cache-node-modules
     cache#v1.10.0:
@@ -39,11 +40,9 @@ steps:
       - *shallow-clone
       - cache#v1.10.0:
           <<: *cache-node-modules-args
-          manifest: 'yarn.lock'
           save:
             - file
             - branch
-          force: true
       - artifacts#v1.9.4:
           upload: 'dist'
           compressed: 'dist.tgz'
@@ -99,7 +98,6 @@ steps:
       - cache#v1.10.0: &promote-cache
           <<: *cache-node-modules-args
           save: 'pipeline'
-          force: true
       - cache#v1.10.0:
           <<: *promote-cache
           path: '.buildx-cache'

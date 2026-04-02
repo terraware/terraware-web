@@ -8,7 +8,7 @@ set -euo pipefail
 .buildkite/scripts/install-deps.sh --node --tools
 
 echo "--- :vercel: Install Vercel CLI"
-npm install -g vercel
+npm install vercel
 
 echo "--- :vercel: Configure Vercel project"
 mkdir -p .vercel
