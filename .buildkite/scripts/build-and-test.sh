@@ -6,6 +6,9 @@ set -euo pipefail
 echo "--- :yarn: Install dependencies"
 yarn install --frozen-lockfile --prefer-offline
 
+echo "--- :yarn: Generate strings"
+yarn generate-strings
+
 echo "--- :prettier: Check formatting"
 yarn prettier --check .
 
@@ -22,9 +25,6 @@ yarn ts
 
 echo "--- :jest: Run unit tests"
 yarn test:ci
-
-echo "--- :yarn: Generate strings"
-yarn generate-strings
 
 echo "--- :package: Build"
 echo "$APP_VERSION" > public/build-version.txt

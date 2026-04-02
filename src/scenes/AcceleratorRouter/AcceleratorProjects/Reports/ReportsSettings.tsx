@@ -234,7 +234,7 @@ export default function ReportsSettings(): JSX.Element {
 
   const PrimaryDataSourceCell = useCallback(
     ({ cell }: { cell: MRT_Cell<IndicatorRow> }) => {
-      const value = cell.getValue<string | undefined>();
+      const value = cell.getValue<string>();
       if (value === strings.TW_DATA) {
         return (
           <Badge
