@@ -10,7 +10,6 @@ import MapLegend, { MapLegendGroup } from 'src/components/common/MapLegend';
 import useObservationResults from 'src/hooks/useObservationResults';
 import usePlantingSite from 'src/hooks/usePlantingSite';
 import usePlantingSiteReportedPlants from 'src/hooks/usePlantingSiteReportedPlants';
-import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { useListObservationSummariesQuery } from 'src/queries/generated/observations';
 import { useLazyGetPlantingSiteHistoryQuery } from 'src/queries/generated/plantingSites';
 import { MapService } from 'src/services';
@@ -28,10 +27,9 @@ export default function StratumLevelDataMap({ plantingSiteId }: StratumLevelData
   const numberFormatter = useNumberFormatter();
   const theme = useTheme();
   const { isDesktop } = useDeviceInfo();
-  const { selectedPlantingSiteId } = usePlantingSiteData();
   const { plantingSite } = usePlantingSite(plantingSiteId);
-  const { plantingSiteReportedPlants } = usePlantingSiteReportedPlants(selectedPlantingSiteId);
-  const { latestObservationResult } = useObservationResults({ plantingSiteId: selectedPlantingSiteId });
+  const { plantingSiteReportedPlants } = usePlantingSiteReportedPlants(plantingSiteId);
+  const { latestObservationResult } = useObservationResults({ plantingSiteId });
 
   const observationSummariesQuery = useListObservationSummariesQuery(
     { plantingSiteId: plantingSiteId ?? -1 },

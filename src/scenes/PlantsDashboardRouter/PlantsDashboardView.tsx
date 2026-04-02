@@ -1,4 +1,5 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
+import { useParams } from 'react-router';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/utils';
@@ -15,7 +16,6 @@ import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites
 import usePlantingSite from 'src/hooks/usePlantingSite';
 import { useOrganization } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
-import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { useListObservationSummariesQuery } from 'src/queries/generated/observations';
 import SimplePlantingSiteMap from 'src/scenes/PlantsDashboardRouter/components/SimplePlantingSiteMap';
 import strings from 'src/strings';
@@ -44,7 +44,12 @@ export default function PlantsDashboardView({
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const [projectId, setProjectId] = useState<number | undefined>(acceleratorProjectId);
 
-  const { selectedPlantingSiteId, setSelectedPlantingSite } = usePlantingSiteData();
+  const { plantingSiteId: plantingSiteIdParam } = useParams<{ plantingSiteId: string }>();
+  const initialPlantingSiteId = plantingSiteIdParam ? Number(plantingSiteIdParam) : undefined;
+  const [selectedPlantingSiteId, setSelectedPlantingSiteId] = useState<number | undefined>(
+    initialPlantingSiteId && !isNaN(initialPlantingSiteId) ? initialPlantingSiteId : undefined
+  );
+
   const { acceleratorOrganizationId, setAcceleratorOrganizationId } = useSpeciesData();
   const { plantingSitesWithAllSitesOption } = useOrganizationPlantingSites();
   const { plantingSite } = usePlantingSite(selectedPlantingSiteId);
@@ -408,12 +413,9 @@ export default function PlantsDashboardView({
         ) as string);
   }, [plantingSite, observationSummaries, observationHectares, renderLatestObservationLink, summariesHectares]);
 
-  const onSelect = useCallback(
-    (nextPlantingSiteId: number) => {
-      setSelectedPlantingSite(nextPlantingSiteId);
-    },
-    [setSelectedPlantingSite]
-  );
+  const onSelect = useCallback((nextPlantingSiteId: number) => {
+    setSelectedPlantingSiteId(nextPlantingSiteId);
+  }, []);
 
   const onSelectProject = useCallback((newProjectId: number) => {
     setProjectId(newProjectId === -1 ? undefined : newProjectId);
