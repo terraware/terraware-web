@@ -7,18 +7,15 @@ set -euo pipefail
 
 .buildkite/scripts/install-deps.sh --node --tools
 
-echo "--- :vercel: Install Vercel CLI"
-npm install vercel
-
 echo "--- :vercel: Configure Vercel project"
 mkdir -p .vercel
 echo "{\"projectId\":\"${VERCEL_PROJECT_ID}\",\"orgId\":\"${VERCEL_ORG_ID}\"}" > .vercel/project.json
 
 echo "--- :vercel: Pull Vercel project settings"
-vercel pull --yes --environment=preview --token="$VERCEL_TOKEN"
+npx vercel pull --yes --environment=preview --token="$VERCEL_TOKEN"
 
 echo "--- :vercel: Deploy to Vercel"
-preview_url=$(vercel deploy --prebuilt --archive=tgz --token="$VERCEL_TOKEN")
+preview_url=$(npx vercel deploy --prebuilt --archive=tgz --token="$VERCEL_TOKEN")
 
 echo "Preview deployed to: ${preview_url}"
 
