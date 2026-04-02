@@ -5,7 +5,6 @@ export type PlantingSiteData = {
   setAcceleratorOrganizationId: (organizationId: number) => void;
   selectedPlantingSiteId?: number;
   setSelectedPlantingSite: (plantingSiteId?: number) => void;
-  reload: () => void;
 };
 
 // default values pointing to nothing
@@ -14,8 +13,6 @@ export const PlantingSiteContext = createContext<PlantingSiteData>({
   setAcceleratorOrganizationId: () => {},
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   setSelectedPlantingSite: () => {},
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  reload: () => {},
 });
 
 export const usePlantingSiteData = () => useContext(PlantingSiteContext);

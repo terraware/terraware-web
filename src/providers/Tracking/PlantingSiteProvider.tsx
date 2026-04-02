@@ -1,9 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
 
-import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
-import { useListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
-
-import { useOrganization } from '../hooks';
 import { PlantingSiteContext, PlantingSiteData } from './PlantingSiteContext';
 
 export type Props = {
@@ -11,27 +7,12 @@ export type Props = {
 };
 
 const PlantingSiteProvider = ({ children }: Props) => {
-  const { isAcceleratorRoute } = useAcceleratorConsole();
-  const { selectedOrganization } = useOrganization();
-
   const [acceleratorOrganizationId, setAcceleratorOrganizationId] = useState<number>();
   const [selectedPlantingSiteId, setSelectedPlantingSiteId] = useState<number>();
 
-  const orgId = isAcceleratorRoute ? acceleratorOrganizationId : selectedOrganization?.id;
-
-  const plantingSitesQuery = useListPlantingSitesQuery(
-    { organizationId: orgId!, full: false, includeZones: false },
-    { skip: !orgId }
-  );
   const setSelectedPlantingSite = useCallback((plantingSiteId?: number) => {
     setSelectedPlantingSiteId((prev) => (prev !== plantingSiteId ? plantingSiteId : prev));
   }, []);
-
-  const { refetch: refetchSites } = plantingSitesQuery;
-
-  const reload = useCallback(() => {
-    void refetchSites();
-  }, [refetchSites]);
 
   const value = useMemo(
     (): PlantingSiteData => ({
@@ -39,9 +20,8 @@ const PlantingSiteProvider = ({ children }: Props) => {
       selectedPlantingSiteId,
       setAcceleratorOrganizationId,
       setSelectedPlantingSite,
-      reload,
     }),
-    [acceleratorOrganizationId, selectedPlantingSiteId, setAcceleratorOrganizationId, setSelectedPlantingSite, reload]
+    [acceleratorOrganizationId, selectedPlantingSiteId, setAcceleratorOrganizationId, setSelectedPlantingSite]
   );
 
   return <PlantingSiteContext.Provider value={value}>{children}</PlantingSiteContext.Provider>;
