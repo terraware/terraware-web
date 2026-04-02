@@ -42,6 +42,7 @@ export type PlantsPrimaryPageViewProps = {
   latestObservationId?: number;
   geometryChangedDate?: string;
   latestObservationDate?: string;
+  organizationId?: number;
   projectId?: number;
   onSelectProjectId?: (projectId: number) => void;
   allowAllAsSiteSelection?: boolean;
@@ -59,6 +60,7 @@ export default function PlantsPrimaryPageView({
   latestObservationId,
   geometryChangedDate,
   latestObservationDate,
+  organizationId,
   projectId,
   onSelectProjectId,
   newHeader,
@@ -75,7 +77,7 @@ export default function PlantsPrimaryPageView({
     skip: !selectedOrganization,
   });
   const projects = projectsData?.projects;
-  const { plantingSitesWithAllSitesOption, isLoading, isSuccess } = useOrganizationPlantingSites();
+  const { plantingSitesWithAllSitesOption, isLoading, isSuccess } = useOrganizationPlantingSites({ organizationId });
 
   const [delayedIsPlantingSiteSet, setDelayedIsPlantingSiteSet] = useState(false);
 

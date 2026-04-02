@@ -51,9 +51,13 @@ export default function PlantsDashboardView({
   );
 
   const { acceleratorOrganizationId, setAcceleratorOrganizationId } = useSpeciesData();
-  const { plantingSitesWithAllSitesOption } = useOrganizationPlantingSites();
+  const { plantingSitesWithAllSitesOption } = useOrganizationPlantingSites({
+    organizationId: isAcceleratorRoute ? acceleratorOrganizationId : undefined,
+  });
   const { plantingSite } = usePlantingSite(selectedPlantingSiteId);
-  const { latestObservationResult } = useObservationResults({ plantingSiteId: selectedPlantingSiteId });
+  const { latestObservationResult } = useObservationResults({
+    plantingSiteId: selectedPlantingSiteId && selectedPlantingSiteId !== -1 ? selectedPlantingSiteId : undefined,
+  });
 
   const plantingSiteId = plantingSite?.id;
   const observationSummariesQuery = useListObservationSummariesQuery(
@@ -434,12 +438,17 @@ export default function PlantsDashboardView({
               gap: theme.spacing(3),
             }}
           >
-            {(organizationId || selectedOrganization?.id) && <MultiplePlantingSiteMap projectId={projectId!} />}
+            {(organizationId || selectedOrganization?.id) && (
+              <MultiplePlantingSiteMap
+                organizationId={isAcceleratorRoute ? acceleratorOrganizationId : undefined}
+                projectId={projectId!}
+              />
+            )}
           </Box>
         </Grid>
       </>
     );
-  }, [theme, organizationId, selectedOrganization?.id, projectId]);
+  }, [theme, organizationId, selectedOrganization?.id, projectId, isAcceleratorRoute, acceleratorOrganizationId]);
 
   return (
     <PlantsPrimaryPage

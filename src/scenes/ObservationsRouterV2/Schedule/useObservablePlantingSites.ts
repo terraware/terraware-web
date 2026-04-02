@@ -10,7 +10,7 @@ const useObservablePlantingSites = () => {
   const [listObservations, listObservationsResponse] = useLazyListObservationsQuery();
   const [listSitesReportedPlants, listSitesReportedPlantsResponse] = useLazyListPlantingSiteReportedPlantsQuery();
 
-  const { plantingSites } = useOrganizationPlantingSites(true);
+  const { plantingSites } = useOrganizationPlantingSites({ full: true });
   const allObservations = useMemo(
     () => listObservationsResponse.data?.observations ?? [],
     [listObservationsResponse.data?.observations]

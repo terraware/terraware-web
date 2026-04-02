@@ -3,10 +3,18 @@ import { useCallback, useEffect, useMemo } from 'react';
 import { useLocalization, useOrganization } from 'src/providers';
 import { PlantingSitePayload, useLazyListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
 
-const useOrganizationPlantingSites = (full?: boolean) => {
+type UseOrganizationPlantingSitesProps = {
+  full?: boolean;
+  organizationId?: number;
+};
+
+const useOrganizationPlantingSites = (props?: UseOrganizationPlantingSitesProps) => {
+  const { full, organizationId: organizationIdProp } = props ?? {};
   const { activeLocale, strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const [listPlantingSites, listPlantingSitesResponse] = useLazyListPlantingSitesQuery();
+
+  const orgId = organizationIdProp ?? selectedOrganization?.id;
 
   const plantingSites = useMemo(
     () =>
@@ -18,14 +26,11 @@ const useOrganizationPlantingSites = (full?: boolean) => {
 
   const reload = useCallback(
     (preferCacheValue?: boolean) => {
-      if (selectedOrganization) {
-        void listPlantingSites(
-          { organizationId: selectedOrganization.id, full, includeZones: false },
-          preferCacheValue
-        );
+      if (orgId) {
+        void listPlantingSites({ organizationId: orgId, full, includeZones: false }, preferCacheValue);
       }
     },
-    [full, listPlantingSites, selectedOrganization]
+    [full, listPlantingSites, orgId]
   );
 
   useEffect(() => {
@@ -33,18 +38,18 @@ const useOrganizationPlantingSites = (full?: boolean) => {
   }, [reload]);
 
   const plantingSitesWithAllSitesOption = useMemo(() => {
-    if (selectedOrganization) {
+    if (orgId) {
       const allOption: PlantingSitePayload = {
         adHocPlots: [],
         id: -1,
         name: strings.ALL_PLANTING_SITES,
-        organizationId: selectedOrganization.id,
+        organizationId: orgId,
         plantingSeasons: [],
       };
       return [allOption, ...plantingSites];
     }
     return plantingSites;
-  }, [plantingSites, selectedOrganization, strings.ALL_PLANTING_SITES]);
+  }, [orgId, plantingSites, strings.ALL_PLANTING_SITES]);
 
   return {
     isLoading: listPlantingSitesResponse.isFetching,

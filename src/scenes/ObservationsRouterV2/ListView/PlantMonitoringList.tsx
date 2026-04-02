@@ -135,7 +135,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
   const assignedTableState = useTableState(ASSIGNED_STORAGE_KEY, { persistFilters: true });
   const adHocTableState = useTableState(ADHOC_STORAGE_KEY, { persistFilters: true });
 
-  const { plantingSites } = useOrganizationPlantingSites(true);
+  const { plantingSites } = useOrganizationPlantingSites({ full: true });
   const [listObservationResults, listObservationsResultsResponse] = useLazyListObservationResultsQuery();
   const [listAdHocObservationResults, listAdHocObservationResultsResponse] = useLazyListAdHocObservationResultsQuery();
   const [getT0SiteDataSet, getT0SiteDataSetResponse] = useLazyGetAllT0SiteDataSetQuery();

@@ -9,7 +9,7 @@ import NurseryWithdrawalsDetailsView from 'src/scenes/NurseryRouter/NurseryWithd
 
 const NurseryRouter = () => {
   const { species } = useSpeciesData();
-  const { plantingSites } = useOrganizationPlantingSites(true);
+  const { plantingSites } = useOrganizationPlantingSites({ full: true });
 
   const stratumNames = useMemo(() => {
     const strata: Record<number, string> = {};
