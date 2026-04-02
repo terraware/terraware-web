@@ -7,7 +7,6 @@ export type Props = {
 };
 
 const PlantingSiteProvider = ({ children }: Props) => {
-  const [acceleratorOrganizationId, setAcceleratorOrganizationId] = useState<number>();
   const [selectedPlantingSiteId, setSelectedPlantingSiteId] = useState<number>();
 
   const setSelectedPlantingSite = useCallback((plantingSiteId?: number) => {
@@ -16,12 +15,10 @@ const PlantingSiteProvider = ({ children }: Props) => {
 
   const value = useMemo(
     (): PlantingSiteData => ({
-      acceleratorOrganizationId,
       selectedPlantingSiteId,
-      setAcceleratorOrganizationId,
       setSelectedPlantingSite,
     }),
-    [acceleratorOrganizationId, selectedPlantingSiteId, setAcceleratorOrganizationId, setSelectedPlantingSite]
+    [selectedPlantingSiteId, setSelectedPlantingSite]
   );
 
   return <PlantingSiteContext.Provider value={value}>{children}</PlantingSiteContext.Provider>;

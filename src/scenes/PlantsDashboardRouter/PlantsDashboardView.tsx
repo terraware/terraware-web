@@ -14,6 +14,7 @@ import useObservationResults from 'src/hooks/useObservationResults';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import usePlantingSite from 'src/hooks/usePlantingSite';
 import { useOrganization } from 'src/providers';
+import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { useListObservationSummariesQuery } from 'src/queries/generated/observations';
 import SimplePlantingSiteMap from 'src/scenes/PlantsDashboardRouter/components/SimplePlantingSiteMap';
@@ -43,8 +44,8 @@ export default function PlantsDashboardView({
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const [projectId, setProjectId] = useState<number | undefined>(acceleratorProjectId);
 
-  const { acceleratorOrganizationId, selectedPlantingSiteId, setAcceleratorOrganizationId, setSelectedPlantingSite } =
-    usePlantingSiteData();
+  const { selectedPlantingSiteId, setSelectedPlantingSite } = usePlantingSiteData();
+  const { acceleratorOrganizationId, setAcceleratorOrganizationId } = useSpeciesData();
   const { plantingSitesWithAllSitesOption } = useOrganizationPlantingSites();
   const { plantingSite } = usePlantingSite(selectedPlantingSiteId);
   const { latestObservationResult } = useObservationResults({ plantingSiteId: selectedPlantingSiteId });

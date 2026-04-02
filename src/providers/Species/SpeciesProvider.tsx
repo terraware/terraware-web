@@ -7,7 +7,6 @@ import { selectSpeciesInUseListRequest, selectSpeciesListRequest } from 'src/red
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { Species } from 'src/types/Species';
 
-import { usePlantingSiteData } from '../Tracking/PlantingSiteContext';
 import { SpeciesContext, SpeciesData } from './SpeciesContext';
 
 export type Props = {
@@ -27,7 +26,7 @@ const SpeciesProvider = ({ children }: Props) => {
 
   const [species, setSpecies] = useState<Species[]>([]);
   const [inUseSpecies, setInUseSpecies] = useState<Species[]>([]);
-  const { acceleratorOrganizationId } = usePlantingSiteData();
+  const [acceleratorOrganizationId, setAcceleratorOrganizationId] = useState<number>();
 
   const reload = useCallback(() => {
     const orgId = (isAcceleratorRoute ? acceleratorOrganizationId : undefined) ?? selectedOrganization?.id;
@@ -65,11 +64,13 @@ const SpeciesProvider = ({ children }: Props) => {
 
   const speciesData = useMemo(
     (): SpeciesData => ({
+      acceleratorOrganizationId,
+      setAcceleratorOrganizationId,
       species,
       inUseSpecies,
       reload,
     }),
-    [species, inUseSpecies, reload]
+    [acceleratorOrganizationId, species, inUseSpecies, reload]
   );
 
   return <SpeciesContext.Provider value={speciesData}>{children}</SpeciesContext.Provider>;
