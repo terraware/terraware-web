@@ -205,9 +205,9 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
     return strings.formatString(
       strings.BATCH_WITHDRAW_SUCCESS,
       numBatches,
-      numBatches === 1 ? strings.BATCHES_SINGULAR : (strings.BATCHES_PLURAL as any),
+      numBatches === 1 ? strings.BATCHES_SINGULAR : strings.BATCHES_PLURAL,
       totalWithdrawn,
-      totalWithdrawn === 1 ? strings.SEEDLINGS_SINGULAR : (strings.SEEDLINGS_PLURAL as any)
+      totalWithdrawn === 1 ? strings.SEEDLINGS_SINGULAR : strings.SEEDLINGS_PLURAL
     ) as string;
   };
 
