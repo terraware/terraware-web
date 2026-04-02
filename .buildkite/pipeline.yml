@@ -44,14 +44,6 @@ steps:
             - file
             - branch
           force: true
-      - cache#v1.10.0:
-          <<: *cache-common-args
-          path: '.cache/ms-playwright'
-          manifest: 'yarn.lock'
-          save:
-            - file
-            - branch
-          force: true
       - artifacts#v1.9.4:
           upload: 'dist'
           compressed: 'dist.tgz'
@@ -108,9 +100,6 @@ steps:
           <<: *cache-node-modules-args
           save: 'pipeline'
           force: true
-      - cache#v1.10.0:
-          <<: *promote-cache
-          path: '.cache/ms-playwright'
       - cache#v1.10.0:
           <<: *promote-cache
           path: '.buildx-cache'
