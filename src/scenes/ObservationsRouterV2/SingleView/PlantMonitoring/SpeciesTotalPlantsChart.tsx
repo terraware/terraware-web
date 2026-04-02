@@ -29,6 +29,10 @@ export default function SpeciesTotalPlantsChart({
   const totals = useMemo((): Data => {
     const data: Data = { labels: [], values: [] };
 
+    if (isNotCompleted) {
+      return data;
+    }
+
     species?.forEach((speciesData) => {
       const { speciesName, speciesScientificName, totalLive } = speciesData;
       const label: string = speciesScientificName || speciesName || '';
@@ -38,7 +42,7 @@ export default function SpeciesTotalPlantsChart({
     });
 
     return data;
-  }, [species]);
+  }, [isNotCompleted, species]);
 
   const chartData = useMemo(
     () => ({

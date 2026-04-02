@@ -44,11 +44,13 @@ export default function SpeciesSurvivalRateChart({
       }
     });
 
+    const hideData = isNotCompleted || isTemporary;
+
     return {
-      labels: data.labels,
+      labels: hideData ? [] : data.labels,
       datasets: [
         {
-          values: !isNotCompleted && !isTemporary ? data.values : [],
+          values: hideData ? [] : data.values,
         },
       ],
     };
