@@ -31,7 +31,7 @@ const ObservationListView = (): JSX.Element => {
   const { isMobile } = useDeviceInfo();
 
   const observableSites = useObservablePlantingSites();
-  const { plantingSites } = useOrganizationPlantingSites(false);
+  const { plantingSites } = useOrganizationPlantingSites();
   const { selectPlantingSite, selectedPlantingSiteId } = useStickyPlantingSiteId('observations-list', -1);
 
   const [countObservations, countObservationsResult] = useLazyCountObservationsQuery();

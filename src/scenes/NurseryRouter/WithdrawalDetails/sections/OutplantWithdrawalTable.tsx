@@ -39,7 +39,7 @@ export default function OutplantWithdrawalTable({
   withdrawal,
 }: OutplantWithdrawalTableProps): JSX.Element {
   const numberFormatter = useNumberFormatter();
-  const { plantingSites } = useOrganizationPlantingSites(true);
+  const { plantingSites } = useOrganizationPlantingSites({ full: true });
 
   type BatchesRow = {
     name?: string;

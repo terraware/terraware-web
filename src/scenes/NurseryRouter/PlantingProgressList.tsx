@@ -41,7 +41,7 @@ export default function PlantingProgressList(): JSX.Element {
   const { selectedOrganization } = useOrganization();
 
   const projects = useAppSelector(selectProjects);
-  const { plantingSites } = useOrganizationPlantingSites(true);
+  const { plantingSites } = useOrganizationPlantingSites({ full: true });
   const [listReportedPlants, listReportedPlantsResponse] = useLazyListPlantingSiteReportedPlantsQuery();
   const [updateSubstratum, { isLoading }] = useUpdateSubstrataMutation();
 

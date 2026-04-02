@@ -177,6 +177,7 @@ export default function PlantsPrimaryPage({
       latestObservationId={latestObservationId}
       geometryChangedDate={geometryChangedDate}
       latestObservationDate={latestObservationDate}
+      organizationId={organizationId}
       projectId={projectId}
       onSelectProjectId={onSelectProjectId}
       allowAllAsSiteSelection={allowAllAsSiteSelection}

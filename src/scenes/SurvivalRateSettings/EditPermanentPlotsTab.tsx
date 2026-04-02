@@ -4,8 +4,8 @@ import { Box, useTheme } from '@mui/material';
 
 import PageForm from 'src/components/common/PageForm';
 import { APP_PATHS } from 'src/constants';
+import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { useAssignT0SiteDataMutation } from 'src/queries/generated/t0';
 import { PlotsWithObservationsSearchResult } from 'src/redux/features/tracking/trackingThunks';
 import strings from 'src/strings';
@@ -32,7 +32,7 @@ const EditPermanentPlotsTab = ({
   const snackbar = useSnackbar();
   const [showSpeciesDensityWarningMessage, setShowSpeciesDensityWarningMessage] = useState(false);
   const navigate = useSyncNavigate();
-  const { reload: reloadPlantingSiteData } = usePlantingSiteData();
+  const { reload: reloadPlantingSiteData } = useOrganizationPlantingSites();
   const [updateT0, updateT0Result] = useAssignT0SiteDataMutation();
   const theme = useTheme();
 

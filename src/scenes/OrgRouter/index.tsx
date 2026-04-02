@@ -12,7 +12,6 @@ import ApplicationProvider from 'src/providers/Application';
 import ParticipantProvider from 'src/providers/Participant/ParticipantProvider';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import SpeciesProvider from 'src/providers/Species/SpeciesProvider';
-import PlantingSiteProvider from 'src/providers/Tracking/PlantingSiteProvider';
 import { useLazyCountObservationsQuery } from 'src/queries/search/observations';
 import { useLazyCountPlantingSitesQuery } from 'src/queries/search/plantingSites';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
@@ -255,9 +254,7 @@ const OrgRouterWithProviders = (props: OrgRouterProps) => {
     <SpeciesProvider>
       <ApplicationProvider>
         <ParticipantProvider>
-          <PlantingSiteProvider>
-            <OrgRouter {...props} />
-          </PlantingSiteProvider>
+          <OrgRouter {...props} />
         </ParticipantProvider>
       </ApplicationProvider>
     </SpeciesProvider>

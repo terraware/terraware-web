@@ -9,13 +9,17 @@ import strings from 'src/strings';
 import PlantDashboardMap from './PlantDashboardMap';
 
 type MultiplePlantingSiteMapProps = {
+  organizationId?: number;
   projectId: number;
   hideAllControls?: boolean;
   style?: CSSProperties;
 };
 
-export default function MultiplePlantingSiteMap({ projectId }: MultiplePlantingSiteMapProps): JSX.Element {
-  const { plantingSitesWithAllSitesOption } = useOrganizationPlantingSites();
+export default function MultiplePlantingSiteMap({
+  organizationId,
+  projectId,
+}: MultiplePlantingSiteMapProps): JSX.Element {
+  const { plantingSitesWithAllSitesOption } = useOrganizationPlantingSites({ organizationId });
   const theme = useTheme();
 
   const plantingSites = useMemo(

@@ -14,7 +14,6 @@ import useObservationResults from 'src/hooks/useObservationResults';
 import usePlantingSite from 'src/hooks/usePlantingSite';
 import usePlantingSiteReportedPlants from 'src/hooks/usePlantingSiteReportedPlants';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
-import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { selectPlantingSiteObservationsRequest } from 'src/redux/features/observations/observationsSelectors';
 import { requestPlantingSiteObservations } from 'src/redux/features/observations/observationsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -57,10 +56,10 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
   const { isMobile } = useDeviceInfo();
   const dispatch = useAppDispatch();
 
-  const { selectedPlantingSiteId, setSelectedPlantingSite } = usePlantingSiteData();
-  const { plantingSiteReportedPlants } = usePlantingSiteReportedPlants(selectedPlantingSiteId);
-  const { latestObservationResult } = useObservationResults({ plantingSiteId: selectedPlantingSiteId });
-  const { plantingSite } = usePlantingSite(selectedPlantingSiteId);
+  const plantingSiteId = location.id;
+  const { plantingSiteReportedPlants } = usePlantingSiteReportedPlants(plantingSiteId);
+  const { latestObservationResult } = useObservationResults({ plantingSiteId });
+  const { plantingSite } = usePlantingSite(plantingSiteId);
 
   const [observationsRequestId, setObservationsRequestId] = useState('');
   const observationsResponse = useAppSelector(selectPlantingSiteObservationsRequest(observationsRequestId));
@@ -87,12 +86,6 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
         observation.state === 'Upcoming' && observation.isAdHoc === false && observation.type === 'Monitoring'
     );
   }, [observationsResponse]);
-
-  useEffect(() => {
-    if (!plantingSite) {
-      setSelectedPlantingSite(location.id);
-    }
-  }, [location, plantingSite, setSelectedPlantingSite]);
 
   const { species: allSpecies } = useSpeciesData();
   const [plantingSiteSpecies, setPlantingSiteSpecies] = useState<PlantingSiteSpecies[]>([]);

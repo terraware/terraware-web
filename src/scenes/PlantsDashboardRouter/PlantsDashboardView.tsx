@@ -1,4 +1,5 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
+import { useParams } from 'react-router';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/utils';
@@ -14,7 +15,7 @@ import useObservationResults from 'src/hooks/useObservationResults';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import usePlantingSite from 'src/hooks/usePlantingSite';
 import { useOrganization } from 'src/providers';
-import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
+import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { useListObservationSummariesQuery } from 'src/queries/generated/observations';
 import SimplePlantingSiteMap from 'src/scenes/PlantsDashboardRouter/components/SimplePlantingSiteMap';
 import strings from 'src/strings';
@@ -43,11 +44,20 @@ export default function PlantsDashboardView({
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const [projectId, setProjectId] = useState<number | undefined>(acceleratorProjectId);
 
-  const { acceleratorOrganizationId, selectedPlantingSiteId, setAcceleratorOrganizationId, setSelectedPlantingSite } =
-    usePlantingSiteData();
-  const { plantingSitesWithAllSitesOption } = useOrganizationPlantingSites();
+  const { plantingSiteId: plantingSiteIdParam } = useParams<{ plantingSiteId: string }>();
+  const initialPlantingSiteId = plantingSiteIdParam ? Number(plantingSiteIdParam) : undefined;
+  const [selectedPlantingSiteId, setSelectedPlantingSiteId] = useState<number | undefined>(
+    initialPlantingSiteId && !isNaN(initialPlantingSiteId) ? initialPlantingSiteId : undefined
+  );
+
+  const { acceleratorOrganizationId, setAcceleratorOrganizationId } = useSpeciesData();
+  const { plantingSitesWithAllSitesOption } = useOrganizationPlantingSites({
+    organizationId: isAcceleratorRoute ? acceleratorOrganizationId : undefined,
+  });
   const { plantingSite } = usePlantingSite(selectedPlantingSiteId);
-  const { latestObservationResult } = useObservationResults({ plantingSiteId: selectedPlantingSiteId });
+  const { latestObservationResult } = useObservationResults({
+    plantingSiteId: selectedPlantingSiteId && selectedPlantingSiteId !== -1 ? selectedPlantingSiteId : undefined,
+  });
 
   const plantingSiteId = plantingSite?.id;
   const observationSummariesQuery = useListObservationSummariesQuery(
@@ -407,12 +417,9 @@ export default function PlantsDashboardView({
         ) as string);
   }, [plantingSite, observationSummaries, observationHectares, renderLatestObservationLink, summariesHectares]);
 
-  const onSelect = useCallback(
-    (nextPlantingSiteId: number) => {
-      setSelectedPlantingSite(nextPlantingSiteId);
-    },
-    [setSelectedPlantingSite]
-  );
+  const onSelect = useCallback((nextPlantingSiteId: number) => {
+    setSelectedPlantingSiteId(nextPlantingSiteId);
+  }, []);
 
   const onSelectProject = useCallback((newProjectId: number) => {
     setProjectId(newProjectId === -1 ? undefined : newProjectId);
@@ -431,12 +438,17 @@ export default function PlantsDashboardView({
               gap: theme.spacing(3),
             }}
           >
-            {(organizationId || selectedOrganization?.id) && <MultiplePlantingSiteMap projectId={projectId!} />}
+            {(organizationId || selectedOrganization?.id) && (
+              <MultiplePlantingSiteMap
+                organizationId={isAcceleratorRoute ? acceleratorOrganizationId : undefined}
+                projectId={projectId!}
+              />
+            )}
           </Box>
         </Grid>
       </>
     );
-  }, [theme, organizationId, selectedOrganization?.id, projectId]);
+  }, [theme, organizationId, selectedOrganization?.id, projectId, isAcceleratorRoute, acceleratorOrganizationId]);
 
   return (
     <PlantsPrimaryPage
