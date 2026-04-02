@@ -163,12 +163,7 @@ const SiteDetails = (): JSX.Element => {
               <IconTooltip title={strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP} />
             </Box>
             <Box height='245px'>
-              <SpeciesTotalPlantsChart
-                chartId='observationSpeciesTotalChart'
-                minHeight='245px'
-                species={species}
-                isNotCompleted={!results?.completedTime}
-              />
+              <SpeciesTotalPlantsChart chartId='observationSpeciesTotalChart' minHeight='245px' species={species} />
             </Box>
           </Box>
           <Box flex={1} minWidth='500px'>
@@ -183,7 +178,6 @@ const SiteDetails = (): JSX.Element => {
                 chartId='observationSurvivalRateChart'
                 species={hasObservedPermanentPlots ? species : []}
                 minHeight='245px'
-                isNotCompleted={!results?.completedTime || !hasObservedPermanentPlots}
               />
             </Box>
           </Box>

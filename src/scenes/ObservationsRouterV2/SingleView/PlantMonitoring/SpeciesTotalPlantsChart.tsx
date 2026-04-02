@@ -10,14 +10,12 @@ export type SpeciesTotalPlantsChartProps = {
   chartId: string;
   minHeight?: string;
   species?: ObservationSpeciesResults[];
-  isNotCompleted?: boolean;
 };
 
 export default function SpeciesTotalPlantsChart({
   chartId,
   minHeight,
   species,
-  isNotCompleted,
 }: SpeciesTotalPlantsChartProps): JSX.Element {
   type Data = {
     labels: string[];
@@ -29,10 +27,6 @@ export default function SpeciesTotalPlantsChart({
   const totals = useMemo((): Data => {
     const data: Data = { labels: [], values: [] };
 
-    if (isNotCompleted) {
-      return data;
-    }
-
     species?.forEach((speciesData) => {
       const { speciesName, speciesScientificName, totalLive } = speciesData;
       const label: string = speciesScientificName || speciesName || '';
@@ -42,23 +36,25 @@ export default function SpeciesTotalPlantsChart({
     });
 
     return data;
-  }, [isNotCompleted, species]);
+  }, [species]);
+
+  const hasData = totals.values.some((v) => v > 0);
 
   const chartData = useMemo(
     () => ({
-      labels: totals.labels,
+      labels: hasData ? totals.labels : [],
       datasets: [
         {
-          values: totals.values,
+          values: hasData ? totals.values : [],
         },
       ],
     }),
-    [totals]
+    [hasData, totals]
   );
 
   return (
     <Box position='relative' height='100%'>
-      {isNotCompleted && (
+      {!hasData && (
         <Box
           sx={{
             backgroundColor: theme.palette.TwClrBgSecondary,
