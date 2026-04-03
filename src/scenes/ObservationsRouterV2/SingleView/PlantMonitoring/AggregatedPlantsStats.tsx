@@ -92,7 +92,6 @@ export default function AggregatedPlantsStats({
               chartId={'observationSurvivalRateChart'}
               species={hasObservedPermanentPlots ? species : []}
               minHeight='170px'
-              isNotCompleted={!completedTime}
             />
           </ChartWrapper>
         </Grid>

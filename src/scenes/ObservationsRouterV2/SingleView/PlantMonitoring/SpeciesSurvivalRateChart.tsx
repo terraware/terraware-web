@@ -10,7 +10,6 @@ export type SpeciesSurvivalRateChartProps = {
   chartId: string;
   minHeight?: string;
   species?: ObservationSpeciesResults[];
-  isNotCompleted?: boolean;
   isTemporary?: boolean;
   isAdHoc?: boolean;
 };
@@ -19,7 +18,6 @@ export default function SpeciesSurvivalRateChart({
   chartId,
   minHeight,
   species,
-  isNotCompleted,
   isTemporary,
   isAdHoc,
 }: SpeciesSurvivalRateChartProps): JSX.Element {
@@ -44,19 +42,23 @@ export default function SpeciesSurvivalRateChart({
       }
     });
 
+    const hideData = isTemporary || data.values.length === 0;
+
     return {
-      labels: data.labels,
+      labels: hideData ? [] : data.labels,
       datasets: [
         {
-          values: !isNotCompleted && !isTemporary ? data.values : [],
+          values: hideData ? [] : data.values,
         },
       ],
     };
-  }, [species, isNotCompleted, isTemporary]);
+  }, [species, isTemporary]);
+
+  const hasData = chartData.datasets[0].values.length > 0;
 
   return (
     <Box position='relative' height='100%'>
-      {(isTemporary || isNotCompleted) && (
+      {(isTemporary || isAdHoc || !hasData) && (
         <Box
           sx={{
             backgroundColor: theme.palette.TwClrBgSecondary,
