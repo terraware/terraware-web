@@ -42,7 +42,7 @@ export default function SpeciesSurvivalRateChart({
       }
     });
 
-    const hideData = isTemporary || data.values.length === 0;
+    const hideData = isTemporary || !data.values.some((v) => v > 0);
 
     return {
       labels: hideData ? [] : data.labels,
@@ -54,7 +54,7 @@ export default function SpeciesSurvivalRateChart({
     };
   }, [species, isTemporary]);
 
-  const hasData = chartData.datasets[0].values.length > 0;
+  const hasData = chartData.datasets[0].values.some((v) => typeof v === 'number' && v > 0);
 
   return (
     <Box position='relative' height='100%'>
