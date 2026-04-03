@@ -21,22 +21,25 @@ const MapPlantDrawer = ({ monitoringPlotId, observationId, plant }: MapPlantDraw
   const { activeLocale, strings } = useLocalization();
 
   const { format } = useNumberFormatter();
-  const { data } = useGetObservationResultsQuery({ observationId, includePlants: true });
+  const { currentData: observationResultResponse } = useGetObservationResultsQuery({
+    observationId,
+    includePlants: true,
+  });
 
   const { species } = useSpeciesData();
 
-  const result = useMemo(() => {
-    return data?.observation;
-  }, [data?.observation]);
+  const observationResult = useMemo(() => {
+    return observationResultResponse?.observation;
+  }, [observationResultResponse?.observation]);
 
   const observationUrl = useMemo(() => {
-    if (result) {
-      return APP_PATHS.OBSERVATION_DETAILS_V2.replace(':observationId', `${result.observationId}`);
+    if (observationResult) {
+      return APP_PATHS.OBSERVATION_DETAILS_V2.replace(':observationId', `${observationResult.observationId}`);
     }
-  }, [result]);
+  }, [observationResult]);
 
-  const resultAdHocPlot = result?.adHocPlot;
-  const resultStrata = result?.strata;
+  const resultAdHocPlot = observationResult?.adHocPlot;
+  const resultStrata = observationResult?.strata;
 
   const monitoringPlot = useMemo(() => {
     const monitoringPlots =
@@ -88,7 +91,7 @@ const MapPlantDrawer = ({ monitoringPlotId, observationId, plant }: MapPlantDraw
   }, [plant.speciesId, plant.speciesName, species, strings.UNKNOWN]);
 
   const rows = useMemo((): MapDrawerTableRow[] => {
-    if (result) {
+    if (observationResult) {
       return [
         {
           key: strings.ACTIVITY_TYPE,
@@ -104,7 +107,7 @@ const MapPlantDrawer = ({ monitoringPlotId, observationId, plant }: MapPlantDraw
         },
         {
           key: strings.OBSERVATION_DATE,
-          value: result.completedTime ? getShortDate(result.completedTime, activeLocale) : strings.UNKNOWN,
+          value: getShortDate(observationResult.completedTime ?? observationResult.startDate, activeLocale),
           url: observationUrl,
         },
         {
@@ -127,7 +130,7 @@ const MapPlantDrawer = ({ monitoringPlotId, observationId, plant }: MapPlantDraw
     plant.gpsCoordinates.coordinates,
     plantSpecies,
     plantStatus,
-    result,
+    observationResult,
     strings,
   ]);
 
