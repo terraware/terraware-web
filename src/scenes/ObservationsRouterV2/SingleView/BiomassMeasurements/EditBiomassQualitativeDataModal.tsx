@@ -164,19 +164,15 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
     return record.biomassMeasurement.forestType === 'Mangrove';
   }, [record]);
 
-  const smallTreeCountValue = useMemo(() => {
-    const low = record.biomassMeasurement.smallTreeCountLow.toString();
-    const high = record.biomassMeasurement.smallTreeCountHigh.toString();
-
-    if (low === '0' && high === '0') {
-      return '0';
-    }
-    if (low === '1001' && high === '1001') {
-      return '+1000';
-    } else {
-      return `${low}-${high}`;
-    }
-  }, [record]);
+  const smallTreeCountValue = useMemo(
+    () =>
+      smallTreeCountOptions.find(
+        (option) =>
+          option.value[0] === record.biomassMeasurement.smallTreeCountLow &&
+          option.value[1] === record.biomassMeasurement.smallTreeCountHigh
+      )?.value,
+    [record, smallTreeCountOptions]
+  );
 
   const saveEditedData = useCallback(() => {
     void (async () => {
