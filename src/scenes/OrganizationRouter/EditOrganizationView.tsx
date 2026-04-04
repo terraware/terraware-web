@@ -133,7 +133,7 @@ export default function OrganizationView({ organization, reloadOrganizationData 
         <Box margin={theme.spacing(0, 3, 2, 3)}>
           <Box display='flex' flexDirection='column' justifyContent='space-between'>
             <Typography margin={0} fontSize='24px' fontWeight={600}>
-              {strings.ORGANIZATION}
+              {strings.EDIT_ORGANIZATION}
             </Typography>
             <PageSnackbar />
           </Box>
