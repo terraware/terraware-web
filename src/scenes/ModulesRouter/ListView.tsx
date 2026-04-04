@@ -67,7 +67,6 @@ export default function ListView(): JSX.Element {
       title={strings.ALL_MODULES}
       isLoading={!currentAcceleratorProject}
       contentStyle={{ paddingLeft: '24px' }}
-      titleStyle={{ marginBottom: 2 }}
     >
       <Box sx={{ paddingBottom: 2 }}>
         <ListViewHeader />

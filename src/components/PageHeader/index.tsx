@@ -50,7 +50,7 @@ export default function PageHeader({
         '&.MuiContainer-root': {
           paddingLeft: 0,
           paddingRight: 0,
-          paddingBottom: theme.spacing(4),
+          paddingBottom: theme.spacing(2),
         },
       }}
     >

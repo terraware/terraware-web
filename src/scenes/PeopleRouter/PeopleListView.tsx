@@ -409,7 +409,7 @@ export default function PeopleListView(): JSX.Element {
         </>
       )}
       <PageHeaderWrapper nextElement={contentRef.current}>
-        <Grid container paddingBottom={theme.spacing(4)} paddingLeft={isMobile ? 0 : theme.spacing(3)}>
+        <Grid container paddingBottom={theme.spacing(2)} paddingLeft={isMobile ? 0 : theme.spacing(3)}>
           <Grid item xs={8}>
             <h1
               style={{

@@ -64,7 +64,7 @@ export default function PlantingSiteView(): JSX.Element {
             flexGrow: plantingSite?.boundary ? 1 : 0,
             display: 'flex',
             flexDirection: 'column',
-            marginTop: theme.spacing(4),
+            marginTop: theme.spacing(2),
           }}
         >
           <PlantingSiteDetailsCard plantingSite={plantingSite} />

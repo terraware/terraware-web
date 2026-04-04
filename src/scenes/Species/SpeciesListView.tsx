@@ -552,7 +552,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              paddingBottom: theme.spacing(4),
+              paddingBottom: theme.spacing(2),
               paddingLeft: theme.spacing(3),
             }}
           >

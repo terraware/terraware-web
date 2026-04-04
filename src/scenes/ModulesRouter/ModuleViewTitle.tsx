@@ -16,7 +16,7 @@ const ModuleViewTitle = ({ module, projectId }: ModulePageTitleProps) => {
   const project = useAppSelector(selectProject(projectId));
 
   return (
-    <Box alignItems='center' display='flex' flexDirection='row' flexWrap='wrap' marginY='24px' width='100%'>
+    <Box alignItems='center' display='flex' flexDirection='row' flexWrap='wrap' marginTop='16px' width='100%'>
       <Typography fontSize={'24px'} lineHeight={'32px'} fontWeight={600} paddingRight='24px' whiteSpace='nowrap'>
         {project?.name ?? ''}
       </Typography>

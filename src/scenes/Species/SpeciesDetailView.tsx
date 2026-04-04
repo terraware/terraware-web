@@ -126,7 +126,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
             flexDirection: 'row',
             justifyContent: 'space-between',
             alignItems: 'center',
-            marginBottom: theme.spacing(4),
+            marginBottom: theme.spacing(2),
           }}
         >
           <Typography fontSize='20px' fontWeight={600}>

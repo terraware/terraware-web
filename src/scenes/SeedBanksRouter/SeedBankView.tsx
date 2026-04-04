@@ -180,7 +180,7 @@ export default function SeedBankView(): JSX.Element {
         onCancel={() => goToSeedBank(selectedSeedBank?.id)}
         onSave={() => void saveSeedBank()}
       >
-        <Box marginBottom={theme.spacing(4)} paddingLeft={theme.spacing(3)}>
+        <Box marginBottom={theme.spacing(2)} paddingLeft={theme.spacing(3)}>
           <Typography fontSize='24px' fontWeight={600}>
             {selectedSeedBank ? selectedSeedBank?.name : strings.ADD_SEED_BANK}
           </Typography>

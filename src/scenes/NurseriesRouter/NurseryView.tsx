@@ -181,7 +181,7 @@ export default function NurseryView(): JSX.Element {
         onCancel={() => goToNursery(selectedNursery?.id)}
         onSave={() => void saveNursery()}
       >
-        <Box marginBottom={theme.spacing(4)} paddingLeft={theme.spacing(3)}>
+        <Box marginBottom={theme.spacing(2)} paddingLeft={theme.spacing(3)}>
           <Typography fontSize='24px' fontWeight={600}>
             {selectedNursery ? selectedNursery.name : strings.ADD_NURSERY}
           </Typography>

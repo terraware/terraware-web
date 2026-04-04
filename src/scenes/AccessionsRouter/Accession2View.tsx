@@ -504,7 +504,7 @@ export default function Accession2View(): JSX.Element {
               }}
             />
           </Box>
-          <Box padding={isMobile ? themeObj.spacing(3, 0, 4, 0) : themeObj.spacing(3, 3, 4, 3)}>
+          <Box padding={isMobile ? themeObj.spacing(3, 0, 4, 0) : themeObj.spacing(3, 3, 2, 3)}>
             <Typography color={themeObj.palette.TwClrTxt} fontSize='14px'>
               {accession?.accessionNumber}
             </Typography>

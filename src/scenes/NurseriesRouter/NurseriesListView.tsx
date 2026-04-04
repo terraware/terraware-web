@@ -87,7 +87,7 @@ export default function NurseriesListView({ organization }: NurseriesListProps):
   return (
     <TfMain>
       <PageHeaderWrapper nextElement={contentRef.current}>
-        <Grid container paddingBottom={theme.spacing(4)} paddingLeft={isMobile ? 0 : theme.spacing(3)}>
+        <Grid container paddingBottom={theme.spacing(2)} paddingLeft={isMobile ? 0 : theme.spacing(3)}>
           <Grid item xs={9} alignItems='center'>
             <Typography fontSize='24px' fontWeight={600}>
               {strings.NURSERIES}

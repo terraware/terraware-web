@@ -87,7 +87,7 @@ export default function SpeciesAddView({ reloadData }: SpeciesAddViewProps): JSX
             width: '100%',
             paddingLeft: theme.spacing(isMobile ? 0 : 4),
             paddingRight: theme.spacing(isMobile ? 0 : 4),
-            paddingTop: theme.spacing(5),
+            paddingTop: theme.spacing(2),
           }}
         >
           <Grid

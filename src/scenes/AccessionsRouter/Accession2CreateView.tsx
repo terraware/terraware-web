@@ -169,7 +169,7 @@ export default function CreateAccession(): JSX.Element | null {
         onSave={() => void saveAccession()}
         saveButtonText={strings.SAVE}
       >
-        <Typography variant='h2' sx={{ fontSize: '24px', fontWeight: 600, marginBottom: theme.spacing(4) }}>
+        <Typography variant='h2' sx={{ fontSize: '24px', fontWeight: 600, marginBottom: theme.spacing(2) }}>
           {strings.ADD_AN_ACCESSION}
         </Typography>
         <Container

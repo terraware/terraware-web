@@ -66,7 +66,7 @@ export default function InventoryForSpeciesView(props: InventoryForSpeciesViewPr
           <Typography
             sx={{
               marginTop: theme.spacing(3),
-              marginBottom: theme.spacing(4),
+              marginBottom: theme.spacing(2),
               paddingLeft: theme.spacing(3),
               fontSize: '20px',
               fontWeight: 600,

@@ -73,8 +73,8 @@ export default function OrganizationView(): JSX.Element {
 
   return (
     <TfMain>
-      <Box margin={theme.spacing(0, 3, 4, 3)}>
-        <Box display='flex' justifyContent='space-between' alignItems='center' marginBottom={theme.spacing(1)}>
+      <Box margin={theme.spacing(0, 3, 2, 3)}>
+        <Box display='flex' justifyContent='space-between' alignItems='center'>
           <Typography margin={0} fontSize='24px' fontWeight={600}>
             {strings.ORGANIZATION}
           </Typography>
