@@ -17,9 +17,6 @@ import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useProjects } from 'src/hooks/useProjects';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
-import { requestSyncActivityMedia } from 'src/redux/features/activities/activitiesAsyncThunks';
-import { selectSyncActivityMedia } from 'src/redux/features/activities/activitiesSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import {
   useAdminCreateActivityMutation,
   useAdminUpdateActivityMutation,
@@ -29,6 +26,9 @@ import {
   useLazyGetActivityQuery,
   useUpdateActivityMutation,
 } from 'src/queries/generated/activities';
+import { requestSyncActivityMedia } from 'src/redux/features/activities/activitiesAsyncThunks';
+import { selectSyncActivityMedia } from 'src/redux/features/activities/activitiesSelectors';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import {
   ACTIVITY_STATUSES,
   ACTIVITY_TYPES,
