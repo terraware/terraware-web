@@ -21,9 +21,12 @@ echo "--- :git: Generate unreleased commits log"
 git fetch --tags --depth=1
 LAST_TAG=$(git tag --list --sort=creatordate 'v[0-9]*' | tail -n1)
 
-.buildkite/scripts/lib/fetch-tag.sh "$LAST_TAG"
-
-git log "${LAST_TAG}..HEAD" --oneline > docs/unreleased.log
+if [[ -n "$LAST_TAG" ]]; then
+    .buildkite/scripts/lib/fetch-tag.sh "$LAST_TAG"
+    git log "${LAST_TAG}..HEAD" --oneline > docs/unreleased.log
+else
+    git log HEAD --oneline > docs/unreleased.log
+fi
 
 # This section is a port of GHA's github-pages-deploy-action.
 
