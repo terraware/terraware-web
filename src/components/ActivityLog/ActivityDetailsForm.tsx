@@ -111,8 +111,12 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
   }, [activityId, fetchActivity, fetchAdminActivity, isAcceleratorRoute]);
 
   const activity = useMemo<TypedActivity | undefined>(() => {
-    if (adminGetData?.activity) return { type: 'admin', payload: adminGetData.activity };
-    if (getData?.activity) return { type: 'base', payload: getData.activity };
+    if (adminGetData?.activity) {
+      return { type: 'admin', payload: adminGetData.activity };
+    }
+    if (getData?.activity) {
+      return { type: 'base', payload: getData.activity };
+    }
     return undefined;
   }, [adminGetData, getData]);
 
@@ -517,7 +521,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
       busy={busy}
       cancelID='cancelSaveActivity'
       onCancel={navToActivityLog}
-      onSave={saveActivity}
+      onSave={() => void saveActivity()}
       saveButtonText={strings.SAVE}
       saveID='saveActivity'
       style={{ paddingBottom: '4px' }}
@@ -525,7 +529,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
       <DeleteActivityModal
         open={deleteActivityModalOpen}
         onClose={handleCloseDeleteActivityModal}
-        onSubmit={dispatchDeleteActivityRequest}
+        onSubmit={() => void dispatchDeleteActivityRequest()}
       />
       <Box
         alignItems={isMobile ? 'flex-start' : 'center'}
