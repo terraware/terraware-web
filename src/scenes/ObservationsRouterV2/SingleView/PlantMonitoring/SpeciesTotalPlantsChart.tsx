@@ -38,7 +38,7 @@ export default function SpeciesTotalPlantsChart({
     return data;
   }, [species]);
 
-  const hasData = totals.values.some((v) => v > 0);
+  const hasData = useMemo(() => totals.values.some((v) => v > 0), [totals.values]);
 
   const chartData = useMemo(
     () => ({
