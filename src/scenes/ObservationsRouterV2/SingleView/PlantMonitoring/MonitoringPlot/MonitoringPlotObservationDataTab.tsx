@@ -58,7 +58,10 @@ const MonitoringPlotObservationDataTab = () => {
     [monitoringPlot?.species]
   );
 
-  const monitoringPlotSpecies = useObservationSpecies(monitoringPlot?.species ?? [], monitoringPlot?.unknownSpecies);
+  const monitoringPlotSpecies = useObservationSpecies(
+    monitoringPlot?.species ?? [],
+    monitoringPlot?.unknownSpecies
+  ).filter((s) => (s.totalLive ?? 0) + (s.totalDead ?? 0) + (s.totalExisting ?? 0) > 0);
 
   const monitoringPlotSpeciesData = monitoringPlot?.species;
 

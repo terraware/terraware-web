@@ -36,7 +36,10 @@ export default function MonitoringPlotSpeciesEditableTable(): JSX.Element {
     [monitoringPlotId, results?.adHocPlot, results?.isAdHoc, results?.strata]
   );
 
-  const monitoringPlotSpecies = useObservationSpecies(monitoringPlot?.species ?? [], monitoringPlot?.unknownSpecies);
+  const monitoringPlotSpecies = useObservationSpecies(
+    monitoringPlot?.species ?? [],
+    monitoringPlot?.unknownSpecies
+  ).filter((s) => (s.totalLive ?? 0) + (s.totalDead ?? 0) + (s.totalExisting ?? 0) > 0);
 
   const [update] = useUpdateCompletedObservationPlotMutation();
   const saveValue = useCallback(
