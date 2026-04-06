@@ -105,7 +105,10 @@ steps:
 
   - label: ':amazon-ecs: Deploy to ECS'
     key: 'deploy'
-    depends_on: 'promote-caches'
+    depends_on:
+      - step: 'promote-caches'
+        allow_failure: true
+      - 'docker'
     if: "build.branch == 'main' || build.tag =~ /^v[0-9]+\\.[0-9]+/"
     plugins:
       - *shallow-clone
