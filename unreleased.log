@@ -1,3 +1,4 @@
+0a245d6f7916 Used observation start date instead of unknown (#5549)
 75112f8b8227 SW-8261 In Plot Details, Species not recorded are showing with 0 values in Species table and charts (#5556)
 b84e8c064f1a SW-8260 Fixed column values and make selection sticky (#5547)
 431ca24a2145 SW-8258: Biomass Monitoring: Number of Small Trees field not showing values in Edit View (#5548)
