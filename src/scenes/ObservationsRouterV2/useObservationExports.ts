@@ -17,11 +17,14 @@ import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites
 import { getConditionString } from 'src/redux/features/observations/utils';
 import { getPlotStatus } from 'src/types/Observations';
 import { downloadCsv, makeCsv } from 'src/utils/csv';
+import { getShortDate } from 'src/utils/dateFormatter';
 import downloadZipFile from 'src/utils/downloadZipFile';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 const useObservationExports = () => {
-  const { strings } = useLocalization();
+  const { activeLocale, strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
+  const defaultTimeZone = useDefaultTimeZone().get().id;
   const [getObservationResults] = useLazyGetObservationResultsQuery();
   const [exportBiomassPlots] = useLazyExportBiomassPlotsCsvQuery();
   const [exportBiomassSpecies] = useLazyExportBiomassSpeciesCsvQuery();
@@ -334,20 +337,34 @@ const useObservationExports = () => {
       ).unwrap();
       const site = siteResults.site;
 
-      const fileBlob = makeObservationCsv(observationResults, site.timeZone ?? selectedOrganization?.timeZone);
+      const fileBlob = makeObservationCsv(
+        observationResults,
+        site.timeZone ?? selectedOrganization?.timeZone ?? defaultTimeZone
+      );
 
       const completedDate = observationResults.completedTime
-        ? getDateDisplayValue(observationResults.completedTime, site.timeZone ?? selectedOrganization?.timeZone)
-        : strings.INCOMPLETE;
+        ? getDateDisplayValue(
+            observationResults.completedTime,
+            site.timeZone ?? selectedOrganization?.timeZone ?? defaultTimeZone
+          )
+        : undefined;
+      const observationDate = getShortDate(completedDate ?? observationResults.startDate, activeLocale);
 
       const sanitizedSiteName = sanitize(site.name);
-      const fileName = `${sanitizedSiteName}-${completedDate}`;
+      const fileName = `${sanitizedSiteName}-Plot-Locations-${observationDate}`;
 
       const fileContent = await fileBlob.text();
 
       downloadCsv(fileName, fileContent);
     },
-    [getObservationResults, getPlantingSite, makeObservationCsv, selectedOrganization?.timeZone, strings.INCOMPLETE]
+    [
+      activeLocale,
+      defaultTimeZone,
+      getObservationResults,
+      getPlantingSite,
+      makeObservationCsv,
+      selectedOrganization?.timeZone,
+    ]
   );
 
   const downloadObservationGpx = useCallback(
@@ -363,11 +380,16 @@ const useObservationExports = () => {
       const site = siteResults.site;
 
       const completedDate = observationResults.completedTime
-        ? getDateDisplayValue(observationResults.completedTime, site.timeZone ?? selectedOrganization?.timeZone)
-        : strings.INCOMPLETE;
+        ? getDateDisplayValue(
+            observationResults.completedTime,
+            site.timeZone ?? selectedOrganization?.timeZone ?? defaultTimeZone
+          )
+        : undefined;
+      const observationDate = getShortDate(completedDate ?? observationResults.startDate, activeLocale);
 
       const sanitizedSiteName = sanitize(site.name);
-      const fileName = `${sanitizedSiteName}-${completedDate}.gpx`;
+      const fileName = `${sanitizedSiteName}-Plot-Locations-${observationDate}.gpx`;
+
       const encodedUri = 'data:application/gpx+xml;charset=utf-8,' + encodeURIComponent(content);
 
       const link = document.createElement('a');
@@ -375,7 +397,14 @@ const useObservationExports = () => {
       link.setAttribute('download', fileName);
       link.click();
     },
-    [exportObservationGpx, getObservationResults, getPlantingSite, selectedOrganization?.timeZone, strings.INCOMPLETE]
+    [
+      activeLocale,
+      defaultTimeZone,
+      exportObservationGpx,
+      getObservationResults,
+      getPlantingSite,
+      selectedOrganization?.timeZone,
+    ]
   );
 
   const downloadBiomassObservationDetails = useCallback(
