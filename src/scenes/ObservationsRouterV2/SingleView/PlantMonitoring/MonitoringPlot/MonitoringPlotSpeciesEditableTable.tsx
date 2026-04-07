@@ -16,6 +16,7 @@ import { ObservationSpeciesResults } from 'src/types/Observations';
 import useObservationSpecies from '../useObservationSpecies';
 
 export default function MonitoringPlotSpeciesEditableTable(): JSX.Element {
+  'use no memo';
   const theme = useTheme();
   const params = useParams<{ observationId: string; monitoringPlotId: string }>();
   const { strings } = useLocalization();
@@ -119,7 +120,7 @@ export default function MonitoringPlotSpeciesEditableTable(): JSX.Element {
     enableBottomToolbar: false,
     enableTopToolbar: false,
     initialState: {
-      sorting: [{ id: 'speciesName', desc: false }],
+      sorting: [{ id: 'speciesScientificName', desc: false }],
     },
     muiTableBodyProps: {
       sx: {

@@ -20,6 +20,7 @@ type TreeRow = ExistingTreePayload & {
 };
 
 export default function TreesAndShrubsEditableTable(): JSX.Element {
+  'use no memo';
   const { species: availableSpecies } = useSpeciesData();
   const theme = useTheme();
   const params = useParams<{ observationId: string }>();
