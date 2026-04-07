@@ -379,7 +379,7 @@ const MyAccountForm = ({
           <Box
             display='flex'
             justifyContent='space-between'
-            marginBottom={theme.spacing(4)}
+            marginBottom={theme.spacing(2)}
             padding={hasNav === false ? theme.spacing(0, 5) : theme.spacing(0, 0, 0, 3)}
             marginTop={organizations && organizations.length > 0 ? 0 : theme.spacing(12)}
           >

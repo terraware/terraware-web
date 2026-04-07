@@ -63,7 +63,7 @@ export default function SeedBankDetailsView(): JSX.Element {
 
   return (
     <TfMain>
-      <Grid container padding={theme.spacing(0, 0, 4, 0)}>
+      <Grid container padding={theme.spacing(0, 0, 2, 0)}>
         <Grid item xs={12} marginBottom={theme.spacing(3)}>
           <BackToLink id='back' to={APP_PATHS.SEED_BANKS} name={strings.SEED_BANKS} />
         </Grid>

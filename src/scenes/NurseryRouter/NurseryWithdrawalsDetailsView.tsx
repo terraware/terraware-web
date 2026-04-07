@@ -220,7 +220,7 @@ export default function NurseryWithdrawalsDetailsView({
         />
       )}
       <PageHeaderWrapper nextElement={contentRef.current} nextElementInitialMargin={-24}>
-        <Box marginBottom={theme.spacing(4)}>
+        <Box marginBottom={theme.spacing(2)}>
           <Box>
             <BackToLink
               id='back'
@@ -233,7 +233,7 @@ export default function NurseryWithdrawalsDetailsView({
             />
           </Box>
           <Box
-            padding={isMobile ? theme.spacing(3, 0, 4, 0) : theme.spacing(3, 3, 4, 3)}
+            padding={isMobile ? theme.spacing(3, 0, 4, 0) : theme.spacing(3, 3, 3, 3)}
             display='flex'
             justifyContent='space-between'
             alignItems='center'

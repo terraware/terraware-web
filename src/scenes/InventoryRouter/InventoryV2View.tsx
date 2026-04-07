@@ -267,7 +267,7 @@ export default function InventoryV2View(props: InventoryProps): JSX.Element {
     <TfMain>
       <ImportInventoryModal open={importInventoryModalOpen} onClose={onCloseImportInventoryModal} />
       <PageHeaderWrapper nextElement={contentRef.current}>
-        <Box sx={{ paddingBottom: theme.spacing(4), paddingLeft: theme.spacing(3) }}>
+        <Box sx={{ paddingBottom: theme.spacing(2), paddingLeft: theme.spacing(3) }}>
           <Grid container>
             <Grid item xs={6}>
               <Typography fontSize='24px' fontWeight={600}>

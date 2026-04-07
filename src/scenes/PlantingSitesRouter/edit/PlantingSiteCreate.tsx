@@ -142,7 +142,7 @@ export default function CreatePlantingSite({ plantingSiteId }: CreatePlantingSit
               <Grid spacing={3} flexGrow={0} display='flex' flexDirection='column' marginTop={theme.spacing(3)}>
                 <Box
                   paddingLeft={theme.spacing(3)}
-                  marginBottom={theme.spacing(4)}
+                  marginBottom={theme.spacing(2)}
                   display='flex'
                   flexDirection='column'
                 >

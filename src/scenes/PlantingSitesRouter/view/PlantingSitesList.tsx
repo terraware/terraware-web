@@ -15,7 +15,7 @@ import useStickyTabs from 'src/utils/useStickyTabs';
 import PlantingSiteTypeSelect from '../edit/PlantingSiteTypeSelect';
 import PlantingSitesListTab from './PlantingSitesListTab';
 
-const ApplicationListView = () => {
+const PlantingSitesList = () => {
   const { strings } = useLocalization();
   const { isMobile } = useDeviceInfo();
   const query = useQuery();
@@ -119,4 +119,4 @@ const ApplicationListView = () => {
   );
 };
 
-export default ApplicationListView;
+export default PlantingSitesList;

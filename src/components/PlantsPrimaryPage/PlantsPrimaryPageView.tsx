@@ -162,7 +162,7 @@ export default function PlantsPrimaryPageView({
       {newHeader ? (
         <>
           {title && (
-            <Grid item xs={12} paddingLeft={theme.spacing(3)} marginBottom={theme.spacing(4)}>
+            <Grid item xs={12} paddingLeft={theme.spacing(3)} marginBottom={theme.spacing(2)}>
               <Typography sx={{ fontSize: '24px', fontWeight: 600, alignItems: 'center' }}>{title}</Typography>
             </Grid>
           )}
@@ -281,7 +281,7 @@ export default function PlantsPrimaryPageView({
         </>
       ) : (
         <PageHeaderWrapper nextElement={contentRef.current}>
-          <Grid item xs={12} paddingLeft={theme.spacing(3)} marginBottom={theme.spacing(4)}>
+          <Grid item xs={12} paddingLeft={theme.spacing(3)} marginBottom={theme.spacing(2)}>
             <Grid item xs={12} display={isMobile ? 'block' : 'flex'} alignItems='center'>
               <Box display='flex' alignItems='center'>
                 <Typography sx={{ fontSize: '24px', fontWeight: 600, alignItems: 'center' }}>{title}</Typography>

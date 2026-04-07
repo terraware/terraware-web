@@ -1,7 +1,7 @@
 import React, { type JSX, useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { Box, Grid, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
 
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -178,11 +178,11 @@ export default function PersonView(): JSX.Element {
   return (
     <TfMain>
       <PageForm cancelID='cancelNewPerson' saveID='saveNewPerson' onCancel={goToPeople} onSave={() => void saveUser()}>
-        <Grid container marginBottom={theme.spacing(4)} paddingLeft={theme.spacing(3)}>
+        <Grid container marginBottom={theme.spacing(2)} paddingLeft={theme.spacing(3)}>
           <Grid item xs={12}>
-            <h2 style={{ marginBottom: '8px' }}>
+            <Typography fontSize='24px' fontWeight={600} margin={0} sx={{ wordBreak: 'break-all' }}>
               {personSelectedToEdit ? personSelectedToEdit.email : strings.ADD_PERSON}
-            </h2>
+            </Typography>
             {!personSelectedToEdit ? (
               <p style={{ marginTop: '8px', marginBottom: 0 }}>{strings.ADD_PERSON_DESC}</p>
             ) : null}

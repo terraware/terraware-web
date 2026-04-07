@@ -149,7 +149,7 @@ export default function InventoryBatchView({ origin, species }: InventoryBatchPr
         <Grid
           container
           marginTop={theme.spacing(3)}
-          marginBottom={theme.spacing(4)}
+          marginBottom={theme.spacing(2)}
           justifyContent='space-between'
           alignItems='center'
         >

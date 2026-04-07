@@ -189,7 +189,7 @@ export default function SpeciesEditView(): JSX.Element {
         onCancel={() => goToSpecies(species?.id)}
         onSave={() => void saveSpecies()}
       >
-        <Box marginBottom={theme.spacing(4)} paddingLeft={theme.spacing(3)}>
+        <Box marginBottom={theme.spacing(2)} paddingLeft={theme.spacing(3)}>
           <Typography fontSize='24px' fontWeight={600}>
             {species?.scientificName}
           </Typography>

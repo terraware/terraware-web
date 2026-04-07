@@ -13,7 +13,7 @@ const TitleBar = (props: {
 
   return (
     <Box
-      margin={theme.spacing(3)}
+      margin={theme.spacing(2, 2, 0, 2)}
       alignItems='center'
       justifyContent='space-between'
       display='flex'

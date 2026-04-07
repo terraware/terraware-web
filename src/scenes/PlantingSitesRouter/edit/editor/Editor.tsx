@@ -300,7 +300,7 @@ export default function Editor(props: EditorProps): JSX.Element {
       {(createDraftStatus === 'pending' || updateDraftStatus === 'pending') && <BusySpinner />}
       {showStartOver && <StartOverConfirmation onClose={onCloseStartOver} onConfirm={onStartOver} />}
       <PageHeaderWrapper nextElement={contentRef.current}>
-        <Box sx={{ padding: theme.spacing(0, 0, 4, 3), display: 'flex' }}>
+        <Box sx={{ padding: theme.spacing(0, 0, 2, 3), display: 'flex' }}>
           <Typography fontSize='24px' fontWeight={600}>
             {strings.ADD_PLANTING_SITE}
           </Typography>
