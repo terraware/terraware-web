@@ -7,7 +7,7 @@ echo "--- :docker: Download and start backend"
 yarn server:reset
 
 echo "--- :playwright: Install Playwright browsers"
-yarn playwright install --with-deps chromium-headless-shell
+yarn playwright install chromium-headless-shell
 
 echo "--- :playwright: Run end-to-end tests"
 # Retry once on timeout, matching the GHA behavior (retry_on: timeout).
