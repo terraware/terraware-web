@@ -18,25 +18,16 @@ import { useProjects } from 'src/hooks/useProjects';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
 import {
-  requestAdminCreateActivity,
-  requestAdminGetActivity,
-  requestAdminUpdateActivity,
-  requestCreateActivity,
-  requestDeleteActivity,
-  requestGetActivity,
-  requestSyncActivityMedia,
-  requestUpdateActivity,
-} from 'src/redux/features/activities/activitiesAsyncThunks';
-import {
-  selectActivityCreate,
-  selectActivityDelete,
-  selectActivityGet,
-  selectActivityUpdate,
-  selectAdminActivityCreate,
-  selectAdminActivityGet,
-  selectAdminActivityUpdate,
-  selectSyncActivityMedia,
-} from 'src/redux/features/activities/activitiesSelectors';
+  useAdminCreateActivityMutation,
+  useAdminUpdateActivityMutation,
+  useCreateActivityMutation,
+  useDeleteActivityMutation,
+  useLazyAdminGetActivityQuery,
+  useLazyGetActivityQuery,
+  useUpdateActivityMutation,
+} from 'src/queries/generated/activities';
+import { requestSyncActivityMedia } from 'src/redux/features/activities/activitiesAsyncThunks';
+import { selectSyncActivityMedia } from 'src/redux/features/activities/activitiesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import {
   ACTIVITY_STATUSES,
@@ -98,25 +89,44 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
   const query = useQuery();
 
   const [source, setSource] = useState<string | null>();
-  const [activity, setActivity] = useState<TypedActivity>();
   const [record, setRecord, onChange, onChangeCallback] = useForm<FormRecord>(undefined);
   const [mediaItems, setMediaItems] = useState<ActivityMediaItem[]>([]);
   const [validateFields, setValidateFields] = useState<boolean>(false);
   const [syncMediaRequestId, setSyncMediaRequestId] = useState('');
-  const [getActivityRequestId, setGetActivityRequestId] = useState('');
-  const [saveActivityRequestId, setSaveActivityRequestId] = useState('');
-  const [deleteActivityRequestId, setDeleteActivityRequestId] = useState('');
   const [busy, setBusy] = useState<boolean>(false);
   const [deleteActivityModalOpen, setDeleteActivityModalOpen] = useState<boolean>(false);
 
-  const getActivityRequest = useAppSelector(selectActivityGet(getActivityRequestId));
-  const adminGetActivityRequest = useAppSelector(selectAdminActivityGet(getActivityRequestId));
-  const createActivityRequest = useAppSelector(selectActivityCreate(saveActivityRequestId));
-  const adminCreateActivityRequest = useAppSelector(selectAdminActivityCreate(saveActivityRequestId));
-  const updateActivityRequest = useAppSelector(selectActivityUpdate(saveActivityRequestId));
-  const adminUpdateActivityRequest = useAppSelector(selectAdminActivityUpdate(saveActivityRequestId));
+  const [fetchAdminActivity, { currentData: adminGetData, isError: adminGetError }] = useLazyAdminGetActivityQuery();
+  const [fetchActivity, { currentData: getData, isError: getError }] = useLazyGetActivityQuery();
+
+  useEffect(() => {
+    if (!activityId) {
+      return;
+    }
+    if (isAcceleratorRoute) {
+      void fetchAdminActivity(activityId, true);
+    } else {
+      void fetchActivity(activityId, true);
+    }
+  }, [activityId, fetchActivity, fetchAdminActivity, isAcceleratorRoute]);
+
+  const activity = useMemo<TypedActivity | undefined>(() => {
+    if (adminGetData?.activity) {
+      return { type: 'admin', payload: adminGetData.activity };
+    }
+    if (getData?.activity) {
+      return { type: 'base', payload: getData.activity };
+    }
+    return undefined;
+  }, [adminGetData, getData]);
+
   const syncActivityMediaRequest = useAppSelector(selectSyncActivityMedia(syncMediaRequestId));
-  const deleteActivityRequest = useAppSelector(selectActivityDelete(deleteActivityRequestId));
+
+  const [adminCreateActivity] = useAdminCreateActivityMutation();
+  const [createActivity] = useCreateActivityMutation();
+  const [adminUpdateActivity] = useAdminUpdateActivityMutation();
+  const [updateActivity] = useUpdateActivityMutation();
+  const [deleteActivity] = useDeleteActivityMutation();
 
   const [focusedFileId, setFocusedFileId] = useState<number>();
   const mapRef = useRef<MapRef | null>(null);
@@ -219,71 +229,6 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
     return true;
   }, [record, mediaItems, snackbar, strings]);
 
-  const saveActivity = useCallback(() => {
-    if (!validateForm()) {
-      setValidateFields(true);
-      return;
-    }
-
-    setBusy(true);
-
-    if (isEditing && isAcceleratorRoute && activity) {
-      // admin update activity
-      const request = dispatch(
-        requestAdminUpdateActivity({
-          activityId: activity.payload.id,
-          activity: {
-            ...activity.payload,
-            date: record?.date as string,
-            description: record?.description as string,
-            isHighlight: !!record?.isHighlight,
-            status: record?.status as AdminActivityPayload['status'],
-            type: record?.type as AdminActivityPayload['type'],
-          } as AdminActivityPayload,
-        })
-      );
-      setSaveActivityRequestId(request.requestId);
-    } else if (isEditing && !isAcceleratorRoute && activity) {
-      // update activity
-      const request = dispatch(
-        requestUpdateActivity({
-          activityId: activity.payload.id,
-          activity: {
-            ...activity.payload,
-            date: record?.date as string,
-            description: record?.description as string,
-            type: record?.type as ActivityPayload['type'],
-          } as ActivityPayload,
-        })
-      );
-      setSaveActivityRequestId(request.requestId);
-    } else if (!isEditing && isAcceleratorRoute) {
-      // admin create activity
-      const request = dispatch(
-        requestAdminCreateActivity({
-          date: record?.date as string,
-          description: record?.description as string,
-          isHighlight: !!record?.isHighlight,
-          projectId,
-          status: record?.status as AdminCreateActivityRequestPayload['status'],
-          type: record?.type as AdminCreateActivityRequestPayload['type'],
-        })
-      );
-      setSaveActivityRequestId(request.requestId);
-    } else {
-      // create activity
-      const request = dispatch(
-        requestCreateActivity({
-          date: record?.date as string,
-          description: record?.description as string,
-          projectId,
-          type: record?.type as CreateActivityRequestPayload['type'],
-        })
-      );
-      setSaveActivityRequestId(request.requestId);
-    }
-  }, [activity, dispatch, isAcceleratorRoute, isEditing, projectId, record, validateForm]);
-
   const syncMediaFiles = useCallback(
     (newActivityId: number) => {
       // Only sync if there are any media operations to perform
@@ -308,6 +253,82 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
     [dispatch, mediaItems, setBusy, navToActivityLog]
   );
 
+  const saveActivity = useCallback(async () => {
+    if (!validateForm()) {
+      setValidateFields(true);
+      return;
+    }
+
+    setBusy(true);
+
+    try {
+      if (isEditing && isAcceleratorRoute && activity) {
+        // admin update activity
+        await adminUpdateActivity({
+          id: activity.payload.id,
+          adminUpdateActivityRequestPayload: {
+            date: record?.date as string,
+            description: record?.description as string,
+            isHighlight: !!record?.isHighlight,
+            status: record?.status as AdminActivityPayload['status'],
+            type: record?.type as AdminActivityPayload['type'],
+          },
+        }).unwrap();
+        syncMediaFiles(activity.payload.id);
+      } else if (isEditing && !isAcceleratorRoute && activity) {
+        // update activity
+        await updateActivity({
+          activityId: activity.payload.id,
+          updateActivityRequestPayload: {
+            date: record?.date as string,
+            description: record?.description as string,
+            status: (activity.payload as ActivityPayload).status,
+            type: record?.type as ActivityPayload['type'],
+          },
+        }).unwrap();
+        syncMediaFiles(activity.payload.id);
+      } else if (!isEditing && isAcceleratorRoute) {
+        // admin create activity
+        const result = await adminCreateActivity({
+          date: record?.date as string,
+          description: record?.description as string,
+          isHighlight: !!record?.isHighlight,
+          projectId,
+          status: record?.status as AdminCreateActivityRequestPayload['status'],
+          type: record?.type as AdminCreateActivityRequestPayload['type'],
+        }).unwrap();
+        syncMediaFiles(result.activity.id);
+      } else {
+        // create activity
+        const result = await createActivity({
+          date: record?.date as string,
+          description: record?.description as string,
+          projectId,
+          type: record?.type as CreateActivityRequestPayload['type'],
+        }).unwrap();
+        syncMediaFiles(result.activity.id);
+      }
+    } catch {
+      setBusy(false);
+      snackbar.toastError(strings.GENERIC_ERROR);
+      setValidateFields(false);
+    }
+  }, [
+    activity,
+    adminCreateActivity,
+    adminUpdateActivity,
+    createActivity,
+    isAcceleratorRoute,
+    isEditing,
+    projectId,
+    record,
+    snackbar,
+    strings.GENERIC_ERROR,
+    syncMediaFiles,
+    updateActivity,
+    validateForm,
+  ]);
+
   // initialize record, if creating new
   useEffect(() => {
     if (record || isEditing) {
@@ -324,29 +345,12 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
     setRecord({ ...newActivity });
   }, [isEditing, projectId, record, selectedOrganization, setRecord]);
 
-  // get activity for editing
+  // show error if get activity fails
   useEffect(() => {
-    if (isEditing && activityId && !activity) {
-      if (isAcceleratorRoute) {
-        const request = dispatch(requestAdminGetActivity(activityId));
-        setGetActivityRequestId(request.requestId);
-      } else {
-        const request = dispatch(requestGetActivity(activityId));
-        setGetActivityRequestId(request.requestId);
-      }
-    }
-  }, [activity, activityId, dispatch, isAcceleratorRoute, isEditing]);
-
-  // handle get activity responses
-  useEffect(() => {
-    if (getActivityRequest?.status === 'error' || adminGetActivityRequest?.status === 'error') {
+    if (adminGetError || getError) {
       snackbar.toastError(strings.GENERIC_ERROR);
-    } else if (getActivityRequest?.status === 'success' && getActivityRequest?.data) {
-      setActivity({ type: 'base', payload: getActivityRequest.data });
-    } else if (adminGetActivityRequest?.status === 'success' && adminGetActivityRequest?.data) {
-      setActivity({ type: 'admin', payload: adminGetActivityRequest.data });
     }
-  }, [getActivityRequest, adminGetActivityRequest, snackbar, strings.GENERIC_ERROR]);
+  }, [adminGetError, getError, snackbar, strings.GENERIC_ERROR]);
 
   // reset record with fetched activity data when editing
   useEffect(() => {
@@ -379,35 +383,6 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
     }
   }, [isEditing, activity]);
 
-  // handle create activity responses
-  useEffect(() => {
-    if (createActivityRequest?.status === 'error' || adminCreateActivityRequest?.status === 'error') {
-      setBusy(false);
-      snackbar.toastError(strings.GENERIC_ERROR);
-      setValidateFields(false);
-    } else if (createActivityRequest?.status === 'success' || adminCreateActivityRequest?.status === 'success') {
-      syncMediaFiles((createActivityRequest?.data?.id || adminCreateActivityRequest?.data?.id) as number);
-    }
-  }, [
-    adminCreateActivityRequest,
-    createActivityRequest,
-    navToActivityLog,
-    snackbar,
-    strings.GENERIC_ERROR,
-    syncMediaFiles,
-  ]);
-
-  // handle update activity responses
-  useEffect(() => {
-    if (updateActivityRequest?.status === 'error' || adminUpdateActivityRequest?.status === 'error') {
-      setBusy(false);
-      snackbar.toastError(strings.GENERIC_ERROR);
-      setValidateFields(false);
-    } else if (updateActivityRequest?.status === 'success' || adminUpdateActivityRequest?.status === 'success') {
-      syncMediaFiles(activityId as number);
-    }
-  }, [activityId, adminUpdateActivityRequest, snackbar, strings.GENERIC_ERROR, updateActivityRequest, syncMediaFiles]);
-
   // handle sync media responses
   useEffect(() => {
     if (syncActivityMediaRequest?.status === 'error') {
@@ -419,18 +394,6 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
       navToActivityLog();
     }
   }, [navToActivityLog, snackbar, strings.GENERIC_ERROR, syncActivityMediaRequest]);
-
-  // handle delete activity responses
-  useEffect(() => {
-    if (deleteActivityRequest?.status === 'error') {
-      setBusy(false);
-      snackbar.toastError(strings.GENERIC_ERROR);
-    } else if (deleteActivityRequest?.status === 'success') {
-      setBusy(false);
-      snackbar.toastSuccess(strings.ACTIVITY_DELETED);
-      navToActivityLog();
-    }
-  }, [deleteActivityRequest, navToActivityLog, setBusy, snackbar, strings]);
 
   const activityTypeOptions = useMemo(() => {
     return ACTIVITY_TYPES.map((activityType: ActivityType) => ({
@@ -520,7 +483,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
     setDeleteActivityModalOpen(false);
   }, []);
 
-  const dispatchDeleteActivityRequest = useCallback(() => {
+  const dispatchDeleteActivityRequest = useCallback(async () => {
     if (!activityId) {
       return;
     }
@@ -528,9 +491,16 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
     setDeleteActivityModalOpen(false);
     setBusy(true);
 
-    const request = dispatch(requestDeleteActivity(activityId));
-    setDeleteActivityRequestId(request.requestId);
-  }, [activityId, dispatch]);
+    try {
+      await deleteActivity(activityId).unwrap();
+      setBusy(false);
+      snackbar.toastSuccess(strings.ACTIVITY_DELETED);
+      navToActivityLog();
+    } catch {
+      setBusy(false);
+      snackbar.toastError(strings.GENERIC_ERROR);
+    }
+  }, [activityId, deleteActivity, navToActivityLog, snackbar, strings]);
 
   const activityWithMedia = useMemo(() => {
     if (activity) {
@@ -551,7 +521,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
       busy={busy}
       cancelID='cancelSaveActivity'
       onCancel={navToActivityLog}
-      onSave={saveActivity}
+      onSave={() => void saveActivity()}
       saveButtonText={strings.SAVE}
       saveID='saveActivity'
       style={{ paddingBottom: '4px' }}
@@ -559,7 +529,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
       <DeleteActivityModal
         open={deleteActivityModalOpen}
         onClose={handleCloseDeleteActivityModal}
-        onSubmit={dispatchDeleteActivityRequest}
+        onSubmit={() => void dispatchDeleteActivityRequest()}
       />
       <Box
         alignItems={isMobile ? 'flex-start' : 'center'}
