@@ -509,7 +509,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
               enableColumnDragging: true,
               enableColumnOrdering: true,
               positionGlobalFilter: 'right',
-              getRowId: (_row, index) => String(index),
+              getRowId: (row) => String(row.id),
               renderToolbarAlertBannerContent: ({ selectedAlert }) => (
                 <Box display='flex' gap={1} alignItems='center' justifyContent='space-between' width='100%'>
                   {selectedAlert}
