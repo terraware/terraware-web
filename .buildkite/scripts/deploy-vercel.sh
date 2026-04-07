@@ -14,6 +14,9 @@ echo "{\"projectId\":\"${VERCEL_PROJECT_ID}\",\"orgId\":\"${VERCEL_ORG_ID}\"}" >
 echo "--- :vercel: Pull Vercel project settings"
 npx vercel pull --yes --environment=preview --token="$VERCEL_TOKEN"
 
+echo "--- :vercel: Build project"
+npx vercel build --token="$VERCEL_TOKEN"
+
 echo "--- :vercel: Deploy to Vercel"
 preview_url=$(npx vercel deploy --prebuilt --archive=tgz --token="$VERCEL_TOKEN")
 
