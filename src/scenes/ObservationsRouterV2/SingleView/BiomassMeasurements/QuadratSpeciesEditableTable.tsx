@@ -36,6 +36,7 @@ export default function QuadratSpeciesEditableTable({
   species,
   position,
 }: QuadratSpeciesEditableTableProps): JSX.Element {
+  'use no memo';
   const { species: availableSpecies } = useSpeciesData();
   const theme = useTheme();
   const { strings } = useLocalization();
