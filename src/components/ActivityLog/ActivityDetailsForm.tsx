@@ -104,9 +104,9 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
       return;
     }
     if (isAcceleratorRoute) {
-      void fetchAdminActivity(activityId);
+      void fetchAdminActivity(activityId, true);
     } else {
-      void fetchActivity(activityId);
+      void fetchActivity(activityId, true);
     }
   }, [activityId, fetchActivity, fetchAdminActivity, isAcceleratorRoute]);
 
