@@ -10,13 +10,13 @@ import {
   useLazyExportBiomassPlotsCsvQuery,
   useLazyExportBiomassSpeciesCsvQuery,
   useLazyExportBiomassTreesShrubsCsvQuery,
-  useLazyExportObservationCsvQuery,
   useLazyExportObservationGpxQuery,
 } from 'src/queries/exports/observations';
 import { ObservationResultsPayload, useLazyGetObservationResultsQuery } from 'src/queries/generated/observations';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
+import { getConditionString } from 'src/redux/features/observations/utils';
 import { getPlotStatus } from 'src/types/Observations';
-import { makeCsv } from 'src/utils/csv';
+import { downloadCsv, makeCsv } from 'src/utils/csv';
 import downloadZipFile from 'src/utils/downloadZipFile';
 
 const useObservationExports = () => {
@@ -26,7 +26,6 @@ const useObservationExports = () => {
   const [exportBiomassPlots] = useLazyExportBiomassPlotsCsvQuery();
   const [exportBiomassSpecies] = useLazyExportBiomassSpeciesCsvQuery();
   const [exportBiomassTreesShrubs] = useLazyExportBiomassTreesShrubsCsvQuery();
-  const [exportObservationCsv] = useLazyExportObservationCsvQuery();
   const [exportObservationGpx] = useLazyExportObservationGpxQuery();
   const [getPlantingSite] = useLazyGetPlantingSiteQuery();
 
@@ -132,6 +131,14 @@ const useObservationExports = () => {
           displayLabel: strings.SURVIVAL_RATE,
         },
         {
+          key: 'conditions',
+          displayLabel: strings.PLOT_CONDITIONS,
+        },
+        {
+          key: 'notes',
+          displayLabel: strings.FIELD_NOTES,
+        },
+        {
           key: 'detailsLink',
           displayLabel: strings.LINK_TO_PLOT_OBSERVATION_DETAILS,
         },
@@ -169,13 +176,19 @@ const useObservationExports = () => {
             // longitude first in each coordinate pair.
             const plotCoordinates: number[][] = monitoringPlot.boundary.coordinates[0];
 
+            const plotConditions = monitoringPlot.conditions
+              .map((condition) => getConditionString(condition))
+              .join(', ');
+
             return {
+              conditions: plotConditions,
               dateObserved,
               detailsLink,
               northeastLatitude: plotCoordinates[2][1],
               northeastLongitude: plotCoordinates[2][0],
               northwestLatitude: plotCoordinates[3][1],
               northwestLongitude: plotCoordinates[3][0],
+              notes: monitoringPlot.notes,
               monitoringPlotNumber: monitoringPlot.monitoringPlotNumber,
               plantingDensity: monitoringPlot.plantingDensity,
               plotType: monitoringPlot.isPermanent ? strings.PERMANENT : strings.TEMPORARY,
@@ -199,32 +212,7 @@ const useObservationExports = () => {
 
       return makeCsv(columnHeaders, data);
     },
-    [
-      strings.DATE_OBSERVED,
-      strings.DEAD_PLANTS_OBSERVED,
-      strings.LINK_TO_PLOT_OBSERVATION_DETAILS,
-      strings.LIVE_PLANTS_OBSERVED,
-      strings.MONITORING_PLOT,
-      strings.MONITORING_PLOT_TYPE,
-      strings.NORTHEAST_CORNER_LATITUDE,
-      strings.NORTHEAST_CORNER_LONGITUDE,
-      strings.NORTHWEST_CORNER_LATITUDE,
-      strings.NORTHWEST_CORNER_LONGITUDE,
-      strings.PERMANENT,
-      strings.PLANT_DENSITY,
-      strings.PREEXISTING_PLANTS_OBSERVED,
-      strings.SOUTHEAST_CORNER_LATITUDE,
-      strings.SOUTHEAST_CORNER_LONGITUDE,
-      strings.SOUTHWEST_CORNER_LATITUDE,
-      strings.SOUTHWEST_CORNER_LONGITUDE,
-      strings.STATUS,
-      strings.SUBSTRATUM,
-      strings.SURVIVAL_RATE,
-      strings.TEMPORARY,
-      strings.TOTAL_PLANTS_OBSERVED,
-      strings.TOTAL_SPECIES_OBSERVED,
-      strings.STRATUM,
-    ]
+    [strings]
   );
 
   const makePlotSpeciesCsv = useCallback(
@@ -337,7 +325,6 @@ const useObservationExports = () => {
 
   const downloadObservationCsv = useCallback(
     async (observationId: number) => {
-      const content = await exportObservationCsv(observationId, true).unwrap();
       const results = await getObservationResults({ observationId, includePlants: true }, true).unwrap();
       const observationResults = results.observation;
 
@@ -347,20 +334,20 @@ const useObservationExports = () => {
       ).unwrap();
       const site = siteResults.site;
 
+      const fileBlob = makeObservationCsv(observationResults, site.timeZone ?? selectedOrganization?.timeZone);
+
       const completedDate = observationResults.completedTime
         ? getDateDisplayValue(observationResults.completedTime, site.timeZone ?? selectedOrganization?.timeZone)
         : strings.INCOMPLETE;
 
       const sanitizedSiteName = sanitize(site.name);
-      const fileName = `${sanitizedSiteName}-${completedDate}.csv`;
-      const encodedUri = 'data:text/csv;charset=utf-8,' + encodeURIComponent(content);
+      const fileName = `${sanitizedSiteName}-${completedDate}`;
 
-      const link = document.createElement('a');
-      link.setAttribute('href', encodedUri);
-      link.setAttribute('download', fileName);
-      link.click();
+      const fileContent = await fileBlob.text();
+
+      downloadCsv(fileName, fileContent);
     },
-    [exportObservationCsv, getObservationResults, getPlantingSite, selectedOrganization?.timeZone, strings.INCOMPLETE]
+    [getObservationResults, getPlantingSite, makeObservationCsv, selectedOrganization?.timeZone, strings.INCOMPLETE]
   );
 
   const downloadObservationGpx = useCallback(
