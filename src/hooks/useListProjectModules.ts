@@ -7,7 +7,7 @@ const useListProjectModules = () => {
 
   const listProjectModules = useCallback(
     (projectId: number) => {
-      void listProjectModulesQuery(projectId);
+      void listProjectModulesQuery(projectId, true);
     },
     [listProjectModulesQuery]
   );
