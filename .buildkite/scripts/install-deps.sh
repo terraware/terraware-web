@@ -62,6 +62,7 @@ install_playwright_system_deps() {
         pango \
         xorg-x11-server-Xvfb \
         alsa-lib \
+        libxkbcommon \
         || true
 }
 
