@@ -1,29 +1,34 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 
-import { selectProjectPlantingSiteList } from 'src/redux/features/tracking/trackingSelectors';
-import { requestListProjectPlantingSites } from 'src/redux/features/tracking/trackingThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useLocalization } from 'src/providers';
+import { useLazyListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
 
-export const useProjectPlantingSites = (projectId: number) => {
-  const dispatch = useAppDispatch();
+type UseProjectPlantingSitesProps = {
+  full?: boolean;
+  projectId: number;
+};
 
-  const [requestId, setRequestId] = useState<string>('');
-
-  const result = useAppSelector(selectProjectPlantingSiteList(requestId));
-
-  const reload = useCallback(() => {
-    const request = dispatch(requestListProjectPlantingSites(projectId));
-    setRequestId(request.requestId);
-  }, [dispatch, projectId]);
-
-  useEffect(() => {
-    reload();
-  }, [dispatch, reload]);
+const useProjectPlantingSites = ({ full, projectId }: UseProjectPlantingSitesProps) => {
+  const { activeLocale } = useLocalization();
+  const [listPlantingSites, listPlantingSitesResponse] = useLazyListPlantingSitesQuery();
 
   const plantingSites = useMemo(
-    () => (result?.status === 'success' && result.data ? result.data : undefined),
-    [result]
+    () =>
+      (listPlantingSitesResponse.currentData?.sites ?? []).toSorted((a, b) =>
+        a.name.localeCompare(b.name, activeLocale || undefined)
+      ),
+    [activeLocale, listPlantingSitesResponse]
   );
 
-  return { plantingSites, reload };
+  useEffect(() => {
+    void listPlantingSites({ projectId, full });
+  }, [full, listPlantingSites, projectId]);
+
+  return {
+    isLoading: listPlantingSitesResponse.isFetching,
+    isSuccess: listPlantingSitesResponse.isSuccess,
+    plantingSites,
+  };
 };
+
+export default useProjectPlantingSites;

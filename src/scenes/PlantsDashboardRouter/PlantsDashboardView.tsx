@@ -438,17 +438,12 @@ export default function PlantsDashboardView({
               gap: theme.spacing(3),
             }}
           >
-            {(organizationId || selectedOrganization?.id) && (
-              <MultiplePlantingSiteMap
-                organizationId={isAcceleratorRoute ? acceleratorOrganizationId : undefined}
-                projectId={projectId!}
-              />
-            )}
+            {projectId && <MultiplePlantingSiteMap projectId={projectId} />}
           </Box>
         </Grid>
       </>
     );
-  }, [theme, organizationId, selectedOrganization?.id, projectId, isAcceleratorRoute, acceleratorOrganizationId]);
+  }, [theme, projectId]);
 
   return (
     <PlantsPrimaryPage

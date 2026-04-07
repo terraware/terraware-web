@@ -1,30 +1,24 @@
-import React, { CSSProperties, type JSX, useMemo } from 'react';
+import React, { type JSX, useMemo } from 'react';
 
 import { Box, CircularProgress, Typography, useTheme } from '@mui/material';
 
 import FormattedNumber from 'src/components/common/FormattedNumber';
-import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
+import useProjectPlantingSites from 'src/hooks/useProjectPlantingSites';
 import strings from 'src/strings';
 
 import PlantDashboardMap from './PlantDashboardMap';
 
 type MultiplePlantingSiteMapProps = {
-  organizationId?: number;
   projectId: number;
-  hideAllControls?: boolean;
-  style?: CSSProperties;
 };
 
-export default function MultiplePlantingSiteMap({
-  organizationId,
-  projectId,
-}: MultiplePlantingSiteMapProps): JSX.Element {
-  const { plantingSitesWithAllSitesOption } = useOrganizationPlantingSites({ organizationId });
+export default function MultiplePlantingSiteMap({ projectId }: MultiplePlantingSiteMapProps): JSX.Element {
+  const { plantingSites } = useProjectPlantingSites({ projectId, full: true });
   const theme = useTheme();
 
-  const plantingSites = useMemo(
-    () => plantingSitesWithAllSitesOption?.filter((ps) => ps.projectId === projectId),
-    [projectId, plantingSitesWithAllSitesOption]
+  const projectPlantingSites = useMemo(
+    () => plantingSites?.filter((ps) => ps.projectId === projectId),
+    [projectId, plantingSites]
   );
 
   const totalArea = useMemo(() => {
@@ -54,7 +48,7 @@ export default function MultiplePlantingSiteMap({
           disablePhotoMarkers
           disablePlantMarkers
           disableSurvivalRate
-          plantingSites={plantingSites}
+          plantingSites={projectPlantingSites}
           observationResults={[]}
         />
       </Box>
