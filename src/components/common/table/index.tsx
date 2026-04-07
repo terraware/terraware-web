@@ -26,20 +26,20 @@ const enhancedTopBarSelectionConfig = {
   renderEnhancedNumSelectedText: (selectedCount: number, pageCount: number): string => {
     switch (true) {
       case selectedCount === 1 && pageCount === 1: {
-        return strings.formatString<string>(strings.TABLE_SELECTED_ROW, `${selectedCount}`) as string;
+        return strings.formatString(strings.TABLE_SELECTED_ROW, `${selectedCount}`) as string;
       }
       case selectedCount > 1 && pageCount === 1: {
-        return strings.formatString<string>(strings.TABLE_SELECTED_ROWS, `${selectedCount}`) as string;
+        return strings.formatString(strings.TABLE_SELECTED_ROWS, `${selectedCount}`) as string;
       }
       case selectedCount === 1 && pageCount > 1: {
-        return strings.formatString<string>(
+        return strings.formatString(
           strings.TABLE_SELECTED_ROW_ACROSS_PAGES,
           `${selectedCount}`,
           `${pageCount}`
         ) as string;
       }
       case selectedCount > 1 && pageCount > 1: {
-        return strings.formatString<string>(
+        return strings.formatString(
           strings.TABLE_SELECTED_ROWS_ACROSS_PAGES,
           `${selectedCount}`,
           `${pageCount}`
