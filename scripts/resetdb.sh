@@ -13,7 +13,7 @@ restore_dump() {
 }
 
 sudo rm -rf $HOME/docker/volumes/postgres/data
-docker compose down --volumes
+docker compose --profile prod down --volumes
 docker compose up -d postgres
 
 # Need to wait for the PostgreSQL server to start up and for the database to be
