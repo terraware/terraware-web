@@ -39,7 +39,7 @@ export default function PlantsAndSpeciesCard({
 
   useEffect(() => {
     if (plantingSiteId) {
-      void getPlantingSite({ id: plantingSiteId, includeZones: false });
+      void getPlantingSite({ id: plantingSiteId, includeZones: false }, true);
     } else if (projectId) {
       void listPlantingSites({ projectId, full: true, includeZones: false }, true);
       void listPlantingSiteReportedPlants({ projectId }, true);

@@ -7,7 +7,7 @@ const useGetProjectModule = () => {
 
   const getProjectModule = useCallback(
     (request: { projectId: number; moduleId: number }) => {
-      void getProjectModuleQuery(request);
+      void getProjectModuleQuery(request, true);
     },
     [getProjectModuleQuery]
   );
