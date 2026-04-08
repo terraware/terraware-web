@@ -1257,7 +1257,7 @@ OBSERVATION_EVENT_SCHEDULED,Observation event is scheduled for {0} for planting 
 OBSERVATION_EVENTS,Observation Events,
 OBSERVATION_EVENTS_TOOLTIP,Previous Observations are shown in decreased opacity.,
 OBSERVATION_PERIOD_WARN,Observation period cannot exceed two months.,
-OBSERVATION_PHOTOS_VIDEOS,Obervation Photos/Videos,
+OBSERVATION_PHOTOS_VIDEOS,Observation Photos/Videos,
 OBSERVATION_RESCHEDULED,Observation rescheduled!,
 OBSERVATION_SCHEDULED,Observation scheduled!,
 OBSERVATION_SMALL_SITE_WARNING,"You are scheduling an Observation for a site that is potentially too small for the assignment of monitoring plots. You will be notified if there are problems with assigning the monitoring plots and starting the Observation. Alternatively, you can conduct an Ad Hoc Plot Observation for this site.",
