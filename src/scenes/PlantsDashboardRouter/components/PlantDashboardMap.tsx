@@ -50,7 +50,7 @@ import MapStatsDrawer from './MapStatsDrawer';
 
 type LayerFeature = {
   plantingSiteId: number;
-  plantingSiteHistoryId: number;
+  plantingSiteHistoryId?: number;
   layerFeatureId: MapLayerFeatureId;
 };
 
@@ -141,7 +141,7 @@ const PlantDashboardMap = ({ plantingSiteId, projectId }: PlantDashboardMapProps
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
 
   const selectFeature = useCallback(
-    (selectedPlantingSiteId: number, selectedPlantingSiteHistoryId: number) =>
+    (selectedPlantingSiteId: number, selectedPlantingSiteHistoryId?: number) =>
       (layerId: string, featureId: string) =>
       () => {
         setSelectedFeature({
@@ -272,6 +272,10 @@ const PlantDashboardMap = ({ plantingSiteId, projectId }: PlantDashboardMapProps
               type: 'MultiPolygon',
               coordinates: site.boundary?.coordinates ?? [],
             },
+            onClick: selectFeature(site.id)('sites', `${site.id}`),
+            selected:
+              selectedFeature?.layerFeatureId.layerId === 'sites' &&
+              selectedFeature?.layerFeatureId.featureId === `${site.id}`,
           },
         ],
         stratumFeatures: strata.map((stratum) => ({
@@ -281,6 +285,10 @@ const PlantDashboardMap = ({ plantingSiteId, projectId }: PlantDashboardMapProps
             type: 'MultiPolygon',
             coordinates: stratum.boundary.coordinates,
           },
+          onClick: selectFeature(site.id)('strata', `${stratum.id}`),
+          selected:
+            selectedFeature?.layerFeatureId.layerId === 'strata' &&
+            selectedFeature?.layerFeatureId.featureId === `${stratum.id}`,
         })),
         substratumFeatures:
           substrata?.map((substratum) => ({
@@ -290,10 +298,14 @@ const PlantDashboardMap = ({ plantingSiteId, projectId }: PlantDashboardMapProps
               type: 'MultiPolygon',
               coordinates: substratum.boundary.coordinates,
             },
+            onClick: selectFeature(site.id)('substrata', `${substratum.id}`),
+            selected:
+              selectedFeature?.layerFeatureId.layerId === 'substrata' &&
+              selectedFeature?.layerFeatureId.featureId === `${substratum.id}`,
           })) ?? [],
       };
     },
-    []
+    [selectFeature, selectedFeature]
   );
 
   const extractFeaturesFromHistory = useCallback(
@@ -399,6 +411,29 @@ const PlantDashboardMap = ({ plantingSiteId, projectId }: PlantDashboardMapProps
             visible: selectedLayer === 'substrata',
           },
         ];
+      } else if (plantingSite) {
+        const features = extractFeaturesFromSite(plantingSite);
+
+        return [
+          {
+            features: features.siteFeatures,
+            layerId: 'sites',
+            style: sitesLayerStyle,
+            visible: selectedLayer === 'sites',
+          },
+          {
+            features: features.stratumFeatures,
+            layerId: 'strata',
+            style: strataLayerStyle,
+            visible: selectedLayer === 'strata',
+          },
+          {
+            features: features.substratumFeatures,
+            layerId: 'substrata',
+            style: substrataLayerStyle,
+            visible: selectedLayer === 'substrata',
+          },
+        ];
       } else {
         return [];
       }
@@ -412,6 +447,7 @@ const PlantDashboardMap = ({ plantingSiteId, projectId }: PlantDashboardMapProps
     substrataLayerStyle,
     extractFeaturesFromSite,
     plantingSiteHistory,
+    plantingSite,
     extractFeaturesFromHistory,
   ]);
 
