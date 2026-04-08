@@ -16,11 +16,6 @@ export default function MultiplePlantingSiteMap({ projectId }: MultiplePlantingS
   const { plantingSites } = useProjectPlantingSites({ projectId, full: true });
   const theme = useTheme();
 
-  const projectPlantingSites = useMemo(
-    () => plantingSites?.filter((ps) => ps.projectId === projectId),
-    [projectId, plantingSites]
-  );
-
   const totalArea = useMemo(() => {
     return plantingSites?.reduce((sum, site) => sum + (site?.areaHa ?? 0), 0) || 0;
   }, [plantingSites]);
@@ -43,14 +38,7 @@ export default function MultiplePlantingSiteMap({ projectId }: MultiplePlantingS
             <FormattedNumber value={Math.round(totalArea * 100) / 100} />
           )}
         </Typography>
-        <PlantDashboardMap
-          disableObserationEvents
-          disablePhotoMarkers
-          disablePlantMarkers
-          disableSurvivalRate
-          plantingSites={projectPlantingSites}
-          observationResults={[]}
-        />
+        <PlantDashboardMap projectId={projectId} />
       </Box>
     );
   } else {

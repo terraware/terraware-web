@@ -5,7 +5,7 @@ import { useLazyListPlantingSitesQuery } from 'src/queries/generated/plantingSit
 
 type UseProjectPlantingSitesProps = {
   full?: boolean;
-  projectId: number;
+  projectId?: number;
 };
 
 const useProjectPlantingSites = ({ full, projectId }: UseProjectPlantingSitesProps) => {
@@ -21,7 +21,9 @@ const useProjectPlantingSites = ({ full, projectId }: UseProjectPlantingSitesPro
   );
 
   useEffect(() => {
-    void listPlantingSites({ projectId, full });
+    if (projectId) {
+      void listPlantingSites({ projectId, full });
+    }
   }, [full, listPlantingSites, projectId]);
 
   return {

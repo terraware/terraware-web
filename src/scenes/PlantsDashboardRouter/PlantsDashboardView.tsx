@@ -10,7 +10,6 @@ import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import { APP_PATHS, SQ_M_TO_HECTARES } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
-import useObservation from 'src/hooks/useObservation';
 import useObservationResults from 'src/hooks/useObservationResults';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import usePlantingSite from 'src/hooks/usePlantingSite';
@@ -76,8 +75,6 @@ export default function PlantsDashboardView({
   const latestObservationResultId = useMemo(() => {
     return latestObservationResult?.observationId;
   }, [latestObservationResult]);
-
-  const { observationResults } = useObservation(latestObservationResultId, { resultsOnly: true });
 
   const siteBoundaryModifiedTime = useMemo(() => {
     if (plantingSite?.strata?.length) {
@@ -306,24 +303,12 @@ export default function PlantsDashboardView({
                     <FormattedNumber value={Math.round(plantingSite.areaHa * 100) / 100} />
                   )}
               </Typography>
-              <PlantDashboardMap
-                observationResults={observationResults ? [observationResults] : []}
-                latestSummary={latestSummary}
-                plantingSites={plantingSite ? [plantingSite] : []}
-              />
+              <PlantDashboardMap plantingSiteId={plantingSite.id} />
             </Box>
           </Grid>
         </>
       ) : undefined,
-    [
-      hasObservationResults,
-      isMobile,
-      observationResults,
-      latestSummary,
-      plantingSite,
-      renderLatestObservationLink,
-      theme,
-    ]
+    [hasObservationResults, isMobile, plantingSite, renderLatestObservationLink, theme]
   );
 
   const renderSimpleSiteMap = useCallback(

@@ -8,6 +8,7 @@ import usePlantingSite from 'src/hooks/usePlantingSite';
 import usePlantingSiteReportedPlants from 'src/hooks/usePlantingSiteReportedPlants';
 import { useLocalization } from 'src/providers';
 import { useListObservationSummariesQuery } from 'src/queries/generated/observations';
+import { useGetPlantingSiteHistoryQuery } from 'src/queries/generated/plantingSites';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 type MapStatsProperties = {
@@ -27,14 +28,24 @@ type MapStatsProperties = {
 type MapStatsDrawerProps = {
   layerFeatureId: MapLayerFeatureId;
   plantingSiteId: number;
+  plantingSiteHistoryId: number;
 };
 
-const MapStatsDrawer = ({ layerFeatureId, plantingSiteId }: MapStatsDrawerProps): JSX.Element | undefined => {
+const MapStatsDrawer = ({
+  layerFeatureId,
+  plantingSiteId,
+  plantingSiteHistoryId,
+}: MapStatsDrawerProps): JSX.Element | undefined => {
   const { strings } = useLocalization();
   const numberFormatter = useNumberFormatter();
   const { plantingSiteReportedPlants, isLoading: isLoadingPlantingSiteReportedPlants } =
     usePlantingSiteReportedPlants(plantingSiteId);
+  const { currentData: plantingSiteHistoryResponse, isLoading: isLoadingSiteHistory } = useGetPlantingSiteHistoryQuery({
+    id: plantingSiteId,
+    historyId: plantingSiteHistoryId,
+  });
   const { plantingSite, isLoading: isLoadingPlantingSite } = usePlantingSite(plantingSiteId);
+  const plantingSiteHistory = useMemo(() => plantingSiteHistoryResponse?.site, [plantingSiteHistoryResponse?.site]);
 
   const isLoading = isLoadingPlantingSiteReportedPlants || isLoadingPlantingSite;
 
@@ -44,7 +55,7 @@ const MapStatsDrawer = ({ layerFeatureId, plantingSiteId }: MapStatsDrawerProps)
   );
   const observationSummaries = observationSummariesQuery.data?.summaries;
 
-  const combinedLoading = isLoading || observationSummariesQuery.isFetching;
+  const combinedLoading = isLoading || isLoadingSiteHistory || observationSummariesQuery.isFetching;
   const [delayedLoading, setDelayedLoading] = useState(combinedLoading);
 
   useEffect(() => {
@@ -52,6 +63,7 @@ const MapStatsDrawer = ({ layerFeatureId, plantingSiteId }: MapStatsDrawerProps)
 
     if (combinedLoading) {
       // immediately set to loading
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setDelayedLoading(true);
     } else {
       // delay setting loading to false until a timer has passed.
@@ -83,19 +95,18 @@ const MapStatsDrawer = ({ layerFeatureId, plantingSiteId }: MapStatsDrawerProps)
         plantingDensity: latestSummary?.plantingDensity,
       };
     } else if (layerFeatureId.layerId === 'strata') {
-      const stratum = plantingSite?.strata?.find((_stratum) => `${_stratum.id}` === layerFeatureId.featureId);
-      const stratumSummary = latestSummary?.strata.find(
-        (_stratum) => `${_stratum.stratumId}` === layerFeatureId.featureId
+      const stratumHistory = plantingSiteHistory?.strata?.find(
+        (_stratumHistory) => _stratumHistory.name === layerFeatureId.featureId
       );
-      const stratumStats = plantingSiteReportedPlants?.strata.find(
-        (_stratum) => `${_stratum.id}` === layerFeatureId.featureId
-      );
+      const stratum = plantingSite?.strata?.find((_stratum) => _stratum.id === stratumHistory?.stratumId);
+      const stratumSummary = latestSummary?.strata.find((_stratum) => _stratum.stratumId === stratum?.id);
+      const stratumStats = plantingSiteReportedPlants?.strata.find((_stratum) => _stratum.id === stratum?.id);
 
       return {
         type: strings.STRATUM,
-        areaHa: stratum?.areaHa,
+        areaHa: stratumHistory?.areaHa,
         survivalRate: stratumSummary?.survivalRate,
-        name: stratum?.name,
+        name: stratumHistory?.name,
         observed: stratumSummary !== undefined,
         observedPlants: stratumSummary?.totalPlants,
         observedSpecies: stratumSummary?.totalSpecies,
@@ -104,34 +115,42 @@ const MapStatsDrawer = ({ layerFeatureId, plantingSiteId }: MapStatsDrawerProps)
         plantingDensity: stratumSummary?.plantingDensity,
       };
     } else if (layerFeatureId.layerId === 'substrata') {
-      const stratum = plantingSite?.strata?.find((_stratum) =>
-        _stratum.substrata.some((_substratum) => `${_substratum.id}` === layerFeatureId.featureId)
+      const substratumHistory = plantingSiteHistory?.strata
+        ?.flatMap((_stratumHistory) => _stratumHistory.substrata)
+        .find((_substratumHistory) => `${_substratumHistory.id}` === layerFeatureId.featureId);
+
+      const stratumHistory = plantingSiteHistory?.strata?.find((_stratum) =>
+        _stratum.substrata.some((_substratum) => _substratum.substratumId === substratumHistory?.substratumId)
       );
-      const substratum = stratum?.substrata.find((_substratum) => `${_substratum.id}` === layerFeatureId.featureId);
+
+      const stratum = plantingSite?.strata?.find((_stratum) =>
+        _stratum.substrata.some((_substratum) => _substratum.id === substratumHistory?.substratumId)
+      );
+      const substratum = stratum?.substrata.find((_substratum) => _substratum.id === substratumHistory?.substratumId);
       const substratumSummary = latestSummary?.strata
         .flatMap((_stratum) => _stratum.substrata)
-        .find((_substratum) => `${_substratum.substratumId}` === layerFeatureId.featureId);
+        .find((_substratum) => _substratum.substratumId === substratum?.id);
       const substratumStats = plantingSiteReportedPlants?.strata
         .flatMap((_stratum) => _stratum.substrata)
-        .find((_substratum) => `${_substratum.id}` === layerFeatureId.featureId);
+        .find((_substratum) => _substratum.id === substratum?.id);
 
       return {
         type: strings.SUBSTRATUM,
-        areaHa: substratum?.areaHa,
+        areaHa: substratumHistory?.areaHa,
         survivalRate: substratumSummary?.survivalRate,
-        name: substratum?.name,
+        name: substratumHistory?.name,
         observed: substratumSummary !== undefined,
         observedPlants: substratumSummary?.totalPlants,
         observedSpecies: substratumSummary?.totalSpecies,
         plantedPlants: substratumStats?.totalPlants,
         plantedSpecies: substratumStats?.species.length,
         plantingDensity: substratumSummary?.plantingDensity,
-        stratumName: stratum?.name,
+        stratumName: stratumHistory?.name,
       };
     } else {
       return undefined;
     }
-  }, [latestSummary, layerFeatureId, plantingSite, plantingSiteReportedPlants, strings]);
+  }, [latestSummary, layerFeatureId, plantingSite, plantingSiteHistory, plantingSiteReportedPlants, strings]);
 
   const rows = useMemo((): MapDrawerTableRow[] => {
     const results: MapDrawerTableRow[] = [];
