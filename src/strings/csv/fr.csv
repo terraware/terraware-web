@@ -1256,6 +1256,7 @@ OBSERVATION_EVENT_SCHEDULED,Un événement d'observation est prévu pour le {0} 
 OBSERVATION_EVENTS,Événements d'observation,564648b0
 OBSERVATION_EVENTS_TOOLTIP,Les observations antérieures apparaissent avec une opacité décroissante.,03c6ea26
 OBSERVATION_PERIOD_WARN,La période d'observation ne peut excéder deux mois.,364a36c6
+OBSERVATION_PHOTOS_VIDEOS,Photos/Vidéos d'observation,25dc7df9
 OBSERVATION_RESCHEDULED,Observation reportée !,583d8d94
 OBSERVATION_SCHEDULED,Observation programmée !,2022ad09
 OBSERVATION_SMALL_SITE_WARNING,Vous planifiez une observation pour un site potentiellement trop petit pour l'attribution de parcelles de surveillance. Vous serez averti·e si l'attribution de parcelles de surveillance et le début de l'observation posent des problèmes. Vous pouvez également effectuer une observation ad hoc des parcelles pour ce site.,5fa79765

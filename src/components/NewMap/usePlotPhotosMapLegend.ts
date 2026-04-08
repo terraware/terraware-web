@@ -36,7 +36,7 @@ const usePlotPhotosMapLegend = (disabled?: boolean) => {
             ]
           : []),
       ],
-      title: strings.PHOTOS,
+      title: strings.OBSERVATION_PHOTOS_VIDEOS,
       type: 'multi-select',
     };
   }, [
@@ -46,9 +46,7 @@ const usePlotPhotosMapLegend = (disabled?: boolean) => {
     plotPhotosVisible,
     virtualPlotStyle,
     virtualPlotVisible,
-    strings.MONITORING_PLOTS,
-    strings.PHOTOS,
-    strings.VIRTUAL_PLOTS,
+    strings,
   ]);
 
   return {

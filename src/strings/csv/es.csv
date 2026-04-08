@@ -1257,6 +1257,7 @@ OBSERVATION_EVENT_SCHEDULED,El evento de observación está programado para el {
 OBSERVATION_EVENTS,Incidencias de observación,564648b0
 OBSERVATION_EVENTS_TOOLTIP,Observaciones previas se muestra con opacidad disminuida,03c6ea26
 OBSERVATION_PERIOD_WARN,El periodo de observación no puede superar los dos meses.,364a36c6
+OBSERVATION_PHOTOS_VIDEOS,Fotos/Videos de Observación,25dc7df9
 OBSERVATION_RESCHEDULED,Observación reprogramada,583d8d94
 OBSERVATION_SCHEDULED,Observación programada,2022ad09
 OBSERVATION_SMALL_SITE_WARNING,Está programando una Observación para un lugar que posiblemente sea demasiado pequeño para la asignación de zonas de seguimiento. Se le notificará si hay problemas con la asignación de las zonas de seguimiento y el inicio de la Observación. También puede realizar una Observación de zona ad hoc para este lugar.,5fa79765
