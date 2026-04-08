@@ -83,6 +83,16 @@ const useTableState = (storageKey: string, options?: UseTableStateOptions) => {
         if (persistedMultiSelectIds.has(f.id) && !Array.isArray(f.value) && f.value !== null) {
           return { ...f, value: [f.value] };
         }
+        // Replace null entries in array filters with ''.
+        // JSON.stringify converts undefined to null, so persisted range filters
+        // like [undefined, 5] reload as [null, 5]. MRT's betweenInclusive only
+        // skips '' and undefined — passing null causes null.toString() to throw.
+        if (Array.isArray(f.value) && (f.value as unknown[]).some((v) => v === null)) {
+          return {
+            ...f,
+            value: (f.value as unknown[]).map((v) => (v === null ? '' : v)),
+          };
+        }
         return f;
       });
     } catch {
