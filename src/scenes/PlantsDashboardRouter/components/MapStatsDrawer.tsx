@@ -197,7 +197,7 @@ const MapStatsDrawer = ({
         type: strings.SUBSTRATUM,
         areaHa: substratumHistory?.areaHa ?? substratum?.areaHa,
         survivalRate: substratumSummary?.survivalRate,
-        name: substratumHistory?.name ?? substratumHistory?.name,
+        name: substratumHistory?.name ?? substratum?.name,
         observed: substratumSummary !== undefined,
         observedPlants: substratumSummary?.totalPlants,
         observedSpecies: substratumSummary?.totalSpecies,
