@@ -235,7 +235,6 @@
     "@babel/traverse": "7.29.0",
     "brace-expansion": "^2.0.3",
     "fork-ts-checker-webpack-plugin": "^9.0.0",
-    "ajv": "^8.18.0",
     "immutable": "^5.1.5",
     "picomatch": "^4.0.4",
     "serialize-javascript": "^7.0.5",
