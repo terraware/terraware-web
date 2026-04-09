@@ -59,6 +59,7 @@ export default function CreateAccession(): JSX.Element | null {
   const [collectedDateError, setCollectedDateError] = useState<string>();
   const [receivedDateError, setReceivedDateError] = useState<string>();
   const [photos, setPhotos] = useState<File[]>([]);
+  const [isSaving, setIsSaving] = useState<boolean>(false);
 
   const onPhotosChanged = (photosList: File[]) => {
     setPhotos(photosList);
@@ -142,6 +143,7 @@ export default function CreateAccession(): JSX.Element | null {
       setValidateFields(true);
       return;
     }
+    setIsSaving(true);
     const response = await SeedBankService.createAccession(record);
     if (response.requestSucceeded) {
       if (photos.length) {
@@ -156,6 +158,7 @@ export default function CreateAccession(): JSX.Element | null {
     } else {
       snackbar.toastError();
     }
+    setIsSaving(false);
   };
 
   const gridSize = () => (isMobile ? 12 : 6);
@@ -163,6 +166,7 @@ export default function CreateAccession(): JSX.Element | null {
   return !activeLocale ? null : (
     <TfMain>
       <PageForm
+        busy={isSaving}
         cancelID='cancelCreateAccession'
         saveID='saveCreateAccession'
         onCancel={goToAccessions}
