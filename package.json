@@ -127,7 +127,6 @@
     "styled-components": "^6.0.0",
     "swiper": "^12.0.3",
     "utm": "^1.1.1",
-    "wait-on": "^9.0.3",
     "web-vitals": "^5.0.0"
   },
   "eslintConfig": {
@@ -168,7 +167,7 @@
     "@datadog/datadog-ci": "^5.9.0",
     "@eslint/compat": "^2.0.0",
     "@eslint/js": "^9.0.0",
-    "@playwright/test": "^1.45.0",
+    "@playwright/test": "^1.55.1",
     "@rsbuild/plugin-babel": "^1.1.1",
     "@rtk-query/codegen-openapi": "^2.1.0",
     "@storybook/addon-essentials": "^7.0.12",
@@ -220,23 +219,30 @@
     "nyc": "^18.0.0",
     "openapi-typescript": "^7.0.0",
     "patch-package": "^8.0.0",
-    "playwright": "^1.45.0",
+    "playwright": "^1.55.1",
     "prettier": "^3.0.3",
     "prop-types": "^15.8.1",
     "react-test-renderer": "19.2.4",
-    "sass": "^1.38.0",
+    "sass": "^1.99.0",
     "storybook": "^7.0.12",
     "ts-node": "^10.9.2",
     "typescript": "^5.0.0",
     "typescript-eslint": "^7.15.0",
+    "wait-on": "^9.0.4",
     "webpack-dev-middleware": "^8.0.0"
   },
   "resolutions": {
     "@babel/traverse": "7.29.0",
+    "brace-expansion": "^2.0.3",
     "fork-ts-checker-webpack-plugin": "^9.0.0",
-    "wrap-ansi": "10.0.0",
+    "ajv": "^8.18.0",
+    "immutable": "^5.1.5",
+    "picomatch": "^4.0.4",
+    "serialize-javascript": "^7.0.5",
+    "simple-git": "^3.32.3",
     "string-width": "8.2.0",
-    "strip-ansi": "6.0.1"
+    "strip-ansi": "6.0.1",
+    "wrap-ansi": "10.0.0"
   },
   "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }
