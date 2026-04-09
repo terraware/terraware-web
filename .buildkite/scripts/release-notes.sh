@@ -11,14 +11,15 @@ echo "--- :git: Generate release notes"
 
 # Get version tags
 git fetch --tags --depth=1
-TAGS=$(git tag --list --sort=creatordate 'v[0-9]*')
-THIS_VERSION=$(echo "$TAGS" | tail -n1)
+THIS_VERSION=$(git tag --list --sort=creatordate 'v[0-9]*' | tail -n1)
+LAST_VERSION=$(git tag --list --sort=creatordate 'v[0-9]*' | tail -n2 | head -n1)
 
-if [[ -z "$THIS_VERSION" ]]; then
-    echo "No version tags found, skipping release notes."
-    exit 0
-fi
+.buildkite/scripts/lib/fetch-tag.sh "$LAST_VERSION"
 
+# THIS_VERSION should already be fetched, but check for it in case history isn't linear.
+.buildkite/scripts/lib/fetch-tag.sh "$THIS_VERSION"
+
+CHANGELOG=$(git log "$LAST_VERSION".."$THIS_VERSION" --pretty=format:"%s")
 LAST_VERSION=$(echo "$TAGS" | tail -n2 | head -n1)
 
 # THIS_VERSION should already be fetched, but check for it in case history isn't linear.
