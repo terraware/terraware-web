@@ -555,20 +555,21 @@ const PlantDashboardMap = ({ plantingSiteId, projectId }: PlantDashboardMapProps
         (thisStratumHistory) => thisStratumHistory.stratumId === stratum.stratumId
       );
 
-      if (stratumHistory) {
-        const stratumId = { layerId: 'strata', featureId: `${stratumHistory.name}` };
-        sortFeatureBySurvivalRate(stratumId, stratum.survivalRate);
-      }
+      const stratumId = stratumHistory
+        ? { layerId: 'strata', featureId: `${stratumHistory.name}` }
+        : { layerId: 'strata', featureId: `${stratum.stratumId}` };
+
+      sortFeatureBySurvivalRate(stratumId, stratum.survivalRate);
 
       stratum.substrata.forEach((substratum) => {
         const substratumHistory = plantingSiteHistory?.strata
           .flatMap((thisStratumHistory) => thisStratumHistory.substrata)
           .find((thisSubstratumHistory) => thisSubstratumHistory.substratumId === substratum.substratumId);
 
-        if (substratumHistory) {
-          const substratumId = { layerId: 'substrata', featureId: `${substratumHistory.id}` };
-          sortFeatureBySurvivalRate(substratumId, substratum.survivalRate);
-        }
+        const substratumId = substratumHistory
+          ? { layerId: 'substrata', featureId: `${substratumHistory.substratumId}` }
+          : { layerId: 'substrata', featureId: `${substratum.substratumId}` };
+        sortFeatureBySurvivalRate(substratumId, substratum.survivalRate);
       });
     });
 
@@ -615,19 +616,22 @@ const PlantDashboardMap = ({ plantingSiteId, projectId }: PlantDashboardMapProps
         (thisStratumHistory) => thisStratumHistory.stratumId === stratum.id
       );
 
-      if (stratumHistory) {
-        const stratumId = { layerId: 'strata', featureId: `${stratumHistory.name}` };
-        sortFeatureByObservationRecency(stratumId, stratum.latestObservationCompletedTime);
-      }
+      const stratumId = stratumHistory
+        ? { layerId: 'strata', featureId: `${stratumHistory.name}` }
+        : { layerId: 'strata', featureId: `${stratum.id}` };
+
+      sortFeatureByObservationRecency(stratumId, stratum.latestObservationCompletedTime);
+
       stratum.substrata.forEach((substratum) => {
         const substratumHistory = plantingSiteHistory?.strata
           .flatMap((thisStratumHistory) => thisStratumHistory.substrata)
           .find((thisSubstratumHistory) => thisSubstratumHistory.substratumId === substratum.id);
 
-        if (substratumHistory) {
-          const substratumId = { layerId: 'substrata', featureId: `${substratumHistory.id}` };
-          sortFeatureByObservationRecency(substratumId, substratum.latestObservationCompletedTime);
-        }
+        const substratumId = substratumHistory
+          ? { layerId: 'substrata', featureId: `${substratumHistory.name}` }
+          : { layerId: 'substrata', featureId: `${substratum.id}` };
+
+        sortFeatureByObservationRecency(substratumId, substratum.latestObservationCompletedTime);
       });
     });
 
