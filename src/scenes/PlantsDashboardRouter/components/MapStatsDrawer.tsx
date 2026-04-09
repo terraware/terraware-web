@@ -47,10 +47,7 @@ const MapStatsDrawer = ({
 
   const isLoading = isLoadingPlantingSiteReportedPlants || isLoadingPlantingSite;
 
-  const observationSummariesQuery = useListObservationSummariesQuery(
-    { plantingSiteId: plantingSiteId ?? -1 },
-    { skip: !plantingSiteId || plantingSiteId === -1 }
-  );
+  const observationSummariesQuery = useListObservationSummariesQuery({ plantingSiteId });
   const observationSummaries = observationSummariesQuery.data?.summaries;
 
   const combinedLoading = isLoading || isLoadingSiteHistory || observationSummariesQuery.isFetching;

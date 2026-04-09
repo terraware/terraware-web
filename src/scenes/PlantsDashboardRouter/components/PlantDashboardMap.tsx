@@ -78,7 +78,7 @@ const PlantDashboardMap = ({ plantingSiteId, projectId }: PlantDashboardMapProps
   useEffect(() => {
     if (plantingSiteId) {
       void getPlantingSite({ id: plantingSiteId }, true);
-      void listObservationResults({ plantingSiteId, includePlants: true, limit: 1 }, true);
+      void listObservationResults({ plantingSiteId, includePlants: true }, true);
       void listObservataionSummary({ plantingSiteId, limit: 1 }, true);
     }
   }, [getPlantingSite, listObservataionSummary, listObservationResults, plantingSiteId]);
@@ -99,7 +99,10 @@ const PlantDashboardMap = ({ plantingSiteId, projectId }: PlantDashboardMapProps
 
   const latestObservationResult = useMemo(() => {
     if (listObservationResultsResponse.currentData?.observations.length) {
-      return listObservationResultsResponse.currentData?.observations[0];
+      const completedResults = listObservationResultsResponse.currentData?.observations.filter(
+        (result) => result.state === 'Completed' || result.state === 'Abandoned'
+      );
+      return completedResults.length ? completedResults[0] : undefined;
     } else {
       return undefined;
     }
@@ -118,7 +121,7 @@ const PlantDashboardMap = ({ plantingSiteId, projectId }: PlantDashboardMapProps
     deadPlantsVisible,
     livePlantsVisible,
     plantMarkersLegendGroup: plantMakersLegendGroup,
-  } = usePlantMarkersMapLegend(plantingSiteId === undefined);
+  } = usePlantMarkersMapLegend(plantingSiteId === undefined || latestObservationResult === undefined);
   const { observationEventsVisible, observationEventsLegendGroup } = useObservationEventsMapLegend(
     plantingSiteId === undefined || latestObservationResult === undefined
   );
@@ -760,7 +763,55 @@ const PlantDashboardMap = ({ plantingSiteId, projectId }: PlantDashboardMapProps
   ]);
 
   const nameTags = useMemo((): MapNameTag[] | undefined => {
-    if (plantingSite?.boundary) {
+    const sites = plantingSiteId ? [plantingSite] : projectPlantingSites;
+
+    return sites.flatMap((site) => {
+      if (site?.boundary) {
+        const points = site.boundary.coordinates
+          .flat()
+          .flat()
+          .map(
+            ([lng, lat]): MapPoint => ({
+              lat,
+              lng,
+            })
+          );
+
+        const bbox = getBoundingBoxFromPoints(points);
+        const latitude = (bbox.maxLat + bbox.minLat) / 2;
+        const longitude = (bbox.maxLng + bbox.minLng) / 2;
+
+        return [
+          {
+            label: site.name,
+            longitude,
+            latitude,
+            onClick: () => fitBounds(bbox),
+          },
+        ];
+      } else {
+        return [];
+      }
+    });
+  }, [fitBounds, plantingSite, plantingSiteId, projectPlantingSites]);
+
+  useEffect(() => {
+    if (plantingSiteHistory) {
+      const points = plantingSiteHistory.boundary.coordinates
+        .flat()
+        .flat()
+        .map(
+          ([lng, lat]): MapPoint => ({
+            lat,
+            lng,
+          })
+        );
+
+      if (points.length) {
+        const bbox = getBoundingBoxFromPoints(points);
+        fitBounds(bbox);
+      }
+    } else if (plantingSite?.boundary) {
       const points = plantingSite.boundary.coordinates
         .flat()
         .flat()
@@ -771,22 +822,28 @@ const PlantDashboardMap = ({ plantingSiteId, projectId }: PlantDashboardMapProps
           })
         );
 
-      const bbox = getBoundingBoxFromPoints(points);
-      const latitude = (bbox.maxLat + bbox.minLat) / 2;
-      const longitude = (bbox.maxLng + bbox.minLng) / 2;
-
-      return [
-        {
-          label: plantingSite.name,
-          longitude,
-          latitude,
-          onClick: () => fitBounds(bbox),
-        },
-      ];
+      if (points.length) {
+        const bbox = getBoundingBoxFromPoints(points);
+        fitBounds(bbox);
+      }
     } else {
-      return [];
+      const points = projectPlantingSites
+        .flatMap((site) => site.boundary?.coordinates ?? [])
+        .flat()
+        .flat()
+        .map(
+          ([lng, lat]): MapPoint => ({
+            lat,
+            lng,
+          })
+        );
+
+      if (points.length) {
+        const bbox = getBoundingBoxFromPoints(points);
+        fitBounds(bbox);
+      }
     }
-  }, [fitBounds, plantingSite]);
+  }, [fitBounds, plantingSite, plantingSiteHistory, projectPlantingSites]);
 
   return token ? (
     <MapComponent
