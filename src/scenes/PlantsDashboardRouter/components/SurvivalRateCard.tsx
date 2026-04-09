@@ -59,7 +59,7 @@ export default function SurvivalRateCard({ plantingSiteId }: SurvivalRateCardPro
             </Box>
           </Tooltip>
         </Box>
-        <Box display='flex' sx={{ flexFlow: 'row wrap' }} marginTop={1}>
+        <Box data-testid='survival-rate-value' display='flex' sx={{ flexFlow: 'row wrap' }} marginTop={1}>
           {latestSummary?.survivalRate !== undefined ? (
             <Typography fontSize='48px' fontWeight={600} lineHeight={1}>
               <FormattedNumber value={latestSummary.survivalRate} />
