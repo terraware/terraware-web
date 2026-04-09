@@ -53,6 +53,7 @@ steps:
     key: 'vercel-preview'
     depends_on: 'build-and-test'
     if: "build.branch != 'main' && build.tag == null"
+    soft_fail: true
     plugins:
       - *shallow-clone
       - *load-secrets
@@ -62,7 +63,9 @@ steps:
 
   - label: ':playwright: Run end-to-end tests'
     key: 'e2e-tests'
-    depends_on: 'vercel-preview'
+    depends_on:
+      - step: 'vercel-preview'
+        allow_failure: true
     if: "build.branch != 'main' && build.tag == null"
     plugins:
       - *shallow-clone
