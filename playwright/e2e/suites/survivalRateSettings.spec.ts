@@ -59,19 +59,27 @@ test.describe('SurvivalRateSettingsTests', () => {
     await page.getByRole('button', { name: 'Edit Permanent Plots' }).click();
     await expect(page.getByLabel('Use Observation data').first()).toBeVisible();
 
-    await page.getByLabel('Provide plant density per species').first().click();
+    const plotCount = await page.getByLabel('Use Observation data').count();
 
-    // Override one density value
+    // Set first plot to manual density
+    await page.getByLabel('Provide plant density per species').first().click();
     const bananaRow = page
       .locator('tr')
       .filter({ hasText: /banana/i })
       .first();
     await bananaRow.locator('input[type="number"]').fill('400');
 
+    // Set all remaining plots to observation data
+    for (let i = 1; i < plotCount; i++) {
+      await page.getByLabel('Use Observation data').nth(i).click();
+      await page.getByPlaceholder('Select...').nth(i).click();
+      await page.locator('li.select-value').first().click();
+    }
+
     await page.locator('#saveSettings').click();
     await expect(page.getByText('t0 set for Permanent Plots')).toBeVisible();
 
-    // Navigate to Plantings > Dashboard
+    // Navigate to Dashboard
     if (!(await page.getByRole('button', { name: 'Dashboard', ...exactOptions }).isVisible())) {
       await page.getByRole('button', { name: 'Plantings' }).click();
     }
