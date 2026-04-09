@@ -20,6 +20,7 @@ import SimplePlantingSiteMap from 'src/scenes/PlantsDashboardRouter/components/S
 import strings from 'src/strings';
 import { isAfter } from 'src/utils/dateUtils';
 
+import EmptyPlantingSiteMap from './components/EmptyPlantingSiteMap';
 import MultiplePlantingSiteMap from './components/MultiplePlantingSiteMap';
 import PlantDashboardMap from './components/PlantDashboardMap';
 import PlantingDensityCard from './components/PlantingDensityCard';
@@ -423,7 +424,7 @@ export default function PlantsDashboardView({
               gap: theme.spacing(3),
             }}
           >
-            {projectId && <MultiplePlantingSiteMap projectId={projectId} />}
+            {projectId ? <MultiplePlantingSiteMap projectId={projectId} /> : <EmptyPlantingSiteMap />}
           </Box>
         </Grid>
       </>
