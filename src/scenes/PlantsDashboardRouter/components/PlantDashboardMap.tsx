@@ -120,10 +120,14 @@ const PlantDashboardMap = ({ plantingSiteId, projectId }: PlantDashboardMapProps
     plantMarkersLegendGroup: plantMakersLegendGroup,
   } = usePlantMarkersMapLegend(plantingSiteId === undefined);
   const { observationEventsVisible, observationEventsLegendGroup } = useObservationEventsMapLegend(
-    plantingSiteId === undefined
+    plantingSiteId === undefined || latestObservationResult === undefined
   );
-  const { plotPhotosVisible, plotPhotosLegendGroup } = usePlotPhotosMapLegend(plantingSiteId === undefined);
-  const { survivalRateVisible, survivalRateLegendGroup } = useSurvivalRateMapLegend(plantingSiteId === undefined);
+  const { plotPhotosVisible, plotPhotosLegendGroup } = usePlotPhotosMapLegend(
+    plantingSiteId === undefined || latestObservationResult === undefined
+  );
+  const { survivalRateVisible, survivalRateLegendGroup } = useSurvivalRateMapLegend(
+    plantingSiteId === undefined || latestObservationResult === undefined
+  );
 
   const {
     sitesLayerStyle,
