@@ -27,6 +27,7 @@ import { isAdmin, isManagerOrHigher, selectedOrgHasFacilityType } from 'src/util
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 import OrganizationStatsCard, { OrganizationStatsCardRow } from './OrganizationStatsCard';
+import VirtualWalkthroughCard from './VirtualWalkthroughCard';
 
 const TerrawareHomeView = () => {
   const { activeLocale } = useLocalization();
@@ -256,6 +257,10 @@ const TerrawareHomeView = () => {
               <Grid container spacing={3} sx={{ padding: 0 }}>
                 <Grid item xs={12}>
                   <OrganizationStatsCard rows={organizationStatsCardRows} />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <VirtualWalkthroughCard />
                 </Grid>
 
                 <Grid item xs={12}>

@@ -395,6 +395,7 @@ CREATE_ORGANIZATION_QUESTION_LOCATION_TYPES,¿Gestiona su organización alguno d
 CREATE_ORGANIZATION_QUESTION_ORGANIZATION_TYPE,¿Cuál de las siguientes opciones describe mejor su organización?,ac93bf9a
 CREATE_SPECIES_LIST,Crear lista de especies,e2fa4ff0
 CREATE_VIRTUAL_PLOT,Crear Parcela Virtual,aea239a2
+CREATE_VIRTUAL_WALKTHROUGH,Crear Recorrido Virtual,5e786aea
 CREATED,Creado,cc1462ae
 CREATED_ON,Creado el,f66518dc
 CROWN_DIAMETER_CM,Diámetro de la copa (cm),4bc3fb02
@@ -2355,6 +2356,7 @@ VIEW,Ver,02cff17a
 VIEW_APPLICATION,Ver solicitud,bbdc193f
 VIEW_FULL_DASHBOARD,Ver panel de control completo,25189646
 VIEW_HISTORY,Ver historial,a1dbe2ca
+VIEW_IN_MAP,Ver en el Mapa,510d8388
 VIEW_INTERNAL_REPORT_FORM,Ver el formulario de informe interno,67f51c8a
 VIEW_MAP,Ver mapa,8ef1dcc4
 VIEW_PLANTING_PROGRESS,Ver el progreso de la siembra,f5a4c1f5
@@ -2439,6 +2441,7 @@ YOU_ARE_HERE,Se encuentra aquí,183a5491
 YOU_HAVE_NOT_UPLOADED_ANY_PHOTOS_OR_VIDEOS,No ha subido ninguna foto ni video,f83261aa
 YOU_HAVE_NOT_UPLOADED_ANY_PLOT_CORNER_PHOTOS,No ha subido ninguna foto de las esquinas de la parcela,4f10d7d3
 YOU_HAVE_UNPUBLISHED_CHANGES,Tiene cambios no publicados,1825c403
+YOU_HAVE_X_VIRTUAL_WALKTHROUGHS,Tiene {0} Recorridos Virtuales,566e4d75
 YOUR_APPLICATIONS,Tus solicitudes,7da0f423
 YOUR_VIDEO_IS_PROCESSING,Su video se está procesando y aparecerá en breve.,fb65d59c
 ZERO,Cero,16bd92ef

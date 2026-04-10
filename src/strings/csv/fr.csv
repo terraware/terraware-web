@@ -394,6 +394,7 @@ CREATE_ORGANIZATION_QUESTION_LOCATION_TYPES,Votre organisation gère-t-elle l'un
 CREATE_ORGANIZATION_QUESTION_ORGANIZATION_TYPE,Lequel des éléments suivants décrit le mieux votre organisation ?,ac93bf9a
 CREATE_SPECIES_LIST,Créer une liste d'espèces,e2fa4ff0
 CREATE_VIRTUAL_PLOT,Créer une parcelle virtuelle,aea239a2
+CREATE_VIRTUAL_WALKTHROUGH,Créer une visite virtuelle,5e786aea
 CREATED,Créée,cc1462ae
 CREATED_ON,Créé le,f66518dc
 CROWN_DIAMETER_CM,Diamètre de la couronne (cm),4bc3fb02
@@ -2355,6 +2356,7 @@ VIEW,Voir,02cff17a
 VIEW_APPLICATION,Voir la demande,bbdc193f
 VIEW_FULL_DASHBOARD,Afficher le tableau de bord complet,25189646
 VIEW_HISTORY,Voir l'historique,a1dbe2ca
+VIEW_IN_MAP,Afficher sur la carte,510d8388
 VIEW_INTERNAL_REPORT_FORM,Afficher le formulaire de rapport interne,67f51c8a
 VIEW_MAP,Voir la carte,8ef1dcc4
 VIEW_PLANTING_PROGRESS,Voir l'avancement des plantations,f5a4c1f5
@@ -2439,6 +2441,7 @@ YOU_ARE_HERE,Vous êtes ici,183a5491
 YOU_HAVE_NOT_UPLOADED_ANY_PHOTOS_OR_VIDEOS,Vous n'avez téléchargé aucune photo ni vidéo.,f83261aa
 YOU_HAVE_NOT_UPLOADED_ANY_PLOT_CORNER_PHOTOS,Vous n'avez téléchargé aucune photo d'angle de parcelle.,4f10d7d3
 YOU_HAVE_UNPUBLISHED_CHANGES,Vous avez des modifications non publiées,1825c403
+YOU_HAVE_X_VIRTUAL_WALKTHROUGHS,Vous avez {0} visites virtuelles,566e4d75
 YOUR_APPLICATIONS,Vos candidatures,7da0f423
 YOUR_VIDEO_IS_PROCESSING,Votre vidéo est en cours de traitement et apparaîtra sous peu.,fb65d59c
 ZERO,zéro,16bd92ef
