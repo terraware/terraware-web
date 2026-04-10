@@ -59,7 +59,7 @@ test.describe('ReportSubmitTests', () => {
     await page.getByRole('button', { name: 'Reports', ...exactOptions }).click();
 
     // The reports table should load and contain the report.
-    await expect(page.getByText('Not Submitted')).toBeVisible({ timeout: 10000 });
+    await expect(page.getByText('Not Submitted').first()).toBeVisible({ timeout: 10000 });
 
     // Click the first report link to open the report detail view.
     const reportLink = page.locator('a').filter({ hasText: /^2025/ }).first();
@@ -74,10 +74,10 @@ test.describe('ReportSubmitTests', () => {
   test('Edit a report — fill in highlights — and save', async ({ page }) => {
     // Navigate directly to the edit page to avoid state dependency on previous test.
     await page.goto(`/reports/${PROJECT_ID}/${reportId}/edit`);
-    await expect(page.locator('#highlights')).toBeVisible({ timeout: 10000 });
+    await expect(page.getByText('Highlights')).toBeVisible({ timeout: 10000 });
 
     // Fill in the Highlights field.
-    await page.locator('#highlights').fill('Test highlights for e2e report submission.');
+    await page.locator('label[for="highlights"] + textarea').fill('Test highlights for e2e report submission.');
 
     // Save the report.
     await page.locator('#saveEditAcceleratorReport').click();
@@ -119,20 +119,23 @@ test.describe('ReportSubmitTests', () => {
     await page.getByRole('link', { name: 'Phase 1 Project Deal' }).click();
 
     // On the project profile page, click "View Reports".
-    await expect(page.getByRole('link', { name: 'View Reports' })).toBeVisible({ timeout: 10000 });
-    await page.getByRole('link', { name: 'View Reports' }).click();
+    await expect(page.getByRole('button', { name: 'View Reports' })).toBeVisible({ timeout: 10000 });
+    await page.getByRole('button', { name: 'View Reports' }).click();
 
     // The reports list should show the submitted report.
     await expect(page.getByText('Submitted', exactOptions)).toBeVisible({ timeout: 10000 });
 
     // Click the report link to open the console report view.
-    const reportLink = page.locator('a').filter({ hasText: /^2025/ }).first();
+    const reportLink = page
+      .locator('tr')
+      .filter({ has: page.getByText('Submitted', { exact: true }) })
+      .locator('a')
+      .filter({ hasText: /^2025/ });
     await expect(reportLink).toBeVisible();
     await reportLink.click();
-
-    // The report view should show the submitted status and the Approve button.
-    await expect(page.getByRole('button', { name: 'Approve' })).toBeVisible({ timeout: 10000 });
-    await expect(page.getByText('Submitted', exactOptions)).toBeVisible();
+    await page.waitForURL(/\/reports\/\d+$/);
+    await expect(page.getByText('Submitted', exactOptions)).toBeVisible({ timeout: 10000 });
+    await expect(page.getByRole('button', { name: 'Approve' })).toBeVisible();
 
     // Click Approve.
     await page.getByRole('button', { name: 'Approve' }).click();
