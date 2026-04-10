@@ -396,6 +396,8 @@ CREATE_ORGANIZATION_QUESTION_ORGANIZATION_TYPE,¿Cuál de las siguientes opcione
 CREATE_SPECIES_LIST,Crear lista de especies,e2fa4ff0
 CREATE_VIRTUAL_PLOT,Crear Parcela Virtual,aea239a2
 CREATE_VIRTUAL_WALKTHROUGH,Crear Recorrido Virtual,5e786aea
+CREATE_VIRTUAL_WALKTHROUGH_DESCRIPTION,"Suba un video para usar en un Recorrido Virtual. Una vez que el Recorrido Virtual haya sido procesado, aparecerá en el mapa. El procesamiento puede tardar hasta 12 horas.",7dcdd24b
+CREATE_VIRTUAL_WALKTHROUGH_STEP2_DESCRIPTION,"El video seleccionado se utilizará para un Recorrido Virtual. Una vez que el Recorrido Virtual haya sido procesado, aparecerá en el mapa. El procesamiento puede tardar hasta 12 horas.",ac22da52
 CREATED,Creado,cc1462ae
 CREATED_ON,Creado el,f66518dc
 CROWN_DIAMETER_CM,Diámetro de la copa (cm),4bc3fb02
@@ -841,6 +843,7 @@ HIGHLIGHTED_ACTIVITY,Actividad destacada,483c0ed0
 HIGHLIGHTS,Destacados,a76b6c49
 HISTORY,Historial,fe7205b3
 HOME,Inicio,8e2553bd
+HOW_TO_RECORD_A_GREAT_VIDEO,Cómo grabar un excelente video:,1602c046
 HUBSPOT,HubSpot,94ba94f4
 HUBSPOT_LINK,Enlace HubSpot,93adbf60
 I_AM_THE_ONLY_PERSON,Soy la única persona,7add78fd
@@ -1833,6 +1836,7 @@ SELECT_AT_LEAST_ONE_SUBSTRATUM,Seleccione al menos un subestrato,85a3b3d7
 SELECT_BATCHES,Seleccionar lotes,d15588c6
 SELECT_BUTTON,Seleccionar,4e21939d
 SELECT_EXISTING_PROJECT,Seleccionar proyecto existente,e3ffeef2
+SELECT_PLANTING_SITE_FOR_3D_MODEL,Seleccione un Sitio de Plantación para asociar con el Modelo 3D,b0c50942
 SELECT_PLANTING_SITE_TYPE,Seleccionar tipo del sitio de siembra,e0ce7f80
 SELECT_PLANTING_SITE_TYPE_DESCRIPTION_1,Por favor seleccione tipo del sitio de siembra a añadir.,727f5a68
 SELECT_PLANTING_SITE_TYPE_DESCRIPTION_2,"Los terrenos detallados le permiten realizar un seguimiento de la localización de las plantas dentro del terreno y realizar un seguimiento de plantas vivas/muertas. Los terrenos sencillos le permiten hacer un seguimiento de qué especies de plantas, y cuántas, se han plantado en ese terreno.",ff0f1252
@@ -2370,6 +2374,9 @@ VIEWING,Visualización,fb67a07d
 VINE,Enredadera,c39d21fb
 VIRTUAL,Virtual,51d865ab
 VIRTUAL_PLOTS,Parcelas virtuales,74b74d96
+VIRTUAL_WALKTHROUGH_STEP_1,Camine alrededor de la parcela a un ritmo constante,3e6a38ef
+VIRTUAL_WALKTHROUGH_STEP_2,Mantenga la cámara estable apuntando hacia el centro de la parcela,a19f5832
+VIRTUAL_WALKTHROUGH_STEP_3,"Recorra la parcela en una formación de ""X"" con la cámara apuntando hacia adelante.",d203df6f
 VISIT_VIRTUAL_PLOT,Visitar parcela virtual,22d34c8b
 VOTER,Votante: {0},46578e94
 VOTING_DECISION,Decisión de votación,9bb0be97
