@@ -616,7 +616,7 @@ const PlantDashboardMap = ({ plantingSiteId, projectId }: PlantDashboardMapProps
           .find((thisSubstratumHistory) => thisSubstratumHistory.substratumId === substratum.id);
 
         const substratumId = substratumHistory
-          ? { layerId: 'substrata', featureId: `${substratumHistory.name}` }
+          ? { layerId: 'substrata', featureId: `${substratumHistory.id}` }
           : { layerId: 'substrata', featureId: `${substratum.id}` };
 
         sortFeatureByObservationRecency(substratumId, substratum.latestObservationCompletedTime);
