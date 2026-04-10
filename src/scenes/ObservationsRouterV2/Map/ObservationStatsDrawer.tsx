@@ -1,4 +1,4 @@
-import React, { type JSX, useEffect, useMemo } from 'react';
+import React, { type JSX, useMemo } from 'react';
 
 import { Box, CircularProgress, useTheme } from '@mui/material';
 
@@ -7,9 +7,9 @@ import { MapLayerFeatureId } from 'src/components/NewMap/types';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
 import usePlantingSite from 'src/hooks/usePlantingSite';
+import usePlantingSiteHistory from 'src/hooks/usePlantingSiteHistory';
 import { useLocalization, useOrganization } from 'src/providers';
 import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
-import { useLazyGetPlantingSiteHistoryQuery } from 'src/queries/generated/plantingSites';
 import { MonitoringPlotStatus, ObservationState } from 'src/types/Observations';
 import { isManagerOrHigher } from 'src/utils/organization';
 
@@ -54,22 +54,17 @@ const ObservationStatsDrawer = ({
     observationId,
   });
   const { plantingSite, isLoading: plantingSiteLoading } = usePlantingSite(plantingSiteId);
-  const [getHistory, { data: plantingSiteHistoryResponse, isLoading: plantingSiteHistoryLoading }] =
-    useLazyGetPlantingSiteHistoryQuery();
+  const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse]);
 
-  const results = observationResultsResponse?.observation;
-  const siteHistory = plantingSiteHistoryResponse?.site;
+  const { plantingSiteHistory: siteHistory, isLoading: plantingSiteHistoryLoading } = usePlantingSiteHistory({
+    plantingSiteId,
+    plantingSiteHistoryId: results?.plantingSiteHistoryId,
+  });
 
   const isLoading = useMemo(
     () => observationResultsLoading || plantingSiteLoading || plantingSiteHistoryLoading,
     [observationResultsLoading, plantingSiteHistoryLoading, plantingSiteLoading]
   );
-
-  useEffect(() => {
-    if (results?.plantingSiteHistoryId) {
-      void getHistory({ id: plantingSiteId, historyId: results.plantingSiteHistoryId }, true);
-    }
-  }, [getHistory, plantingSiteId, results?.plantingSiteHistoryId]);
 
   const properties = useMemo((): ObservationStatsProperties | undefined => {
     if (layerFeatureId.layerId === 'sites') {

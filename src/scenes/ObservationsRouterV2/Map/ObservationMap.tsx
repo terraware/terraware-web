@@ -31,6 +31,7 @@ import useSurvivalRateMapLegend from 'src/components/NewMap/useSurvivalRateMapLe
 import { getBoundingBoxFromPoints } from 'src/components/NewMap/utils';
 import isEnabled from 'src/features';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
+import usePlantingSiteHistory from 'src/hooks/usePlantingSiteHistory';
 import { useLocalization, useOrganization } from 'src/providers';
 import { ObservationSplatPayload, useLazyListObservationSplatsQuery } from 'src/queries/generated/observationSplats';
 import {
@@ -38,7 +39,7 @@ import {
   ObservationMonitoringPlotResultsPayload,
   ObservationResultsPayload,
 } from 'src/queries/generated/observations';
-import { useLazyGetPlantingSiteHistoryQuery, useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
+import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import {
   ObservationMonitoringPlotPhoto,
   ObservationMonitoringPlotPhotoWithGps,
@@ -126,7 +127,6 @@ const ObservationMap = ({
 
   const { plantingSites } = useOrganizationPlantingSites({ full: true });
   const [getPlantingSite, getPlantingSiteResult] = useLazyGetPlantingSiteQuery();
-  const [getPlantingSiteHistory, getPlantingSiteHistoryResult] = useLazyGetPlantingSiteHistoryQuery();
   const [listObservationSplats, listObservationSplatsResult] = useLazyListObservationSplatsQuery();
 
   useEffect(() => {
@@ -240,28 +240,16 @@ const ObservationMap = ({
       .filter((plot): plot is ObservationMonitoringPlotResultsPayload => plot !== undefined);
   }, [selectedAdHocResults]);
 
-  useEffect(() => {
-    if (selectedResults && selectedResults.plantingSiteHistoryId) {
-      void getPlantingSiteHistory(
-        {
-          id: selectedResults.plantingSiteId,
-          historyId: selectedResults.plantingSiteHistoryId,
-        },
-        true
-      );
-    }
-  }, [getPlantingSiteHistory, selectedResults]);
+  const { plantingSiteHistory: selectedHistory } = usePlantingSiteHistory({
+    plantingSiteId,
+    plantingSiteHistoryId: selectedResults?.plantingSiteHistoryId,
+  });
 
   useEffect(() => {
     if (selectedResults && selectedObservationId) {
       void listObservationSplats({ observationId: selectedObservationId }, true);
     }
   }, [listObservationSplats, selectedObservationId, selectedResults]);
-
-  const selectedHistory = useMemo(
-    () => getPlantingSiteHistoryResult.data?.site,
-    [getPlantingSiteHistoryResult.data?.site]
-  );
 
   useEffect(() => {
     if (plantingSiteId && selectedHistory) {

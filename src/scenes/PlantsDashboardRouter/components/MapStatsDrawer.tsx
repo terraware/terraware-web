@@ -5,10 +5,10 @@ import { Box, CircularProgress } from '@mui/material';
 import MapDrawerTable, { MapDrawerTableRow } from 'src/components/MapDrawerTable';
 import { MapLayerFeatureId } from 'src/components/NewMap/types';
 import usePlantingSite from 'src/hooks/usePlantingSite';
+import usePlantingSiteHistory from 'src/hooks/usePlantingSiteHistory';
 import usePlantingSiteReportedPlants from 'src/hooks/usePlantingSiteReportedPlants';
 import { useLocalization } from 'src/providers';
 import { useListObservationSummariesQuery } from 'src/queries/generated/observations';
-import { useLazyGetPlantingSiteHistoryQuery } from 'src/queries/generated/plantingSites';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 type MapStatsProperties = {
@@ -40,35 +40,30 @@ const MapStatsDrawer = ({
   const numberFormatter = useNumberFormatter();
   const { plantingSiteReportedPlants, isLoading: isLoadingPlantingSiteReportedPlants } =
     usePlantingSiteReportedPlants(plantingSiteId);
-  const [getPlantingSiteHistory, { currentData: plantingSiteHistoryResponse, isLoading: isLoadingSiteHistory }] =
-    useLazyGetPlantingSiteHistoryQuery();
+  const { plantingSiteHistory, isLoading: isLoadingSiteHistory } = usePlantingSiteHistory({
+    plantingSiteId,
+    plantingSiteHistoryId,
+  });
   const { plantingSite, isLoading: isLoadingPlantingSite } = usePlantingSite(plantingSiteId);
-  const plantingSiteHistory = useMemo(() => plantingSiteHistoryResponse?.site, [plantingSiteHistoryResponse?.site]);
+  const { currentData: observationSummariesData, isFetching: isLoadingObservationSummaries } =
+    useListObservationSummariesQuery({ plantingSiteId, limit: 1 });
+  const observationSummaries = useMemo(() => observationSummariesData?.summaries, [observationSummariesData]);
 
-  const isLoading = isLoadingPlantingSiteReportedPlants || isLoadingPlantingSite;
+  const isLoading = useMemo(
+    () =>
+      isLoadingPlantingSiteReportedPlants ||
+      isLoadingPlantingSite ||
+      isLoadingSiteHistory ||
+      isLoadingObservationSummaries,
+    [isLoadingObservationSummaries, isLoadingPlantingSite, isLoadingPlantingSiteReportedPlants, isLoadingSiteHistory]
+  );
 
-  const observationSummariesQuery = useListObservationSummariesQuery({ plantingSiteId });
-  const observationSummaries = observationSummariesQuery.data?.summaries;
-
-  const combinedLoading = isLoading || isLoadingSiteHistory || observationSummariesQuery.isFetching;
-  const [delayedLoading, setDelayedLoading] = useState(combinedLoading);
-
-  useEffect(() => {
-    if (plantingSiteHistoryId) {
-      void getPlantingSiteHistory(
-        {
-          id: plantingSiteId,
-          historyId: plantingSiteHistoryId,
-        },
-        true
-      );
-    }
-  }, [getPlantingSiteHistory, plantingSiteHistoryId, plantingSiteId]);
+  const [delayedLoading, setDelayedLoading] = useState(isLoading);
 
   useEffect(() => {
     let timeout: NodeJS.Timeout;
 
-    if (combinedLoading) {
+    if (isLoading) {
       // immediately set to loading
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setDelayedLoading(true);
@@ -80,7 +75,7 @@ const MapStatsDrawer = ({
     }
 
     return () => clearTimeout(timeout);
-  }, [combinedLoading]);
+  }, [isLoading]);
 
   const latestSummary = useMemo(
     () => (observationSummaries && observationSummaries.length > 0 ? observationSummaries[0] : undefined),

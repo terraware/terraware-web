@@ -26,16 +26,13 @@ import usePlantingSiteMapLegend from 'src/components/NewMap/usePlantingSiteMapLe
 import usePlotPhotosMapLegend from 'src/components/NewMap/usePlotPhotosMapLegend';
 import useSurvivalRateMapLegend from 'src/components/NewMap/useSurvivalRateMapLegend';
 import { getBoundingBoxFromPoints } from 'src/components/NewMap/utils';
+import usePlantingSiteHistory from 'src/hooks/usePlantingSiteHistory';
 import useProjectPlantingSites from 'src/hooks/useProjectPlantingSites';
 import {
   useLazyListObservationResultsQuery,
   useLazyListObservationSummariesQuery,
 } from 'src/queries/generated/observations';
-import {
-  PlantingSiteHistoryPayload,
-  useLazyGetPlantingSiteHistoryQuery,
-  useLazyGetPlantingSiteQuery,
-} from 'src/queries/generated/plantingSites';
+import { PlantingSiteHistoryPayload, useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import { MapService } from 'src/services';
 import {
   ObservationMonitoringPlotPhoto,
@@ -71,7 +68,6 @@ const PlantDashboardMap = ({ plantingSiteId, projectId }: PlantDashboardMapProps
   const { selectedLayer, plantingSiteLegendGroup } = usePlantingSiteMapLegend('strata');
   const { plantingSites: projectPlantingSites } = useProjectPlantingSites({ full: true, projectId });
   const [getPlantingSite, getPlantingSiteResponse] = useLazyGetPlantingSiteQuery();
-  const [getPlantingSiteHistory, getPlantingSiteHistoryResponse] = useLazyGetPlantingSiteHistoryQuery();
   const [listObservationResults, listObservationResultsResponse] = useLazyListObservationResultsQuery();
   const [listObservataionSummary, listObservataionSummaryResponse] = useLazyListObservationSummariesQuery();
 
@@ -84,10 +80,6 @@ const PlantDashboardMap = ({ plantingSiteId, projectId }: PlantDashboardMapProps
   }, [getPlantingSite, listObservataionSummary, listObservationResults, plantingSiteId]);
 
   const plantingSite = useMemo(() => getPlantingSiteResponse.currentData?.site, [getPlantingSiteResponse]);
-  const plantingSiteHistory = useMemo(
-    () => getPlantingSiteHistoryResponse.currentData?.site,
-    [getPlantingSiteHistoryResponse.currentData?.site]
-  );
 
   const latestSummary = useMemo(() => {
     if (listObservataionSummaryResponse.currentData?.summaries.length) {
@@ -108,14 +100,10 @@ const PlantDashboardMap = ({ plantingSiteId, projectId }: PlantDashboardMapProps
     }
   }, [listObservationResultsResponse]);
 
-  useEffect(() => {
-    if (plantingSiteId && latestObservationResult?.plantingSiteHistoryId) {
-      void getPlantingSiteHistory(
-        { id: plantingSiteId, historyId: latestObservationResult.plantingSiteHistoryId },
-        true
-      );
-    }
-  }, [getPlantingSiteHistory, latestObservationResult, plantingSiteId]);
+  const { plantingSiteHistory } = usePlantingSiteHistory({
+    plantingSiteId,
+    plantingSiteHistoryId: latestObservationResult?.plantingSiteHistoryId,
+  });
 
   const {
     deadPlantsVisible,
@@ -567,7 +555,7 @@ const PlantDashboardMap = ({ plantingSiteId, projectId }: PlantDashboardMapProps
           .find((thisSubstratumHistory) => thisSubstratumHistory.substratumId === substratum.substratumId);
 
         const substratumId = substratumHistory
-          ? { layerId: 'substrata', featureId: `${substratumHistory.substratumId}` }
+          ? { layerId: 'substrata', featureId: `${substratumHistory.id}` }
           : { layerId: 'substrata', featureId: `${substratum.substratumId}` };
         sortFeatureBySurvivalRate(substratumId, substratum.survivalRate);
       });
