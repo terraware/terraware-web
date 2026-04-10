@@ -18,7 +18,7 @@ import {
 } from 'src/components/NewMap/types';
 import useMapUtils from 'src/components/NewMap/useMapUtils';
 import { getBoundingBoxFromMultiPolygons, getBoundingBoxFromPoints } from 'src/components/NewMap/utils';
-import { useProjectPlantingSites } from 'src/hooks/useProjectPlantingSites';
+import useProjectPlantingSites from 'src/hooks/useProjectPlantingSites';
 import { activityTypeColor } from 'src/types/Activity';
 import useMapboxToken from 'src/utils/useMapboxToken';
 
@@ -51,7 +51,7 @@ export default function MapSplitView({
   const { isDesktop } = useDeviceInfo();
   const { mapId, refreshToken, token } = useMapboxToken();
   const { fitBounds } = useMapUtils(mapRef);
-  const { plantingSites } = useProjectPlantingSites(projectId);
+  const { plantingSites } = useProjectPlantingSites({ projectId });
   const [searchParams, setSearchParams] = useSearchParams();
   const [previousProjectId, setPreviousProjectId] = useState(projectId);
 

@@ -13,7 +13,7 @@ import MapLayerSelect, { MapLayer } from 'src/components/common/MapLayerSelect';
 import PlantingSiteMapLegend from 'src/components/common/PlantingSiteMapLegend';
 import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import usePlantingSite from 'src/hooks/usePlantingSite';
-import { useLazyGetPlantingSiteHistoryQuery } from 'src/queries/generated/plantingSites';
+import usePlantingSiteHistory from 'src/hooks/usePlantingSiteHistory';
 import { useListPlantingSiteHistoryIdsQuery } from 'src/queries/search/plantingSiteHistories';
 import { MapService } from 'src/services';
 import strings from 'src/strings';
@@ -134,22 +134,11 @@ function PlantingSiteMapView({ search }: PlantingSiteMapViewProps): JSX.Element 
   const { plantingSite } = usePlantingSite(plantingSiteId);
 
   const { data: plantingSiteHistoryIds } = useListPlantingSiteHistoryIdsQuery(plantingSiteId);
-  const [getPlantingSiteHistory, { data: plantingSiteHistoryData }] = useLazyGetPlantingSiteHistoryQuery();
-  const selectedHistory = useMemo(() => plantingSiteHistoryData?.site, [plantingSiteHistoryData]);
 
-  useEffect(() => {
-    if (plantingSiteId && selectedHistoryId) {
-      const siteId = Number(plantingSiteId);
-      void getPlantingSiteHistory(
-        {
-          id: siteId,
-          historyId: selectedHistoryId,
-        },
-        true
-      );
-    }
-  }, [getPlantingSiteHistory, plantingSiteId, selectedHistoryId]);
-
+  const { plantingSiteHistory: selectedHistory } = usePlantingSiteHistory({
+    plantingSiteId,
+    plantingSiteHistoryId: selectedHistoryId,
+  });
   const dates = useMemo(() => {
     return plantingSiteHistoryIds?.map((history) => history.createdTime);
   }, [plantingSiteHistoryIds]);
