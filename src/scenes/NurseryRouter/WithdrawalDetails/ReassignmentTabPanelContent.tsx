@@ -14,7 +14,6 @@ import OutplantReassignmentTable from './sections/OutplantReassignmentTable';
 
 type ReassignmentTabPanelContentProps = {
   species: Species[];
-  substratumNames: Record<number, string>;
   withdrawal?: NurseryWithdrawal;
   delivery?: Delivery;
   batches?: Batch[];
@@ -22,7 +21,6 @@ type ReassignmentTabPanelContentProps = {
 
 export default function ReassignmentTabPanelContent({
   species,
-  substratumNames,
   withdrawal,
   delivery,
 }: ReassignmentTabPanelContentProps): JSX.Element {
@@ -62,12 +60,7 @@ export default function ReassignmentTabPanelContent({
         ))}
       </Grid>
       <Box marginTop={theme.spacing(3)}>
-        <OutplantReassignmentTable
-          species={species}
-          substratumNames={substratumNames}
-          delivery={delivery}
-          withdrawalNotes={withdrawal?.notes}
-        />
+        <OutplantReassignmentTable species={species} delivery={delivery} withdrawalNotes={withdrawal?.notes} />
       </Box>
     </Box>
   );

@@ -1,8 +1,10 @@
-import React, { type JSX, useMemo } from 'react';
+import React, { type JSX, useEffect, useMemo } from 'react';
 
 import { TableColumnType } from '@terraware/web-components';
 
 import Table from 'src/components/common/table';
+import { useOrganization } from 'src/providers';
+import { useLazyListSubstrataQuery } from 'src/queries/search/substrata';
 import strings from 'src/strings';
 import { Species } from 'src/types/Species';
 import { Delivery } from 'src/types/Tracking';
@@ -10,7 +12,6 @@ import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 type OutplantReassignmentTableProps = {
   species: Species[];
-  substratumNames: Record<number, string>;
   delivery?: Delivery;
   withdrawalNotes?: string;
 };
@@ -27,10 +28,30 @@ const columns = (): TableColumnType[] => [
 export default function OutplantReassignmentTable({
   delivery,
   species,
-  substratumNames,
   withdrawalNotes,
 }: OutplantReassignmentTableProps): JSX.Element {
   const numberFormatter = useNumberFormatter();
+
+  const { selectedOrganization } = useOrganization();
+  const [listSubstrata, listSubstrataResponse] = useLazyListSubstrataQuery();
+  const substratumNames = useMemo((): Record<number, string> => {
+    if (listSubstrataResponse.currentData) {
+      const results = {} as Record<number, string>;
+      listSubstrataResponse.currentData.forEach(({ id, name }) => {
+        results[id] = name;
+      });
+
+      return results;
+    } else {
+      return {};
+    }
+  }, [listSubstrataResponse.currentData]);
+
+  useEffect(() => {
+    if (selectedOrganization) {
+      void listSubstrata(selectedOrganization.id, true);
+    }
+  }, [listSubstrata, selectedOrganization]);
 
   const rowData = useMemo(() => {
     // get list of distinct species

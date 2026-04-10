@@ -6,6 +6,7 @@ import { Autocomplete, DropdownItem, Textfield } from '@terraware/web-components
 
 import CellRenderer from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
+import { StratumResponsePayload, SubstratumResponsePayload } from 'src/queries/generated/plantingSites';
 import strings from 'src/strings';
 import { NumberFormatter } from 'src/types/Number';
 
@@ -33,8 +34,8 @@ export type ReassignmentRowType = {
   numPlants: number;
   species: string;
   siteName: string;
-  originalStratum: StratumInfo;
-  originalSubstratum: SubstratumInfo;
+  originalStratum: StratumResponsePayload;
+  originalSubstratum: SubstratumResponsePayload;
   reassignment: Reassignment;
 };
 

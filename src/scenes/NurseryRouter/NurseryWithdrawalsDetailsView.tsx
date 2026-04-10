@@ -45,15 +45,9 @@ export interface WithdrawalSummary {
 
 type NurseryWithdrawalsDetailsViewProps = {
   species: Species[];
-  stratumNames: Record<number, string>;
-  substratumNames: Record<number, string>;
 };
 
-export default function NurseryWithdrawalsDetailsView({
-  species,
-  stratumNames,
-  substratumNames,
-}: NurseryWithdrawalsDetailsViewProps): JSX.Element {
+export default function NurseryWithdrawalsDetailsView({ species }: NurseryWithdrawalsDetailsViewProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { activeLocale } = useLocalization();
   const theme = useTheme();
@@ -159,8 +153,6 @@ export default function NurseryWithdrawalsDetailsView({
           >
             <WithdrawalTabPanelContent
               species={species}
-              stratumNames={stratumNames}
-              substratumNames={substratumNames}
               withdrawal={withdrawal}
               withdrawalSummary={withdrawalSummary}
               delivery={delivery}
@@ -182,7 +174,6 @@ export default function NurseryWithdrawalsDetailsView({
           >
             <ReassignmentTabPanelContent
               species={species}
-              substratumNames={substratumNames}
               withdrawal={withdrawal}
               delivery={delivery}
               batches={batches}
@@ -191,18 +182,7 @@ export default function NurseryWithdrawalsDetailsView({
         ),
       },
     ];
-  }, [
-    activeLocale,
-    batches,
-    delivery,
-    isMobile,
-    species,
-    stratumNames,
-    substratumNames,
-    theme,
-    withdrawal,
-    withdrawalSummary,
-  ]);
+  }, [activeLocale, batches, delivery, isMobile, species, theme, withdrawal, withdrawalSummary]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'withdrawal',
@@ -285,8 +265,6 @@ export default function NurseryWithdrawalsDetailsView({
           <Box sx={contentPanelProps}>
             <WithdrawalTabPanelContent
               species={species}
-              stratumNames={stratumNames}
-              substratumNames={substratumNames}
               withdrawal={withdrawal}
               withdrawalSummary={withdrawalSummary}
               delivery={delivery}
