@@ -13,6 +13,7 @@ import TfMain from 'src/components/common/TfMain';
 import TitleDescription from 'src/components/common/TitleDescription';
 import Table from 'src/components/common/table';
 import { APP_PATHS } from 'src/constants';
+import usePlantingSite from 'src/hooks/usePlantingSite';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { TrackingService } from 'src/services';
@@ -23,7 +24,7 @@ import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
 
-import ReassignmentRenderer, { Reassignment, ReassignmentRowType, StratumInfo } from './ReassignmentRenderer';
+import ReassignmentRenderer, { Reassignment, ReassignmentRowType } from './ReassignmentRenderer';
 
 const columns = (): TableColumnType[] => [
   { key: 'species', name: strings.SPECIES, type: 'string' },
@@ -45,13 +46,12 @@ export default function NurseryReassignmentView(): JSX.Element {
   const { deliveryId } = useParams<{ deliveryId: string }>();
   const snackbar = useSnackbar();
   const [delivery, setDelivery] = useState<Delivery>();
-  const [strata, setStrata] = useState<StratumInfo[]>();
-  const [siteName, setSiteName] = useState<string>();
   const [reassignments, setReassignments] = useState<{ [substratumId: string]: Reassignment }>({});
   const [noReassignments, setNoReassignments] = useState<boolean>(false);
   const contentRef = useRef(null);
 
   const { species } = useSpeciesData();
+  const { plantingSite } = usePlantingSite(delivery?.plantingSiteId);
 
   // populate delivery
   useEffect(() => {
@@ -69,36 +69,6 @@ export default function NurseryReassignmentView(): JSX.Element {
 
     void populateDelivery();
   }, [deliveryId, snackbar]);
-
-  // populate strata
-  useEffect(() => {
-    if (!delivery) {
-      return;
-    }
-
-    const populateStrata = async () => {
-      const response = await TrackingService.getPlantingSite(delivery.plantingSiteId);
-      if (response.requestSucceeded && response.site) {
-        setSiteName(response.site.name);
-
-        if (!response.site.strata) {
-          return;
-        }
-
-        const stratumInfos = response.site.strata.map((stratum) => ({
-          id: stratum.id,
-          name: stratum.name,
-          substrata: stratum.substrata.map((substratum) => ({ id: substratum.id, name: substratum.name })),
-        }));
-
-        setStrata(stratumInfos);
-      } else {
-        snackbar.toastError();
-      }
-    };
-
-    void populateStrata();
-  }, [delivery, snackbar]);
 
   const goToWithdrawals = () => {
     const withdrawalId = query.has('fromWithdrawal') ? delivery?.withdrawalId : undefined;
@@ -146,7 +116,7 @@ export default function NurseryReassignmentView(): JSX.Element {
   };
 
   const plantings: ReassignmentRowType[] = useMemo(() => {
-    if (!delivery || !siteName || !strata) {
+    if (!delivery || !plantingSite) {
       return [];
     }
 
@@ -156,7 +126,7 @@ export default function NurseryReassignmentView(): JSX.Element {
           return null;
         }
 
-        const originalStratum = strata.find((stratum) =>
+        const originalStratum = plantingSite.strata?.find((stratum) =>
           stratum.substrata.some((substratum) => substratum.id === planting.substratumId)
         );
         if (!originalStratum) {
@@ -172,20 +142,20 @@ export default function NurseryReassignmentView(): JSX.Element {
         return {
           numPlants: planting.numPlants,
           species: species.find((_species) => _species.id === planting.speciesId)?.scientificName ?? '',
-          siteName,
+          siteName: plantingSite?.name,
           originalStratum,
           originalSubstratum,
           reassignment: reassignments[planting.id] || { plantingId: planting.id, notes: '' },
         };
       })
       .filter((planting): planting is ReassignmentRowType => !!planting);
-  }, [delivery, siteName, species, strata, reassignments]);
+  }, [delivery, species, plantingSite, reassignments]);
 
   const reassignmentRenderer = useMemo(
     () =>
       ReassignmentRenderer({
         numberFormatter,
-        strata: strata || [],
+        strata: plantingSite?.strata || [],
         setReassignment: (reassignment: Reassignment) =>
           setReassignments((current) => {
             const newReassignments = { ...current };
@@ -193,7 +163,7 @@ export default function NurseryReassignmentView(): JSX.Element {
             return newReassignments;
           }),
       }),
-    [strata, numberFormatter]
+    [plantingSite, numberFormatter]
   );
 
   return (
@@ -222,7 +192,7 @@ export default function NurseryReassignmentView(): JSX.Element {
           <ErrorBox title={strings.NO_REASSIGNMENTS} text={strings.NO_REASSIGNMENTS_TEXT} />
         </Box>
       )}
-      {strata ? (
+      {plantingSite ? (
         <PageForm
           cancelID='cancelNurseryReassignment'
           saveID='saveNurseryReassignment'

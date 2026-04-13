@@ -1,9 +1,11 @@
-import React, { type JSX, useMemo } from 'react';
+import React, { type JSX, useEffect, useMemo } from 'react';
 
 import { TableColumnType } from '@terraware/web-components';
 
 import Table from 'src/components/common/table';
-import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
+import { useOrganization } from 'src/providers';
+import { useLazyListStrataQuery } from 'src/queries/search/strata';
+import { SubstratumPayload, useLazyListSubstrataQuery } from 'src/queries/search/substrata';
 import strings from 'src/strings';
 import { Batch, NurseryWithdrawal } from 'src/types/Batch';
 import { Species } from 'src/types/Species';
@@ -15,8 +17,6 @@ import WithdrawalRenderer from './WithdrawalRenderer';
 
 type OutplantWithdrawalTableProps = {
   species: Species[];
-  substratumNames: Record<number, string>;
-  stratumNames: Record<number, string>;
   delivery?: Delivery;
   batches?: Batch[];
   withdrawal?: NurseryWithdrawal;
@@ -32,14 +32,12 @@ const columns = (): TableColumnType[] => [
 
 export default function OutplantWithdrawalTable({
   species,
-  stratumNames,
-  substratumNames,
   delivery,
   batches,
   withdrawal,
 }: OutplantWithdrawalTableProps): JSX.Element {
   const numberFormatter = useNumberFormatter();
-  const { plantingSites } = useOrganizationPlantingSites({ full: true });
+  const { selectedOrganization } = useOrganization();
 
   type BatchesRow = {
     name?: string;
@@ -51,18 +49,41 @@ export default function OutplantWithdrawalTable({
     toSubstratum: string;
   };
 
-  const plantingSiteId = delivery?.plantingSiteId;
-  const plantingSite = plantingSites?.find((site) => site.id === plantingSiteId);
+  const [listStrata, listStrataResponse] = useLazyListStrataQuery();
+  const [listSubstrata, listSubstrataResponse] = useLazyListSubstrataQuery();
 
-  const substratumToStratumMap = useMemo(() => {
-    const map: Record<number, number> = {};
-    plantingSite?.strata?.forEach((stratum) => {
-      stratum.substrata?.forEach((substratum) => {
-        map[substratum.id] = stratum.id;
+  const stratumNames = useMemo((): Record<number, string> => {
+    if (listStrataResponse.currentData) {
+      const results = {} as Record<number, string>;
+      listStrataResponse.currentData.forEach(({ id, name }) => {
+        results[id] = name;
       });
-    });
-    return map;
-  }, [plantingSite?.strata]);
+
+      return results;
+    } else {
+      return {};
+    }
+  }, [listStrataResponse.currentData]);
+
+  const substratumById = useMemo((): Record<number, SubstratumPayload> => {
+    if (listSubstrataResponse.currentData) {
+      const results = {} as Record<number, SubstratumPayload>;
+      listSubstrataResponse.currentData.forEach((substratum) => {
+        results[substratum.id] = substratum;
+      });
+
+      return results;
+    } else {
+      return {};
+    }
+  }, [listSubstrataResponse]);
+
+  useEffect(() => {
+    if (selectedOrganization) {
+      void listStrata(selectedOrganization.id, true);
+      void listSubstrata(selectedOrganization.id, true);
+    }
+  }, [listStrata, listSubstrata, selectedOrganization]);
 
   const rowData = useMemo(() => {
     if (batches) {
@@ -85,7 +106,7 @@ export default function OutplantWithdrawalTable({
           ?.filter((pl) => pl.speciesId === sp && pl.type === 'Delivery')
           .forEach((pl) => {
             const substratumId = pl.substratumId ?? -1;
-            const stratumId = substratumId !== -1 ? substratumToStratumMap[substratumId] : undefined;
+            const stratumId = substratumId !== -1 ? substratumById[substratumId]?.stratumId : undefined;
             if (!speciesSubstratumMap[sp][substratumId]) {
               speciesSubstratumMap[sp][substratumId] = pl.numPlants;
             } else {
@@ -103,8 +124,8 @@ export default function OutplantWithdrawalTable({
           rows.push({
             quantity: numberFormatter.format(speciesSubstratumMap[sp][substratumId]),
             species: species?.find((x) => x?.id === sp)?.scientificName ?? '',
-            to_stratum: substratumId > -1 ? stratumNames[substratumToStratumMap[substratumId]] ?? '' : '',
-            to_substratum: substratumId > -1 ? substratumNames[substratumId] ?? substratumId?.toString() : '',
+            to_stratum: substratumId > -1 ? substratumById[substratumId]?.stratumName ?? '' : '',
+            to_substratum: substratumId > -1 ? substratumById[substratumId]?.name ?? substratumId?.toString() : '',
           });
         }
       }
@@ -126,7 +147,7 @@ export default function OutplantWithdrawalTable({
           const toStratum = stratumIds.map((_id) => stratumNames[Number(_id)]).join(',');
           const substratumMap = speciesSubstratumMap[speciesId];
           const substratumIds = Object.keys(substratumMap);
-          const toSubstratum = substratumIds.map((_subId) => substratumNames[Number(_subId)]).join(',');
+          const toSubstratum = substratumIds.map((_subId) => substratumById[Number(_subId)]?.name ?? '').join(',');
 
           batchesMap.push({
             batchId,
@@ -150,8 +171,7 @@ export default function OutplantWithdrawalTable({
     numberFormatter,
     species,
     stratumNames,
-    substratumNames,
-    substratumToStratumMap,
+    substratumById,
     withdrawal?.batchWithdrawals,
   ]);
 
