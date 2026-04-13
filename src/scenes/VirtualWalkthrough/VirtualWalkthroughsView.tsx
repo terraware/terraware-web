@@ -7,6 +7,7 @@ import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 
+import VirtualWalkthroughsMap from './VirtualWalkthroughsMap';
 import VirtualWalkthroughsTable from './VirtualWalkthroughsTable';
 
 export default function VirtualWalkthroughsView(): JSX.Element {
@@ -28,7 +29,9 @@ export default function VirtualWalkthroughsView(): JSX.Element {
             borderRadius: '8px',
             height: '400px',
           }}
-        />
+        >
+          <VirtualWalkthroughsMap />
+        </Box>
         <VirtualWalkthroughsTable />
       </Box>
     </TfMain>
