@@ -29,9 +29,9 @@ export default function VirtualWalkthroughsMap(): JSX.Element {
       const points = plantingSites.flatMap(
         (site) =>
           site.boundary?.coordinates
-            .flat()
-            .flat()
-            .map(([lng, lat]): MapPoint => ({ lat, lng })) ?? []
+            ?.flat()
+            ?.flat()
+            ?.map(([lng, lat]): MapPoint => ({ lat, lng })) ?? []
       );
       if (points.length) {
         fitBounds(getBoundingBoxFromPoints(points));
