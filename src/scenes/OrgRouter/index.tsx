@@ -7,6 +7,7 @@ import ErrorBoundary from 'src/ErrorBoundary';
 import ProjectsRouter from 'src/components/Projects/Router';
 import SeedFundReportsRouter from 'src/components/SeedFundReports/Router';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
 import ApplicationProvider from 'src/providers/Application';
 import ParticipantProvider from 'src/providers/Participant/ParticipantProvider';
@@ -41,6 +42,7 @@ import AcceleratorReportsRouter from 'src/scenes/Reports';
 import SeedBanksRouter from 'src/scenes/SeedBanksRouter';
 import SeedsDashboard from 'src/scenes/SeedsDashboard';
 import SpeciesRouter from 'src/scenes/Species';
+import VirtualWalkthroughsView from 'src/scenes/VirtualWalkthrough/VirtualWalkthroughsView';
 import { Project } from 'src/types/Project';
 import { getRgbaFromHex } from 'src/utils/color';
 import { isPlaceholderOrg, selectedOrgHasFacilityType } from 'src/utils/organization';
@@ -79,6 +81,8 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
 
   const hasObservationsResults = useMemo(() => !!countObservationsResult, [countObservationsResult]);
   const hasPlantingSites = useMemo(() => !!countPlantingSitesResult.data, [countPlantingSitesResult.data]);
+
+  const isVirtualWalkthorughEnabled = isEnabled('Virtual Monitoring Plots');
 
   const contentStyles = {
     height: '100%',
@@ -236,6 +240,9 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
             <Route path={APP_PATHS.DELIVERABLES + '/*'} element={<DeliverablesRouter />} />
             <Route path={APP_PATHS.APPLICATIONS + '/*'} element={<ApplicationRouter />} />
             <Route path={APP_PATHS.ACTIVITY_LOG + '/*'} element={<ActivityLogRouter />} />
+            {isVirtualWalkthorughEnabled && (
+              <Route path={APP_PATHS.VIRTUAL_WALKTHROUGHS + '/*'} element={<VirtualWalkthroughsView />} />
+            )}
 
             {!isProduction && (
               <Route path={APP_PATHS.OPT_IN} element={<OptInFeaturesView refresh={reloadPreferences} />} />
