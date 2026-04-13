@@ -82,7 +82,7 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
   const hasObservationsResults = useMemo(() => !!countObservationsResult, [countObservationsResult]);
   const hasPlantingSites = useMemo(() => !!countPlantingSitesResult.data, [countPlantingSitesResult.data]);
 
-  const isVirtualWalkthorughEnabled = isEnabled('Virtual Monitoring Plots');
+  const isVirtualWalkthroughEnabled = isEnabled('Virtual Monitoring Plots');
 
   const contentStyles = {
     height: '100%',
@@ -240,7 +240,7 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
             <Route path={APP_PATHS.DELIVERABLES + '/*'} element={<DeliverablesRouter />} />
             <Route path={APP_PATHS.APPLICATIONS + '/*'} element={<ApplicationRouter />} />
             <Route path={APP_PATHS.ACTIVITY_LOG + '/*'} element={<ActivityLogRouter />} />
-            {isVirtualWalkthorughEnabled && (
+            {isVirtualWalkthroughEnabled && (
               <Route path={APP_PATHS.VIRTUAL_WALKTHROUGHS + '/*'} element={<VirtualWalkthroughsView />} />
             )}
 
