@@ -1,10 +1,12 @@
 import React from 'react';
+import { useLocation } from 'react-router';
 
 import { Grid, useTheme } from '@mui/material';
 
 import DismissibleWrapper from 'src/components/common/DismissibleWrapper';
 import ParticipantPage from 'src/components/common/PageWithModuleTimeline/ParticipantPage';
 import isEnabled from 'src/features';
+import VirtualWalkthroughMessages from 'src/scenes/VirtualWalkthrough/VirtualWalkthroughMessages';
 
 import VirtualWalkthroughCard from '../TerrawareHomeView/VirtualWalkthroughCard';
 import CurrentModule from './CurrentModule';
@@ -15,8 +17,11 @@ import WelcomeBanner from './WelcomeBanner';
 
 const ParticipantHomeView = () => {
   const theme = useTheme();
+  const location = useLocation();
 
   const virtualWalkthroughEnabled = isEnabled('Virtual Monitoring Plots');
+  const virtualWalkthroughStatus = (location.state as { virtualWalkthroughStatus?: string } | null)
+    ?.virtualWalkthroughStatus;
 
   return (
     <ParticipantPage>
@@ -24,6 +29,16 @@ const ParticipantHomeView = () => {
         <Grid item>
           <Header />
         </Grid>
+
+        {virtualWalkthroughEnabled && (
+          <Grid item marginTop={theme.spacing(2)}>
+            <VirtualWalkthroughMessages
+              processingCount={virtualWalkthroughStatus === 'processing' ? 1 : 0}
+              hasUploadFailed={virtualWalkthroughStatus === 'failed'}
+              hasUnableToProcess={virtualWalkthroughStatus === 'unable-to-process'}
+            />
+          </Grid>
+        )}
 
         <DismissibleWrapper dontShowAgainPreferenceName={'dont-show-accelerator-welcome-banner'}>
           {(onClose) => (

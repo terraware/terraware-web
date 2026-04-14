@@ -1725,6 +1725,8 @@ RESET_STATUS,Restablecer estado,75db6b41
 RESET_STATUS_BODY,Agregar esta especie al/los proyecto(s) seleccionado(s) restablecerá el estado del entregable. Tendrás que volver a enviar el entregable para su aprobación para: {0},357adbe0
 RESTART_PRESCREEN,Reanudar prueba de preselección,6dba93aa
 RESTART_PRESCREEN_CONFIRMATION,Está a punto de reiniciar su preselección.,cd9aa0b9
+RETRY,Reintentar,65b3392f
+RETRY_UPLOAD,Reintentar carga,1847db8b
 REVIEW,Revisar,646ae645
 REVIEW_AND_SUBMIT,Revisar y enviar,c471786c
 REVIEW_APPLICATION,Revisar solicitud,6e3751e9
@@ -2311,6 +2313,7 @@ UPLOAD_FILES_DESCRIPTION,Buscar o arrastrar y soltar archivos.,7c4a7822
 UPLOAD_FILES_DESCRIPTION_FORMATS,"Busque o arrastre y suelte fotos y/o videos (JPG, PNG, MP4, MOV)",db3af0c6
 UPLOAD_FILES_TITLE,Cargar archivo(s),bd0f5440
 UPLOAD_MODULES_DESCRIPTION,Explore o arrastre y suelte un archivo CSV.,0e9c1a46
+UPLOAD_NEW_VIDEO,subir un nuevo video,20f126dc
 UPLOAD_PHOTO,Cargar foto...,9a57b4af
 UPLOAD_PHOTO_DESCR_LANDSCAPE_3_2,"Examine o arrastre y suelte un archivo (JPG, PNG). Se recomienda una fotografía en posición horizontal (alineación horizontal y/o relación de aspecto 3:2).",a126e16b
 UPLOAD_PHOTO_DESCRIPTION,"Busca o arrastra y coloca aquí un archivo (JPG, PNG).",9c8c3f2c
@@ -2361,6 +2364,11 @@ VIABILITY_TESTING_EMPTY_MESSAGE,El Ensayo de viabilidad te ayuda a monitorear la
 VIABILITY_TESTS,Pruebas de viabilidad,097a958c
 VIDEO_LINK,Enlace de video,2546979d
 VIDEO_PROCESSING,Procesamiento de video,998e847c
+VIDEO_PROCESSING_DESCRIPTION,Tiene {0} video(s) aún en proceso. Esto puede tardar hasta 12 horas.,d85b02f6
+VIDEO_UNABLE_TO_PROCESS,No se pudo procesar el video,3817bfb4
+VIDEO_UNABLE_TO_PROCESS_DESCRIPTION,"No pudimos generar el modelo a partir del video proporcionado. Para obtener consejos sobre cómo mejorar su video, consulte el {0}. Puede eliminar el video de la tabla a continuación. {1} o {2}.",a9655e8d
+VIDEO_UPLOAD_FAILED,Error al cargar el video,2406bea0
+VIDEO_UPLOAD_FAILED_DESCRIPTION,"No se pudo cargar su video. {0}. Para obtener consejos sobre cómo mejorar su video, consulte el {1}.",0fbf7c0c
 VIEW,Ver,02cff17a
 VIEW_APPLICATION,Ver solicitud,bbdc193f
 VIEW_FULL_DASHBOARD,Ver panel de control completo,25189646
@@ -2379,9 +2387,9 @@ VIEWING,Visualización,fb67a07d
 VINE,Enredadera,c39d21fb
 VIRTUAL,Virtual,51d865ab
 VIRTUAL_PLOTS,Parcelas virtuales,74b74d96
-VIRTUAL_WALKTHROUGH_STEP_1,Camine alrededor de la parcela a un ritmo constante,3e6a38ef
-VIRTUAL_WALKTHROUGH_STEP_2,Mantenga la cámara estable apuntando hacia el centro de la parcela,a19f5832
-VIRTUAL_WALKTHROUGH_STEP_3,"Recorra la parcela en una formación de ""X"" con la cámara apuntando hacia adelante.",d203df6f
+VIRTUAL_WALKTHROUGH_STEP_1,Camine por el área que desea registrar a un ritmo constante.,590d04be
+VIRTUAL_WALKTHROUGH_STEP_2,Recorra toda el área dos veces en formación de espiral.,75ea84f9
+VIRTUAL_WALKTHROUGH_STEP_3,"Mantenga la cámara estable, siempre apuntando al centro.",1db14cb7
 VIRTUAL_WALKTHROUGHS,Recorridos virtuales,74c630f5
 VISIT_VIRTUAL_PLOT,Visitar parcela virtual,22d34c8b
 VOTER,Votante: {0},46578e94

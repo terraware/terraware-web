@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useMixpanel } from 'react-mixpanel-browser';
+import { useLocation } from 'react-router';
 
 import { Box, Container, Grid, Typography } from '@mui/material';
 import { IconName } from '@terraware/web-components';
@@ -22,6 +23,7 @@ import { useLazySearchPlantingSitesQuery } from 'src/queries/search/plantingSite
 import NewApplicationModal from 'src/scenes/ApplicationRouter/NewApplicationModal';
 import CTACard from 'src/scenes/Home/CTACard';
 import MobileAppCard from 'src/scenes/Home/MobileAppCard';
+import VirtualWalkthroughMessages from 'src/scenes/VirtualWalkthrough/VirtualWalkthroughMessages';
 import { PreferencesService } from 'src/services';
 import strings from 'src/strings';
 import { isAdmin, isManagerOrHigher, selectedOrgHasFacilityType } from 'src/utils/organization';
@@ -44,6 +46,10 @@ const TerrawareHomeView = () => {
   const orgNurserySummary = useOrgNurserySummary();
   const showAcceleratorCard = orgPreferences.showAcceleratorCard !== false;
   const virtualWalkthroughEnabled = isEnabled('Virtual Monitoring Plots');
+
+  const location = useLocation();
+  const virtualWalkthroughStatus = (location.state as { virtualWalkthroughStatus?: string } | null)
+    ?.virtualWalkthroughStatus;
 
   const [isNewApplicationModalOpen, setIsNewApplicationModalOpen] = useState<boolean>(false);
 
@@ -257,6 +263,15 @@ const TerrawareHomeView = () => {
             />
             <Container maxWidth={false} sx={{ padding: 0 }}>
               <Grid container spacing={3} sx={{ padding: 0 }}>
+                {virtualWalkthroughEnabled && (
+                  <Grid item xs={12}>
+                    <VirtualWalkthroughMessages
+                      processingCount={virtualWalkthroughStatus === 'processing' ? 1 : 0}
+                      hasUploadFailed={virtualWalkthroughStatus === 'failed'}
+                      hasUnableToProcess={virtualWalkthroughStatus === 'unable-to-process'}
+                    />
+                  </Grid>
+                )}
                 <Grid item xs={12}>
                   <OrganizationStatsCard rows={organizationStatsCardRows} />
                 </Grid>

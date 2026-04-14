@@ -90,7 +90,7 @@ const CreateVirtualWalkthroughStep1Modal = ({
               </List>
             </Box>
 
-            <img alt='video diagram' src='/assets/video-diagram.svg' style={{ height: '123px', width: '123px' }} />
+            <img alt='video diagram' src='/assets/spiral-diagram.svg' style={{ height: '123px', width: '123px' }} />
           </Box>
 
           {/* FileChooser opens the native file picker; after selection Step 2 opens automatically */}
