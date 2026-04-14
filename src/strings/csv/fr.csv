@@ -1133,6 +1133,7 @@ NATIVE_FOREST,Forêt indigène,bbd2ab56
 NATIVE_NON_NATIVE,Indigène/non-indigène,4ce0ad21
 NATIVE_SPECIES_TO_BE_PLANTED,Espèces indigènes à planter,7a13ce14
 NATURAL_REGENERATION_WOODY,Régénération naturelle ligneuse,26fe4ab1
+NEEDS_ATTENTION,Nécessite une attention,95ec1cac
 NEEDS_TRANSLATION,Nécessite une traduction,ce38bfa9
 NEW,Nouveau,b8096e3b
 NEW_ACCESSION,Ajouter une adhésion,6d0d1602
@@ -1260,7 +1261,7 @@ OBSERVATION_EVENT_SCHEDULED,Un événement d'observation est prévu pour le {0} 
 OBSERVATION_EVENTS,Événements d'observation,564648b0
 OBSERVATION_EVENTS_TOOLTIP,Les observations antérieures apparaissent avec une opacité décroissante.,03c6ea26
 OBSERVATION_PERIOD_WARN,La période d'observation ne peut excéder deux mois.,364a36c6
-OBSERVATION_PHOTOS_VIDEOS,Photos/Vidéos d'observation,25dc7df9
+OBSERVATION_PHOTOS_VIDEOS,Photos/Vidéos d'observation,95e219ea
 OBSERVATION_RESCHEDULED,Observation reportée !,583d8d94
 OBSERVATION_SCHEDULED,Observation programmée !,2022ad09
 OBSERVATION_SMALL_SITE_WARNING,Vous planifiez une observation pour un site potentiellement trop petit pour l'attribution de parcelles de surveillance. Vous serez averti·e si l'attribution de parcelles de surveillance et le début de l'observation posent des problèmes. Vous pouvez également effectuer une observation ad hoc des parcelles pour ce site.,5fa79765
@@ -2055,6 +2056,7 @@ SUCCESS,Succès,cbb4902d
 SUCCESS_STORIES,Histoires de réussite,a5cb3671
 SUCCESS_STORIES_INSTRUCTIONS,Décrivez de manière concise une ou deux histoires de réussite personnalisées (une demi-page maximum).,81363354
 SUCCESS_STORIES_REQUIRED,Histoires de succès *,eed11aad
+SUCCESSFUL,Réussi,df6d0f2d
 SUCCESSIONAL_GROUP,Groupe de succession écologique,c27d86f8
 SUCCESSIONAL_GROUP_EARLY_SECONDARY,Secondaire initial,25c1dd23
 SUCCESSIONAL_GROUP_LATE_SECONDARY,Secondaire tardif,4817ea1d
@@ -2133,6 +2135,7 @@ THIS_MODULE_CONTAINS,Ce module contient :,7982e848
 THIS_PROJECT_HAS_NO_ACTIVITIES,Ce projet n’a aucune activité,cb693792
 THIS_REPORT_HAS_BEEN_APPROVED,Ce rapport a été approuvé.,030064cb
 THREATENED,Menacée,57ca76f3
+THUMBNAIL,Vignette,3196d372
 TIDE,Courant,9dd490e9
 TIME,Temps,2132441e
 TIME_ZONE,Fuseau horaire,abc27841
@@ -2356,6 +2359,7 @@ VIABILITY_TEST_START_DATE_ERROR,La date ne doit pas être antérieure à la date
 VIABILITY_TESTING,Test de viabilité,cb87d231
 VIABILITY_TESTING_EMPTY_MESSAGE,"Le test de viabilité vous aide à contrôler la qualité des semences. Vous pouvez effectuer un test de germination en pépinière ou en laboratoire, ou réaliser un test de coupe.",d0729b19
 VIABILITY_TESTS,Tests de viabilité,097a958c
+VIDEO_LINK,Lien vidéo,2546979d
 VIDEO_PROCESSING,Traitement de la vidéo,998e847c
 VIEW,Voir,02cff17a
 VIEW_APPLICATION,Voir la demande,bbdc193f
@@ -2378,6 +2382,7 @@ VIRTUAL_PLOTS,Parcelles virtuelles,74b74d96
 VIRTUAL_WALKTHROUGH_STEP_1,Marchez autour de la parcelle à un rythme régulier,3e6a38ef
 VIRTUAL_WALKTHROUGH_STEP_2,Tenez la caméra stable en la dirigeant vers le centre de la parcelle,a19f5832
 VIRTUAL_WALKTHROUGH_STEP_3,Parcourez la parcelle en formant un « X » avec la caméra orientée vers l’avant.,d203df6f
+VIRTUAL_WALKTHROUGHS,Visites virtuelles,74c630f5
 VISIT_VIRTUAL_PLOT,Visiter la parcelle virtuelle,22d34c8b
 VOTER,Électeur : {0},46578e94
 VOTING_DECISION,Décision de vote,9bb0be97
