@@ -1724,6 +1724,8 @@ RESET_STATUS,Réinitialiser le statut,75db6b41
 RESET_STATUS_BODY,L’ajout de cette espèce au(x) projet(s) sélectionné(s) réinitialisera le statut du produit livrable. Vous devrez soumettre à nouveau le produit à approuver pour : {0},357adbe0
 RESTART_PRESCREEN,Recommencer la présélection,6dba93aa
 RESTART_PRESCREEN_CONFIRMATION,Vous êtes sur le point de redémarrer votre présélection.,cd9aa0b9
+RETRY,Réessayer,65b3392f
+RETRY_UPLOAD,Réessayer le téléversement,1847db8b
 REVIEW,Révision,646ae645
 REVIEW_AND_SUBMIT,Réviser et soumettre,c471786c
 REVIEW_APPLICATION,Examiner la candidature,6e3751e9
@@ -2311,6 +2313,7 @@ UPLOAD_FILES_DESCRIPTION,Parcourir ou glisser-déposer des fichiers.,7c4a7822
 UPLOAD_FILES_DESCRIPTION_FORMATS,"Parcourez ou faites glisser et déposez des photos et/ou des vidéos (JPG, PNG, MP4, MOV)",db3af0c6
 UPLOAD_FILES_TITLE,Télécharger le(s) fichier(s),bd0f5440
 UPLOAD_MODULES_DESCRIPTION,Parcourir ou glisser-déposer un fichier CSV.,0e9c1a46
+UPLOAD_NEW_VIDEO,téléverser une nouvelle vidéo,20f126dc
 UPLOAD_PHOTO,Téléverser la photo...,9a57b4af
 UPLOAD_PHOTO_DESCR_LANDSCAPE_3_2,"Parcourez ou glissez-déposez un fichier (JPG, PNG). Il est recommandé d'utiliser une photo en format paysage (alignement horizontal et/ou format 3/2).",a126e16b
 UPLOAD_PHOTO_DESCRIPTION,"Parcourir ou glisser-déposer un fichier (JPG, PNG).",9c8c3f2c
@@ -2361,6 +2364,11 @@ VIABILITY_TESTING_EMPTY_MESSAGE,"Le test de viabilité vous aide à contrôler l
 VIABILITY_TESTS,Tests de viabilité,097a958c
 VIDEO_LINK,Lien vidéo,2546979d
 VIDEO_PROCESSING,Traitement de la vidéo,998e847c
+VIDEO_PROCESSING_DESCRIPTION,Il vous reste {0} vidéo(s) en cours de traitement. Cela peut prendre jusqu'à 12 heures.,d85b02f6
+VIDEO_UNABLE_TO_PROCESS,Impossible de traiter la vidéo,3817bfb4
+VIDEO_UNABLE_TO_PROCESS_DESCRIPTION,"Nous n'avons pas pu générer le modèle à partir de la vidéo fournie. Pour des conseils afin d'améliorer votre vidéo, consultez le {0}. Vous pouvez retirer la vidéo du tableau ci-dessous. {1} ou {2}.",a9655e8d
+VIDEO_UPLOAD_FAILED,Échec du téléversement de la vidéo,2406bea0
+VIDEO_UPLOAD_FAILED_DESCRIPTION,"Le téléversement de votre vidéo a échoué. {0}. Pour des conseils afin d'améliorer votre vidéo, consultez le {1}.",0fbf7c0c
 VIEW,Voir,02cff17a
 VIEW_APPLICATION,Voir la demande,bbdc193f
 VIEW_FULL_DASHBOARD,Afficher le tableau de bord complet,25189646
@@ -2379,9 +2387,9 @@ VIEWING,Visualisation,fb67a07d
 VINE,Vigne,c39d21fb
 VIRTUAL,Virtuel,51d865ab
 VIRTUAL_PLOTS,Parcelles virtuelles,74b74d96
-VIRTUAL_WALKTHROUGH_STEP_1,Marchez autour de la parcelle à un rythme régulier,3e6a38ef
-VIRTUAL_WALKTHROUGH_STEP_2,Tenez la caméra stable en la dirigeant vers le centre de la parcelle,a19f5832
-VIRTUAL_WALKTHROUGH_STEP_3,Parcourez la parcelle en formant un « X » avec la caméra orientée vers l’avant.,d203df6f
+VIRTUAL_WALKTHROUGH_STEP_1,Marchez autour de la zone que vous souhaitez enregistrer à un rythme régulier.,590d04be
+VIRTUAL_WALKTHROUGH_STEP_2,Parcourez toute la zone deux fois en formant une spirale.,75ea84f9
+VIRTUAL_WALKTHROUGH_STEP_3,"Tenez la caméra immobile, toujours orientée vers le centre.",1db14cb7
 VIRTUAL_WALKTHROUGHS,Visites virtuelles,74c630f5
 VISIT_VIRTUAL_PLOT,Visiter la parcelle virtuelle,22d34c8b
 VOTER,Électeur : {0},46578e94
