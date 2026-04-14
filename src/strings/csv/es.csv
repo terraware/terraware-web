@@ -1134,6 +1134,7 @@ NATIVE_FOREST,Bosque autóctono,bbd2ab56
 NATIVE_NON_NATIVE,Nativo/No nativo,4ce0ad21
 NATIVE_SPECIES_TO_BE_PLANTED,Especies nativas que se plantarán,7a13ce14
 NATURAL_REGENERATION_WOODY,Regeneración natural leñosa,26fe4ab1
+NEEDS_ATTENTION,Requiere atención,95ec1cac
 NEEDS_TRANSLATION,Necesita traducción,ce38bfa9
 NEW,Nuevo,b8096e3b
 NEW_ACCESSION,Añadir accesión,6d0d1602
@@ -1261,7 +1262,7 @@ OBSERVATION_EVENT_SCHEDULED,El evento de observación está programado para el {
 OBSERVATION_EVENTS,Incidencias de observación,564648b0
 OBSERVATION_EVENTS_TOOLTIP,Observaciones previas se muestra con opacidad disminuida,03c6ea26
 OBSERVATION_PERIOD_WARN,El periodo de observación no puede superar los dos meses.,364a36c6
-OBSERVATION_PHOTOS_VIDEOS,Fotos/Videos de Observación,25dc7df9
+OBSERVATION_PHOTOS_VIDEOS,Fotos/Vídeos de observación,95e219ea
 OBSERVATION_RESCHEDULED,Observación reprogramada,583d8d94
 OBSERVATION_SCHEDULED,Observación programada,2022ad09
 OBSERVATION_SMALL_SITE_WARNING,Está programando una Observación para un lugar que posiblemente sea demasiado pequeño para la asignación de zonas de seguimiento. Se le notificará si hay problemas con la asignación de las zonas de seguimiento y el inicio de la Observación. También puede realizar una Observación de zona ad hoc para este lugar.,5fa79765
@@ -2055,6 +2056,7 @@ SUCCESS,Éxito,cbb4902d
 SUCCESS_STORIES,Casos de éxito,a5cb3671
 SUCCESS_STORIES_INSTRUCTIONS,Presente un relato conciso de una o dos historias de éxito personalizadas. (Media página como máximo).,81363354
 SUCCESS_STORIES_REQUIRED,Casos de éxito *,eed11aad
+SUCCESSFUL,Exitoso,df6d0f2d
 SUCCESSIONAL_GROUP,Grupo sucesional,c27d86f8
 SUCCESSIONAL_GROUP_EARLY_SECONDARY,Secundario temprano,25c1dd23
 SUCCESSIONAL_GROUP_LATE_SECONDARY,Secundario tardío,4817ea1d
@@ -2133,6 +2135,7 @@ THIS_MODULE_CONTAINS,Este módulo contiene:,7982e848
 THIS_PROJECT_HAS_NO_ACTIVITIES,Este proyecto no tiene actividades,cb693792
 THIS_REPORT_HAS_BEEN_APPROVED,Se aprobó este informe.,030064cb
 THREATENED,Amenazada,57ca76f3
+THUMBNAIL,Miniatura,3196d372
 TIDE,Marea,9dd490e9
 TIME,Hora,2132441e
 TIME_ZONE,Zona horaria,abc27841
@@ -2356,6 +2359,7 @@ VIABILITY_TEST_START_DATE_ERROR,Esto no debería ser antes de la fecha de recole
 VIABILITY_TESTING,Ensayo de viabilidad,cb87d231
 VIABILITY_TESTING_EMPTY_MESSAGE,El Ensayo de viabilidad te ayuda a monitorear la calidad de la semilla. Realizar una prueba de germinación en vivero o laboratorio o una prueba de corte en sus semillas.,d0729b19
 VIABILITY_TESTS,Pruebas de viabilidad,097a958c
+VIDEO_LINK,Enlace de video,2546979d
 VIDEO_PROCESSING,Procesamiento de video,998e847c
 VIEW,Ver,02cff17a
 VIEW_APPLICATION,Ver solicitud,bbdc193f
@@ -2378,6 +2382,7 @@ VIRTUAL_PLOTS,Parcelas virtuales,74b74d96
 VIRTUAL_WALKTHROUGH_STEP_1,Camine alrededor de la parcela a un ritmo constante,3e6a38ef
 VIRTUAL_WALKTHROUGH_STEP_2,Mantenga la cámara estable apuntando hacia el centro de la parcela,a19f5832
 VIRTUAL_WALKTHROUGH_STEP_3,"Recorra la parcela en una formación de ""X"" con la cámara apuntando hacia adelante.",d203df6f
+VIRTUAL_WALKTHROUGHS,Recorridos virtuales,74c630f5
 VISIT_VIRTUAL_PLOT,Visitar parcela virtual,22d34c8b
 VOTER,Votante: {0},46578e94
 VOTING_DECISION,Decisión de votación,9bb0be97

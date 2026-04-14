@@ -4,7 +4,9 @@ import { Grid, useTheme } from '@mui/material';
 
 import DismissibleWrapper from 'src/components/common/DismissibleWrapper';
 import ParticipantPage from 'src/components/common/PageWithModuleTimeline/ParticipantPage';
+import isEnabled from 'src/features';
 
+import VirtualWalkthroughCard from '../TerrawareHomeView/VirtualWalkthroughCard';
 import CurrentModule from './CurrentModule';
 import Header from './Header';
 import ToDo from './ToDo';
@@ -13,6 +15,8 @@ import WelcomeBanner from './WelcomeBanner';
 
 const ParticipantHomeView = () => {
   const theme = useTheme();
+
+  const virtualWalkthroughEnabled = isEnabled('Virtual Monitoring Plots');
 
   return (
     <ParticipantPage>
@@ -34,6 +38,12 @@ const ParticipantHomeView = () => {
             <ToDo />
           </ToDoProvider>
         </Grid>
+
+        {virtualWalkthroughEnabled && (
+          <Grid item marginTop={theme.spacing(2)}>
+            <VirtualWalkthroughCard />
+          </Grid>
+        )}
 
         <Grid item marginTop={theme.spacing(2)}>
           <CurrentModule />
