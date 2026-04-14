@@ -395,6 +395,9 @@ CREATE_ORGANIZATION_QUESTION_LOCATION_TYPES,¿Gestiona su organización alguno d
 CREATE_ORGANIZATION_QUESTION_ORGANIZATION_TYPE,¿Cuál de las siguientes opciones describe mejor su organización?,ac93bf9a
 CREATE_SPECIES_LIST,Crear lista de especies,e2fa4ff0
 CREATE_VIRTUAL_PLOT,Crear Parcela Virtual,aea239a2
+CREATE_VIRTUAL_WALKTHROUGH,Crear Recorrido Virtual,5e786aea
+CREATE_VIRTUAL_WALKTHROUGH_DESCRIPTION,"Suba un video para usar en un Recorrido Virtual. Una vez que el Recorrido Virtual haya sido procesado, aparecerá en el mapa. El procesamiento puede tardar hasta 12 horas.",7dcdd24b
+CREATE_VIRTUAL_WALKTHROUGH_STEP2_DESCRIPTION,"El video seleccionado se utilizará para un Recorrido Virtual. Una vez que el Recorrido Virtual haya sido procesado, aparecerá en el mapa. El procesamiento puede tardar hasta 12 horas.",ac22da52
 CREATED,Creado,cc1462ae
 CREATED_ON,Creado el,f66518dc
 CROWN_DIAMETER_CM,Diámetro de la copa (cm),4bc3fb02
@@ -840,6 +843,7 @@ HIGHLIGHTED_ACTIVITY,Actividad destacada,483c0ed0
 HIGHLIGHTS,Destacados,a76b6c49
 HISTORY,Historial,fe7205b3
 HOME,Inicio,8e2553bd
+HOW_TO_RECORD_A_GREAT_VIDEO,Cómo grabar un excelente video:,1602c046
 HUBSPOT,HubSpot,94ba94f4
 HUBSPOT_LINK,Enlace HubSpot,93adbf60
 I_AM_THE_ONLY_PERSON,Soy la única persona,7add78fd
@@ -1130,7 +1134,6 @@ NATIVE_FOREST,Bosque autóctono,bbd2ab56
 NATIVE_NON_NATIVE,Nativo/No nativo,4ce0ad21
 NATIVE_SPECIES_TO_BE_PLANTED,Especies nativas que se plantarán,7a13ce14
 NATURAL_REGENERATION_WOODY,Regeneración natural leñosa,26fe4ab1
-NEEDS_ATTENTION,Requiere atención,95ec1cac
 NEEDS_TRANSLATION,Necesita traducción,ce38bfa9
 NEW,Nuevo,b8096e3b
 NEW_ACCESSION,Añadir accesión,6d0d1602
@@ -1258,7 +1261,7 @@ OBSERVATION_EVENT_SCHEDULED,El evento de observación está programado para el {
 OBSERVATION_EVENTS,Incidencias de observación,564648b0
 OBSERVATION_EVENTS_TOOLTIP,Observaciones previas se muestra con opacidad disminuida,03c6ea26
 OBSERVATION_PERIOD_WARN,El periodo de observación no puede superar los dos meses.,364a36c6
-OBSERVATION_PHOTOS_VIDEOS,Fotos/Vídeos de Observación,95e219ea
+OBSERVATION_PHOTOS_VIDEOS,Fotos/Videos de Observación,25dc7df9
 OBSERVATION_RESCHEDULED,Observación reprogramada,583d8d94
 OBSERVATION_SCHEDULED,Observación programada,2022ad09
 OBSERVATION_SMALL_SITE_WARNING,Está programando una Observación para un lugar que posiblemente sea demasiado pequeño para la asignación de zonas de seguimiento. Se le notificará si hay problemas con la asignación de las zonas de seguimiento y el inicio de la Observación. También puede realizar una Observación de zona ad hoc para este lugar.,5fa79765
@@ -1834,6 +1837,7 @@ SELECT_AT_LEAST_ONE_SUBSTRATUM,Seleccione al menos un subestrato,85a3b3d7
 SELECT_BATCHES,Seleccionar lotes,d15588c6
 SELECT_BUTTON,Seleccionar,4e21939d
 SELECT_EXISTING_PROJECT,Seleccionar proyecto existente,e3ffeef2
+SELECT_PLANTING_SITE_FOR_3D_MODEL,Seleccione un Sitio de Plantación para asociar con el Modelo 3D,b0c50942
 SELECT_PLANTING_SITE_TYPE,Seleccionar tipo del sitio de siembra,e0ce7f80
 SELECT_PLANTING_SITE_TYPE_DESCRIPTION_1,Por favor seleccione tipo del sitio de siembra a añadir.,727f5a68
 SELECT_PLANTING_SITE_TYPE_DESCRIPTION_2,"Los terrenos detallados le permiten realizar un seguimiento de la localización de las plantas dentro del terreno y realizar un seguimiento de plantas vivas/muertas. Los terrenos sencillos le permiten hacer un seguimiento de qué especies de plantas, y cuántas, se han plantado en ese terreno.",ff0f1252
@@ -2051,7 +2055,6 @@ SUCCESS,Éxito,cbb4902d
 SUCCESS_STORIES,Casos de éxito,a5cb3671
 SUCCESS_STORIES_INSTRUCTIONS,Presente un relato conciso de una o dos historias de éxito personalizadas. (Media página como máximo).,81363354
 SUCCESS_STORIES_REQUIRED,Casos de éxito *,eed11aad
-SUCCESSFUL,Exitoso,df6d0f2d
 SUCCESSIONAL_GROUP,Grupo sucesional,c27d86f8
 SUCCESSIONAL_GROUP_EARLY_SECONDARY,Secundario temprano,25c1dd23
 SUCCESSIONAL_GROUP_LATE_SECONDARY,Secundario tardío,4817ea1d
@@ -2130,7 +2133,6 @@ THIS_MODULE_CONTAINS,Este módulo contiene:,7982e848
 THIS_PROJECT_HAS_NO_ACTIVITIES,Este proyecto no tiene actividades,cb693792
 THIS_REPORT_HAS_BEEN_APPROVED,Se aprobó este informe.,030064cb
 THREATENED,Amenazada,57ca76f3
-THUMBNAIL,Miniatura,3196d372
 TIDE,Marea,9dd490e9
 TIME,Hora,2132441e
 TIME_ZONE,Zona horaria,abc27841
@@ -2354,12 +2356,12 @@ VIABILITY_TEST_START_DATE_ERROR,Esto no debería ser antes de la fecha de recole
 VIABILITY_TESTING,Ensayo de viabilidad,cb87d231
 VIABILITY_TESTING_EMPTY_MESSAGE,El Ensayo de viabilidad te ayuda a monitorear la calidad de la semilla. Realizar una prueba de germinación en vivero o laboratorio o una prueba de corte en sus semillas.,d0729b19
 VIABILITY_TESTS,Pruebas de viabilidad,097a958c
-VIDEO_LINK,Enlace de video,2546979d
 VIDEO_PROCESSING,Procesamiento de video,998e847c
 VIEW,Ver,02cff17a
 VIEW_APPLICATION,Ver solicitud,bbdc193f
 VIEW_FULL_DASHBOARD,Ver panel de control completo,25189646
 VIEW_HISTORY,Ver historial,a1dbe2ca
+VIEW_IN_MAP,Ver en el Mapa,510d8388
 VIEW_INTERNAL_REPORT_FORM,Ver el formulario de informe interno,67f51c8a
 VIEW_MAP,Ver mapa,8ef1dcc4
 VIEW_PLANTING_PROGRESS,Ver el progreso de la siembra,f5a4c1f5
@@ -2373,7 +2375,9 @@ VIEWING,Visualización,fb67a07d
 VINE,Enredadera,c39d21fb
 VIRTUAL,Virtual,51d865ab
 VIRTUAL_PLOTS,Parcelas virtuales,74b74d96
-VIRTUAL_WALKTHROUGHS,Recorridos Virtuales,74c630f5
+VIRTUAL_WALKTHROUGH_STEP_1,Camine alrededor de la parcela a un ritmo constante,3e6a38ef
+VIRTUAL_WALKTHROUGH_STEP_2,Mantenga la cámara estable apuntando hacia el centro de la parcela,a19f5832
+VIRTUAL_WALKTHROUGH_STEP_3,"Recorra la parcela en una formación de ""X"" con la cámara apuntando hacia adelante.",d203df6f
 VISIT_VIRTUAL_PLOT,Visitar parcela virtual,22d34c8b
 VOTER,Votante: {0},46578e94
 VOTING_DECISION,Decisión de votación,9bb0be97
@@ -2445,6 +2449,7 @@ YOU_ARE_HERE,Se encuentra aquí,183a5491
 YOU_HAVE_NOT_UPLOADED_ANY_PHOTOS_OR_VIDEOS,No ha subido ninguna foto ni video,f83261aa
 YOU_HAVE_NOT_UPLOADED_ANY_PLOT_CORNER_PHOTOS,No ha subido ninguna foto de las esquinas de la parcela,4f10d7d3
 YOU_HAVE_UNPUBLISHED_CHANGES,Tiene cambios no publicados,1825c403
+YOU_HAVE_X_VIRTUAL_WALKTHROUGHS,Tiene {0} Recorridos Virtuales,566e4d75
 YOUR_APPLICATIONS,Tus solicitudes,7da0f423
 YOUR_VIDEO_IS_PROCESSING,Su video se está procesando y aparecerá en breve.,fb65d59c
 ZERO,Cero,16bd92ef
