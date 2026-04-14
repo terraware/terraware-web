@@ -10,6 +10,7 @@ import Link from 'src/components/common/Link';
 import PageCard from 'src/components/common/PageCard';
 import TfMain from 'src/components/common/TfMain';
 import { ACCELERATOR_LINK, APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useOrgNurserySummary } from 'src/hooks/useOrgNurserySummary';
 import { useSeedBankSummary } from 'src/hooks/useSeedBankSummary';
@@ -27,6 +28,7 @@ import { isAdmin, isManagerOrHigher, selectedOrgHasFacilityType } from 'src/util
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 import OrganizationStatsCard, { OrganizationStatsCardRow } from './OrganizationStatsCard';
+import VirtualWalkthroughCard from './VirtualWalkthroughCard';
 
 const TerrawareHomeView = () => {
   const { activeLocale } = useLocalization();
@@ -41,6 +43,7 @@ const TerrawareHomeView = () => {
   const seedBankSummary = useSeedBankSummary();
   const orgNurserySummary = useOrgNurserySummary();
   const showAcceleratorCard = orgPreferences.showAcceleratorCard !== false;
+  const virtualWalkthroughEnabled = isEnabled('Virtual Monitoring Plots');
 
   const [isNewApplicationModalOpen, setIsNewApplicationModalOpen] = useState<boolean>(false);
 
@@ -257,6 +260,12 @@ const TerrawareHomeView = () => {
                 <Grid item xs={12}>
                   <OrganizationStatsCard rows={organizationStatsCardRows} />
                 </Grid>
+
+                {virtualWalkthroughEnabled && (
+                  <Grid item xs={12}>
+                    <VirtualWalkthroughCard />
+                  </Grid>
+                )}
 
                 <Grid item xs={12}>
                   <MobileAppCard
