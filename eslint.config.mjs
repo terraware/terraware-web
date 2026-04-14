@@ -413,7 +413,6 @@ export default fixupConfigRules([
 
       'use-isnan': 'error',
       'valid-typeof': 'off',
-
     },
   },
 ]);
