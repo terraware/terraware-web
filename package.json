@@ -226,11 +226,12 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.0.0",
     "typescript-eslint": "^7.15.0",
-    "wait-on": "^9.0.4",
+    "wait-on": "^9.0.5",
     "webpack-dev-middleware": "^8.0.0"
   },
   "resolutions": {
     "@babel/traverse": "7.29.0",
+    "axios": "^1.15.0",
     "brace-expansion": "^2.0.3",
     "fork-ts-checker-webpack-plugin": "^9.0.0",
     "immutable": "^5.1.5",
