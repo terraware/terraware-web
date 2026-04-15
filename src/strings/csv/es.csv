@@ -2320,6 +2320,7 @@ UPLOAD_PHOTO_DESCRIPTION,"Busca o arrastra y coloca aquí un archivo (JPG, PNG).
 UPLOAD_PHOTO_MOBILE_DESCRIPTION,"Buscar archivos (JPG, PNG).",761b20be
 UPLOAD_PHOTOS,Cargar foto(s),d20a4173
 UPLOAD_SPATIAL_FILES,Subir archivo(s) espacial(es),953e770a
+UPLOAD_VIDEO_DESCRIPTION_FORMATS,"Busque o arrastre y suelte un video (MP4, MOV)",02b875b2
 USD_PER_HECTARE,${0} por ha,d8525ed1
 USE_OBSERVATION_DATA,Usar datos de observación,37c30404
 USE_OBSERVATION_DATA_TOOLTIP,Seleccione de la lista de todas las Observaciones completadas que incluyan datos t0 para la parcela.,1919d6a5

@@ -2320,6 +2320,7 @@ UPLOAD_PHOTO_DESCRIPTION,"Parcourir ou glisser-déposer un fichier (JPG, PNG).",
 UPLOAD_PHOTO_MOBILE_DESCRIPTION,"Parcourir les fichiers (JPG, PNG).",761b20be
 UPLOAD_PHOTOS,Téléverser une (des) photo(s),d20a4173
 UPLOAD_SPATIAL_FILES,Envoyer de(s) fichier(s) spatial(aux),953e770a
+UPLOAD_VIDEO_DESCRIPTION_FORMATS,"Parcourez ou faites glisser et déposez une vidéo (MP4, MOV)",02b875b2
 USD_PER_HECTARE,$ {0} per ha,d8525ed1
 USE_OBSERVATION_DATA,Utiliser les données d’observation,37c30404
 USE_OBSERVATION_DATA_TOOLTIP,Sélectionnez dans la liste toutes les observations terminées qui incluent les données t0 pour la parcelle.,1919d6a5
