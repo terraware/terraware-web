@@ -96,10 +96,7 @@ test.describe('ObservationDetailsScreenshots', () => {
     await waitFor(page, '#row1');
 
     await expect(page.locator('#row1')).toBeVisible();
-    await expect(page.getByRole('table').first()).toHaveScreenshot(
-      'observation-strata-table.png',
-      SCREENSHOT_OPTIONS
-    );
+    await expect(page.getByRole('table').first()).toHaveScreenshot('observation-strata-table.png', SCREENSHOT_OPTIONS);
   });
 
   test('Observation level detail view — map', async ({ page }) => {
