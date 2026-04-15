@@ -191,14 +191,14 @@ const ActivitiesListView = ({
     isFetching: listActivitiesFetching,
     isLoading: listActivitiesLoading,
     isError: listActivitiesError,
-  } = useListActivitiesQuery({ projectId, depth: 'CoverPhotos' }, { skip: isAcceleratorRoute || isFunderRoute });
+  } = useListActivitiesQuery({ projectId, depth: 'All' }, { skip: isAcceleratorRoute || isFunderRoute });
 
   const {
     currentData: adminListActivitiesData,
     isFetching: adminListActivitiesFetching,
     isLoading: adminListActivitiesLoading,
     isError: adminListActivitiesError,
-  } = useAdminListActivitiesQuery({ projectId, depth: 'CoverPhotos' }, { skip: !isAcceleratorRoute || isFunderRoute });
+  } = useAdminListActivitiesQuery({ projectId, depth: 'All' }, { skip: !isAcceleratorRoute || isFunderRoute });
 
   const {
     currentData: funderListActivitiesData,
