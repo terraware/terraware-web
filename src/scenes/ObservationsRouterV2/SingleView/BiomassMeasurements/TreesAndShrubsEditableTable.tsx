@@ -80,6 +80,39 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
     [updateObservation]
   );
 
+  const TreeNumberCell = useCallback(
+    ({ row }: { row: { original: TreeRow } }) => (
+      <>
+        {row.original.treeGrowthForm === 'Trunk'
+          ? `${row.original.treeNumber}_${row.original.trunkNumber}`
+          : row.original.treeNumber}
+      </>
+    ),
+    []
+  );
+
+  const GrowthFormCell = useCallback(
+    ({ row }: { row: { original: TreeRow } }) => (
+      <>{row.original.treeGrowthForm === 'Trunk' ? 'Tree' : row.original.treeGrowthForm}</>
+    ),
+    []
+  );
+
+  const IsInvasiveCell = useCallback(
+    ({ row }: { row: { original: TreeRow } }) => <>{row.original.isInvasive ? strings.YES : strings.NO}</>,
+    [strings.YES, strings.NO]
+  );
+
+  const IsThreatenedCell = useCallback(
+    ({ row }: { row: { original: TreeRow } }) => <>{row.original.isThreatened ? strings.YES : strings.NO}</>,
+    [strings.YES, strings.NO]
+  );
+
+  const IsDeadCell = useCallback(
+    ({ row }: { row: { original: TreeRow } }) => <>{row.original.isDead ? strings.YES : strings.NO}</>,
+    [strings.YES, strings.NO]
+  );
+
   const columns = useMemo<EditableTableColumn<TreeRow>[]>(
     () => [
       {
@@ -87,13 +120,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
         accessorKey: 'treeNumber',
         header: strings.ID,
         enableEditing: false,
-        Cell: ({ row }) => (
-          <>
-            {row.original.treeGrowthForm === 'Trunk'
-              ? `${row.original.treeNumber}_${row.original.trunkNumber}`
-              : row.original.treeNumber}
-          </>
-        ),
+        Cell: TreeNumberCell,
       },
       {
         id: 'speciesName',
@@ -106,7 +133,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
         accessorKey: 'treeGrowthForm',
         header: strings.GROWTH_FORM,
         enableEditing: false,
-        Cell: ({ row }) => <>{row.original.treeGrowthForm === 'Trunk' ? 'Tree' : row.original.treeGrowthForm}</>,
+        Cell: GrowthFormCell,
       },
       {
         id: 'diameterAtBreastHeight',
@@ -147,7 +174,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
         id: 'isInvasive',
         accessorFn: (row) => (row.isInvasive ? 'true' : 'false'),
         header: strings.INVASIVE,
-        Cell: ({ row }) => <>{row.original.isInvasive ? strings.YES : strings.NO}</>,
+        Cell: IsInvasiveCell,
         editConfig: {
           editVariant: 'select',
           selectOptions: [
@@ -161,7 +188,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
         id: 'isThreatened',
         accessorFn: (row) => (row.isThreatened ? 'true' : 'false'),
         header: strings.THREATENED,
-        Cell: ({ row }) => <>{row.original.isThreatened ? strings.YES : strings.NO}</>,
+        Cell: IsThreatenedCell,
         editConfig: {
           editVariant: 'select',
           selectOptions: [
@@ -175,7 +202,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
         id: 'isDead',
         accessorFn: (row) => (row.isDead ? 'true' : 'false'),
         header: strings.DEAD,
-        Cell: ({ row }) => <>{row.original.isDead ? strings.YES : strings.NO}</>,
+        Cell: IsDeadCell,
         editConfig: {
           editVariant: 'select',
           selectOptions: [
@@ -186,7 +213,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
         },
       },
     ],
-    [saveRecordedTree, saveBiomassSpecies, strings]
+    [saveRecordedTree, saveBiomassSpecies, strings, TreeNumberCell, GrowthFormCell, IsInvasiveCell, IsThreatenedCell, IsDeadCell]
   );
 
   const treesWithData = useMemo(() => {
