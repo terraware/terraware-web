@@ -129,8 +129,12 @@ export default function QuadratSpeciesEditableTable({
               inputProps={{ min: 0, max: 25 }}
               onChange={(event) => {
                 const val = event.target.value;
-                if (val.length > 2) { event.target.value = val.slice(0, 2); }
-                if (Number(event.target.value) > 25) { event.target.value = '25'; }
+                if (val.length > 2) {
+                  event.target.value = val.slice(0, 2);
+                }
+                if (Number(event.target.value) > 25) {
+                  event.target.value = '25';
+                }
               }}
               onBlur={(event) => {
                 const numValue = Number(event.target.value);

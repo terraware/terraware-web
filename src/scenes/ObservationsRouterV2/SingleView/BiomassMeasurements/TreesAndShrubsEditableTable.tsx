@@ -213,7 +213,16 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
         },
       },
     ],
-    [saveRecordedTree, saveBiomassSpecies, strings, TreeNumberCell, GrowthFormCell, IsInvasiveCell, IsThreatenedCell, IsDeadCell]
+    [
+      saveRecordedTree,
+      saveBiomassSpecies,
+      strings,
+      TreeNumberCell,
+      GrowthFormCell,
+      IsInvasiveCell,
+      IsThreatenedCell,
+      IsDeadCell,
+    ]
   );
 
   const treesWithData = useMemo(() => {
