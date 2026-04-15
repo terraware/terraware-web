@@ -1,8 +1,7 @@
-import React, { type JSX, useCallback, useMemo } from 'react';
+import React, { type JSX, useCallback, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { Box, useTheme } from '@mui/material';
-import { MRT_ColumnDef, MaterialReactTable, useMaterialReactTable } from 'material-react-table';
+import { EditableTable, EditableTableColumn } from '@terraware/web-components';
 
 import { useLocalization } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
@@ -22,7 +21,6 @@ type TreeRow = ExistingTreePayload & {
 export default function TreesAndShrubsEditableTable(): JSX.Element {
   'use no memo';
   const { species: availableSpecies } = useSpeciesData();
-  const theme = useTheme();
   const params = useParams<{ observationId: string }>();
   const { strings } = useLocalization();
 
@@ -31,6 +29,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
   const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);
 
   const [update] = useUpdateCompletedObservationPlotMutation();
+  const [optimisticValues, setOptimisticValues] = useState<Record<number, Partial<TreeRow>>>({});
 
   const updateObservation = useCallback(
     (updatePayload: UpdateObservationRequestPayload) => {
@@ -46,196 +45,174 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
     [observationId, results, update]
   );
 
-  const updateRecordedTree = useCallback(
-    (fieldId: string, recordedTreeId: number) => (event: { currentTarget: { value: any }; target: { value: any } }) => {
-      const value = event.currentTarget.value || event.target.value;
+  const saveRecordedTree = useCallback(
+    (fieldId: string, row: TreeRow, value: any, optimisticValue: any = value) => {
       if (value !== undefined) {
-        const uploadPayload: RecordedTreeUpdateOperationPayload = {
+        setOptimisticValues((prev) => ({
+          ...prev,
+          [row.id]: { ...prev[row.id], [fieldId]: optimisticValue },
+        }));
+        const payload: RecordedTreeUpdateOperationPayload = {
           type: 'RecordedTree',
-          recordedTreeId,
+          recordedTreeId: row.id,
           [fieldId]: value,
         };
-        updateObservation({ updates: [uploadPayload] });
+        updateObservation({ updates: [payload] });
       }
     },
     [updateObservation]
   );
 
-  const columns = useMemo<MRT_ColumnDef<TreeRow>[]>(
+  const saveBiomassSpecies = useCallback(
+    (fieldId: string, row: TreeRow, value: string) => {
+      const boolValue = value === 'true';
+      setOptimisticValues((prev) => ({
+        ...prev,
+        [row.id]: { ...prev[row.id], [fieldId]: boolValue },
+      }));
+      const payload: BiomassSpeciesUpdateOperationPayload = {
+        type: 'BiomassSpecies',
+        speciesId: row.speciesId,
+        scientificName: row.speciesId === undefined ? row.speciesName : undefined,
+        [fieldId]: boolValue,
+      };
+      updateObservation({ updates: [payload] });
+    },
+    [updateObservation]
+  );
+
+  const columns = useMemo<EditableTableColumn<TreeRow>[]>(
     () => [
       {
+        id: 'treeNumber',
         accessorKey: 'treeNumber',
         header: strings.ID,
         enableEditing: false,
-        Cell: ({ row }) => {
-          if (row.original.treeGrowthForm === 'Trunk') {
-            return `${row.original.treeNumber}_${row.original.trunkNumber}`;
-          }
-          return row.original.treeNumber;
-        },
+        Cell: ({ row }) => (
+          <>
+            {row.original.treeGrowthForm === 'Trunk'
+              ? `${row.original.treeNumber}_${row.original.trunkNumber}`
+              : row.original.treeNumber}
+          </>
+        ),
       },
       {
+        id: 'speciesName',
         accessorKey: 'speciesName',
         header: strings.SPECIES,
         enableEditing: false,
       },
       {
+        id: 'treeGrowthForm',
         accessorKey: 'treeGrowthForm',
         header: strings.GROWTH_FORM,
         enableEditing: false,
-        Cell: ({ row }) => {
-          return row.original.treeGrowthForm === 'Trunk' ? 'Tree' : row.original.treeGrowthForm;
-        },
+        Cell: ({ row }) => <>{row.original.treeGrowthForm === 'Trunk' ? 'Tree' : row.original.treeGrowthForm}</>,
       },
       {
+        id: 'diameterAtBreastHeight',
         accessorKey: 'diameterAtBreastHeight',
         header: strings.DBH_CM,
-        muiEditTextFieldProps: ({ row }) => ({
-          onBlur: updateRecordedTree('diameterAtBreastHeight', row.original.id),
-        }),
         enableEditing: (row) => row.original.treeGrowthForm !== 'Shrub',
+        editConfig: {
+          onSave: (row, value) => saveRecordedTree('diameterAtBreastHeight', row, value),
+        },
       },
       {
+        id: 'pointOfMeasurement',
         accessorKey: 'pointOfMeasurement',
         header: strings.POM_M,
-        muiEditTextFieldProps: ({ row }) => ({
-          onBlur: updateRecordedTree('pointOfMeasurement', row.original.id),
-        }),
         enableEditing: (row) => row.original.treeGrowthForm !== 'Shrub',
+        editConfig: {
+          onSave: (row, value) => saveRecordedTree('pointOfMeasurement', row, value),
+        },
       },
       {
+        id: 'height',
         accessorKey: 'height',
         header: strings.HEIGHT_M,
-        muiEditTextFieldProps: ({ row }) => ({
-          onBlur: updateRecordedTree('height', row.original.id),
-        }),
         enableEditing: (row) => row.original.treeGrowthForm !== 'Shrub',
+        editConfig: {
+          onSave: (row, value) => saveRecordedTree('height', row, value),
+        },
       },
       {
+        id: 'shrubDiameter',
         accessorKey: 'shrubDiameter',
         header: strings.CROWN_DIAMETER_CM,
-        muiEditTextFieldProps: ({ row }) => ({
-          onBlur: updateRecordedTree('shrubDiameter', row.original.id),
-        }),
+        editConfig: {
+          onSave: (row, value) => saveRecordedTree('shrubDiameter', row, value),
+        },
       },
       {
-        accessorKey: 'isInvasive',
-        Cell: ({ cell }) => {
-          const value = cell.getValue();
-          return value === true || value === 'true' ? strings.YES : strings.NO;
-        },
+        id: 'isInvasive',
+        accessorFn: (row) => (row.isInvasive ? 'true' : 'false'),
         header: strings.INVASIVE,
-        editVariant: 'select',
-        editSelectOptions: [
-          { label: strings.YES, value: 'true' },
-          { label: strings.NO, value: 'false' },
-        ],
-        muiEditTextFieldProps: ({ row }) => ({
-          select: true,
-          onBlur: (event: React.FocusEvent<HTMLInputElement>) => {
-            const value = event.target.value === 'true';
-            const uploadPayload: BiomassSpeciesUpdateOperationPayload = {
-              type: 'BiomassSpecies',
-              speciesId: row.original.speciesId,
-              isInvasive: value,
-            };
-            updateObservation({ updates: [uploadPayload] });
-          },
-        }),
+        Cell: ({ row }) => <>{row.original.isInvasive ? strings.YES : strings.NO}</>,
+        editConfig: {
+          editVariant: 'select',
+          selectOptions: [
+            { label: strings.YES, value: 'true' },
+            { label: strings.NO, value: 'false' },
+          ],
+          onSave: (row, value) => saveBiomassSpecies('isInvasive', row, value),
+        },
       },
       {
-        accessorKey: 'isThreatened',
+        id: 'isThreatened',
+        accessorFn: (row) => (row.isThreatened ? 'true' : 'false'),
         header: strings.THREATENED,
-        Cell: ({ cell }) => {
-          const value = cell.getValue();
-          return value === true || value === 'true' ? strings.YES : strings.NO;
+        Cell: ({ row }) => <>{row.original.isThreatened ? strings.YES : strings.NO}</>,
+        editConfig: {
+          editVariant: 'select',
+          selectOptions: [
+            { label: strings.YES, value: 'true' },
+            { label: strings.NO, value: 'false' },
+          ],
+          onSave: (row, value) => saveBiomassSpecies('isThreatened', row, value),
         },
-        editVariant: 'select',
-        editSelectOptions: [
-          { label: strings.YES, value: 'true' },
-          { label: strings.NO, value: 'false' },
-        ],
-        muiEditTextFieldProps: ({ row }) => ({
-          select: true,
-          onBlur: (event: React.FocusEvent<HTMLInputElement>) => {
-            const value = event.target.value === 'true';
-            const uploadPayload: BiomassSpeciesUpdateOperationPayload = {
-              type: 'BiomassSpecies',
-              speciesId: row.original.speciesId,
-              isThreatened: value,
-            };
-            updateObservation({ updates: [uploadPayload] });
-          },
-        }),
       },
       {
-        accessorKey: 'isDead',
+        id: 'isDead',
+        accessorFn: (row) => (row.isDead ? 'true' : 'false'),
         header: strings.DEAD,
-        Cell: ({ cell }) => {
-          const value = cell.getValue();
-          return value === true || value === 'true' ? strings.YES : strings.NO;
+        Cell: ({ row }) => <>{row.original.isDead ? strings.YES : strings.NO}</>,
+        editConfig: {
+          editVariant: 'select',
+          selectOptions: [
+            { label: strings.YES, value: 'true' },
+            { label: strings.NO, value: 'false' },
+          ],
+          onSave: (row, value) => saveRecordedTree('isDead', row, value, value === 'true'),
         },
-        editVariant: 'select',
-        editSelectOptions: [
-          { label: strings.YES, value: 'true' },
-          { label: strings.NO, value: 'false' },
-        ],
-        muiEditTextFieldProps: ({ row }) => ({
-          select: true,
-          onBlur: updateRecordedTree('isDead', row.original.id),
-        }),
       },
     ],
-    [updateRecordedTree, strings, updateObservation]
+    [saveRecordedTree, saveBiomassSpecies, strings]
   );
 
   const treesWithData = useMemo(() => {
     return results?.biomassMeasurements?.trees?.map((tree) => {
       const foundSpecies = availableSpecies.find((avSpecies) => avSpecies.id === tree.speciesId);
+      const optimistic = optimisticValues[tree.id] ?? {};
       return {
         ...tree,
+        ...optimistic,
         speciesName: tree.speciesName || foundSpecies?.scientificName,
       };
     });
-  }, [availableSpecies, results]);
-
-  const table = useMaterialReactTable({
-    columns,
-    data: treesWithData || [],
-    editDisplayMode: 'cell',
-    enableColumnOrdering: false,
-    enableColumnPinning: false,
-    enableEditing: true,
-    enableSorting: true,
-    enableFilters: false,
-    enablePagination: false,
-    enableBottomToolbar: false,
-    enableTopToolbar: false,
-    initialState: {
-      sorting: [{ id: 'speciesName', desc: false }],
-    },
-    muiTableBodyProps: {
-      sx: {
-        '& tr:nth-of-type(odd) > td': {
-          backgroundColor: theme.palette.TwClrBaseGray025,
-        },
-      },
-    },
-    muiTablePaperProps: {
-      elevation: 0,
-    },
-    muiTableBodyRowProps: {
-      sx: {
-        '& td': {
-          borderBottom: 'none',
-        },
-      },
-    },
-  });
+  }, [availableSpecies, results, optimisticValues]);
 
   return (
-    <Box minHeight={'160px'} padding={2}>
-      <MaterialReactTable table={table} />
-    </Box>
+    <EditableTable
+      clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
+      columns={columns}
+      data={treesWithData ?? []}
+      enableEditing={true}
+      enableSorting={true}
+      enablePagination={false}
+      enableBottomToolbar={false}
+      enableTopToolbar={false}
+      initialSorting={[{ id: 'speciesName', desc: false }]}
+    />
   );
 }
