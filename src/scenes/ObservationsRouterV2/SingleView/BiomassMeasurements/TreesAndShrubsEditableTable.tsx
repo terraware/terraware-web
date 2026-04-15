@@ -19,7 +19,6 @@ type TreeRow = ExistingTreePayload & {
 };
 
 export default function TreesAndShrubsEditableTable(): JSX.Element {
-  'use no memo';
   const { species: availableSpecies } = useSpeciesData();
   const params = useParams<{ observationId: string }>();
   const { strings } = useLocalization();
