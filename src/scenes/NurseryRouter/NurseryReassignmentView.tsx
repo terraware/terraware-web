@@ -137,7 +137,7 @@ export default function NurseryReassignmentView(): JSX.Element {
       })),
     };
 
-    void reassignDelivery({ id: deliveryId, reassignDeliveryRequestPayload: request }).unwrap();
+    void reassignDelivery({ id: deliveryId, reassignDeliveryRequestPayload: request });
   }, [deliveryId, reassignDelivery, validReassignments]);
 
   useEffect(() => {
