@@ -2,7 +2,6 @@ import { fixupConfigRules } from '@eslint/compat';
 import { FlatCompat } from '@eslint/eslintrc';
 import js from '@eslint/js';
 import stylisticJs from '@stylistic/eslint-plugin-js';
-import typescriptEslintTslint from '@typescript-eslint/eslint-plugin-tslint';
 import tsParser from '@typescript-eslint/parser';
 import jsdoc from 'eslint-plugin-jsdoc';
 import nodePlugin from 'eslint-plugin-n';
@@ -62,7 +61,6 @@ export default fixupConfigRules([
       reactHooks,
       'prefer-arrow': preferArrow,
       '@stylistic/js': stylisticJs,
-      '@typescript-eslint/tslint': typescriptEslintTslint,
     },
 
     languageOptions: {
@@ -415,45 +413,6 @@ export default fixupConfigRules([
 
       'use-isnan': 'error',
       'valid-typeof': 'off',
-
-      '@typescript-eslint/tslint/config': [
-        'error',
-        {
-          rules: {
-            // Deprecated: replaced by @stylistic/js/array-bracket-spacing
-            //'array-bracket-spacing': [true, 'never'],
-
-            // Deprecated: replaced by @stylistic/js/brace-style
-            // 'brace-style': [
-            //   true,
-            //   '1tbs',
-            //   {
-            //     allowSingleLine: true,
-            //   },
-            // ],
-
-            // Depreacted: replaced by n/handle-callback-err
-            // 'handle-callback-err': [true, '^(e|err|error)$'],
-
-            // Replaced by react/jsx-no-string-ref
-            // 'jsx-no-string-ref': true,
-
-            // Duplicated
-            // 'no-ex-assign': true,
-
-            // Replaced by @stylistic/js/arrow-spacing
-            // 'ter-arrow-spacing': true,
-
-            // Replaced by @stylistic/js/no-mixed-spaces-and-tabs
-            // 'ter-no-mixed-spaces-and-tabs': true,
-
-            // Duplicated
-            // 'ter-prefer-arrow-callback': true,
-
-            whitespace: true,
-          },
-        },
-      ],
     },
   },
 ]);
