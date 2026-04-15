@@ -14,6 +14,9 @@ const config: ConfigFile = {
         operation.path === '/api/v1/accelerator/projects' ||
         operation.path === '/api/v1/accelerator/projects/{projectId}',
     },
+    './src/queries/generated/deliveries.ts': {
+      filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/tracking/deliveries'),
+    },
     './src/queries/generated/draftPlantingSites.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/tracking/draftSites'),
     },

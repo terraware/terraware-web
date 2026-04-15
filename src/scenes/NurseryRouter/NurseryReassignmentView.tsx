@@ -1,4 +1,4 @@
-import React, { type JSX, useEffect, useMemo, useRef, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, CircularProgress, Grid, useTheme } from '@mui/material';
@@ -15,10 +15,9 @@ import Table from 'src/components/common/table';
 import { APP_PATHS } from 'src/constants';
 import usePlantingSite from 'src/hooks/usePlantingSite';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
+import { useLocalization } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
-import { TrackingService } from 'src/services';
-import strings from 'src/strings';
-import { Delivery } from 'src/types/Tracking';
+import { useGetDeliveryQuery, useReassignDeliveryMutation } from 'src/queries/generated/deliveries';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import useQuery from 'src/utils/useQuery';
@@ -26,94 +25,52 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 import ReassignmentRenderer, { Reassignment, ReassignmentRowType } from './ReassignmentRenderer';
 
-const columns = (): TableColumnType[] => [
-  { key: 'species', name: strings.SPECIES, type: 'string' },
-  { key: 'siteName', name: strings.PLANTING_SITE, type: 'string' },
-  { key: 'originalStratum', name: strings.ORIGINAL_STRATUM, type: 'string' },
-  { key: 'originalSubstratum', name: strings.ORIGINAL_SUBSTRATUM, type: 'string' },
-  { key: 'newStratum', name: strings.NEW_STRATUM, type: 'string' },
-  { key: 'newSubstratum', name: strings.NEW_SUBSTRATUM, type: 'string' },
-  { key: 'reassign', name: strings.REASSIGN, type: 'number' },
-  { key: 'notes', name: strings.NOTES, type: 'string' },
-];
-
 export default function NurseryReassignmentView(): JSX.Element {
+  const { strings } = useLocalization();
   const query = useQuery();
   const numberFormatter = useNumberFormatter();
   const theme = useTheme();
-  const navigate = useSyncNavigate();
-  const { isMobile } = useDeviceInfo();
-  const { deliveryId } = useParams<{ deliveryId: string }>();
   const snackbar = useSnackbar();
-  const [delivery, setDelivery] = useState<Delivery>();
-  const [reassignments, setReassignments] = useState<{ [substratumId: string]: Reassignment }>({});
-  const [noReassignments, setNoReassignments] = useState<boolean>(false);
+  const navigate = useSyncNavigate();
   const contentRef = useRef(null);
+
+  const [noReassignments, setNoReassignments] = useState<boolean>(false);
+  const { isMobile } = useDeviceInfo();
+  const params = useParams<{ deliveryId: string }>();
+  const deliveryId = Number(params.deliveryId);
+
+  const columns = useMemo(
+    (): TableColumnType[] => [
+      { key: 'species', name: strings.SPECIES, type: 'string' },
+      { key: 'siteName', name: strings.PLANTING_SITE, type: 'string' },
+      { key: 'originalStratum', name: strings.ORIGINAL_STRATUM, type: 'string' },
+      { key: 'originalSubstratum', name: strings.ORIGINAL_SUBSTRATUM, type: 'string' },
+      { key: 'newStratum', name: strings.NEW_STRATUM, type: 'string' },
+      { key: 'newSubstratum', name: strings.NEW_SUBSTRATUM, type: 'string' },
+      { key: 'reassign', name: strings.REASSIGN, type: 'number' },
+      { key: 'notes', name: strings.NOTES, type: 'string' },
+    ],
+    [strings]
+  );
+
+  const [reassignments, setReassignments] = useState<{ [substratumId: string]: Reassignment }>({});
+  const [reassignDelivery, reassignDeliveryResponse] = useReassignDeliveryMutation();
+
+  const getDeliveryResponse = useGetDeliveryQuery(deliveryId);
+  const delivery = useMemo(() => getDeliveryResponse.currentData?.delivery, [getDeliveryResponse]);
+  useEffect(() => {
+    if (getDeliveryResponse.isError) {
+      snackbar.toastError();
+    }
+  }, [getDeliveryResponse.isError, snackbar]);
 
   const { species } = useSpeciesData();
   const { plantingSite } = usePlantingSite(delivery?.plantingSiteId);
 
-  // populate delivery
-  useEffect(() => {
-    if (!deliveryId) {
-      return;
-    }
-    const populateDelivery = async () => {
-      const response = await TrackingService.getDelivery(Number(deliveryId));
-      if (response.requestSucceeded) {
-        setDelivery(response.delivery);
-      } else {
-        snackbar.toastError();
-      }
-    };
-
-    void populateDelivery();
-  }, [deliveryId, snackbar]);
-
-  const goToWithdrawals = () => {
+  const goToWithdrawals = useCallback(() => {
     const withdrawalId = query.has('fromWithdrawal') ? delivery?.withdrawalId : undefined;
     navigate({ pathname: APP_PATHS.NURSERY_WITHDRAWALS + (withdrawalId ? `/${withdrawalId}` : '') });
-  };
-
-  const reassign = async () => {
-    // get all reassignments that have a valid quantity
-    setNoReassignments(false);
-    let hasErrors = false;
-    const validReassignments = plantings
-      .map((planting) => planting?.reassignment)
-      .filter((reassignment) => {
-        if (reassignment.error) {
-          hasErrors = true;
-          return false;
-        }
-        return Number(reassignment.quantity) > 0 && reassignment.newSubstratumId;
-      });
-
-    if (hasErrors) {
-      return;
-    }
-
-    if (!validReassignments.length) {
-      setNoReassignments(true);
-      return;
-    }
-
-    const request = {
-      reassignments: validReassignments.map((reassignment) => ({
-        fromPlantingId: reassignment.plantingId,
-        numPlants: reassignment.quantity!,
-        toSubstratumId: reassignment.newSubstratumId!,
-        notes: reassignment.notes,
-      })),
-    };
-
-    const response = await TrackingService.reassignPlantings(delivery!.id, request);
-    if (response.requestSucceeded) {
-      goToWithdrawals();
-    } else {
-      snackbar.toastError();
-    }
-  };
+  }, [delivery, navigate, query]);
 
   const plantings: ReassignmentRowType[] = useMemo(() => {
     if (!delivery || !plantingSite) {
@@ -149,7 +106,50 @@ export default function NurseryReassignmentView(): JSX.Element {
         };
       })
       .filter((planting): planting is ReassignmentRowType => !!planting);
-  }, [delivery, species, plantingSite, reassignments]);
+  }, [delivery, plantingSite, species, reassignments]);
+
+  const hasError = useMemo(() => {
+    return plantings.map((planting) => planting?.reassignment).some((reassignment) => reassignment.error !== undefined);
+  }, [plantings]);
+
+  const validReassignments = useMemo(() => {
+    return plantings
+      .map((planting) => planting?.reassignment)
+      .filter((reassignment) => {
+        if (reassignment.error) {
+          return false;
+        }
+        return Number(reassignment.quantity) > 0 && reassignment.newSubstratumId;
+      });
+  }, [plantings]);
+
+  const reassign = useCallback(() => {
+    if (hasError) {
+      return;
+    }
+    if (validReassignments.length === 0) {
+      setNoReassignments(true);
+      return;
+    }
+    const request = {
+      reassignments: validReassignments.map((reassignment) => ({
+        fromPlantingId: reassignment.plantingId,
+        numPlants: reassignment.quantity!,
+        toSubstratumId: reassignment.newSubstratumId!,
+        notes: reassignment.notes,
+      })),
+    };
+
+    void reassignDelivery({ id: deliveryId, reassignDeliveryRequestPayload: request });
+  }, [deliveryId, hasError, reassignDelivery, validReassignments]);
+
+  useEffect(() => {
+    if (reassignDeliveryResponse.isSuccess) {
+      goToWithdrawals();
+    } else if (reassignDeliveryResponse.isError) {
+      snackbar.toastError();
+    }
+  }, [goToWithdrawals, reassignDeliveryResponse.isError, reassignDeliveryResponse.isSuccess, snackbar]);
 
   const reassignmentRenderer = useMemo(
     () =>
@@ -198,6 +198,7 @@ export default function NurseryReassignmentView(): JSX.Element {
           saveID='saveNurseryReassignment'
           onCancel={goToWithdrawals}
           onSave={() => void reassign()}
+          saveDisabled={hasError}
           saveButtonText={strings.REASSIGN}
         >
           <Box

@@ -14,8 +14,6 @@ import SearchService from './SearchService';
 const PLANTING_SITES_ENDPOINT = '/api/v1/tracking/sites';
 const PLANTING_SITES_VALIDATE_ENDPOINT = '/api/v1/tracking/sites/validate';
 const PLANTING_SITE_ENDPOINT = '/api/v1/tracking/sites/{id}';
-const DELIVERY_ENDPOINT = '/api/v1/tracking/deliveries/{id}';
-const REASSIGN_ENDPOINT = '/api/v1/tracking/deliveries/{id}/reassign';
 const PLANTING_SITE_REPORTED_PLANTS_ENDPOINT = '/api/v1/tracking/sites/{id}/reportedPlants';
 const ALL_REPORTED_PLANTS_ENDPOINT = '/api/v1/tracking/sites/reportedPlants';
 
@@ -24,9 +22,6 @@ type ListPlantingSitesResponsePayload =
 
 type GetPlantingSiteResponsePayload =
   paths[typeof PLANTING_SITE_ENDPOINT]['get']['responses'][200]['content']['application/json'];
-
-type GetDeliveryResponsePayload =
-  paths[typeof DELIVERY_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 
 type GetPlantingSiteReportedPlantsPayload =
   paths[typeof PLANTING_SITE_REPORTED_PLANTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
@@ -51,9 +46,6 @@ export type PlantingSiteData = {
 export type DeliveryData = {
   delivery?: Delivery;
 };
-
-export type ReassignPostRequestBody =
-  paths[typeof REASSIGN_ENDPOINT]['post']['requestBody']['content']['application/json'];
 
 const httpPlantingSites = HttpService.root(PLANTING_SITES_ENDPOINT);
 const httpPlantingSitesValidate = HttpService.root(PLANTING_SITES_VALIDATE_ENDPOINT);
@@ -120,37 +112,6 @@ const getPlantingSite = async (siteId: number): Promise<PlantingSiteData & Respo
   );
 
   return response;
-};
-
-/**
- * Get a delivery by id
- */
-const getDelivery = async (deliveryId: number): Promise<DeliveryData & Response> => {
-  const response: DeliveryData & Response = await HttpService.root(DELIVERY_ENDPOINT).get<
-    GetDeliveryResponsePayload,
-    DeliveryData
-  >(
-    {
-      urlReplacements: {
-        '{id}': deliveryId.toString(),
-      },
-    },
-    (data) => ({ delivery: data?.delivery })
-  );
-
-  return response;
-};
-
-/**
- * Reassign plantings
- */
-const reassignPlantings = async (deliveryId: number, reassignments: ReassignPostRequestBody): Promise<Response> => {
-  return await HttpService.root(REASSIGN_ENDPOINT).post({
-    urlReplacements: {
-      '{id}': deliveryId.toString(),
-    },
-    entity: reassignments,
-  });
 };
 
 /**
@@ -303,11 +264,9 @@ const TrackingService = {
   createPlantingSite,
   fetchPlantingSiteList,
   validatePlantingSite,
-  getDelivery,
   getPlantingSite,
   getReportedPlants,
   listPlantingSites,
-  reassignPlantings,
   searchMonitoringPlots,
   searchPlantingSites,
   listOrganizationReportedPlants,

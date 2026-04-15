@@ -85,8 +85,15 @@ export type GetSiteT0DataResponsePayload = {
   data: SiteT0DataResponsePayload;
   status: SuccessOrError;
 };
+export type MonitoringPlotT0StatusPayload = {
+  monitoringPlotId: number;
+  observed: boolean;
+  substratumObserved: boolean;
+  t0set: boolean;
+};
 export type GetAllSiteT0DataSetResponsePayload = {
   allSet: boolean;
+  plots: MonitoringPlotT0StatusPayload[];
   status: SuccessOrError;
 };
 export type ObservationSpeciesDensityPayload = {
