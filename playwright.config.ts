@@ -23,6 +23,7 @@ export default defineConfig({
   /* Reporter(s) to use. See https://playwright.dev/docs/test-reporters */
   reporter: process.env.CI ? [['github'], ['html', { open: 'never' }]] : 'html',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
+  snapshotPathTemplate: '{snapshotDir}/{testFilePath}-snapshots/{arg}{-projectName}{ext}',
   use: {
     /* Collect trace for the first failure. See https://playwright.dev/docs/trace-viewer */
     trace: process.env.CI ? 'retain-on-first-failure' : 'on',
