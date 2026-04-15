@@ -124,6 +124,9 @@ export default function NurseryReassignmentView(): JSX.Element {
   }, [plantings]);
 
   const reassign = useCallback(() => {
+    if (hasError) {
+      return;
+    }
     if (validReassignments.length === 0) {
       setNoReassignments(true);
       return;
