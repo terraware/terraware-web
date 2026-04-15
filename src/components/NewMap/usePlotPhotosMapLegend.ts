@@ -19,7 +19,7 @@ const usePlotPhotosMapLegend = (disabled?: boolean) => {
       items: [
         {
           id: 'plot-photos',
-          label: strings.MONITORING_PLOTS,
+          label: strings.OBSERVATIONS,
           setVisible: setPlotPhotosVisible,
           style: plotPhotoStyle,
           visible: plotPhotosVisible,
@@ -36,7 +36,7 @@ const usePlotPhotosMapLegend = (disabled?: boolean) => {
             ]
           : []),
       ],
-      title: strings.OBSERVATION_PHOTOS_VIDEOS,
+      title: strings.PHOTOS_VIDEOS,
       type: 'multi-select',
     };
   }, [
