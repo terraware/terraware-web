@@ -96,10 +96,10 @@ const CreateVirtualWalkthroughStep1Modal = ({
           {/* FileChooser opens the native file picker; after selection Step 2 opens automatically */}
           <FileChooser
             acceptFileType='video/mp4, video/quicktime'
-            chooseFileText={strings.CHOOSE_FILES}
+            chooseFileText={strings.CHOOSE_FILE}
             multipleSelection={false}
             setFiles={handleSetFiles}
-            uploadDescription={strings.UPLOAD_FILES_DESCRIPTION_FORMATS}
+            uploadDescription={strings.UPLOAD_VIDEO_DESCRIPTION_FORMATS}
             uploadText={strings.UPLOAD_FILES}
           />
         </Box>
