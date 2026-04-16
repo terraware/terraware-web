@@ -2,6 +2,32 @@
 
 This directory contains the playwright tests and some of the data files used for setup
 
+## Updating screenshot snapshots
+
+Some tests use `toHaveScreenshot()`. Snapshots must be generated on Linux to match the CI environment. Use the official Playwright Docker image to generate them locally regardless of your host OS.
+
+First, confirm your Playwright version:
+
+```bash
+node -e "console.log(require('./node_modules/@playwright/test/package.json').version)"
+```
+
+Replace `<version>` below with that value (e.g. `1.49.1`).
+
+**Dev snapshots** (dev server must be running on port 3000):
+
+```bash
+docker run --rm --ipc=host -v "$(pwd):/work" -w /work -e PLAYWRIGHT_BASE_URL=http://host.docker.internal:3000 -e TIMEOUT=60000 -e WORKERS=1 mcr.microsoft.com/playwright:v<version>-jammy npx playwright test observationDetailsScreenshots --project=dev --update-snapshots
+```
+
+**Prod snapshots** (prod stack must be running on port 3001 via `yarn build && yarn server:reset`):
+
+```bash
+docker run --rm --ipc=host -v "$(pwd):/work" -w /work -e PLAYWRIGHT_BASE_URL=http://host.docker.internal:3001 -e TIMEOUT=60000 -e WORKERS=1 mcr.microsoft.com/playwright:v<version>-jammy npx playwright test observationDetailsScreenshots --project=prod --update-snapshots
+```
+
+Commit the generated files in `playwright/e2e/suites/observationDetailsScreenshots.spec.ts-snapshots/`.
+
 ## Creating new test users
 
 Follow these steps to create new test users and give them the correct permissions

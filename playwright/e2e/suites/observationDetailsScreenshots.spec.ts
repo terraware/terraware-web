@@ -14,6 +14,9 @@ const MAP_SCREENSHOT_OPTIONS = {
   maxDiffPixelRatio: 0.05,
 };
 
+// Prod Docker is slower than macOS — use a generous timeout for all waitFor calls
+const WAIT_TIMEOUT = 30000;
+
 /**
  * Mask chart canvas elements to avoid pixel-level flakiness from antialiasing
  * and Chart.js rendering differences between runs.
@@ -30,18 +33,22 @@ const chartMasks = (page: Page) => [
  * The map sets data-map-idle="true" on the container once the idle event fires.
  */
 const waitForMapIdle = async (page: Page) => {
-  await page.locator('.mapboxgl-map[data-map-idle="true"]').first().waitFor({ timeout: 20000 });
+  await page.locator('.mapboxgl-map[data-map-idle="true"]').first().waitFor({ timeout: WAIT_TIMEOUT });
 };
 
 test.describe('ObservationDetailsScreenshots', () => {
+  // These tests involve multiple page navigations and map tile loading, so they
+  // need a longer timeout than the default (especially in Linux Docker).
+  test.describe.configure({ timeout: 120000 });
+
   test.beforeEach(async ({ page, context, baseURL }) => {
     await changeToSuperAdmin(context, baseURL);
     await page.goto('/');
-    await waitFor(page, '#home', 10000);
+    await waitFor(page, '#home', WAIT_TIMEOUT);
     await selectOrg(page, 'Terraformation (staging)');
     await page.getByRole('button', { name: 'Plantings' }).click();
     await page.getByRole('button', { name: 'Observations' }).click();
-    await waitFor(page, '#row1', 10000);
+    await waitFor(page, '#row1', WAIT_TIMEOUT);
   });
 
   test('Observation list view', async ({ page }) => {
@@ -78,7 +85,7 @@ test.describe('ObservationDetailsScreenshots', () => {
 
   test('Observation level detail view — stats and charts', async ({ page }) => {
     await page.locator('a:has-text("May 2025")').click();
-    await waitFor(page, '#home');
+    await waitFor(page, '#home', WAIT_TIMEOUT);
 
     // Wait for charts to render before screenshotting
     await expect(page.locator('#observationSpeciesTotalChart')).toBeVisible();
@@ -92,8 +99,8 @@ test.describe('ObservationDetailsScreenshots', () => {
 
   test('Observation level detail view — strata table', async ({ page }) => {
     await page.locator('a:has-text("May 2025")').click();
-    await waitFor(page, '#home');
-    await waitFor(page, '#row1');
+    await waitFor(page, '#home', WAIT_TIMEOUT);
+    await waitFor(page, '#row1', WAIT_TIMEOUT);
 
     await expect(page.locator('#row1')).toBeVisible();
     await expect(page.getByRole('table').first()).toHaveScreenshot('observation-strata-table.png', SCREENSHOT_OPTIONS);
@@ -101,7 +108,7 @@ test.describe('ObservationDetailsScreenshots', () => {
 
   test('Observation level detail view — map', async ({ page }) => {
     await page.locator('a:has-text("May 2025")').click();
-    await waitFor(page, '#home');
+    await waitFor(page, '#home', WAIT_TIMEOUT);
 
     // The detail view defaults to list view; switch to map view
     await page.getByText('Map', { exact: true }).click();
@@ -116,11 +123,11 @@ test.describe('ObservationDetailsScreenshots', () => {
 
   test('Stratum level detail view — stats and charts', async ({ page }) => {
     await page.locator('a:has-text("May 2025")').click();
-    await waitFor(page, '#home');
-    await waitFor(page, '#row1');
+    await waitFor(page, '#home', WAIT_TIMEOUT);
+    await waitFor(page, '#row1', WAIT_TIMEOUT);
 
     await page.locator('a:has-text("Stratum 01")').click();
-    await waitFor(page, '#home');
+    await waitFor(page, '#home', WAIT_TIMEOUT);
 
     await expect(page.locator('#observationSpeciesTotalChart')).toBeVisible();
     await expect(page.locator('#observationSurvivalRateChart')).toBeVisible();
@@ -133,12 +140,12 @@ test.describe('ObservationDetailsScreenshots', () => {
 
   test('Stratum level detail view — monitoring plots table', async ({ page }) => {
     await page.locator('a:has-text("May 2025")').click();
-    await waitFor(page, '#home');
-    await waitFor(page, '#row1');
+    await waitFor(page, '#home', WAIT_TIMEOUT);
+    await waitFor(page, '#row1', WAIT_TIMEOUT);
 
     await page.locator('a:has-text("Stratum 01")').click();
-    await waitFor(page, '#home');
-    await waitFor(page, '#row1');
+    await waitFor(page, '#home', WAIT_TIMEOUT);
+    await waitFor(page, '#row1', WAIT_TIMEOUT);
 
     await expect(page.locator('#row1')).toBeVisible();
     await expect(page.getByRole('table').first()).toHaveScreenshot(
@@ -149,15 +156,15 @@ test.describe('ObservationDetailsScreenshots', () => {
 
   test('Monitoring plot level detail view — general tab', async ({ page }) => {
     await page.locator('a:has-text("May 2025")').click();
-    await waitFor(page, '#home');
-    await waitFor(page, '#row1');
+    await waitFor(page, '#home', WAIT_TIMEOUT);
+    await waitFor(page, '#row1', WAIT_TIMEOUT);
 
     await page.locator('a:has-text("Stratum 01")').click();
-    await waitFor(page, '#home');
-    await waitFor(page, '#row1');
+    await waitFor(page, '#home', WAIT_TIMEOUT);
+    await waitFor(page, '#row1', WAIT_TIMEOUT);
 
     await page.locator('#row1 a').click();
-    await waitFor(page, '#home');
+    await waitFor(page, '#home', WAIT_TIMEOUT);
 
     await expect(page.locator('#plotSpeciesTotalChart')).toBeVisible();
     await expect(page.locator('#plotSpeciesSurvivalRate')).toBeVisible();
@@ -170,15 +177,15 @@ test.describe('ObservationDetailsScreenshots', () => {
 
   test('Monitoring plot level detail view — species table', async ({ page }) => {
     await page.locator('a:has-text("May 2025")').click();
-    await waitFor(page, '#home');
-    await waitFor(page, '#row1');
+    await waitFor(page, '#home', WAIT_TIMEOUT);
+    await waitFor(page, '#row1', WAIT_TIMEOUT);
 
     await page.locator('a:has-text("Stratum 01")').click();
-    await waitFor(page, '#home');
-    await waitFor(page, '#row1');
+    await waitFor(page, '#home', WAIT_TIMEOUT);
+    await waitFor(page, '#row1', WAIT_TIMEOUT);
 
     await page.locator('#row1 a').click();
-    await waitFor(page, '#home');
+    await waitFor(page, '#home', WAIT_TIMEOUT);
 
     // The species editable table (MonitoringPlotSpeciesEditableTable)
     await expect(page.getByRole('table').first()).toBeVisible();
@@ -190,15 +197,15 @@ test.describe('ObservationDetailsScreenshots', () => {
 
   test('Monitoring plot level detail view — photos and videos tab', async ({ page }) => {
     await page.locator('a:has-text("May 2025")').click();
-    await waitFor(page, '#home');
-    await waitFor(page, '#row1');
+    await waitFor(page, '#home', WAIT_TIMEOUT);
+    await waitFor(page, '#row1', WAIT_TIMEOUT);
 
     await page.locator('a:has-text("Stratum 01")').click();
-    await waitFor(page, '#home');
-    await waitFor(page, '#row1');
+    await waitFor(page, '#home', WAIT_TIMEOUT);
+    await waitFor(page, '#row1', WAIT_TIMEOUT);
 
     await page.locator('#row1 a').click();
-    await waitFor(page, '#home');
+    await waitFor(page, '#home', WAIT_TIMEOUT);
 
     await page.getByRole('tab', { name: 'Photos & Videos' }).click();
 
@@ -209,9 +216,9 @@ test.describe('ObservationDetailsScreenshots', () => {
     await page.locator('.select').first().click();
     await page.getByRole('list').getByText('PS2', { exact: true }).click();
 
-    await expect(page.getByRole('button', { name: 'Survival Rate Settings' })).toBeVisible({ timeout: 10000 });
+    await expect(page.getByRole('button', { name: 'Survival Rate Settings' })).toBeVisible({ timeout: WAIT_TIMEOUT });
     await page.getByRole('button', { name: 'Survival Rate Settings' }).click();
-    await waitFor(page, '#home');
+    await waitFor(page, '#home', WAIT_TIMEOUT);
 
     await expect(page).toHaveScreenshot('survival-rate-settings.png', SCREENSHOT_OPTIONS);
   });
@@ -220,9 +227,9 @@ test.describe('ObservationDetailsScreenshots', () => {
     await page.locator('.select').first().click();
     await page.getByRole('list').getByText('PS2', { exact: true }).click();
 
-    await expect(page.getByRole('button', { name: 'Survival Rate Settings' })).toBeVisible({ timeout: 10000 });
+    await expect(page.getByRole('button', { name: 'Survival Rate Settings' })).toBeVisible({ timeout: WAIT_TIMEOUT });
     await page.getByRole('button', { name: 'Survival Rate Settings' }).click();
-    await waitFor(page, '#home');
+    await waitFor(page, '#home', WAIT_TIMEOUT);
 
     await page.getByRole('button', { name: 'Edit Permanent Plots' }).click();
     await expect(page.getByLabel('Use Observation data').first()).toBeVisible();
