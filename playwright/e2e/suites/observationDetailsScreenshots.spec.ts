@@ -138,14 +138,18 @@ test.describe('ObservationDetailsScreenshots', () => {
     await waitFor(page, '#home', WAIT_TIMEOUT);
     await waitFor(page, '#row1', WAIT_TIMEOUT);
 
-    // Wait for the lazy-loaded planting site to resolve. The breadcrumb second entry
-    // (#crumb_1, observation date + site name) only appears after useLazyGetPlantingSiteQuery
-    // completes. Without this wait, CI screenshots show the single-crumb state, which
-    // shifts all page content and causes ~19% pixel diff vs the reference.
-    await expect(page.locator('#crumb_1')).toBeVisible({ timeout: WAIT_TIMEOUT });
-
     await expect(page.locator('#observationSpeciesTotalChart')).toBeVisible();
     await expect(page.locator('#observationSurvivalRateChart')).toBeVisible();
+
+    // SurvivalRateMessageV2 renders a full-width banner while its T0 query is in-flight
+    // (survivalRateSet is undefined/falsy until useLazyGetAllT0SiteDataSetQuery resolves).
+    // T0 is configured for this site in the seeded DB, so the banner disappears once
+    // the query completes. On slow CI backends the query is still pending when charts
+    // become visible, causing ~19% pixel diff vs the reference (which was generated on
+    // fast local Docker where the query resolved before the screenshot).
+    await expect(page.getByText('Survival Rates are not able to be calculated', { exact: false })).toBeHidden({
+      timeout: WAIT_TIMEOUT,
+    });
 
     await expect(page).toHaveScreenshot('observation-stratum-detail.png', {
       ...FULL_PAGE_SCREENSHOT_OPTIONS,
