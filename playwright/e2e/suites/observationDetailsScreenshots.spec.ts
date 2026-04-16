@@ -138,6 +138,12 @@ test.describe('ObservationDetailsScreenshots', () => {
     await waitFor(page, '#home', WAIT_TIMEOUT);
     await waitFor(page, '#row1', WAIT_TIMEOUT);
 
+    // Wait for the lazy-loaded planting site to resolve. The breadcrumb second entry
+    // (#crumb_1, observation date + site name) only appears after useLazyGetPlantingSiteQuery
+    // completes. Without this wait, CI screenshots show the single-crumb state, which
+    // shifts all page content and causes ~19% pixel diff vs the reference.
+    await expect(page.locator('#crumb_1')).toBeVisible({ timeout: WAIT_TIMEOUT });
+
     await expect(page.locator('#observationSpeciesTotalChart')).toBeVisible();
     await expect(page.locator('#observationSurvivalRateChart')).toBeVisible();
 
