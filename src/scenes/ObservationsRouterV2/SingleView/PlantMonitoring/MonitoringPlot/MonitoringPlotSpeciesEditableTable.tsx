@@ -1,8 +1,7 @@
-import React, { type JSX, useCallback, useMemo } from 'react';
+import React, { type JSX, useCallback, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { Box, useTheme } from '@mui/material';
-import { MRT_ColumnDef, MRT_Row, MaterialReactTable, useMaterialReactTable } from 'material-react-table';
+import { EditableTable, EditableTableColumn } from '@terraware/web-components';
 
 import { useLocalization } from 'src/providers';
 import {
@@ -15,9 +14,10 @@ import { ObservationSpeciesResults } from 'src/types/Observations';
 
 import useObservationSpecies from '../useObservationSpecies';
 
+const getRowKey = (row: ObservationSpeciesResults): string =>
+  String(row.speciesId ?? `${row.certainty}_${row.speciesName ?? ''}`);
+
 export default function MonitoringPlotSpeciesEditableTable(): JSX.Element {
-  'use no memo';
-  const theme = useTheme();
   const params = useParams<{ observationId: string; monitoringPlotId: string }>();
   const { strings } = useLocalization();
 
@@ -43,32 +43,38 @@ export default function MonitoringPlotSpeciesEditableTable(): JSX.Element {
   ).filter((s) => (s.totalLive ?? 0) + (s.totalDead ?? 0) + (s.totalExisting ?? 0) > 0);
 
   const [update] = useUpdateCompletedObservationPlotMutation();
-  const saveValue = useCallback(
-    (fieldId: string, certainty: 'Other' | 'Unknown' | 'Known', speciesId?: number, speciesName?: string) =>
-      (event: { currentTarget: { value: any }; target: { value: any } }) => {
-        const value = event.currentTarget.value || event.target.value;
-        if (monitoringPlot && value !== undefined && !isNaN(value)) {
-          const uploadPayload: MonitoringSpeciesUpdateOperationPayload = {
-            type: 'MonitoringSpecies',
-            speciesId,
-            certainty,
-            speciesName,
-            [fieldId]: Number(value),
-          };
-          const mainPayload: UpdateCompletedObservationPlotApiArg = {
-            observationId,
-            plotId: monitoringPlot.monitoringPlotId,
-            updateObservationRequestPayload: { updates: [uploadPayload] },
-          };
-          void update(mainPayload);
-        }
-      },
+  const [optimisticValues, setOptimisticValues] = useState<Record<string, Partial<ObservationSpeciesResults>>>({});
+
+  const saveSpeciesCount = useCallback(
+    (fieldId: string, row: ObservationSpeciesResults, value: any) => {
+      const numValue = Number(value);
+      if (monitoringPlot && value !== undefined && !isNaN(numValue)) {
+        setOptimisticValues((prev) => ({
+          ...prev,
+          [getRowKey(row)]: { ...prev[getRowKey(row)], [fieldId]: numValue },
+        }));
+        const uploadPayload: MonitoringSpeciesUpdateOperationPayload = {
+          type: 'MonitoringSpecies',
+          speciesId: row.speciesId,
+          certainty: row.certainty,
+          speciesName: row.speciesName,
+          [fieldId]: numValue,
+        };
+        const mainPayload: UpdateCompletedObservationPlotApiArg = {
+          observationId,
+          plotId: monitoringPlot.monitoringPlotId,
+          updateObservationRequestPayload: { updates: [uploadPayload] },
+        };
+        void update(mainPayload);
+      }
+    },
     [observationId, monitoringPlot, update]
   );
 
-  const columns = useMemo<MRT_ColumnDef<ObservationSpeciesResults>[]>(
+  const columns = useMemo<EditableTableColumn<ObservationSpeciesResults>[]>(
     () => [
       {
+        id: 'speciesScientificName',
         accessorKey: 'speciesScientificName',
         header: strings.SPECIES,
         enableEditing: false,
@@ -76,74 +82,55 @@ export default function MonitoringPlotSpeciesEditableTable(): JSX.Element {
       ...(!results?.isAdHoc
         ? [
             {
-              accessorKey: 'totalExisting',
+              id: 'totalExisting',
+              accessorKey: 'totalExisting' as keyof ObservationSpeciesResults,
               header: strings.PREEXISTING,
-              muiEditTextFieldProps: ({ row }: { row: MRT_Row<ObservationSpeciesResults> }) => ({
-                onBlur: saveValue(
-                  'totalExisting',
-                  row.original.certainty,
-                  row.original.speciesId,
-                  row.original.speciesName
-                ),
-              }),
-            },
+              editConfig: {
+                onSave: (row: ObservationSpeciesResults, value: any) => saveSpeciesCount('totalExisting', row, value),
+              },
+            } as EditableTableColumn<ObservationSpeciesResults>,
           ]
         : []),
       {
+        id: 'totalLive',
         accessorKey: 'totalLive',
         header: strings.LIVE_PLANTS,
-        muiEditTextFieldProps: ({ row }) => ({
-          onBlur: saveValue('totalLive', row.original.certainty, row.original.speciesId, row.original.speciesName),
-        }),
+        editConfig: {
+          onSave: (row, value) => saveSpeciesCount('totalLive', row, value),
+        },
       },
       {
+        id: 'totalDead',
         accessorKey: 'totalDead',
         header: strings.DEAD_PLANTS,
-        muiEditTextFieldProps: ({ row }) => ({
-          onBlur: saveValue('totalDead', row.original.certainty, row.original.speciesId, row.original.speciesName),
-        }),
+        editConfig: {
+          onSave: (row, value) => saveSpeciesCount('totalDead', row, value),
+        },
       },
     ],
-    [strings.SPECIES, strings.PREEXISTING, strings.LIVE_PLANTS, strings.DEAD_PLANTS, results?.isAdHoc, saveValue]
+    [strings.SPECIES, strings.PREEXISTING, strings.LIVE_PLANTS, strings.DEAD_PLANTS, results?.isAdHoc, saveSpeciesCount]
   );
 
-  const table = useMaterialReactTable({
-    columns,
-    data: monitoringPlotSpecies,
-    editDisplayMode: 'cell',
-    enableColumnOrdering: false,
-    enableColumnPinning: false,
-    enableEditing: true,
-    enableSorting: true,
-    enableFilters: false,
-    enablePagination: false,
-    enableBottomToolbar: false,
-    enableTopToolbar: false,
-    initialState: {
-      sorting: [{ id: 'speciesScientificName', desc: false }],
-    },
-    muiTableBodyProps: {
-      sx: {
-        '& tr:nth-of-type(odd) > td': {
-          backgroundColor: theme.palette.TwClrBaseGray025,
-        },
-      },
-    },
-    muiTablePaperProps: {
-      elevation: 0,
-    },
-    muiTableBodyRowProps: {
-      sx: {
-        '& td': {
-          borderBottom: 'none',
-        },
-      },
-    },
-  });
+  const speciesWithOptimistic = useMemo(
+    () =>
+      monitoringPlotSpecies.map((sp) => ({
+        ...sp,
+        ...optimisticValues[getRowKey(sp)],
+      })),
+    [monitoringPlotSpecies, optimisticValues]
+  );
 
   return (
-    <Box minHeight={'160px'} padding={2}>
-      <MaterialReactTable table={table} />
-    </Box>
+    <EditableTable
+      clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
+      columns={columns}
+      data={speciesWithOptimistic}
+      enableEditing={true}
+      enableSorting={true}
+      enablePagination={false}
+      enableBottomToolbar={false}
+      enableTopToolbar={false}
+      initialSorting={[{ id: 'speciesScientificName', desc: false }]}
+    />
   );
 }

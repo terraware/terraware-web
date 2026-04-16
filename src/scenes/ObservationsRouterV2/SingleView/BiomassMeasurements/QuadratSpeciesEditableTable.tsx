@@ -1,8 +1,8 @@
-import React, { type JSX, useCallback, useMemo } from 'react';
+import React, { type JSX, useCallback, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { Box, useTheme } from '@mui/material';
-import { MRT_ColumnDef, MRT_TableInstance, MaterialReactTable, useMaterialReactTable } from 'material-react-table';
+import { TextField } from '@mui/material';
+import { EditableTable, EditableTableColumn } from '@terraware/web-components';
 
 import { useLocalization } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
@@ -31,14 +31,14 @@ type QuadratSpeciesEditableTableProps = {
   position: QuadratPosition;
 };
 
+const getRowKey = (row: SpeciesRow): string => String(row.speciesId ?? row.scientificName ?? row.speciesName ?? '');
+
 export default function QuadratSpeciesEditableTable({
   editable,
   species,
   position,
 }: QuadratSpeciesEditableTableProps): JSX.Element {
-  'use no memo';
   const { species: availableSpecies } = useSpeciesData();
-  const theme = useTheme();
   const { strings } = useLocalization();
 
   const params = useParams<{ observationId: string }>();
@@ -46,6 +46,7 @@ export default function QuadratSpeciesEditableTable({
   const { data: observationResultsResponse } = useGetObservationResultsQuery({ observationId });
   const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);
   const [update] = useUpdateCompletedObservationPlotMutation();
+  const [optimisticValues, setOptimisticValues] = useState<Record<string, Partial<SpeciesRow>>>({});
 
   const updateObservation = useCallback(
     (updatePayload: UpdateObservationRequestPayload) => {
@@ -55,169 +56,165 @@ export default function QuadratSpeciesEditableTable({
           plotId: results.adHocPlot.monitoringPlotId,
           updateObservationRequestPayload: updatePayload,
         };
-
         void update(payload);
       }
     },
     [observationId, results, update]
   );
 
-  const saveValue = useCallback(
-    (iTable: MRT_TableInstance<SpeciesRow>, speciesId?: number, scientificName?: string) =>
-      (event: { currentTarget: { value: any } }) => {
-        const value = event.currentTarget.value;
-        const numValue = Number(value);
-        if (!isNaN(numValue) && numValue >= 0 && numValue <= 25 && (speciesId || scientificName)) {
-          const uploadPayload: QuadratSpeciesUpdateOperationPayload = {
-            type: 'QuadratSpecies',
-            position,
-            speciesId,
-            scientificName: speciesId ? undefined : scientificName,
-            abundance: value,
-          };
-
-          updateObservation({ updates: [uploadPayload] });
-        }
-      },
+  const saveAbundance = useCallback(
+    (row: SpeciesRow, numValue: number) => {
+      setOptimisticValues((prev) => ({
+        ...prev,
+        [getRowKey(row)]: { ...prev[getRowKey(row)], abundanceCount: numValue },
+      }));
+      const uploadPayload: QuadratSpeciesUpdateOperationPayload = {
+        type: 'QuadratSpecies',
+        position,
+        speciesId: row.speciesId,
+        scientificName: row.speciesId ? undefined : row.scientificName || row.speciesName,
+        abundance: numValue,
+      };
+      updateObservation({ updates: [uploadPayload] });
+    },
     [position, updateObservation]
   );
 
-  const columns = useMemo<MRT_ColumnDef<SpeciesRow>[]>(
+  const saveBiomassSpecies = useCallback(
+    (fieldId: string, row: SpeciesRow, value: string) => {
+      const boolValue = value === 'true';
+      setOptimisticValues((prev) => ({
+        ...prev,
+        [getRowKey(row)]: { ...prev[getRowKey(row)], [fieldId]: boolValue },
+      }));
+      const payload: BiomassSpeciesUpdateOperationPayload = {
+        type: 'BiomassSpecies',
+        speciesId: row.speciesId,
+        scientificName: row.speciesId === undefined ? row.scientificName || row.speciesName : undefined,
+        [fieldId]: boolValue,
+      };
+      updateObservation({ updates: [payload] });
+    },
+    [updateObservation]
+  );
+
+  const IsInvasiveCell = useCallback(
+    ({ row }: { row: { original: SpeciesRow } }) => <>{row.original.isInvasive ? strings.YES : strings.NO}</>,
+    [strings.YES, strings.NO]
+  );
+
+  const IsThreatenedCell = useCallback(
+    ({ row }: { row: { original: SpeciesRow } }) => <>{row.original.isThreatened ? strings.YES : strings.NO}</>,
+    [strings.YES, strings.NO]
+  );
+
+  const columns = useMemo<EditableTableColumn<SpeciesRow>[]>(
     () => [
       {
+        id: 'speciesName',
         accessorKey: 'speciesName',
         header: strings.SPECIES,
         enableEditing: false,
       },
       {
+        id: 'abundanceCount',
         accessorKey: 'abundanceCount',
         header: strings.HERBACEOUS_ABUNDANCE_SQUARE_COUNT,
-        muiEditTextFieldProps: ({ row, table: iTable }) => {
-          return {
-            type: 'number',
-            inputProps: {
-              min: 0,
-              max: 25,
-              maxLength: 2,
-            },
-            onBlur: saveValue(iTable, row.original.speciesId, row.original.scientificName || row.original.speciesName),
-
-            onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
-              const val = event.target.value;
-              if (val.length > 2) {
-                event.target.value = val.slice(0, 2);
-              }
-              const numVal = Number(event.target.value);
-              if (numVal > 25) {
-                event.target.value = '25';
-              }
-            },
-          };
+        editConfig: {
+          editVariant: 'custom',
+          customEditComponent: ({ row, table: iTable }) => (
+            <TextField
+              type='number'
+              defaultValue={row.original.abundanceCount ?? ''}
+              inputProps={{ min: 0, max: 25 }}
+              onChange={(event) => {
+                const val = event.target.value;
+                if (val.length > 2) {
+                  event.target.value = val.slice(0, 2);
+                }
+                if (Number(event.target.value) > 25) {
+                  event.target.value = '25';
+                }
+              }}
+              onBlur={(event) => {
+                const numValue = Number(event.target.value);
+                if (
+                  !isNaN(numValue) &&
+                  numValue >= 0 &&
+                  numValue <= 25 &&
+                  (row.original.speciesId || row.original.scientificName || row.original.speciesName)
+                ) {
+                  saveAbundance(row.original, numValue);
+                }
+                iTable.setEditingCell(null);
+              }}
+              size='small'
+              fullWidth
+            />
+          ),
         },
       },
       {
-        accessorKey: 'abundancePercentCalculated',
+        id: 'abundancePercentCalculated',
+        accessorFn: (row) => (row.abundanceCount !== undefined ? row.abundanceCount * 4 : undefined),
         header: strings.HERBACEOUS_ABUNDANCE_PERCENT,
         enableEditing: false,
       },
       {
-        accessorKey: 'isInvasive',
-        Cell: ({ cell }) => (cell.getValue() ? strings.YES : strings.NO),
+        id: 'isInvasive',
+        accessorFn: (row) => (row.isInvasive ? 'true' : 'false'),
         header: strings.INVASIVE,
-        editVariant: 'select',
-        editSelectOptions: [
-          { label: strings.YES, value: 'true' },
-          { label: strings.NO, value: 'false' },
-        ],
-        muiEditTextFieldProps: ({ row }) => ({
-          select: true,
-          onBlur: (event: React.FocusEvent<HTMLInputElement>) => {
-            const value = event.target.value === 'true';
-            const uploadPayload: BiomassSpeciesUpdateOperationPayload = {
-              type: 'BiomassSpecies',
-              speciesId: row.original.speciesId,
-              scientificName: row.original.scientificName,
-              isInvasive: value,
-            };
-            updateObservation({ updates: [uploadPayload] });
-          },
-        }),
+        Cell: IsInvasiveCell,
+        editConfig: {
+          editVariant: 'select',
+          selectOptions: [
+            { label: strings.YES, value: 'true' },
+            { label: strings.NO, value: 'false' },
+          ],
+          onSave: (row, value) => saveBiomassSpecies('isInvasive', row, value),
+        },
       },
       {
-        accessorKey: 'isThreatened',
+        id: 'isThreatened',
+        accessorFn: (row) => (row.isThreatened ? 'true' : 'false'),
         header: strings.THREATENED,
-        Cell: ({ cell }) => (cell.getValue() ? strings.YES : strings.NO),
-        editVariant: 'select',
-        editSelectOptions: [
-          { label: strings.YES, value: 'true' },
-          { label: strings.NO, value: 'false' },
-        ],
-        muiEditTextFieldProps: ({ row }) => ({
-          select: true,
-          onBlur: (event: React.FocusEvent<HTMLInputElement>) => {
-            const value = event.target.value === 'true';
-            const uploadPayload: BiomassSpeciesUpdateOperationPayload = {
-              type: 'BiomassSpecies',
-              speciesId: row.original.speciesId,
-              scientificName: row.original.scientificName,
-              isThreatened: value,
-            };
-            updateObservation({ updates: [uploadPayload] });
-          },
-        }),
+        Cell: IsThreatenedCell,
+        editConfig: {
+          editVariant: 'select',
+          selectOptions: [
+            { label: strings.YES, value: 'true' },
+            { label: strings.NO, value: 'false' },
+          ],
+          onSave: (row, value) => saveBiomassSpecies('isThreatened', row, value),
+        },
       },
     ],
-    [strings, saveValue, updateObservation]
+    [strings, saveAbundance, saveBiomassSpecies, IsInvasiveCell, IsThreatenedCell]
   );
 
   const speciesWithData = useMemo(() => {
     return species?.map((sp) => {
       const foundSpecies = availableSpecies.find((avSpecies) => avSpecies.id === sp.speciesId);
+      const optimistic = optimisticValues[getRowKey(sp)] ?? {};
       return {
         ...sp,
-        abundancePercentCalculated: sp.abundanceCount ? sp.abundanceCount * 4 : undefined,
+        ...optimistic,
         speciesName: foundSpecies?.scientificName || sp.scientificName || sp.speciesName,
       };
     });
-  }, [species, availableSpecies]);
-
-  const table = useMaterialReactTable({
-    columns,
-    data: speciesWithData || [],
-    editDisplayMode: 'cell',
-    enableColumnOrdering: false,
-    enableColumnPinning: false,
-    enableEditing: editable,
-    enableSorting: true,
-    enableFilters: false,
-    enablePagination: false,
-    enableBottomToolbar: false,
-    enableTopToolbar: false,
-    initialState: {
-      sorting: [{ id: 'speciesName', desc: false }],
-    },
-    muiTableBodyProps: {
-      sx: {
-        '& tr:nth-of-type(odd) > td': {
-          backgroundColor: theme.palette.TwClrBaseGray025,
-        },
-      },
-    },
-    muiTablePaperProps: {
-      elevation: 0,
-    },
-    muiTableBodyRowProps: {
-      sx: {
-        '& td': {
-          borderBottom: 'none',
-        },
-      },
-    },
-  });
+  }, [species, availableSpecies, optimisticValues]);
 
   return (
-    <Box minHeight={'160px'} padding={2}>
-      <MaterialReactTable table={table} />
-    </Box>
+    <EditableTable
+      clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
+      columns={columns}
+      data={speciesWithData ?? []}
+      enableEditing={editable}
+      enableSorting={true}
+      enablePagination={false}
+      enableBottomToolbar={false}
+      enableTopToolbar={false}
+      initialSorting={[{ id: 'speciesName', desc: false }]}
+    />
   );
 }
