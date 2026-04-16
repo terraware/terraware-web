@@ -128,6 +128,7 @@ test.describe('ObservationDetailsScreenshots', () => {
 
     await page.locator('a:has-text("Stratum 01")').click();
     await waitFor(page, '#home', WAIT_TIMEOUT);
+    await waitFor(page, '#row1', WAIT_TIMEOUT);
 
     await expect(page.locator('#observationSpeciesTotalChart')).toBeVisible();
     await expect(page.locator('#observationSurvivalRateChart')).toBeVisible();
