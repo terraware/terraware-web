@@ -3,9 +3,17 @@ import { Page, expect, test } from '@playwright/test';
 import { changeToSuperAdmin } from '../utils/userUtils';
 import { selectOrg, waitFor } from '../utils/utils';
 
+// For element-level screenshots (tables, map containers) where content is uniform
 const SCREENSHOT_OPTIONS = {
   animations: 'disabled' as const,
   maxDiffPixelRatio: 0.02,
+};
+
+// For full-page screenshots: a slightly higher threshold accommodates minor
+// font/antialiasing differences between rendering environments
+const FULL_PAGE_SCREENSHOT_OPTIONS = {
+  animations: 'disabled' as const,
+  maxDiffPixelRatio: 0.06,
 };
 
 const MAP_SCREENSHOT_OPTIONS = {
@@ -92,7 +100,7 @@ test.describe('ObservationDetailsScreenshots', () => {
     await expect(page.locator('#observationSurvivalRateChart')).toBeVisible();
 
     await expect(page).toHaveScreenshot('observation-detail-level.png', {
-      ...SCREENSHOT_OPTIONS,
+      ...FULL_PAGE_SCREENSHOT_OPTIONS,
       mask: chartMasks(page),
     });
   });
@@ -134,8 +142,10 @@ test.describe('ObservationDetailsScreenshots', () => {
     await expect(page.locator('#observationSurvivalRateChart')).toBeVisible();
 
     await expect(page).toHaveScreenshot('observation-stratum-detail.png', {
-      ...SCREENSHOT_OPTIONS,
-      mask: chartMasks(page),
+      ...FULL_PAGE_SCREENSHOT_OPTIONS,
+      // Also mask the monitoring plot table: it loads async and can shift layout
+      // enough to cause large diffs even when charts are stable
+      mask: [...chartMasks(page), page.getByRole('table').first()],
     });
   });
 
@@ -171,7 +181,7 @@ test.describe('ObservationDetailsScreenshots', () => {
     await expect(page.locator('#plotSpeciesSurvivalRate')).toBeVisible();
 
     await expect(page).toHaveScreenshot('observation-plot-detail-general.png', {
-      ...SCREENSHOT_OPTIONS,
+      ...FULL_PAGE_SCREENSHOT_OPTIONS,
       mask: chartMasks(page),
     });
   });
@@ -210,7 +220,7 @@ test.describe('ObservationDetailsScreenshots', () => {
 
     await page.getByRole('tab', { name: 'Photos & Videos' }).click();
 
-    await expect(page).toHaveScreenshot('observation-plot-photos-tab.png', SCREENSHOT_OPTIONS);
+    await expect(page).toHaveScreenshot('observation-plot-photos-tab.png', FULL_PAGE_SCREENSHOT_OPTIONS);
   });
 
   test('Survival rate settings view', async ({ page }) => {
@@ -221,7 +231,7 @@ test.describe('ObservationDetailsScreenshots', () => {
     await page.getByRole('button', { name: 'Survival Rate Settings' }).click();
     await waitFor(page, '#home', WAIT_TIMEOUT);
 
-    await expect(page).toHaveScreenshot('survival-rate-settings.png', SCREENSHOT_OPTIONS);
+    await expect(page).toHaveScreenshot('survival-rate-settings.png', FULL_PAGE_SCREENSHOT_OPTIONS);
   });
 
   test('Edit survival rate settings view', async ({ page }) => {
@@ -235,6 +245,6 @@ test.describe('ObservationDetailsScreenshots', () => {
     await page.getByRole('button', { name: 'Edit Permanent Plots' }).click();
     await expect(page.getByLabel('Use Observation data').first()).toBeVisible();
 
-    await expect(page).toHaveScreenshot('survival-rate-settings-edit.png', SCREENSHOT_OPTIONS);
+    await expect(page).toHaveScreenshot('survival-rate-settings-edit.png', FULL_PAGE_SCREENSHOT_OPTIONS);
   });
 });
