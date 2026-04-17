@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useMixpanel } from 'react-mixpanel-browser';
-import { useLocation } from 'react-router';
 
 import { Box, Container, Grid, Typography } from '@mui/material';
 import { IconName } from '@terraware/web-components';
@@ -46,10 +45,6 @@ const TerrawareHomeView = () => {
   const orgNurserySummary = useOrgNurserySummary();
   const showAcceleratorCard = orgPreferences.showAcceleratorCard !== false;
   const virtualWalkthroughEnabled = isEnabled('Virtual Monitoring Plots');
-
-  const location = useLocation();
-  const virtualWalkthroughStatus = (location.state as { virtualWalkthroughStatus?: string } | null)
-    ?.virtualWalkthroughStatus;
 
   const [isNewApplicationModalOpen, setIsNewApplicationModalOpen] = useState<boolean>(false);
 
@@ -265,11 +260,7 @@ const TerrawareHomeView = () => {
               <Grid container spacing={3} sx={{ padding: 0 }}>
                 {virtualWalkthroughEnabled && (
                   <Grid item xs={12}>
-                    <VirtualWalkthroughMessages
-                      processingCount={virtualWalkthroughStatus === 'processing' ? 1 : 0}
-                      hasUploadFailed={virtualWalkthroughStatus === 'failed'}
-                      hasUnableToProcess={virtualWalkthroughStatus === 'unable-to-process'}
-                    />
+                    <VirtualWalkthroughMessages organizationId={selectedOrganization!.id} />
                   </Grid>
                 )}
                 <Grid item xs={12}>

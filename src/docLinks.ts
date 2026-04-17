@@ -13,7 +13,8 @@ export type DocType =
   | 'terraformation_software_solutions'
   | 'knowledge_base'
   | 'knowledge_base_add_species'
-  | 'knowledge_base_stratification';
+  | 'knowledge_base_stratification'
+  | 'virtual_walkthroughs_videos_tips';
 
 type DocLink = Record<DocType, string>;
 
@@ -37,6 +38,7 @@ const DOC_LINKS: Record<SupportedLocaleId, DocLink> = {
       'https://knowledge.terraformation.com/hc/en-us/articles/19699832923796-Adding-Species-To-Your-List',
     knowledge_base_stratification:
       'https://knowledge.terraformation.com/hc/en-us/articles/27918882767892-Managing-Planting-Sites',
+    virtual_walkthroughs_videos_tips: 'https://knowledge.terraformation.com/hc/en-us/articles/48235134762004',
   },
   es: {
     ad_hoc_plots: 'https://knowledge.terraformation.com/hc/en-us/articles/36389038050708-Ad-Hoc-Plot-Observations',
@@ -57,6 +59,7 @@ const DOC_LINKS: Record<SupportedLocaleId, DocLink> = {
       'https://knowledge.terraformation.com/hc/en-us/articles/19699832923796-Adding-Species-To-Your-List',
     knowledge_base_stratification:
       'https://knowledge.terraformation.com/hc/en-us/articles/27918882767892-Managing-Planting-Sites',
+    virtual_walkthroughs_videos_tips: 'https://knowledge.terraformation.com/hc/en-us/articles/48235134762004',
   },
   fr: {
     ad_hoc_plots: 'https://knowledge.terraformation.com/hc/en-us/articles/36389038050708-Ad-Hoc-Plot-Observations',
@@ -77,6 +80,7 @@ const DOC_LINKS: Record<SupportedLocaleId, DocLink> = {
       'https://knowledge.terraformation.com/hc/en-us/articles/19699832923796-Adding-Species-To-Your-List',
     knowledge_base_stratification:
       'https://knowledge.terraformation.com/hc/en-us/articles/27918882767892-Managing-Planting-Sites',
+    virtual_walkthroughs_videos_tips: 'https://knowledge.terraformation.com/hc/en-us/articles/48235134762004',
   },
 };
 

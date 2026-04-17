@@ -2389,9 +2389,9 @@ VIEWING,Visualisation,fb67a07d
 VINE,Vigne,c39d21fb
 VIRTUAL,Virtuel,51d865ab
 VIRTUAL_PLOTS,Parcelles virtuelles,74b74d96
-VIRTUAL_WALKTHROUGH_STEP_1,Marchez autour de la zone que vous souhaitez enregistrer à un rythme régulier.,590d04be
-VIRTUAL_WALKTHROUGH_STEP_2,Parcourez toute la zone deux fois en formant une spirale.,75ea84f9
-VIRTUAL_WALKTHROUGH_STEP_3,"Tenez la caméra immobile, toujours orientée vers le centre.",1db14cb7
+VIRTUAL_WALKTHROUGH_STEP_1,Marchez autour de la zone que vous souhaitez enregistrer à un rythme régulier.,d9da91c5
+VIRTUAL_WALKTHROUGH_STEP_2,Parcourez toute la zone en formant une spirale comme indiqué.,5b77fcc9
+VIRTUAL_WALKTHROUGH_STEP_3,"Tenez la caméra immobile, toujours orientée vers le centre.",9e4497e3
 VIRTUAL_WALKTHROUGHS,Visites virtuelles,74c630f5
 VISIT_VIRTUAL_PLOT,Visiter la parcelle virtuelle,22d34c8b
 VOTER,Électeur : {0},46578e94
@@ -2461,6 +2461,7 @@ YOU_ARE_ABOUT_TO_APPROVE_THIS_SPECIES_DELIVERABLE,Vous êtes sur le point d'appr
 YOU_ARE_ABOUT_TO_PUBLISH,Vous êtes sur le point de publier sur le portail des financeurs.,8adda943
 YOU_ARE_ABOUT_TO_SUBMIT_THIS_SPECIES_DELIVERABLE,Voulez-vous vraiment soumettre cette liste d'espèces pour approbation ?,47f7bdd3
 YOU_ARE_HERE,Vous êtes ici,183a5491
+YOU_CAN_NOW_CREATE_VIRTUAL_WALKTHROUGHS,Vous pouvez désormais créer des Visites Virtuelles dans Terraware. Consultez notre {0} pour plus de détails.,769f02b1
 YOU_HAVE_NOT_UPLOADED_ANY_PHOTOS_OR_VIDEOS,Vous n'avez téléchargé aucune photo ni vidéo.,f83261aa
 YOU_HAVE_NOT_UPLOADED_ANY_PLOT_CORNER_PHOTOS,Vous n'avez téléchargé aucune photo d'angle de parcelle.,4f10d7d3
 YOU_HAVE_UNPUBLISHED_CHANGES,Vous avez des modifications non publiées,1825c403

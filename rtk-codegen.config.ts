@@ -46,6 +46,12 @@ const config: ConfigFile = {
         operation.path.startsWith('/api/v1/tracking/observations') &&
         !operation.path.includes('{observationId}/splats'),
     },
+    './src/queries/generated/organizationMedia.ts': {
+      filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/organizations/{organizationId}/media'),
+    },
+    './src/queries/generated/organizationSplats.ts': {
+      filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/organizations/{organizationId}/splats'),
+    },
     './src/queries/generated/observationSplats.ts': {
       filterEndpoints: (_, operation) =>
         operation.path.startsWith('/api/v1/tracking/observations/{observationId}/splats'),
