@@ -141,16 +141,6 @@ test.describe('ObservationDetailsScreenshots', () => {
     await expect(page.locator('#observationSpeciesTotalChart')).toBeVisible();
     await expect(page.locator('#observationSurvivalRateChart')).toBeVisible();
 
-    // SurvivalRateMessageV2 renders a full-width banner while its T0 query is in-flight
-    // (survivalRateSet is undefined/falsy until useLazyGetAllT0SiteDataSetQuery resolves).
-    // T0 is configured for this site in the seeded DB, so the banner disappears once
-    // the query completes. On slow CI backends the query is still pending when charts
-    // become visible, causing ~19% pixel diff vs the reference (which was generated on
-    // fast local Docker where the query resolved before the screenshot).
-    await expect(page.getByText('Survival Rates are not able to be calculated', { exact: false })).toBeHidden({
-      timeout: WAIT_TIMEOUT,
-    });
-
     await expect(page).toHaveScreenshot('observation-stratum-detail.png', {
       ...FULL_PAGE_SCREENSHOT_OPTIONS,
       // Also mask the monitoring plot table: it loads async and can shift layout
