@@ -18,7 +18,7 @@ echo "--- :vercel: Build project"
 npx vercel build --token="$VERCEL_TOKEN"
 
 echo "--- :vercel: Deploy to Vercel"
-preview_url=$(npx vercel deploy --prebuilt --archive=tgz --token="$VERCEL_TOKEN" --meta branch="$BUILDKITE_BRANCH")
+preview_url=$(npx vercel deploy --prebuilt --archive=tgz --token="$VERCEL_TOKEN" --meta githubCommitRef="$BUILDKITE_BRANCH")
 
 echo "Preview deployed to: ${preview_url}"
 
