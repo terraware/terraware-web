@@ -162,11 +162,7 @@ const OnboardingHomeView = () => {
         {isLoadingInitialData ? null : (
           <Box paddingRight={'24px'} paddingLeft={isMobile ? '24px' : 0}>
             <PageHeader
-              title={
-                user?.firstName
-                  ? strings.formatString('Testing!', user.firstName)
-                  : strings.WELCOME
-              }
+              title={user?.firstName ? strings.formatString('Testing!', user.firstName) : strings.WELCOME}
               subtitle=''
             />
             <Container maxWidth={false} sx={{ padding: 0 }}>
