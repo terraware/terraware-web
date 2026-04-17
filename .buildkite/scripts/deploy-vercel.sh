@@ -22,8 +22,15 @@ preview_url=$(npx vercel deploy --prebuilt --archive=tgz --token="$VERCEL_TOKEN"
 
 echo "Preview deployed to: ${preview_url}"
 
+echo "--- :vercel: Alias deployment to branch URL"
+branch_slug=$(echo "$BUILDKITE_BRANCH" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9-]/-/g')
+branch_url="terraware-web-${branch_slug}.vercel.app"
+npx vercel alias set "$preview_url" "$branch_url" --token="$VERCEL_TOKEN"
+
+echo "Branch URL: https://${branch_url}"
+
 echo "--- :github: Post preview URL as build annotation"
 buildkite-agent annotate \
     --style info \
     --context vercel-preview \
-    "Vercel preview: [${preview_url}](${preview_url})"
+    "Vercel preview: [https://${branch_url}](https://${branch_url})"
