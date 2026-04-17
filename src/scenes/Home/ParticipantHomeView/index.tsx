@@ -1,5 +1,4 @@
 import React from 'react';
-import { useLocation } from 'react-router';
 
 import { Grid, useTheme } from '@mui/material';
 
