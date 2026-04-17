@@ -164,7 +164,7 @@ const OnboardingHomeView = () => {
             <PageHeader
               title={
                 user?.firstName
-                  ? strings.formatString('Testing!', user.firstName)
+                  ? strings.formatString(strings.WELCOME_TO_TERRAWARE_PERSON, user.firstName)
                   : strings.WELCOME
               }
               subtitle=''
