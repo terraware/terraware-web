@@ -201,7 +201,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           {
             organizationId: selectedOrganization.id,
             plantingSiteId,
-            includePlants: true,
+            depth: 'Plant',
           },
           true
         );
