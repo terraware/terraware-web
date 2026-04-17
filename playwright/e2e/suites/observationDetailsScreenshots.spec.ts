@@ -50,6 +50,12 @@ test.describe('ObservationDetailsScreenshots', () => {
   test.describe.configure({ timeout: 120000 });
 
   test.beforeEach(async ({ page, context, baseURL }) => {
+    // Abort the app version check so the "Please refresh" banner never appears.
+    // Locally the frontend and backend versions can differ, triggering the banner and
+    // shifting all page content. CI does not show it, so snapshots must be generated
+    // without it to match what CI renders.
+    await page.route(/build-version\.txt/, (route) => route.abort());
+
     await changeToSuperAdmin(context, baseURL);
     await page.goto('/');
     await waitFor(page, '#home', WAIT_TIMEOUT);
