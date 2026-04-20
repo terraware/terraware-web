@@ -6,7 +6,7 @@ import { Message } from '@terraware/web-components';
 import Link from 'src/components/common/Link';
 import { useDocLinks } from 'src/docLinks';
 import { useGenerateOrganizationSplatMutation } from 'src/queries/generated/organizationSplats';
-import { useSearchOrganizationMediaFilesQuery } from 'src/queries/search/organizationMedia';
+import { useSearchOrganizationVirtualWalkthroughsQuery } from 'src/queries/search/organizationVirtualWalkthroughs';
 import CreateVirtualWalkthroughStep1Modal from 'src/scenes/Home/TerrawareHomeView/CreateVirtualWalkthroughStep1Modal';
 import strings from 'src/strings';
 
@@ -23,7 +23,7 @@ const VirtualWalkthroughMessages = ({
   const docLinks = useDocLinks();
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
 
-  const { data: mediaFiles } = useSearchOrganizationMediaFilesQuery(organizationId);
+  const { data: mediaFiles } = useSearchOrganizationVirtualWalkthroughsQuery(organizationId);
   const [generateSplat] = useGenerateOrganizationSplatMutation();
 
   const processingCount = useMemo(

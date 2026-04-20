@@ -1,28 +1,45 @@
-import React, { type JSX, useEffect, useMemo, useRef, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { MapRef } from 'react-map-gl/mapbox';
+
+import { Box } from '@mui/material';
 
 import MapComponent from 'src/components/NewMap';
 import { MapLegendGroup } from 'src/components/NewMap/MapLegend';
-import { MapLayer, MapNameTag, MapPoint } from 'src/components/NewMap/types';
+import { MapLayer, MapMarker, MapMarkerGroup, MapNameTag, MapPoint } from 'src/components/NewMap/types';
 import useMapFeatureStyles from 'src/components/NewMap/useMapFeatureStyles';
 import useMapUtils from 'src/components/NewMap/useMapUtils';
 import usePlantingSiteMapLegend from 'src/components/NewMap/usePlantingSiteMapLegend';
-import usePlotPhotosMapLegend from 'src/components/NewMap/usePlotPhotosMapLegend';
 import { getBoundingBoxFromPoints } from 'src/components/NewMap/utils';
+import Button from 'src/components/common/button/Button';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
+import { OrganizationVirtualWalkthrough } from 'src/queries/search/organizationVirtualWalkthroughs';
+import strings from 'src/strings';
 import useMapboxToken from 'src/utils/useMapboxToken';
 
-export default function VirtualWalkthroughsMap(): JSX.Element {
+import VirtualWalkthroughModal from './VirtualWalkthroughModal';
+
+type VirtualWalkthroughsMapProps = {
+  mediaFiles: OrganizationVirtualWalkthrough[];
+  organizationId: number;
+};
+
+export default function VirtualWalkthroughsMap({
+  mediaFiles,
+  organizationId,
+}: VirtualWalkthroughsMapProps): JSX.Element {
   const mapRef = useRef<MapRef | null>(null);
   const { mapId, token } = useMapboxToken();
   const { fitBounds } = useMapUtils(mapRef);
   const [mapLoaded, setMapLoaded] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<OrganizationVirtualWalkthrough | undefined>(undefined);
 
   const { plantingSites } = useOrganizationPlantingSites({ full: true });
 
   const { selectedLayer, plantingSiteLegendGroup } = usePlantingSiteMapLegend('sites');
-  const { plotPhotosLegendGroup } = usePlotPhotosMapLegend();
-  const { sitesLayerStyle, strataLayerStyle, substrataLayerStyle } = useMapFeatureStyles();
+  const { sitesLayerStyle, strataLayerStyle, substrataLayerStyle, virtualPlotStyle } = useMapFeatureStyles();
+  const [virtualWalkthroughsVisible, setVirtualWalkthroughsVisible] = useState(true);
 
   useEffect(() => {
     if (mapLoaded && plantingSites.length) {
@@ -107,18 +124,112 @@ export default function VirtualWalkthroughsMap(): JSX.Element {
   }, [plantingSites]);
 
   const legends = useMemo((): MapLegendGroup[] => {
-    return [plantingSiteLegendGroup, plotPhotosLegendGroup];
-  }, [plantingSiteLegendGroup, plotPhotosLegendGroup]);
+    return [
+      plantingSiteLegendGroup,
+      {
+        items: [
+          {
+            id: 'virtual-walkthroughs',
+            label: strings.VIRTUAL_WALKTHROUGHS,
+            setVisible: setVirtualWalkthroughsVisible,
+            style: virtualPlotStyle,
+            visible: virtualWalkthroughsVisible,
+          },
+        ],
+        title: strings.PHOTOS_VIDEOS,
+        type: 'multi-select',
+      },
+    ];
+  }, [plantingSiteLegendGroup, virtualPlotStyle, virtualWalkthroughsVisible]);
+
+  const selectFile = useCallback(
+    (file: OrganizationVirtualWalkthrough) => () => {
+      setSelectedFile(file);
+      setDrawerOpen(true);
+    },
+    []
+  );
+
+  const virtualWalkthroughMarkers = useMemo((): MapMarker[] => {
+    return mediaFiles
+      .filter(
+        (f) =>
+          !f.needsAttention &&
+          f.splatStatus !== 'Errored' &&
+          f.splatStatus !== 'Preparing' &&
+          f.latitude !== undefined &&
+          f.longitude !== undefined
+      )
+      .map(
+        (f): MapMarker => ({
+          id: `splats/${f.fileId}`,
+          latitude: f.latitude!,
+          longitude: f.longitude!,
+          selected: selectedFile?.fileId === f.fileId,
+          onClick: selectFile(f),
+        })
+      );
+  }, [mediaFiles, selectFile, selectedFile]);
+
+  const markers = useMemo((): MapMarkerGroup[] => {
+    return [
+      {
+        markers: virtualWalkthroughMarkers,
+        markerGroupId: 'virtual-walkthroughs',
+        style: virtualPlotStyle,
+        visible: virtualWalkthroughsVisible,
+      },
+    ];
+  }, [virtualPlotStyle, virtualWalkthroughMarkers, virtualWalkthroughsVisible]);
+
+  const drawerContent = useMemo(() => {
+    if (!selectedFile) {
+      return undefined;
+    }
+    return (
+      <Box display='flex' flexDirection='column' width='100%' gap={2}>
+        <Box
+          component='img'
+          src={`/api/v1/organizations/${organizationId}/media/${selectedFile.fileId}/thumbnail?maxWidth=377`}
+          alt={strings.THUMBNAIL}
+          sx={{ width: '100%', objectFit: 'cover' }}
+        />
+
+        <Button
+          id='view-3d-model'
+          label={strings.VIEW_3D_MODEL}
+          onClick={() => setModalOpen(true)}
+          priority='primary'
+          size='medium'
+          disabled={selectedFile.splatStatus !== 'Ready'}
+        />
+      </Box>
+    );
+  }, [organizationId, selectedFile]);
 
   return (
-    <MapComponent
-      mapId={mapId}
-      mapRef={mapRef}
-      token={token ?? ''}
-      mapLayers={layers}
-      nameTags={nameTags}
-      legends={legends}
-      onMapLoad={() => setMapLoaded(true)}
-    />
+    <>
+      {modalOpen && selectedFile && (
+        <VirtualWalkthroughModal
+          organizationId={organizationId}
+          fileId={selectedFile.fileId}
+          onClose={() => setModalOpen(false)}
+        />
+      )}
+      <MapComponent
+        mapId={mapId}
+        mapRef={mapRef}
+        token={token ?? ''}
+        mapLayers={layers}
+        mapMarkers={mapLoaded ? markers : undefined}
+        nameTags={nameTags}
+        legends={legends}
+        onMapLoad={() => setMapLoaded(true)}
+        drawerOpen={drawerOpen}
+        drawerSize='medium'
+        drawerChildren={drawerContent}
+        setDrawerOpen={setDrawerOpen}
+      />
+    </>
   );
 }

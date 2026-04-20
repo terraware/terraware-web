@@ -6,5 +6,8 @@ api.enhanceEndpoints({
     generateOrganizationSplat: {
       invalidatesTags: [{ type: QueryTagTypes.OrganizationMedia, id: 'LIST' }],
     },
+    setOrganizationSplatNeedsAttention: {
+      invalidatesTags: [{ type: QueryTagTypes.OrganizationMedia, id: 'LIST' }],
+    },
   },
 });

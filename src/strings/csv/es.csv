@@ -110,6 +110,7 @@ ADD_STANDARD_METRIC_CONFIRMATION,Está a punto de agregar una métrica estándar
 ADD_SUB_LOCATION,Añadir Sub-Lugar,d0ad4ffd
 ADD_SUBSET_WEIGHT_AND_COUNT,Agregar peso y recuento del subconjunto,e1b6fdf2
 ADD_TEST,Añadir Prueba,2a608b3f
+ADD_TO_MAP,Agregar al mapa,325f5a77
 ADD_TO_PROJECT,Añadir al proyecto,3e56c71f
 ADD_VIABILITY,Añadir Viabilidad,a4672790
 ADD_VIABILITY_TEST,Añadir Prueba de Viabilidad,4648a184
@@ -739,6 +740,7 @@ FIRE,Incendio,3daefdd1
 FIRST_ADD_PLANTING_SITE,"Para ver el tablero, usted debe tener un área de plantación.",29adc97e
 FIRST_NAME,Nombre,4728037d
 FIX_HIGHLIGHTED_FIELDS,Corrija los campos resaltados a continuación.,505e80af
+FLAG,Marcar,aafc43da
 FLY,Volar,0747d35f
 FLY_FASTER,Volar más rápido,e24d00c8
 FLY_SLOWER,Volar más lento,0271712f
@@ -1036,6 +1038,7 @@ MAPS_GIS_DESCRIPTION,Los mapas que se muestran aquí pertenecen a la base de dat
 MARK_ALL_AS_READ,Marcar todo como leído,aad72628
 MARK_AS_COMPLETE,Marcar como completo,63a2256e
 MARK_AS_INCOMPLETE,Marcar como incompleto,3baf97ae
+MARK_AS_NEEDS_ATTENTION,Marcar como requiere atención,6a16567f
 MARK_AS_READ,Marcar como leído,d91d4c14
 MARK_AS_SUBMITTED,Marcar como enviado,b7f9a33e
 MARK_AS_SUBMITTED_UNDO,Deshacer marcar como enviado,4ad82823
@@ -1090,6 +1093,7 @@ MONITORING,Monitoreo,c607ad35
 MONITORING_PLOT,Parcela de vigilancia,97de3243
 MONITORING_PLOT_TYPE,Tipo de parcela de vigilancia,5269e047
 MONITORING_PLOTS,Control de parcelas,42428fbb
+MONITORS,Monitores,5783929b
 MONOCULTURE,Monocultivo,7499be9c
 MONTH_01,Enero,735450e1
 MONTH_02,Febrero,2d7dea43
@@ -2298,6 +2302,7 @@ UNSPECIFIED,No especificado,be62b890
 UPCOMING,Venidero,fa1930e2
 UPCOMING_PLANTING_SEASONS,Próximas temporadas de plantación,3ad28e65
 UPDATE,Actualizar,c4c30980
+UPDATE_LOCATION,Actualizar ubicación,86b598cd
 UPDATE_NEEDED,Actualización necesaria,7b391dc2
 UPDATE_REQUESTED,Actualización solicitada,3c56b2c5
 UPDATE_STATUS_WARNING,Estás a punto de actualizar el estatus,6ee652b9
@@ -2372,6 +2377,7 @@ VIDEO_UNABLE_TO_PROCESS_DESCRIPTION,"No pudimos generar el modelo a partir del v
 VIDEO_UPLOAD_FAILED,Error al cargar el video,2406bea0
 VIDEO_UPLOAD_FAILED_DESCRIPTION,"No se pudo cargar su video. {0}. Para obtener consejos sobre cómo mejorar su video, consulte el {1}.",0fbf7c0c
 VIEW,Ver,02cff17a
+VIEW_3D_MODEL,Ver modelo 3D,fc2e2960
 VIEW_APPLICATION,Ver solicitud,bbdc193f
 VIEW_FULL_DASHBOARD,Ver panel de control completo,25189646
 VIEW_HISTORY,Ver historial,a1dbe2ca
