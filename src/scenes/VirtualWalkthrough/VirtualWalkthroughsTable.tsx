@@ -1,6 +1,7 @@
-import React, { type JSX, useCallback, useMemo } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
+import MuxPlayer from '@mux/mux-player-react';
 import { EditableTable, EditableTableColumn } from '@terraware/web-components';
 import {
   MRT_Cell,
@@ -11,9 +12,13 @@ import {
   MRT_ToggleGlobalFilterButton,
 } from 'material-react-table';
 
+import ImageLightbox from 'src/components/common/ImageLightbox';
 import Link from 'src/components/common/Link';
 import useTableState from 'src/hooks/useTableState';
-import { useDeleteOrganizationMediaFileMutation } from 'src/queries/generated/organizationMedia';
+import {
+  useDeleteOrganizationMediaFileMutation,
+  useLazyGetOrganizationMediaFileStreamQuery,
+} from 'src/queries/generated/organizationMedia';
 import { useSetOrganizationSplatNeedsAttentionMutation } from 'src/queries/generated/organizationSplats';
 import { OrganizationVirtualWalkthrough } from 'src/queries/search/organizationVirtualWalkthroughs';
 import strings from 'src/strings';
@@ -40,6 +45,9 @@ export default function VirtualWalkthroughsTable({
   const theme = useTheme();
   const [deleteMediaFile] = useDeleteOrganizationMediaFileMutation();
   const [setNeedsAttention] = useSetOrganizationSplatNeedsAttentionMutation();
+  const [getMediaStream, { data: mediaStreamData }] = useLazyGetOrganizationMediaFileStreamQuery();
+  const [lightboxFileId, setLightboxFileId] = useState<number | undefined>(undefined);
+  const [mediaStream, setMediaStream] = useState<{ playbackId: string; playbackToken: string } | undefined>();
   const {
     columnFilters,
     setColumnFilters,
@@ -48,6 +56,26 @@ export default function VirtualWalkthroughsTable({
     showColumnFilters,
     showGlobalFilter,
   } = useTableState('virtual-walkthroughs-table');
+
+  useEffect(() => {
+    if (mediaStreamData) {
+      setMediaStream({ playbackId: mediaStreamData.playbackId, playbackToken: mediaStreamData.playbackToken });
+    }
+  }, [mediaStreamData]);
+
+  const handleOpenVideo = useCallback(
+    (fileId: number) => {
+      setLightboxFileId(fileId);
+      setMediaStream(undefined);
+      void getMediaStream({ organizationId, fileId });
+    },
+    [getMediaStream, organizationId]
+  );
+
+  const handleCloseLightbox = useCallback(() => {
+    setLightboxFileId(undefined);
+    setMediaStream(undefined);
+  }, []);
 
   const ThumbnailCell = useCallback(
     ({ cell }: { cell: MRT_Cell<OrganizationVirtualWalkthrough> }) => {
@@ -72,13 +100,9 @@ export default function VirtualWalkthroughsTable({
   const VideoLinkCell = useCallback(
     ({ cell }: { cell: MRT_Cell<OrganizationVirtualWalkthrough> }) => {
       const fileId = cell.getValue<number>();
-      return (
-        <Link to={`/api/v1/organizations/${organizationId}/media/${fileId}/stream`} target='_blank'>
-          {`media_${fileId}`}
-        </Link>
-      );
+      return <Link onClick={() => handleOpenVideo(fileId)}>{`media_${fileId}`}</Link>;
     },
-    [organizationId]
+    [handleOpenVideo]
   );
 
   const FlagCell = useCallback(
@@ -177,34 +201,54 @@ export default function VirtualWalkthroughsTable({
   }, [FlagCell, LocationCell, RemoveCell, StatusCell, ThumbnailCell, VideoLinkCell]);
 
   return (
-    <EditableTable
-      columns={columns}
-      data={mediaFiles}
-      clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
-      enableEditing={false}
-      enableSorting={true}
-      enableGlobalFilter={true}
-      enableColumnFilters={true}
-      enableColumnOrdering={false}
-      enablePagination={false}
-      enableTopToolbar={true}
-      enableBottomToolbar={false}
-      storageKey='virtual-walkthroughs-table'
-      renderToolbarInternalActions={({ table }) => (
-        <Box display='flex' gap={0.5}>
-          <MRT_ToggleGlobalFilterButton table={table} />
-          <MRT_ToggleFiltersButton table={table} />
-          <MRT_ShowHideColumnsButton table={table} />
-          <MRT_ToggleDensePaddingButton table={table} />
-          <MRT_ToggleFullScreenButton table={table} />
-        </Box>
-      )}
-      tableOptions={{
-        state: { columnFilters, showColumnFilters, showGlobalFilter },
-        onColumnFiltersChange: setColumnFilters,
-        onShowColumnFiltersChange: setShowColumnFilters,
-        onShowGlobalFilterChange: setShowGlobalFilter,
-      }}
-    />
+    <>
+      <EditableTable
+        columns={columns}
+        data={mediaFiles}
+        clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
+        enableEditing={false}
+        enableSorting={true}
+        enableGlobalFilter={true}
+        enableColumnFilters={true}
+        enableColumnOrdering={false}
+        enablePagination={false}
+        enableTopToolbar={true}
+        enableBottomToolbar={false}
+        storageKey='virtual-walkthroughs-table'
+        renderToolbarInternalActions={({ table }) => (
+          <Box display='flex' gap={0.5}>
+            <MRT_ToggleGlobalFilterButton table={table} />
+            <MRT_ToggleFiltersButton table={table} />
+            <MRT_ShowHideColumnsButton table={table} />
+            <MRT_ToggleDensePaddingButton table={table} />
+            <MRT_ToggleFullScreenButton table={table} />
+          </Box>
+        )}
+        tableOptions={{
+          state: { columnFilters, showColumnFilters, showGlobalFilter },
+          onColumnFiltersChange: setColumnFilters,
+          onShowColumnFiltersChange: setShowColumnFilters,
+          onShowGlobalFilterChange: setShowGlobalFilter,
+        }}
+      />
+
+      <ImageLightbox
+        altComponent={
+          mediaStream ? (
+            <MuxPlayer
+              accentColor={theme.palette.TwClrBgBrand}
+              autoPlay
+              metadata={{ video_title: `Virtual Walkthrough (File ID: ${lightboxFileId})` }}
+              playbackId={mediaStream.playbackId}
+              playbackToken={mediaStream.playbackToken}
+              style={{ aspectRatio: 16 / 9, height: '80vh', maxWidth: '80vw', width: 'auto' }}
+            />
+          ) : undefined
+        }
+        imageSrc=''
+        isOpen={!!lightboxFileId}
+        onClose={handleCloseLightbox}
+      />
+    </>
   );
 }

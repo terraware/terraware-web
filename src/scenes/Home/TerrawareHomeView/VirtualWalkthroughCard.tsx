@@ -47,7 +47,7 @@ const VirtualWalkthroughCard = (): JSX.Element => {
         <Typography sx={{ color: theme.palette.TwClrTxt, fontSize: '16px', fontWeight: 400, lineHeight: '24px' }}>
           {strings.formatString(strings.YOU_HAVE_X_VIRTUAL_WALKTHROUGHS, readyCount)}
         </Typography>
-        <Link to={APP_PATHS.OBSERVATIONS} fontSize='16px' fontWeight={400}>
+        <Link to={APP_PATHS.VIRTUAL_WALKTHROUGHS} fontSize='16px' fontWeight={400}>
           {strings.VIEW_IN_MAP}
         </Link>
       </>
